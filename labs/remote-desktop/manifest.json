@@ -1,0 +1,16 @@
+{
+  "workshoptitle": "Workshop Guide Selection",
+  "help": "livelabs-help-db_us@oracle.com",
+  "tutorials": [
+    {
+      "title": "Open Your Workshop Guide",
+      "description": "Instructions for opening the correct workshop guide for compute images supporting multiple workshops",
+      "filename": "./../open-workshop-guide/open-workshop-guide.md"
+    },
+    {
+      "title": "Need Help?",
+      "description": "Solutions to Common Problems and Directions for Receiving Live Help",
+      "filename": "https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/need-help/need-help-livelabs.md"
+    }
+  ]
+}

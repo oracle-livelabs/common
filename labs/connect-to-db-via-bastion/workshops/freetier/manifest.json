@@ -1,0 +1,21 @@
+{
+    "workshoptitle": "LiveLabs Sprints",
+    "help": "livelabs-help-us_us@oracle.com",
+    "tutorials": [
+        {
+            "title": "Introduction",
+            "description": "The Introduction is always first. The title and contents menu title match for the Introduction.",
+            "filename": "../../introduction/introduction.md"
+        },
+        {
+            "title": "LiveLab Sprint - Connect to database server via Bastion",
+            "description": "Labs that follow the introduction are numbered, starting with Lab 1",
+            "filename": "../../connect-to-db-bastion.md"
+        },
+        {
+            "title": "Need help?",
+            "description": "Solutions to Common Problems and Directions for Receiving Live Help",
+            "filename":"https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/need-help/need-help-freetier.md"
+        }
+    ]
+}
