@@ -1,0 +1,82 @@
+extends: conditional
+message: "'%s' has no definition."
+link: https://docs.microsoft.com/en-us/style-guide/acronyms
+level: suggestion
+ignorecase: false
+# Ensures that the existence of 'first' implies the existence of 'second'.
+first: '\b([A-Z]{3,5})\b'
+second: '(?:\b[A-Z][a-z]+ )+\(([A-Z]{3,5})\)'
+# ... with the exception of these:
+exceptions:
+  - ALTER
+  - API
+  - ADMIN
+  - ASP
+  - BATCH
+  - CLI
+  - CPU
+  - CSS
+  - CSV
+  - DEBUG
+  - DOM
+  - DPI
+  - FAQ
+  - FROM
+  - GCC
+  - GDB
+  - GET
+  - GPU
+  - GTK
+  - GUI
+  - HTML
+  - HTTP
+  - HTTPS
+  - IDE
+  - JAR
+  - JSON
+  - JSX
+  - JOB
+  - LOAD
+  - LESS
+  - LLDB
+  - MODEL
+  - NET
+  - NOTE
+  - NVDA
+  - NULL
+  - OSS
+  - PATH
+  - PDF
+  - PHP
+  - POST
+  - PUT
+  - RAM
+  - READ
+  - REST
+  - REPL
+  - RSA
+  - SELECT
+  - SCM
+  - SCSS
+  - SDK
+  - SQL
+  - SSH
+  - SSL
+  - SVG
+  - TABLE
+  - TYPE
+  - TBD
+  - TCP
+  - TODO
+  - URI
+  - URL
+  - USB
+  - UTF
+  - VALUE
+  - VIEW
+  - WHERE
+  - WRITE
+  - XML
+  - XSS
+  - YAML
+  - ZIP

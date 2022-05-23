@@ -1,0 +1,12 @@
+# based on Microsoft.HeadingColons
+# menu cascades are not accessible. Describe the menu option instead.
+extends: existence
+message: "Menu cascade found at '%s'. Do not use symbols to separate menu options as they cause translation issues."
+link: https://docs-uat.us.oracle.com/en/sptest/test-suite/test-product/test-release/oxygn/semantic-elements.html
+ignorecase: true
+nonword: true
+level: error
+tokens:
+# find instancs of > strings that do no have a corresponding < that is not a blockquote
+#  - '(?:^|>)[^<>\r\n]*(>)(.)*[\s]*'
+  - '(?:^)[^<>\r\n]*(>)(.)*$' 

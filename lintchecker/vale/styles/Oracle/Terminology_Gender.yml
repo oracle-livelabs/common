@@ -1,0 +1,13 @@
+# From Microsoft.
+# Appended additional pronouns from Oracle word list.
+extends: existence
+message: "Do not use '%s'. Do not use gender-specific, third-person pronouns or he/she or s/he constructions."
+link: 'https://docs-uat.us.oracle.com/en/sptest/osgxx/neutral-tone-and-inclusive-language.html'
+level: error
+ignorecase: true
+tokens:
+  - he/she
+  - s/he
+  - him/her
+  - he or she
+  - him or her

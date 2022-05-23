@@ -1,0 +1,8 @@
+# checks for IP addresses using a pattern of 1-3 digits separated by . and optionally followed by the "/" and the number of bits in the IP address space
+extends: existence
+message: "IP address '%s' found. Make sure that you are not using Oracle IP addresses. Use a reserved address from 192.0.2.1 through 192.0.2.254, 198.51.100.1 through 198.51.100.254, or 203.0.113.1 through 203.0.113.254 instead."
+link: https://docs-uat.us.oracle.com/en/sptest/osgxx/domain-names-and-ip-addresses.html
+ignorecase: true
+level: error
+tokens:
+  - '(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?:\/[0-9]{1,2})?$'

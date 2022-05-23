@@ -1,0 +1,11 @@
+{
+  "workshoptitle": "<Placeholder for Workshop Title>",
+  "help": "livelabs-help-db_us@oracle.com",
+  "tutorials": [
+    {
+      "title": "<Placeholder for lab title>",
+      "description": "This is the preview output.",
+      "filename": "preview"
+    }
+  ]
+}

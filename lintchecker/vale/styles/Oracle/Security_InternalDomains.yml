@@ -1,0 +1,18 @@
+# From Microsoft.
+# Appended additional pronouns from Oracle word list.
+extends: existence
+message: "Do not expose the internal domain '%s'."
+link: 'https://confluence.oraclecorp.com/confluence/display/DOCENG/QA+Test+Error+Messages#QATestErrorMessages-QAT-1067/warning'
+level: error
+scope: raw
+ignorecase: true
+tokens:
+  - oraclecorp.com
+  - us.oracle.com
+  - uk.oracle.com
+  - cz.oracle.com
+  - cn.oracle.com
+  - in.oracle.com
+  - no.oracle.com
+  - fr.oracle.com
+  - idc.oracle.com

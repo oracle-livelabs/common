@@ -1,0 +1,14 @@
+# replaces one term with another
+extends: substitution
+message: "Use '%s' instead of '%s'."
+link: https://docs-uat.us.oracle.com/en/sptest/osgxx/word-list.html
+ignorecase: true
+level: warning
+swap:
+  global menu: navigation menu
+  hamburger menu: navigation menu
+  menu option: menu item
+  OCI console: Oracle Cloud Console
+  reboot: start, start up, or restart
+  service menu: navigation menu
+  

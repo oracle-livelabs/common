@@ -1,0 +1,24 @@
+---
+extends: substitution
+message: "Use '%s' instead of '%s'"
+
+description: |
+  # Rule Overview
+
+  This rule showcases how you can enforce brand names using Vale.
+
+  For examples sake, we'll let our product name be "VS Code" and our brand name
+  be "Microsoft":
+
+  Okay: Please open Microsoft VS Code.
+
+  Bad (no brand): Please open VS Code.
+
+  Okay (CLI): Please use the VS Code CLI tool.
+
+  Bad (wrong case): Please open Microsoft VS code.
+
+level: error
+ignorecase: false
+swap:
+  '(?:[^\s]*) ?VS Code': Microsoft VS Code

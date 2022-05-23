@@ -1,0 +1,24 @@
+# ensures proper use of Oracle product names
+extends: substitution
+message: "Use '%s' instead of '%s'. Avoid incorrect Oracle product names."
+ignorecase: false
+scope: raw
+level: error
+#scope: Does this need to be set
+link: http://doctools.us.oracle.com/trademarks.html
+swap:
+  ADB: Oracle Autonomous Database
+  ADW: Oracle Autonomous Data Warehouse
+  ATP: Oracle Autonomous Transaction Processing
+  OML: Oracle Machine Learning Notebooks
+  mysql: MySQL
+  Mysql: MySQL
+  OCI: Oracle Cloud Infrastructure
+
+# '(?:[^\S?][^\s][^\S?]*) ?Autonomous Database': Oracle Autonomous Database
+#  '(?<!(?:Oracle)\s*) ?Autonomous Database': Oracle Autonomous Database
+#  '(?:[^\s+Oracle]*) ?Autonomous Transaction Processing': Oracle Autonomous Transaction Processing
+#  '(?:[^\s]*) ?Autonomous Transaction Database': Oracle Autonomous Transaction Processing
+#  Oracle Autonomous Transaction Database: Oracle Autonomous Transaction Processing
+#  '(?:[^\s+Oracle]*) ?Machine Learning Notebooks': Oracle Machine Learning Notebooks
+#  '(?:[^\S?][^\s][^\S?]*) ?SQL Developer Web': Oracle SQL Developer Web

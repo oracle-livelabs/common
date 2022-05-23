@@ -1,0 +1,228 @@
+
+ [4mD:\Github\learning-library\oic-integration-library\core-competencies\b2b\getting-started\introduction\introduction.md[0m
+ 20:190  [34msuggestion[0m  Use 'and so on, and so forth'   Oracle.Terminology_Latin 
+                     instead of 'etc.'. Avoid Latin                           
+                     abbreviations. Use them only                             
+                     in tables or where space is                              
+                     limited.                                                 
+ 20:360  [34msuggestion[0m  Use 'regarding, concerning'     Oracle.Terminology_Latin 
+                     instead of 're'. Avoid Latin                             
+                     abbreviations. Use them only                             
+                     in tables or where space is                              
+                     limited.                                                 
+
+
+ [4mD:\Github\learning-library\oic-integration-library\core-competencies\b2b\getting-started\b2b-trading-partner-manager\b2b-trading-partner-manager.md[0m
+ 110:57   [34msuggestion[0m  Consider using 'usually'        Oracle.Grammar_Wordiness 
+                      instead of 'In most cases'.                              
+ 119:136  [34msuggestion[0m  Consider using 'per' instead    Oracle.Grammar_Wordiness 
+                      of 'as per'.                                             
+ 154:100  [34msuggestion[0m  Consider using 'per' instead    Oracle.Grammar_Wordiness 
+                      of 'as per'.                                             
+
+
+ [4mD:\Github\learning-library\oic-integration-library\core-competencies\b2b\getting-started\b2b-outbound-x12-ftp\b2b-outbound-x12-ftp.md[0m
+ 55:39    [34msuggestion[0m  Consider using 'per' instead                                            Oracle.Grammar_Wordiness         
+                      of 'as per'.                                                                                             
+ 71:56    [34msuggestion[0m  Consider using 'per' instead                                            Oracle.Grammar_Wordiness         
+                      of 'as per'.                                                                                             
+ 94:54    [34msuggestion[0m  Consider using 'per' instead                                            Oracle.Grammar_Wordiness         
+                      of 'as per'.                                                                                             
+ 108:80   [34msuggestion[0m  Consider using 'to' instead of                                          Oracle.Grammar_Wordiness         
+                      'in order to'.                                                                                           
+ 120:3    [34msuggestion[0m  Consider using 'drag' instead                                           Oracle.Grammar_Wordiness         
+                      of 'drag and drop'.                                                                                      
+ 127:3    [31merror[0m       Menu cascade found at                                                   Oracle.Accessibility_MenuCascade 
+                      'lineItems->SKU'. Do not                                                                                 
+                      use symbols to separate                                                                                  
+                      menu options as they cause                                                                               
+                      translation issues.                                                                                      
+ 128:3    [31merror[0m       Menu cascade found at                                                   Oracle.Accessibility_MenuCascade 
+                      'lineItems->Quantity'. Do                                                                                
+                      not use symbols to separate                                                                              
+                      menu options as they cause                                                                               
+                      translation issues.                                                                                      
+ 129:3    [31merror[0m       Menu cascade found at                                                   Oracle.Accessibility_MenuCascade 
+                      'lineItems->unitOfMeasure'.                                                                              
+                      Do not use symbols to separate                                                                           
+                      menu options as they cause                                                                               
+                      translation issues.                                                                                      
+ 130:3    [31merror[0m       Menu cascade found at                                                   Oracle.Accessibility_MenuCascade 
+                      'lineItems->price'. Do not                                                                               
+                      use symbols to separate                                                                                  
+                      menu options as they cause                                                                               
+                      translation issues.                                                                                      
+ 148:1    [31merror[0m       Menu cascade found at 'In the                                           Oracle.Accessibility_MenuCascade 
+                      success route: Add Integration                                                                           
+                      Action ->Enter name as                                                                                   
+                      callTradingPartner and select                                                                            
+                      DELL FTP Send Integration                                                                                
+                      (OR any other outbound B2B                                                                               
+                      integration which you have                                                                               
+                      created) and click on Next                                                                               
+                      ->Click on Next ->Click on                                                                               
+                      Done and Save your integration                                                                           
+                      flow'. Do not use symbols to                                                                             
+                      separate menu options as they                                                                            
+                      cause translation issues.                                                                                
+ 150:1    [31merror[0m       Menu cascade found at 'Edit                                             Oracle.Accessibility_MenuCascade 
+                      Map to callTradingPartner ->                                                                             
+                      Select Developer mode and From                                                                           
+                      Source, expand EDI-Generate ->                                                                           
+                      executeResponse->TranslateOutput'.                                                                       
+                      Do not use symbols to separate                                                                           
+                      menu options as they cause                                                                               
+                      translation issues.                                                                                      
+ 153:27   [31merror[0m       Menu cascade found at                                                   Oracle.Accessibility_MenuCascade 
+                      'components.schemas.request-wrapper->messages->b2b-message-reference'.                                   
+                      Do not use symbols to separate menu options as they cause translation                                    
+                      issues.                                                                                                  
+ 154:26   [31merror[0m       Menu cascade found at                                                   Oracle.Accessibility_MenuCascade 
+                      'components.schemas.request-wrapper->trading-partner'.                                                   
+                      Do not use symbols to separate menu options as they                                                      
+                      cause translation issues.                                                                                
+ 155:34   [31merror[0m       Menu cascade found at 'Connectivity                                     Oracle.Accessibility_MenuCascade 
+                      Properties->Localintegration->code'.                                                                     
+                      Do not use symbols to separate menu                                                                      
+                      options as they cause translation                                                                        
+                      issues.                                                                                                  
+ 156:37   [31merror[0m       Menu cascade found at 'Connectivity                                     Oracle.Accessibility_MenuCascade 
+                      Properties->Localintegration->version'.                                                                  
+                      Do not use symbols to separate menu                                                                      
+                      options as they cause translation                                                                        
+                      issues.                                                                                                  
+ 159:1    [31merror[0m       Menu cascade found at 'In                                               Oracle.Accessibility_MenuCascade 
+                      Otherwise route: Add Throw New                                                                           
+                      Fault Action ->Enter name as                                                                             
+                      Error ->click on Create and                                                                              
+                      map the below elements'. Do                                                                              
+                      not use symbols to separate                                                                              
+                      menu options as they cause                                                                               
+                      translation issues.                                                                                      
+ 165:7    [31merror[0m       Menu cascade found at                                                   Oracle.Accessibility_MenuCascade 
+                      'Validate and Close -> Save                                                                              
+                      your integration flow.'. Do                                                                              
+                      not use symbols to separate                                                                              
+                      menu options as they cause                                                                               
+                      translation issues.                                                                                      
+ 170:1    [31merror[0m       Menu cascade found at                                                   Oracle.Accessibility_MenuCascade 
+                      'From Source, expand                                                                                     
+                      EDI-Generate Response                                                                                    
+                      ->executeResponse->TranslateOutput                                                                       
+                      and From Target, expand Purchase                                                                         
+                      Order Result and map the following                                                                       
+                      elements as per the table given                                                                          
+                      below.'. Do not use symbols to                                                                           
+                      separate menu options as they                                                                            
+                      cause translation issues.                                                                                
+ 170:166  [34msuggestion[0m  Consider using 'per' instead                                            Oracle.Grammar_Wordiness         
+                      of 'as per'.                                                                                             
+ 199:1    [31merror[0m       Menu cascade found at 'Go to                                            Oracle.Accessibility_MenuCascade 
+                      Monitoring->Integrations->Tracking->                                                                     
+                      Cross check your backend integration                                                                     
+                      and trading partner integration ran                                                                      
+                      successfully.'. Do not use symbols                                                                       
+                      to separate menu options as they                                                                         
+                      cause translation issues.                                                                                
+
+
+ [4mD:\Github\learning-library\oic-integration-library\core-competencies\b2b\getting-started\setup\setup.md[0m
+ 110:34  [33mwarning[0m  Don't use 'here' as the         Oracle.Accessibility_LinkText 
+                  context for a link. Use link                                  
+                  text that clearly identifies                                  
+                  the target of the link, such                                  
+                  as name of your target page.                                  
+
+
+ [4mD:\Github\learning-library\oic-integration-library\core-competencies\b2b\getting-started\b2b-inbound-x12-ftp\b2b-inbound-x12-ftp.md[0m
+ 49:196  [34msuggestion[0m  Consider using 'per' instead    Oracle.Grammar_Wordiness              
+                     of 'as per'.                                                          
+ 61:113  [34msuggestion[0m  Consider using 'per' instead    Oracle.Grammar_Wordiness              
+                     of 'as per'.                                                          
+ 78:107  [34msuggestion[0m  Consider using 'per' instead    Oracle.Grammar_Wordiness              
+                     of 'as per'.                                                          
+ 89:6    [31merror[0m       Do not start headings with      Oracle.Tutorial_HeadingImperativeVerb 
+                     'ing' words. Use imperative                                           
+                     verbs such as 'create' and                                            
+                     'configure' instead.                                                  
+ 139:61  [34msuggestion[0m  Consider using 'per' instead    Oracle.Grammar_Wordiness              
+                     of 'as per'.                                                          
+ 144:37  [34msuggestion[0m  Consider using 'drag' instead   Oracle.Grammar_Wordiness              
+                     of 'Drag and drop'.                                                   
+ 144:37  [31merror[0m       Menu cascade found at 'Drag     Oracle.Accessibility_MenuCascade      
+                     and drop ‘message’ repeating                                          
+                     element from the path execute                                         
+                     -> request-wrapper'. Do                                               
+                     not use symbols to separate                                           
+                     menu options as they cause                                            
+                     translation issues.                                                   
+ 194:4   [34msuggestion[0m  Consider using 'drag' instead   Oracle.Grammar_Wordiness              
+                     of 'Drag and drop'.                                                   
+ 206:1   [31merror[0m       Menu cascade found at 'Add      Oracle.Accessibility_MenuCascade      
+                     trading partner as one of                                             
+                     the tracking field from the                                           
+                     execute -> Request-Wrapper'.                                          
+                     Do not use symbols to separate                                        
+                     menu options as they cause                                            
+                     translation issues.                                                   
+
+
+ [4mD:\Github\learning-library\oic-integration-library\core-competencies\b2b\getting-started\getting-started-b2b\gettingStartedB2B.md[0m
+ 36:258   [34msuggestion[0m  Use 'and so on, and so forth'   Oracle.Terminology_Latin              
+                      instead of 'etc.'. Avoid Latin                                        
+                      abbreviations. Use them only                                          
+                      in tables or where space is                                           
+                      limited.                                                              
+ 38:68    [34msuggestion[0m  Consider using 'some' instead   Oracle.Grammar_Wordiness              
+                      of 'some of the'.                                                     
+ 40:6     [31merror[0m       Do not start headings with      Oracle.Tutorial_HeadingImperativeVerb 
+                      'ing' words. Use imperative                                           
+                      verbs such as 'create' and                                            
+                      'configure' instead.                                                  
+ 54:1     [34msuggestion[0m  Consider using 'sometimes'      Oracle.Grammar_Wordiness              
+                      instead of 'In some cases'.                                           
+ 71:45    [34msuggestion[0m  Use 'that is' instead           Oracle.Terminology_Latin              
+                      of 'i.e.'. Avoid Latin                                                
+                      abbreviations. Use them only                                          
+                      in tables or where space is                                           
+                      limited.                                                              
+ 74:78    [34msuggestion[0m  Use 'for example, such as'      Oracle.Terminology_Latin              
+                      instead of 'e.g.'. Avoid Latin                                        
+                      abbreviations. Use them only                                          
+                      in tables or where space is                                           
+                      limited.                                                              
+ 79:101   [34msuggestion[0m  Use 'for example, such as'      Oracle.Terminology_Latin              
+                      instead of 'e.g.'. Avoid Latin                                        
+                      abbreviations. Use them only                                          
+                      in tables or where space is                                           
+                      limited.                                                              
+ 90:89    [34msuggestion[0m  Consider using 'must' instead   Oracle.Grammar_Wordiness              
+                      of 'needs to'.                                                        
+ 95:58    [34msuggestion[0m  Consider using 'per' instead    Oracle.Grammar_Wordiness              
+                      of 'as per'.                                                          
+ 101:206  [34msuggestion[0m  Consider using 'to' instead of  Oracle.Grammar_Wordiness              
+                      'in order to'.                                                        
+ 125:69   [31merror[0m       "the" is repeated.              Markup.Repetition                     
+ 125:69   [31merror[0m       Delete repeated instances of    Oracle.Grammar_Repetition             
+                      'the'.                                                                
+ 151:126  [34msuggestion[0m  Consider using 'about' instead  Oracle.Grammar_Wordiness              
+                      of 'pertaining to'.                                                   
+ 168:49   [31merror[0m       "the" is repeated.              Markup.Repetition                     
+ 168:49   [31merror[0m       Delete repeated instances of    Oracle.Grammar_Repetition             
+                      'the'.                                                                
+ 187:6    [31merror[0m       Do not start headings with      Oracle.Tutorial_HeadingImperativeVerb 
+                      'ing' words. Use imperative                                           
+                      verbs such as 'create' and                                            
+                      'configure' instead.                                                  
+ 191:84   [34msuggestion[0m  Use 'through, by using'         Oracle.Terminology_Latin              
+                      instead of 'via'. Avoid Latin                                         
+                      abbreviations. Use them only                                          
+                      in tables or where space is                                           
+                      limited.                                                              
+ 198:75   [34msuggestion[0m  Use 'through, by using'         Oracle.Terminology_Latin              
+                      instead of 'via'. Avoid Latin                                         
+                      abbreviations. Use them only                                          
+                      in tables or where space is                                           
+                      limited.                                                              
+
+✖ [31m23 errors[0m, [33m1 warning[0m and [34m29 suggestions[0m in 8 files.

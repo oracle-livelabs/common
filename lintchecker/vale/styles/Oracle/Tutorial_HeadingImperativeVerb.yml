@@ -1,0 +1,9 @@
+# Looks for "ing" in first word of all heading text 
+extends: existence
+message: "Do not start headings with 'ing' words. Use imperative verbs such as 'create' and 'configure' instead."
+link: https://confluence.oraclecorp.com/confluence/display/DLPP/Style+conventions+for+tutorials#Styleconventionsfortutorials-Titles
+ignorecase: true
+level: error
+scope: heading
+tokens:
+  - '^(?:\S*)(ing)'

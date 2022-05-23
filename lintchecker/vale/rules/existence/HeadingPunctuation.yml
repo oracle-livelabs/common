@@ -1,0 +1,31 @@
+---
+extends: existence
+message: "Don't use end punctuation in headings."
+link: https://docs.microsoft.com/en-us/style-guide/punctuation/periods
+level: warning
+scope: heading
+
+description: |
+  # Rule Overview
+
+  This rule implements a guideline from the *Microsoft Writing Style Guide*:
+
+  > Don’t use end punctuation in headlines, headings, subheadings, UI titles,
+  > UI text, or simple lists (three or fewer words per item).
+
+  ## Let's get started!
+
+  The heading above shouldn't include '!'.
+
+# Actions are a Vale Server feature (https://errata.ai/vale-server/)
+# that adds the allows its integrations (such as VS Code) to one-click
+# fixes to rules.
+action:
+  name: edit
+  params:
+    - remove
+    - '.?!'
+
+nonword: true
+tokens:
+  - '[a-z][.?!](?:\s|$)'

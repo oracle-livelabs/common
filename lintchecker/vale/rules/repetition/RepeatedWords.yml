@@ -1,0 +1,29 @@
+---
+extends: repetition
+message: "'%s' is repeated!"
+level: error
+alpha: true
+
+description: |
+  # Rule Overview
+
+  This rule looks for repeated instances of 'words' (as defined by the
+  the `tokens` regex).
+
+  Thanks to Vale's internal processing of markup, it's able to detect
+  this in cases that plain regex could not -- such as within Markdown
+  links:
+
+  This was [added to the API in](example.com) in v2.4.0.
+
+# Actions are a Vale Server feature (https://errata.ai/vale-server/)
+# that adds the allows its integrations (such as VS Code) to one-click
+# fixes to rules.
+action:
+  name: edit
+  params:
+    - truncate
+    - " "
+
+tokens:
+  - '[^\s]+'

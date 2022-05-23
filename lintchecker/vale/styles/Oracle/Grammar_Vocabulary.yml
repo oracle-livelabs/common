@@ -1,0 +1,10 @@
+# Looks for commonly misspelled words.
+extends: substitution
+message: "Use '%s' instead of '%s'."
+ignorecase: true
+level: suggestion
+#scope: Does this need to be set
+link: 'https://docs-uat.us.oracle.com/en/sptest/osgxx/word-list.html'
+swap:
+  3rd party: third-party
+  3rd-party: third-party

@@ -1,0 +1,17 @@
+---
+extends: consistency
+message: "Inconsistent spelling of '%s'"
+level: error
+
+description: |
+  # Rule Overview
+
+  This rule ensures that we're consistent with how we spell certain
+  words.
+
+  Once we can say 'advisor', we can't say 'adviser'.
+
+ignorecase: true
+# We only want one of these to appear.
+either:
+  advisor: adviser

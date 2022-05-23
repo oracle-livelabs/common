@@ -1,0 +1,7 @@
+# based on Markup.Repetition.yml
+extends: repetition
+message: "Delete repeated instances of '%s'."
+level: error
+alpha: true
+tokens:
+  - '[^\s]+'

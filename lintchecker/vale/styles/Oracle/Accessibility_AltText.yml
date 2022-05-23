@@ -1,0 +1,13 @@
+# Running rules in separate YML files prevented one of the two from executing.
+# Use image descriptions for complex images. 
+extends: existence
+message: "Always include alt text for inline images."
+level: error
+ignorecase: true
+link: https://confluence.oraclecorp.com/confluence/display/DLPP/Style+conventions+for+tutorials#imageDescriptionsTutorials
+scope: raw
+raw:
+# Matches empty alt text tags for inline images.
+  - '\!\[(\s*)\]\((\S)+.(\W+)\).'
+# Matches image code when it appears on separate line, but a link to the image description does NOT follow it.
+#  - '\!(\[(\s*)\]|\[(.+)\])\((\S)+.(\W+)\)\n{2,}'

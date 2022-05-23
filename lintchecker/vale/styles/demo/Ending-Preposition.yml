@@ -1,0 +1,5 @@
+message: "Don't end a sentence with '%s'"
+extends: existence
+level: suggestion
+raw:
+  - '\b(?:at|from|of|to|in|for|on|by)[.!]'

@@ -1,0 +1,31 @@
+# checks that Heading 1 titles are sentence case (required for Markdown tutorials)
+extends: capitalization
+message: "Use sentence-style capitalization for the heading '%s'."
+link: https://confluence.oraclecorp.com/confluence/display/DLPP/Style+conventions+for+tutorials#Styleconventionsfortutorials-Titles
+level: error
+scope: heading.h1
+match: $sentence
+indicators:
+  - ':'
+exceptions:
+  - Azure
+  - CLI
+  - Code
+  - Cosmos
+  - Docker
+  - Emmet
+  - I
+  - Kubernetes
+  - Linux
+  - macOS
+  - Marketplace
+  - MongoDB
+  - REPL
+  - Studio
+  - TypeScript
+  - URLs
+  - Visual
+  - VS
+  - Windows
+  - Oracle Autonomous Database
+  - Oracle REST Data Services

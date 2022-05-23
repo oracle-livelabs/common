@@ -1,0 +1,50 @@
+# From Google, Microsoft, proselint. All three styles use same set of terms.
+# Added additional terms and variations from Oracle list of gender-specific terms.
+extends: substitution
+message: "Use a neutral, adult-to-adult tone and inclusive language. Consider using '%s' instead of '%s'."
+link: 'https://docs-uat.us.oracle.com/en/sptest/osgxx/neutral-tone-and-inclusive-language.html'
+ignorecase: true
+level: error
+swap:
+  (?:alumna|alumnus):          graduate
+  (?:alumnae|alumni):          graduates
+  air(?:m[ae]n|wom[ae]n):      pilot(s)
+  air(?:host|hostess):          flight attendant
+  anchor(?:m[ae]n|wom[ae]n):   anchor(s)
+  authoress:                   author
+  camera(?:m[ae]n|wom[ae]n):   camera operator(s)
+  business(?:m[ae]n|wom[ae]n): businessperson
+  chair(?:m[ae]n|wom[ae]n):    chairperson, chair(s)
+  congress(?:m[ae]n|wom[ae]n): congressperson, representative, senator, member(s) of congress
+  delivery(?:m[ae]n|wom[ae]n): delivery person, driver, courier
+  door(?:m[ae]|wom[ae]n):      concierge(s)
+  draft(?:m[ae]n|wom[ae]n):    drafter(s)
+  fire(?:m[ae]n|wom[ae]n):     firefighter(s)
+  fisher(?:m[ae]n|wom[ae]n):   fisher(s)
+  fresh(?:m[ae]n|wom[ae]n):    first-year student(s)
+  garbage(?:m[ae]n|wom[ae]n):  waste collector(s)
+  lady lawyer:                 lawyer
+  ladylike:                    courteous
+  landlord:                    building manager
+  mail(?:m[ae]n|wom[ae]n):     postal worker, mail carrier(s)
+  man and wife:                husband and wife
+  man enough:                  strong enough
+  mankind:                     human kind
+  manmade:                     manufactured
+  manpower:                    personnel
+  men and girls:               men and women
+  middle(?:m[ae]n|wom[ae]n):   intermediary
+  news(?:m[ae]n|wom[ae]n):     journalist(s)
+  ombuds(?:man|woman):         ombuds
+  oneupmanship:                upstaging
+  poetess:                     poet
+  police(?:m[ae]n|wom[ae]n):   police officer(s)
+  repair(?:m[ae]n|wom[ae]n):   technician(s)
+  sales(?:m[ae]n|wom[ae]n):    salesperson, sales people
+  service(?:m[ae]n|wom[ae]n):  soldier(s)
+  steward(?:ess)?:             flight attendant
+  tribes(?:m[ae]n|wom[ae]n):   tribe member(s)
+  waitress:                    waiter
+  woman doctor:                doctor
+  woman scientist[s]?:         scientist(s)
+  work(?:m[ae]n|wom[ae]n):     worker(s)

@@ -1,0 +1,21 @@
+---
+extends: sequence
+message: "In this context, the idiom needs to be spelled 'of all time'."
+level: warning
+
+description: |
+  # Rule Overview
+
+  This rule looks for misused cases 'of all times':
+
+  > In my opinion, he is still the greatest basketball player of all times.
+
+  It illustrates a usecase for the `skip` key, which allows for more
+  complex pattern-matching possibilities.
+
+tokens:
+  - tag: JJS
+    skip: 3
+  - pattern: of
+  - pattern: all
+  - pattern: times

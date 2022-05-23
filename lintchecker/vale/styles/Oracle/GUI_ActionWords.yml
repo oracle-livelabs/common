@@ -1,0 +1,12 @@
+# checks for GUI action words
+extends: substitution
+message: "Use '%s' instead of '%s' when referring to UI elements."
+link: https://docs-uat.us.oracle.com/en/sptest/osgxx/words-describe-actions-and-elements.html 
+ignorecase: true
+level: suggestion
+swap:
+  - click on: click
+  - right-click on: right-click
+  - right click on: right-click
+  - logon to: log on to
+  - login to: log in to

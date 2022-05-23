@@ -1,0 +1,9 @@
+# based on Vale.Link.yml - looks for ambiguous link text 
+extends: existence
+message: "Don't use '%s' as the context for a link.  Use link text that clearly identifies the target of the link, such as name of your target page."
+link: https://docs-uat.us.oracle.com/en/sptest/osgxx/links.html
+ignorecase: true
+level: warning
+scope: link
+tokens:
+  - here

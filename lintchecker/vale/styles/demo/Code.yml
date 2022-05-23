@@ -1,0 +1,8 @@
+extends: substitution
+message: Consider using '%s' instead of '%s'
+level: warning
+nonword: true
+scope: raw
+swap:
+  'for loops?': for-loop
+  '`for` loops?': for-loop

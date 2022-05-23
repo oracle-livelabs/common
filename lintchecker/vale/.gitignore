@@ -1,0 +1,35 @@
+# Folders
+docs/public*
+_obj
+_test
+vendor/bundle/
+builds
+bin
+tmp
+tags
+site
+target
+dist
+_vendor-*
+docs/public/
+fixtures/formats/Sphinx/_build/
+.vscode
+
+*.sublime-workspace
+*.sublime-project
+
+# Files
+*.o
+*.a
+*.so
+*.exe
+*.prof
+*.swp
+*~
+.bundle
+.vagrant
+
+internal/cli/flag_closed.go
+
+
+

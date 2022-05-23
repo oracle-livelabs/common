@@ -1,0 +1,16 @@
+extends: capitalization
+message: "'%s' should be in title case."
+level: error
+scope: heading
+match: $title
+style: Chicago
+exceptions:
+  - foo
+  - bar
+  - lorem
+  - ipsum
+  - brew(1)
+  - macOS
+  - Homebrew/homebrew-core
+  - Homebrew/linuxbrew-core
+  - (or Linux)

@@ -1,0 +1,11 @@
+---
+extends: spelling
+message: "'%s' is a typo!"
+custom: true
+action:
+  name: suggest
+dicpath: ../../fixtures/spelling/medical
+dictionaries:
+  - en_US
+  - en_medical
+ignore: Spelling/ignore/base.txt

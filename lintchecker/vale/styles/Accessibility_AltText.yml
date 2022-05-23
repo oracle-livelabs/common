@@ -1,0 +1,11 @@
+extends: existence
+message: "Always include alt text for inline images."
+level: error
+ignorecase: true
+scope: raw
+link: https://confluence.oraclecorp.com/confluence/display/DLPP/Style+conventions+for+tutorials#altTextTutorials
+raw:
+# Matches empty alt text tags for inline images.
+
+  - '\!\[(\s*)\]\((\S)+.(\W+)\).'
+

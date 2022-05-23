@@ -1,0 +1,36 @@
+# Looks for offensive words and suggests appropriate replacements.
+extends: substitution
+message: "Avoid offensive terms. Use '%s' instead of '%s'."
+ignorecase: true
+level: error
+#scope: Does this need to be set
+link: 'https://docs-uat.us.oracle.com/en/sptest/osgxx/word-list.html'
+swap:
+  abort:                            end, quit, stop, cancel, terminate
+  accessable:                       accessible
+  \b(?:ADA-compliant|ADA):          accessible
+  alive:                            active
+  Americans with Disabilities Act:  accessible
+  black hat:                        unethical hacker, unethical hacking
+  blacklist:                        blocklist, block, blocked
+  dead:                             terminated
+  disabled:                         users with disabilities, people with disabilities
+  dumb:                             nonprogrammable
+  fat client:                       thick client
+  graylist:                         caution list
+  handicapped:                      users with disabilities, people with disabilities
+  hang:                             delay, suspend, stop responding
+  hits:                             visits, results
+  hit:                              press
+  illegal:                          not allowed, not permitted, invalid
+  legal:                            valid, allowed, permitted
+  kill:                             end, stop, terminate
+  master:                           primary, main, parent
+  slave:                            secondary, replica, worker, agent, child
+  Section 508 certified:            accessible
+  \b(?:surviving|survivor):         remaining, existing
+  tar:                              compress, archive
+  untar:                            extract
+  victim:                           deleted, replaced, removed
+  white hat:                        ethical hacker. ethical hacking
+  whitelist:                        allowlist, allow, allowed
