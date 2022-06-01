@@ -1,11 +1,11 @@
 # generateRelated
-Script to find all related workshops/labs by traversing the manifest.json file.
+Script to find all related sprints by traversing the manifest.json file.
 
-The script looks for the "show_related.tags" key in the manifest.json and creates the related_xx.json file in the ".../common/related" directory of the GitHub repository.
+The script looks for the "show_related.tags" key in the manifest.json and creates the related_sprints.json file in the ".../common/related" directory of the GitHub repository.
 
 Please note that your local GitHub repo should have the latest files as per the production repo before you run this script.
 
-## Version 0.1
+## Version 0.2
 
 ### Requirements
 Python 3.x
