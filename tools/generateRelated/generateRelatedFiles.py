@@ -1,9 +1,9 @@
 # Author: Ashwin Agarwal
-# Description: This scripts generates the related sprint/workshops list and stores it in a JSON file in the /common/related directory
-# Last updated: 20-Apr-2022
+# Description: This scripts generates the related sprint list and stores it in a JSON file in the /common/related directory
+# Last updated: 1-Jun-2022
 # Requirement: Python 3
 # OS: Tested in macOS only
-# Version: 0.1
+# Version: 0.2
 
 import os
 import json
@@ -14,19 +14,19 @@ ALL_TAGS = ["adb", "db"]
 # List of all supported files. Add new support files here.
 ALL_FILES = ["related_sprints.json"]
 
-# the directory from which the program should start looking for manifest.json files
-START_DIR = "learning-library"
-# The URL from which the workshop can be viewed
-BASE_URL = os.path.join("https://oracle.github.io/", START_DIR)
-LL = Path(os.path.realpath(__file__)).parents[3] # path to the learning library directory
-OUTPUT_DIR = os.path.join(LL, "common/related/")
+# Path of the common directory
+COMMON_DIR = Path(os.path.realpath(__file__)).parents[2]
 
-# Raise an exception if the start directory is not the same as START_DIR
-if os.path.basename(LL) != START_DIR:
-    print("ERROR: Exiting... The start directory must be the \"%s\" directory." % START_DIR)
-    exit(0)
+# The URL from which the sprint can be viewed
+SPRINTS_URL = "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/"
 
-val = input("Please note that your local GitHub repo should have the latest files as per the production repo before you run this script. Enter \"y\" to continue: ")
+# Path of the sprint directory
+SPRINTS_DIR = os.path.join(Path(os.path.realpath(__file__)).parents[3], "sprints/")
+
+# Path to the directory that will contain the JSON file generated
+OUTPUT_DIR = os.path.join(COMMON_DIR, "related/")
+
+val = input("Please note that your local GitHub repos (common & sprints) should have the latest files as per the production repo before you run this script. Enter \"y\" to continue: ")
 
 if val.lower().strip() not in ("y", "yes"):
     print("Exiting... Since you entered \"%s\"" % val)
@@ -50,12 +50,12 @@ def readManifestFileAsJSON(file_path):
 
 related_json = {}
     
-for folder_path, dirs, files in os.walk(LL):
+for folder_path, dirs, files in os.walk(SPRINTS_DIR):
     if 'index.html' not in files or 'manifest.json' not in files:
         continue
     file_path = os.path.join(folder_path, 'manifest.json')
-    manifest_json = readManifestFileAsJSON(file_path)
-    
+    manifest_json = readManifestFileAsJSON(file_path)        
+
     if 'show_related' in manifest_json:
         if 'workshoptitle' not in manifest_json or \
         'tutorials' not in manifest_json or \
@@ -63,7 +63,8 @@ for folder_path, dirs, files in os.walk(LL):
             print('WARNING: Skipping... File does not have workshoptitle/tutorials/tutorials.title - \"%s\"' % file_path)
             continue
         
-        tut_url = str(os.path.join(folder_path, 'index.html')).replace(str(LL), BASE_URL)
+        tut_url = str(os.path.join(folder_path, 'index.html')).replace(str(SPRINTS_DIR), SPRINTS_URL)
+
         tut_name = manifest_json['tutorials'][0]['title']
         workshop_name = manifest_json['workshoptitle']
         related = manifest_json['show_related']
@@ -81,7 +82,7 @@ for folder_path, dirs, files in os.walk(LL):
             if filename not in related_json:
                 if filename not in ALL_FILES:
                     print("WARNING: Skipping... Related file mentioned is not addded in the ALL_FILES list - Related file: \"%s\" mentioned in \"%s\"" % (filename, file_path))
-                    continue
+                    # continue
                 related_json[filename] = {}
             
             for t in tags:
@@ -94,7 +95,7 @@ for folder_path, dirs, files in os.walk(LL):
                 related_title = workshop_name
                 if related_title.lower() == "LiveLabs Sprints".lower():
                     related_title = tut_name
-                related_json[filename][t] = {related_title: tut_url}
+                related_json[filename][t].update({related_title: tut_url})
                 
 output_files = list(related_json.keys())
 if len(output_files) > 0:
@@ -103,15 +104,26 @@ else:
     print("\nExiting... No files to create.")
     exit(0)
 
+# If related directory doesn't exist, create it
+if not os.path.exists(OUTPUT_DIR):
+    print("Related directory doesn't exist. Creating it...")
+    os.makedirs(OUTPUT_DIR)
+    print("SUCCESS: Related directory successfully created! - \"%s\"\n" % OUTPUT_DIR)
+
 for related_filename, related_content in related_json.items():
     try:
         file_with_path = os.path.join(OUTPUT_DIR, related_filename)
+
+        if os.path.exists(file_with_path): # if file exists
+            print("File already exists. Updating it...")                    
+        else: # if file doesn't exist
+            print("File doesn't exist. Creating it...")                
         f = open(file_with_path, 'w')
         f.write(json.dumps(related_content, indent=3))
-        f.close()
-        print("SUCCESS: Proceeding... File successfully created! - \"%s\"" % file_with_path)
+        f.close()                
+        print("SUCCESS: File successfully created/updated! - \"%s\"" % file_with_path)
     except Exception as e:
-        print("ERROR: Exiting... File could not be created! - \"%s\"\n%s" % (file_with_path, e))
+        print("ERROR: Exiting... File could not be created/updated! - \"%s\"\n%s" % (file_with_path, e))
         exit(0)
 
-print("The script has executed successfully!")
+print("\nThe script has executed successfully!")
