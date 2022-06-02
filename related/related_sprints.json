@@ -1,0 +1,23 @@
+{
+   "data-management": {
+      "Where do I find the ADB OCID?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-find-adb-ocid/index.html",
+      "How can I download the ADB Wallet using OCI CLI?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-download-adb-wallet/index.html"
+   },
+   "autonomous-database-for-analytics-and-data-warehousing": {
+      "Where do I find the ADB OCID?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-find-adb-ocid/index.html",
+      "How can I download the ADB Wallet using OCI CLI?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-download-adb-wallet/index.html"
+   },
+   "autonomous-json-database": {
+      "Where do I find the ADB OCID?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-find-adb-ocid/index.html",
+      "How can I download the ADB Wallet using OCI CLI?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-download-adb-wallet/index.html"
+   },
+   "autonomous-database-for-transaction-processing-and-mixed-workloads": {
+      "Where do I find the ADB OCID?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-find-adb-ocid/index.html",
+      "How can I download the ADB Wallet using OCI CLI?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-download-adb-wallet/index.html"
+   },
+   "devops": {
+      "How can I download the ADB Wallet using OCI CLI?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-download-adb-wallet/index.html",
+      "How can I add autocomplete for OCI CLI?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/oci/sprint-autocomplete-for-ocicl/index.html",
+      "How do I install Oracle Cloud Command Line Interface (OCI CLI)": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/oci/sprint-install-ocicl/index.html"
+   }
+}
