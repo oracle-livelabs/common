@@ -1,16 +1,20 @@
 # Author: Ashwin Agarwal
 # Description: This scripts generates the related sprint list and stores it in a JSON file in the /common/related directory
-# Last updated: 1-Jun-2022
+# Last updated: 2-Jun-2022
 # Requirement: Python 3
 # OS: Tested in macOS only
-# Version: 0.2
+# Version: 0.3
 
 import os
 import json
 from pathlib import Path
 
-# List of all supported tags. Add new supported tags here.
-ALL_TAGS = ["adb", "db"]
+# List of all supported tags. This list is fetched from tags.txt file.
+tags_file = open(os.path.join(Path(os.path.realpath(__file__)).parents[0], "tags.txt"), 'r')
+tags_file_content = tags_file.read()
+
+ALL_TAGS = tags_file_content.split('\n')
+
 # List of all supported files. Add new support files here.
 ALL_FILES = ["related_sprints.json"]
 
@@ -26,7 +30,7 @@ SPRINTS_DIR = os.path.join(Path(os.path.realpath(__file__)).parents[3], "sprints
 # Path to the directory that will contain the JSON file generated
 OUTPUT_DIR = os.path.join(COMMON_DIR, "related/")
 
-val = input("Please note that your local GitHub repos (common & sprints) should have the latest files as per the production repo before you run this script. Enter \"y\" to continue: ")
+val = input("Before you run this script, please ensure that your local GitHub repos are up-to-date with the production repos. Enter \"y\" to continue: ")
 
 if val.lower().strip() not in ("y", "yes"):
     print("Exiting... Since you entered \"%s\"" % val)
