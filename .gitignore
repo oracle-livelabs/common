@@ -4,3 +4,5 @@
 **/*.bin
 *.patch
 env.sh
+labs/.DS_Store
+labs/.DS_Store
