@@ -5,7 +5,7 @@ The script looks for the "show_related.tags" key in the manifest.json and create
 
 Please note that your local GitHub repo should have the latest files as per the production repo before you run this script.
 
-## Version 0.2
+## Version 0.3
 
 ### Requirements
 Python 3.x
