@@ -5,7 +5,7 @@
     {
       "title": "Open Your Workshop Guide",
       "description": "Instructions for opening the correct workshop guide for compute images supporting multiple workshops",
-      "filename": "./../open-workshop-guide/open-workshop-guide.md"
+      "filename": "./using-novnc-remote-desktop.md"
     },
     {
       "title": "Need Help?",
