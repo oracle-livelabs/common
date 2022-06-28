@@ -35,46 +35,33 @@ Creating an Oracle account can be summarized in the following two simple steps.
 
 ## Task 2: Request Workshop Reservation
 
-1. Using your *Oracle Account Login* go to [LiveLabs 2.0](http://bit.ly/golivelabs) and click ![Reserve](images/reserve.png) to request a reservation for this workshop.
+1. Using your *Oracle Account Login* go to [LiveLabs](http://bit.ly/golivelabs). Open a workshop, click **Start**, and then **Run on LiveLabs** to request a reservation for this workshop.
+  ![Run on LiveLabs](images/run-on-livelabs.png " ")
 
-2. After creating a reservation for a LiveLab Workshop, you will receive an e-mail indicating that your reservation is being processed, followed by an e-mail indicating that your environment has been created.
+2. Fill out information on the *Reserve Workshop* page. Check **I consent to recieve emails from LiveLabs for my reservation**. Click **Submit Reservation**.
+  ![Submit Reservation](images/submit-reservation.png " ")
+
+3. After creating a reservation for a LiveLab Workshop, you will receive an e-mail indicating that your reservation is being processed, followed by an e-mail indicating that your environment has been created.
 
   ![Reservation email](images/livelab-env-created-email.png " ")
 
   >**Note:** You will receive the second created e-mail just before your selected reservation time.
 
-3. Log into LiveLabs and click **My Reservations**, then click the **Launch Workshop** link for the Workshop environment you'd like to use. Note that you may have several Workshops listed.
+4. Log into LiveLabs. Click your username, and click **My Reservations**. Then click the **Launch Workshop** link for the Workshop environment you'd like to use. Note that you may have several Workshops listed.
 
   ![My reservations](images/ll-reservations.png " ")
 
-4. Click on the **Remote Desktop** URL to access the VM instance.
+5. Click **View Login Info** and click **Launch Remote Desktop** to access the VM instance.
 
   ![Remote Desktop](images/launch-ll-workshop-novnc.png " ")
 
-5. Optionally, open the lab instructions by choosing one of the two options. The recommended method as detailed in the next lab is to open the guide from the remote desktop session
-
-  ![Open lab instructions](images/open-workshop-guide-novnc.png " ")
+6. If you need to view your login information anytime, click **View Login Info**.
+  ![View Login Info](../need-help/images/view-login-info.png " ")
 
 You may now **proceed to the next lab**.
-
-## Rate this Workshop
-
-When you are finished don't forget to rate this workshop!  We rely on this feedback to help us improve and refine our LiveLabs catalog.  Follow the steps to submit your rating.
-
-1.  Go back to your **workshop homepage** in LiveLabs by searching for your workshop and clicking the Launch button.
-
-2.  Click on the **Brown Button** to re-access the workshop
-
-    ![Brown Button](images/workshop-homepage-2.png " ")
-
-3.  Click **Rate this workshop**
-
-    ![Rate this workshop](images/rate-this-workshop.png " ")
-
-If you still have an active reservation, you can also rate by going to My Reservations -> Launch Workshop.
 
 ## Acknowledgements
 
 - **Created By/Date** - Kay Malcolm, Database Product Management March 2020
 - **Contributors** - Rene Fontcha, Kamryn Vinson, Anoosha Pilli, Arabella Yao
-- **Last Updated By/Date** - Arabella Yao, 2022
+- **Last Updated By/Date** - Arabella Yao, Jun 2022

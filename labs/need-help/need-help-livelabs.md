@@ -1,11 +1,11 @@
 # Need help?
 
 ## Introduction
-This page is designed to help you solve some common problems users face in this LiveLab. 
+This page is designed to help you solve some common problems users face in this LiveLab.
 
-If you still find yourself stuck or would like to report an issue with the workshop, click the question mark icon in the upper left corner to contact the LiveLabs team directly via email.  
+If you still find yourself stuck or would like to report an issue with the workshop, click the question mark icon in the upper right corner to contact the LiveLabs team directly via email.
 
-![](images/help-button2.png)
+![Help button](images/help-button2.png)
 
 For more about getting support using our email, click [here](#HowtoFormatYourSupportEmailRequest).
 
@@ -17,40 +17,40 @@ For more about getting support using our email, click [here](#HowtoFormatYourSup
 ## How to Format Your Support Email Request
 This will construct an email in your default mail application that is auto populated to address our LiveLabs support inbox and will also include your current workshop in the subject line. Follow the steps below to contact us and get a quick resolution to your issue.
 
-1. Do not change the subject line. 
+1. Do not change the subject line.
 2. Include the description of your issue and any pertinent information in the contents on your email.
 
-    ![](images/e-mail.png)
+    ![Email](images/e-mail.png)
 
-3. Include the **Lab Number**, **Step Number**, and **Sub-Step Number** where you've encounter the issue. 
+3. Include the **Lab Number**, **Step Number**, and **Sub-Step Number** where you've encounter the issue.
 4. Attach a **Screenshot** and **Any Troubleshooting Steps** you've tried so we can recreate the issue and provide a timely and accurate solution.
 
-    ![](images/problem-picture2.png)
+    ![Attach](images/problem-picture2.png)
 
-## Can't Login to Oracle Cloud
-1. Double check that you are using the information and credentials provided to you in the lab banner. 
+## Can't Log in to Oracle Cloud
+1. Double check that you are using the information and credentials provided to you in the lab banner.
 
-    ![](images/banner-info-highlight.png)
+    ![Lab banner](images/banner-info-highlight.png)
 
 2. Make sure you are using the tenancy, username, and password provided to you in the lab banner.
 
-    ![](images/login-demo1.png)
+    ![Login information](images/login-demo1.png)
 
-3. If you've forgotten your password, you can reset it to the default lab password provided in the lab banner.
+3. If you need to view your login information anytime, click **View Login Info**.
 
-    ![](images/reset-password.png)
+    ![View Login Info](images/view-login-info.png)
 
 ## Can't Create an Oracle Database? Nothing in Your Compartment?
-1. Ensure that under "List Scope", you are selecting the compartment provided to you in the lab banner. 
+1. Ensure that under "List Scope", you are selecting the compartment provided to you in the lab banner.
 
 2. If you can't find your compartment in the drop-down box, make sure you *set your region* to the one provided in the lab banner.
 
-    ![](images/compartment-select.png)
+    ![Set region](images/compartment-select.png)
 
 ## Connectivity Issues? Unable to Upload Data or Connect to the Database?
 Are you connected to a **VPN**, **Corporate Network**, or behind a strict **Firewall**?
 
-If any of these three conditions are true, some ports in your network may be closed to traffic. Uploading data through Database Actions in your web browser and applications like the Oracle Analytics Tool could be restricted and may appear to "Hang" or freeze. 
+If any of these three conditions are true, some ports in your network may be closed to traffic. Uploading data through Database Actions in your web browser and applications like the Oracle Analytics Tool could be restricted and may appear to "Hang" or freeze.
 
 1. Please disconnect from your VPN and try again if applicable.
 
@@ -75,7 +75,7 @@ If the workshop asks you to open cloud shell, but you cannot access it, please m
    ![Cloud Shell](https://raw.githubusercontent.com/oracle/learning-library/master/common/images/console/cloud-shell.png " ")
 
 
-## Cannot Connect to the Marketplace compute instance using private SSH key?
+## Cannot Connect to the Marketplace Compute Instance Using Private SSH Key?
 
    ![Policy Missing Error](images/private-ssh-key-denied.png " ")
 1. If you cannot connect to your compute instance using your private SSH key, please make sure the private key you provide and use matches the public SSH key you provide when you reserve the workshop on LiveLabs.
@@ -84,3 +84,8 @@ If the workshop asks you to open cloud shell, but you cannot access it, please m
 ## Cannot Create Password for Database Users?
 
 1. Make sure the password you enter only contains upper case letters, lower case letters, numbers, and underscores as special characters.
+
+## Acknowledgements
+* **Author** - LiveLabs Team
+* **Contributors** - LiveLabs Team, Arabella Yao
+* **Last Updated By/Date** - Arabella Yao, May 2022
