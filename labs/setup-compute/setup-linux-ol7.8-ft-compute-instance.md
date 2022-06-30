@@ -30,7 +30,7 @@ If you already have a VCN created, skip this step and proceed to *STEP 3*.
 1.  Login to your Oracle Cloud account
 2.  Click the **Create a Stack** tile on the homepage.  Or, click the **Navigation Menu** in the upper left, navigate to **Developer Services**, and select **Stacks**.
 
-	![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/developer-resmgr-stacks.png " ")
+	![](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
 3.  In the Browse Solutions window, select **Default VCN**.
     ![Image alt text](images/db19c-freetier-step1-2.png " ")
 
@@ -60,7 +60,7 @@ Now that your stack has been created, you will run an *apply* job to create the 
 7. Copy the first subnet id to a notepad and save for the next step.  If you would like to further inspect the VCN, complete #s 8-12.  Otherwise skip to the next section.
 ![Image alt text](images/db19c-freetier-step1-13.png " ")
 8.  Click the **Navigation Menu** in the upper left, navigate to **Networking**, and select **Virtual Cloud Networks**.
-![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/networking-vcn.png " ")
+![](https://oracle-livelabs.github.io/common/images/console/networking-vcn.png " ")
 9.  The VCN you created should be listed.  Click on the VCN you just created.
 ![Image alt text](images/db19c-freetier-step1-15.png " ")  
 10.  On the VCN homepage notice the 3 subnets that were created.  Each subnet is tied to an Availability Domain.  Click on the first subnet that matches AD-1.
@@ -73,7 +73,7 @@ Now that your stack has been created, you will run an *apply* job to create the 
 ## Task 3: Setup Compute Instance
 
 1. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**.
-    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/compute-instances.png " ")
+    ![](https://oracle-livelabs.github.io/common/images/console/compute-instances.png " ")
 2. Click on **Create Instance**. 
     ![](images/setup-linux-ft-create-instance.png " ")
 3. Enter the **Name** for your Compute Instance and choose the **compartment**. 

@@ -35,7 +35,7 @@ Your options are:
 2. Login to Oracle Cloud
 3.  Open up the hamburger menu in the left hand corner.  Click **Developer Services**, choose **Resource Manager > Stacks**. Choose the compartment in which you would like to install. Click **Create Stack**.  
 
-  ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/developer-resmgr-stacks.png " ")
+  ![](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
 
   ![](./images/create-stack.png " ")
 
@@ -107,7 +107,7 @@ If you just completed Task 1A, please proceed to Task 2.  If you have an existin
 2.  Login to Oracle Cloud
 3.  Open up the hamburger menu in the left hand corner.  Choose the compartment in which you would like to install.  Choose **Resource Manager > Stacks**.  
 
-  ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/developer-resmgr-stacks.png " ")
+  ![](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
 
   ![](./images/create-stack.png " ")
 

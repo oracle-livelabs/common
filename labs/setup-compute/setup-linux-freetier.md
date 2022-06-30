@@ -30,7 +30,7 @@ If you already have a VCN created, skip this step and proceed to *STEP 3*.
 1.  Login to your Oracle Cloud account
 2.  Click the **Create a Stack** tile on the homepage.  Or, click the **Navigation Menu** in the upper left, navigate to **Developer Services**, select **Stacks** and click **Create Stack**.
 
-	![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/developer-resmgr-stacks.png " ")
+	![](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
 3.  Choose **Template** and click on **Select Template**.
 
     ![Image alt text](images/db19c-ft-step1-3.png " ")
@@ -60,7 +60,7 @@ Now that your stack has been created, you will run an *apply* job to create the 
 6. Copy the first subnet id to a notepad and save for the next step.  If you would like to further inspect the VCN, complete steps#7-12.  Otherwise skip to the next section.
 ![Image alt text](images/db19c-freetier-step1-13.png " ")
 7.  Click the **Navigation Menu** in the upper left, navigate to **Networking**, and select **Virtual Cloud Networks**.
-    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/networking-vcn.png " ")
+    ![](https://oracle-livelabs.github.io/common/images/console/networking-vcn.png " ")
 8.  The VCN you created should be listed.  Click on the VCN you just created.
 ![Image alt text](images/db19c-freetier-step1-15.png " ")  
 9.  On the VCN homepage notice the 3 subnets that were created.  Each subnet is tied to an Availability Domain.  Click on the subnet that matches AD-1.
@@ -72,7 +72,7 @@ Now that your stack has been created, you will run an *apply* job to create the 
 
 ## Task 3: Setup Compute Stack
 1.  Click the **Create a Stack** tile on the homepage.  Or, click the **Navigation Menu** in the upper left, navigate to **Developer Services**, select **Stacks** and click **Create Stack**.
-	![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/developer-resmgr-stacks.png " ")
+	![](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
 2.  Choose **Template** and click on **Select Template**.
 
     ![Image alt text](images/db19c-ft-step1-3.png " ")
@@ -109,7 +109,7 @@ Now that your stack has been created, you will run an *apply* job to create the 
 5. You will notice that 3 objects were created.  Your instance has a private IP address and a public IP address.  Copy the public IP address, you will need it to connect to your instance.
 ![Image alt text](images/db19c-freetier-step1-12.png " ")
 6. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**.
-	![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/compute-instances.png " ")
+	![](https://oracle-livelabs.github.io/common/images/console/compute-instances.png " ")
 7.  The compute instance you created should be listed. Note the public IP address.
 ![Image alt text](images/linux-compute-step3-11.png " ")     
 

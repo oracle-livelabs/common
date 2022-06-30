@@ -28,7 +28,7 @@ Watch the video below for a quick walk through of the lab.
 2.  Login to Oracle Cloud
 3.  Open up the hamburger menu in the left hand corner.  Choose the compartment in which you would like to install.  Under the **Solutions and Platform** submenu, choose **Resource Manager > Stacks**.  
 
-  ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/developer-resmgr-stacks.png " ")
+  ![](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
 
   ![](./images/em-create-stack.png " ")
 
@@ -86,7 +86,7 @@ If you just completed Step 1A, please proceed to Step 2.  If you have an existin
 2.  Login to Oracle Cloud
 3.  Open up the hamburger menu in the left hand corner.  Choose the compartment in which you would like to install.  Choose **Resource Manager > Stacks**.  
 
-  ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/developer-resmgr-stacks.png " ")
+  ![](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
 
   ![](./images/em-create-stack.png " ")
 
@@ -197,24 +197,24 @@ Choose the environment where you created your ssh-key in the previous lab (Gener
 
 1.  To start the Oracle Cloud Shell, go to your Cloud console and click the Cloud Shell icon at the top right of the page.
 
-	![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/cloudshellopen.png " ")
+	![](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-cloud-shell/images/cloudshellopen.png " ")
 
-    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/cloudshellsetup.png " ")
+    ![](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-cloud-shell/images/cloudshellsetup.png " ")
 
-    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/cloudshell.png " ")
+    ![](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-cloud-shell/images/cloudshell.png " ")
 
 2.  Click on the Cloud Shell hamburger icon and select **Upload** to upload your private key
 
-    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/upload-key.png " ")
+    ![](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-cloud-shell/images/upload-key.png " ")
 
 3.  To connect to the compute instance that was created for you, you will need to load your private key.  This is the key that does *not* have a .pub file at the end.  Locate that file on your machine and click **Upload** to process it.
 
-    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/upload-key-select.png " ")
+    ![](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-cloud-shell/images/upload-key-select.png " ")
 
 4. Be patient while the key file uploads to your Cloud Shell directory
-    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/upload-key-select-2.png " ")
+    ![](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-cloud-shell/images/upload-key-select-2.png " ")
 
-    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/upload-key-select-3.png " ")
+    ![](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-cloud-shell/images/upload-key-select-3.png " ")
 
 5. Once finished run the command below to check to see if your ssh key was uploaded.  Change the permissions to 600 and move it into your .ssh directory
 
@@ -230,7 +230,7 @@ Choose the environment where you created your ssh-key in the previous lab (Gener
     cd ~
     ````
 
-    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/upload-key-finished.png " ")
+    ![](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-cloud-shell/images/upload-key-finished.png " ")
 
 6.  If you didn't jot down your compute instance public IP address, go to *Compute* -> *Instance* and select the instance you created (make sure you choose the correct compartment). Alternatively, you can navigate to *My Reservations* in LiveLabs, click on *Launch Workshop* and get your public IP.
 

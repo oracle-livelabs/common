@@ -36,7 +36,7 @@ If you already have a VCN created, skip this step and proceed to *STEP 3*.
 3.  Login to your Oracle Cloud account.
 4.  Click the **Navigation Menu** in the upper left, navigate to **Developer Services**, and select **Stacks**.
 
-	![Stacks](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/developer-resmgr-stacks.png " ")
+	![Stacks](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
 
 5. Click **Create Stack**.
     ![Create Stack](./images/create-stack.png " ")
@@ -75,7 +75,7 @@ If you already have a VCN created, skip this step and proceed to *STEP 3*.
 ## Task 3: Gather Compute Instance Details
 1. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**.
 
-	![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/compute-instances.png " ")
+	![](https://oracle-livelabs.github.io/common/images/console/compute-instances.png " ")
 
 2. Look for the instance you just created and jot down the public IP address.
 
