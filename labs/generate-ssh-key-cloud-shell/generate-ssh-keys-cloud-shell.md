@@ -29,7 +29,7 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
 1.  To start the Oracle Cloud shell, go to your Cloud console and click the cloud shell icon at the top right of the page.
 
-    ![Cloud shell open.](https://raw.githubusercontent.com/oracle/learning-library/master/common/images/console/cloud-shell.png " ")
+    ![Cloud shell open.](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/cloud-shell.png " ")
 
     ![Set up cloud shell](./images/cloudshellsetup.png " ")
 

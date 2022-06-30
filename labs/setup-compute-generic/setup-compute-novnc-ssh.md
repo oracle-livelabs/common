@@ -35,7 +35,7 @@ Your options are:
 2. Login to Oracle Cloud
 3.  Open up the hamburger menu in the left hand corner.  Click **Developer Services**, choose **Resource Manager > Stacks**. Choose the compartment in which you would like to install. Click **Create Stack**.  
 
-  ![](https://raw.githubusercontent.com/oracle/learning-library/master/common/images/console/developer-resmgr-stacks.png " ")
+  ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/developer-resmgr-stacks.png " ")
 
   ![](./images/create-stack.png " ")
 
@@ -63,7 +63,7 @@ Your options are:
 
         ![](./images/create-stack-novnc-ssh-3.png " ")
 
-        ***Note 1:*** This assumes that you already have an RSA type SSH key-pair available on the local system where you will be connecting from. If you don't and for more info on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle.github.io/learning-library/common/labs/generate-ssh-key)
+        ***Note 1:*** This assumes that you already have an RSA type SSH key-pair available on the local system where you will be connecting from. If you don't and for more info on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key)
 
         ***Note 2:*** If you used the Oracle Cloud Shell to create your key, make sure you paste the pub file in a notepad, remove any hard returns.  The file should be one line or you will not be able to login to your compute instance
 
@@ -107,7 +107,7 @@ If you just completed Task 1A, please proceed to Task 2.  If you have an existin
 2.  Login to Oracle Cloud
 3.  Open up the hamburger menu in the left hand corner.  Choose the compartment in which you would like to install.  Choose **Resource Manager > Stacks**.  
 
-  ![](https://raw.githubusercontent.com/oracle/learning-library/master/common/images/console/developer-resmgr-stacks.png " ")
+  ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/developer-resmgr-stacks.png " ")
 
   ![](./images/create-stack.png " ")
 
@@ -142,7 +142,7 @@ If you just completed Task 1A, please proceed to Task 2.  If you have an existin
 
         ![](./images/create-stack-novnc-ssh-3.png " ")
 
-        ***Note 1:*** This assumes that you already have an RSA type SSH key-pair available on the local system where you will be connecting from. If you don't and for more info on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle.github.io/learning-library/common/labs/generate-ssh-key)
+        ***Note 1:*** This assumes that you already have an RSA type SSH key-pair available on the local system where you will be connecting from. If you don't and for more info on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key)
 
         ***Note 2:*** If you used the Oracle Cloud Shell to create your key, make sure you paste the pub file in a notepad, remove any hard returns.  The file should be one line or you will not be able to login to your compute instance
 
@@ -213,7 +213,7 @@ For ease of execution of this workshop, your VM instance has been pre-configured
 
 If you elected to auto-generate the SSH key-pair at provisioning, proceed as indicated below.
 
-In this example we will be illustrating connection from a Unix-style terminal such as *Mobaxterm*, MacOS terminal, etc.. For *Putty* on Windows, please refer to the guide [Generate SSH Keys](https://oracle.github.io/learning-library/common/labs/generate-ssh-key) on how to convert the key to the required *.ppk* format.
+In this example we will be illustrating connection from a Unix-style terminal such as *Mobaxterm*, MacOS terminal, etc.. For *Putty* on Windows, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key) on how to convert the key to the required *.ppk* format.
 
 1. Click *Copy* to get the private key and paste into a file on the system with an SSH client where you intend to initiate the connection. e.g. *mykey_rsa*.
 

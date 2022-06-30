@@ -29,7 +29,7 @@ This lab assumes you have:
 
 2. Click the hamburger menu on the left hand side and select "Identity and Security" then "Bastion"
 
-	![Bastion](https://raw.githubusercontent.com/oracle/learning-library/master/common/images/console/id-bastion.png " ")
+	![Bastion](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/id-bastion.png " ")
 
 
 3. Under List Scope, in the Compartment list, click the name of the compartment where you want to create a bastion.

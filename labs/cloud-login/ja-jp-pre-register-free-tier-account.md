@@ -81,7 +81,7 @@ Oracle Cloudからサインアウトした場合は、以下の手順を使用�
 
 4. これでOracle Cloudにサインインしました！
 
-    ![OCI Console Home Page](https://raw.githubusercontent.com/oracle/learning-library/master/common/images/console/ja-jp-home-page.png " ")
+    ![OCI Console Home Page](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/ja-jp-home-page.png " ")
 
 **次のラボ**に進んでください。
 

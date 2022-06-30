@@ -202,8 +202,6 @@ You have finished developing your workshop. To publish your workshop, you still 
 
 ## Task 9: Request Publishing
 
-Workshops authors can watch this [video 0:00 - 8:20](https://otube.oracle.com/playlist/dedicated/201649953/1_23j991jo/1_97hh00t6) on how to request publishing.
-
 1.  Click **Publishing** tab, then **+ Publish to LiveLabs**.
 
   ![Request Publishing](images/publishing-tab.png)
@@ -390,10 +388,6 @@ If you have already created an SSH key in your local computer and added the key 
 If you have multiple Oracle LiveLabs repositories, you need to switch to the repository that you will work on in GitHub Desktop. Expand the dropdown list of **Current Repository**, and click the repository that you need.
 
   ![Switch repository.](../3-labs-use-atom-editor-develop-content/images/switch-repo.png " ")
-
-## Want to Learn More?
-
-* [Using GitHub Desktop to merge, commit and make pull requests](https://otube.oracle.com/media/t/1_bxj0cfqf)
 
 ## Acknowledgements
 

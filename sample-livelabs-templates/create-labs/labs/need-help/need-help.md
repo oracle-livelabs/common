@@ -4,8 +4,6 @@
 
 In this lab, you will learn how to reach out for help if you have any questions when you develop your workshops. We provide several helpful resources to ensure that you can get all the help you need.
 
-Watch this [video 17:10 – 19:00](https://otube.oracle.com/media/LiveLabs%20Workshops%20Workflow%20WMS%202.0%20-%20LiveLabs%20-%20Office%20Hours%20-%2002-01-2022/1_nc5xgue2) to learn about all the helpful resources.
-
 ### Objectives
 - Learn about LiveLabs helpful resources
 
