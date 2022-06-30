@@ -7,8 +7,7 @@
 3. Remove the comments like this one: *List objectives for this lab*
 4. Make sure you use lower case folder and file name and dashes for spaces (setup-adb NOT Setup_ADB)
 5. Your image names should have descriptive names. Not just adb1, adb2, adb3.  For handicap accessibility we need the image descriptions to explain what the image looks like.  Remember all lower case and dashes.
-6. Make sure you watch this [video](https://otube.oracle.com/media/1_ucr6grc6) for how to do Self QA of a workshop.  These are the standards that need to be met before going to production.  (It's short don't worry!)
-7. Download our [QA Feedback doc](https://confluence.oraclecorp.com/confluence/download/attachments/1966947336/livelabs-QA-Feedback-Form-v2.docx?version=2&modificationDate=1598913736000&api=v2) as well.  We find workshops get in production quicker when you know what's needed to move to production up front and you use the skeleton.
+6. Download our QA Feedback doc on WMS.  We find workshops get in production quicker when you know what's needed to move to production up front and you use the skeleton.
 
 PS:  You do not need a Readme.md.  Readme's exist only at the top library levels. We direct all traffic to LiveLabs since we can't track usage on GitHub.  Do not create any direct links to GitHub, your workshop may be super popular but we can't track it so no one will know.
 
@@ -82,7 +81,7 @@ Look at the product-name-workshop/tenancy folder and look at the manifest.json f
 The Prerequisite "lab" is the first lab in a common folder on the oracle/learning-library repo. Because this lab already exists, we can use a RAW/absolute URL instead:
 
   ```
-  "filename": "https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/cloud-login/cloud-login-livelabs2.md"        },
+  "filename": "https://oracle-livelabs.github.io/common/labs/cloud-login/cloud-login-livelabs2.md"        },
   ```
 
 The manifest.json file needs to know the location of each lab relative to where it exists in the hierarchy. In this structure, labs are located two levels up, for example:
@@ -93,6 +92,6 @@ The manifest.json file needs to know the location of each lab relative to where 
 
 ### For example:
 
-This [APEX Workshop](https://oracle.github.io/learning-library/developer-library/apex/spreadsheet/workshops/tenancy/) is a good example a workshop with a single set of labs: [https://github.com/oracle/learning-library/tree/master/developer-library/apex/spreadsheet](https://github.com/oracle/learning-library/tree/master/developer-library/apex/spreadsheet).
+This [APEX Workshop](https://oracle-livelabs.github.io/apex/spreadsheet/) is a good example a workshop with a single set of labs: [https://github.com/oracle-livelabs/apex/tree/main/spreadsheet](https://github.com/oracle-livelabs/apex/tree/main/spreadsheet).
 
 

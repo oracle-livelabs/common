@@ -97,7 +97,7 @@ If you already have a cloud account, skip to **Task 2**.
 
 4. You are now signed in to Oracle Cloud!
 
-    ![OCI Console Home Page](https://raw.githubusercontent.com/oracle/learning-library/master/common/images/console/home-page.png " ")
+    ![OCI Console Home Page](https://oracle-livelabs.github.io/common/images/console/home-page.png " ")
 
 You may now **proceed to the next lab**
 

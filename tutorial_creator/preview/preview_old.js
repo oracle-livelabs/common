@@ -1,5 +1,5 @@
 "use strict";
-const main_js = "https://oracle.github.io/learning-library/common/redwood-hol/js/main.js";
+const main_js = "https://oracle-livelabs.github.io/common/redwood-hol/js/main.js";
 
 $.holdReady(true); //stops document.ready part from execution
 $.getScript(main_js, function () {

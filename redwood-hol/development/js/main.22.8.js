@@ -18,9 +18,9 @@ Version     Date             Author          Summary
 */
 
 "use strict";
-var showdown = "https://oracle.github.io/learning-library/common/redwood-hol/js/showdown.min.js";
-var highlight = "https://oracle.github.io/learning-library/common/redwood-hol/js/highlight.min.js";
-const related_path = "https://oracle.github.io/learning-library/common/related/";
+var showdown = "https://oracle-livelabs.github.io/common/redwood-hol/js/showdown.min.js";
+var highlight = "https://oracle-livelabs.github.io/common/redwood-hol/js/highlight.min.js";
+const related_path = "https://oracle-livelabs.github.io/common/related/";
 // const related_path = "http://localhost:5500/common/related/";
 
 let main = function() {
@@ -1507,6 +1507,6 @@ let download = function() {
         $("#module-content h2:not(:eq(0))").nextAll().show('fast'),
         $('h2').removeClass('plus minus'),
         $('#btn_toggle').remove()).done(function() {
-        download_file($('.selected span').text().replace(/[^[A-Za-z0-9:?]+?/g, '') + '.html', '<html><head><link rel="stylesheet" href="https://oracle.github.io/learning-library/common/redwood-hol/css/style.min.css" /><link rel="shortcut icon" href="https://oracle.github.io/learning-library/common/redwood-hol/img/favicon.ico" /></head><body style="padding-top: 0px;">' + $('#contentBox')[0].outerHTML + '</body></html>');
+        download_file($('.selected span').text().replace(/[^[A-Za-z0-9:?]+?/g, '') + '.html', '<html><head><link rel="stylesheet" href="https://oracle-livelabs.github.io/common/redwood-hol/css/style.min.css" /><link rel="shortcut icon" href="https://oracle-livelabs.github.io/common/redwood-hol/img/favicon.ico" /></head><body style="padding-top: 0px;">' + $('#contentBox')[0].outerHTML + '</body></html>');
     });
 }

@@ -220,7 +220,7 @@ In earlier versions of Windows, ssh-keygen was not a native utility, so third pa
 
     ![Enter IP address of OCI compute instance.](images/ip.png " ")
 
-    ![Compute Instances](https://raw.githubusercontent.com/oracle/learning-library/master/common/images/console/compute-instances.png " ")
+    ![Compute Instances](https://oracle-livelabs.github.io/common/images/console/compute-instances.png " ")
 
 2.  Under **Category** select **Connection** and then choose the **Data** field. Enter the assigned instance's username. OCI instances will default to the username ```opc```. Enter ```opc```.
 
