@@ -64,7 +64,7 @@ In this workshop, you will:
     * **Host:** Provide the **Public IP address** of the DB system noted earlier in step 1.
     * **Port:** Leave the value default to **22**.
     * **Username:** **opc**
-    * **Use key file:** Select the use key file checkbox and browse the Private key of your local machine. If you don't have ssh keys created in your machine, click [here](https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/generate-ssh-key/generate-ssh-keys.md) for instructions to create SSH keys.
+    * **Use key file:** Select the use key file checkbox and browse the Private key of your local machine. If you don't have ssh keys created in your machine, click [here](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key/generate-ssh-keys.md) for instructions to create SSH keys.
     * **Add a Local Port Forward:** Select the Add a Local Port Forward checkbox.
     * **Name:** Give a name to the local port forwarding of your SSH Host. In this example, it is db21c.
     * **Port:** Leave the value default to **1521**.

@@ -22,7 +22,7 @@ ALL_FILES = ["related_sprints.json"]
 COMMON_DIR = Path(os.path.realpath(__file__)).parents[2]
 
 # The URL from which the sprint can be viewed
-SPRINTS_URL = "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/"
+SPRINTS_URL = "https://oracle-livelabs.github.io/sprints/"
 
 # Path of the sprint directory
 SPRINTS_DIR = os.path.join(Path(os.path.realpath(__file__)).parents[3], "sprints/")

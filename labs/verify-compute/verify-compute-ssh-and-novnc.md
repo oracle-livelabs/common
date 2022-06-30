@@ -59,24 +59,24 @@ Your options are:
 
 2.  To start the Oracle Cloud Shell, go to your Cloud console and click the Cloud Shell icon at the top right of the page.
 
-	![](https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/generate-ssh-key-cloud-shell/images/cloudshellopen.png " ")
+	![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/cloudshellopen.png " ")
 
-    ![](https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/generate-ssh-key-cloud-shell/images/cloudshellsetup.png " ")
+    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/cloudshellsetup.png " ")
 
-    ![](https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/generate-ssh-key-cloud-shell/images/cloudshell.png " ")
+    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/cloudshell.png " ")
 
 3.  Click on the Cloud Shell hamburger icon and select **Upload** to upload your private key. Note the private key does not have a `.pub` extension.
 
-    ![](https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/generate-ssh-key-cloud-shell/images/upload-key.png " ")
+    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/upload-key.png " ")
 
 4.  To connect to the compute instance that was created for you, you will need to load your private key.  This is the half of the key pair that does *not* have a `.pub` extension.  Locate that file on your machine and click **Upload** to process it.
 
-    ![](https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/generate-ssh-key-cloud-shell/images/upload-key-select.png " ")
+    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/upload-key-select.png " ")
 
 5. Be patient while the key file uploads to your Cloud Shell directory.
-    ![](https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/generate-ssh-key-cloud-shell/images/upload-key-select-2.png " ")
+    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/upload-key-select-2.png " ")
 
-    ![](https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/generate-ssh-key-cloud-shell/images/upload-key-select-3.png " ")
+    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/upload-key-select-3.png " ")
 
 
 6. Once finished run the command below to check to see if your ssh key was uploaded.  Move it into your .ssh directory and change the permissions.
@@ -93,7 +93,7 @@ Your options are:
     ls ~/.ssh
     ```
 
-    ![](https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/generate-ssh-key-cloud-shell/images/upload-key-finished.png " ")
+    ![](https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/generate-ssh-key-cloud-shell/images/upload-key-finished.png " ")
 
 7.  Secure Shell into the compute instance using your uploaded key name (the private key).
 
