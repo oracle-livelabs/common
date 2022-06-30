@@ -22,7 +22,7 @@ Estimated time: 5 minutes
 
 2. Navigate to your Autonomous Database, so click **Oracle Database**, then **Autonomous Database**.
 
-    ![Click Autonomous Data Warehouse.](https://raw.githubusercontent.com/oracle-livelabs/common/main/images/console/database-adw.png " ")
+    ![Click Autonomous Data Warehouse.](https://oracle-livelabs.github.io/common/images/console/database-adw.png " ")
 
 3. Make sure your Workload Type is __Data Warehouse__ or __All__ to see your Autonomous Data Warehouse instances. Use the __List Scope__ drop-down menu to select a compartment. <if type="livelabs">Check your login credentials to find the **compartment** assigned to you. Enter your compartment number, for example `LL185`, in the Search Compartments field to quickly locate your compartment.
 
