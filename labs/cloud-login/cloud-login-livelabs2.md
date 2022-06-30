@@ -35,25 +35,31 @@ Creating an Oracle account can be summarized in the following two simple steps.
 
 ## Task 2: Request Workshop Reservation
 
-1. Using your *Oracle Account Login* go to [LiveLabs 2.0](http://bit.ly/golivelabs) and click ![Reserve](images/reserve.png) to request a reservation for this workshop.
+1. Using your *Oracle Account Login* go to [LiveLabs](http://bit.ly/golivelabs). Open a workshop, click **Start**, and then **Run on LiveLabs** to request a reservation for this workshop.
+  ![Run on LiveLabs](images/run-on-livelabs.png " ")
 
-2. After creating a reservation for a LiveLab Workshop, you will receive an e-mail indicating that your reservation is being processed, followed by an e-mail indicating that your environment has been created.
+2. Fill out information on the *Reserve Workshop* page. Check **I consent to recieve emails from LiveLabs for my reservation**. Click **Submit Reservation**.
+  ![Submit Reservation](images/submit-reservation.png " ")
 
-  ![Reservation Email](images/livelab-env-created-email.png " ")
+3. After creating a reservation for a LiveLab Workshop, you will receive an e-mail indicating that your reservation is being processed, followed by an e-mail indicating that your environment has been created.
+
+  ![Reservation email](images/livelab-env-created-email.png " ")
 
   >**Note:** You will receive the second created e-mail just before your selected reservation time.
 
-3. Log into LiveLabs and click **My Reservations**, then click the **Launch Workshop** link for the Workshop environment you'd like to use. Note that you may have several Workshops listed.
+4. Log into LiveLabs. Click your username, and click **My Reservations**. Then click the **Launch Workshop** link for the Workshop environment you'd like to use. Note that you may have several Workshops listed.
 
-  ![My Reservations](images/ll-reservations.png " ")
+  ![My reservations](images/ll-reservations.png " ")
 
-4. Follow the instructions provided to log in to your Oracle Cloud account, change your password, and complete your login to Oracle Cloud.
+5. Click **View Login Info** and click **Launch OCI**.
+  ![Launch OCI](images/launch-oci.png " ")
 
-  ![Complete login to Oracle Cloud](images/launch-ll-workshop.png " ")
+6. Follow the instructions provided to log in to your Oracle Cloud account, change your password, and complete your login to Oracle Cloud.
 
-5. Finally, open the lab instructions by choosing one of the two options.
+  ![Login information](../need-help/images/login-demo1.png " ")
 
-  ![Open lab instructions](images/open-workshop.png " ")
+7. If you need to view your login information anytime, click **View Login Info**.
+  ![View Login Info](../need-help/images/view-login-info.png " ")
 
 You may now **proceed to the next lab**.
 

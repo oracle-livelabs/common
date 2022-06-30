@@ -11,7 +11,7 @@ Watch this [video 17:10 – 19:00](https://otube.oracle.com/media/LiveLabs%20Wor
 
 ## Option 1: Use Self-service Learning Resources
 
-1. To get the most complete and updated information about LiveLabs workshops, read this [LiveLabs Step by Step guide](https://oracle.github.io/learning-library/sample-livelabs-templates/create-labs/labs/workshops/freetier/).
+1. To get the most complete and updated information about LiveLabs workshops, read this LiveLabs Step by Step guide.
 
 2. To make sure your workshop follows all LiveLabs standards, read this [Self QA checklist](https://objectstorage.us-ashburn-1.oraclecloud.com/p/MKKRgodQ0WIIgL_R3QCgCRWCg30g22bXgxCdMk3YeKClB1238ZJXdau_Jsri0nzP/n/c4u04/b/qa-form/o/QA.docx).
 
