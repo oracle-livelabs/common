@@ -11,7 +11,7 @@ Visit [LiveLabs](https://developer.oracle.com/livelabs) now to get started.  Wor
 
 
 ## Contributing
-Pull requests are currently not being accepted. See [CONTRIBUTING](CONTRIBUTING.md) for details.  To get your workshop featured on this page, please contact Michelle Malcher or Kevin Lazarz.
+Pull requests are currently not being accepted. See [CONTRIBUTING](CONTRIBUTING.md) for details. 
 
 ## License
 Copyright (c) 2014, 2022 Oracle and/or its affiliates
