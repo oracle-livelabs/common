@@ -10,8 +10,9 @@ Visit [LiveLabs](https://developer.oracle.com/livelabs) now to get started.  Wor
 [![](https://oracle-livelabs.github.io/common/images/livelabs-new-skin.png)](https://developer.oracle.com/livelabs)
 
 
+
 ## Contributing
-Pull requests are currently not being accepted. See [CONTRIBUTING](CONTRIBUTING.md) for details. 
+Pull requests are currently not being accepted. See [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## License
 Copyright (c) 2014, 2022 Oracle and/or its affiliates
