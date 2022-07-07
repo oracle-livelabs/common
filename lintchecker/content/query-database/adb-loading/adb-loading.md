@@ -125,7 +125,7 @@ In OCI Object Storage, a bucket is the terminology for a container of multiple f
 
 1. Now you set up the OCI Object Store. Click the **Navigation Menu** in the upper left, navigate to **Storage**, and select **Buckets**. To revisit signing-in and navigating to ADW, please see [Lab 1](?lab=lab-1-provision-autonomous-database).
 
-  ![Select Object Storage from the left navigation window in the Oracle Cloud homepage.](https://raw.githubusercontent.com/oracle/learning-library/master/common/images/console/storage-buckets.png " ")
+  ![Select Object Storage from the left navigation window in the Oracle Cloud homepage.](https://oracle-livelabs.github.io/common/images/console/storage-buckets.png " ")
 
   *To learn more about the OCI Object Storage, refer to its <a href="https://docs.us-phoenix-1.oraclecloud.com/Content/GSG/Tasks/addingbuckets.htm" target="\_blank">documentation</a>*
 

@@ -4,7 +4,6 @@ extends: existence
 message: "Always include alt text for inline images."
 level: error
 ignorecase: true
-link: https://confluence.oraclecorp.com/confluence/display/DLPP/Style+conventions+for+tutorials#imageDescriptionsTutorials
 scope: raw
 raw:
 # Matches empty alt text tags for inline images.

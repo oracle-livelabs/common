@@ -22,13 +22,10 @@ Estimated time: 5 minutes
 
 2. Navigate to your Autonomous Database, so click **Oracle Database**, then **Autonomous Database**.
 
-    ![Click Autonomous Data Warehouse.](https://raw.githubusercontent.com/oracle/learning-library/master/common/images/console/database-adw.png " ")
+    ![Click Autonomous Data Warehouse.](https://oracle-livelabs.github.io/common/images/console/database-adw.png " ")
 
-3. Make sure your Workload Type is __Data Warehouse__ or __All__ to see your Autonomous Data Warehouse instances. Use the __List Scope__ drop-down menu to select a compartment. <if type="livelabs">Enter the first part of your user name, for example `LL185` in the Search Compartments field to quickly locate your compartment.
+3. Make sure your Workload Type is __Data Warehouse__ or __All__ to see your Autonomous Data Warehouse instances. Use the __List Scope__ drop-down menu to select a compartment. <if type="livelabs">Check your login credentials to find the **compartment** assigned to you. Enter your compartment number, for example `LL185`, in the Search Compartments field to quickly locate your compartment.</if>
 
-    ![Check the workload type on the left.](images/task1-4.png " ")
-    </if>
-    <if type="freetier">
     ![Check the workload type on the left.](images/task1-4.png " ")
 
 4. From the databases displayed, click on the name of your database to navigate to your ABD details page.
@@ -37,21 +34,15 @@ Estimated time: 5 minutes
 
     ![Database Actions](./images/ADB-details-sdw-1.png)
 
-6. The **Launch DB actions modal** window will appear.
+6. The **Launch DB actions modal** window will appear. If you have pop-up blockers on, you have to open pop-up windows manually and turn on the radio button to allow access to the [cloud.oracle.com](https://cloud.oracle.com) site to view the Database Actions homepage.
 
     ![Launch DB actions modal](./images/db-actions-modal.png)
 
-    This will open another browser tab/window. If you have popup blockers on, you may need to allow cloud.oracle.com access to open popup windows or open the popup window manually.
-
-7. The popup window will take you directly to the **Database Actions** start page logged in as the **Admin** user.
+7. Wait for the Database Actions Launchpad to open in another tab of the browser. You are automatically signed in as the ADMIN user.
 
     ![Database Actions Dashboard](./images/db-actions-main.png)
 
-    If it does not, you will be directed to a login page.
-
-    ![Log in](./images/sdw-login.png)
-
-8. Sign in with the database instance's default administrator account, **Username - ADMIN** with the admin password you specified when creating the database. Click **Sign in**.
+8. If you are directed to the *Sign In* page, sign in as the ADMIN user by providing database instance’s default administrator account credentials, **Username - ADMIN** with the admin password you specified when creating the database. Click **Sign in**.
 
     ![Sign in](./images/sdw-signin-admin.png " ")
 
@@ -70,5 +61,5 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 
 - **Author** - Troy Anthony, Database Product Management, May 2020
-- **Contributors** - Anoosha Pilli, Product Manager; Brian Spendolini
-- **Last Updated By/Date** - Anoosha Pilli, Product Manager, Database Product Management, April 2022
+- **Contributors** - Anoosha Pilli, Product Manager; Brian Spendolini; Arabella Yao, Product Manager
+- **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Jun 2022

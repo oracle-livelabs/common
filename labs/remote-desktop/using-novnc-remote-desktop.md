@@ -60,7 +60,7 @@ While your workshop can be executed end-to-end from the remote desktop, follow t
 
 *Notes:* In this section you are enabling SSH access to the OS user running the remote desktop. This could be oracle, opc, or any other OS user for which the noVNC remote desktop has been configured.
 
-This assumes that you already have an RSA type SSH key-pair available on the local system where you will be connecting from. If you don't and for more info on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle.github.io/learning-library/common/labs/generate-ssh-key)
+This assumes that you already have an RSA type SSH key-pair available on the local system where you will be connecting from. If you don't and for more info on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key)
 
 1. Open the remote clipboard on the remote desktop as shown in *Task 2* and launch a terminal session
 
@@ -108,7 +108,7 @@ This assumes that you already have an RSA type SSH key-pair available on the loc
     </copy>
     ```
 
-    For Putty, please refer to the guide [Generate SSH Keys](https://oracle.github.io/learning-library/common/labs/generate-ssh-key) on how to establish the connection using the *.ppk* private key.
+    For Putty, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key) on how to establish the connection using the *.ppk* private key.
 
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology

@@ -1,23 +1,23 @@
 {
    "adb-shared": {
-      "Where do I find the ADB OCID?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-find-adb-ocid/index.html",
-      "How can I download the ADB Wallet using OCI CLI?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-download-adb-wallet/index.html"
+      "Where do I find the ADB OCID?": "https://oracle-livelabs.github.io/sprints/data-management/sprint-find-adb-ocid/index.html",
+      "How can I download the ADB Wallet using OCI CLI?": "https://oracle-livelabs.github.io/sprints/data-management/sprint-download-adb-wallet/index.html"
    },
    "adw": {
-      "Where do I find the ADB OCID?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-find-adb-ocid/index.html",
-      "How can I download the ADB Wallet using OCI CLI?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-download-adb-wallet/index.html"
+      "Where do I find the ADB OCID?": "https://oracle-livelabs.github.io/sprints/data-management/sprint-find-adb-ocid/index.html",
+      "How can I download the ADB Wallet using OCI CLI?": "https://oracle-livelabs.github.io/sprints/data-management/sprint-download-adb-wallet/index.html"
    },
    "ajd": {
-      "Where do I find the ADB OCID?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-find-adb-ocid/index.html",
-      "How can I download the ADB Wallet using OCI CLI?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-download-adb-wallet/index.html"
+      "Where do I find the ADB OCID?": "https://oracle-livelabs.github.io/sprints/data-management/sprint-find-adb-ocid/index.html",
+      "How can I download the ADB Wallet using OCI CLI?": "https://oracle-livelabs.github.io/sprints/data-management/sprint-download-adb-wallet/index.html"
    },
    "atp": {
-      "Where do I find the ADB OCID?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-find-adb-ocid/index.html",
-      "How can I download the ADB Wallet using OCI CLI?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-download-adb-wallet/index.html"
+      "Where do I find the ADB OCID?": "https://oracle-livelabs.github.io/sprints/data-management/sprint-find-adb-ocid/index.html",
+      "How can I download the ADB Wallet using OCI CLI?": "https://oracle-livelabs.github.io/sprints/data-management/sprint-download-adb-wallet/index.html"
    },
    "cloud-infrastructure": {
-      "Where do I find the ADB OCID?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/data-management/sprint-find-adb-ocid/index.html",
-      "How can I add autocomplete for OCI CLI?": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/oci/sprint-autocomplete-for-ocicl/index.html",
-      "How do I install Oracle Cloud Command Line Interface (OCI CLI)": "https://objectstorage.us-phoenix-1.oraclecloud.com/p/IozwMOYZg-Zi5KMIi8LKKxxM0LQ3zU6x0U8A4jCgGbYobtKZUWFhZjugu59EG44n/n/c4u02/b/sprints/o/oci/sprint-install-ocicl/index.html"
+      "Where do I find the ADB OCID?": "https://oracle-livelabs.github.io/sprints/data-management/sprint-find-adb-ocid/index.html",
+      "How can I add autocomplete for OCI CLI?": "https://oracle-livelabs.github.io/sprints/oci/sprint-autocomplete-for-ocicl/index.html",
+      "How do I install Oracle Cloud Command Line Interface (OCI CLI)": "https://oracle-livelabs.github.io/sprints/oci/sprint-install-ocicl/index.html"
    }
 }

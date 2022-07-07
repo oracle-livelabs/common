@@ -29,9 +29,9 @@ const nav_pages = [
     { id: '#btn_unused_images', html: 'unused_images.html' }
 ];
 // links to the template files on Github
-const template_md = "https://raw.githubusercontent.com/oracle/learning-library/master/sample-livelabs-templates/livelabs-template/livelabs-template.md";
-const template_html = "https://raw.githubusercontent.com/oracle/learning-library/master/templates/redwood-hol/index.html";
-const main_js = "https://oracle.github.io/learning-library/common/redwood-hol/js/main.min.js";
+const template_md = "https://oracle-livelabs.github.io/common/sample-livelabs-templates/livelabs-template/livelabs-template.md";
+const template_html = "https://oracle-livelabs.github.io/common/redwood-hol/index.html";
+const main_js = "https://oracle-livelabs.github.io/common/redwood-hol/js/main.min.js";
 
 // The beautifer is used for beautifying and indenting the HTML source files when the download zip feature is used.
 const beautifier = "./js/beautifier.min.js";

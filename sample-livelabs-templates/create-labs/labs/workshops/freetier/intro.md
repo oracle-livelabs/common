@@ -2,7 +2,7 @@
 
 The labs in this workshop walk you through all the steps to **develop workshops** for LiveLabs.
 
-  > **Note:** You can find information about creating images for compute instances and storing them in Marketplace in the [Creating Compute Images for Marketplace](https://objectstorage.us-phoenix-1.oraclecloud.com/p/SJgQwcGUvQ4LqtQ9xGsxRcgoSN19Wip9vSdk-D_lBzi7bhDP6eG1zMBl0I21Qvaz/n/c4u02/b/common/o/sample-livelabs-templates/create-labs/labs/workshops/compute/index.html) LiveLabs workshop.
+  > **Note:** You can find information about creating images for compute instances and storing them in Marketplace in the [Creating Compute Images for Marketplace](https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/compute/index.html) LiveLabs workshop.
 
 ## What are Labs and Workshops?
 A lab is a new model adopted by the Database (DB) organization to enhance the tutorial experience. Labs are what the User Assistance community commonly knew as Oracle by Example (OBE). Labs can be combined to form a workshop, formerly known as Hands-on Lab or HOL, or a Learning Path.
@@ -44,8 +44,6 @@ Beginning in May 2022, Oracle LiveLabs began moving from the oracle/learning-lib
 
 ## LiveLabs Workshop Workflow
 
-You can watch the [video 0:18 - 16:35](https://otube.oracle.com/media/LiveLabs%20Workshops%20Workflow%20WMS%202.0%20-%20LiveLabs%20-%20Office%20Hours%20-%2002-01-2022/1_nc5xgue2) for an overview of LiveLabs workshop workflow and different statuses of a workshop.
-
 Before you start, please check LiveLabs ([developer.oracle.com/livelabs](https://developer.oracle.com/livelabs)) to see if there is already a workshop similar to the content you want to create. Please also check WMS ([bit.ly/oraclewms](https://bit.ly/oraclewms)) to see if there is already a workshop in development that resembles your content. If so, please contact that workshop team to see if you can cooperate on the workshop. If not, please proceed.
 
 For a workshop to go from an idea to a LiveLabs workshop in production, it has to go through the following phases or statuses in WMS. You can refer to this section to see your current and next steps.
@@ -55,11 +53,7 @@ For a workshop to go from an idea to a LiveLabs workshop in production, it has t
 
    ![Submitted](./images/submitted.png " ")
 
-   Workshop authors can watch the [video 2:22 – 22:40](https://otube.oracle.com/media/How%20to%20submit%20a%20LiveLabs%20workshop%20in%20WMS%20-%20LiveLabs%20Office%20Hours%20-%2002-04-2022/1_6v8qdkzp) on how to submit and create a new workshop.
-
-   Council can watch this [video 5:10 - 7:05](https://otube.oracle.com/media/Know%20about%20Roles%20and%20Responsibilities%20in%20LiveLabs%20Workshop%20Management%20System%202.0%20-%20LiveLabs%20Office%20Hours%20-%2001-28-2022/1_hrkwddhr) to understand your responsibilities and this [video 9:45 - 10:45](https://otube.oracle.com/media/Introducing%20LiveLabs%20Dashboard%20-%20LiveLabs%20Office%20Hours%20-%2002-08-2022/1_ebeuqq95) to learn how to change workshop statuses (approve the workshop).
-
-2. Council asks workshop team for *more information*. The workshop team will respond to the council via the **Message the Team** tab in WMS to get the workshop approved.
+1. Council asks workshop team for *more information*. The workshop team will respond to the council via the **Message the Team** tab in WMS to get the workshop approved.
   ![More Info Needed](./images/more-info-needed.png " ")
 
 3. Council *approves* the workshop. Now, the workshop team can start developing the workshop. Refer to the notification email to see your action items.
@@ -80,7 +74,6 @@ For a workshop to go from an idea to a LiveLabs workshop in production, it has t
 7. The workshop is *completed* and is ready for publishing! Workshop teams will submit a publishing request, and the LiveLabs team will approve it. After the publishing request is approved, the workshop will be live in LiveLabs automatically within a business day.
   ![Completed](./images/completed.png " ")
 
-  Workshops authors, please watch this [video 0:00 - 8:20](https://otube.oracle.com/playlist/dedicated/201649953/1_23j991jo/1_97hh00t6) on how to request publishing.
 
 ## Develop LiveLabs Workshops Workflow
 The following diagram shows the general workflow process that your need to follow to set up your environment to develop labs and workshops. Most of the tasks are performed only once.
