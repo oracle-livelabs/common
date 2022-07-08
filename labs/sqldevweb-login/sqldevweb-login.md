@@ -42,7 +42,7 @@ Estimated time: 5 minutes
 
     ![Database Actions Dashboard](./images/db-actions-main.png)
 
-8. If you are directed to the *Sign In* page, sign in as the ADMIN user by providing database instance’s default administrator account credentials, **Username - ADMIN** with the admin password you specified when creating the database. Click **Sign in**.
+8. If you are directed to the *Sign In* page, sign in as the ADMIN user by providing database instance’s default administrator account credentials, **Username - ADMIN** and with the admin password you specified when creating the database. Click **Sign in**.
 
     ![Sign in](./images/sdw-signin-admin.png " ")
 

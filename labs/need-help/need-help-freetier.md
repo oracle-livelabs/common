@@ -10,9 +10,8 @@ If you still find yourself stuck or would like to report an issue with the works
 For more about getting support using our email, click [here](#HowtoFormatYourSupportEmailRequest).
 
 ### Common Issues Table of Contents
-  - [Can't Login to Oracle Cloud](#CantLogintoOracleCloud)
-  - [Can't Create An Oracle Database? Nothing In Your Compartment?](#CantCreateanOracleDatabase?NothinginYourCompartment?)
   - [Connectivity Issues? Unable To Upload Data or Connect To The database?](#ConnectivityIssues?UnabletoUploadDataorConnecttotheDatabase?)
+  - [Cannot Create Password for Database Users?](#CannotCreatePasswordforDatabaseUsers?)
 
 ## How to Format Your Support Email Request
 This will construct an email in your default mail application that is auto populated to address our LiveLabs support inbox and will also include your current workshop in the subject line. Follow the steps below to contact us and get a quick resolution to your issue.
@@ -41,7 +40,7 @@ If any of these three conditions are true, some ports in your network may be clo
 
 ## Cannot Create Password for Database Users?
 
-1. Make sure the password you enter only contains upper case letters, lower case letters, numbers, and underscores as special characters.
+1. Make sure the password you enter satisfies the following [restrictions](https://docs.oracle.com/en/cloud/saas/marketing/responsys-user/Account_PasswordRestrictions.htm).
 
 ## Acknowledgements
 * **Author** - LiveLabs Team
