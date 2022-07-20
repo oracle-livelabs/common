@@ -12,7 +12,7 @@ If you already have a reservation, skip to the next lab to start your workshop!
 
 Creating an Oracle account can be summarized in the following two simple steps.
 
-1. Navigate to [oracle.com](http://www.oracle.com), Click on *View Account*, and Select *Create an Account*
+1. Navigate to [oracle.com](http://www.oracle.com), Click on *View Accounts*, and Select *Create an Account*
 
   ![](images/create-account-oracle-1.png " ")
 
