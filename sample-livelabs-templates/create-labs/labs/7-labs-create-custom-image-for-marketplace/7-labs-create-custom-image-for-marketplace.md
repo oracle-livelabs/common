@@ -62,8 +62,8 @@ This lab assumes you have:
     ln -sf /root/bootstrap/firstboot.sh /var/lib/cloud/scripts/per-instance/firstboot.sh
     ln -sf /root/bootstrap/eachboot.sh /var/lib/cloud/scripts/per-boot/eachboot.sh
     rm -f /u01/app/osa/non-marketplace-init/system-configured
-    rm -rf /home/oracle/log/*
-    rm -rf /home/opc/log/*
+    rm -f /home/*/.livelabs/.desktop_configured
+    rm -rf /home/*/log/*
     rm -f /var/log/audit/audit.log
     EOF
     chmod +x /tmp/cleanup.sh
