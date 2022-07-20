@@ -10,7 +10,7 @@ This lab walks you through the steps to setup Sprints repository in Oracle LiveL
 
 The scope for LiveLabs Sprint differs from a standard LiveLabs workshop. A LiveLabs Sprint provides users with a quick & easy form of help by providing answers to a particular technical question, challenge or issue.
 
-The following diagram shows the general LiveLabs Sprints Development Workflow process that your need to follow to set up your environment to develop sprints and to submit a new sprint publish request. Most of the tasks are performed only once.
+The following diagram (will be added soon) shows the general LiveLabs Sprints Development Workflow process that your need to follow to set up your environment to develop sprints and to submit a new sprint publish request. Most of the tasks are performed only once.
 
 ### Objectives
 
@@ -44,7 +44,7 @@ To get started with Oracle LiveLabs Sprints development, you should have:
 
 > **Note:** You will be creating your sprint folder anywhere within the domain folder of your cloned sprints repository. See the different domain folders and decide on a folder for your sprint. If no existing folder fits your sprint, please contact our LiveLabs Sprints team by emailing us to [livelabs-help-sprints_us@oracle.com](livelabs-help-sprints_us@oracle.com) or send us a message in slack #workshop-authors-help channel with the details of the folder you wish to create. We will respond within 20 minutes over slack or within 24 hours via email respectively.
 
-1.  The following image shows folder structure of the sample **sprint** that is opened in the Visual Studio Code Editor. Inside this **oracle-livelabs/sprints** repository in Oracle LiveLabs GitHub Project, there is a sample-sprints folder. You can see this structure at the following URL https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-sprints. You can get started with sprint development by copying this sprint folder inside the sprint-sprints folder.
+1.  The following image shows folder structure of the sample **sprint** that is opened in the Visual Studio Code Editor. Inside this **oracle-livelabs/sprints** repository in Oracle LiveLabs GitHub Project, there is a sample-sprints folder. You can see this structure at the following URL https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-sprints. You can get started with sprint development by copying this sprint folder inside the sprint folder.
 
     ![Example of sprint structure.](./images/sample-sprint-structure.png " ")
 
@@ -60,25 +60,36 @@ To get started with Oracle LiveLabs Sprints development, you should have:
 
     > **Note:** Make sure that the **livelabs-help-sprints_us@oracle.com** email is listed in ***help***.
 
-    ![Sample manifest json file.](./images/manifest.png " ")
+    ![Sample manifest json file.](./images/sprint-manifest.png " ")
 
 ## Task 3: Create content for your Sprint
 
 1.  Every day before you start editing your content, make sure to do a Merge in GitHub Desktop (steps in Lab 3 Task 3). Merging synchronizes the content in your cloned repository with the latest content on the upstream/main repository and ensures that you have the most recent versions of the templates and other workshops/labs.
 
-2.  Copy the files in **sprint** folder in the **sample-sprints** folder as it is into the domain folder you decided or copy from an existing Sprint in that domain folder to create your content.
+2.  Copy along with the files in **sprint** folder in the **sample-sprints** folder as it is into the domain folder you decided or copy from an existing Sprint in that domain folder to create your content.
 
-3.  Re-name you sprint folder name and the markdown (.md) file to match the folder name.
+    ![Copy sprint folder](./images/copy-sprint-folder.png " ")
+
+3.  Re-name your sprint folder name and the markdown (.md) file to match the folder name.
 
 4.  To edit the .md file of your sprint, open the text editor of your choice. In this case, we are using VS Code, click File > Open.
 
-5.  Navigate to your sprint folder and click Select Folder to open your sprint folder. Your sprint folder along with the images folder, markdown, index.html and manifest.json files will then be displayed in your text editor.
+    ![click open in VS Code](./images/click-open-in-vscode.png " ")
+
+5.  Navigate to your sprint folder and click Open to open your sprint folder. Your sprint folder along with the images folder, markdown, index.html and manifest.json files will then be displayed in your text editor.
+
+    ![sprint folder open in VS Code](./images/sprint-folder-open-in-vscode.png " ")
 
 6.  If you want to add images in your sprint, then include them within the images folder. You can delete the images folder if you do not need it.
 
 7.  Edit the manifest.json file.
     -   help: Update the field to point to *livelabs-help-sprints_us@oracle.com* email.
-    -   title: Update the first title field with the title of your sprint. The manifest.json is like your book map file in SDL. If you would like to add related sprints, update the title fields with the sprints tile and add the absolute path (steps in Lab 3 Task 1) to their markdown files. You can add up to a maximum of six related sprints and also delete the existing sprints sections if you do not need them.
+    -   title: Update the first title field with the title of your sprint.
+    -   description: Add a short description about the sprint
+    -   filename: Update this field with your file name
+    -   Other related sprints: The manifest.json is like your book map file in SDL. If you would like to add related sprints, update the title fields with the respective sprints tile, their description and absolute paths (steps in Lab 3 Task 1) to their markdown files in filename. You can add up to a maximum of six related sprints and also delete the existing sprints sections if you do not need them.
+
+        ![edit manifest.json file](./images/edit-manifest-file.png " ")
 
 8.  You can take the help of the formatting in .md file you copied earlier and edit it to develop your sprint.
 
@@ -106,28 +117,35 @@ You will push the updated content from your clone into the origin of your clone,
 
 1.  After you submit the pull request, navigate to your domain sprint bucket in [WMS](http://bit.ly/oraclewms). If no existing domain sprint bucket fits your sprint, please contact our LiveLabs Sprints team by emailing us to [livelabs-help-sprints_us@oracle.com](livelabs-help-sprints_us@oracle.com) or send us a message in slack #workshop-authors-help to create a new bucket. We will respond within 20 minutes over slack or within 24 hours via email respectively and create the bucket if needed.
 
-2. In your sprint bucket in WMS, click on the **Publishing** tab.
+2. In your sprint bucket in WMS, click on the **Publishing** tab. and then click **Publish to LiveLabs** button to submit a new sprint publish request.
 
-3.  Click **Publish to LiveLabs** button to submit a new sprint publish request.
+      ![Request Publishing](images/publishing-tab.png)
 
-4.  Provide the details below:
+3.  Provide the details below and click **Create**:
+
     -   **Publish Type:** Leave the default - Public
     -   **Workshop Time (in hours):** Convert the sprints duration time to hours. Make sure they end with odd number. For example, if a sprint duration is 4 minutes, update the field with 0.067 hours.
     -   **LiveLabs Sprint:** Turn *ON* the radio button for the sprint and provide the oracle-livelabs.github.io/sprints pages URL (Steps in Lab 4 task 6 to create production URL) for the sprint once it is published. Format: https://oracle-livelabs.github.io/sprints/domain-folder-name/your-sprint-folder-name/
 
-5.  Scroll down to the Override Workshop Fields Section and provide these details:
+    Scroll down to the Override Workshop Fields Section and provide these details:
     -   **Title Override field:** Choose a descriptive title up to 200 characters. Do not include the word "Sprint" and use "Oracle Speak". Choose a title that users would recognize or understand. Do not use abbreviations ("Autonomous Database" not "ADB") and start the title with a question, for example, How can I, Where do I, What do I do) and use only imperative verbs ("Build" not "Building").
     -   **Desc Short Override field:** The short description is the key piece of information that goes on the tile of the workshop. Keep it crisp, catchy, and interesting. The length is up to 400 characters.
 
-6. Once you have provided the above details, verify and click **Create**. The sprint will now be in **Publish Requested** status.
+    ![Request Sprint Publishing](images/request-sprint-publishing.png)
 
-7. After you have submitted the new sprint request, note the WMS ID and LiveLabs ID and update the pull request with the WMS ID and LiveLabs ID of the sprint.
+4. Now, the sprint will be in **Publish Requested** status. Click on your sprint tile to view your Sprint's Current Publish Status and note the WMS ID and LiveLabs ID as we will need it now and for your reference as well.
 
-8.  If there are any changes to the sprint, the pull request will be updated with the comments and if there are changes to the sprint submit request, the LiveLabs Sprints team will reach out to you via email or WMS and update the publishing status of the sprint to **Changes Requested** in WMS.
+    ![Note WMS ID and LL ID](images/note-wms-ll-ids.png)
 
-9.  LiveLabs Admin team will review and approve the new sprint submit publish request and the pull request within 1-2 business days if there are no changes needed and update the sprint status to **Publish Approved** in WMS.
+5. After you have submitted the new sprint request in WMS, update the pull request with the WMS ID and LiveLabs ID of the sprint by clicking on Edit next to title of the pull request.
 
-10. Once the sprint is approved in WMS, the sprint will be live in Production in 1 business day.
+    ![Update pull request with WMS ID and LiveLabs ID](images/update-pr-with-wms-ll-ids.png)
+
+6.  LiveLabs team will now review your sprint request and the pull request. If there are any changes to the sprint, the pull request will be updated with the comments and if there are changes to the sprint submit request, the LiveLabs Sprints team will reach out to you via email or WMS and update the publishing status of the sprint to **Changes Requested** in WMS.
+
+7.  if there are no changes needed, LiveLabs Admin team will approve the new sprint submit publish request and the pull request within 1-2 business days and update the sprint status to **Publish Approved** in WMS.
+
+8. Once the sprint is approved in WMS, the sprint will be live in Production in 1 business day.
 
 Feel free to make changes to the Sprints to keep them updated. Make sure to create a pull request with the changes you made to the sprint.
 
