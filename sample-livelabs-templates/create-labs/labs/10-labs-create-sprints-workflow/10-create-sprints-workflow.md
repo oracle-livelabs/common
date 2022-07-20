@@ -1,4 +1,4 @@
-# Develop Sprints for LiveLabs
+# Develop LiveLabs Sprints
 
 ## Introduction
 

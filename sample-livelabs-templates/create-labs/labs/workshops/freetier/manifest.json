@@ -43,7 +43,7 @@
       "filename": "https://oracle-livelabs.github.io/common/labs/generate-ssh-key-local/generate-ssh-keys-local.md"
     },
     {
-      "title": "(Optional) Lab 6: Develop Sprints for LiveLabs",
+      "title": "(Optional) Lab 6: Develop LiveLabs Sprints",
       "description": "This lab shows you how to create Sprint for LiveLabs",
       "filename": "./../../10-labs-create-sprints-workflow/10-create-sprints-workflow.md"
     },
