@@ -23,13 +23,15 @@ Estimated Time - 5 minutes
 
     ![Select region on the far upper-right corner of the page.](./images/task3-1.png " ")
 
-2. Click on navigation menu, search **Oracle Database** and choose **Autonomous Transaction Processing** (ATP).
+2. Click on navigation menu, search **Oracle Database** and choose **Autonomous Transaction Processing** (ATP). *Note:* While this lab terminates an Oracle Autonomous Transaction Processing database that is already provisioned, the steps are the same for terminating an Oracle Autonomous Data Warehouse database.
 
     **Note:** You can also directly access your Oracle Autonomous Transaction Processing service in the **Quick Actions** section of the dashboard.
 
     ![](./images/task3-2.png " ")
 
-3. From the compartment drop-down menu select the **Compartment** where your Oracle Autonomous Database resource is provisioned. If there were a long list of databases, you could filter the list by the **State** of the databases (Available, Stopped, Terminated, etc). You can also sort by **Workload Type**. In this demo, the **Transaction Processing** workload type is selected.
+3. From the compartment drop-down menu select the **Compartment** where your Oracle Autonomous Database resource is provisioned. If there were a long list of databases, you could filter the list by the **State** of the databases (Available, Stopped, Terminated, etc) to view the database you wish to terminate. You can also sort by **Workload Type**.
+
+    In this lab, as **DEMOATP** is an Oracle Autonomous Transaction Processing database which is already provisioned, we selected the **Transaction Processing** workload type to filter the database.
 
     ![](./images/choose-compartment.png " ")
     ![](./images/choose-state.png " ")
