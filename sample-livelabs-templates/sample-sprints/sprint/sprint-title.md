@@ -2,6 +2,7 @@
 Duration: 1 minute to 10 minute
 
 ## Answer
+
 * Description of solution/answer
 * be short & precise
 * try to minimize use of images/screenshots - less is more (sometimes)
@@ -35,4 +36,7 @@ This is were the answer to the question is provided
 * [URL text 1](http://docs.oracle.com)
 * [URL text 2](http://docs.oracle.com)
 
-
+## Acknowledgements
+* **Author** - <Name, Title, Group>
+* **Contributors** -  <Name, Group> -- optional
+* **Last Updated By/Date** - <Name,  Month Year>

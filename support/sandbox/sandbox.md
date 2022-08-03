@@ -4,11 +4,7 @@
 
 To get started, you need to have an active Oracle Cloud account and a LiveLabs reservation. An Oracle Cloud account is free and needed to gain access to your LiveLabs reservation, Oracle Support, and other Oracle publicly-accessible content.
 
-If you already have an Oracle Cloud account, you can skip to Step 2.
-
-If you already have a reservation, skip to the next lab to start your workshop!
-
-Estimated Time: 5 minutes
+If you already have an Oracle Cloud account, you can skip to Task 2.
 
 ### Objectives
 
@@ -27,11 +23,11 @@ Creating an Oracle account can be summarized in the following two simple steps.
 
 1. Navigate to [oracle.com](http://www.oracle.com), Click on *View Accounts*, and Select *Create an Account*
 
-  ![Create an Account](images/create-account-oracle-1.png " ")
+  ![Create account](images/create-account-oracle-1.png " ")
 
-2. Fill out the form and click *Create Account*
+2. Fill out the form and click *Create Account*.
 
-  ![Fill out form](images/create-account-oracle-2.png " ")
+  ![Fill out the form](images/create-account-oracle-2.png " ")
 
 ## Task 2: Request Workshop Reservation
 
@@ -54,17 +50,33 @@ Creating an Oracle account can be summarized in the following two simple steps.
 5. Click **View Login Info** and click **Launch OCI**.
   ![Launch OCI](images/launch-oci.png " ")
 
-6. Follow the instructions provided to log in to your Oracle Cloud account, change your password, and complete your login to Oracle Cloud.
+6. Use the provided tenancy name, user name, and password to log in to your Oracle Cloud account. 
 
-  ![Login information](../need-help/images/login-demo1.png " ")
+  ![Login information](images/login-demo1.png " ")
 
-7. If you need to view your login information anytime, click **View Login Info**.
-  ![View Login Info](../need-help/images/view-login-info.png " ")
+7. After clicking **Sign In**, you are required to change your password to complete your login to Oracle Cloud.
 
-You may now **proceed to the next lab**.
+  ![Change password](images/change-password.png " ")
+
+8. If you need to view your login information anytime, click **View Login Info**.
+  ![View Login Info](images/view-login-info.png " ")
+
+## Task 3: Access your NoVNC environment
+
+1. Log into LiveLabs. Click your username, and click **My Reservations**. Then click the **Launch Workshop** link for the Workshop environment you'd like to use. Note that you may have several Workshops listed.
+
+  ![My reservations](images/ll-reservations.png " ")
+
+2. Click **View Login Info** and click **Launch Remote Desktop** to access the VM instance.
+
+  ![Remote Desktop](images/launch-ll-workshop-novnc.png " ")
+
+3. If you need to view your login information anytime, click **View Login Info**.
+  ![View Login Info](images/view-login-info.png " ")
+
 
 ## Acknowledgements
 
-- **Created By/Date** - Kay Malcolm, Database Product Management, March 2020
+- **Created By/Date** - Kay Malcolm, Database Product Management March 2020
 - **Contributors** - Rene Fontcha, Kamryn Vinson, Anoosha Pilli, Arabella Yao
-- **Last Updated By/Date** - Arabella Yao, Jun 2022
+- **Last Updated By/Date** - Kamryn Vinson, July 2022
