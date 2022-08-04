@@ -8,9 +8,11 @@ This lab walks you through the steps to setup Sprints repository in Oracle LiveL
 
 ### What are Oracle LiveLabs Sprints?
 
-The scope for LiveLabs Sprint differs from a standard LiveLabs workshop. A LiveLabs Sprint provides users with a quick & easy form of help by providing answers to a particular technical question, challenge or issue.
+The scope for LiveLabs Sprint differs from a standard LiveLabs workshop. A LiveLabs Sprint provides users with a quick & easy form of help by providing answers to a particular technical question, challenge or issue. The maximum duration to complete the steps in a sprint should be less than 10-15 minutes.
 
-The following diagram (will be added soon) shows the general LiveLabs Sprints Development Workflow process that your need to follow to set up your environment to develop sprints and to submit a new sprint publish request. Most of the tasks are performed only once.
+The following diagram shows the general LiveLabs Sprints Development Workflow process that your need to follow to set up your environment and to develop sprints. Most of the tasks are performed only once.
+
+![Sprints Workflow](./images/sprints-workflow.png " ")
 
 ### Objectives
 
@@ -124,7 +126,7 @@ You will push the updated content from your clone into the origin of your clone,
 3.  Provide the details below and click **Create**:
 
     -   **Publish Type:** Leave the default - Public
-    -   **Workshop Time (in hours):** Convert the sprints duration time to hours. Make sure they end with odd number. For example, if a sprint duration is 4 minutes, update the field with 0.067 hours.
+    -   **Workshop Time (in hours):** The maximum duration to complete the steps in a sprint should be less than 10-15 minutes. Convert the sprints duration time to hours. Make sure they end with odd number. For example, if a sprint duration is 4 minutes, update the field with 0.067 hours.
     -   **LiveLabs Sprint:** Turn *ON* the radio button for the sprint and provide the oracle-livelabs.github.io/sprints pages URL (Steps in Lab 4 task 6 to create production URL) for the sprint once it is published. Format: https://oracle-livelabs.github.io/sprints/domain-folder-name/your-sprint-folder-name/
 
     Scroll down to the Override Workshop Fields Section and provide these details:
