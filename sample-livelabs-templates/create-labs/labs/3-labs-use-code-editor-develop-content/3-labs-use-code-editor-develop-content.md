@@ -4,7 +4,7 @@
 
 You can use your preferred editor to author and edit your Markdown (.md) content for rendering the Workshop output.
 
-> **Note:** Oracle recommends the UA Developers use Atom.
+> **Note:** Oracle recommends using Visual Studio Code (VSCode). If you are currently using Atom - it is being retired, and you should move to using VSCode.
 
 ### Objectives
 
@@ -14,22 +14,7 @@ You can use your preferred editor to author and edit your Markdown (.md) content
 * Preview the content in a browser.
 
 
-## Task 1: Install Your Text Editor
-
-You can use your preferred editor, however, we recommend downloading either Atom or Visual Studio Code. Below, there are instructions for both.
-
-### **Option 1: Install Atom**
-
-`Atom.io` is a 3rd party IDE freely available under MIT License.
-
-To install Atom:
-
-1. Go to the [Atom](https://github.com/atom/atom/releases/tag/v1.51.0) URL.
-2. Click the zip file for your operating system, save and extract the zip file.
-  ![Installation of Atom.](./images/use-atom-editor-download.png " ")
-3. From the extracted files, click `atom.exe` to launch Atom.
-
-### **Option 2: Install Visual Studio Code**
+## Task 1: Install Visual Studio Code
 
 To install Visual Studio Code:
 
@@ -40,28 +25,7 @@ To install Visual Studio Code:
 4. Drag it to the Applications folder and double-click it to launch the text editor.
   ![Launch Visual Studio Code.](./images/vscode-drag.png " ")
 
-## Task 2: Install Live Server
-
-### **Option 1: Install Atom's Live Server Package**
-
-You must NOT be connected to Oracle's network or VPN while installing the **atom-live-server** package.
-
-To install **atom-live-server**:
-1. In the **Atom** editor, click **Help**, and then select **Welcome Guide**.
-2. In the **Welcome Guide** screen, click **Install a Package**, and then click **Open Installer** to display the **Install Packages** window.
-
-  ![Install a package on Atom.](./images/use-atom-editor-welcome-install-package.png " ")
-
-3. Enter **atom-live-server**, and then click **Install**.
-
-  ![Install live server.](./images/use-atom-editor-welcome-install-package-atom-live-server.png " ")
-
-4. When the installation is completed, the **Install** button is replaced with the **Uninstall** and **Disable** buttons.
-  ![Successful installation.](./images/use-atom-editor-welcome-uninstall-disable.png " ")
-The **atom-live-server** plugin is added to the **Packages** menu.
-  ![Atom live server is installed.](./images/use-atom-editor-welcome-atom-live-server-package-menu.png " ")
-
-### **Option 2: Install Visual Studio Code's Live Server Extension**
+## Task 2: Install Visual Studio Code's Live Server Extension
 
 1. Launch VS Code and navigate to the Extensions bar.
   ![Add extensions in visual studio code.](./images/extensions-tab.png " ")
@@ -135,7 +99,7 @@ To create your lab and workshop content:
 
 6. Similarly, copy the **workshops** folder along with its contents from **sample-livelabs-templates\sample-workshop** to your project folder. For example, **sample-livelabs-templates\create-labs\labs**.
 
-7. To edit the `.md` file of your lab, open your text editor (in this case, we're using Atom), click **File > Open Folder** to display the **Open Folder** dialog box. In VSCode, you would click **File > Open**.
+7. In VSCode, to edit the `.md` file of your lab, you click **File > Open**.
   ![Open project folder in Atom.](./images/use-atom-editor-open-folder.png " ")
 
 8. Navigate to your project folder and click **Select Folder** to open your project folder.
@@ -168,26 +132,10 @@ To create your lab and workshop content:
 
   ![Every image must have a description.](./images/image-desc.png " ")
 
-3. Do not use any IP addresses, intranet URLs (for example links to a Confluence page), email addresses, OCIDs, usernames, or passwords in the text. Do not provide a demo password. 
+3. Do not use any IP addresses, intranet URLs (for example links to a Confluence page), email addresses, OCIDs, usernames, or passwords in the text. Do not provide a demo password.
 
 
 ## Task 6: Preview Your Workshop and Labs Using Live Server
-### **Option 1: Using Atom**
-
-1. First, start the **atom-live-server**. In the Atom editor, select **Packages > atom-live-server > Start server**.
-  ![Start live server.](./images/use-atom-editor-packages-start-live-server.png " ")
-
-  By default, the **atom-live-server** opens a browser window that displays the folders inside your project (**labs**) folder.
-2. Click the **workshops** folder and then click the **freetier** folder that contains the workshop you want to view.
-  ![Select the workshop you want to view.](./images/use-atom-editor-open-live-server.png " ")
-
-  The Workshop is displayed along with the labs. You can make content changes in the **Atom** editor to the workshop and lab files, save the changes, and the updated content gets automatically refreshed in the browser window.
-
-  ![Workshop view in Live Server.](./images/use-atom-editor-workshop-output.png " ")
-
-3. To stop the **atom-live-server**, go back to **Atom**, select  **Packages > atom-live-server > Stop folder-path-at-port-#**.
-
-### **Option 2: Using Visual Studio Code**
 
 1. Within the directory of any workshop you want to view, click the **workshops** folder and then click the **freetier** folder.
   ![Navigate to freetier folder.](./images/folder-nav.png " ")
