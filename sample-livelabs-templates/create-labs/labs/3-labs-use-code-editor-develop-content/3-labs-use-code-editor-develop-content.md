@@ -75,18 +75,18 @@ To install Visual Studio Code:
   ![Synchronized repositories.](./images/fetch-origin.png " ")
 
 ## Task 4: Create Your Labs and Workshop Content
-Leverage the content from the **sample-livelabs-templates\sample-workshop** folder to start creating lab and workshop content for your project.
+Leverage the content from the **[sample-livelabs-templates/sample-workshop](https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop)** folder to start creating lab and workshop content for your project. Fork and clone the **[oracle-livelabs/common repository](https://github.com/oracle-livelabs/common/)** to get the sample-workshop folder on your local computer, by following Lab 1 -> Task 5 and Task 6.
 
 > **Note:** Ensure to update your clone from the **upstream/main** repository (detailed in **Task 3**) regularly whenever we are working on the markdown files.
 
 To create your lab and workshop content:
-1. Submit your workshop to the [LiveLabs Workshop Management System](http://bit.ly/oraclelivelabs) BEFORE you begin development.  No GitHub requests will be approved without an approved WMS ID.
+1. Submit your workshop to the [Workshop Management System](http://bit.ly/oraclelivelabs) BEFORE you begin development.  No GitHub requests will be approved without an approved WMS ID.
 
-2. Open your cloned repository using Windows Explorer (Windows) or Finder (Mac).
+2. Open your cloned repository (where you want to put your workshop, not the common repository) using Windows Explorer (Windows) or Finder (Mac).
 
 3. Create your project folder anywhere in your cloned repository. If a folder already exists for the product you work on, then you can create your project folder within that.
 
-4. Go to **sample-livelabs-templates\sample-workshop**. This has a few lab folders, such as **provision**, **query**, etc. Every lab folder contains the following: a **files** folder, an **images** folder, and the respective `.md` file. You can use **Live Server** to open up **sample-workshop\workshops\tenancy\index.html** to see how a workshop will show up in production, and play with it.
+4. In your cloned *common* repository, Go to **sample-livelabs-templates/sample-workshop**. This has a few lab folders, such as **provision**, **query**, etc. Every lab folder contains the following: a **files** folder, an **images** folder, and the respective `.md` file. You can use **Live Server** to open up **sample-workshop\workshops\tenancy\index.html** to see how a workshop will show up in production, and play with it.
 
 5. Copy any lab folder (except the folder named `workshops`), such as the **query** folder, to your project folder. In your project folder, rename the folder **query** and the respective `.md` file within it as per your requirement.  Based on the sample **query** folder, you can create and rename as many labs (folders) and the respective `.md` files as per your requirement.
 
