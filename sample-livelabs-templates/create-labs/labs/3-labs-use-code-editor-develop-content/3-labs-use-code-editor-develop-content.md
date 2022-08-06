@@ -4,7 +4,7 @@
 
 You can use your preferred editor to author and edit your Markdown (.md) content for rendering the Workshop output.
 
-> **Note:** Oracle recommends using Visual Studio Code (VSCode). If you are currently using Atom - it is being retired, and you should move to using VSCode.
+> **Note:** Oracle recommends using **Visual Studio Code (VSCode)**. If you are currently using **Atom** - it is being retired, and you should move to use VSCode.
 
 ### Objectives
 
@@ -86,7 +86,7 @@ To create your lab and workshop content:
 
 3. Create your project folder anywhere in your cloned repository. If a folder already exists for the product you work on, then you can create your project folder within that.
 
-4. In your cloned *common* repository, Go to **sample-livelabs-templates/sample-workshop**. This has a few lab folders, such as **provision**, **query**, etc. Every lab folder contains the following: a **files** folder, an **images** folder, and the respective `.md` file. You can use **Live Server** to open up **sample-workshop\workshops\tenancy\index.html** to see how a workshop will show up in production, and play with it.
+4. In your cloned *common* repository, Go to **sample-livelabs-templates/sample-workshop**. This has a few lab folders, such as **provision**, **query**, etc. Every lab folder contains the following: a **files** folder, an **images** folder, and the respective `.md` file. You can use **Live Server** (see in Task 6) to open up **sample-workshop/workshops/tenancy/index.html** to see how a workshop will show up in production, and play with it.
 
 5. Copy any lab folder (except the folder named `workshops`), such as the **query** folder, to your project folder. In your project folder, rename the folder **query** and the respective `.md` file within it as per your requirement.  Based on the sample **query** folder, you can create and rename as many labs (folders) and the respective `.md` files as per your requirement.
 
@@ -97,33 +97,39 @@ To create your lab and workshop content:
       Your lab will look similar to this example:
       ![Example of your lab files folder.](./images/lab-folder-structure.png " ")
 
-6. Similarly, copy the **workshops** folder along with its contents from **sample-livelabs-templates\sample-workshop** to your project folder. For example, **sample-livelabs-templates\create-labs\labs**.
+6. Similarly, copy the **workshops** folder along with its contents from **sample-livelabs-templates/sample-workshop** to your project folder.
 
-7. In VSCode, to edit the `.md` file of your lab, you click **File > Open**.
-  ![Open project folder in Atom.](./images/use-atom-editor-open-folder.png " ")
+7. To edit a `.md` file of your lab, you click **File > Open**.
+  ![Open md file](./images/file-open.png " ")
 
-8. Navigate to your project folder and click **Select Folder** to open your project folder.
-  ![Navigate to your project folder.](./images/atom-editor-browse-select-lab.png " ")
+8. Navigate to your project folder and click **Open** to open your project folder.
+  ![Navigate to your project folder.](./images/project-folder.png " ")
 
   The project folder along with the labs and **workshops** folder will then be displayed in your text editor.
-    ![Workshops folder displayed in text editor.](./images/atom-editor-project-folder-displayed.png " ")
+    ![Workshops folder displayed in text editor.](./images/project-folder-displayed.png " ")
 
-9. Select the `.md` file you want to edit, for example, select the `1-labs-git-hub-get-started-install-configure.md` file and edit your lab content. Similarly, edit the `.md` files of the rest of your labs.
-    ![Select markdown file to edit.](./images/atom-editor-browse-open-mdfile-editing.png " ")
+9. Select the `.md` file you want to edit, for example, select the `data-load/data-load.md` file and edit your lab content. Similarly, edit the `.md` files of the rest of your labs.
+    ![Select markdown file to edit.](./images/open-mdfile-editing.png " ")
 
 10. If you want to add images in your lab, then include them within the **images** folder. You can insert images in the respective `.md` file.
 
-11. Similarly to edit your workshop content, expand the **workshops\tenancy** (if you are creating a workshop running on users' tenancies), **workshops\sandbox** (if you are creating a sandbox/green button workshop), and/or **workshops\desktop** (if you are creating a noVNC workshop) folder in your text editor. Edit the `manifest.json` to list the labs you have added to your workshop (or plan to add) and update the title of the workshop. The `manifest.json` is like your book map file in SDL.
+11. Similarly to edit your workshop content, expand the **workshops/tenancy** (if you are creating a workshop running on users' tenancies), **workshops/sandbox** (if you are creating a sandbox/green button workshop), and/or **workshops/desktop** (if you are creating a noVNC workshop) folder in your text editor. Edit the `manifest.json` to list the labs you have added to your workshop (or plan to add) and update the title of the workshop. The `manifest.json` is like your book map file in SDL.
 
   Besides the list of labs, also update the `workshoptitle` field, and update the `help` field to point to the workshop's stakeholders group email. If the `include` and `variables` field do not apply to your workshop, please remove them, otherwise, your workshop will not render properly.
 
-  ![Edit manifest json file with Atom.](./images/manifest.png " ")
+  ![Edit manifest json file](./images/manifest.png " ")
 
-12. If you want to add an introduction to your workshop, then navigate to **sample-livelabs-templates\sample-workshop** and copy the `introduction` folder to your project folder, for example, **create-labs\labs**. You can rename the introduction folder if you would want to.
+12. If you want to add an introduction to your workshop, then navigate to **sample-livelabs-templates/sample-workshop** and copy the `introduction` folder to your project folder. You can rename the introduction folder if you would want to.
 
-13. You can also create a `README.md` file within **workshops\freetier**, and update the `README.md` with a summary of your workshop. Note that the `README.md` file is optional for your workshop.
+13. You can also create a `README.md` file within **workshops/tenancy**, **workshops/sandbox**, and/or **workshops/desktop**, and update the `README.md` with a summary of your workshop. Note that the `README.md` file is optional for your workshop.
 
-## Task 5: Security
+## Task 5: Use Common Labs
+
+1. Some labs can be shared by many LiveLabs workshops, so we put together a list of [common labs](https://github.com/oracle-livelabs/common/tree/main/labs), including "Generate SSH Key," "Register an Oracle Cloud account," "Need Help," etc. for easier workshop development. You can leverage the [common labs](https://github.com/oracle-livelabs/common/tree/main/labs) located in the **[oracle-livelabs/common repository](https://github.com/oracle-livelabs/common/)**.
+
+2. To use a common lab, you need to use an absolute link to the lab in your workshop's manifest.json file. For example, if you want to use the "Generate SSH Key" common lab located in [https://github.com/oracle-livelabs/common/blob/main/**labs/generate-ssh-key-cloud-shell/generate-ssh-keys-cloud-shell.md**](https://github.com/oracle-livelabs/common/blob/main/labs/generate-ssh-key-cloud-shell/generate-ssh-keys-cloud-shell.md), you should use this link in the manifest.json file: [https://oracle-livelabs.github.io/common/**labs/generate-ssh-key-local/generate-ssh-keys-local.md**](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-local/generate-ssh-keys-local.md).
+
+## Task 6: Security
 
 1. Blur all personal information (IP addresses, intranet URLs, email addresses, OCIDs, usernames, and passwords) from images.
   ![Blur all identifiable information.](./images/blur-ip.png " ")
@@ -135,7 +141,7 @@ To create your lab and workshop content:
 3. Do not use any IP addresses, intranet URLs (for example links to a Confluence page), email addresses, OCIDs, usernames, or passwords in the text. Do not provide a demo password.
 
 
-## Task 6: Preview Your Workshop and Labs Using Live Server
+## Task 7: Preview Your Workshop and Labs Using Live Server
 
 1. Within the directory of any workshop you want to view, click the **workshops** folder and then click the **freetier** folder.
   ![Navigate to freetier folder.](./images/folder-nav.png " ")
@@ -143,7 +149,7 @@ To create your lab and workshop content:
   ![Right click and select open with the Live Server.](./images/right-click.png " ")
 3. The local version of your workshop will then be launched in your web browser.
 
-## Task 7: (Optional) Helpful resources and extensions for Visual Studio Code
+## Task 8: (Optional) Helpful resources and extensions for Visual Studio Code
 
 1. [Showdown Editor](http://demo.showdownjs.com/) is a Javascript Markdown to HTML converter that LiveLabs uses in the background to convert Markdown files to HTML. This documentation is a helpful resource while developing content in markdown files. This document provides a quick description of the markdown syntax supported on the left side and the output in HTML format on the right side. Showdown Editor shows the syntax of writing, paragraphs, headings, block and italics, code formatting, creating lists, tables, adding links, images, escaping entities, etc.
 
@@ -179,7 +185,7 @@ To create your lab and workshop content:
 
   ![Delete Trailing Spaces Extension](./images/delete-trailing-spaces-extension.png " ")
 
-6. Install Path Intellisense Extension in Visual Studio Code - since repositories in the Oracle LiveLabs GitHub project have many files, you may want to access files in different folders of your workshop or sometimes in a different directory. To know the file, you are pointing to in the manifest.json file, you can use the path intellisense extension.
+6. Install Path Intellisense Extension in Visual Studio Code - since repositories in the Oracle LiveLabs GitHub project have many files, you may want to access files in different folders of your workshop or sometimes in a different directory. To know the file, you are pointing to in the manifest.json file, you can use the path Intellisense extension.
 
   To install this extension, search for path intellisense in VS Code marketplace, select the first extension and install it.
 
@@ -259,4 +265,4 @@ If you see a blank page, check the manifest.json file.
     * Andres Quintana
     * Brianna Ambler
 
-* **Last Updated By/Date:** Arabella Yao, Jun 2022
+* **Last Updated By/Date:** Arabella Yao, August 2022

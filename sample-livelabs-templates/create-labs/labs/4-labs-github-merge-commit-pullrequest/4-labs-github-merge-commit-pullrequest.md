@@ -9,7 +9,7 @@ As a best practice, merge your repositories every day or whenever you start your
 * Commit your changes
 * Request for a review
 * Test your content
-* Create a Pull Request to upload your content to main
+* Create a Pull Request to upload your content to the main branch
 
 ### What Do You Need?
 * Git Environment Setup
@@ -224,7 +224,11 @@ You have finished developing your workshop. To publish your workshop, you still 
 
 ## (Optional) Task 10: Embed a Video
 
-We also recommend workshop teams provide a video if available, for a better customer experience. This video will be displayed on this workshop's LiveLabs landing page. The video can be from [Oracle Video Hub](https://videohub.oracle.com/) (recommended) or from [YouTube](https://www.youtube.com/). Oracle Video Hub is the public video platform of Oracle. Videos uploaded to Oracle Video Hub help us get better analytics on video usage. If your team does not have a YouTube account, you can reach out to the LiveLabs team and ask us to upload the video for you.
+We also recommend workshop teams provide a video if available, for a better customer experience. This video will be displayed on this workshop's LiveLabs landing page as shown on the screenshot below.
+
+![Video on workshop landing page](images/video-landing-page.png " ")
+
+The video can be from [Oracle Video Hub](https://videohub.oracle.com/) (recommended) or from [YouTube](https://www.youtube.com/). Oracle Video Hub is the public video platform of Oracle. Videos uploaded to Oracle Video Hub help us get better analytics on video usage. If your team does not have a YouTube account, you can reach out to the LiveLabs team and ask us to upload the video for you.
 
 Option 1: To embed a video from Oracle Video Hub:
 
@@ -251,7 +255,7 @@ You may now **proceed to the next lab**.
 
 ## **Appendix**: Troubleshooting Tips
 ### Issue 1: Commits Behind oracle:main
-  ![Sync GitHub with main repository.](./images/git-hub-sync-behind.png " ")
+  ![Sync GitHub with the main repository.](./images/git-hub-sync-behind.png " ")
 
 1. Follow the steps in Task 1: Get the Latest Updates from Production.
 
@@ -426,4 +430,4 @@ If you have multiple Oracle LiveLabs repositories, you need to switch to the rep
     * Arabella Yao, Product Manager, Database
     * Madhusudhan Rao, Product Manager, Database
 
-* **Last Updated By/Date:** Arabella Yao, June 2022
+* **Last Updated By/Date:** Arabella Yao, August 2022
