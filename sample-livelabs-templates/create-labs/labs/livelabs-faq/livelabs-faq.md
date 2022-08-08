@@ -98,7 +98,7 @@ For questions related to LiveLabs please review this FAQ. If you don't see an an
     -	Zip your files and mail to [livelabs-help-db_us@oracle.com](livelabs-help-db_us@oracle.com).
     -	LiveLabs team will upload the file in LiveLabs owned tenancy object storage and share the pre-authenticated link with an expiry date to you in 1-2 days.
 8.	How to submit videos for the workshops to one of the Oracle’s official Youtube channels?
-    -	Workshop videos can only be sourced from one of the official Oracle Youtube channels.  We have a LiveLabs YouTube channel.  Submit the video to [livelabs-help-db_us@oracle.com](livelabs-help-db_us@oracle.com) and we will review and upload it.
+    -   Refer to Lab 4: Use GitHub Desktop to Commit to the GitHub Repository -> (Optional) Task 10: Embed a Video.
 9.	How to create a custom image from the Marketplace?
     -	Refer to [this](https://rpastijn.github.io/stuff/?lab=custom-image-mp-image) documentation on Github.
 10. Where can I locate the Self QA Checklist?
@@ -112,7 +112,15 @@ For questions related to LiveLabs please review this FAQ. If you don't see an an
     - Delete the same repo you just deleted on Github on your local machine as well.
     - After the successful deletion of repo on Github and local machine, follow the instructions from step 7 in lab 1 - Get Started with Git and Set up the GitHub Environment to rebuilt the repo.
 12. After my pull request is merged, how long does it take for the changes to be reflected in production?
-    Workshops in production use object storage links. The synchronization between the GitHub repositories and object storage happens every night (PST), so your changes will be reflected after the synchronization happens. If you want to update the workshop for upcoming events, please plan ahead.
+    -   It takes around 30 minutes for the github.io pages to reflect the changes you make. After changes are reflected on the github.io page, your workshop in production is updated automatically.
+
+13. My workshop in production has the wrong information, throws a 404 error, or is not updated with my new changes. How can I troubleshoot?
+    -   There are several possible causes of the issue.
+    -   First, go to [WMS](https://apex.oraclecorp.com/pls/apex/f?p=24885:51) and examine your workshop's information.
+    -   If the workshop in production has the wrong title, description, outline, prerequisites, video, or any information on the landing page, you can correct that information in [WMS](https://apex.oraclecorp.com/pls/apex/f?p=24885:51). After you correct that information, the changes will be reflected in production after WMS and LiveLabs syncs within a day.
+    -   If the workshop in production throws a 404 error, or the content is not updated with your recent changes, click **Publishing** tab and open your workshop's LiveLabs publishing entry. Make sure the URLs of your workshop are correct and have the updated workshop information. WMS and LiveLabs sync daily, so any changes to those URLs will be reflected in production within one day.
+    -   If the URLs have the wrong or outdated information, you need to create a PR to the oracle main branch to merge your changes or wait until your PRs are merged. Note that it takes some time for changes to be reflected in the github.io pages after your PRs are merged.
+
 
 ## **Workshops FAQ**
 
@@ -172,6 +180,11 @@ For questions related to LiveLabs please review this FAQ. If you don't see an an
     -	Click on Report: View All Workshops on the left menu Report.
     -	Click on Production flg column and select 1 from the dropdown list to filter the workshops in production.
     -	Click Actions -> Download -> Excel Download.
+13. Why cannot I updated a workshop assigned to me?
+    - Only people listed as **Workshop Team Members** can update workshop information in WMS.
+    - Check if your correct email address is listed in the **Workshop Team Members**. If not, please ask any person listed as the **Workshop Team Members** to add you to the team. Then, you will be able to update your workshop's information.
+14. I want to present a workshop to customers. How can I find some presentation materials of the workshop?
+    - Contact the workshop team (by following Step 6: How to contact the author of a workshop?)
 
 ## **Event Codes FAQ**
 
@@ -239,4 +252,4 @@ For questions related to LiveLabs please review this FAQ. If you don't see an an
 
 * **Author:** Anoosha Pilli, Product Manager, Database Product Management
 * **Contributors:** Madhusudhan Rao, Arabella Yao, Product Manager, Database Product Management
-* **Last Updated By/Date:** Arabella Yao, April 2022
+* **Last Updated By/Date:** Arabella Yao, August 2022
