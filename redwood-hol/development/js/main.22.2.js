@@ -912,7 +912,7 @@ let main = function() {
         const wurl = location.href;
         let llid = "could not be identified. Please continue submitting your question."
         if (wurl.lastIndexOf("llid=") != "-1") {
-            llid = wurl.lastIndexOf("index") + wurl.substring((wurl.lastIndexOf("llid=") +5));
+            llid = wurl.substring((wurl.lastIndexOf("llid=") +5));
         }
         if (help !== undefined) {
             // the Need Help? URL is taken from the manifest file (key is help)
