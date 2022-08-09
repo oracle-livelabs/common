@@ -1032,7 +1032,7 @@ pre .copy-button:hover {
 
 /* LLAPEX-543: fix padding in breadcrumb */
 #tutorial-title {
-    padding-left: 8px;
+    padding-left: 0.3rem;
     display: block;
 }
 
