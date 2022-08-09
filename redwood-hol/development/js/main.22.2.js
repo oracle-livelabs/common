@@ -905,13 +905,18 @@ let main = function() {
     }
 
     /* Add the Need Help link in the header (DBDOC-2459 and DBDOC-2496) */
-    // LLAPEX-542: Add body to email template containing workshop
+    // LLAPEX-542: Add body to email template containing workshop ID
     let addNeedHelpLink = function(help, wtitle) {
         const subject = "Question about workshop: " + wtitle;
         const help_text = "Need help? Send us an email.";
+        const wurl = location.href;
+        let llid = "could not be identified. Please continue submitting your question."
+        if (wurl.lastIndexOf("llid=") != "-1") {
+            llid = wurl.lastIndexOf("index") + wurl.substring((wurl.lastIndexOf("llid=") +5));
+        }
         if (help !== undefined) {
             // the Need Help? URL is taken from the manifest file (key is help)
-            let need_help = $(document.createElement('a')).attr({ 'href': 'mailto:' + help + '?subject=' + subject + '&body=URL of workshop: ' + location.href, 'title': help_text, 'id': 'need_help', 'tabindex': '0' }).text('?');
+            let need_help = $(document.createElement('a')).attr({ 'href': 'mailto:' + help + '?subject=' + subject + '&body=LiveLabs ID ' + llid , 'title': help_text, 'id': 'need_help', 'tabindex': '0' }).text('?');
             $('header .hol-Header-wrap').append(need_help);
 
             // let need_help_div = $(document.createElement('div')).attr({ 'href': 'mailto:' + help + '?subject=' + subject, 'title': help_text, 'id': 'need_help', 'tabindex': '0' }).text('?');
