@@ -910,13 +910,13 @@ let main = function() {
         const subject = "Question about workshop: " + wtitle;
         const help_text = "Need help? Send us an email.";
         const wurl = location.href;
-        let llid = "could not be identified. Please continue submitting your question."
+        let llid = "na"
         if (wurl.lastIndexOf("llid=") != "-1") {
             llid = wurl.substring((wurl.lastIndexOf("llid=") +5));
         }
         if (help !== undefined) {
             // the Need Help? URL is taken from the manifest file (key is help)
-            let need_help = $(document.createElement('a')).attr({ 'href': 'mailto:' + help + '?subject=' + subject + '&body=LiveLabs ID ' + llid , 'title': help_text, 'id': 'need_help', 'tabindex': '0' }).text('?');
+            let need_help = $(document.createElement('a')).attr({ 'href': 'mailto:' + help + '?subject=' + subject + ' (' + llid + ')' , 'title': help_text, 'id': 'need_help', 'tabindex': '0' }).text('?');
             $('header .hol-Header-wrap').append(need_help);
 
             // let need_help_div = $(document.createElement('div')).attr({ 'href': 'mailto:' + help + '?subject=' + subject, 'title': help_text, 'id': 'need_help', 'tabindex': '0' }).text('?');
