@@ -910,7 +910,7 @@ let main = function() {
         const subject = "Question about workshop: " + wtitle;
         const help_text = "Need help? Send us an email.";
         const wurl = location.href;
-        let llid = "na"
+        let llid = "na";
         if (wurl.lastIndexOf("llid=") != "-1") {
             llid = wurl.substring((wurl.lastIndexOf("llid=") +5));
         }
