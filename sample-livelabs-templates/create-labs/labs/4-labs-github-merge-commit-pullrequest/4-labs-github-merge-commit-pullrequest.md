@@ -24,7 +24,9 @@ Watch this video below on how to self-QA your workshop.
 
 Before you develop you should ensure you have the latest content from production to ensure you are developing off the latest code set.
 
-1. Go to your personal GitHub repo on the web and determine if your personal repo is behind the main.  If it is, perform the following steps to sync.  This should be done before you commit.
+>**Note:** Make sure you are performing the following steps **off VPN**.
+
+1. Go to your personal forked GitHub repo on the web and determine if your forked repo is behind the main.  If it is, perform the following steps to sync.  This should be done before you commit.
 
   Here we are using the *em-omc* repository as an example. You need to do that on whichever repo you work.
 
@@ -33,7 +35,7 @@ Before you develop you should ensure you have the latest content from production
 2. Start your **GitHub Desktop** client. If you have multiple Oracle LiveLabs repositories, first switch to the repository that you will work on. Expand the dropdown list of **Current Repository**. Click the repository that you want to sync. In this case, I select the *em-omc* repository as an example.
   ![Switch repository.](../3-labs-use-atom-editor-develop-content/images/switch-repo.png " ")
 
-3. Click **Fetch origin**. Then, go to **Branch** -> **Merge into Current Branch**.
+3. Click **Fetch origin** to get the latest updates from production. Then, go to **Branch** -> **Merge into Current Branch**.
 
   ![Merge into current branch.](./images/git-hub-merge-branch.png " ")
 
@@ -53,6 +55,8 @@ Before you develop you should ensure you have the latest content from production
 
 ## Task 2: Commit your Changes in your Clone
 When you create, delete, or modify assets in your clone (local copy), you should commit (save) those changes to your clone, and then push those changes from your clone to your fork. Then these changes get saved to your forked repository.
+
+>**Note:** Make sure you are performing the following steps **off VPN**.
 
 To commit your changes:
 1. Start your **GitHub Desktop** client.
@@ -202,7 +206,7 @@ You have finished developing your workshop. To publish your workshop, you still 
 
 ## Task 9: Request Publishing
 
-1.  Click **Publishing** tab, then **+ Publish to LiveLabs**.
+1.  Click the **Publishing** tab, then **+ Publish to LiveLabs**.
 
   ![Request Publishing](images/publishing-tab.png)
 
@@ -214,7 +218,7 @@ You have finished developing your workshop. To publish your workshop, you still 
 
     - Paid Tier On? - Can this workshop be done in a customer tenancy?
 
-    - Green Button On? - Can this workshop be done in a registered LiveLabs tenancy, a.k.a Green Button? With Green Button, users can run the workshop in pre-provisioned environments. Users have to complete the workshop in a specified limited amount of time. After their reservations expire, any instances they create will be destroyed. However, users can extend their reservations up to 4 times. You can contact us via WMS to request a Green Button for your workshop. Green Button can also be added after your workshop has already been in production.
+    - Green Button On? - Can this workshop be done in a registered LiveLabs tenancy, a.k.a Green Button? If you want to know more about the green button, or request one for your workshop, please see *Task 10: Request the Green Button* below.
 
     ![Publishing Information](images/livelabs-publishing.png " ")
 
@@ -222,7 +226,35 @@ You have finished developing your workshop. To publish your workshop, you still 
 
 4. When your workshop is in **Completed** status, and we have approved your publishing request, your workshop will be published automatically within 1 business day.
 
-## (Optional) Task 10: Embed a Video
+## (Optional) Task 10: Request the Green Button
+
+After you enable the green button for your workshop, users can run the workshop in pre-provisioned environments (a.k.a. sandbox), so they don't need to register OCI Free Tier accounts. Users have to complete the workshop in a specified limited amount of time (they can extend their reservations up to 4 times). After their reservations expire, any instances they create will be destroyed.
+
+The green button is a great choice if you want users to try some not available in OCI Free Tier for free, or if the workshop setup is long and time-consuming and you want customers to skip the setup and dive directly into products and services. Note that not all services are available or can be provisioned in the green button environment.
+
+The green Button can also be added after your workshop has already been in production.
+
+1. Go to WMS and find your workshop. Click the **Publishing** tab, then click **Edit** in the LiveLabs publishing entry (if available), or click **+ Publish to LiveLabs** (if you do not have a LiveLabs publishing entry already).
+
+	![Edit LiveLabs publishing entry](images/publishing-edit.png " ")
+	![Request Publishing](images/publishing-tab.png " ")
+
+2. Turn on the **Green Button Enabled?** button. This will trigger a notification to our LiveLabs team.
+	![Turn on Green Button](images/gb-enabled.png " ")
+
+3. Scroll down and fill out the **Green Button Questionnaire** to the best of your knowledge.
+	![Green Button Questionnaire](images/gb-questionnaire.png " ")
+
+4. Click **Create** or **Save**.
+
+5. You need to create a green button version of your workshop since the setup, instructions, and screenshots will be different for green button users. Refer to Lab 2 - Lab 4 to develop your workshop. Note that you should update the *workshops/sandbox/index.html* (or *workshops/livelabs/index.html*) and the *workshops/sandbox/manifest.json* (or *workshops/livelabs/manifest.json*), and all necessary lab files.
+
+6. Our LiveLabs team will work with you to set up and test the green button for your workshop. The time varies depending on what services and products the workshop showcases, and if we have any existing green buttons similar. If you have any questions, please reach out to *livelabs-help-db_us@oracle.com*.
+
+7. After the green button is ready, make sure you QA the workshop. Then, the green button will be ready for use in production.
+	![Sandbox](images/sandbox.png " ")
+
+## (Optional) Task 11: Embed a Video
 
 We also recommend workshop teams provide a video if available, for a better customer experience. This video will be displayed on this workshop's LiveLabs landing page as shown on the screenshot below.
 
