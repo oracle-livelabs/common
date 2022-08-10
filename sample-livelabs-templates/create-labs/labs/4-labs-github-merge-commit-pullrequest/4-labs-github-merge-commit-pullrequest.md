@@ -24,7 +24,9 @@ Watch this video below on how to self-QA your workshop.
 
 Before you develop you should ensure you have the latest content from production to ensure you are developing off the latest code set.
 
-1. Go to your personal GitHub repo on the web and determine if your personal repo is behind the main.  If it is, perform the following steps to sync.  This should be done before you commit.
+>**Note:** Make sure you are performing the following steps **off VPN**.
+
+1. Go to your personal forked GitHub repo on the web and determine if your forked repo is behind the main.  If it is, perform the following steps to sync.  This should be done before you commit.
 
   Here we are using the *em-omc* repository as an example. You need to do that on whichever repo you work.
 
@@ -33,7 +35,7 @@ Before you develop you should ensure you have the latest content from production
 2. Start your **GitHub Desktop** client. If you have multiple Oracle LiveLabs repositories, first switch to the repository that you will work on. Expand the dropdown list of **Current Repository**. Click the repository that you want to sync. In this case, I select the *em-omc* repository as an example.
   ![Switch repository.](../3-labs-use-atom-editor-develop-content/images/switch-repo.png " ")
 
-3. Click **Fetch origin**. Then, go to **Branch** -> **Merge into Current Branch**.
+3. Click **Fetch origin** to get the latest updates from production. Then, go to **Branch** -> **Merge into Current Branch**.
 
   ![Merge into current branch.](./images/git-hub-merge-branch.png " ")
 
@@ -53,6 +55,8 @@ Before you develop you should ensure you have the latest content from production
 
 ## Task 2: Commit your Changes in your Clone
 When you create, delete, or modify assets in your clone (local copy), you should commit (save) those changes to your clone, and then push those changes from your clone to your fork. Then these changes get saved to your forked repository.
+
+>**Note:** Make sure you are performing the following steps **off VPN**.
 
 To commit your changes:
 1. Start your **GitHub Desktop** client.
