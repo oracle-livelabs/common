@@ -228,7 +228,7 @@ You have finished developing your workshop. To publish your workshop, you still 
 
 ## (Optional) Task 10: Request the Green Button
 
-After you enable the green button for your workshop, users can run the workshop in pre-provisioned environments (a.k.a. sandbox), so they don't need to register OCI Free Tier accounts. Users have to complete the workshop in a specified limited amount of time (they can extend their reservations up to 4 times). After their reservations expire, any instances they create will be destroyed.
+After you enable the green button for your workshop, users can run the workshop in pre-provisioned environments (a.k.a. sandbox), so they don't need to register OCI Free Tier accounts. Users have to complete the workshop in a specified limited amount of time (they can extend their reservations up to 4 times). After their reservations expire, any instances they create will be destroyed, and they can no longer access their sandbox environments.
 
 The green button is a great choice if you want users to try some not available in OCI Free Tier for free, or if the workshop setup is long and time-consuming and you want customers to skip the setup and dive directly into products and services. Note that not all services are available or can be provisioned in the green button environment.
 
@@ -239,19 +239,31 @@ The green Button can also be added after your workshop has already been in produ
 	![Edit LiveLabs publishing entry](images/publishing-edit.png " ")
 	![Request Publishing](images/publishing-tab.png " ")
 
-2. Turn on the **Green Button Enabled?** button. This will trigger a notification to our LiveLabs team.
-	![Turn on Green Button](images/gb-enabled.png " ")
+2. Scroll down to the new Green Button section at the bottom of the page.
+	![Scroll Down](images/scroll-down.png " ")
 
-3. Scroll down and fill out the **Green Button Questionnaire** to the best of your knowledge.
-	![Green Button Questionnaire](images/gb-questionnaire.png " ")
+3. We offer two options to create a Green Button in LiveLabs. A **Green Button Lite** provides users the **ability** to provision certain resources by themselves, but it happens automatically and will be ready within 1 business day! A **regular Green Button** can provision resources for the user but can take 1-3 weeks to develop depending on the workshop's complexity.
+	![Green Button Options](images/gb-options.png " ")
 
-4. Click **Create** or **Save**.
+4. Fill out the green button information.
+
+    Option 1: **Green Button Lite**
+    1. Click **Green Button Lite**, understand the instructions, and then **OK**.
+    ![Green Button Lite](images/gb-lite.png " ")
+    2. Carefully read instructions to understand the Green Button Lite. Select what resources you want the users to be able to create.
+    ![Green Button Questionnaire](images/gb-lite-questionnaire.png " ")
+
+    Option 2: Regular Green Button
+    1. Click **Green Button**, understand the instructions, and then **OK**.
+    ![Green Button regular](images/gb-regular.png " ")
+    2. Carefully read instructions to understand the process of creating a regular Green Button. Follow instructions to open **Open Jira Ticket**.
+    ![Green Button JIRA](images/gb-regular-info.png " ")
+
+4. When finished, click **Create** or **Save**.
 
 5. You need to create a green button version of your workshop since the setup, instructions, and screenshots will be different for green button users. Refer to Lab 2 - Lab 4 to develop your workshop. Note that you should update the *workshops/sandbox/index.html* (or *workshops/livelabs/index.html*) and the *workshops/sandbox/manifest.json* (or *workshops/livelabs/manifest.json*), and all necessary lab files.
 
-6. Our LiveLabs team will work with you to set up and test the green button for your workshop. The time varies depending on what services and products the workshop showcases, and if we have any existing green buttons similar. If you have any questions, please reach out to *livelabs-help-db_us@oracle.com*.
-
-7. After the green button is ready, make sure you QA the workshop. Then, the green button will be ready for use in production.
+6. After the green button is ready, make sure you QA the workshop. The green button will be ready for use in production.
 	![Sandbox](images/sandbox.png " ")
 
 ## (Optional) Task 11: Embed a Video
