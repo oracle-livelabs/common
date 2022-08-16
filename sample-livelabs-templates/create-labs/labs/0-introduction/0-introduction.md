@@ -4,9 +4,8 @@ Welcome to LiveLabs and creating workshops to give practical hands on experience
 
 This workshop is to help walk you through the process of creating your own workshop. It will walk you through all of the steps, processes and how to do quality checks to build a successful workshop. This workshop will also explain the workflow using Workshopshop Management System (WMS), from development to publishing. 
 
-> **Note:** There are sample labs, images in the common repository of the oracle-livelabs github. You can also find information about creating images for compute instances and storing them in Marketplace in the [Creating Compute Images for Marketplace](https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/compute/) LiveLabs workshop.
-
-LiveLabs Overivew [watch now](https://www.youtube.com/watch?v=lHriX403Oz4).
+LiveLabs Overview
+[](youtube:lHriX403Oz4)
 
 ## What are Labs and Workshops?
 
@@ -54,7 +53,7 @@ Also get familiar with WMS to see the process, check out videos under new here a
 * **Authors:**
     * Michelle Malcher, Senior Manager, Oracle Database Product Management
 * **Contributors:**
- * Anuradha Chepuri, Principal User Assistance Developer, Oracle GoldenGate
+    * Anuradha Chepuri, Principal User Assistance Developer, Oracle GoldenGate
     * Lauran Serhal, Principal User Assistance Developer, Oracle Database and Big Data
     * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ 
     * Arabella Yao, Product Manager, Database Product Management
