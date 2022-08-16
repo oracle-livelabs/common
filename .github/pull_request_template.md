@@ -1,7 +1,5 @@
 # Add here your WMS ID
 
-
-
 # General requirements
 1. Information in workshop is adequate and updated
 2. Code is correct and working
