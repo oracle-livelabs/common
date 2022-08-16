@@ -8,7 +8,7 @@ In this lab, you will learn how to implement certain common markdown features an
 
 ### Objectives
 
- * Linking to Absolute Path Images (on Object Storage)
+ * Linking to Absolute Path Images
  * Using Conditional Formatting
  * [Linking within a Workshop (Hotlinks)](#STEP3:LinkingwithinaWorkshop(Hotlinks))
  * Adding Videos
@@ -20,8 +20,8 @@ In this lab, you will learn how to implement certain common markdown features an
 * An IDE, such as Atom or Visual Studio Code.
 * A local web server such as **atom-live-server** for Atom or **Live Server** for VSC.
 
-## Task 1: Linking to Absolute Path Images (on Object Storage)
-Rather than pointing to images within your lab folder or workshop directory with a relative path, you can just as easily point your images to URLs. This comes in handy if you reuse an image a lot, the code you write to display it in markdown will always be the same no matter where the image is in relation to markdown. Using absolute image paths is also handy if you need to keep an image updated, as changing the destination file image will affect every instance where you pointed an image to it. This is also useful when you want to *point to an image in a different repository* (you don't need to clone or fork that repository). This is the same concept and implementation as using absolute paths for common labs in your manifest.json files.
+## Task 1: Linking to Absolute Path Images
+Rather than pointing to images within your lab folder or workshop directory with a relative path, you can just as easily point your images to URLs. This comes in handy if you use [common images](https://github.com/oracle-livelabs/common/tree/main/images), or reuse an image a lot, the code you write to display it in markdown will always be the same no matter where the image is in relation to markdown. Using absolute image paths is also handy if you need to keep an image updated, as changing the destination file image will affect every instance where you pointed an image to it. This is also useful when you want to *point to an image in a different repository* (you don't need to clone or fork that repository). This is the same concept and implementation as using absolute paths for common labs in your manifest.json files.
 
 *For screenshots of OCI menu navigation, use the images with absolute links*
 
@@ -40,7 +40,7 @@ Rather than pointing to images within your lab folder or workshop directory with
   Here is how the image path above shows up in production:
   ![Description](https://oracle-livelabs.github.io/common/images/console/home-page.png " ")
 
-3. If the image link breaks, the image will break. For this reason, it's recommended that you use the Object Storage link rather than a random image hosting site.  To get this Object Storage link, navigate to the **oracle-livelabs/common** repository, and find the image file. Append the file path at the end of *"https://objectstorage.us-phoenix-1.oraclecloud.com/p/SJgQwcGUvQ4LqtQ9xGsxRcgoSN19Wip9vSdk-D\_lBzi7bhDP6eG1zMBl0I21Qvaz/n/c4u02/b/common/o/"*. For example, if an image is located in **images/console/home-page.png** in the **common** repository, then the link you should use is https://oracle-livelabs.github.io/common/**images/console/home-page.png**.
+3. You can find all common images in the [oracle-livelabs/common](https://github.com/oracle-livelabs/common/tree/main/images) GitHub repository. For example, if an image is located in **images/console/home-page.png** in the **common** repository, then the link you should use is https://oracle-livelabs.github.io/common/**images/console/home-page.png**.
 
   ![Recommended to use GitHub path for images.](./images/home-page.png " ")
 
@@ -172,4 +172,4 @@ Download this handy [Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.
     * Andres Quintana
     * Arabella Yao, Database Product Management
 
-* **Last Updated By/Date** - Arabella Yao, Jun 2022
+* **Last Updated By/Date** - Arabella Yao, August 2022
