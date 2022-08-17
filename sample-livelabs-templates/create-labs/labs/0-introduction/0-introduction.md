@@ -1,15 +1,15 @@
 # Introduction to Labs and Workshops
 
-Welcome to LiveLabs and creating workshops to give practical hands on experiences for Oracle Products and technologies. This is the place to demonstrate the use case and allow users to explore and gain valuable knowledge with Oracle Cloud, Applications and Database. 
+Welcome to LiveLabs and creating workshops to give practical hands on experiences for Oracle Products and technologies. This is the place to demonstrate use cases and allow users to explore and gain valuable knowledge with Oracle Cloud, Applications and Database. 
 
-This workshop is to help walk you through the process of creating your own workshop. It will walk you through all of the steps, processes and how to do quality checks to build a successful workshop. This workshop will also explain the workflow using Workshopshop Management System (WMS), from development to publishing. 
+This workshop is to help walk you through the process of creating your own workshop. It will walk you through all of the steps, processes even how to do quality checks to build a successful workshop. This workshop will also explain the workflow using Workshopshop Management System (WMS), from development to publishing. 
 
 LiveLabs Overview
 [](youtube:lHriX403Oz4)
 
 ## What are Labs and Workshops?
 
-Labs are a set of step by step instructions to complete to finish a task as part of the hands-on experience. A workshop is the collection of the labs provided in a specific order to complete the overall set of instructions. A workshop should have an introduction and then at least two labs to work through. The workshop has the big picture of the what the user is going to accomplish by completing all or some of the labs listed in the workshop. 
+Labs are a set of step by step instructions to complete a task as part of the hands-on experience. A workshop is the collection of the labs provided in a specific order to complete the overall set of instructions. A workshop should have an introduction and then at least two labs to work through. The workshop has the big picture of the what the user is going to accomplish by completing all or some of the labs listed in the workshop. 
 
 An individual Markdown (.md) file is the document and text that makes up a lab. For each lab there is a markdown and the workshop has files that will call each lab and put them in order. In most cases, this is not a problem since most of the LiveLabs workshops contain at least one common lab titled **Get Started** that guides the user on the different types of Cloud accounts.
 
@@ -21,10 +21,13 @@ Before you get started with the development of labs and workshop, check out exis
 
 * [WMS](https://bit.ly/oraclewms)
 
-Also get familiar with WMS to see the process, check out videos under new here and need help sections of the menu. Use the sample workshop that is found in https://github.com/oracle-livelabs/common under the  sample-livelabs-templates directory. (Steps will be provided later on settung up your GitHub repos). Another important step is to take look at the QA document since it provides how to do images, format markdown and gets you started in the right direction for the workshop standards.
+Also get familiar with WMS to see the process, check out videos under new here and need help sections of the menu. Use the sample workshop that is found in https://github.com/oracle-livelabs/common under the  sample-livelabs-templates directory. (Steps will be provided later on settung up your GitHub repos). This common repository also has a set of common images that you can use as part of your workshop.
+
+Another important step is to take look at the QA document since it provides how to do images, format markdown and gets you started in the right direction for the workshop standards. We also have a set of common images that are included in the common directory for you to use as part of your workshop.
 
 * [QA Document](https://objectstorage.us-ashburn-1.oraclecloud.com/p/MKKRgodQ0WIIgL_R3QCgCRWCg30g22bXgxCdMk3YeKClB1238ZJXdau_Jsri0nzP/n/c4u04/b/qa-form/o/QA.docx)
 
+We also have a set of common images that are included in the common directory
 ### **Workshop Objectives**
 
 * Enter new workshop in WMS
@@ -37,16 +40,17 @@ Also get familiar with WMS to see the process, check out videos under new here a
 
 - **Lab 1:** Create new workshop in WMS
 - **Lab 2:** Configure your environment for development
-- **Lab 3:** Develop Markdown content
+- **Lab 3:** Maintain GitHub environment
+- **Lab 4.** Develop Markdown content
 - **Lab 4:** QA checks and steps
 - **Lab 5:** Publish your workshop
-- **Lab 6:** Optional ways to publish your workshop
 
 
 ## Want to learn more about LiveLabs workshops and GitHub?
 
 * [Oracle LiveLabs](https://developer.oracle.com/livelabs)
 * [Get started with GitHub](https://docs.github.com/en/get-started)
+* [Oracle LiveLabs Common Repository](https://github.com/oracle-livelabs/common/tree/main/images)
 
 ## Acknowledgements
 

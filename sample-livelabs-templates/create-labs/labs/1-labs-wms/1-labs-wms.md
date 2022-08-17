@@ -17,7 +17,7 @@ The WMS workflow is shown with statuses and gives visibility into the developmen
 * Access to the **Oracle Workshop Management System (WMS)**
 * [WMS](https://bit.ly/oraclewms)
 
-## Task 1: Submit a Workshop Request to the Oracle Workshop Management System
+## Task 1: Submit a workshop request to the Oracle Workshop Management System
 
 Before getting started, you should submit your LiveLabs workshop request to the WMS. Submitting a workshop informs the Oracle ecosystem that you are working on a workshop and submits your idea to the Workshop Council. We urge you not to delay this step. There are hundreds of workshops already, this step is important to help us preserve the quality and integrity of the workshop catalog.
 
@@ -75,7 +75,7 @@ There are different ways to deploy your workshop. It can run in a free tier acco
   [](youtube:bEk71_rNfuc)
 
 
-## Task 3: LiveLabs Workshop Workflow
+## Task 3: LiveLabs workshop workflow
 
 For a workshop to go from an idea to a LiveLabs workshop in production, it has to go through the following phases or statuses in WMS. You can refer to this section to see your current and next steps.
 
@@ -105,7 +105,7 @@ For a workshop to go from an idea to a LiveLabs workshop in production, it has t
 7. The workshop is *completed* and is ready for publishing! Workshop teams will submit a publishing request, and the LiveLabs team will approve it. After the publishing request is approved, the workshop will be live in LiveLabs automatically within a business day.
   ![Completed](./images/completed.png " ")
 
-## Task 4: Develop LiveLabs Workshops Workflow
+## Task 4: Develop LiveLabs workshops workflow
 
 The following steps show the general workflow process that your need to follow to set up your environment to develop labs and workshops. Most of the tasks are performed only once. 
 
