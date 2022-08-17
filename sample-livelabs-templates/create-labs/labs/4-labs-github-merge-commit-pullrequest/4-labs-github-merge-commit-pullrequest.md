@@ -33,7 +33,7 @@ Before you develop you should ensure you have the latest content from production
   ![Sync GitHub with main repository.](./images/git-hub-sync-behind.png " ")
 
 2. Start your **GitHub Desktop** client. If you have multiple Oracle LiveLabs repositories, first switch to the repository that you will work on. Expand the dropdown list of **Current Repository**. Click the repository that you want to sync. In this case, I select the *em-omc* repository as an example.
-  ![Switch repository.](../3-labs-use-atom-editor-develop-content/images/switch-repo.png " ")
+  ![Switch repository.](../3-labs-use-code-editor-develop-content/images/switch-repo.png " ")
 
 3. Click **Fetch origin** to get the latest updates from production. Then, go to **Branch** -> **Merge into Current Branch**.
 
@@ -228,7 +228,7 @@ You have finished developing your workshop. To publish your workshop, you still 
 
 ## (Optional) Task 10: Request the Green Button
 
-After you enable the green button for your workshop, users can run the workshop in pre-provisioned environments (a.k.a. sandbox), so they don't need to register OCI Free Tier accounts. Users have to complete the workshop in a specified limited amount of time (they can extend their reservations up to 4 times). After their reservations expire, any instances they create will be destroyed.
+After you enable the green button for your workshop, users can run the workshop in pre-provisioned environments (a.k.a. sandbox), so they don't need to register OCI Free Tier accounts. Users have to complete the workshop in a specified limited amount of time (they can extend their reservations up to 4 times). After their reservations expire, the current reservations will no longer be accessible. However, users can always create a new reservation to work through the workshop again.
 
 The green button is a great choice if you want users to try some not available in OCI Free Tier for free, or if the workshop setup is long and time-consuming and you want customers to skip the setup and dive directly into products and services. Note that not all services are available or can be provisioned in the green button environment.
 
@@ -239,19 +239,37 @@ The green Button can also be added after your workshop has already been in produ
 	![Edit LiveLabs publishing entry](images/publishing-edit.png " ")
 	![Request Publishing](images/publishing-tab.png " ")
 
-2. Turn on the **Green Button Enabled?** button. This will trigger a notification to our LiveLabs team.
-	![Turn on Green Button](images/gb-enabled.png " ")
+2. Scroll down to the new Green Button section at the bottom of the page.
+	![Scroll Down](images/scroll-down.png " ")
 
-3. Scroll down and fill out the **Green Button Questionnaire** to the best of your knowledge.
-	![Green Button Questionnaire](images/gb-questionnaire.png " ")
+3. We offer two options to create a Green Button in LiveLabs. A **Green Button Lite** provides users the **ability** to provision certain resources by themselves, but it happens automatically and will be ready within 1 business day! A **regular Green Button** can provision resources for the user but can take 1-3 weeks to develop depending on the workshop's complexity.
+	![Green Button Options](images/gb-options.png " ")
 
-4. Click **Create** or **Save**.
+4. Fill out the green button information.
 
-5. You need to create a green button version of your workshop since the setup, instructions, and screenshots will be different for green button users. Refer to Lab 2 - Lab 4 to develop your workshop. Note that you should update the *workshops/sandbox/index.html* (or *workshops/livelabs/index.html*) and the *workshops/sandbox/manifest.json* (or *workshops/livelabs/manifest.json*), and all necessary lab files.
+    Option 1: **Green Button Lite**
 
-6. Our LiveLabs team will work with you to set up and test the green button for your workshop. The time varies depending on what services and products the workshop showcases, and if we have any existing green buttons similar. If you have any questions, please reach out to *livelabs-help-db_us@oracle.com*.
+    A Green Button Lite is a quick an easy way to create a Green Button for your workshop. Instead of provisioning actual resources for the lab, a Green Button Lite will spin up an environment in one of the LiveLabs tenancies with policies and quotas that will allow the USER to provision resources.
 
-7. After the green button is ready, make sure you QA the workshop. Then, the green button will be ready for use in production.
+    1. Click **Green Button Lite**, understand the instructions, and then **OK**.
+    ![Green Button Lite](images/gb-lite.png " ")
+    2. Carefully read instructions to understand the Green Button Lite. Select what resources you want the users to be able to create.
+    ![Green Button Questionnaire](images/gb-lite-questionnaire.png " ")
+
+    Option 2: Regular Green Button
+
+    A Green Button provides users automatically provisioned resources in an isolated environment in one of our LiveLabs tenancies. With this option, you can provision many OCI resources on behalf of the user, who will then be able to complete your workshop with little or no setup. LiveLabs cannot handle all OCI resources for green buttons, so each request will be evaluated on a case-by-case basis. Also, depending on the green button's complexity, completion time for a green button can range from 1-3 weeks.
+
+    1. Click **Green Button**, understand the instructions, and then **OK**.
+    ![Green Button regular](images/gb-regular.png " ")
+    2. Carefully read instructions to understand the process of creating a regular Green Button. Follow instructions to open **Open Jira Ticket**.
+    ![Green Button JIRA](images/gb-regular-info.png " ")
+
+5. When finished, click **Create** or **Save**.
+
+6. You need to create a green button version of your workshop since the setup, instructions, and screenshots will be different for green button users. Refer to Lab 2 - Lab 4 to develop your workshop. Note that you should update the *workshops/sandbox/index.html* (or *workshops/livelabs/index.html*) and the *workshops/sandbox/manifest.json* (or *workshops/livelabs/manifest.json*), and all necessary lab files.
+
+6. After the green button is ready, make sure you QA the workshop. The green button will be ready for use in production.
 	![Sandbox](images/sandbox.png " ")
 
 ## (Optional) Task 11: Embed a Video
@@ -397,7 +415,7 @@ In the worst case, if you cannot resolve issues in your local or staging repo, a
 
 ### Issue 6: Authentication error
 
-  ![Authentication failed.](../3-labs-use-atom-editor-develop-content/images/authentication-failed.png " ")
+  ![Authentication failed.](../3-labs-use-code-editor-develop-content/images/authentication-failed.png " ")
 
 First, make sure that you are logged into your GitHub account in GitHub Desktop. If it still does not solve the error, try the following steps.
 
@@ -406,13 +424,13 @@ If you have already created an SSH key in your local computer and added the key 
 1. If you have not generated SSH keys in your local computer, first follow the *(Optional) Lab 5: Generate SSH keys* on the left to generate SSH keys in your local computer.
 
 2. Now you have your public and private SSH keys. Go to your GitHub account in a browser. Click the arrow next to your profile picture on the upper right, and click **Settings**. Click **SSH and GPG keys**. If you have not added any SSH keys to your GitHub account, you will not see any SSH keys displayed. Then click **New SSH key**.
-  ![Settings](../3-labs-use-atom-editor-develop-content/images/settings-ssh.png " ")
+  ![Settings](../3-labs-use-code-editor-develop-content/images/settings-ssh.png " ")
 
 3. For **Title**, give your SSH key a name. In the **Key** field, copy and paste your public SSH key. Then, click **Add SSH key**.
-  ![Add SSH key](../3-labs-use-atom-editor-develop-content/images/add-ssh-key.png " ")
+  ![Add SSH key](../3-labs-use-code-editor-develop-content/images/add-ssh-key.png " ")
 
 4. After the SSH key is added, you can see it under SSH keys on your GitHub page.
-  ![SSH key added](../3-labs-use-atom-editor-develop-content/images/ssh-key-displayed.png " ")
+  ![SSH key added](../3-labs-use-code-editor-develop-content/images/ssh-key-displayed.png " ")
 
 5. Open up your terminal. Go to where *you cloned your GitHub repository* (which may be different from the example below). In this case, I am using the **em-omc** repository as an example, but the process is the same for other repositories.
 
@@ -436,7 +454,7 @@ If you have already created an SSH key in your local computer and added the key 
     ```
 
 8. Finally, go back to **GitHub Desktop** UI, and click **Push origin**. This should solve the authentication issue, and you can continue the lab.
-  ![Push origin.](../3-labs-use-atom-editor-develop-content/images/push-origin.png " ")
+  ![Push origin.](../3-labs-use-code-editor-develop-content/images/push-origin.png " ")
 
 ### Issue 7: GitHub Desktop is stuck
 
@@ -448,7 +466,7 @@ If you have already created an SSH key in your local computer and added the key 
 
 If you have multiple Oracle LiveLabs repositories, you need to switch to the repository that you will work on in GitHub Desktop. Expand the dropdown list of **Current Repository**, and click the repository that you need.
 
-  ![Switch repository.](../3-labs-use-atom-editor-develop-content/images/switch-repo.png " ")
+  ![Switch repository.](../3-labs-use-code-editor-develop-content/images/switch-repo.png " ")
 
 ## Acknowledgements
 
