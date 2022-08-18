@@ -25,7 +25,7 @@
     {
       "title": "Lab 3: Use A Text Editor to Develop Markdown Content",
       "description": "This lab shows you how to develop your lab (markdown) content using an editor, such as **Atom** and starting the atom-live-server.",
-      "filename": "./../../3-labs-use-atom-editor-develop-content/3-labs-use-atom-editor-develop-content.md"
+      "filename": "./../../3-labs-use-code-editor-develop-content/3-labs-use-code-editor-develop-content.md"
     },
     {
       "title": "Lab 3a: Common Markdown Features for Content Development",
@@ -41,6 +41,11 @@
       "title": "(Optional) Lab 5: Generate SSH keys",
       "description": "This lab shows you how to generate SSH keys for authentification",
       "filename": "https://oracle-livelabs.github.io/common/labs/generate-ssh-key-local/generate-ssh-keys-local.md"
+    },
+    {
+      "title": "(Optional) Lab 6: Develop LiveLabs Sprints",
+      "description": "This lab shows you how to create Sprint for LiveLabs",
+      "filename": "./../../10-labs-create-sprints-workflow/10-create-sprints-workflow.md"
     },
     {
       "title": "Need Help?",

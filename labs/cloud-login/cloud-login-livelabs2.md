@@ -25,7 +25,7 @@ Estimated Time: 5 minutes
 
 Creating an Oracle account can be summarized in the following two simple steps.
 
-1. Navigate to [oracle.com](http://www.oracle.com), Click on *View Account*, and Select *Create an Account*
+1. Navigate to [oracle.com](http://www.oracle.com), Click on *View Accounts*, and Select *Create an Account*
 
   ![Create an account](images/create-account-oracle-1.png " ")
 
@@ -35,7 +35,7 @@ Creating an Oracle account can be summarized in the following two simple steps.
 
 ## Task 2: Request Workshop Reservation
 
-1. Using your *Oracle Account Login* go to [LiveLabs](http://bit.ly/golivelabs). Open a workshop, click **Start**, and then **Run on LiveLabs** to request a reservation for this workshop.
+1. Using your *Oracle Account Login* go to [LiveLabs](https://developer.oracle.com/livelabs). Open a workshop, click **Start**, and then **Run on LiveLabs** to request a reservation for this workshop.
   ![Run on LiveLabs](images/run-on-livelabs.png " ")
 
 2. Fill out information on the *Reserve Workshop* page. Check **I consent to recieve emails from LiveLabs for my reservation**. Click **Submit Reservation**.
