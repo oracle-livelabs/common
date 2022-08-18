@@ -1,4 +1,4 @@
-# Introduction to Labs and Workshops
+# Introduction to labs and workshops
 
 Welcome to LiveLabs and creating workshops to give practical hands on experiences for Oracle Products and technologies. This is the place to demonstrate use cases and allow users to explore and gain valuable knowledge with Oracle Cloud, Applications and Database. 
 
@@ -7,7 +7,7 @@ This workshop is to help walk you through the process of creating your own works
 LiveLabs Overview
 [](youtube:lHriX403Oz4)
 
-## What are Labs and Workshops?
+## What are labs and workshops?
 
 Labs are a set of step by step instructions to complete a task as part of the hands-on experience. A workshop is the collection of the labs provided in a specific order to complete the overall set of instructions. A workshop should have an introduction and then at least two labs to work through. The workshop has the big picture of the what the user is going to accomplish by completing all or some of the labs listed in the workshop. 
 
@@ -15,7 +15,7 @@ An individual Markdown (.md) file is the document and text that makes up a lab. 
 
 Markdown files and images that are part of the lab instructions are kept in oracle-livelabs a GitHub repository, which we will give details on later, and the workshops can be published in LiveLabs, OHC Learn and OSPA Luna.
 
-### **What's Next?**
+### **What's next?**
 
 Before you get started with the development of labs and workshop, check out existing workshops in LiveLabs, and see what workshops are currently being developed in Workshop Management (WMS). There are some great examples out there and can give you new ideas or allow you to contribute to existing workshops. 
 
@@ -28,7 +28,7 @@ Another important step is to take look at the QA document since it provides how 
 * [QA Document](https://objectstorage.us-ashburn-1.oraclecloud.com/p/MKKRgodQ0WIIgL_R3QCgCRWCg30g22bXgxCdMk3YeKClB1238ZJXdau_Jsri0nzP/n/c4u04/b/qa-form/o/QA.docx)
 
 We also have a set of common images that are included in the common directory
-### **Workshop Objectives**
+### **Workshop objectives**
 
 * Enter new workshop in WMS
 * Prepare your environment to develop the workshop.
@@ -36,11 +36,11 @@ We also have a set of common images that are included in the common directory
 * Perform QA on your workshop.
 * Get your workshop ready to publish.
 
-### **Lab Breakdown**
+### **Lab breakdown**
 
-- **Lab 1:** Create new workshop in WMS
-- **Lab 2:** Configure your environment for development
-- **Lab 3:** Maintain GitHub environment
+- **Lab 1:** Submit new workshop in WMS
+- **Lab 2:** Set up GitHub and install tools
+- **Lab 3:** Stay in sync with GitHub environment
 - **Lab 4.** Develop Markdown content
 - **Lab 4:** QA checks and steps
 - **Lab 5:** Publish your workshop

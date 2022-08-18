@@ -75,7 +75,7 @@ There are different ways to deploy your workshop. It can run in a free tier acco
   [](youtube:bEk71_rNfuc)
 
 
-## Task 3: LiveLabs workshop workflow
+## Task 3: Workshop workflow - Status
 
 For a workshop to go from an idea to a LiveLabs workshop in production, it has to go through the following phases or statuses in WMS. You can refer to this section to see your current and next steps.
 
@@ -105,7 +105,7 @@ For a workshop to go from an idea to a LiveLabs workshop in production, it has t
 7. The workshop is *completed* and is ready for publishing! Workshop teams will submit a publishing request, and the LiveLabs team will approve it. After the publishing request is approved, the workshop will be live in LiveLabs automatically within a business day.
   ![Completed](./images/completed.png " ")
 
-## Task 4: Develop LiveLabs workshops workflow
+## Task 4: Workshop development workflow
 
 The following steps show the general workflow process that your need to follow to set up your environment to develop labs and workshops. Most of the tasks are performed only once. 
 
