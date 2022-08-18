@@ -28,7 +28,9 @@ Another important step is to take look at the QA document since it provides how 
 * [QA Document](https://objectstorage.us-ashburn-1.oraclecloud.com/p/MKKRgodQ0WIIgL_R3QCgCRWCg30g22bXgxCdMk3YeKClB1238ZJXdau_Jsri0nzP/n/c4u04/b/qa-form/o/QA.docx)
 
 We also have a set of common images that are included in the common directory
+
 ### **Workshop objectives**
+
 
 * Enter new workshop in WMS
 * Prepare your environment to develop the workshop.

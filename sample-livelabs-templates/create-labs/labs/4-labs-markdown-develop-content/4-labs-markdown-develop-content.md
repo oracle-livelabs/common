@@ -9,7 +9,6 @@ Using VSCode or another editor of your choice, the Markdown files need to be edi
 **Helpful tips from your LiveLabs Team**
 [Video walking markdown editing](youtube:rOj5APIO-XU)
 
-
 ### Objectives
 
 * Create workshop and lab content.
