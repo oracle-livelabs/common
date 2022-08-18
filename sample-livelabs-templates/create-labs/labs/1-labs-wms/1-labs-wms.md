@@ -72,7 +72,7 @@ There are different ways to deploy your workshop. It can run in a free tier acco
   
   ![Image Upload](images/socialtab3.png " ")
   
-  [](youtube:bEk71_rNfuc)
+  [Video walking through the social tab](youtube:bEk71_rNfuc)
 
 
 ## Task 3: Workshop workflow - Status
