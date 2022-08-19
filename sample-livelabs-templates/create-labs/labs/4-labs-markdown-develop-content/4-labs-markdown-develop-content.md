@@ -7,7 +7,7 @@ Using VSCode or another editor of your choice, the Markdown files need to be edi
 > **Note:** Oracle recommends using **Visual Studio Code (VSCode)**. If you are currently using **Atom** - it is being retired, and you should move to use VSCode.
 
 **Helpful tips from your LiveLabs Team**
-[Video walking markdown editing](youtube:rOj5APIO-XU)
+[Video walking through markdown editing](https://www.youtube.com/watch?v=rOj5APIU-XU)
 
 ### Objectives
 

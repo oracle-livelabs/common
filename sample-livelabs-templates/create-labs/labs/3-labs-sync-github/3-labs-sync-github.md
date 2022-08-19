@@ -1,4 +1,4 @@
-# Maintain GitHub environment
+# Stay in sync with GitHub environment
 
 ## Introduction
 
