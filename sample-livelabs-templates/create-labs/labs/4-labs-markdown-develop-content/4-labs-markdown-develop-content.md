@@ -7,7 +7,7 @@ Using VSCode or another editor of your choice, the Markdown files need to be edi
 > **Note:** Oracle recommends using **Visual Studio Code (VSCode)**. If you are currently using **Atom** - it is being retired, and you should move to use VSCode.
 
 **Helpful tips from your LiveLabs Team**
-[Video walking markdown editing](youtube:rOj5APIO-XU)
+[Video walking through markdown editing](https://www.youtube.com/watch?v=rOj5APIU-XU)
 
 ### Objectives
 
@@ -244,9 +244,7 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
   Do you see one or two images above?
 
-  If you are viewing this page via LiveServer from your IDE (on a case insensitive operating system), you should see **two** images.
-
-  If you are viewing this page on github.io, you should only see **one** image.
+   If you are viewing this page on github.io, you should only see **one** image. Even with the same name, the case sensitivity does not allow you to see the second image.
 
 2. If you do run into a Case Sensitivity error on Windows or macOS, you cannot simply fix it by renaming it DIRECTLY with the correct case... because the system will not recognize that you are trying to rename it. You have to either rename that item to something else entirely and then rename it back with the correct case... or you can use **"git mv"** as described [in this article](https://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory) for more complicated fixes that involve entire directories.
 
