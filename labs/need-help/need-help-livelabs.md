@@ -91,4 +91,4 @@ If the workshop asks you to open cloud shell, but you cannot access it, please m
 ## Acknowledgements
 * **Author** - LiveLabs Team
 * **Contributors** - LiveLabs Team, Arabella Yao
-* **Last Updated By/Date** - Arabella Yao, May 2022
+* **Last Updated By/Date** - Arabella Yao, Aug 2022
