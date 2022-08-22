@@ -26,7 +26,7 @@ In this workshop, you will:
 
 1. On the Oracle home page, click on the hamburger menu and click on **Oracle Base Database (VM, BM)**.
 
-    ![Base Database.](https://oracle-livelabs.github.io/common/images/console/database-vm-bm.png " ")
+    ![Base Database.](https://oracle-livelabs.github.io/common/images/console/database-basedb.png " ")
 
 2. Choose your compartment and click on your DB system.
 
