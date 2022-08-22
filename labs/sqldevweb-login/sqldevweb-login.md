@@ -18,7 +18,7 @@ Estimated time: 5 minutes
 
     > **Note:** You can also directly access your Autonomous Data Warehouse or Autonomous Transaction Processing service in the **Launch Resources** section of the dashboard.
 
-    ![Oracle home page.](./images/navigation.png " ")
+    ![Oracle home page.](https://oracle-livelabs.github.io/common/images/console/navigation.png " ")
 
 2. Navigate to your Autonomous Database, so click **Oracle Database**, then **Autonomous Database**.
 
