@@ -5,17 +5,17 @@
     {
       "title": "Introduction",
       "description": "This lab provides an overview of submitting and creating workshops and labs for Oracle LiveLabs and other platforms.",
-      "filename": "./../../0-introduction/0-introduction.md"
+      "filename": "./../../introduction/introduction.md"
     },
     {
         "title": "Need more infomation on GitHub?",
         "description": "Describes what GitHub is and general information on projects and repositories"
-        "filename": "./../../0-introduction/0a-github-introduction.md"
+        "filename": "./../../introduction/github-introduction.md"
     },
     {
         "title": "Need to understand the status workflow in WMS?",
         "description": "Details the status in WMS and what comes next, who is responsible."
-        "filename": "./../../0-introduction/0b-wms-workflows.md"
+        "filename": "./../../introduction/wms-workflows.md"
     },
     {
       "title": "LiveLabs FAQ",
