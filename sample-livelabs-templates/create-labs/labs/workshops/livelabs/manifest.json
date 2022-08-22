@@ -9,12 +9,12 @@
     },
     {
         "title": "Need more infomation on GitHub?",
-        "description": "Describes what GitHub is and general information on projects and repositories"
+        "description": "Describes what GitHub is and general information on projects and repositories",
         "filename": "./../../introduction/github-introduction.md"
     },
     {
         "title": "Need to understand the status workflow in WMS?",
-        "description": "Details the status in WMS and what comes next, who is responsible."
+        "description": "Details the status in WMS and what comes next, who is responsible.",
         "filename": "./../../introduction/wms-workflows.md"
     },
     {
@@ -44,7 +44,7 @@
     },
     {
       "title": "Lab 5: QA checks and steps",
-      "description": "This lab prepares you for QA of your workshop, details to look for and adjust before publishing your workshop."
+      "description": "This lab prepares you for QA of your workshop, details to look for and adjust before publishing your workshop.",
       "filename": "./../../5-labs-qa-checks/5-labs-qa-checks.md"
     },
     {
