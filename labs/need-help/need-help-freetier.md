@@ -45,4 +45,4 @@ If any of these three conditions are true, some ports in your network may be clo
 ## Acknowledgements
 * **Author** - LiveLabs Team
 * **Contributors** - LiveLabs Team, Arabella Yao
-* **Last Updated By/Date** - Arabella Yao, Jun 2022
+* **Last Updated By/Date** - Arabella Yao, Aug 2022
