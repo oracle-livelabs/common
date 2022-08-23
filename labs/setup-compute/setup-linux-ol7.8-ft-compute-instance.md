@@ -100,7 +100,7 @@ There are multiple ways to connect to your cloud instance.  Choose the way to co
 
 1. To re-start the Oracle Cloud shell, go to your Cloud console and click the cloud shell icon to the right of the region.  *Note: Make sure you are in the region you were assigned*
 
-    ![Cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png.png " ")
+    ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png " ")
 
 2.  Go to **Compute** -> **Instance** and select the instance you created (make sure you choose the correct compartment)
 3.  On the instance homepage, find the Public IP addresss for your instance.
