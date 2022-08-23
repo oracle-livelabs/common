@@ -18,11 +18,6 @@
         "filename": "./../../introduction/wms-workflows.md"
     },
     {
-      "title": "LiveLabs FAQ",
-      "description": "This lab shows you how to to use Oracle Learning Library (OLL) administration tools to manage links and how to add a link to an OHC page.",
-      "filename": "./../../livelabs-faq/livelabs-faq.md"
-    },
-    {
       "title": "Lab 1: Submit new workshop in WMS",
       "description": "This lab walks you through working with Oracle Workshop Management System (WMS) and shows you the workflow for developing a workshop.",
       "filename": "./../../1-labs-wms/1-labs-wms.md"
