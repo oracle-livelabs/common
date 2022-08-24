@@ -168,8 +168,7 @@ But to embed a video in the markdown files, right now the option is to use YouTu
     ![Embed](images/youtube-embed.png " ")
 3. Copy the src link (without double quotes) highlighted on the screenshot below.
     ![Embed link](images/youtube-link.png " ")
-4. Paste the link to the **YouTube Link** section on the publishing entry. Click **Create** or **Save**.
-    ![Paste link](images/video-link.png " ")
+
 
 ## Task 8: Scale an image
 Without using image scaling, all the screenshots you take for your workshop will be of different sizes (unless you're a master of making pixel-perfect crops). To remedy this, we HIGHLY recommend you to stick with a scaling and use it throughout your workshop. This will make all the images scale to the same width (if possible) and contribute to a more consistent and polished feel. You can override the default image scaling by applying these manual controls below. **We highly recommend you use #4's format by default.**
