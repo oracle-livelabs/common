@@ -158,24 +158,10 @@ Adding videos is very similar to adding images. We most commonly see videos adde
 
   ![How to link a youtube video.](./images/youtube-url.png " ")
   
-We also recommend workshop teams provide a video if available, for a better customer experience. This video will be displayed on this workshop's LiveLabs landing page as shown on the screenshot below.
+We also recommend workshop teams provide a video if available, for a better customer experience. You can use YouTube or Oracle Video Hub as part of this as it will be embedded as part of the Publishing Steps in Lab 6. This video will be displayed on this workshop's LiveLabs landing page as shown on the screenshot below.
 
-![Video on workshop landing page](images/video-landing-page.png " ")
+But to embed a video in the markdown files, right now the option is to use YouTube. Here are the steps:
 
-The video can be from [Oracle Video Hub](https://videohub.oracle.com/) (recommended) or from [YouTube](https://www.youtube.com/). Oracle Video Hub is the public video platform of Oracle. Videos uploaded to Oracle Video Hub help us get better analytics on video usage. If your team does not have a YouTube account, you can reach out to the LiveLabs team and ask us to upload the video for you.
-
-Option 1: To embed a video from Oracle Video Hub:
-
-1. On the Oracle Video Hub page of the video, click **Share**.
-    ![Share](images/oracle-share.png " ")
-2. Click **Embed**.
-    ![Embed](images/oracle-embed.png " ")
-3. Copy the src link from `https` to `flashvars[streamerType]=auto` as shown on the screenshot below.
-    ![Embed link](images/oracle-link.png " ")
-4. Paste the link to the **YouTube Link** section on the publishing entry. Click **Create** or **Save**.
-    ![Paste link](images/video-link.png " ")
-
-Option 2: To embed a video from Youtube:
 1. On the Youtube page of the video, click **SHARE**.
     ![Share](images/youtube-share.png " ")
 2. Click **Embed**.
