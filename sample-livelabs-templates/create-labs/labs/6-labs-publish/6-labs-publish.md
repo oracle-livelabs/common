@@ -71,9 +71,19 @@ To create a Pull Request:
 
     ![Publishing Information](images/livelabs-publishing.png " ")
 
-3. Click **Create** or **Save**.
+3. Embed a video on the LiveLabs homepage for the workshop. This can be from YouTube or Oracle Video Hub.
+    - On the Oracle Video Hub page of the video, click **Share**:
+    ![Share](images/oracle-share.png " ")
+    - Click **Embed**
+    ![Embed link](images/oracle-link.png " ")
+    - Copy the src link from 'https' to 'lashvars[streamerType]=auto' as shown on the screenshot below.
+    ![Embed link](images/oracle-link.png " ")
+    - Past the link to the **Video Link** section on the publishing entry.
+    ![Paste link](images/video-link.png " ")
 
-4. When your workshop is in **Completed** status, and we have approved your publishing request, your workshop will be published automatically within 1 business day.
+4. Click **Create** or **Save**.
+
+5. When your workshop is in **Completed** status, and we have approved your publishing request, your workshop will be published automatically within 1 business day.
 
 ## (Optional) Task 3: Request the Green Button
 
