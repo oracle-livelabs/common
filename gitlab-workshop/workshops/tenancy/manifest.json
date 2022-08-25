@@ -23,6 +23,10 @@
             "filename": "../../provision/provision.md"
         },
         {
+            "title": "Lab 2: Set up Compute",
+            "filename": "../../compute/compute.md"
+        },
+        {
             "title": "Lab 3: Install GitLab on a Compute",
             "filename": "../../install/installgilab.md"
         },

@@ -23,7 +23,7 @@ This lab assumes you have:
 * Ability to SSH into to server via a Public IP
 
 
-*This is the "fold" - below items are collapsed by default*
+
 
 ## Task 1: Install and configure the necessary dependencies
 
