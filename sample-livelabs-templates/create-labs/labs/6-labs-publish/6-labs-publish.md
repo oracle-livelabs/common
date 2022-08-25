@@ -88,7 +88,7 @@ To create a Pull Request:
 ## (Optional) Task 3: Request the Green Button
 
 This walks you through requesting a Green Button for your workshop to run in LiveLabs Sandbox:
-[Video walking Green Button - LiveLabs Sandbox Request](youtube:bEk71_rNfuc)
+[Video walking Green Button - LiveLabs Sandbox Request](https://otube.oracle.com/media/LiveLabsA+Green+Button+Lite/1_85wokrec)
 
 After you enable the green button for your workshop, users can run the workshop in pre-provisioned environments (a.k.a. sandbox), so they don't need to register OCI Free Tier accounts. Users have to complete the workshop in a specified limited amount of time (they can extend their reservations up to 4 times). After their reservations expire, any instances they create will be destroyed.
 
