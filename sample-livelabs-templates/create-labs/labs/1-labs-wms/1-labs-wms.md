@@ -72,7 +72,7 @@ There are different ways to deploy your workshop. It can run in a free tier acco
   
   ![Image Upload](images/socialtab3.png " ")
   
-  [Video walking through the social tab](youtube:bEk71_rNfuc)
+  [Video walking through the social tab](https://otube.oracle.com/media/LiveLabsA+Go+to+Market+-+Social+Tab+in+WMS./1_hr3dmmwx)
 
 
 ## Task 3: Workshop workflow - Status
