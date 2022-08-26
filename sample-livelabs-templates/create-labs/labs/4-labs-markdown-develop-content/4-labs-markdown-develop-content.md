@@ -6,8 +6,8 @@ Using VSCode or another editor of your choice, the Markdown files need to be edi
 
 > **Note:** Oracle recommends using **Visual Studio Code (VSCode)**. If you are currently using **Atom** - it is being retired, and you should move to use VSCode.
 
-**Helpful tips from your LiveLabs Team**
-[Video walking through markdown editing](youtube:rOj5APIU-XU)
+<!-- **Helpful tips from your LiveLabs Team**
+[Video walking through markdown editing](youtube:rOj5APIU-XU) -->
 
 ### Objectives
 
@@ -147,27 +147,39 @@ Sometimes you may want to link to something within your lab or workshop.  Most c
 ## Task 7: Add and embed a Video
 
 Adding videos is very similar to adding images. We most commonly see videos added in the introductions for labs to familiarize the audience with the product before they dive into the workshop.
+LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or [Oracle Video Hub]([https://https://videohub.oracle.com/).
+
+### Embedding a video from Oracle Video Hub (recommended)
+
+1. Take a look at his exmaple of a video hosted on Oracle Video Hub in this lab.
+
+  ![The Video Hub markdown](images/videhub-markdown.png =60%x* " ")
+
+  The embedded video looks like this: 
+
+  [Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8)
+
+
+  Markdown does the work of embedding the video for you, all you need to provide is a video hosting site and the video link address.
+
+2. You can find the video identifier code in the URL (in this example, the code is **1_2ubr9fo8**).
+  
+  *Please note:* Oracle Video Hub identifiers are usually prefixed with either `0_` or `1_` folled by a unique code.
+
+  ![The Video Hub URL](images/video-hub-url.png =60%x* " ")
+
+
+### Embedding a video from YouTube
 
 1. Take a look at this example of a video linked in the introduction of a workshop.
 
-  ![Example of a video link.](./images/youtube-vsc.png " ")
+  ![Example of a video link.](./images/youtube-vsc.png =60%x* " ")
 
-  Markdown does the work of embedding the video for you, all you need to provide is a video hosting site (YouTube highly recommended) and the video link address.
+  Markdown does the work of embedding the video for you, all you need to provide is a video hosting site and the video link address.
 
 2. The video link address is the characters you'll find at the end of the URL for the video you want to link.
 
-  ![How to link a youtube video.](./images/youtube-url.png " ")
-  
-We also recommend workshop teams provide a video if available, for a better customer experience. You can use YouTube or Oracle Video Hub as part of this as it will be embedded as part of the Publishing Steps in Lab 6. This video will be displayed on this workshop's LiveLabs landing page as shown on the screenshot below.
-
-But to embed a video in the markdown files, right now the option is to use YouTube. Here are the steps:
-
-1. On the Youtube page of the video, click **SHARE**.
-    ![Share](images/youtube-share.png " ")
-2. Click **Embed**.
-    ![Embed](images/youtube-embed.png " ")
-3. Copy the src link (without double quotes) highlighted on the screenshot below.
-    ![Embed link](images/youtube-link.png " ")
+  ![How to link a youtube video.](./images/youtube-url.png =60%x* " ")
 
 
 ## Task 8: Scale an image
