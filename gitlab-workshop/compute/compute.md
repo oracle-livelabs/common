@@ -4,7 +4,7 @@
 
 This lab will show you how to setup a Oracle Cloud network (VCN) and a compute instance running Oracle Linux.
 
-Estimated Lab Time:  20 minutes
+Estimated Lab Time:  30 minutes
 
 
 
@@ -35,7 +35,7 @@ To create a compartment click the **Navigation Menu** in the upper left, navigat
 
 The Console is designed to display your resources by compartment within the current region. When you work with your resources in the Console, you must choose which compartment to work in from a list on the page. 
 
-## Task 2: Setup Virtual Cloud Network (VCN)
+## Task 2: Setup Virtual Cloud Network
 
 Oracle Cloud Infrastructure (OCI) Virtual Cloud Networks (VCNs) provide customizable and private cloud networks in Oracle Cloud Infrastructure (OCI). Just like a traditional data center network, the VCN provides customers with complete control over their cloud networking environment. This includes assigning private IP address spaces, creating subnets and route tables, and configuring stateful firewalls.
 
@@ -44,16 +44,17 @@ To create a compartment click the **Navigation Menu** in the upper left, navigat
 1. Select the option **Create VCN with Internet Connectivity**
 	![vcn1](images/vcn1.png)
 	
-
 2. Specify Basic Information for your VCN
 	![vcn1](images/vcn2.png)
 
-- Specify the Name of the VCN
-- Select the same Compartment for your VCN creation, that was created in the previous step
-- Specify a VCN CIDR Block big enough to accomodate two subnets
-- Specify the Public Subnet CIDR Block
-- Specify the Private Subnet CIDR Block
-- Ensure to check the DNS Resolution radio button for the naming resolution to be enabled in the VCN
+    - Specify the Name of the VCN
+    - Select the same Compartment for your VCN creation, that was created in the previous step
+    - Specify a VCN CIDR Block big enough to accomodate two subnets
+    - Specify the Public Subnet CIDR Block
+    - Specify the Private Subnet CIDR Block
+    - Ensure to check the DNS Resolution radio button for the naming resolution to be enabled in the VCN
+ 
+    
 
 3. Review and Validate the VCN Information and hit **Create**
 	![vcn1](images/vcn3.png)
@@ -107,11 +108,11 @@ The ssh keys on MacOS can be created using the **Terminal** application. If you 
 
 The command above creates two files under the .ssh folder in the Home directory of the user, a *private key:* ```id_rsa``` and a *public key:* ```id_rsa.pub```. Keep the private key safe and don't share its content with anyone. The public key will be needed for various activities and can be uploaded to certain systems as well as copied and pasted to facilitate secure communications in the cloud.
 
-2. **Generate SSH Keys on Windows 10/11**
+2. **Generate SSH Keys on Windows**
 
 SSH keys on Windows can either be created using **PowerShell** or **Command Prompt**.
 
-Open a **Powershell** command window on your Windows 10 system by clicking it's icon/tile or by typing 'powershell' in the search field in the Start bar.
+Open a **Powershell** command window on your Windows system by typing 'powershell' in the search field in the Start bar.
 
 ![powershell](images/powershell1.png)
 
@@ -141,10 +142,13 @@ The command above creates two files under the .ssh folder in the Home directory 
 8. Deafult options for **Boot Volume** should suffice for this Lab. No Change is required. Then click create.
 
 ![compute](images/compute3.png)
-8. The compute instance will be provisioned shortly.
+9. The compute instance will be provisioned shortly.
 
 
 ## Task 3: Connect to your Instance
+
+### 1. *Connect from MacOS*
+
 Click the **Navigation Menu** in the upper left, navigate to **Compute**, select **Instances** and click on the instance that was provisioned in the previous steps. This will bring the instance details.
 
 1. Copy the **Public IP** of the Instance, Also, the default user is always *opc* for Oracle Linux images
@@ -154,7 +158,7 @@ Click the **Navigation Menu** in the upper left, navigate to **Compute**, select
 
 
 
-4. Connect to the compute Instance on MacOS
+2. Connect to the compute Instance on MacOS
 
 	```
   ssh opc@150.136.40.2
@@ -165,8 +169,34 @@ Click the **Navigation Menu** in the upper left, navigate to **Compute**, select
   Warning: Permanently added '150.136.40.2' (ED25519) to the list of known hosts.
   Activate the web console with: systemctl enable --now cockpit.socket
 
-[opc@gitlab ~]$
+  [opc@gitlab ~]$
   ```
+
+
+### 2. *Connect from Windows using Putty*
+
+Putty can be used to connect to Linux machines from Windows machines. However, the private ssh key created earlier needs to be converted from a **PEM** format to a **PPK** format before connecting to the instance. Use the steps below to do the conversion of the key before attemting to log in.
+
+1. On the Windows machine, click on Start menu> All Programs > PuTTY > PuTTYgen.
+![puttygen1](images/puttygen1.png)
+
+2. Click the **Load** button and select the private key *id_rsa*, generated earlier
+![puttygen1](images/puttygen2.png)
+
+3. Click the **Save private key** and save the file with the same name with **ppk** extension
+![puttygen1](images/puttygen3.png)
+
+Once the private key is saved in the ppk format, Putty can be used to connect to the compute instance
+
+4. Open Putty, and input the usename and the host IP address
+![puttygen1](images/putty1.png)
+
+5. Next, in the left hand panel locate the **Connection > SSH > Auth** configuration tab. Specify the location of the Private Key File converted earleir
+![puttygen1](images/putty2.png)
+
+6. Hit **Open** button and a connection should be made to the compute instance
+![puttygen1](images/putty3.png)
+
 
 ## Learn More
 
@@ -175,8 +205,11 @@ Click the **Navigation Menu** in the upper left, navigate to **Compute**, select
 * [Compartments](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcompartments.htm)
 * [Virtual Cloud Network (VCN)](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/overview.htm)
 * [OCI Compute Service](https://docs.oracle.com/en-us/iaas/Content/Compute/Concepts/computeoverview.htm)
+* [Managing Key Pairs on Linux Instances](https://docs.oracle.com/en-us/iaas/Content/Compute/Tasks/managingkeypairs.htm)
 * [Connecting to an Instance](https://docs.oracle.com/en-us/iaas/Content/Compute/Tasks/accessinginstance.htm)
+* [Download Putty](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+
 
 ## Acknowledgements
 * **Author** - Farooq Nafey, August 2022
-* **Last Updated By/Date** - <Name, Month Year>
+* **Last Updated By/Date** - Farooq Nafey, August 2022
