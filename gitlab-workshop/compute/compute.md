@@ -64,6 +64,15 @@ To create a compartment click the **Navigation Menu** in the upper left, navigat
 	![vcn1](images/vcn4.png)
 
 
+5. After Successful creation of a VCN, the following VCN / Subnets will be provisioned
+
+  | VCN / Subnet | CIDR Block | Total IPs | Total Usable IPs| Subnet Access |
+  | --- | --- | --- | --- |
+  | livelab |  172.30.0.0/22 | 1024 | |
+  | Public Subnet-livelab | 172.30.0.0/23 | 512 | 509 | Public (Regional) |
+  | Private Subnet-livelab | 172.30.2.0/23 | 512 | 509 | Private (Regional) |
+
+
 ## Task 3: Create SSH Keys
 
 ### Introduction
@@ -125,7 +134,7 @@ The command above creates two files under the .ssh folder in the Home directory 
 
 ## Task 4: Setup Compute Instance
 1. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**.
-2. Click on Create Instance.
+2. Click on **Create Instance**.
 3. Enter the **Name** for your Compute Instance and choose the **compartment**. 
 4. Click on edit and choose the Availability Domain, Image, and Shape of your choice. For this lab, use the default Oracle Linux 8.6 image
 
@@ -133,8 +142,8 @@ The command above creates two files under the .ssh folder in the Home directory 
 
 ![compute](images/compute1.png)
 
-5. Specify the **VCN** and the **Subnet Name**
-6. Make sure to **Assign a Public IPV4 address** to the compute instance. We will use this Public IP to log in to to the compute instance.
+5. Specify the **VCN** and the *public* **Subnet Name**
+6. Make sure to **Assign a Public IPV4 address** to the compute instance. We will use this Public IP to login to to the compute instance.
 7. In the Add SSH keys, select Upload Public Keys and specify your public ssh key.  
 
 
@@ -145,7 +154,7 @@ The command above creates two files under the .ssh folder in the Home directory 
 9. The compute instance will be provisioned shortly.
 
 
-## Task 3: Connect to your Instance
+## Task 3: Connect to the Instance
 
 ### 1. *Connect from MacOS*
 
@@ -161,12 +170,12 @@ Click the **Navigation Menu** in the upper left, navigate to **Compute**, select
 2. Connect to the compute Instance on MacOS
 
 	```
-  ssh opc@150.136.40.2
-  The authenticity of host '150.136.40.2 (150.136.40.2)' can't be established.
-  ED25519 key fingerprint is SHA256:NWVXZK7cbbKcnU34ehCA7Cmkn6BGZ9TwTjMEf0Mw//0.
+  ssh opc@150.136.95.109
+  The authenticity of host '150.136.95.109 (150.136.95.109)' can't be established.
+  ED25519 key fingerprint is SHA256:WsFhNLknVX+GIMGf08UH6ifpAhXmGU29VIKLPQCnfkM.
   This key is not known by any other names
   Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-  Warning: Permanently added '150.136.40.2' (ED25519) to the list of known hosts.
+  Warning: Permanently added '150.136.95.109' (ED25519) to the list of known hosts.
   Activate the web console with: systemctl enable --now cockpit.socket
 
   [opc@gitlab ~]$
@@ -177,7 +186,7 @@ Click the **Navigation Menu** in the upper left, navigate to **Compute**, select
 
 Putty can be used to connect to Linux machines from Windows machines. However, the private ssh key created earlier needs to be converted from a **PEM** format to a **PPK** format before connecting to the instance. Use the steps below to do the conversion of the key before attemting to log in.
 
-1. On the Windows machine, click on Start menu> All Programs > PuTTY > PuTTYgen.
+1. On the Windows machine, click on **Start Menu**> **All Programs** > **PuTTY** > **PuTTYgen**.
 ![puttygen1](images/puttygen1.png)
 
 2. Click the **Load** button and select the private key *id_rsa*, generated earlier
@@ -191,12 +200,14 @@ Once the private key is saved in the ppk format, Putty can be used to connect to
 4. Open Putty, and input the usename and the host IP address
 ![puttygen1](images/putty1.png)
 
-5. Next, in the left hand panel locate the **Connection > SSH > Auth** configuration tab. Specify the location of the Private Key File converted earleir
+5. Next, in the left hand panel locate the **Connection > SSH > Auth** configuration tab. Specify the location of the Private Key File (converted earlier to ppk format) and hit **Open** button
 ![puttygen1](images/putty2.png)
 
-6. Hit **Open** button and a connection should be made to the compute instance
+6. *Accept* the **PuTTy Security Alert**
 ![puttygen1](images/putty3.png)
 
+7. Successful connection is established with the instance
+![puttygen1](images/putty4.png)
 
 ## Learn More
 
