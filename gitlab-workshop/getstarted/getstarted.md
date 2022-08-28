@@ -9,7 +9,8 @@ Estimated Time: 5 minutes
 ### Objectives
 
 - Create an Oracle Cloud Free Tier account
-- Sign in to your account
+- Sign in to your Oracle Cloud account account
+- signup for a trial GitLab account
 
 ### Prerequisites
 
@@ -68,7 +69,23 @@ If you've signed out of the Oracle Cloud, use these steps to sign back in.
 
     ![OCI Console Home Page](images/home-page.png " ")
 
+
+## Task 3: Signup for Free Trial of GitLab
+
+In this section, we will walk through the steps to signup for a free GitLab Trial account at [https://about.gitlab.com/](https://about.gitlab.com/)
+
+1. On the upper right hand corner of the websit click on ![Image alt text](images/trial.png)
+2. Fill in the user details details to activate a 30 daya trail
+    ![trial](images/gitlabSignup.png)
+3. Activate the account once the confrmation email is received, and signin to complete the registration process
+
 You may now **proceed to the next lab**.
+
+## Learn More
+
+* [Oracle Cloud Infrastructure](https://www.oracle.com/cloud/)
+* [What's included with Oracle Cloud Free Tier?](https://www.oracle.com/cloud/free/)
+* [GitLab Trial Frequently Asked Questions (FAQs)](https://about.gitlab.com/free-trial/)
 
 ## Acknowledgements
 
