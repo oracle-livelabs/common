@@ -17,9 +17,7 @@ In this lab, you will:
 * Setup a compute instance
 * Login to your compute instance
 
-### Prerequisites (Optional)
-
-*List the prerequisites for this lab using the format below. Fill in whatever knowledge, accounts, etc. is needed to complete the lab. Do NOT list each previous lab as a prerequisite.*
+### Prerequisites
 
 This lab assumes you have:
 - An Oracle Free Tier or Paid Cloud account
@@ -29,7 +27,7 @@ This lab assumes you have:
 
 When you first start working with Oracle Cloud Infrastructure, you need to think carefully about how you want to use compartments to organize and isolate your cloud resources. Compartments are fundamental to that process. Most resources can be moved between compartments. However, it's important to think through your compartment design for your organization up front, before implementing anything.
 
-To create a compartment click the **Navigation Menu** in the upper left, navigate to **Identity & Security**, and select **Compartments** under **Identity**.
+1. To create a compartment click the **Navigation Menu** in the upper left, navigate to **Identity & Security**, and select **Compartments** under **Identity**.
 
 ![compartment](images/compartment.png)
 

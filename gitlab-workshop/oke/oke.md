@@ -41,21 +41,47 @@ The VCN in which you want to create and deploy clusters must have specific secur
 
 ## Task 2: Create Managed Kubernetes (OKE) Cluster
 
-1. Sub step 1 - tables sample
-![oke1](images/oke1.png)
+1. In the Console, open the navigation menu and click **Developer Services**. Under **Containers & Artifacts**, click **Kubernetes Clusters (OKE)** and select the option **Create Cluster**. Use the **Custom Create** workflow option to create a cluster
 
-2. Sub step 2 - tables sample
-![oke1](images/oke2.png)
-3. Sub step 3 - tables sample
-![oke1](images/oke3.png)
-4. Sub step 4 - tables sample
+  ![oke1](images/oke1.png)
+
+2. Select the **Compartment** and the **Kubernetes version** from the drop down menu.
+
+  ![oke1](images/oke2.png)
+
+3. Under the Network Type selection, specify the **Flannel overlay**. Specify the VCN name, and the Public Subnet for *Kubernetes Service LB Subnet* and *Kubernetes API endpoint Subnet*. There is no requirement to assign a Public IP to the API endpoint.
+
+  ![oke1](images/oke3.png)
+
+4. Click Next and specify configuration details for the node pool in the cluster.
+    - Name: A name of your choice for the new node pool
+    - Version: The version of Kubernetes to run on each worker node in the node pool. By default, the version of Kubernetes specified for the control plane nodes is selected
+    - Shape: The shape to use for worker nodes in the node pool. The shape determines the number of CPUs and the amount of memory allocated to each node
+    - Image: The image to use on worker nodes in the node pool. Make sure the select the image thas is compatible with Kubernetes version
+
 ![oke1](images/oke4.png)
-5. Sub step 5 - tables sample
+
+5. Number of Nodes: The number of worker nodes to create in the node pool, placed in the availability domains you select, and in the regional subnet (recommended) or AD-specific subnet you specify for each availability domain.
+    - Boot Volume: Default options for the boot volume configuration should suffice
+
 ![oke1](images/oke5.png)
-6. Sub step 6 - tables sample
+
+6. Add an SSH Key: The public key portion of the key pair you want to use for SSH access to each node in the node pool. The public key is installed on all worker nodes in the cluster
+
 ![oke1](images/oke6.png)
-7. Sub step 7 - tables sample
+
+7. Review the details you entered for the new cluster. Click **Create Cluster** to create the new cluster. 
+
 ![oke1](images/oke7.png)
+
+8. Cluster creation continues
+    - Container Engine for Kubernetes starts creating the cluster with the name you specified
+    - Container Engine for Kubernetes creates:
+        - node pool with the user define name
+        - worker nodes with auto-generated names in the format oke-c&lt;part-of-cluster-OCID&gt;-n&lt;part-of-node-pool-OCID&gt;-s&lt;part-of-subnet-OCID&gt;-&lt;slot&gt;
+    - Do not change the auto-generated names of worker nodes
+
+Click Close to return to the Console. The cluster creation nromally takes 15-20 mins to complete.
 
 
 
@@ -99,14 +125,32 @@ If valid, the output is:
   ```
 
 ## Task 4: Create IAM Policies
-![Compartment](images/dynamicgroup1.png)
 
-![DynamicGroup](images/dynamicgroup2.png)
+1. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Compartment**
+    - Navigate to the compartment that is being used for this Live Lab and copy the OCID of the compartment
 
-![Policy](images/dynamicgroup3.png)
 
-## Task 5: Install OCI CLI on Linux 8
-1. Install OCI Cli
+  ![Compartment](images/dynamicgroup1.png)
+
+2. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Dynamic Groups** and hit **Create Dynamic Group**
+    - Specify the Name and Description for the dynamic group
+    - Speciy the Rule for the Dynamic Group by specifying the OCID of the Compartment
+        - Optionally, Rule Builder can also be used to specify the Rule
+
+  ![DynamicGroup](images/dynamicgroup2.png)
+
+3. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Policies** and hit **Create Policy**
+    - Specify the Name and Description for the policy
+    - Policy can be created in the root compartment
+    - Specify the Policy rule. The policy specified would allow the user to *manage* the *cluster-family*
+    - This policy would allow the user to access the Cluster details programmatically using OCI CLI
+
+  ![Policy](images/dynamicgroup3.png)
+
+## Task 5: Install OCI CLI on Linux 8.x
+OCI CLI installation is required in order to access the OKE cluster.
+
+1. Install OCI CLI
   ```
   <copy>sudo dnf -y install oraclelinux-developer-release-el8</copy>
   <copy>sudo dnf -y install python36-oci-cli</copy>
@@ -174,10 +218,11 @@ If valid, the output is:
 
 ## Learn More
 
-
+* [Custom Create Workflow to Create a Cluster](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingclusterusingoke_topic-Using_the_Console_to_create_a_Custom_Cluster_with_Explicitly_Defined_Settings.htm)
 * [Install Kubectl on Linux](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
+* [Installing the CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm)
 * [Helm](https://helm.sh/docs/intro/install/)
-* [URL text 2](http://docs.oracle.com)
+
 
 ## Acknowledgements
 * **Author** - Farooq Nafey, Principal Cloud Architect
