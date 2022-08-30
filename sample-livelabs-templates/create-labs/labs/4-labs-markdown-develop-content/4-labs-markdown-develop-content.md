@@ -6,8 +6,8 @@ Using VSCode or another editor of your choice, the Markdown files need to be edi
 
 > **Note:** Oracle recommends using **Visual Studio Code (VSCode)**. If you are currently using **Atom** - it is being retired, and you should move to use VSCode.
 
-**Helpful tips from your LiveLabs Team**
-[Video walking through markdown editing](https://www.youtube.com/watch?v=rOj5APIU-XU)
+<!-- **Helpful tips from your LiveLabs Team**
+[Video walking through markdown editing](youtube:rOj5APIU-XU) -->
 
 ### Objectives
 
@@ -147,43 +147,40 @@ Sometimes you may want to link to something within your lab or workshop.  Most c
 ## Task 7: Add and embed a Video
 
 Adding videos is very similar to adding images. We most commonly see videos added in the introductions for labs to familiarize the audience with the product before they dive into the workshop.
+LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or [Oracle Video Hub]([https://https://videohub.oracle.com/).
+
+### Embedding a video from Oracle Video Hub (recommended)
+
+1. Take a look at his exmaple of a video hosted on Oracle Video Hub in this lab.
+
+  ![The Video Hub markdown](images/videhub-markdown.png =60%x* " ")
+
+  The embedded video looks like this: 
+
+  [Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8)
+
+
+  Markdown does the work of embedding the video for you, all you need to provide is a video hosting site and the video link address.
+
+2. You can find the video identifier code in the URL (in this example, the code is **1_2ubr9fo8**).
+  
+  *Please note:* Oracle Video Hub identifiers are usually prefixed with either `0_` or `1_` folled by a unique code.
+
+  ![The Video Hub URL](images/video-hub-url.png =60%x* " ")
+
+
+### Embedding a video from YouTube
 
 1. Take a look at this example of a video linked in the introduction of a workshop.
 
-  ![Example of a video link.](./images/youtube-vsc.png " ")
+  ![Example of a video link.](./images/youtube-vsc.png =60%x* " ")
 
-  Markdown does the work of embedding the video for you, all you need to provide is a video hosting site (YouTube highly recommended) and the video link address.
+  Markdown does the work of embedding the video for you, all you need to provide is a video hosting site and the video link address.
 
 2. The video link address is the characters you'll find at the end of the URL for the video you want to link.
 
-  ![How to link a youtube video.](./images/youtube-url.png " ")
-  
-We also recommend workshop teams provide a video if available, for a better customer experience. This video will be displayed on this workshop's LiveLabs landing page as shown on the screenshot below.
+  ![How to link a youtube video.](./images/youtube-url.png =60%x* " ")
 
-![Video on workshop landing page](images/video-landing-page.png " ")
-
-The video can be from [Oracle Video Hub](https://videohub.oracle.com/) (recommended) or from [YouTube](https://www.youtube.com/). Oracle Video Hub is the public video platform of Oracle. Videos uploaded to Oracle Video Hub help us get better analytics on video usage. If your team does not have a YouTube account, you can reach out to the LiveLabs team and ask us to upload the video for you.
-
-Option 1: To embed a video from Oracle Video Hub:
-
-1. On the Oracle Video Hub page of the video, click **Share**.
-    ![Share](images/oracle-share.png " ")
-2. Click **Embed**.
-    ![Embed](images/oracle-embed.png " ")
-3. Copy the src link from `https` to `flashvars[streamerType]=auto` as shown on the screenshot below.
-    ![Embed link](images/oracle-link.png " ")
-4. Paste the link to the **YouTube Link** section on the publishing entry. Click **Create** or **Save**.
-    ![Paste link](images/video-link.png " ")
-
-Option 2: To embed a video from Youtube:
-1. On the Youtube page of the video, click **SHARE**.
-    ![Share](images/youtube-share.png " ")
-2. Click **Embed**.
-    ![Embed](images/youtube-embed.png " ")
-3. Copy the src link (without double quotes) highlighted on the screenshot below.
-    ![Embed link](images/youtube-link.png " ")
-4. Paste the link to the **YouTube Link** section on the publishing entry. Click **Create** or **Save**.
-    ![Paste link](images/video-link.png " ")
 
 ## Task 8: Scale an image
 Without using image scaling, all the screenshots you take for your workshop will be of different sizes (unless you're a master of making pixel-perfect crops). To remedy this, we HIGHLY recommend you to stick with a scaling and use it throughout your workshop. This will make all the images scale to the same width (if possible) and contribute to a more consistent and polished feel. You can override the default image scaling by applying these manual controls below. **We highly recommend you use #4's format by default.**

@@ -71,14 +71,34 @@ To create a Pull Request:
 
     ![Publishing Information](images/livelabs-publishing.png " ")
 
-3. Click **Create** or **Save**.
+3. Embed a video on the LiveLabs homepage for the workshop from Oracle Video Hub.
+    
+    **Option 1:** Embed video from Oracle Video Hub (Recommended):
+    - On the Oracle Video Hub page of the video, click **Share**:
+      ![Share](images/oracle-share.png =50%x* " ")
+    - Click **Embed**
+      ![Embed link](images/oracle-link.png =50%x* " ")
+    - Copy the src link from 'https' to 'lashvars[streamerType]=auto' as shown on the screenshot below.
+      ![Embed link](images/oracle-link.png =50%x* " ")
+    - Past the link to the **Video Link** section on the publishing entry.
+      ![Paste link](images/video-link.png =50%x* " ")
 
-4. When your workshop is in **Completed** status, and we have approved your publishing request, your workshop will be published automatically within 1 business day.
+    **Option 2:** Embed video from YouTube:
+    - On the Youtube page of the video, click **SHARE**.
+      ![Share](images/youtube-share.png =50%x* " ")
+    - Click **Embed**.
+      ![Embed](images/youtube-embed.png =50%x* " ")
+    - Copy the src link (without double quotes) highlighted on the screenshot below.
+      ![Embed link](images/youtube-link.png =50%x* " ")
+
+4. Click **Create** or **Save**.
+
+5. When your workshop is in **Completed** status, and we have approved your publishing request, your workshop will be published automatically within 1 business day.
 
 ## (Optional) Task 3: Request the Green Button
 
 This walks you through requesting a Green Button for your workshop to run in LiveLabs Sandbox:
-[Video walking Green Button - LiveLabs Sandbox Request](youtube:bEk71_rNfuc)
+[Video walking Green Button - LiveLabs Sandbox Request](https://otube.oracle.com/media/LiveLabsA+Green+Button+Lite/1_85wokrec)
 
 After you enable the green button for your workshop, users can run the workshop in pre-provisioned environments (a.k.a. sandbox), so they don't need to register OCI Free Tier accounts. Users have to complete the workshop in a specified limited amount of time (they can extend their reservations up to 4 times). After their reservations expire, any instances they create will be destroyed.
 
