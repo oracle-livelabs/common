@@ -10,7 +10,7 @@ In the following sections, you can find frequently asked questions, technical re
 
 <br>
 
-### Join the CloudWorld Community
+## Join the CloudWorld Community
 
 __If you have any questions, feel free to join the Oracle CloueWorld community on our public Slack channel #OCW-HOL-Support.__
 
@@ -167,9 +167,9 @@ Always know what is going on.
 
 ![CloudWorld Agenda](https://www.oracle.com/content/published/api/v1.1/assets/CONT1E0D09E6A6DD4366BF066A1B7671C8CC/native?cb=_cache_2d16&channelToken=e8a0673b81ca460986a44e776a18fa0a)
 
-## Visit the Oracle Cloud Discovery Hub - The Cloud is Yours!
+## Visit the Oracle Discovery Hub!
 
-The Oracle CLoud Discovery Hub is the best place if you want to explorer other hands-on labs on your own pace. We have created a dedicated space for you to sit down and select from a la carte menu the workshop you like best. You can find the Oracle Cloud Discovery Hub in the Database area.
+The Oracle Discovery Hub is the best place if you want to explorer other hands-on labs on your own pace. We have created a dedicated space for you to sit down and select from a la carte menu the workshop you like best. You can find the Oracle Discovery Hub in the Database area.
 
 Have a look at the map: [Link to map to be provided](https://google.com)
 
