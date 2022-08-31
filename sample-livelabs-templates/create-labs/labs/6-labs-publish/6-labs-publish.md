@@ -36,12 +36,13 @@ To create a Pull Request:
 
   ![Open a pull request.](./images/git-hub-branch-browser-create-pull-request.png " ")
 
-3. Enter the title for the pull request, **include your WMS ID** (you can find that by visiting the [WMS](http://bit.ly/oraclewms)) in the title.  PRs will not be approved without this ID.
+3. Enter the title for the pull request, **include your WMS ID** (you can find that by visiting the [WMS](http://bit.ly/oraclewms)) in the title.  PRs will not be approved without this ID. Check your pull request against the **General requirements** and the short **Checklist**. Refer to the QA document for the complete list. If your pull request satisfies all the requirements, less time will be spent on back-and-forth communications, and your changes will be in production as soon as possible. Add **x** in the brackets to check that item on the checklist.
+
 4. Click **Create pull request**.
     ![Include WMS id in pull request title.](./images/git-hub-pull-request-title-comment.png " ")
-  A status page is displayed indicating that you have created a pull request along with the request number (for example, #1770), that it is pending review, and that merging is blocked.
+  A status page is displayed indicating that you have created a pull request along with the request number (for example, #1770), that it is pending review, and that merging is blocked. The LiveLabs admin team will review your PR within 1 business day.
 
-  When your pull request is approved, the page gets updated with information about your commits being approved and merged into the **upstream/main** repository (production).
+5. When your pull request is approved, the page gets updated with information about your commits being approved and merged into the **upstream/main** repository (production).
 
   When the pull request is approved and merged into the **upstream/main** repository, two emails are sent to the e-mail account associated with your GitHub account.
 
@@ -52,6 +53,7 @@ To create a Pull Request:
 
   Your committed content is now visible to the public on the upstream/main or production repository: oracle-livelabs/&lt;repository&gt;.
 
+6. We may request some changes to your pull request. You need to make those changes as soon as possible. As long as your PR is still open, you don't need to create a new PR - new commits will be added automatically. You do need to make sure that your branch is still up-to-date with the main branch.
 
 ## Task 2: Request publishing
 
