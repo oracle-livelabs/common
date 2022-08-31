@@ -21,11 +21,11 @@ This lab assumes that you have completed **Lab 5: QA checks and steps** in the *
 
 After you complete QA and made any other needed updates to your files, you are ready to merge your files and folders to the Oracle LiveLabs production repositories.
 
-The **Pull Request** is a request that you send to the repository owners and code owners of the **oracle-livelabs/repository** to approve and host your content on the production **(upstream/main)** repository.
+The **Pull Request** is a request that you send to the repository owners and code owners of the **oracle-livelabs/repository** to approve and host your content on the production **(oracle-livelabs:main)** repository.
 
 Note:  *Before executing a PR, make sure you that your personal GitHub repo on the web is not behind (See Lab 3 **Maintain GitHub environment** and troubleshooting steps for merge conflicts).  Failure to do so will result in conflicts.  You cannot issue a pull request without syncing first.  PRs will not be approved without your WMS ID (Workshop ID)*
 
-> **Note:** The owners can approve your request, ask for more information if required, or reject your request if your content does not meet the standards for Oracle LiveLabs.
+> **Note:** The LiveLabs admin team will review your PR within 1 business day. We will approve your request, ask for more information if required, or reject your request if your content does not meet the standards for Oracle LiveLabs.
 
 To create a Pull Request:
 1. In the **GitHub Desktop** client, select **Branch > Create Pull Request** to display a browser interface.
@@ -36,14 +36,14 @@ To create a Pull Request:
 
   ![Open a pull request.](./images/git-hub-branch-browser-create-pull-request.png " ")
 
-3. Enter the title for the pull request, **include your WMS ID** (you can find that by visiting the [WMS](http://bit.ly/oraclewms)) in the title.  PRs will not be approved without this ID. Check your pull request against the **General requirements** and the short **Checklist**. Refer to the [QA document](https://objectstorage.us-ashburn-1.oraclecloud.com/p/MKKRgodQ0WIIgL_R3QCgCRWCg30g22bXgxCdMk3YeKClB1238ZJXdau_Jsri0nzP/n/c4u04/b/qa-form/o/QA.docx) for the complete list. If your pull request satisfies all the requirements, less time will be spent on back-and-forth communications, and your changes will be in production as soon as possible. Add **x** in the brackets to check that item on the checklist. You can also put the reasons for pull request on this section.
+3. Enter the title for the pull request, **include your WMS ID** (you can find that by visiting the WMS) in the title.  PRs will not be approved without this ID. Check your pull request against the **General requirements** and the short **Checklist**. Refer to the [QA document](https://objectstorage.us-ashburn-1.oraclecloud.com/p/MKKRgodQ0WIIgL_R3QCgCRWCg30g22bXgxCdMk3YeKClB1238ZJXdau_Jsri0nzP/n/c4u04/b/qa-form/o/QA.docx) for the complete list. If your pull request satisfies all the requirements, less time will be spent on back-and-forth communications, and your changes will be in production as soon as possible. Add **x** in the brackets to check that item on the checklist. You can also put the reasons for pull request on this section.
 
   ![Fill out PR title and check general requirements](./images/general-req.png " ")
   ![Checklist](./images/checklist.png " ")
 
 4. Click **Create pull request**.
     ![Include WMS id in pull request title.](./images/git-hub-pull-request-title-comment.png " ")
-  A status page is displayed indicating that you have created a pull request along with the request number (for example, #1770), that it is pending review, and that merging is blocked. The LiveLabs admin team will review your PR within 1 business day.
+  A status page is displayed indicating that you have created a pull request along with the request number (for example, #1770), that it is pending review, and that merging is blocked.
   ![Pending Review](./images/pending-review.png " ")
 
 5. When your pull request is approved, the page gets updated with information about your commits being approved and merged into the **oracle-livelabs:main** repository (production).
@@ -54,9 +54,9 @@ To create a Pull Request:
     > **Note:**
 
     * The first email notifies you that your pull request was approved (or rejected).
-    * If your pull request was approved, then the second email notifies you that your pull request was merged into the **upstream/main** repository.
+    * If your pull request was approved, then the second email notifies you that your pull request was merged into the **oracle-livelabs:main** repository.
 
-    Your committed content is now visible to the public on the upstream/main or production repository: oracle-livelabs/&lt;repository&gt;.
+    Your committed content is now visible to the public on the oracle-livelabs:main or production repository: oracle-livelabs/&lt;repository&gt;.
 
 6. We may request some changes to your pull request. You need to make those changes as soon as possible. As long as your PR is still open, you don't need to create a new PR - new commits will be added automatically. You do need to make sure that your branch is still up-to-date with the main branch.
 
