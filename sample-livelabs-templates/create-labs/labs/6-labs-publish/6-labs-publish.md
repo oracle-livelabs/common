@@ -44,17 +44,19 @@ To create a Pull Request:
 4. Click **Create pull request**.
     ![Include WMS id in pull request title.](./images/git-hub-pull-request-title-comment.png " ")
   A status page is displayed indicating that you have created a pull request along with the request number (for example, #1770), that it is pending review, and that merging is blocked. The LiveLabs admin team will review your PR within 1 business day.
+  ![Pending Review](./images/pending-review.png " ")
 
-5. When your pull request is approved, the page gets updated with information about your commits being approved and merged into the **upstream/main** repository (production).
+5. When your pull request is approved, the page gets updated with information about your commits being approved and merged into the **oracle-livelabs:main** repository (production).
+  ![PR is merged](./images/merged.png " ")
 
-  When the pull request is approved and merged into the **upstream/main** repository, two emails are sent to the e-mail account associated with your GitHub account.
+    When the pull request is approved and merged into the **oracle-livelabs:main** repository, two emails are sent to the e-mail account associated with your GitHub account.
 
-   > **Note:**
+    > **Note:**
 
-   * The first email notifies you that your pull request was approved (or rejected).
-   * If your pull request was approved, then the second email notifies you that your pull request was merged into the **upstream/main** repository.
+    * The first email notifies you that your pull request was approved (or rejected).
+    * If your pull request was approved, then the second email notifies you that your pull request was merged into the **upstream/main** repository.
 
-  Your committed content is now visible to the public on the upstream/main or production repository: oracle-livelabs/&lt;repository&gt;.
+    Your committed content is now visible to the public on the upstream/main or production repository: oracle-livelabs/&lt;repository&gt;.
 
 6. We may request some changes to your pull request. You need to make those changes as soon as possible. As long as your PR is still open, you don't need to create a new PR - new commits will be added automatically. You do need to make sure that your branch is still up-to-date with the main branch.
 
