@@ -2,7 +2,7 @@
 
 ## Introduction
 
-You can speciy variales in another file and refer to them in your markdown.
+You can specify variables in another file and refer to them in your Markdown.
 
 
 ## Task 1:
