@@ -2,7 +2,7 @@
 
 ## Tables are cool!
 
-You can define a table in Mardown just like so:
+You can define a table in Markdown just like so:
 
 ```
 | Tables        | Are           | Cool  |
