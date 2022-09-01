@@ -8,13 +8,15 @@ It is a pleasure to welcome you to the Oracle CloudWorld Hands-On Lab (HOL) Expe
 
 In the following sections, you can find frequently asked questions, technical requirements, and tips & tricks.
 
-<br>
+## Your HOL ID is the key to everything
 
-### Join the CloudWorld Community
+Every session at CloudWorld has a unique ID. You can find the particualr ID in the session catalog or in the session builder. If you are already attending a session and you are not sure about the HOL ID, simply ask someone from the staff. They are happy to help you!
 
-**If you have any questions, feel free to join the Oracle CloueWorld community on our public Slack channel #OCW-HOL-Support.**
+The image show the HOL ID for a session in the session catalog:
 
-We are also sharing latest updates on sessions on the Slack channel
+![Find your HOL ID](images/sessionid.png =30%x*)
 
-If you are new to Slack, please register here: [Create Slack account](https://bit.ly/join-devrel-slack).
+You can ask questions about a workshop at any time in our [Oracle CloudWorld Slack community](https://oracle-livelabs.github.io/common/support/slack/slack.md).
+ Make sure to always add the HOL ID to your question. This helps the experts to find the answer faster.
+
 
