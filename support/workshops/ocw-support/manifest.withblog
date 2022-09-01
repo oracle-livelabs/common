@@ -7,7 +7,11 @@
             "filename": "../../welcome/welcome.md"
         },
         {
-            "title": "Technical requirements for LiveLabs Workshops",
+            "title": "Hands-on Lab Blog",
+            "filename": "../../blog/blog.md"
+        },
+        {
+            "title": "Technical requirements for Hands-on Labs",
             "filename": "../../requirements/requirements.md"
         },
         {
@@ -25,18 +29,6 @@
         {
             "title": "My session runs on a special environment",
             "filename": "../../special-env/special-env.md"
-        },
-        {
-            "title": "Explore the Oracle Discovery Lab",
-            "filename": "../../discovery/discovery.md"
-        },
-        {
-            "title": "Join the Oracle CloudWorld Community",
-            "filename": "../../slack/slack.md"
-        },
-        {
-            "title": "Oracle CloudWorld Session Catalog",
-            "filename": "../../sessions/sessions.md"
         },
         {
             "title": "General FAQ",

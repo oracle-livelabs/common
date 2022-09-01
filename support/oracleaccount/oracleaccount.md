@@ -1,5 +1,7 @@
 # Your Oracle Account
 
+## Create an Oracle Account in just one minute
+
 You are provided access to our Oracle Cloud environments in some hands-on labs. The use of those environments is free of charge, and there are no strings attached. We require you to log in using your Oracle Account to use those environments.
 
 In case you forgot your Oracle Account credentials or you require a new one, have a look at the next paragraph:
