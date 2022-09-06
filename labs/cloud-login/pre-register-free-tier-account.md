@@ -8,7 +8,7 @@ Estimated Time: 5 minutes
 
 ### Existing Cloud Accounts
 
-If you already have access to an Oracle Cloud account, including an Oracle Cloud account using [Oracle Universal Credits](https://docs.oracle.com/en/cloud/get-started/subscriptions-cloud/csgsg/universal-credits.html), skip to **Task 2** to sign in to your cloud tenancy.
+If you already have access to an Oracle Cloud account, skip to **Task 2** to sign in to your cloud tenancy.
 
 ### Objectives
 
@@ -105,4 +105,4 @@ You may now **proceed to the next lab**
 
 - **Created By/Date** - Kay Malcolm, Database Product Management, Database Product Management, March 2020
 - **Contributors** - John Peach, Kamryn Vinson, Rene Fontcha, Arabella Yao
-- **Last Updated By** - Arabella Yao, Product Manager, Database Product Management, March 2022
+- **Last Updated By** - Arabella Yao, Product Manager, Database Product Management, Aug 2022
