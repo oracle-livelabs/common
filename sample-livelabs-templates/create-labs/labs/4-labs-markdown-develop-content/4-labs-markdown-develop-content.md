@@ -246,6 +246,44 @@ The LintChecker is a great javascript function for QAing that you should take ad
 2. If you do run into a Case Sensitivity error on Windows or macOS, you cannot simply fix it by renaming it DIRECTLY with the correct case... because the system will not recognize that you are trying to rename it. You have to either rename that item to something else entirely and then rename it back with the correct case... or you can use **"git mv"** as described [in this article](https://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory) for more complicated fixes that involve entire directories.
 
 
+## Task 11: Code Snippets
+
+1. If you include code snippets in your workshop instruction, you can use the following syntax for code to distinguish it from other instructions.
+
+    ![Code Snippet](./images/code-snippet.png " ")
+
+    ```
+    some code
+    ```
+
+2. If you want users to copy this code snippet, you can add the *copy* tag around the code.
+
+  ![Add copy tag for code snippet](./images/code-copy.png " ")
+
+    ```
+    <copy>
+    some code
+    </copy>
+    ```
+
+3. If you specify the language of the code, Markdown can recognize the syntax and highlight certain information.
+
+    ![Add json tag for code snippet](./images/json-code.png " ")
+
+    ```json
+    {
+      "firstName": "John",
+      "lastName": "Smith",
+      "age": 25
+    }
+
+    ```
+    ![Add java tag for code snippet](./images/java-code.png " ")
+    ```java
+    System.out.println("Hello World");
+    ```
+
+
 **Reminder** Download this handy [Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.com/p/Qfg5WZ_O9yDet7NlaJPT76s9o_Yy0VVQ3LDh34c0HTrietIqqKq-m9zukdqiRymL/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
 
 You may now **proceed to the next lab**.
@@ -257,6 +295,7 @@ You may now **proceed to the next lab**.
 * **Contributors:**
     * Lauran Serhal, Principal User Assistance Developer, Oracle Database and Big Data User Assistance
     * Anuradha Chepuri, Principal User Assistance Developer, Oracle GoldenGate
+    * Arabella Yao, Product Manager, Database Product Management
 
 * **Reviewed by:**
     * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
@@ -265,4 +304,4 @@ You may now **proceed to the next lab**.
     * Andres Quintana
     * Brianna Ambler
 
-* **Last Updated By/Date:** Michelle Malcher, August 2022
+* **Last Updated By/Date:** Arabella Yao, September 2022
