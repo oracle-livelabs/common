@@ -57,7 +57,7 @@ To create a compartment click the **Navigation Menu** in the upper left, navigat
 3. Review and Validate the VCN Information and hit **Create**
 	![vcn1](images/vcn3.png)
 
-4. VCN Creation is successfully created
+4. VCN provisioning is completed
 
 	![vcn1](images/vcn4.png)
 
@@ -66,9 +66,11 @@ To create a compartment click the **Navigation Menu** in the upper left, navigat
 
   | VCN / Subnet | CIDR Block | Total IPs | Total Usable IPs| Subnet Access |
   | --- | --- | --- | --- |
-  | livelab |  172.30.0.0/22 | 1024 | |
-  | Public Subnet-livelab | 172.30.0.0/23 | 512 | 509 | Public (Regional) |
-  | Private Subnet-livelab | 172.30.2.0/23 | 512 | 509 | Private (Regional) |
+  | livelab |  172.30.0.0/21 | 2048 | |
+  | Public Subnet-livelab | 172.30.0.0/22 | 1024 | 1021 | Public (Regional) |
+  | Private Subnet-livelab | 172.30.4.0/22 | 1024 | 1021 | Private (Regional) |
+    
+    >**Note:** 3 IPs per Subnet are reserved by OCI
 
 
 ## Task 3: Create SSH Keys
@@ -90,7 +92,7 @@ Estimated Time: 5 minutes
 
 The ssh keys on MacOS can be created using the **Terminal** application. If you don't already have a shortcut to the terminal application for MacOS, you can find it in the **Applications > Utilities** menu or (Shift+Command+U) on your keyboard.
   ```
-  ssh-keygen -t rsa
+  <copy>ssh-keygen -t rsa</copy>
   Generating public/private rsa key pair.
   Enter file in which to save the key (/Users/fnafey/.ssh/id_rsa):
   Enter passphrase (empty for no passphrase):
@@ -149,7 +151,10 @@ The command above creates two files under the .ssh folder in the Home directory 
 8. Deafult options for **Boot Volume** should suffice for this Lab. No Change is required. Then click create.
 
 ![compute](images/compute3.png)
+
 9. The compute instance will be provisioned shortly.
+
+![compute](images/compute4.png)
 
 
 ## Task 3: Connect to the Instance
@@ -165,18 +170,17 @@ Click the **Navigation Menu** in the upper left, navigate to **Compute**, select
 
 
 
-2. Connect to the compute Instance on MacOS
+2. Connect to the compute Instance on MacOS / Linux
 
 	```
-  ssh opc@150.136.95.109
-  The authenticity of host '150.136.95.109 (150.136.95.109)' can't be established.
-  ED25519 key fingerprint is SHA256:WsFhNLknVX+GIMGf08UH6ifpAhXmGU29VIKLPQCnfkM.
+  ssh opc@150.230.24.165
+  The authenticity of host '150.230.24.165 (150.230.24.165)' can't be established.
+  ED25519 key fingerprint is SHA256:hZ5/mqmkXo0u0QHcx6HcFQFLKEePaghQZoHiy9wHh3g.
   This key is not known by any other names
   Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-  Warning: Permanently added '150.136.95.109' (ED25519) to the list of known hosts.
+  Warning: Permanently added '150.230.24.165' (ED25519) to the list of known hosts.
   Activate the web console with: systemctl enable --now cockpit.socket
 
-  [opc@gitlab ~]$
   ```
 
 

@@ -39,7 +39,30 @@ The VCN in which you want to create and deploy clusters must have specific secur
 
   ![EgressSL](images/egress.png)
 
-## Task 2: Create Managed Kubernetes (OKE) Cluster
+## Task 2: Create IAM Policies
+
+1. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Compartment**
+    - Navigate to the compartment that is being used for this Live Lab and copy the OCID of the compartment
+
+
+  ![Compartment](images/dynamicgroup1.png)
+
+2. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Dynamic Groups** and hit **Create Dynamic Group**
+    - Specify the Name and Description for the dynamic group
+    - Speciy the Rule for the Dynamic Group by specifying the OCID of the Compartment
+        - Optionally, Rule Builder can also be used to specify the Rule
+
+  ![DynamicGroup](images/dynamicgroup2.png)
+
+3. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Policies** and hit **Create Policy**
+    - Specify the Name and Description for the policy
+    - Policy must be created in the root compartment
+    - Specify the Policy rule. The policy specified would allow the user to *manage* the *cluster-family*
+    - This policy would allow the user to access the Cluster details programmatically using OCI CLI
+
+  ![Policy](images/dynamicgroup3.png)
+
+## Task 3: Create Managed Kubernetes (OKE) Cluster
 
 1. In the Console, open the navigation menu and click **Developer Services**. Under **Containers & Artifacts**, click **Kubernetes Clusters (OKE)** and select the option **Create Cluster**. Use the **Custom Create** workflow option to create a cluster
 
@@ -75,18 +98,21 @@ The VCN in which you want to create and deploy clusters must have specific secur
 ![oke1](images/oke7.png)
 
 8. Cluster creation continues
+
+  ![oke1](images/oke8.png)
+
     - Container Engine for Kubernetes starts creating the cluster with the name you specified
     - Container Engine for Kubernetes creates:
         - node pool with the user define name
         - worker nodes with auto-generated names in the format oke-c&lt;part-of-cluster-OCID&gt;-n&lt;part-of-node-pool-OCID&gt;-s&lt;part-of-subnet-OCID&gt;-&lt;slot&gt;
     - Do not change the auto-generated names of worker nodes
 
-Click Close to return to the Console. The cluster creation nromally takes 15-20 mins to complete.
+Click Close to return to the Console. The cluster creation normally takes 15-20 mins to complete.
 
 
 
 
-## Task 3: Install Kubectl Utility
+## Task 4: Install Kubectl Utility
 1. Download the latest release with the command
   ```
   <copy>curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"</copy>
@@ -124,29 +150,6 @@ If valid, the output is:
   <copy>source ~/.bash_profile</copy>
   ```
 
-## Task 4: Create IAM Policies
-
-1. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Compartment**
-    - Navigate to the compartment that is being used for this Live Lab and copy the OCID of the compartment
-
-
-  ![Compartment](images/dynamicgroup1.png)
-
-2. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Dynamic Groups** and hit **Create Dynamic Group**
-    - Specify the Name and Description for the dynamic group
-    - Speciy the Rule for the Dynamic Group by specifying the OCID of the Compartment
-        - Optionally, Rule Builder can also be used to specify the Rule
-
-  ![DynamicGroup](images/dynamicgroup2.png)
-
-3. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Policies** and hit **Create Policy**
-    - Specify the Name and Description for the policy
-    - Policy can be created in the root compartment
-    - Specify the Policy rule. The policy specified would allow the user to *manage* the *cluster-family*
-    - This policy would allow the user to access the Cluster details programmatically using OCI CLI
-
-  ![Policy](images/dynamicgroup3.png)
-
 ## Task 5: Install OCI CLI on Linux 8.x
 OCI CLI installation is required in order to access the OKE cluster.
 
@@ -164,7 +167,7 @@ OCI CLI installation is required in order to access the OKE cluster.
 
 
 
-4. Verifying the OCI CLI Installation
+4. Verify the OCI CLI configuration using Instance Principal Authentication
   ```
   <copy>oci os ns get</copy>
   {
@@ -185,20 +188,22 @@ OCI CLI installation is required in order to access the OKE cluster.
 
 3. To access the kubeconfig for your cluster via the VCN-Native private endpoint, execute the command copied earlier (this should be different everyone):
   ```
-  oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.iad.aaaaaaaaptlwwc5cy4ngggtybswnpfpdbga5mnhpfajjxkxupcn5vxlanmka --file $HOME/.kube/config --region us-ashburn-1 --token-version 2.0.0  --kube-endpoint PRIVATE_ENDPOINT
+  oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.ca-toronto-1.aaaaaaaawchlmxcseig5gngnnlweecfm4j27e25xxk5oe4xboc2sg5cs3wna --file $HOME/.kube/config --region ca-toronto-1 --token-version 2.0.0  --kube-endpoint PRIVATE_ENDPOINT
+  New config written to the Kubeconfig file /home/opc/.kube/config
   ```
 
 4. Set your KUBECONFIG environment variable to the file for this cluster
   ```
   <copy>echo "export KUBECONFIG=$HOME/.kube/config" >>~/.bash_profile</copy>
+  <copy>source ~/.bash_profile</copy>
   ```
 
 5. Get the cluster details
   ```
   <copy>kubectl get nodes</copy> 
-  NAME          STATUS   ROLES   AGE     VERSION
-  172.30.2.25   Ready    node    6m43s   v1.24.1
-  172.30.3.84   Ready    node    6m29s   v1.24.1 
+  NAME           STATUS   ROLES   AGE     VERSION
+  172.30.4.165   Ready    node    6m27s   v1.24.1
+  172.30.5.244   Ready    node    5m33s   v1.24.1
   ```
 
 ## Task 7: Install Helm
@@ -215,14 +220,57 @@ OCI CLI installation is required in order to access the OKE cluster.
   helm repo add gitlab http://charts.gitlab.io/
   ```
 
+## Task 9: Setting Up an Ingress Controller on a Cluster
+An Ingress controller is a specialized load balancer for Kubernetes that is responsible for accepting the user traffic from the internet and load balances it to pods/containers running inside the Kubernetes cluster
+
+1. To get the user OCID, Navigate to Upper Right Hand corner of the OCI Console, and click on **Profile**, and  select **User settings** from the menu.  Copy the User OCID from the console.
+
+  ![user OCID](images/userOCID.png)
+
+2. Create the Access Rules for the Ingress Controller
+ Note that you must set up your own kubeconfig file. You cannot access a cluster using a kubeconfig file that a different user set up. Replace the User OCID with the one from your account.
+
+  >**NOTE:** If your Oracle Cloud Infrastructure user is a tenancy administrator, skip this step and go straight to Creating the Service Account, and the Ingress Controller.
+  ```
+  <copy>kubectl create clusterrolebinding gitlab-crb --clusterrole=cluster-admin --user=ocid1.user.oc1..aaaaaaaa37reb2tsbm6odkb4g23c6vujjx6ppdaathqpomnywo52t7nhhgva</copy>
+  
+  clusterrolebinding.rbac.authorization.k8s.io/gitlab-crb created
+  ```
+
+3. Create the Service Account, and the Ingress Controller
+
+  >**NOTE:** To find out the version number of the latest version of the script, see the [kubenetes/ingress-nginx documentation on GitHub](https://github.com/kubernetes/ingress-nginx#support-versions-table). Make sure to use the version of Ingress Controller that is compatible with the Kubernetes version.
+  ```
+  <copy>kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml</copy>
+
+  namespace/ingress-nginx created
+  serviceaccount/ingress-nginx created
+  serviceaccount/ingress-nginx-admission created
+  role.rbac.authorization.k8s.io/ingress-nginx created
+  role.rbac.authorization.k8s.io/ingress-nginx-admission created
+  clusterrole.rbac.authorization.k8s.io/ingress-nginx created
+  clusterrole.rbac.authorization.k8s.io/ingress-nginx-admission created
+  rolebinding.rbac.authorization.k8s.io/ingress-nginx created
+  rolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+  clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx created
+  clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+  configmap/ingress-nginx-controller created
+  service/ingress-nginx-controller created
+  service/ingress-nginx-controller-admission created
+  deployment.apps/ingress-nginx-controller created
+  job.batch/ingress-nginx-admission-create created
+  job.batch/ingress-nginx-admission-patch created
+  ingressclass.networking.k8s.io/nginx created
+  validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission created
+  ```
 
 ## Learn More
 
 * [Custom Create Workflow to Create a Cluster](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingclusterusingoke_topic-Using_the_Console_to_create_a_Custom_Cluster_with_Explicitly_Defined_Settings.htm)
 * [Install Kubectl on Linux](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
-* [Installing the CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm)
-* [Helm](https://helm.sh/docs/intro/install/)
-
+* [Installing the OCI CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm)
+* [Installing Helm](https://helm.sh/docs/intro/install/)
+* [Setting Up an Ingress Controller on a Cluster](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengsettingupingresscontroller.htm)
 
 ## Acknowledgements
 * **Author** - Farooq Nafey, Principal Cloud Architect
