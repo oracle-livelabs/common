@@ -26,7 +26,7 @@ In this lab, you will query files on the Oracle Cloud Infrastructure (OCI) Objec
 
     ![Enter login details and click Sign in.](./images/step1.2-Picture100-16.png " ")
 
-3. Download this [code snippet](/files/create_external_tables_without_base_url.txt) to a text editor.
+3. Download this [code snippet](./files/create_external_tables_without_base_url.txt) to a text editor.
 
 4. Replace `<file_uri_base>` in the code with the base URL you copied in the Load Data into an Oracle Autonomous Database Instance lab (in Object Store URL). You should make 9 substitutions.
 
