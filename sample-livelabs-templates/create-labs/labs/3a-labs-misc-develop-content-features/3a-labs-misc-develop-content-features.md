@@ -195,6 +195,17 @@ This concludes this lab. You may now **proceed to the next lab**.
     System.out.println("Hello World");
     ```
 
+4. If you do not want anything highlighted in your code snippet, simply add the `text` tag.
+
+    ![Add text tag to remove all highlighting](../4-labs-markdown-develop-content/images/text.png " ")
+    ```text
+    {
+      "firstName": "John",
+      "lastName": "Smith",
+      "age": 25
+    }
+    ```
+
 ## Task 9: Useful Markdown Syntax Cheatsheet
 
 Download this handy [Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.com/p/Qfg5WZ_O9yDet7NlaJPT76s9o_Yy0VVQ3LDh34c0HTrietIqqKq-m9zukdqiRymL/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
