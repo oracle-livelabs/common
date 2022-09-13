@@ -35,6 +35,10 @@
             "filename": "../../oke/oke.md"
         },
         {
+            "title": "Lab 5: Install GitLab Runner",
+            "filename": "../../runner/runner.md"
+        },
+        {
             "title": "Need Help?",
             "description": "Solutions to Common Problems and Directions for Receiving Live Help",
             "filename":"https://oracle-livelabs.github.io/common/labs/need-help/need-help-freetier.md"

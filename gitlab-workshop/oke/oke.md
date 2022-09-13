@@ -231,8 +231,10 @@ An Ingress controller is a specialized load balancer for Kubernetes that is resp
  Note that you must set up your own kubeconfig file. You cannot access a cluster using a kubeconfig file that a different user set up. Replace the User OCID with the one from your account.
 
   >**NOTE:** If your Oracle Cloud Infrastructure user is a tenancy administrator, skip this step and go straight to Creating the Service Account, and the Ingress Controller.
+
+  
   ```
-  <copy>kubectl create clusterrolebinding gitlab-crb --clusterrole=cluster-admin --user=ocid1.user.oc1..aaaaaaaa37reb2tsbm6odkb4g23c6vujjx6ppdaathqpomnywo52t7nhhgva</copy>
+  <copy>kubectl create clusterrolebinding gitlab-crb --clusterrole=cluster-admin --user=</copy></copy>ocid1.user.oc1..aaaaaaaa37reb2tsbm6odkb4g23c6vujjx6ppdaathqpomnywo52t7nhhgva</copy>
   
   clusterrolebinding.rbac.authorization.k8s.io/gitlab-crb created
   ```
@@ -264,6 +266,13 @@ An Ingress controller is a specialized load balancer for Kubernetes that is resp
   validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission created
   ```
 
+
+4. Verify that the Public IP address is assigned to the Load Balancer
+
+  ```
+  <copy>kubectl get svc -n ingress-nginx</copy>
+  ```
+
 ## Learn More
 
 * [Custom Create Workflow to Create a Cluster](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingclusterusingoke_topic-Using_the_Console_to_create_a_Custom_Cluster_with_Explicitly_Defined_Settings.htm)
@@ -274,4 +283,4 @@ An Ingress controller is a specialized load balancer for Kubernetes that is resp
 
 ## Acknowledgements
 * **Author** - Farooq Nafey, Principal Cloud Architect
-* **Last Updated By/Date** - August 2022
+* **Last Updated By/Date** - Farooq Nafey, August 2022
