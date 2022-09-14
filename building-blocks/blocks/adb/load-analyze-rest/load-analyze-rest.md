@@ -20,11 +20,7 @@ In this lab, you will:
 * Create an account on News API (https://newsapi.org/) and retrieve an API key
 * Create a PLSQL function that retrieves the latest news for actors
 * Perform a sentiment analysis on the article descriptions
-<<<<<<< HEAD
 * Identify which actors are generating buzz - both good and bad
-=======
-* Which actors are generating buzz - both good and bad?
->>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 
 
 ### Prerequisites
@@ -52,7 +48,6 @@ The News API provides a simple REST API to retrive news from various sources. Ge
 
 ## Task 2: Create a PLSQL function that retrieves news for an actor
 Now that you have the API key, create a PLSQL function that queries the REST endpoint using the parameters above.
-<<<<<<< HEAD
 
 1. Navigate to the Database Actions' SQL Worksheet
     
@@ -62,9 +57,6 @@ Now that you have the API key, create a PLSQL function that queries the REST end
     Then, select SQL in the Launchpad:
     ![Click SQL](/common/building-blocks/tasks/adb/images/adb-dbactions-click-sql.png "Click SQL")
 
-=======
-1. Go to SQL Worksheet.
->>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 2. Ensure that the public REST endpoint is accessible by our PL/SQL function. Copy and paste the following API call into SQL Worksheet to update the access control list. Click **Run Script**. This will allow the ADMIN user to call out to any public host.
     ```
     <copy>

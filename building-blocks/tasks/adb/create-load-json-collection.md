@@ -11,16 +11,11 @@ Oracle SQL allows you to analyze JSON data - including complex data types like a
 
 ### Movie JSON data
 Our movie data set has a series of columns that contain different types of details about movies. Each movie has a **crew** associated with it and that crew is comprised of **jobs**, such as "producer," "director," "writer," along with the names of the individuals. Each movie also has a list of award nominations and wins. An example of how this information is organized is shown below:
-<<<<<<< HEAD
-=======
-adb-json-movie
->>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 
 ![JSON example](images/adb-json-movie.png " ")
 
 You can see that JSON data is organized very differently than typical warehouse data. There is a single entry for "producer" but the corresponding key "names" actually has multiple values. This is referred to as an **array** - specifically a JSON array.
 
-<<<<<<< HEAD
 1. Navigate to the Database Actions' SQL Worksheet:
     
     Go to Database Actions from the Autonomous Database OCI console:
@@ -30,9 +25,6 @@ You can see that JSON data is organized very differently than typical warehouse 
     ![Click SQL](images/adb-dbactions-click-sql.png "Click SQL")
 
 2. Use the Autonomous Database ``DBMS_CLOUD.COPY_COLLECTION`` procedure to create and load the movie collection from object storage. Copy and paste the following PL/SQL into the SQL worksheet and click run:
-=======
-1. Use the Autonomous Database ``DBMS_CLOUD.COPY_COLLECTION`` procedure to create and load the movie collection from object storage. Copy and paste the following PL/SQL into the SQL worksheet and click run:
->>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
     ```
     <copy>
     -- create and load movie json collection from a public bucket on object storage
@@ -53,11 +45,7 @@ You can see that JSON data is organized very differently than typical warehouse 
 
 > **Note:** There is extra metadata captured for SODA collections that is not removed by dropping the table directly using SQL ``drop table``. To properly drop a collection, use PL/SQL function [`DMBS_SODA.DROP_COLLECTION`](https://docs.oracle.com/en/database/oracle/oracle-database/18/adsdp/using-soda-pl-sql.html#GUID-D29C4FFF-D093-4C1B-889A-5C29B63756C6).
 
-<<<<<<< HEAD
 3. Let's take a look at the documents. The documents are stored in a highly optimized binary format. Use the `JSON_SERIALIZE` function to view the JSON text. Copy and paste the following SQL into the worksheet and click **Run**:
-=======
-2. Let's take a look at the documents. The documents are stored in a highly optimized binary format. Use the `JSON_SERIALIZE` function to view the JSON text. Copy and paste the following SQL into the worksheet and click **Run**:
->>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
     ```
     <copy>
     select json_serialize(json_document) as json
