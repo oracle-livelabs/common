@@ -1,7 +1,11 @@
 /*    Creates the workshop log and dataset table */
 declare
     l_format varchar2(1000) := '{"skipheaders":"0", "delimiter":"\n", "ignoreblanklines":"true"}';
+<<<<<<< HEAD
+    l_uri    varchar2(1000) := 'https://raw.githubusercontent.com/martygubar/common/main/building-blocks/setup/datasets.json';
+=======
     l_uri    varchar2(1000) := 'https://raw.githubusercontent.com/martygubar/adb/main/building-blocks/setup/datasets.json';
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 begin
    -- drop tables if they exist
    for rec in (
@@ -62,7 +66,11 @@ end;
 -- Install the workshop base package
 declare
     l_git varchar2(4000);
+<<<<<<< HEAD
+    l_repo_name varchar2(100) := 'common';
+=======
     l_repo_name varchar2(100) := 'adb';
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
     l_owner varchar2(100) := 'martygubar';
     l_package_file varchar2(200) := 'building-blocks/setup/workshop-package.sql';
 begin

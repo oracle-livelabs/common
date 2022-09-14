@@ -24,9 +24,18 @@ Listed below are the tasks that you can incorporate into your markdown. You can 
 |---------------| ---- |  ---- |------------ |
 | adb | [Connect with SQL Worksheet](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#ConnectwithSQLWorksheet) | /common/building-blocks/tasks/adb/connect-with-sql-worksheet-body.md | Connect to Autonomous Database using the SQL Worksheet in Database Actions |
 | adb | [Create and load JSON Collection from object storage](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#CreateandloadJSONCollectionfromobjectstorage) | /common/building-blocks/tasks/adb/create-load-json-collection.md | <ul><li>Loads data using DBMS&lowbar;CLOUD.COPY&lowbar;COLLECTION</li><li>Introduces JSON&lowbar;SERIALIZE, JSON&lowbar;VALUE and JSON&lowbar;QUERY (minimal)</li><li>Creates a view over JSON data</li><li>Performs basic JSON queries</li></ul> |
+<<<<<<< HEAD
+| adb | [Create ADB User using Database Actions](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#CreateADBUserusingDatabaseActions) | /common/building-blocks/tasks/adb/create-user.md | Creates an ADB user using the new user database action |
 | adb | [Go to Data Load Utility Database Action](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#GotoDataLoadUtilityDatabaseAction) | /common/building-blocks/tasks/adb/goto-data-load-utility.md | Navigate to data loader. AUTHORS: For expediency, this task uses the ADMIN user/password to open Database Actions. In your workshop, you might want to substitute a different user/password to open Database Actions. |
 | adb | [Go to Autonomous Database Service](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#GotoAutonomousDatabaseService) | /common/building-blocks/tasks/adb/goto-service-body.md | Navigate to ADB using the OCI menu. AUTHORS: For expediency, this task uses the ADMIN user/password to open Database Actions. In your workshop, you might want to substitue a different user/password to open Database Actions. |
 | adb | [Go to SQL Worksheet in Database Actions](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#GotoSQLWorksheetinDatabaseActions) | /common/building-blocks/tasks/adb/goto-sql-worksheet.md | Navigate to SQL Worksheet from the OCI service console.  |
+| adb | [Load data from public buckets using Database Actions. Sales data not included.](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#LoaddatafrompublicbucketsusingDatabaseActionsSalesdatanotincluded) | /common/building-blocks/tasks/adb/load-public-db-actions-no-sales.md | Uses Database Actions to load data from public object storage buckets. It loads the following tables:<ul><li>customer&lowbar;contact</li><li>genre</li><li>pizza location</li></ul><p>To load sales&lowbar;sample, use task **Load data from public buckets using Database Actions** |
+| adb | [Load data from public buckets using Database Actions](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#LoaddatafrompublicbucketsusingDatabaseActions) | /common/building-blocks/tasks/adb/load-public-db-actions.md | Uses Database Actions to load data from public object storage buckets. It loads the following tables:<ul><li>customer&lowbar;contact</li><li>sales&lowbar;sample</li><li>genre</li><li>pizza location</li></ul> |
+=======
+| adb | [Go to Data Load Utility Database Action](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#GotoDataLoadUtilityDatabaseAction) | /common/building-blocks/tasks/adb/goto-data-load-utility.md | Navigate to data loader. AUTHORS: For expediency, this task uses the ADMIN user/password to open Database Actions. In your workshop, you might want to substitute a different user/password to open Database Actions. |
+| adb | [Go to Autonomous Database Service](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#GotoAutonomousDatabaseService) | /common/building-blocks/tasks/adb/goto-service-body.md | Navigate to ADB using the OCI menu. AUTHORS: For expediency, this task uses the ADMIN user/password to open Database Actions. In your workshop, you might want to substitue a different user/password to open Database Actions. |
+| adb | [Go to SQL Worksheet in Database Actions](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#GotoSQLWorksheetinDatabaseActions) | /common/building-blocks/tasks/adb/goto-sql-worksheet.md | Navigate to SQL Worksheet from the OCI service console.  |
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 | adb | [Provision Autonomous Database](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#ProvisionAutonomousDatabase) | /common/building-blocks/tasks/adb/provision-body.md | Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, OCPUs, storage and more. |
 | adb | [Query JSON arrays](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#QueryJSONarrays) | /common/building-blocks/tasks/adb/query-json-arrays.md | Use JSON&lowbar;TABLE to convert arrays into rows. |
 | adb | [Query simple JSON attributes](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#QuerysimpleJSONattributes) | /common/building-blocks/tasks/adb/query-json-simple.md | Use dot notation and JSON&lowbar;VALUE to query JSON documents. Creates a view to simplify subsequent access. |
@@ -53,9 +62,18 @@ The template assumes you copied the default **variables.json** to the same direc
   "include": {
      "adb-connect-with-sql-worksheet-body.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-body.md",
      "adb-create-load-json-collection.md":"/common/building-blocks/tasks/adb/create-load-json-collection.md",
+<<<<<<< HEAD
+     "adb-create-user.md":"/common/building-blocks/tasks/adb/create-user.md",
      "adb-goto-data-load-utility.md":"/common/building-blocks/tasks/adb/goto-data-load-utility.md",
      "adb-goto-service-body.md":"/common/building-blocks/tasks/adb/goto-service-body.md",
      "adb-goto-sql-worksheet.md":"/common/building-blocks/tasks/adb/goto-sql-worksheet.md",
+     "adb-load-public-db-actions-no-sales.md":"/common/building-blocks/tasks/adb/load-public-db-actions-no-sales.md",
+     "adb-load-public-db-actions.md":"/common/building-blocks/tasks/adb/load-public-db-actions.md",
+=======
+     "adb-goto-data-load-utility.md":"/common/building-blocks/tasks/adb/goto-data-load-utility.md",
+     "adb-goto-service-body.md":"/common/building-blocks/tasks/adb/goto-service-body.md",
+     "adb-goto-sql-worksheet.md":"/common/building-blocks/tasks/adb/goto-sql-worksheet.md",
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
      "adb-provision-body.md":"/common/building-blocks/tasks/adb/provision-body.md",
      "adb-query-json-arrays.md":"/common/building-blocks/tasks/adb/query-json-arrays.md",
      "adb-query-json-simple.md":"/common/building-blocks/tasks/adb/query-json-simple.md",

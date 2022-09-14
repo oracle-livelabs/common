@@ -6,12 +6,20 @@
 -->
 1. Click **Create Autonomous Database** to start the instance creation process.
 
+<<<<<<< HEAD
+    ![Click Create Autonomous Database.](images/adb-click-create-adb.png "Create ADB")
+=======
     ![Click Create Autonomous Database.](images/adb-click-create-adb.png " ")
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 
 2.  This brings up the **Create Autonomous Database** screen where you will specify the configuration of the instance.
 
 
+<<<<<<< HEAD
+    ![Create Autonomous Database](images/adb-create-screen-freetier-default.png "Create ADB")
+=======
     ![Create Autonomous Database](images/adb-create-screen-freetier-default.png " ")
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 
 
 3. Give basic information for the autonomous database:
@@ -40,14 +48,23 @@
 
     For this workshop, pick **[](var:db_workload_type)**
 
+<<<<<<< HEAD
+    ![Choose a workload type.](images/adb-create-screen-workload.png "Workload type")
+=======
     ![Choose a workload type.](images/adb-create-screen-workload.png " ")
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 
 5. Choose a deployment type. Select the deployment type for your database from the choices:
 
     - **Shared Infrastructure** - For this lab, choose **Shared Infrastructure** as the deployment type.
+<<<<<<< HEAD
+
+    ![Choose a deployment type.](images/adb-create-screen-deployment-type.png "Deployment type")
+=======
     - **Dedicated Infrastructure** - Or, you could have chosen Dedicated Infrastructure as the deployment type.
 
     ![Choose a deployment type.](images/adb-create-screen-deployment-type.png " ")
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 
 6. Configure the database:
 
@@ -60,7 +77,11 @@
 
     > **Note:** You cannot scale up/down an Always Free autonomous database.
 
+<<<<<<< HEAD
+    ![Choose the remaining parameters.](./images/adb-create-screen-configure-db.png "Configuration")
+=======
     ![Choose the remaining parameters.](./images/adb-create-screen-configure-db.png " ")
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 
 7. Create administrator credentials:
 
@@ -72,7 +93,11 @@
     - The password must not be the same password that you set less than 24 hours ago.
     - Re-enter the password to confirm it. Make a note of this password.
 
+<<<<<<< HEAD
+    ![Enter password and confirm password.](./images/adb-create-screen-password.png "Admin password")
+=======
     ![Enter password and confirm password.](./images/adb-create-screen-password.png " ")
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 
 8. Choose network access:
     - For this lab, accept the default, **Secure access from everywhere**.
@@ -80,29 +105,52 @@
     - If you want to restrict access to a private endpoint within an OCI VCN, select **Private endpoint access only** in the Choose network access area.
     - If the **Require mutual TLS (mTLS) authentication** option is selected, mTLS will be required to authenticate connections to your Autonomous Database. TLS connections allow you to connect to your Autonomous Database without a wallet, if you use a JDBC thin driver with JDK8 or above. See the [documentation for network options](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/support-tls-mtls-authentication.html#GUID-3F3F1FA4-DD7D-4211-A1D3-A74ED35C0AF5) for options to allow TLS, or to require only mutual TLS (mTLS) authentication.
 
+<<<<<<< HEAD
+    ![Choose the network access.](./images/adb-create-screen-choose-network.png "Networking options")
+=======
     ![Choose the network access.](./images/adb-create-screen-choose-network.png " ")
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 
 9. Choose a license type. <if type="freetier">For this lab, choose **License Included**.</if><if type="livelabs">For this lab, choose **Bring Your Own License (BYOL)**.</if> The two license types are:
     - **Bring Your Own License (BYOL)** - Select this type when your organization has existing database licenses.
     - **License Included** - Select this type when you want to subscribe to new database software licenses and the database cloud service.
 
 <if type="freetier">
+<<<<<<< HEAD
+    ![](./images/adb-create-screen-license.png "License type")
+</if>
+<if type="livelabs">
+    ![](images/adb-create-screen-byol.png "License type")
+=======
     ![](./images/adb-create-screen-license.png " ")
 </if>
 <if type="livelabs">
     ![](images/adb-create-screen-byol.png)
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 </if>
 
 10. For this lab, do not provide a contact email address. The "Contact Email" field allows you to list contacts to receive operational notices and announcements as well as unplanned maintenance notifications.
 
+<<<<<<< HEAD
+    ![Do not provide a contact email address.](images/adb-create-screen-contact-email.png "email")
+=======
     ![Do not provide a contact email address.](images/adb-create-screen-contact-email.png)
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
 
 11. Click **Create Autonomous Database**.
 
 12.  Your instance will begin provisioning.
 
+<<<<<<< HEAD
+    ![Database Provisioning message.](./images/adb-create-provisioning-message.png "Provisioning")
+
+    In a few minutes, the state will turn from Provisioning to Available. At this point, your Autonomous Database instance is ready to use! Have a look at your instance's details - including its name, database version, OCPU count, and storage size.
+
+    ![Database complete message.](./images/adb-create-complete-message.png "Complete")
+=======
     ![Database Provisioning message.](./images/adb-create-provisioning-message.png " ")
 
     In a few minutes, the state will turn from Provisioning to Available. At this point, your Autonomous Data Warehouse database is ready to use! Have a look at your instance's details here including its name, database version, OCPU count, and storage size.
 
     ![Database complete message.](./images/adb-create-complete-message.png " ")
+>>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
