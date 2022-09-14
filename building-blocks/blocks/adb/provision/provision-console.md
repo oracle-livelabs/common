@@ -1,4 +1,4 @@
-# Create an Oracle Autonomous Database (ADW and ATP)
+# Create an Oracle Autonomous Database 
 
 ## Introduction
 
@@ -14,13 +14,13 @@ In this lab, you will:
 
 -   This lab requires completion of the Get Started section in the Contents menu on the left.
 
-## Task 1: Choose ADW or ATP from the services menu
+## Task 1: Choose Autonomous Database from the services menu
 [](include:adb-goto-service-body.md)
 
 ## Task 2: Create the Autonomous Database instance
 [](include:adb-provision-body.md)
 
-Please *proceed to the next lab*.
+Please [proceed to the next lab](#next).
 
 ## Learn more
 
