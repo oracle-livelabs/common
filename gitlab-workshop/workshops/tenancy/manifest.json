@@ -18,30 +18,30 @@
             "filename": "../../getstarted/getstarted.md"
         },
         {
-            "title": "Lab 1: Sample Lab",
+            "title": "Lab 1: Set up Network / Compute",
+            "filename": "../../compute/compute.md"
+        },
+        {
+            "title": "Lab 2: Install GitLab on a Compute",
+            "filename": "../../installgilab/installgilab.md"
+        },
+        {
+            "title": "Lab 3: Provision an OKE Cluster",
+            "filename": "../../oke/oke.md"
+        },
+        {
+            "title": "Lab 4: Install GitLab Runner",
+            "filename": "../../runner/runner.md"
+        },
+        {
+            "title": "Lab : Sample Lab",
             "description": "Labs that follow the introduction are numbered, starting with Lab 1",
             "filename": "../../provision/provision.md"
         },
         {
-            "title": "Lab 2: Set up Network / Compute",
-            "filename": "../../compute/compute.md"
-        },
-        {
-            "title": "Lab 3: Install GitLab on a Compute",
-            "filename": "../../install/installgilab.md"
-        },
-        {
-            "title": "Lab 4: Provision an OKE Cluster",
-            "filename": "../../oke/oke.md"
-        },
-        {
-            "title": "Lab 5: Install GitLab Runner",
-            "filename": "../../runner/runner.md"
-        },
-        {
             "title": "Need Help?",
             "description": "Solutions to Common Problems and Directions for Receiving Live Help",
-            "filename":"https://oracle-livelabs.github.io/common/labs/need-help/need-help-freetier.md"
+            "filename":"https://oracle-livelabs.github.io/common/labs/need-help/need-help-livelabs.md"
         },
         {
             "title": "Other LiveLabs you might like",
