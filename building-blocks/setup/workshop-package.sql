@@ -2,11 +2,7 @@ create or replace package workshop authid current_user
 as
 
     /* Specify constants for the utility */
-<<<<<<< HEAD
     repo varchar2(100)       := 'common';
-=======
-    repo varchar2(100)       := 'adb';
->>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
     repo_owner varchar2(100) := 'martygubar';
     install_path varchar2(100) := 'building-blocks/setup/scripts';
 

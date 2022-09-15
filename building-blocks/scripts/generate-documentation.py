@@ -241,14 +241,11 @@ def write_task_manifest():
     output = add_line(output, '         "filename": "' + relpath_blocks + '/how-to-author-with-blocks/how-to-author-with-blocks.md"' )
     output = add_line(output, '     },')
     output = add_line(output, '     {')
-<<<<<<< HEAD
     output = add_line(output, '         "title": "Workshop Utilities - Add Users and Data Sets",' )
     output = add_line(output, '         "type": "freetier",' )
     output = add_line(output, '         "filename": "' + relpath_blocks + '/how-to-author-with-blocks/data-sets.md"' )
     output = add_line(output, '     },')
     output = add_line(output, '     {')
-=======
->>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
     output = add_line(output, '         "title": "Creating Blocks and Tasks",' )
     output = add_line(output, '         "type": "freetier",' )
     output = add_line(output, '         "filename": "' + relpath_blocks + '/how-to-author-with-blocks/creating-blocks-tasks.md"' )
@@ -298,11 +295,7 @@ def write_blocks_manifest():
     output = add_line(output, '     {')
     output = add_line(output, '         "title": "Get Started",' )
     output = add_line(output, '         "description": "Get a Free Trial",' )
-<<<<<<< HEAD
     output = add_line(output, '         "filename": "https://oracle-livelabs.github.io/common/labs/cloud-login/cloud-login.md"' )
-=======
-    output = add_line(output, '         "filename": "https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/cloud-login/cloud-login.md"' )
->>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
     output = add_line(output, '     },')
     output = add_line(output, '     {')
     output = add_line(output, '         "title": "Add Workshop Utilities",' )
@@ -435,11 +428,7 @@ def write_cloud_service_tasks():
         output = add_line(output, '**Add to your manifest.json:**')
         output = add_line(output, "```")
         output = add_line(output, '"include": {')
-<<<<<<< HEAD
         output = add_line(output, '     "' + t.include_name + '":"' + t.path + '"')
-=======
-        output = add_line(output, '     "' + t.include_name + '":"' + t.path)
->>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
         output = add_line(output, '}')
         output = add_line(output, "```")
         output = add_line(output, "")

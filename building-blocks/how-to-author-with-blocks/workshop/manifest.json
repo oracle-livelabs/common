@@ -3,18 +3,12 @@
  "include": {
      "adb-connect-with-sql-worksheet-body.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-body.md",
      "adb-create-load-json-collection.md":"/common/building-blocks/tasks/adb/create-load-json-collection.md",
-<<<<<<< HEAD
      "adb-create-user.md":"/common/building-blocks/tasks/adb/create-user.md",
      "adb-goto-data-load-utility.md":"/common/building-blocks/tasks/adb/goto-data-load-utility.md",
      "adb-goto-service-body.md":"/common/building-blocks/tasks/adb/goto-service-body.md",
      "adb-goto-sql-worksheet.md":"/common/building-blocks/tasks/adb/goto-sql-worksheet.md",
      "adb-load-public-db-actions-no-sales.md":"/common/building-blocks/tasks/adb/load-public-db-actions-no-sales.md",
      "adb-load-public-db-actions.md":"/common/building-blocks/tasks/adb/load-public-db-actions.md",
-=======
-     "adb-goto-data-load-utility.md":"/common/building-blocks/tasks/adb/goto-data-load-utility.md",
-     "adb-goto-service-body.md":"/common/building-blocks/tasks/adb/goto-service-body.md",
-     "adb-goto-sql-worksheet.md":"/common/building-blocks/tasks/adb/goto-sql-worksheet.md",
->>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
      "adb-provision-body.md":"/common/building-blocks/tasks/adb/provision-body.md",
      "adb-query-json-arrays.md":"/common/building-blocks/tasks/adb/query-json-arrays.md",
      "adb-query-json-simple.md":"/common/building-blocks/tasks/adb/query-json-simple.md",
@@ -33,14 +27,11 @@
          "filename": "/common/building-blocks/how-to-author-with-blocks/how-to-author-with-blocks.md"
      },
      {
-<<<<<<< HEAD
          "title": "Workshop Utilities - Add Users and Data Sets",
          "type": "freetier",
          "filename": "/common/building-blocks/how-to-author-with-blocks/data-sets.md"
      },
      {
-=======
->>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
          "title": "Creating Blocks and Tasks",
          "type": "freetier",
          "filename": "/common/building-blocks/how-to-author-with-blocks/creating-blocks-tasks.md"

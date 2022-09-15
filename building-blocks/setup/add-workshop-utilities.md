@@ -48,11 +48,7 @@ You will automatically log in as the ADMIN user.
     <copy>
     declare
         l_git varchar2(4000);
-<<<<<<< HEAD
         l_repo_name varchar2(100) := 'common';
-=======
-        l_repo_name varchar2(100) := 'adb';
->>>>>>> d55985721b3eda3e0a1965da470a05acf8c7a3f3
         l_owner varchar2(100) := 'martygubar';
         l_package_file varchar2(200) := 'building-blocks/setup/workshop-setup.sql';
     begin
