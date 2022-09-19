@@ -147,6 +147,8 @@ In the next Task, you will clone this forked repository.
 ## Task 6: Clone the Forked Repository
 A clone is a copy of your forked repository that lives on your local computer instead of on [GitHub Web UI](http://github.com). When you clone your forked repository, you can edit the files in your preferred editor, such as **Atom** editor, or **Visual Studio Code**, and use the **GitHub Desktop** client to keep track of your changes without having to be online.
 
+>**Note:** Make sure you are performing the following steps **off VPN**.
+
 To clone the forked repository:
 1. Open your **GitHub Desktop** application and log in using your GitHub account.
 
@@ -155,6 +157,7 @@ To clone the forked repository:
     ![Clone repository.](./images/git-hub-desktop-clone-repository.png " ")
 
 3. Select your repository such as **your account/repo** from **Your Repositories**. In this example, select **arabellayao/goldengate**. Under **Local Path**, select the local path on your machine where the repository is going to be cloned (copied). This is where the repository files get copied to your local file system. Click **Clone**.
+    >**Note:** If you cannot find the repo you just forked, click the **refresh** button.
 
     ![Available repositories dialog box.](./images/clone.png " ")
 
@@ -200,4 +203,4 @@ This concludes this lab. You may now **proceed to the next lab**.
     * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
     * Arabella Yao, Product Manager, Database
 
-* **Last Updated By/Date:** Arabella Yao, Jun 2022
+* **Last Updated By/Date:** Arabella Yao, August 2022

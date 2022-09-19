@@ -2,7 +2,7 @@
 
 ## Tables are cool!
 
-You can define a table in Mardown just like so:
+You can define a table in Markdown just like so:
 
 ```
 | Tables        | Are           | Cool  |
@@ -21,7 +21,7 @@ The result looks like this:
 
 You can see that there is a default table caption provided which is by default a concatenation of the workshop title and the lab title.
 
-If you dont like the default, you can also provide your own table title by adding the following below the table defintion:
+If you don't like the default, you can also provide your own table title by adding the below the table definition:
 
 ```
 {: title="My table title"}
@@ -49,6 +49,6 @@ Now our table looks like this:
 
 As you can see, the numbering is added automatically.
 
-Isn't that cool? 
+Isn't that cool?
 
 You can also refer to the [LiveLabs Markdown Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.com/p/MKKRgodQ0WIIgL_R3QCgCRWCg30g22bXgxCdMk3YeKClB1238ZJXdau_Jsri0nzP/n/c4u04/b/qa-form/o/LiveLabs_MD_Cheat_Sheet.pdf)

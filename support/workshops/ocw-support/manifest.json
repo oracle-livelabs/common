@@ -1,0 +1,46 @@
+{
+    "workshoptitle": "Oracle CloudWorld 2022 Support",
+    "help": "livelabs-help-db_us@oracle.com",
+    "tutorials": [
+        {
+            "title": "Welcome to Oracle CloudWorld 2022",
+            "filename": "../../welcome/welcome.md"
+        },
+        {
+            "title": "Technical requirements for LiveLabs Workshops",
+            "filename": "../../requirements/requirements.md"
+        },
+        {
+            "title": "Your Oracle Account",
+            "filename": "../../oracleaccount/oracleaccount.md"
+        },
+        {
+            "title": "Claim your Oracle Cloud Free Tier account ",
+            "filename": "../../freetier/freetier.md"
+        },
+        {
+            "title": "How to get access to the LiveLabs Sandbox",
+            "filename": "../../sandbox/sandbox.md"
+        },
+        {
+            "title": "My session runs on a special environment",
+            "filename": "../../special-env/special-env.md"
+        },
+        {
+            "title": "Explore the Oracle Discovery Lab",
+            "filename": "../../discovery/discovery.md"
+        },
+        {
+            "title": "Join the Oracle CloudWorld Community",
+            "filename": "../../slack/slack.md"
+        },
+        {
+            "title": "Oracle CloudWorld Session Catalog",
+            "filename": "../../sessions/sessions.md"
+        },
+        {
+            "title": "General FAQ",
+            "filename": "../../general-faq/general-faq.md"
+        }
+    ]
+}

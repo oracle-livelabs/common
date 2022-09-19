@@ -25,7 +25,7 @@
     {
       "title": "Lab 3: Use A Text Editor to Develop Markdown Content",
       "description": "This lab shows you how to develop your lab (markdown) content using an editor, such as **Atom** and starting the atom-live-server.",
-      "filename": "./../../3-labs-use-atom-editor-develop-content/3-labs-use-atom-editor-develop-content.md"
+      "filename": "./../../3-labs-use-code-editor-develop-content/3-labs-use-code-editor-develop-content.md"
     },
     {
       "title": "Lab 3a: Common Markdown Features for Content Development",

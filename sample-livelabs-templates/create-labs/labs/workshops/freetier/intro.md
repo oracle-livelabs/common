@@ -5,7 +5,7 @@ The labs in this workshop walk you through all the steps to **develop workshops*
   > **Note:** You can find information about creating images for compute instances and storing them in Marketplace in the [Creating Compute Images for Marketplace](https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/compute/index.html) LiveLabs workshop.
 
 ## What are Labs and Workshops?
-A lab is a new model adopted by the Database (DB) organization to enhance the tutorial experience. Labs are what the User Assistance community commonly knew as Oracle by Example (OBE). Labs can be combined to form a workshop, formerly known as Hands-on Lab or HOL, or a Learning Path.
+A **lab** is a new model adopted by the Database (DB) organization to enhance the tutorial experience. Labs are what the User Assistance community commonly knew as Oracle by Example (OBE). Labs can be combined to form a **workshop**, formerly known as **Hands-on Lab** or HOL, or a Learning Path.
 
 An individual Markdown (.md) file is called a lab. A collection of labs is called a workshop. A LiveLabs workshop must contain more than one lab. You cannot create a single lab LiveLabs (LL) workshop. In most cases, this is not a problem since most of the LL workshops contain at least one common lab titled **Get Started** that guides the user on the different types of Cloud accounts.
 
@@ -76,9 +76,19 @@ For a workshop to go from an idea to a LiveLabs workshop in production, it has t
 
 
 ## Develop LiveLabs Workshops Workflow
-The following diagram shows the general workflow process that your need to follow to set up your environment to develop labs and workshops. Most of the tasks are performed only once.
+The following steps show the general workflow process that your need to follow to set up your environment to develop labs and workshops. Most of the tasks are performed only once.
 
-![LiveLabs workflow infographic.](./images/git-hub-workflow-flow-chart.png " ")
+1. Create, set up, and access GitHub account
+2. Install GitHub Desktop
+3. Fork repositories from [oracle-livelabs](https://github.com/oracle-livelabs)
+4. Clone repositories that you forked
+5. Install and use Visual Studio Code and Live Server
+6. Create your workshop's folder structure
+7. Create content using Visual Studio Code and the [sample workshop template](https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop)
+8. Review content by stakeholders or subject matter experts (SMEs)
+9. Deploy completed content to the oracle-livelabs main branch
+
+>**Note:** If you want more information about how to perform each step above, click on labs on the left.
 
 ## Workshop Objectives
   * Set up the GitHub environment.
@@ -98,6 +108,8 @@ The following diagram shows the general workflow process that your need to follo
 - **Lab 3a:** Common Markdown Features for Content Development
 - **Lab 4:** Use GitHub Desktop to Commit to the GitHub Repository
 - **Optional Lab 5:** Add GitHub Hosted Labs and Workshops to OHC
+- **(Optional) Lab 6:** Develop LiveLabs Sprints
+- **Need Help?**
 
 ## What's Next?
 
@@ -116,4 +128,4 @@ The following diagram shows the general workflow process that your need to follo
     * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
     * Arabella Yao, Product Manager, Database Product Management
 * **Last Updated By/Date:**
-    * Arabella Yao, Jun 2022
+    * Arabella Yao, August 2022
