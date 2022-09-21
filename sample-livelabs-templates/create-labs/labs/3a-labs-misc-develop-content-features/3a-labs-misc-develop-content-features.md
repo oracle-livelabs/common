@@ -158,7 +158,55 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
 This concludes this lab. You may now **proceed to the next lab**.
 
-## Task 8: Useful Markdown Syntax Cheatsheet
+## Task 8: Code Snippets
+
+1. If you include code snippets in your workshop instruction, you can use the following syntax for code to distinguish it from other instructions.
+
+    ![Code Snippet](../4-labs-markdown-develop-content/images/code-snippet.png " ")
+
+    ```
+    some code
+    ```
+
+2. If you want users to copy this code snippet, you can add the *copy* tag around the code.
+
+  ![Add copy tag for code snippet](../4-labs-markdown-develop-content/images/code-copy.png " ")
+
+    ```
+    <copy>
+    some code
+    </copy>
+    ```
+
+3. If you specify the language of the code, Markdown can recognize the syntax and highlight certain information.
+
+    ![Add json tag for code snippet](../4-labs-markdown-develop-content/images/json-code.png " ")
+
+    ```json
+    {
+      "firstName": "John",
+      "lastName": "Smith",
+      "age": 25
+    }
+
+    ```
+    ![Add java tag for code snippet](./images/java-code.png " ")
+    ```java
+    System.out.println("Hello World");
+    ```
+
+4. If you do not want anything highlighted in your code snippet, simply add the `text` tag.
+
+    ![Add text tag to remove all highlighting](../4-labs-markdown-develop-content/images/text.png " ")
+    ```text
+    {
+      "firstName": "John",
+      "lastName": "Smith",
+      "age": 25
+    }
+    ```
+
+## Task 9: Useful Markdown Syntax Cheatsheet
 
 Download this handy [Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.com/p/Qfg5WZ_O9yDet7NlaJPT76s9o_Yy0VVQ3LDh34c0HTrietIqqKq-m9zukdqiRymL/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
 
@@ -172,4 +220,4 @@ Download this handy [Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.
     * Andres Quintana
     * Arabella Yao, Database Product Management
 
-* **Last Updated By/Date** - Arabella Yao, August 2022
+* **Last Updated By/Date** - Arabella Yao, September 2022

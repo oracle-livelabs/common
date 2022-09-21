@@ -2,7 +2,7 @@
 
 ## Introduction
 
-After you have completed self QA and your workshop has been reviewed, it is time to publish your workshop to LiveLabs Production. There are two areas that need to be completed to do this. First is in GitHub, and this is done by a Pull Request to merge your files with the oracle-livelabs main - production repository. Second is in WMS to complete the **Publish** tab details to allow for the completion of the update of LiveLabs production to showcase your workshop. 
+After you have completed self QA and your workshop has been reviewed, it is time to publish your workshop to LiveLabs Production. There are two areas that need to be completed to do this. First is in GitHub, and this is done by a Pull Request to merge your files with the oracle-livelabs main - production repository. Second is in WMS to complete the **Publish** tab details to allow for the completion of the update of LiveLabs production to showcase your workshop.
 
 ### Objectives
 
@@ -19,7 +19,7 @@ This lab assumes that you have completed **Lab 5: QA checks and steps** in the *
 
 ## Task 1: Create a pull request to upload your content to the Main Repository
 
-After you complete QA and made any other needed updates to your files, you are ready to merge your files and folders to the Oracle LiveLabs production repositories.
+After you complete QA and make any other needed updates to your files, you are ready to merge your files and folders to the Oracle LiveLabs production repositories.
 
 The **Pull Request** is a request that you send to the repository owners and code owners of the **oracle-livelabs/repository** to approve and host your content on the production **(oracle-livelabs:main)** repository.
 
@@ -46,7 +46,15 @@ To create a Pull Request:
   A status page is displayed indicating that you have created a pull request along with the request number (for example, #1770), that it is pending review, and that merging is blocked.
   ![Pending Review](./images/pending-review.png " ")
 
-5. When your pull request is approved, the page gets updated with information about your commits being approved and merged into the **oracle-livelabs:main** repository (production).
+5. On the status page, check 1) your branch does not have merge conflicts; 2) your branch is up-to-date. If your PR has any of those two issues, our LiveLabs team will not approve or merge your PR.
+
+    ![Merge Conflicts](./images/github-conflicts.png " ")
+
+    To solve merge conflicts, go to *Lab 3 -> Task 3: Merge content from Git before you start editing your content* and *Lab 6 -> Appendix -> Issue 1: GitHub Merge Conflicts*.
+
+    To make sure your branch is up-to-date, go to *Lab 3 -> Task 3: Merge content from Git before you start editing your content*.
+
+6. When your pull request is approved, the page gets updated with information about your commits being approved and merged into the **oracle-livelabs:main** repository (production).
   ![PR is merged](./images/merged.png " ")
 
     When the pull request is approved and merged into the **oracle-livelabs:main** repository, two emails are sent to the e-mail account associated with your GitHub account.
@@ -58,7 +66,7 @@ To create a Pull Request:
 
     Your committed content is now visible to the public on the oracle-livelabs:main or production repository: oracle-livelabs/&lt;repository&gt;.
 
-6. We may request some changes to your pull request. You need to make those changes as soon as possible. As long as your PR is still open, you don't need to create a new PR - new commits will be added automatically. You do need to make sure that your branch is still up-to-date with the main branch.
+7. We may request some changes to your pull request. You need to make those changes as soon as possible. As long as your PR is still open, you don't need to create a new PR - new commits will be added automatically. You do need to make sure that your branch is still up-to-date with the main branch.
 
 ## Task 2: Request publishing
 
@@ -66,17 +74,15 @@ To create a Pull Request:
 
   ![Request Publishing](images/publishing-tab.png)
 
-2. Fill out publishing information, including **Publish Type** and **Workshop Time**. Click **?** beside the Publishing Type to see different types of publishing. Turn on appropriate tenancies for your workshop: **Paid Tier Enabled?**, and/or **Green Button Enabled?**, and fill out appropriate **URL**s. Click **Create** to submit your publishing request. Our LiveLabs team will either approve your publishing request or ask you for more information within 2 business days.
+2. Fill out publishing information, including **Publish Type** and **Workshop Time**. Click **?** beside the Publishing Type to see different types of publishing. Turn on appropriate buttons for your workshop: **Brown Button Enabled?**, or **LiveLabs Sprint Enabled?**, and fill out appropriate **URL**s.
 
-    - Always Free On? - Turn off this button. This button will be deleted soon.
+    - Brown Button Enabled? - Can this workshop be done in a customer tenancy?
 
-    - Free Tier On? - Turn off this button. This button will be deleted soon.
-
-    - Paid Tier On? - Can this workshop be done in a customer tenancy?
-
-    - Green Button On? - Can this workshop be done in a registered LiveLabs tenancy, a.k.a Green Button? If you want to know more about the green button, or request one for your workshop, please see *Task 3: Request the Green Button* below.
+    - LiveLabs Sprint Enabled? - See **Additional optional labs: Develop LiveLabs Sprints** on the left menu for more information.
 
     ![Publishing Information](images/livelabs-publishing.png " ")
+
+If you want to request a green button (or a sandbox environment) for your workshop, please see **(Optional) Task 3: Request the Green Button** below for more information.
 
 3. Embed a video on the LiveLabs homepage for the workshop from Oracle Video Hub.
     
@@ -165,4 +171,4 @@ GitHub merge conflicts happen when you and some other contributors are changing 
     * Arabella Yao, Product Manager, Database
     * Madhusudhan Rao, Product Manager, Database
 
-* **Last Updated By/Date:** Arabella Yao, August 2022
+* **Last Updated By/Date:** Arabella Yao, September 2022
