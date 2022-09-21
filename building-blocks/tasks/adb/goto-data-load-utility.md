@@ -7,11 +7,11 @@
 
 Navigate to the Data Load utility of Database Actions.
 
-1. Navigate to the Details page of the Autonomous Database you provisioned in the "Provision an Autonomous Database" lab. In this example, the database display name is "MyQuickStart." Click **Database Actions** to go to the suite of Autonomous Database tools.
+1. Go to the Details page of the Autonomous Database you provisioned. Click **Database Actions** to go to the suite of Autonomous Database tools.
 
     ![Details page of your Autonomous Database](images/service-details.png " ")
 
-2.  A sign-in page opens for Database Actions. For this lab, simply use your database instance's default administrator account, **Username - admin**, and click **Next**. Enter the administrator **Password** you specified when creating the database. Click **Sign in**.
+2. Logging into Database Actions from the OCI service console expects you to be the ADMIN user. Log in as ADMIN if you are not automatically logged into Database Actions. Enter the administrator **Password** you specified when creating the database. Click **Sign in**.
 
     ![Enter the admin password.](./images/admin-username-and-password.png " ")
 
