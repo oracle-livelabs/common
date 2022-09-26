@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This lab walks you through the steps of getting an Oracle Cloud Free Tier account and signing in.
+This lab walks you through the steps of getting an Oracle Cloud Free Tier account and GitLab Free Trial signup.
 
 Estimated Time: 15 minutes
 
@@ -10,7 +10,7 @@ Estimated Time: 15 minutes
 
 - Create an Oracle Cloud Free Tier account
 - Sign in to your Oracle Cloud account account
-- signup for a trial GitLab account
+- Signup for a trial GitLab account
 
 ### Prerequisites
 
@@ -95,4 +95,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 
 - **Created By/Date** - Farooq Nafey, August 2022
-- **Last Updated By/Date** - Farooq Nafey, August 2022
+- **Last Updated By/Date** - Farooq Nafey, September 2022

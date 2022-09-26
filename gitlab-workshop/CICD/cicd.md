@@ -2,60 +2,75 @@
 
 ## Introduction
 
-*Describe the lab in one or two sentences, for example:* This lab walks you through the steps to ...
+In this Lab we will deploy the GitLab CI/CD pipeline. The pipeline will use the application source code and build a docker image, and push the image in the Oracle Container Registry. Then a Kubernetes deployment will be created based on the container image. The application deployment will be exposed using the Ingress, and should be visible through the web browser.
 
-Estimated Time: -- minutes
+Estimated Time: 45 minutes
 
-### About <Product/Technology> (Optional)
-Enter background information here about the technology/feature or product used in this lab - no need to repeat what you covered in the introduction. Keep this section fairly concise. If you find yourself needing more than to sections/paragraphs, please utilize the "Learn More" section.
+
 
 ### Objectives
 
-*List objectives for this lab using the format below*
-
 In this lab, you will:
-* Objective 1
-* Objective 2
-* Objective 3
+* Create an OCI Container Registry
+* Specify Project specific CI/CD variables
+* Register Oracle OKE Cluster with GitLab
+* Create Project Files
+* Check the CD/CD Job Status
 
-### Prerequisites (Optional)
+### Prerequisites 
 
-*List the prerequisites for this lab using the format below. Fill in whatever knowledge, accounts, etc. is needed to complete the lab. Do NOT list each previous lab as a prerequisite.*
 
 This lab assumes you have:
-* An Oracle Cloud account
-* All previous labs successfully completed
-
-
-*This is the "fold" - below items are collapsed by default*
+* Completed all the previous Labs successfully
 
 
 ## Task 1: Create an OCIR Repository
-1. Create a registry in the compartment with name **webapp**
-
-![Container Registry](images/ocir.png)
-
-2. Create an Auth token to access the OCIR
-![Container Registry](images/auth.png)
-Copy the authentication token, and save it as it won't be shown again
-
-## Task 2: Create project specific CI/CD variables
-
-![GitLab CI/CD variables](images/variable1.png)
+1. To create a repository in Container Registry:
+    - In the Console, open the **navigation menu** and click **Developer Services**. Under **Containers and Artifacts**, click **Container Registry**
+    - Choose a Compartment you have permission to work in
+    - Specify a Name of your choice for the new repository
+    - Specify the Access type as Private
+    - Click Create Repository
 
 
-![GitLab CI/CD variables](images/variable2.png)
-*description*
+  ![Container Registry](images/ocir1.png)
 
-## Task 3 Register OKE Cluster
+2. Container Registry is created with the specified name
 
-![Register OKE Cluster](images/oke-cluster1.png)
 
-![Register OKE Cluster](images/oke-cluster2.png)
+  ![Container Registry](images/ocir2.png)
 
-![Register OKE Cluster](images/oke-cluster3.png)
+3. Create an Auth token to access the OCIR
 
-![Register OKE Cluster](images/oke-cluster4.png)
+* Before you can push and pull Docker images to and from Oracle Cloud Infrastructure Registry (also known as Container Registry), you must already have an Oracle Cloud Infrastructure username and an auth token. To create a new auth token:
+
+    - In the top-right corner of the Console, open the **Profile** menu (User menu icon) and then click **User Settings** to view the details.
+    - On the **Auth Tokens** page, click Generate Token.
+    - Enter a friendly description for the auth token. Avoid entering confidential information.
+    - Click Generate Token. The new auth token is displayed.
+
+
+  ![Auth Token](images/auth1.png)
+
+    - Copy the auth token immediately to a secure location from where you can retrieve it later, because you won't see the auth token again in the Console.
+    - Close the Generate Token dialog.
+
+  ![Auth Token](images/auth2.png)
+
+
+
+## Task 2 Register OKE Cluster
+
+1. In your GitLab project, navigate to **Repository** > **Files** and create a new file
+
+  ![Register OKE Cluster](images/oke-cluster1.png)
+
+2. The file must be named as: .gitlab/agents/&lt;agent-name&gt;/config.yaml. Ensure the filename ends in .yaml, not .yml. The agent-name chosen witll be used in next setp while creating the CI/CD variables. 
+  ![Register OKE Cluster](images/oke-cluster2.png)
+
+  ![Register OKE Cluster](images/oke-cluster3.png)
+
+  ![Register OKE Cluster](images/oke-cluster4.png)
 
   ```
   helm repo add gitlab https://charts.gitlab.io
@@ -81,7 +96,46 @@ Copy the authentication token, and save it as it won't be shown again
   TEST SUITE: None
   ```
 
-![Register OKE Cluster](images/oke-cluster5.png)
+  ![Register OKE Cluster](images/oke-cluster5.png)
+
+
+
+## Task 3: Create Project specific CI/CD variables
+
+1. Next, we need to add CI/CD variables to a project’s settings. Variables are commonly used to configure third-part services that are repeatedly used throughout the pipeline. 
+The variables will be available to all the stages within a Pipeline.
+
+
+ To add or update variables in the project settings:
+
+    - Go to your project’s **Settings** > **CI/CD** and expand the **Variables** section
+    - Select the Add Variable button and fill in the details:
+        - Key: Must be one line, with no spaces, using only letters, numbers, or _.
+        - Value: No limitations.
+        - Type: File or Variable.
+        - Environment scope: Optional. All, or specific environments.
+        - Protect variable Optional. If selected, the variable is only available in pipelines that run on protected branches or protected tags.
+        - Mask variable Optional. If selected, the variable’s Value is masked in job logs. The variable fails to save if the value does not meet the masking requirements.
+
+
+2. Below is an example of a variable creation.
+  ![GitLab CI/CD variables](images/variable1.png)
+
+3. In the similar way create the following variables, with appropriate values specific to your tenancy and region
+
+- IMAGE_NAME webserver
+- IMAGE_VERSION 1.0
+- OKE_AGENT gitlab-instance-c00de01e/LiveLab:oke-cluster
+- OKE_REGISTRY_IMAGE fra.ocir.io/orasenatdpltintegration01/webapp
+- OKE_REGISTRY_PASSWORD &lt;auth-token&gt;
+- OKE_REGISTRY_USER enter your username in the format &lt;tenancy-namespace&gt;/&lt;username&gt;, where &lt;tenancy-namespace&gt; is the auto-generated Object Storage namespace string of your tenancy (as shown on the Tenancy Information page). For example, ansh81vru1zp/jdoe@acme.com. If your tenancy is federated with Oracle Identity Cloud Service, use the format &lt;tenancy-namespace&gt;/oracleidentitycloudservice/&lt;username&gt;.
+- OKE_REGISTRY https://fra.ocir.io [Region specific OCIR URL](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm#regional-availability)
+
+
+4. Once done, we should have the following variables define in the project
+
+  ![GitLab CI/CD variables](images/variable2.png)
+
 
 
 ## Task 4 Create Project Files
@@ -203,6 +257,7 @@ update the file
 ## Task 5: Check the CI/CD Job Status
 
 Check the Job status 
+Ingress
 
   
 
@@ -210,10 +265,7 @@ Check the Job status
 
 ## Learn More
 
-* [Install GitLab Runner](https://docs.gitlab.com/runner/install/linux-repository.html)
-* [Register a Runner](https://docs.gitlab.com/runner/register/)
-* [Install Docker](https://docs.docker.com/engine/install/centos/)
-* [OCI: Container Registry](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm#regional-availability)
+* [Install GitLab agent for Kubernetes](https://docs.gitlab.com/ee/user/clusters/agent/install/)
 
 
 ## Acknowledgements

@@ -2,48 +2,44 @@
 
 ## Introduction
 
-*Describe the lab in one or two sentences, for example:* This lab walks you through the steps to ...
+GitLab Runner is an application that works with GitLab CI/CD to run jobs in a pipeline. In this lab, we will install a GitLab runner and register it with the GitLab server.
 
-Estimated Time: -- minutes
+Estimated Time: 30 minutes
 
-### About <Product/Technology> (Optional)
-Enter background information here about the technology/feature or product used in this lab - no need to repeat what you covered in the introduction. Keep this section fairly concise. If you find yourself needing more than to sections/paragraphs, please utilize the "Learn More" section.
+### GitLab Runner versions
+For compatibility reasons, the GitLab Runner major.minor version should stay in sync with the GitLab major and minor version. Older runners may still work with newer GitLab versions, and vice versa. However, features may not be available or work properly if a version difference exists.
 
 ### Objectives
 
-*List objectives for this lab using the format below*
 
 In this lab, you will:
-* Objective 1
-* Objective 2
-* Objective 3
+* Create a new GitLab project
+* Install and configure GitLab Runner
+* Install Docker on the runner server
 
-### Prerequisites (Optional)
+### Prerequisites 
 
-*List the prerequisites for this lab using the format below. Fill in whatever knowledge, accounts, etc. is needed to complete the lab. Do NOT list each previous lab as a prerequisite.*
 
 This lab assumes you have:
-* An Oracle Cloud account
-* All previous labs successfully completed
+* Completed all the previos Labs successfully
 
 
-*This is the "fold" - below items are collapsed by default*
 
 
 ## Task 1: Create a GitLab Project
 
 
-Create a New project in GitLab
-![GitLab Project](images/project1.png)
+1. To get Started, Create a **New project** in GitLab
+  ![GitLab Project](images/project1.png)
 
-Create a new project from a blank template
-![GitLab Project](images/project2.png)
+1. Create a project from a **blank project**
+  ![GitLab Project](images/project2.png)
 
-Specify the Project slug and the Project name
-![GitLab Project](images/project3.png)
+3. Specify the **Project slug** and the **Project name**
+  ![GitLab Project](images/project3.png)
 
-Project with the specified name is created
-![GitLab Project](images/project4.png)
+4. Project with the specified name is created
+  ![GitLab Project](images/project4.png)
 
 
 ## Task 2: Install GitLab Runner
@@ -52,80 +48,95 @@ Project with the specified name is created
 
 1. Add the official GitLab repository
 
-    ```
+	```
   <copy>curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh" | sudo bash</copy>
-    ```
+	```
 
 
 
 2. Install the latest version of GitLab Runner
 
-    ```
+	```
 	<copy>sudo yum -y install gitlab-runner</copy>
-    ```
+	```
 
 ## Task 3: Register a GitLab Runner
 
 1. Get the Runner registration information
-![Runner Registration Information](images/runner1.png)
+    - To access the runner registration information, go to **Settings** > **CI/CD** and expand the **Runners** section
+    - The URL and the registration token are displayed that will be used to register a runner with the GitLab server
+
+  ![Runner Registration Information](images/runner1.png)
 
 2. Register the GitLab runner with the GitLab instance 
+    - Enter the GitLab instance URL 
+    - Enter the registration token
+    - Enter a description for the runner
+    - Enter tags for the runner (comma-separated)
+    - Enter optional maintenance note for the runner
+    - Enter an executor
+        - shell is used for this lab
 
-    ```
-    <copy>sudo gitlab-runner register</copy>
-    Runtime platform                  arch=amd64 os=linux pid=3073 revision=43b2dc3d version=15.4.0
-    Running in system-mode.
+	```
+  <copy>sudo gitlab-runner register</copy>
+  Runtime platform                  arch=amd64 os=linux pid=3073 revision=43b2dc3d version=15.4.0
+  Running in system-mode.
 
-    Enter the GitLab instance URL (for example, https://gitlab.com/):
-    https://gitlab.cloudlab.site/
-    Enter the registration token:
-    GR13489412vF5MSLMCh6m4oGEqyZ2
-    Enter a description for the runner:
-    [runner]: oci-runner
-    Enter tags for the runner (comma-separated):
-    oci,runner
-    Enter optional maintenance note for the runner:
+  Enter the GitLab instance URL (for example, https://gitlab.com/):
+  https://gitlab.cloudlab.site/
+  Enter the registration token:
+  GR13489412vF5MSLMCh6m4oGEqyZ2
+  Enter a description for the runner:
+  [runner]: oci-runner
+  Enter tags for the runner (comma-separated):
+  oci,runner
+  Enter optional maintenance note for the runner:
 
-    Registering runner... succeeded                     runner=GR13489412vF5MSLM
-    Enter an executor: shell, ssh, virtualbox, docker+machine, custom, docker, docker-ssh, parallels, docker-ssh+machine, kubernetes:
-    shell
-    Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
+  Registering runner... succeeded                     runner=GR13489412vF5MSLM
+  Enter an executor: shell, ssh, virtualbox, docker+machine, custom, docker, docker-ssh, parallels, docker-ssh+machine, kubernetes:
+  shell
+  Runner registered successfully. Feel free to start it, but if it's running already the config should be automatically reloaded!
 
-    Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml"
-    ```
+  Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml"
+	```  
 
-3. Once the runner is registered successfully, it should show up under the Available runners
-![Runner Registration Information](images/runner2.png)
+3. Once the runner is registered successfully, it should show up under the list of available runners
+  ![Runner Registration Information](images/runner2.png)
 
-4. Click on the pencil icon next to the runner, and modiy the properties as follows:
-Make sure to click the checkbox *Run untagged jobs*
-![Runner Registration Information](images/runner3.png)
+4. Click on the **Pencil Icon** next to the runner, and modiy the properties as follows:
+    - Make sure to click the checkbox *Run untagged jobs*
+
+  ![Runner Registration Information](images/runner3.png)
 
 ## Task 4: Install Docker
 
+GitLab CI/CD uses Docker to build container images. Docker will be used to build custom application image and publish it to a OCI Container Registry (OCIR)
+
 1. Setup Docker Registry
 
-  ```
+	```
   <copy>sudo yum install -y yum-utils
   sudo yum-config-manager \
       --add-repo \
       https://download.docker.com/linux/centos/docker-ce.repo</copy>
-  ```
+	```
 
 2. Install Docker Engine
 
-  ```
+	```
   <copy>sudo yum install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin</copy>
-  ```
+	```
 
 
 3. Enable and Start Docker
-  ```
+
+	```
   <copy>sudo systemctl enable docker --now</copy>
-  ```
+	```
 
 4. Verify the Docker Status
-  ```
+
+	```
     <copy>sudo systemctl status docker</copy>
   ● docker.service - Docker Application Container Engine
     Loaded: loaded (/usr/lib/systemd/system/docker.service; enabled; vendor preset: disabled)
@@ -136,19 +147,21 @@ Make sure to click the checkbox *Run untagged jobs*
     Memory: 30.7M
     CGroup: /system.slice/docker.service
             └─49263 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
-  ```
+	```
 
 3. Add the gitlab-runner user to the docker group
-  ```
+
+	```
   <copy>sudo usermod -aG docker gitlab-runner</copy>
   # Optionally add opc user to docker group
   <copy>sudo usermod -aG docker opc</copy>
-  ```
+	```
 
 4. Verify that gitlab-runner has access to Docker
-  ```
+
+	```
   <copy>sudo -u gitlab-runner -H docker info</copy>
-  ```
+	```
 
 ## Learn More
 

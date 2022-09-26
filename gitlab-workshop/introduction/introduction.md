@@ -2,9 +2,9 @@
 
 ## About this Workshop
 
-Administering and managing software development at scale, in an enterprise environment, can present a few challenges. In this technical demonstration, we will walk through the steps of installing and configuring GitLab, a DevOps platform, leveraging GitLab and OCI native services to enable CI/CD to build and deliver secure applications automatically. Combining GitLab’s continuous integration and deployment (CI) pipeline to deploy containerized applications with Oracle Kubernetes Engine enables your organization to define appropriate development processes, validate, automate build, test and deploy containerized applications to Container Engine for Kubernetes (OKE) faster and more securely.
+Administering and managing software development at scale, in an enterprise environment, can present a few challenges. In this technical demonstration, we will walk through the steps of installing and configuring GitLab, a DevOps platform, leveraging GitLab and OCI native services to enable CI/CD to build and deliver secure applications automatically. Combining GitLab’s continuous integration and deployment (CI) pipeline to deploy containerized applications with Oracle Kubernetes Engine enables organization to define appropriate development processes, validate, automate build, test and deploy containerized applications to Container Engine for Kubernetes (OKE) faster and more securely.
 
-Estimated Workshop Time: 3 hours 30 minutes (This estimate is for the entire workshop - it is the sum of the estimates provided for each of the labs included in the workshop.)
+Estimated Workshop Time: 3 hours 15 minutes (This estimate is for the entire workshop - it is the sum of the estimates provided for each of the labs included in the workshop.)
 
 
 * Introduction to GitLab

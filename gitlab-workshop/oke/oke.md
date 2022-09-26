@@ -2,17 +2,17 @@
 
 ## Introduction
 
-This Lab will walk you through the step by step instructions of provisioning a Container Engine for Kubernetes (OKE). This Kubernetes cluster will be used to deploy a two-tier application that will be managed by GitLab CI/CD pipeline.
+This Lab will walk you through the step by step instructions of provisioning a Container Engine for Kubernetes (OKE). This Kubernetes cluster will be used to deploy an application that will be managed by GitLab CI/CD pipeline.
 
-Estimated Time: 60 minutes
+Estimated Time: 45 minutes
 
 ### Objectives
 
 In this lab, you will:
-* Security Rule Configuration in Security Lists 
+* Configure Security Rules in Security Lists for Kubernetes Cluster creation
 * Provison a Kubernetes Cluster and a Node Pool
-* Access Kubernetes Cluster
-* Deploy a sample application on the Kubernetes cluster
+* Configure GitLab Runner compute instance to Access Kubernetes Cluster
+* Setup an Ingress Controller
 
 ### Prerequisites
 
@@ -25,7 +25,7 @@ This lab assumes you have:
 
 ## Task 1: Security Rule Configuration in Security Lists
 
-The VCN in which you want to create and deploy clusters must have specific security rules defined. The worker nodes, Kubernetes API endpoint, pods (when using VCN-native pod networking), and load balancer have different security rule requirements, as configured in this lab. You can add additional rules to meet your specific needs.
+The VCN in which you want to create and deploy OKE cluster must have specific security rules defined. The worker nodes, Kubernetes API endpoint, pods (when using VCN-native pod networking), and load balancer have different security rule requirements, as demonstrated in this lab. You can add additional rules to meet your specific needs.
 
 1. Modify the Ingress rules in Security List of the *Public Subnet* as follows:
 
@@ -41,8 +41,10 @@ The VCN in which you want to create and deploy clusters must have specific secur
 
 ## Task 2: Create IAM Policies
 
+Oracle Cloud Infrastructure Identity and Access Management (IAM) lets you control who has access to your cloud resources. Certain IAM policies are required to successfully access a cluster once it is provisioned.
+
 1. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Compartment**
-    - Navigate to the compartment that is being used for this Live Lab and copy the OCID of the compartment
+    - Navigate to the compartment that is being used for this Live Lab and copy the **OCID** of the compartment
 
 
   ![Compartment](images/dynamicgroup1.png)
@@ -56,8 +58,8 @@ The VCN in which you want to create and deploy clusters must have specific secur
 
 3. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Policies** and hit **Create Policy**
     - Specify the Name and Description for the policy
-    - Policy must be created in the root compartment
-    - Specify the Policy rule. The policy specified would allow the user to *manage* the *cluster-family*
+    - Policy must be created in the **root** compartment
+    - Specify the Policy rule. The policy specified would allow the user to *manage* the *cluster-family*. This policy enable users to perform any operation on cluster-related resources (this 'catch-all' policy effectively makes all users administrators insofar as cluster-related resources are concerned):
     - This policy would allow the user to access the Cluster details programmatically using OCI CLI
 
   ![Policy](images/dynamicgroup3.png)
@@ -66,15 +68,15 @@ The VCN in which you want to create and deploy clusters must have specific secur
 
 1. In the Console, open the navigation menu and click **Developer Services**. Under **Containers & Artifacts**, click **Kubernetes Clusters (OKE)** and select the option **Create Cluster**. Use the **Custom Create** workflow option to create a cluster
 
-  ![oke1](images/oke1.png)
+  ![Container Engine for Kubernetes](images/oke1.png)
 
 2. Select the **Compartment** and the **Kubernetes version** from the drop down menu.
 
-  ![oke1](images/oke2.png)
+  ![Container Engine for Kubernetes](images/oke2.png)
 
-3. Under the Network Type selection, specify the **Flannel overlay**. Specify the VCN name, and the Public Subnet for *Kubernetes Service LB Subnet* and *Kubernetes API endpoint Subnet*. There is no requirement to assign a Public IP to the API endpoint.
+3. Under the Network Type selection, specify the **Flannel overlay**. Specify the VCN name, and the Public Subnet for *Kubernetes Service LB Subnet* and *Kubernetes API endpoint Subnet*. Make sure to assign a Public IP address to the API endpoint.
 
-  ![oke1](images/oke3.png)
+    ![Container Engine for Kubernetes](images/oke3.png)
 
 4. Click Next and specify configuration details for the node pool in the cluster.
     - Name: A name of your choice for the new node pool
@@ -82,24 +84,25 @@ The VCN in which you want to create and deploy clusters must have specific secur
     - Shape: The shape to use for worker nodes in the node pool. The shape determines the number of CPUs and the amount of memory allocated to each node
     - Image: The image to use on worker nodes in the node pool. Make sure the select the image thas is compatible with Kubernetes version
 
-![oke1](images/oke4.png)
+  ![Container Engine for Kubernetes](images/oke4.png)
 
-5. Number of Nodes: The number of worker nodes to create in the node pool, placed in the availability domains you select, and in the regional subnet (recommended) or AD-specific subnet you specify for each availability domain.
-    - Boot Volume: Default options for the boot volume configuration should suffice
+5. Number of Worker Nodes: Specify the number of worker nodes to create in the node pool.
+6. Use the defualt Boot volume options
+7. Placement Configuration: Specify one or more availability domains for the worker nodes, and specify the private regional subnet
 
-![oke1](images/oke5.png)
+![Container Engine for Kubernetes](images/oke5.png)
 
-6. Add an SSH Key: The public key portion of the key pair you want to use for SSH access to each node in the node pool. The public key is installed on all worker nodes in the cluster
+8. Add an SSH Key: The public key portion of the key pair you want to use for SSH access to each node in the node pool. The public key is installed on all worker nodes in the cluster
 
-![oke1](images/oke6.png)
+  ![Container Engine for Kubernetes](images/oke6.png)
 
-7. Review the details you entered for the new cluster. Click **Create Cluster** to create the new cluster. 
+9. Review the details you entered for the new cluster. Click **Create Cluster** to create the new cluster. 
 
-![oke1](images/oke7.png)
+  ![Container Engine for Kubernetes](images/oke7.png)
 
-8. Cluster creation continues
+10. Cluster creation continues
 
-  ![oke1](images/oke8.png)
+  ![Container Engine for Kubernetes](images/oke8.png)
 
     - Container Engine for Kubernetes starts creating the cluster with the name you specified
     - Container Engine for Kubernetes creates:
@@ -107,8 +110,11 @@ The VCN in which you want to create and deploy clusters must have specific secur
         - worker nodes with auto-generated names in the format oke-c&lt;part-of-cluster-OCID&gt;-n&lt;part-of-node-pool-OCID&gt;-s&lt;part-of-subnet-OCID&gt;-&lt;slot&gt;
     - Do not change the auto-generated names of worker nodes
 
-Click Close to return to the Console. The cluster creation normally takes 15-20 mins to complete.
+Click Close to return to the Console. The cluster creation would continue and completes shortly.
 
+11. Cluster creation completes
+
+  ![Container Engine for Kubernetes](images/oke9.png)
 
 
 
@@ -116,130 +122,138 @@ Click Close to return to the Console. The cluster creation normally takes 15-20 
 > **Note:** The steps below need to be completed on the *runner* server.
 
 1. Download the latest release with the command
-  ```
-  <copy>curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"</copy>
-  ```
+    ```
+    <copy>curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"</copy>
+    ```
 
 2. Validate the binary (optional). Download the kubectl checksum file:
-  ```
-  <copy>curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"</copy>
-  ```
+    ```
+    <copy>curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"</copy>
+    ```
 
 3. Validate the kubectl binary against the checksum file:
-  ```
-  <copy>echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check</copy>
-  ```
-If valid, the output is:
-  ```
-  kubectl: OK
-  ```
-4. Get the Checksum from the Kubectl checksum file
-  ```
-  <copy>cat kubectl.sha256 ; echo</copy>
-  e23cc7092218c95c22d8ee36fb9499194a36ac5b5349ca476886b7edc0203885
-  ```
+    ```
+    <copy>echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check</copy>
+    ```
 
-5. Get the checksum of the Kubect utility. download earlier
-  ```
-  <copy>sha256sum kubectl</copy>
-  e23cc7092218c95c22d8ee36fb9499194a36ac5b5349ca476886b7edc0203885  kubectl
-  ```
-6. If the Checksum from the file and the Kubectl utility match, install the Kubect utility
-  ```
-  <copy>sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl</copy>
-  # Enable kubectl autocompletion
-  <copy>echo 'source <(kubectl completion bash)' >>~/.bash_profile</copy>
-  <copy>source ~/.bash_profile</copy>
-  ```
+4. If valid, the output is:
+    ```
+    kubectl: OK
+    ```
+
+5. Get the Checksum from the Kubectl checksum file
+    ```
+    <copy>cat kubectl.sha256 ; echo</copy>
+    e23cc7092218c95c22d8ee36fb9499194a36ac5b5349ca476886b7edc0203885
+    ```
+
+6. Get the checksum of the Kubect utility. download earlier
+    ```
+    <copy>sha256sum kubectl</copy>
+    e23cc7092218c95c22d8ee36fb9499194a36ac5b5349ca476886b7edc0203885  kubectl
+    ```
+
+7. If the Checksum from the file and the Kubectl utility match, install the Kubect utility
+    ```
+    <copy>sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl</copy>
+    # Enable kubectl autocompletion
+    <copy>echo 'source <(kubectl completion bash)' >>~/.bash_profile</copy>
+    <copy>source ~/.bash_profile</copy>
+    ```
 
 ## Task 5: Install OCI CLI on Linux 8.x
 OCI CLI installation is required in order to access the OKE cluster.
 
 1. Install OCI CLI
-  ```
-  <copy>sudo dnf -y install oraclelinux-developer-release-el8</copy>
-  <copy>sudo dnf -y install python36-oci-cli</copy>
-  <copy>oci --version</copy>
-  ```
+    ```
+    <copy>sudo dnf -y install oraclelinux-developer-release-el8</copy>
+    <copy>sudo dnf -y install python36-oci-cli</copy>
+    <copy>oci --version</copy>
+    ```
 2. Enable Instance Principal Authenication and reload the profile
-  ```
-  <copy>sudo echo 'export OCI_CLI_AUTH=instance_principal' >> ~/.bash_profile</copy>
-  <copy>source ~/.bash_profile</copy>
-  ```
+    ```
+    <copy>sudo echo 'export OCI_CLI_AUTH=instance_principal' >> ~/.bash_profile</copy>
+    <copy>source ~/.bash_profile</copy>
+    ```
 
 
 
 4. Verify the OCI CLI configuration using Instance Principal Authentication
-  ```
-  <copy>oci os ns get</copy>
-  {
-    "data": "orasenatdpltintegration01"
-  }
-  ```
+    ```
+    <copy>oci os ns get</copy>
+    {
+      "data": "orasenatdpltintegration01"
+    }
+    ```
 
 
 ## Task 6: Access the OKE Cluster
-1. To access the Kubernetes cluster access details click the **Navigation Menu** in the upper left, navigate to **Developer Services** , and select **Kubernetes Clusters (OKE)**. Click the cluster name created earlier and click on **Access Cluster**. This shows all the steps needed to be performed on a machine to access the OKE Cluster successfully. Since No Public IP was assigned to the Kubernetes API endpoint, therefore the cluster would only be accessible from any compute running inside the customer VCN.
+1. To access the Kubernetes cluster access details, click the **Navigation Menu** in the upper left, navigate to **Developer Services** , and select **Kubernetes Clusters (OKE)**. Click the cluster name created earlier and click on **Access Cluster**. This shows all the steps needed to be performed on a machine to access the OKE Cluster successfully. Since a Public IP was assigned to the Kubernetes API endpoint, therefore the cluster would only be accessible from anywhere.
 
-![accessoke](images/access_oke1.png)
+* **Copy** the instructions to access the kubeconfig for your cluster via the VCN-Native public endpoint.
+
+  ![accessoke](images/access_oke1.png)
 
 2. Create a directory to contain the kubeconfig file
-  ```
-  <copy>mkdir -p $HOME/.kube</copy>
-  ```
+    ```
+    <copy>mkdir -p $HOME/.kube</copy>
+    ```
 
-3. To access the kubeconfig for your cluster via the VCN-Native private endpoint, execute the command copied earlier (this should be different everyone):
-  ```
-  oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.eu-frankfurt-1.aaaaaaaaejvpasg53womynz4fl4gtqbodbvra3fxnu3f5f46ccctq5mfv7ia --file $HOME/.kube/config --region eu-frankfurt-1 --token-version 2.0.0  --kube-endpoint PUBLIC_ENDPOINT
-  New config written to the Kubeconfig file /home/opc/.kube/config
-  ```
+3. To access the kubeconfig for your cluster via the VCN-Native private endpoint, execute the command copied earlier (this should be different for everyone):
+    ```
+    oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.eu-frankfurt-1.aaaaaaaaejvpasg53womynz4fl4gtqbodbvra3fxnu3f5f46ccctq5mfv7ia --file $HOME/.kube/config --region eu-frankfurt-1 --token-version 2.0.0  --kube-endpoint PUBLIC_ENDPOINT
+
+    New config written to the Kubeconfig file /home/opc/.kube/config
+    ```
 
 4. Set your KUBECONFIG environment variable to the file for this cluster
-  ```
-  <copy>echo "export KUBECONFIG=$HOME/.kube/config" >>~/.bash_profile</copy>
-  <copy>source ~/.bash_profile</copy>
-  ```
+    ```
+    <copy>echo "export KUBECONFIG=$HOME/.kube/config" >>~/.bash_profile</copy>
+    <copy>source ~/.bash_profile</copy>
+    ```
 
 5. Get the cluster details
-  ```
-  <copy>kubectl get nodes</copy> 
-  NAME          STATUS   ROLES   AGE     VERSION
-  172.30.4.26   Ready    node    2m44s   v1.24.1
-  172.30.7.28   Ready    node    3m27s   v1.24.1
-  ```
-
+    ```
+    <copy>kubectl get nodes</copy> 
+    NAME          STATUS   ROLES   AGE     VERSION
+    172.30.4.26   Ready    node    2m44s   v1.24.1
+    172.30.7.28   Ready    node    3m27s   v1.24.1
+    ```
 ## Task 7: Install Helm
+
 1. Helm has an installer script that will automatically grab the latest version of Helm and install it locally. 
-  ```
-  <copy>curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3</copy>
-  <copy>chmod 700 get_helm.sh</copy>
-  <copy>./get_helm.sh</copy>
-  ```
+    ```
+    <copy>curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3</copy>
+    <copy>chmod 700 get_helm.sh</copy>
+    <copy>./get_helm.sh</copy>
+    ```
 
 
-## Task 8: Set Up an Ingress Controller on a Cluster
+## Task 8: Setup an Ingress Controller on OKE Cluster
 An Ingress controller is a specialized load balancer for Kubernetes that is responsible for accepting the user traffic from the internet and load balances it to pods/containers running inside the Kubernetes cluster
 
-1. To get the user OCID, Navigate to Upper Right Hand corner of the OCI Console, and click on **Profile**, and  select **User settings** from the menu.  Copy the User OCID from the console.
+1. To get the user OCID, Navigate to Upper Right Hand corner of the OCI Console, and click on **Profile**, and  select **User settings** from the menu.  Copy the User **OCID** from the console.
 
   ![user OCID](images/userOCID.png)
 
 2. Create the Access Rules for the Ingress Controller
- Note that you must set up your own kubeconfig file. You cannot access a cluster using a kubeconfig file that a different user set up. Replace the User OCID with the one from your account.
 
-  >**NOTE:** If your Oracle Cloud Infrastructure user is a tenancy administrator, skip this step and go straight to Creating the Service Account, and the Ingress Controller.
+* Note that you must set up your own kubeconfig file. You cannot access a cluster using a kubeconfig file that a different user set up. Replace the User OCID with the one for your account.
+
+  **NOTE:** If your Oracle Cloud Infrastructure user is a tenancy administrator, skip this step and go straight to Creating the Service Account, and the Ingress Controller.
 
   
-  ```
-  <copy>kubectl create clusterrolebinding gitlab-crb --clusterrole=cluster-admin --user=</copy></copy>ocid1.user.oc1..aaaaaaaayk22dlcwymd7dvo4uqw56fg5a2m6drjrgktft5melvr6vwez7uda</copy>
+	```
+  kubectl create clusterrolebinding gitlab-crb --clusterrole=cluster-admin --user=ocid1.user.oc1..aaaaaaaayk22dlcwymd7dvo4uqw56fg5a2m6drjrgktft5melvr6vwez7uda
   
   clusterrolebinding.rbac.authorization.k8s.io/gitlab-crb created
-  ```
+	```
 
 3. Create the Service Account, and the Ingress Controller
 
-  >**NOTE:** To find out the version number of the latest version of the script, see the [kubenetes/ingress-nginx documentation on GitHub](https://github.com/kubernetes/ingress-nginx#support-versions-table). Make sure to use the version of Ingress Controller that is compatible with the Kubernetes version.
-  ```
+  **NOTE:** To find out the version number of the latest version of the script, see the [kubenetes/ingress-nginx documentation on GitHub](https://github.com/kubernetes/ingress-nginx#support-versions-table). Make sure to use the version of Ingress Controller that is compatible with the Kubernetes version.
+
+	```
   <copy>kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml</copy>
 
   namespace/ingress-nginx created
@@ -266,12 +280,12 @@ An Ingress controller is a specialized load balancer for Kubernetes that is resp
 
 4. Verify that the Public IP address is assigned to the Load Balancer
 
-  ```
+	```
   <copy>kubectl get svc -n ingress-nginx</copy>
   NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                      AGE
   ingress-nginx-controller             LoadBalancer   10.96.94.169    129.159.207.127   80:31334/TCP,443:31826/TCP   45s
   ingress-nginx-controller-admission   ClusterIP      10.96.149.252   &lt;none&gt;            443/TCP                      45s
-  ```
+	```
 
 ## Learn More
 
@@ -283,4 +297,4 @@ An Ingress controller is a specialized load balancer for Kubernetes that is resp
 
 ## Acknowledgements
 * **Author** - Farooq Nafey, Principal Cloud Architect
-* **Last Updated By/Date** - Farooq Nafey, August 2022
+* **Last Updated By/Date** - Farooq Nafey, September 2022

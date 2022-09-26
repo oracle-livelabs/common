@@ -23,7 +23,7 @@
         },
         {
             "title": "Lab 2: Install GitLab on a Compute",
-            "filename": "../../installgilab/installgiltab.md"
+            "filename": "../../installgiltab/installgitlab.md"
         },
         {
             "title": "Lab 3: Provision an OKE Cluster",
@@ -36,11 +36,6 @@
                 {
             "title": "Lab 5: Implement GitLab CI/CD Pipeline",
             "filename": "../../CICD/cicd.md"
-        },
-        {
-            "title": "Lab : Sample Lab",
-            "description": "Labs that follow the introduction are numbered, starting with Lab 1",
-            "filename": "../../provision/provision.md"
         },
         {
             "title": "Need Help?",

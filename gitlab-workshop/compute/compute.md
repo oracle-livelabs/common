@@ -25,9 +25,9 @@ This lab assumes you have:
 
 ## Task 1: Create a Compartment
 
-When you first start working with Oracle Cloud Infrastructure, you need to think carefully about how you want to use compartments to organize and isolate your cloud resources. Compartments are fundamental to that process. Most resources can be moved between compartments. However, it's important to think through your compartment design for your organization up front, before implementing anything.
+When you first start working with Oracle Cloud Infrastructure, you need to think carefully about how you want to use compartments to organize and isolate your cloud resources. Compartments are fundamental to that process. Most resources can be moved between compartments. However, it's important to think through your compartment design for your organization up front, before implementing anything. Compartment is a global resource and can be created and accessed from any region in the OCI ecosystem.
 
-1. To create a compartment click the **Navigation Menu** in the upper left, navigate to **Identity & Security**, and select **Compartments** under **Identity**.
+1. To create a compartment click the **Navigation Menu** in the upper left, navigate to **Identity & Security**, and select **Compartments** under **Identity**. Select the Parent compartment from the drop-down list where you want your compartment to be created.
 
 ![compartment](images/compartment.png)
 
@@ -35,7 +35,7 @@ The Console is designed to display your resources by compartment within the curr
 
 ## Task 2: Setup Virtual Cloud Network
 
-Oracle Cloud Infrastructure (OCI) Virtual Cloud Networks (VCNs) provide customizable and private cloud networks in Oracle Cloud Infrastructure (OCI). Just like a traditional data center network, the VCN provides customers with complete control over their cloud networking environment. This includes assigning private IP address spaces, creating subnets and route tables, and configuring stateful firewalls.
+Oracle Cloud Infrastructure (OCI) Virtual Cloud Networks (VCNs) provide customizable and private cloud networks in Oracle Cloud Infrastructure (OCI). Just like a traditional data center network, the VCN provides customers with complete control over their cloud networking environment. This includes assigning private IP address spaces, creating subnets and route tables, and configuring stateful firewalls. Ensure to select the correct region from the upper right corner of the console. If the desired region is not subscribed, it can be subscribed using a single-click operation.
 
 To create a compartment click the **Navigation Menu** in the upper left, navigate to **Networking**, and select **Start VCN Wizard** under **Virtual Cloud Networks**.
 
@@ -132,12 +132,14 @@ Press Enter at all of the prompts to accept the default location, default file n
 
 The command above creates two files under the .ssh folder in the Home directory of the user, a *private key:* ```id_rsa``` and a *public key:* ```id_rsa.pub```. Keep the private key safe and don't share its content with anyone. The public key will be needed for various activities and can be uploaded to certain systems as well as copied and pasted to facilitate secure communications in the cloud.
 
-## Task 4: Setup Compute Instance
+## Task 4: Setup Compute Instance for GitLab Server
+
+* Create a compute instance for GitLab server that will be used to install and configure GitLab software in the following labs.
 
 1. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**.
 2. Click on **Create Instance**.
 3. Enter the **Name** for your Compute Instance and choose the **compartment**. 
-4. Click on edit and choose the Availability Domain, Image, and Shape of your choice. For this lab, use the default Oracle Linux 8.6 image
+4. Click on edit and choose the **Availability Domain**, **Image**, and **Shape** of your choice. For this lab, use the latest Oracle Linux 8.x image
 
 
 
@@ -173,21 +175,21 @@ Click the **Navigation Menu** in the upper left, navigate to **Compute**, select
 
 2. Connect to the compute Instance on MacOS / Linux
 
-	```
-  ssh opc@130.61.225.51
-  The authenticity of host '130.61.225.51 (130.61.225.51)' can't be established.
-  ED25519 key fingerprint is SHA256:jOKuEsU9C9Lb/cL9YH/vN/4JuLCRijHl7oV5ZLo/4jI.
-  This key is not known by any other names
-  Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-  Warning: Permanently added '130.61.225.51' (ED25519) to the list of known hosts.
-  Activate the web console with: systemctl enable --now cockpit.socket
+    ```
+    ssh opc@130.61.225.51
+    The authenticity of host '130.61.225.51 (130.61.225.51)' can't be established.
+    ED25519 key fingerprint is SHA256:jOKuEsU9C9Lb/cL9YH/vN/4JuLCRijHl7oV5ZLo/4jI.
+    This key is not known by any other names
+    Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+    Warning: Permanently added '130.61.225.51' (ED25519) to the list of known hosts.
+    Activate the web console with: systemctl enable --now cockpit.socket
 
-  ```
+    ```
 
 
 ### 2. *Connect from Windows using Putty*
 
-Putty can be used to connect to Linux machines from Windows machines. However, the private ssh key created earlier needs to be converted from a **PEM** format to a **PPK** format before connecting to the instance. Use the steps below to do the conversion of the key before attemting to log in.
+Putty can be used to connect to Linux machines from Windows machines. However, the private ssh key created earlier needs to be converted from a **PEM** format to a **PPK** format before connecting to the instance. Use the steps below to do the conversion of the key before attemting to log in. Ensure to download the Putty Installer before attempting to perform the key conversion. 
 
 1. On the Windows machine, click on **Start Menu**> **All Programs** > **PuTTY** > **PuTTYgen**.
 ![puttygen1](images/puttygen1.png)
@@ -213,13 +215,14 @@ Once the private key is saved in the ppk format, Putty can be used to connect to
 ![puttygen1](images/putty4.png)
 
 
-## Task 5: Setup DNS
+## Task 6: Setup DNS
 
-One of the requirement for GitLab configuration is to use https protocol for secure communication between the server and the client. During the configuration the TLS certificates are automatically requested and configured on the GitLab server. Since, the certificates are always bound to a DNS domain, therefore it essentail to bind the IP address of the server to a domain name that would later be used for configuring and accessing GitLab securely.
+One of the requirement for GitLab configuration is to use https protocol for secure communication between the server and the client. During the configuration the TLS certificates are automatically requested and configured on the GitLab server. Since, the certificates are always bound to a DNS domain, therefore it is essentail to bind the IP address of the server to a domain name that would later be used for configuring and accessing GitLab securely.
 
-If you are using an external DNS management service then configure the Public IP address of the GitLab server to the desired doamin. For the purpose of this LiveLab, I will use OCI's DNS Management service to create the DNS entry for the GitLab server. The domain name is already registered with an exteranl registrar, and the nameservers are configured to point to Oracle Cloud Infrastructure's Nameservers. 
+If you are using an external DNS management service then configure the Public IP address of the GitLab server to the desired domain. For the purpose of this LiveLab, I will use OCI's DNS Management service to create the DNS entry for the GitLab server. The domain name is already registered with an exteranl registrar, and the nameservers are configured to point to Oracle Cloud Infrastructure's Nameservers. 
 
-1. In the Console, open the navigation menu and click Networking. Under DNS Management, click Zones and create a new Public Zone.
+1. In the Console, open the navigation menu and click **Networking**. Under **DNS Management**, click **Zones** and create a new **Public Zone**.
+* The domain name registered for this lab is cloudlab.site. Select the Zone Type as Primary from the drop-down list.
 
 ![DNS Management](images/dns1.png)
 
@@ -229,15 +232,27 @@ If you are using an external DNS management service then configure the Public IP
 
 3. Verify that the domain name to IP adress mapping is resolving correctly, before proceeding.
 
-  ```
-  <copy>nslookup gitlab.cloudlab.site</copy>
-  Server:		167.206.10.178
-  Address:	167.206.10.178#53
+    ```
+    <copy>nslookup gitlab.cloudlab.site</copy>
+    Server:		167.206.10.178
+    Address:	167.206.10.178#53
 
-  Non-authoritative answer:
-  Name:	gitlab.cloudlab.site
-  Address: 130.61.225.51
-```
+    Non-authoritative answer:
+    Name:	gitlab.cloudlab.site
+    Address: 130.61.225.51
+    ```
+
+
+## Task 7: Create Compute for GitLab Runner
+
+Use the same process to create another compute instance for GitLab Runner Installation. Instance with 2 OCPUs and 16GB of RAM should be sufficient for the installation to succeed. After successful creation of the compute, we should have two compute instances up and running. GitLab software will be installed and configured on the compute named *gitlab*, whereas compute named *runner* will be used in following labs. 
+
+  | Hostname | VCN Subnet | OCPUs | Memory (GB) |
+  | --- | --- | --- | --- |
+  | gitlab | Public Subnet | 4  | 64 GB RAM  |
+  | runner | Public Subnet | 2  |  32 GB RAM |
+  
+
 
 ## Learn More
 
@@ -253,4 +268,4 @@ If you are using an external DNS management service then configure the Public IP
 
 ## Acknowledgements
 * **Author** - Farooq Nafey, August 2022
-* **Last Updated By/Date** - Farooq Nafey, August 2022
+* **Last Updated By/Date** - Farooq Nafey, September 2022
