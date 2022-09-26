@@ -1,4 +1,4 @@
-# Set up Oracle Linux compute Image
+# Set up OCI Virtual Cloud Network and a Compute Instance 
 
 ## Introduction
 
@@ -133,6 +133,7 @@ Press Enter at all of the prompts to accept the default location, default file n
 The command above creates two files under the .ssh folder in the Home directory of the user, a *private key:* ```id_rsa``` and a *public key:* ```id_rsa.pub```. Keep the private key safe and don't share its content with anyone. The public key will be needed for various activities and can be uploaded to certain systems as well as copied and pasted to facilitate secure communications in the cloud.
 
 ## Task 4: Setup Compute Instance
+
 1. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**.
 2. Click on **Create Instance**.
 3. Enter the **Name** for your Compute Instance and choose the **compartment**. 
@@ -157,7 +158,7 @@ The command above creates two files under the .ssh folder in the Home directory 
 ![compute](images/compute4.png)
 
 
-## Task 3: Connect to the Instance
+## Task 5: Connect to the Instance
 
 ### 1. *Connect from MacOS*
 
@@ -173,12 +174,12 @@ Click the **Navigation Menu** in the upper left, navigate to **Compute**, select
 2. Connect to the compute Instance on MacOS / Linux
 
 	```
-  ssh opc@150.230.24.165
-  The authenticity of host '150.230.24.165 (150.230.24.165)' can't be established.
-  ED25519 key fingerprint is SHA256:hZ5/mqmkXo0u0QHcx6HcFQFLKEePaghQZoHiy9wHh3g.
+  ssh opc@130.61.225.51
+  The authenticity of host '130.61.225.51 (130.61.225.51)' can't be established.
+  ED25519 key fingerprint is SHA256:jOKuEsU9C9Lb/cL9YH/vN/4JuLCRijHl7oV5ZLo/4jI.
   This key is not known by any other names
   Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-  Warning: Permanently added '150.230.24.165' (ED25519) to the list of known hosts.
+  Warning: Permanently added '130.61.225.51' (ED25519) to the list of known hosts.
   Activate the web console with: systemctl enable --now cockpit.socket
 
   ```
@@ -210,6 +211,33 @@ Once the private key is saved in the ppk format, Putty can be used to connect to
 
 7. Successful connection is established with the instance
 ![puttygen1](images/putty4.png)
+
+
+## Task 5: Setup DNS
+
+One of the requirement for GitLab configuration is to use https protocol for secure communication between the server and the client. During the configuration the TLS certificates are automatically requested and configured on the GitLab server. Since, the certificates are always bound to a DNS domain, therefore it essentail to bind the IP address of the server to a domain name that would later be used for configuring and accessing GitLab securely.
+
+If you are using an external DNS management service then configure the Public IP address of the GitLab server to the desired doamin. For the purpose of this LiveLab, I will use OCI's DNS Management service to create the DNS entry for the GitLab server. The domain name is already registered with an exteranl registrar, and the nameservers are configured to point to Oracle Cloud Infrastructure's Nameservers. 
+
+1. In the Console, open the navigation menu and click Networking. Under DNS Management, click Zones and create a new Public Zone.
+
+![DNS Management](images/dns1.png)
+
+2. Add a new **A** record, pointing the Public IP address to the desired Name.
+
+![DNS Management](images/dns2.png)
+
+3. Verify that the domain name to IP adress mapping is resolving correctly, before proceeding.
+
+  ```
+  <copy>nslookup gitlab.cloudlab.site</copy>
+  Server:		167.206.10.178
+  Address:	167.206.10.178#53
+
+  Non-authoritative answer:
+  Name:	gitlab.cloudlab.site
+  Address: 130.61.225.51
+```
 
 ## Learn More
 

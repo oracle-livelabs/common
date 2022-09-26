@@ -113,6 +113,8 @@ Click Close to return to the Console. The cluster creation normally takes 15-20 
 
 
 ## Task 4: Install Kubectl Utility
+> **Note:** The steps below need to be completed on the *runner* server.
+
 1. Download the latest release with the command
   ```
   <copy>curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"</copy>
@@ -171,7 +173,7 @@ OCI CLI installation is required in order to access the OKE cluster.
   ```
   <copy>oci os ns get</copy>
   {
-    "data": "orasenatdpltintegration03"
+    "data": "orasenatdpltintegration01"
   }
   ```
 
@@ -188,7 +190,7 @@ OCI CLI installation is required in order to access the OKE cluster.
 
 3. To access the kubeconfig for your cluster via the VCN-Native private endpoint, execute the command copied earlier (this should be different everyone):
   ```
-  oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.ca-toronto-1.aaaaaaaawchlmxcseig5gngnnlweecfm4j27e25xxk5oe4xboc2sg5cs3wna --file $HOME/.kube/config --region ca-toronto-1 --token-version 2.0.0  --kube-endpoint PRIVATE_ENDPOINT
+  oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.eu-frankfurt-1.aaaaaaaaejvpasg53womynz4fl4gtqbodbvra3fxnu3f5f46ccctq5mfv7ia --file $HOME/.kube/config --region eu-frankfurt-1 --token-version 2.0.0  --kube-endpoint PUBLIC_ENDPOINT
   New config written to the Kubeconfig file /home/opc/.kube/config
   ```
 
@@ -201,9 +203,9 @@ OCI CLI installation is required in order to access the OKE cluster.
 5. Get the cluster details
   ```
   <copy>kubectl get nodes</copy> 
-  NAME           STATUS   ROLES   AGE     VERSION
-  172.30.4.165   Ready    node    6m27s   v1.24.1
-  172.30.5.244   Ready    node    5m33s   v1.24.1
+  NAME          STATUS   ROLES   AGE     VERSION
+  172.30.4.26   Ready    node    2m44s   v1.24.1
+  172.30.7.28   Ready    node    3m27s   v1.24.1
   ```
 
 ## Task 7: Install Helm
@@ -214,13 +216,8 @@ OCI CLI installation is required in order to access the OKE cluster.
   <copy>./get_helm.sh</copy>
   ```
 
-## Task 8: Add GitLab Helm Respoitory
-1. Add GitLab Repository to the compute instance
-  ```
-  helm repo add gitlab http://charts.gitlab.io/
-  ```
 
-## Task 9: Setting Up an Ingress Controller on a Cluster
+## Task 8: Set Up an Ingress Controller on a Cluster
 An Ingress controller is a specialized load balancer for Kubernetes that is responsible for accepting the user traffic from the internet and load balances it to pods/containers running inside the Kubernetes cluster
 
 1. To get the user OCID, Navigate to Upper Right Hand corner of the OCI Console, and click on **Profile**, and  select **User settings** from the menu.  Copy the User OCID from the console.
@@ -234,7 +231,7 @@ An Ingress controller is a specialized load balancer for Kubernetes that is resp
 
   
   ```
-  <copy>kubectl create clusterrolebinding gitlab-crb --clusterrole=cluster-admin --user=</copy></copy>ocid1.user.oc1..aaaaaaaa37reb2tsbm6odkb4g23c6vujjx6ppdaathqpomnywo52t7nhhgva</copy>
+  <copy>kubectl create clusterrolebinding gitlab-crb --clusterrole=cluster-admin --user=</copy></copy>ocid1.user.oc1..aaaaaaaayk22dlcwymd7dvo4uqw56fg5a2m6drjrgktft5melvr6vwez7uda</copy>
   
   clusterrolebinding.rbac.authorization.k8s.io/gitlab-crb created
   ```
@@ -271,6 +268,9 @@ An Ingress controller is a specialized load balancer for Kubernetes that is resp
 
   ```
   <copy>kubectl get svc -n ingress-nginx</copy>
+  NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                      AGE
+  ingress-nginx-controller             LoadBalancer   10.96.94.169    129.159.207.127   80:31334/TCP,443:31826/TCP   45s
+  ingress-nginx-controller-admission   ClusterIP      10.96.149.252   &lt;none&gt;            443/TCP                      45s
   ```
 
 ## Learn More

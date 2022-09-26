@@ -23,7 +23,7 @@
         },
         {
             "title": "Lab 2: Install GitLab on a Compute",
-            "filename": "../../installgilab/installgilab.md"
+            "filename": "../../installgilab/installgiltab.md"
         },
         {
             "title": "Lab 3: Provision an OKE Cluster",
@@ -32,6 +32,10 @@
         {
             "title": "Lab 4: Install GitLab Runner",
             "filename": "../../runner/runner.md"
+        },
+                {
+            "title": "Lab 5: Implement GitLab CI/CD Pipeline",
+            "filename": "../../CICD/cicd.md"
         },
         {
             "title": "Lab : Sample Lab",

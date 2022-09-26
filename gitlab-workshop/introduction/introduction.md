@@ -2,7 +2,7 @@
 
 ## About this Workshop
 
-Administering and managing software development at scale, in an enterprise environment, can present a few challenges. In this technical demonstration, we will walk through the benefits of establishing a DevOps platform utilizing GitLab and OCI to enable collaboration across teams and deliver secure applications faster. Combining GitLab’s continuous integration and deployment (CI) pipeline to deploy containerized applications with Oracle Kubernetes Engine enables your organization to define appropriate development processes, automate security scans and compliance checks and leverage OCI to run applications faster and more securely.
+Administering and managing software development at scale, in an enterprise environment, can present a few challenges. In this technical demonstration, we will walk through the steps of installing and configuring GitLab, a DevOps platform, leveraging GitLab and OCI native services to enable CI/CD to build and deliver secure applications automatically. Combining GitLab’s continuous integration and deployment (CI) pipeline to deploy containerized applications with Oracle Kubernetes Engine enables your organization to define appropriate development processes, validate, automate build, test and deploy containerized applications to Container Engine for Kubernetes (OKE) faster and more securely.
 
 Estimated Workshop Time: 3 hours 30 minutes (This estimate is for the entire workshop - it is the sum of the estimates provided for each of the labs included in the workshop.)
 
@@ -18,9 +18,9 @@ Estimated Workshop Time: 3 hours 30 minutes (This estimate is for the entire wor
 ### Objectives
 
 In this workshop, you will learn how to:
-* Setup the OCI Infrastructure
+* Setup the OCI Infrastructure core services like Network, Compute and Kubernetes
 * Install and Configure GitLab 
-* Manage CI/CD on OCI using GitLab
+* Build and Manage a Continuous Integration & Continuous Deployment (CI/CD) Pipeline to deploy containerized applications on OKE
 
 ### Prerequisites
 
