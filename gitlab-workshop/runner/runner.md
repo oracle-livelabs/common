@@ -173,3 +173,12 @@ GitLab CI/CD uses Docker to build container images. Docker will be used to build
 ## Acknowledgements
 * **Author** - Farooq Nafey, Princiapl Cloud Architect
 * **Last Updated By/Date** - Farooq Nafey, September 2022
+
+
+    * **IMAGE_NAME** *webserver*
+    * **IMAGE_VERSION** *1.0*
+    * **OKE_AGENT** *gitlab-instance-c00de01e/LiveLab:oke-cluster* (copy from URL and append the agent name)
+    * **OKE_REGISTRY_IMAGE** *fra.ocir.io/orasenatdpltintegration01/webapp* (OCI OCIR region URL followed by tenancy name and the OCIR repo created earlier)
+    * **OKE_REGISTRY_PASSWORD** *&lt;auth-token&gt;*
+    * **OKE_REGISTRY_USER** enter your username in the format &lt;tenancy-namespace&gt;/&lt;username&gt;, where &lt;tenancy-namespace&gt; is the auto-generated Object Storage namespace string of your tenancy (as shown on the Tenancy Information page). For example, ansh81vru1zp/jdoe@acme.com. If your tenancy is federated with Oracle Identity Cloud Service, use the format &lt;tenancy-namespace&gt;/oracleidentitycloudservice/&lt;username&gt;.
+    * **OKE_REGISTRY** *https://fra.ocir.io* [Click here for the Region specific OCIR URL](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm#regional-availability)

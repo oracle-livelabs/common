@@ -65,37 +65,54 @@ This lab assumes you have:
 
   ![Register OKE Cluster](images/oke-cluster1.png)
 
-2. The file must be named as: .gitlab/agents/&lt;agent-name&gt;/config.yaml. Ensure the filename ends in .yaml, not .yml. The agent-name chosen witll be used in next setp while creating the CI/CD variables. 
+2. Create an agent configuration file. The file must be named as, .gitlab/agents/&lt;agent-name&gt;/config.yaml. Ensure the filename ends in .yaml, not .yml. The agent-name chosen witll be used in next setp while creating the CI/CD variables. The value for the parameter **id** can be copied from the URL
+
+    ```
+    <copy>.gitlab/agents/<agent-name>/config.yaml</copy>
+    ```
+
   ![Register OKE Cluster](images/oke-cluster2.png)
+
+3. You must register an agent before you can install the agent in your cluster. To register an agent:
+    -   On the top bar, select Main menu > Projects and find your project. If you have an agent configuration file, it must be in this project. Your cluster manifest files should also be in this project.
+    -   From the left sidebar, select **Infrastructure** > **Kubernetes clusters**.
+    -   Select **Connect a cluster** (agent).
+        -   Select the configuration file from the drop-down list
+    -   Select **Register** an agent.
 
   ![Register OKE Cluster](images/oke-cluster3.png)
 
+4. GitLab generates an access token for the agent. You need this token to install the agent in your cluster and to update the agent to another version.
+
   ![Register OKE Cluster](images/oke-cluster4.png)
 
-  ```
-  helm repo add gitlab https://charts.gitlab.io
-  "gitlab" has been added to your repositories
-  
-  helm repo update
-    Hang tight while we grab the latest from your chart repositories...
-  ...Successfully got an update from the "gitlab" chart repository
-  Update Complete. ⎈Happy Helming!⎈
-  
-  helm upgrade --install oke-cluster gitlab/gitlab-agent \
-  >     --namespace gitlab-agent \
-  >     --create-namespace \
-  >     --set image.tag=v15.4.0 \
-  >     --set config.token=FtSFmc4MLHQu-1r5Vx_iygy8iThXEGr9TNFwLS1JxfX1LxBCxQ \
-  >     --set config.kasAddress=wss://gitlab.cloudlab.site/-/kubernetes-agent/
-    Release "oke-cluster" does not exist. Installing it now.
-  NAME: oke-cluster
-  LAST DEPLOYED: Sun Sep 25 22:46:16 2022
-  NAMESPACE: gitlab-agent
-  STATUS: deployed
-  REVISION: 1
-  TEST SUITE: None
-  ```
+5. Login to the *runner* server and execute the commands obtained from the previous step
 
+    ```
+    helm repo add gitlab https://charts.gitlab.io
+    "gitlab" has been added to your repositories
+    
+    helm repo update
+      Hang tight while we grab the latest from your chart repositories...
+    ...Successfully got an update from the "gitlab" chart repository
+    Update Complete. ⎈Happy Helming!⎈
+    
+    helm upgrade --install oke-cluster gitlab/gitlab-agent \
+    >     --namespace gitlab-agent \
+    >     --create-namespace \
+    >     --set image.tag=v15.4.0 \
+    >     --set config.token=FtSFmc4MLHQu-1r5Vx_iygy8iThXEGr9TNFwLS1JxfX1LxBCxQ \
+    >     --set config.kasAddress=wss://gitlab.cloudlab.site/-/kubernetes-agent/
+      Release "oke-cluster" does not exist. Installing it now.
+    NAME: oke-cluster
+    LAST DEPLOYED: Sun Sep 25 22:46:16 2022
+    NAMESPACE: gitlab-agent
+    STATUS: deployed
+    REVISION: 1
+    TEST SUITE: None
+    ```
+
+6. Refresh the webpage, and the OKE cluster should be connected to GitLab
   ![Register OKE Cluster](images/oke-cluster5.png)
 
 
@@ -118,41 +135,47 @@ The variables will be available to all the stages within a Pipeline.
         - Mask variable Optional. If selected, the variable’s Value is masked in job logs. The variable fails to save if the value does not meet the masking requirements.
 
 
-2. Below is an example of a variable creation.
+2. Below is an example of a variable creation
   ![GitLab CI/CD variables](images/variable1.png)
 
 3. In the similar way create the following variables, with appropriate values specific to your tenancy and region
 
-- IMAGE_NAME webserver
-- IMAGE_VERSION 1.0
-- OKE_AGENT gitlab-instance-c00de01e/LiveLab:oke-cluster
-- OKE_REGISTRY_IMAGE fra.ocir.io/orasenatdpltintegration01/webapp
-- OKE_REGISTRY_PASSWORD &lt;auth-token&gt;
-- OKE_REGISTRY_USER enter your username in the format &lt;tenancy-namespace&gt;/&lt;username&gt;, where &lt;tenancy-namespace&gt; is the auto-generated Object Storage namespace string of your tenancy (as shown on the Tenancy Information page). For example, ansh81vru1zp/jdoe@acme.com. If your tenancy is federated with Oracle Identity Cloud Service, use the format &lt;tenancy-namespace&gt;/oracleidentitycloudservice/&lt;username&gt;.
-- OKE_REGISTRY https://fra.ocir.io [Region specific OCIR URL](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm#regional-availability)
+
+    * **IMAGE_NAME**: **webserver**
+    * **IMAGE_VERSION**: **1.0**
+    * **OCIR_PASSWORD**: **&lt;auth-token&gt;**
+    * **OCIR_REGISTRY**: **https://fra.ocir.io** [Find the region specific OCIR Endpoint here](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm#regional-availability)
+    * **OCIR_REPOSITORY**: **fra.ocir.io/orasenatdpltintegration01/webapp** (OCI OCIR region URL followed by tenancy name and the OCIR repo created earlier)
+    * **OCIR_USER**: enter your username in the format &lt;tenancy-namespace&gt;/&lt;username&gt;, where &lt;tenancy-namespace&gt; is the auto-generated Object Storage namespace string of your tenancy (as shown on the Tenancy Information page). For example, ansh81vru1zp/jdoe@acme.com. If your tenancy is federated with Oracle Identity Cloud Service, use the format &lt;tenancy-namespace&gt;/oracleidentitycloudservice/&lt;username&gt;.
+    * **OKE_AGENT**: **gitlab-instance-c00de01e/LiveLab:oke-cluster** (copy from URL and append the agent name)
+    
+    
+    
+    
 
 
-4. Once done, we should have the following variables define in the project
+4. Once done, you should have the following variables defined in the project
 
   ![GitLab CI/CD variables](images/variable2.png)
 
 
 
 ## Task 4 Create Project Files
+Finally, it's time to create a few project files and put the CI/CD pipeline to test. The following four files need to be created in the project's root repository.
 
-1. Create Dockerfile
+1. Download the [Dockerfile](files/Dockerfile) and upload it to the project's file repository
 
     ```
-    FROM node:18.9.0-alpine
+    <copy>FROM node:18.9.0-alpine
     ADD app.js /app.js
-    ENTRYPOINT ["node", "app.js"]
+    ENTRYPOINT ["node", "app.js"]</copy>
+    ``` 
+
+
+2. Create a [app.js](files/app.js) application file and upload it to the project's file repository
+
     ```
-
-
-2. Create an application file with the name app.js 
-
-    ```
-    const http = require('http');
+    <copy>const http = require('http');
     const os = require('os');
     const dns = require('dns');
 
@@ -172,13 +195,15 @@ The variables will be available to all the stages within a Pipeline.
         + "Host Uptime in Seconds: "+ os.uptime() + "\n");
     };
     var www = http.createServer(handler);
-    www.listen(8080);
-    ```
+    www.listen(8080);</copy>
+    ```  
 
-3. Create a Kubernetes deployment file in the template format
+
+
+3. Create a Kubernetes deployment file [deployment.tmpl](files/deployment.tmpl) in the template format and upload it to the project's file repository. The deployment file requires the use of CI/CD variables, and therefore can not be in .yml or .yaml format.
 
     ```
-    apiVersion: apps/v1
+    <copy>apiVersion: apps/v1
     kind: Deployment
     metadata:
       name: webapp
@@ -201,6 +226,7 @@ The variables will be available to all the stages within a Pipeline.
             - containerPort: 8080
           imagePullSecrets:
           - name: ocir-cred
+
     ---
     apiVersion: v1
     kind: Service
@@ -215,7 +241,6 @@ The variables will be available to all the stages within a Pipeline.
       type: ClusterIP
 
     ---
-
     apiVersion: networking.k8s.io/v1
     kind: Ingress
     metadata:
@@ -232,23 +257,99 @@ The variables will be available to all the stages within a Pipeline.
                 service:
                   name: webapp-svc
                   port:
-                    number: 8088
-
+                    number: 8088</copy>
     ```
 
-3. Create a .gitlab-ci.yml file
+4. Finally create a file named [**.gitlab-ci.yml**](files/gitlab-ci.yml) in the root of your repository, which contains the CI/CD configuration. The moment the file is create, a CI/CD pipline would get triggered.  
+* **Don't forget to rename the file to .gitlab-ci.yml before uploading to the project repository**
 
     ```
-  stages:
-    - validate
-    - build
-    - test
-    - deploy
+    <copy>stages:
+      - validate
+      - build
+      - test
+      - deploy
+
+    # Login to OCIR
+    variables:
+      KUBE_CONTEXT: "$OKE_AGENT"
+
+    validate-job:
+      stage: validate
+      script:
+        - docker info
+        - docker login -u "$OCIR_USER" -p "$OCIR_PASSWORD" "$OCIR_REGISTRY"
+      allow_failure: false
+
+    # Build Image and Push to OCIR
+    code-build-job:
+      stage: build
+      script:
+        - docker build -t "$IMAGE_NAME":"$IMAGE_VERSION" .
+      dependencies:
+        - validate-job
+
+    code-push-job:
+      stage: build
+      script:
+        - docker tag  "$IMAGE_NAME":"$IMAGE_VERSION" "$OCIR_REPOSITORY":"$IMAGE_VERSION"
+        - docker push "$OCIR_REPOSITORY":"$IMAGE_VERSION"
+      dependencies:
+        - code-build-job
+      allow_failure: false
+
+    test-build:
+      stage: test
+      script:
+        - docker inspect "$OCIR_REPOSITORY":"$IMAGE_VERSION"
+      dependencies:
+        - code-push-job
 
 
+    .kube-context:
+      before_script:
+        - if [ -n "$KUBE_CONTEXT" ]; then kubectl config use-context "$KUBE_CONTEXT"; fi
+
+    deploy-create-credential:
+      stage: deploy
+      allow_failure: true
+      image:
+        name: bitnami/kubectl:latest
+        entrypoint: ['']
+      extends: [.kube-context]
+      script:
+        - kubectl config get-contexts
+        - kubectl config use-context "$OKE_AGENT"
+        - kubectl get secret ocir-cred || exit_code=$?
+        - echo $exit_code
+        - >
+            if [ "$exit_code" == 1 ]; then
+                kubectl create secret docker-registry ocir-cred --docker-username="$OCIR_USER" --docker-password="$OCIR_PASSWORD" --docker-server="$OCIR_REGISTRY"
+            else
+                echo "Skipping secret Creation"
+            fi
+      dependencies:
+        - test-build
+
+
+    deploy-create-deployment:
+      stage: deploy
+      image:
+        name: bitnami/kubectl:latest
+        entrypoint: ['']
+      extends: [.kube-context]
+      script:
+        - kubectl config get-contexts
+        - kubectl config use-context "$OKE_AGENT"
+        - envsubst < deployment.tmpl > deployment.yaml
+        - kubectl apply -f deployment.yaml
+      dependencies:
+        - deploy-create-credential</copy>
     ```
 
-update the file
+5. Once all the files are uploaded / created, the repository should have the following contents
+
+  ![Project's Repository](images/repository.png)
 
 
 
@@ -256,11 +357,74 @@ update the file
 
 ## Task 5: Check the CI/CD Job Status
 
-Check the Job status 
-Ingress
+1. Navigate to project's **CI/CD** > **Pipelines**. Since the AutoDevOps option is enabled by default any updates to the .gitlab-ci.yml automatically triggers a pipeline deployment
 
-  
+  ![](images/status1.png)
 
+2. Click on the job, and see the status of the individual stages and jobs
+
+  ![](images/status2.png)
+
+## Task 6: Verify the Deployment Status
+
+1. Naviagte to OCI's Container Registry and verify that the container image with the tag (as specified in the IMAGE_VERSION variable) has been created and pushed to the registry 
+
+  ![OCIR](images/status3.png)
+
+
+2. As a part of the deployment, a secret is created on the OKE that will be used to pull an image from a private container image registry or repository.
+
+    ```
+    <copy>kubectl describe secrets ocir-cred</copy>
+    Name:         ocir-cred
+    Namespace:    default
+    Labels:       <none>
+    Annotations:  <none>
+
+    Type:  kubernetes.io/dockerconfigjson
+
+    Data
+    ====
+    .dockerconfigjson:  301 bytes
+    ```
+
+
+3. Check the kubernetes Deployment Deployment status
+
+    ```
+    <copy>kubectl get pods</copy>
+    NAME                      READY   STATUS    RESTARTS   AGE
+    webapp-7d75ddccb6-pzsct   1/1     Running   1          91s
+    webapp-7d75ddccb6-qclsh   1/1     Running   1          89s
+    ```
+
+4. Verify the Ingess that is deployed along with the Kubernetes deployment
+
+    ```
+    <copy>kubectl describe ingress webapp-ingress</copy>
+    Name:             webapp-ingress
+    Labels:           &lt;none&gt;
+    Namespace:        default
+    Address:          129.159.207.127
+    Ingress Class:    <none>
+    Default backend:  &lt;default&gt;
+    Rules:
+      Host        Path  Backends
+      ----        ----  --------
+      *
+                  /   webapp-svc:8088 (10.244.0.132:8080,10.244.0.3:8080)
+    Annotations:  kubernetes.io/ingress.class: nginx
+    Events:       &lt;none&gt;
+    ```
+
+
+5. On the Web Browser, type the IP address of the Public Load Balancer that was deployed in the previous Lab and it should point to the application just deployed
+
+  ![Ingress Resource](images/ingress1.png)
+
+6. Refresh the webpage a few times, and it should cycle through the available pods in the deployment
+
+  ![Ingress Resource](images/ingress2.png)
 
 
 ## Learn More
