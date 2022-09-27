@@ -156,7 +156,7 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
     ![](./images/create-pre-auth-url.png " ")
 
-3. Draft an email to *`livelabs-help-db_us@oracle.com`* and *`livelabs-help-license_us@oracle.com`* with the following content
+3. Send an email to *`livelabs-help-db_us@oracle.com`* and *`livelabs-help-license_us@oracle.com`* with the following content
 
     - Pre-authenticated URL created and copied above
     - **`desktop_guide_url`**: Link to github.io guide ending with "*../workshop/desktop*".
@@ -171,6 +171,7 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
       ```
     - **`desktop_app2_url`** (Optional): Same as above a second webapp loaded on the second Google-Chrome browser tab
 
+4. Next, please wait for our LiveLabs team to validate the image and publish it to marketplace. We will provide the ORM stack needed for brown button (run on customers' tenancies) provisioning and set up the green button (LiveLabs sandbox tenancy).
 
 ## Learn More
 * [Oracle Cloud Marketplace Partner Portal Documentation](https://docs.oracle.com/en/cloud/marketplace/partner-portal/index.html)
@@ -179,4 +180,4 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, February 2021
-* **Last Updated By/Date** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, April 2022
+* **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Sep 2022
