@@ -131,6 +131,14 @@ To create a Pull Request:
     ![Include WMS id in pull request title.](./images/git-hub-pull-request-title-comment.png " ")
   A status page is displayed indicating that you have created a pull request along with the request number (for example, #1770), that it is pending review, and that merging is blocked.
 
+5. Scroll down the page to check 1) your branch does not have merge conflicts; 2) your branch is up-to-date. If your PR has any of those two issues, our LiveLabs team will not approve or merge your PR.
+
+    ![Merge Conflicts](./images/github-conflicts.png " ")
+
+    To solve merge conflicts, go to *Task 1: Get the Latest Updates from Production* and *Appendix -> Issue 3: GitHub Merge Conflicts*.
+
+    To make sure your branch is up-to-date, go to *Task 1: Get the Latest Updates from Production*.
+
   When your pull request is approved, the page gets updated with information about your commits being approved and merged into the **upstream/main** repository (production).
 
   When the pull request is approved and merged into the **upstream/main** repository, two emails are sent to the e-mail account associated with your GitHub account.
