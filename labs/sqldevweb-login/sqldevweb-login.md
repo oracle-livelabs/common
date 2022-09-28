@@ -30,7 +30,7 @@ Estimated time: 5 minutes
 
 4. From the databases displayed, click on the name of your database to navigate to your ABD details page.
 
-5. From the ADB Details page, click the Database Actions button ![](./images/db-actions-button.png)
+5. From the ADB Details page, click the Database Actions button. ![Database Actions Button](./images/db-actions-button.png)
 
     ![Database Actions](./images/ADB-details-sdw-1.png)
 

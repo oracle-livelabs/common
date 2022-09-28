@@ -33,36 +33,36 @@ Estimated Time - 5 minutes
 
     In this lab, as **DEMOATP** is an Oracle Autonomous Transaction Processing database which is already provisioned, we selected the **Transaction Processing** workload type to filter the database.
 
-    ![](./images/choose-compartment.png " ")
-    ![](./images/choose-state.png " ")
+    ![Choose compartment](./images/choose-compartment.png " ")
+    ![Choose state](./images/choose-state.png " ")
 
 4. From the databases displayed, click **Display Name** of the database you wish to terminate.
 
     In this lab, we are terminating the available **DEMOATP** Oracle Autonomous Transaction Processing database instance. Click **DEMOATP**.
 
-    ![](./images/demoatp.png " ")
+    ![Click display name](./images/demoatp.png " ")
 
 5. Click **More Actions**.
 
-    ![](./images/more-actions.png " ")
+    ![Click More Actions](./images/more-actions.png " ")
 
 6. From the more actions drop-down, scroll down and click **Terminate**.
 
-    ![](./images/terminate.png " ")
+    ![Click Terminate](./images/terminate.png " ")
 
 7. Confirm that you wish to terminate your Oracle Autonomous Database in the confirmation dialog. Type the database name in the input field and click **Terminate Autonomous Database**.
 
     In this lab, type **DEMOATP** and click **Terminate Autonomous Database**.
 
-    ![](./images/demoatp-terminate.png " ")
+    ![Click Terminate Autonomous Database](./images/demoatp-terminate.png " ")
 
 8.  Your instance will begin to terminate, the Lifecycle State will turn from Available to Terminating.
 
-    ![](./images/terminating.png " ")
+    ![Terminating](./images/terminating.png " ")
 
 9. After a few minutes, once the instance is terminated, the Lifecycle state will change from Terminating to Terminated.
 
-    ![](./images/terminated.png " ")
+    ![Terminated](./images/terminated.png " ")
 
     You have successfully terminated an Oracle Autonomous Database instance.
 
