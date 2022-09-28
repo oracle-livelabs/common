@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This Lab will walk you through the step by step instructions of provisioning a Container Engine for Kubernetes (OKE). This Kubernetes cluster will be used to deploy an application that will be managed by GitLab CI/CD pipeline.
+This Lab will walk you through the step-by-step instructions of provisioning a Container Engine for Kubernetes (OKE). This Kubernetes cluster will be used to deploy an application that will be managed by GitLab CI/CD pipeline.
 
 Estimated Time: 45 minutes
 
@@ -10,7 +10,7 @@ Estimated Time: 45 minutes
 
 In this lab, you will:
 * Configure Security Rules in Security Lists for Kubernetes Cluster creation
-* Provison a Kubernetes Cluster and a Node Pool
+* Provision a Kubernetes Cluster and a Node Pool
 * Configure GitLab Runner compute instance to Access Kubernetes Cluster
 * Setup an Ingress Controller
 
@@ -49,17 +49,17 @@ Oracle Cloud Infrastructure Identity and Access Management (IAM) lets you contro
 
   ![Compartment](images/dynamicgroup1.png)
 
-2. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Dynamic Groups** and hit **Create Dynamic Group**
+2. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Dynamic Groups** and click **Create Dynamic Group**
     - Specify the Name and Description for the dynamic group
-    - Speciy the Rule for the Dynamic Group by specifying the OCID of the Compartment
+    - Specify the Rule for the Dynamic Group by specifying the OCID of the Compartment
         - Optionally, Rule Builder can also be used to specify the Rule
 
   ![DynamicGroup](images/dynamicgroup2.png)
 
-3. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Policies** and hit **Create Policy**
+3. Click on the main Navigation Menu, Select **Identity & Security** and then under **Identity** select **Policies** and click **Create Policy**
     - Specify the Name and Description for the policy
     - Policy must be created in the **root** compartment
-    - Specify the Policy rule. The policy specified would allow the user to *manage* the *cluster-family*. This policy enable users to perform any operation on cluster-related resources (this 'catch-all' policy effectively makes all users administrators insofar as cluster-related resources are concerned):
+    - Specify the Policy rule. The policy specified would allow the user to *manage* the *cluster-family*. This policy enables users to perform any operation on cluster-related resources (this 'catch-all' policy effectively makes all users administrators insofar as cluster-related resources are concerned)
     - This policy would allow the user to access the Cluster details programmatically using OCI CLI
 
   ![Policy](images/dynamicgroup3.png)
@@ -70,11 +70,11 @@ Oracle Cloud Infrastructure Identity and Access Management (IAM) lets you contro
 
   ![Container Engine for Kubernetes](images/oke1.png)
 
-2. Select the **Compartment** and the **Kubernetes version** from the drop down menu.
+2. Select the **Compartment** and the **Kubernetes version** from the drop-down menu.
 
   ![Container Engine for Kubernetes](images/oke2.png)
 
-3. Under the Network Type selection, specify the **Flannel overlay**. Specify the VCN name, and the Public Subnet for *Kubernetes Service LB Subnet* and *Kubernetes API endpoint Subnet*. Make sure to assign a Public IP address to the API endpoint.
+3. Under the **Network type** selection, specify the **Flannel overlay**. Specify the VCN name, and the Public Subnet for *Kubernetes Service LB Subnet* and *Kubernetes API endpoint Subnet*. Make sure to assign a Public IP address to the API endpoint.
 
     ![Container Engine for Kubernetes](images/oke3.png)
 
@@ -82,12 +82,12 @@ Oracle Cloud Infrastructure Identity and Access Management (IAM) lets you contro
     - Name: A name of your choice for the new node pool
     - Version: The version of Kubernetes to run on each worker node in the node pool. By default, the version of Kubernetes specified for the control plane nodes is selected
     - Shape: The shape to use for worker nodes in the node pool. The shape determines the number of CPUs and the amount of memory allocated to each node
-    - Image: The image to use on worker nodes in the node pool. Make sure the select the image thas is compatible with Kubernetes version
+    - Image: The image to use on worker nodes in the node pool. Make sure to select the image that is compatible with Kubernetes version
 
   ![Container Engine for Kubernetes](images/oke4.png)
 
 5. Number of Worker Nodes: Specify the number of worker nodes to create in the node pool.
-6. Use the defualt Boot volume options
+6. Use the default Boot volume options
 7. Placement Configuration: Specify one or more availability domains for the worker nodes, and specify the private regional subnet
 
 ![Container Engine for Kubernetes](images/oke5.png)
@@ -153,7 +153,7 @@ Click Close to return to the Console. The cluster creation would continue and co
     e23cc7092218c95c22d8ee36fb9499194a36ac5b5349ca476886b7edc0203885  kubectl
     ```
 
-7. If the Checksum from the file and the Kubectl utility match, install the Kubect utility
+7. If the Checksum from the file and the Kubectl utility match, install the Kubectl utility
     ```
     <copy>sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl</copy>
     # Enable kubectl autocompletion
@@ -162,7 +162,7 @@ Click Close to return to the Console. The cluster creation would continue and co
     ```
 
 ## Task 5: Install OCI CLI on Linux 8.x
-OCI CLI installation is required in order to access the OKE cluster.
+OCI CLI installation is required to access the OKE cluster.
 
 1. Install OCI CLI
     ```
@@ -170,7 +170,7 @@ OCI CLI installation is required in order to access the OKE cluster.
     <copy>sudo dnf -y install python36-oci-cli</copy>
     <copy>oci --version</copy>
     ```
-2. Enable Instance Principal Authenication and reload the profile
+2. Enable Instance Principal Authentication and reload the profile
     ```
     <copy>sudo echo 'export OCI_CLI_AUTH=instance_principal' >> ~/.bash_profile</copy>
     <copy>source ~/.bash_profile</copy>
@@ -188,7 +188,7 @@ OCI CLI installation is required in order to access the OKE cluster.
 
 
 ## Task 6: Access the OKE Cluster
-1. To access the Kubernetes cluster access details, click the **Navigation Menu** in the upper left, navigate to **Developer Services** , and select **Kubernetes Clusters (OKE)**. Click the cluster name created earlier and click on **Access Cluster**. This shows all the steps needed to be performed on a machine to access the OKE Cluster successfully. Since a Public IP was assigned to the Kubernetes API endpoint, therefore the cluster would only be accessible from anywhere.
+1. To access the Kubernetes cluster access details, click the **Navigation Menu** in the upper left, navigate to **Developer Services** , and select **Kubernetes Clusters (OKE)**. Click the cluster name created earlier and click on **Access Cluster**. This shows all the steps needed to be performed on a machine to access the OKE Cluster successfully. Since a Public IP was assigned to the Kubernetes API endpoint, therefore the cluster would be accessible from anywhere.
 
 * **Copy** the instructions to access the kubeconfig for your cluster via the VCN-Native public endpoint.
 
@@ -199,7 +199,7 @@ OCI CLI installation is required in order to access the OKE cluster.
     <copy>mkdir -p $HOME/.kube</copy>
     ```
 
-3. To access the kubeconfig for your cluster via the VCN-Native private endpoint, execute the command copied earlier (this should be different for everyone):
+3. To access the kubeconfig for your cluster via the VCN-Native private endpoint, execute the command copied earlier (this should be different for everyone)
     ```
     oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.eu-frankfurt-1.aaaaaaaaejvpasg53womynz4fl4gtqbodbvra3fxnu3f5f46ccctq5mfv7ia --file $HOME/.kube/config --region eu-frankfurt-1 --token-version 2.0.0  --kube-endpoint PUBLIC_ENDPOINT
 
@@ -212,7 +212,7 @@ OCI CLI installation is required in order to access the OKE cluster.
     <copy>source ~/.bash_profile</copy>
     ```
 
-5. Get the cluster details
+5. Get the cluster details, to ensure authentication and access is working correctly
     ```
     <copy>kubectl get nodes</copy> 
     NAME          STATUS   ROLES   AGE     VERSION
@@ -232,22 +232,20 @@ OCI CLI installation is required in order to access the OKE cluster.
 ## Task 8: Setup an Ingress Controller on OKE Cluster
 An Ingress controller is a specialized load balancer for Kubernetes that is responsible for accepting the user traffic from the internet and load balances it to pods/containers running inside the Kubernetes cluster
 
-1. To get the user OCID, Navigate to Upper Right Hand corner of the OCI Console, and click on **Profile**, and  select **User settings** from the menu.  Copy the User **OCID** from the console.
+1. To get the user OCID, Navigate to Upper Right-Hand corner of the OCI Console, and click on **Profile**, and select **User settings** from the menu.  Copy the User **OCID** from the console.
 
-  ![user OCID](images/userOCID.png)
+![user OCID](images/userOCID.png)
 
 2. Create the Access Rules for the Ingress Controller
-
-* Note that you must set up your own kubeconfig file. You cannot access a cluster using a kubeconfig file that a different user set up. Replace the User OCID with the one for your account.
-
-  **NOTE:** If your Oracle Cloud Infrastructure user is a tenancy administrator, skip this step and go straight to Creating the Service Account, and the Ingress Controller.
+Note that you must set up your own kubeconfig file. You cannot access a cluster using a kubeconfig file that a different user set up. Replace the User OCID with the one for your account.
+If your Oracle Cloud Infrastructure user is a tenancy administrator, skip this step and go straight to Creating the Service Account, and the Ingress Controller.
 
   
-	```
-  kubectl create clusterrolebinding gitlab-crb --clusterrole=cluster-admin --user=ocid1.user.oc1..aaaaaaaayk22dlcwymd7dvo4uqw56fg5a2m6drjrgktft5melvr6vwez7uda
+    ```
+    kubectl create clusterrolebinding gitlab-crb --clusterrole=cluster-admin --user=ocid1.user.oc1..aaaaaaaayk22dlcwymd7dvo4uqw56fg5a2m6drjrgktft5melvr6vwez7uda
   
-  clusterrolebinding.rbac.authorization.k8s.io/gitlab-crb created
-	```
+    clusterrolebinding.rbac.authorization.k8s.io/gitlab-crb created
+    ```
 
 3. Create the Service Account, and the Ingress Controller
 
@@ -296,5 +294,5 @@ An Ingress controller is a specialized load balancer for Kubernetes that is resp
 * [Setting Up an Ingress Controller on a Cluster](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengsettingupingresscontroller.htm)
 
 ## Acknowledgements
-* **Author** - Farooq Nafey, Principal Cloud Architect
+- **Created By/Date** - Farooq Nafey, Principal Cloud Architect, August 2022
 * **Last Updated By/Date** - Farooq Nafey, September 2022

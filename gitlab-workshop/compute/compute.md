@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This lab will show you how to setup a Oracle Cloud network (VCN) and a compute instance running Oracle Linux.
+This lab will show you how to setup an Oracle Cloud network (VCN) and a compute instance running Oracle Linux.
 
 Estimated Lab Time:  30 minutes
 
@@ -27,7 +27,7 @@ This lab assumes you have:
 
 When you first start working with Oracle Cloud Infrastructure, you need to think carefully about how you want to use compartments to organize and isolate your cloud resources. Compartments are fundamental to that process. Most resources can be moved between compartments. However, it's important to think through your compartment design for your organization up front, before implementing anything. Compartment is a global resource and can be created and accessed from any region in the OCI ecosystem.
 
-1. To create a compartment click the **Navigation Menu** in the upper left, navigate to **Identity & Security**, and select **Compartments** under **Identity**. Select the Parent compartment from the drop-down list where you want your compartment to be created.
+1. To create a compartment, click the **Navigation Menu** in the upper left, navigate to **Identity & Security**, and select **Compartments** under **Identity**. Select the Parent compartment from the drop-down list where you want your compartment to be created.
 
 ![compartment](images/compartment.png)
 
@@ -37,7 +37,7 @@ The Console is designed to display your resources by compartment within the curr
 
 Oracle Cloud Infrastructure (OCI) Virtual Cloud Networks (VCNs) provide customizable and private cloud networks in Oracle Cloud Infrastructure (OCI). Just like a traditional data center network, the VCN provides customers with complete control over their cloud networking environment. This includes assigning private IP address spaces, creating subnets and route tables, and configuring stateful firewalls. Ensure to select the correct region from the upper right corner of the console. If the desired region is not subscribed, it can be subscribed using a single-click operation.
 
-To create a compartment click the **Navigation Menu** in the upper left, navigate to **Networking**, and select **Start VCN Wizard** under **Virtual Cloud Networks**.
+To create a VCN, click the **Navigation Menu** in the upper left, navigate to **Networking**, and select **Start VCN Wizard** under **Virtual Cloud Networks**.
 
 1. Select the option **Create VCN with Internet Connectivity**
 	![vcn1](images/vcn1.png)
@@ -47,7 +47,7 @@ To create a compartment click the **Navigation Menu** in the upper left, navigat
 
     - Specify the Name of the VCN
     - Select the same Compartment for your VCN creation, that was created in the previous step
-    - Specify a VCN CIDR Block big enough to accomodate two subnets
+    - Specify a VCN CIDR Block big enough to accommodate two subnets
     - Specify the Public Subnet CIDR Block
     - Specify the Private Subnet CIDR Block
     - Ensure to check the DNS Resolution radio button for the naming resolution to be enabled in the VCN
@@ -83,7 +83,6 @@ If you already have an SSH key pair, you may use that to connect to your environ
 
 *IMPORTANT:  If the SSH key is not created correctly, you will not be able to connect to your environment and will get errors.  Please ensure you create your key properly.*
 
-Estimated Time: 5 minutes
 
 ### Objectives
 - Generate and access SSH public and private keys
@@ -91,6 +90,7 @@ Estimated Time: 5 minutes
 1. **Generate SSH Keys on MacOS**
 
 The ssh keys on MacOS can be created using the **Terminal** application. If you don't already have a shortcut to the terminal application for MacOS, you can find it in the **Applications > Utilities** menu or (Shift+Command+U) on your keyboard.
+
   ```
   <copy>ssh-keygen -t rsa</copy>
   Generating public/private rsa key pair.
@@ -136,9 +136,9 @@ The command above creates two files under the .ssh folder in the Home directory 
 
 * Create a compute instance for GitLab server that will be used to install and configure GitLab software in the following labs.
 
-1. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**.
-2. Click on **Create Instance**.
-3. Enter the **Name** for your Compute Instance and choose the **compartment**. 
+1. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**
+2. Click on **Create Instance**
+3. Enter the **Name** for your Compute Instance and choose the **compartment**
 4. Click on edit and choose the **Availability Domain**, **Image**, and **Shape** of your choice. For this lab, use the latest Oracle Linux 8.x image
 
 
@@ -146,16 +146,17 @@ The command above creates two files under the .ssh folder in the Home directory 
 ![compute](images/compute1.png)
 
 5. Specify the **VCN** and the *public* **Subnet Name**
-6. Make sure to **Assign a Public IPV4 address** to the compute instance. We will use this Public IP to login to to the compute instance.
-7. In the Add SSH keys, select Upload Public Keys and specify your public ssh key.  
+6. Make sure to **Assign a Public IPV4 address** to the compute instance. We will use this Public IP to login to to the compute instance
+7. In the **Add SSH keys**, select **Upload Public Key** and specify your public ssh key
 
 
 ![compute](images/compute2.png)
-8. Deafult options for **Boot Volume** should suffice for this Lab. No Change is required. Then click create.
+
+8. Default options for **Boot Volume** should suffice for this Lab. No Change is required. Then click create
 
 ![compute](images/compute3.png)
 
-9. The compute instance will be provisioned shortly.
+9. The compute instance will be provisioned shortly
 
 ![compute](images/compute4.png)
 
@@ -189,7 +190,7 @@ Click the **Navigation Menu** in the upper left, navigate to **Compute**, select
 
 ### 2. *Connect from Windows using Putty*
 
-Putty can be used to connect to Linux machines from Windows machines. However, the private ssh key created earlier needs to be converted from a **PEM** format to a **PPK** format before connecting to the instance. Use the steps below to do the conversion of the key before attemting to log in. Ensure to download the Putty Installer before attempting to perform the key conversion. 
+Putty can be used to connect to Linux machines from Windows machines. However, the private ssh key created earlier needs to be converted from a **PEM** format to a **PPK** format before connecting to the instance. Use the steps below to do the conversion of the key before attempting to log in. Ensure to download the [Putty Installer](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) before attempting to perform the key conversion. 
 
 1. On the Windows machine, click on **Start Menu**> **All Programs** > **PuTTY** > **PuTTYgen**.
 ![puttygen1](images/puttygen1.png)
@@ -202,7 +203,7 @@ Putty can be used to connect to Linux machines from Windows machines. However, t
 
 Once the private key is saved in the ppk format, Putty can be used to connect to the compute instance
 
-4. Open Putty, and input the usename and the host IP address
+4. Open Putty, and input the username and the host IP address
 ![puttygen1](images/putty1.png)
 
 5. Next, in the left hand panel locate the **Connection > SSH > Auth** configuration tab. Specify the location of the Private Key File (converted earlier to ppk format) and hit **Open** button
@@ -217,9 +218,9 @@ Once the private key is saved in the ppk format, Putty can be used to connect to
 
 ## Task 6: Setup DNS
 
-One of the requirement for GitLab configuration is to use https protocol for secure communication between the server and the client. During the configuration the TLS certificates are automatically requested and configured on the GitLab server. Since, the certificates are always bound to a DNS domain, therefore it is essentail to bind the IP address of the server to a domain name that would later be used for configuring and accessing GitLab securely.
+One of the requirement for GitLab configuration is to use *https* protocol for secure communication between the server and the client. During the configuration the TLS certificates are automatically requested and configured on the GitLab server. Since, the certificates are always bound to a DNS domain, therefore it is essential to bind the IP address of the server to a domain name that would later be used for configuring and accessing GitLab securely.
 
-If you are using an external DNS management service then configure the Public IP address of the GitLab server to the desired domain. For the purpose of this LiveLab, I will use OCI's DNS Management service to create the DNS entry for the GitLab server. The domain name is already registered with an exteranl registrar, and the nameservers are configured to point to Oracle Cloud Infrastructure's Nameservers. 
+If you are using an external DNS management service, then configure the Public IP address of the GitLab server to the desired domain. For the purpose of this LiveLab, I will use OCI's DNS Management service to create the DNS entry for the GitLab server. The domain name is already registered with an external registrar, and the nameservers are configured to point to Oracle Cloud Infrastructure's Nameservers. 
 
 1. In the Console, open the navigation menu and click **Networking**. Under **DNS Management**, click **Zones** and create a new **Public Zone**.
 * The domain name registered for this lab is cloudlab.site. Select the Zone Type as Primary from the drop-down list.
@@ -230,7 +231,7 @@ If you are using an external DNS management service then configure the Public IP
 
 ![DNS Management](images/dns2.png)
 
-3. Verify that the domain name to IP adress mapping is resolving correctly, before proceeding.
+3. Verify that the domain name to IP address mapping is resolving correctly, before proceeding.
 
     ```
     <copy>nslookup gitlab.cloudlab.site</copy>
@@ -245,7 +246,7 @@ If you are using an external DNS management service then configure the Public IP
 
 ## Task 7: Create Compute for GitLab Runner
 
-Use the same process to create another compute instance for GitLab Runner Installation. Instance with 2 OCPUs and 16GB of RAM should be sufficient for the installation to succeed. After successful creation of the compute, we should have two compute instances up and running. GitLab software will be installed and configured on the compute named *gitlab*, whereas compute named *runner* will be used in following labs. 
+Use the same process to create another compute instance for GitLab Runner Installation. Instance with 2 OCPUs and 16GB of RAM should be sufficient for the installation to succeed. After successful creation of the compute, we should have two compute instances up and running. GitLab software will be installed and configured on the compute named *gitlab*, whereas compute named *runner* will be used to install GitLab Runner. 
 
   | Hostname | VCN Subnet | OCPUs | Memory (GB) |
   | --- | --- | --- | --- |
@@ -258,7 +259,7 @@ Use the same process to create another compute instance for GitLab Runner Instal
 
 
 
-* [Compartments](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcompartments.htm)
+* [OCI Compartments](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/managingcompartments.htm)
 * [Virtual Cloud Network (VCN)](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/overview.htm)
 * [OCI Compute Service](https://docs.oracle.com/en-us/iaas/Content/Compute/Concepts/computeoverview.htm)
 * [Managing Key Pairs on Linux Instances](https://docs.oracle.com/en-us/iaas/Content/Compute/Tasks/managingkeypairs.htm)
@@ -267,5 +268,5 @@ Use the same process to create another compute instance for GitLab Runner Instal
 
 
 ## Acknowledgements
-* **Author** - Farooq Nafey, August 2022
+- **Created By/Date** - Farooq Nafey, Principal Cloud Architect, August 2022
 * **Last Updated By/Date** - Farooq Nafey, September 2022

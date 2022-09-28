@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In this Lab we will deploy the GitLab CI/CD pipeline. The pipeline will use the application source code and build a docker image, and push the image in the Oracle Container Registry. Then a Kubernetes deployment will be created based on the container image. The application deployment will be exposed using the Ingress, and should be visible through the web browser.
+In this Lab we will deploy the GitLab CI/CD pipeline. The pipeline will use the application source code to build a docker image and push the image in the Oracle Container Registry. Then a Kubernetes deployment will be created based on the container image. The application deployment will be exposed using the Ingress and should be visible through the web browser.
 
 Estimated Time: 45 minutes
 
@@ -12,10 +12,10 @@ Estimated Time: 45 minutes
 
 In this lab, you will:
 * Create an OCI Container Registry
-* Specify Project specific CI/CD variables
-* Register Oracle OKE Cluster with GitLab
-* Create Project Files
-* Check the CD/CD Job Status
+* Specify project specific CI/CD variables
+* Register Oracle OKE cluster with GitLab
+* Create project Files
+* Check the CI/CD job Status
 
 ### Prerequisites 
 
@@ -65,20 +65,20 @@ This lab assumes you have:
 
   ![Register OKE Cluster](images/oke-cluster1.png)
 
-2. Create an agent configuration file. The file must be named as, .gitlab/agents/&lt;agent-name&gt;/config.yaml. Ensure the filename ends in .yaml, not .yml. The agent-name chosen witll be used in next setp while creating the CI/CD variables. The value for the parameter **id** can be copied from the URL
+2. Create an agent configuration file. The file must be named as *.gitlab/agents/&lt;agent-name&gt;/config.yaml*. Ensure the filename ends in .yaml, not .yml. The agent-name chosen will be used in next step while creating the CI/CD variables. The value for the parameter **id** can be copied from the URL
 
     ```
-    <copy>.gitlab/agents/<agent-name>/config.yaml</copy>
+    <copy>.gitlab/agents/oke-cluster/config.yaml</copy>
     ```
 
   ![Register OKE Cluster](images/oke-cluster2.png)
 
 3. You must register an agent before you can install the agent in your cluster. To register an agent:
-    -   On the top bar, select Main menu > Projects and find your project. If you have an agent configuration file, it must be in this project. Your cluster manifest files should also be in this project.
-    -   From the left sidebar, select **Infrastructure** > **Kubernetes clusters**.
-    -   Select **Connect a cluster** (agent).
+    -   On the top bar, select **Main menu** > **Projects** and find your project. If you have an agent configuration file, it must be in this project. Your cluster manifest files should also be in this project.
+    -   From the left sidebar, select **Infrastructure** > **Kubernetes clusters**
+    -   Select **Connect a cluster** (agent)
         -   Select the configuration file from the drop-down list
-    -   Select **Register** an agent.
+    -   Select **Register** an agent
 
   ![Register OKE Cluster](images/oke-cluster3.png)
 
@@ -119,7 +119,7 @@ This lab assumes you have:
 
 ## Task 3: Create Project specific CI/CD variables
 
-1. Next, we need to add CI/CD variables to a project’s settings. Variables are commonly used to configure third-part services that are repeatedly used throughout the pipeline. 
+1. Next, we need to add CI/CD variables to a project’s settings. Variables are commonly used to configure third-party services that are repeatedly used throughout the pipeline. 
 The variables will be available to all the stages within a Pipeline.
 
 
@@ -146,8 +146,8 @@ The variables will be available to all the stages within a Pipeline.
     * **OCIR_PASSWORD**: **&lt;auth-token&gt;**
     * **OCIR_REGISTRY**: **https://fra.ocir.io** [Find the region specific OCIR Endpoint here](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm#regional-availability)
     * **OCIR_REPOSITORY**: **fra.ocir.io/orasenatdpltintegration01/webapp** (OCI OCIR region URL followed by tenancy name and the OCIR repo created earlier)
-    * **OCIR_USER**: enter your username in the format &lt;tenancy-namespace&gt;/&lt;username&gt;, where &lt;tenancy-namespace&gt; is the auto-generated Object Storage namespace string of your tenancy (as shown on the Tenancy Information page). For example, ansh81vru1zp/jdoe@acme.com. If your tenancy is federated with Oracle Identity Cloud Service, use the format &lt;tenancy-namespace&gt;/oracleidentitycloudservice/&lt;username&gt;.
-    * **OKE_AGENT**: **gitlab-instance-c00de01e/LiveLab:oke-cluster** (copy from URL and append the agent name)
+    * **OCIR_USER**: enter your username in the format &lt;tenancy-namespace&gt;/&lt;username&gt;, where &lt;tenancy-namespace&gt; is the auto-generated Object Storage namespace string of your tenancy (as shown on the Tenancy Information page). For example, ansh81vru1zp/jdoe@acme.com. If your tenancy is federated with Oracle Identity Cloud Service, use the format &lt;tenancy-namespace&gt;/oracleidentitycloudservice/&lt;username&gt;
+    * **OKE_AGENT**: **gitlab-instance-c00de01e/LiveLab:oke-cluster** (copy namespace from the URL, followed by the Project name, and Kubernetes agent name)
     
     
     
@@ -161,6 +161,7 @@ The variables will be available to all the stages within a Pipeline.
 
 
 ## Task 4 Create Project Files
+
 Finally, it's time to create a few project files and put the CI/CD pipeline to test. The following four files need to be created in the project's root repository.
 
 1. Download the [Dockerfile](files/Dockerfile) and upload it to the project's file repository
@@ -169,10 +170,9 @@ Finally, it's time to create a few project files and put the CI/CD pipeline to t
     <copy>FROM node:18.9.0-alpine
     ADD app.js /app.js
     ENTRYPOINT ["node", "app.js"]</copy>
-    ``` 
+    ```
 
-
-2. Create a [app.js](files/app.js) application file and upload it to the project's file repository
+2. Create an [app.js](files/app.js) application file and upload it to the project's file repository
 
     ```
     <copy>const http = require('http');
@@ -196,11 +196,11 @@ Finally, it's time to create a few project files and put the CI/CD pipeline to t
     };
     var www = http.createServer(handler);
     www.listen(8080);</copy>
-    ```  
+    ```
 
 
 
-3. Create a Kubernetes deployment file [deployment.tmpl](files/deployment.tmpl) in the template format and upload it to the project's file repository. The deployment file requires the use of CI/CD variables, and therefore can not be in .yml or .yaml format.
+3. Create a Kubernetes deployment file [deployment.tmpl](files/deployment.tmpl) in the template format and upload it to the project's file repository. The deployment file requires the use of CI/CD variables, and therefore cannot be in .yml or .yaml format.
 
     ```
     <copy>apiVersion: apps/v1
@@ -221,7 +221,7 @@ Finally, it's time to create a few project files and put the CI/CD pipeline to t
         spec:
           containers:
           - name: webapp
-            image: ${OKE_REGISTRY_IMAGE}:${IMAGE_VERSION}
+            image: ${OCIR_REPOSITORY}:${IMAGE_VERSION}
             ports:
             - containerPort: 8080
           imagePullSecrets:
@@ -260,8 +260,10 @@ Finally, it's time to create a few project files and put the CI/CD pipeline to t
                     number: 8088</copy>
     ```
 
-4. Finally create a file named [**.gitlab-ci.yml**](files/gitlab-ci.yml) in the root of your repository, which contains the CI/CD configuration. The moment the file is create, a CI/CD pipline would get triggered.  
-* **Don't forget to rename the file to .gitlab-ci.yml before uploading to the project repository**
+
+4. Finally create a file named [**.gitlab-ci.yml**](files/gitlab-ci.yml) in the root of your repository, which contains the CI/CD configuration. The moment the file is created, a CI/CD pipeline would get triggered.  
+
+  **Don't forget to rename the file to .gitlab-ci.yml before uploading to the project repository**
 
     ```
     <copy>stages:
@@ -347,17 +349,15 @@ Finally, it's time to create a few project files and put the CI/CD pipeline to t
         - deploy-create-credential</copy>
     ```
 
-5. Once all the files are uploaded / created, the repository should have the following contents
+5. Once all the files are uploaded / created, the repository should have the following content
 
   ![Project's Repository](images/repository.png)
 
 
 
-
-
 ## Task 5: Check the CI/CD Job Status
 
-1. Navigate to project's **CI/CD** > **Pipelines**. Since the AutoDevOps option is enabled by default any updates to the .gitlab-ci.yml automatically triggers a pipeline deployment
+1. Navigate to project's **CI/CD** > **Pipelines**. Since the Auto DevOps option is enabled by default, any updates to any file would automatically trigger a pipeline execution
 
   ![](images/status1.png)
 
@@ -367,7 +367,7 @@ Finally, it's time to create a few project files and put the CI/CD pipeline to t
 
 ## Task 6: Verify the Deployment Status
 
-1. Naviagte to OCI's Container Registry and verify that the container image with the tag (as specified in the IMAGE_VERSION variable) has been created and pushed to the registry 
+1. Navigate to OCI's Container Registry and verify that the container image with the tag (as specified in the IMAGE_VERSION variable) has been created and pushed to the registry 
 
   ![OCIR](images/status3.png)
 
@@ -389,7 +389,7 @@ Finally, it's time to create a few project files and put the CI/CD pipeline to t
     ```
 
 
-3. Check the kubernetes Deployment Deployment status
+3. Check the Kubernetes Deployment status
 
     ```
     <copy>kubectl get pods</copy>
@@ -398,7 +398,7 @@ Finally, it's time to create a few project files and put the CI/CD pipeline to t
     webapp-7d75ddccb6-qclsh   1/1     Running   1          89s
     ```
 
-4. Verify the Ingess that is deployed along with the Kubernetes deployment
+4. Verify that Ingress is deployed along with the Kubernetes deployment
 
     ```
     <copy>kubectl describe ingress webapp-ingress</copy>
@@ -418,7 +418,7 @@ Finally, it's time to create a few project files and put the CI/CD pipeline to t
     ```
 
 
-5. On the Web Browser, type the IP address of the Public Load Balancer that was deployed in the previous Lab and it should point to the application just deployed
+5. On the Web Browser, type the IP address of the Public Load Balancer that was deployed in the previous lab, and it should point to the application just deployed
 
   ![Ingress Resource](images/ingress1.png)
 
@@ -433,5 +433,5 @@ Finally, it's time to create a few project files and put the CI/CD pipeline to t
 
 
 ## Acknowledgements
-* **Author** - Farooq Nafey, Princiapl Cloud Architect
+- **Created By/Date** - Farooq Nafey, Principal Cloud Architect, August 2022
 * **Last Updated By/Date** - Farooq Nafey, September 2022

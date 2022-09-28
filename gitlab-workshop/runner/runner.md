@@ -7,7 +7,7 @@ GitLab Runner is an application that works with GitLab CI/CD to run jobs in a pi
 Estimated Time: 30 minutes
 
 ### GitLab Runner versions
-For compatibility reasons, the GitLab Runner major.minor version should stay in sync with the GitLab major and minor version. Older runners may still work with newer GitLab versions, and vice versa. However, features may not be available or work properly if a version difference exists.
+For compatibility reasons, the GitLab Runner ```major.minor``` version should stay in sync with the GitLab major and minor version. Older runners may still work with newer GitLab versions, and vice versa. However, features may not be available or work properly if a version difference exists.
 
 ### Objectives
 
@@ -21,7 +21,7 @@ In this lab, you will:
 
 
 This lab assumes you have:
-* Completed all the previos Labs successfully
+* Completed all the previous Labs successfully
 
 
 
@@ -134,7 +134,7 @@ GitLab CI/CD uses Docker to build container images. Docker will be used to build
   <copy>sudo systemctl enable docker --now</copy>
 	```
 
-4. Verify the Docker Status
+4. Verify the Docker service status
 
 	```
     <copy>sudo systemctl status docker</copy>
@@ -149,7 +149,7 @@ GitLab CI/CD uses Docker to build container images. Docker will be used to build
             └─49263 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
 	```
 
-3. Add the gitlab-runner user to the docker group
+3. Add the gitlab-runner user to the docker group, this enables users to use the docker commands without using sudo 
 
 	```
   <copy>sudo usermod -aG docker gitlab-runner</copy>
@@ -168,17 +168,9 @@ GitLab CI/CD uses Docker to build container images. Docker will be used to build
 * [Install GitLab Runner](https://docs.gitlab.com/runner/install/linux-repository.html)
 * [Register a Runner](https://docs.gitlab.com/runner/register/)
 * [Install Docker](https://docs.docker.com/engine/install/centos/)
+* [Deploy GitLab Runners on Oracle Container Engine for Kubernetes with autoscaling](https://docs.oracle.com/en/solutions/git-lab-runners-on-oke)
 
 
 ## Acknowledgements
-* **Author** - Farooq Nafey, Princiapl Cloud Architect
+- **Created By/Date** - Farooq Nafey, Principal Cloud Architect, August 2022
 * **Last Updated By/Date** - Farooq Nafey, September 2022
-
-
-    * **IMAGE_NAME** *webserver*
-    * **IMAGE_VERSION** *1.0*
-    * **OKE_AGENT** *gitlab-instance-c00de01e/LiveLab:oke-cluster* (copy from URL and append the agent name)
-    * **OKE_REGISTRY_IMAGE** *fra.ocir.io/orasenatdpltintegration01/webapp* (OCI OCIR region URL followed by tenancy name and the OCIR repo created earlier)
-    * **OKE_REGISTRY_PASSWORD** *&lt;auth-token&gt;*
-    * **OKE_REGISTRY_USER** enter your username in the format &lt;tenancy-namespace&gt;/&lt;username&gt;, where &lt;tenancy-namespace&gt; is the auto-generated Object Storage namespace string of your tenancy (as shown on the Tenancy Information page). For example, ansh81vru1zp/jdoe@acme.com. If your tenancy is federated with Oracle Identity Cloud Service, use the format &lt;tenancy-namespace&gt;/oracleidentitycloudservice/&lt;username&gt;.
-    * **OKE_REGISTRY** *https://fra.ocir.io* [Click here for the Region specific OCIR URL](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm#regional-availability)

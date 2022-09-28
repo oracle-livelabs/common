@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: ${OKE_REGISTRY_IMAGE}:${IMAGE_VERSION}
+        image: ${OCIR_REPOSITORY}:${IMAGE_VERSION}
         ports:
         - containerPort: 8080
       imagePullSecrets:

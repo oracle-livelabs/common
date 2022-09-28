@@ -2,7 +2,7 @@
 
 ## About this Workshop
 
-Administering and managing software development at scale, in an enterprise environment, can present a few challenges. In this technical demonstration, we will walk through the steps of installing and configuring GitLab, a DevOps platform, leveraging GitLab and OCI native services to enable CI/CD to build and deliver secure applications automatically. Combining GitLab’s continuous integration and deployment (CI) pipeline to deploy containerized applications with Oracle Kubernetes Engine enables organization to define appropriate development processes, validate, automate build, test and deploy containerized applications to Container Engine for Kubernetes (OKE) faster and more securely.
+Administering and managing software development at scale, in an enterprise environment, can present a few challenges. In this technical demonstration, we will walk through the steps of installing and configuring GitLab, a DevOps platform, leveraging GitLab and OCI native services to enable CI/CD to build and deliver secure applications automatically. Combining GitLab’s continuous integration and deployment (CI/CD) pipeline to deploy containerized applications with Oracle Kubernetes Engine enables organization to define appropriate development processes, validate, automate build, test, and deploy containerized applications to Container Engine for Kubernetes (OKE) faster and more securely.
 
 Estimated Workshop Time: 3 hours 15 minutes (This estimate is for the entire workshop - it is the sum of the estimates provided for each of the labs included in the workshop.)
 
@@ -42,8 +42,8 @@ This lab assumes you have:
 * [GitLab Reference Architecture](https://docs.gitlab.com/ee/administration/reference_architectures/2k_users.html)
 * [GitLab Support Page](https://about.gitlab.com/support/)
 * [GitLab Contact Sales](https://about.gitlab.com/sales/)
-* [How to activiate GitLab Enterprise Edition License](https://docs.gitlab.com/ee/user/admin_area/license.html)
+* [How to Activate GitLab Enterprise Edition License](https://docs.gitlab.com/ee/user/admin_area/license.html)
 
 ## Acknowledgements
-* **Author** - Farooq Nafey, Princiapl Cloud Architect
+* **Author** - Farooq Nafey, Principal Cloud Architect
 * **Last Updated By/Date** - Farooq Nafey, September 2022
