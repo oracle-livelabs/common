@@ -21,27 +21,32 @@ This lab assumes you have:
 ## Task 1: Access the Graphical Remote Desktop
 For ease of execution of this workshop, your VM instance has been pre-configured with a remote graphical desktop accessible using any modern browser on your laptop or workstation. Proceed as detailed below to login.
 
-1. Now that your instance has been provisioned, navigate to ***My Reservations***, find the request you submitted from the list displayed (only one item will be displayed if this is your first request).
+1. Now that your instance has been provisioned, navigate to **My Reservations**, find the request you submitted from the list displayed (only one item will be displayed if this is your first request).
 
-   ![](images/ll-launch-workshop.png " ")
+   ![my reservation](images/my-reservations.png "my reservation")
 
-2. Click on ***Launch Workshop***
+2. Click on **Launch Workshop** after the reservation provisioning has been completed.
 
-3. Click on *Remote Desktop* link.
+    ![my reservation completed](images/my-reservation-completed.png "my reservation completed")
 
-    ![](images/launch-ll-workshop-novnc.png " ")
+3. Click on **Login info** and then on **Remote Desktop** link.
+
+    ![Login information](images/login-info.png "Login Information")
 
     This should take you directly to your remote desktop in a single click.
 
-    ![](images/novnc-launch-get-started-2.png " ")
+    ![noVNC launch remote desktop](images/novnc-launch-get-started-2.png "noVNC launch remote desktop ")
 
-    *Note:* While rare, you may see an error titled “*Deceptive Site Ahead*” or similar depending on your browser type as shown below.
+    >**Note:**  While rare, you may see an error titled **Deceptive Site Ahead** or similar depending on your browser type as shown below.
 
     Public IP addresses used for LiveLabs provisioning comes from a pool of reusable addresses and this error is due to the fact that the address was previously used by a compute instance long terminated, but that wasn't properly secured, got compromised and was flagged.
 
-    You can safely ignore and proceed by clicking on *Details*, and finally on *Visit this unsafe site*.
+    You can safely ignore and proceed by clicking on **Details**, and finally on **Visit this unsafe site**.
 
-    ![](images/novnc-deceptive-site-error.png " ")
+    ![site error message](images/novnc-deceptive-site-error.png "site error message ")
+
+
+You may now proceed to the next lab.
 
 
 ## Appendix 1: Login to Host using SSH Key Based Authentication (Optional) - Choose a path
@@ -189,5 +194,5 @@ To use PuTTYgen to convert a key into .ppk format, complete the following steps:
 4. Go to **File**, and then click **Save private key** to save the key in .ppk format.
 
 ## Acknowledgements
-* **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology 
+* **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology
 * **Last Updated By/Date** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, June 2021
