@@ -19,7 +19,7 @@ This lab assumes you have:
 For ease of execution of this workshop, your VM instance has been pre-configured with a remote graphical desktop accessible using any modern browser on your laptop or workstation. Proceed as detailed below to login.
 
 1. Now that your instance has been provisioned, if not already on **My Reservations** page, then:
-    - Click on the drop-down arrow next to your *Username*,
+    - Click on the drop-down arrow next to your *Username*
     - Click on *My Reservations*
 
    ![my reservation](images/my-reservations.png "my reservation")
