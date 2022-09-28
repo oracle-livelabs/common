@@ -29,7 +29,7 @@ For ease of execution of this workshop, your VM instance has been pre-configured
 
     ![my reservation completed](images/my-reservation-completed.png "my reservation completed")
 
-3. Click on **Login info** and then on **Remote Desktop** link.
+3. Click on **Login info** and then on **Launch Remote Desktop** link.
 
     ![Login information](images/login-info.png "Login Information")
 
@@ -45,6 +45,11 @@ For ease of execution of this workshop, your VM instance has been pre-configured
 
     ![site error message](images/novnc-deceptive-site-error.png "site error message ")
 
+4. During the lifetime of your environment, you may return to this page to request an extension. To further extend the duration of your reservation, click on **Extend Workshop Reservation**
+
+    ![Extend Workshop Reservation](images/extend-my-reservation.png "Extend Workshop Reservation")
+
+    >**Note:**  You may extend your reservation up to 4 times yielding a maximum lifetime equal to double of the initial duration.
 
 You may now proceed to the next lab.
 

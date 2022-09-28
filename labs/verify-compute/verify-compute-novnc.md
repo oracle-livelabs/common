@@ -17,16 +17,20 @@ This lab assumes you have:
 
 ## Task 1: Access the Graphical Remote Desktop
 For ease of execution of this workshop, your VM instance has been pre-configured with a remote graphical desktop accessible using any modern browser on your laptop or workstation. Proceed as detailed below to login.
- 
-1. Now that your instance has been provisioned, navigate to **My Reservations**, find the request you submitted from the list displayed (only one item will be displayed if this is your first request).
+
+1. Now that your instance has been provisioned, if not already on **My Reservations** page, then:
+    - Click on the drop-down arrow next to your *Username*,
+    - Click on *My Reservations*
 
    ![my reservation](images/my-reservations.png "my reservation")
 
-2. Click on **Launch Workshop** after the reservation provisioning has been completed.
+2. Find the request you submitted from the list displayed (only one item will be displayed if this is your first request), then click on **Launch Workshop**
 
-    ![my reservation completed](images/my-reservation-completed.png "my reservation completed") 
+    ![my reservation completed](images/my-reservation-completed.png "my reservation completed")
 
-3. Click on **Login info** and then on **Remote Desktop** link.
+    >**Note:** The *Launch Workshop* link will be visible only when provisioning is completed
+
+3. Click on **Login info** and then on **Launch Remote Desktop** link.
 
     ![Login information](images/login-info.png "Login Information")
 
@@ -41,6 +45,12 @@ For ease of execution of this workshop, your VM instance has been pre-configured
     You can safely ignore and proceed by clicking on **Details**, and finally on **Visit this unsafe site**.
 
     ![site error message](images/novnc-deceptive-site-error.png "site error message ")
+
+4. During the lifetime of your environment, you may return to this page to request an extension. To further extend the duration of your reservation, click on **Extend Workshop Reservation**
+
+    ![Extend Workshop Reservation](images/extend-my-reservation.png "Extend Workshop Reservation")
+
+    >**Note:**  You may extend your reservation up to 4 times yielding a maximum lifetime equal to double of the initial duration.
 
 
 You may now proceed to the next lab.
