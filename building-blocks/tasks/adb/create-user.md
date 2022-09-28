@@ -11,17 +11,17 @@ When you create a new Autonomous Database, you automatically get an account call
 
     ![Click Database Actions](images/launchdbactions.png " ")
 
-You will automatically log in as the ADMIN user.
+You will automatically log in as the ADMIN user, or you may be prompted to provide the username (admin) and password of the administrator you specified when you created the Autonomous Database instance.
 
-2. On the Database Actions home page, click the **Database Users** card.
+2. On the Database Actions home page, under **Administration**, click the **Database Users** card.
 
     ![Database Users card of the Database Actions home page](images/db-actions-dbuser-card.png " ")
 
-3.  You can see that your ADMIN user appears as the current user.  On the right-hand side, click the **+ Create User** button.
+3.  You can see that your ADMIN user appears as the current user. On the right-hand side, click the **+ Create User** button.
 
     ![Create User button highlighted on the Database Users page](images/db-actions-click-create-user.png " ")
 
-5. The **Create User**  form will appear on the right-hand side of your browser window. Use the settings below to complete the form:
+4. The **Create User** form will appear on the right-hand side of your browser window. Use the settings below to complete the form:
 
  - username: [](var:db_user_name)
  - password: create a suitably strong password, and make note of it, as you will need to provide it in an upcoming step.

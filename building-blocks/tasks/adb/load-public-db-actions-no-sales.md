@@ -4,7 +4,7 @@
         "description":"Uses Database Actions to load data from public object storage buckets. It loads the following tables:<ul><li>customer_contact</li><li>genre</li><li>pizza location</li></ul><p>To load sales_sample, use task **Load data from public buckets using Database Actions**"
     }
 -->
-1. Under **What do you want to do with your data?** select **LOAD DATA**, and under **Where is your data?** select **CLOUD STORE**, then click **Next**
+1. In the **Database Actions Launchpad** home page, under the **Data Tools** section, select the **DATA LOAD** card. Under **What do you want to do with your data?** select **LOAD DATA**, and under **Where is your data?** select **CLOUD STORE**, then click **Next**
 
     ![Select Load Data, then Cloud Store](images/select-load-data-from-cloud-store.png)
 
@@ -16,7 +16,7 @@
     </copy>
     ```
 
-    You will see a list of folders on the left side from which you can drag and drop to the data loading job.
+    Press **Enter** on your keyboard. You will see a list of folders on the left side from which you can drag and drop to the data loading job.
 
     ![The Load Cloud Object page appears](images/load-cloud-object-page-appears.png)
 
@@ -47,5 +47,5 @@
 12. Let's do a quick review of the loaded data. Click the **Table** tab to view the **genre** data:
 
     ![View genre data](images/adb-dataload-genre-table.png)
-    
+
     The data looks good! Click **Close** to exit the **genre** task and then click **Done** to exit the DATA LOAD tool and return to the Database Actions Launchpad.
