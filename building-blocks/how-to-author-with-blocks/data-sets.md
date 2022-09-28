@@ -176,7 +176,7 @@ Run the following script in a SQL Worksheet (must be ADB) to install the utility
   <copy>
   declare
       l_git varchar2(4000);
-      l_repo_name varchar2(100) := 'adb';
+      l_repo_name varchar2(100) := 'common';
       l_owner varchar2(100) := 'martygubar';
       l_package_file varchar2(200) := 'building-blocks/setup/workshop-setup.sql';
   begin

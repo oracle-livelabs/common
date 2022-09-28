@@ -3,9 +3,12 @@
  "include": {
      "adb-connect-with-sql-worksheet-body.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-body.md",
      "adb-create-load-json-collection.md":"/common/building-blocks/tasks/adb/create-load-json-collection.md",
+     "adb-create-user.md":"/common/building-blocks/tasks/adb/create-user.md",
      "adb-goto-data-load-utility.md":"/common/building-blocks/tasks/adb/goto-data-load-utility.md",
      "adb-goto-service-body.md":"/common/building-blocks/tasks/adb/goto-service-body.md",
      "adb-goto-sql-worksheet.md":"/common/building-blocks/tasks/adb/goto-sql-worksheet.md",
+     "adb-load-public-db-actions-no-sales.md":"/common/building-blocks/tasks/adb/load-public-db-actions-no-sales.md",
+     "adb-load-public-db-actions.md":"/common/building-blocks/tasks/adb/load-public-db-actions.md",
      "adb-provision-body.md":"/common/building-blocks/tasks/adb/provision-body.md",
      "adb-query-json-arrays.md":"/common/building-blocks/tasks/adb/query-json-arrays.md",
      "adb-query-json-simple.md":"/common/building-blocks/tasks/adb/query-json-simple.md",
@@ -21,7 +24,7 @@
      {
          "title": "Get Started",
          "description": "Get a Free Trial",
-         "filename": "https://raw.githubusercontent.com/oracle/learning-library/master/common/labs/cloud-login/cloud-login.md"
+         "filename": "https://oracle-livelabs.github.io/common/labs/cloud-login/cloud-login.md"
      },
      {
          "title": "Add Workshop Utilities",
