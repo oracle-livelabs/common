@@ -25,7 +25,7 @@ In this workshop, you will learn how to:
 ### Prerequisites
 
 This lab assumes you have:
-* An Oracle account
+* An Oracle Cloud Infrastructure (OCI) account
 * Understanding of Continuous Integration / Continuous deployment (CI/CD) Fundamentals
 * Working Knowledge of Linux basic commands, Kubernetes, Cloud Networking
 
