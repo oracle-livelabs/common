@@ -427,9 +427,41 @@ Finally, it's time to create a few project files and put the CI/CD pipeline to t
   ![Ingress Resource](images/ingress2.png)
 
 
+
+## Task 7: Import GitLab's Demo Projects from Oracle CloudWorld 2022 
+
+The [GitLab's Demo projects](https://gitlab.com/gitlab-com/alliances/oracle/sandbox-projects/cloudworld-2022) used at CloudWorld 2022 are publicly available and can be imported into the customer's account. Please use the process below to import the projects and play around for further hands-on experience.
+
+1. Browse to the project link and choose the project that needs to be imported
+
+  ![Import Project](images/fork1.png)
+
+2. In the project's main page click on the **Clone** link on the left side of the screen. Copy the URL from **Clone with HTTPS** option
+
+  ![Import Project](images/fork2.png)
+
+3. In your GitLab account click on **New project** to create a new project
+
+  ![Import Project](images/fork3.png)
+
+4. Create a new project by importing an existing project
+
+  ![Import Project](images/fork4.png)
+
+5. Import a project by selecting **Repository by URL** option. Paste the URL copied earlier and hit **Create project**
+
+  ![Import Project](images/fork5.png)
+
+6. The project is now successfully imported. Feel free to explore and deploy the project into OCI
+
+  ![Import Project](images/fork6.png)
+
+
+ 
 ## Learn More
 
 * [Install GitLab agent for Kubernetes](https://docs.gitlab.com/ee/user/clusters/agent/install/)
+* [Projects from GitLab's Demo at Oracle CloudWorld 2022](https://gitlab.com/gitlab-com/alliances/oracle/sandbox-projects/cloudworld-2022)
 
 
 ## Acknowledgements
