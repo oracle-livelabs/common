@@ -9,7 +9,7 @@ Estimated Workshop Time: 3 hours 15 minutes (This estimate is for the entire wor
 
 * Introduction to GitLab
 
-  [What is GitLab](youtube:MqL6BMOySIQ)
+  [Build Software Faster with The One DevOps Platform by GitLab](youtube:LTSSsn_xy3E)
 
 * GitLab — A Single Application for your Entire Software Development Lifecycle (SDLC)
 
