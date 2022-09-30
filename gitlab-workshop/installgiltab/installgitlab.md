@@ -118,7 +118,7 @@ Enable the Ingress rules on port 80 & 443 in the security list of the **Public S
 
 
     Thank you for installing GitLab!
-    GitLab should be available at https://gitlab.cloudlab.site
+    GitLab should be available at https://&lt;domain-name&gt;
 
     For a comprehensive list of configuration options please see the Omnibus GitLab readme
     https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md

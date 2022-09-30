@@ -94,13 +94,13 @@ The ssh keys on MacOS can be created using the **Terminal** application. If you 
   ```
   <copy>ssh-keygen -t rsa</copy>
   Generating public/private rsa key pair.
-  Enter file in which to save the key (/Users/fnafey/.ssh/id_rsa):
+  Enter file in which to save the key (/Users/demo/.ssh/id_rsa):
   Enter passphrase (empty for no passphrase):
   Enter same passphrase again:
-  Your identification has been saved in /Users/fnafey/.ssh/id_rsa
-  Your public key has been saved in /Users/fnafey/.ssh/id_rsa.pub
+  Your identification has been saved in /Users/demo/.ssh/id_rsa
+  Your public key has been saved in /Users/demo/.ssh/id_rsa.pub
   The key fingerprint is:
-  SHA256:3UYprkLRvQI/QdKyOoeghc/ow/fx0S2noUBnFvzJeLk fnafey@fnafey-mac
+  SHA256:3UYprkLRvQI/QdKyOoeghc/ow/fx0S2noUBnFvzJeLk demo@demo-mac
   The key's randomart image is:
   +---[RSA 3072]----+
   |      ...        |
@@ -177,12 +177,12 @@ Click the **Navigation Menu** in the upper left, navigate to **Compute**, select
 2. Connect to the compute Instance on MacOS / Linux
 
     ```
-    ssh opc@130.61.225.51
-    The authenticity of host '130.61.225.51 (130.61.225.51)' can't be established.
+    ssh opc@<public-ip-address>
+    The authenticity of host '<public-ip-address> (<public-ip-address>)' can't be established.
     ED25519 key fingerprint is SHA256:jOKuEsU9C9Lb/cL9YH/vN/4JuLCRijHl7oV5ZLo/4jI.
     This key is not known by any other names
     Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-    Warning: Permanently added '130.61.225.51' (ED25519) to the list of known hosts.
+    Warning: Permanently added '<public-ip-address>' (ED25519) to the list of known hosts.
     Activate the web console with: systemctl enable --now cockpit.socket
 
     ```
@@ -240,7 +240,7 @@ If you are using an external DNS management service, then configure the Public I
 
     Non-authoritative answer:
     Name:	gitlab.cloudlab.site
-    Address: 130.61.225.51
+    Address: &lt;public-ip-address&gt;
     ```
 
 
