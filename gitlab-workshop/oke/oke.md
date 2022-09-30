@@ -182,7 +182,7 @@ OCI CLI installation is required to access the OKE cluster.
     ```
     <copy>oci os ns get</copy>
     {
-      "data": "orasenatdpltintegration01"
+      "data": "&lt;object-storage-namespace&gt;"
     }
     ```
 
@@ -190,7 +190,7 @@ OCI CLI installation is required to access the OKE cluster.
 ## Task 6: Access the OKE Cluster
 1. To access the Kubernetes cluster access details, click the **Navigation Menu** in the upper left, navigate to **Developer Services** , and select **Kubernetes Clusters (OKE)**. Click the cluster name created earlier and click on **Access Cluster**. This shows all the steps needed to be performed on a machine to access the OKE Cluster successfully. Since a Public IP was assigned to the Kubernetes API endpoint, therefore the cluster would be accessible from anywhere.
 
-* **Copy** the instructions to access the kubeconfig for your cluster via the VCN-Native public endpoint.
+* **Copy** the instructions to access the kubeconfig for your cluster using the **VCN-Native public endpoint**
 
   ![accessoke](images/access_oke1.png)
 
@@ -242,7 +242,7 @@ If your Oracle Cloud Infrastructure user is a tenancy administrator, skip this s
 
   
     ```
-    kubectl create clusterrolebinding gitlab-crb --clusterrole=cluster-admin --user=ocid1.user.oc1..aaaaaaaayk22dlcwymd7dvo4uqw56fg5a2m6drjrgktft5melvr6vwez7uda
+    <copy>kubectl create clusterrolebinding gitlab-crb --clusterrole=cluster-admin --user=</copy> &lt;user-OCID&gt;
   
     clusterrolebinding.rbac.authorization.k8s.io/gitlab-crb created
     ```
@@ -281,7 +281,7 @@ If your Oracle Cloud Infrastructure user is a tenancy administrator, skip this s
 	```
   <copy>kubectl get svc -n ingress-nginx</copy>
   NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                      AGE
-  ingress-nginx-controller             LoadBalancer   10.96.94.169    129.159.207.127   80:31334/TCP,443:31826/TCP   45s
+  ingress-nginx-controller             LoadBalancer   10.96.94.169    &lt;public-ip&gt;       80:31334/TCP,443:31826/TCP   45s
   ingress-nginx-controller-admission   ClusterIP      10.96.149.252   &lt;none&gt;            443/TCP                      45s
 	```
 

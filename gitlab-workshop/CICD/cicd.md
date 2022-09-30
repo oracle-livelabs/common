@@ -405,7 +405,7 @@ Finally, it's time to create a few project files and put the CI/CD pipeline to t
     Name:             webapp-ingress
     Labels:           &lt;none&gt;
     Namespace:        default
-    Address:          129.159.207.127
+    Address:          &lt;load-balancer-pulic-ip&gt;
     Ingress Class:    <none>
     Default backend:  &lt;default&gt;
     Rules:
