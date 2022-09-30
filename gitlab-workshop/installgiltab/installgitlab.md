@@ -81,7 +81,7 @@ Enable the Ingress rules on port 80 & 443 in the security list of the **Public S
     ```
     <copy>sudo EXTERNAL_URL="https://<domain-name>" yum install -y gitlab-ee</copy>
     ```
-    > **Note:** *Make sure to provide a publicly routable DNS name for your GitLab server and use https for the configuration. For https:// URLs, GitLab will automatically request a certificate with Let's Encrypt, which requires inbound HTTP access and a valid hostname. You can also use your own certificate or just use http:// (without the s ). If you would like to specify a custom password for the initial administrator user ( root ), check the documentation. If a password is not specified, a random password will be automatically generated.*
+    > **Note:** *Make sure to provide a Fully Qualified Domain Name (FQDN) for your GitLab server and use https for the configuration. For https:// URLs, GitLab will automatically request a certificate with Let's Encrypt, which requires inbound HTTP access (on port 80) and a valid hostname. You can also use your own certificate or just use http:// (without the s ). If you would like to specify a custom password for the initial administrator user ( root ), check the documentation. If a password is not specified, a random password will be automatically generated.*
 
 3. Abridged output of the installation process:
     ```
@@ -118,7 +118,7 @@ Enable the Ingress rules on port 80 & 443 in the security list of the **Public S
 
 
     Thank you for installing GitLab!
-    GitLab should be available at https://&lt;domain-name&gt;
+    GitLab should be available at https://<domain-name>
 
     For a comprehensive list of configuration options please see the Omnibus GitLab readme
     https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/README.md

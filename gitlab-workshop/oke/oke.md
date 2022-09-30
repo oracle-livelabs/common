@@ -230,7 +230,7 @@ OCI CLI installation is required to access the OKE cluster.
 
 
 ## Task 8: Setup an Ingress Controller on OKE Cluster
-An Ingress controller is a specialized load balancer for Kubernetes that is responsible for accepting the user traffic from the internet and load balances it to pods/containers running inside the Kubernetes cluster
+An Ingress controller is a specialized load balancer for Kubernetes that is responsible for accepting the user traffic from the internet and load balances it to pods/containers running inside the Kubernetes cluster.
 
 1. To get the user OCID, Navigate to Upper Right-Hand corner of the OCI Console, and click on **Profile**, and select **User settings** from the menu.  Copy the User **OCID** from the console.
 
@@ -238,7 +238,7 @@ An Ingress controller is a specialized load balancer for Kubernetes that is resp
 
 2. Create the Access Rules for the Ingress Controller
 Note that you must set up your own kubeconfig file. You cannot access a cluster using a kubeconfig file that a different user set up. Replace the User OCID with the one for your account.
-If your Oracle Cloud Infrastructure user is a tenancy administrator, skip this step and go straight to Creating the Service Account, and the Ingress Controller.
+*If your Oracle Cloud Infrastructure user is a tenancy administrator, skip this step and go straight to Creating the Service Account, and the Ingress Controller.*
 
   
     ```
