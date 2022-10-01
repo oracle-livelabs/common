@@ -130,7 +130,7 @@ To clone the forked repository:
 
   ![Synchronized repositories.](./images/fetch-origin.png " ")
   
-  ## Task 4: Folder structure of the Oracle LiveLabs
+## Task 4: Folder structure of the Oracle LiveLabs
 
   The following image shows a folder structure of the **sample-workshop** that is opened in the **Visual Studio Code** Editor. Inside each repository in [Oracle LiveLabs](https://github.com/oracle-livelabs), there is a **sample-livelabs-templates**  folder. You can see this structure at the following URL [https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop](https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop). You can get started with workshop development by copying this sample workshop folder.
 
@@ -140,7 +140,7 @@ To clone the forked repository:
     The following describes the components of the above example:
     * The root folder of this example is the name of the workshop, **sample-workshop**. Direct links to the workshop files will be coming soon.
 
-  >**Note:** You will be creating your project folder anywhere within your cloned repository. If you have not done so, please look into the [Oracle LiveLabs GitHub organization](https://github.com/oracle-livelabs) to see different repositories and decide on a repository for your workshop. If no existing repository fits your workshop, please contact our LiveLabs team. (See more details about this back in Task 1.)
+  > **Note:** You will be creating your project folder anywhere within your cloned repository. If you have not done so, please look into the [Oracle LiveLabs GitHub organization](https://github.com/oracle-livelabs) to see different repositories and decide on a repository for your workshop. If no existing repository fits your workshop, please contact our LiveLabs team. (See more details about this back in Task 1.)
 
     * Each lab has its own folder, for example, **data-load**, **introduction**, **provision**, etc., each containing:
       * a **files** folder (optional) that contains the files used in this lab.
@@ -157,7 +157,7 @@ To clone the forked repository:
 
       ![Sample manifest json file.](./images/manifest.png " ")
 
-## Task 6: Commit your changes in your clone
+## Task 4: Commit your changes in your clone
 When you create, delete, or modify assets in your clone (local copy), you should commit (save) those changes to your clone, and then push those changes from your clone to your fork. Then these changes get saved to your forked repository.
 
 >**Note:** Make sure you are performing the following steps **off VPN**.
@@ -174,8 +174,7 @@ To commit your changes:
 
   ![Push updated content to the origin.](./images/git-hub-commit-push-origin.png " ")
 
-
-## Task 7: Set up GitHub pages for your fork to test your content
+## Task 5: Set up GitHub pages for your fork to test your content
 
 After you upload the content from your clone to your fork, request your review team members to review this content by providing them with access to **your GitHub Pages site URL** (or the URL of your forked repository).
 
@@ -205,9 +204,9 @@ To publish your GitHub Pages site:
 6. This may take a few minutes to complete. After the GitHub Pages are enabled, the message under **GitHub Pages** changes to **Your site  is published at https://arabellayao.github.io/em-omc/**
   ![Changes are published.](./images/git-hub-stage-git-hub-pages-settings-page-published.png " ")
 
-## Task 8: Access your workshop on GitHub
+## Task 6: Access your workshop on GitHub
 
-After your pull request is complete, wait a few minutes and perform the steps below. Github pages take approximately 5 minutes for the pages to be copied
+After your pull request is complete, wait a few minutes and perform the steps below. Github pages take approximately 5 minutes for the pages to be copied.
 
 1. This workshop for example is located in the link below.
 
