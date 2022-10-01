@@ -2,7 +2,7 @@
 
 Welcome to LiveLabs and creating workshops to give practical hands on experiences for Oracle Products and technologies. This is the place to demonstrate use cases and allow users to explore and gain valuable knowledge with Oracle Cloud, Applications and Database. 
 
-This workshop is to help walk you through the process of creating your own workshop. It will walk you through all of the steps, processes even how to do quality checks to build a successful workshop. This workshop will also explain the workflow using Workshopshop Management System (WMS), from development to publishing. 
+This workshop is to help walk you through the process of creating your own workshop. It will walk you through all of the steps, processes even how to do quality checks to build a successful workshop. This workshop will also explain the workflow using Workshop Management System (WMS), from development to publishing. 
 
 LiveLabs Overview
 [](youtube:lHriX403Oz4)
@@ -21,7 +21,7 @@ Before you get started with the development of labs and workshop, check out exis
 
 * [WMS](https://bit.ly/oraclewms)
 
-Also get familiar with WMS to see the process, check out videos under new here and need help sections of the menu. Use the sample workshop that is found in https://github.com/oracle-livelabs/common under the  sample-livelabs-templates directory. (Steps will be provided later on settung up your GitHub repos). This common repository also has a set of common images that you can use as part of your workshop.
+Also get familiar with WMS to see the process, check out videos under new here and need help sections of the menu. Use the sample workshop that is found in https://github.com/oracle-livelabs/common under the  sample-livelabs-templates directory. (Steps will be provided later on setting up your GitHub repos). This common repository also has a set of common images that you can use as part of your workshop.
 
 Another important step is to take look at the QA document since it provides how to do images, format markdown and gets you started in the right direction for the workshop standards. We also have a set of common images that are included in the common directory for you to use as part of your workshop.
 

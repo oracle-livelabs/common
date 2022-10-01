@@ -20,6 +20,7 @@ Watch this video below on how to self-QA your workshop.
 
 
 ## Task 1: Share your workshop for review
+
 After you have successfully set up your GitHub pages, you can share your workshop for review.
 To share and view your workshop:
 1. In the browser, enter the URL of your GitHub Pages. For example, if I want to share a workshop in the *em-omc* folder for review, the GitHub Pages URL is [https://arabellayao.github.io/em-omc/](https://arabellayao.github.io/em-omc/). Please replace *em-omc* with the repository of your workshop.
