@@ -205,6 +205,18 @@ This concludes this lab. You may now **proceed to the next lab**.
       "age": 25
     }
     ```
+5. You can hide and reveal a code snippet, to challenge the users first, but still provide them with support when they get stumped.
+
+  ![Code Block Reveal](./images/code-block-reveal.png " ")
+  <details>
+        <summary>*Reveal code block*</summary>
+        ```python
+        <copy>
+        def getPrice():
+        ...
+        return jsonify(product_price)</copy>
+        ```
+  </details>
 
 ## Task 9: Useful Markdown Syntax Cheatsheet
 

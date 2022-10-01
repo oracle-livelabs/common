@@ -294,6 +294,19 @@ The LintChecker is a great javascript function for QAing that you should take ad
     }
     ```
 
+5. You can hide and reveal a code snippet, to challenge the users first, but still provide them with support when they get stumped.
+
+  ![Code Block Reveal](./images/code-block-reveal.png " ")
+  <details>
+        <summary>*Reveal code block*</summary>
+        ```python
+        <copy>
+        def getPrice():
+        ...
+        return jsonify(product_price)</copy>
+        ```
+  </details>
+
 **Reminder** Download this handy [Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.com/p/Qfg5WZ_O9yDet7NlaJPT76s9o_Yy0VVQ3LDh34c0HTrietIqqKq-m9zukdqiRymL/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
 
 You may now **proceed to the next lab**.
