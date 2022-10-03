@@ -35,7 +35,7 @@
         },
                 {
             "title": "Lab 5: Implement GitLab CI/CD Pipeline",
-            "filename": "../../CICD/cicd.md"
+            "filename": "../../cicd/cicd.md"
         },
         {
             "title": "Other LiveLabs you might like",
