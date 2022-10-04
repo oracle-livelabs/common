@@ -23,6 +23,10 @@
             "filename": "../../sandbox/sandbox.md"
         },
         {
+            "title": "Hands-on labs using CloudWorld-specific SSH keys",
+            "filename": "../../sshconnect/sshconnect.md"
+        },
+        {
             "title": "My session runs on a special environment",
             "filename": "../../special-env/special-env.md"
         },

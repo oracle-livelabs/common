@@ -24,6 +24,10 @@
         {
             "title": "Lab 4: General FAQ",
             "filename": "../../general-faq/general-faq.md"
+        },
+        {
+            "title": "CloudWorld 2022 Support",
+            "filename": "../../ocwsupportlab/ocwsupportlab.md"
         }
     ]
 }
