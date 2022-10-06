@@ -8,7 +8,7 @@
 **Add to your manifest.json:**
 ```
 "include": {
-     "adb-connect-with-sql-worksheet-body.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-body.md
+     "adb-connect-with-sql-worksheet-body.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-body.md"
 }
 ```
 
@@ -30,7 +30,7 @@
 **Add to your manifest.json:**
 ```
 "include": {
-     "adb-create-load-json-collection.md":"/common/building-blocks/tasks/adb/create-load-json-collection.md
+     "adb-create-load-json-collection.md":"/common/building-blocks/tasks/adb/create-load-json-collection.md"
 }
 ```
 
@@ -43,6 +43,28 @@
  
 [](include:adb-create-load-json-collection.md)
  
+## Create ADB User using Database Actions
+**Markdown file location:**
+```
+/common/building-blocks/tasks/adb/create-user.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "adb-create-user.md":"/common/building-blocks/tasks/adb/create-user.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:adb-create-user.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:adb-create-user.md)
+ 
 ## Go to Data Load Utility Database Action
 **Markdown file location:**
 ```
@@ -52,7 +74,7 @@
 **Add to your manifest.json:**
 ```
 "include": {
-     "adb-goto-data-load-utility.md":"/common/building-blocks/tasks/adb/goto-data-load-utility.md
+     "adb-goto-data-load-utility.md":"/common/building-blocks/tasks/adb/goto-data-load-utility.md"
 }
 ```
 
@@ -74,7 +96,7 @@
 **Add to your manifest.json:**
 ```
 "include": {
-     "adb-goto-service-body.md":"/common/building-blocks/tasks/adb/goto-service-body.md
+     "adb-goto-service-body.md":"/common/building-blocks/tasks/adb/goto-service-body.md"
 }
 ```
 
@@ -96,7 +118,7 @@
 **Add to your manifest.json:**
 ```
 "include": {
-     "adb-goto-sql-worksheet.md":"/common/building-blocks/tasks/adb/goto-sql-worksheet.md
+     "adb-goto-sql-worksheet.md":"/common/building-blocks/tasks/adb/goto-sql-worksheet.md"
 }
 ```
 
@@ -109,6 +131,50 @@
  
 [](include:adb-goto-sql-worksheet.md)
  
+## Load data from public buckets using Database Actions. Sales data not included.
+**Markdown file location:**
+```
+/common/building-blocks/tasks/adb/load-public-db-actions-no-sales.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "adb-load-public-db-actions-no-sales.md":"/common/building-blocks/tasks/adb/load-public-db-actions-no-sales.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:adb-load-public-db-actions-no-sales.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:adb-load-public-db-actions-no-sales.md)
+ 
+## Load data from public buckets using Database Actions
+**Markdown file location:**
+```
+/common/building-blocks/tasks/adb/load-public-db-actions.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "adb-load-public-db-actions.md":"/common/building-blocks/tasks/adb/load-public-db-actions.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:adb-load-public-db-actions.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:adb-load-public-db-actions.md)
+ 
 ## Provision Autonomous Database
 **Markdown file location:**
 ```
@@ -118,7 +184,7 @@
 **Add to your manifest.json:**
 ```
 "include": {
-     "adb-provision-body.md":"/common/building-blocks/tasks/adb/provision-body.md
+     "adb-provision-body.md":"/common/building-blocks/tasks/adb/provision-body.md"
 }
 ```
 
@@ -140,7 +206,7 @@
 **Add to your manifest.json:**
 ```
 "include": {
-     "adb-query-json-arrays.md":"/common/building-blocks/tasks/adb/query-json-arrays.md
+     "adb-query-json-arrays.md":"/common/building-blocks/tasks/adb/query-json-arrays.md"
 }
 ```
 
@@ -162,7 +228,7 @@
 **Add to your manifest.json:**
 ```
 "include": {
-     "adb-query-json-simple.md":"/common/building-blocks/tasks/adb/query-json-simple.md
+     "adb-query-json-simple.md":"/common/building-blocks/tasks/adb/query-json-simple.md"
 }
 ```
 
@@ -184,7 +250,7 @@
 **Add to your manifest.json:**
 ```
 "include": {
-     "adb-query-object-store-contents-with-sql.md":"/common/building-blocks/tasks/adb/query-object-store-contents-with-sql.md
+     "adb-query-object-store-contents-with-sql.md":"/common/building-blocks/tasks/adb/query-object-store-contents-with-sql.md"
 }
 ```
 
@@ -206,7 +272,7 @@
 **Add to your manifest.json:**
 ```
 "include": {
-     "adb-query-spatial.md":"/common/building-blocks/tasks/adb/query-spatial.md
+     "adb-query-spatial.md":"/common/building-blocks/tasks/adb/query-spatial.md"
 }
 ```
 
@@ -228,7 +294,7 @@
 **Add to your manifest.json:**
 ```
 "include": {
-     "adb-use-partitioned-external-table-body.md":"/common/building-blocks/tasks/adb/use-partitioned-external-table-body.md
+     "adb-use-partitioned-external-table-body.md":"/common/building-blocks/tasks/adb/use-partitioned-external-table-body.md"
 }
 ```
 

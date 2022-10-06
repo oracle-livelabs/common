@@ -131,6 +131,14 @@ To create a Pull Request:
     ![Include WMS id in pull request title.](./images/git-hub-pull-request-title-comment.png " ")
   A status page is displayed indicating that you have created a pull request along with the request number (for example, #1770), that it is pending review, and that merging is blocked.
 
+5. Scroll down the page to check 1) your branch does not have merge conflicts; 2) your branch is up-to-date. If your PR has any of those two issues, our LiveLabs team will not approve or merge your PR.
+
+    ![Merge Conflicts](./images/github-conflicts.png " ")
+
+    To solve merge conflicts, go to *Task 1: Get the Latest Updates from Production* and *Appendix -> Issue 3: GitHub Merge Conflicts*.
+
+    To make sure your branch is up-to-date, go to *Task 1: Get the Latest Updates from Production*.
+
   When your pull request is approved, the page gets updated with information about your commits being approved and merged into the **upstream/main** repository (production).
 
   When the pull request is approved and merged into the **upstream/main** repository, two emails are sent to the e-mail account associated with your GitHub account.
@@ -210,17 +218,15 @@ You have finished developing your workshop. To publish your workshop, you still 
 
   ![Request Publishing](images/publishing-tab.png)
 
-2. Fill out publishing information, including **Publish Type** and **Workshop Time**. Click **?** beside the Publishing Type to see different types of publishing. Turn on appropriate tenancies for your workshop: **Paid Tier Enabled?**, and/or **Green Button Enabled?**, and fill out appropriate **URL**s. Click **Create** to submit your publishing request. Our LiveLabs team will either approve your publishing request or ask you for more information within 2 business days.
+2. Fill out publishing information, including **Publish Type** and **Workshop Time**. Click **?** beside the Publishing Type to see different types of publishing. Turn on appropriate buttons for your workshop: **Brown Button Enabled?**, or **LiveLabs Sprint Enabled?**, and fill out appropriate **URL**s.
 
-    - Always Free On? - Turn off this button. This button will be deleted soon.
+    - Brown Button Enabled? - Can this workshop be done in a customer tenancy?
 
-    - Free Tier On? - Turn off this button. This button will be deleted soon.
-
-    - Paid Tier On? - Can this workshop be done in a customer tenancy?
-
-    - Green Button On? - Can this workshop be done in a registered LiveLabs tenancy, a.k.a Green Button? If you want to know more about the green button, or request one for your workshop, please see *Task 10: Request the Green Button* below.
+    - LiveLabs Sprint Enabled? - See **(Optional) Lab 6: Develop LiveLabs Sprints** on the left menu for more information.
 
     ![Publishing Information](images/livelabs-publishing.png " ")
+
+    If you want to request a green button (or a sandbox environment) for your workshop, please see **(Optional) Task 10: Request the Green Button** below for more information.
 
 3. Click **Create** or **Save**.
 
@@ -480,4 +486,4 @@ If you have multiple Oracle LiveLabs repositories, you need to switch to the rep
     * Arabella Yao, Product Manager, Database
     * Madhusudhan Rao, Product Manager, Database
 
-* **Last Updated By/Date:** Arabella Yao, August 2022
+* **Last Updated By/Date:** Arabella Yao, September 2022

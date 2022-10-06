@@ -20,7 +20,7 @@ In this lab, you will:
 * Create an account on News API (https://newsapi.org/) and retrieve an API key
 * Create a PLSQL function that retrieves the latest news for actors
 * Perform a sentiment analysis on the article descriptions
-* Which actors are generating buzz - both good and bad?
+* Identify which actors are generating buzz - both good and bad
 
 
 ### Prerequisites
@@ -48,7 +48,15 @@ The News API provides a simple REST API to retrive news from various sources. Ge
 
 ## Task 2: Create a PLSQL function that retrieves news for an actor
 Now that you have the API key, create a PLSQL function that queries the REST endpoint using the parameters above.
-1. Go to SQL Worksheet.
+
+1. Navigate to the Database Actions' SQL Worksheet
+    
+    Go to Database Actions from the Autonomous Database OCI console:
+    ![Go to DB Actions](/common/building-blocks/tasks/adb/images/adb-dbactions-goto.png "Go to DB Actions")
+
+    Then, select SQL in the Launchpad:
+    ![Click SQL](/common/building-blocks/tasks/adb/images/adb-dbactions-click-sql.png "Click SQL")
+
 2. Ensure that the public REST endpoint is accessible by our PL/SQL function. Copy and paste the following API call into SQL Worksheet to update the access control list. Click **Run Script**. This will allow the ADMIN user to call out to any public host.
     ```
     <copy>
@@ -68,7 +76,8 @@ Now that you have the API key, create a PLSQL function that queries the REST end
 
     ```
     <copy>
-    set define off;  -- turns off prompting for parameter values
+    -- turn off prompting for parameter values
+    set define off;  
 
     create or replace function get_news (
                                 news_search in varchar2 default '+"Tom Hanks"',
