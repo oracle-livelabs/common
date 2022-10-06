@@ -421,7 +421,7 @@ Times
 * Thursday 10/20 - 8AM – 1PM
 
 Have a look at the map: (Still need to add)
-![Venetian Level 2 Map](https://google.com)
+![Venetian Level 2 Map](./images/venetian-map.png)
 
 ## Learn More
 
