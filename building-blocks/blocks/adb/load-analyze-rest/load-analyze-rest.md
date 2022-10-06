@@ -76,7 +76,8 @@ Now that you have the API key, create a PLSQL function that queries the REST end
 
     ```
     <copy>
-    set define off;  -- turns off prompting for parameter values
+    -- turn off prompting for parameter values
+    set define off;  
 
     create or replace function get_news (
                                 news_search in varchar2 default '+"Tom Hanks"',
