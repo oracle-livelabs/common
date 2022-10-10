@@ -306,7 +306,7 @@ If your workshop includes one or more Oracle Databases or WebLogic Server, proce
 2. Run the following block to create a services:
 
     - *oracle-database.service* - Manages all databases with an in entry in */etc/oratab* set to *Y*
-    - *oracle-db-listener.service* - Manages additional listeners beside *1521* and with an entry in *$HOME/scripts/livelabs/listener-tab* set to *Y*
+    - *oracle-db-listener.service* - Manages additional listeners beside *1521* and with an entry in *~oracle/scripts/livelabs/listener-tab* set to *Y*
 
     ```
     <copy>
@@ -316,15 +316,18 @@ If your workshop includes one or more Oracle Databases or WebLogic Server, proce
     unzip -o  create-services-multi-db.zip -d ll_tmp
     cd ll_tmp/
     chmod +x *.sh .*.sh
-    sudo ./create-services-multi-db.sh
+    ./create-services-multi-db.sh
     </copy>
     ```
 
-3. For any additional DB listener other than *LISTENER* or having any other name but using port *1521*, add to *$HOME/scripts/livelabs/listener-tab* and set the flag to "*Y*"
+    ![Create Database Services](./images/create-db-multi-services.png "Create Database Services")
+
+3. For any additional DB listener other than *LISTENER* or having any other name but using port *1521*, proceed as indicated in the output from above execution to set the flag to "*Y*"
 
     ```
-    <copy>
-    vi $HOME/scripts/livelabs/listener-tab
+    e.g.
+   <copy>
+    vi /home/oracle/scripts/livelabs/listener-tab
     </copy>
     ```
 
@@ -362,7 +365,7 @@ If your workshop includes one or more Oracle Databases or WebLogic Server, proce
     unzip -o  create-services-weblogic.zip -d ll_tmp
     cd ll_tmp/
     chmod +x *.sh .*.sh
-    sudo ./create-services-weblogic.sh
+    ./create-services-weblogic.sh
     </copy>
     ```
 
