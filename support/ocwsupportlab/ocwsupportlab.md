@@ -201,7 +201,15 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
       * ocw2022_rsa.pub (public key)
       * ocw2022-putty.ppk (private key in Putty format - for Windows only)
 
-3. Connect to the remote server using SSH
+4. Modify file permissions
+
+    ```
+    <copy>
+    chmod 600 ocw2022_rsa
+    </copy>
+    ```
+
+5. Connect to the remote server using SSH
 
     ```
     <copy>
@@ -246,7 +254,16 @@ If you are using MacOS, you can also connect using a terminal application such a
       * ocw2022_rsa.pub (public key)
       * ocw2022-putty.ppk (private key in Putty format - for Windows only)
 
-3. Connect to the remote server using SSH
+4. Modify file permissions
+
+    ```
+    <copy>
+    chmod 600 ocw2022_rsa
+    </copy>
+    ```
+
+
+5. Connect to the remote server using SSH
 
     ```
     <copy>
@@ -352,7 +369,15 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
       * ocw2022_rsa.pub (public key)
       * ocw2022-putty.ppk (private key in Putty format - for Windows only)
 
-3. Connect to the remote server using SSH
+4. Modify file permissions
+
+    ```
+    <copy>
+    chmod 600 ocw2022_rsa
+    </copy>
+    ```
+
+5. Connect to the remote server using SSH
 
     ```
     <copy>
@@ -388,15 +413,21 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
       * ocw2022_rsa.pub (public key)
       * ocw2022-putty.ppk (private key in Putty format - for Windows only)
 
-3. Connect to the remote server using SSH
+4. Modify file permissions
+
+    ```
+    <copy>
+    chmod 600 ocw2022_rsa
+    </copy>
+    ```
+
+5. Connect to the remote server using SSH
 
     ```
     <copy>
     ssh -i ocw2022_rsa <user>@<ip-adress>
     </copy>
     ```
-
-
 
 
 ##  Find other Hands-on Labs
