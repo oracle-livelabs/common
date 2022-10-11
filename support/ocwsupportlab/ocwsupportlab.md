@@ -10,7 +10,7 @@ In the following sections, you can find frequently asked questions, technical re
 
 <br>
 
-## Join the CloudWorld Community
+## Join the CloudWorld Discovery Lab Community
 
 __If you have any questions, feel free to join the Oracle CloudWorld Discovery Lab community on our public Slack channel #support-discovery-lab.__
 

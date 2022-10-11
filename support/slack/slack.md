@@ -1,4 +1,4 @@
-# Come and join the Oracle CloudWorld Discovery Lab Slack Community
+# Join the Oracle CloudWorld Discovery Lab Slack Community
 
 ## The best place to get quick help and suport
 
