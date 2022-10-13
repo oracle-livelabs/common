@@ -2,13 +2,9 @@
 
 With your registration to CloudWorld, you are entitled to sign up for a particular CloudWorld Oracle Cloud Free Tier account. You do not need to provide any payment information, and the registration takes only a few minutes. You can explore your Oracle Cloud Infrastructure account in just a few minutes.
 
-If you have any issues with your Oracle Cloud Free Tier account, please visit the Free Tier support team, which you can find here: [link to map showing location of Free Tier Help Desk](https://google.com) 
-
 **Step-by-step guide: Sign up for an Oracle Cloud Free Tier Account**
 
-1. Go to [cloud.oracle.com](https://cloud.oracle.com) and click **Sign up**.
-
-    ![Click Sign Up](images/signup-cloud.png =30%x* " ")
+1. Go to [http://signup.cloud.oracle.com](https://signup.cloud.oracle.com) 
 
 2. Fill in the Account Information and click **Verify my Email**. 
 
@@ -20,7 +16,7 @@ If you have any issues with your Oracle Cloud Free Tier account, please visit th
 
 4.  Congratulations! You unlocked the Oracle Cloud Free Tier trial account
 
-    ![Special Offer](images/specialoffer.png =30%x* " "))
+    ![Special Offer](images/specialoffer.png =30%x* " ")
 
 5. Fill in the Account Information and click **Continue**.
 
