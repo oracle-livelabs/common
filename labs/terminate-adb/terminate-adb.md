@@ -8,6 +8,9 @@ This lab walks you through the steps to terminate an available or stopped Oracle
 
 Estimated Time - 5 minutes
 
+Watch the video below for a quick walk-through of the lab.
+[Terminate Oracle Autonomous Database](videohub:1_y16iujj6)
+
 ### Objectives
 
 - Terminate an available or stopped Oracle Autonomous Database instance.
@@ -21,48 +24,48 @@ Estimated Time - 5 minutes
 
 1. If you are using a Free Trial or Always Free account, in the Oracle Cloud console, you need to be in the region where your Oracle Autonomous Database resources is provisioned. You can see your current default **Region** in the top right-hand corner of the page. To change the default region, click on the **Region** drop-down and choose the region where your Oracle Autonomous Database resource is provisioned.
 
-    ![Select region on the far upper-right corner of the page.](./images/task3-1.png " ")
+    ![Select region on the far upper-right corner of the page.](https://oracle-livelabs.github.io/common/images/console/region.png " ")
 
 2. Click on navigation menu, search **Oracle Database** and choose **Autonomous Transaction Processing** (ATP). *Note:* While this lab terminates an Oracle Autonomous Transaction Processing database that is already provisioned, the steps are the same for terminating an Oracle Autonomous Data Warehouse database.
 
     **Note:** You can also directly access your Oracle Autonomous Transaction Processing service in the **Quick Actions** section of the dashboard.
 
-    ![](./images/task3-2.png " ")
+    ![Select ATP.](https://oracle-livelabs.github.io/common/images/console/database-atp.png " ")
 
 3. From the compartment drop-down menu select the **Compartment** where your Oracle Autonomous Database resource is provisioned. If there were a long list of databases, you could filter the list by the **State** of the databases (Available, Stopped, Terminated, etc) to view the database you wish to terminate. You can also sort by **Workload Type**.
 
     In this lab, as **DEMOATP** is an Oracle Autonomous Transaction Processing database which is already provisioned, we selected the **Transaction Processing** workload type to filter the database.
 
-    ![](./images/choose-compartment.png " ")
-    ![](./images/choose-state.png " ")
+    ![Choose compartment](./images/choose-compartment.png " ")
+    ![Choose state](./images/choose-state.png " ")
 
 4. From the databases displayed, click **Display Name** of the database you wish to terminate.
 
     In this lab, we are terminating the available **DEMOATP** Oracle Autonomous Transaction Processing database instance. Click **DEMOATP**.
 
-    ![](./images/demoatp.png " ")
+    ![Click display name](./images/demoatp.png " ")
 
 5. Click **More Actions**.
 
-    ![](./images/more-actions.png " ")
+    ![Click More Actions](./images/more-actions.png " ")
 
 6. From the more actions drop-down, scroll down and click **Terminate**.
 
-    ![](./images/terminate.png " ")
+    ![Click Terminate](./images/terminate.png " ")
 
 7. Confirm that you wish to terminate your Oracle Autonomous Database in the confirmation dialog. Type the database name in the input field and click **Terminate Autonomous Database**.
 
     In this lab, type **DEMOATP** and click **Terminate Autonomous Database**.
 
-    ![](./images/demoatp-terminate.png " ")
+    ![Click Terminate Autonomous Database](./images/demoatp-terminate.png " ")
 
 8.  Your instance will begin to terminate, the Lifecycle State will turn from Available to Terminating.
 
-    ![](./images/terminating.png " ")
+    ![Terminating](./images/terminating.png " ")
 
 9. After a few minutes, once the instance is terminated, the Lifecycle state will change from Terminating to Terminated.
 
-    ![](./images/terminated.png " ")
+    ![Terminated](./images/terminated.png " ")
 
     You have successfully terminated an Oracle Autonomous Database instance.
 
@@ -73,4 +76,5 @@ Estimated Time - 5 minutes
 ## Acknowledgements
 
 * **Author** - Anoosha Pilli, Oracle Database Product Management, Product Manager
-* **Last Updated By/Date** - Anoosha Pilli, September, 2021
+* **Contributor** - Arabella Yao, Product Manager, Database Product Management
+* **Last Updated By/Date** - Arabella Yao, Aug 2022

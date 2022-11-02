@@ -7,7 +7,7 @@
 Estimated Lab Time: -- minutes
 
 ### About <Product/Technology> (Optional)
-Enter background information here about the technology/feature or product used in this lab - no need to repeat what you covered in the introduction. Keep this section fairly concise. If you find yourself needing more than to sections/paragraphs, please utilize the "Learn More" section.
+Enter background information here about the technology/feature or product used in this lab - no need to repeat what you covered in the introduction. Keep this section fairly concise. If you find yourself needing more than two sections/paragraphs, please utilize the "Learn More" section.
 
 ### Objectives
 
@@ -29,15 +29,15 @@ This lab assumes you have:
 
 *This is the "fold" - below items are collapsed by default*
 
-## Task 1: Concise Step Description
+## Task 1: Concise Task Description
 
-(optional) Step 1 opening paragraph.
+(optional) Task 1 opening paragraph.
 
-1. Sub step 1
+1. Step 1
 
 	![Image alt text](images/sample1.png)
 
-2. Sub step 2
+2. Step 2
 
   ![Image alt text](images/sample1.png)
 
@@ -47,9 +47,9 @@ This lab assumes you have:
 
    If you add another paragraph, add 3 spaces before the line.
 
-## Task 2: Concise Step Description
+## Task 2: Concise Task Description
 
-1. Sub step 1 - tables sample
+1. Step 1 - tables sample
 
   Use tables sparingly:
 

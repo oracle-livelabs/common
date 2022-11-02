@@ -48,11 +48,11 @@ There are multiple ways to connect to your cloud instance.  Choose the way to co
 
 1.  To start the Oracle Cloud Shell, go to your Cloud console and click the Cloud Shell icon at the top right of the page.
 
-	![Open cloud shell](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
+    ![Click cloud shell icon.](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
 
-    ![Set up cloud shell](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-cloud-shell/images/cloudshellsetup.png " ")
+    ![Set up cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-setup.png " ")
 
-    ![Cloud shell opened](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-cloud-shell/images/cloudshell.png " ")
+    ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png.png " ")
 
 2.  Click on the Cloud Shell hamburger icon and select **Upload** to upload your private key. Note the private key does not have a `.pub` extension.
 
@@ -242,4 +242,4 @@ When creating your SSH Key, if the key is invalid the compute instance stack cre
 ## Acknowledgements
 - **Author** - LiveLabs Team, Senior Director, DB Product Management
 - **Contributors** - Robert Pastijn, DB Product Management, PTS; Didi Han, DB Product Management; Arabella Yao, DB Product Management
-- **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, June 2022
+- **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Aug 2022

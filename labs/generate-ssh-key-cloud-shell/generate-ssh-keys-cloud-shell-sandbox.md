@@ -24,15 +24,22 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
 ## Task 1: Generate SSH Keys
 
-1.  To start the Oracle Cloud shell, go to your Cloud console and click the cloud shell icon at the top right of the page.
+1. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**.
 
-    ![Cloud shell open.](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
+   ![Compute Instances](https://oracle-livelabs.github.io/common/images/console/compute-instances.png " ")
 
-    ![Set up cloud shell](./images/cloudshellsetup.png " ")
+2. Select the compartment you were assigned. Expand the **root** compartment and then the **Livelabs** compartment. Select the compartment assigned to you.
+   ![Select Compartment](https://oracle-livelabs.github.io/common/labs/need-help/images/select-compartment.png " ")
 
-    ![Cloud shell](./images/cloudshell.png " ")
+3. Go to your Cloud console and click the cloud shell icon at the top right of the page.
 
-2.  Once the cloud shell has started, enter the following command. Choose the key name you can remember. This will be the keyname you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
+    ![Click cloud shell icon.](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
+
+    ![Set up cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-setup.png " ")
+
+    ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png " ")
+
+4.  Once the cloud shell has started, enter the following command. Choose the key name you can remember. This will be the keyname you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
 
     ````
     <copy>mkdir .ssh</copy>
@@ -52,7 +59,7 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     ![SSH key output](./images/cloudshell-ssh-keygen-2.png " ")
 
-3.  Examine the two files that you just created.
+5.  Examine the two files that you just created.
 
     ````
     <copy>ls</copy>
@@ -62,13 +69,13 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     >**Note:** In the output, there are two files, a *private key:* `cloudshellkey` and a *public key:* `cloudshellkey.pub`. Keep the private key safe and don't share its content with anyone. The public key will be needed for various activities and can be uploaded to certain systems as well as copied and pasted to facilitate secure communications in the cloud.
 
-4. To list the contents of the public key, use the cat command ```cat <<sshkeyname>>.pub```
+6. To list the contents of the public key, use the cat command ```cat <<sshkeyname>>.pub```
 
     >**Note:** The angle brackets <<>> should not appear in your code.
 
     ![Cat in cloud shell](./images/cat-in-cloudshell.png " ")
 
-5.  When pasting the key into the compute instance in future labs, make sure that you remove any hard returns that may have been added when copying. *The .pub key should be one line.*
+7.  When pasting the key into the compute instance in future labs, make sure that you remove any hard returns that may have been added when copying. *The .pub key should be one line.*
 
     ![Copy public key](./images/copy-publickey-cloudshell.png " ")
 
@@ -77,4 +84,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 * **Author** - Dan Kingsley, Enablement Specialist, OSPA
 * **Contributors** - Arabella Yao, Database Product Management
-* **Last Updated By/Date** - Arabella Yao, May 2022
+* **Last Updated By/Date** - Arabella Yao, Aug 2022

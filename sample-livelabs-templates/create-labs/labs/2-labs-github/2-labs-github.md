@@ -1,8 +1,10 @@
-# Configure your environment for development
+# Set up GitHub and install tools
 
 ## Introduction
 
-In this lab, you will learn how to configure your environment to develop LiveLabs workshops. We use the Oracle LiveLabs GitHub organization so you will learn to create a GitHub Account, set up the GitHub development environment, and install GitHub Desktop. Oracle LiveLabs Organization is one of Oracle GitHub Organizations and we encourage you to sign up through OIM and register your email account, but it is not required for LiveLabs development. These steps need to be completed once to setup your environment for current and future development.
+In this lab, you will learn how to configure your environment to develop LiveLabs workshops. We use the Oracle LiveLabs GitHub organization so you will learn to create a GitHub Account, set up the GitHub development environment, and install GitHub Desktop. Oracle LiveLabs Organization is one of Oracle GitHub Organizations and we encourage you to sign up through OIM and register your email account, but it is not required for LiveLabs development. 
+
+These steps need to be completed once to setup your environment for current and future development.
 
 > **Note:** Oracle recommends using **Visual Studio Code (VSCode)**. If you are currently using **Atom** - it is being retired, and you should move to use VSCode.
 
@@ -98,6 +100,9 @@ To install Visual Studio Code:
   ![Search for live server.](./images/ls-search.png " ")
 3. Click "Install".
   ![Install live server.](./images/ls-install.png " ")
+
+Video about the Visual Studio Code's extensions and showdownjs:
+[Video walking through showdownjs and extensions](https://www.youtube.com/watch?v=rOj5APIU-XU)
 
 ## Task 6: (Optional) Helpful resources and extensions for Visual Studio Code
 

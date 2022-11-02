@@ -6,6 +6,9 @@ Using VSCode or another editor of your choice, the Markdown files need to be edi
 
 > **Note:** Oracle recommends using **Visual Studio Code (VSCode)**. If you are currently using **Atom** - it is being retired, and you should move to use VSCode.
 
+<!-- **Helpful tips from your LiveLabs Team**
+[Video walking through markdown editing](youtube:rOj5APIU-XU) -->
+
 ### Objectives
 
 * Create workshop and lab content.
@@ -144,43 +147,40 @@ Sometimes you may want to link to something within your lab or workshop.  Most c
 ## Task 7: Add and embed a Video
 
 Adding videos is very similar to adding images. We most commonly see videos added in the introductions for labs to familiarize the audience with the product before they dive into the workshop.
+LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or [Oracle Video Hub]([https://https://videohub.oracle.com/).
+
+### Embedding a video from Oracle Video Hub (recommended)
+
+1. Take a look at his exmaple of a video hosted on Oracle Video Hub in this lab.
+
+  ![The Video Hub markdown](images/videhub-markdown.png =60%x* " ")
+
+  The embedded video looks like this: 
+
+  [Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8)
+
+
+  Markdown does the work of embedding the video for you, all you need to provide is a video hosting site and the video link address.
+
+2. You can find the video identifier code in the URL (in this example, the code is **1_2ubr9fo8**).
+  
+  *Please note:* Oracle Video Hub identifiers are usually prefixed with either `0_` or `1_` folled by a unique code.
+
+  ![The Video Hub URL](images/video-hub-url.png =60%x* " ")
+
+
+### Embedding a video from YouTube
 
 1. Take a look at this example of a video linked in the introduction of a workshop.
 
-  ![Example of a video link.](./images/youtube-vsc.png " ")
+  ![Example of a video link.](./images/youtube-vsc.png =60%x* " ")
 
-  Markdown does the work of embedding the video for you, all you need to provide is a video hosting site (YouTube highly recommended) and the video link address.
+  Markdown does the work of embedding the video for you, all you need to provide is a video hosting site and the video link address.
 
 2. The video link address is the characters you'll find at the end of the URL for the video you want to link.
 
-  ![How to link a youtube video.](./images/youtube-url.png " ")
-  
-We also recommend workshop teams provide a video if available, for a better customer experience. This video will be displayed on this workshop's LiveLabs landing page as shown on the screenshot below.
+  ![How to link a youtube video.](./images/youtube-url.png =60%x* " ")
 
-![Video on workshop landing page](images/video-landing-page.png " ")
-
-The video can be from [Oracle Video Hub](https://videohub.oracle.com/) (recommended) or from [YouTube](https://www.youtube.com/). Oracle Video Hub is the public video platform of Oracle. Videos uploaded to Oracle Video Hub help us get better analytics on video usage. If your team does not have a YouTube account, you can reach out to the LiveLabs team and ask us to upload the video for you.
-
-Option 1: To embed a video from Oracle Video Hub:
-
-1. On the Oracle Video Hub page of the video, click **Share**.
-    ![Share](images/oracle-share.png " ")
-2. Click **Embed**.
-    ![Embed](images/oracle-embed.png " ")
-3. Copy the src link from `https` to `flashvars[streamerType]=auto` as shown on the screenshot below.
-    ![Embed link](images/oracle-link.png " ")
-4. Paste the link to the **YouTube Link** section on the publishing entry. Click **Create** or **Save**.
-    ![Paste link](images/video-link.png " ")
-
-Option 2: To embed a video from Youtube:
-1. On the Youtube page of the video, click **SHARE**.
-    ![Share](images/youtube-share.png " ")
-2. Click **Embed**.
-    ![Embed](images/youtube-embed.png " ")
-3. Copy the src link (without double quotes) highlighted on the screenshot below.
-    ![Embed link](images/youtube-link.png " ")
-4. Paste the link to the **YouTube Link** section on the publishing entry. Click **Create** or **Save**.
-    ![Paste link](images/video-link.png " ")
 
 ## Task 8: Scale an image
 Without using image scaling, all the screenshots you take for your workshop will be of different sizes (unless you're a master of making pixel-perfect crops). To remedy this, we HIGHLY recommend you to stick with a scaling and use it throughout your workshop. This will make all the images scale to the same width (if possible) and contribute to a more consistent and polished feel. You can override the default image scaling by applying these manual controls below. **We highly recommend you use #4's format by default.**
@@ -241,12 +241,71 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
   Do you see one or two images above?
 
-  If you are viewing this page via LiveServer from your IDE (on a case insensitive operating system), you should see **two** images.
-
-  If you are viewing this page on github.io, you should only see **one** image.
+   If you are viewing this page on github.io, you should only see **one** image. Even with the same name, the case sensitivity does not allow you to see the second image.
 
 2. If you do run into a Case Sensitivity error on Windows or macOS, you cannot simply fix it by renaming it DIRECTLY with the correct case... because the system will not recognize that you are trying to rename it. You have to either rename that item to something else entirely and then rename it back with the correct case... or you can use **"git mv"** as described [in this article](https://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory) for more complicated fixes that involve entire directories.
 
+
+## Task 11: Code Snippets
+
+1. If you include code snippets in your workshop instruction, you can use the following syntax for code to distinguish it from other instructions.
+
+    ![Code Snippet](./images/code-snippet.png " ")
+
+    ```
+    some code
+    ```
+
+2. If you want users to copy this code snippet, you can add the *copy* tag around the code.
+
+  ![Add copy tag for code snippet](./images/code-copy.png " ")
+
+    ```
+    <copy>
+    some code
+    </copy>
+    ```
+
+3. If you specify the language of the code, Markdown can recognize the syntax and highlight certain information.
+
+    ![Add json tag for code snippet](./images/json-code.png " ")
+
+    ```json
+    {
+      "firstName": "John",
+      "lastName": "Smith",
+      "age": 25
+    }
+
+    ```
+    ![Add java tag for code snippet](./images/java-code.png " ")
+    ```java
+    System.out.println("Hello World");
+    ```
+
+4. If you do not want anything highlighted in your code snippet, simply add the `text` tag.
+
+    ![Add text tag to remove all highlighting](./images/text.png " ")
+    ```text
+    {
+      "firstName": "John",
+      "lastName": "Smith",
+      "age": 25
+    }
+    ```
+
+5. You can hide and reveal a code snippet, to challenge the users first, but still provide them with support when they get stumped.
+
+  ![Code Block Reveal](./images/code-block-reveal.png " ")
+  <details>
+        <summary>*Reveal code block*</summary>
+        ```python
+        <copy>
+        def getPrice():
+        ...
+        return jsonify(product_price)</copy>
+        ```
+  </details>
 
 **Reminder** Download this handy [Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.com/p/Qfg5WZ_O9yDet7NlaJPT76s9o_Yy0VVQ3LDh34c0HTrietIqqKq-m9zukdqiRymL/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
 
@@ -259,6 +318,7 @@ You may now **proceed to the next lab**.
 * **Contributors:**
     * Lauran Serhal, Principal User Assistance Developer, Oracle Database and Big Data User Assistance
     * Anuradha Chepuri, Principal User Assistance Developer, Oracle GoldenGate
+    * Arabella Yao, Product Manager, Database Product Management
 
 * **Reviewed by:**
     * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
@@ -267,4 +327,4 @@ You may now **proceed to the next lab**.
     * Andres Quintana
     * Brianna Ambler
 
-* **Last Updated By/Date:** Michelle Malcher, August 2022
+* **Last Updated By/Date:** Arabella Yao, September 2022
