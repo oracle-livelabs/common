@@ -12,11 +12,11 @@ In the following sections, you can find frequently asked questions, technical re
 
 ## Join the CloudWorld Discovery Lab Community
 
-__If you have any questions, feel free to join the Oracle CloudWorld Discovery Lab community on our public Slack channel #support-discovery-lab.__
+__If you have any questions, feel free to join the Oracle CloudWorld Discovery Lab community on our public Slack channel #ocw-hol-support.__
 
 Need to create an account first? Have a look at our LiveLab Sprint [How to create a Oracle DevRel Slack account?](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=3469).
 
-Join the #support-discovery-lab Slack channel in our public Slack workspace if you have questions about any of the Oracle CloudWorld hands-on labs.
+Join the #ocw-hol-support Slack channel in our public Slack workspace if you have questions about any of the Oracle CloudWorld hands-on labs.
 
 > Tip: Use your HOL or Tutorial ID in your post. This helps us to find the correct expert. You can find the HOL or tutorial ID on the start page (you can, of course, also just tell us the actual title).
 
@@ -45,13 +45,10 @@ Some hands-on labs use *[noVNC](https://novnc.com/info.html)*. You will be infor
 
 With your registration to CloudWorld, you are entitled to sign up for a particular CloudWorld Oracle Cloud Free Tier account. You do not need to provide any payment information, and the registration takes only a few minutes. You can explore your Oracle Cloud Infrastructure account in just a few minutes.
 
-If you have any issues with your Oracle Cloud Free Tier account, please visit the Free Tier support team, which you can find here: [link to map showing location of Free Tier Help Desk](https://google.com) 
 
 **Step-by-step guide: Sign up for an Oracle Cloud Free Tier Account**
 
-1. Go to [cloud.oracle.com](https://cloud.oracle.com) and click **Sign up**.
-
-    ![Click Sign Up](images/signup-cloud.png =30%x* " ")
+1. Go to [http://signup.cloud.oracle.com](https://signup.cloud.oracle.com) 
 
 2. Fill in the Account Information and click **Verify my Email**. 
 
@@ -63,7 +60,7 @@ If you have any issues with your Oracle Cloud Free Tier account, please visit th
 
 4.  Congratulations! You unlocked the Oracle Cloud Free Tier trial account
 
-    ![Special Offer](images/specialoffer.png =30%x* " "))
+    ![Special Offer](images/specialoffer.png =30%x* " ")
 
 5. Fill in the Account Information and click **Continue**.
 
