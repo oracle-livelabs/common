@@ -33,7 +33,7 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     ![Set up cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-setup.png " ")
 
-    ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png.png " ")
+    ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png " ")
 
     >**Note:** If you get a "Policy Missing" error, make sure you have navigated first to the compartment assigned to you and then launched cloud shell. Go to the *Need Help* lab -> *Cannot Access Cloud Shell?* to see how you can do that.
 
