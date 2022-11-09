@@ -10,14 +10,16 @@ In the following sections, you can find frequently asked questions, technical re
 
 <br>
 
-## Join the CloudWorld Community
+## Join the CloudWorld Discovery Lab Community
 
-__If you have any questions, feel free to join the Oracle CloueWorld community on our public Slack channel #OCW-HOL-Support.__
+__If you have any questions, feel free to join the Oracle CloudWorld Discovery Lab community on our public Slack channel #ocw-hol-support.__
 
-It is a great place to get connected with everyone at CloudWorld.
-We are also sharing latest updates on sessions on the Slack channel
+Need to create an account first? Have a look at our LiveLab Sprint [How to create a Oracle DevRel Slack account?](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=3469).
 
-If you are new to Slack, please register here: [Create Slack account](https://bit.ly/join-devrel-slack).
+Join the #ocw-hol-support Slack channel in our public Slack workspace if you have questions about any of the Oracle CloudWorld hands-on labs.
+
+> Tip: Use your HOL or Tutorial ID in your post. This helps us to find the correct expert. You can find the HOL or tutorial ID on the start page (you can, of course, also just tell us the actual title).
+
 
 ## Technical Requirements for Hands-on Labs
 
@@ -43,13 +45,10 @@ Some hands-on labs use *[noVNC](https://novnc.com/info.html)*. You will be infor
 
 With your registration to CloudWorld, you are entitled to sign up for a particular CloudWorld Oracle Cloud Free Tier account. You do not need to provide any payment information, and the registration takes only a few minutes. You can explore your Oracle Cloud Infrastructure account in just a few minutes.
 
-If you have any issues with your Oracle Cloud Free Tier account, please visit the Free Tier support team, which you can find here: [link to map showing location of Free Tier Help Desk](https://google.com) 
 
 **Step-by-step guide: Sign up for an Oracle Cloud Free Tier Account**
 
-1. Go to [cloud.oracle.com](https://cloud.oracle.com) and click **Sign up**.
-
-    ![Click Sign Up](images/signup-cloud.png =30%x* " ")
+1. Go to [http://signup.cloud.oracle.com](https://signup.cloud.oracle.com) 
 
 2. Fill in the Account Information and click **Verify my Email**. 
 
@@ -61,7 +60,7 @@ If you have any issues with your Oracle Cloud Free Tier account, please visit th
 
 4.  Congratulations! You unlocked the Oracle Cloud Free Tier trial account
 
-    ![Special Offer](images/specialoffer.png =30%x* " "))
+    ![Special Offer](images/specialoffer.png =30%x* " ")
 
 5. Fill in the Account Information and click **Continue**.
 
@@ -199,7 +198,15 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
       * ocw2022_rsa.pub (public key)
       * ocw2022-putty.ppk (private key in Putty format - for Windows only)
 
-3. Connect to the remote server using SSH
+4. Modify file permissions
+
+    ```
+    <copy>
+    chmod 600 ocw2022_rsa
+    </copy>
+    ```
+
+5. Connect to the remote server using SSH
 
     ```
     <copy>
@@ -244,7 +251,16 @@ If you are using MacOS, you can also connect using a terminal application such a
       * ocw2022_rsa.pub (public key)
       * ocw2022-putty.ppk (private key in Putty format - for Windows only)
 
-3. Connect to the remote server using SSH
+4. Modify file permissions
+
+    ```
+    <copy>
+    chmod 600 ocw2022_rsa
+    </copy>
+    ```
+
+
+5. Connect to the remote server using SSH
 
     ```
     <copy>
@@ -350,7 +366,15 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
       * ocw2022_rsa.pub (public key)
       * ocw2022-putty.ppk (private key in Putty format - for Windows only)
 
-3. Connect to the remote server using SSH
+4. Modify file permissions
+
+    ```
+    <copy>
+    chmod 600 ocw2022_rsa
+    </copy>
+    ```
+
+5. Connect to the remote server using SSH
 
     ```
     <copy>
@@ -386,15 +410,21 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
       * ocw2022_rsa.pub (public key)
       * ocw2022-putty.ppk (private key in Putty format - for Windows only)
 
-3. Connect to the remote server using SSH
+4. Modify file permissions
+
+    ```
+    <copy>
+    chmod 600 ocw2022_rsa
+    </copy>
+    ```
+
+5. Connect to the remote server using SSH
 
     ```
     <copy>
     ssh -i ocw2022_rsa <user>@<ip-adress>
     </copy>
     ```
-
-
 
 
 ##  Find other Hands-on Labs
@@ -421,7 +451,7 @@ Times
 * Thursday 10/20 - 8AM – 1PM
 
 Have a look at the map: (Still need to add)
-![Venetian Level 2 Map](https://google.com)
+![Venetian Level 2 Map](./images/venetian-map.png)
 
 ## Learn More
 
