@@ -177,7 +177,7 @@ Run the following script in a SQL Worksheet (must be ADB) to install the utility
   declare
       l_git varchar2(4000);
       l_repo_name varchar2(100) := 'common';
-      l_owner varchar2(100) := 'martygubar';
+      l_owner varchar2(100) := 'oracle-livelabs';
       l_package_file varchar2(200) := 'building-blocks/setup/workshop-setup.sql';
   begin
       -- get a handle to github
@@ -205,9 +205,24 @@ The Workshop Utilities provide an add user procedure. The newly created user has
 
   ```
   <copy>
-  exec add_adb_user('dave','Spatialisc00l#')
+  exec add_adb_user('moviestream','Spatialisc00l#')
+
+  -- Run the command below in order to allow the new user (in this case "moviestream") using ORDS.
+  -- This includes connecting via the ADB SQL Tools
+  begin 
+      ords_admin.enable_schema (
+          p_enabled               => TRUE,
+          p_schema                => 'moviestream',
+          p_url_mapping_type      => 'BASE_PATH',
+          p_auto_rest_auth        => TRUE   
+      );
+  end;
+  /
   </copy>
   ```
+
+In order for the user to connect
+
 
 ## List available data sets
 Once the utilities are installed, It is easy to view available datasets and then load the ones you want into any schema. After logging in as the targeted user, run the following query to view available datasets:
