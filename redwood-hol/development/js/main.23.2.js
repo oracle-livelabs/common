@@ -1118,7 +1118,7 @@ let main = function() {
         The MD code should be in the format [](youtube:<enter_video_id>) for it to render as iframe. */
         let renderYouTubeVideos = function(articleElement) {
             $(articleElement).find('a[href^="youtube:"]').each(function() {
-                $(this).after('<div class="video-container' + '-' + $(this).attr("href").split(":")[2] + '"><iframe id="kaltura_player" title="video iframe" src="https://cdnapisec.kaltura.com/p/2171811/sp/217181100/embedIframeJs/uiconf_id/35965902/partner_id/2171811?iframeembed=true&playerId=kaltura_player&entry_id=' +  $(this).attr('href').split(":")[1] + '&flashvars[streamerType]=auto" frameborder="0" allowfullscreen></div>');
+                $(this).after('<div class="video-container' + '-' + $(this).attr("href").split(":")[2] + '"><iframe title="video iframe" src="https://www.youtube.com/embed/' + $(this).attr('href').split(":")[1] + '" frameborder="0" allowfullscreen></div>');
                 $(this).remove();
             });
             return articleElement;
