@@ -1,7 +1,7 @@
 /*    Creates the workshop log and dataset table */
 declare
     l_format varchar2(1000) := '{"skipheaders":"0", "delimiter":"\n", "ignoreblanklines":"true"}';
-    l_uri    varchar2(1000) := 'https://raw.githubusercontent.com/martygubar/common/main/building-blocks/setup/datasets.json';
+    l_uri    varchar2(1000) := 'https://raw.githubusercontent.com/oracle-livelabs/common/main/building-blocks/setup/datasets.json';
 begin
    -- drop tables if they exist
    for rec in (
@@ -63,7 +63,7 @@ end;
 declare
     l_git varchar2(4000);
     l_repo_name varchar2(100) := 'common';
-    l_owner varchar2(100) := 'martygubar';
+    l_owner varchar2(100) := 'oracle-livelabs';
     l_package_file varchar2(200) := 'building-blocks/setup/workshop-package.sql';
 begin
     -- get a handle to github
