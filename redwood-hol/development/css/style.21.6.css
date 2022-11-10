@@ -894,6 +894,7 @@ textarea {
     position: relative;
     padding-bottom: 60%; /* 16:9 */
     height: 0;
+    margin-bottom: -29%;
 }
 
 .video-container-medium iframe {
