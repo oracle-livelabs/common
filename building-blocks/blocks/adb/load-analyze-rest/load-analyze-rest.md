@@ -14,6 +14,9 @@ In this lab, you will find the latest news about actors and then perform a senti
 
 Estimated Time: 10 minutes
 
+Watch the video below for a quick walk-through of the lab.
+[Load and Analyze the News from REST Endpoints](videohub:1_sznobm6z)
+
 ### Objectives
 
 In this lab, you will:
@@ -76,7 +79,8 @@ Now that you have the API key, create a PLSQL function that queries the REST end
 
     ```
     <copy>
-    set define off;  -- turns off prompting for parameter values
+    -- turn off prompting for parameter values
+    set define off;  
 
     create or replace function get_news (
                                 news_search in varchar2 default '+"Tom Hanks"',
