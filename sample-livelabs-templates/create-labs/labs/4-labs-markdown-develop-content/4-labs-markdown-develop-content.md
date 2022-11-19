@@ -188,37 +188,69 @@ Without using video scaling, all the video you embed will have small as the defa
 
 1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need a particular scaling to drive emphasis on a subject.
 
-  [Demo video with no sizing.](videohub:1_2ubr9fo8)
+	```
+	[Oracle Video Hub video with no sizing](videohub:1_2ubr9fo8)
+	```
+
+  	[Demo video with no sizing.](videohub:1_2ubr9fo8)
 
 2. To scale the video size to small which is also the default video size, use this format.
 
-  [Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:small)
+	```
+	[Oracle Video Hub video scaled to small size, default video size](videohub:1_2ubr9fo8:small)
+	```
+
+  	[Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:small)
 
 3. Use this format to scale the video size to medium.
 
-  [Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:medium)
+	```
+	[Oracle Video Hub video scaled to medium size](videohub:1_2ubr9fo8:medium)
+	```
+
+  	[Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:medium)
 
 4. To scale the video size to large in relation to the amount of lab page space available, use this format.
 
-  [Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:large)
+	```
+	[Oracle Video Hub video scaled to large size](videohub:1_2ubr9fo8:large)
+	```
+
+	[Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:large)
 
 ### Resizing a video from YouTube
 
 1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need a particular scaling to drive emphasis on a subject.
 
-  [Demo video with no sizing.](youtube:lHriX403Oz4)
+	```
+	[YouTube video with no sizing](youtube:lHriX403Oz4)
+	```
+
+	[Demo video with no sizing.](youtube:lHriX403Oz4)
 
 2. To scale the video size to small which is also the default video size, use this format.
 
-  [Video hosted on Youtube](youtube:lHriX403Oz4:small)
+	```
+	[YouTube video scaled to small size, default video size](youtube:lHriX403Oz4:small
+	```
+
+	[Video hosted on YouTube](youtube:lHriX403Oz4:small)
 
 3. Use this format to scale the video size to medium.
 
-  [Video hosted on Oracle Video Hub](youtube:lHriX403Oz4:medium)
+	```
+	[YouTubevideo scaled to medium size](youtube:lHriX403Oz4:medium)
+	```
+
+	[Video hosted on YouTube](youtube:lHriX403Oz4:medium)
 
 4. To scale the video size to large in relation to the amount of lab page space available, use this format.
 
-  [Video hosted on Oracle Video Hub](youtube:lHriX403Oz4:large)
+	```
+	[YouTube video scaled to large size](youtube:lHriX403Oz4:large)
+	```
+
+	[Video hosted on YouTube](youtube:lHriX403Oz4:large)
 
 ## Task 9: Scale an image
 
