@@ -384,19 +384,11 @@ The LintChecker is a great javascript function for QAing that you should take ad
 With this new feature, you can now cross out text or words in a paragraph by adding two tilde before and after the word or text in a paragraph.
 
 1. Use this format to cross out a word - *`~~strikethroguh~~`* transforms to *~~strikethrough~~*.
-<<<<<<< HEAD
 
 2. To cross out text or a sentence in a paragraph, use this format.
 
   *`~~An example of Strikethrough.~~`* transforms to *~~An example of Strikethrough.~~*
 
-=======
-
-2. To cross out text or a sentence in a paragraph, use this format.
-
-  *`~~An example of Strikethrough.~~`* transforms to *~~An example of Strikethrough.~~*
-
->>>>>>> upstream/main
 ## Task 14: Clickable Links
 
 1. Old pattern of making URL clickable required markdown formatting. For example, you need to have this format in markdown to make the links clickable.
