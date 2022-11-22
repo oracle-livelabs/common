@@ -24,9 +24,9 @@ In this workshop, you will:
 
 ## Task 1: Gather DB System Details
 
-1. On the Oracle home page, click on the hamburger menu and click on  **Bare Metal, VM and Exadata**.
+1. On the Oracle home page, click on the hamburger menu and click on **Oracle Base Database (VM, BM)**.
 
-    ![](./images/vm.png " ")
+    ![Base Database.](https://oracle-livelabs.github.io/common/images/console/database-basedb.png " ")
 
 2. Choose your compartment and click on your DB system.
 
@@ -145,4 +145,5 @@ In this workshop, you will:
 ## Acknowledgements
 
 * **Author** - Anoosha Pilli, Product Manager, Database Product Management
-* **Last Updated By/Date** - Anoosha Pilli, February 2021
+* **Contributor** - Arabella Yao, Product Manager, Database Product Management
+* **Last Updated By/Date** - Arabella Yao, Aug 2022

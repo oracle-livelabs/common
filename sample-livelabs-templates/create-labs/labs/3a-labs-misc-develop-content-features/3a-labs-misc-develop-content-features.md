@@ -8,7 +8,7 @@ In this lab, you will learn how to implement certain common markdown features an
 
 ### Objectives
 
- * Linking to Absolute Path Images (on Object Storage)
+ * Linking to Absolute Path Images
  * Using Conditional Formatting
  * [Linking within a Workshop (Hotlinks)](#STEP3:LinkingwithinaWorkshop(Hotlinks))
  * Adding Videos
@@ -20,8 +20,8 @@ In this lab, you will learn how to implement certain common markdown features an
 * An IDE, such as Atom or Visual Studio Code.
 * A local web server such as **atom-live-server** for Atom or **Live Server** for VSC.
 
-## Task 1: Linking to Absolute Path Images (on Object Storage)
-Rather than pointing to images within your lab folder or workshop directory with a relative path, you can just as easily point your images to URLs. This comes in handy if you reuse an image a lot, the code you write to display it in markdown will always be the same no matter where the image is in relation to markdown. Using absolute image paths is also handy if you need to keep an image updated, as changing the destination file image will affect every instance where you pointed an image to it. This is also useful when you want to *point to an image in a different repository* (you don't need to clone or fork that repository). This is the same concept and implementation as using absolute paths for common labs in your manifest.json files.
+## Task 1: Linking to Absolute Path Images
+Rather than pointing to images within your lab folder or workshop directory with a relative path, you can just as easily point your images to URLs. This comes in handy if you use [common images](https://github.com/oracle-livelabs/common/tree/main/images), or reuse an image a lot, the code you write to display it in markdown will always be the same no matter where the image is in relation to markdown. Using absolute image paths is also handy if you need to keep an image updated, as changing the destination file image will affect every instance where you pointed an image to it. This is also useful when you want to *point to an image in a different repository* (you don't need to clone or fork that repository). This is the same concept and implementation as using absolute paths for common labs in your manifest.json files.
 
 *For screenshots of OCI menu navigation, use the images with absolute links*
 
@@ -40,7 +40,7 @@ Rather than pointing to images within your lab folder or workshop directory with
   Here is how the image path above shows up in production:
   ![Description](https://oracle-livelabs.github.io/common/images/console/home-page.png " ")
 
-3. If the image link breaks, the image will break. For this reason, it's recommended that you use the Object Storage link rather than a random image hosting site.  To get this Object Storage link, navigate to the **oracle-livelabs/common** repository, and find the image file. Append the file path at the end of *"https://objectstorage.us-phoenix-1.oraclecloud.com/p/SJgQwcGUvQ4LqtQ9xGsxRcgoSN19Wip9vSdk-D\_lBzi7bhDP6eG1zMBl0I21Qvaz/n/c4u02/b/common/o/"*. For example, if an image is located in **images/console/home-page.png** in the **common** repository, then the link you should use is https://oracle-livelabs.github.io/common/**images/console/home-page.png**.
+3. You can find all common images in the [oracle-livelabs/common](https://github.com/oracle-livelabs/common/tree/main/images) GitHub repository. For example, if an image is located in **images/console/home-page.png** in the **common** repository, then the link you should use is https://oracle-livelabs.github.io/common/**images/console/home-page.png**.
 
   ![Recommended to use GitHub path for images.](./images/home-page.png " ")
 
@@ -91,7 +91,47 @@ Adding videos is very similar to adding images. We most commonly see videos adde
 
   ![How to link a youtube video.](./images/youtube-url.png " ")
 
-## Task 5: Scaling an Image
+## Task 5: Scale a video
+
+Without using video scaling, all the video you embed will have small as the default size for your workshop. You can override the default video scaling by applying these manual controls below.
+
+### Resizing a video from Video Hub (Recommended)
+
+1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need a particular scaling to drive emphasis on a subject.
+
+  [Demo video with no sizing.](videohub:1_2ubr9fo8)
+
+2. To scale the video size to small which is also the default video size, use this format.
+
+  [Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:small)
+
+3. Use this format to scale the video size to medium.
+
+  [Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:medium)
+
+4. To scale the video size to large in relation to the amount of lab page space available, use this format.
+
+  [Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:large)
+
+### Resizing a video from YouTube
+
+1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need a particular scaling to drive emphasis on a subject.
+
+  [Demo video with no sizing.](youtube:lHriX403Oz4)
+
+2. To scale the video size to small which is also the default video size, use this format.
+
+  [Video hosted on Youtube](youtube:lHriX403Oz4:small)
+
+3. Use this format to scale the video size to medium.
+
+  [Video hosted on Oracle Video Hub](youtube:lHriX403Oz4:medium)
+
+4. To scale the video size to large in relation to the amount of lab page space available, use this format.
+
+  [Video hosted on Oracle Video Hub](youtube:lHriX403Oz4:large)
+
+## Task 6: Scaling an Image
 Without using image scaling, all the screenshots you take for your workshop will be of different sizes (unless you're a master of making pixel-perfect crops). To remedy this, we HIGHLY recommend you to stick with a scaling and use it throughout your workshop. This will make all the images scale to the same width (if possible) and contribute to a more consistent and polished feel. You can override the default image scaling by applying these manual controls below. **We highly recommend you use #4's format by default.**
 
 1. This is a demo image with no image sizing applied:
@@ -128,7 +168,7 @@ Without using image scaling, all the screenshots you take for your workshop will
 
 5. As a final note, it's in your best interest to take as large of a picture as you can and then scale it down using the parameters above. LiveLabs allows the magnification of images so if you have a larger base image, the audience will have more clarity.
 
-## Task 6: Using the LintChecker
+## Task 7: Using the LintChecker
 The LintChecker is a great javascript function for QAing that you should take advantage of. It is especially handy in catching some of the more easily overlooked errors such as indentation and syntax errors.
 
 1. To enable the LintChecker, just tack on **?qa=true** to the URL. You can do this from the github.io webpage or through LiveServer in your chosen IDE.
@@ -138,7 +178,7 @@ The LintChecker is a great javascript function for QAing that you should take ad
   A box will pop up with any errors that the LintChecker caught. Keep in mind that these are not an exhaustive list of errors, they are only the ones that the function has been programmed to catch.  Also keep in mind that even though it lists something as an "error", if it was done intentionally by you, you can by all means just ignore it.
 
 
-## Task 7: Case Sensitivity
+## Task 8: Case Sensitivity
 
 **THIS IS IMPORTANT.** The majority of us use Windows and macOS which are **Case Insensitive** systems. This means that Windows and macOS consider "OrAcLe.PnG" to be the same as "oracle.png" or "Oracle.PNG" for file structure. GitHub and GitHub pages are **Case Sensitive**, and **do** make that distinction.
 
@@ -158,7 +198,93 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
 This concludes this lab. You may now **proceed to the next lab**.
 
-## Task 8: Useful Markdown Syntax Cheatsheet
+## Task 9: Code Snippets
+
+1. If you include code snippets in your workshop instruction, you can use the following syntax for code to distinguish it from other instructions.
+
+    ![Code Snippet](../4-labs-markdown-develop-content/images/code-snippet.png " ")
+
+    ```
+    some code
+    ```
+
+2. If you want users to copy this code snippet, you can add the *copy* tag around the code.
+
+  ![Add copy tag for code snippet](../4-labs-markdown-develop-content/images/code-copy.png " ")
+
+    ```
+    <copy>
+    some code
+    </copy>
+    ```
+
+3. If you specify the language of the code, Markdown can recognize the syntax and highlight certain information.
+
+    ![Add json tag for code snippet](../4-labs-markdown-develop-content/images/json-code.png " ")
+
+    ```json
+    {
+      "firstName": "John",
+      "lastName": "Smith",
+      "age": 25
+    }
+
+    ```
+    ![Add java tag for code snippet](./images/java-code.png " ")
+    ```java
+    System.out.println("Hello World");
+    ```
+
+4. If you do not want anything highlighted in your code snippet, simply add the `text` tag.
+
+    ![Add text tag to remove all highlighting](../4-labs-markdown-develop-content/images/text.png " ")
+    ```text
+    {
+      "firstName": "John",
+      "lastName": "Smith",
+      "age": 25
+    }
+    ```
+5. You can hide and reveal a code snippet, to challenge the users first, but still provide them with support when they get stumped.
+
+  ![Code Block Reveal](./images/code-block-reveal.png " ")
+  <details>
+        <summary>*Reveal code block*</summary>
+        ```python
+        <copy>
+        def getPrice():
+        ...
+        return jsonify(product_price)</copy>
+        ```
+  </details>
+
+## Task 10: Strikethrough
+
+With this new feature, you can now cross out text or words in a paragraph by adding two tilde before and after the word or text in a paragraph.
+
+1. Use this format to cross out a word - *`~~strikethroguh~~`* transforms to *~~strikethrough~~*.
+
+2. To cross out text or a sentence in a paragraph, use this format.
+
+  *`~~An example of Strikethrough.~~`* transforms to *~~An example of Strikethrough.~~*
+
+## Task 11: Clickable Links
+
+1. Old pattern of making URL clickable required markdown formatting. For example, you need to have this format in markdown to make the links clickable.
+
+  *`Please visit [https://developer.oracle.com/livelabs](https://developer.oracle.com/livelabs)`* or *`Please visit <https://developer.oracle.com/livelabs>`* transforms to Please visit [https://developer.oracle.com/livelabs](https://developer.oracle.com/livelabs)
+
+2. With new pattern, type the URL (including https://) and the engine automatically creates a clickable URL.
+
+  *`Please visit https://developer.oracle.com/livelabs`* transforms to Please visit https://developer.oracle.com/livelabs.
+
+3.  The old formatting still works and is required to achieve the below formatting with alternative text in markdown format.
+
+  *`Please visit [LiveLabs](https://developer.oracle.com)`* transforms to Please visit [LiveLabs](https://developer.oracle.com).
+
+4. The URLs are opened in a new tab in the browser and the same applies to email addresses as well.
+
+## Task 12: Useful Markdown Syntax Cheatsheet
 
 Download this handy [Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.com/p/Qfg5WZ_O9yDet7NlaJPT76s9o_Yy0VVQ3LDh34c0HTrietIqqKq-m9zukdqiRymL/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
 
@@ -172,4 +298,4 @@ Download this handy [Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.
     * Andres Quintana
     * Arabella Yao, Database Product Management
 
-* **Last Updated By/Date** - Arabella Yao, Jun 2022
+* **Last Updated By/Date** - Arabella Yao, September 2022

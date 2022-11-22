@@ -10,7 +10,7 @@ Estimated Time: 5 minutes
 
 We offer two types of Cloud Accounts:
 
-*Free Tier Accounts*:  After you sign up for the free Oracle Cloud promotion or sign up for a paid account, you’ll get a welcome email. The email provides you with your cloud account details and sign in credentials.
+*Free Tier Accounts*:  After you sign up for the free [Oracle Cloud promotion](https://signup.cloud.oracle.com) or sign up for a paid account, you’ll get a welcome email. The email provides you with your cloud account details and sign in credentials.
 
 *Oracle Cloud Paid Accounts*:  When your tenancy is provisioned, Oracle sends an email to the default administrator at your company with the sign-in credentials and URL. This administrator can then create a user for each person who needs access to the Oracle Cloud. Check your email or contact your administrator for your credentials and account name.
 
@@ -30,9 +30,9 @@ If you've signed out of the Oracle Cloud, use these steps to sign back in.
 
     ![Cloud Account Name](images/cloud-oracle.png " ")
 
-2. Expand the arrow after *"Oracle Cloud Infrastructure Direct Sign-In"* to reveal the login input fields.
+2. Click **Continue** to reveal the login input fields.
 
-    ![Expand Oracle Cloud Infrastructure Direct Sign-In](images/cloud-login-tenant.png " ")
+    ![Click Continue Single Sign-In](images/cloud-login-tenant.png " ")
 
 3. Enter your Cloud Account credentials and click **Sign In**. Your username is your email address. The password is what you chose when you signed up for an account.
 
@@ -47,4 +47,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 - **Created By/Date** - Kay Malcolm, Database Product Management, March 2020
 - **Contributors** - John Peach, Kamryn Vinson, Rene Fontcha, Madhusudhan Rao, Arabella Yao
-- **Last Updated By** - Arabella Yao, Database Product Management, May 2022
+- **Last Updated By** - Arabella Yao, Database Product Management, Aug 2022

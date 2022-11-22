@@ -125,21 +125,17 @@ There are multiple ways to connect to your cloud instance.  Choose the way to co
 
 1. To re-start the Oracle Cloud shell, go to your Cloud console and click the cloud shell icon to the right of the region.  *Note: Make sure you are in the region you were assigned*
 
-    ![](./images/cloudshell.png " ")
+    ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png " ")
 
 2.  Go to **Compute** -> **Instance** and select the instance you created (make sure you choose the correct compartment)
 3.  On the instance homepage, find the Public IP address for your instance.
-
-    ![](./images/linux-compute-step3-11.png " ")
-4.  Enter the command below to login to your instance.    
+4.  Enter the command below to login to your instance.
     ````
     ssh -i ~/.ssh/<sshkeyname> opc@<Your Compute Instance Public IP Address>
     ````
 
     *Note: The angle brackets <> should not appear in your code.*
-    ![](./images/linux-compute-step3-12.png " ")
 5.  When prompted, answer **yes** to continue connecting.
-6.  Continue to STEP 5 on the left hand menu.
 
 ### MAC or Windows CYGWIN Emulator
 1.  Go to **Compute** -> **Instance** and select the instance you created (make sure you choose the correct compartment)
@@ -150,13 +146,10 @@ There are multiple ways to connect to your cloud instance.  Choose the way to co
     ````
     ssh -i ~/.ssh/<sshkeyname> opc@<Your Compute Instance Public IP Address>
     ````
-    ![](./images/cloudshellssh.png " ")
+    ![SSH](./images/ssh-first-time.png " ")
 
-    ![](./images/cloudshelllogin.png " ")
 
     *Note: The angle brackets <> should not appear in your code.*
-
-4.  After successfully logging in, proceed to STEP 5.
 
 ### Windows using Putty
 
@@ -165,7 +158,6 @@ There are multiple ways to connect to your cloud instance.  Choose the way to co
     ````
     ssh -i ~/.ssh/<sshkeyname> opc@<Your Compute Instance Public IP Address>
     ````
-    ![](./images/ssh-first-time.png " ")
 
     *Note: The angle brackets <> should not appear in your code.*
 
@@ -194,4 +186,4 @@ You may now proceed to the next lab.
 ## Acknowledgements
 - **Author** - LiveLabs Team, DB Product Management
 - **Contributors** - Jaden McElvey, Anoosha Pilli, Sanjay Narvekar, David Start, Arabella Yao
-- **Last Updated By/Date** - Anoosha Pilli, May 2021
+- **Last Updated By/Date** - Arabella Yao, Aug 2022

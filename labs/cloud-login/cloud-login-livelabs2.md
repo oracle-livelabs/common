@@ -2,46 +2,22 @@
 
 ## Introduction
 
-To get started, you need to have an active Oracle Cloud account and a LiveLabs reservation. An Oracle Cloud account is free and needed to gain access to your LiveLabs reservation, Oracle Support, and other Oracle publicly-accessible content.
+Welcome to your LiveLabs Sandbox environment.
+In order to start your workshop, you need to login to our LiveLabs Sandbox.
 
-If you already have an Oracle Cloud account, you can skip to Task 2.
-
-If you already have a reservation, skip to the next lab to start your workshop!
+In this lab, we are going to show you where you can find the login information and how to login to the LiveLabs Sandbox
 
 Estimated Time: 5 minutes
 
 ### Objectives
 
-- Create an Oracle cloud account
-- Request workshop reservation on LiveLabs
-- Launch workshop
+- View login information to LiveLabs Sandbox
+- Login to LiveLabs Sandbox
 
-### Prerequisites
 
-- A valid email address
-- Valid phone number
+## Task 1: View Login Information
 
-## Task 1: Create an Oracle Account
-
-Creating an Oracle account can be summarized in the following two simple steps.
-
-1. Navigate to [oracle.com](http://www.oracle.com), Click on *View Accounts*, and Select *Create an Account*
-
-  ![Create an account](images/create-account-oracle-1.png " ")
-
-2. Fill out the form and click **Create Account**.
-
-  ![Create account](images/create-account-oracle-2.png " ")
-
-## Task 2: Request Workshop Reservation
-
-1. Using your *Oracle Account Login* go to [LiveLabs](http://bit.ly/golivelabs). Open a workshop, click **Start**, and then **Run on LiveLabs** to request a reservation for this workshop.
-  ![Run on LiveLabs](images/run-on-livelabs.png " ")
-
-2. Fill out information on the *Reserve Workshop* page. Check **I consent to recieve emails from LiveLabs for my reservation**. Click **Submit Reservation**.
-  ![Submit Reservation](images/submit-reservation.png " ")
-
-3. After creating a reservation for a LiveLab Workshop, you will receive an e-mail indicating that your reservation is being processed, followed by an e-mail indicating that your environment has been created.
+1. After creating a reservation for a LiveLab Workshop, you will receive an e-mail indicating that your reservation is being processed, followed by an e-mail indicating that your environment has been created.
 
   ![Reservation email](images/livelab-env-created-email.png " ")
 
