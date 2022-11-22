@@ -55,6 +55,7 @@ This lab assumes you have:
     <copy>
     cat > /tmp/cleanup.sh <<EOF
     #!/bin/bash
+    shopt -s dotglob
     systemctl stop rsyslog
     sh -c 'yes| /tmp/oci-image-cleanup.sh'
     sed -i -e 's|^.*PermitRootLogin.*\$|PermitRootLogin no|g' /etc/ssh/sshd_config
