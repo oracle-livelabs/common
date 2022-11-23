@@ -48,6 +48,11 @@
       "filename": "./../../6-labs-publish/6-labs-publish.md"
     },
     {
+      "title": "Additional optional labs: Create an Event Code",
+      "description": "This lab shows you how to create an Event Code",
+      "filename": "./../../11-create-event-code/11-create-event-code.md"
+    },
+    {
         "title": "Additional optional labs: Develop LiveLabs Sprints",
         "description": "This lab shows you how to create a Sprint for LiveLabs",
         "filename": "./../../10-labs-create-sprints-workflow/10-create-sprints-workflow.md"
