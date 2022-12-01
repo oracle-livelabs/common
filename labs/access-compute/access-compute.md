@@ -1,4 +1,4 @@
-# Get started - LiveLabs login and SSH into Oracle Database 19c (ORCL) Compute Instance.
+# Get started - LiveLabs login and SSH into Oracle Database 19c (ORCL) compute instance.
 
 ## Introduction
 

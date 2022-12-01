@@ -1,4 +1,4 @@
-# Create SSH Keys Using Local Tools
+# Create SSH keys using local tools
 
 ## Introduction
 

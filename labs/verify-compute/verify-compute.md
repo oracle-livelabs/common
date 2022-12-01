@@ -1,4 +1,4 @@
-# Verify Compute Instance Setup
+# Verify compute instance setup
 
 ## Introduction
 This lab will show you how to login to your pre-created compute instance running on Oracle Cloud.

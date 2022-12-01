@@ -1,4 +1,4 @@
-# Verify Compute Instance Setup - Cloud Shell
+# Verify compute instance Setup - Cloud Shell
 
 ## Introduction
 This lab will show you how to login to your pre-created compute instance running on Oracle Cloud.
