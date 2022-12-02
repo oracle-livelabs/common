@@ -1,4 +1,4 @@
-# Setup SSH Tunnel
+# Set up SSH Tunnel
 
 ## Introduction
 As per security policies all external connections to this workshop instance are to be done over SSH. This lab will show you how to setup SSH tunnels to enable remote access to your workshop instance for client running on any port than 22.
