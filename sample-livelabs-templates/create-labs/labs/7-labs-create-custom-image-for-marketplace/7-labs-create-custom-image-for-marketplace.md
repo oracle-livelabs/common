@@ -112,13 +112,13 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
 5. Navigate to *ll-orm-mkplc-freetier* and open the file *variables.tf*
 
-6. Search and replace the string below with the OCID of the newly created custom image copied above
+6. Update the default value for each of the 5 variables shown below
 
-    ```
-    <copy>
-    replace-with-valid-image-OCID
-    </copy>
-    ```
+    - **`instance_image_id`** - Enter the new image OCID copied above *(Required)*
+    - **`novnc_delay_sec`** - Adjust the delay (in seconds by appending s to the number. e.g. 600s) to wait for all processes to start post boot before the desktop URL is presented to the user *(optional)*
+    - **`desktop_guide_url`** - Enter the desktop guide URL for your workshop. It should end with `".../workshop/desktop"`. *(Required)*
+    - **`desktop_app1_url`** - Enter your first desktop webapp URL if applicable, unset by setting to `""`, or just keep unchanged *(optional)*
+    - **`desktop_app2_url`** - Enter your second desktop webapp URL if applicable, unset by setting to `""`, or just keep unchanged *(optional)*
 
     ![](./images/update-image-ocid.png " ")
 
@@ -129,7 +129,7 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
 9. Using the new zip file above, navigate to "*Developer Services > Stacks*" and create a test instance with Oracle Resources Manager (ORM).
 
-    *Notes:* For more details on how to provision with ORM, refer to [setup-compute](https://oracle-livelabs.github.io/common/sample-livelabs-templates/sample-workshop-novnc/workshops/freetier/?lab=setup-compute-novnc-ssh) lab guide.
+    *Notes:* For more details on how to provision with ORM, refer to [setup-compute](https://oracle-livelabs.github.io/common/sample-livelabs-templates/sample-workshop-novnc/workshops/tenancy/?lab=setup-compute-novnc-ssh) lab guide.
 
 10. After successful instance creation, get the remote desktop URL and logon to validate
 
@@ -181,4 +181,5 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, February 2021
-* **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Sep 2022
+* **Contributors**  -
+* **Last Updated By/Date** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, December 2022
