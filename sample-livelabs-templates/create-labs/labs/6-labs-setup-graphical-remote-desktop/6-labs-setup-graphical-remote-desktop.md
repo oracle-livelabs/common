@@ -256,7 +256,7 @@ Skip *Task 3B* and proceed to *Task 4*
 
     > *Notes:* The example below borrows from the *Oracle WebLogic Kubernetes ToolKit UI* Workshop where the three URLs are updated to the following
 
-    - *`desktop_guide_url`*="https://oracle.github.io/learning-library/developer-library/multicloud/weblogic-toolkit-ui/workshops/desktop"
+    - *`desktop_guide_url`*="https://oracle-livelabs.github.io/multicloud/weblogic-toolkit-ui/workshops/desktop"
     - *`desktop_app1_url`*="http://localhost:7001/console"    
     - *`desktop_app2_url`*="https://container-registry.oracle.com"
 
@@ -475,7 +475,7 @@ Update your Terraform/ORM stack with the tasks below to enable VNC password rese
     ```
     <copy>
     terraform {
-      required_version = "~> 0.13.0"
+      required_version = "~> 1.1.0"
     }
 
     provider "oci" {
@@ -499,7 +499,7 @@ Update your Terraform/ORM stack with the tasks below to enable VNC password rese
     ```
     <copy>
     variable "desktop_guide_url" {
-      default = "https://oracle.github.io/learning-library/security-library/database/advanced/workshops/main-key-vault"
+      default = "https://oracle-livelabs.github.io/security/database/advanced/workshops/desktop-key-vault"
     }
 
     variable "desktop_app1_url" {
@@ -551,7 +551,7 @@ Update your Terraform/ORM stack with the tasks below to enable VNC password rese
       length  = 10
       upper   = true
       lower   = true
-      number  = true
+      numeric = true
       special = false
     }
     </copy>

@@ -1,8 +1,51 @@
 create or replace procedure add_adb_user(user_name varchar2, pwd varchar2) authid current_user
 as
     l_count number;
+    type t_db_object is TABLE OF VARCHAR2(100);
+    db_roles_privs t_db_object;
     
     begin
+        -- List of roles and privs    
+        db_roles_privs := t_db_object(
+                        'console_developer',
+                        'dcat_sync',
+                        'dwrole',
+                        'graph_developer',
+                        'oml_developer',
+                        'connect',
+                        'create analytic view',
+                        'create attribute dimension',
+                        'create mining model',
+                        'create any index',
+                        'create procedure',
+                        'create sequence',
+                        'create table',
+                        'create trigger',
+                        'create type',
+                        'create view',
+                        'global query rewrite',
+                        'create materialized view',
+                        'resource',
+                        'create job',
+                        'debug connect session',
+                        'inherit privileges on user admin',
+                        'unlimited tablespace',
+                        'execute on dbms_cloud',
+                        'execute on dbms_cloud_repo',
+                        'execute on dbms_session',
+                        'execute on dbms_soda',
+                        'execute on dbms_soda_admin',                        
+                        'write on directory data_pump_dir',
+                        'select on sys.v_$services',
+                        'select on sys.dba_rsrc_consumer_group_privs',
+                        'read on all_dcat_entities',
+                        'read on dcat_entities',
+                        'read on all_dcat_assets',
+                        'read on all_dcat_folders'
+                        );
+                        
+                       
+        -- Check if user exists.            
         select count(*)
         into l_count
         from all_users
@@ -18,31 +61,19 @@ as
         workshop.write('create user ' || user_name || ' identified by ####');
         execute immediate 'create user ' || user_name || ' identified by ' || pwd;
 
-        workshop.write('grant privileges', 1);
-        workshop.exec('grant connect to ' || user_name);
-        workshop.exec('grant resource to ' || user_name);
-        workshop.exec('grant dwrole to ' || user_name);
-        workshop.exec('grant console_developer to ' || user_name);
-        workshop.exec('grant oml_developer to ' || user_name);
-        workshop.exec('grant graph_developer to ' || user_name);
-
-        workshop.exec('grant unlimited tablespace to ' || user_name);
-        workshop.exec('grant create table to ' || user_name);
-        workshop.exec('grant create view to ' || user_name);
-        workshop.exec('grant create sequence to ' || user_name);
-        workshop.exec('grant create procedure to ' || user_name);
-        workshop.exec('grant create job to ' || user_name);
-
-        workshop.exec('grant execute on dbms_cloud to ' || user_name);
-        workshop.exec('grant execute on dbms_cloud_repo to ' || user_name);
-        workshop.exec('grant read on directory data_pump_dir to ' || user_name);
-        workshop.exec('grant write on directory data_pump_dir to ' || user_name);
-        workshop.exec('grant select on sys.v_$services to ' || user_name);
-        workshop.exec('grant select on sys.dba_rsrc_consumer_group_privs to ' || user_name);
-        workshop.exec('grant execute on dbms_session to ' || user_name);
+        -- privs
+        workshop.write('grant privileges and roles', 1);
+        
+        for i in 1 .. db_roles_privs.count loop
+            workshop.exec('grant ' || db_roles_privs(i) || ' to ' || user_name);
+        
+        end loop;
+        
+        
+        workshop.exec('grant soda_app to ' || user_name || ' with delegate option');
         workshop.exec('alter user ' || user_name || ' grant connect through OML$PROXY');
         workshop.exec('alter user ' || user_name || ' grant connect through GRAPH$PROXY_USER');
-        workshop.exec('alter user ' || user_name || ' default role connect, resource, dwrole, oml_developer, graph_developer');
+        -- workshop.exec('alter user ' || user_name || ' default role connect, resource, dwrole, oml_developer, graph_developer');
             
         commit;
 
@@ -66,7 +97,6 @@ as
 
 
 end add_adb_user;
-/
 
 begin
     workshop.exec('grant execute on add_adb_user to public');
