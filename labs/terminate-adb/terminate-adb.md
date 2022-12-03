@@ -22,7 +22,7 @@ Watch the video below for a quick walk-through of the lab.
 
 ## Task 1: Terminate a Provisioned Oracle Autonomous Database Instance
 
-1. If you are using an Oracle Cloud account, in the Oracle Cloud console, you need to be in the region where your Oracle Autonomous Database resources is provisioned. You can see your current default **Region** in the top right-hand corner of the page. To change the default region, click on the **Region** drop-down and choose the region where your Oracle Autonomous Database resource is provisioned.
+1. If you are using an Oracle Cloud trial account, in the Oracle Cloud console, you need to be in the region where your Oracle Autonomous Database resources is provisioned. You can see your current default **Region** in the top right-hand corner of the page. To change the default region, click on the **Region** drop-down and choose the region where your Oracle Autonomous Database resource is provisioned.
 
     ![Select region on the far upper-right corner of the page.](https://oracle-livelabs.github.io/common/images/console/region.png " ")
 
