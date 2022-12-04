@@ -94,8 +94,6 @@ as
             workshop.write(sqlerrm);
             raise;
 
-
-
 end add_adb_user;
 /
 
