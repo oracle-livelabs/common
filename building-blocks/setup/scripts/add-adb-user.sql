@@ -43,8 +43,7 @@ as
                         'read on all_dcat_assets',
                         'read on all_dcat_folders'
                         );
-                        
-                       
+                                               
         -- Check if user exists.            
         select count(*)
         into l_count
@@ -68,8 +67,7 @@ as
             workshop.exec('grant ' || db_roles_privs(i) || ' to ' || user_name);
         
         end loop;
-        
-        
+                
         workshop.exec('grant soda_app to ' || user_name || ' with delegate option');
         workshop.exec('alter user ' || user_name || ' grant connect through OML$PROXY');
         workshop.exec('alter user ' || user_name || ' grant connect through GRAPH$PROXY_USER');
