@@ -134,6 +134,7 @@ If your workshop supports multiple instance types, but the bulk of the content s
   ![Recommended to keep code block organization.](./images/conditional-note.png " ")
 
 ## Task 6: Link within a workshop (Hotlinks)
+
 Sometimes you may want to link to something within your lab or workshop.  Most commonly, this is used in pages to link from the introduction or objectives to a specific section in the lab. This section in particular is hot-linked from the introduction to driving home that point. We'll take a look at the "Need Help?" lab to demonstrate how to incorporate this in your workshop.
 
 1. First, take a look at the format of the hotlink. It's the same as when you construct a regular hyperlink, except that you preface the URL section with a **#** and then you use a seemingly condensed version of the section name you want to link to.
@@ -159,15 +160,13 @@ LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or
 
   [Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8)
 
-
   Markdown does the work of embedding the video for you, all you need to provide is a video hosting site and the video link address.
 
 2. You can find the video identifier code in the URL (in this example, the code is **1_2ubr9fo8**).
   
-  *Please note:* Oracle Video Hub identifiers are usually prefixed with either `0_` or `1_` folled by a unique code.
+  *Please note:* Oracle Video Hub identifiers are usually prefixed with either `0_` or `1_` filled by a unique code.
 
   ![The Video Hub URL](images/video-hub-url.png =60%x* " ")
-
 
 ### Embedding a video from YouTube
 
@@ -181,8 +180,80 @@ LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or
 
   ![How to link a youtube video.](./images/youtube-url.png =60%x* " ")
 
+## Task 8: Scale a video
 
-## Task 8: Scale an image
+Without using video scaling, all the video you embed will have small as the default size for your workshop. You can override the default video scaling by applying these manual controls below.
+
+### Resizing a video from Video Hub (Recommended)
+
+1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need a particular scaling to drive emphasis on a subject.
+
+	```
+	[Oracle Video Hub video with no sizing](videohub:1_2ubr9fo8)
+	```
+
+  	[Demo video with no sizing.](videohub:1_2ubr9fo8)
+
+2. To scale the video size to small which is also the default video size, use this format.
+
+	```
+	[Oracle Video Hub video scaled to small size, default video size](videohub:1_2ubr9fo8:small)
+	```
+
+  	[Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:small)
+
+3. Use this format to scale the video size to medium.
+
+	```
+	[Oracle Video Hub video scaled to medium size](videohub:1_2ubr9fo8:medium)
+	```
+
+  	[Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:medium)
+
+4. To scale the video size to large in relation to the amount of lab page space available, use this format.
+
+	```
+	[Oracle Video Hub video scaled to large size](videohub:1_2ubr9fo8:large)
+	```
+
+	[Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:large)
+
+### Resizing a video from YouTube
+
+1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need a particular scaling to drive emphasis on a subject.
+
+	```
+	[YouTube video with no sizing](youtube:lHriX403Oz4)
+	```
+
+	[Demo video with no sizing.](youtube:lHriX403Oz4)
+
+2. To scale the video size to small which is also the default video size, use this format.
+
+	```
+	[YouTube video scaled to small size, default video size](youtube:lHriX403Oz4:small)
+	```
+
+	[Video hosted on YouTube](youtube:lHriX403Oz4:small)
+
+3. Use this format to scale the video size to medium.
+
+	```
+	[YouTubevideo scaled to medium size](youtube:lHriX403Oz4:medium)
+	```
+
+	[Video hosted on YouTube](youtube:lHriX403Oz4:medium)
+
+4. To scale the video size to large in relation to the amount of lab page space available, use this format.
+
+	```
+	[YouTube video scaled to large size](youtube:lHriX403Oz4:large)
+	```
+
+	[Video hosted on YouTube](youtube:lHriX403Oz4:large)
+
+## Task 9: Scale an image
+
 Without using image scaling, all the screenshots you take for your workshop will be of different sizes (unless you're a master of making pixel-perfect crops). To remedy this, we HIGHLY recommend you to stick with a scaling and use it throughout your workshop. This will make all the images scale to the same width (if possible) and contribute to a more consistent and polished feel. You can override the default image scaling by applying these manual controls below. **We highly recommend you use #4's format by default.**
 
 1. This is a demo image with no image sizing applied:
@@ -219,7 +290,8 @@ Without using image scaling, all the screenshots you take for your workshop will
 
 5. As a final note, it's in your best interest to take as large of a picture as you can and then scale it down using the parameters above. LiveLabs allows the magnification of images so if you have a larger base image, the audience will have more clarity.
 
-## Task 9: Use the LintChecker
+## Task 10: Use the LintChecker
+
 The LintChecker is a great javascript function for QAing that you should take advantage of. It is especially handy in catching some of the more easily overlooked errors such as indentation and syntax errors.
 
 1. To enable the LintChecker, just tack on **?qa=true** to the URL. You can do this from the github.io webpage or through LiveServer in your chosen IDE.
@@ -228,8 +300,7 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
   A box will pop up with any errors that the LintChecker caught. Keep in mind that these are not an exhaustive list of errors, they are only the ones that the function has been programmed to catch.  Also keep in mind that even though it lists something as an "error", if it was done intentionally by you, you can by all means just ignore it.
 
-
-## Task 10: Case Sensitivity
+## Task 11: Case Sensitivity
 
 **THIS IS IMPORTANT.** The majority of us use Windows and macOS which are **Case Insensitive** systems. This means that Windows and macOS consider "OrAcLe.PnG" to be the same as "oracle.png" or "Oracle.PNG" for file structure. GitHub and GitHub pages are **Case Sensitive**, and **do** make that distinction.
 
@@ -245,8 +316,7 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
 2. If you do run into a Case Sensitivity error on Windows or macOS, you cannot simply fix it by renaming it DIRECTLY with the correct case... because the system will not recognize that you are trying to rename it. You have to either rename that item to something else entirely and then rename it back with the correct case... or you can use **"git mv"** as described [in this article](https://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory) for more complicated fixes that involve entire directories.
 
-
-## Task 11: Code Snippets
+## Task 12: Code Snippets
 
 1. If you include code snippets in your workshop instruction, you can use the following syntax for code to distinguish it from other instructions.
 
@@ -309,22 +379,50 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
 **Reminder** Download this handy [Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.com/p/Qfg5WZ_O9yDet7NlaJPT76s9o_Yy0VVQ3LDh34c0HTrietIqqKq-m9zukdqiRymL/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
 
+## Task 13: Strikethrough
+
+With this new feature, you can now cross out text or words in a paragraph by adding two tilde before and after the word or text in a paragraph.
+
+1. Use this format to cross out a word - *`~~strikethroguh~~`* transforms to *~~strikethrough~~*.
+
+2. To cross out text or a sentence in a paragraph, use this format.
+
+  *`~~An example of Strikethrough.~~`* transforms to *~~An example of Strikethrough.~~*
+
+## Task 14: Clickable Links
+
+1. Old pattern of making URL clickable required markdown formatting. For example, you need to have this format in markdown to make the links clickable.
+
+  *`Please visit [https://developer.oracle.com/livelabs](https://developer.oracle.com/livelabs)`* or *`Please visit <https://developer.oracle.com/livelabs>`* transforms to Please visit [https://developer.oracle.com/livelabs](https://developer.oracle.com/livelabs)
+
+2. With new pattern, type the URL (including https://) and the engine automatically creates a clickable URL.
+
+  *`Please visit https://developer.oracle.com/livelabs`* transforms to Please visit https://developer.oracle.com/livelabs
+
+3.  The old formatting still works and is required to achieve the below formatting with alternative text in markdown format.
+
+  *`Please visit [LiveLabs](https://developer.oracle.com)`* transforms to Please visit [LiveLabs](https://developer.oracle.com).
+
+4. The URLs are opened in a new tab in the browser and the same applies to email addresses as well.
+
 You may now **proceed to the next lab**.
 
-
 ## Acknowledgements
+
 * **Author:**
     * Michelle Malcher, Senior Manager, Oracle Database Product Management
 * **Contributors:**
     * Lauran Serhal, Principal User Assistance Developer, Oracle Database and Big Data User Assistance
     * Anuradha Chepuri, Principal User Assistance Developer, Oracle GoldenGate
     * Arabella Yao, Product Manager, Database Product Management
+    * Anoosha Pilli, Product Manager, Database Product Management
 
 * **Reviewed by:**
     * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
     * Kay Malcolm, Database Product Management
     * Arabella Yao, Database Product Management
+    * Anoosha Pilli, Database Product Management
     * Andres Quintana
     * Brianna Ambler
 
-* **Last Updated By/Date:** Arabella Yao, September 2022
+* **Last Updated By/Date:** Anoosha Pilli, November 2022
