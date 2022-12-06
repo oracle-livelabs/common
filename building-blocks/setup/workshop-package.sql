@@ -3,7 +3,7 @@ as
 
     /* Specify constants for the utility */
     repo varchar2(100)       := 'common';
-    repo_owner varchar2(100) := 'oracle-livelabs';
+    repo_owner varchar2(100) := 'martygubar';
     install_path varchar2(100) := 'building-blocks/setup/scripts';
 
     procedure install_prerequisites;
