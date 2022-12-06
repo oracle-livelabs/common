@@ -29,7 +29,10 @@ begin
                END;
         ' );
 
-        begin        
+        begin
+            delete user_sdo_geom_metadata where table_name = 'PIZZA_LOCATION';
+            commit;
+
             insert into user_sdo_geom_metadata values (
              'PIZZA_LOCATION',
              user||'.LATLON_TO_GEOMETRY(lat,lon)',

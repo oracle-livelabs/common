@@ -33,6 +33,9 @@ begin
             -- SPATIAL METADATA UPDATES
             workshop.write('add spatial metadata', 2);
 
+            delete user_sdo_geom_metadata where table_name = 'CUSTOMER_CONTACT';
+            commit;
+
             insert into user_sdo_geom_metadata values (
              'CUSTOMER_CONTACT',
              user||'.LATLON_TO_GEOMETRY(loc_lat,loc_long)',
