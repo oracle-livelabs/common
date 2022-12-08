@@ -16,27 +16,27 @@ We offer two types of Cloud Accounts:
 
 ### Objectives
 
-- Learn how to login to your Oracle Cloud Account
+- Learn how to log in to your Oracle Cloud Account
 
 ### Prerequisites
 - Cloud Account Name - The name of your tenancy (supplied by the administrator or in your Oracle Cloud welcome email)
 - Username
 - Password
 
-## Task 1:  Login to Oracle Cloud
+## Task 1:  Log in to Oracle Cloud
 If you've signed out of the Oracle Cloud, use these steps to sign back in.
 
 1. Go to [cloud.oracle.com](https://cloud.oracle.com) and enter your Cloud Account Name and click **Next**. This is the name you chose while creating your account in the previous section. It's NOT your email address. If you've forgotten the name, see the confirmation email.
 
-    ![Cloud Account Name](images/cloud-oracle.png " ")
+    ![Cloud Account Name](./images/cloud-oracle.png " ")
 
 2. Click **Continue** to reveal the login input fields.
 
-    ![Click Continue Single Sign-In](images/cloud-login-tenant.png " ")
+    ![Click Continue Single Sign-In](./images/cloud-login-tenant.png " ")
 
 3. Enter your Cloud Account credentials and click **Sign In**. Your username is your email address. The password is what you chose when you signed up for an account.
 
-    ![Sign in](images/oci-signin.png " ")
+    ![Sign in](./images/oci-signin.png " ")
 
 4. You are now signed in to Oracle Cloud!
 
@@ -47,4 +47,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 - **Created By/Date** - Kay Malcolm, Database Product Management, March 2020
 - **Contributors** - John Peach, Kamryn Vinson, Rene Fontcha, Madhusudhan Rao, Arabella Yao
-- **Last Updated By** - Arabella Yao, Database Product Management, Aug 2022
+- **Last Updated By** - Arabella Yao, Database Product Management, Dec 2022

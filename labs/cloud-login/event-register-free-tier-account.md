@@ -4,14 +4,16 @@
 
 Before you get started, you will need an Oracle Cloud account. This 5-minute lab walks you through the steps of getting an Oracle Cloud Free Tier account and signing in.
 
+<!--
 Watch this video to create your free trial account on Oracle cloud.
 [Create Free Trial account on Oracle Cloud](youtube:nClCXAfqvzs)
+-->
 
 Estimated Time: 5 minutes
 
 ### Existing Cloud Accounts
 
-If you already have access to an Oracle Cloud account, including an Oracle Cloud account using [Oracle Universal Credits](https://docs.oracle.com/en/cloud/get-started/subscriptions-cloud/csgsg/universal-credits.html), skip to **STEP 2** to sign in to your cloud tenancy.
+If you already have access to an Oracle Cloud account, skip to **Task 2** to sign in to your cloud tenancy.
 
 ### Objectives
 
@@ -25,7 +27,7 @@ If you already have access to an Oracle Cloud account, including an Oracle Cloud
 
 ## Task 1: Create Your Free Trial Account
 
-If you already have a cloud account, skip to **STEP 2**.
+If you already have a cloud account, skip to **Task 2**.
 
 1. Open up a web browser to access the Oracle Cloud account registration form at [oracle.com/cloud/free](https://signup.cloud.oracle.com).
 

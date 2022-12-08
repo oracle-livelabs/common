@@ -19,14 +19,15 @@ Estimated Time: 5 minutes
 
 ## Task 1: Create Your Free Trial Account
 
-In this section, you will fill out the registration form at [oracle.com/cloud/free](https://signup.cloud.oracle.com).
+In this section, you will register a Free Trial Account.
 
-1.  Click on the "Start for free" button and enter the appropriate information to create your account.
+1.  Go to [oracle.com/cloud/free](https://signup.cloud.oracle.com) and enter the appropriate information to create your account.
     * Enter the same **email address** you used to register for Oracle Open World / Oracle Code One. A popup should appear recognizing your email. If not, the registration form will ask for additional information later.
     * Select your **country/territory**.
+    * Enter your **first name** and **last name**.
     * Click **Next**.
 
-    ![Account info](images/signup-for-freetier.png " ")
+    ![Registration](./images/cloud-infrastructure.png " ")
 
 2.  Enter a few details for your new Oracle Cloud account.
     * You can choose almost anything for your Cloud Account Name. Remember what you wrote. You'll need this name later to sign in.
@@ -48,23 +49,19 @@ In this section, you will fill out the registration form at [oracle.com/cloud/fr
 
 If you've signed out of the Oracle Cloud, use these steps to sign back in.
 
-1. Go to [cloud.oracle.com](https://cloud.oracle.com).
+1. Go to [cloud.oracle.com](https://cloud.oracle.com). Enter your Cloud Account Name and click **Next**. This is the name you chose while creating your account in the previous section. It's NOT your email address. If you've forgotten the name, see the confirmation email.
 
     ![cloud.oracle.com](images/cloud-oracle.png " ")
 
-2. Click **View Accounts** to bring up a menu.  Click **Sign in to Cloud**.
-
-    ![Sign in to Cloud](images/signin-to-cloud.png " ")
-
-3. Enter your Cloud Account Name and click **Next**. This is the name you chose while creating your account in the previous section. It's NOT your email address. If you've forgotten the name, see the confirmation email.
+2. Under **Single Sign-On (SSO)**, click **Continue**.
 
     ![Cloud Account Name](images/cloud-login-tenant.png " ")
 
-4. Enter your Cloud Account credentials and click **Sign In**. Your username is your email address. The password is what you chose when you signed up for an account.
+3. Enter your Cloud Account credentials and click **Sign In**. Your username is your email address. The password is what you chose when you signed up for an account.
 
     ![Sign in](images/username.png " ")
 
-5. You are now signed in to Oracle Cloud!
+4. You are now signed in to Oracle Cloud!
 
     ![OCI Console Home Page](https://oracle-livelabs.github.io/common/images/console/home-page.png " ")
 
@@ -74,4 +71,4 @@ You may now **proceed to the next lab**.
 
 - **Created By/Date** - Kay Malcolm, Database Product Management, March 2020
 - **Contributors** - John Peach, Madhusudhan Rao, Arabella Yao
-- **Last Updated By/Date** - Arabella Yao, May 2022
+- **Last Updated By/Date** - Arabella Yao, Dec 2022

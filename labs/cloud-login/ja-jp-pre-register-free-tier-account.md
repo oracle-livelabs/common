@@ -6,7 +6,7 @@
 
 ### 既存のクラウドアカウント
 
- [Oracle Universal Credits](https://docs.oracle.com/en/cloud/get-started/subscriptions-cloud/csgsg/universal-credits.html)を使用したOracle Cloudアカウントなど、すでにOracle Cloudアカウントをお持ちの場合は、**ステップ2**に進んで、お持ちのクラウド・テナントにサインインしてください。
+すでにOracle Cloudアカウントを持っている場合は、**タスク2**にスキップして、クラウド テナントにサインインします。
 
 ### 必要なもの
 
@@ -15,7 +15,7 @@
 
 ## Task 1: Free Trialアカウントの作成
 
-すでにクラウドアカウントをお持ちの方は、**STEP2**へお進みください。
+すでにクラウドアカウントをお持ちの方は、**Task 2**へお進みください。
 
 1. Webブラウザを開いて、 [oracle.com/cloud/free](https://signup.cloud.oracle.com)のOracle Cloudアカウント登録フォームにアクセスします。
 2.  登録ページが表示されます.
