@@ -15,7 +15,7 @@ Estimated Time: 5 minutes
 
 
 ### LiveLabs (Green Button) Reservations - Please Read
-If you are creating an SSH Key for a workshop that will be running *inside a LiveLabs tenancy*, do not select Oracle Cloud Shell.  Select the options that correspond to the OS running on your local laptop.  You will be pasting your key into the LiveLabs reservation page so that we can pre-create your instance for you.
+If you are creating an SSH Key for a workshop that will be running *inside a LiveLabs tenancy*, do not select Oracle Cloud Shell Option.  Select the options that correspond to the OS running on your local laptop.  You will be pasting your key into the LiveLabs reservation page so that we can pre-create your instance for you.
 
 ![LiveLabs Reservation.](./images/livelabs-reservation.png " ")
 
@@ -34,19 +34,19 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     ![Set up cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-setup.png " ")
 
-    ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png.png " ")
+    ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png " ")
 
 2.  Once the cloud shell has started, enter the following command. Choose the key name you can remember. This will be the keyname you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
 
-    ````
+    ````text
     <copy>mkdir .ssh</copy>
     ````
 
-    ````
+    ````text
     <copy>cd .ssh</copy>
     ````
 
-    ````
+    ````text
     ssh-keygen -b 2048 -t rsa -f <<sshkeyname>>
     ````
 
