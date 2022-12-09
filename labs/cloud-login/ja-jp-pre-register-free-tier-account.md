@@ -23,15 +23,16 @@
 3.  次の情報を入力して、Oracle Cloud Free Tierアカウントを作成します。
     *  **国**
     * **氏名**と**メールアドレス**
+    * **hCaptcha** を使用して身元を確認する
 
 4. 有効なメールアドレスを入力したら、 **電子メールの検証** ボタンを選択します。ボタンを選択すると以下のような画面が表示されます。
     ボタンを選択すると以下のような画面が表示されます:
        ![Verify Email](./images/ja-jp-verify-email.png " ")
 
 5. 電子メールを確認します。受信トレイにオラクルからのアカウント検証メールが表示されます。メールは以下のような内容になります:
-       ![Verification email](./images/ja-jp-verification-mail.png " ")
+       ![Verification email](./images/verification-mail.png " ")
 
-6. （可能であれば）リンクを選択するか、リンクをコピーしてブラウザに貼り付けます。
+6. **Verify email** をクリックします。
 
 7. 以下の情報を入力してOracle Cloud Free Tierアカウントを作成します
        * **パスワード**

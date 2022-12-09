@@ -70,7 +70,7 @@ If you've signed out of the Oracle Cloud, use these steps to sign back in.
 
     ![Cloud Account Name](./images/cloud-oracle.png " ")
 
-2. Expand the arrow after *Oracle Cloud Infrastructure Direct Sign-In* to reveal the login input fields.
+2. Click **Continue** to reveal the login input fields.
 
     ![Expand Oracle Cloud Infrastructure Direct Sign-In](./images/cloud-login-tenant.png " ")
 
