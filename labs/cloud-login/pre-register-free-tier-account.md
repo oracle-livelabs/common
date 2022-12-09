@@ -33,6 +33,8 @@ If you already have a cloud account, skip to **Task 2**.
 2.  Enter the following information to create your Oracle Cloud Free Tier account.
     * Choose your **Country**
     * Enter your **Name** and **Email**
+    * Use hCaptcha to verify your identity
+
 
 3. Once you have entered a valid email address, select the **Verify my email** button.
     The screen will appear as follows after you select the button:
@@ -53,28 +55,23 @@ If you already have a cloud account, skip to **Task 2**.
     - Click **Continue**
     ![Account Info](./images/account-info.png " ")
 
-
-7.  Enter your Address information and Phone Number.  Click **Continue**.
+7.  Enter your address information. Choose your country and enter a phone number. Click **Continue**.
           ![Free Tier Address](./images/free-tier-address.png " ")
 
-9. Once you receive your code, enter it and click **Verify My Code**.
-          ![Verify My Code](./images/free-tier-address-4.png " ")
-
-10. Click the **Add payment verification method** button.
+8. Click the **Add payment verification method** button.
           ![Payment Verification](./images/free-tier-payment-1.png " ")
 
-11. Choose the verification method. In this case, click the **Credit Card** button. Enter your information and payment details.
+9. Choose the verification method. In this case, click the **Credit Card** button. Enter your information and payment details.
 
     >**Note:** This is a free credit promotion account. You will not be charged unless you elect to upgrade the account.
 
     ![Credit Card](./images/free-tier-payment-2.png " ")
 
-12. Once your payment verification is complete, review and accept the agreement by clicking the check box.  Click the **Start my free trial** button.
+10. Once your payment verification is complete, review and accept the agreement by clicking the check box.  Click the **Start my free trial** button.
 
     ![Start Free Trial](./images/free-tier-agreement.png " ")
 
-13. Your account is provisioning and should be available soon! You might want to log out as you wait for your account to be provisioned. You'll receive two emails from Oracle. One email will be the initial notification that provisioning is underway. The other email will be a notification that provisioning is complete. Here is a copy of the final notification:
-       ![Account Provisioned](./images/account-provisioned.png " ")
+11. Your account is provisioning and should be available soon! You might want to log out as you wait for your account to be provisioned. You'll receive an email from Oracle notifying you that provisioning is complete, with your cloud account and username.
 
 ## Task 2: Sign in to Your Account
 
