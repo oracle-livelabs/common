@@ -37,7 +37,7 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png " ")
 
-    >**Note:** If you get a *Policy Missing* error, you may need to switch to the compartment assigned to you first. You can find the troubleshooting tips by going to the **Need Help** lab -> **Cannot Access Cloud Shell**.
+    >**Note:** If you get a *Policy Missing* error, make sure you have navigated first to the compartment assigned to you and then launched cloud shell. Go to the *Need Help* lab -> *Cannot Access Cloud Shell?* to see how you can do that.
 
 2.  Once the cloud shell has started, enter the following command. Choose the key name you can remember. This will be the keyname you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
 

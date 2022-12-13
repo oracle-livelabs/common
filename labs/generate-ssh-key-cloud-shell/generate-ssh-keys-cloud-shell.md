@@ -16,7 +16,7 @@ Estimated Time: 5 minutes
 ### Objectives
 In this lab, you will:
 - Generate SSH keys using Oracle cloud shell
-- List content of the public key
+- List the content of the public key
 
 ### Prerequisites
 * An Oracle Cloud Account - please view this workshop's LiveLabs landing page to see which environments are supported.
@@ -27,7 +27,7 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
 ## Task 1: Generate SSH Keys
 
-1.  To start the Oracle Cloud shell, go to your Cloud console and click the cloud shell icon at the top right of the page.
+1.  To start the Oracle Cloud shell, go to your Cloud console and click **Cloud Shell** at the top right of the page.
 
     ![Click cloud shell icon.](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
 
@@ -35,16 +35,16 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png " ")
 
-    >**Note:** If you get a "Policy Missing" error, make sure you have navigated first to the compartment assigned to you and then launched cloud shell. Go to the *Need Help* lab -> *Cannot Access Cloud Shell?* to see how you can do that.
+    >**Note:** If you get a *Policy Missing* error, make sure you have navigated first to the compartment assigned to you and then launched the cloud shell. Go to the *Need Help* lab -> *Cannot Access Cloud Shell?* to see how you can do that.
 
-2.  Once the cloud shell has started, enter the following commands. Choose the key name you can remember. This will be the keyname you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
+2.  Once the cloud shell has started, enter the following commands. Choose the key name you can remember. This will be the key name you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
 
-    ````
+    ````text
     <copy>mkdir .ssh</copy>
     ````
     ![mkdir](./images/mkdir.png " ")
 
-    ````
+    ````text
     <copy>cd .ssh
     ssh-keygen -b 2048 -t rsa -f cloudshellkey</copy>
     ````
@@ -63,7 +63,7 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
     >**Note:** In the output, there are two files, a *private key:* `cloudshellkey` and a *public key:* `cloudshellkey.pub`. Keep the private key safe and don't share its content with anyone. The public key will be needed for various activities and can be uploaded to certain systems as well as copied and pasted to facilitate secure communications in the cloud.
 
 4. To list the contents of the public key, use the cat command:
-     ```
+     ```text
     <copy>cat cloudshellkey.pub</copy>
      ```
 
@@ -80,4 +80,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 * **Author** - Dan Kingsley, Enablement Specialist, OSPA
 * **Contributors** - Jaden McElvey, Kamryn Vinson, Arabella Yao
-* **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Aug 2022
+* **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Dec 2022
