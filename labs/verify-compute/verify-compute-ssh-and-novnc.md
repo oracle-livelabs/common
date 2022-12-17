@@ -7,7 +7,7 @@ Estimated Time: 10 minutes
 
 ### Objectives
 In this lab, you will:
-- Gather details needed (public IP address) to connect to your instance
+- Gather details needed to connect to your instance (public IP address)
 - Learn how to connect to your compute instance using Remote Desktop or SSH protocol
 
 ### Prerequisites
@@ -75,7 +75,7 @@ Your options are:
 
 2.  To start the Oracle Cloud Shell, go to your Cloud console and click **Cloud Shell** at the top right of the page.
 
-	![Cloud Shell icon](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
+	![Select Cloud Shell](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
 
 	![Opened Cloud Shell](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png " ")
 
@@ -120,7 +120,7 @@ If you are unable to SSH into the compute instance, check out the troubleshootin
 You may now **proceed to the next lab**.
 
 ## Appendix 1B: Connect via MAC or Windows CYGWIN Emulator
-Depending on your workshop, you may need to connect to the instance via a secure shell client (SSH). If you're instructed in the next lab(s) to execute tasks via an SSH terminal, review the options below and select the one that best meeting your needs.
+Depending on your workshop, you may need to connect to the instance via a secure shell client (SSH). If you're instructed in the next lab(s) to execute tasks via an SSH terminal, review the options below and select the one that best meets your needs.
 
 1.  Go to **Compute** -> **Instances**. Make sure you choose the correct compartment. Select the instance you created.
     ![Compute Instance](https://oracle-livelabs.github.io/common/images/console/compute-instances.png " ")

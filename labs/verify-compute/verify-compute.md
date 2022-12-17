@@ -135,7 +135,7 @@ On Windows, you can use PuTTY as an SSH client. PuTTY enables Windows users to c
 
 5.  For the Auto-login username, enter **opc**.
 
-    ![Enter opc](./images/opc.jpg " ")
+    ![Enter opc](./images/opc.png " ")
 
 ### Add Your Private Key
 
