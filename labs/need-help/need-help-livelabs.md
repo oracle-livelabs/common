@@ -3,7 +3,7 @@
 ## Introduction
 This page is designed to help you solve some common problems users face in this LiveLab.
 
-If you still find yourself stuck or would like to report an issue with the workshop, click the question mark icon in the upper right corner to contact the LiveLabs team directly via email.
+After reading those troubleshooting tips, if you still find yourself stuck or would like to report an issue with the workshop, click the question mark icon in the upper right corner to contact the LiveLabs team directly via email.
 
 ![Help button](./images/help-button2.png)
 
@@ -27,7 +27,7 @@ This will construct an email in your default mail application that is auto-popul
 
 3. Include the description of your **issue** and any pertinent information in the contents of your email.
 
-4. Attach a **Screenshot** and **Any Troubleshooting Steps** you've tried so we can recreate the issue and provide a timely and accurate solution.
+4. Attach a **Screenshot** and **Any Troubleshooting Steps** you've tried, so that we can recreate the issue and provide a timely and accurate solution.
 
 ## Can't Log in to Oracle Cloud
 1. Double-check that you are using the information and credentials provided to you in the lab banner.
@@ -89,4 +89,4 @@ If the workshop asks you to open the cloud shell, but you cannot access it, plea
 ## Acknowledgements
 * **Author** - LiveLabs Team
 * **Contributors** - LiveLabs Team, Arabella Yao
-* **Last Updated By/Date** - Arabella Yao, Aug 2022
+* **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Dec 2022

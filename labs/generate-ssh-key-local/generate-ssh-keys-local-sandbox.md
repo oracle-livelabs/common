@@ -42,7 +42,7 @@ Estimated Time: 5 minutes
 
     ![Examine files](./images/ssh-key-content.png " ")
 
-    >**Note**: in the output there are two files, a *private key:* ```id_rsa``` and a *public key:* ```id_rsa.pub```. Keep the private key safe and don't share its content with anyone. The public key will be needed for various activities and can be uploaded to certain systems as well as copied and pasted to facilitate secure communications in the cloud.
+    >**Note**: In the output there are two files, a *private key:* ```id_rsa``` and a *public key:* ```id_rsa.pub```. Keep the private key safe and don't share its content with anyone. The public key will be needed for various activities and can be uploaded to certain systems as well as copied and pasted to facilitate secure communications in the cloud.
 
 4.  If you're ready to create an instance, copy and paste the contents when prompted for the SSH key. Make sure that you remove any hard returns that may have been added when copying.
 

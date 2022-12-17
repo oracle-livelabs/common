@@ -31,13 +31,13 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
 1.  To start the Oracle Cloud shell, go to your Cloud console and click **Cloud Shell** at the top right of the page.
 
-    ![Click cloud shell icon.](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
+    ![Click cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
 
     ![Set up cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-setup.png " ")
 
     ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png " ")
 
-    >**Note:** If you get a *Policy Missing* error, make sure you have navigated first to the compartment assigned to you and then launched cloud shell. Go to the *Need Help* lab -> *Cannot Access Cloud Shell?* to see how you can do that.
+    >**Note:** If you get a *Policy Missing* error, make sure you have navigated first to the compartment assigned to you, and then launch cloud shell. Go to the *Need Help* lab -> *Cannot Access Cloud Shell?* to see how to do that.
 
 2.  Once the cloud shell has started, enter the following command. Choose the key name you can remember. This will be the keyname you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
 
