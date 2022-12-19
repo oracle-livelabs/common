@@ -3,7 +3,7 @@
   "help": "livelabs-help-db_us@oracle.com",
   "tutorials": [
     {
-      "title": "Open Your Workshop Guide",
+      "title": "Use noVNC remote desktop",
       "description": "Instructions for opening the correct workshop guide for compute images supporting multiple workshops",
       "filename": "./using-novnc-remote-desktop.md"
     },
