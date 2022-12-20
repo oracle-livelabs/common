@@ -1,9 +1,9 @@
-# Cleanup
+# Clean up
 
 ## Introduction
 Upon completing your labs, we recommend that you perform a cleanup to dispose of all OCI resources created by Oracle Resource Manager (ORM). This lab will guide you to properly destroy these resources and delete the stack.
 
-*Estimated Lab Time:* 10 minutes
+Estimated Time: 10 minutes
 
 ### Objectives
 -   Destroy Resources with ORM
@@ -17,10 +17,10 @@ This lab assumes you have:
     - Lab: Environment Setup
 
 ## Task 1: Destroy ORM Stack Created Resources
-1. Login to Oracle Cloud
+1. Log in to Oracle Cloud
 2. Open up the hamburger menu in the left hand corner.  Click **Developer Services**, choose **Resource Manager > Stacks**.
 
-    ![Navigate to Stacks](./images/navigate-to-stack.png "Navigate to Stacks")
+    ![Navigate to Stacks](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png "Navigate to Stacks")
 
 3. Choose the compartment in which you created the stack and select it.  
 
@@ -49,5 +49,5 @@ This completes the workshop.
 
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology
-* **Contributors** -
+* **Contributors** - Arabella Yao, Product Manager, Database Product Manager
 * **Last Updated By/Date** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, November 2022
