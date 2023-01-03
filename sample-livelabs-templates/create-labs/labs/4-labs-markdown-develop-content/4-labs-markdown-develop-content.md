@@ -231,7 +231,7 @@ Without using video scaling, all the video you embed will have small as the defa
 2. To scale the video size to small which is also the default video size, use this format.
 
 	```
-	[YouTube video scaled to small size, default video size](youtube:lHriX403Oz4:small
+	[YouTube video scaled to small size, default video size](youtube:lHriX403Oz4:small)
 	```
 
 	[Video hosted on YouTube](youtube:lHriX403Oz4:small)
@@ -397,7 +397,7 @@ With this new feature, you can now cross out text or words in a paragraph by add
 
 2. With new pattern, type the URL (including https://) and the engine automatically creates a clickable URL.
 
-  *`Please visit https://developer.oracle.com/livelabs`* transforms to Please visit https://developer.oracle.com/livelabs.
+  *`Please visit https://developer.oracle.com/livelabs`* transforms to Please visit https://developer.oracle.com/livelabs
 
 3.  The old formatting still works and is required to achieve the below formatting with alternative text in markdown format.
 
