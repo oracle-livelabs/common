@@ -13,7 +13,7 @@ Estimated Time: 5 minutes
 ### Objectives
 In this lab, you will:
 - Generate SSH keys using Oracle cloud shell
-- List content of the public key
+- List the content of the public key
 
 ### Prerequisites
 * An Oracle Cloud Account - please view this workshop's LiveLabs landing page to see which environments are supported.
@@ -28,28 +28,28 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
    ![Compute Instances](https://oracle-livelabs.github.io/common/images/console/compute-instances.png " ")
 
-2. Select the compartment you were assigned. Expand the **root** compartment and then the **Livelabs** compartment. Select the compartment assigned to you.
+2. Select the compartment you are assigned (check which compartment you are assigned to on the LiveLabs *Login Info* page). Expand the **root** compartment and then the **Livelabs** compartment. Select the compartment assigned to you.
    ![Select Compartment](https://oracle-livelabs.github.io/common/labs/need-help/images/select-compartment.png " ")
 
-3. Go to your Cloud console and click the cloud shell icon at the top right of the page.
+3. Go to your Cloud console and click **Cloud Shell** at the top right of the page.
 
-    ![Click cloud shell icon.](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
+    ![Click cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
 
     ![Set up cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-setup.png " ")
 
     ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png " ")
 
-4.  Once the cloud shell has started, enter the following command. Choose the key name you can remember. This will be the keyname you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
+4.  Once the cloud shell has started, enter the following command. Choose the key name you can remember. This will be the key name you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
 
-    ````
+    ````text
     <copy>mkdir .ssh</copy>
     ````
 
-    ````
+    ````text
     <copy>cd .ssh</copy>
     ````
 
-    ````
+    ````text
     ssh-keygen -b 2048 -t rsa -f <<sshkeyname>>
     ````
 
@@ -84,4 +84,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 * **Author** - Dan Kingsley, Enablement Specialist, OSPA
 * **Contributors** - Arabella Yao, Database Product Management
-* **Last Updated By/Date** - Arabella Yao, Aug 2022
+* **Last Updated By/Date** - Arabella Yao, Dec 2022

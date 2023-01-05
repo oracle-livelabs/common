@@ -1,7 +1,7 @@
-# Setup Compute Instance
+# Set up compute instance
 
 ## Introduction
-This lab will show you how to setup a Resource Manager stack that will generate the Oracle Cloud objects needed to run your workshop.
+This lab will show you how to set up a Resource Manager stack that will generate the Oracle Cloud objects needed to run your workshop.
 
 *Estimated Time*: 15 minutes
 
@@ -13,7 +13,7 @@ Watch the video below for a walk through of the Environment Setup lab.
 For more information about Terraform and Resource Manager, please see the appendix below.
 
 ### Objectives
--   Create Compute + Networking Resource Manager Stack
+-   Create Compute + Networking using Resource Manager Stack
 -   Connect to compute instance
 
 ### Prerequisites
@@ -33,7 +33,7 @@ Your options are:
 ## Task 1A: Create Stack:  Compute + Networking
 1. Identify the ORM stack zip file downloaded in *Lab: Prepare Setup*
 2. Login to Oracle Cloud
-3.  Open up the hamburger menu in the left hand corner.  Click **Developer Services**, choose **Resource Manager > Stacks**. Choose the compartment in which you would like to install. Click **Create Stack**.  
+3.  Open up the hamburger menu in the left hand corner.  Click **Developer Services**, choose **Resource Manager > Stacks**. Choose the compartment in which you would like to install. Click **Create Stack**.
 
   ![](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
 
@@ -49,7 +49,7 @@ Your options are:
 
   ![](./images/create-stack-novnc-ssh-1.png " ")
 
-    - **Instance Count:** Accept the default, **1**, unless you intend to create more than one. e.g. for a team
+    - **Instance Count:** Accept the default, **1**, unless you intend to create more than one (e.g. for a team)
     - **Select Availability Domain:** Select an availability domain from the dropdown list.
     - **Need Remote Access via SSH?** In this step you have 3 options to select from:
         - **Option (A)** - Keep Unchecked for Remote Desktop only Access - The Default
@@ -99,13 +99,13 @@ Your options are:
 You may now proceed to Task 2 (skip Task 1B).
 
 ## Task 1B: Create Stack:  Compute only
-If you just completed Task 1A, please proceed to Task 2.  If you have an existing VCN and are comfortable updating VCN configurations, please ensure your VCN meets the minimum requirements. Refer to *Lab: Prepare Setup*       
+If you just completed Task 1A, please proceed to Task 2.  If you have an existing VCN and are comfortable updating VCN configurations, please ensure your VCN meets the minimum requirements. Refer to *Lab: Prepare Setup*.
 
   *Note:* We recommend letting our stack create the VCN to reduce the potential for errors.
 
 1.  Identify the ORM stack zip file downloaded in *Lab: Prepare Setup*
 2.  Login to Oracle Cloud
-3.  Open up the hamburger menu in the left hand corner.  Choose the compartment in which you would like to install.  Choose **Resource Manager > Stacks**.  
+3.  Open up the hamburger menu in the left hand corner.  Choose the compartment in which you would like to install.  Choose **Resource Manager > Stacks**. Click **Create Stack**.
 
   ![](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
 
@@ -120,7 +120,7 @@ If you just completed Task 1A, please proceed to Task 2.  If you have an existin
     - **Description**:  Same as above
     - **Create in compartment**:  Select the correct compartment if not already selected
 
-  *Note:* If this is a newly provisioned tenant such as freetier with no user created compartment, stop here and first create it before proceeding.
+  >**Note:** If this is a newly provisioned tenant such as freetier with no user created compartment, stop here and first create it before proceeding.
 
 5. Click **Next**.
 
@@ -128,7 +128,7 @@ If you just completed Task 1A, please proceed to Task 2.  If you have an existin
 
   ![](./images/create-stack-novnc-ssh-5.png " ")
 
-    - **Instance Count:** Accept the default, **1**, unless you intend to create more than one. e.g. for a team
+    - **Instance Count:** Accept the default, **1**, unless you intend to create more than one (e.g. for a team)
     - **Select Availability Domain:** Select an availability domain from the dropdown list.
     - **Need Remote Access via SSH?** In this step you have 3 options to select from:
         - **Option (A)** - Keep Unchecked for Remote Desktop only Access - The Default
@@ -167,7 +167,7 @@ If you just completed Task 1A, please proceed to Task 2.  If you have an existin
     - **Use Existing VCN?:** Check to select.
     - **Select Existing VCN?:** Select existing VCN with regional public subnet and required security list.
 
-  *Note:* For an existing VCN Option to be used successful, review the details at the bottom of this section
+  >**Note:** For an existing VCN Option to be used successful, review the details at the bottom of this section
 
   ![](./images/create-stack-novnc-ssh-6.png " ")
 
@@ -186,7 +186,7 @@ In the prior steps we elected to trigger the *terraform apply action* on stack c
 
   ![](./images/create-stack-novnc-ssh-7.png " ")
 
-2.  Congratulations, your environment has been created!  Click on the *Application Information* tab to get additional information about what you have just done.
+2.  Congratulations, your environment has been created!  Click the *Application Information* tab to get additional information about what you have just done.
 3.  Your public IP address(es), instance name(s), and remote desktop URL are displayed.
 
 
@@ -203,7 +203,7 @@ For ease of execution of this workshop, your VM instance has been pre-configured
 
   ![](images/novnc-launch-get-started-2.png " ")
 
-    *Note:* While rare, you may see an error on the browser - “*Deceptive Site Ahead*” or similar depending on your browser type as shown below.
+    >**Note:** While rare, you may see an error on the browser - “*Deceptive Site Ahead*” or similar depending on your browser type as shown below.
 
     Public IP addresses used for LiveLabs provisioning comes from a pool of reusable addresses and this error is due to the fact that the address was previously used by a compute instance long terminated, but that wasn't properly secured, got bridged and was flagged. You can safely ignore and proceed by clicking on *Details*, and finally on *Visit this unsafe site*.
 
@@ -221,7 +221,7 @@ In this example we will be illustrating connection from a Unix-style terminal su
 
 2. Restrict the permissions on the file to *0600*
 
-    ```
+    ```text
     <copy>
     chmod 0600 mykey_rsa
     </copy>
@@ -231,7 +231,7 @@ In this example we will be illustrating connection from a Unix-style terminal su
 
 3. Connect to your instance using the key.
 
-    ```
+    ```text
     <copy>
     ssh -i <path to mykey_rsa opc>@<my instance public IP>
     </copy>
@@ -247,7 +247,7 @@ Resource Manager is an Oracle Cloud Infrastructure service that allows you to au
 [](youtube:udJdVCz5HYs)
 
 ## Appendix 3: Troubleshooting Tips
-If you encountered any issues during the lab, follow the steps below to resolve them.  If you are unable to resolve, please skip to the **Need Help** section to submit your issue via our  support forum.
+If you encountered any issues during the lab, follow the steps below to resolve them.  If you are unable to resolve them, please skip to the **Need Help** lab to submit your issue to our support emailbox.
 - Availability Domain Mismatch
 - Limits Exceeded
 - Flex Shape Not Found
@@ -273,7 +273,7 @@ When creating a stack and using an existing VCN, the availability domain and the
 #### Issue #2 Description
 When creating a stack your ability to create an instance is based on the capacity you have available for your tenancy.
 
-#### Fix for Issue #3
+#### Fix for Issue #2
 If you have other compute instances you are not using, you can go to those instances and delete them.  If you are using them, follow the instructions to check your available usage and adjust your variables.
 1. Click on the Hamburger menu, go to **Governance** -> **Limits, Quotas and Usage**
 2. Select **Compute**
@@ -295,7 +295,7 @@ If you have other compute instances you are not using, you can go to those insta
 #### Issue #3 Description
 When creating a stack your ability to create an instance is based on the capacity you have available for your tenancy.
 
-*Please ensure that you are NOT running this in the **Always Free** Tier. This workshop does not run on the Always Free tier, you must have available cloud credits.  Go to **Governance** -> **Limits, Quotas and Usage,** select **compute**, ensure that you have **more than** the micro tier available.  If you have only 2 micro computes, your account has transitioned to an Always Free.  This means that the promotional period of 30 days has expired or you have run out of credits, this workshop will NOT run.*
+*Please ensure that you have available cloud credits.  Go to **Governance** -> **Limits, Quotas and Usage,** select **compute**, ensure that you have **more than** the micro tier available.  If you have only 2 micro computes, this workshop will NOT run.*
 
 #### Fix for Issue #3
 If you have other compute instances you are not using, you can go to those instances and delete them.  If you are using them, follow the instructions to check your available usage and adjust your variables.

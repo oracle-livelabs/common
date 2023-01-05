@@ -129,24 +129,24 @@ To clone the forked repository:
   In the **GitHub Desktop** UI, notice that the **Push origin** is replaced by **Fetch origin** after the push origin operation is completed.  The local clone and fork repositories are now synchronized with the main repository.
 
   ![Synchronized repositories.](./images/fetch-origin.png " ")
-  
+
 ## Task 4: Folder structure of the Oracle LiveLabs
 
   The following image shows a folder structure of the **sample-workshop** that is opened in the **Visual Studio Code** Editor. Inside each repository in [Oracle LiveLabs](https://github.com/oracle-livelabs), there is a **sample-livelabs-templates**  folder. You can see this structure at the following URL [https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop](https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop). You can get started with workshop development by copying this sample workshop folder.
 
   ![Example of workshop structure.](./images/sample-workshop-structure.png " ")
 
-  ## Task 5: Understand the components of the workshop and lab folders
-    The following describes the components of the above example:
+## Task 5: Understand the components of the workshop and lab folders
+The following describes the components of the above example:
     * The root folder of this example is the name of the workshop, **sample-workshop**. Direct links to the workshop files will be coming soon.
 
   > **Note:** You will be creating your project folder anywhere within your cloned repository. If you have not done so, please look into the [Oracle LiveLabs GitHub organization](https://github.com/oracle-livelabs) to see different repositories and decide on a repository for your workshop. If no existing repository fits your workshop, please contact our LiveLabs team. (See more details about this back in Task 1.)
 
-    * Each lab has its own folder, for example, **data-load**, **introduction**, **provision**, etc., each containing:
+  * Each lab has its own folder, for example, **data-load**, **introduction**, **provision**, etc., each containing:
       * a **files** folder (optional) that contains the files used in this lab.
       * an **images** folder that contains the screenshots used in this lab.
       * a **.md** file that contains this lab's content.
-    * The **workshops** folder contains the **desktop**, **sandbox** (previously livelabs), and/or **tenancy** (previously freetier) folder, each containing:
+  * The **workshops** folder contains the **desktop**, **sandbox** (previously livelabs), and/or **tenancy** (previously freetier) folder, each containing:
       * an `index.html` file, which is executed when it is accessed by a browser. You can copy this file from the *sample-workshop* folder and use it without changes.
       * a `manifest.json` file defines the structure of the workshop that the `index.html` file renders. You can copy this file from the *sample-workshop* folder, but you need to customize it for your workshop.
       * a `README.md` file (optional), which contains the summary of the entire workshop. You can view it from your git repository.
@@ -157,7 +157,7 @@ To clone the forked repository:
 
       ![Sample manifest json file.](./images/manifest.png " ")
 
-## Task 4: Commit your changes in your clone
+## Task 6: Commit your changes in your clone
 When you create, delete, or modify assets in your clone (local copy), you should commit (save) those changes to your clone, and then push those changes from your clone to your fork. Then these changes get saved to your forked repository.
 
 >**Note:** Make sure you are performing the following steps **off VPN**.
@@ -174,7 +174,7 @@ To commit your changes:
 
   ![Push updated content to the origin.](./images/git-hub-commit-push-origin.png " ")
 
-## Task 5: Set up GitHub pages for your fork to test your content
+## Task 7: Set up GitHub pages for your fork to test your content
 
 After you upload the content from your clone to your fork, request your review team members to review this content by providing them with access to **your GitHub Pages site URL** (or the URL of your forked repository).
 
@@ -204,7 +204,7 @@ To publish your GitHub Pages site:
 6. This may take a few minutes to complete. After the GitHub Pages are enabled, the message under **GitHub Pages** changes to **Your site  is published at https://arabellayao.github.io/em-omc/**
   ![Changes are published.](./images/git-hub-stage-git-hub-pages-settings-page-published.png " ")
 
-## Task 6: Access your workshop on GitHub
+## Task 8: Access your workshop on GitHub
 
 After your pull request is complete, wait a few minutes and perform the steps below. Github pages take approximately 5 minutes for the pages to be copied.
 
@@ -219,6 +219,44 @@ After your pull request is complete, wait a few minutes and perform the steps be
     ```
     https://arabellayao.github.io/em-omc/enterprise-manager/emcc/workshops/freetier/index.html
     ```
+
+## (Optional) Task 9: Customize your Workshop for Events
+
+This task walks you through the steps to customize a workshop for events and create an event code.
+
+### What is Event Code?
+
+An Event code is a fully customizable way to run a customized set of focused labs for your target audience. We now fully support hidden workshops for Oracle sales/PM and marketing purposes. The hidden workshops won’t be accessible to the general audience, and cannot be indexed by search engines. The user must log in with Oracle SSO and have the event code to proceed.
+
+If for an event, you want to add additional labs, remove some labs, have a different version of a lab, or change the workshop's meta info (including its title, description, outline, prerequisites, workshop time, promotion video, etc.) you can do that via an event code, without affecting the workshop already in production. PMs and Sales at Oracle have widely used event codes for big events like Oracle CloudWorld, as well as smaller events like training sessions, both internally and externally.
+
+The following screenshot shows the landing page of an event code. Any information squared in red can be customized.
+
+![Event Code Landing Page](./images/landing.png " ")
+
+If you are the **workshop team** of the workshop that you want to create an event for, you can change the workshop title, add additional labs, remove labs, and/or have a different version of a lab for the event by performing Steps 1 - 6.
+
+>**Note**: Steps 1 - 6 are optional - only if you want to customize the workshop content for your events. If you only want to customize the workshop's meta info, you can go directly to Step 7.
+
+1.  Depending on which repo your workshop is in, merge content from GitHub by following Lab 3: Stay in sync with GitHub environment -> **Task 3: Merge content from Git before you start editing your content**.
+
+2.  Go to Visual Studio Code, under the **workshops** folder, where you can see a **freetier/tenancy** folder and/or a **livelabs/sandbox** folder, create a new folder and give it a descriptive name (lowercase) for the event (e.g. cloudworld, training, event, etc.)
+
+3.  Then, copy the *index.html* and *manifest.json* from the **freetier/tenancy** or **livelabs/sandbox** folder, depending on where the new version of the workshop will run.
+
+4. Now, in the new *manifest.json* file under the event folder, you can edit the workshop title, add labs, remove labs, or replace labs.
+
+5. You can also create new Markdown files under lab folders to have a different version of labs, and then have the manifest.json file point to the new Markdown files.
+
+6. Finally, push your changes and create a pull request to one of the oracle-livelabs GitHub repos. After your pull request is approved and merged, you can proceed to Step 7.
+
+7. Go to the Workshop Management System (WMS). Expand **Events**, then click **Request an Event Code**. Watch this [**video**](https://otube.oracle.com/media/t/1_vuoemxyl) to learn how to request an event code. If you perform Steps 1 - 6, then you need to click **Edit Workshop Links** and put the customized links (for example, links ending with *workshops/events/index.html*).
+
+  ![Request an Event Code](./images/request.png " ")
+  ![Customize URLs](./images/url.png " ")
+
+8. After the event, if you as the event organizers want to know about the event's registration information, you can contact the LiveLabs team. We can share the number of attendees, their emails' domain names (but not their email address), and when they request the event codes, etc.
+
 ## Troubleshooting
 
 ### Issue 1: Commits Behind oracle:main
@@ -392,6 +430,7 @@ If you have multiple Oracle LiveLabs repositories, you need to switch to the rep
 * **Contributors:**
     * Lauran Serhal, Principal User Assistance Developer, Oracle Database and Big Data User Assistance
     * Anuradha Chepuri, Principal User Assistance Developer, Oracle GoldenGate
+    * Arabella Yao, Product Manager, Database Product Management
 
 * **Reviewed by:**
     * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
@@ -400,4 +439,4 @@ If you have multiple Oracle LiveLabs repositories, you need to switch to the rep
     * Andres Quintana
     * Brianna Ambler
 
-* **Last Updated By/Date:** Michelle Malcher, August 2022
+* **Last Updated By/Date:** Arabella Yao, Dec 2022
