@@ -193,6 +193,7 @@ For ease of execution of this workshop, your VM instance has been pre-configured
 
 1. Navigate to **Stack Details** -> **Application Information** tab, and click the **Remote Desktop** URL.
 
+  ![Click Remote Desktop URL](./images/19c-remote-desktop.png " ")
 
   ![URL opens](./images/novnc-login-ssh.png " ")
 
