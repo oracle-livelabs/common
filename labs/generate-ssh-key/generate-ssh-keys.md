@@ -27,9 +27,19 @@ Watch the video below for an overview of the Generate SSH Keys Cloud Shell optio
 
 The Cloud Shell machine is a small virtual machine running a Bash shell which you access through the OCI Console (Homepage). Cloud Shell comes with a pre-authenticated OCI CLI (Command Line Interface), set to the Console tenancy home page region, as well as up-to-date tools and utilities. To use the Cloud Shell machine, your tenancy administrator must grant the required IAM (Identity and Access Management) policy.
 
->**Note:**  If you are making a reservation via the LiveLabs Green Button, you will need to choose the option that matches your laptop.  Your tenancy access will be provided AFTER you create your ssh key locally.
+>**Note:**  If you are making a reservation via the LiveLabs Sandbox (Green Button), you will need to choose the option that matches your laptop.  Your tenancy access will be provided AFTER you create your ssh key locally.
 
-1.  To start the Oracle Cloud shell, go to your Cloud console and click **Cloud Shell** at the top right of the page.
+1. If you are using the LiveLabs Sandbox environment, you first need to switch to the compartment assigned to you. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**.
+
+   ![Compute Instances](https://oracle-livelabs.github.io/common/images/console/compute-instances.png " ")
+
+    Select the compartment you are assigned to (check which compartment you are assigned to on the LiveLabs *Login Info* page). Expand the **root** compartment and then the **Livelabs** compartment. Select the compartment assigned to you.
+
+    ![View Login Info](https://oracle-livelabs.github.io/common/labs/need-help/images/view-login-info.png " ")
+
+   ![Select Compartment](https://oracle-livelabs.github.io/common/labs/need-help/images/select-compartment.png " ")
+
+2.  To start the Oracle Cloud shell, go to your Cloud console and click **Cloud Shell** at the top right of the page.
 
     ![Click cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
 
@@ -39,7 +49,7 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     >**Note:** If you get a *Policy Missing* error, make sure you have navigated first to the compartment assigned to you, and then launch cloud shell. Go to the *Need Help* lab -> *Cannot Access Cloud Shell?* to see how to do that.
 
-2.  Once the cloud shell has started, enter the following command. Choose the key name you can remember. This will be the keyname you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
+3.  Once the cloud shell has started, enter the following command. Choose the key name you can remember. This will be the keyname you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
 
     ````text
     <copy>mkdir .ssh</copy>
@@ -57,7 +67,7 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     ![Generate SSH key in cloud shell.](./images/cloudshell-ssh-keygen.png " ")
 
-3.  Examine the two files that you just created.
+4.  Examine the two files that you just created.
 
     ````
     <copy>ls</copy>
@@ -67,13 +77,13 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     >**Note:** in the output that there are two files, a *private key:* ```<<sshkeyname>>``` and a *public key:* ```<<sshkeyname>>.pub```. Keep the private key safe and don't share its content with anyone. The public key will be needed for various activities and can be uploaded to certain systems as well as copied and pasted to facilitate secure communications in the cloud.
 
-4. To list the contents of the public key, use the cat command ```cat <<sshkeyname>>.pub```
+5. To list the contents of the public key, use the cat command ```cat <<sshkeyname>>.pub```
 
     >**Note:** The angle brackets <<>> should not appear in your command.
 
     ![Use cat command.](./images/cat-in-cloudshell.png " ")
 
-5.  When pasting the key into the compute instance in future labs, make sure that you remove any hard returns that may have been added when copying. *The .pub key should be one line.*
+6.  When pasting the key into the compute instance in future labs, make sure that you remove any hard returns that may have been added when copying. *The .pub key should be one line.*
 
     ![Pasting public key into compute instance.](./images/copy-publickey-cloudshell.png " ")
 
