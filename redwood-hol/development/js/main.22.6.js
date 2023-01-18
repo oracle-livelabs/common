@@ -1106,7 +1106,7 @@ let main = function() {
     // QA part of the code
     let performQA = function(articleElement, markdownContent, manifestFileContent) {
         let error_div = $(document.createElement('div')).attr('id', 'qa-report').html("<div id='qa-reportheader'></div><div id='qa-reportbody'><ol></ol></div>");
-        const more_info = "Please see <a href='https://oracle.github.io/learning-library/sample-livelabs-templates/create-labs/labs/workshops/freetier/?lab=3a-labs-misc-develop-content-features' target='_blank'>using the LiveLabs template</a> for more information.";
+        const more_info = "Please see <a href='https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/freetier/?lab=4-labs-markdown-develop-content' target='_blank'>using the LiveLabs template</a> for more information.";
 
         let urlExists = function(url, callback) {
             $.ajax({
