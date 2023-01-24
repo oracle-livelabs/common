@@ -28,7 +28,10 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
    ![Compute Instances](https://oracle-livelabs.github.io/common/images/console/compute-instances.png " ")
 
-2. Select the compartment you are assigned (check which compartment you are assigned to on the LiveLabs *Login Info* page). Expand the **root** compartment and then the **Livelabs** compartment. Select the compartment assigned to you.
+2. Select the compartment you are assigned to (check which compartment you are assigned to on the LiveLabs *Login Info* page). Expand the **root** compartment and then the **Livelabs** compartment. Select the compartment assigned to you.
+
+    ![View Login Info](https://oracle-livelabs.github.io/common/labs/need-help/images/view-login-info.png " ")
+
    ![Select Compartment](https://oracle-livelabs.github.io/common/labs/need-help/images/select-compartment.png " ")
 
 3. Go to your Cloud console and click **Cloud Shell** at the top right of the page.
