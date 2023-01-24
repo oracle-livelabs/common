@@ -1,19 +1,18 @@
 # Set up compute instance
 
 ## Introduction
-This lab will show you how to setup a Resource Manager stack that will generate the Oracle Cloud objects needed to run your workshop.
+This lab will show you how to set up a Resource Manager stack that will generate the Oracle Cloud objects needed to run your workshop.
 
-*Estimated Time*: 15 minutes
+Estimated Time: 15 minutes
 
-
-Watch the video below for a walk through of the Environment Setup lab.
-[](youtube:anPEOZYBdyA)
+Watch the video below for a walk-through of the Environment Setup lab.
+[Lab walk-through](youtube:anPEOZYBdyA)
 
 ### About Terraform and Oracle Cloud Resource Manager
 For more information about Terraform and Resource Manager, please see the appendix below.
 
 ### Objectives
--   Create Compute + Networking Resource Manager Stack
+-   Create Compute + Networking using Resource Manager Stack
 -   Connect to compute instance
 
 ### Prerequisites
@@ -21,7 +20,7 @@ This lab assumes you have:
 - An Oracle Cloud account
 - SSH Keys (optional)
 - You have completed:
-    - Lab: Prepare Setup 
+    - Lab: Prepare Setup
 
 ## Task 1: Create Stack: Choose a Path
 Proceed to deploy your workshop environment using Oracle Resource Manager (ORM) stack
@@ -32,24 +31,24 @@ Your options are:
 
 ## Task 1A: Create Stack:  Compute + Networking
 1. Identify the ORM stack zip file downloaded in *Lab: Prepare Setup*
-2. Login to Oracle Cloud
-3.  Open up the hamburger menu in the left hand corner.  Click **Developer Services**, choose **Resource Manager > Stacks**. Choose the compartment in which you would like to install. Click **Create Stack**.  
+2. Log in to Oracle Cloud
+3.  Open up the hamburger menu in the top left corner.  Click **Developer Services**, and choose **Resource Manager > Stacks**. Choose the compartment in which you would like to install the stack. Click **Create Stack**.
 
-  ![](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
+  ![Select Stacks](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
 
-  ![](./images/create-stack.png " ")
+  ![Create Stack](./images/create-stack.png " ")
 
-4.  Select **My Configuration**, choose the **.ZIP FILE** button, click the **Browse** link and select the zip file that you downloaded or drag-n-drop for the file explorer.
+4.  Select **My Configuration**, choose the **.Zip file** button, click the **Browse** link, and select the zip file that you downloaded or drag-n-drop for the file explorer.
 
-  ![](./images/create-stack-novnc-1.png " ")
+  ![Select zip file](./images/select-zip.png " ")
 
 5.  Click **Next**.
 
 6. Enter or select the following:
 
-  ![](./images/create-stack-novnc-ssh-1.png " ")
+  ![Enter main configurations](./images/main-config-compute-vnc.png " ")
 
-    - **Instance Count:** Accept the default, **1**, unless you intend to create more than one. e.g. for a team
+    - **Instance Count:** Accept the default, **1**, unless you intend to create more than one (e.g. for a team)
     - **Select Availability Domain:** Select an availability domain from the dropdown list.
     - **Need Remote Access via SSH?** In this step you have 3 options to select from:
         - **Option (A)** - Keep Unchecked for Remote Desktop only Access - The Default
@@ -59,17 +58,17 @@ Your options are:
                 - *Paste SSH Keys*: Paste the plaintext key strings or
                 - *Choose SSH Key Files*: Drag-n-drop or browse and select valid public keys of *openssh* format from your computer
 
-        ![](./images/create-stack-novnc-ssh-2.png " ")
+        ![Paste SSH keys](./images/paste-ssh.png " ")
 
-        ![](./images/create-stack-novnc-ssh-3.png " ")
+        ![Choose SSH keys](./images/choose-ssh.png " ")
 
-        ***Note 1:*** This assumes that you already have an RSA type SSH key-pair available on the local system where you will be connecting from. If you don't and for more info on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key)
-
-        ***Note 2:*** If you used the Oracle Cloud Shell to create your key, make sure you paste the pub file in a notepad, remove any hard returns.  The file should be one line or you will not be able to login to your compute instance
+        >**Notes:**
+        1. This assumes that you already have an RSA-type SSH key pair available on the local system where you will be connecting from. If you don't and for more info on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key)
+        2. If you used the Oracle Cloud Shell to create your key, make sure you paste the pub file in a notepad, and remove any hard returns. The file should be one line or you will not be able to login to your compute instance
 
         - **Option (C)** - Check *Need Remote Access via SSH?* and *Auto Generate SSH Key Pair* to have the keys auto-generated for you during provisioning. If you select this option you will be provided with the private key post provisioning.
 
-        ![](./images/create-stack-novnc-ssh-3b.png " ")
+        ![Auto-generate SSH keys](./images/auto-ssh.png " ")
 
     Depending on the quota you have in your tenancy you can choose from standard Compute shapes or Flex shapes. Please visit the Appendix: Troubleshooting Tips for instructions on checking your quota
 
@@ -77,12 +76,12 @@ Your options are:
     - **Instance Shape:** Keep the default or select from the list of Flex shapes in the dropdown menu (e.g *VM.Standard.E4.Flex*).
     - **Instance OCPUS:** Accept the default shown. e.g. (**4**) will provision 4 OCPUs and 64GB of memory. You may also elect to reduce or increase the count by selecting from the dropdown. e.g. `[2-24]`. Please ensure you have the capacity available before increasing.
 
-    If don't have the required quota for Flex Shapes or you prefer to use fixed shapes, follow the instructions below.  Otherwise skip to the next step.
+    If don't have the required quota for Flex Shapes or you prefer to use fixed shapes, follow the instructions below.  Otherwise, skip to the next step.
 
     - **Use Flexible Instance Shape with Adjustable OCPU Count?:** Unchecked
     - **Instance Shape:** Accept the default shown or select from the dropdown. e.g. VM.Standard2.2
 
-  ![](./images/create-stack-novnc-ssh-4.png " ")
+  ![Use fixed shapes](./images/fixed-shape.png " ")
 
 7. For this section we will provision a new VCN with all the appropriate ingress and egress rules needed to run this workshop.  If you already have a VCN, make sure it has all of the correct ingress and egress rules and skip to the next section.
     - **Use Existing VCN?:** Accept the default by leaving this unchecked. This will create a **new VCN**.
@@ -90,45 +89,45 @@ Your options are:
 8. Click **Next**.
 9. Select **Run Apply** and click **Create**.
 
-  ![](./images/create-stack-novnc-4.png " ")
+  ![Run Apply](./images/run-apply.png " ")
 
-10. Your stack has is now created and the *Apply* action triggered is running to deploy your environment!  
+10. Your stack has now been created and the *Apply* action triggered is running to deploy your environment!
 
-  ![](./images/create-stack-novnc-ssh-7.png " ")
+  ![Apply is successful](./images/apply-job-success.png " ")
 
 You may now proceed to Task 2 (skip Task 1B).
 
-## Task 1B: Create Stack:  Compute only
-If you just completed Task 1A, please proceed to Task 2.  If you have an existing VCN and are comfortable updating VCN configurations, please ensure your VCN meets the minimum requirements. Refer to *Lab: Prepare Setup*       
+## Task 1B: Create Stack:  Compute Only
+If you just completed Task 1A, please proceed to Task 2.  If you have an existing VCN and are comfortable updating VCN configurations, please ensure your VCN meets the minimum requirements. Refer to *Lab: Prepare Setup*.
 
-  *Note:* We recommend letting our stack create the VCN to reduce the potential for errors.
+  >**Note:** We recommend letting our stack create the VCN to reduce the potential for errors.
 
 1.  Identify the ORM stack zip file downloaded in *Lab: Prepare Setup*
-2.  Login to Oracle Cloud
-3.  Open up the hamburger menu in the left hand corner.  Choose the compartment in which you would like to install.  Choose **Resource Manager > Stacks**.  
+2.  Log in to Oracle Cloud
+3.  Open up the hamburger menu in the top left corner.  Click **Developer Services**, and choose **Resource Manager > Stacks**. Choose the compartment in which you would like to install the stack. Click **Create Stack**.
 
-  ![](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
+  ![Select Stacks](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
 
-  ![](./images/create-stack.png " ")
+  ![Create Stack](./images/create-stack.png " ")
 
-4. Select **My Configuration**, click the **Browse** link and select the zip file that you downloaded. Click **Select**.
+4. Select **My Configuration**, choose the **.Zip file** button, click the **Browse** link, and select the zip file that you downloaded or drag-n-drop for the file explorer.
 
-  ![](./images/create-stack-novnc-1.png " ")
+  ![Choose zip](./images/select-zip.png " ")
 
   Enter the following information:
-    - **Name**:  Enter a name  or keep the prefilled default (*DO NOT ENTER ANY SPECIAL CHARACTERS HERE*, including periods, underscores, exclamation etc, it will mess up the configuration and you will get an error during the apply process)
+    - **Name**:  Enter a name  or keep the prefilled default (*DO NOT ENTER ANY SPECIAL CHARACTERS HERE*, including periods, underscores, exclamation, etc, it will mess up the configuration and you will get an error during the apply process)
     - **Description**:  Same as above
     - **Create in compartment**:  Select the correct compartment if not already selected
 
-  *Note:* If this is a newly provisioned tenant such as freetier with no user created compartment, stop here and first create it before proceeding.
+  >**Note:** If this is a newly provisioned tenant such as freetier with no user-created compartment, stop here and first create it before proceeding.
 
 5. Click **Next**.
 
 6. Enter or select the following:
 
-  ![](./images/create-stack-novnc-ssh-5.png " ")
+  ![Enter main configurations](./images/main-config-compute.png " ")
 
-    - **Instance Count:** Accept the default, **1**, unless you intend to create more than one. e.g. for a team
+    - **Instance Count:** Accept the default, **1**, unless you intend to create more than one (e.g. for a team)
     - **Select Availability Domain:** Select an availability domain from the dropdown list.
     - **Need Remote Access via SSH?** In this step you have 3 options to select from:
         - **Option (A)** - Keep Unchecked for Remote Desktop only Access - The Default
@@ -138,17 +137,17 @@ If you just completed Task 1A, please proceed to Task 2.  If you have an existin
                 - *Paste SSH Keys*: Paste the plaintext key strings or
                 - *Choose SSH Key Files*: Drag-n-drop or browse and select valid public keys of *openssh* format from your computer
 
-        ![](./images/create-stack-novnc-ssh-2.png " ")
+        ![Paste SSH keys](./images/paste-ssh.png " ")
 
-        ![](./images/create-stack-novnc-ssh-3.png " ")
+        ![select SSH keys](./images/choose-ssh.png " ")
 
-        ***Note 1:*** This assumes that you already have an RSA type SSH key-pair available on the local system where you will be connecting from. If you don't and for more info on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key)
-
-        ***Note 2:*** If you used the Oracle Cloud Shell to create your key, make sure you paste the pub file in a notepad, remove any hard returns.  The file should be one line or you will not be able to login to your compute instance
+        >**Notes:**
+        1. This assumes that you already have an RSA-type SSH key pair available on the local system where you will be connecting from. If you don't and for more info on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key)
+        2. If you used the Oracle Cloud Shell to create your key, make sure you paste the pub file in a notepad, and remove any hard returns. The file should be one line or you will not be able to login to your compute instance
 
         - **Option (C)** - Check *Need Remote Access via SSH?* and *Auto Generate SSH Key Pair* to have the keys auto-generated for you during provisioning. If you select this option you will be provided with the private key post provisioning.
 
-        ![](./images/create-stack-novnc-ssh-3b.png " ")
+        ![Auto-generate SSH keys](./images/auto-ssh.png " ")
 
     Depending on the quota you have in your tenancy you can choose from standard Compute shapes or Flex shapes. Please visit the Appendix: Troubleshooting Tips for instructions on checking your quota
 
@@ -156,111 +155,111 @@ If you just completed Task 1A, please proceed to Task 2.  If you have an existin
     - **Instance Shape:** Keep the default or select from the list of Flex shapes in the dropdown menu (e.g *VM.Standard.E4.Flex*).
     - **Instance OCPUS:** Accept the default shown. e.g. (**4**) will provision 4 OCPUs and 64GB of memory. You may also elect to reduce or increase the count by selecting from the dropdown. e.g. `[2-24]`. Please ensure you have the capacity available before increasing.
 
-    If don't have the required quota for Flex Shapes or you prefer to use fixed shapes, follow the instructions below.  Otherwise skip to the next step.
+    If don't have the required quota for Flex Shapes or you prefer to use fixed shapes, follow the instructions below.  Otherwise, skip to the next step.
 
     - **Use Flexible Instance Shape with Adjustable OCPU Count?:** Unchecked
     - **Instance Shape:** Accept the default shown or select from the dropdown. e.g. VM.StandardE2.2
 
-  ![](./images/create-stack-novnc-ssh-4.png " ")
+  ![Use fixed shapes](./images/fixed-shape.png " ")
 
-7. For this section we will an existing VNC.  Please make sure it has all of the correct ingress and egress rules otherwise go back to *TASK 1A* and deploy with a self-contained VCN.
+7. For this section we will an existing VNC.  Please make sure it has all of the correct ingress and egress rules otherwise go back to *Task 1A* and deploy with a self-contained VCN.
     - **Use Existing VCN?:** Check to select.
-    - **Select Existing VCN?:** Select existing VCN with regional public subnet and required security list.
+    - **Select Existing VCN:** Select existing VCN with the regional public subnet and required security list.
 
-  *Note:* For an existing VCN Option to be used successful, review the details at the bottom of this section
+  >**Note:** For an existing VCN Option to be used successfully, read *Appendix 3* at the bottom of this lab.
 
-  ![](./images/create-stack-novnc-ssh-6.png " ")
+  ![Use existing VCN](./images/use-exisiting-vcn.png " ")
 
-8. Review and click **Create**.
-
-  ![](./images/create-stack-novnc-8.png " ")
+9. Select **Run Apply** and click **Create**.
+  ![Click Create](./images/click-create.png " ")
 
 9. Your stack is now created and the *Apply* action triggered is running to deploy your environment!
 
-  ![](./images/create-stack-novnc-5.png " ")
+  ![Apply job in progress](./images/apply-in-progress.png " ")
 
 ## Task 2: Terraform Apply
-In the prior steps we elected to trigger the *terraform apply action* on stack creation.
+In the prior steps, we elected to trigger the *terraform apply action* on stack creation.
 
 1.  Review the job output.
 
-  ![](./images/create-stack-novnc-ssh-7.png " ")
+  ![Job output](./images/apply-job-success.png " ")
 
-2.  Congratulations, your environment has been created!  Click on the *Application Information* tab to get additional information about what you have just done.
+2.  Congratulations, your environment has been created!  Click the **Application Information** tab to get additional information about what you have just done.
+
 3.  Your public IP address(es), instance name(s), and remote desktop URL are displayed.
 
-
 ## Task 3: Access the Graphical Remote Desktop
-For ease of execution of this workshop, your VM instance has been pre-configured with a remote graphical desktop accessible using any modern browser on your laptop or workstation. Proceed as detailed below to login.
+For ease of execution of this workshop, your VM instance has been pre-configured with a remote graphical desktop accessible using any modern browser on your laptop or workstation. Proceed as detailed below to log in.
 
-1. Navigate to **Stack Details**, **Application Information** tab, and click on the remote desktop URL
+1. Navigate to **Stack Details** -> **Application Information** tab, and click the **Remote Desktop** URL.
 
-  ![](./images/create-stack-novnc-ssh-8.png " ")
+  ![Click Remote Desktop URL](./images/19c-remote-desktop.png " ")
 
-  ![](./images/novnc-login-ssh.png " ")
+  ![URL opens](./images/novnc-login-ssh.png " ")
 
   This should take you directly to your remote desktop in a single click.
 
-  ![](images/novnc-launch-get-started-2.png " ")
+  ![Remote desktop displayed](./images/novnc-launch-get-started.png " ")
 
-    *Note:* While rare, you may see an error on the browser - “*Deceptive Site Ahead*” or similar depending on your browser type as shown below.
+    >**Note:** While rare, you may see an error on the browser - “*Deceptive Site Ahead*” or similar depending on your browser type as shown below.
 
-    Public IP addresses used for LiveLabs provisioning comes from a pool of reusable addresses and this error is due to the fact that the address was previously used by a compute instance long terminated, but that wasn't properly secured, got bridged and was flagged. You can safely ignore and proceed by clicking on *Details*, and finally on *Visit this unsafe site*.
+    Public IP addresses used for LiveLabs provisioning come from a pool of reusable addresses and this error is because the address was previously used by a compute instance long terminated, but that wasn't properly secured, got bridged, and was flagged. You can safely ignore and proceed by clicking on *Details*, and finally, on *Visit this unsafe site*.
 
-  ![](images/novnc-deceptive-site-error.png " ")
+  ![Deceptive error](./images/novnc-deceptive-site-error.png " ")
 
-## Appendix 1:  Using Auto-generated SSH Keys to connect to your instance via an SSH terminal
+You may now **proceed to the next lab**.
 
-If you elected to auto-generate the SSH key-pair at provisioning, proceed as indicated below.
+## Appendix 1:  Use Auto-generated SSH Keys to Connect to Your Instance via an SSH Terminal
 
-In this example we will be illustrating connection from a Unix-style terminal such as *Mobaxterm*, MacOS terminal, etc.. For *Putty* on Windows, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key) on how to convert the key to the required *.ppk* format.
+If you elected to auto-generate the SSH key pair at provisioning, proceed as indicated below.
 
-1. Click *Copy* to get the private key and paste into a file on the system with an SSH client where you intend to initiate the connection. e.g. *mykey_rsa*.
+In this example, we will be illustrating a connection from a Unix-style terminal such as *Mobaxterm*, MacOS terminal, etc.. For *Putty* on Windows, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key) on how to convert the key to the required *.ppk* format.
 
-    ![](./images/create-stack-novnc-ssh-9.png " ")
+1. Click *Copy* to get the private key and paste it into a file on the system with an SSH client where you intend to initiate the connection. e.g. *mykey_rsa*.
+
+    ![Copy private key](./images/copy-private-key.png " ")
 
 2. Restrict the permissions on the file to *0600*
 
-    ```
+    ```text
     <copy>
-    chmod 0600 mykey_rsa
+    chmod 600 mykey_rsa
     </copy>
     ```
 
-    ![](./images/create-stack-novnc-ssh-10.png " ")
+    ![Restrict permission to file](./images/chmod.png " ")
 
 3. Connect to your instance using the key.
 
-    ```
+    ```text
     <copy>
-    ssh -i <path to mykey_rsa opc>@<my instance public IP>
+    ssh -i <path to mykey_rsa> opc@<my instance public IP>
     </copy>
     ```
-    ![](./images/create-stack-novnc-ssh-11.png " ")
-
+    ![SSH connect to instance](./images/ssh-login.png " ")
 
 ## Appendix 2:  Terraform and Resource Manager
-Terraform is a tool for building, changing, and versioning infrastructure safely and efficiently.  Configuration files describe to Terraform the components needed to run a single application or your entire datacenter.  In this lab a configuration file has been created for you to build network and compute components.  The compute component you will build creates an image out of Oracle's Cloud Marketplace.  This image is running Oracle Linux 7.
+Terraform is a tool for building, changing, and versioning infrastructure safely and efficiently.  Configuration files describe to Terraform the components needed to run a single application or your entire datacenter.  In this lab, a configuration file has been created for you to build a network and compute components.  The compute component you will build creates an image out of Oracle's Cloud Marketplace.  This image is running Oracle Linux 7.
 
-Resource Manager is an Oracle Cloud Infrastructure service that allows you to automate the process of provisioning your Oracle Cloud Infrastructure resources. Using Terraform, Resource Manager helps you install, configure, and manage resources through the "infrastructure-as-code" model. To learn more about OCI Resource Manager, take a watch the video below.
+Resource Manager is an Oracle Cloud Infrastructure service that allows you to automate the process of provisioning your Oracle Cloud Infrastructure resources. Using Terraform, Resource Manager helps you install, configure, and manage resources through the "infrastructure-as-code" model. To learn more about OCI Resource Manager, watch the video below.
 
 [](youtube:udJdVCz5HYs)
 
 ## Appendix 3: Troubleshooting Tips
-If you encountered any issues during the lab, follow the steps below to resolve them.  If you are unable to resolve, please skip to the **Need Help** section to submit your issue via our  support forum.
+If you encountered any issues during the lab, follow the steps below to resolve them.  If you are unable to resolve them, please go to the **Need Help** lab on the left menu to submit your issue to our support emailbox.
 - Availability Domain Mismatch
 - Limits Exceeded
 - Flex Shape Not Found
 - Instance shape selection grayed out
 
 ### **Issue #1:** Availability Domain Mismatch
-![](images/error-ad-mismatch.png  " ")
+![Availability domain mismatch error](./images/error-ad-mismatch.png  " ")
 
 #### Issue #1 Description
-When creating a stack and using an existing VCN, the availability domain and the subnet must match otherwise the stack errors.  
+When creating a stack and using an existing VCN, the availability domain and the subnet must match, otherwise the stack errors.
 
 #### Fix for Issue #1
-1.  Click on **Stack**-> **Edit Stack** -> **Configure Variables**.
+1.  Click **Stack**-> **Edit Stack** -> **Configure Variables**.
 2.  Scroll down to the network definition.
 3.  Make sure the Availability Domain number matches the subnet number.  E.g. If you choose AD-1, you must also choose subnet #1.
 4.  Click **Next**
@@ -268,69 +267,69 @@ When creating a stack and using an existing VCN, the availability domain and the
 6.  Click **Terraform Actions** -> **Apply**
 
 ### **Issue #2:** Flex Shape Not Found
-![](images/flex-shape-error.png  " ")
+![flex shape not found error](./images/flex-shape-error.png  " ")
 
 #### Issue #2 Description
-When creating a stack your ability to create an instance is based on the capacity you have available for your tenancy.
+When creating a stack, your ability to create an instance is based on the capacity you have available for your tenancy.
 
-#### Fix for Issue #3
+#### Fix for Issue #2
 If you have other compute instances you are not using, you can go to those instances and delete them.  If you are using them, follow the instructions to check your available usage and adjust your variables.
-1. Click on the Hamburger menu, go to **Governance** -> **Limits, Quotas and Usage**
+1. Click the Hamburger menu on the top left corner, go to **Governance** -> **Limits, Quotas and Usage**
 2. Select **Compute**
-3. These labs use the following compute types.  Check your limit, your usage and the amount you have available in each availability domain (click Scope to change Availability Domain)
+3. These labs use the following compute types.  Check your limit, your usage and the amount you have available in each availability domain (click **Scope** to change Availability Domain)
 4. Look for *Cores for Standard.E2 based VM and BM instances*, *Cores for Standard.xx.Flex based VM and BM instances*, and *Cores for Optimized3 based VM and BM instances*
-4. Click on the hamburger menu -> **Resource Manager** -> **Stacks**
-5. Click on the stack you created previously
-6. Click **Edit Stack** -> **Configure Variables**.
-7. Scroll down to Options
-8. Change the shape based on the availability you have in your system
-9. Click **Next**
-10. Click **Save Changes**
-11. Click **Terraform Actions** -> **Apply**
+5. Click the hamburger menu -> **Resource Manager** -> **Stacks**
+6. Click the stack you created previously
+7. Click **Edit Stack** -> **Configure Variables**.
+8. Scroll down to Options
+9. Change the **shape** based on the availability you have in your system
+10. Click **Next**
+11. Click **Save Changes**
+12. Click **Terraform Actions** -> **Apply**
 
 ### **Issue #3:** Limits Exceeded
 
-![](images/no-quota.png  " ")
+![limits exceeded error](./images/no-quota.png  " ")
 
 #### Issue #3 Description
-When creating a stack your ability to create an instance is based on the capacity you have available for your tenancy.
+When creating a stack, your ability to create an instance is based on the capacity you have available for your tenancy.
 
-*Please ensure that you have available cloud credits.  Go to **Governance** -> **Limits, Quotas and Usage,** select **compute**, ensure that you have **more than** the micro tier available.  If you have only 2 micro computes, this workshop will NOT run.*
+*Please ensure that you have available cloud credits.  Go to **Governance** -> **Limits, Quotas and Usage,** select **compute**, and ensure that you have **more than** the micro tier available.  If you have only 2 micro computes, this workshop will NOT run.*
 
 #### Fix for Issue #3
 If you have other compute instances you are not using, you can go to those instances and delete them.  If you are using them, follow the instructions to check your available usage and adjust your variables.
 
-1. Click on the Hamburger menu, go to **Governance** -> **Limits, Quotas and Usage**
+1. Click the Hamburger menu, go to **Governance** -> **Limits, Quotas and Usage**
 2. Select **Compute**
-3. These labs use the following compute types.  Check your limit, your usage and the amount you have available in each availability domain (click Scope to change Availability Domain)
+3. These labs use the following compute types.  Check your limit, your usage and the amount you have available in each availability domain (click **Scope** to change Availability Domain)
 4. Look for *Cores for Standard.E2 based VM and BM instances*, *Cores for Standard.xx.Flex based VM and BM instances*, and *Cores for Optimized3 based VM and BM instances*
-5. Click on the Hamburger menu -> **Resource Manager** -> **Stacks**
-6. Click on the stack you created previously
+5. Click the Hamburger menu -> **Resource Manager** -> **Stacks**
+6. Click the stack you created previously
 7. Click **Edit Stack** -> **Configure Variables**.
-8. Scroll down to Options
-9. Change the shape based on the availability you have in your system
+8. Scroll down to **Options**
+9. Change the **shape** based on the availability you have in your system
 10. Click **Next**
 11. Click **Save Changes**
 12. Click **Terraform Actions** -> **Apply**
 
 ### **Issue #4:** Instance Shape LOV Selection Grayed Out
 
-![](images/no-e3flex-in-tenant.png " ")
+![Instance Shape LOV Selection Grayed Out Error](./images/no-e3flex-in-tenant.png " ")
 
 #### Issue #4 Description
-When creating a stack selected the option *"Use Flexible Instance Shape with Adjustable OCPU Count"* but the *"Instance Shape"* LOV selection is grayed out and the following error message displayed:***"Specify a value that satisfies the following regular expression: ^VM\.(Standard\.E3\.Flex)$"***
+When creating a stack, select the option *"Use Flexible Instance Shape with Adjustable OCPU Count"*, but the *"Instance Shape"* LOV selection is grayed out, and the following error message is displayed:***"Specify a value that satisfies the following regular expression: ^VM\.(Standard\.E3\.Flex)$"***.
 
-This issue is an indication that your tenant is not currently configure to use flexible shapes (e3flex)
+This issue is an indication that your tenant is not currently configured to use flexible shapes (e3flex).
 
 #### Fix for Issue #4
 Modify your stack to use fixed shapes instead.
 
-1. Uncheck the option *"Use Flexible Instance Shape with Adjustable OCPU Count"* to use fixed shape instead
-![](./images/standardshape.png " ")
+1. Uncheck the option *"Use Flexible Instance Shape with Adjustable OCPU Count"* to use a fixed shape instead.
+![Use fixed shapes](./images/standardshape.png " ")
 
-
-You may now **proceed to the next lab**
+You may now **proceed to the next lab**.
 
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology
-* **Last Updated By/Date** - Marion Smith, Technical Program Manager, April 2022
+* **Contributors** - Marion Smith, Technical Program Manager, Arabella Yao, Database Product Manager
+* **Last Updated By/Date** - Arabella Yao, Jan 2023
