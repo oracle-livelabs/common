@@ -13,64 +13,19 @@ This lab assumes you have:
 
 ## Task 1: Cleanup Instance for Image Capture   
 
-1. As user *opc*, Download the latest *oci-image-cleanup.sh* script.
+1. Start an SSH termial session to the instance as user *opc* 
+    
+    **Notes:** This session must be external to your remote desktop connection.
+
+2. Copy and run the following to cleanup the instance.
 
     ```
     <copy>
     cd /tmp
-    wget https://raw.githubusercontent.com/oracle/oci-utils/master/libexec/oci-image-cleanup -O /tmp/oci-image-cleanup.sh
-    chmod +x oci-image-cleanup.sh
-    </copy>
-    ```
-
-2. Stop VNC Service to preserve the remote desktop layout before proceeding with custom image creation.
-
-    ```
-    <copy>
-    cat > /tmp/stopvnc.sh <<EOF
-    #!/bin/bash
-
-    #Drop existing chrome browser sessions
-    ll_windows_opened=\$(ps aux | grep 'disable-session-crashed-bubble'|grep -v grep |awk '{print \$2}'|wc -l)
-
-    if [[ "\${ll_windows_opened}" -gt 0 ]]; then
-      kill -2 \$(ps aux | grep 'disable-session-crashed-bubble'|grep -v grep |awk '{print \$2}')
-    fi
-
-    #Stop VNC
-    cd /etc/systemd/system
-    for i in \$(ls vncserver_*@*)
-    do
-      systemctl stop \$i
-    done
-    EOF
-    chmod +x /tmp/stopvnc.sh
-    sudo /tmp/stopvnc.sh
-    </copy>
-    ```
-
-2. Create and run script */tmp/cleanup.sh*
-
-    ```
-    <copy>
-    cat > /tmp/cleanup.sh <<EOF
-    #!/bin/bash
-    shopt -s dotglob
-    systemctl stop rsyslog
-    sh -c 'yes| /tmp/oci-image-cleanup.sh'
-    sed -i -e 's|^.*PermitRootLogin.*\$|PermitRootLogin no|g' /etc/ssh/sshd_config
-    sed -i -e 's|root:x:0:0:root:/root:/bin/bash|root:x:0:0:root:/root:/sbin/nologin|g' /etc/passwd
-    ln -sf /root/bootstrap/firstboot.sh /var/lib/cloud/scripts/per-instance/firstboot.sh
-    ln -sf /root/bootstrap/eachboot.sh /var/lib/cloud/scripts/per-boot/eachboot.sh
-    rm -f /u01/app/osa/non-marketplace-init/system-configured
-    rm -f /opt/.livelabs_firstboot_initialized
-    rm -f /home/*/.livelabs/.desktop_configured
-    rm -rf /home/*/log/*
-    rm -f /var/log/audit/audit.log
-    EOF
-    chmod +x /tmp/cleanup.sh
-    sudo /tmp/cleanup.sh
-
+    wget -q https://objectstorage.us-ashburn-1.oraclecloud.com/p/M8Q8E0Y8nmagcCPqUV3xHxqU21DN0acGe_J2wgNAg2XdxnPdTAJcmznu59NhlJ-E/n/natdsecurity/b/misc/o/livelabs-image-cleanup.zip -O /tmp/livelabs-image-cleanup.zip
+    unzip -qo livelabs-image-cleanup.zip 
+    chmod +x livelabs-image-cleanup.sh
+    sudo /tmp/livelabs-image-cleanup.sh
     </copy>
     ```
 
@@ -112,13 +67,13 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
 5. Navigate to *ll-orm-mkplc-freetier* and open the file *variables.tf*
 
-6. Search and replace the string below with the OCID of the newly created custom image copied above
+6. Update the default value for each of the 5 variables shown below
 
-    ```
-    <copy>
-    replace-with-valid-image-OCID
-    </copy>
-    ```
+    - **`instance_image_id`** - Enter the new image OCID copied above *(Required)*
+    - **`novnc_delay_sec`** - Adjust the delay (in seconds by appending s to the number. e.g. 600s) to wait for all processes to start post boot before the desktop URL is presented to the user *(optional)*
+    - **`desktop_guide_url`** - Enter the desktop guide URL for your workshop. It should end with `".../workshop/desktop"`. *(Required)*
+    - **`desktop_app1_url`** - Enter your first desktop webapp URL if applicable, unset by setting to `""`, or just keep unchanged *(optional)*
+    - **`desktop_app2_url`** - Enter your second desktop webapp URL if applicable, unset by setting to `""`, or just keep unchanged *(optional)*
 
     ![](./images/update-image-ocid.png " ")
 
@@ -129,7 +84,7 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
 9. Using the new zip file above, navigate to "*Developer Services > Stacks*" and create a test instance with Oracle Resources Manager (ORM).
 
-    *Notes:* For more details on how to provision with ORM, refer to [setup-compute](https://oracle-livelabs.github.io/common/sample-livelabs-templates/sample-workshop-novnc/workshops/freetier/?lab=setup-compute-novnc-ssh) lab guide.
+    *Notes:* For more details on how to provision with ORM, refer to [setup-compute](https://oracle-livelabs.github.io/common/sample-livelabs-templates/sample-workshop-novnc/workshops/tenancy/?lab=setup-compute-novnc-ssh) lab guide.
 
 10. After successful instance creation, get the remote desktop URL and logon to validate
 
@@ -181,4 +136,5 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, February 2021
-* **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Sep 2022
+* **Contributors**  -
+* **Last Updated By/Date** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, December 2022
