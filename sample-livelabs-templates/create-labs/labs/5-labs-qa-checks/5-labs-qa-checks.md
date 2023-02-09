@@ -88,6 +88,8 @@ For the workshop in **Completed** or **Quarterly QA Complete** status and have p
 
 1. The workshop status will automatically update to Quarterly QA after 60 days and workshop team will receive an email to perform Quarterly QA of the workshop. At this point, the workshop team needs to follow the instructions in the email and complete the self QA Checklist as in Task 3 step 4 to perform the Quarterly QA of the workshop.
 
+    ![Quarterly QA](images/quarterly-qa.png " ")
+
 2. Once you save the filled out Self QA Checklist and have updated your workshop, create pull request if necessary with all your changes and set your **Workshop Status** to **Quarterly QA Complete** in WMS.
 
     ![Quarterly QA Complete](images/quarterly-qa-complete.png " ")
