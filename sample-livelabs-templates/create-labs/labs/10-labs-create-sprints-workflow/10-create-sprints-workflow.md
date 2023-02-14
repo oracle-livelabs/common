@@ -24,11 +24,11 @@ The following diagram shows the general LiveLabs Sprints Development Workflow pr
 
 ### What Do You Need?
 
-To get started with Oracle LiveLabs Sprints development, you should have:
+To get started with Oracle LiveLabs Sprints development, you should have completed Lab 2:
 
-* A GitHub Account (steps in Lab 1 Task 2)
-* Installed GitHub Desktop on your machine (steps in Lab 1 Task 4)
-* Installed Visual Studio Code editor (steps in Lab 3 Task 1 Option 2) with LiveServer extension (steps in Lab 3 Task 2 Option 2)
+* A GitHub Account (steps in Lab 2 Task 1)
+* Installed GitHub Desktop on your machine (steps in Lab 2 Task 3)
+* Installed Visual Studio Code editor (steps in Lab 2 Task 4) with LiveServer extension (steps in Lab 2 Task 5)
 
 ## Task 1: Set up Oracle LiveLabs Sprints GitHub Repository
 
@@ -38,9 +38,9 @@ To get started with Oracle LiveLabs Sprints development, you should have:
 
     ![Sprints Repository](./images/sprints-repository.png " ")
 
-2.  Fork the **oracle-livelabs/sprints** repository (Steps in Lab 1 Task 5 Steps 3-6)
+2.  Fork the **oracle-livelabs/sprints** repository (Steps in Lab 3 Task 1 Steps 4-6)
 
-3.  Create a local clone of the forked repository (Steps in Lab 1 Task 6)
+3.  Create a local clone of the forked repository (Steps in Lab 3 Task 2)
 
 ## Task 2: Understand the Oracle LiveLabs Sprints Folder Structure and its components
 
@@ -89,31 +89,31 @@ To get started with Oracle LiveLabs Sprints development, you should have:
     -   title: Update the first title field with the title of your sprint.
     -   description: Add a short description about the sprint
     -   filename: Update this field with your file name
-    -   Other related sprints: The manifest.json is like your book map file in SDL. If you would like to add related sprints, update the title fields with the respective sprints tile, their description and absolute paths (steps in Lab 3 Task 1) to their markdown files in filename. You can add up to a maximum of six related sprints and also delete the existing sprints sections if you do not need them.
+    -   Other related sprints: The manifest.json is like your book map file in SDL. If you would like to add related sprints, update the title fields with the respective sprints title, their description and absolute paths (steps in Lab 4 Task 4) to their markdown files in filename. You can add up to a maximum of six related sprints and also delete the existing sprints sections if you do not need them.
 
         ![edit manifest.json file](./images/edit-manifest-file.png " ")
 
 8.  You can take the help of the formatting in .md file you copied earlier and edit it to develop your sprint.
 
-9.  Make sure you develop the content considering all the security related points mentioned in Lab 3 Task 5 of the LiveLabs guide.
+9.  Make sure you develop the content considering all the security related points mentioned in Lab 4 Task 3 of the LiveLabs guide.
 
-10. Preview you Sprint using the Live Server (Steps in Lab 3 Task 6 Option 2)
+10. Preview you Sprint using the Live Server.
 
-You can refer the Lab 3a for common markdown features for content development and Lab 3 Task 7 for helpful resources and extensions for VS Code.
+You can refer the Lab 4 for markdown features for content development and Lab 2 Task 6 for helpful resources and extensions for VS Code.
 
 ## Task 4: Commit Your Changes to Your Clone and Create Pull Request
 
 You will push the updated content from your clone into the origin of your clone, that is, your fork, to synchronize your clone with your fork. Again as a reminder, it is a best practice to merge your repository every day or whenever you start your GitHub Desktop application. Merge pulls all the commits (changes) from the upstream/main repositories (production), into your local filesystem clone (local machine). This keeps your local clone up-to-date with other people's work (commits) from the upstream/main. Next, Merging also avoids the long time it could take to complete if you do not do that often.
 
-1.  Once you have complete the development of the sprint or when you create, delete, or modify assets in your clone (local copy), you should commit (save) those changes to your clone, and then push those changes from your clone to your fork (Steps in Lab 4 Task 2). Then these changes get saved to your forked repository.
+1.  Once you have complete the development of the sprint or when you create, delete, or modify assets in your clone (local copy), you should commit (save) those changes to your clone, and then push those changes from your clone to your fork (Steps in Lab 3 Task 6). Then these changes get saved to your forked repository.
 
-2.  Before you create a pull request, get the latest updates from the production repository into your clone. (Steps in Lab 4 Task 1).
+2.  Before you create a pull request, get the latest updates from the production repository into your clone. (Steps in Lab 3 Task 3).
 
-3. Set up GitHub Pages for your Fork (Steps in Lab 4 Task 3) to test or review your Sprint content (Steps in Lab 4 Task 4).
+3. Set up GitHub Pages for your Fork (Steps in Lab 3 Task 7) to test or review your Sprint content (Steps in Lab 3 Task 8).
 
-4. Create a Pull Request to upload your content to the main repository i.e., **https://github.com/oracle-livelabs/sprints** (Steps in Lab 4 task 5).
+4. Create a Pull Request to upload your content to the main repository i.e., **https://github.com/oracle-livelabs/sprints** (Steps in Lab 6 task 1) and follow the steps in Task 5 to request sprint publishing in WMS.
 
-5.  Once the PR is approved, it takes a few minutes for the changes to reflect on **oracle-livelabs.github.io/sprints** GitHub pages site. You can access your Sprint on GitHub by following the steps in Lab 4 Task 6.
+5.  Once the PR is approved, it takes a few minutes for the changes to reflect on **oracle-livelabs.github.io/sprints** GitHub pages site. You can access your Sprint on GitHub by following the steps in Lab 3 Task 8.
 
 ##  Task 5: Request Sprint Publish in WMS
 
@@ -123,11 +123,11 @@ You will push the updated content from your clone into the origin of your clone,
 
       ![Request Publishing](images/publishing-tab.png)
 
-3.  Provide the details below and click **Create**:
+3.  Provide all these **required** details below and click **Create**:
 
     -   **Publish Type:** Leave the default - Public
     -   **Workshop Time (in hours):** The maximum duration to complete the steps in a sprint should be less than 10-15 minutes. Convert the sprints duration time to hours. Make sure they end with odd number. For example, if a sprint duration is 4 minutes, update the field with 0.067 hours.
-    -   **LiveLabs Sprint:** Turn *ON* the radio button for the sprint and provide the oracle-livelabs.github.io/sprints pages URL (Steps in Lab 4 task 6 to create production URL) for the sprint once it is published. Format: https://oracle-livelabs.github.io/sprints/domain-folder-name/your-sprint-folder-name/
+    -   **LiveLabs Sprint:** Turn *ON* the radio button for the sprint and provide the oracle-livelabs.github.io/sprints pages URL (Follow the steps in Lab 5 task 1 and replace your github account name with oracle-livelabs to create production URL) for the sprint once it is published. Format: https://oracle-livelabs.github.io/sprints/domain-folder-name/your-sprint-folder-name/
 
     Scroll down to the Override Workshop Fields Section and provide these details:
     -   **Title Override field:** Choose a descriptive title up to 200 characters. Do not include the word "Sprint" and use "Oracle Speak". Choose a title that users would recognize or understand. Do not use abbreviations ("Autonomous Database" not "ADB") and start the title with a question, for example, How can I, Where do I, What do I do) and use only imperative verbs ("Build" not "Building").
@@ -145,7 +145,7 @@ You will push the updated content from your clone into the origin of your clone,
 
 6.  LiveLabs team will now review your sprint request and the pull request. If there are any changes to the sprint, the pull request will be updated with the comments and if there are changes to the sprint submit request, the LiveLabs Sprints team will reach out to you via email or WMS and update the publishing status of the sprint to **Changes Requested** in WMS.
 
-7.  if there are no changes needed, LiveLabs Admin team will approve the new sprint submit publish request and the pull request within 1-2 business days and update the sprint status to **Publish Approved** in WMS.
+7.  If there are no changes needed, LiveLabs Admin team will approve the new sprint submit publish request and the pull request within 1-2 business days and update the sprint status to **Publish Approved** in WMS.
 
 8. Once the sprint is approved in WMS, the sprint will be live in Production in 1 business day.
 
@@ -156,4 +156,4 @@ Feel free to make changes to the Sprints to keep them updated. Make sure to crea
 ## Acknowledgements
 
 * **Author** - Anoosha Pilli, Product Management, Database Product Management
-* **Last Updated By/Date** - Anoosha Pilli, July 2022
+* **Last Updated By/Date** - Anoosha Pilli, February 2023
