@@ -36,7 +36,7 @@ You can also add multiple files that specify variables (see the example in Task 
 {
     "var11": "Variable 1 value but yet different",
     "var22": "Variable 2 value is different",
-    "random_name2": "LiveLabs rocks & rules!",
+    "random_name2": "LiveLabs rocks & rules!",``
     "name_of_database": "My-Database-Name-is-the-best",
     "magic": "What is 2*2?"
  }
