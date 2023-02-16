@@ -42,6 +42,8 @@ Now that you have successfully destroyed all the resources provisioned for your 
 
 1. Follow the breadcrumbs links in the upper-left and click on **Stack Details**, the **More Actions > Delete Stack**.  
 
+    ![Delete Stack](./images/delete-stack-0.png "Delete Stack")
+
     ![Delete Stack](./images/delete-stack.png "Delete Stack")
 
 
