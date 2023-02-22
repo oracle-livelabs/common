@@ -24,35 +24,35 @@
 
     ![Drag the customer_contact folder](images/drag-customer-contact-folder.png)
 
-4. Perform the same drag and drop steps for **customer**, **genre**, **sales\_sample** and **pizza\_location**.
+4. Perform the same drag and drop steps for **genre**, **sales\_sample** and **pizza\_location**.
 
 
-5. Click the pencil icon for the **customer\_contact** load task to view the settings for this task.
+5. Click the 3-dot ellipsis menu for the **customer\_contact** load task. In the pop-up menu, click **Settings** to view the settings for this task.
 
     ![Click the pencil icon to open settings viewer for customer_contact load task](images/cc-viewsettings.png)
 
-6. In the settings viewer, you can see that Database Actions will create a **CUSTOMER_CONTACT** table with the list of columns and data types that will be created from the csv file. They all look correct, so click **Close** to close the settings viewer.
+6. In the settings viewer, you can see that Database Actions will create a **CUSTOMER_CONTACT** table with the list of columns and data types that will be created from the csv file. Take a moment to examine the preview information and loading options. In the Mapping section, notice that you can change the target column names and data types. They all look correct, so click **Close** to close the settings viewer.
 
     ![View the settings for customer_contact load task](images/settings-viewer-for-customer-contact.png)
 
-7. Click the pencil icon for the **sales\_sample** task to view its settings. In this case, update the name of the table to **CUSTSALES**.
+7. Click the pencil icon for the **sales\_sample** task to view its settings. Note that the tool makes intelligent choices for target table name and properties.  Since this is an initial load, accept the default option of **Create Table**, which conveniently creates the target table in the Autonomous Database, without the need to predefine the table in SQL. In this case, update the name of the table to be created, to **CUSTSALES**.
 
     ![Update table name](images/adb-load-data-table-name.png)
 
     Click **Close**
 
-8. Now click the **Start** button to run the data load job.
+8. Now click the **Start** button to run the data load job. In the **Run Data Load Job** dialog box, click **Run**.
 
     ![Run the data load job](images/rundataload.png)
 
     The job should take about 2 minutes to run.
 
-9. Check that all of the data load cards have green tick marks in them, indicating that the data load tasks have completed successfully. Click the information button on the **genre** task:
+9. Check that all of the data load cards have green tick marks in them, indicating that the data load tasks have completed successfully. Click the 3-dot ellipsis menu and **Settings** button for the **genre** task:
 
     ![Check the job is completed](images/loadcompleted.png)
 
 10. Let's do a quick review of the loaded data. Click the **Table** tab to view the **genre** data:
 
     ![View genre data](images/adb-dataload-genre-table.png)
-    
+
     The data looks good! Click **Close** to exit the **genre** task and then click **Done** to exit the DATA LOAD tool and return to the Database Actions Launchpad.
