@@ -1,4 +1,4 @@
-# Connnect to database via SSH Bastion
+# Connect to database via SSH Bastion
 
 ## Introduction
 
@@ -33,9 +33,11 @@ This lab assumes you have:
 
 	![Compartment](./images/list-scope-comp.png)
 
-Change name of Instance to your specification.
+	Change name of Instance to your specification.
 
-4. Click **Create bastion**
+4. Click **Create bastion**.
+
+	![Create bastion](./images/create-bastion.png)
 
 5. Enter a name for the Bastion
 	- Avoid entering any confidential information in this field. Only alphanumeric characters are supported.
@@ -83,7 +85,7 @@ Before creating a Managed SSH session, verify that:
 
 	![Display name](./images/managed.png)
 
-7. Under Add SSH Key, provide the public key file of the SSH key pair that you want to use for the session.
+7. Choose Compute instance and under Add SSH Key, provide the public key file of the SSH key pair that you want to use for the session.
 Later, when you connect to the session, you must provide the private key of the same SSH key pair.
 
 8. When you are finished, click "Create session"
