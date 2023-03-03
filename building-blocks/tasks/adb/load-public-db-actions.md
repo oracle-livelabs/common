@@ -24,7 +24,7 @@
 
     ![Drag the customer_contact folder](images/drag-customer-contact-folder.png)
 
-4. Perform the same drag and drop steps for **genre**, **sales\_sample** and **pizza\_location**.
+4. Perform the same drag and drop steps for **customer**, **genre**, **sales\_sample** and **pizza\_location**.
 
 
 5. Click the 3-dot ellipsis menu for the **customer\_contact** load task. In the pop-up menu, click **Settings** to view the settings for this task.
