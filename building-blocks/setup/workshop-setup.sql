@@ -1,7 +1,7 @@
 /*    Creates the workshop log and dataset table */
 declare
     l_format varchar2(1000) := '{"skipheaders":"0", "delimiter":"\n", "ignoreblanklines":"true"}';
-    l_uri    varchar2(1000) := 'https://raw.githubusercontent.com/oracle-livelabs/common/main/building-blocks/setup/datasets.json';
+    l_uri    varchar2(1000) := 'https://objectstorage.us-phoenix-1.oraclecloud.com/n/adwc4pm/b/workshop_utilities/o/setup/datasets.json';
 begin
    -- drop tables if they exist
    for rec in (
@@ -60,22 +60,20 @@ end;
 /
 
 -- Install the workshop base package
+
 declare
+
     l_git varchar2(4000);
     l_repo_name varchar2(100) := 'common';
     l_owner varchar2(100) := 'martygubar';
     l_package_file varchar2(200) := 'building-blocks/setup/workshop-package.sql';
-begin
-    -- get a handle to github
-    l_git := dbms_cloud_repo.init_github_repo(
-                 repo_name       => l_repo_name,
-                 owner           => l_owner );
 
-    -- install the package header
-    dbms_cloud_repo.install_file(
-        repo        => l_git,
-        file_path   => l_package_file,
-        stop_on_error => true);
+begin
+
+    dbms_cloud_repo.install_sql(
+        content   => to_clob(dbms_cloud.get_object(object_uri => l_uri)),
+        stop_on_error => true                                     
+    );
 
     -- enable access to the objects
     execute immediate 'grant execute on workshop to public' ;

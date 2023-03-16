@@ -1,9 +1,9 @@
-# Get started - LiveLabs login and SSH into Oracle Database 19c (ORCL) Compute Instance.
+# Get started - LiveLabs login and SSH into Oracle Database 19c (ORCL) compute instance
 
 ## Introduction
 
 Welcome to your LiveLabs Sandbox environment.
-In order to start your workshop, you need to login to our LiveLabs Sandbox.
+In order to start your workshop, you need to log in to our LiveLabs Sandbox.
 
 In this lab, we are going to show you where you can find the login information and how to SSH into the Oracle Database 19c (ORCL) Compute Instance running on the LiveLabs Sandbox environment. We will also verify and connect to the Database
 
@@ -12,9 +12,9 @@ Estimated Time: 5 minutes
 ### Objectives
 
 - View login information to LiveLabs Sandbox
-- Login to LiveLabs Sandbox
-- SSH into Compute Instance
-- Verify and Connect to the Database
+- Log in to LiveLabs Sandbox
+- SSH into compute instance
+- Verify and connect to the database
 
 
 ## Task 1: View Login Information
@@ -52,7 +52,7 @@ There are multiple ways to connect to your cloud instance.  Choose the way to co
       ssh -i <private key> opc@<Your Compute Instance Public IP Address> 
       ```
 
-    *Note: The angle brackets <> should not appear in your code.*
+    >**Note:** The angle brackets <> should not appear in your code.
   
   ![User Index](images/ssh-compute.png "User Index") 
   
@@ -67,7 +67,7 @@ There are multiple ways to connect to your cloud instance.  Choose the way to co
     ````
     ![SSH first time](./images/ssh-first-time.png "SSH first time")
 
-    *Note: The angle brackets <> should not appear in your code.*
+    >**Note:** The angle brackets <> should not appear in your code.
 
 2.  Enter a name for the session and click **Save**.
 
@@ -81,9 +81,9 @@ There are multiple ways to connect to your cloud instance.  Choose the way to co
 
     ![Putty Auth](./images/putty-auth.png "Putty Auth")
 
-6. The file path for the SSH private key file now displays in the Private key file for authentication field.
+6. The file path for the SSH private key file now displays in the Private key file for the authentication field.
 
-7. Click Session in the left navigation pane, then click Save in the Load, save or delete a stored session.
+7. Click **Session** in the left navigation pane, then click **Save** in the Load, and save or delete a stored session.
 
 8. Click Open to begin your session with the instance.
  
@@ -160,4 +160,5 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 
 - **Created By/Date** - Madhusudhan Rao, Principal Product Manager, Oracle Database, Nov 2nd 2022 
+- **Contributors** - Arabella Yao, Product Manager, Database Product Management
 - **Last Updated By/Date** -  Madhusudhan Rao, Principal Product Manager, Oracle Database, Nov 3rd 2022 

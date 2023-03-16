@@ -1,7 +1,7 @@
 create or replace package workshop authid current_user
 as
 
-    /* Specify constants for the utility */
+
     repo varchar2(100)       := 'common';
     repo_owner varchar2(100) := 'martygubar';
     install_path varchar2(100) := 'building-blocks/setup/scripts';
@@ -321,14 +321,17 @@ create or replace package body workshop as
     
     
     /* install the prerequisite procedures */
+
     procedure install_prerequisites as
     l_git clob;
     l_num_scripts number;
+
     begin
     
     -- The setup/scripts folder contains all of the prerequisite scripts required by
     -- the labs.  Install those scripts
     write('Adding prerequisite scripts', 1);
+
     write('repo  = ' || repo);
     write('owner = ' || repo_owner);
     
@@ -344,26 +347,26 @@ create or replace package body workshop as
                 path   => install_path
             ) -- list_files
           ); -- table
+
     
     write(l_num_scripts || ' scripts will be installed');
     
     for rec in (
-        select name
-        from table(
-            dbms_cloud_repo.list_files (
-                    repo   => l_git,
-                    path   => install_path
-                ) -- list_files
-              ) -- table
+        select *
+        from dbms_cloud.list_objects (
+           location_uri => install_path
+          )
     )
     loop 
         begin
     
+
             write('installing ' || rec.name, 2);
             dbms_cloud_repo.install_file(
                 repo        => l_git,
                 file_path   => rec.name);
     
+
             exception
                 when others then
                     write(sqlerrm);
@@ -389,6 +392,8 @@ create or replace package body workshop as
                             'dwrole',
                             'graph_developer',
                             'oml_developer',
+
+
                             'connect',
                             'create analytic view',
                             'create attribute dimension',
@@ -412,7 +417,9 @@ create or replace package body workshop as
                             'execute on dbms_session',
                             'execute on dbms_soda',
                             'execute on dbms_soda_admin',                        
+
                             'write on directory data_pump_dir',
+
                             'select on sys.v_$services',
                             'select on sys.dba_rsrc_consumer_group_privs',
                             'read on all_dcat_entities',

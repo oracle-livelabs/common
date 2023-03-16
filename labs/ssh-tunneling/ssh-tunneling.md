@@ -1,4 +1,4 @@
-# Connect a Virtual DB System and SQL Developer Using SSH Tunneling
+# Connect a virtual DB System and SQL Developer using SSH Tunneling
 
 ## Introduction
 

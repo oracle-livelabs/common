@@ -196,7 +196,7 @@ Run the following script in a SQL Worksheet (must be ADB) to install the utility
   </copy>
   ```
 There is also a Block that steps thru this install in more detail:
-* [Add Workshop Utilities](/building-blocks/workshop/freetier/index.html?lab=add-workshop-utilities)
+* [Add Workshop Utilities](https://oracle-livelabs.github.io/common/building-blocks/workshop/freetier/index.html?lab=add-workshop-utilities)
 
 You're now ready to add users and load data!
 
