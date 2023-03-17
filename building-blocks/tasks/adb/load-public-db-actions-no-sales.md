@@ -4,7 +4,7 @@
         "description":"Uses Database Actions to load data from public object storage buckets. It loads the following tables:<ul><li>customer_contact</li><li>genre</li><li>pizza location</li></ul><p>To load sales_sample, use task **Load data from public buckets using Database Actions**"
     }
 -->
-1. In the **Database Actions Launchpad** home page, under the **Data Tools** section, select the **DATA LOAD** card. Under **What do you want to do with your data?** select **LOAD DATA**, and under **Where is your data?** select **CLOUD STORE**, then click **Next**
+1. In the **Database Actions Launchpad** home page, under the **Data Studio** section, select the **DATA LOAD** card. Under **What do you want to do with your data?** select **LOAD DATA**, and under **Where is your data?** select **CLOUD STORE**, then click **Next**
 
     ![Select Load Data, then Cloud Store](images/select-load-data-from-cloud-store.png)
 
@@ -40,7 +40,7 @@
 
     The job should take about 2 minutes to run.
 
-11. Check that all of the data load cards have green tick marks in them, indicating that the data load tasks have completed successfully. Click the information button on the **genre** task:
+11. Check that all of the data load cards have green tick marks in them, indicating that the data load tasks have completed successfully. Click the on the **genre** task link to view the results:
 
     ![Check the job is completed](images/loadcompleted-no-sales.png)
 
