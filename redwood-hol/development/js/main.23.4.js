@@ -1344,16 +1344,17 @@ let main = function() {
         let checkForGerundInTitle = function(manifest) {
             if(manifest.workshoptitle.indexOf("ing ") !== -1) {
                 //updated to specifiy what Imperative means
-                add_issue("Please use an imperative workshop title instead of a gerund.(e.g 'Start' not 'Starting'.)", "major-error")
+                add_issue ("Your workshop title uses a gerund. Consider using an imperative verb workshop title, for example, 'Start' instead of 'Starting'.","major-error")
+                // add_issue("Please use an imperative workshop title instead of a gerund,(e.g 'Start' not 'Starting').", "major-error")
             }
         }
 
         let checkForGerundInLabTitle = function(manifest) {
             var i = 0;
             while (i < manifest.tutorials.length) {
-                ("length of array: ", i);
                 if(manifest.tutorials[i].title.indexOf("ing ") !== -1) {
-                    add_issue(manifest.tutorials[i].title + ",please use an imperative lab title instead of a gerund.", "major-error")
+                    //specifies where imperative issue location(s) within the Lab
+                    add_issue("Your lab: '" + manifest.tutorials[i].title + "', uses a gerund. Consider using an imperative verb lab title instead of a gerund, for example, 'Start' instead of 'Starting'.", "major-error")
                 }
                 i++;
               }
