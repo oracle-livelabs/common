@@ -1,8 +1,10 @@
 create or replace package workshop authid current_user
 as
 
-    /* Specify constants for the utility */
-    install_path varchar2(100) := 'https://objectstorage.us-phoenix-1.oraclecloud.com/n/adwc4pm/b/workshop_utilities/o/setup/scripts/';
+
+    repo varchar2(100)       := 'common';
+    repo_owner varchar2(100) := 'martygubar';
+    install_path varchar2(100) := 'building-blocks/setup/scripts';
 
     procedure install_prerequisites;
 
@@ -319,21 +321,32 @@ create or replace package body workshop as
     
     
     /* install the prerequisite procedures */
-    procedure install_prerequisites as    
-        l_num_scripts number;
+
+    procedure install_prerequisites as
+    l_git clob;
+    l_num_scripts number;
+
     begin
     
     -- The setup/scripts folder contains all of the prerequisite scripts required by
     -- the labs.  Install those scripts
     write('Adding prerequisite scripts', 1);
-    write('source path  = ' || install_path);
-        
+
+    write('repo  = ' || repo);
+    write('owner = ' || repo_owner);
+    
+    l_git := dbms_cloud_repo.init_github_repo(
+                repo_name       => repo,
+                owner           => repo_owner );
     
     select count(*)
     into l_num_scripts
-    from dbms_cloud.list_objects (
-       location_uri => install_path
-      );
+    from table(
+        dbms_cloud_repo.list_files (
+                repo   => l_git,
+                path   => install_path
+            ) -- list_files
+          ); -- table
 
     
     write(l_num_scripts || ' scripts will be installed');
@@ -347,15 +360,13 @@ create or replace package body workshop as
     loop 
         begin
     
-            write('installing ' || install_path || rec.object_name, 2);
-            
-            dbms_cloud_repo.install_sql (
-                content         => to_clob(dbms_cloud.get_object(object_uri => install_path || rec.object_name)),
-                stop_on_error   => false
-                
-            );
 
-  
+            write('installing ' || rec.name, 2);
+            dbms_cloud_repo.install_file(
+                repo        => l_git,
+                file_path   => rec.name);
+    
+
             exception
                 when others then
                     write(sqlerrm);
@@ -381,7 +392,8 @@ create or replace package body workshop as
                             'dwrole',
                             'graph_developer',
                             'oml_developer',
-                            'soda_app',
+
+
                             'connect',
                             'create analytic view',
                             'create attribute dimension',
@@ -405,7 +417,9 @@ create or replace package body workshop as
                             'execute on dbms_session',
                             'execute on dbms_soda',
                             'execute on dbms_soda_admin',                        
-                            'all on directory data_pump_dir',
+
+                            'write on directory data_pump_dir',
+
                             'select on sys.v_$services',
                             'select on sys.dba_rsrc_consumer_group_privs',
                             'read on all_dcat_entities',
