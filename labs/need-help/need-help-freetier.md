@@ -10,8 +10,9 @@ After reading those troubleshooting tips, if you still find yourself stuck or wo
 For more about getting support using our email, click [here](#HowtoFormatYourSupportEmailRequest).
 
 ### Common Issues Table of Contents
-  - [Connectivity Issues? Unable To Upload Data or Connect To The database?](#ConnectivityIssues?UnabletoUploadDataorConnecttotheDatabase?)
+  - [Connectivity Issues? Unable to Upload Data or Connect to the Database? Hmmm... can't reach this page? What ports should I open to gain access to the workshop?](#ConnectivityIssues?UnabletoUploadDataorConnecttotheDatabase?Hmmm...can'treachthispage?WhatportsshouldIopentogainaccesstotheworkshop?)
   - [Cannot Create Passwords for Database Users?](#CannotCreatePasswordsforDatabaseUsers?)
+  - [Cannot find Groups under Identity & Security in my tenancy?](CannotfindGroupsunderIdentity&Securityinmytenancy?)
 
 ## How to Format Your Support Email Request
 This will construct an email in your default mail application that is auto-populated to address our LiveLabs support inbox and will also include your current workshop in the subject line. Follow the steps below to contact us and get a quick resolution to your issue.
