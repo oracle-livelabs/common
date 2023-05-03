@@ -25,21 +25,49 @@ This will construct an email in your default mail application that is auto-popul
 
 4. Attach a **Screenshot** and **Any Troubleshooting Steps** you've tried, so that we can recreate the issue and provide a timely and accurate solution.
 
-## Connectivity Issues? Unable to Upload Data or Connect to the Database?
+## Connectivity Issues? Unable to Upload Data or Connect to the Database? Hmmm... can't reach this page? What ports should I open to gain access to the workshop?
+
 Are you connected to a **VPN**, **Corporate Network**, or behind a strict **Firewall**?
 
-If any of these three conditions are true, some ports in your network may be closed to traffic. Uploading data through Database Actions in your web browser and applications like the Oracle Analytics Tool could be restricted and may appear to "Hang" or freeze.
+If any of these three conditions are true, some ports in your network may be closed to traffic.
+
+For uploading data through Database Actions in your web browser and applications like the Oracle Analytics Tool could be restricted and may appear to "Hang" or freeze.
+
+While connecting to a noVNC workshop, you might get "Hmmm... can't reach this page" error and could not access the workshop.
+
+Try these options to access the environment again:
 
 1. Please disconnect from your VPN and try again if applicable.
 
 2. If you are connected to a corporate network, try switching to a public or a "clear" network if allowed.
 
-3. Alternatively, contact your IT Administrator to see if adding exceptions to your network or firewall would be viable.
+3. Check and disable the ad blocker if there is one setup for your browser.
 
+4. Try running the workshop in a different browser other than your current browser.
+
+5. For the noVNC workshop, check if you can open port 6080.
+
+6. For other standard scenarios, check if you can open ports such as 80, 443, and 22 (for ssh).
+
+7. Alternatively, contact your IT Administrator to see if adding exceptions to your network or firewall would be viable.
 
 ## Cannot Create Passwords for Database Users?
 
 1. Make sure the password you enter satisfies the following [restrictions](https://docs.oracle.com/en/cloud/saas/marketing/responsys-user/Account_PasswordRestrictions.htm).
+
+## Cannot find Groups under Identity & Security in my tenancy?
+
+1. From the navigation menu, click **Identity & Security** and select **Domains** under **Identity**.
+
+  ![Select Domains](./images/select-domain.png " ")
+
+2. Make sure you are in the correct compartment and click **Default(Current domain)**
+
+  ![Click Default](./images/domain-groups.png " ")
+
+3. From the Identity domain section on the left, click **Groups** to access the groups.
+
+  ![Click Groups](./images/click-groups.png " ")
 
 ## Acknowledgements
 * **Author** - LiveLabs Team
