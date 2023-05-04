@@ -6,7 +6,7 @@ This lab will show you how to set up a Resource Manager stack that will generate
 Estimated Time: 15 minutes
 
 Watch the video below for a walk-through of the Environment Setup lab.
-[Lab walk-through](youtube:anPEOZYBdyA)
+[Lab walk-through](videohub:1_icfgp61i)
 
 ### About Terraform and Oracle Cloud Resource Manager
 For more information about Terraform and Resource Manager, please see the appendix below.
