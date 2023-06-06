@@ -12,7 +12,7 @@ For more about getting support using our email, click [here](#HowtoFormatYourSup
 ### Common Issues Table of Contents
   - [Can't Log in to Oracle Cloud](#CantLogintoOracleCloud)
   - [Can't Create An Oracle Database? Nothing In Your Compartment?](#CantCreateanOracleDatabase?NothinginYourCompartment?)
-  - [Connectivity Issues? Unable To Upload Data or Connect To The database?](#ConnectivityIssues?UnabletoUploadDataorConnecttotheDatabase?)
+  - [Connectivity Issues? Unable to Upload Data or Connect to the Database? Hmmm... can't reach this page? What ports should I open to gain access to the workshop?](#ConnectivityIssues?UnabletoUploadDataorConnecttotheDatabase?Hmmm...can'treachthispage?WhatportsshouldIopentogainaccesstotheworkshop?)
   - [Cannot Access Cloud Shell?](#CannotAccessCloudShell?)
   - [Cannot Connect to the Marketplace Compute Instance Using a Private SSH Key?](#CannotConnecttotheMarketplaceComputeInstanceUsingaPrivateSSHKey?)
   - [Cannot Create Passwords for Database Users?](#CannotCreatePasswordsforDatabaseUsers?)
@@ -49,16 +49,31 @@ This will construct an email in your default mail application that is auto-popul
 
     ![Set region](./images/compartment-select.png)
 
-## Connectivity Issues? Unable to Upload Data or Connect to the Database?
+## Connectivity Issues? Unable to Upload Data or Connect to the Database? Hmmm... can't reach this page? What ports should I open to gain access to the workshop?
+
 Are you connected to a **VPN**, **Corporate Network**, or behind a strict **Firewall**?
 
-If any of these three conditions are true, some ports in your network may be closed to traffic. Uploading data through Database Actions in your web browser and applications like the Oracle Analytics Tool could be restricted and may appear to "Hang" or freeze.
+If any of these three conditions are true, some ports in your network may be closed to traffic.
+
+For uploading data through Database Actions in your web browser and applications like the Oracle Analytics Tool could be restricted and may appear to "Hang" or freeze.
+
+While connecting to a noVNC workshop, you might get "Hmmm... can't reach this page" error and could not access the workshop.
+
+Try these options to access the environment again:
 
 1. Please disconnect from your VPN and try again if applicable.
 
 2. If you are connected to a corporate network, try switching to a public or a "clear" network if allowed.
 
-3. Alternatively, contact your IT Administrator to see if adding exceptions to your network or firewall would be viable.
+3. Check and disable the ad blocker if there is one setup for your browser.
+
+4. Try running the workshop in a different browser other than your current browser.
+
+5. For the noVNC workshop, check if you can open port 6080.
+
+6. For other standard scenarios, check if you can open ports such as 80, 443, and 22 (for ssh).
+
+7. Alternatively, contact your IT Administrator to see if adding exceptions to your network or firewall would be viable.
 
 ## Cannot Access Cloud Shell?
 
@@ -75,7 +90,6 @@ If the workshop asks you to open the cloud shell, but you cannot access it, plea
 
 3. Relaunch your cloud shell. You should be able to open your cloud shell.
    ![Cloud Shell](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
-
 
 ## Cannot Connect to the Marketplace Compute Instance Using a Private SSH Key?
 

@@ -141,7 +141,32 @@ The green Button can also be added after your workshop has already been in produ
 
 Congratulations on completing the Step by Step workshop to create your workshop in LiveLabs.
 
+## (Optional) Task 4: Re-publish your workshop
+
+For the workshops that are in Quarterly QA status with a last qa date of more than 105 days and wish to update workshop publishing entry with *Publish status - Published and Publish type - Private/Disabled* to *Publish Status - Published and Publish type - Public/Event*, please follow these steps to request republishing of your workshop in production.
+
+![Republish request process](./images/republish-request-process.png " ")
+
+1. Perform all the steps in **Lab 5** especially *Lab 5 Task 4*. Ensure you have completed the self QA checklist and updated your workshop status to Quarterly QA Complete.
+
+2. After that, update your publishing entry **Publish type** to either *Public/Event* based on your requirement and click **Save**.
+
+  ![Update publish type](./images/update-publish-type.png " ")
+
+3. Confirm your changes by clicking the **Push to LiveLabs** button.
+
+  ![Confirm Push to LiveLabs](./images/confirm-push-to-ll.png " ")
+
+4. Click on the Publishing tab and view the Publish status of your publishing entry. Publish status will be updated to **Publish Requested** automatically.
+
+  ![Publish status Updated to publish requested](./images/updated-to-publish-requested.png " ")
+
+5. The LiveLabs publishing team will review the request in 1-2 business days and update the publishing entry publish status to **Publish Approved** if everything looks good. If there are any changes, the LiveLabs publishers will share the feedback using the WMS messaging system, asking the workshop team to make changes to the workshop. The workshop team will make the requested changes to the workshop and may create a Pull request if needed. After the changes are made, the workshop team will update the LiveLabs publishers using the WMS messaging system.
+
+6. After LiveLabs publishers have updated the workshop publishing status to Publish Approved, the workshop will be pushed to production within a day.
+
 ## **Appendix**: Troubleshooting Tips
+
 ### Issue 1: GitHub Merge Conflicts
 GitHub merge conflicts happen when you and some other contributors are changing the same content in the oracle-livelabs repositories. Merge conflicts prevent you from pushing your changes to your GitHub repository.
   ![Merge Conflicts](./images/merge-conflicts.png)

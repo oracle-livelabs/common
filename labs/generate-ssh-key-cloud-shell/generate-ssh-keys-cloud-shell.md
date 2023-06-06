@@ -8,8 +8,8 @@ We recommend you use the *Oracle Cloud Shell* to interface with the OCI compute 
 
 *IMPORTANT:  If the SSH key is not created correctly, you will not be able to connect to your environment and will get errors.  Please ensure you create your key properly.*
 
-Watch the video below for an overview of the lab.
-[Lab overview](youtube:oq2Hk1Yy9Cg)
+Watch the video below for a quick walk-through of the lab.
+[Lab overview](videohub:1_myugyuz7)
 
 Estimated Time: 5 minutes
 
