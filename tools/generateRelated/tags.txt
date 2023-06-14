@@ -1,5 +1,5 @@
 adb-dedicated
-adb-shared
+adb-serverless
 adw
 ajd
 apex
@@ -11,7 +11,7 @@ audit-vault
 automl
 automatic-indexing
 autonomous-db-dedicated
-autonomous-db-shared
+autonomous-db-serverless
 autonomous-database
 big-data
 block-volume
