@@ -52,13 +52,20 @@ Below is a partial list of the key data sets that are used by the MovieStream (w
     </tr>
   </thead>
   <tbody>
+      <tr>
+      <td style="text-align: left;">movieCollection</td>
+      <td>moviestream_gold</td>
+      <td>movie/*.json</td>
+      <td style="text-align: left;">3800</td>
+      <td style="text-align: left;">Movies list of movies.  Lots of good attributes, including: awards, nominations, cast, crew, genres, budget, gross, opening date, etc. This in JSON format.</td>
+    </tr> 
     <tr>
       <td style="text-align: left;">movie</td>
       <td>moviestream_gold</td>
       <td>movie/*.json</td>
-      <td style="text-align: left;">3821</td>
-      <td style="text-align: left;">Movies list of movies.  Lots of good attributes, including: awards, nominations, cast, crew, genres, budget, gross, opening date, etc. This in JSON format.</td>
-    </tr>
+      <td style="text-align: left;">3800</td>
+      <td style="text-align: left;">Relational view of the movieCollection.</td>
+    </tr>   
     <tr>
       <td>customer_contact</td>
       <td>moviestream_gold</td>
@@ -174,29 +181,18 @@ Run the following script in a SQL Worksheet (must be ADB) to install the utility
 
   ```
   <copy>
-  declare
-      l_git varchar2(4000);
-      l_repo_name varchar2(100) := 'common';
-      l_owner varchar2(100) := 'oracle-livelabs';
-      l_package_file varchar2(200) := 'building-blocks/setup/workshop-setup.sql';
+  declare 
+      l_uri varchar2(500) := 'https://objectstorage.us-ashburn-1.oraclecloud.com/n/c4u04/b/building_blocks_utilities/o/setup/workshop-setup.sql';
   begin
-      -- get a handle to github
-      l_git := dbms_cloud_repo.init_github_repo(
-                  repo_name       => l_repo_name,
-                  owner           => l_owner );
-
-      -- install the package header
-      dbms_cloud_repo.install_file(
-          repo        => l_git,
-          file_path   => l_package_file,
-          stop_on_error => false);
-
+      dbms_cloud_repo.install_sql(
+          content => to_clob(dbms_cloud.get_object(object_uri => l_uri))
+      );
   end;
   /
   </copy>
   ```
 There is also a Block that steps thru this install in more detail:
-* [Add Workshop Utilities](/building-blocks/workshop/freetier/index.html?lab=add-workshop-utilities)
+* [Add Workshop Utilities](https://oracle-livelabs.github.io/common/building-blocks/workshop/freetier/index.html?lab=add-workshop-utilities)
 
 You're now ready to add users and load data!
 
@@ -205,7 +201,7 @@ The Workshop Utilities provide an add user procedure. The newly created user has
 
   ```
   <copy>
-  exec add_adb_user('moviestream','Spatialisc00l#')
+  exec workshop.add_adb_user('moviestream','Spatialisc00l#')
 
   -- Run the command below in order to allow the new user (in this case "moviestream") using ORDS.
   -- This includes connecting via the ADB SQL Tools
@@ -230,10 +226,11 @@ Once the utilities are installed, It is easy to view available datasets and then
   <copy>
   select  
     table_name,
+    tags,
     description,
     dependencies,
     post_load_proc
-  from workshop_datasets;;
+  from workshop_datasets;
   </copy>
   ```
 
@@ -245,21 +242,22 @@ You will also see post-load procedures that are registered with the data set. Th
 
 ## Create and load tables
 Use the `workshop.add_dataset` procedure to add tables to your schema. The procedure takes two inputs:
-  * **table\_names**: comma separated list of tables.  Use ALL to add all tables
+  * **table\_names**: comma separated list of tables.  Use ALL to add all tables **OR**
+    **tag**: tables can be tagged (or grouped). For example, to add all data sets for the end to end demo, you can use the "end-to-end" tag.
   * **debug\_on**: will keep dmbs_cloud logging tables after a data load. This lets you check for rejected records and other loading issue
 
 In the following example, add the **PIZZA\_LOCATION** and **CUSTOMER\_CONTACT** tables:
 
   ```sql
   <copy>
-    exec workshop.add_dataset('PIZZA_LOCATION, CUSTOMER_CONTACT')
+    exec workshop.add_dataset(table_names => 'PIZZA_LOCATION, CUSTOMER_CONTACT')
   </copy>
   ```
 
-To create and load all 14 tables and views, simply run:
+To create and load all 14 tables and views required for the end-to-end workshop, simply run:
   ```sql
   <copy>
-  exec workshop.add_dataset('ALL')
+  exec workshop.add_dataset(tag => 'end-to-end')
   </copy>
   ```
 

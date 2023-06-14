@@ -37,11 +37,11 @@ This lab assumes you have:
 
     ![Check the workload type on the left.](./images/list-scope.png " ")
 
-4. From the databases displayed, click the name of your database to navigate to your ABD details page.
+4. From the databases displayed, click the name of your database to navigate to your ADB details page.
 
 5. From the ADB Details page, click **Database Actions**. ![Database Actions Button](./images/db-actions-button.png)
 
-    ![Database Actions](./images/adb-details-sdw-1.png)
+    ![Database Actions](./images/adb-details-sdw.png)
 
 6. The **Launch DB actions modal** window will appear. If you have pop-up blockers on, you have to open pop-up windows manually and turn on the radio button to allow access to the [cloud.oracle.com](https://cloud.oracle.com) site to view the Database Actions homepage.
 

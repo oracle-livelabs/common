@@ -158,11 +158,11 @@ LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or
 
   The embedded video looks like this: 
 
-  [Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8)
+  [Video hosted on Oracle Video Hub](videohub:1_yido2qmq)
 
   Markdown does the work of embedding the video for you, all you need to provide is a video hosting site and the video link address.
 
-2. You can find the video identifier code in the URL (in this example, the code is **1_2ubr9fo8**).
+2. You can find the video identifier code in the URL (in this example, the code is **1_1_yido2qmq**).
   
   *Please note:* Oracle Video Hub identifiers are usually prefixed with either `0_` or `1_` filled by a unique code.
 
@@ -192,7 +192,7 @@ Without using video scaling, all the video you embed will have small as the defa
 	[Oracle Video Hub video with no sizing](videohub:1_2ubr9fo8)
 	```
 
-  	[Demo video with no sizing.](videohub:1_2ubr9fo8)
+  	[Demo video with no sizing.](videohub:1_yido2qmq)
 
 2. To scale the video size to small which is also the default video size, use this format.
 
@@ -200,23 +200,23 @@ Without using video scaling, all the video you embed will have small as the defa
 	[Oracle Video Hub video scaled to small size, default video size](videohub:1_2ubr9fo8:small)
 	```
 
-  	[Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:small)
+  	[Video hosted on Oracle Video Hub](videohub:1_yido2qmq:small)
 
 3. Use this format to scale the video size to medium.
 
 	```
-	[Oracle Video Hub video scaled to medium size](videohub:1_2ubr9fo8:medium)
+	[Oracle Video Hub video scaled to medium size](videohub:1_yido2qmq:medium)
 	```
 
-  	[Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:medium)
+  	[Video hosted on Oracle Video Hub](videohub:1_yido2qmq:medium)
 
 4. To scale the video size to large in relation to the amount of lab page space available, use this format.
 
 	```
-	[Oracle Video Hub video scaled to large size](videohub:1_2ubr9fo8:large)
+	[Oracle Video Hub video scaled to large size](videohub:1_yido2qmq:large)
 	```
 
-	[Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:large)
+	[Video hosted on Oracle Video Hub](videohub:1_yido2qmq:large)
 
 ### Resizing a video from YouTube
 

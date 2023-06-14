@@ -38,13 +38,14 @@
     - **JSON Database** - is Oracle Autonomous Transaction Processing, but designed for developing NoSQL-style applications that use JavaScript Object Notation (JSON) documents. You can store up to 20 GB of data other than JSON document collections. There is no storage limit for JSON collections.
     - **APEX** - is a low cost, Oracle Cloud service offering convenient access to the Oracle APEX platform for rapidly building and deploying low-code applications
 
-    For this workshop, pick **[](var:db_workload_type)**
+    For this workshop, choose **Data Warehouse**.
 
     ![Choose a workload type.](images/adb-create-screen-workload.png "Workload type")
 
 5. Choose a deployment type. Select the deployment type for your database from the choices:
 
-    - **Shared Infrastructure** - For this lab, choose **Shared Infrastructure** as the deployment type.
+    - **Serverless** - For this lab, choose **Serverless** as the deployment type.
+    - **Dedicated Infrastructure**
 
     ![Choose a deployment type.](images/adb-create-screen-deployment-type.png "Deployment type")
 

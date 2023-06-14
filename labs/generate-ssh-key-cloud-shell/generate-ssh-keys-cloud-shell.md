@@ -8,8 +8,8 @@ We recommend you use the *Oracle Cloud Shell* to interface with the OCI compute 
 
 *IMPORTANT:  If the SSH key is not created correctly, you will not be able to connect to your environment and will get errors.  Please ensure you create your key properly.*
 
-Watch the video below for an overview of the lab.
-[Lab overview](youtube:oq2Hk1Yy9Cg)
+Watch the video below for a quick walk-through of the lab.
+[Lab overview](videohub:1_myugyuz7)
 
 Estimated Time: 5 minutes
 
@@ -27,7 +27,17 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
 ## Task 1: Generate SSH Keys
 
-1.  To start the Oracle Cloud shell, go to your Cloud console and click **Cloud Shell** at the top right of the page.
+1. If you are using the LiveLabs Sandbox environment, you first need to switch to the compartment assigned to you. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**.
+
+   ![Compute Instances](https://oracle-livelabs.github.io/common/images/console/compute-instances.png " ")
+
+    Select the compartment you are assigned to (check which compartment you are assigned to on the LiveLabs *Login Info* page). Expand the **root** compartment and then the **Livelabs** compartment. Select the compartment assigned to you.
+
+   ![View Login Info](https://oracle-livelabs.github.io/common/labs/need-help/images/view-login-info.png " ")
+
+   ![Select Compartment](https://oracle-livelabs.github.io/common/labs/need-help/images/select-compartment.png " ")
+
+2.  To start the Oracle Cloud shell, go to your Cloud console and click **Cloud Shell** at the top right of the page.
 
     ![Click cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
 
