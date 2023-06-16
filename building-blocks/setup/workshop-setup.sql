@@ -62,7 +62,12 @@ end;
 -- Install the workshop base package
 
 declare
-    l_uri varchar2(200) := 'https://objectstorage.us-phoenix-1.oraclecloud.com/n/adwc4pm/b/workshop_utilities/o/setup/workshop-package.sql';
+
+    l_git varchar2(4000);
+    l_repo_name varchar2(100) := 'common';
+    l_owner varchar2(100) := 'martygubar';
+    l_package_file varchar2(200) := 'building-blocks/setup/workshop-package.sql';
+
 begin
 
     dbms_cloud_repo.install_sql(
