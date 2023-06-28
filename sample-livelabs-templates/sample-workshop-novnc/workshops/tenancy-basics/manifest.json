@@ -39,7 +39,7 @@
       "filename": "../../provision/provision.md"
     },
     {
-      "title": "Lab 5: Environment Cleanup",
+      "title": "Environment Cleanup",
       "description": "Cleanly dispose of all OCI resources created by ORM for the workshop, and delete the stack",
       "filename": "https://oracle-livelabs.github.io/common/labs/cleanup-stack/cleanup-stack.md"
     },
