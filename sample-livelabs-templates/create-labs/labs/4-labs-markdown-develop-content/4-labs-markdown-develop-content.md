@@ -2,16 +2,16 @@
 
 ## Introduction
 
-Using VSCode or another editor of your choice, the Markdown files need to be edited based on your workshop content. As you learned in the previous lab, there are templates that are provided to get you started.
+To optimize your workflow while developing workshop content, we highly recommend utilizing VSCode as your preferred editor. Leveraging the power of VSCode you can use the optional tasks below and efficiently edit the Markdown files according to your specific needs. As demonstrated in the previous lab, Task 1 has templates that will provide a solid foundation for you to get started with editing process. By incorporating these recommendations from Task 2 to 15 (optional tasks), you can streamline your content development and enhance productivity.
 
-> **Note:** Oracle recommends using **Visual Studio Code (VSCode)**. If you are currently using **Atom** - it is being retired, and you should move to use VSCode.
+> **Note:** For a comprehensive workshop development experience, we recommended to utilize the sample workshop folder provided in Task 1, while tasks 2 to 15 are optional.
 
 <!-- **Helpful tips from your LiveLabs Team**
 [Video walking through markdown editing](youtube:rOj5APIU-XU) -->
 
 ### Objectives
 
-* Create workshop and lab content.
+* Create workshop and lab content
 * Link to absolute path images
 * Use conditional formatting
 * Add videos and scale images
@@ -405,6 +405,16 @@ With this new feature, you can now cross out text or words in a paragraph by add
 
 4. The URLs are opened in a new tab in the browser and the same applies to email addresses as well.
 
+## Task 15: Building Blocks
+
+Building Blocks are a way to enhance both the workshop development and customer experience. This step focuses on how authors can use Building Blocks and Tasks to accelerate their workshop development in your repo.
+
+1. You can view the sample on building block [here](https://github.com/oracle-livelabs/common/blob/main/building-blocks/blocks/adb/provision/provision-console.md) and sample task [here](https://github.com/oracle-livelabs/common/blob/main/building-blocks/tasks/adb/provision-body.md)
+
+2. You can view more building blocks and tasks by navigating to the [building-blocks](https://github.com/oracle-livelabs/common/tree/main/building-blocks) folder in the common repo.
+
+3. If you would like to leverage pre-built building blocks for your repository, feel free to check out this [how to create building block guide](https://github.com/oracle-livelabs/common/blob/main/building-blocks/how-to-author-with-blocks/how-to-author-with-blocks.md) to begin building for your repo.
+
 You may now **proceed to the next lab**.
 
 ## Acknowledgements
@@ -425,4 +435,4 @@ You may now **proceed to the next lab**.
     * Andres Quintana
     * Brianna Ambler
 
-* **Last Updated By/Date:** Anoosha Pilli, November 2022
+* **Last Updated By/Date:** Anoosha Pilli, June 2023
