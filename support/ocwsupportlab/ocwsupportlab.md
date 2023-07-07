@@ -1,24 +1,12 @@
-# Welcome to Oracle CloudWorld 2022!
+# Welcome to Oracle CloudWorld 2023!
 
 ## Introduction
 
-![Cloud World Logo](images/2022-08-23-cloudworldlogo.png)
+![Cloud World Logo](images/ocw23-dark-2.png)
 
 It is a pleasure to welcome you to the Oracle CloudWorld Hands-On Lab (HOL) Experience. We want to encourage you to get hands-on in each session and follow the hands-on lab instructions.
 
-In the following sections, you can find frequently asked questions, technical requirements, and tips & tricks.
-
-<br>
-
-## Join the CloudWorld Discovery Lab Community
-
-__If you have any questions, feel free to join the Oracle CloudWorld Discovery Lab community on our public Slack channel #ocw-hol-support.__
-
-Need to create an account first? Have a look at our LiveLab Sprint [How to create a Oracle DevRel Slack account?](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=3469).
-
-Join the #ocw-hol-support Slack channel in our public Slack workspace if you have questions about any of the Oracle CloudWorld hands-on labs.
-
-> Tip: Use your HOL or Tutorial ID in your post. This helps us to find the correct expert. You can find the HOL or tutorial ID on the start page (you can, of course, also just tell us the actual title).
+>In the following sections, you can find frequently asked questions, technical requirements, and tips & tricks.
 
 
 ## Technical Requirements for Hands-on Labs
@@ -29,16 +17,7 @@ All you need is your laptop and a modern web browser, and you should be good to 
 - Google Chrome 69 or later
 - Safari 12.1 or later
 - Firefox 62 or later (OCI Console does not support Firefox Private Browsing)
-</b>
-
-Some hands-on labs use *[noVNC](https://novnc.com/info.html)*. You will be informed by your host if noVNC is going be used. noVNC uses many modern web technologies, so a formal requirement list is unavailable. However, these are the minimum versions we are currently aware of:
-
-<b>
-- Chrome 64 or later
-- Firefox 79 or later
-- Safari 13.4 or later
-- Opera 51 or later
-- Edge 79 or later
+- Microsoft Edge 79 or later
 </b>
 
 ## Get Your CloudWorld Oracle Cloud Free Tier Account
@@ -168,7 +147,7 @@ In the following sections, we provide instructions on using the provided CloudWo
 
 ### Option 1 (**recommended**): Oracle Cloud Shell
 
-Oracle Cloud Infrastructure comes out-of-the-box with a handy utlity: Oracle Cloud Shell.
+Oracle Cloud Infrastructure comes out-of-the-box with a handy utility: Oracle Cloud Shell.
 You can use Oracle Cloud Shell to connect to your remote server using SSH.
 
 1. After you log in to OCI, open Oracle Cloud Shell. If it is the first time using Cloud Shell, it may take a minute or so to start up.
@@ -179,14 +158,14 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
    
     ```
     <copy>
-    wget https://bit.ly/ocw22-ssh
+    wget https://bit.ly/ocw23-keys
     </copy>
     ```
 3. Unzip the archive
    
     ```
     <copy>
-    unzip ocw22-ssh
+    unzip ocw23-keys
     </copy>
     ```
 
@@ -194,15 +173,15 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
 
    You will find the following files:
 
-      * ocw2022_rsa (privayte key)
-      * ocw2022_rsa.pub (public key)
-      * ocw2022-putty.ppk (private key in Putty format - for Windows only)
+      * ocw23-rsa (privayte key)
+      * ocw23-rsa.pub (public key)
+      * ocw23-rsa.ppk (private key in Putty format - for Windows only)
 
 4. Modify file permissions
 
     ```
     <copy>
-    chmod 600 ocw2022_rsa
+    chmod 600 ocw23-rsa
     </copy>
     ```
 
@@ -210,7 +189,7 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
 
     ```
     <copy>
-    ssh -i ocw2022_rsa <user>@<ip-adress>
+    ssh -i ocw23-rsa <user>@<ip-adress>
     </copy>
     ```
 
@@ -232,14 +211,14 @@ If you are using MacOS, you can also connect using a terminal application such a
    
     ```
     <copy>
-    wget https://bit.ly/ocw22-ssh
+    wget https://bit.ly/ocw23-keys
     </copy>
     ```
 3. Unzip the archive
    
     ```
     <copy>
-    unzip ocw22-ssh
+    unzip ocw23-keys
     </copy>
     ```
 
@@ -247,15 +226,15 @@ If you are using MacOS, you can also connect using a terminal application such a
 
    You will find the following files:
 
-      * ocw2022_rsa (privayte key)
-      * ocw2022_rsa.pub (public key)
-      * ocw2022-putty.ppk (private key in Putty format - for Windows only)
+      * ocw23-rsa (privayte key)
+      * ocw23-rsa.pub (public key)
+      * ocw23-rsa.ppk (private key in Putty format - for Windows only)
 
 4. Modify file permissions
 
     ```
     <copy>
-    chmod 600 ocw2022_rsa
+    chmod 600 ocw23-rsa
     </copy>
     ```
 
@@ -264,7 +243,7 @@ If you are using MacOS, you can also connect using a terminal application such a
 
     ```
     <copy>
-    ssh -i ocw2022_rsa <user>@<ip-adress>
+    ssh -i ocw23-rsa <user>@<ip-adress>
     </copy>
     ```
 
@@ -275,18 +254,18 @@ If you are using MacOS, you can also connect using a terminal application such a
 You can also use Putty to connect to the remote server.
 You must have Putty installed. [Download Putty](https://www.putty.org/)
 
-1. Download the ocw22-rsa.zip using a browser of your choice from the following URL:
+1. Download the ocw23-keys.zip using a browser of your choice from the following URL:
 
     ```
     <copy>
-    https://bit.ly/ocw22-ssh
+    https://bit.ly/ocw23-keys
     </copy>
     ```
-2. Unzip the file and copy the file ocw2022-putty.ppk to a folder of your choice, for example to your Windows Desktop.
+2. Unzip the file and copy the file ocw23-rsa.ppk to a folder of your choice, for example to your Windows Desktop.
 
     ![copy ppk to dekstop](images/putty-copy-to-desktop.png)
 
-3. Open Putty and add ocw2022-putty.ppk to configuration settings
+3. Open Putty and add ocw23-rsa.ppk to configuration settings
 
     ![copy ppk to dekstop](images/putty-config.png)
 
@@ -309,14 +288,14 @@ More information on using SSH in PowerShell can be found here: [PowerShell remot
    
     ```
     <copy>
-    wget https://bit.ly/ocw22-ssh -outfile ocw-rsa.zip
+    wget https://bit.ly/ocw23-keys -outfile ocw23-keys.zip
     </copy>
     ```
 3. Unzip the archive
    
     ```
     <copy>
-    Expand-Archive .\ocw22-rsa.zip
+    Expand-Archive .\ocw23-keys.zip
     </copy>
     ```
 
@@ -324,20 +303,20 @@ More information on using SSH in PowerShell can be found here: [PowerShell remot
 
    You will find the following files:
 
-      * ocw2022_rsa (privayte key)
-      * ocw2022_rsa.pub (public key)
-      * ocw2022-putty.ppk (private key in Putty format - for Windows only)
-
-3. Connect to the remote server using SSH
+      * ocw23-rsa (privayte key)
+      * ocw23-rsa.pub (public key)
+      * ocw23-rsa.ppk (private key in Putty format - for Windows only)
+  
+4. Connect to the remote server using SSH
 
     ```
     <copy>
-    ssh -i ocw2022_rsa <user>@<ip-adress>
+    ssh -i ocw23-rsa <user>@<ip-adress>
     </copy>
     ```
 <hr>
 <br>
-### Option 5 (Windows WSL): Conenct using Windows Subsystem for Linux
+### Option 5 (Windows WSL): Connect using Windows Subsystem for Linux
 
 You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote server. You must have Windows Subsystem for Linux (WSL or WSL2) installed in order to use this method.
 
@@ -347,14 +326,14 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
    
     ```
     <copy>
-    wget https://bit.ly/ocw22-ssh
+    wget https://bit.ly/ocw23-keys
     </copy>
     ```
 3. Unzip the archive
    
     ```
     <copy>
-    unzip ocw22-ssh
+    unzip ocw23-rsa
     </copy>
     ```
 
@@ -362,15 +341,15 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
 
    You will find the following files:
 
-      * ocw2022_rsa (privayte key)
-      * ocw2022_rsa.pub (public key)
-      * ocw2022-putty.ppk (private key in Putty format - for Windows only)
+      * ocw23-rsa (privayte key)
+      * ocw23-rsa.pub (public key)
+      * ocw23-rsa.ppk (private key in Putty format - for Windows only)
 
 4. Modify file permissions
 
     ```
     <copy>
-    chmod 600 ocw2022_rsa
+    chmod 600 ocw23-rsa
     </copy>
     ```
 
@@ -378,7 +357,7 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
 
     ```
     <copy>
-    ssh -i ocw2022_rsa <user>@<ip-adress>
+    ssh -i ocw23-rsa <user>@<ip-adress>
     </copy>
     ```
 <hr>
@@ -391,14 +370,14 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
    
     ```
     <copy>
-    wget https://bit.ly/ocw22-ssh
+    wget https://bit.ly/ocw23-keys
     </copy>
     ```
 3. Unzip the archive
    
     ```
     <copy>
-    unzip ocw22-ssh
+    unzip ocw23-rsa
     </copy>
     ```
 
@@ -406,15 +385,15 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
 
    You will find the following files:
 
-      * ocw2022_rsa (privayte key)
-      * ocw2022_rsa.pub (public key)
-      * ocw2022-putty.ppk (private key in Putty format - for Windows only)
+      * ocw23-rsa (privayte key)
+      * ocw23-rsa.pub (public key)
+      * ocw23-rsa.ppk (private key in Putty format - for Windows only)
 
 4. Modify file permissions
 
     ```
     <copy>
-    chmod 600 ocw2022_rsa
+    chmod 600 ocw23-rsa
     </copy>
     ```
 
@@ -422,14 +401,14 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
 
     ```
     <copy>
-    ssh -i ocw2022_rsa <user>@<ip-adress>
+    ssh -i ocw23-rsa <user>@<ip-adress>
     </copy>
     ```
 
 
 ##  Find other Hands-on Labs
 
-Are you looking for the next hands-on lab to visit? Have a look at the [Session Catalog](https://reg.rf.oracle.com/flow/oracle/cloudworld/session-catalog/page/catalog)
+Are you looking for the next hands-on lab to visit? Have a look at the [Session Catalog](https://reg.rf.oracle.com/flow/oracle/cwoh23/catalog/page/catalog)
 
 ##  CloudWorld Agenda
 
@@ -437,21 +416,9 @@ Always know what is going on.
 
 ![CloudWorld Agenda](https://www.oracle.com/content/published/api/v1.1/assets/CONT1E0D09E6A6DD4366BF066A1B7671C8CC/native?cb=_cache_2d16&channelToken=e8a0673b81ca460986a44e776a18fa0a)
 
-## Visit the Oracle Discovery Hub!
+## Visit the Oracle Community Theater and Community Lab!
 
-The Oracle Discovery Hub is the best place if you want to explorer other hands-on labs on your own pace. We have created a dedicated space for you to sit down and select from a la carte menu the workshop you like best. You can find the Oracle Discovery Hub in the Database area.
-
-Venetian Level 2
-
-![Discovery Hub](./images/discovery-hub.png " ")
-
-Times
-* Tuesday 10/18 – 1PM to 6PM 
-* Wednesday 10/19 – 8AM – 5PM
-* Thursday 10/20 - 8AM – 1PM
-
-Have a look at the map: (Still need to add)
-![Venetian Level 2 Map](./images/venetian-map.png)
+tbd
 
 ## Learn More
 
@@ -461,4 +428,4 @@ Have a look at the map: (Still need to add)
 ## Acknowledgements
 
 * **Author** - Kevin Lazarz, Oracle Database Product Management, Senior Principal Product Manager
-* **Last Updated By/Date** - Kevin Lazarz, August 2022
+* **Last Updated By/Date** - Kevin Lazarz, July 2023
