@@ -20,13 +20,13 @@
     {
       "title": "Lab 1: Prepare Setup",
       "description": "How to download your ORM stack and update security rules for an existing VCN",
-      "filename": "../../prepare-setup/prepare-setup.md"
+      "filename": "../../prepare-setup/prepare-setup.md",
+      "type": "advanced"
     },
     {
       "title": "Lab 2: Environment Setup",
       "description": "How to provision the workshop environment and connect to it",
-      "filename": "https://oracle-livelabs.github.io/common/labs/setup-compute-generic/setup-compute-novnc-ssh.md",
-      "type": "advanced"
+      "filename": "https://oracle-livelabs.github.io/common/labs/setup-compute-generic/setup-compute-novnc-ssh.md"
     },
     {
       "title": "Lab 2: Initialize Environment",
@@ -44,7 +44,7 @@
       "filename": "../../query/query.md"
     },
     {
-      "title": "Lab 5: Environment Cleanup",
+      "title": "Environment Cleanup",
       "description": "Cleanly dispose of all OCI resources created by ORM for the workshop, and delete the stack",
       "filename": "https://oracle-livelabs.github.io/common/labs/cleanup-stack/cleanup-stack.md"
     },
