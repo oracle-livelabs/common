@@ -10,38 +10,33 @@
     
     ![Shows where the create button modeler is.](images/graph/graph-create-button.png " ")  
 
-2. Enter **`MOVIE_RECOMMENDATIONS`** as the graph name, then click **Next**. That graph name is used throughout the next lab.  
-    Do not enter a different name because then the queries and code snippets in the next lab will fail. 
+2. Enter **`MOVIE_RECOMMENDATIONS`** as the graph name. That graph name is used throughout the next lab. Do not enter a different name because then the queries and code snippets in the next lab will fail. 
 
     ![Shows the create graph window where you assign the graph a name.](./images/graph/create-graph-dialog.png " ")
 
-3. Expand **MOVIESTREAM** and select the `CUSTOMER_PROMOTIONS`, `CUSTSALES_PROMOTIONS` and `MOVIE` tables.
+    Click **Next**.  
 
-    Click to expand list of available items and then select the tables
+3. Expand **MOVIESTREAM** and select the `CUSTOMER_SAMPLE`, `WATCHED` and `MOVIE` tables.
 
     ![Shows how to select tables](./images/graph/selected-tables.png " ")
 
-4. Move them to the right, that is, click the first icon on the shuttle control.   
+    Shuttle them to the right using the first icon on the shuttle control.   
 
     ![Shows the selected tables.](./images/graph/select-tables.png " ")
 
-5.  Click **Next** to define the graph.  
+    Click **Next**.  
 
-    The suggested model has the `MOVIE` and `CUSTOMER_PROMOTIONS`, as a vertex table since there are foreign key constraints specified on `CUSTSALES_PROMOTIONS` that reference it.   
+4.  The suggested model has the `MOVIE` and `CUSTOMER_SAMPLE`, as a vertex tables since there are foreign key constraints specified on table `WATCHED` that reference them.   
 
-    And `CUSTSALES_PROMOTIONS` is a suggested edge table.
 
     ![Shows the vertex and edge table.](./images/graph/create-graph-suggested-model.png " ")    
 
 
-6.  Now let's change the default Edge label.   
-
-    Click the `CUSTSALES_PROMOTIONS` edge table and rename the Edge Label from `CUSTSALES_PROMOTIONS` to **WATCHED**. Then click **Next**.  
-    Then click outside the input box on confirm label and save the update.  
+5.  You can view and change properties of the graph by clicking on one of the tables. For example, click `WATCHED` and notice the edge label. You will see this label when viewing and querying the graph. Keep the `WATCHED` label because it will be used in the next lab when querying the graph.  
 
     ![Changed the label name of the edge to Transfers.](images/graph/edit-edge-label.png " ")  
 
-    This is **important** because we will use these edge labels in the next lab of this workshop when querying the graph.  
+    Click **Next**.        
  
 
 <!---
@@ -74,12 +69,12 @@
    **Important:** Click the **Save** (floppy disk icon) to commit the changes.
 --->
 
-7. In the Summary step, click on **Create Graph**. This will open a Create Graph tab; click on **Create Graph**. 
+6. In the Summary step, click on **Create Graph**:
 
     ![Shows the job tab with the job status as successful](./images/graph/jobs-create-graph.png " ")  
 
-    This will open a Create Graph tab, click on **Create Graph**. 
+    This will open a Create Graph tab. Click **Create Graph**. 
 
     ![Shows in-memory enabled and the create graph button](./images/graph/create-graph-in-memory.png " ")
 
-    After this, you will be taken to the Jobs page where the graph will be create it. Refresh the page to see how the status of the Graph is doing. 
+    Monitor the graph creation process. After a couple of minutes, you should see a successful **Completed** status and you'll be ready to start analyzing the graph!
