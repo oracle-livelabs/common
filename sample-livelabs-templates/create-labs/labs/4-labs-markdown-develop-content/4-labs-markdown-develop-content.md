@@ -111,8 +111,8 @@ Rather than pointing to images within your lab folder or workshop directory with
 
   ![Recommended to use GitHub path for images.](./images/home-page.png " ")
 
-
 ## Task 5: Use conditional formatting
+
 If your workshop supports multiple instance types, but the bulk of the content stays the same, then conditional formatting can save you a lot of work. Most commonly, if you have differences between the "Free Tier" and "LiveLabs" (Green button) versions such as provisioning a database instance in Free Tier and just checking that it's created properly for LiveLabs, then conditional formatting will allow your workshop to use a singular markdown for both. This will save you immense effort and prevent accidental oversights if you need to update your workshop in the future since you won't have to maintain a duplicate markdown.
 
   1. Conditional formatting is using the "if" conditional to choose what to display in your markdown, based on an additional attribute "type" you attach to a lab element in your manifest.json file. Take a look at this example to understand the components involved in making conditional formatting work.
@@ -132,6 +132,24 @@ If your workshop supports multiple instance types, but the bulk of the content s
 2. You may have noticed that the numbering of the substeps within a step that uses conditional formatting may get out of line. Don't worry, as long as you use a number greater than 0, markdown will automatically number them sequentially when it gets rendered on a webpage. Also, note that conditional formatting can be used in-line if needed, you don't **HAVE TO** envelope content in a neat code block... though it's recommended to keep things organized and easy to read.
 
   ![Recommended to keep code block organization.](./images/conditional-note.png " ")
+
+3. **Conditional Formatting Tabs** - Conditional formatting can also be utilized to showcase distinct content based on various programming languages. You can follow the steps below to achieve this objective, by incorporating either a single task or multiple tasks, depending on your specific needs.
+
+  Determine the specific programming languages for which you want to display different content. Create if blocks in a task, or multiple tasks if necessary, for each programming language you identified. Make sure to include the relevant instructions and content specific to each language.
+
+  In the manifest.json file, in the corresponding lab section add the attribute "type" and reference all the programming language elements referenced in the in your manifest.json file. This association will allow the system to identify and display the appropriate content based on the programming language selected.
+
+  The following example screenshot demonstrates the implementation of blocks for Java and Python programming languages on lines 69 and 78, respectively. Each if block contains the necessary steps specific to each programming language.
+
+  ![mutiple-type-conditional-formatting-instructions](./images/mutiple-type-conditional-formatting-instructions.png " ")
+
+  To ensure proper integration, the respective lab section in the manifest.json file should include the "type" attribute, referencing all the programming languages mentioned in the lab's markdown file. In the provided example, along with other programming languages, "java" and "python" are included.
+
+  ![mutiple-type-conditional-formatting](./images/mutiple-type-conditional-formatting.png " ")
+
+  To validate these modifications, you can utilize LiveServer to initiate testing. Tabs will be generated for each language, enabling users to switch between them. Upon selecting a specific tab, language-specific instructions will be displayed in the associated task(s). This interactive approach enhances the user experience by providing relevant instructions based on the selected programming language.
+
+  ![tabs-conditional-formatting](./images/tabs-conditional-formatting.png " ")
 
 ## Task 6: Link within a workshop (Hotlinks)
 
@@ -414,6 +432,20 @@ Building Blocks are a way to enhance both the workshop development and customer 
 2. You can view more building blocks and tasks by navigating to the [building-blocks](https://github.com/oracle-livelabs/common/tree/main/building-blocks) folder in the common repo.
 
 3. If you would like to leverage pre-built building blocks for your repository, feel free to check out this [how to create building block guide](https://github.com/oracle-livelabs/common/blob/main/building-blocks/how-to-author-with-blocks/how-to-author-with-blocks.md) to begin building for your repo.
+
+## Task 16: Use LiveServer extension
+
+If you have installed the LiveServer extension in your VSCode by following the steps in Lab 2 Task4, you can conveniently utilize Live Server to open your workshop's HTML file and enjoy the seamless experience of dynamically viewing and testing your changes.
+
+1. In the "workshops" folder of your workshop project, locate either your "tenancy" or "sandbox" folder. Right-click on the index.html file within the chosen folder. From the context menu, select **Open with Live Server**.
+
+  ![open-live-server](./images/open-live-server.png " ")
+
+2. This action will launch a local server, and your default web browser will open, displaying your workshop.
+
+  ![view-in-live-server](./images/view-in-live-server.png " ")
+
+3. With the workshop now open in your browser, you have the flexibility to modify your files as needed. Save the changes you make to the files. To see the changes reflected in real-time, simply reload the page in your browser and the Live Server ensures that any modifications you make to the files are immediately visible.
 
 You may now **proceed to the next lab**.
 
