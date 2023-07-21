@@ -26,7 +26,7 @@ This lab assumes you have:
 - An Oracle Free Tier account, Paid Cloud account, or access to the LiveLabs Sandbox environment
 - Access to an available Autonomous Database
 
-## Task 1: Connect to Your Autonomous Database Using SQL Developer Web
+## Task 1: Connect to Your Autonomous Database Using Database Actions
 
 1. After logging into your Oracle Cloud account, click the hamburger icon to open your Cloud Services navigation menu. This will reveal your top-level menu options.
 
