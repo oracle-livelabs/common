@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This lab guides you through accessing the Oracle Autonomous Database instance on Oracle Cloud and connecting to your Autonomous Database using Database Actions (also known as SQL Developer Web) as the ADMIN.
+This lab guides you through accessing the Oracle Autonomous Database instance on Oracle Cloud and connecting to your Autonomous Database using Database Actions (also known as SQL Developer Web) as the *built-in* `ADMIN` Administrator account.
 
 Database Actions is included with Oracle REST Data Services. It is the web-based version of Oracle SQL Developer. Database Actions enables users to perform actions like:
 
@@ -54,21 +54,27 @@ This lab assumes you have:
 
     ![Launching the Database Actions modal.](./images/db-actions-modal.png)
 
-8. If this is your first time logging into the Database Actions Launchpad, you may need to sign-in as the ADMIN for the selected Autonomous Database.
+8. Database Actions will attempt to log-in for you, using your ADMIN credentials (or whichever REST-enabled user you are attempting to sign-in as). In certain cases you may need to login manually; if so, make sure you have your ADMIN credentials accessible.
+
+   > Note: These will be the ADMIN username and password selected when you first created your Autonomous Database.
 
     ![Signing in as the Admin for your ADB.](./images/signing-in-to-database-actions-as-admin-user.png " ")
 
     > Note: You will enter `ADMIN` as the Username, along with the ADMIN password you specified when you first created your Autonomous Database.
 
-9. After signing in as the `ADMIN`, the Database Actions Launchpad will appear.
+9. Alternatively, you may bookmark your Database Actions URL for quicker access. This will allow you to proceed directly to the login screen. Once there, you may login as any user that has a schema that is REST-enabled.
+
+      ![Bookmarked sign-in page for Database Actions.](./images/database-actions-bookmark-sign-in-page.png " ")
+
+10. After signing in as the `ADMIN`, the Database Actions Launchpad will appear.
 
     ![The Database Actions Launchpad, complete view.](./images/database-actions-launchpad-complete-view.png " ")
 
-10. From the Database Actions Launchpad, select the **SQL** tile to open a new SQL Worksheet.
+11. From the Database Actions Launchpad, select the **SQL** tile to open a new SQL Worksheet.
 
     ![SQL tile](./images/selecting-sql-worksheet-from-database-actions-launchpad.png " ")
 
-11. A new SQL Worksheet will appear. If this is your first time opening a SQL Worksheet, you will be presented with a quick tour of the most commonly performed actions. You may advance through the tour, or click the `X` in any box, to exit the tour.
+12. A new SQL Worksheet will appear. If this is your first time opening a SQL Worksheet, you will be presented with a quick tour of the most commonly performed actions. You may advance through the tour, or click the `X` in any box, to exit the tour.
 
     ![Close information box](./images/tour-button-upon-sql-worksheet-first-load-screen.png " ")
 
