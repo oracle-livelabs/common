@@ -1,3 +1,9 @@
+<!--
+    {
+        "name":"Provision Your Oracle Analytics Cloud (OAC) Instance",
+        "description":"Show how to create a new OAC instance"
+    }
+-->
 # Provision Your Oracle Analytics Cloud (OAC) Instance
 
 ## Introduction

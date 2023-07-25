@@ -21,6 +21,28 @@
  
 [](include:adb-connect-with-sql-worksheet-body.md)
  
+## Create Graph
+**Markdown file location:**
+```
+/common/building-blocks/tasks/adb/create-graph.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "adb-create-graph.md":"/common/building-blocks/tasks/adb/create-graph.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:adb-create-graph.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:adb-create-graph.md)
+ 
 ## Create and load JSON Collection from object storage
 **Markdown file location:**
 ```
@@ -87,6 +109,28 @@
  
 [](include:adb-goto-data-load-utility.md)
  
+## Go to Graph Studio
+**Markdown file location:**
+```
+/common/building-blocks/tasks/adb/goto-graph-studio.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "adb-goto-graph-studio.md":"/common/building-blocks/tasks/adb/goto-graph-studio.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:adb-goto-graph-studio.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:adb-goto-graph-studio.md)
+ 
 ## Go to Autonomous Database Service
 **Markdown file location:**
 ```
@@ -130,6 +174,28 @@
 **Markdown Output &#8595;&#8595;:**
  
 [](include:adb-goto-sql-worksheet.md)
+ 
+## Load data from public buckets using Database Actions
+**Markdown file location:**
+```
+/common/building-blocks/tasks/adb/load-public-db-actions-15-min-quickstart.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "adb-load-public-db-actions-15-min-quickstart.md":"/common/building-blocks/tasks/adb/load-public-db-actions-15-min-quickstart.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:adb-load-public-db-actions-15-min-quickstart.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:adb-load-public-db-actions-15-min-quickstart.md)
  
 ## Load data from public buckets using Database Actions. Sales data not included.
 **Markdown file location:**
