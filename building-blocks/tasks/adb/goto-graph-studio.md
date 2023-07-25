@@ -2,6 +2,7 @@
     {
         "name":"Go to Graph Studio",
         "description":"Login to Graph Studio from the Autonomous Database OCI console"
+    }
 -->
 
 Graph Studio is a feature of Autonomous Database. It is available as an option on the Database Actions Launchpad. You need a graph-enabled user to log into Graph Studio. In this workshop, the graph user has already been created for you.
