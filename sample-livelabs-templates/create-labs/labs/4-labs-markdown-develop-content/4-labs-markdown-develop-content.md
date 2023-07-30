@@ -170,7 +170,7 @@ LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or
 
 ### Embedding a video from Oracle Video Hub (recommended)
 
-1. Take a look at his exmaple of a video hosted on Oracle Video Hub in this lab.
+1. Take a look at his example of a video hosted on Oracle Video Hub in this lab.
 
   ![The Video Hub markdown](images/videhub-markdown.png =60%x* " ")
 
@@ -180,7 +180,7 @@ LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or
 
   Markdown does the work of embedding the video for you, all you need to provide is a video hosting site and the video link address.
 
-2. You can find the video identifier code in the URL (in this example, the code is **1_1_yido2qmq**).
+2. You can find the video identifier code in the URL (in this example, the code is **1_yido2qmq**).
   
   *Please note:* Oracle Video Hub identifiers are usually prefixed with either `0_` or `1_` filled by a unique code.
 
