@@ -77,8 +77,24 @@ To create a Pull Request:
 2. Fill out publishing information, including **Publish Type** and **Workshop Time**. Click **?** beside the Publishing Type to see different types of publishing. Turn on appropriate buttons for your workshop: **Brown Button Enabled?**, or **LiveLabs Sprint Enabled?**, and fill out appropriate **URL**s.
 
     - Brown Button Enabled? - Can this workshop be done in a customer tenancy?
+    - Brown Button URL - Your URL should look like this:
+    ```
+    https://oracle-livelabs.github.io/<your-repo-name>/path/to/your-workshops/tenancy-or-sandbox-folder
+    ```
+    For example, the sample workshop is hosted in common repo and link looks like this:
+    ```
+    https://oracle-livelabs.github.io/common/sample-livelabs-templates/sample-workshop/workshops/tenancy/
+    ```
 
     - LiveLabs Sprint Enabled? - See **Additional optional labs: Develop LiveLabs Sprints** on the left menu for more information.
+    - Sprint URL - Your URL should look like this:
+    ```
+    https://oracle-livelabs.github.io/sprints/<your-sprint-category-folder-name>/<your-sprint-folder-name>/
+    ```
+    For example, the sample sprint is hosted in sprints repo and link looks like this:
+    ```
+    https://oracle-livelabs.github.io/sprints/sample-sprints/sprint/
+    ```
 
     ![Publishing Information](images/livelabs-publishing.png " ")
 
