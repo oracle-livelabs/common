@@ -2,11 +2,14 @@
  "workshoptitle":"LiveLabs Building Blocks",
  "include": {
      "adb-connect-with-sql-worksheet-body.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-body.md",
+     "adb-create-graph.md":"/common/building-blocks/tasks/adb/create-graph.md",
      "adb-create-load-json-collection.md":"/common/building-blocks/tasks/adb/create-load-json-collection.md",
      "adb-create-user.md":"/common/building-blocks/tasks/adb/create-user.md",
      "adb-goto-data-load-utility.md":"/common/building-blocks/tasks/adb/goto-data-load-utility.md",
+     "adb-goto-graph-studio.md":"/common/building-blocks/tasks/adb/goto-graph-studio.md",
      "adb-goto-service-body.md":"/common/building-blocks/tasks/adb/goto-service-body.md",
      "adb-goto-sql-worksheet.md":"/common/building-blocks/tasks/adb/goto-sql-worksheet.md",
+     "adb-load-public-db-actions-15-min-quickstart.md":"/common/building-blocks/tasks/adb/load-public-db-actions-15-min-quickstart.md",
      "adb-load-public-db-actions-no-sales.md":"/common/building-blocks/tasks/adb/load-public-db-actions-no-sales.md",
      "adb-load-public-db-actions.md":"/common/building-blocks/tasks/adb/load-public-db-actions.md",
      "adb-provision-body.md":"/common/building-blocks/tasks/adb/provision-body.md",
@@ -51,7 +54,7 @@
          "filename": "/common/building-blocks/blocks/adb/provision-python-api/provision-python-api.md"
      },
      {
-         "title": "[adb] Create an Oracle Autonomous Database (ADW and ATP)",
+         "title": "[adb] Create an Oracle Autonomous Database",
          "type": "freetier",
          "filename": "/common/building-blocks/blocks/adb/provision/provision-console.md"
      },
