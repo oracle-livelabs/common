@@ -1,5 +1,5 @@
 {
-   "adb-shared": {
+   "adb-serverless": {
       "Where do I find the ADB OCID?": "https://oracle-livelabs.github.io/sprints/data-management/sprint-find-adb-ocid/index.html",
       "How can I download the ADB Wallet using OCI CLI?": "https://oracle-livelabs.github.io/sprints/data-management/sprint-download-adb-wallet/index.html"
    },
