@@ -2,16 +2,16 @@
 
 ## Introduction
 
-Using VSCode or another editor of your choice, the Markdown files need to be edited based on your workshop content. As you learned in the previous lab, there are templates that are provided to get you started.
+To optimize your workflow while developing workshop content, we highly recommend utilizing VSCode as your preferred editor. Leveraging the power of VSCode you can use the optional tasks below and efficiently edit the Markdown files according to your specific needs. As demonstrated in the previous lab, Task 1 has templates that will provide a solid foundation for you to get started with editing process. By incorporating these recommendations from Task 2 to 15 (optional tasks), you can streamline your content development and enhance productivity.
 
-> **Note:** Oracle recommends using **Visual Studio Code (VSCode)**. If you are currently using **Atom** - it is being retired, and you should move to use VSCode.
+> **Note:** For a comprehensive workshop development experience, we recommended to utilize the sample workshop folder provided in Task 1, while tasks 2 to 15 are optional.
 
 <!-- **Helpful tips from your LiveLabs Team**
 [Video walking through markdown editing](youtube:rOj5APIU-XU) -->
 
 ### Objectives
 
-* Create workshop and lab content.
+* Create workshop and lab content
 * Link to absolute path images
 * Use conditional formatting
 * Add videos and scale images
@@ -111,8 +111,8 @@ Rather than pointing to images within your lab folder or workshop directory with
 
   ![Recommended to use GitHub path for images.](./images/home-page.png " ")
 
-
 ## Task 5: Use conditional formatting
+
 If your workshop supports multiple instance types, but the bulk of the content stays the same, then conditional formatting can save you a lot of work. Most commonly, if you have differences between the "Free Tier" and "LiveLabs" (Green button) versions such as provisioning a database instance in Free Tier and just checking that it's created properly for LiveLabs, then conditional formatting will allow your workshop to use a singular markdown for both. This will save you immense effort and prevent accidental oversights if you need to update your workshop in the future since you won't have to maintain a duplicate markdown.
 
   1. Conditional formatting is using the "if" conditional to choose what to display in your markdown, based on an additional attribute "type" you attach to a lab element in your manifest.json file. Take a look at this example to understand the components involved in making conditional formatting work.
@@ -133,6 +133,24 @@ If your workshop supports multiple instance types, but the bulk of the content s
 
   ![Recommended to keep code block organization.](./images/conditional-note.png " ")
 
+3. **Conditional Formatting Tabs** - Conditional formatting can also be utilized to showcase distinct content based on various programming languages. You can follow the steps below to achieve this objective, by incorporating either a single task or multiple tasks, depending on your specific needs.
+
+  Determine the specific programming languages for which you want to display different content. Create if blocks in a task, or multiple tasks if necessary, for each programming language you identified. Make sure to include the relevant instructions and content specific to each language.
+
+  In the manifest.json file, in the corresponding lab section add the attribute "type" and reference all the programming language elements referenced in the in your manifest.json file. This association will allow the system to identify and display the appropriate content based on the programming language selected.
+
+  The following example screenshot demonstrates the implementation of blocks for Java and Python programming languages on lines 69 and 78, respectively. Each if block contains the necessary steps specific to each programming language.
+
+  ![mutiple-type-conditional-formatting-instructions](./images/mutiple-type-conditional-formatting-instructions.png " ")
+
+  To ensure proper integration, the respective lab section in the manifest.json file should include the "type" attribute, referencing all the programming languages mentioned in the lab's markdown file. In the provided example, along with other programming languages, "java" and "python" are included.
+
+  ![mutiple-type-conditional-formatting](./images/mutiple-type-conditional-formatting.png " ")
+
+  To validate these modifications, you can utilize LiveServer to initiate testing. Tabs will be generated for each language, enabling users to switch between them. Upon selecting a specific tab, language-specific instructions will be displayed in the associated task(s). This interactive approach enhances the user experience by providing relevant instructions based on the selected programming language.
+
+  ![tabs-conditional-formatting](./images/tabs-conditional-formatting.png " ")
+
 ## Task 6: Link within a workshop (Hotlinks)
 
 Sometimes you may want to link to something within your lab or workshop.  Most commonly, this is used in pages to link from the introduction or objectives to a specific section in the lab. This section in particular is hot-linked from the introduction to driving home that point. We'll take a look at the "Need Help?" lab to demonstrate how to incorporate this in your workshop.
@@ -152,17 +170,17 @@ LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or
 
 ### Embedding a video from Oracle Video Hub (recommended)
 
-1. Take a look at his exmaple of a video hosted on Oracle Video Hub in this lab.
+1. Take a look at his example of a video hosted on Oracle Video Hub in this lab.
 
   ![The Video Hub markdown](images/videhub-markdown.png =60%x* " ")
 
   The embedded video looks like this: 
 
-  [Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8)
+  [Video hosted on Oracle Video Hub](videohub:1_yido2qmq)
 
   Markdown does the work of embedding the video for you, all you need to provide is a video hosting site and the video link address.
 
-2. You can find the video identifier code in the URL (in this example, the code is **1_2ubr9fo8**).
+2. You can find the video identifier code in the URL (in this example, the code is **1_yido2qmq**).
   
   *Please note:* Oracle Video Hub identifiers are usually prefixed with either `0_` or `1_` filled by a unique code.
 
@@ -192,7 +210,7 @@ Without using video scaling, all the video you embed will have small as the defa
 	[Oracle Video Hub video with no sizing](videohub:1_2ubr9fo8)
 	```
 
-  	[Demo video with no sizing.](videohub:1_2ubr9fo8)
+  	[Demo video with no sizing.](videohub:1_yido2qmq)
 
 2. To scale the video size to small which is also the default video size, use this format.
 
@@ -200,23 +218,23 @@ Without using video scaling, all the video you embed will have small as the defa
 	[Oracle Video Hub video scaled to small size, default video size](videohub:1_2ubr9fo8:small)
 	```
 
-  	[Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:small)
+  	[Video hosted on Oracle Video Hub](videohub:1_yido2qmq:small)
 
 3. Use this format to scale the video size to medium.
 
 	```
-	[Oracle Video Hub video scaled to medium size](videohub:1_2ubr9fo8:medium)
+	[Oracle Video Hub video scaled to medium size](videohub:1_yido2qmq:medium)
 	```
 
-  	[Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:medium)
+  	[Video hosted on Oracle Video Hub](videohub:1_yido2qmq:medium)
 
 4. To scale the video size to large in relation to the amount of lab page space available, use this format.
 
 	```
-	[Oracle Video Hub video scaled to large size](videohub:1_2ubr9fo8:large)
+	[Oracle Video Hub video scaled to large size](videohub:1_yido2qmq:large)
 	```
 
-	[Video hosted on Oracle Video Hub](videohub:1_2ubr9fo8:large)
+	[Video hosted on Oracle Video Hub](videohub:1_yido2qmq:large)
 
 ### Resizing a video from YouTube
 
@@ -405,6 +423,30 @@ With this new feature, you can now cross out text or words in a paragraph by add
 
 4. The URLs are opened in a new tab in the browser and the same applies to email addresses as well.
 
+## Task 15: Building Blocks
+
+Building Blocks are a way to enhance both the workshop development and customer experience. This step focuses on how authors can use Building Blocks and Tasks to accelerate their workshop development in your repo.
+
+1. You can view the sample on building block [here](https://github.com/oracle-livelabs/common/blob/main/building-blocks/blocks/adb/provision/provision-console.md) and sample task [here](https://github.com/oracle-livelabs/common/blob/main/building-blocks/tasks/adb/provision-body.md)
+
+2. You can view more building blocks and tasks by navigating to the [building-blocks](https://github.com/oracle-livelabs/common/tree/main/building-blocks) folder in the common repo.
+
+3. If you would like to leverage pre-built building blocks for your repository, feel free to check out this [how to create building block guide](https://github.com/oracle-livelabs/common/blob/main/building-blocks/how-to-author-with-blocks/how-to-author-with-blocks.md) to begin building for your repo.
+
+## Task 16: Use LiveServer extension
+
+If you have installed the LiveServer extension in your VSCode by following the steps in Lab 2 Task4, you can conveniently utilize Live Server to open your workshop's HTML file and enjoy the seamless experience of dynamically viewing and testing your changes.
+
+1. In the "workshops" folder of your workshop project, locate either your "tenancy" or "sandbox" folder. Right-click on the index.html file within the chosen folder. From the context menu, select **Open with Live Server**.
+
+  ![open-live-server](./images/open-live-server.png " ")
+
+2. This action will launch a local server, and your default web browser will open, displaying your workshop.
+
+  ![view-in-live-server](./images/view-in-live-server.png " ")
+
+3. With the workshop now open in your browser, you have the flexibility to modify your files as needed. Save the changes you make to the files. To see the changes reflected in real-time, simply reload the page in your browser and the Live Server ensures that any modifications you make to the files are immediately visible.
+
 You may now **proceed to the next lab**.
 
 ## Acknowledgements
@@ -425,4 +467,4 @@ You may now **proceed to the next lab**.
     * Andres Quintana
     * Brianna Ambler
 
-* **Last Updated By/Date:** Anoosha Pilli, November 2022
+* **Last Updated By/Date:** Anoosha Pilli, June 2023

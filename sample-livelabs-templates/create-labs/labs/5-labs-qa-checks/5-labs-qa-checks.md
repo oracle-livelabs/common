@@ -49,7 +49,7 @@ Now that your workshop is in the repositories inside the Oracle LiveLabs GitHub 
 
 ## Task 3: Self QA
 
-You have finished developing your workshop. To publish your workshop, you still need to perform Self-QA on the workshop.
+You have finished developing your workshop. To publish your workshop, you still need to perform Self QA on the workshop.
 
 1.  On the *Workshop Details* page, ensure **Workshop Title** matches the workshop title in development, and **Short Description**, **Long Description**, **Workshop Outline**, and **Workshop Prerequisites** are all up-to-date. Click **?** beside each field to see its details.
 
@@ -62,44 +62,89 @@ You have finished developing your workshop. To publish your workshop, you still 
 
   ![Tags](images/tags.png " ")
 
-4.  If you have changed your Status to **Self QA** or **Quarterly Self QA**, click on the **Self QA Checklist** tab and check your workshop against the form and check all the checkboxes and upload the images. Click **Save** to the changes made to the Self QA Checklist form in WMS. Update your workshop and create a new pull request if necessary for the workshop to follow LiveLabs standards.
+4.  If you have changed your Status to **Self QA** or your workshop status is in **Quarterly QA**, click on the **Self QA Checklist** tab and check your workshop against the form. Update your workshop and create a new pull request if necessary for the workshop to follow LiveLabs standards.
 
   ![Self QA Checklist](./images/self-qa-checklist-1.png " ")
   ![Self QA Checklist](./images/self-qa-checklist-2.png " ")
 
-  Workshop teams and stakeholders can watch this video below on how to self-QA or verify the QA of a workshop.
+  Workshop teams and stakeholders can watch this video below on how to self QA or verify the QA of a workshop.
   [](youtube:8tirP-hibsk)
 
-5. After you finish Self QA, and your changes are reflected on the oracle.github.io page, set your **Workshop Status** to **Self QA Complete** in WMS.
-  
+5. You *MUST* check all the boxes on the form, upload the images, update the pull request link if you created one (optional) and click **Save** to save the checklist changes before you update your workshop status to Self QA Complete; otherwise, you will get warning and will not be able to update your workshop status to Self QA Complete.
+
+  ![Complete checklist warning](./images/complete-checklist-warning.png " " )
+
+6. After you finish Self QA, and your changes are reflected on the oracle.github.io page, set your **Workshop Status** to **Self QA Complete** in WMS.
+
   ![Self QA Complete](images/self-qa-complete.png " ")
 
-6. Your stakeholders will verify the QA within 2 business days. They will reach out to you via WMS if there are more changes needed. Otherwise, they will move the workshop into **Completed** status. If you have not heard back from your stakeholders 2 business days after you submit the Self QA form, please message them via WMS. While you are waiting to hear back from your stakeholder, you can go to Lab 6 Task 2 and request publishing.
+7. Confirm you have performed Self QA by clicking **Yes, I certify** and then click **Save** to save your workshop status to Self QA Complete.
+
+  ![Self QA complete confirmation](./images/self-qa-complete-confirmation.png " ")
+
+  After saving your workshop status to Self QA Complete, you Self QA Checklist tab will grey out with the QA History section populated in the checklist tab and last QA date and person email updated on the workshop details tab.
+
+  ![Completed Checklist](./images/completed-checklist-1.png " ")
+  ![Completed Checklist](./images/completed-checklist-2.png " ")
+  ![Last QA details populated](./images/last-qa-details-populated.png " ")
+
+8. Your stakeholders will verify the QA within 2 business days. They will reach out to you via WMS if there are more changes needed. Otherwise, they will move the workshop into **Completed** status. If you have not heard back from your stakeholders 2 business days after you submit the Self QA form, please message them via WMS. While you are waiting to hear back from your stakeholder, you can go to Lab 6 Task 2 and request publishing.
 
   ![Message](images/message-team.png " ")
 
-8. Questions?  Go to your workshop and find your stakeholder email address, and contact them.  You can also ask in the #workshops-authors-help Slack channel.
+9. Questions?  Go to your workshop and find your stakeholder email address, and contact them.  You can also ask in the #workshops-authors-help Slack channel.
 
   ![Stakeholder](images/stakeholder.png " ")
 
 ## Task 4: Quarterly QA
 
-For the workshop in **Completed** or **Quarterly QA Complete** status and have published entries we want to ensure that customers benefit from workshops that contain up-to-date information. So, the workshop team needs to perform Quarterly QA of the workshop within every 90 days.
+For the workshop in **Completed** or **Quarterly QA Complete** status and have Published - Public or Published - Event entries, we want to ensure that customers benefit from workshops that contain up-to-date information. So, the workshop team needs to perform Quarterly QA of the workshop every 90 days.
 
-1. The workshop status will automatically update to Quarterly QA after 60 days and workshop team will receive an email to perform Quarterly QA of the workshop. At this point, the workshop team needs to follow the instructions in the email and complete the self QA Checklist as in Task 3 step 4 to perform the Quarterly QA of the workshop.
+1. The workshop status will automatically update to Quarterly QA after 90 days from the time you have last performed QA of your workshop. When the status is updated to Quarterly QA, the workshop team will receive an email with instructions to perform Quarterly QA of the workshop.
 
     ![Quarterly QA](images/quarterly-qa.png " ")
 
-2. Once you save the filled out Self QA Checklist and have updated your workshop, create pull request if necessary with all your changes and set your **Workshop Status** to **Quarterly QA Complete** in WMS.
+2. At this point, the workshop team will have 10 days to perform the Quarterly QA of the workshop.
 
-    ![Quarterly QA Complete](images/quarterly-qa-complete.png " ")
+3. The workshop team needs to follow the instructions in the Quarterly QA email and perform the QA of the workshop against the Self QA Checklist as in Task 3 step 4 of this lab in 10 days (i.e your last QA date plus 100 days). Once you have performed QA and updated your workshop, create a pull request if necessary with all your changes.
 
-3. If the workshop team does not perform the Quarter QA within the 90 days period, the LiveLabs publishers will remove the published workshop from production. The workshop will remain in the WMS catalog and will be purged after 30 days.
+4. You *MUST* check all the boxes on the Self QA Checklist form, upload the images and update the pull request link if you created one (optional).
+
+  ![Self QA Checklist](./images/self-qa-checklist-1.png " ")
+  ![Self QA Checklist](./images/self-qa-checklist-2.png " ")
+
+5. Click **Save** and confirm **Push to LiveLabs** to save your checklist changes before you update your workshop status to Quarterly QA Complete.
+
+  ![Confirm Push to LiveLabs](images/confirm-push-to-ll.png " ")
+
+  Otherwise, you will get this warning while updating your workshop status to Quarterly QA Complete and you will not be able to save your workshop status to Quarterly QA Complete.
+
+  ![Complete checklist warning](./images/complete-checklist-warning.png " " )
+
+6. After saving the checklist changes, then set your **Workshop Status** to **Quarterly QA Complete**.
+
+  ![Quarterly QA Complete](images/quarterly-qa-complete.png " ")
+
+7. Confirm you have performed Quarterly QA by clicking **Yes, I certify**.
+
+  ![Quarterly QA complete confirmation](./images/quarterly-qa-complete-confirmation.png " ")
+
+8. Click **Save** button and then click **Push to LiveLabs**. Now, you have updated your workshop status to Quarter QA Complete and have completed the QA of the workshop.
+
+  ![Confirm Push to LiveLabs](images/confirm-push-to-ll.png " ")
+
+  After saving your workshop status to Quarterly QA Complete, you Self QA Checklist tab will grey out with the QA History section populated in the checklist tab and last QA date and person email updated on the workshop details tab.
+
+  ![Completed Checklist](./images/completed-checklist-1.png " ")
+  ![Completed Checklist](./images/completed-checklist-2.png " ")
+  ![Last QA details populated](./images/last-qa-details-populated.png " ")
+
+9. If the workshop team does not perform the Quarter QA within the given time period, the LiveLabs publishers will disable the workshop in WMS i.e the published entry of the workshop will be pulled off from production. This is a disable, not a delete. So, your workshop will remain in the WMS catalog and you can bring back to production after completing the Quarterly QA of the workshop.
 
   ![Entry Disabled](./images/entry-disabled.png " ")
   ![Disabled](./images/disabled.png " ")
 
-4. Questions? Go to your workshop and find your stakeholder email address, and contact them. You can also ask in the #workshops-authors-help Slack channel.
+10. Questions? Go to your workshop and find your stakeholder email address, and contact them. You can also ask in the #workshops-authors-help Slack channel.
 
   ![Stakeholder](images/stakeholder.png " ")
 

@@ -164,6 +164,7 @@ When you create, delete, or modify assets in your clone (local copy), you should
 
 To commit your changes:
 1. Start your **GitHub Desktop** client.
+
 2. In the **Summary (required)** text box on the left (next to your picture), enter a summary of your changes. You can optionally add a more detailed description of your changes in the **Description** text box.
 
   ![Enter a summary of your changes.](./images/git-hub-commit-to-main.png " ")
@@ -172,7 +173,7 @@ To commit your changes:
 
 4. Click **Push origin** (it should have an upward arrow with a number). This pushes the updated content from your clone into the origin of this clone, that is, your fork.
 
-  ![Push updated content to the origin.](./images/git-hub-commit-push-origin.png " ")
+  ![Push updated content to the origin.](./images/push-origin.png " ")
 
 ## Task 7: Set up GitHub pages for your fork to test your content
 
@@ -193,15 +194,15 @@ To publish your GitHub Pages site:
 
 3. On the left menu, click **Pages**.
 
-  ![Select pages.](./images/git-hub-stage-git-hub-pages-settings-theme.png " ")
+  ![Select pages.](./images/git-hub-stage-git-hub-pages-settings-theme1.png " ")
 
-4. Under **Source**, select **main** (if it's not already selected) from the drop-down list. Click **Save**.
+4. Under **Branch**, select **main** (if it's not already selected) from the drop-down list. Click **Save**.
 
-  ![Select main as source.](./images/source-main.png " ")
+  ![Select main as source.](./images/branch-main.png " ")
 
-5. Optional: Under **Theme Chooser**, click **Change Theme** and select a theme of your choice.
+<!-- 5. Optional: Under **Theme Chooser**, click **Change Theme** and select a theme of your choice. -->
 
-6. This may take a few minutes to complete. After the GitHub Pages are enabled, the message under **GitHub Pages** changes to **Your site  is published at https://arabellayao.github.io/em-omc/**
+5. This may take a few minutes to complete. After the GitHub Pages are enabled, the message under **GitHub Pages** changes to **Your site  is published at https://arabellayao.github.io/em-omc/**
   ![Changes are published.](./images/git-hub-stage-git-hub-pages-settings-page-published.png " ")
 
 ## Task 8: Access your workshop on GitHub
