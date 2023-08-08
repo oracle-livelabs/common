@@ -1,7 +1,7 @@
 <!--
     {
         "name":"Provision Autonomous Database",
-        "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, OCPUs, storage and more."
+        "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more."
     }
 -->
 1. Click **Create Autonomous Database** to start the instance creation process.
@@ -97,6 +97,6 @@
 
     ![Database Provisioning message.](./images/adb-create-provisioning-message.png "Provisioning")
 
-    In a few minutes, the state will turn from Provisioning to Available. At this point, your Autonomous Database instance is ready to use! Have a look at your instance's details - including its name, database version, OCPU count, and storage size.
+    In a few minutes, the state will turn from Provisioning to Available. At this point, your Autonomous Database instance is ready to use! Have a look at your instance's details - including its name, database version, ECPU count, and storage size.
 
     ![Database complete message.](./images/adb-create-complete-message.png "Complete")
