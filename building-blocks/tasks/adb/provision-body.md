@@ -1,7 +1,7 @@
 <!--
     {
         "name":"Provision Autonomous Database",
-        "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, OCPUs, storage and more."
+        "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more."
     }
 -->
 1. Click **Create Autonomous Database** to start the instance creation process.
@@ -51,11 +51,11 @@
 
 6. Configure the database:
 
-    - **Always Free** - If your Cloud Account is an Always Free account, you can select this option to create an always free autonomous database. An always free database comes with 1 OCPU and 20 GB of storage. For this lab, we recommend you leave Always Free unchecked.
+    - **Always Free** - If your Cloud Account is an Always Free account, you can select this option to create an always free autonomous database. An always free database comes with at least 2 ECPUs and 20 GB of storage. For this lab, we recommend you leave Always Free unchecked.
     - **Choose database version** - Select **19c** as the database version.
-    - **OCPU count** - Number of OCPUs for your service. For this lab, specify **[](var:db_ocpu)**. If you choose an Always Free database, it comes with 1 OCPU.
+    - **ECPU count** - Number of ECPUs for your service. For this lab, specify **[](var:db_ocpu)**. If you choose an Always Free database, it comes with at least 2 ECPUs.
     - **Storage (TB)** - Select your storage capacity in terabytes. For this lab, specify **[](var:db_storage)** of storage. Or, if you choose an Always Free database, it comes with 20 GB of storage.
-    - **OCPU auto Scaling** - For this lab, keep auto scaling enabled, to enable the system to automatically use up to three times more OCPU and IO resources to meet workload demand.
+    - **ECPU auto Scaling** - For this lab, keep auto scaling enabled, to enable the system to automatically use up to three times more ECPU and IO resources to meet workload demand.
     - **Storage auto scaling** - For this lab, there is no need to enable storage auto scaling, which would allow the system to expand up to three times the reserved storage.
 
     > **Note:** You cannot scale up/down an Always Free autonomous database.
@@ -103,6 +103,6 @@
 
     ![Database Provisioning message.](./images/adb-create-provisioning-message.png "Provisioning")
 
-    In a few minutes, the state will turn from Provisioning to Available. At this point, your Autonomous Database instance is ready to use! Have a look at your instance's details - including its name, database version, OCPU count, and storage size.
+    In a few minutes, the state will turn from Provisioning to Available. At this point, your Autonomous Database instance is ready to use! Have a look at your instance's details - including its name, database version, ECPU count, and storage size.
 
     ![Database complete message.](./images/adb-create-complete-message.png "Complete")
