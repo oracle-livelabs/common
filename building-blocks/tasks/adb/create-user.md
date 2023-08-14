@@ -7,17 +7,13 @@
 
 When you create a new Autonomous Database, you automatically get an account called ADMIN that is your super administrator user. In the real world, you will definitely want to keep your data warehouse data separate from the administration processes. Therefore, you will need to know how to create separate new users and grant them access to your data warehouse. This section will guide you through this process using the "New User" wizard within the Database Actions set of tools.
 
-1. Navigate to the Details page of the Autonomous Database you previously provisioned. In this example, the database name is "[](var:db_display_name)." Click the **Database Actions** button.
+1. Navigate to the Details page of the Autonomous Database you previously provisioned. In this example, the database name is "[](var:db_display_name)." Click the **Database Actions -> Database Users** button.
 
-    ![Click Database Actions](images/launchdbactions.png " ")
+    ![Click Database Actions](images/goto-database-users-from-console.png "Click Database Actions")
 
 You will automatically log in as the ADMIN user, or you may be prompted to provide the username (admin) and password of the administrator you specified when you created the Autonomous Database instance.
 
-2. On the Database Actions home page, under **Administration**, click the **Database Users** card.
-
-    ![Database Users card of the Database Actions home page](images/db-actions-dbuser-card.png " ")
-
-3.  You can see that your ADMIN user appears as the current user. On the right-hand side, click the **+ Create User** button.
+2.  You can see that your ADMIN user appears as the current user. And, several other system users already exist. On the right-hand side, click the **+ Create User** button.
 
     ![Create User button highlighted on the Database Users page](images/db-actions-click-create-user.png " ")
 
