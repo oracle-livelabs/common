@@ -244,7 +244,7 @@ Now that we have the latest news for each actor, let's derive the sentiment of t
     ```
     As to be expected, the computed sentiment isn't great. However, it's not all bad; as you scroll through the results, there are some positive articles. Also, the description field is fairly small. A richer text field would likely produce even better results.
 
-    ![](images/adb-sentiment-analysis.png)
+    ![Run a sentiment analysis](images/adb-sentiment-analysis.png)
 
 4. MovieStream will want to consider which movies to promote on the site. Actors that are generating buzz and the type of news will likely have some influence on their recommendations. Below are the rankings for our actors:
     ```
