@@ -100,7 +100,7 @@ You have finished developing your workshop. To publish your workshop, you still 
 
 For the workshop in **Completed** or **Quarterly QA Complete** status and have Published - Public or Published - Event entries, we want to ensure that customers benefit from workshops that contain up-to-date information. So, the workshop team needs to perform Quarterly QA of the workshop every 90 days.
 
-> **Note:** If you have a lot of workshops to QA, you can QA them in a two-phased approach:
+> **Note:** Maintaining several workshops and running through the QA can be time consuming. We are suggesting a two-phased approach to make sure critical items are addressed regularly.
   - **Lite QA:** Review the workshop on a high level for screenshots, links, and instructions to ensure the workshop is current and is using the latest version. Make any minor changes, if necessary, to keep the content updated.
   - **In-depth QA:** Run through the workshop end-to-end to ensure it is working as expected since it was published. Update workshop if necessary
   - **Example:** If there are ten workshops to QA, in the first quarter, you can perform lite QA reviews for the first 1-5 (or a selection) workshops and in-depth QA for the following 5-10 workshops. Subsequently, in the following quarter, you can perform in-depth QA for the first 1-5 workshops and lite QA for the following 5-10 workshops. This approach will allow you to manage more workshops while ensuring thorough quality assessment efficiently.
