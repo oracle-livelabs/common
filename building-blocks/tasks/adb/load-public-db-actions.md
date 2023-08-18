@@ -8,7 +8,7 @@
 
     ![Select Load Data, then Cloud Store](images/select-load-data-from-cloud-store.png)
 
-2. The **Load Cloud Object** page appears. Use this page to drag and drop tables from the public object storage bucket to the data loading job. Copy the following object storage URL to the **Select Cloud Store Link or enter public URL field**:
+2. The **Load Data from Cloud Store** page appears. Copy the following object storage URL for the source data to the empty text field:
 
     ```
     <copy>
@@ -16,7 +16,9 @@
     </copy>
     ```
 
-    Click ENTER on your keyboard. You will see a list of folders on the left side from which you can drag and drop to the data loading job.
+    ![Enter URL](images/cloud-location-url.png)
+
+    Click ENTER on your keyboard. This will take you to the data loading tool. You will see a list of folders on the left side from which you can drag and drop to the data loading job.
 
     ![The Load Cloud Object page appears](images/load-cloud-object-page-appears.png)
 
@@ -24,7 +26,7 @@
 
     ![Drag the customer_contact folder](images/drag-customer-contact-folder.png)
 
-4. Perform the same drag and drop steps for **customer**, **genre**, **sales\_sample** and **pizza\_location**.
+4. Perform the same drag and drop steps for **genre**, **sales\_sample** and **pizza\_location**.
 
 
 5. Click the 3-dot ellipsis menu for the **customer\_contact** load task. In the pop-up menu, click **Settings** to view the settings for this task.
@@ -35,7 +37,7 @@
 
     ![View the settings for customer_contact load task](images/settings-viewer-for-customer-contact.png)
 
-7. Click the pencil icon for the **sales\_sample** task to view its settings. Note that the tool makes intelligent choices for target table name and properties.  Since this is an initial load, accept the default option of **Create Table**, which conveniently creates the target table in the Autonomous Database, without the need to predefine the table in SQL. In this case, update the name of the table to be created, to **CUSTSALES**.
+7. New view the settings for **sales\_sample** task to view its settings. Note that the tool makes intelligent choices for target table name and properties.  Since this is an initial load, accept the default option of **Create Table**, which conveniently creates the target table in the Autonomous Database, without the need to predefine the table in SQL. In this case, update the name of the table to be created, to **CUSTSALES**.
 
     ![Update table name](images/adb-load-data-table-name.png)
 
