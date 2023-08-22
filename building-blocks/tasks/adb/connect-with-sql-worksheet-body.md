@@ -9,10 +9,10 @@ Although you can connect to your Oracle Autonomous Database using desktop tools 
 
 1.  If you are not logged in to Oracle Cloud Console, log in and select **[](var:db_workload_type)** from the navigation menu, make sure you are in the right compartment where you ADB is provisioned and navigate into your **[](var:db_display_name)** instance.
 
-    ![Oracle Home page left navigation menu.](https://raw.githubusercontent.com/oracle/learning-library/master/common/images/console/database-adw.png " ")
+    ![Oracle Home page left navigation menu.](images/oci-navigation-adb.png " ")
 
 
-    ![Autonomous Databases homepage.](images/step1.1-adb.png " ")
+    ![Autonomous Databases homepage.](images/oci-adb-list-with-db.png " ")
 
 2. In your [](var:db_display_name)'s details page, click the **Database Actions** button.
 
