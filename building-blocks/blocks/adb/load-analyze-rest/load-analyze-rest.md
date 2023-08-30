@@ -269,4 +269,4 @@ This completes this lab. You now know how to integrate and analyze data coming f
 ## Acknowledgements
 
 * **Author** - Marty Gubar, Autonomous Database Product Management
-* **Last Updated By/Date** - Marty Gubar, July 2022
+* **Last Updated By/Date:** Marty Gubar, July 2022
