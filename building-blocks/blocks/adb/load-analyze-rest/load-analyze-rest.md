@@ -54,11 +54,8 @@ Now that you have the API key, create a PLSQL function that queries the REST end
 
 1. Navigate to the Database Actions' SQL Worksheet
     
-    Go to Database Actions from the Autonomous Database OCI console:
-    ![Go to DB Actions](/common/building-blocks/tasks/adb/images/adb-dbactions-goto.png "Go to DB Actions")
-
-    Then, select SQL in the Launchpad:
-    ![Click SQL](/common/building-blocks/tasks/adb/images/adb-dbactions-click-sql.png "Click SQL")
+    Go to **Database Actions -> SQL** from the Autonomous Database OCI console:
+    ![Go to DB Actions](/common/building-blocks/tasks/adb/images/adb-dbactions-goto-sql.png "Go to DB Actions")
 
 2. Ensure that the public REST endpoint is accessible by our PL/SQL function. Copy and paste the following API call into SQL Worksheet to update the access control list. Click **Run Script**. This will allow the ADMIN user to call out to any public host.
     ```
@@ -129,7 +126,7 @@ Now that you have the API key, create a PLSQL function that queries the REST end
     /
     </copy>
     ```
-    **`DBMS_CLOUD.SEND_REQUEST`** is the key function; it queries the endpoint and returns a response object. This response object is then passed to **`BMS_CLOUD.GET_RESPONSE_TEXT`** to retrieve the news articles in JSON format.
+    **`DBMS_CLOUD.SEND_REQUEST`** is the key function; it queries the endpoint and returns a response object. This response object is then passed to **`DBMS_CLOUD.GET_RESPONSE_TEXT`** to retrieve the news articles in JSON format.
 
 4. Query the News API for the top 20 actors. The result of the query is saved into a table.
 
@@ -247,7 +244,7 @@ Now that we have the latest news for each actor, let's derive the sentiment of t
     ```
     As to be expected, the computed sentiment isn't great. However, it's not all bad; as you scroll through the results, there are some positive articles. Also, the description field is fairly small. A richer text field would likely produce even better results.
 
-    ![](images/adb-sentiment-analysis.png)
+    ![Run a sentiment analysis](images/adb-sentiment-analysis.png)
 
 4. MovieStream will want to consider which movies to promote on the site. Actors that are generating buzz and the type of news will likely have some influence on their recommendations. Below are the rankings for our actors:
     ```

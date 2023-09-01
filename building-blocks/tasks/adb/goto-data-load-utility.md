@@ -7,7 +7,7 @@
 
 Navigate to the Data Load utility of Database Actions.
 
-1. Go to the Details page of the Autonomous Database you provisioned. Click **Database Actions** to go to the suite of Autonomous Database tools.
+1. Go to the Details page of the Autonomous Database you provisioned. Click **Database Actions** and select **View all database actions** to go to the suite of Autonomous Database tools.
 
     ![Details page of your Autonomous Database](images/service-details.png " ")
 

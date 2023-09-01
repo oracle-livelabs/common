@@ -18,11 +18,8 @@ You can see that JSON data is organized very differently than typical warehouse 
 
 1. Navigate to the Database Actions' SQL Worksheet:
     
-    Go to Database Actions from the Autonomous Database OCI console:
-    ![Go to DB Actions](images/adb-dbactions-goto.png "Go to DB Actions")
-
-    Then, select SQL in the Launchpad:
-    ![Click SQL](images/adb-dbactions-click-sql.png "Click SQL")
+    Go to **Database Actions -> SQL** from the Autonomous Database OCI console:
+    ![Go to DB Actions](images/adb-dbactions-goto-sql.png "Go to DB Actions")
 
 2. Use the Autonomous Database ``DBMS_CLOUD.COPY_COLLECTION`` procedure to create and load the movie collection from object storage. Copy and paste the following PL/SQL into the SQL worksheet and click run:
     ```
