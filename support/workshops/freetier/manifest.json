@@ -1,30 +1,11 @@
 {
     "workshoptitle": "Support LiveLab",
     "help": "livelabs-help-db_us@oracle.com",
-    "variables": ["../../variables/variables.json",
-        "../../variables/variables-in-another-file.json"],
+    "variables": [
+        "../../variables/variables.json",
+        "../../variables/variables-in-another-file.json"
+    ],
     "tutorials": [
-        {
-            "title": "Lab 0: General requirements about using LiveLabs and OCI",
-            "description": "Labs that follow the introduction are numbered, starting with Lab 1",
-            "filename": "../../requirements/requirements.md"
-        },
-        {
-            "title": "Lab 1: My HOL runs on a Always free/Free Tier tenancy",
-            "filename": "../../freetier/freetier.md"
-        },
-        {
-            "title": "Lab 2: My HOL runs on LiveLabs Sandbox",
-            "filename": "../../sandbox/sandbox.md"
-        },
-        {
-            "title": "Lab 3: My HOL runs on special environment",
-            "filename": "../../special-env/special-env.md"
-        },
-        {
-            "title": "Lab 4: General FAQ",
-            "filename": "../../general-faq/general-faq.md"
-        },
         {
             "title": "CloudWorld 2022 Support",
             "filename": "../../ocwsupportlab/ocwsupportlab.md"
