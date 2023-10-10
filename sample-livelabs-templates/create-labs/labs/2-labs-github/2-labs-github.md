@@ -25,7 +25,7 @@ These steps need to be completed once to setup your environment for current and 
 In this Task, you will create and set up your GitHub account.
 
 1. Create a free GitHub Account here: [GitHub Web UI](https://github.com/) if you don't have one.
-    ![](./images/git-download-install-create-account.png " ")
+    ![Git download install create account](./images/git-download-install-create-account.png " ")
 
 2.  If this is a new account, use your Oracle email ID to register. This is optional, however we highly recommend you associate your @oracle.com email with your account so we can validate you are an Oracle Employee. If you are not an Oracle Employee you can develop a workshop in oracle-livelabs/partner-solutions repository and sign an Oracle Contributor Agreement.
 
