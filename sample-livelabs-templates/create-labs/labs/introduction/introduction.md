@@ -50,7 +50,7 @@ We also have a set of common images that are included in the common directory
 
 ## Want to learn more about LiveLabs workshops and GitHub?
 
-* [Oracle LiveLabs](https://developer.oracle.com/livelabs)
+* [Oracle LiveLabs](https://oracle.com/livelabs)
 * [Get started with GitHub](https://docs.github.com/en/get-started)
 * [Oracle LiveLabs Common Repository](https://github.com/oracle-livelabs/common/tree/main/images)
 
