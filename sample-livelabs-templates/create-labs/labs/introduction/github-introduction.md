@@ -17,7 +17,7 @@ In the following simplified example, the three-drawer filing cabinet represents 
 
 ### **Oracle LiveLabs GitHub Project Repository**
 
-At Oracle, we have a GitHub project named **Oracle** which has **305** repositories as of March 15th, 2022. One of the repositories in the **Oracle** GitHub project is named **learning-library**. All of the LiveLabs workshops that you and others created were stored in the **learning-library** repository. In May 2022, after a significant shift, all of the content in learning-library was strategically migrated to **oracle-livelabs** GitHub project repositories. Currently, as of October 2023, Oracle LiveLabs GitHub Project has 30 active repositories. In September 2023, the  learning-library repository was officially deprecated. The **oracle-livelabs** repo is sometimes referred to as **Production** since it's where authors push their completed LiveLabs workshops.
+Oracle LiveLabs has its own GitHub project that has 30 active repositories. This is separate from the Oracle GitHub project that has another 305 repositories with several code samples and architectures. The **oracle-livelabs** repository is where authors push their completed markdown and image files for their LiveLabs workshops. The repositories in **oracle-livelabs** match up with the council groups and products.
 
 + You can access the **oracle-livelabs** GitHub project using the following URL:
 
