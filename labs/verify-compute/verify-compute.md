@@ -20,7 +20,7 @@ This lab assumes you have:
 
 ## Task 1: Gather Compute Instance Details
 1. Now that your instance has been provisioned. If you are not already on the **My Reservations** page, then:
-    - Sign in to [LiveLabs](https://developer.oracle.com/livelabs)
+    - Sign in to [LiveLabs](https://oracle.com/livelabs)
     - Click the drop-down arrow next to your **Username**
     - Click **My Reservations**
 
