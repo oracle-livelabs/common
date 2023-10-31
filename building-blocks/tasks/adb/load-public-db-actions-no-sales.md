@@ -16,7 +16,9 @@
     </copy>
     ```
 
-    Press **Enter** on your keyboard. You will see a list of folders on the left side from which you can drag and drop to the data loading job.
+    ![Enter URL](images/cloud-location-url.png)
+
+    Click ENTER on your keyboard. This will take you to the data loading tool. You will see a list of folders on the left side from which you can drag and drop to the data loading job.
 
     ![The Load Cloud Object page appears](images/load-cloud-object-page-appears.png)
 
@@ -24,27 +26,28 @@
 
     ![Drag the customer_contact folder](images/drag-customer-contact-folder.png)
 
-4. Perform the same drag and drop steps for **genre** and **pizza\_location**
+4. Perform the same drag and drop steps for **genre**, and **pizza\_location**.
 
-6. Click the pencil icon for the **customer\_contact** load task to view the settings for this task.
+
+5. Click the 3-dot ellipsis menu for the **customer\_contact** load task. In the pop-up menu, click **Settings** to view the settings for this task.
 
     ![Click the pencil icon to open settings viewer for customer_contact load task](images/cc-viewsettings.png)
 
-7. In the settings viewer, you can see that Database Actions will create a **CUSTOMER_CONTACT** table with the list of columns and data types that will be created from the csv file. They all look correct, so click **Close** to close the settings viewer.
+6. In the settings viewer, you can see that Database Actions will create a **CUSTOMER_CONTACT** table with the list of columns and data types that will be created from the csv file. Take a moment to examine the preview information and loading options. In the Mapping section, notice that you can change the target column names and data types. They all look correct, so click **Close** to close the settings viewer.
 
     ![View the settings for customer_contact load task](images/settings-viewer-for-customer-contact.png)
 
-10. Now click the **Start** button to run the data load job.
+7. Now click the **Start** button to run the data load job.
 
     ![Run the data load job](images/rundataload.png)
 
     The job should take about 2 minutes to run.
 
-11. Check that all of the data load cards have green tick marks in them, indicating that the data load tasks have completed successfully. Click the on the **genre** task link to view the results:
+8. Check that all of the data load cards have green tick marks in them, indicating that the data load tasks have completed successfully. Click the on the **genre** task link to view the results:
 
     ![Check the job is completed](images/loadcompleted-no-sales.png)
 
-12. Let's do a quick review of the loaded data. Click the **Table** tab to view the **genre** data:
+9. Let's do a quick review of the loaded data. Click the **Table** tab to view the **genre** data:
 
     ![View genre data](images/adb-dataload-genre-table.png)
 

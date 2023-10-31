@@ -27,7 +27,7 @@ You can refer to this page if you have any general questions about Oracle CloudW
 
 ## Can I Access the HOLs after CloudWorld?
 
-Yes, you can still access the hands-on labs after CloudWorld. For more hands-on labs, go to [LiveLabs](https://developer.oracle.com/livelabs/).
+Yes, you can still access the hands-on labs after CloudWorld. For more hands-on labs, go to [LiveLabs](https://oracle.com/livelabs/).
 
 ## Learn More
 

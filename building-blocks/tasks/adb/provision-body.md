@@ -1,7 +1,7 @@
 <!--
     {
         "name":"Provision Autonomous Database",
-        "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, OCPUs, storage and more."
+        "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more."
     }
 -->
 1. Click **Create Autonomous Database** to start the instance creation process.
@@ -51,12 +51,13 @@
 
 6. Configure the database:
 
-    - **Always Free** - If your Cloud Account is an Always Free account, you can select this option to create an always free autonomous database. An always free database comes with 1 OCPU and 20 GB of storage. For this lab, we recommend you leave Always Free unchecked.
+    - **Always Free** - An Always Free database is especially useful for development and trying new features. You can deploy an Always Free instance in an Always Free account or paid account. The only option you specify in an Always Free database is the database version. For this lab, we recommend you leave **Always Free** unchecked unless you are in an Always Free account.
     - **Choose database version** - Select **19c** as the database version.
-    - **OCPU count** - Number of OCPUs for your service. For this lab, specify **[](var:db_ocpu)**. If you choose an Always Free database, it comes with 1 OCPU.
+    - **ECPU count** - Number of ECPUs for your service. For this lab, specify **[](var:db_ocpu)**. If you choose an Always Free database, you do not need to specify this option.
     - **Storage (TB)** - Select your storage capacity in terabytes. For this lab, specify **[](var:db_storage)** of storage. Or, if you choose an Always Free database, it comes with 20 GB of storage.
-    - **OCPU auto Scaling** - For this lab, keep auto scaling enabled, to enable the system to automatically use up to three times more OCPU and IO resources to meet workload demand.
+    - **Compute auto scaling** - For this lab, keep auto scaling enabled, to enable the system to automatically use up to three times more compute and IO resources to meet workload demand. 
     - **Storage auto scaling** - For this lab, there is no need to enable storage auto scaling, which would allow the system to expand up to three times the reserved storage.
+    - **Backup retention** - Your data is always backed up. Specify the backup retention period in days.
 
     > **Note:** You cannot scale up/down an Always Free autonomous database.
 
@@ -82,16 +83,9 @@
 
     ![Choose the network access.](./images/adb-create-screen-choose-network.png "Networking options")
 
-9. Choose a license type. <if type="freetier">For this lab, choose **License Included**.</if><if type="livelabs">For this lab, choose **Bring Your Own License (BYOL)**.</if> The two license types are:
+9. Choose a license type. For this lab, accept the default **License Included**. The two license types are:
     - **Bring Your Own License (BYOL)** - Select this type when your organization has existing database licenses.
     - **License Included** - Select this type when you want to subscribe to new database software licenses and the database cloud service.
-
-<if type="freetier">
-    ![](./images/adb-create-screen-license.png "License type")
-</if>
-<if type="livelabs">
-    ![](images/adb-create-screen-byol.png "License type")
-</if>
 
 10. For this lab, do not provide a contact email address. The "Contact Email" field allows you to list contacts to receive operational notices and announcements as well as unplanned maintenance notifications.
 
@@ -103,6 +97,6 @@
 
     ![Database Provisioning message.](./images/adb-create-provisioning-message.png "Provisioning")
 
-    In a few minutes, the state will turn from Provisioning to Available. At this point, your Autonomous Database instance is ready to use! Have a look at your instance's details - including its name, database version, OCPU count, and storage size.
+    In a few minutes, the state will turn from Provisioning to Available. At this point, your Autonomous Database instance is ready to use! Have a look at your instance's details - including its name, database version, ECPU count, and storage size.
 
     ![Database complete message.](./images/adb-create-complete-message.png "Complete")

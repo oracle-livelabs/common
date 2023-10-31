@@ -371,7 +371,7 @@ In the worst case, if you cannot resolve issues in your local or staging repo, a
 
 ### Issue 6: Authentication error
 
-  ![Authentication failed.](../3-labs-maintain-github/images/authentication-failed.png " ")
+  ![Authentication failed.](./images/authentication-failed.png " ")
 
 First, make sure that you are logged into your GitHub account in GitHub Desktop. If it still does not solve the error, try the following steps.
 
@@ -380,13 +380,13 @@ If you have already created an SSH key in your local computer and added the key 
 1. If you have not generated SSH keys in your local computer, first follow the *(Optional) Lab 5: Generate SSH keys* on the left to generate SSH keys in your local computer.
 
 2. Now you have your public and private SSH keys. Go to your GitHub account in a browser. Click the arrow next to your profile picture on the upper right, and click **Settings**. Click **SSH and GPG keys**. If you have not added any SSH keys to your GitHub account, you will not see any SSH keys displayed. Then click **New SSH key**.
-  ![Settings](../3-labs-maintain-github/images/settings-ssh.png " ")
+  ![Settings](./images/settings-ssh.png " ")
 
 3. For **Title**, give your SSH key a name. In the **Key** field, copy and paste your public SSH key. Then, click **Add SSH key**.
-  ![Add SSH key](../3-labs-maintain-github/images/add-ssh-key.png " ")
+  ![Add SSH key](./images/add-ssh-key.png " ")
 
 4. After the SSH key is added, you can see it under SSH keys on your GitHub page.
-  ![SSH key added](../3-labs-maintain-github/images/ssh-key-displayed.png " ")
+  ![SSH key added](./images/ssh-key-displayed.png " ")
 
 5. Open up your terminal. Go to where *you cloned your GitHub repository* (which may be different from the example below). In this case, I am using the **em-omc** repository as an example, but the process is the same for other repositories.
 
@@ -410,7 +410,7 @@ If you have already created an SSH key in your local computer and added the key 
     ```
 
 8. Finally, go back to **GitHub Desktop** UI, and click **Push origin**. This should solve the authentication issue, and you can continue the lab.
-  ![Push origin.](../3-labs-maintain-github/images/push-origin.png " ")
+  ![Push origin.](./images/push-origin.png " ")
 
 ### Issue 7: GitHub Desktop is stuck
 
@@ -422,7 +422,7 @@ If you have already created an SSH key in your local computer and added the key 
 
 If you have multiple Oracle LiveLabs repositories, you need to switch to the repository that you will work on in GitHub Desktop. Expand the dropdown list of **Current Repository**, and click the repository that you need.
 
-  ![Switch repository.](../3-labs-maintain-github/images/switch-repo.png " ")
+  ![Switch repository.](./images/switch-repo.png " ")
 
 
 ## Acknowledgements
