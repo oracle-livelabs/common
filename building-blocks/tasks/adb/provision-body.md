@@ -8,13 +8,7 @@
 
     ![Click Create Autonomous Database.](images/adb-click-create-adb.png "Create ADB")
 
-2.  This brings up the **Create Autonomous Database** screen where you will specify the configuration of the instance.
-
-
-    ![Create Autonomous Database](images/adb-create-screen-freetier-default.png "Create ADB")
-
-
-3. Give basic information for the autonomous database:
+2.  This brings up the **Create Autonomous Database** screen. Provide basic information for the Autonomous Database:
 
 <if type="freetier">
     - **Choose a compartment** - Select the compartment you just created.
@@ -31,7 +25,7 @@
     ![Enter the required details.](./images/adb-create-screen-names.png " ")
 </if>
 
-4. Choose a workload type. Select the workload type for your database from the choices:
+3. Choose a workload type. Select the workload type for your database from the choices:
 
     - **Data Warehouse** - designed to support all standard SQL and business intelligence (BI) tools, and provides all of the performance of the market-leading Oracle Database in an environment that is tuned and optimized for data warehouse workloads
     - **Transaction Processing** - provides all of the performance of the market-leading Oracle Database in an environment that is tuned and optimized to meet the demands of a variety of applications, including: mission-critical transaction processing, mixed transactions and analytics, IoT, and JSON document store
@@ -42,14 +36,14 @@
 
     ![Choose a workload type.](images/adb-create-screen-workload.png "Workload type")
 
-5. Choose a deployment type. Select the deployment type for your database from the choices:
+4. Choose a deployment type. Select the deployment type for your database from the choices:
 
     - **Serverless** - For this lab, choose **Serverless** as the deployment type.
     - **Dedicated Infrastructure**
 
     ![Choose a deployment type.](images/adb-create-screen-deployment-type.png "Deployment type")
 
-6. Configure the database:
+5. Configure the database:
 
     - **Always Free** - An Always Free database is especially useful for development and trying new features. You can deploy an Always Free instance in an Always Free account or paid account. The only option you specify in an Always Free database is the database version. For this lab, we recommend you leave **Always Free** unchecked unless you are in an Always Free account.
     - **Choose database version** - Select **19c** as the database version.
@@ -63,7 +57,7 @@
 
     ![Choose the remaining parameters.](./images/adb-create-screen-configure-db.png "Configuration")
 
-7. Create administrator credentials:
+6. Create administrator credentials:
 
     - **Password and Confirm Password** - Specify the password for ADMIN user of the service instance. The password must meet the following requirements:
     - The password must be between 12 and 30 characters long and must include at least one uppercase letter, one lowercase letter, and one numeric character.
@@ -75,7 +69,7 @@
 
     ![Enter password and confirm password.](./images/adb-create-screen-password.png "Admin password")
 
-8. Choose network access:
+7. Choose network access:
     - For this lab, accept the default, **Secure access from everywhere**.
     - If you want to allow traffic only from the IP addresses and VCNs you specify - where access to the database from all public IPs or VCNs is blocked, select **Secure access from allowed IPs and VCNs only** in the Choose network access area.
     - If you want to restrict access to a private endpoint within an OCI VCN, select **Private endpoint access only** in the Choose network access area.
@@ -83,17 +77,17 @@
 
     ![Choose the network access.](./images/adb-create-screen-choose-network.png "Networking options")
 
-9. Choose a license type. For this lab, accept the default **License Included**. The two license types are:
+8. Choose a license type. For this lab, accept the default **License Included**. The two license types are:
     - **Bring Your Own License (BYOL)** - Select this type when your organization has existing database licenses.
     - **License Included** - Select this type when you want to subscribe to new database software licenses and the database cloud service.
 
-10. For this lab, do not provide a contact email address. The "Contact Email" field allows you to list contacts to receive operational notices and announcements as well as unplanned maintenance notifications.
+9. For this lab, do not provide a contact email address. The "Contact Email" field allows you to list contacts to receive operational notices and announcements as well as unplanned maintenance notifications.
 
     ![Do not provide a contact email address.](images/adb-create-screen-contact-email.png "email")
 
-11. Click **Create Autonomous Database**.
+10. Click **Create Autonomous Database**.
 
-12.  Your instance will begin provisioning.
+11.  Your instance will begin provisioning.
 
     ![Database Provisioning message.](./images/adb-create-provisioning-message.png "Provisioning")
 
