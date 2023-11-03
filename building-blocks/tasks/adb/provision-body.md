@@ -16,6 +16,8 @@
     - **Database Name** - Use letters and numbers only, starting with a letter. Maximum length is 14 characters. (Underscores not supported.) For this lab, use **[](var:db_name)**.
 
     ![Enter the required details.](./images/adb-create-screen-names.png " ")
+
+> **Note:** Ensure you use suggested database names as instructed, and not those shown in screenshots.
 </if>
 <if type="livelabs">
     - **Choose a compartment** - Use the default compartment created for you.
@@ -23,6 +25,8 @@
     - **Database Name** - Use letters and numbers only, starting with a letter. Maximum length is 14 characters. (Underscores not supported.) For this lab, use **[](var:db_name_livelabs)**, for example, **[](var:db_name_livelabs_example)**.
 
     ![Enter the required details.](./images/adb-create-screen-names.png " ")
+
+> **Note:** Ensure you use suggested database names as instructed, and not those shown in screenshots.
 </if>
 
 3. Choose a workload type. Select the workload type for your database from the choices:
