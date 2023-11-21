@@ -93,7 +93,7 @@ If you already have a cloud account, skip to **Task 2**.
 
 4. You will be prompted to enable secure verification. Click **Enable Secure Verification**. For more details, refer the [Managing Multifactor Authentication documentation](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/usingmfa.htm)
 
-    ![Enable secure verification](./images/enable-secure-verification " ")
+    ![Enable secure verification](./images/enable-secure-verification.png " ")
 
 5. Select a method - **Mobile App** or **FIDO Authenticator** to enable secure verification.
 
@@ -102,7 +102,7 @@ If you already have a cloud account, skip to **Task 2**.
 6. If you have chosen:
     - **Mobile App** - Follow the steps as shown in the screenshot to setup authentication.
 
-        ![Mobile App](.images/mobile-app-mfa.png " ")
+        ![Mobile App](./images/mobile-app-mfa.png " ")
 
     -  **FIDO Authenticator** - Click **Setup** and follow the steps to setup authentication.
 
