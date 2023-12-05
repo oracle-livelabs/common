@@ -9,7 +9,7 @@ Graph Studio is a feature of Autonomous Database. It is available as an option o
 
 1. In your **Autonomous Database Details page** page, click the **Database Actions** button, and then select **View all database actions**.
 
-    ![Click the Database Actions button.](images/graph/click-database-actions.png " ") 
+    ![Click the Database Actions button.](images/adb-dbactions-goto.png " ") 
 
     >**Note:** Use the Admin credentials to sign in if needed. (The Admin user password is located under **View Login Info** )   
 

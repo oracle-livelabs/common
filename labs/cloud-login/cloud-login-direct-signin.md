@@ -40,7 +40,11 @@ If you've signed out of the Oracle Cloud, use these steps to sign back in.
 
     ![Sign in](./images/oci-direct-signin.png " ")
 
-4. You are now signed in to Oracle Cloud!
+4. Enter your **Multi-factor Authentication** code and click **Sign In**. For more details, refer the [Managing Multifactor Authentication documentation](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/usingmfa.htm)
+
+    ![multi-factor-authentication](./images/multi-factor-authentication.png " ")
+
+5. After verification, you will be signed in to Oracle Cloud!
 
     ![OCI Console Home Page](https://oracle-livelabs.github.io/common/images/console/home-page.png " ")
 
@@ -49,4 +53,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 - **Created By/Date** - Anoosha Pilli, Database Product Management, August 2023
 - **Contributors** - John Peach, Kamryn Vinson, Kay Malcolm, Rene Fontcha, Madhusudhan Rao, Arabella Yao
-- **Last Updated By** - Anoosha Pilli, Database Product Management, August 2023
+- **Last Updated By** - Anoosha Pilli, Database Product Management, October 2023

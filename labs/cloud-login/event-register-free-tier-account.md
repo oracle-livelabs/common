@@ -78,7 +78,24 @@ If you've signed out of the Oracle Cloud, use these steps to sign back in.
 
     ![Sign in](./images/oci-signin.png " ")
 
-4. You are now signed in to Oracle Cloud!
+4. You will be prompted to enable secure verification. Click **Enable Secure Verification**. For more details, refer the [Managing Multifactor Authentication documentation](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/usingmfa.htm)
+
+    ![Enable secure verification](./images/enable-secure-verification " ")
+
+5. Select a method - **Mobile App** or **FIDO Authenticator** to enable secure verification.
+
+    ![Choose method](./images/select-mfa-method.png " ")
+
+6. If you have chosen:
+    - **Mobile App** - Follow the steps as shown in the screenshot to setup authentication.
+
+        ![Mobile App](.images/mobile-app-mfa.png " ")
+
+    -  **FIDO Authenticator** - Click **Setup** and follow the steps to setup authentication.
+
+        ![FIDO Authenticator](./images/fido-mfa.png " ")
+
+7. Once you have verified authentication, you will now be signed in to Oracle Cloud!
 
     ![OCI Console Home Page](https://oracle-livelabs.github.io/common/images/console/home-page.png " ")
 
@@ -88,4 +105,4 @@ You may now **proceed to the next lab**.
 
 - **Created By/Date** - Anoosha Pilli, Product Manager, February 2021
 - **Contributors** - Madhusudhan Rao, Arabella Yao
-- **Last Updated By** - Arabella Yao, Database Product Management, Dec 2022
+- **Last Updated By** - Anoosha Pilli, October 2023
