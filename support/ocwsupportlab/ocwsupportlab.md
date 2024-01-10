@@ -4,14 +4,14 @@
 
 ![Cloud World Logo](images/ocw23-dark-2.png)
 
-It is a pleasure to welcome you to the Oracle CloudWorld Hands-On Lab (HOL) Experience. We want to encourage you to get hands-on in each session and follow the hands-on lab instructions.
+It is our utmost pleasure to extend a warm welcome to you as you embark on the Oracle CloudWorld Hands-On Lab (HOL) Experience. We wholeheartedly encourage and invite you to actively participate in every session, fully immersing yourself in the hands-on lab activities by closely following the provided instructions. Your engagement is key to making this experience truly exceptional.
 
->In the following sections, you can find frequently asked questions, technical requirements, and tips & tricks.
+>In the following sections, you will discover frequently asked questions, technical requirements, and helpful tips and tricks.
 
 
 ## Technical Requirements for Hands-on Labs
 
-All you need is your laptop and a modern web browser, and you should be good to go. We want you to get the best and most seamless hands-on lab experience. Therefore, we recommend the following browsers and minimum versions to use when accessing Oracle Cloud Infrastructure (OCI):
+All that's required is your laptop equipped with a modern web browser, and you'll be ready to start. To ensure you have the best and smoothest hands-on lab experience, we recommend using the following browsers and their minimum versions when accessing Oracle Cloud Infrastructure (OCI):
 
 <b>
 - Google Chrome 69 or later
@@ -22,7 +22,7 @@ All you need is your laptop and a modern web browser, and you should be good to 
 
 ## Get Your CloudWorld Oracle Cloud Free Tier Account
 
-With your registration to CloudWorld, you are entitled to sign up for a particular CloudWorld Oracle Cloud Free Tier account. You do not need to provide any payment information, and the registration takes only a few minutes. You can explore your Oracle Cloud Infrastructure account in just a few minutes.
+As part of your CloudWorld registration, you have the privilege to create a dedicated Oracle Cloud Free Tier account for CloudWorld. No payment information is required, and the registration process itself takes just a few minutes, allowing you to swiftly access and explore your Oracle Cloud Infrastructure account.
 
 
 **Step-by-step guide: Sign up for an Oracle Cloud Free Tier Account**
@@ -57,9 +57,36 @@ With your registration to CloudWorld, you are entitled to sign up for a particul
 
     ![Sign In](images/sign-in.png =30%x* " ")
 
-9.  You are now signed in to Oracle Cloud!
+9. Next, you need to configure Multi-Factor-Authentication (MFA). Click **Enable Secure Verification** to start the process)
+
+    ![enable MFA](images/enable-mfa.png =30%x* " ")
+
+10. We support multiple ways for second-factor authentication:
+    1.  Oracle Authenticator App (**recommended**).
+    2.  3rd party authenticator apps, for example Google or Microsoft Authenticator.
+    3.  FIDO, a hardware-enabled authentication using your device's security function such as fingerprints or facial recognition. Another hardware-enabled authentication can be performed using a hardware key, for example, a YubiKey.
+
+    In this guide, we explain enabling MFA using the Oracle Authenticator App which can be downloaded in Apple App Store or Google PlayStore.
+
+    Click **Mobile App** to start the process.
+
+    ![Mobile App enablement](images/mobile-mfa.png =30%x* " ")
+
+11. In the Authenticator App, tap **Add Account**. This will open the camera application. Now scan the QR code displayed in the web browser.
+
+    ![scan QR code](images/scan-qr.png =30%x* " ")
+
+12. After scanning the QR code, your account is automatically enrolled for MFA. Please click **Done** to proceed.
+
+    ![enrolled](images/enrolled.png =30%x* " ")
+
+13. You are now signed in to Oracle Cloud!
 
     ![You are now signed in to Oracle Cloud](images/oci.png =30%x* " ")
+
+Here is a video demonstrating the MFA process:
+[](videohub:1_0y3nn2ig)
+
 
 ##  Your Oracle Account
 
@@ -86,15 +113,15 @@ Click [here](https://www.oracle.com/corporate/contact/help.html) to learn more a
 
 Here you can find a quick guide explaining how to access the LiveLabs Sandbox environment.
 
-*Please note*: Some hands-on labs provide access to preconfigured environments using noVNC (see Step 2b). Your session host will inform you about the applicable access method.
+*Please note*: Some hands-on labs provide access to preconfigured environments using noVNC (see Step 2b). Your host will inform you about the applicable access method.
 
-1. Using your *Oracle Account Login* go to [LiveLabs](https://developer.oracle.com/livelabs). Open a workshop, click **Start**, and then **Run on LiveLabs** to request a reservation for this workshop.
+1. Using your *Oracle Account Login* go to [LiveLabs](https://oracle.com/livelabs). Open a workshop, click **Start**, and then **Run on LiveLabs** to request a reservation for this workshop.
   ![Run on LiveLabs](images/run-on-livelabs.png =20%x* " ")
 
-2. Fill out information on the *Reserve Workshop* page. Check **I consent to recieve emails from LiveLabs for my reservation**. Click **Submit Reservation**.
+1. Fill out information on the *Reserve Workshop* page. Check **I consent to receive emails from LiveLabs for my reservation**. Click **Submit Reservation**.
   ![Submit Reservation](images/submit-reservation.png =20%x* " ")
 
-3. After creating a reservation for a LiveLab Workshop, you will receive an e-mail indicating that your reservation is being processed, followed by an e-mail indicating that your environment has been created.
+1. After creating a reservation for a LiveLab Workshop, you will receive an e-mail indicating that your reservation is being processed, followed by an e-mail indicating that your environment has been created.
   ![Reservation email](images/livelab-env-created-email.png =20%x* " ")
 
 >**Note:** You will receive the second created e-mail just before your selected reservation time.
@@ -139,7 +166,7 @@ Here you can find a quick guide explaining how to access the LiveLabs Sandbox en
 
 
 ### Why do I need SSH Keys?
-Some hands-on labs will use pre-provisioned environments that may require you to log in via SSH to a specific server.
+Some hands-on labs will use preprovisioned environments that may require you to log in via SSH to a specific server.
 We have used a CloudWorld-specific SSH key pair to provision the environments to save you time. That way, you can start immediately with the hands-on exercises and not have to be concerned with the initial configuration.
 
 In the following sections, we provide instructions on using the provided CloudWorld-specific SSH keys.
@@ -158,7 +185,7 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
    
     ```
     <copy>
-    wget https://bit.ly/ocw23-keys
+    wget https://developer.oracle.com/livelabs/ssh
     </copy>
     ```
 3. Unzip the archive
@@ -173,7 +200,7 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
 
    You will find the following files:
 
-      * ocw23-rsa (privayte key)
+      * ocw23-rsa (private key)
       * ocw23-rsa.pub (public key)
       * ocw23-rsa.ppk (private key in Putty format - for Windows only)
 
@@ -197,7 +224,7 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
 <br>
 ### Option 2 (MacOS): Connect using MacOS Terminal
 
-If you are using MacOS, you can also connect using a terminal application such as the default Termional application.
+If you are using MacOS, you can also connect using a terminal application such as the default terminal application.
 
 1. Open the terminal application of your choice:
    
@@ -211,7 +238,7 @@ If you are using MacOS, you can also connect using a terminal application such a
    
     ```
     <copy>
-    wget https://bit.ly/ocw23-keys
+    wget https://developer.oracle.com/livelabs/ssh
     </copy>
     ```
 3. Unzip the archive
@@ -258,7 +285,7 @@ You must have Putty installed. [Download Putty](https://www.putty.org/)
 
     ```
     <copy>
-    https://bit.ly/ocw23-keys
+    https://developer.oracle.com/livelabs/ssh
     </copy>
     ```
 2. Unzip the file and copy the file ocw23-rsa.ppk to a folder of your choice, for example to your Windows Desktop.
@@ -280,15 +307,15 @@ You will be prompted for the username once you click 'Open'
 ### Option 4 (Windows PowerShell): Connect using Windows Powershell
 
 If your Windows 10 or Windows 11 configuration allows to run SSH in PowerShell, you can use the following steps to connect to a remote server.
-More information on using SSH in PowerShell can be found here: [PowerShell remoting over SSH](https://learn.microsoft.com/en-us/powershell/scripting/learn/remoting/ssh-remoting-in-powershell-core)
+More information on using SSH in PowerShell can be found here: [PowerShell remote over SSH](https://learn.microsoft.com/en-us/powershell/scripting/learn/remoting/ssh-remoting-in-powershell-core)
 
-1. Open WindowsPowershell
+1. Open Windows PowerShell
 
 2. Download the SSH keys using wget
    
     ```
     <copy>
-    wget https://bit.ly/ocw23-keys -outfile ocw23-keys.zip
+    wget https://developer.oracle.com/livelabs/ssh -outfile ocw23-keys.zip
     </copy>
     ```
 3. Unzip the archive
@@ -303,7 +330,7 @@ More information on using SSH in PowerShell can be found here: [PowerShell remot
 
    You will find the following files:
 
-      * ocw23-rsa (privayte key)
+      * ocw23-rsa (private key)
       * ocw23-rsa.pub (public key)
       * ocw23-rsa.ppk (private key in Putty format - for Windows only)
   
@@ -326,7 +353,7 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
    
     ```
     <copy>
-    wget https://bit.ly/ocw23-keys
+    wget https://developer.oracle.com/livelabs/ssh
     </copy>
     ```
 3. Unzip the archive
@@ -341,7 +368,7 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
 
    You will find the following files:
 
-      * ocw23-rsa (privayte key)
+      * ocw23-rsa (private key)
       * ocw23-rsa.pub (public key)
       * ocw23-rsa.ppk (private key in Putty format - for Windows only)
 
@@ -370,7 +397,7 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
    
     ```
     <copy>
-    wget https://bit.ly/ocw23-keys
+    wget https://developer.oracle.com/livelabs/ssh
     </copy>
     ```
 3. Unzip the archive
@@ -385,7 +412,7 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
 
    You will find the following files:
 
-      * ocw23-rsa (privayte key)
+      * ocw23-rsa (private key)
       * ocw23-rsa.pub (public key)
       * ocw23-rsa.ppk (private key in Putty format - for Windows only)
 
@@ -410,15 +437,22 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
 
 Are you looking for the next hands-on lab to visit? Have a look at the [Session Catalog](https://reg.rf.oracle.com/flow/oracle/cwoh23/catalog/page/catalog)
 
-##  CloudWorld Agenda
-
-Always know what is going on.
-
-![CloudWorld Agenda](https://www.oracle.com/content/published/api/v1.1/assets/CONT1E0D09E6A6DD4366BF066A1B7671C8CC/native?cb=_cache_2d16&channelToken=e8a0673b81ca460986a44e776a18fa0a)
 
 ## Visit the Oracle Community Theater and Community Lab!
 
-tbd
+Within the ![DatabaseWorld](https://www.oracle.com/cloudworld/databaseworld/) Demogrounds, you'll discover the Community Theater and the Community Lab.
+
+The Community Theater serves as the hub for this year's technical sessions, offering a comprehensive exploration of the cutting-edge features introduced in Oracle Database 23c. This immersive experience not only provides the quickest pathway to learning but also allows you to witness and experiment with the exciting innovations accompanying the release of Oracle Database 23c.
+
+Within the Community Lab, we present an array of hands-on workshops that empower you to delve into these experiences at your own convenience. Simply take a seat and dive right in, whether it's on one of our readily available laptops or your personal device.
+
+![CTT and Lab](images/dbdemogrounds.png)
+
+You can find the DatabaseWorld activities in the Tech Anchor within the CloudWorld Hub.
+
+![CloudWorld Hub](images/cloudworldhub.png)
+
+
 
 ## Learn More
 
@@ -428,4 +462,4 @@ tbd
 ## Acknowledgements
 
 * **Author** - Kevin Lazarz, Oracle Database Product Management, Senior Principal Product Manager
-* **Last Updated By/Date** - Kevin Lazarz, July 2023
+* **Last Updated By/Date** - Kevin Lazarz, September 2023

@@ -78,7 +78,7 @@ Look at the product-name-workshop/tenancy folder and look at the manifest.json f
 
 > **Note:** The use of "Lab n:" in the titles is optional
 
-The Prerequisite "lab" is the first lab in a common folder on the oracle/learning-library repo. Because this lab already exists, we can use a RAW/absolute URL instead:
+The Prerequisite "lab" is the first lab in a common folder on the oracle-livelabs/common repo. Because this lab already exists, we can use a RAW/absolute URL instead:
 
   ```
   "filename": "https://oracle-livelabs.github.io/common/labs/cloud-login/cloud-login-livelabs2.md"        },
@@ -92,6 +92,6 @@ The manifest.json file needs to know the location of each lab relative to where 
 
 ### For example:
 
-This [APEX Workshop](https://oracle-livelabs.github.io/apex/spreadsheet/) is a good example of a workshop with a single set of labs: [https://github.com/oracle-livelabs/apex/tree/main/spreadsheet](https://github.com/oracle-livelabs/apex/tree/main/spreadsheet).
+This [APEX Workshop](https://oracle-livelabs.github.io/apex/spreadsheet/workshops/freetier/) is a good example of a workshop with a single set of labs: [https://github.com/oracle-livelabs/apex/tree/main/spreadsheet](https://github.com/oracle-livelabs/apex/tree/main/spreadsheet).
 
 

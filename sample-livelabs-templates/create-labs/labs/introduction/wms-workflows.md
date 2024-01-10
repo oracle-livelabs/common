@@ -38,7 +38,7 @@ If something is unclear or more details are needed to understand the workshop, t
 
 ### **What's Next?**
 
-Now that you know all about Oracle GitHub project, learning-library repository and LiveLabs workshop development workflow, you are all set to begin the labs! Click **Lab 1: Submit new workshop in WMS** in the Contents menu to get stated.
+Now that you know all about Oracle LiveLabs GitHub project repository and LiveLabs workshop development workflow, you are all set to begin the labs! Click **Lab 1: Submit new workshop in WMS** in the Contents menu to get stated.
 
 ## Want to learn more about LiveLabs workshops?
 
