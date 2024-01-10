@@ -1,4 +1,4 @@
-# Introduction to Oracle GitHub Project and learning-library Repository
+# Introduction to Oracle LiveLabs GitHub Project Repository
 
 ## What is GitHub?
 
@@ -15,30 +15,20 @@ In the following simplified example, the three-drawer filing cabinet represents 
 
   ![GitHub project organization diagram.](./images/git-hub-projects-repositories.png " ")
 
-### **Oracle GitHub Project and learning-library Repository**
+### **Oracle LiveLabs GitHub Project Repository**
 
-At Oracle, we have a GitHub project named **Oracle** which has **305** repositories as of March 15th, 2022. One of the repositories in the **Oracle** GitHub project is named **learning-library**. All of the LiveLabs workshops that you and others create are stored in the **learning-library** repository. This repo is sometimes referred to as **Production** since it's where customers view the completed LiveLabs workshops.
+Oracle LiveLabs has its own GitHub project that has 30 active repositories. This is separate from the Oracle GitHub project that has another 305 repositories with several code samples and architectures. The **oracle-livelabs** repository is where authors push their completed markdown and image files for their LiveLabs workshops. The repositories in **oracle-livelabs** match up with the council groups and products.
 
-![GitHub project workflow diagram.](./images/git-hub-oracle-projects-learning-library.png " ")
++ You can access the **oracle-livelabs** GitHub project using the following URL:
 
-+ You can access the **Oracle** GitHub project using the following URL:
-  [https://github.com/oracle](https://github.com/oracle)
+  [https://oracle.com/livelabs](https://oracle.com/livelabs)
 
-  ![GitHub access overview.](./images/git-hub-oracle-project.png " ")
+  ![Oracle LiveLabs GitHub Project](./images/oracle-livelabs-github-project.png " ")
 
-+ You can access the **Oracle** GitHub project repositories using the following URL:
-  [https://github.com/orgs/oracle/repositories](https://github.com/orgs/oracle/repositories)
++ You can access all the **oracle-livelabs** GitHub project repositories using the following URL:
+  [https://github.com/orgs/oracle-livelabs/repositories](https://github.com/orgs/oracle-livelabs/repositories)
 
-  ![GitHub Oracle repository.](./images/git-hub-oracle-repos.png " ")
-
-+ You can access **Oracle**'s GitHub project **learning-library** repository directly using the following URL which you should bookmark as you will use it often:
-  [https://github.com/oracle/learning-library](https://github.com/oracle/learning-library)
-
-  ![GitHub Oracle learning library.](./images/git-hub-learning-library.png " ")
-
-  The highlighted **sample-livelabs-templates** folder contains this workshop and also the available Livelabs templates.
-
-  > **Note:** The term **learning-library** that we reference in this workshop is the GitHub repository for the **Oracle** GitHub project. It is NOT the same as **Oracle Learning Library (OLL)** used formerly in the OBE world. OLL is an online resource for content about Oracle products [https://apexapps.oracle.com/pls/apex/f?p=44785:1](https://apexapps.oracle.com/pls/apex/f?p=44785:1).
+  ![Oracle LiveLabs GitHub Repositories.](./images/oracle-livelabs-github-repos.png " ")
 
 ## Want to learn more about GitHub?
 
@@ -53,4 +43,4 @@ At Oracle, we have a GitHub project named **Oracle** which has **305** repositor
     * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
     * Arabella Yao, Product Manager, Database Product Management
 * **Last Updated By/Date:**
-    * Anoosha Pilli, June 2022
+    * Anoosha Pilli, October 2023

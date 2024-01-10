@@ -4,11 +4,7 @@
         "description":"Navigate to ADB using the OCI menu. AUTHORS: For expediency, this task uses the ADMIN user/password to open Database Actions. In your workshop, you might want to substitute a different user/password to open Database Actions."
     }
 -->
-1. Once logged into Oracle Cloud, click the navigation menu in the upper left to show top level navigation choices:
-
-    ![Click OCI navigation menu.](images/oci-navigation-invoke.png " ")
-
-    Then, select **Oracle Database -> [](var:db_workload_type)**:   
+1. In the Oracle Cloud console, open the **navigation menu**, navigate to **Oracle Database**, and then select **Autonomous Data Warehouse**.
 
     ![Click Autonomous Database (ATP or ADW).](images/oci-navigation-adb.png " ")
 
