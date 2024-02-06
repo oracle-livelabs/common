@@ -10,13 +10,9 @@
 **Last Updated By/Date:** Lauran Serhal, February 2024
 -->
 
-_**IMPORTANT:** If you already have an RSA key pair in PEM format (minimum 2048 bits) and a fingerprint of the public key, you can skip this optional task and proceed to **Task 6**. To get your user's and tenancy's OCID, see [Where to Get the Tenancy's OCID and User's OCID](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five); however, going through the entire task might be easier for you as you can get all the information that you need from the **Configuration File Preview** dialog box when you create your keys._
+_**IMPORTANT:** If you already have an RSA key pair in PEM format (minimum 2048 bits) and a fingerprint of the public key, you can skip this optional task and proceed to the next task in the workshop; however, going through this entire task might be easier for you. The **Console** displays the _configuration file preview_ dialog box that shows the **user ocid**, **fingerprint**, **tenancy ocid**, and **region**._ For additional information see the [How to Generate an API Signing Key](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#two), [How to Get the Key's Fingerprint](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#four), and [Where to Get the Tenancy's OCID and User's OCID](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five) documentation resources.
 
-In this task, you learn how to use the **Console** to generate the private/public key pair. If you already have a key pair, you can choose to upload the public key instead. The **Console** also displays the _configuration file preview_ dialog box that contains important information such as the **user ocid**, **tenancy ocid**, **region**, and the generated **fingerprint** private and/or public key values.
-
-+ An RSA key pair in PEM format (minimum 2048 bits). See [How to Generate an API Signing Key](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#two).
-+ The fingerprint of the public key. See [How to Get the Key's Fingerprint](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#four).
-+ The user's and tenancy's OCIDs. See [Where to Get the Tenancy's OCID and User's OCID](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five).
+In this optional task, you learn how to use the **Console** to generate the private/public key pair.
 
 1. In the **Console** banner, click the **Profile** icon. From the drop-down menu, click your **My profile**.
 
