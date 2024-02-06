@@ -5,6 +5,11 @@
     }
 -->
 
+<!-- 
+**Author:** Lauran Serhal, Consulting User Assistance Developer
+**Last Updated By/Date:** Lauran Serhal, February 2024
+-->
+
 _**IMPORTANT:** If you already have an RSA key pair in PEM format (minimum 2048 bits) and a fingerprint of the public key, you can skip this optional task and proceed to **Task 6**. To get your user's and tenancy's OCID, see [Where to Get the Tenancy's OCID and User's OCID](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five); however, going through the entire task might be easier for you as you can get all the information that you need from the **Configuration File Preview** dialog box when you create your keys._
 
 ## Introduction
@@ -56,13 +61,3 @@ Estimated Time: 5 minutes
     ![Private key value.](./images/get-private-key-value.png " ")
 
 7. In the **Configuration File Preview** dialog box, click **Close**.
-
-## Want to Learn More?
-
-* [Oracle Cloud Infrastructure Documentation](https://docs.cloud.oracle.com/en-us/iaas/Content/GSG/Concepts/baremetalintro.htm)
-* [Overview of Oracle Cloud Infrastructure Identity and Access Management](https://docs.cloud.oracle.com/en-us/iaas/Content/Identity/Concepts/overview.htm)
-
-## Acknowledgements
-
-* **Author:** Lauran Serhal, Consulting User Assistance Developer
-* **Last Updated By/Date:** Lauran Serhal, February 2024
