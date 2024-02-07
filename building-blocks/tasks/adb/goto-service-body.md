@@ -13,7 +13,7 @@
     ![Database list.](images/oci-adb-list.png " ")
 
     - **Compartment**: OCI resources are organized into compartments. Select the compartment where you want to create your Autonomous Database. <if type="livelabs">To quickly locate the compartment that has been assigned to you for this workshop, enter the first part of your user name (e.g. `LL185`) in the Search Compartments field.</if>
-    - **Workload Type**: Filter the Autonomous Database list by selecting your workload type. Select *All* to view all databases
+    - **Workload Type**: Filter the Autonomous Database list by selecting your workload type. Select **All** to view all databases
     - **State**: View databases that are available, stopped, terminated and more.
 
 <if type="freetier">
