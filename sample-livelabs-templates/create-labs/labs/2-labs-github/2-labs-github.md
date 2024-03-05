@@ -101,8 +101,6 @@ To install Visual Studio Code:
 3. Click "Install".
   ![Install live server.](./images/ls-install.png " ")
 
-Video about the Visual Studio Code's extensions and showdownjs:
-[Video walking through showdownjs and extensions](https://www.youtube.com/watch?v=rOj5APIU-XU)
 
 ## Task 6: (Optional) Helpful resources and extensions for Visual Studio Code
 
