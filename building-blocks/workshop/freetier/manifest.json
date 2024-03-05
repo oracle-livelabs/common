@@ -1,10 +1,13 @@
 {
  "workshoptitle":"LiveLabs Building Blocks",
  "include": {
+     "adb-cleanup.md":"/common/building-blocks/tasks/adb/cleanup.md",
      "adb-connect-with-sql-worksheet-body.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-body.md",
+     "adb-connect-with-sql-worksheet-non-admin.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-non-admin.md",
      "adb-create-graph.md":"/common/building-blocks/tasks/adb/create-graph.md",
      "adb-create-load-json-collection.md":"/common/building-blocks/tasks/adb/create-load-json-collection.md",
      "adb-create-user.md":"/common/building-blocks/tasks/adb/create-user.md",
+     "adb-generate-rsa-key-pair.md":"/common/building-blocks/tasks/adb/generate-rsa-key-pair.md",
      "adb-goto-data-load-utility.md":"/common/building-blocks/tasks/adb/goto-data-load-utility.md",
      "adb-goto-graph-studio.md":"/common/building-blocks/tasks/adb/goto-graph-studio.md",
      "adb-goto-service-body.md":"/common/building-blocks/tasks/adb/goto-service-body.md",
@@ -32,6 +35,11 @@
      {
          "title": "Add Workshop Utilities",
          "filename": "/common/building-blocks/setup/add-workshop-utilities.md"
+     },
+     {
+         "title": "[adb] Delete your workshop resources",
+         "type": "freetier",
+         "filename": "/common/building-blocks/blocks/adb/cleanup/cleanup.md"
      },
      {
          "title": "[adb] Connect with SQL Worksheet",
