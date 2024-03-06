@@ -101,7 +101,6 @@ To install Visual Studio Code:
 3. Click "Install".
   ![Install live server.](./images/ls-install.png " ")
 
-
 ## Task 6: (Optional) Helpful resources and extensions for Visual Studio Code
 
 1. [Showdown Editor](http://demo.showdownjs.com/) is a Javascript Markdown to HTML converter that LiveLabs uses in the background to convert Markdown files to HTML. This documentation is a helpful resource while developing content in markdown files. This document provides a quick description of the markdown syntax supported on the left side and the output in HTML format on the right side. Showdown Editor shows the syntax of writing, paragraphs, headings, block and italics, code formatting, creating lists, tables, adding links, images, escaping entities, etc.

@@ -33,7 +33,7 @@ class Lab:
     physical_path = None
     cloud_service = None
     dependencies = None
-  
+
 
 # helper function simply adds a line to a string
 def add_line (input_string, line):
@@ -453,6 +453,7 @@ def main():
     write_toc()
     write_cloud_service_tasks()     
     write_blocks_manifest()
+
 
 
 if __name__ == "__main__":
