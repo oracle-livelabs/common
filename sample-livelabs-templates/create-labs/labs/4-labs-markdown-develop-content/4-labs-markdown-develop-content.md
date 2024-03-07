@@ -166,7 +166,7 @@ Sometimes you may want to link to something within your lab or workshop.  Most c
 ## Task 7: Add and embed a Video
 
 Adding videos is very similar to adding images. We most commonly see videos added in the introductions for labs to familiarize the audience with the product before they dive into the workshop.
-LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or [Oracle Video Hub]([https://https://videohub.oracle.com/).
+LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or [Oracle Video Hub](https://videohub.oracle.com).
 
 ### Embedding a video from Oracle Video Hub (recommended)
 
