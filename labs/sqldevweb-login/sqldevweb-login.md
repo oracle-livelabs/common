@@ -30,7 +30,7 @@ This lab assumes you have:
 
 1. After logging into your Oracle Cloud account, click the hamburger icon to open your Cloud Services navigation menu. This will reveal your top-level menu options.
 
-    ![Click the hamburger icon to expand the navigation menu.](./labs/sqldevweb-login/images/navigate-to-hamburger-icon-oci-console.png " ")
+    ![Click the hamburger icon to expand the navigation menu.](./images/navigate-to-hamburger-icon-oci-console.png " ")
 
 2. From the available options, click `Oracle Database`.
 
@@ -58,7 +58,7 @@ This lab assumes you have:
 
    > Note: These will be the ADMIN username and password selected when you first created your Autonomous Database.
 
-    ![Signing in as the Admin for your ADB.](./images/signing-in-to-database-actions-as-admin-user.png " ")
+   ![Signing in as the Admin for your ADB.](./images/signing-in-to-database-actions-as-admin-user.png " ")
 
     > Note: You will enter `ADMIN` as the Username, along with the ADMIN password you specified when you first created your Autonomous Database.
 
