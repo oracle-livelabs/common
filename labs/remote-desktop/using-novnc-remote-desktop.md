@@ -17,7 +17,7 @@ This lab assumes you have:
 - Provisioned VM Instance configured with noVNC
 
 ## Task 1: Enable Full-screen Display
-For seamless desktop integration and to make the best use of your display, perform the following tasks to render your remote desktop session in fullscreen mode.
+To effortlessly merge your desktop environments and maximize your display's potential, follow these steps to bring your remote desktop session in fullscreen mode.
 
 1. Click on the small gray tab on the middle-left side of your screen to open the control bar.
 
@@ -116,4 +116,4 @@ This assumes that you already have an RSA-type SSH key-pair available on the loc
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology
 * **Contributors** - Arabella Yao, Product Manager, Database Product Management
-* **Last Updated By/Date** - Arabella Yao, Dec 2022
+* **Last Updated By/Date** - Ramona Magadan, March 2024

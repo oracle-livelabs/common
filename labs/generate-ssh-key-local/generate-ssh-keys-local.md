@@ -54,13 +54,13 @@ You may now **proceed to the next lab**.
 
 ## Option 2:  Windows 10
 
-Creating keys for Windows can be interesting as ```ssh-keygen``` was not a native utility for Windows until the release of Windows 10. And it wasn't included in the initial Windows 10 builds. In this section, we'll assume your version of Windows 10 actually has ```ssh-keygen``` installed.  Note that you might have an earlier build that doesn't include ssh-keygen. If you can't find it, either upgrade or try one of the other methods listed for earlier versions of Windows.
+Creating keys for Windows can be interesting as ```ssh-keygen``` was not a native utility for Windows until the release of Windows 10. And it wasn't included in the initial Windows 10 builds. In this section, we'll assume your version of Windows 10 actually has ```ssh-keygen``` installed.  Keep in mind, if you're working with an older slice of Windows 10 that's missing ssh-keygen, you're not out of options. Consider updating your system or exploring alternative techniques tailored for the Windows versions.
 
 1.  Open a **Powershell** command window on your Windows 10 system by clicking its icon/tile or by typing 'powershell' in the search field in the Start bar.
 
     ![Powershell](./images/powershell.png " ")
 
-2.  Enter the command ```ssh-keygen``` into the terminal window. Pay particular attention to where the file will be saved so you can locate it later.   ```ssh-keygen``` will default to the standard .ssh directory under the user's base directory.
+2.  Enter the command ```ssh-keygen``` into the terminal window. Keep a keen eye on the file's save location to easily find it when you need it later.   ```ssh-keygen``` will default to the standard .ssh directory under the user's base directory.
 
     ```
     <copy>ssh-keygen</copy>
@@ -148,7 +148,7 @@ In earlier versions of Windows, ssh-keygen was not a native utility, so third-pa
 
     ![Navigate up into root C: directory.](./images/ls-git-bash.png " ")
 
-    Note in the output that there are two files, a *private key:* ```id_rsa``` and a *public key:* ```id_rsa.pub```. Keep the private key safe and don't share its content with anyone. The public key will be needed for various activities and can be uploaded to certain systems as well as copied and pasted to facilitate secure communications in the cloud.
+    >**Note:** In the output that there are two files, a *private key:* ```id_rsa``` and a *public key:* ```id_rsa.pub```. Keep the private key safe and don't share its content with anyone. The public key will be needed for various activities and can be uploaded to certain systems as well as copied and pasted to facilitate secure communications in the cloud.
 
 6.  Make a note of where your SSH public and private key files are located. You may be asked to upload the file or to copy/paste the content into other labs for Oracle Cloud Services. Copy the key content exactly, capturing space after the key characters may render your key invalid. In the example below, you can use the gitbash ```cat``` command to display the public key file content. You can select the key file content and right-click to **Copy** the key.  Or you can upload the file directly.
 
@@ -156,13 +156,13 @@ In earlier versions of Windows, ssh-keygen was not a native utility, so third-pa
 
     >**Note:** If you've already installed Git for Windows, don't bother with PuTTY. It's your choice which utility to use for key generation and terminal access.
 
-You may now **proceed to the next lab**.
+You're all set to move on to the ** next lab**.
 
 ## Option 3b: Windows Versions - PuTTY
 
 In earlier versions of Windows, ssh-keygen was not a native utility, so third-party utilities had to be utilized. In this section, we'll illustrate using **PuTTY**. If you prefer **Git for Windows**, visit the option prior to this one.
 
-1.  If you don't already have it installed, access the link below and download the application. For Oracle employees, **PuTTY** is also available for download internally via the **MyDesktop** application. For non-Oracle employees and customers, use the below link. If you are unable to install anything on your laptop due to permission issues, please use the **Oracle Cloud Shell** option above.
+1.  If you don't already have it installed, access the link below and download the application following the link below.
 
     [Click here to download PuTTY for Windows](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
 
@@ -292,4 +292,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 * **Author** - Dan Kingsley, Enablement Specialist, OSPA
 * **Contributors** - Arabella Yao, Database Product Management
-* **Last Updated By/Date** - Arabella Yao, Dec 2022
+* **Last Updated By/Date** - Ramona Magadan, March 2024
