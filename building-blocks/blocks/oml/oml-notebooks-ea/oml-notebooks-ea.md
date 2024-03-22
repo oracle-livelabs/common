@@ -1,8 +1,8 @@
-# Introduction to Oracle Machine Learning Notebooks Early Adopter (EA)
+# Introduction to Oracle Machine Learning Notebooks 
 
 ## Introduction
 
-This lab walks you through the steps to sign into Oracle Machine Learning UI, create an Oracle Machine Learning (OML) notebook from scratch using the enhanced Early Adopter (EA) environment, and explore the features.
+This lab walks you through the steps to sign into Oracle Machine Learning UI, create an Oracle Machine Learning (OML) notebook from scratch using the enhanced notebook environment, and explore the features.
 
 Estimated Time: 15 minutes
 
@@ -91,15 +91,15 @@ A notebook is a web-based interface for data analysis, data discovery, data visu
 </if>
 This completes the task of accessing Oracle Machine Learning user interface.
 
-## Task 2: Access Oracle Machine Learning Notebook Early Adopter (EA)
+## Task 2: Access Oracle Machine Learning Notebook 
 
 You can access the Notebooks EA page from the left navigation pane of Oracle Machine Learning Notebook UI, or from the Notebooks listing page.
-To access the Notebooks Early Adopter page:
+To access the Notebooks page:
 1. Go to the Oracle Machine Learning UI left navigation pane, and click **Notebooks EA** under Projects.
 
 	![Left Navigation](images/notebooks-ea-leftnav.png)
 
-	Alternatively, you can click **Notebooks** under Quick Actions on the home page to open the Notebooks page. On the Notebooks page, click **Go to OML Notebooks EA** to open the Notebooks Early Adopter  listing page.
+	Alternatively, you can click **Notebooks** under Quick Actions on the home page to open the Notebooks page. On the Notebooks page, click **Go to OML Notebooks EA** to open the Notebooks listing page.
 		![Go to OML Notebooks EA](images/goto-notebooks-ea.png)
 
 2. This opens the OML Notebooks EA (Early Adopter) page.
@@ -113,30 +113,28 @@ Here, you have the option to:
 * **Duplicate:** Click on a notebook row to select it , and click **Duplicate.** This creates a copy of a notebook, and the duplicate copy of the is listed on the Notebooks page with the suffix `_1` in the notebook name.
 * **Save as Template:** To save a notebook as a template, select the notebook and click **Save as Template.** In the Save as Template dialog, you can define the location of the template to save it in Personal or Shared under Templates.
 * **Import:** To import a notebook, click **Import.** The following notebook formats are supported for import - ``.json`` , ``.zpln`` (Zeppelin notebook), ``.ipynb`` (Jupyter notebook) and ``.dsnb`` (native). Select the project and workspace in which to import the notebook.
-* **Export:** To export a notebook, click **Export.** You can export Notebooks Early Adopter in the .dsnb format, Zeppelin format (.json ) file and in Jupyter format ( .ipynb), and later import them in to the same or a different environment. You can also export the notebook in HTML format, and optionally exclude paragraph code, results, and timestamps.
+* **Export:** To export a notebook, click **Export.** You can export Notebooks Early Adopter in the `.dsnb` format, Zeppelin format (`.json` ) file and in Jupyter format (`.ipynb`), and later import them in to the same or a different environment. You can also export the notebook in HTML format, and optionally exclude paragraph code, results, and timestamps.
 * **Version:** To create versions of a notebook, select it and click **Version.** The Versions page for that particular notebook opens. Here, you can create a new version of the notebook by clicking **+Version.** The Create Version dialog opens. Enter a name of the notebook version, a description, and click **OK.** The new version of the notebook gets created by the same name with a suffix `_2` for the second version. For subsequent versions, suffix (number) increments by one. To revert to an older version by clicking Revert Version. You also have the option to delete any version of the notebook. Click **Back to Notebooks** to go to the OML Notebooks EA (Early Adopter) page.
 
 ## Task 3: Create a notebook and define paragraphs using the md, SQL, PL/SQL, Python, and R Interpreters
 
 In this task, you will create a new notebook, and add paragraphs to connect to the Markdown, SQL, Script, Python, and R interpreters. Interpreters are independent backend engines. R and Python engines are stateful while the notebook is open, and database objects are valid for the duration the database connection is active. You can change the interpreter by explicitly specifying one of `%script`, `%python`, `%sql` , `%r` , `%md`, or `%conda` to connect to the respective interpreter.
 
-To learn about Conda:
-* Go to _Lab 8 Introduction to the Conda Environment in Oracle Machine Learning UI_ in this workshop.
-* [Use the Conda Interpreter in a Notebook Paragraph](https://docs.oracle.com/en/database/oracle/machine-learning/oml-notebooks/omlug/notebooks.html#GUID-0AAB3590-4422-450D-BE91-4EC435FD4254)
+To learn about Conda, refer to [Use the Conda Interpreter in a Notebook Paragraph](https://docs.oracle.com/en/database/oracle/machine-learning/oml-notebooks/omlug/notebooks.html#GUID-0AAB3590-4422-450D-BE91-4EC435FD4254)
 
 1. On the Notebooks EA (Early Adopter) page, click **Create.**
 		![Create OML Notebooks EA](images/notebooks-ea-create.png)
 2. In the Create Notebook dialog, enter the name `Test Notebook EA` in the **Name** field and click **OK.** The notebook is created and it opens in the notebook editor.
 		![Create Notebook dialog](images/test-notebook-ea.png)
 
-	You can now use the Test Notebook EA to create a Markdown paragraph, SQL paragraph, Python, R and Conda paragraphs. To learn about Conda, go to _Lab 8 Introduction to the Conda Environment in Oracle Machine Learning UI_ in this workshop/   
+	You can now use the **Test Notebook EA** to create a Markdown paragraph, SQL paragraph, Python, R and Conda paragraphs.   
 
 ### Task 3.1: Use the Markdown interpreter and display static html from Markdown plain text
 
 In this task, you will use the Markdown interpreter, and display the formatted text in the output of the markdown paragraph.
 >*Note:* The first time a given interpreter type is accessed, the interpreter is started, which may take a few seconds to initialize and establish a connection to the database. Subsequent uses of the interpreter in later paragraphs will be immediate.
 
-1. In the first paragraph, type %md and press Enter.
+1. In the first paragraph, type `%md` and press Enter.
 2. Type the following:
 	* To format the text in bold, type the text Hello World inside a double asterisk pair, and press Enter.
 	* To format the text in italics, type the text Hello World either inside an asterisk pair or an underscore pair, and click the Run
@@ -352,9 +350,7 @@ This completes the task of connecting to the R interpreter and running R command
 
 Upon creating a notebook, it opens automatically, presenting you with a single paragraph using the default ``%sql`` interpreter. You can change the interpreter by explicitly specifying one of ``%script``, ``%python``, ``%sql`` , ``%r`` , ``%md``, or ``%conda`` to connect to the respective interpreter.
 
-To learn about Conda:
-* Go to _Lab 8 Introduction to the Conda Environment in Oracle Machine Learning UI_ in this workshop.
-* [Use the Conda Interpreter in a Notebook Paragraph](https://docs.oracle.com/en/database/oracle/machine-learning/oml-notebooks/omlug/notebooks.html#GUID-0AAB3590-4422-450D-BE91-4EC435FD4254)
+To learn about Conda, refer to [Use the Conda Interpreter in a Notebook Paragraph](https://docs.oracle.com/en/database/oracle/machine-learning/oml-notebooks/omlug/notebooks.html#GUID-0AAB3590-4422-450D-BE91-4EC435FD4254)
 
 By default, you are assigned into a project. Select the project that contains the notebook you want to use.
 
