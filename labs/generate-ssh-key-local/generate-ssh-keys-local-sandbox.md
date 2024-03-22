@@ -54,7 +54,7 @@ You may now **proceed to the next lab**.
 
 ## Option 2:  Windows 10
 
-Creating keys for Windows can be interesting as ```ssh-keygen``` was not a native utility for Windows until the release of Windows 10. And it wasn't included in the initial Windows 10 builds. In this section, we'll assume your version of Windows 10 actually has ```ssh-keygen``` installed.  Keep in mind, if you're working with an older version of Windows 10 that's missing ssh-keygen, you're not out of options. Consider updating your system or exploring alternative techniques tailored for the Windows versions.
+Creating keys for Windows can be interesting as ```ssh-keygen``` was not a native utility for Windows until the release of Windows 10. And it wasn't included in the initial Windows 10 builds. In this section, we'll assume your version of Windows 10 actually has ```ssh-keygen``` installed.  Keep in mind, if you're working with an older version of Windows 10 that's missing ssh-keygen, you're not out of options. Consider updating your system or exploring alternative techniques tailored for the Windows versions. One option can be to install Git for Windows, it comes with Git Bash which includes ```ssh-keygen```.
 
 1.  Open a **Powershell** command window on your Windows 10 system by clicking its icon/tile or by typing 'powershell' in the search field in the Start bar.
 
