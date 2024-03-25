@@ -33,7 +33,7 @@ Follow steps below to establish a unique static hostname that will be enforced o
     <copy>
     cd /tmp
     rm -rf ll-setup
-    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/Nx05fQvoLmaWOPXEMT_atsi0G7Y2lHAlI7W0k5fEijsa-36DcucQwPUn6xR2OIH8/n/natdsecurity/b/misc/o/setup-novnc-livelabs.zip -O setup-novnc-livelabs.zip
+    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/GOsnDGZTmd1hZsH5TdsrT8ePf8_099TbUyly6WZ8WZawpLagHMBpAOpXao4KTEPc/n/c4u02/b/hosted_workshops/o/stacks/setup-novnc-livelabs.zip -O setup-novnc-livelabs.zip
     unzip -o  setup-novnc-livelabs.zip -d ll-setup
     cd ll-setup/
     chmod +x *.sh .*.sh
@@ -312,7 +312,7 @@ If your workshop includes one or more Oracle Databases or WebLogic Server, proce
     <copy>
     cd /tmp
     rm -rf ll_tmp
-    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/N3xh9JYLTXSQMr4Lhsnu9bbNCBiZlXKXc3SnbvtKmhWp9-LG7T8jWYbz9gnM73zM/n/natdsecurity/b/misc/o/create-services-multi-db.zip -O create-services-multi-db.zip
+    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/8i4KgBjWw5ghjvqKU8i-C-hCg3c3C2XYoJaTBJHSO5Byzo0Rtm8lo_LjmuhUGEmt/n/c4u02/b/hosted_workshops/o/stacks/create-services-multi-db.zip -O create-services-multi-db.zip
     unzip -o  create-services-multi-db.zip -d ll_tmp
     cd ll_tmp/
     chmod +x *.sh .*.sh
@@ -361,7 +361,7 @@ If your workshop includes one or more Oracle Databases or WebLogic Server, proce
     <copy>
     cd /tmp
     rm -rf ll_tmp
-    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/QQAFYkt5JRMmSM2COnTntCXYnR48dHbrSVpnfiDAOxKoPye18MWfHzOtyjaNmZl-/n/natdsecurity/b/misc/o/create-services-weblogic.zip -O create-services-weblogic.zip
+    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/JdxdqCv0t-oaOyHn84DXHVxJKwpRJWSZNkwpbF1jEGHaQ4X07hwPNus8xDlVs8on/n/c4u02/b/hosted_workshops/o/stacks/create-services-weblogic.zip -O create-services-weblogic.zip
     unzip -o  create-services-weblogic.zip -d ll_tmp
     cd ll_tmp/
     chmod +x *.sh .*.sh

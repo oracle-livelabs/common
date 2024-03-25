@@ -91,4 +91,4 @@ Oracle Cloudからサインアウトした場合は、以下の手順を使用�
 
 - **作成者・日時** - Kay Malcolm, Database Product Management, March 2020
 - **投稿者** - John Peach, Kamryn Vinson, Rene Fontcha, Arabella Yao
-- **最終更新日** - Arabella Yao, Dec 2022
+- **最終更新日** - Ramona Magadan, March 2024
