@@ -211,7 +211,7 @@ Now that you have the API key, create a PL/SQL function that queries the REST en
 
 10. Let's see the news for **Johnny Depp**. Copy and paste the following code into your SQL Worksheet, and then click the **Run Script (F5)** icon in the Worksheet toolbar.
 
-    >**Note:** Since you are querying a live news feed, your results will definitely be different our results.
+    >**Note:** Since you are querying a live news feed, your results will definitely be different than our results.
 
     ```
     <copy>
