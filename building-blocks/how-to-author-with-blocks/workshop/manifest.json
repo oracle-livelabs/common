@@ -1,24 +1,27 @@
 {
  "workshoptitle":"LiveLabs Building Blocks",
  "include": {
-     "adb-connect-with-sql-worksheet-body.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-body.md",
-     "adb-create-graph.md":"/common/building-blocks/tasks/adb/create-graph.md",
-     "adb-create-load-json-collection.md":"/common/building-blocks/tasks/adb/create-load-json-collection.md",
-     "adb-create-user.md":"/common/building-blocks/tasks/adb/create-user.md",
-     "adb-goto-data-load-utility.md":"/common/building-blocks/tasks/adb/goto-data-load-utility.md",
-     "adb-goto-graph-studio.md":"/common/building-blocks/tasks/adb/goto-graph-studio.md",
-     "adb-goto-service-body.md":"/common/building-blocks/tasks/adb/goto-service-body.md",
-     "adb-goto-sql-worksheet.md":"/common/building-blocks/tasks/adb/goto-sql-worksheet.md",
-     "adb-load-public-db-actions-15-min-quickstart.md":"/common/building-blocks/tasks/adb/load-public-db-actions-15-min-quickstart.md",
-     "adb-load-public-db-actions-no-sales.md":"/common/building-blocks/tasks/adb/load-public-db-actions-no-sales.md",
-     "adb-load-public-db-actions.md":"/common/building-blocks/tasks/adb/load-public-db-actions.md",
-     "adb-provision-body.md":"/common/building-blocks/tasks/adb/provision-body.md",
-     "adb-query-json-arrays.md":"/common/building-blocks/tasks/adb/query-json-arrays.md",
-     "adb-query-json-simple.md":"/common/building-blocks/tasks/adb/query-json-simple.md",
-     "adb-query-object-store-contents-with-sql.md":"/common/building-blocks/tasks/adb/query-object-store-contents-with-sql.md",
-     "adb-query-spatial.md":"/common/building-blocks/tasks/adb/query-spatial.md",
-     "adb-use-partitioned-external-table-body.md":"/common/building-blocks/tasks/adb/use-partitioned-external-table-body.md",
-     "iam-compartment-create-body.md":"/common/building-blocks/tasks/iam/compartment-create-body.md"
+     "adb\cleanup.m-tasks\adb\cleanup.md":"d",
+     "adb\connect-with-sql-worksheet-body.m-tasks\adb\connect-with-sql-worksheet-body.md":"d",
+     "adb\connect-with-sql-worksheet-non-admin.m-tasks\adb\connect-with-sql-worksheet-non-admin.md":"d",
+     "adb\create-graph.m-tasks\adb\create-graph.md":"d",
+     "adb\create-load-json-collection.m-tasks\adb\create-load-json-collection.md":"d",
+     "adb\create-user.m-tasks\adb\create-user.md":"d",
+     "adb\generate-rsa-key-pair.m-tasks\adb\generate-rsa-key-pair.md":"d",
+     "adb\goto-data-load-utility.m-tasks\adb\goto-data-load-utility.md":"d",
+     "adb\goto-graph-studio.m-tasks\adb\goto-graph-studio.md":"d",
+     "adb\goto-service-body.m-tasks\adb\goto-service-body.md":"d",
+     "adb\goto-sql-worksheet.m-tasks\adb\goto-sql-worksheet.md":"d",
+     "adb\load-public-db-actions-15-min-quickstart.m-tasks\adb\load-public-db-actions-15-min-quickstart.md":"d",
+     "adb\load-public-db-actions-no-sales.m-tasks\adb\load-public-db-actions-no-sales.md":"d",
+     "adb\load-public-db-actions.m-tasks\adb\load-public-db-actions.md":"d",
+     "adb\provision-body.m-tasks\adb\provision-body.md":"d",
+     "adb\query-json-arrays.m-tasks\adb\query-json-arrays.md":"d",
+     "adb\query-json-simple.m-tasks\adb\query-json-simple.md":"d",
+     "adb\query-object-store-contents-with-sql.m-tasks\adb\query-object-store-contents-with-sql.md":"d",
+     "adb\query-spatial.m-tasks\adb\query-spatial.md":"d",
+     "adb\use-partitioned-external-table-body.m-tasks\adb\use-partitioned-external-table-body.md":"d",
+     "iam\compartment-create-body.m-tasks\iam\compartment-create-body.md":"d"
   },
  "help": "livelabs-help-db_us@oracle.com",
  "variables": ["/common/building-blocks/variables/variables.json"],
@@ -45,14 +48,109 @@
          "filename": "/common/building-blocks/how-to-author-with-blocks/all-blocks-tasks.md"
      },
      {
-         "title": "ADB Tasks",
+         "title": "ADB\CLEANUP.M Tasks",
          "type": "freetier",
-         "filename": "/common/building-blocks/how-to-author-with-blocks/adb.md"
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\cleanup.m.md"
      },
      {
-         "title": "IAM Tasks",
+         "title": "ADB\CONNECT-WITH-SQL-WORKSHEET-BODY.M Tasks",
          "type": "freetier",
-         "filename": "/common/building-blocks/how-to-author-with-blocks/iam.md"
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\connect-with-sql-worksheet-body.m.md"
+     },
+     {
+         "title": "ADB\CONNECT-WITH-SQL-WORKSHEET-NON-ADMIN.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\connect-with-sql-worksheet-non-admin.m.md"
+     },
+     {
+         "title": "ADB\CREATE-GRAPH.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\create-graph.m.md"
+     },
+     {
+         "title": "ADB\CREATE-LOAD-JSON-COLLECTION.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\create-load-json-collection.m.md"
+     },
+     {
+         "title": "ADB\CREATE-USER.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\create-user.m.md"
+     },
+     {
+         "title": "ADB\GENERATE-RSA-KEY-PAIR.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\generate-rsa-key-pair.m.md"
+     },
+     {
+         "title": "ADB\GOTO-DATA-LOAD-UTILITY.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\goto-data-load-utility.m.md"
+     },
+     {
+         "title": "ADB\GOTO-GRAPH-STUDIO.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\goto-graph-studio.m.md"
+     },
+     {
+         "title": "ADB\GOTO-SERVICE-BODY.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\goto-service-body.m.md"
+     },
+     {
+         "title": "ADB\GOTO-SQL-WORKSHEET.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\goto-sql-worksheet.m.md"
+     },
+     {
+         "title": "ADB\LOAD-PUBLIC-DB-ACTIONS-15-MIN-QUICKSTART.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\load-public-db-actions-15-min-quickstart.m.md"
+     },
+     {
+         "title": "ADB\LOAD-PUBLIC-DB-ACTIONS-NO-SALES.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\load-public-db-actions-no-sales.m.md"
+     },
+     {
+         "title": "ADB\LOAD-PUBLIC-DB-ACTIONS.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\load-public-db-actions.m.md"
+     },
+     {
+         "title": "ADB\PROVISION-BODY.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\provision-body.m.md"
+     },
+     {
+         "title": "ADB\QUERY-JSON-ARRAYS.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\query-json-arrays.m.md"
+     },
+     {
+         "title": "ADB\QUERY-JSON-SIMPLE.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\query-json-simple.m.md"
+     },
+     {
+         "title": "ADB\QUERY-OBJECT-STORE-CONTENTS-WITH-SQL.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\query-object-store-contents-with-sql.m.md"
+     },
+     {
+         "title": "ADB\QUERY-SPATIAL.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\query-spatial.m.md"
+     },
+     {
+         "title": "ADB\USE-PARTITIONED-EXTERNAL-TABLE-BODY.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/adb\use-partitioned-external-table-body.m.md"
+     },
+     {
+         "title": "IAM\COMPARTMENT-CREATE-BODY.M Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/iam\compartment-create-body.m.md"
      }
   ]
 }
