@@ -1,4 +1,4 @@
-# Building Blocks
+# Authoring LiveLabs Workshops with Building Blocks and Tasks
 
 ## Introduction
 LiveLabs is a great environment for publishing workshops. There are a few things that we are addressing to satisfy the following requirements:
@@ -8,16 +8,45 @@ LiveLabs is a great environment for publishing workshops. There are a few things
 * Improve on-going maintenance of workshops
 * Promote consistency across workshops
 
-Building Blocks are a way to enhance both the workshop development and customer experience. This page focuses on how authors can use Building Blocks and Tasks to accelerate workshop development.
+Building Blocks are a way to enhance both the workshop development and customer experience. This workshop provides the details on how authors can use Building Blocks and Tasks to accelerate workshop development.
 
-## Building Blocks and Tasks
-As an author, there are two types of components you may want to take advantage of: a Building Block and/or a Task. Let's examine these two concepts and how they map to your workshop development:
+## Introduction to Building Blocks and Tasks
+As a LiveLabs workshop author, there are two types of components you may want to take advantage of:
+
+* Building **Block** (common block), and/or
+* Building **Task** (common task)
+
+>**Note:** Both Building **Blocks** and **Tasks** are located in the **`common`** repository; therefore, in this workshop we will refer to Building Blocks and Tasks as **`common`** **blocks** and **tasks** interchangeably.
+
+Let's look at the folder structure for the Building Blocks and Tasks. 
+
+![Building Blocks and Tasks structure](images/common-blocks-tasks-structure.png " ")
+
+Let's examine the above folders structure:
+
+* **`livelabs-clones`:**    
+This is the root folder that contains all of your repositories that you use in your workshops. The name of this folder is up to you. In our example, this folder contains the **`adb`**, **`common`**, **`oci`**, and **`sprints`** repositories. Having a root or parent folder that contains all of your cloned repos is a
+pre-requisite; _otherwise, you'll have issues implementing and running common blocks and tasks_.
+
+* **`common` repository:**    
+This is the the repo that contains the Building Blocks and Tasks among other things.
+
+* **`building-blocks`:**    
+This is the root folder that contains all common blocks and tasks.
+
+* 
+
+### Pre-requisite 1 to Using Building Blocks and Tasks
+
+
+
+Let's examine these two concepts and how they map to your workshop development:
 
 ![Blocks and Tasks](images/lab-to-block.png " ")
 
 Just as a lab is comprised of multiple tasks, a Block is comprised of multiple Tasks.
 
-For example: ADB provisioning has two tasks:  
+For example: ADB provisioning has two tasks:
 * Selecting the ADB Service from the OCI menu
 * Creating the ADB instance
 
