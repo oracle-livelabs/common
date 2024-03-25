@@ -16,8 +16,6 @@ You will provision your OAC instance with your Oracle Cloud paid or Free Tier **
 
 Provisioning an Oracle Analytics Cloud instance can take over **20+ minutes**. We position this lab first, so that the OAC instance can provision while you proceed with the following labs.
 
-> **Note:** Oracle Analytics Cloud (OAC) is not available with Oracle Cloud Free Tier (Always Free), nor is it supported in Oracle LiveLabs Sandbox hosted environments (the Green button). If you run this workshop using an Always Free database or a LiveLabs Sandbox environment, you can view **Lab 1** and **Lab 5** _without provisioning and using OAC_, and later practice the two labs on **Oracle Autonomous Database** and **OAC** in your organization’s own tenancy.
-
 Also...
 
 > **Note**: If you attend this workshop at CloudWorld or another in-person instructor-led event, your instructor will direct you to skip this lab, providing you a link to  an already-provisioned OAC instance.
