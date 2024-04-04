@@ -64,7 +64,7 @@ If you've signed out of the Oracle Cloud, use these steps to sign back in.
 
 4. You will be prompted to enable secure verification. Click **Enable Secure Verification**. For more details, refer the [Managing Multifactor Authentication documentation](https://docs.oracle.com/en-us/iaas/Content/Identity/Tasks/usingmfa.htm)
 
-    ![Enable secure verification](./images/enable-secure-verification " ")
+    ![Enable secure verification](./images/enable-secure-verification.png " ")
 
 5. Select a method - **Mobile App** or **FIDO Authenticator** to enable secure verification.
 
@@ -89,4 +89,4 @@ You may now **proceed to the next lab**.
 
 - **Created By/Date** - Kay Malcolm, Database Product Management, March 2020
 - **Contributors** - John Peach, Madhusudhan Rao, Arabella Yao
-- **Last Updated By/Date** - Anoosha Pilli, October 2023
+- **Last Updated By/Date** - Carmen Berdant, Mar 2024

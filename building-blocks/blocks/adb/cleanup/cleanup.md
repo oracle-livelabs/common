@@ -1,7 +1,9 @@
 <!--
     {
         "name":"Delete your workshop resources",
-        "description":"Delete some or all of the resources that you created in the workshop"
+        "description":"Delete some or all of the resources that you created in the workshop",
+        "created by": "Lauran K. Serhal",
+        "created on": "February 2024"
     }
 -->
 

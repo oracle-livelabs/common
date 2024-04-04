@@ -4,26 +4,33 @@
         "description":"Use dot notation and JSON_VALUE to query JSON documents. Creates a view to simplify subsequent access."
     }
 -->
-Oracle Database offers a wide range of SQL functions that help you analyze JSON data ([see documentation](https://docs.oracle.com/en/database/oracle/oracle-database/19/adjsn/query-json-data.html#GUID-119E5069-77F2-45DC-B6F0-A1B312945590) for details). The SQL capabilities include simple extraction of JSON attributes using dot notation, array and object manipulation, JSON aggregations and more.  
+<!--
+    {
+        "name":"Query simple JSON attributes",
+        "description":"Use dot notation and JSON_VALUE to query JSON documents. Creates a view to simplify subsequent access."
+    }
+-->
+Oracle Database offers a wide range of SQL functions that help you analyze JSON data ([see Query JSON Data](https://docs.oracle.com/en/database/oracle/oracle-database/19/adjsn/query-json-data.html#GUID-119E5069-77F2-45DC-B6F0-A1B312945590) for details). The SQL capabilities include simple extraction of JSON attributes using dot notation, array and object manipulation, JSON aggregations and more.
 
-1. Use simple dot notation to extract fields in tabular format.
+1. Use the simple dot (.) notation to extract fields in a tabular format.
 
-    The movie collection includes `title` and `year` attributes. Your SQL can use dot notation to navigate the JSON path. For example, `m.json_document.title` refers to table `m` (`movie_collection`), the `json_document` column, and the `title` JSON attribute. Copy and paste the following SQL into the worksheet and click **Run** to view Meryl Streep's movies:
+    The movie collection includes **`title`** and **`year`** attributes. Your SQL statements can use the dot notation to navigate through the JSON path. For example, **`m.json_document.title`** refers to table **`m` (`movie_collection`)**, the **`json_document`** column, and the **`title`** JSON attribute. Copy and paste the following SQL statement into the worksheet, and then click the **Run Statement** icon in the Worksheet toolbar to view **Meryl Streep's** movies:
+
     ```
     <copy>
     select
         m.json_document.title,
-        m.json_document.year       
+        m.json_document.year
     from movie_collection m
-    where m.json_document.cast like '%Meryl Streep%'
-    ;
+    where m.json_document.cast like '%Meryl Streep%';
     </copy>
     ```
 
-    Below are the Meryl Streep movies and the years that they were released:
+    Meryl Streep movies and the years that they were released are displayed.
+
     ![Meryl Streep movies](images/adb-query-json-meryl-streep.png)
 
-2. Simplify subsequent queries against the movie collection by using a view. The view will allow tools and applications to access JSON data as if it were tabular data. The view definition extracts from the JSON documents both simple fields (using the `JSON_VALUE` function) and complex arrays (using the `JSON_QUERY` function). Copy and paste the following SQL into the worksheet.
+2. You can simplify subsequent queries against the movie collection by using a view. The view will allow tools and applications to access JSON data as if it were tabular data. The view definition extracts from the JSON documents both simple fields (using the `JSON_VALUE` function) and complex arrays (using the `JSON_QUERY` function). Copy and paste the following SQL code into the worksheet, and then click the **Run Statement** icon in the Worksheet toolbar.
 
     ```
     <copy>
@@ -54,7 +61,9 @@ Oracle Database offers a wide range of SQL functions that help you analyze JSON 
     ```
     Each JSON attribute is now exposed as a column - similar to any table column.
 
-3. Query the view by copying and pasting the following SQL into the worksheet:
+    ![Create movie view.](images/create-json-view.png)
+
+3. Query the newly created by view. Copy and paste the following SQL code into the worksheet, and then click the **Run Statement** icon in the Worksheet toolbar.
 
     ```
     <copy>
@@ -63,6 +72,9 @@ Oracle Database offers a wide range of SQL functions that help you analyze JSON 
     where rownum < 10;
     </copy>
     ```
-    ![Tabular and array-based data](images/adb-create-json-view.png)
+
+    ![Tabular and array-based data](images/query-view.png)
 
     Most of the data is in tabular format. However, several of the fields are arrays. For example, there are multiple genres and cast members associated with each movie.
+
+    ![Genre and Cast members.](images/genre-cast.png)
