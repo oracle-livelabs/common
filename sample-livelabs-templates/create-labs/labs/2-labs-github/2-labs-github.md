@@ -2,7 +2,7 @@
 
 ## Introduction
 
-In this lab, you will learn how to configure your environment to develop LiveLabs workshops. We use the Oracle LiveLabs GitHub organization so you will learn to create a GitHub Account, set up the GitHub development environment, and install GitHub Desktop. Oracle LiveLabs Organization is one of Oracle GitHub Organizations and we encourage you to sign up through OIM and register your email account, but it is not required for LiveLabs development. 
+In this lab, you will learn how to configure your environment to develop LiveLabs workshops. We use the Oracle LiveLabs GitHub organization so you will learn to create a GitHub Account, set up the GitHub development environment, and install GitHub Desktop. Oracle LiveLabs Organization is one of Oracle GitHub Organizations and we encourage you to sign up through OIM and register your email account, but it is not required for LiveLabs development.
 
 These steps need to be completed once to setup your environment for current and future development.
 
@@ -169,4 +169,4 @@ This concludes this lab. You may now **proceed to the next lab**.
     * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
     * Arabella Yao, Product Manager, Database
 
-* **Last Updated By/Date:** Arabella Yao, August 2022
+* **Last Updated By/Date:** Ana Coman, March 2024

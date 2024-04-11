@@ -43,4 +43,4 @@ Oracle LiveLabs has its own GitHub project that has 30 active repositories. This
     * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
     * Arabella Yao, Product Manager, Database Product Management
 * **Last Updated By/Date:**
-    * Anoosha Pilli, October 2023
+    * Ana Coman, March 2024

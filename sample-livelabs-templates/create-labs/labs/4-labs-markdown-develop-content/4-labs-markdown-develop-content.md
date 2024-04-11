@@ -74,7 +74,7 @@ To create your lab and workshop content:
 
 2. To use a common lab, you need to use an absolute link to the lab in your workshop's manifest.json file. For example, if you want to use the "Generate SSH Key" common lab located in [https://github.com/oracle-livelabs/common/blob/main/**labs/generate-ssh-key-cloud-shell/generate-ssh-keys-cloud-shell.md**](https://github.com/oracle-livelabs/common/blob/main/labs/generate-ssh-key-cloud-shell/generate-ssh-keys-cloud-shell.md), you should use this link in the manifest.json file: [https://oracle-livelabs.github.io/common/**labs/generate-ssh-key-local/generate-ssh-keys-local.md**](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-local/generate-ssh-keys-local.md).
 
-Leverage LiveLabs [Markdown Cheat Sheet](https://objectstorage.us-ashburn-1.oraclecloud.com/p/MKKRgodQ0WIIgL_R3QCgCRWCg30g22bXgxCdMk3YeKClB1238ZJXdau_Jsri0nzP/n/c4u04/b/qa-form/o/LiveLabs_MD_Cheat_Sheet.pdf)
+Leverage LiveLabs [Markdown Cheat Sheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf)
 
 ## Task 3: Security
 
@@ -107,7 +107,7 @@ Rather than pointing to images within your lab folder or workshop directory with
   Here is how the image path above shows up in production:
   ![Description](https://oracle-livelabs.github.io/common/images/console/home-page.png " ")
 
-3. You can find all common images in the [oracle-livelabs/common](https://github.com/oracle-livelabs/common/tree/main/images) GitHub repository. For example, if an image is located in **images/console/home-page.png** in the **common** repository, then the link you should use is https://oracle-livelabs.github.io/common/**images/console/home-page.png**.
+3. You can find all common images in the [oracle-livelabs/common](https://github.com/oracle-livelabs/common/tree/main/images) GitHub repository. For example, if an image is located in **images/console/home-page.png** in the **common** repository, then the link you should use is https://oracle-livelabs.github.io/common/images/console/home-page.png.
 
   ![Recommended to use GitHub path for images.](./images/home-page.png " ")
 
@@ -174,20 +174,16 @@ LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or
 
   ![The Video Hub markdown](images/videhub-markdown.png =60%x* " ")
 
-  The embedded video looks like this: 
-
-  [Video hosted on Oracle Video Hub](videohub:1_yido2qmq)
-
   Markdown does the work of embedding the video for you, all you need to provide is a video hosting site and the video link address.
 
 2. You can find the video identifier code in the URL (in this example, the code is **1_yido2qmq**).
-  
+
   *Please note:* Oracle Video Hub identifiers are usually prefixed with either `0_` or `1_` filled by a unique code.
 
   ![The Video Hub URL](images/video-hub-url.png =60%x* " ")
 
 ### Embedding a video from YouTube
-
+1
 1. Take a look at this example of a video linked in the introduction of a workshop.
 
   ![Example of a video link.](./images/youtube-vsc.png =60%x* " ")
@@ -257,7 +253,7 @@ Without using video scaling, all the video you embed will have small as the defa
 3. Use this format to scale the video size to medium.
 
 	```
-	[YouTubevideo scaled to medium size](youtube:lHriX403Oz4:medium)
+	[YouTube video scaled to medium size](youtube:lHriX403Oz4:medium)
 	```
 
 	[Video hosted on YouTube](youtube:lHriX403Oz4:medium)
@@ -395,13 +391,13 @@ The LintChecker is a great javascript function for QAing that you should take ad
         ```
   </details>
 
-**Reminder** Download this handy [Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.com/p/Qfg5WZ_O9yDet7NlaJPT76s9o_Yy0VVQ3LDh34c0HTrietIqqKq-m9zukdqiRymL/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
+**Reminder** Download this handy [Cheatsheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
 
 ## Task 13: Strikethrough
 
 With this new feature, you can now cross out text or words in a paragraph by adding two tilde before and after the word or text in a paragraph.
 
-1. Use this format to cross out a word - *`~~strikethroguh~~`* transforms to *~~strikethrough~~*.
+1. Use this format to cross out a word - *`~~strikethrough~~`* transforms to *~~strikethrough~~*.
 
 2. To cross out text or a sentence in a paragraph, use this format.
 
@@ -467,4 +463,4 @@ You may now **proceed to the next lab**.
     * Andres Quintana
     * Brianna Ambler
 
-* **Last Updated By/Date:** Anoosha Pilli, June 2023
+* **Last Updated By/Date:** Ana Coman, April 2024

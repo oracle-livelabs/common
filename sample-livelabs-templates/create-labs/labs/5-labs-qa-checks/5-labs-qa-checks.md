@@ -68,7 +68,7 @@ You have finished developing your workshop. To publish your workshop, you still 
   ![Self QA Checklist](./images/self-qa-checklist-2.png " ")
 
   Workshop teams and stakeholders can watch this video below on how to self QA or verify the QA of a workshop.
-  [](youtube:8tirP-hibsk)
+  [Self QA Checklist](youtube:8tirP-hibsk)
 
 5. You *MUST* check all the boxes on the form, upload the images, update the pull request link if you created one (optional) and click **Save** to save the checklist changes before you update your workshop status to Self QA Complete; otherwise, you will get warning and will not be able to update your workshop status to Self QA Complete.
 
@@ -166,4 +166,4 @@ For the workshop in **Completed** or **Quarterly QA Complete** status and have P
     * Arabella Yao, Product Manager, Database
     * Madhusudhan Rao, Product Manager, Database
 
-* **Last Updated By/Date:** Anoosha Pilli, February 2023
+* **Last Updated By/Date:** Ana Coman, April 2024
