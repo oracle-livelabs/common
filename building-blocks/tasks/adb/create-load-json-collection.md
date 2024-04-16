@@ -17,9 +17,7 @@ Our movie data set has a series of columns that contain different types of detai
 JSON data is organized very differently than typical warehouse data. There is a single entry for **producer** but the corresponding key **names** actually has multiple values. This is referred to as an **array** - specifically a JSON array.
 
 >**Note:**    
-If you already have the **Oracle Database Actions** browser tab open from the previous lab, click the **Database Actions | Launchpad** banner to display the **Database Actions | Launchpad** Home page. In the **Development** section, click the **SQL** card to display the SQL Worksheet. Next, skip to **step 6**; otherwise, start with **step 1** below.
-
-![Click the banner.](./images/click-banner.png " ")
+If you already have the SQL Worksheet open from the previous lab, skip to **step 5** below; otherwise, start with **step 1** below.
 
 1. Log in to the **Oracle Cloud Console**, if you are not already logged as the Cloud Administrator.
 
