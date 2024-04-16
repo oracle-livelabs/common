@@ -5,16 +5,14 @@
     }
 -->
 
-1. Navigate to the **Autonomous Database details** page of the Autonomous Database instance that you provisioned earlier. Click the **Database actions** drop-down list, and then select **View all database actions**.
+1. Navigate to the **Autonomous Database details** page of the Autonomous Database instance that you provisioned earlier. Click the **Database actions** drop-down list, and then select **Data Load**.
 
-    ![Click view all database actions.](./images/click-all-database-actions.png =70%x*)
+    ![Click data load from the database actions.](./images/click-data-load-drop-down.png =70%x*)
 
-2. The **Database Actions | Launchpad** Home page is displayed in a _**new tab**_ in your browser. In the **Data Studio** section, click the **DATA LOAD** card.
+2. The **Data Load** Home page is displayed in a _**new browser tab**_.
 
-    ![Click the Data Load card.](./images/click-data-load.png " ")
-
-    The **Data Load** page is displayed.
+    ![Click the Data Load card.](./images/data-load-home-page.png =70%x*)
 
     >**Note:** Logging into **Database Actions** from the OCI Service Console expects you to be the `ADMIN` user. Log in as `ADMIN` if you are not automatically logged into **Database Actions**. Enter the administrator **Password** that you specified when you created the database, and then click **Sign in**.
 
-    ![Enter the admin password.](./images/admin-username-and-password.png " ")
+    ![Enter the admin password.](./images/admin-username-and-password.png =50%x*)

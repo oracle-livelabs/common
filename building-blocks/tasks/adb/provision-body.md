@@ -4,9 +4,9 @@
         "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more."
     }
 -->
-1. Click **Create Autonomous Database** to start the instance creation process. The **Create Autonomous Database** page is displayed.
+1. Click **Create Autonomous Database** to start the instance creation process. The **Create Autonomous Database** page is displayed. Select the desired region and compartment. If you get a **Forbidden** message, that indicates you are in the wrong compartment.
 
-    ![Click Create Autonomous Database.](images/adb-click-create-adb.png " ")
+    ![Click Create Autonomous Database.](images/ll-adb-click-create-adb.png " ")
 
 2.  In the **Provide basic information for the Autonomous Database** section, specify the following:
 
@@ -22,9 +22,9 @@
 <if type="livelabs">
     - **Compartment** - Use the default compartment created for you.
     - **Display Name** - Enter a memorable name for the database for display purposes. For this lab, use **[](var:db_display_name)**.
-    - **Database Name** - Use letters and numbers only, starting with a letter. Maximum length is 14 characters. (Underscores not supported.) For this lab, use **[](var:db_name_livelabs)**, for example, **[](var:db_name_livelabs_example)**.
+    - **Database Name** - Use letters and numbers only, starting with a letter. Maximum length is 14 characters. (Underscores not supported.) For this lab, use **[](var:db_name_livelabs)**. For example, if your assigned username for the workshop is **LL81481-USER**, then your database name will be something like **[](var:db_name_livelabs_example)**.
 
-    ![Enter the required details.](./images/adb-create-screen-names.png " ")
+    ![Enter the required details.](./images/adb-create-screen-names.png =70%x*)
 
 > **Note:** Ensure that you use the suggested database names as instructed in this step, and not those shown in the screenshots.
 </if>
@@ -100,14 +100,32 @@
 
 12.  The **Autonomous Database details** page is displayed. The status of your ADB instance is **PROVISIONING**.
 
+    <if type="freetier">
     ![Database Provisioning message.](./images/adb-create-provisioning-message.png " ")
+    </if>
+
+    <if type="livelabs">
+    ![Database Provisioning message.](./images/ll-adb-create-provisioning-message.png " ")
+    </if>
 
     A **Check database lifecycle state** informational box is displayed. You can navigate through this tour or choose to skip it. Click **Skip tour**. A **Skip guided tour** dialog box is displayed. Click **Skip**.
 
     In a few minutes, the instance status changes to **AVAILABLE**. At this point, your Autonomous Data Warehouse database instance is ready to use! Review your instance's details including its name, database version, ECPU count, and storage size.
 
+    <if type="livelabs">
+    ![Database complete message.](./images/ll-adb-create-complete-message.png " ")
+    </if>
+
+    <if type="freetier">
     ![Database complete message.](./images/adb-create-complete-message.png " ")
+    </if>
 
 13. Click the **Autonomous Database** link in the breadcrumbs. The **Autonomous Database** page is displayed. The new Autonomous Database instance is displayed. In the following screen capture, the instance display name is **MyQuickStart**.
 
+    <if type="livelabs">
+    ![Database instance displayed.](./images/ll-adb-page.png " ")
+    </if>
+
+    <if type="freetier">
     ![Database instance displayed.](./images/adb-instance-displayed.png " ")
+    </if>
