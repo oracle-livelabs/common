@@ -6,7 +6,13 @@
 -->
 1. Click **Create Autonomous Database** to start the instance creation process. The **Create Autonomous Database** page is displayed. Select the desired region and compartment. If you get a **Forbidden** message, that indicates you are in the wrong compartment.
 
+    <if type="livelabs">
     ![Click Create Autonomous Database.](images/ll-adb-click-create-adb.png " ")
+    </if>
+
+    <if type="freetier">
+    ![Click Create Autonomous Database.](images/click-create-new-adb.png " ")
+    </if>
 
 2.  In the **Provide basic information for the Autonomous Database** section, specify the following:
 
