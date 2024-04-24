@@ -681,6 +681,6 @@ Prior to noVNC some images were configured with *Apache Guacamole*. If this appl
     ```
 
 ## Acknowledgements
-* **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, September 2020
-* **Contributors** - Robert Pastijn
-* **Last Updated By/Date** - Ana Coman, Technical Program Manager, Database Outbound , April 2024
+* **Author** - Rene Fontcha, Master Principal Solution Architect,September 2020
+* **Contributors** - Robert Pastijn, Distinguished Product Manager
+* **Last Updated By/Date** - Ana Coman, Technical Program Manager, Oracle Database Product Management, April 2024

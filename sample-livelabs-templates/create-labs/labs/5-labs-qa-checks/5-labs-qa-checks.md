@@ -24,10 +24,10 @@ Watch this video below on how to self-QA your workshop.
 
 After you have successfully set up your GitHub pages, you can share your workshop for review.
 To share and view your workshop:
-1. In the browser, enter the URL of your GitHub Pages. For example, if I want to share a workshop in the *em-omc* folder for review, the GitHub Pages URL is [https://arabellayao.github.io/em-omc/](https://arabellayao.github.io/em-omc/). Please replace *em-omc* with the repository of your workshop.
+1. In the browser, enter the URL of your GitHub Pages. For example, if I want to share a workshop in the *em-omc* folder for review, the GitHub Pages URL is [https://username.github.io/em-omc/](https://arabellayao.github.io/em-omc/). Please replace *em-omc* with the repository of your workshop.
 
 2. Append the URL with the details of your workshop.
-    The complete URL will look similar to this: [https://arabellayao.github.io/em-omc/enterprise-manager/emcc/workshops/freetier/index.html](https://arabellayao.github.io/em-omc/enterprise-manager/emcc/workshops/freetier/index.html), which can be shared for review.
+    The complete URL will look similar to this: [https://username.github.io/em-omc/enterprise-manager/emcc/workshops/freetier/index.html](https://.github.io/em-omc/enterprise-manager/emcc/workshops/freetier/index.html), which can be shared for review.
 
 
 ## Task 2: Change your status
@@ -88,7 +88,7 @@ You have finished developing your workshop. To publish your workshop, you still 
   ![Completed Checklist](./images/completed-checklist-2.png " ")
   ![Last QA details populated](./images/last-qa-details-populated.png " ")
 
-8. Your stakeholders will verify the QA within 2 business days. They will reach out to you via WMS if there are more changes needed. Otherwise, they will move the workshop into **Completed** status. If you have not heard back from your stakeholders 2 business days after you submit the Self QA form, please message them via WMS. While you are waiting to hear back from your stakeholder, you can go to Lab 6 Task 2 and request publishing.
+8. Your stakeholders will verify the QA. They will reach out to you via WMS if there are more changes needed. Otherwise, they will move the workshop into **Completed** status. If you have not heard back from your stakeholders 2 business days after you submit the Self QA form, please message them via WMS. While you are waiting to hear back from your stakeholder, you can go to Lab 6 Task 2 and request publishing.
 
   ![Message](images/message-team.png " ")
 
@@ -156,14 +156,13 @@ For the workshop in **Completed** or **Quarterly QA Complete** status and have P
 ## Acknowledgements
 
 * **Author:**
-   * Michelle Malcher, Senior Manager, Oracle Database Product Management
+   * Michelle Malcher, Director, Oracle Database Product Management
 * **Contributors:**
-    * Lauran Serhal, Principal User Assistance Developer, Oracle Database and Big Data User Assistance
-    * Anuradha Chepuri, Principal User Assistance Developer, Oracle GoldenGate
-    * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
-    * Kamryn Vinson, Product Manager, Database
-    * Anoosha Pilli, Product Manager, Database
-    * Arabella Yao, Product Manager, Database
-    * Madhusudhan Rao, Product Manager, Database
+    * Lauran Serhal, Consulting User Assistance Developer, Oracle Database and Big Data
+    * Anuradha Chepuri, Consulting User Assistance Developer, Oracle GoldenGate
+    * Aslam Khan, Senior Manager, ODI, OGG, EDQ
+    * Kamryn Vinson, Senior Product Manager, Database
+    * Madhusudhan Rao, Principal Product Manager, Database
 
-* **Last Updated By/Date:** Ana Coman, April 2024
+* **Last Updated By/Date:**
+    * Ana Coman, Technical Program Manager, Oracle Database Product Management, April 2024

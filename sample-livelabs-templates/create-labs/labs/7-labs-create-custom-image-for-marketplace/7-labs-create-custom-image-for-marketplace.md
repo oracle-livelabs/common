@@ -135,6 +135,6 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
 
 ## Acknowledgements
-* **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, February 2021
+* **Author** - Rene Fontcha, Master Principal Solution Architect, February 2021
 * **Contributors**  -
-* **Last Updated By/Date** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, December 2022
+* **Last Updated By/Date** - Rene Fontcha, Master Principal Solution Architect, December 2022
