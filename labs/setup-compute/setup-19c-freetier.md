@@ -30,7 +30,7 @@ This lab assumes you have:
 ## Task 1: Set up Stack
 
 1.  Click on the link below to download the Resource Manager zip file you need to build your environment.
-    - [livelabs-db19ccompute-0812.zip](https://objectstorage.us-ashburn-1.oraclecloud.com/p/jyHA4nclWcTaekNIdpKPq3u2gsLb00v_1mmRKDIuOEsp--D6GJWS_tMrqGmb85R2/n/c4u04/b/livelabsfiles/o/labfiles/livelabs-db19ccompute-0812.zip) - Packaged terraform instance creation script for creating instance running the 19c Oracle Database
+    - [livelabs-db19ccompute-0812.zip](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/labfiles/livelabs-db19ccompute-0812.zip) - Packaged terraform instance creation script for creating instance running the 19c Oracle Database
 
 2.  Save it in your downloads folder.
 
@@ -107,7 +107,7 @@ There are multiple ways to connect to your cloud instance.  Choose the way to co
 
 - Oracle Cloud Shell
 - MAC or Windows CYCGWIN Emulator
-- Windows Using Putty
+- Windows Using PuTTY
 
 ### Oracle Cloud Shell
 
@@ -151,9 +151,9 @@ There are multiple ways to connect to your cloud instance.  Choose the way to co
 
 >**Note:** If you encounter any errors with this task, please see the Troubleshooting Tips in the appendix.
 
-### Windows using Putty
+### Windows using PuTTY
 
-1.  Open up putty and create a new connection.
+1.  Open up PuTTY and create a new connection.
 
 2.  Enter a name for the session and click **Save**.
 
@@ -280,7 +280,7 @@ The participant is unable to log in to instance
 #### Tips for fixing Issue #1
 There may be several reasons why you can't log in to the instance.  Here are some common ones we've seen from workshop participants
 - Incorrectly formatted ssh key
-- The user chose to log in from MAC Terminal, Putty, etc and the instance is being blocked by the company VPN (shut down VPNs and try to access or use Cloud Shell)
+- The user chose to log in from MAC Terminal, PuTTY, etc and the instance is being blocked by the company VPN (shut down VPNs and try to access or use Cloud Shell)
 - Incorrect name supplied for ssh key (Do not use sshkeyname, use the key name you provided)
 - @ placed before opc user (Remove @ sign and log in using the format above)
 - Make sure you are the oracle user (type the command *whoami* to check, if not, type *sudo su - oracle* to switch to the oracle user)
@@ -348,4 +348,4 @@ Reload your browser
 ## Acknowledgements
 - **Author** - LiveLabs Team
 - **Contributors** - Sanjay Narvekar, Troy Anthony, Anoosha Pilli, Arabella Yao, Kamryn Vinson, Jeffrey Malcolm Jr.
-- **Last Updated By/Date** - Arabella Yao, Dec 2022
+- **Last Updated By/Date** - Carmen Berdant, Mar 2024

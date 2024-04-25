@@ -6,7 +6,7 @@ This lab will show you how to set up an Oracle Virtual Cloud Network (VCN) and a
 Estimated Time:  15 minutes
 
 ### About Terraform and Oracle Cloud Resource Manager
-Terraform is a tool for building, changing, and versioning infrastructure safely and efficiently.  Oracle offers sample solutions to help you quickly create common Oracle cloud components.
+Terraform is a tool for building, changing, and versioning infrastructure safely and efficiently.  Oracle offers sample solutions to help you quickly create common Oracle Cloud Components.
 
 Resource Manager is an Oracle Cloud Infrastructure service that allows you to automate the process of provisioning your Oracle Cloud Infrastructure resources. Using Terraform, Resource Manager helps you install, configure, and manage resources through the "infrastructure-as-code" model. To learn more about OCI Resource Manager, watch the video below.
 
@@ -175,7 +175,7 @@ There are multiple ways to connect to your cloud instance.  Choose the way to co
 
 3. Click **Connection** > **Data** in the left navigation pane and set the Auto-login username to **root**.
 
-4. Click **Connection** > **SSH** > **Auth** in the left navigation pane and configure the SSH private key to use by clicking **Browse** under the Private key file for authentication.
+4. Click **Connection** > **SSH** > **Auth**> **Credentials** in the left navigation pane and configure the SSH private key to use by clicking **Browse** under the Private key file for authentication.
 
 5. Navigate to the location where you saved your SSH private key file, select the file, and click **Open**.
     >**Note:**  You cannot connect while on VPN or in the Oracle office on clear-corporate (choose clear-internet).
@@ -264,4 +264,4 @@ Reload your browser
 ## Acknowledgements
 - **Author** - LiveLabs Team, DB Product Management
 - **Contributors** - Jaden McElvey, Anoosha Pilli, Sanjay Narvekar, David Start, Arabella Yao
-- **Last Updated By/Date** - Arabella Yao, Dec 2022
+- **Last Updated By/Date** - Ramona Magadan, March 2024

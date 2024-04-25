@@ -4,21 +4,25 @@
         "description":"Navigate to ADB using the OCI menu. AUTHORS: For expediency, this task uses the ADMIN user/password to open Database Actions. In your workshop, you might want to substitute a different user/password to open Database Actions."
     }
 -->
-1. In the Oracle Cloud console, open the **navigation menu**, navigate to **Oracle Database**, and then select **Autonomous Data Warehouse**.
+1. Open the **Navigation** menu.
 
-    ![Click Autonomous Database (ATP or ADW).](images/oci-navigation-adb.png " ")
+    ![Open the Navigation menu.](images/open-navigation-menu.png =50%x*)
 
-2. You can use the List Scope fields on the left to control the list of Autonomous Databases that are displayed. This is useful when you are managing many Autonomous Databases:
+2. Under **Oracle Database**, click **Autonomous Data Warehouse**.
 
-    ![Database list.](images/oci-adb-list.png " ")
+    ![Click Autonomous Database (ATP or ADW).](images/oci-navigation-adb.png =60%x*)
 
-    - **Compartment**: OCI resources are organized into compartments. Select the compartment where you want to create your Autonomous Database. <if type="livelabs">To quickly locate the compartment that has been assigned to you for this workshop, enter the first part of your user name (e.g. `LL185`) in the Search Compartments field.</if>
+3. You can use the **List scope** and **Filters** sections on the left to control the list of Autonomous Databases that are displayed. This is useful when you are managing many Autonomous Databases.
+
+    ![Database list.](images/oci-adb-list.png =75%x*)
+
+    - **Compartment**: OCI resources are organized into compartments. Select the compartment where you want to create your Autonomous Database. <if type="livelabs">To quickly locate the compartment that has been assigned to you for this workshop, enter the first part of your user name such as `LL81481` (if that is your assigned username) in the **Compartment** field.</if>
     - **Workload Type**: Filter the Autonomous Database list by selecting your workload type. Select **All** to view all databases
     - **State**: View databases that are available, stopped, terminated and more.
 
 <if type="freetier">
 
-   > **Note:** Avoid the use of the `ManagedCompartmentforPaaS` compartment as this is an Oracle default used for Oracle Platform Services.
+    > **Note:** Avoid the use of the `ManagedCompartmentforPaaS` compartment as this is an Oracle default used for Oracle Platform Services.
 
 </if>
 

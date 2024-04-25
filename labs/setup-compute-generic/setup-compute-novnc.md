@@ -245,6 +245,7 @@ This issue is an indication that your tenant is not currently configured to use 
 Modify your stack to use fixed shapes instead.
 
 1. Uncheck the option *"Use Flexible Instance Shape with Adjustable OCPU Count"* to use a fixed shape instead
+
 ![Use fixed shapes](./images/standardshape.png " ")
 
 You may now **proceed to the next lab**.
@@ -252,4 +253,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology
 * **Contributors** - Arabella Yao, Product Manager, Database Product Management
-* **Last Updated By/Date** - Arabella Yao, Jan 2023
+* **Last Updated By/Date** - Ramona Magadan, March 2024

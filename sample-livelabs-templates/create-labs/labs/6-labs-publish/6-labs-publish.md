@@ -36,11 +36,12 @@ To create a Pull Request:
 
   ![Open a pull request.](./images/git-hub-branch-browser-create-pull-request.png " ")
 
+
 3. Enter the title for the pull request, **include your WMS ID** (you can find that by visiting the WMS) in the title.  PRs will not be approved without this ID. Check your pull request against the **General requirements** and the short **Checklist**. Refer to the that the info can be found in WMS in the self QA tab. If your pull request satisfies all the requirements, less time will be spent on back-and-forth communications, and your changes will be in production as soon as possible. Add **x** in the brackets to check that item on the checklist. You can also put the reasons for pull request on this section.
 
   ![Fill out PR title and check general requirements](./images/general-req.png " ")
   ![Checklist](./images/checklist.png " ")
-s
+
 4. Click **Create pull request**.
     ![Include WMS id in pull request title.](./images/git-hub-pull-request-title-comment.png " ")
   A status page is displayed indicating that you have created a pull request along with the request number (for example, #1770), that it is pending review, and that merging is blocked.

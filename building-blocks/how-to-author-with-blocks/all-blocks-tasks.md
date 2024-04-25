@@ -10,12 +10,15 @@ Building Blocks are exposed to customers. You can use these same blocks in your 
 | setup | [Add Workshop Utilities](/common/building-blocks/workshop/freetier/index.html?lab=add-workshop-utilities) |  /common/building-blocks /setup/add-workshop-utilities.md| Utilities for adding data sets and users |
 | adb | [Delete your workshop resources](/common/building-blocks/workshop/freetier/index.html?lab=cleanup.md) | /common/building-blocks/blocks/adb/cleanup/cleanup.md | Delete some or all of the resources that you created in the workshop |
 | adb | [Connect with SQL Worksheet](/common/building-blocks/workshop/freetier/index.html?lab=connect-sql-worksheet.md) | /common/building-blocks/blocks/adb/connect/connect-sql-worksheet.md | Connect to Autonomous Database using the SQL Worksheet in Database Actions |
-| adb | [Load and Analyze Data from REST Services](/common/building-blocks/workshop/freetier/index.html?lab=load-analyze-rest.md) | /common/building-blocks/blocks/adb/load-analyze-rest/load-analyze-rest.md | Analyze data sourced from REST services. Using the News API as an example.<ul><li>Create an Account on newsapi.org</li><li>Create a PLSQL function that retrieves news for actors</li><li>Perform a sentiment analysis on the article descriptions</li><li>Find which actors are generating buzz - both good and bad</li></ul> |
+| adb | [Load and Analyze Data from REST Services](/common/building-blocks/workshop/freetier/index.html?lab=load-analyze-rest.md) | /common/building-blocks/blocks/adb/load-analyze-rest/load-analyze-rest.md | Analyze data sourced from REST services. Using the News API as an example.<ul><li>Create an Account on https://newsapi.org</li><li>Create a PL/SQL function that retrieves news for actors</li><li>Perform a sentiment analysis on the article descriptions</li><li>Find which actors are generating buzz - both good and bad</li></ul> |
 | adb | [Use Database Actions Data Loading for Object Store data](/common/building-blocks/workshop/freetier/index.html?lab=load-data-tools.md) | /common/building-blocks/blocks/adb/load-data/load-data-tools.md | Use the Database Actions tooling to easily load data from object storage. |
 | adb | [Provision ADB using Python API](/common/building-blocks/workshop/freetier/index.html?lab=provision-python-api.md) | /common/building-blocks/blocks/adb/provision-python-api/provision-python-api.md | OCI provides a rich set of APIs to interact with its services. Use the python API to provision an autonomous database. |
 | adb | [Create an Oracle Autonomous Database](/common/building-blocks/workshop/freetier/index.html?lab=provision-console.md) | /common/building-blocks/blocks/adb/provision/provision-console.md | Learn how to provision Autonomous Database using the OCI console. |
 | adb | [Access and Load Partitioned Object Storage Data](/common/building-blocks/workshop/freetier/index.html?lab=use-partitioned-external-table.md) | /common/building-blocks/blocks/adb/use-partitioned-external-table/use-partitioned-external-table.md | Show value of partitioned external tables to improve performance |
 | oac | [Provision Your Oracle Analytics Cloud (OAC) Instance](/common/building-blocks/workshop/freetier/index.html?lab=oac-provision.md) | /common/building-blocks/blocks/oac/provision/oac-provision.md | Show how to create a new OAC instance |
+| oml | [Introduction to the Conda Environments in Oracle Machine Learning Notebooks](/common/building-blocks/workshop/freetier/index.html?lab=oml-conda.md) | /common/building-blocks/blocks/oml/oml-conda/oml-conda.md | No description found. |
+| oml | [Use the OML Monitoring Functionality to monitor your data and machine learning models](/common/building-blocks/workshop/freetier/index.html?lab=oml-monitoring.md) | /common/building-blocks/blocks/oml/oml-monitoring/oml-monitoring.md | No description found. |
+| oml | [Introduction to Oracle Machine Learning Notebooks](/common/building-blocks/workshop/freetier/index.html?lab=oml-notebooks-ea.md) | /common/building-blocks/blocks/oml/oml-notebooks-ea/oml-notebooks-ea.md | No description found. |
 
 [Go here for the customer view of Building Blocks](/building-blocks/workshop/freetier/index.html)
 ## List of Tasks
@@ -23,7 +26,7 @@ Building Blocks are exposed to customers. You can use these same blocks in your 
 Listed below are the tasks that you can incorporate into your markdown. You can also use the navigation tree on the left to view the tasks. Again, contribute to the list of tasks!
 | Cloud Service | Task |  File | Description |
 |---------------| ---- |  ---- |------------ |
-| adb | [Delete your workshop resources](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#Deleteyourworkshopresources) | /common/building-blocks/tasks/adb/cleanup.md | Delete some or all of the resources that you created in the workshop |
+| adb | [cleanup.md](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#cleanupmd) | /common/building-blocks/tasks/adb/cleanup.md |   |
 | adb | [Connect with SQL Worksheet](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#ConnectwithSQLWorksheet) | /common/building-blocks/tasks/adb/connect-with-sql-worksheet-body.md | Connect to Autonomous Database using the SQL Worksheet in Database Actions |
 | adb | [Connect with SQL Worksheet as non-admin user](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#ConnectwithSQLWorksheetasnonadminuser) | /common/building-blocks/tasks/adb/connect-with-sql-worksheet-non-admin.md | Connect to Autonomous Database using the SQL Worksheet in Database Actions. Non-admin user. |
 | adb | [Create Graph](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#CreateGraph) | /common/building-blocks/tasks/adb/create-graph.md | Create a bipartite Graph for MOVIESTREAM watched movies. |
@@ -44,6 +47,17 @@ Listed below are the tasks that you can incorporate into your markdown. You can 
 | adb | [Analyze Spatial Data with SQL](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#AnalyzeSpatialDatawithSQL) | /common/building-blocks/tasks/adb/query-spatial.md | Oracle provides rich support for querying and analyzing spatial data. Run queries to find pizza shops closest to customers. |
 | adb | [Using Partitoned External Tables](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=adb#UsingPartitonedExternalTables) | /common/building-blocks/tasks/adb/use-partitioned-external-table-body.md | Create partitioned external tables over object storage data using a single, simple API call. Then, load that data. Compare performance of external tables and partitioned external tables. |
 | iam | [Create an OCI Compartment](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=iam#CreateanOCICompartment) | /common/building-blocks/tasks/iam/compartment-create-body.md | Create a new compartment using the OCI service console |
+| oml | [Sign into Oracle Machine Learning UI](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=oml#SignintoOracleMachineLearningUI) | /common/building-blocks/tasks/oml/access-notebook-ea.md | Steps to sign into Oracle Machine Learning UI |
+| oml | [Create the Customer360 table](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=oml#CreatetheCustomer360table) | /common/building-blocks/tasks/oml/create-cust360-table.md | Steps to create the Customer360 table |
+| oml | [Create an OML User](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=oml#CreateanOMLUser) | /common/building-blocks/tasks/oml/create-oml-user.md | Steps to create an OML user by the name OMLUSER |
+| oml | [Sign into Oracle Machine Learning UI](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=oml#SignintoOracleMachineLearningUI) | /common/building-blocks/tasks/oml/notebook-features.md | Steps to sign into Oracle Machine Learning UI |
+| oml | [Provision an Autonomous Database](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=oml#ProvisionanAutonomousDatabase) | /common/building-blocks/tasks/oml/prov-an-adb.md | Steps to provision an autonomous database |
+| oml | [Sign into Oracle Machine Learning UI](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=oml#SignintoOracleMachineLearningUI) | /common/building-blocks/tasks/oml/sign-into-oml.md | Steps to sign into Oracle Machine Learning UI |
+| oml | [Sign into Oracle Machine Learning UI](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=oml#SignintoOracleMachineLearningUI) | /common/building-blocks/tasks/oml/use-md-interpreter.md | Steps to sign into Oracle Machine Learning UI |
+| oml | [Sign into Oracle Machine Learning UI](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=oml#SignintoOracleMachineLearningUI) | /common/building-blocks/tasks/oml/use-plsql-interpreter.md | Steps to sign into Oracle Machine Learning UI |
+| oml | [Sign into Oracle Machine Learning UI](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=oml#SignintoOracleMachineLearningUI) | /common/building-blocks/tasks/oml/use-py-interpreter.md | Steps to sign into Oracle Machine Learning UI |
+| oml | [Sign into Oracle Machine Learning UI](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=oml#SignintoOracleMachineLearningUI) | /common/building-blocks/tasks/oml/use-r-interpreter.md | Steps to sign into Oracle Machine Learning UI |
+| oml | [Sign into Oracle Machine Learning UI](/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=oml#SignintoOracleMachineLearningUI) | /common/building-blocks/tasks/oml/use-sql-interpreter.md | Steps to sign into Oracle Machine Learning UI |
 
 ## Variable Defaults
 You can use the default variables or copy the default file to your project and override the settings. See the **Authoring using Blocks and Tasks** topic for details.
@@ -81,7 +95,18 @@ The template assumes you copied the default **variables.json** to the same direc
      "adb-query-object-store-contents-with-sql.md":"/common/building-blocks/tasks/adb/query-object-store-contents-with-sql.md",
      "adb-query-spatial.md":"/common/building-blocks/tasks/adb/query-spatial.md",
      "adb-use-partitioned-external-table-body.md":"/common/building-blocks/tasks/adb/use-partitioned-external-table-body.md",
-     "iam-compartment-create-body.md":"/common/building-blocks/tasks/iam/compartment-create-body.md"
+     "iam-compartment-create-body.md":"/common/building-blocks/tasks/iam/compartment-create-body.md",
+     "oml-access-notebook-ea.md":"/common/building-blocks/tasks/oml/access-notebook-ea.md",
+     "oml-create-cust360-table.md":"/common/building-blocks/tasks/oml/create-cust360-table.md",
+     "oml-create-oml-user.md":"/common/building-blocks/tasks/oml/create-oml-user.md",
+     "oml-notebook-features.md":"/common/building-blocks/tasks/oml/notebook-features.md",
+     "oml-prov-an-adb.md":"/common/building-blocks/tasks/oml/prov-an-adb.md",
+     "oml-sign-into-oml.md":"/common/building-blocks/tasks/oml/sign-into-oml.md",
+     "oml-use-md-interpreter.md":"/common/building-blocks/tasks/oml/use-md-interpreter.md",
+     "oml-use-plsql-interpreter.md":"/common/building-blocks/tasks/oml/use-plsql-interpreter.md",
+     "oml-use-py-interpreter.md":"/common/building-blocks/tasks/oml/use-py-interpreter.md",
+     "oml-use-r-interpreter.md":"/common/building-blocks/tasks/oml/use-r-interpreter.md",
+     "oml-use-sql-interpreter.md":"/common/building-blocks/tasks/oml/use-sql-interpreter.md"
   },
   "help": "livelabs-help-db_us@oracle.com",
   "variables": ["./variables.json"],

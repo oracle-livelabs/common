@@ -1,5 +1,5 @@
 # Tasks for OCI Service: ADB
-## Delete your workshop resources
+## cleanup.md
 **Markdown file location:**
 ```
 /common/building-blocks/tasks/adb/cleanup.md

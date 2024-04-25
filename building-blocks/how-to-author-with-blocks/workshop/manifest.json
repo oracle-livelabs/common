@@ -21,7 +21,18 @@
      "adb-query-object-store-contents-with-sql.md":"/common/building-blocks/tasks/adb/query-object-store-contents-with-sql.md",
      "adb-query-spatial.md":"/common/building-blocks/tasks/adb/query-spatial.md",
      "adb-use-partitioned-external-table-body.md":"/common/building-blocks/tasks/adb/use-partitioned-external-table-body.md",
-     "iam-compartment-create-body.md":"/common/building-blocks/tasks/iam/compartment-create-body.md"
+     "iam-compartment-create-body.md":"/common/building-blocks/tasks/iam/compartment-create-body.md",
+     "oml-access-notebook-ea.md":"/common/building-blocks/tasks/oml/access-notebook-ea.md",
+     "oml-create-cust360-table.md":"/common/building-blocks/tasks/oml/create-cust360-table.md",
+     "oml-create-oml-user.md":"/common/building-blocks/tasks/oml/create-oml-user.md",
+     "oml-notebook-features.md":"/common/building-blocks/tasks/oml/notebook-features.md",
+     "oml-prov-an-adb.md":"/common/building-blocks/tasks/oml/prov-an-adb.md",
+     "oml-sign-into-oml.md":"/common/building-blocks/tasks/oml/sign-into-oml.md",
+     "oml-use-md-interpreter.md":"/common/building-blocks/tasks/oml/use-md-interpreter.md",
+     "oml-use-plsql-interpreter.md":"/common/building-blocks/tasks/oml/use-plsql-interpreter.md",
+     "oml-use-py-interpreter.md":"/common/building-blocks/tasks/oml/use-py-interpreter.md",
+     "oml-use-r-interpreter.md":"/common/building-blocks/tasks/oml/use-r-interpreter.md",
+     "oml-use-sql-interpreter.md":"/common/building-blocks/tasks/oml/use-sql-interpreter.md"
   },
  "help": "livelabs-help-db_us@oracle.com",
  "variables": ["/common/building-blocks/variables/variables.json"],
@@ -56,6 +67,11 @@
          "title": "IAM Tasks",
          "type": "freetier",
          "filename": "/common/building-blocks/how-to-author-with-blocks/iam.md"
+     },
+     {
+         "title": "OML Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/oml.md"
      }
   ]
 }

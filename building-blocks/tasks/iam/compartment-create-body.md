@@ -4,21 +4,43 @@
         "description":"Create a new compartment using the OCI service console"
     }
 -->
+
 A compartment is a collection of cloud assets, like compute instances, load balancers, databases, and so on. By default, a root compartment was created for you when you created your tenancy (for example, when you registered for the trial account). It is possible to create everything in the root compartment, but Oracle recommends that you create sub-compartments to help manage your resources more efficiently.
 
-If you are using an Oracle LiveLabs-provided sandbox, you don't have privileges to create a compartment and should skip this first task. Oracle LiveLabs has already created a compartment for you and you should use that one. Even though you can't create a compartment, you can review the steps below to see how it is done.
+_If you are using an Oracle LiveLabs-provided sandbox, you don't have privileges to create a compartment and you can either review or skip this first task. Oracle LiveLabs has already created a compartment for you and you should use that one. Even though you can't create a compartment, you can review the steps below to see how it is done._
 
+>_**Note:** This is an optional task. If you already have a compartment that you are using, you don't have to create a new compartment._
 
-1. Click the three-line menu on the top left of the console. Scroll down to the bottom of the menu, click **Identity & Security -> Compartments**.
+1. Open the **Navigation** menu.
 
-    ![Click Identity & Security then Compartments.](images/oci-navigation-compartments.png " ")
+    ![Click the Navigation menu.](./images/click-navigation-menu.png =50%x*)
 
-    Then, click the **Create Compartment** button to create a sub-compartment.
+2. Click **Identity & Security**. Under **Identity**, click **Compartments**.
 
-    ![Click the Create Compartment button.](images/compartment-create.png " ")
+    ![The Navigation menu is clicked. The navigation path to Compartments is displayed.](./images/navigate-compartment.png =60%x*)
 
-2. Give the compartment a name and description. Be sure your root compartment appears as the parent compartment. Press the blue **Create Compartment** button.
+    For faster navigation, you can pin items that you use frequently. To pin an item, hover over the menu item and then click pin to the left of the item name.
 
-    ![Click the Create Compartment button.](images/compartment-click-create.png " ")
+    ![An example on pinning an item such as Data Lake/Data Catalog for quicker access is shown.](./images/pin-items.png =60%x*)
 
-    The compartment is created and you can use it for your cloud services!
+    The pinned item is displayed in the **Pinned** section of the **Home** tab the next time you use the Navigation menu.
+
+    ![An example that shows the Compartment item pinned.](./images/pinned-item.png =60%x*)
+
+    The **Recently visited** section of the **Home** tab shows recently used navigation items.
+
+    To quickly find navigation menu items, use the **Search** box.
+
+3. On the **Compartments** page, click **Create Compartment**.
+
+   ![The Compartments page is displayed. The Create Compartment button is highlighted.](./images/click-create-compartment.png =60%x*)
+
+4. In the **Create Compartment** dialog box, enter a name and a description in the **Name** and the **Description** fields respectively.
+
+5. In the **Parent Compartment** drop-down list, select your parent compartment, and then click **Create Compartment**.
+
+   ![On the completed Create Compartment dialog box, click Create Compartment.](./images/create-compartment.png =60%x*)
+
+   The **Compartments** page is re-displayed and the newly created compartment is displayed in the list of available compartments.
+
+   ![The newly created compartment is highlighted with its status as Active.](./images/compartment-created.png =60%x*)
