@@ -36,7 +36,8 @@ To create a Pull Request:
 
   ![Open a pull request.](./images/git-hub-branch-browser-create-pull-request.png " ")
 
-1. Enter the title for the pull request, **include your WMS ID** (you can find that by visiting the WMS) in the title.  PRs will not be approved without this ID. Check your pull request against the **General requirements** and the short **Checklist**. If your pull request satisfies all the requirements, less time will be spent on back-and-forth communications, and your changes will be in production as soon as possible. Add **x** in the brackets to check that item on the checklist. You can also put the reasons for pull request on this section.
+
+3. Enter the title for the pull request, **include your WMS ID** (you can find that by visiting the WMS) in the title.  PRs will not be approved without this ID. Check your pull request against the **General requirements** and the short **Checklist**. Refer to the that the info can be found in WMS in the self QA tab. If your pull request satisfies all the requirements, less time will be spent on back-and-forth communications, and your changes will be in production as soon as possible. Add **x** in the brackets to check that item on the checklist. You can also put the reasons for pull request on this section.
 
   ![Fill out PR title and check general requirements](./images/general-req.png " ")
   ![Checklist](./images/checklist.png " ")
@@ -101,7 +102,7 @@ To create a Pull Request:
 If you want to request a green button (or a sandbox environment) for your workshop, please see **(Optional) Task 3: Request the Green Button** below for more information.
 
 3. Embed a video on the LiveLabs homepage for the workshop from Oracle Video Hub.
-    
+
     **Option 1:** Embed video from Oracle Video Hub (Recommended):
     - On the Oracle Video Hub page of the video, click **Share**:
       ![Share](images/oracle-share.png =50%x* " ")
@@ -135,7 +136,7 @@ The green button is a great choice if you want users to try some features unavai
 
 The green button can also be added to your workshop even after it is in production.
 
-1. You need to create a green button version of your workshop since the setup, instructions, and screenshots will differ for green button users. Refer to Lab 2 - Lab 4 to develop your workshop. Note that you should update the *workshops/sandbox/index.html* (or *workshops/livelabs/index.html*) and the *workshops/sandbox/manifest.json* (or *workshops/livelabs/manifest.json*) and all necessary lab files before the green button is live in production.
+1. You need to create a green button version of your workshop since the setup, instructions, and screenshots will differ for green button users. Refer to [Video walking Green Button - LiveLabs Sandbox Request](https://otube.oracle.com/media/LiveLabsA+Green+Button+Lite/1_85wokrec) to develop your workshop. Note that you should update the *workshops/sandbox/index.html* (or *workshops/livelabs/index.html*) and the *workshops/sandbox/manifest.json* (or *workshops/livelabs/manifest.json*) and all necessary lab files before the green button is live in production.
 
 2. Go to WMS and find your workshop to request the green button. Click the **Publishing** tab, then click **Edit** for the LiveLabs publishing entry you wish to request green button (if available) or click **+ Publish to LiveLabs** (if you do not have a LiveLabs publishing entry already).
 
@@ -270,13 +271,12 @@ GitHub merge conflicts happen when you and some other contributors are changing 
 ## Acknowledgements
 
 * **Author:**
-    * Anuradha Chepuri, Principal User Assistance Developer, Oracle GoldenGate
+    * Anuradha Chepuri, Consulting User Assistance Developer, Oracle GoldenGate
 * **Contributors:**
-    * Lauran Serhal, Principal User Assistance Developer, Oracle Database and Big Data User Assistance
-    * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
-    * Kamryn Vinson, Product Manager, Database
-    * Anoosha Pilli, Product Manager, Database
-    * Arabella Yao, Product Manager, Database
-    * Madhusudhan Rao, Product Manager, Database
+    * Lauran Serhal, Consulting User Assistance Developer, Oracle Database and Big Data
+    * Aslam Khan, Senior Manager, ODI, OGG, EDQ
+    * Kamryn Vinson, Senior Product Manager, Database
+    * Madhusudhan Rao, Principal Product Manager, Database
 
-* **Last Updated By/Date:** Arabella Yao, September 2022
+* **Last Updated By/Date:**
+    * Ana Coman, Technical Program Manager, Oracle Database Product Management, April 2024
