@@ -31,15 +31,11 @@ For ease of execution of this workshop, your VM instance has been pre-configured
 
     >**Note:** The *Launch Workshop* link will be visible only when provisioning is completed
 
-3. Click **View Login Info** and then Copy Compartment OCID, and save it to notepad.  
-   
-    ![Save OCID](./images/lllaunchlab.png "Login Information")
-
-    then **Launch Remote Desktop**.
+3. Click **View Login Info** and then **Launch Remote Desktop**.
 
     ![Login information](./images/login-info.png "Login Information")
 
-    This should take you directly to your remote desktop in a single click.
+    This should take you directly to your remote desktop in a single click.  A sample of another lab is shown below.
 
     ![noVNC launch remote desktop](./images/novnc-launch-get-started-2.png "noVNC launch remote desktop ")
 
