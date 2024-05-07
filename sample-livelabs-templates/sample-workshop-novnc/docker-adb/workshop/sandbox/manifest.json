@@ -1,10 +1,10 @@
 {
-  "workshoptitle": "The Title of the Workshop is defined in the manifest",
-  "help": "livelabs-help-**enterarea**_us@oracle.com",
+  "workshoptitle": "Using Docker to Setup ADB-S Free - 23ai",
+  "help": "livelabs-help-db_us@oracle.com",
   "tutorials": [
     {
       "title": "Lab 1: Environment Setup",
-      "description": "Setup Docker image with ADB Free",
+      "description": "Setup Docker image with ADB-S Free - 23ai",
       "filename": "../../setup/setup.md"
     },
     {
