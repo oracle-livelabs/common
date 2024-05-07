@@ -1,0 +1,16 @@
+{
+  "workshoptitle": "The Title of the Workshop is defined in the manifest",
+  "help": "livelabs-help-**enterarea**_us@oracle.com",
+  "tutorials": [
+    {
+      "title": "Lab 1: Environment Setup",
+      "description": "Setup Docker image with ADB Free",
+      "filename": "../../setup/setup.md"
+    },
+    {
+      "title": "Need Help?",
+      "description": "Solutions to Common Problems and Directions for Receiving Live Help",
+      "filename": "https://oracle-livelabs.github.io/common/labs/need-help/need-help-livelabs.md"
+    }
+  ]
+}
