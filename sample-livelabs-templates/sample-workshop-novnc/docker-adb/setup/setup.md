@@ -20,7 +20,7 @@ This lab assumes you have:
     </copy>
     ```
 
-3. Now that you are prompted to login, type the username in the format of ***tenancy_name***/***username***. You will find that information in the Login Details of your LiveLabs reservation. Hit enter, and it should say "Login Succeeded".
+3. Now that you are prompted to login, type the username in the format of ***tenancy_name***/***username***. The password will be your ***auth_token***. You will find all the necessary information in the Login Details of your LiveLabs reservation. Hit enter, and it should say "Login Succeeded".
 
 4. Run this following command, and it will pull down the latest version of the 23ai ADB image.
 
@@ -77,7 +77,7 @@ This lab assumes you have:
 
     ```
     <copy>
-    adb-cli add-database --workload-type "ATP" --admin-password "Welcome_MY_ATP_1234" --database-name MYATP
+    adb-cli add-database --workload-type "ADW" --admin-password "Welcome_1234"
     </copy>
     ```
 
@@ -85,13 +85,22 @@ This lab assumes you have:
 
     ```
     <copy>
-    adb-cli change-password --database-name "MYATP" --old-password "Welcome_MY_ATP_1234" --new-password "Welcome_12345"
+    adb-cli change-password --database-name "MYADW" --old-password "Welcome_1234" --new-password "Welcome_12345"
     </copy>
     ```
 
-11. This is how you connect to ORDS.
+<!-- 11. 
+mkdir /scratch/
+podman cp adb-free:/u01/app/oracle/wallets/tls_wallet /scratch/tls_wallet
 
-12. Finally, this is how you would connect to APEX.
+12. 
+
+hostname fqdn -->
+
+
+<!-- 11. This is how you connect to ORDS.
+
+12. Finally, this is how you would connect to APEX. -->
 
 ## Acknowledgements
 * **Author** - Kaylien Phan, Senior Product Manager
