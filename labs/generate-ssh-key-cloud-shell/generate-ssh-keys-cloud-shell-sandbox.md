@@ -87,4 +87,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 * **Author** - Dan Kingsley, Enablement Specialist, OSPA
 * **Contributors** - Arabella Yao, Database Product Management
-* **Last Updated By/Date** - Arabella Yao, Dec 2022
+* **Last Updated By/Date** - Carmen Berdant, Mar 2024

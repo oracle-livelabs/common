@@ -19,7 +19,7 @@ This lab assumes you have:
 For ease of execution of this workshop, your VM instance has been pre-configured with a remote graphical desktop - accessible using any modern browser on your laptop or workstation. Proceed as detailed below to log in.
 
 1. Now that your instance has been provisioned. If you are not already on the **My Reservations** page, then:
-    - Sign in to [LiveLabs](https://developer.oracle.com/livelabs)
+    - Sign in to [LiveLabs](https://oracle.com/livelabs)
     - Click the drop-down arrow next to your **Username**
     - Click **My Reservations**
 
@@ -35,7 +35,7 @@ For ease of execution of this workshop, your VM instance has been pre-configured
 
     ![Login information](./images/login-info.png "Login Information")
 
-    This should take you directly to your remote desktop in a single click.
+    This should take you directly to your remote desktop in a single click.  A sample of another lab is shown below.
 
     ![noVNC launch remote desktop](./images/novnc-launch-get-started-2.png "noVNC launch remote desktop ")
 

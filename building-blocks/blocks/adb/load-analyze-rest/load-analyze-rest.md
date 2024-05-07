@@ -1,14 +1,32 @@
 <!---
 {
     "name":"Load and Analyze Data from REST Services",
-    "description":"Analyze data sourced from REST services. Using the News API as an example.<ul><li>Create an Account on newsapi.org</li><li>Create a PLSQL function that retrieves news for actors</li><li>Perform a sentiment analysis on the article descriptions</li><li>Find which actors are generating buzz - both good and bad</li></ul>"
+    "description":"Analyze data sourced from REST services. Using the News API as an example.<ul><li>Create an Account on https://newsapi.org</li><li>Create a PL/SQL function that retrieves news for actors</li><li>Perform a sentiment analysis on the article descriptions</li><li>Find which actors are generating buzz - both good and bad</li></ul>"
 }
 --->
 # Load and Analyze the News from REST Endpoints
 
 ## Introduction
 
-There are so many interesting and potentially useful data sets available today via REST: social, financial, science, health, weather - the list goes on and on. Autonomous Database makes it really easy to integrate these sources using SQL queries – eliminating the need for intermediate processing and storage and making that data available to any SQL client.
+There are so many interesting and potentially useful data sets available today via REST: social, financial, science, health, weather and so on. Autonomous Database makes it really easy to integrate these sources using SQL queries. This eliminates the need for intermediate processing and storage and making that data available to any SQL client.
+
+**News API** is a simple HTTP REST API for searching and retrieving live articles from all over the web. It can help you answer questions such as:
+
+* What top stories is TechCrunch running right now?
+* What new articles were published about the next iPhone today?
+* Has my company or product been mentioned or reviewed by any blogs recently?
+
+You can search for articles with any combination of the following criteria:
+
+* **Keyword or phrase:** For example, find all articles containing the word `Microsoft`.
+* **Date published:**. For example, find all articles published yesterday.
+* **Source domain name:** For example, find all articles published on https://thenextweb.com.
+* **Language:** For example,  find all articles written in English.
+
+You can sort the results in the following order:
+* **Date published**
+* **Relevancy to search keyword**
+* **Popularity of source**
 
 In this lab, you will find the latest news about actors and then perform a sentiment analysis of that news. This information can help decide which movies to promote on the MovieStream site - allowing MovieStream to take advantage of "buzz" to drive revenue.
 
@@ -20,47 +38,65 @@ Watch the video below for a quick walk-through of the lab.
 ### Objectives
 
 In this lab, you will:
-* Create an account on News API (https://newsapi.org/) and retrieve an API key
-* Create a PLSQL function that retrieves the latest news for actors
-* Perform a sentiment analysis on the article descriptions
-* Identify which actors are generating buzz - both good and bad
-
+* Create an account on News API (https://newsapi.org/) and retrieve an API key.
+* Create a PL/SQL function that retrieves the latest news for actors.
+* Perform a sentiment analysis on the article descriptions.
+* Identify which actors are generating buzz - both good and bad.
 
 ### Prerequisites
 
-- This lab requires:
-    * a provisioned ADB instance
-    * movies loaded from object storage
+* An ADB instance.
+* movies loaded from Oracle object storage.
 
-## Task 1: Create an account on News API and retrieve an API key
-The News API provides a simple REST API to retrive news from various sources. Get started by creating a News API account:
+## Task 1: Create a News API Account and Key
+
+You need an API key to use the **News API**. This is a unique key that identifies your requests. They're free while you're in development.
+
+Create a **News API** account as follows:
 
 1. Register for an API key from the [News API](https://newsapi.org/register).
-2. Complete the fields on the registration page, including your name, email and password. Agree to the terms and click **Submit**.
-3. You will receive an email from News API that includes your API key. You will need the API key to make REST calls against the service.
-4. We will use the [`Everything` News API endpoint (`https://newsapi.org/v2/everything`) ](https://newsapi.org/docs/endpoints/everything) The key parameters for the REST endpoint are:
+
+2. Complete the fields on the registration page, including your first name, email, and password. Agree to the terms, and then click **Submit**.
+
+    ![Register for an API key.](./images/register-api-key.png " ")
+
+    A **Registration Complete** dialog box is displayed that shows your API key. Save your API key for later use.
+
+    ![API key registration complete.](./images/api-registration-complete.png =50%x*)
+
+3. You will receive an email from News API that includes your API key. You will need this API key to make REST calls against the service.
+
+    ![Registration complete email.](./images/api-key-email.png " ")
+
+4. You will use the [`Everything` News API endpoint (`https://newsapi.org/v2/everything`)](https://newsapi.org/docs/endpoints/everything). The key parameters for the REST endpoint are:
 
     | Parameter | Description |
     | --------- | ----------- |
-    | q         | The search term. This will be an actor |
-    | searchin  | We will search news items' titles and descriptions (the full article requires more work) |
-    | from      | The oldest article. We will default to one week ago |
-    | to      | The newest article. We will default to today |
-    | sortby    | We will sort by the published date |
+    | **`q`**         | The search term. This will be an actor in our example|
+    | **`searchin`**  | You will search news items' titles and descriptions (the full article requires more work) |
+    | **`from`**      | The oldest article. You will default to one week ago |
+    | **`to`**      | The newest article. You will default to today |
+    | **`sortby`**    | You will sort by the published date |
     {: title="News API parameters"}
 
-## Task 2: Create a PLSQL function that retrieves news for an actor
-Now that you have the API key, create a PLSQL function that queries the REST endpoint using the parameters above.
+## Task 2: Create a PL/SQL Function to Retrieve News for an Actor
 
-1. Navigate to the Database Actions' SQL Worksheet
+Now that you have the API key, create a PL/SQL function that queries the REST endpoint using the parameters above. If you already have the SQL Worksheet open from the previous lab, skip to step 6 below; otherwise, start with step 1.
+
+1. Log in to the **Oracle Cloud Console**, if you are not already logged as the Cloud Administrator.
+
+2. Open the **Navigation** menu and click **Oracle Database**. Under **Oracle Database**, click **Autonomous Database**.
+
+3. On the **Autonomous Databases** page, click your ADB instance.
+
+4. On the **Autonomous Database details** page, click the **Database actions** drop-down list, and then click **SQL**.
+
+5. The SQL Worksheet is displayed.
+
+    ![The SQL worksheet is displayed.](./images/sql-worksheet-displayed.png " ")
     
-    Go to Database Actions from the Autonomous Database OCI console:
-    ![Go to DB Actions](/common/building-blocks/tasks/adb/images/adb-dbactions-goto.png "Go to DB Actions")
+6. Ensure that the public REST endpoint is accessible by our PL/SQL function. Copy and paste the following API call code into your SQL Worksheet to update the access control list, and then click the **Run Script (F5)** icon in the Worksheet toolbar. This will allow the **ADMIN** user to call out to any public host.
 
-    Then, select SQL in the Launchpad:
-    ![Click SQL](/common/building-blocks/tasks/adb/images/adb-dbactions-click-sql.png "Click SQL")
-
-2. Ensure that the public REST endpoint is accessible by our PL/SQL function. Copy and paste the following API call into SQL Worksheet to update the access control list. Click **Run Script**. This will allow the ADMIN user to call out to any public host.
     ```
     <copy>
     begin
@@ -75,73 +111,85 @@ Now that you have the API key, create a PLSQL function that queries the REST end
     /
     </copy>
     ```
-3. Create the function that queries the News API REST endpoint. Copy and paste the function below into the SQL worksheet. Replace **`<your api key>`** with the API key that the News API sent to you. After replacing the API key, click **Run Script**.
+
+    The output is displayed in the **Script Output** tab.
+
+    ![The result of running the script is displayed.](./images/access-control-result.png " ")
+
+7. Create the function that queries the **News API REST endpoint**. Copy and paste the code in the next step into your SQL Worksheet. _Replace the **`enter-your-api-key`** place holder in the variables declaration section (labeled -- REST management) with your own **API key** that you received from News API when you created your account_.
+
+     ![Provide your api key.](./images/provide-api-key.png " ")
+
+8. Click the **Run Script (F5)** icon in the Worksheet toolbar.
 
     ```
     <copy>
+
     -- turn off prompting for parameter values
-    set define off;  
+
+    set define off;
 
     create or replace function get_news (
-                                news_search in varchar2 default '+"Tom Hanks"',
-                                from_date in varchar2 default to_char(sysdate-7, 'YYYY-MM-DD'),
-                                end_date in varchar2 default to_char(sysdate, 'YYYY-MM-DD')
-                                )    
-        return clob is
+        news_search in varchar2 default '+"Tom Hanks"',
+        from_date in varchar2 default to_char(sysdate-7, 'YYYY-MM-DD'),
+        end_date in varchar2 default to_char(sysdate, 'YYYY-MM-DD')
+        )
+    return clob is
 
-            result_row      clob;
+    result_row      clob;
 
-            -- REST management
-            req             varchar2(1000);
-            resp            dbms_cloud_types.resp;            
-            params          varchar2(1000);
-            apikey          varchar2(100) := '<your api key>';
-            endpoint        varchar2(100) := 'https://newsapi.org/v2/everything';
+    -- REST management
+    req             varchar2(1000);
+    resp            dbms_cloud_types.resp;
+    params          varchar2(1000);
+    apikey          varchar2(100) := 'enter-your-api-key';
+    endpoint        varchar2(100) := 'https://newsapi.org/v2/everything';
+
+    begin
+        -- Create the URL based on the parameters, API Key and rest endpoint
+        params      :=  '?q=' || news_search
+                        || '&apikey=' ||apikey
+                        || '&from=' || from_date
+                        || '&to=' || end_date
+                        || '&sortBy=publishedAt&language=en&searchIn=title,description';
 
 
-        begin        
-            -- Create the URL based on the parameters, API Key and rest endpoint
-            params      :=  '?q=' || news_search
-                            || '&apikey=' ||apikey
-                            || '&from=' || from_date
-                            || '&to=' || end_date
-                            || '&sortBy=publishedAt&language=en&searchIn=title,description';
+        req := utl_url.escape(endpoint || params);
 
+    -- send the request and process the result
+    resp := dbms_cloud.send_request(
+        credential_name => null,
+        -- headers         => reqheader,
+        uri             => req,
+        method          => DBMS_CLOUD.METHOD_GET,
+        cache           => true
+    );
 
-            req := utl_url.escape(endpoint || params);
+    -- Get the response. This is in JSON format
+    result_row := dbms_cloud.get_response_text(resp);
 
-            -- send the request and process the result
-            resp := dbms_cloud.send_request(
-                credential_name => null,
-                -- headers         => reqheader,        
-                uri             => req,
-                method          => DBMS_CLOUD.METHOD_GET,
-                cache           => true
-            );
-
-            -- Get the response. This is in JSON format
-            result_row := dbms_cloud.get_response_text(resp);
-
-            -- Return the result
-            return result_row;
-
-        end;
+    -- Return the result
+    return result_row;
+    end;
     /
     </copy>
     ```
-    **`DBMS_CLOUD.SEND_REQUEST`** is the key function; it queries the endpoint and returns a response object. This response object is then passed to **`BMS_CLOUD.GET_RESPONSE_TEXT`** to retrieve the news articles in JSON format.
 
-4. Query the News API for the top 20 actors. The result of the query is saved into a table.
+    The **`DBMS_CLOUD.SEND_REQUEST`** is the key function; it queries the endpoint and returns a response object. This response object is then passed to **`BMS_CLOUD.GET_RESPONSE_TEXT`** to retrieve the news articles in JSON format.
+
+    ![The function is created.](./images/function-created.png " ")
+
+9. Query the News API for the top 20 actors. The result of the query is saved into a table. Copy and paste the following code into your SQL Worksheet, and then click the **Run Script (F5)** icon in the Worksheet toolbar.
 
     ```
     <copy>
     create table news as
     with top_actors as (
-        select  
+        select
             jt.actor,
             sum(gross)
         from movie m,
-            json_table(m.cast,'$[*]' columns (actor path '$')) jt    
+            json_table(m.cast,'$[*]' columns (actor path '$')) jt
         where actor != 'novalue'
         group by jt.actor
         order by 2 desc nulls last
@@ -159,61 +207,70 @@ Now that you have the API key, create a PLSQL function that queries the REST end
     - A subquery - select the top 20 actors based on box office revenue.
     - For each of those top actors, get the latest news by calling the `get_news` function.
 
-    5. Let's see the news for Johnny Depp. Note, because this is querying a live news feed, your results will definitely be different!!
-        ```
-        <copy>
-        select
-            actor,
-            json_query(json_document, '$' returning clob pretty) as news_articles
-        from news
-        where actor = 'Johnny Depp';
-        </copy>
-        ```
-    Lots of news - 251 articles across publications. Unfortunately, the news is not all good.
+    ![The table is created.](./images/table-created.png " ")
 
-        ![News results](images/adb-query-news.png)
+10. Let's see the news for **Johnny Depp**. Copy and paste the following code into your SQL Worksheet, and then click the **Run Script (F5)** icon in the Worksheet toolbar.
 
-    6. Finally, let's clean up the JSON and make it more structured and easier to analyze. Use the **`JSON_TABLE`** function to turn the nested arrays into rows. Again, we'll create a table with a row for each article:
+    >**Note:** Since you are querying a live news feed, your results will definitely be different than our results.
 
-        ```
-        <copy>
-        create table news_buzz as
-        select
-            actor,
-            json_value(json_document, '$.totalResults' returning number) as buzz,
-            author,
-            source,
-            title,
-            description
-        from news n,
-            json_table(n.json_document, '$.articles[*]'
-                columns (
-                    source      varchar2(100)    path '$.source.name',
-                    author      varchar2(100)    path '$.author',
-                    title       varchar2(200)    path '$.title',
-                    description varchar2(1000)   path '$.description'
+    ```
+    <copy>
+    select
+        actor,
+        json_query(json_document, '$' returning clob pretty) as news_articles
+    from news
+    where actor = 'Johnny Depp';
+    </copy>
+    ```
 
-                )
-            ) jt;
-        </copy>
-        ```
+    There are **14** articles across publications about Johnny Depp. Unfortunately, not all the news is good.
 
-    7. Let's review the results:
-        ```
-        <copy>
-        select *
-        from news_buzz;
-        </copy>
-        ```
+    ![News results](images/adb-query-news.png)
 
-        It's now easy to see each article that refers to an actor, including its title and description.
+11. Finally, let's clean up the JSON and make it more structured and easier to analyze. Use the **`JSON_TABLE`** function to turn the nested arrays into rows. Again, we'll create a table with a row for each article. Copy and paste the following code into your SQL Worksheet, and then click the **Run Script (F5)** icon in the Worksheet toolbar.
 
-        ![Query news buzz](images/adb-query-news-buzz.png)
+    ```
+    <copy>
+    create table news_buzz as
+    select
+        actor,
+        json_value(json_document, '$.totalResults' returning number) as buzz,
+        author,
+        source,
+        title,
+        description
+    from news n,
+        json_table(n.json_document, '$.articles[*]'
+            columns (
+                source      varchar2(100)    path '$.source.name',
+                author      varchar2(100)    path '$.author',
+                title       varchar2(200)    path '$.title',
+                description varchar2(1000)   path '$.description'
+            )
+        ) jt;
+    </copy>
+    ```
 
-## Task 3: Analyze the sentiment of each article description        
-Now that we have the latest news for each actor, let's derive the sentiment of those articles. Oracle Database has powerful text functions for tokenizing the text and then analyzing it. In our case, we'll use the defaults; however, you can perform much more sophisticated models using training methods.
+    ![Table news_buzz is created.](./images/table-news-buzz-created.png " ")
 
-1. Specify the type of lexer to use. We will use the "automatic" version, which will be fine for our use case. Copy and paste the following into the SQL Worksheet and click **Run Statement**:
+12. Let's review the results. Copy and paste the following code into your SQL Worksheet, and then click the **Run Statement** icon in the Worksheet toolbar.
+
+    ```
+    <copy>
+    select *
+    from news_buzz;
+    </copy>
+    ```
+
+    It's now easy to see each article that refers to an actor, including its title and description.
+
+    ![Query news buzz](images/adb-query-news-buzz.png)
+
+## Task 3: Analyze the Sentiment of Each Article's Description
+
+Now that you have the latest news for each actor, you will derive the sentiment of those articles. Oracle Database has powerful text functions for tokenizing the text and then analyzing it. In this example, you will use the defaults; however, you can perform much more sophisticated models using training methods.
+
+1. Specify the type of lexer to use. We will use the **`automatic`** version, which will be sufficient for this example. Copy and paste the following code into the SQL Worksheet, and then click **Run Script (F5)** in the Worksheet toolbar.
 
     ```
     <copy>
@@ -221,7 +278,10 @@ Now that we have the latest news for each actor, let's derive the sentiment of t
     </copy>
     ```
 
-2. Create the sentiment index:
+    ![Use automatic lexer](images/set-lexer.png)
+
+2. Create the sentiment index. The index creation analyzes each article, derives the sentiment, and stores it in the index. Copy and paste the following code into the SQL Worksheet, and then click **Run Script (F5)** in the Worksheet toolbar.
+
     ```
     <copy>
     create index news_sentiment_idx
@@ -230,26 +290,30 @@ Now that we have the latest news for each actor, let's derive the sentiment of t
     parameters ('lexer newsautolexer stoplist ctxsys.default_stoplist');
     </copy>
     ```
-    The index creation analyzes each article, deriving the sentiment and storing it in the index.
 
-3. Let's look at the sentiment of some of Johnny Depp's news:
+    ![Create index](images/create-index.png)
+
+3. Let's look at the sentiment of some of Johnny Depp's news. Copy and paste the following code into the SQL Worksheet, and then click **Run Statement** in the Worksheet toolbar.
+
     ```
     <copy>
     select
         actor,
         ctx_doc.sentiment_aggregate('news_sentiment_idx', rowid) as sentiment,
-        description     
+        description
     from news_buzz
     where actor = 'Johnny Depp'
     order by sentiment
     ;
     </copy>
     ```
-    As to be expected, the computed sentiment isn't great. However, it's not all bad; as you scroll through the results, there are some positive articles. Also, the description field is fairly small. A richer text field would likely produce even better results.
 
-    ![](images/adb-sentiment-analysis.png)
+    ![Query sentiment](images/query-sentiment.png)
 
-4. MovieStream will want to consider which movies to promote on the site. Actors that are generating buzz and the type of news will likely have some influence on their recommendations. Below are the rankings for our actors:
+    The Total Results is 54 in our example; however, your results might be different. Scroll to the right to view the complete results. The description field is fairly small. A richer text field would likely produce even better results.
+
+4. MovieStream needs to decide which movies to promote on their site. Actors that are generating more buzz and the type of news will likely have some influence on their recommendations. Query the ranking for the actors. Copy and paste the following code into the SQL Worksheet, and then click **Run Statement** in the Worksheet toolbar.
+
     ```
     <copy>
     select
@@ -266,7 +330,19 @@ Now that we have the latest news for each actor, let's derive the sentiment of t
 
 This completes this lab. You now know how to integrate and analyze data coming from REST endpoints in Autonomous Database.
 
+You may now proceed to the next lab.
+
+## Learn more
+
+* [SQL Language Reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/index.html)
+* [DBMS_CLOUD Subprograms and REST APIs](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/dbms-cloud-subprograms.html#GUID-3D0A5361-672C-467D-AA90-656B1B4D4E37)
+* [Oracle Text](https://docs.oracle.com/en/database/oracle/oracle-database/19/ccref/index.html)
+* [Oracle Cloud Infrastructure Documentation](https://docs.cloud.oracle.com/en-us/iaas/Content/GSG/Concepts/baremetalintro.htm)
+* [Using Oracle Autonomous Database Serverless](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/index.html)
+
 ## Acknowledgements
 
-* **Author** - Marty Gubar, Autonomous Database Product Management
-* **Last Updated By/Date** - Marty Gubar, July 2022
+* **Authors:**
+    * Marty Gubar, Autonomous Database Product Management
+    * Lauran K. Serhal, Consulting User Assistance Developer
+* **Last Updated By/Date:** Lauran K. Serhal, April 2024

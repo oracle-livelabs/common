@@ -1,4 +1,26 @@
 # Tasks for OCI Service: ADB
+## cleanup.md
+**Markdown file location:**
+```
+/common/building-blocks/tasks/adb/cleanup.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "adb-cleanup.md":"/common/building-blocks/tasks/adb/cleanup.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:adb-cleanup.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:adb-cleanup.md)
+ 
 ## Connect with SQL Worksheet
 **Markdown file location:**
 ```
@@ -20,6 +42,28 @@
 **Markdown Output &#8595;&#8595;:**
  
 [](include:adb-connect-with-sql-worksheet-body.md)
+ 
+## Connect with SQL Worksheet as non-admin user
+**Markdown file location:**
+```
+/common/building-blocks/tasks/adb/connect-with-sql-worksheet-non-admin.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "adb-connect-with-sql-worksheet-non-admin.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-non-admin.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:adb-connect-with-sql-worksheet-non-admin.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:adb-connect-with-sql-worksheet-non-admin.md)
  
 ## Create Graph
 **Markdown file location:**
@@ -86,6 +130,28 @@
 **Markdown Output &#8595;&#8595;:**
  
 [](include:adb-create-user.md)
+ 
+## Generate an RSA key pair
+**Markdown file location:**
+```
+/common/building-blocks/tasks/adb/generate-rsa-key-pair.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "adb-generate-rsa-key-pair.md":"/common/building-blocks/tasks/adb/generate-rsa-key-pair.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:adb-generate-rsa-key-pair.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:adb-generate-rsa-key-pair.md)
  
 ## Go to Data Load Utility Database Action
 **Markdown file location:**

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Oracle Workshop Management System (WMS) is used to submit workshops, follow a process for team approvals, develop and publish the workshop. Most of our focus in these step by step guides will talk about publishing to LiveLabs, but authors can also publish on Luna and OHC, which will use the workshop that was published in LiveLabs.
+Oracle Workshop Management System (WMS) is used to submit workshops, follow a process for team approvals, develop and publish the workshop. Most of our focus in these step by step guides will talk about publishing to LiveLabs, which will use the workshop that was published in LiveLabs.
 
 The WMS workflow is shown with statuses and gives visibility into the development steps. WMS also hosts ways to market the workshop with social media, and keep track of regular quality checks to keep the workshop relevant.
 
@@ -63,15 +63,15 @@ There are different ways to deploy your workshop. It can run in a free tier acco
 3. Click the *Go to Market - Social* tab to include a link to the blog of your workshop, write a couple of sentences that would accompany a LinkedIn or Twitter post about your workshop, and write a tweet to be used to promote your workshop. Of course this can be done anytime while working on your workshop, or maybe you are using a blog to create the workshop. These details should be completed for when your workshop is published. Be sure to check the approved box when ready to use for social media posting and blogs.
 
   ![Select social](images/socialtab1.png " ")
-  
+
   There is also a video script for recording some details about the workshop. Keep it short and simple to highlight the objectives or use case. Again, just check the box when the script is ready for publishing.
-  
+
   ![Video script](images/socialtab2.png " ")
-  
+
   You can also upload images and video files for marketing the workshop.
-  
+
   ![Image Upload](images/socialtab3.png " ")
-  
+
   [Video walking through the social tab](https://otube.oracle.com/media/LiveLabsA+Go+to+Market+-+Social+Tab+in+WMS./1_hr3dmmwx)
 
 
@@ -112,10 +112,6 @@ For a workshop to go from an idea to a LiveLabs workshop in production, it has t
 
   ![Self QA Complete](./images/self-qa-complete.png " ")
 
-  Workshop authors can watch the video below on how to self-QA your workshop. Stakeholders can also watch the video below to learn how to verify the QA of a workshop.
-
-  [](youtube:8tirP-hibsk)
-
   The workshop's *stakeholders* will verify the QA within 2 business days. They will either send workshop team issues to fix, or move the workshop to *Completed* status, meaning the workshop is ready for production.
 
 8. The workshop is *completed* and is ready for publishing! Workshop teams will submit a publishing request, and the LiveLabs team will approve it. Steps to complete publishing are in Lab 6. After the publishing request is approved, the workshop will be live in LiveLabs automatically within a business day.
@@ -140,7 +136,7 @@ For a workshop to go from an idea to a LiveLabs workshop in production, it has t
 
 Now that you understand the general status workflow and approvals involved, it is time to get started with developing the content. In the next couple of labs we will walk through the details of using GitHub and Markdown content, but the following steps show the general workflow process that you need to follow to set up your environment to develop labs and workshops. Most of the tasks are performed only once, but there are others that will be repeated and you can use your configured environment to develop other new workshops.
 
-This is the overview of the steps, and in the next lab these topics will be covered to walk you through setting up your environment, writing and editing and QA of your workshop to get it ready to publish. We have videos for these steps that are also part of the labs and in the WMS **I Need Help** menu. 
+This is the overview of the steps, and in the next lab these topics will be covered to walk you through setting up your environment, writing and editing and QA of your workshop to get it ready to publish. We have videos for these steps that are also part of the labs and in the WMS **I Need Help** menu.
 
 1. Create, set up, and access GitHub account
 2. Install GitHub Desktop
@@ -172,4 +168,4 @@ This concludes this lab. You may now **proceed to the next lab**.
     * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
     * Arabella Yao, Product Manager, Database
 
-* **Last Updated By/Date:** Anoosha Pilli, February 2023
+* **Last Updated By/Date:** Ana Coman, March 2024

@@ -24,10 +24,10 @@ Watch this video below on how to self-QA your workshop.
 
 After you have successfully set up your GitHub pages, you can share your workshop for review.
 To share and view your workshop:
-1. In the browser, enter the URL of your GitHub Pages. For example, if I want to share a workshop in the *em-omc* folder for review, the GitHub Pages URL is [https://arabellayao.github.io/em-omc/](https://arabellayao.github.io/em-omc/). Please replace *em-omc* with the repository of your workshop.
+1. In the browser, enter the URL of your GitHub Pages. For example, if I want to share a workshop in the *em-omc* folder for review, the GitHub Pages URL is [https://username.github.io/em-omc/](https://arabellayao.github.io/em-omc/). Please replace *em-omc* with the repository of your workshop.
 
 2. Append the URL with the details of your workshop.
-    The complete URL will look similar to this: [https://arabellayao.github.io/em-omc/enterprise-manager/emcc/workshops/freetier/index.html](https://arabellayao.github.io/em-omc/enterprise-manager/emcc/workshops/freetier/index.html), which can be shared for review.
+    The complete URL will look similar to this: [https://username.github.io/em-omc/enterprise-manager/emcc/workshops/freetier/index.html](https://.github.io/em-omc/enterprise-manager/emcc/workshops/freetier/index.html), which can be shared for review.
 
 
 ## Task 2: Change your status
@@ -68,7 +68,7 @@ You have finished developing your workshop. To publish your workshop, you still 
   ![Self QA Checklist](./images/self-qa-checklist-2.png " ")
 
   Workshop teams and stakeholders can watch this video below on how to self QA or verify the QA of a workshop.
-  [](youtube:8tirP-hibsk)
+  [Self QA Checklist](youtube:8tirP-hibsk)
 
 5. You *MUST* check all the boxes on the form, upload the images, update the pull request link if you created one (optional) and click **Save** to save the checklist changes before you update your workshop status to Self QA Complete; otherwise, you will get warning and will not be able to update your workshop status to Self QA Complete.
 
@@ -88,7 +88,7 @@ You have finished developing your workshop. To publish your workshop, you still 
   ![Completed Checklist](./images/completed-checklist-2.png " ")
   ![Last QA details populated](./images/last-qa-details-populated.png " ")
 
-8. Your stakeholders will verify the QA within 2 business days. They will reach out to you via WMS if there are more changes needed. Otherwise, they will move the workshop into **Completed** status. If you have not heard back from your stakeholders 2 business days after you submit the Self QA form, please message them via WMS. While you are waiting to hear back from your stakeholder, you can go to Lab 6 Task 2 and request publishing.
+8. Your stakeholders will verify the QA. They will reach out to you via WMS if there are more changes needed. Otherwise, they will move the workshop into **Completed** status. If you have not heard back from your stakeholders 2 business days after you submit the Self QA form, please message them via WMS. While you are waiting to hear back from your stakeholder, you can go to Lab 6 Task 2 and request publishing.
 
   ![Message](images/message-team.png " ")
 
@@ -99,6 +99,11 @@ You have finished developing your workshop. To publish your workshop, you still 
 ## Task 4: Quarterly QA
 
 For the workshop in **Completed** or **Quarterly QA Complete** status and have Published - Public or Published - Event entries, we want to ensure that customers benefit from workshops that contain up-to-date information. So, the workshop team needs to perform Quarterly QA of the workshop every 90 days.
+
+> **Note:** Maintaining several workshops and running through the QA can be time consuming. We are suggesting a two-phased approach to make sure critical items are addressed regularly.
+  - **Lite QA:** Review the workshop on a high level for screenshots, links, and instructions to ensure the workshop is current and is using the latest version. Make any minor changes, if necessary, to keep the content updated.
+  - **In-depth QA:** Run through the workshop end-to-end to ensure it is working as expected since it was published. Update workshop if necessary
+  - **Example:** If there are ten workshops to QA, in the first quarter, you can perform lite QA reviews for the first 1-5 (or a selection) workshops and in-depth QA for the following 5-10 workshops. Subsequently, in the following quarter, you can perform in-depth QA for the first 1-5 workshops and lite QA for the following 5-10 workshops. This approach will allow you to manage more workshops while ensuring thorough quality assessment efficiently.
 
 1. The workshop status will automatically update to Quarterly QA after 90 days from the time you have last performed QA of your workshop. When the status is updated to Quarterly QA, the workshop team will receive an email with instructions to perform Quarterly QA of the workshop.
 
@@ -151,14 +156,13 @@ For the workshop in **Completed** or **Quarterly QA Complete** status and have P
 ## Acknowledgements
 
 * **Author:**
-   * Michelle Malcher, Senior Manager, Oracle Database Product Management
+   * Michelle Malcher, Director, Oracle Database Product Management
 * **Contributors:**
-    * Lauran Serhal, Principal User Assistance Developer, Oracle Database and Big Data User Assistance
-    * Anuradha Chepuri, Principal User Assistance Developer, Oracle GoldenGate
-    * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
-    * Kamryn Vinson, Product Manager, Database
-    * Anoosha Pilli, Product Manager, Database
-    * Arabella Yao, Product Manager, Database
-    * Madhusudhan Rao, Product Manager, Database
+    * Lauran Serhal, Consulting User Assistance Developer, Oracle Database and Big Data
+    * Anuradha Chepuri, Consulting User Assistance Developer, Oracle GoldenGate
+    * Aslam Khan, Senior Manager, ODI, OGG, EDQ
+    * Kamryn Vinson, Senior Product Manager, Database
+    * Madhusudhan Rao, Principal Product Manager, Database
 
-* **Last Updated By/Date:** Anoosha Pilli, February 2023
+* **Last Updated By/Date:**
+    * Ana Coman, Technical Program Manager, Oracle Database Product Management, April 2024

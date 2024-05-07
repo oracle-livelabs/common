@@ -7,13 +7,12 @@ For a workshop to go from an idea to a LiveLabs workshop in production, it has t
 1. After the workshop team submits the workshop request (see details in Lab 1 -> Task 1), the workshop is in *Submitted* status. The workshop's *council* group will review the workshop within 2-3 business days. Council will either approve the workshop and move it to *Approved*, or ask the workshop team for more information and move it to *More Info Needed*.
 
 This is the status you are currently at if you worked through the first couple steps of this lab. When you hit save on the information you provided as details about your new workshop, it saves it in submitted status. Which means it is ready for the council to review and either approve your workshop or ask for more details. The council does receive an automated email message alerting them to this submission as well as having this appear on their dashboard in WMS for newly submitted workshops.
-
->**Note:** If workshop teams have not heard back from the council for more than 3 business days, please follow up with your council group. To find your council members, go to WMS, under **People & Role Reports**, select **Workshop Council Members**, and you can find your council members.
+x . To find your council members, go to WMS, under **People & Role Reports**, select **Workshop Council Members**, and you can find your council members.
 
    ![Submitted](./images/submitted.png " ")
 
 1. Council asks workshop team for *more information*. The workshop team will respond to the council via the **Message the Team** tab in WMS to get the workshop approved.
-
+fWorkshop authors can watch the video below on how to self-QA your workshop. Stakeholders can also watch the video below to learn how to verify the QA of a workshop.
 If something is unclear or more details are needed to understand the workshop, the council will ask for more information before continuing. This is to validate the use case make sure that what is being highlighted is clear or could be just wanting more details to how this is going to be accomplished.
   ![More Info Needed](./images/more-info-needed.png " ")
 
@@ -38,7 +37,7 @@ If something is unclear or more details are needed to understand the workshop, t
 
 ### **What's Next?**
 
-Now that you know all about Oracle GitHub project, learning-library repository and LiveLabs workshop development workflow, you are all set to begin the labs! Click **Lab 1: Submit new workshop in WMS** in the Contents menu to get stated.
+Now that you know all about Oracle LiveLabs GitHub project repository and LiveLabs workshop development workflow, you are all set to begin the labs! Click **Lab 1: Submit new workshop in WMS** in the Contents menu to get stated.
 
 ## Want to learn more about LiveLabs workshops?
 
@@ -55,4 +54,4 @@ Now that you know all about Oracle GitHub project, learning-library repository a
     * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
     * Arabella Yao, Product Manager, Database Product Management
 * **Last Updated By/Date:**
-    * Michelle Malcher, August 2022
+    * Ana Coman, March 2024

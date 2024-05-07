@@ -4,8 +4,6 @@
 
 Oracle LiveLabs has a set folder structure that you will need to follow for developing your workshops. The folder structure is only part of the development since the workshop content is contained in the Markdown files and images that you write and edit as your workshop development. You can use your preferred editor to author and edit your Markdown (.md) content for rendering the Workshop output.
 
-> **Note:** Oracle recommends using **Visual Studio Code (VSCode)**. If you are currently using **Atom** - it is being retired, and you should move to use VSCode.
-
 ### Objectives
 
 * Clone and fork Oracle LiveLabs GitHub repositories.
@@ -17,13 +15,13 @@ Oracle LiveLabs has a set folder structure that you will need to follow for deve
 
 ## Task 1: Fork repositories of the oracle-livelabs organization on your GitHub account
 
-  We create workshops and labs in the repositories of the **oracle-livelabs** organization. You must fork a repository to create a duplicate personal copy of the repository on your GitHub account. You own the forked (stage) repository, and you can edit its contents without affecting the parent (production) repository.
+  We create workshops and labs in the repositories of the **oracle-livelabs** organization. You must fork a repository to create a duplicate personal copy of the repository on your GitHub account. You own the forked (stage) repository, and you can edit its contents without affecting the main (production) repository.
 
-  For example, if a user named arabellayao forks the **database** repository in the **oracle-livelabs** project, a duplicate repository [arabellayao/database](https://github.com/arabellayao/database) is created.
-  
-  You should also fork the [common repository](https://github.com/orgs/oracle-livelabs/common). Even though you will not be changing files here, you can use the common/images that are available and the sample workshops you will be using for templates are contained here.
+  For example, if a user named arabellayao forks the **database** repository in the **oracle-livelabs** project, a duplicate repository [user1/database](https://github.com/arabellayao/database) is created.
 
-  After your workshop is approved by the council group, you first need to identify **which one repository among the [24 repositories](https://github.com/orgs/oracle-livelabs/repositories) you want to create your workshop in**. That decision depends on what product your workshop is about, or which council your workshop belongs to. For example, if your workshop is about GoldenGate, you should create your workshop in the [oracle-livelabs/goldengate](https://github.com/oracle-livelabs/goldengate) repository. Click [here](https://github.com/orgs/oracle-livelabs/repositories) to see the complete list of the repositories, and select one repository that fits your workshop.
+  You should also fork the [user repository](https://github.com/oracle-livelabs/common). Even though you will not be changing files here, you can use the common/images that are available and the sample workshops you will be using for templates are contained here.
+
+  After your workshop is approved by the council group, you first need to identify **which one repository among the [29 repositories](https://github.com/orgs/oracle-livelabs/repositories) you want to create your workshop in**. That decision depends on what product your workshop is about, or which council your workshop belongs to. For example, if your workshop is about GoldenGate, you should create your workshop in the [oracle-livelabs/goldengate](https://github.com/oracle-livelabs/goldengate) repository. Click [here](https://github.com/orgs/oracle-livelabs/repositories) to see the complete list of the repositories, and select one repository that fits your workshop.
 
   If you are not sure which repository to put your workshop in or do not see a repository that fits your workshop, please contact your council group or contact our LiveLabs team. We can give you some suggestions, and even create a new repository for you if necessary.
 
@@ -31,7 +29,7 @@ Oracle LiveLabs has a set folder structure that you will need to follow for deve
 
 1. Log in to the [GitHub Web UI](http://github.com), using your GitHub account.
 
-2. Navigate to the [Oracle Livelabs GitHub project](https://github.com/oracle-livelabs).
+2. Navigate to the [Oracle Livelabs GitHub organization](https://github.com/oracle-livelabs).
 
 3. Click **Repositories** to review the existing repositories. Select one repository that fits your workshop and click that repository.
 
@@ -45,7 +43,7 @@ Oracle LiveLabs has a set folder structure that you will need to follow for deve
 
   ![Create fork](./images/create-fork.png " ")
 
-6. Then, user arabellayao has forked the **goldengate** repository.
+6. Then, user has forked the **goldengate** repository.
 
   ![Local repository](./images/local-repo.png " ")
 
@@ -54,7 +52,6 @@ In the next Task, you will clone this forked repository.
 ## Task 2: Clone the forked repository
 A clone is a copy of your forked repository that lives on your local computer instead of on [GitHub Web UI](http://github.com). When you clone your forked repository, you can edit the files in your preferred editor, recommended **Visual Studio Code**, and use the **GitHub Desktop** client to keep track of your changes without having to be online.
 
->**Note:** Make sure you are performing the following steps **off VPN**. When performing clones and fetching origin you should not be on VPN, but editing and other steps such as pull request it does not matter.
 
 To clone the forked repository:
 1. Open your **GitHub Desktop** application and log in using your GitHub account.
@@ -63,7 +60,7 @@ To clone the forked repository:
 
     ![Clone repository.](./images/git-hub-desktop-clone-repository.png " ")
 
-3. Select your repository such as **your account/repo** from **Your Repositories**. In this example, select **arabellayao/goldengate**. Under **Local Path**, select the local path on your machine where the repository is going to be cloned (copied). This is where the repository files get copied to your local file system. Click **Clone**.
+3. Select your repository such as **your account/repo** from **Your Repositories**. In this example, select **username/goldengate**. Under **Local Path**, select the local path on your machine where the repository is going to be cloned (copied). This is where the repository files get copied to your local file system. Click **Clone**.
     >**Note:** If you cannot find the repo you just forked, click the **refresh** button.
 
     ![Available repositories dialog box.](./images/clone.png " ")
@@ -102,23 +99,21 @@ To clone the forked repository:
   2. If you have multiple Oracle LiveLabs repositories, first switch to the repository that you will work on. Expand the dropdown list of **Current Repository**. Click the repository that you want to sync. In this case, I select the *em-omc* repository as an example, but the following process is the same for syncing other repositories.
   ![Switch repository.](./images/switch-repo.png " ")
 
-  3. Make sure you perform the following steps **off VPN**. Otherwise, your GitHub Desktop may be stuck.
-
-  4. Click **Fetch origin**.
+  3. Click **Fetch origin**.
   ![Fetch origin.](./images/fetch-origin.png " ")
 
-  5. Select **Branch > Merge into Current Branch...** to display the **Merge into main** window.
+  4. Select **Branch > Merge into Current Branch...** to display the **Merge into main** window.
 
     ![Merge current branch.](./images/git-hub-merge-current-branch.png " ")
 
-  6. Under the **Default Branch**, the main branch is selected by default. This indicates the local clone on your PC.
+  5. Under the **Default Branch**, the main branch is selected by default. This indicates the local clone on your PC.
     ![Main branch is selected by default.](./images/git-hub-merge-local-clone-default-branch.png " ")
 
-  7. Scroll down the **Merge into main** window, select **upstream/main** (this is your production repository which is oracle-livelabs/repository), and then click **Create a merge commit**. In this example, this will merge 1 commit by other people from the **upstream/main** into the clone on the local PC.
+  6. Scroll down the **Merge into main** window, select **upstream/main** (this is your production repository which is oracle-livelabs/repository), and then click **Create a merge commit**. In this example, this will merge 1 commit by other people from the **upstream/main** into the clone on the local PC.
 
     ![Create a Merge Commit.](./images/create-merge-commit.png " ")
 
-  8. When the merge is completed, a **"Successfully merged upstream/main into main"** message is displayed. To push the new commits from the local clone to your forked location, click **Push origin**. If you get an *Authentication failed* error, refer to the Troubleshooting section at the end of this lab.
+  7. When the merge is completed, a **"Successfully merged upstream/main into main"** message is displayed. To push the new commits from the local clone to your forked location, click **Push origin**. If you get an *Authentication failed* error, refer to the Troubleshooting section at the end of this lab.
 
     ![Push Origin.](./images/push-origin.png " ")
 
@@ -160,7 +155,6 @@ The following describes the components of the above example:
 ## Task 6: Commit your changes in your clone
 When you create, delete, or modify assets in your clone (local copy), you should commit (save) those changes to your clone, and then push those changes from your clone to your fork. Then these changes get saved to your forked repository.
 
->**Note:** Make sure you are performing the following steps **off VPN**.
 
 To commit your changes:
 1. Start your **GitHub Desktop** client.
@@ -179,7 +173,7 @@ To commit your changes:
 
 After you upload the content from your clone to your fork, request your review team members to review this content by providing them with access to **your GitHub Pages site URL** (or the URL of your forked repository).
 
->**Note:** You should perform the following actions in your forked GitHub repository (e.g. [https://github.com/arabellayao/em-omc](https://github.com/arabellayao/em-omc)), instead of the production repository (e.g. [https://github.com/oracle-livelabs/em-omc](https://github.com/oracle-livelabs/em-omc)).
+>**Note:** You should perform the following actions in your forked GitHub repository (e.g. [https://github.com/username/em-omc](https://github.com/arabellayao/em-omc)), instead of the production repository (e.g. [https://github.com/oracle-livelabs/em-omc](https://github.com/oracle-livelabs/em-omc)).
 
 The GitHub Web UI has a feature called **Set Up GitHub Pages for Your Fork** to Test Your Content. This feature performs a dynamic conversion of the Markdown files (.md files you have developed using your Atom Editor) to HTML. You can preview your workshop and labs on your forked repository and provide this URL to your reviewers.
 
@@ -301,7 +295,7 @@ If you have not updated your local GitHub repo with GitHub repo in oracle-livela
 
 >**Note:** Make sure you are performing the following actions **off VPN**.
 
-1. Navigate to your local GitHub repository or your workshop folder in your terminal or VScode.
+1. Find below some instructions of Git Bash
 
 2. Make sure you have Git installed.
 
@@ -351,8 +345,6 @@ If you have not updated your local GitHub repo with GitHub repo in oracle-livela
 
 ### Issue 5: Mess up GitHub Repo and Want to Delete the Repo
 
->**Note:** Do this only if necessary.
-
 In the worst case, if you cannot resolve issues in your local or staging repo, and want to delete your entire repository, follow the below steps:
 
 1. Open up a browser. Go to your repository (your fork). Click **Settings**.
@@ -371,7 +363,7 @@ In the worst case, if you cannot resolve issues in your local or staging repo, a
 
 ### Issue 6: Authentication error
 
-  ![Authentication failed.](../3-labs-maintain-github/images/authentication-failed.png " ")
+  ![Authentication failed.](./images/authentication-failed.png " ")
 
 First, make sure that you are logged into your GitHub account in GitHub Desktop. If it still does not solve the error, try the following steps.
 
@@ -380,13 +372,13 @@ If you have already created an SSH key in your local computer and added the key 
 1. If you have not generated SSH keys in your local computer, first follow the *(Optional) Lab 5: Generate SSH keys* on the left to generate SSH keys in your local computer.
 
 2. Now you have your public and private SSH keys. Go to your GitHub account in a browser. Click the arrow next to your profile picture on the upper right, and click **Settings**. Click **SSH and GPG keys**. If you have not added any SSH keys to your GitHub account, you will not see any SSH keys displayed. Then click **New SSH key**.
-  ![Settings](../3-labs-maintain-github/images/settings-ssh.png " ")
+  ![Settings](./images/settings-ssh.png " ")
 
 3. For **Title**, give your SSH key a name. In the **Key** field, copy and paste your public SSH key. Then, click **Add SSH key**.
-  ![Add SSH key](../3-labs-maintain-github/images/add-ssh-key.png " ")
+  ![Add SSH key](./images/add-ssh-key.png " ")
 
 4. After the SSH key is added, you can see it under SSH keys on your GitHub page.
-  ![SSH key added](../3-labs-maintain-github/images/ssh-key-displayed.png " ")
+  ![SSH key added](./images/ssh-key-displayed.png " ")
 
 5. Open up your terminal. Go to where *you cloned your GitHub repository* (which may be different from the example below). In this case, I am using the **em-omc** repository as an example, but the process is the same for other repositories.
 
@@ -410,34 +402,28 @@ If you have already created an SSH key in your local computer and added the key 
     ```
 
 8. Finally, go back to **GitHub Desktop** UI, and click **Push origin**. This should solve the authentication issue, and you can continue the lab.
-  ![Push origin.](../3-labs-maintain-github/images/push-origin.png " ")
+  ![Push origin.](./images/push-origin.png " ")
 
-### Issue 7: GitHub Desktop is stuck
 
-1. First make sure that you are off VPN.
-
-2. Re-open the GitHub desktop.
-
-### Issue 8: GitHub Desktop does not reflect the repo I work on
+### Issue 7: GitHub Desktop does not reflect the repo I work on
 
 If you have multiple Oracle LiveLabs repositories, you need to switch to the repository that you will work on in GitHub Desktop. Expand the dropdown list of **Current Repository**, and click the repository that you need.
 
-  ![Switch repository.](../3-labs-maintain-github/images/switch-repo.png " ")
+  ![Switch repository.](./images/switch-repo.png " ")
 
 
 ## Acknowledgements
 * **Author:**
-    * Michelle Malcher, Senior Manager, Oracle Database Product Management
+    * Michelle Malcher, Director, Oracle Database Product Management
 * **Contributors:**
-    * Lauran Serhal, Principal User Assistance Developer, Oracle Database and Big Data User Assistance
-    * Anuradha Chepuri, Principal User Assistance Developer, Oracle GoldenGate
-    * Arabella Yao, Product Manager, Database Product Management
+    * Lauran Serhal, Consulting User Assistance Developer, Oracle Database and Big Data
+    * Anuradha Chepuri, Consulting User Assistance Developer, Oracle GoldenGate
 
 * **Reviewed by:**
-    * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
-    * Kay Malcolm, Database Product Management
-    * Arabella Yao, Database Product Management
-    * Andres Quintana
-    * Brianna Ambler
+    * Aslam Khan, Senior Manager, ODI, OGG, EDQ
+    * Kay Malcolm, Vice President, Database Product Management
+    * Andres Quintana, Senior Product Manager
+    * Brianna Ambler, Product Manager
 
-* **Last Updated By/Date:** Arabella Yao, Dec 2022
+* **Last Updated By/Date:**
+    * Ana Coman, Technical Program Manager, Oracle Database Product Management, April 2024
