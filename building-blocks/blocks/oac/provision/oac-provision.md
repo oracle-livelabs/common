@@ -84,9 +84,9 @@ You may now proceed to the next lab.
 ## **Acknowledgements**
 
 - **Authors:**
-    * Priscila Iruela - Technology Product Strategy Director
-    * Juan Antonio Martin Pedro - Analytics Business Development
     * Lauran K. Serhal, Consulting User Assistance Developer
+    * Priscila Iruela, Technology Product Strategy Director
+    * Juan Antonio Martin Pedro, Analytics Business Development
 
 - **Contributors:**
     * Victor Martin

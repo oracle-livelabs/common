@@ -7,11 +7,11 @@
 
 1. On the **Data Load** page, click the **LOAD DATA** card.
 
-    ![Click Link Data.](images/click-load-data.png)
+    ![Select Link Data and Cloud Store.](images/data-load-home-page-callout.png =70%x*)
 
 2. On the **Load Data** page, click the **Cloud Store** tab.
 
-    ![Select Link Data and Cloud Store.](images/load-data-page.png)
+    ![Click Cloud Store.](images/click-cloud-store-tab.png =70%x*)
 
 3. Copy the following object storage URL and paste it in the **Select Cloud Store Location or enter public URL** field. The **moviestream\_landing** Oracle Object Storage bucket that contains the data is located in a different tenancy than yours, **c4u04**; therefore, you will use the following URL.
 
@@ -33,11 +33,11 @@
 
 6. A **Load to Single Target Table** dialog box is displayed to prompt you whether or not you want to link all objects in this folder matching **.csv** to a single target table. This folder contains a single file, `customer-contact.csv`. In general, data lake folders contain many files of the same type, as you will see with sales data. Click **Yes**.
 
-    ![Click yes to load objects to a single table.](images/load-to-single-table.png)
+    ![Click yes to load objects to a single table.](images/load-to-single-table.png =60%x*)
 
     The **customer\_contact** target table to be created for the selected `.csv` file is displayed in the data loading job section.
 
-    ![The customer_contact target table is displayed.](images/customer_contact-target-table.png)
+    ![The customer_contact target table is displayed.](images/customer_contact-target-table.png " ")
 
 7. Drag and drop the **genre**, **sales\_sample**, and **pizza\_location** folders onto the data linking job section. Click **Yes** when prompted for each target table.
 
@@ -45,42 +45,44 @@
 
 8. Click the **Settings** icon (pencil) for the **customer\_contact** link task to view its settings.
 
-    ![Click the pencil icon to open settings viewer for customer_contact load task](images/click-customer-contact-settings.png)
+    ![Click the pencil icon to open settings viewer for customer_contact load task](images/click-customer-contact-settings.png =50%x*)
 
     The **Load Data from Cloud Store Location customer_contact** settings panel is displayed.
 
-9. The **Database Actions** link job will create a **CUSTOMER_CONTACT** table with the listed columns and data types that are based on the selected *.csv file. Review the information and the loading options. In the **Mapping** section, notice that you can change the target column names, data types, and length/precision. Click **Close** to close the settings viewer panel.
+9. The **Database Actions** load job will create a **CUSTOMER_CONTACT** table with the listed columns and data types that are based on the selected *.csv file. Review the information and the loading options. In the **Mapping** section, notice that you can change the target column names, data types, and length/precision. Click **Close** to close the settings viewer panel.
 
     ![View the settings for customer_contact load task](images/customer-contact-settings.png)
 
 10. Click the **Settings** icon (pencil) for the **sales\_sample** load task to view its settings.
 
-    ![View the sales-sample load task settings.](images/sales-sample-preview.png)
+    ![View the sales-sample load task settings.](images/click-sales-sample-settings.png =50%x*)
 
 11. The Load tool makes intelligent choices for the target table name and properties. Since this is an initial load, accept the default option of **Create Table**, which conveniently creates the target table in the Autonomous Database instance, without the need to predefine the table in SQL. Change the name of the target table to be created from **SALES_SAMPLE** to **CUSTSALES**. Next, click **Close**.
 
     ![Update table name](images/change-target-table-name.png)
 
-12. Click **Start** to run the data link job. In the **Start Link From Cloud Store** dialog box, click **Run**.
+12. Click **Start** to run the data load job. In the **Start Load From Cloud Store** dialog box, click **Run**.
 
-    ![Run the data load job](images/run-data-link.png)
+    ![Run the data load job](images/run-data-load.png)
 
     > **Note:** The load job can take about 2 minutes to complete.
 
-13. After the load job is completed, make sure that all of the data load cards have green check marks next to them. This indicates that your data load tasks have completed successfully.
+13. After the load job is completed, make sure that all of the data load cards have the copy icons next to them. You can click the **Report** button for each load job to view a report of total rows processed successfully and failed for the selected table.
 
     ![Load job tasks completed. View the genre load task settings.](images/load-completed.png)
 
-14. Click the **Settings** icon (pencil) for the **genre** load task to view its settings.
+14. Click the **Report** button for the **CUSTSALES** load job. The details about the successful load job is displayed. Click **Close**.
 
-15. Review some of the linked data. Click the **Table** tab to view the **genre** data.
+    ![Click Report for custsales.](images/click-custsales-report.png)
+
+15. Click the **ellipsis** icon for the **genre** load task to view its settings. Next, click **Table** > **View Details** from the context menu.
+
+    ![View genre data.](images/click-genre-ellipsis.png)
+
+16. The **Preview** tab is selected by default. This shows the **genre** data.
 
     ![View genre data](images/preview-genre-table.png)
 
-16. Click **Close** to exit the **genre** task preview.
+17. Click **Close** to exit the **genre** task preview and return to the load data dashboard.
 
-     ![Click Done.](images/data-load-page.png)
-
-17. Click **Done** to exit the **Link Data** page and return to the **Data Load** page.
-
-    ![Data Load page.](images/data-load-page-redisplayed.png)
+     ![Click Close.](images/data-load-page.png)

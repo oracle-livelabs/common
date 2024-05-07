@@ -4,7 +4,7 @@
         "description":"Learn how to provision Autonomous Database using the OCI console."
     }
 -->
-# Create an Oracle Autonomous Database 
+# Create an Oracle Autonomous Database
 
 ## Introduction
 

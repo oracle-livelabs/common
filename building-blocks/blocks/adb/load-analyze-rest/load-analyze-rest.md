@@ -81,7 +81,7 @@ Create a **News API** account as follows:
 
 ## Task 2: Create a PL/SQL Function to Retrieve News for an Actor
 
-Now that you have the API key, create a PL/SQL function that queries the REST endpoint using the parameters above.
+Now that you have the API key, create a PL/SQL function that queries the REST endpoint using the parameters above. If you already have the SQL Worksheet open from the previous lab, skip to step 6 below; otherwise, start with step 1.
 
 1. Log in to the **Oracle Cloud Console**, if you are not already logged as the Cloud Administrator.
 
@@ -345,4 +345,4 @@ You may now proceed to the next lab.
 * **Authors:**
     * Marty Gubar, Autonomous Database Product Management
     * Lauran K. Serhal, Consulting User Assistance Developer
-* **Last Updated By/Date:** Lauran K. Serhal, March 2024
+* **Last Updated By/Date:** Lauran K. Serhal, April 2024
