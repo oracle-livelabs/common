@@ -16,17 +16,17 @@ This lab assumes you have:
 
     ```
     <copy>
-    docker login yyz.ocir.io
+    podman login yyz.ocir.io
     </copy>
     ```
 
-3. Now that you are prompted to login, type the username in the format of ***tenancy_name***/***username***. You will find that information in the Login Details of your LiveLabs reservation. Hit enter, and it should say "Login Successful".
+3. Now that you are prompted to login, type the username in the format of ***tenancy_name***/***username***. You will find that information in the Login Details of your LiveLabs reservation. Hit enter, and it should say "Login Succeeded".
 
 4. Run this following command, and it will pull down the latest version of the 23ai ADB image.
 
     ```
     <copy>
-    podman pull yyz.ocir.io/c4u04/livelabs:adb-free-latest
+    podman pull yyz.ocir.io/c4u04/livelabs:latest-23ai
     </copy>
     ```
 
@@ -38,7 +38,7 @@ This lab assumes you have:
     </copy>
     ```
 
-6. Run the image.
+6. Run the image. Replace the WALLET PASSWORD and ADMIN PASSWORD variables with your own.
 
     ```
     <copy>
@@ -48,12 +48,12 @@ This lab assumes you have:
     -p 8443:8443 \
     -p 27017:27017 \
     -e WORKLOAD_TYPE='ATP' \
-    -e WALLET_PASSWORD=*** \
-    -e ADMIN_PASSWORD=*** \
+    -e WALLET_PASSWORD='xxxxx' \
+    -e ADMIN_PASSWORD='xxxxx' \
     --cap-add SYS_ADMIN \
     --device /dev/fuse \
     --name adb-free \
-    yyz.ocir.io/c4u04/livelabs:adb-free-latest
+    yyz.ocir.io/c4u04/livelabs:latest-23ai
     </copy>
     ```
 
@@ -77,7 +77,7 @@ This lab assumes you have:
 
     ```
     <copy>
-    adb-cli add-database --workload-type "ATP" --admin-password "Welcome_MY_ATP_1234"  
+    adb-cli add-database --workload-type "ATP" --admin-password "Welcome_MY_ATP_1234" --database-name MYATP
     </copy>
     ```
 
