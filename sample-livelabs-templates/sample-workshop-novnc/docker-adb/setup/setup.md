@@ -65,9 +65,33 @@ This lab assumes you have:
     </copy>
     ```
 
-8. Now, the ADB container is live and you can run commands against it. Here are a few examples.
+8. Now, the ADB container is live and you can run commands against it. You can view the list of available commands using the following command.
 
+    ```
+    <copy>
+    adb-cli --help 
+    </copy>
+    ```
 
+9. You can add a database.
+
+    ```
+    <copy>
+    adb-cli add-database --workload-type "ATP" --admin-password "Welcome_MY_ATP_1234"  
+    </copy>
+    ```
+
+10. You can change the admin password.
+
+    ```
+    <copy>
+    adb-cli change-password --database-name "MYATP" --old-password "Welcome_MY_ATP_1234" --new-password "Welcome_12345"
+    </copy>
+    ```
+
+11. This is how you connect to ORDS.
+
+12. Finally, this is how you would connect to APEX.
 
 ## Acknowledgements
 * **Author** - Kaylien Phan, Senior Product Manager
