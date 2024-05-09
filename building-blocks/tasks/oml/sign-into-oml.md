@@ -15,7 +15,7 @@ A notebook is a web-based interface for data analysis, data discovery, data visu
 
 	![Database Actions](images/db-users-db-actions.png)
 
-2. On the Database Actions page, go to the Development section and click **Oracle Machine Learning**. This opens the Oracle Machine Learning sign in page.
+2. On the Database Actions page, go to the Development tab and click **Oracle Machine Learning**. This opens the Oracle Machine Learning sign in page.
 
 	 ![Oracle Machine Learning Notebooks in ADW](images/adb-dev-oml.png)
 
