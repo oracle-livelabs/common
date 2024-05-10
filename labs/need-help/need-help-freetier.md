@@ -10,9 +10,9 @@ After reading those troubleshooting tips, if you still find yourself stuck or wo
 For more about getting support using our email, click [here](#HowtoFormatYourSupportEmailRequest).
 
 ### Common Issues Table of Contents
-  - [Connectivity Issues? Unable to Upload Data or Connect to the Database? Hmmm... can't reach this page? What ports should I open to gain access to the workshop?](#ConnectivityIssues?UnabletoUploadDataorConnecttotheDatabase?Hmmm...can'treachthispage?WhatportsshouldIopentogainaccesstotheworkshop?)
+  - [Connectivity Issues?](#ConnectivityIssues?)
   - [Cannot Create Passwords for Database Users?](#CannotCreatePasswordsforDatabaseUsers?)
-  - [Cannot find Groups under Identity & Security in my tenancy?](CannotfindGroupsunderIdentity&Securityinmytenancy?)
+  - [Cannot find Groups under Identity and Security in my tenancy?](#CannotfindGroupsunderIdentityandSecurityinmytenancy?)
 
 ## How to Format Your Support Email Request
 This will construct an email in your default mail application that is auto-populated to address our LiveLabs support inbox and will also include your current workshop in the subject line. Follow the steps below to contact us and get a quick resolution to your issue.
@@ -26,7 +26,7 @@ This will construct an email in your default mail application that is auto-popul
 
 4. Attach a **Screenshot** and **Any Troubleshooting Steps** you've tried, so that we can recreate the issue and provide a timely and accurate solution.
 
-## Connectivity Issues? Unable to Upload Data or Connect to the Database? Hmmm... can't reach this page? What ports should I open to gain access to the workshop?
+## Connectivity Issues?
 
 Are you connected to a **VPN**, **Corporate Network**, or behind a strict **Firewall**?
 
@@ -56,7 +56,7 @@ Try these options to access the environment again:
 
 1. Make sure the password you enter satisfies the following [restrictions](https://docs.oracle.com/en/cloud/saas/marketing/responsys-user/Account_PasswordRestrictions.htm).
 
-## Cannot find Groups under Identity & Security in my tenancy?
+## Cannot find Groups under Identity and Security in my tenancy?
 
 1. From the navigation menu, click **Identity & Security** and select **Domains** under **Identity**.
 
@@ -73,4 +73,4 @@ Try these options to access the environment again:
 ## Acknowledgements
 * **Author** - LiveLabs Team
 * **Contributors** - LiveLabs Team, Arabella Yao
-* **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Dec 2022
+* **Last Updated By/Date** - Carmen Berdant, Technical Project Manager, Database Product Management, Mar 2024
