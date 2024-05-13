@@ -75,5 +75,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 
 - **Author** - Troy Anthony, Database Product Management, May 2020
-- **Contributors** - Anoosha Pilli, Product Manager; Brian Spendolini; Arabella Yao, Product Manager
 - **Last Updated By/Date** - Ramona Magadan, Database Product Management, May 2024
