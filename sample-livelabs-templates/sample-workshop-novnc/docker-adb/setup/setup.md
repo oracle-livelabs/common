@@ -20,7 +20,7 @@ This lab assumes you have:
     </copy>
     ```
 
-3. Now that you are prompted to login, type the username in the format of ***tenancy_name***/***username***. The password will be your ***auth_token***. You will find all the necessary information in the Login Details of your LiveLabs reservation. Hit enter, and it should say "Login Succeeded".
+3. Now that you are prompted to login, type the username in the format of ***tenancy-name***/***username***. The password will be your ***auth-token***. You will find all the necessary information in the Login Details of your LiveLabs reservation. Hit enter, and it should say "Login Succeeded".
 
 4. Run this following command, and it will pull down the latest version of the 23ai ADB image.
 
@@ -38,7 +38,9 @@ This lab assumes you have:
     </copy>
     ```
 
-6. Run the image. Replace the WALLET PASSWORD and ADMIN PASSWORD variables with your own.
+6. Run the image. Replace the WALLET PASSWORD and ADMIN PASSWORD variables with your own. Make sure your passwords are between 12-30 characters, with at least 1 uppercase letter, 1 lowercase letter, and 1 number.
+
+    You can pass in 'ADW' (Autonomous Data Warehouse) instead of 'ATP' (Autonomous Transaction Processing) for Workload type if you choose.
 
     ```
     <copy>
@@ -57,7 +59,17 @@ This lab assumes you have:
     </copy>
     ```
 
-7. Take note of the container string that is output by the last command, and insert it into this following command before running.
+7. Wait a few minutes for the container to be healthy. It takes a bit to create the new wallet, bring up the database, change the admin password, and start ORDS. You can monitor the container status using:
+
+    ```
+    <copy>
+    podman ps
+    </copy>
+    ```
+
+    It should say (healthy), as opposed to (starting) under status before you move onto the next steps.
+
+8. Take note of the container string that is output by the last command, and insert it into this following command before running.
 
     ```
     <copy>
@@ -65,7 +77,7 @@ This lab assumes you have:
     </copy>
     ```
 
-8. Now, the ADB container is live and you can run commands against it. You can view the list of available commands using the following command.
+9. Now, the ADB container is live and you can run commands against it. You can view the list of available commands using the following command.
 
     ```
     <copy>
@@ -73,6 +85,62 @@ This lab assumes you have:
     </copy>
     ```
 
+
+## Task 2: Access Database Actions and APEX
+
+1. To access Database Actions/ORDS, open a new window in your Chrome browser and go to this website:
+
+    ```
+    <copy>
+    https://localhost:8443/ords
+    </copy>
+    ```
+
+    It must include the "https://" to work.
+
+2. Click 'Advanced' then 'Proceed to localhost (unsafe)'.
+
+3. Click 'Go' to SQL Developer Web.
+
+4. Type in 'admin' for username and the password you had set as ADMIN_PASSWORD in the run command for Task 1, Step 6.
+
+5. Underneath Development, click 'Open' for SQL or you can click SQL under Development in the hamburger menu in the top left.
+
+6. Close out the tutorial that pops up when you open the worksheet.
+
+7. We need to set the URL for APEX's image directory for it to work. We will do so by pasting in this command.
+
+    ```
+    <copy>
+    begin
+        APEX_INSTANCE_ADMIN.set_parameter(
+            p_parameter => 'IMAGE_PREFIX',
+            p_value => 'https://objectstorage.ca-toronto-1.oraclecloud.com/n/c4u04/b/apex-images/o/23.2.3/images/');
+        commit;
+    end;
+    /
+    </copy>
+    ```
+
+8. Allow clipboard to paste into SQL Developer worksheet.
+
+9. Click the green play button to run the command.
+
+10. Make sure that it says 'PL/SQL procedure successfully completed.'
+
+11. Go back to the ORDS URL, and this time click 'Go' underneath Oracle APEX.
+
+    ```
+    <copy>
+    https://localhost:8443/ords
+    </copy>
+    ```
+
+12. Sign in with the password you had set as ADMIN_PASSWORD in the run command for Task 1, Step 6.
+
+13. Now you have access to Database Actions and APEX within your ADB 23ai Container Image! Feel free to explore what's possible within your environment.
+
+<!-- 11. 
 9. You can add a database.
 
     ```
@@ -89,7 +157,6 @@ This lab assumes you have:
     </copy>
     ```
 
-<!-- 11. 
 mkdir /scratch/
 podman cp adb-free:/u01/app/oracle/wallets/tls_wallet /scratch/tls_wallet
 
