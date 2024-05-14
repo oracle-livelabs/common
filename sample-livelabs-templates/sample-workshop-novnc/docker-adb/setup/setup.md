@@ -24,7 +24,7 @@ This lab assumes you have:
 
     ![Docker login](images/2-docker-login.png)
 
-3. Now that you are prompted to login, type the username in the format of ***tenancy_name***/***username***. The password will be your ***auth_token***. You will find all the necessary information in the Login Details of your LiveLabs reservation. 
+3. Now that you are prompted to login, type the username in the format of ***tenancy-name***/***username***. The password will be your ***auth-token***. You will find all the necessary information in the Login Details of your LiveLabs reservation. 
 
     ![Copy auth token](images/4-auth-token-copy.png)
 
