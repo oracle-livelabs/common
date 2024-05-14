@@ -32,7 +32,7 @@ This lab assumes you have:
 
     ![Login succeeded](images/3-login-succeeded.png)
 
-5. Run this following command, and it will pull down the latest version of the 23ai ADB image.
+5. Run this following command, and it will pull down the latest version of the 23ai ADB image. Rerun the command if it fails.
 
     ```
     <copy>
