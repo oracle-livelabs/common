@@ -76,7 +76,7 @@ This is the result we want, to add a help tab on the left side situated with the
 
 The database team's help pages can be found below. We recommend you have seperate pages for "freetier" and "livelabs" to provide more focused support.
 
-[Database Need Help github Pages](https://github.com/oracle/learning-library/tree/master/common/labs/need-help)
+[Database Need Help github Pages](https://github.com/oracle-livelabs/common/tree/main/labs/need-help)
 
 
 1. To add your help page, we just need to add another entry to the "tutorials" lab array in the manifest.json files. We recommend inserting it at the end so that your help page is the last lab entry. Your "filename" link should point toward the link of your team's help pages. Don't forgot to change the link depending on the manifest location to their respective "freetier" or "livelabs" help pages if applicable.

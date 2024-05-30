@@ -19,7 +19,7 @@ This lab assumes you have:
 For ease of execution of this workshop, your VM instance has been pre-configured with a remote graphical desktop - accessible using any modern browser on your laptop or workstation. Proceed as detailed below to log in.
 
 1. Now that your instance has been provisioned. If you are not already on the **My Reservations** page, then:
-    - Sign in to [LiveLabs](https://developer.oracle.com/livelabs)
+    - Sign in to [LiveLabs](https://oracle.com/livelabs)
     - Click the drop-down arrow next to your **Username**
     - Click **My Reservations**
 
@@ -31,7 +31,11 @@ For ease of execution of this workshop, your VM instance has been pre-configured
 
     >**Note:** The *Launch Workshop* link will be visible only when provisioning is completed
 
-3. Click **View Login Info** and then **Launch Remote Desktop**.
+3. Click **View Login Info** and then Copy Compartment OCID, and save it to notepad.  
+   
+    ![Save OCID](./images/lllaunchlab.png "Login Information")
+
+    then **Launch Remote Desktop**.
 
     ![Login information](./images/login-info.png "Login Information")
 

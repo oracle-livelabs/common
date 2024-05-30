@@ -20,7 +20,7 @@ This lab assumes you have:
 
 ## Task 1: Gather Compute Instance Details
 1. Now that your instance has been provisioned. If you are not already on the **My Reservations** page, then:
-    - Sign in to [LiveLabs](https://developer.oracle.com/livelabs)
+    - Sign in to [LiveLabs](https://oracle.com/livelabs)
     - Click the drop-down arrow next to your **Username**
     - Click **My Reservations**
 
@@ -43,7 +43,7 @@ Now it's time to choose a path. You can connect to the compute instance by one o
 Your options are:
 1. Task 2A: Connect using Cloud Shell *(recommended)*
 2. Task 2B: Connect using MAC or a Windows CYGWIN Emulator
-3. Task 2C: Connect using Putty *(Requires you to install applications on your machine)*
+3. Task 2C: Connect using PuTTY *(Requires you to install applications on your machine)*
 
 ## Task 2A: Upload Key to Cloud Shell and Connect
 
@@ -116,7 +116,7 @@ Depending on your workshop, you may need to connect to the instance via a secure
 
 You may now **proceed to the next lab**.
 
-## Task 2C: Connect via Windows Using Putty
+## Task 2C: Connect via Windows Using PuTTY
 On Windows, you can use PuTTY as an SSH client. PuTTY enables Windows users to connect to remote systems over the Internet using SSH and Telnet. SSH is supported in PuTTY, provides for a secure shell, and encrypts information before it's transferred.
 
 1.  Download and install PuTTY. [http://www.putty.org](http://www.putty.org)
@@ -141,7 +141,7 @@ On Windows, you can use PuTTY as an SSH client. PuTTY enables Windows users to c
 
 6.  In the Category section, click **Connection** -> **SSH** -> **Auth**.
 7.  Click **Browse** and find the private key file that matches your VM’s public key. This private key should have a *.ppk* extension for PuTTy to work.
-8.  If you do not have a .ppk extension, see the [Appendix](#Appendix:TroubleshootingTips) for instructions for converting your private key to .ppk format using PuttyGen.
+8.  If you do not have a .ppk extension, see the [Appendix](#Appendix:TroubleshootingTips) for instructions for converting your private key to .ppk format using PuTTYGen.
 
     ![Select SSH private key](./images/ppk.jpg " ")
 
@@ -163,7 +163,7 @@ The participant is unable to log in to the compute instance
 There may be several reasons why you can't log in to the instance.  Here are some common ones we've seen from workshop participants
 - Permissions are too open for the private key - be sure to chmod the file using `chmod 600 ~/.ssh/<yourprivatekeyname>`
 - Incorrectly formatted SSH key
-- The user chose to log in from MAC Terminal, Putty, etc and the instance is being blocked by the company VPN (shut down VPNs and try to access or use Cloud Shell)
+- The user chose to log in from MAC Terminal, PuTTY, etc and the instance is being blocked by the company VPN (shut down VPNs and try to access or use Cloud Shell)
 - Incorrect name supplied for SSH key (Do not use sshkeyname, use the SSH key name you provided)
 - @ placed before opc user (Remove @ sign and log in using the format above)
 - Make sure you are the *oracle* user (type the command *whoami* to check, if not type *sudo su - oracle* to switch to the oracle user)
@@ -173,7 +173,7 @@ There may be several reasons why you can't log in to the instance.  Here are som
 The participant is running PuTTY on Windows and needs a private SSH key in *ppk* format
 
 #### Tips for fixing Issue #2
-If you want to use Putty to connect to your server, you must convert your SSH key into a format compatible with Putty. To convert your key into the required .ppk format, you can use PuTTYgen.
+If you want to use PuTTY to connect to your server, you must convert your SSH key into a format compatible with PuTTY. To convert your key into the required .ppk format, you can use PuTTYgen.
 
 [Download PuTTYgen](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwigtZLx47DwAhUYKFkFHf99BmAQFjAAegQIAxAD&url=https%3A%2F%2Fwww.puttygen.com%2F&usg=AOvVaw1fagG6hM51oZWfQB_rqn2t)
 
@@ -189,4 +189,4 @@ To use PuTTYgen to convert a key into .ppk format, complete the following steps:
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology
 * **Contributors** - LiveLabs Team
-* **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Dec 2022
+* **Last Updated By/Date** - Ramona Magadan, March 2024

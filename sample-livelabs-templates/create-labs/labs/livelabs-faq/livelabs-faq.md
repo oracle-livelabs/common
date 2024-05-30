@@ -102,7 +102,7 @@ For questions related to LiveLabs please review this FAQ. If you don't see an an
 9.	How to create a custom image from the Marketplace?
     -	Refer to [this](https://rpastijn.github.io/stuff/?lab=custom-image-mp-image) documentation on Github.
 10. Where can I locate the Self QA Checklist?
-    -   When you're ready to Self-QA, change your workshop status to "Self QA". This will trigger an e-mail containing the Self QA Checklist. It can also be found [here](https://objectstorage.us-ashburn-1.oraclecloud.com/p/MKKRgodQ0WIIgL_R3QCgCRWCg30g22bXgxCdMk3YeKClB1238ZJXdau_Jsri0nzP/n/c4u04/b/qa-form/o/QA.docx).
+    -   When you're ready to Self-QA, change your workshop status to "Self QA". This will trigger an e-mail containing the Self QA Checklist. 
 11. What to do if my github local and staging environment are corrupted and need to delete it and then rebuilt it?
     - Instructions to delete a forked repo on Github:
         - Go to Settings of Repo you want to unfork

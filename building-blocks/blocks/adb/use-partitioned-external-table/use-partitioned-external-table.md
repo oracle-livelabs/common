@@ -1,3 +1,9 @@
+<!--
+    {
+        "name":"Access and Load Partitioned Object Storage Data",
+        "description":"Show value of partitioned external tables to improve performance"
+    }
+-->
 # Access and Load Partitioned Object Storage Data
 
 ## Introduction

@@ -22,7 +22,7 @@ This lab assumes you have:
 For ease of execution of this workshop, your VM instance has been pre-configured with a remote graphical desktop, which is accessible using any modern browser on your laptop or workstation. Proceed as detailed below to log in.
 
 1. Now that your instance has been provisioned. If you are not already on the **My Reservations** page, then:
-    - Sign in to [LiveLabs](https://developer.oracle.com/livelabs)
+    - Sign in to [LiveLabs](https://oracle.com/livelabs)
     - Click the drop-down arrow next to your **Username**
     - Click **My Reservations**
 
@@ -42,7 +42,7 @@ For ease of execution of this workshop, your VM instance has been pre-configured
 
     ![noVNC launch remote desktop](./images/novnc-launch-get-started-2.png "noVNC launch remote desktop ")
 
-    >**Note:**  While rare, you may see an error titled **Deceptive Site Ahead** or similar depending on your browser type as shown below.
+    >**Note:**  Although uncommon, you may see an error titled **Deceptive Site Ahead** or similar depending on your browser type as shown below.
 
     Public IP addresses used for LiveLabs provisioning come from a pool of reusable addresses and this error is because the address was previously used by a compute instance long terminated, but that wasn't properly secured, got compromised, and was flagged.
 
@@ -65,7 +65,7 @@ Access to the compute instance by SSH protocol through the terminal is optional.
 Your options are:
 1. Appendix 1A: Connect using Cloud Shell *(recommended)*
 2. Appendix 1B: Connect using MAC or a Windows CYGWIN Emulator
-3. Appendix 1C: Connect using Putty *(Requires you to install applications on your machine)*
+3. Appendix 1C: Connect using PuTTY *(Requires you to install applications on your machine)*
 
 ## Appendix 1A: Upload Key to Cloud Shell and Connect
 
@@ -183,7 +183,7 @@ The participant is unable to log in to the compute instance
 There may be several reasons why you can't log in to the instance.  Here are some common ones we've seen from workshop participants
 - Permissions are too open for the private key - be sure to chmod the file using `chmod 600 ~/.ssh/<yourprivatekeyname>`
 - Incorrectly formatted SSH key
-- The user chose to log in from MAC Terminal, Putty, etc and the instance is being blocked by the company VPN (shut down VPNs and try to access or use Cloud Shell)
+- The user chose to log in from MAC Terminal, PuTTY, etc and the instance is being blocked by the company VPN (shut down VPNs and try to access or use Cloud Shell)
 - Incorrect name supplied for SSH key (Do not use sshkeyname, use the SSH key name you provided)
 - @ placed before opc user (Remove @ sign and log in using the format above)
 - Make sure you are the *oracle* user (type the command *whoami* to check, if not type *sudo su - oracle* to switch to the oracle user)
@@ -193,7 +193,7 @@ There may be several reasons why you can't log in to the instance.  Here are som
 The participant is running PuTTY on Windows and needs a private SSH key in *ppk* format
 
 #### Tips for fixing Issue #2
-If you want to use Putty to connect to your server, you must convert your SSH key into a format compatible with Putty. To convert your key into the required .ppk format, you can use PuTTYgen.
+If you want to use PuTTY to connect to your server, you must convert your SSH key into a format compatible with PuTTY. To convert your key into the required .ppk format, you can use PuTTYgen.
 
 [Download PuTTYgen](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwigtZLx47DwAhUYKFkFHf99BmAQFjAAegQIAxAD&url=https%3A%2F%2Fwww.puttygen.com%2F&usg=AOvVaw1fagG6hM51oZWfQB_rqn2t)
 
@@ -209,4 +209,4 @@ To use PuTTYgen to convert a key into .ppk format, complete the following steps:
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology
 * **Contributor** - Arabella Yao, Product Manager, Database Product Management
-* **Last Updated By/Date** - Arabella Yao, Dec 2022
+* **Last Updated By/Date** - Carmen Berdant, Mar 2024

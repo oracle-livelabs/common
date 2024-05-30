@@ -1,49 +1,28 @@
-# Welcome to Oracle CloudWorld 2022!
+# Welcome to Oracle CloudWorld 2023!
 
 ## Introduction
 
-![Cloud World Logo](images/2022-08-23-cloudworldlogo.png)
+![Cloud World Logo](images/ocw23-dark-2.png)
 
-It is a pleasure to welcome you to the Oracle CloudWorld Hands-On Lab (HOL) Experience. We want to encourage you to get hands-on in each session and follow the hands-on lab instructions.
+It is our utmost pleasure to extend a warm welcome to you as you embark on the Oracle CloudWorld Hands-On Lab (HOL) Experience. We wholeheartedly encourage and invite you to actively participate in every session, fully immersing yourself in the hands-on lab activities by closely following the provided instructions. Your engagement is key to making this experience truly exceptional.
 
-In the following sections, you can find frequently asked questions, technical requirements, and tips & tricks.
-
-<br>
-
-## Join the CloudWorld Discovery Lab Community
-
-__If you have any questions, feel free to join the Oracle CloudWorld Discovery Lab community on our public Slack channel #ocw-hol-support.__
-
-Need to create an account first? Have a look at our LiveLab Sprint [How to create a Oracle DevRel Slack account?](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=3469).
-
-Join the #ocw-hol-support Slack channel in our public Slack workspace if you have questions about any of the Oracle CloudWorld hands-on labs.
-
-> Tip: Use your HOL or Tutorial ID in your post. This helps us to find the correct expert. You can find the HOL or tutorial ID on the start page (you can, of course, also just tell us the actual title).
+>In the following sections, you will discover frequently asked questions, technical requirements, and helpful tips and tricks.
 
 
 ## Technical Requirements for Hands-on Labs
 
-All you need is your laptop and a modern web browser, and you should be good to go. We want you to get the best and most seamless hands-on lab experience. Therefore, we recommend the following browsers and minimum versions to use when accessing Oracle Cloud Infrastructure (OCI):
+All that's required is your laptop equipped with a modern web browser, and you'll be ready to start. To ensure you have the best and smoothest hands-on lab experience, we recommend using the following browsers and their minimum versions when accessing Oracle Cloud Infrastructure (OCI):
 
 <b>
 - Google Chrome 69 or later
 - Safari 12.1 or later
 - Firefox 62 or later (OCI Console does not support Firefox Private Browsing)
-</b>
-
-Some hands-on labs use *[noVNC](https://novnc.com/info.html)*. You will be informed by your host if noVNC is going be used. noVNC uses many modern web technologies, so a formal requirement list is unavailable. However, these are the minimum versions we are currently aware of:
-
-<b>
-- Chrome 64 or later
-- Firefox 79 or later
-- Safari 13.4 or later
-- Opera 51 or later
-- Edge 79 or later
+- Microsoft Edge 79 or later
 </b>
 
 ## Get Your CloudWorld Oracle Cloud Free Tier Account
 
-With your registration to CloudWorld, you are entitled to sign up for a particular CloudWorld Oracle Cloud Free Tier account. You do not need to provide any payment information, and the registration takes only a few minutes. You can explore your Oracle Cloud Infrastructure account in just a few minutes.
+As part of your CloudWorld registration, you have the privilege to create a dedicated Oracle Cloud Free Tier account for CloudWorld. No payment information is required, and the registration process itself takes just a few minutes, allowing you to swiftly access and explore your Oracle Cloud Infrastructure account.
 
 
 **Step-by-step guide: Sign up for an Oracle Cloud Free Tier Account**
@@ -78,9 +57,36 @@ With your registration to CloudWorld, you are entitled to sign up for a particul
 
     ![Sign In](images/sign-in.png =30%x* " ")
 
-9.  You are now signed in to Oracle Cloud!
+9. Next, you need to configure Multi-Factor-Authentication (MFA). Click **Enable Secure Verification** to start the process)
+
+    ![enable MFA](images/enable-mfa.png =30%x* " ")
+
+10. We support multiple ways for second-factor authentication:
+    1.  Oracle Authenticator App (**recommended**).
+    2.  3rd party authenticator apps, for example Google or Microsoft Authenticator.
+    3.  FIDO, a hardware-enabled authentication using your device's security function such as fingerprints or facial recognition. Another hardware-enabled authentication can be performed using a hardware key, for example, a YubiKey.
+
+    In this guide, we explain enabling MFA using the Oracle Authenticator App which can be downloaded in Apple App Store or Google PlayStore.
+
+    Click **Mobile App** to start the process.
+
+    ![Mobile App enablement](images/mobile-mfa.png =30%x* " ")
+
+11. In the Authenticator App, tap **Add Account**. This will open the camera application. Now scan the QR code displayed in the web browser.
+
+    ![scan QR code](images/scan-qr.png =30%x* " ")
+
+12. After scanning the QR code, your account is automatically enrolled for MFA. Please click **Done** to proceed.
+
+    ![enrolled](images/enrolled.png =30%x* " ")
+
+13. You are now signed in to Oracle Cloud!
 
     ![You are now signed in to Oracle Cloud](images/oci.png =30%x* " ")
+
+Here is a video demonstrating the MFA process:
+[](videohub:1_0y3nn2ig)
+
 
 ##  Your Oracle Account
 
@@ -107,15 +113,15 @@ Click [here](https://www.oracle.com/corporate/contact/help.html) to learn more a
 
 Here you can find a quick guide explaining how to access the LiveLabs Sandbox environment.
 
-*Please note*: Some hands-on labs provide access to preconfigured environments using noVNC (see Step 2b). Your session host will inform you about the applicable access method.
+*Please note*: Some hands-on labs provide access to preconfigured environments using noVNC (see Step 2b). Your host will inform you about the applicable access method.
 
-1. Using your *Oracle Account Login* go to [LiveLabs](https://developer.oracle.com/livelabs). Open a workshop, click **Start**, and then **Run on LiveLabs** to request a reservation for this workshop.
+1. Using your *Oracle Account Login* go to [LiveLabs](https://oracle.com/livelabs). Open a workshop, click **Start**, and then **Run on LiveLabs** to request a reservation for this workshop.
   ![Run on LiveLabs](images/run-on-livelabs.png =20%x* " ")
 
-2. Fill out information on the *Reserve Workshop* page. Check **I consent to recieve emails from LiveLabs for my reservation**. Click **Submit Reservation**.
+1. Fill out information on the *Reserve Workshop* page. Check **I consent to receive emails from LiveLabs for my reservation**. Click **Submit Reservation**.
   ![Submit Reservation](images/submit-reservation.png =20%x* " ")
 
-3. After creating a reservation for a LiveLab Workshop, you will receive an e-mail indicating that your reservation is being processed, followed by an e-mail indicating that your environment has been created.
+1. After creating a reservation for a LiveLab Workshop, you will receive an e-mail indicating that your reservation is being processed, followed by an e-mail indicating that your environment has been created.
   ![Reservation email](images/livelab-env-created-email.png =20%x* " ")
 
 >**Note:** You will receive the second created e-mail just before your selected reservation time.
@@ -160,7 +166,7 @@ Here you can find a quick guide explaining how to access the LiveLabs Sandbox en
 
 
 ### Why do I need SSH Keys?
-Some hands-on labs will use pre-provisioned environments that may require you to log in via SSH to a specific server.
+Some hands-on labs will use preprovisioned environments that may require you to log in via SSH to a specific server.
 We have used a CloudWorld-specific SSH key pair to provision the environments to save you time. That way, you can start immediately with the hands-on exercises and not have to be concerned with the initial configuration.
 
 In the following sections, we provide instructions on using the provided CloudWorld-specific SSH keys.
@@ -168,7 +174,7 @@ In the following sections, we provide instructions on using the provided CloudWo
 
 ### Option 1 (**recommended**): Oracle Cloud Shell
 
-Oracle Cloud Infrastructure comes out-of-the-box with a handy utlity: Oracle Cloud Shell.
+Oracle Cloud Infrastructure comes out-of-the-box with a handy utility: Oracle Cloud Shell.
 You can use Oracle Cloud Shell to connect to your remote server using SSH.
 
 1. After you log in to OCI, open Oracle Cloud Shell. If it is the first time using Cloud Shell, it may take a minute or so to start up.
@@ -179,14 +185,14 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
    
     ```
     <copy>
-    wget https://bit.ly/ocw22-ssh
+    wget https://developer.oracle.com/livelabs/ssh
     </copy>
     ```
 3. Unzip the archive
    
     ```
     <copy>
-    unzip ocw22-ssh
+    unzip ocw23-keys
     </copy>
     ```
 
@@ -194,15 +200,15 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
 
    You will find the following files:
 
-      * ocw2022_rsa (privayte key)
-      * ocw2022_rsa.pub (public key)
-      * ocw2022-putty.ppk (private key in Putty format - for Windows only)
+      * ocw23-rsa (private key)
+      * ocw23-rsa.pub (public key)
+      * ocw23-rsa.ppk (private key in Putty format - for Windows only)
 
 4. Modify file permissions
 
     ```
     <copy>
-    chmod 600 ocw2022_rsa
+    chmod 600 ocw23-rsa
     </copy>
     ```
 
@@ -210,7 +216,7 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
 
     ```
     <copy>
-    ssh -i ocw2022_rsa <user>@<ip-adress>
+    ssh -i ocw23-rsa <user>@<ip-adress>
     </copy>
     ```
 
@@ -218,7 +224,7 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
 <br>
 ### Option 2 (MacOS): Connect using MacOS Terminal
 
-If you are using MacOS, you can also connect using a terminal application such as the default Termional application.
+If you are using MacOS, you can also connect using a terminal application such as the default terminal application.
 
 1. Open the terminal application of your choice:
    
@@ -232,14 +238,14 @@ If you are using MacOS, you can also connect using a terminal application such a
    
     ```
     <copy>
-    wget https://bit.ly/ocw22-ssh
+    wget https://developer.oracle.com/livelabs/ssh
     </copy>
     ```
 3. Unzip the archive
    
     ```
     <copy>
-    unzip ocw22-ssh
+    unzip ocw23-keys
     </copy>
     ```
 
@@ -247,15 +253,15 @@ If you are using MacOS, you can also connect using a terminal application such a
 
    You will find the following files:
 
-      * ocw2022_rsa (privayte key)
-      * ocw2022_rsa.pub (public key)
-      * ocw2022-putty.ppk (private key in Putty format - for Windows only)
+      * ocw23-rsa (privayte key)
+      * ocw23-rsa.pub (public key)
+      * ocw23-rsa.ppk (private key in Putty format - for Windows only)
 
 4. Modify file permissions
 
     ```
     <copy>
-    chmod 600 ocw2022_rsa
+    chmod 600 ocw23-rsa
     </copy>
     ```
 
@@ -264,7 +270,7 @@ If you are using MacOS, you can also connect using a terminal application such a
 
     ```
     <copy>
-    ssh -i ocw2022_rsa <user>@<ip-adress>
+    ssh -i ocw23-rsa <user>@<ip-adress>
     </copy>
     ```
 
@@ -275,18 +281,18 @@ If you are using MacOS, you can also connect using a terminal application such a
 You can also use Putty to connect to the remote server.
 You must have Putty installed. [Download Putty](https://www.putty.org/)
 
-1. Download the ocw22-rsa.zip using a browser of your choice from the following URL:
+1. Download the ocw23-keys.zip using a browser of your choice from the following URL:
 
     ```
     <copy>
-    https://bit.ly/ocw22-ssh
+    https://developer.oracle.com/livelabs/ssh
     </copy>
     ```
-2. Unzip the file and copy the file ocw2022-putty.ppk to a folder of your choice, for example to your Windows Desktop.
+2. Unzip the file and copy the file ocw23-rsa.ppk to a folder of your choice, for example to your Windows Desktop.
 
     ![copy ppk to dekstop](images/putty-copy-to-desktop.png)
 
-3. Open Putty and add ocw2022-putty.ppk to configuration settings
+3. Open Putty and add ocw23-rsa.ppk to configuration settings
 
     ![copy ppk to dekstop](images/putty-config.png)
 
@@ -301,22 +307,22 @@ You will be prompted for the username once you click 'Open'
 ### Option 4 (Windows PowerShell): Connect using Windows Powershell
 
 If your Windows 10 or Windows 11 configuration allows to run SSH in PowerShell, you can use the following steps to connect to a remote server.
-More information on using SSH in PowerShell can be found here: [PowerShell remoting over SSH](https://learn.microsoft.com/en-us/powershell/scripting/learn/remoting/ssh-remoting-in-powershell-core)
+More information on using SSH in PowerShell can be found here: [PowerShell remote over SSH](https://learn.microsoft.com/en-us/powershell/scripting/learn/remoting/ssh-remoting-in-powershell-core)
 
-1. Open WindowsPowershell
+1. Open Windows PowerShell
 
 2. Download the SSH keys using wget
    
     ```
     <copy>
-    wget https://bit.ly/ocw22-ssh -outfile ocw-rsa.zip
+    wget https://developer.oracle.com/livelabs/ssh -outfile ocw23-keys.zip
     </copy>
     ```
 3. Unzip the archive
    
     ```
     <copy>
-    Expand-Archive .\ocw22-rsa.zip
+    Expand-Archive .\ocw23-keys.zip
     </copy>
     ```
 
@@ -324,20 +330,20 @@ More information on using SSH in PowerShell can be found here: [PowerShell remot
 
    You will find the following files:
 
-      * ocw2022_rsa (privayte key)
-      * ocw2022_rsa.pub (public key)
-      * ocw2022-putty.ppk (private key in Putty format - for Windows only)
-
-3. Connect to the remote server using SSH
+      * ocw23-rsa (private key)
+      * ocw23-rsa.pub (public key)
+      * ocw23-rsa.ppk (private key in Putty format - for Windows only)
+  
+4. Connect to the remote server using SSH
 
     ```
     <copy>
-    ssh -i ocw2022_rsa <user>@<ip-adress>
+    ssh -i ocw23-rsa <user>@<ip-adress>
     </copy>
     ```
 <hr>
 <br>
-### Option 5 (Windows WSL): Conenct using Windows Subsystem for Linux
+### Option 5 (Windows WSL): Connect using Windows Subsystem for Linux
 
 You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote server. You must have Windows Subsystem for Linux (WSL or WSL2) installed in order to use this method.
 
@@ -347,14 +353,14 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
    
     ```
     <copy>
-    wget https://bit.ly/ocw22-ssh
+    wget https://developer.oracle.com/livelabs/ssh
     </copy>
     ```
 3. Unzip the archive
    
     ```
     <copy>
-    unzip ocw22-ssh
+    unzip ocw23-rsa
     </copy>
     ```
 
@@ -362,15 +368,15 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
 
    You will find the following files:
 
-      * ocw2022_rsa (privayte key)
-      * ocw2022_rsa.pub (public key)
-      * ocw2022-putty.ppk (private key in Putty format - for Windows only)
+      * ocw23-rsa (private key)
+      * ocw23-rsa.pub (public key)
+      * ocw23-rsa.ppk (private key in Putty format - for Windows only)
 
 4. Modify file permissions
 
     ```
     <copy>
-    chmod 600 ocw2022_rsa
+    chmod 600 ocw23-rsa
     </copy>
     ```
 
@@ -378,7 +384,7 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
 
     ```
     <copy>
-    ssh -i ocw2022_rsa <user>@<ip-adress>
+    ssh -i ocw23-rsa <user>@<ip-adress>
     </copy>
     ```
 <hr>
@@ -391,14 +397,14 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
    
     ```
     <copy>
-    wget https://bit.ly/ocw22-ssh
+    wget https://developer.oracle.com/livelabs/ssh
     </copy>
     ```
 3. Unzip the archive
    
     ```
     <copy>
-    unzip ocw22-ssh
+    unzip ocw23-rsa
     </copy>
     ```
 
@@ -406,15 +412,15 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
 
    You will find the following files:
 
-      * ocw2022_rsa (privayte key)
-      * ocw2022_rsa.pub (public key)
-      * ocw2022-putty.ppk (private key in Putty format - for Windows only)
+      * ocw23-rsa (private key)
+      * ocw23-rsa.pub (public key)
+      * ocw23-rsa.ppk (private key in Putty format - for Windows only)
 
 4. Modify file permissions
 
     ```
     <copy>
-    chmod 600 ocw2022_rsa
+    chmod 600 ocw23-rsa
     </copy>
     ```
 
@@ -422,36 +428,31 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
 
     ```
     <copy>
-    ssh -i ocw2022_rsa <user>@<ip-adress>
+    ssh -i ocw23-rsa <user>@<ip-adress>
     </copy>
     ```
 
 
 ##  Find other Hands-on Labs
 
-Are you looking for the next hands-on lab to visit? Have a look at the [Session Catalog](https://reg.rf.oracle.com/flow/oracle/cloudworld/session-catalog/page/catalog)
+Are you looking for the next hands-on lab to visit? Have a look at the [Session Catalog](https://reg.rf.oracle.com/flow/oracle/cwoh23/catalog/page/catalog)
 
-##  CloudWorld Agenda
 
-Always know what is going on.
+## Visit the Oracle Community Theater and Community Lab!
 
-![CloudWorld Agenda](https://www.oracle.com/content/published/api/v1.1/assets/CONT1E0D09E6A6DD4366BF066A1B7671C8CC/native?cb=_cache_2d16&channelToken=e8a0673b81ca460986a44e776a18fa0a)
+Within the ![DatabaseWorld](https://www.oracle.com/cloudworld/databaseworld/) Demogrounds, you'll discover the Community Theater and the Community Lab.
 
-## Visit the Oracle Discovery Hub!
+The Community Theater serves as the hub for this year's technical sessions, offering a comprehensive exploration of the cutting-edge features introduced in Oracle Database 23ai. This immersive experience not only provides the quickest pathway to learning but also allows you to witness and experiment with the exciting innovations accompanying the release of Oracle Database 23ai.
 
-The Oracle Discovery Hub is the best place if you want to explorer other hands-on labs on your own pace. We have created a dedicated space for you to sit down and select from a la carte menu the workshop you like best. You can find the Oracle Discovery Hub in the Database area.
+Within the Community Lab, we present an array of hands-on workshops that empower you to delve into these experiences at your own convenience. Simply take a seat and dive right in, whether it's on one of our readily available laptops or your personal device.
 
-Venetian Level 2
+![CTT and Lab](images/dbdemogrounds.png)
 
-![Discovery Hub](./images/discovery-hub.png " ")
+You can find the DatabaseWorld activities in the Tech Anchor within the CloudWorld Hub.
 
-Times
-* Tuesday 10/18 – 1PM to 6PM 
-* Wednesday 10/19 – 8AM – 5PM
-* Thursday 10/20 - 8AM – 1PM
+![CloudWorld Hub](images/cloudworldhub.png)
 
-Have a look at the map: (Still need to add)
-![Venetian Level 2 Map](./images/venetian-map.png)
+
 
 ## Learn More
 
@@ -461,4 +462,4 @@ Have a look at the map: (Still need to add)
 ## Acknowledgements
 
 * **Author** - Kevin Lazarz, Oracle Database Product Management, Senior Principal Product Manager
-* **Last Updated By/Date** - Kevin Lazarz, August 2022
+* **Last Updated By/Date** - Kevin Lazarz, September 2023

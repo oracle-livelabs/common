@@ -116,4 +116,4 @@ This assumes that you already have an RSA-type SSH key-pair available on the loc
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology
 * **Contributors** - Arabella Yao, Product Manager, Database Product Management
-* **Last Updated By/Date** - Arabella Yao, Dec 2022
+* **Last Updated By/Date** - Ramona Magadan, March 2024

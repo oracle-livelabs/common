@@ -33,7 +33,7 @@ Follow steps below to establish a unique static hostname that will be enforced o
     <copy>
     cd /tmp
     rm -rf ll-setup
-    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/Nx05fQvoLmaWOPXEMT_atsi0G7Y2lHAlI7W0k5fEijsa-36DcucQwPUn6xR2OIH8/n/natdsecurity/b/misc/o/setup-novnc-livelabs.zip -O setup-novnc-livelabs.zip
+    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/GOsnDGZTmd1hZsH5TdsrT8ePf8_099TbUyly6WZ8WZawpLagHMBpAOpXao4KTEPc/n/c4u02/b/hosted_workshops/o/stacks/setup-novnc-livelabs.zip -O setup-novnc-livelabs.zip
     unzip -o  setup-novnc-livelabs.zip -d ll-setup
     cd ll-setup/
     chmod +x *.sh .*.sh
@@ -109,37 +109,37 @@ Upon successful validation as indicated above, proceed by selecting either *Task
     <copy>http://[your instance public-ip address]/livelabs/vnc.html?password=LiveLabs.Rocks_99&resize=scale&quality=9&autoconnect=true&reconnect=true</copy>
     ```
 
-    ![](./images/novnc-landing-1a.png " ")
+    ![noVNC language](./images/novnc-landing-1a.png " ")
 
 2. Click *Next*
 
-    ![](./images/novnc-landing-1b.png " ")
+    ![noVNC typing](./images/novnc-landing-1b.png " ")
 
 3. Click *Next*
 
-    ![](./images/novnc-landing-1c.png " ")
+    ![noVNC privacy](./images/novnc-landing-1c.png " ")
 
 4. Click *Skip*
 
-    ![](./images/novnc-landing-1d.png " ")
+    ![noVNC connect your online accounts](./images/novnc-landing-1d.png " ")
 
 5. Click *Start Using Oracle Linux Server*
 
-    ![](./images/novnc-landing-1e.png " ")
+    ![noVNC ready to use](./images/novnc-landing-1e.png " ")
 
 6. Click on *X* to close the *Getting Started* landing page
 
-    ![](./images/novnc-landing-1f.png " ")
+    ![noVNC getting started](./images/novnc-landing-1f.png " ")
 
 
 7. Right-Click anywhere in the desktop and Uncheck *Keep aligned*
 
-    ![](./images/novnc-organize-desktop-1.png " ")
+    ![noVNC organize desktop keep aligned](./images/novnc-organize-desktop-1.png " ")
 
 8. Right-Click anywhere in the desktop and select *Organize Desktop by Name*
 
-    ![](./images/novnc-organize-desktop-2.png " ")
-    ![](./images/novnc-organize-desktop-3.png " ")
+    ![noVNC organize desktop by name](./images/novnc-organize-desktop-2.png " ")
+    ![noVNC organize desktop](./images/novnc-organize-desktop-3.png " ")
 
 
 9. Double-Click on the *Terminal* icon to Launch, then run the following from terminal session to initialize LiveLabs browser windows.
@@ -152,25 +152,25 @@ Upon successful validation as indicated above, proceed by selecting either *Task
 
 10.  Keep *Make Google Chrome the default browser* checked, uncheck *Automatic Usage Statistics & Crash reporting* and click *OK*. This opens the first browser session on the left preloaded with a sample workshop guide.
 
-    ![](./images/novnc-landing-1.png " ")
+    ![noVNC Chrome default browser](./images/novnc-landing-1.png " ")
 
 11.  Keep *Make Google Chrome the default browser* checked, uncheck *Automatic Usage Statistics & Crash reporting* and click *OK*. This opens the second browser session on the right preloaded with two tabs.
 
-    ![](./images/novnc-custom-chrome-1a.png " ")
+    ![noVNC language Chrome](./images/novnc-custom-chrome-1a.png " ")
 
 12. Click on *Accept All*
 
-    ![](./images/novnc-custom-chrome-2a.png " ")
+    ![noVNC Accept All](./images/novnc-custom-chrome-2a.png " ")
 
 13. Close all browser windows opened.
 
 
 14. Click on the *Google Chrome* icon, then on *Get Started*, on the next 3 pages click on *Skip*, and finally on *No Thanks*.
 
-    ![](./images/novnc-custom-chrome-3a.png " ")
-    ![](./images/novnc-custom-chrome-4a.png " ")
-    ![](./images/novnc-custom-chrome-5a.png " ")
-    ![](./images/novnc-custom-chrome-6a.png " ")
+    ![noVNC custom Chrome get Started](./images/novnc-custom-chrome-3a.png " ")
+    ![noVNC custom Chrome choose Applications](./images/novnc-custom-chrome-4a.png " ")
+    ![noVNC custom Chrome choose background](./images/novnc-custom-chrome-5a.png " ")
+    ![noVNC custom Chrome ](./images/novnc-custom-chrome-6a.png " ")
     ![](./images/novnc-custom-chrome-7a.png " ")
 
 Skip *Task 3B* and proceed to *Task 4*
@@ -185,27 +185,27 @@ Skip *Task 3B* and proceed to *Task 4*
     <copy>http://[your instance public-ip address]/livelabs/vnc.html?password=LiveLabs.Rocks_99&resize=scale&quality=9&autoconnect=true&reconnect=true</copy>
     ```
 
-    ![](./images/novnc-landing-2a.png " ")
+    ![noVNC english](./images/novnc-landing-2a.png " ")
 
 2. Click *Next*
 
-    ![](./images/novnc-landing-2b.png " ")
+    ![noVNC english keyboard](./images/novnc-landing-2b.png " ")
 
 3. Click *Next*
 
-    ![](./images/novnc-landing-2c.png " ")
+    ![noVNC privacy policy](./images/novnc-landing-2c.png " ")
 
 4. Click *Skip*
 
-    ![](./images/novnc-landing-2d.png " ")
+    ![noVNC connect your accounts](./images/novnc-landing-2d.png " ")
 
 5. Click *Start Using Oracle Linux Server*
 
-    ![](./images/novnc-landing-2e.png " ")
+    ![noVNC Linux Server](./images/novnc-landing-2e.png " ")
 
 6. Click on *X* to close the *Getting Started* landing page
 
-    ![](./images/novnc-landing-2f.png " ")
+    ![noVNC getting started](./images/novnc-landing-2f.png " ")
 
 
 7. Click on *Activities* >> *Terminal* to Launch the Terminal, then run the following to initialize LiveLabs browser windows.
@@ -216,8 +216,8 @@ Skip *Task 3B* and proceed to *Task 4*
     </copy>
     ```
 
-    ![](./images/novnc-test-browser-windows-1.png " ")
-    ![](./images/novnc-test-browser-windows-2.png " ")
+    ![noVNC test browser windows](./images/novnc-test-browser-windows-1.png " ")
+    ![noVNC test browser windows terminal](./images/novnc-test-browser-windows-2.png " ")
 
 
 8.  Keep *Make Google Chrome the default browser* checked, uncheck *Automatic Usage Statistics & Crash reporting* and click *OK*. This opens the first browser session on the left preloaded with a sample workshop guide.
@@ -236,11 +236,11 @@ Skip *Task 3B* and proceed to *Task 4*
 
 12. Click on *Activities* >> *Google Chrome* to Launch, then on *Get Started*, on the next 3 pages click on *Skip*, and finally on *No Thanks*.
 
-    ![](./images/novnc-launch-chrome.png " ")
-    ![](./images/novnc-custom-chrome-4a.png " ")
-    ![](./images/novnc-custom-chrome-5a.png " ")
-    ![](./images/novnc-custom-chrome-6a.png " ")
-    ![](./images/novnc-custom-chrome-7a.png " ")
+    ![noVNC launch Chrome](./images/novnc-launch-chrome.png " ")
+    ![noVNC custom Chrome](./images/novnc-custom-chrome-4a.png " ")
+    ![noVNC custom Chrome background](./images/novnc-custom-chrome-5a.png " ")
+    ![noVNC custom Chrome](./images/novnc-custom-chrome-6a.png " ")
+    ![noVNC custom Chrome main page](./images/novnc-custom-chrome-7a.png " ")
 
 13. Close all browser windows opened.
 
@@ -257,7 +257,7 @@ Skip *Task 3B* and proceed to *Task 4*
     > *Notes:* The example below borrows from the *Oracle WebLogic Kubernetes ToolKit UI* Workshop where the three URLs are updated to the following
 
     - *`desktop_guide_url`*="https://oracle-livelabs.github.io/multicloud/weblogic-toolkit-ui/workshops/desktop"
-    - *`desktop_app1_url`*="http://localhost:7001/console"    
+    - *`desktop_app1_url`*="http://localhost:7001/console"
     - *`desktop_app2_url`*="https://container-registry.oracle.com"
 
     ![](./images/novnc-test-desktop-url-1a.png " ")
@@ -312,7 +312,7 @@ If your workshop includes one or more Oracle Databases or WebLogic Server, proce
     <copy>
     cd /tmp
     rm -rf ll_tmp
-    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/N3xh9JYLTXSQMr4Lhsnu9bbNCBiZlXKXc3SnbvtKmhWp9-LG7T8jWYbz9gnM73zM/n/natdsecurity/b/misc/o/create-services-multi-db.zip -O create-services-multi-db.zip
+    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/8i4KgBjWw5ghjvqKU8i-C-hCg3c3C2XYoJaTBJHSO5Byzo0Rtm8lo_LjmuhUGEmt/n/c4u02/b/hosted_workshops/o/stacks/create-services-multi-db.zip -O create-services-multi-db.zip
     unzip -o  create-services-multi-db.zip -d ll_tmp
     cd ll_tmp/
     chmod +x *.sh .*.sh
@@ -361,7 +361,7 @@ If your workshop includes one or more Oracle Databases or WebLogic Server, proce
     <copy>
     cd /tmp
     rm -rf ll_tmp
-    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/QQAFYkt5JRMmSM2COnTntCXYnR48dHbrSVpnfiDAOxKoPye18MWfHzOtyjaNmZl-/n/natdsecurity/b/misc/o/create-services-weblogic.zip -O create-services-weblogic.zip
+    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/JdxdqCv0t-oaOyHn84DXHVxJKwpRJWSZNkwpbF1jEGHaQ4X07hwPNus8xDlVs8on/n/c4u02/b/hosted_workshops/o/stacks/create-services-weblogic.zip -O create-services-weblogic.zip
     unzip -o  create-services-weblogic.zip -d ll_tmp
     cd ll_tmp/
     chmod +x *.sh .*.sh
@@ -681,6 +681,6 @@ Prior to noVNC some images were configured with *Apache Guacamole*. If this appl
     ```
 
 ## Acknowledgements
-* **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, September 2020
-* **Contributors** - Robert Pastijn
-* **Last Updated By/Date** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, May 2022
+* **Author** - Rene Fontcha, Master Principal Solution Architect,September 2020
+* **Contributors** - Robert Pastijn, Distinguished Product Manager
+* **Last Updated By/Date** - Ana Coman, Technical Program Manager, Oracle Database Product Management, April 2024
