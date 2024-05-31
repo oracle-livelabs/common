@@ -51,9 +51,9 @@ A notebook is a web-based interface for data analysis, data discovery, data visu
 
   ![List of provisioned ADBs](images/provisioned-adb.png)        	  
 
-3. On your Oracle Autonomous Database instance page, click **Database Actions**. The Launch DB Actions dialog opens. Wait till the Database Actions opens.
+3. On your Oracle Autonomous Database instance page, click the **Database Actions** pull-down menu, and then select the option `View all database actions`. Wait till the Database Actions opens.
 
-	![ADW Service Console](images/database-actions.png)
+	![ADW Service Console](images/database_actions.png)
 
 4. On the Database Actions page, go to the **Development** tab and click **Oracle Machine Learning**. This opens the Oracle Machine Learning sign in page.
 
@@ -610,10 +610,14 @@ In this step, you will learn how to create a notebook based on a template exampl
 4. A message appears stating that the notebook has been created and will appear under the Notebook EA Listing.  Click **Open Notebook**.
 	![Open Notebook](images/open-nb-dialog.png)
 
-5. The Notebooks EA Listing page opens. Click on the notebook to open it.
-	![Notebook listing](images/oml-listing-exmpl.png)
+6. The Notebook is open and ready to run.
+    ![Notebook OML Run-me-first](images/notebook-run-me-first.png)
 
-	Alternatively, you can open the left navigation menu, and click **Projects** and then **Notebooks EA** to open the Notebooks page. The notebook is listed on this page. Access the notebook that you just created.
+7. You can go back to the Notebooks EA listing by clicking on the three-line menu and then clicking on **Notebooks EA**.
+   	![Go back to Notebook listing](images/back-to-oml-listing.png)
+
+8. The final listing of Notebooks EA is shown.
+	![Notebook listing](images/oml-listing-exmpl.png)
 
 This completes the task of creating a notebook from a template example.
 
