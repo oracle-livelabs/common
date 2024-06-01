@@ -8,7 +8,7 @@ Estimated Time: 15 minutes
 
 ### About Oracle Machine Learning Notebooks
 
-Oracle Machine Learning Notebooks Early Adopter (EA) is an enhanced web-based notebook platform for data engineers, data analysts, R and Python users, and data scientists. You can write code, text, create visualizations, and perform data analytics and machine learning modeling. You can also leverage third-party packages from the R and Python ecosystems. In Oracle Machine Learning, notebooks are organized in projects, and projects within a workspace. You can create, edit, delete, copy, move, and version notebooks, and even save notebooks as private or sharable templates.
+Oracle Machine Learning Notebooks Early Adopter is an enhanced web-based notebook platform for data engineers, data analysts, R and Python users, and data scientists. You can write code, text, create visualizations, and perform data analytics and machine learning modeling. You can also leverage third-party packages from the R and Python ecosystems. In Oracle Machine Learning, notebooks are organized in projects, and projects within a workspace. You can create, edit, delete, copy, move, and version notebooks, and even save notebooks as private or sharable templates.
 
 To support data science team collaboration, you can post  and respond to comments on individual paragraphs within a notebook and share notebooks as templates.
 The Oracle Machine Learning Notebook EA provides:
@@ -25,7 +25,7 @@ The Oracle Machine Learning Notebook EA provides:
 
 In this lab, you will learn how to:
 * Access the enhanced notebook environment
-* Create and run a Notebook EA
+* Create and run a Notebook
 * Edit notebooks
 * Create notebook versions
 * View version history and compare notebook versions
@@ -356,9 +356,9 @@ By default, you are assigned into a project. Select the project that contains th
 
 To edit an existing notebook:
 
-1. On the Oracle Machine Learning Notebook Early Adopter page, click the notebook name that you want to open. The selected notebook opens in the edit mode. In this lab, you click the **Notebook EA Demo**.
+1. On the Oracle Machine Learning Notebook page, click the notebook name that you want to open. The selected notebook opens in the edit mode. In this lab, you click the **Notebook EA Demo**.
 
-2. 2.	When the notebook is open, you can use the following notebook features from the  toolbars:
+2. When the notebook is open, you can use the following notebook features from the  toolbars:
 ![Notebook EA Edit options](images/notebook-ea-edit-options.png)
 
 * Click ![Run all paragraph](images/run-paragraphs-icon.png) to run all paragraphs in the notebook.
