@@ -424,7 +424,7 @@ To edit an existing notebook:
 
 Paragraph Dependencies allow you to add dependencies between paragraphs. The dependent paragraphs automatically run after the original paragraph is run, according to the order of dependency.
 To create paragraph dependencies:
-1. On the Notebooks EA Page, click **Create**.
+1. On the Notebooks page, click **Create**.
 2. In the Create Notebooks dialog, enter the name _Paragraph Dependencies Demo_ in the **Name** field and click **OK.** The notebook is created and it opens in the notebook editor.
 3. On the notebook, hover your cursor over the lower border of the paragraph and click the + icon to add a paragraph. Or, click on the **Add SQL Paragraph** icon to call the PL/SQL interpreter.
 	![Add PLSQL paragraph](images/add-sql-script-toolbar.png)
@@ -510,7 +510,7 @@ In this task, you will create Version 1 of the _Paragraph Dependencies Demo_ not
 5. Click **Back to Notebooks** to go back to the Notebooks page.
 	![Notebook EA versions page](images/view-ver1.png)
 
-### Task 6.2: Create Versions in the Notebooks EA Editor
+### Task 6.2: Create Versions in the Notebooks Editor
 By creating versions of your notebook, you can archive your work in a notebook. You can create versions of an open notebook, as well as on the notebooks listing page. In this example:
 
 * The original notebook _Paragraph Dependencies Demo_, is edited to add a script to build a machine learning model.
@@ -521,7 +521,7 @@ By creating versions of your notebook, you can archive your work in a notebook. 
 >**Note:** A versioned notebook is non-editable. If you want to make any changes to a particular version of a notebook, you must restore that version to edit it.
 
 To create a new notebook version and view version history:
-1. On the Notebooks EA page, click on the _Paragraph Dependencies Demo_ notebook to open it in the notebook editor.
+1. On the Notebooks page, click on the _Paragraph Dependencies Demo_ notebook to open it in the notebook editor.
 	> **Note:**  **Version 1** of this notebook is already created as part Task 6.1 in this lab. It contains the archived code to create the view ESM_SH_DATA, count the number of records, and view the data. Clicking on the notebook opens the original editable version.
 
 	![Notebook EA versions page](images/click-para-dep-nb.png)
@@ -616,7 +616,7 @@ In this step, you will learn how to create a notebook based on a template exampl
 7. You can go back to the Notebooks EA listing by clicking on the three-line menu and then clicking on **Notebooks EA**.
    	![Go back to Notebook listing](images/back-to-oml-listing.png)
 
-8. The final listing of Notebooks EA is shown.
+8. The final listing of Notebooks is shown.
 	![Notebook listing](images/oml-listing-exmpl.png)
 
 This completes the task of creating a notebook from a template example.
