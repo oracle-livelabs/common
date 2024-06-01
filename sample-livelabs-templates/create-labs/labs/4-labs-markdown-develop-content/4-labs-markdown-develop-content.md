@@ -21,6 +21,13 @@ To optimize your workflow while developing workshop content, we highly recommend
 ### What Do You Need?
 * An IDE, such as Visual Studio Code.
 
+
+## Understanding how it works the include and varibles section in manifest.json
+
+The "include" section of a workshop manifest file have a critical role in seamlessly incorporating external resources into the workshop content. These resources can include a variety of files, including code snippets, data files, images. Utilizing the "include" directive, you can embed links to local files, enabling readers to conveniently download essential resources.
+
+Variables stored in JSON format gives you the possibility to define configurable parameters, such as database names, compute resources, or workload types.
+
 ## Task 1: Create your labs and workshop content
 Leverage the content from the **[sample-livelabs-templates/sample-workshop](https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop)** folder to start creating lab and workshop content for your project. Fork and clone the **[oracle-livelabs/common repository](https://github.com/oracle-livelabs/common/)** to get the sample-workshop folder on your local computer, by following Task 1 and Task 2 of this workshop.
 
@@ -68,12 +75,6 @@ To create your lab and workshop content:
 
 13. You can also create a `README.md` file within **workshops/tenancy**, **workshops/sandbox**, and/or **workshops/desktop**, and update the `README.md` with a summary of your workshop. Note that the `README.md` file is optional for your workshop.
 
-## Understanding how it works the include and varibles section in manifest.json
-
-The "include" section of a workshop manifest file have a critical role in seamlessly incorporating external resources into the workshop content. These resources can include a variety of files, including code snippets, data files, images. Utilizing the "include" directive, you can embed links to local files, enabling readers to conveniently download essential resources.
-
-Variables stored in JSON format gives you the possibility to define configurable parameters, such as database names, compute resources, or workload types.
-
 ## Task 2: Use common labs and images
 
 1. Some labs can be shared by many LiveLabs workshops, so we put together a list of [common labs](https://github.com/oracle-livelabs/common/tree/main/labs), including "Generate SSH Key," "Register an Oracle Cloud account," "Need Help," etc. for easier workshop development. You can leverage the [common labs](https://github.com/oracle-livelabs/common/tree/main/labs) located in the **[oracle-livelabs/common repository](https://github.com/oracle-livelabs/common/)**.
@@ -82,13 +83,13 @@ Variables stored in JSON format gives you the possibility to define configurable
 
 Leverage LiveLabs [Markdown Cheat Sheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf)
 
-## Task 0: DONT's
+## Task 3: DONT's
 
 1. Mandatory requirements (Check links, code snippets, help email address, grammar issues)
 2. Make sure that all filenames are lowercase, markdown filenames and directories generally match
 3. Pay attention on lab section (each lab has a title(#), Introduction (##), Objectives(###), Prerequisites(###), Acknowledgements (##))
 
-## Task 1: Security
+## Task 4: Security
 
 1. Blur all personal information (IP addresses, intranet URLs, email addresses, OCIDs, usernames, and passwords) from images.
   ![Blur all identifiable information.](./images/blur-ip.png " ")
@@ -99,7 +100,7 @@ Leverage LiveLabs [Markdown Cheat Sheet](https://c4u04.objectstorage.us-ashburn-
 
 3. Do not use any IP addresses, intranet URLs (for example links to a Confluence page), email addresses, OCIDs, usernames, or passwords in the text. Do not provide a demo password.
 
-## Task 2: Link to absolute path images
+## Task 5: Link to absolute path images
 Rather than pointing to images within your lab folder or workshop directory with a relative path, you can just as easily point your images to URLs. This comes in handy if you use [common images](https://github.com/oracle-livelabs/common/tree/main/images), or reuse an image a lot, the code you write to display it in markdown will always be the same no matter where the image is in relation to markdown. Using absolute image paths is also handy if you need to keep an image updated, as changing the destination file image will affect every instance where you pointed an image to it. This is also useful when you want to *point to an image in a different repository* (you don't need to clone or fork that repository). This is the same concept and implementation as using absolute paths for common labs in your manifest.json files.
 
 *For screenshots of OCI menu navigation, use the images with absolute links*
@@ -123,7 +124,7 @@ Rather than pointing to images within your lab folder or workshop directory with
 
   ![Recommended to use GitHub path for images.](./images/home-page.png " ")
 
-## Task 3: Use conditional formatting
+## Task 6: Use conditional formatting
 
 If your workshop supports multiple instance types, but the bulk of the content stays the same, then conditional formatting can save you a lot of work. Most commonly, if you have differences between the "Free Tier" and "LiveLabs" (Green button) versions such as provisioning a database instance in Free Tier and just checking that it's created properly for LiveLabs, then conditional formatting will allow your workshop to use a singular markdown for both. This will save you immense effort and prevent accidental oversights if you need to update your workshop in the future since you won't have to maintain a duplicate markdown.
 
@@ -163,7 +164,7 @@ If your workshop supports multiple instance types, but the bulk of the content s
 
   ![tabs-conditional-formatting](./images/tabs-conditional-formatting.png " ")
 
-## Task 4: Link within a workshop (Hotlinks)
+## Task 7: Link within a workshop (Hotlinks)
 
 Sometimes you may want to link to something within your lab or workshop.  Most commonly, this is used in pages to link from the introduction or objectives to a specific section in the lab. This section in particular is hot-linked from the introduction to driving home that point. We'll take a look at the "Need Help?" lab to demonstrate how to incorporate this in your workshop.
 
@@ -176,7 +177,7 @@ Sometimes you may want to link to something within your lab or workshop.  Most c
   ![Inspect element of a hotlink.](./images/hotlink-element.png " ")
 
 
-## Task 5: Scale an image
+## Task 8: Scale an image
 
 Without using image scaling, all the screenshots you take for your workshop will be of different sizes (unless you're a master of making pixel-perfect crops). To remedy this, we HIGHLY recommend you to stick with a scaling and use it throughout your workshop. This will make all the images scale to the same width (if possible) and contribute to a more consistent and polished feel. You can override the default image scaling by applying these manual controls below. **We highly recommend you use #4's format by default.**
 
@@ -214,7 +215,7 @@ Without using image scaling, all the screenshots you take for your workshop will
 
 5. As a final note, it's in your best interest to take as large of a picture as you can and then scale it down using the parameters above. LiveLabs allows the magnification of images so if you have a larger base image, the audience will have more clarity.
 
-## Task 6: Add and embed a Video
+## Task 9: Add and embed a Video
 
 Adding videos is very similar to adding images. We most commonly see videos added in the introductions for labs to familiarize the audience with the product before they dive into the workshop.
 LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or [Oracle Video Hub](https://videohub.oracle.com).
@@ -245,7 +246,7 @@ LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or
 
   ![How to link a youtube video.](./images/youtube-url.png =60%x* " ")
 
-## Task 7: Scale a video
+## Task 10: Scale a video
 
 Without using video scaling, all the video you embed will have small as the default size for your workshop. You can override the default video scaling by applying these manual controls below.
 
@@ -318,7 +319,7 @@ Without using video scaling, all the video you embed will have small as the defa
 	[Video hosted on YouTube](youtube:lHriX403Oz4:large)
 
 
-## Task 8: Use the LintChecker
+## Task 11: Use the LintChecker
 
 The LintChecker is a great javascript function for QAing that you should take advantage of. It is especially handy in catching some of the more easily overlooked errors such as indentation and syntax errors.
 
@@ -328,7 +329,7 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
   A box will pop up with any errors that the LintChecker caught. Keep in mind that these are not an exhaustive list of errors, they are only the ones that the function has been programmed to catch.  Also keep in mind that even though it lists something as an "error", if it was done intentionally by you, you can by all means just ignore it.
 
-## Task 9: Case Sensitivity
+## Task 12: Case Sensitivity
 
 **THIS IS IMPORTANT.** The majority of us use Windows and macOS which are **Case Insensitive** systems. This means that Windows and macOS consider "OrAcLe.PnG" to be the same as "oracle.png" or "Oracle.PNG" for file structure. GitHub and GitHub pages are **Case Sensitive**, and **do** make that distinction.
 
@@ -344,7 +345,7 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
 2. If you do run into a Case Sensitivity error on Windows or macOS, you cannot simply fix it by renaming it DIRECTLY with the correct case... because the system will not recognize that you are trying to rename it. You have to either rename that item to something else entirely and then rename it back with the correct case... or you can use **"git mv"** as described [in this article](https://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory) for more complicated fixes that involve entire directories.
 
-## Task 10: Code Snippets
+## Task 13: Code Snippets
 
 1. If you include code snippets in your workshop instruction, you can use the following syntax for code to distinguish it from other instructions.
 
@@ -407,7 +408,7 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
 **Reminder** Download this handy [Cheatsheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
 
-## Task 11: Strikethrough
+## Task 14: Strikethrough
 
 With this new feature, you can now cross out text or words in a paragraph by adding two tilde before and after the word or text in a paragraph.
 
@@ -417,7 +418,7 @@ With this new feature, you can now cross out text or words in a paragraph by add
 
   *`~~An example of Strikethrough.~~`* transforms to *~~An example of Strikethrough.~~*
 
-## Task 12: Clickable Links
+## Task 15: Clickable Links
 
 1. Old pattern of making URL clickable required markdown formatting. For example, you need to have this format in markdown to make the links clickable.
 
@@ -433,7 +434,7 @@ With this new feature, you can now cross out text or words in a paragraph by add
 
 4. The URLs are opened in a new tab in the browser and the same applies to email addresses as well.
 
-## Task 13: Building Blocks
+## Task 16: Building Blocks
 
 Building Blocks are a way to enhance both the workshop development and customer experience. This step focuses on how authors can use Building Blocks and Tasks to accelerate their workshop development in your repo.
 
@@ -443,7 +444,7 @@ Building Blocks are a way to enhance both the workshop development and customer 
 
 3. If you would like to leverage pre-built building blocks for your repository, feel free to check out this [how to create building block guide](https://github.com/oracle-livelabs/common/blob/main/building-blocks/how-to-author-with-blocks/how-to-author-with-blocks.md) to begin building for your repo.
 
-## Task 14: Use LiveServer extension
+## Task 17: Use LiveServer extension
 
 If you have installed the LiveServer extension in your VSCode by following the steps in Lab 2 Task4, you can conveniently utilize Live Server to open your workshop's HTML file and enjoy the seamless experience of dynamically viewing and testing your changes.
 
@@ -474,4 +475,4 @@ You may now **proceed to the next lab**.
     * Brianna Ambler, Product Manager
 
 * **Last Updated By/Date:**
-    * Ana Coman, Technical Program Manager, Oracle Database Product Management, April 2024
+    * Ana Coman, Technical Program Manager, Oracle Database Product Management, May 2024
