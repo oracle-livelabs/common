@@ -201,18 +201,18 @@ To publish your GitHub Pages site:
 
 ## Task 8: Access your workshop on GitHub
 
-After your pull request is complete, wait a few minutes and perform the steps below. Github pages take approximately 5 minutes for the pages to be copied.
+Every time you have successfully pushed your committed changes to Github, Github Pages can take several minutes to process the changes to copy.
 
 1. This workshop for example is located in the link below.
 
     ```
-   https://github.com/arabellayao/em-omc/blob/main/enterprise-manager/emcc/workshops/freetier/index.html
+   https://github.com/user/em-omc/blob/main/enterprise-manager/emcc/workshops/freetier/index.html
     ```
 
 3. The published version becomes:
 
     ```
-    https://arabellayao.github.io/em-omc/enterprise-manager/emcc/workshops/freetier/index.html
+    https://user.github.io/em-omc/enterprise-manager/emcc/workshops/freetier/index.html
     ```
 
 ## (Optional) Task 9: Customize your Workshop for Events
@@ -426,4 +426,4 @@ If you have multiple Oracle LiveLabs repositories, you need to switch to the rep
     * Brianna Ambler, Product Manager
 
 * **Last Updated By/Date:**
-    * Ana Coman, Technical Program Manager, Oracle Database Product Management, April 2024
+    * Ana Coman, Technical Program Manager, Oracle Database Product Management, May 2024
