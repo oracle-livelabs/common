@@ -65,7 +65,7 @@ For custom images received from authors via imports from Object Storage pre-auth
 
 12. Update the value of the following variables to match the correct URLs for the workshop.
 
-    - **`desktop_guide_url`**: Link to github.io guide ending with "*../workshop/desktop*"
+    - **`desktop_guide_url`**: Link to github.io guide ending with "*../workshops/desktop*"
       ```
       e.g.
       https://oracle-livelabs.github.io/em-omc/enterprise-manager/emcc/workshops/desktop
