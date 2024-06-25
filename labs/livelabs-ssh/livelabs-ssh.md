@@ -34,7 +34,7 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
 
     ```bash
     <copy>
-    wget https://github.com/oracle-livelabs/common/labs/livelabs-ssh/files/id_rsa_livelabs.zip
+    wget https://oracle-livelabs.github.io/common/labs/livelabs-ssh/files/id_rsa_livelabs.zip 
     </copy>
     ```
 3. Unzip the archive
@@ -83,7 +83,7 @@ The instructions below also apply if you are using Microsoft Windows Subsystem f
 
     ```bash
     <copy>
-    wget https://github.com/oracle-livelabs/common/labs/livelabs-ssh/files/id_rsa_livelabs.zip
+    wget https://oracle-livelabs.github.io/common/labs/livelabs-ssh/files/id_rsa_livelabs.zip 
     </copy>
     ```
 3. Unzip the archive
@@ -122,11 +122,11 @@ The instructions below also apply if you are using Microsoft Windows Subsystem f
 You can also use Putty to connect to the remote server.
 You must have Putty installed. [Download Putty](https://www.putty.org/)
 
-1. Download the id_rsa_livelabs.zip using a browser of your choice from the following URL or click [here]([id_rsa_livelabs.zip](https://github.com/oracle-livelabs/common/labs/livelabs-ssh/files/id_rsa_livelabs.zip)):
+1. Download the id_rsa_livelabs.zip using a browser of your choice from the following URL or click [here]([id_rsa_livelabs.zip](https://oracle-livelabs.github.io/common/labs/livelabs-ssh/files/id_rsa_livelabs.zip )):
 
     ```bash
     <copy>
-    https://github.com/oracle-livelabs/common/labs/livelabs-ssh/files/id_rsa_livelabs.zip
+    https://oracle-livelabs.github.io/common/labs/livelabs-ssh/files/id_rsa_livelabs.zip 
     </copy>
     ```
 
