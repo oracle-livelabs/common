@@ -442,7 +442,7 @@ Are you looking for the next hands-on lab to visit? Have a look at the [Session 
 
 Within the ![DatabaseWorld](https://www.oracle.com/cloudworld/databaseworld/) Demogrounds, you'll discover the Community Theater and the Community Lab.
 
-The Community Theater serves as the hub for this year's technical sessions, offering a comprehensive exploration of the cutting-edge features introduced in Oracle Database 23c. This immersive experience not only provides the quickest pathway to learning but also allows you to witness and experiment with the exciting innovations accompanying the release of Oracle Database 23c.
+The Community Theater serves as the hub for this year's technical sessions, offering a comprehensive exploration of the cutting-edge features introduced in Oracle Database 23ai. This immersive experience not only provides the quickest pathway to learning but also allows you to witness and experiment with the exciting innovations accompanying the release of Oracle Database 23ai.
 
 Within the Community Lab, we present an array of hands-on workshops that empower you to delve into these experiences at your own convenience. Simply take a seat and dive right in, whether it's on one of our readily available laptops or your personal device.
 

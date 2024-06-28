@@ -7,13 +7,12 @@ This lab shows you how to deploy and configure noVNC Graphical Remote Desktop on
 - Configure image for preserved static hostname
 - Deploy NoVNC Remote Desktop
 - Configure Desktop
-- Add Applications Shortcuts to Desktop (EL7 only)
 - Optimize Browser Settings
 - Create systemd services for Oracle Database(s) and WebLogic (Optional)
 
 ### Prerequisites
 This lab assumes you have:
-- An Oracle Enterprise Linux 7 or 8 (OEL) that meets requirement for marketplace publishing. Performing this setup on an instance provisioned from a stock OCI image for EL7 or EL8 should meet these requirements and run successfully.
+- An Oracle Enterprise Linux 8 (OEL) that meets requirement for marketplace publishing. Performing this setup on an instance provisioned from a stock OCI image for EL8 should meet these requirements and run successfully.
 
 ## Task 1: Configure and Enforce Static hostname
 Follow steps below to establish a unique static hostname that will be enforced on any offspring from the image. Whenever possible, this one-time task should be performed prior to installing any product that will hardcode the hostname to various config/settings in the product. e.g. DB Listener, Weblogic, etc...
@@ -97,85 +96,10 @@ Follow steps below to establish a unique static hostname that will be enforced o
 
 3. Test the two remote desktop URLs shown in the output
 
-Upon successful validation as indicated above, proceed by selecting either *Task 3A* for Enterprise Linux 7 or *Task 3B* for Enterprise Linux 8.
-
-## Task 3A: Enterprise Linux 7 (EL7)
-
-1. Launch your web browser to the URL provided in output from above execution, then *Next*
-
-    E.g.
-
-    ```
-    <copy>http://[your instance public-ip address]/livelabs/vnc.html?password=LiveLabs.Rocks_99&resize=scale&quality=9&autoconnect=true&reconnect=true</copy>
-    ```
-
-    ![noVNC language](./images/novnc-landing-1a.png " ")
-
-2. Click *Next*
-
-    ![noVNC typing](./images/novnc-landing-1b.png " ")
-
-3. Click *Next*
-
-    ![noVNC privacy](./images/novnc-landing-1c.png " ")
-
-4. Click *Skip*
-
-    ![noVNC connect your online accounts](./images/novnc-landing-1d.png " ")
-
-5. Click *Start Using Oracle Linux Server*
-
-    ![noVNC ready to use](./images/novnc-landing-1e.png " ")
-
-6. Click on *X* to close the *Getting Started* landing page
-
-    ![noVNC getting started](./images/novnc-landing-1f.png " ")
+Upon successful validation as indicated above, proceed with the next lab.
 
 
-7. Right-Click anywhere in the desktop and Uncheck *Keep aligned*
-
-    ![noVNC organize desktop keep aligned](./images/novnc-organize-desktop-1.png " ")
-
-8. Right-Click anywhere in the desktop and select *Organize Desktop by Name*
-
-    ![noVNC organize desktop by name](./images/novnc-organize-desktop-2.png " ")
-    ![noVNC organize desktop](./images/novnc-organize-desktop-3.png " ")
-
-
-9. Double-Click on the *Terminal* icon to Launch, then run the following from terminal session to initialize LiveLabs browser windows.
-
-    ```
-    <copy>
-    $HOME/.livelabs/init_ll_windows.sh
-    </copy>
-    ```
-
-10.  Keep *Make Google Chrome the default browser* checked, uncheck *Automatic Usage Statistics & Crash reporting* and click *OK*. This opens the first browser session on the left preloaded with a sample workshop guide.
-
-    ![noVNC Chrome default browser](./images/novnc-landing-1.png " ")
-
-11.  Keep *Make Google Chrome the default browser* checked, uncheck *Automatic Usage Statistics & Crash reporting* and click *OK*. This opens the second browser session on the right preloaded with two tabs.
-
-    ![noVNC language Chrome](./images/novnc-custom-chrome-1a.png " ")
-
-12. Click on *Accept All*
-
-    ![noVNC Accept All](./images/novnc-custom-chrome-2a.png " ")
-
-13. Close all browser windows opened.
-
-
-14. Click on the *Google Chrome* icon, then on *Get Started*, on the next 3 pages click on *Skip*, and finally on *No Thanks*.
-
-    ![noVNC custom Chrome get Started](./images/novnc-custom-chrome-3a.png " ")
-    ![noVNC custom Chrome choose Applications](./images/novnc-custom-chrome-4a.png " ")
-    ![noVNC custom Chrome choose background](./images/novnc-custom-chrome-5a.png " ")
-    ![noVNC custom Chrome ](./images/novnc-custom-chrome-6a.png " ")
-    ![](./images/novnc-custom-chrome-7a.png " ")
-
-Skip *Task 3B* and proceed to *Task 4*
-
-## Task 3B: Enterprise Linux 8 (EL8)
+## Task 3: Enterprise Linux 8 (EL8)
 
 1. Launch your web browser to the URL provided in output from above execution, then *Next*
 
@@ -436,36 +360,8 @@ If there are no WebApps used in the workshop, configure *Startup Programs* for a
 
     ![](./images/novnc-startup-prog-6a.png " ")
 
-## Appendix 2: Adding Applications Shortcuts to Desktop (Enterprise Linux 7 only)  
 
-    > *Notes:* Desktop icons support is limited to Enterprise Linux 7 (EL7).
-
-For ease of access to the workshop guide and desktop applications provided on the instance, the following shortcuts are configured by default:
-
-- Get Started with your Workshop (launch workshop guide and relevant web apps if any)
-- Google Chrome Browser
-- Gnome Terminal
-
-Follow the steps below to add any other desktop application shortcut relevant to your workshop. The example below is for illustration only as it features the already configured LiveLabs custom desktop application *Get Started with your Workshop*. As a result, use it as a reference and substitute accordingly for the relevant desktop application of your choice (e.g. SQLDeveloper, JDeveloper, Postman, etc...).
-
-1. On the remote desktop, click on *Home > Other Locations*, then navigate to *`/usr/share/applications`* and scroll-down to find *Get Started with your Workshop*
-
-    ![](./images/create-shortcut-1.png " ")
-
-2. Right-click on *Get Started with your Workshop* and select *Copy to...*
-
-    ![](./images/create-shortcut-2.png " ")
-
-3. Navigate to *Home > Desktop* and Click on *Select*
-
-    ![](./images/create-shortcut-3.png " ")
-
-4. Double-click on the newly added icon on the desktop and click on *Trust and Launch*
-
-    ![](./images/create-shortcut-4.png " ")
-    ![](./images/create-shortcut-5.png " ")
-
-## Appendix 3: Enable VNC Password Reset, and Workshop Guide and WebApps URLs injection for each instance provisioned from the image
+## Appendix 2: Enable VNC Password Reset, and Workshop Guide and WebApps URLs injection for each instance provisioned from the image
 Actions provided in this Appendix are not meant to be performed on the image. They are rather intended as guidance for workshop developers writing terraform scripts to provision instances from an image configured as prescribed in this guide.
 
 Update your Terraform/ORM stack with the tasks below to enable VNC password reset and add workshop URLs for each VM provisioned from the image.
@@ -629,7 +525,7 @@ Update your Terraform/ORM stack with the tasks below to enable VNC password rese
     **Note:** Your source image instance is now configured to generate a random VNC password for every instance created from it, provided that the provisioning requests include the needed metadata storing the random string.
 
 
-## Appendix 4: Removing Guacamole from a previously configured LiveLabs image
+## Appendix 3: Removing Guacamole from a previously configured LiveLabs image
 
 Prior to noVNC some images were configured with *Apache Guacamole*. If this applies to your image, proceed as detailed below to remove it prior to deploying noVNC
 
@@ -683,4 +579,4 @@ Prior to noVNC some images were configured with *Apache Guacamole*. If this appl
 ## Acknowledgements
 * **Author** - Rene Fontcha, Master Principal Solution Architect,September 2020
 * **Contributors** - Robert Pastijn, Distinguished Product Manager
-* **Last Updated By/Date** - Ana Coman, Technical Program Manager, Oracle Database Product Management, April 2024
+* **Last Updated By/Date** - Kevin Lazarz, Senior Manager,  Oracle Database Product Management, June 2024

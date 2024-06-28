@@ -8,10 +8,10 @@ Estimated Time: 15 minutes
 
 ### About Oracle Machine Learning Notebooks
 
-Oracle Machine Learning Notebooks Early Adopter (EA) is an enhanced web-based notebook platform for data engineers, data analysts, R and Python users, and data scientists. You can write code, text, create visualizations, and perform data analytics and machine learning modeling. You can also leverage third-party packages from the R and Python ecosystems. In Oracle Machine Learning, notebooks are organized in projects, and projects within a workspace. You can create, edit, delete, copy, move, and version notebooks, and even save notebooks as private or sharable templates.
+Oracle Machine Learning Notebooks s an enhanced web-based notebook platform for data engineers, data analysts, R and Python users, and data scientists. You can write code, text, create visualizations, and perform data analytics and machine learning modeling. You can also leverage third-party packages from the R and Python ecosystems. In Oracle Machine Learning, notebooks are organized in projects, and projects within a workspace. You can create, edit, delete, copy, move, and version notebooks, and even save notebooks as private or sharable templates.
 
 To support data science team collaboration, you can post  and respond to comments on individual paragraphs within a notebook and share notebooks as templates.
-The Oracle Machine Learning Notebook EA provides:
+The Oracle Machine Learning Notebooks provides:
 * Faster notebook loading time than the original notebook interface.
 * The Oracle look and feel as it based on the Oracle Redwood theme.
 * Enriched visualization in its line chart, area chart, bar chart, pyramid chart, pie chart, donut chart, funnel chart, tag Cloud, treemap diagram, sunburst diagram, scatter plot, box plot.
@@ -25,7 +25,7 @@ The Oracle Machine Learning Notebook EA provides:
 
 In this lab, you will learn how to:
 * Access the enhanced notebook environment
-* Create and run a Notebook EA
+* Create and run a Notebook
 * Edit notebooks
 * Create notebook versions
 * View version history and compare notebook versions
@@ -51,11 +51,11 @@ A notebook is a web-based interface for data analysis, data discovery, data visu
 
   ![List of provisioned ADBs](images/provisioned-adb.png)        	  
 
-3. On your Oracle Autonomous Database instance page, click **Database Actions**. The Launch DB Actions dialog opens. Wait till the Database Actions opens.
+3. On your Oracle Autonomous Database instance page, click the **Database Actions** pull-down menu, and then select the option `View all database actions`. Wait till the Database Actions opens.
 
-	![ADW Service Console](images/database-actions.png)
+	![ADW Service Console](images/database_actions.png)
 
-4. On the Database Actions page, go to the Development section and click **Oracle Machine Learning**. This opens the Oracle Machine Learning sign in page.
+4. On the Database Actions page, go to the **Development** tab and click **Oracle Machine Learning**. This opens the Oracle Machine Learning sign in page.
 
 	![Development option in ADW Service Console](images/adb-dev-oml.png)
 
@@ -93,16 +93,16 @@ This completes the task of accessing Oracle Machine Learning user interface.
 
 ## Task 2: Access Oracle Machine Learning Notebook 
 
-You can access the Notebooks EA page from the left navigation pane of Oracle Machine Learning Notebook UI, or from the Notebooks listing page.
+You can access the Notebooks page from the left navigation pane of Oracle Machine Learning Notebook UI, or from the Notebooks listing page.
 To access the Notebooks page:
-1. Go to the Oracle Machine Learning UI left navigation pane, and click **Notebooks EA** under Projects.
+1. Go to the Oracle Machine Learning UI left navigation pane, and click **Notebooks** under Projects.
 
 	![Left Navigation](images/notebooks-ea-leftnav.png)
 
-	Alternatively, you can click **Notebooks** under Quick Actions on the home page to open the Notebooks page. On the Notebooks page, click **Go to OML Notebooks EA** to open the Notebooks listing page.
-		![Go to OML Notebooks EA](images/goto-notebooks-ea.png)
+	Alternatively, you can click **Notebooks** under Quick Actions on the home page to open the Notebooks page. On the Notebooks page, click **Go to OML Notebooks** to open the Notebooks listing page.
+		![Go to OML Notebooks](images/goto-notebooks-ea.png)
 
-2. This opens the OML Notebooks EA (Early Adopter) page.
+2. This opens the OML Notebooks page.
 
 	![OML Notebooks EA page](images/notebooks-ea-page.png)
 
@@ -113,8 +113,8 @@ Here, you have the option to:
 * **Duplicate:** Click on a notebook row to select it , and click **Duplicate.** This creates a copy of a notebook, and the duplicate copy of the is listed on the Notebooks page with the suffix `_1` in the notebook name.
 * **Save as Template:** To save a notebook as a template, select the notebook and click **Save as Template.** In the Save as Template dialog, you can define the location of the template to save it in Personal or Shared under Templates.
 * **Import:** To import a notebook, click **Import.** The following notebook formats are supported for import - ``.json`` , ``.zpln`` (Zeppelin notebook), ``.ipynb`` (Jupyter notebook) and ``.dsnb`` (native). Select the project and workspace in which to import the notebook.
-* **Export:** To export a notebook, click **Export.** You can export Notebooks Early Adopter in the `.dsnb` format, Zeppelin format (`.json` ) file and in Jupyter format (`.ipynb`), and later import them in to the same or a different environment. You can also export the notebook in HTML format, and optionally exclude paragraph code, results, and timestamps.
-* **Version:** To create versions of a notebook, select it and click **Version.** The Versions page for that particular notebook opens. Here, you can create a new version of the notebook by clicking **+Version.** The Create Version dialog opens. Enter a name of the notebook version, a description, and click **OK.** The new version of the notebook gets created by the same name with a suffix `_2` for the second version. For subsequent versions, suffix (number) increments by one. To revert to an older version by clicking Revert Version. You also have the option to delete any version of the notebook. Click **Back to Notebooks** to go to the OML Notebooks EA (Early Adopter) page.
+* **Export:** To export a notebook, click **Export.** You can export Noteboooks in the `.dsnb` format, Zeppelin format (`.json` ) file and in Jupyter format (`.ipynb`), and later import them in to the same or a different environment. You can also export the notebook in HTML format, and optionally exclude paragraph code, results, and timestamps.
+* **Version:** To create versions of a notebook, select it and click **Version.** The Versions page for that particular notebook opens. Here, you can create a new version of the notebook by clicking **+Version.** The Create Version dialog opens. Enter a name of the notebook version, a description, and click **OK.** The new version of the notebook gets created by the same name with a suffix `_2` for the second version. For subsequent versions, suffix (number) increments by one. To revert to an older version by clicking Revert Version. You also have the option to delete any version of the notebook. Click **Back to Notebooks** to go to the OML Notebooks page.
 
 ## Task 3: Create a notebook and define paragraphs using the md, SQL, PL/SQL, Python, and R Interpreters
 
@@ -122,12 +122,12 @@ In this task, you will create a new notebook, and add paragraphs to connect to t
 
 To learn about Conda, refer to [Use the Conda Interpreter in a Notebook Paragraph](https://docs.oracle.com/en/database/oracle/machine-learning/oml-notebooks/omlug/notebooks.html#GUID-0AAB3590-4422-450D-BE91-4EC435FD4254)
 
-1. On the Notebooks EA (Early Adopter) page, click **Create.**
-		![Create OML Notebooks EA](images/notebooks-ea-create.png)
-2. In the Create Notebook dialog, enter the name `Test Notebook EA` in the **Name** field and click **OK.** The notebook is created and it opens in the notebook editor.
+1. On the Notebooks page, click **Create.**
+		![Create OML Notebooks](images/notebooks-ea-create.png)
+2. In the Create Notebook dialog, enter the name `Test Notebook` in the **Name** field and click **OK.** The notebook is created and it opens in the notebook editor.
 		![Create Notebook dialog](images/test-notebook-ea.png)
 
-	You can now use the **Test Notebook EA** to create a Markdown paragraph, SQL paragraph, Python, R and Conda paragraphs.   
+	You can now use the **Test Notebook** to create a Markdown paragraph, SQL paragraph, Python, R and Conda paragraphs.   
 
 ### Task 3.1: Use the Markdown interpreter and display static html from Markdown plain text
 
@@ -356,10 +356,10 @@ By default, you are assigned into a project. Select the project that contains th
 
 To edit an existing notebook:
 
-1. On the Oracle Machine Learning Notebook Early Adopter page, click the notebook name that you want to open. The selected notebook opens in the edit mode. In this lab, you click the **Notebook EA Demo**.
+1. On the Oracle Machine Learning Notebook page, click the notebook name that you want to open. The selected notebook opens in the edit mode. In this lab, you click the **Notebook Demo**.
 
-2. 2.	When the notebook is open, you can use the following notebook features from the  toolbars:
-![Notebook EA Edit options](images/notebook-ea-edit-options.png)
+2. When the notebook is open, you can use the following notebook features from the  toolbars:
+![Notebook Edit options](images/notebook-ea-edit-options.png)
 
 * Click ![Run all paragraph](images/run-paragraphs-icon.png) to run all paragraphs in the notebook.
 * Click ![Invalidate Sessions](images/invalidate-sessions-icon.png) to invalidate and reset the notebook session.
@@ -373,7 +373,7 @@ To edit an existing notebook:
 
 * Click ![Clear Results](images/clear-results.png) to clear paragraph results.
 * Click ![Clear Paragraph Dependencies](images/clear-para-dep-icon.png) clear paragraph dependencies to clear paragraph dependencies.
-* Click ![Export Notebook](images/export-icon.png) export notebook early adopter to export the notebook. You can export the notebook as a ``.dsnb`` file (Early Adopter notebook), ``.zpln`` file (Zeppelin notebook) and ``.ipynb`` file (Jupyter notebook). You have these additional settings while exporting a notebook:
+* Click ![Export Notebook](images/export-icon.png) export notebook to export the notebook. You can export the notebook as a ``.dsnb`` file (OML Notebook), ``.zpln`` file (Zeppelin notebook) and ``.ipynb`` file (Jupyter notebook). You have these additional settings while exporting a notebook:
 ![Export Notebook](images/export-notebook-dialog.png)
 	- **Exclude code:** Click to exclude the code in the notebook paragraphs. The exported notebook will only contain the paragraph outputs.
 	- **Exclude results:** Click to exclude the paragraph output. The exported notebook will only contain the codes in the paragraphs.
@@ -383,7 +383,7 @@ To edit an existing notebook:
 * Click ![Hide code](images/hide-code.png) to hide the code of all paragraphs in the notebook.
 * Click ![Hide results](images/hide-results.png) to hide the results of all the paragraph in the notebook.
 * Click ![Enable read-only](images/read-only.png)  to enable read-only mode for this notebook.
-	>**Note:** The read-only mode is available only for the Oracle Machine Learning Notebook Early Adopter.
+	>**Note:** The read-only mode is available only for the Oracle Machine Learning Notebooks.
 
 * Click ![Show panel](images/show-panel.png) to open the settings option in the side panel. The settings option in the side panel are the same settings option available in the paragraph.
 	- This is the screenshot of the settings option on the side panel that open when you click the Show Panel icon. Note that the settings option in the paragraph is hidden when the side panel is open. Click the close icon on the panel to close the pane.
@@ -392,7 +392,7 @@ To edit an existing notebook:
 	![Settings in the panel](images/settings-option-para.png)
 
 * Click ![Update interpreter](images/update-nb-type.png) to change the interpreter binding to either low, medium, or high.
-* Click ![Update notebook layout](images/update-nb-layout.png) Zeppelin to switch the Early Adopter notebook to either Zeppelin or Jupyter notebook.
+* Click ![Update notebook layout](images/update-nb-layout.png) Zeppelin to switch the OML Notebook to either Zeppelin or Jupyter notebook.
 
 
 ### Paragraph level features:
@@ -424,7 +424,7 @@ To edit an existing notebook:
 
 Paragraph Dependencies allow you to add dependencies between paragraphs. The dependent paragraphs automatically run after the original paragraph is run, according to the order of dependency.
 To create paragraph dependencies:
-1. On the Notebooks EA Page, click **Create**.
+1. On the Notebooks page, click **Create**.
 2. In the Create Notebooks dialog, enter the name _Paragraph Dependencies Demo_ in the **Name** field and click **OK.** The notebook is created and it opens in the notebook editor.
 3. On the notebook, hover your cursor over the lower border of the paragraph and click the + icon to add a paragraph. Or, click on the **Add SQL Paragraph** icon to call the PL/SQL interpreter.
 	![Add PLSQL paragraph](images/add-sql-script-toolbar.png)
@@ -491,26 +491,26 @@ You can create versions of notebooks on the notebooks page, as well as in the no
 
 ### Task 6.1: Create Versions on the Notebooks EA Page
 In this task, you will create Version 1 of the _Paragraph Dependencies Demo_ notebook.
-1. On the Notebooks EA page, select the _Paragraph Dependencies Demo_ notebook to enable all the edit options.
-	![Notebook EA page with options enabled](images/nbea-options-enabled.png)
+1. On the Notebooks page, select the _Paragraph Dependencies Demo_ notebook to enable all the edit options.
+	![Notebooks page with options enabled](images/nbea-options-enabled.png)
 2. Click **Version** to go to the versions page for this notebook.
-	![Notebook EA page with options enabled](images/nbea-versions-clicked.png)
+	![Notebooks page with options enabled](images/nbea-versions-clicked.png)
 3. On the Versions page for this notebook, click **Versions** to open the Create Versions dialog.
-	![Notebook EA versions page](images/nbea-versions-page.png)
+	![Notebooks versions page](images/nbea-versions-page.png)
 
 3. In the Create Versions dialog:
 	* **Name:** Enter _Version 1_ for the new version of this notebook
 	* **Descriptions:** Enter comments, if any.
 	* Click **OK.** Once the notebook version is created, it is listed on the Versions - Notebook Versioning Demo page.
 
-	![Notebook EA versions page](images/create-version1-dialog.png)
+	![Notebooks versions page](images/create-version1-dialog.png)
 4. On the _Paragraph Dependencies Demo_ page, select **Version 1** of the notebook version that you just created to enable all the available options.
 	* Click **Delete** to delete the selected version of the notebook.
 	* Click **Restore Version** to restore the selected version of the notebook.
 5. Click **Back to Notebooks** to go back to the Notebooks page.
-	![Notebook EA versions page](images/view-ver1.png)
+	![Notebook versions page](images/view-ver1.png)
 
-### Task 6.2: Create Versions in the Notebooks EA Editor
+### Task 6.2: Create Versions in the Notebooks Editor
 By creating versions of your notebook, you can archive your work in a notebook. You can create versions of an open notebook, as well as on the notebooks listing page. In this example:
 
 * The original notebook _Paragraph Dependencies Demo_, is edited to add a script to build a machine learning model.
@@ -521,10 +521,10 @@ By creating versions of your notebook, you can archive your work in a notebook. 
 >**Note:** A versioned notebook is non-editable. If you want to make any changes to a particular version of a notebook, you must restore that version to edit it.
 
 To create a new notebook version and view version history:
-1. On the Notebooks EA page, click on the _Paragraph Dependencies Demo_ notebook to open it in the notebook editor.
+1. On the Notebooks page, click on the _Paragraph Dependencies Demo_ notebook to open it in the notebook editor.
 	> **Note:**  **Version 1** of this notebook is already created as part Task 6.1 in this lab. It contains the archived code to create the view ESM_SH_DATA, count the number of records, and view the data. Clicking on the notebook opens the original editable version.
 
-	![Notebook EA versions page](images/click-para-dep-nb.png)
+	![Notebooks versions page](images/click-para-dep-nb.png)
 
 2. Now, edit the notebook to add a script to build a machine learning model. On the notebook, hover your cursor over the lower border of the third paragraph, and click the **Add SQL Script Paragraph**  to call the PL/SQL Interpreter.
 
@@ -559,35 +559,35 @@ To create a new notebook version and view version history:
 	```
 4. Now, archive this notebook along with the code to build the machine learning model by versioning it. On the top left corner of the notebook editor, click the Versioning icon.
 
-	![Notebook EA versions page](images/create-version2.png)
+	![Notebooks versions page](images/create-version2.png)
 
 5. The options to **Create Version** and **View Version History** opens. Click **Create Version**.
 
-	![Notebook EA versions page](images/create-version-option.png)
+	![Notebooks versions page](images/create-version-option.png)
 
 6. In the New Version dialog:
 
 	* **Name:** Here, the name Version 2 is taken by default. Let's retain this name.
 	* **Description:** Enter notes, if any.
 	* Click **Create.**
-	![Notebook EA versions page](images/create-version2-dialog.png)
+	![Notebooks versions page](images/create-version2-dialog.png)
 	* A message is displayed confirming the creation of the new version.
 	![Notebook EA versions page](images/message-version2.png)
 
-### Task 6.3: View Version History and Compare Notebook EA Versions
+### Task 6.3: View Version History and Compare Notebooks Versions
 To view the version that you created in Task 6.2:
 
 1. Click the versioning icon, and then click **View Version History**.
-	![Notebook EA versions page](images/view-version-history.png)
+	![Notebooks versions page](images/view-version-history.png)
 
 2. On the right pane of the notebook editor, the Version History panel opens.
-	![Notebook EA versions page](images/version-history-pane.png)
+	![Notebooks versions page](images/version-history-pane.png)
 3. Hover your cursor over any notebook version and click on it to enable the available options. You can perform the following tasks in the Version History panel. On the Version History pane on the right:
-	![Notebook EA versions page](images/version-history-options.png)
+	![Notebooks versions page](images/version-history-options.png)
 	* Click the open version icon to open the selected version. Clicking on any versioned notebook opens the notebook in read-only mode, as versioned notebooks are non-editable.
-	![Open Notebook EA version](images/open-version.png)
+	![Open Notebooks version](images/open-version.png)
 	To view the current editable version, click View current version of the notebook.
-	![View Current Notebook EA version](images/view-current-version.png)
+	![View Current Notebook version](images/view-current-version.png)
 	* Click **Delete** to delete the selected version.
 	* Click **Compare Versions** to compare the current version of the notebook with another version.
 	![Compare Notebook version](images/click-compare-version.png)
@@ -607,13 +607,18 @@ In this step, you will learn how to create a notebook based on a template exampl
 	![Run Me First Example Template](images/expl-run-me-first.png)
 3. The Create Notebook dialog opens. By default, it adds **(1)** to the original example template name, and selects the current project and workspace you are signed in to. Let's retain the defaults here. You have the option to change them. Click **OK**.   
 	![Create Notebook from Examples](images/expl-create-nb.png)
-4. A message appears stating that the notebook has been created and will appear under the Notebook EA Listing.  Click **Open Notebook**.
+4. A message appears stating that the notebook has been created and will appear on the Notebooks page.  Click **Open Notebook**.
 	![Open Notebook](images/open-nb-dialog.png)
 
-5. The Notebooks EA Listing page opens. Click on the notebook to open it.
-	![Notebook listing](images/oml-listing-exmpl.png)
+5. The Notebook is open and ready to run.
+    ![Notebook OML Run-me-first](images/notebook-run-me-first.png)
 
-	Alternatively, you can open the left navigation menu, and click **Projects** and then **Notebooks EA** to open the Notebooks page. The notebook is listed on this page. Access the notebook that you just created.
+6. You can go back to the Notebooks page by clicking on the Cloud menu icon to open the left navigatin pane. On the left navigation pane, expand Projects and then click **Notebooks**.
+
+   	![Go back to Notebook listing](images/back-to-oml-listing.png)
+
+7. The final list of Notebooks is avaiable on the Notebooks page,as shown in the screeshot here.
+	![Notebook listing](images/oml-listing-exmpl.png)
 
 This completes the task of creating a notebook from a template example.
 
@@ -627,4 +632,4 @@ This completes the task of creating a notebook from a template example.
 
 * **Author** -  Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, March 2024
+* **Last Updated By/Date** - Moitreyee Hazarika, June 2024

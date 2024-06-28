@@ -35,7 +35,7 @@ For ease of execution of this workshop, your VM instance has been pre-configured
 
     ![Login information](./images/login-info.png "Login Information")
 
-    This should take you directly to your remote desktop in a single click.
+    This should take you directly to your remote desktop in a single click.  A sample of another lab is shown below.
 
     ![noVNC launch remote desktop](./images/novnc-launch-get-started-2.png "noVNC launch remote desktop ")
 
