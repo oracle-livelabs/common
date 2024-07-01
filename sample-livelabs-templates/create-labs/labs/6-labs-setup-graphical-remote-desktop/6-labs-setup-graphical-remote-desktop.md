@@ -150,17 +150,21 @@ Upon successful validation as indicated above, proceed with the next lab.
 
     ![](./images/novnc-test-browser-windows-3.png " ")
 
-9.  Keep *Make Google Chrome the default browser* checked, uncheck *Automatic Usage Statistics & Crash reporting* and click *OK*. This opens the second browser session on the right preloaded with two tabs.
+9.  Keep *Make Google Chrome the default browser* checked, uncheck *Automatic Usage Statistics & Crash reporting* and click *OK*. 
 
     ![](./images/novnc-custom-chrome-1a.png " ")
 
-10. Click on *Accept All*
+10. A Google Chrome sign-in window will then appear. Close that window.
+
+    ![Google Chrome sign-in window](./images/chrome-pop-up.png)
+
+11. On the right, you'll then see the second browser session preloaded with two tabs. Click on *Accept All*
 
     ![](./images/novnc-custom-chrome-2a.png " ")
 
-11. Close all browser windows opened.
+12. Close all browser windows opened.
 
-12. Click on *Activities* >> *Google Chrome* to Launch, then on *Get Started*, on the next 3 pages click on *Skip*, and finally on *No Thanks*.
+13. Click on *Activities* >> *Google Chrome* to Launch, then on *Get Started*, on the next 3 pages click on *Skip*, and finally on *No Thanks*.
 
     ![noVNC launch Chrome](./images/novnc-launch-chrome.png " ")
     ![noVNC custom Chrome](./images/novnc-custom-chrome-4a.png " ")
@@ -168,7 +172,7 @@ Upon successful validation as indicated above, proceed with the next lab.
     ![noVNC custom Chrome](./images/novnc-custom-chrome-6a.png " ")
     ![noVNC custom Chrome main page](./images/novnc-custom-chrome-7a.png " ")
 
-13. Close all browser windows opened.
+14. Close all browser windows opened.
 
 ## Task 4: Enterprise Linux 9 (EL9)
 1. Launch the terminal.
@@ -235,24 +239,57 @@ Upon successful validation as indicated above, proceed with the next lab.
 
 3. Close all browser windows opened.
 
-4. Review *`$HOME/.bash_profile`* and confirm the presence of the following default code block (add if missing).
+4. Run the following command.
 
+    ```
+    <copy>
+    cat $HOME/.bash_profile
+    </copy>
+    ```
+5. Review the output and confirm that the following code block is present. 
     ```
     # Get the aliases and functions
     if [ -f ~/.bashrc ]; then
         . ~/.bashrc
     fi
     ```
+6. If the code block is not present, run the following command and add the code block from above. The file should then look like the following:
+
+    ```
+    <copy>
+    vi $HOME/.bash_profile
+    </copy>
+    ```
+
+    ```
+    # .bash_profile
+
+    # Get the aliases and functions
+    if [ -f ~/.bashrc ]; then
+	    . ~/.bashrc
+    fi
+
+    # User specific environment and startup programs
+    . ~/.set-env.sh
+    ```
+Once the code block has been added, type ":wq" to save the file and exit the vi editor.
+
 ## Task 6: Create Auto-Start SYSTEMD Services for Oracle Databases or WebLogic Domain (Optional)
 
 If your workshop includes one or more Oracle Databases or WebLogic Server, proceed as indicated below to setup SYSTEMD services. This will allow for automatic management of the UP/DOWN state of these processes. As a result workshop attendees will get started faster as these processes will be up and running post provisioning and before they even connect to the instance.
 
 ### **Oracle Database**
-1. Review "*/etc/oratab*" and ensure that the switch is set to "*Y*" for any entry that will be managed by the service
+1. Run the following command. In the output, ensure that the switch is set to "*Y*" for any entry that will be managed by the service.
+
+    ```
+    <copy>
+    cat /etc/oratab
+    </copy>
+    ```
 
     ![](./images/add-db-service.png " ")
 
-2. Run the following block to create a services:
+2. Run the following block to create the services:
 
     - *oracle-database.service* - Manages all databases with an in entry in */etc/oratab* set to *Y*
     - *oracle-db-listener.service* - Manages additional listeners beside *1521* and with an entry in *~oracle/scripts/livelabs/listener-tab* set to *Y*
