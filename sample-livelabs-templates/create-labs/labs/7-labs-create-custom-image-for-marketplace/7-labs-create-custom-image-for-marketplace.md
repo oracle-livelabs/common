@@ -13,9 +13,7 @@ This lab assumes you have:
 
 ## Task 1: Cleanup Instance for Image Capture   
 
-1. Start an SSH terminal session to the instance as user *opc* 
-    
-    **Notes:** This session must be external to your remote desktop connection.
+1. **Outside of your remote desktop connection!** Connect to your instance via SSH as user *opc*. 
 
 2. Copy and run the following to cleanup the instance.
 
