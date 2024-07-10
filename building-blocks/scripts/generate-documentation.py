@@ -33,6 +33,7 @@ class Lab:
     include_name = None
     name = None
     description = None
+    author=None
     path = None
     physical_path = None
     cloud_service = None
@@ -116,6 +117,7 @@ def add_task_details(this_task):
         j = json.loads(comment, strict=False)
         this_task.name = j["name"]
         this_task.description = j["description"]
+        this_task.author=j["author"]
     except Exception as e:
         print(
             "WARNING! "
@@ -165,6 +167,7 @@ def add_block_details(this_block):
         if not h1:
             this_block.name = "Not Found. Fix markdown file " + this_block.path
             this_block.description = "No description found."
+            this_block.author = "No author found."
             return False
         print(
             "WARNING! "
@@ -173,6 +176,7 @@ def add_block_details(this_block):
         )
         this_block.name = h1
         this_block.description = "No description found."
+        this_block.author = "No author found."
 
     else:
         # extract json from the first html comment found
@@ -186,6 +190,7 @@ def add_block_details(this_block):
             j = json.loads(comment, strict=False)
             this_block.name = j["name"]
             this_block.description = j["description"]
+            this_block.author = j["author"]
         except Exception as e:
             print(
                 "WARNING! "
@@ -367,6 +372,7 @@ def write_blocks_manifest():
     output = add_line(output, "     {")
     output = add_line(output, '         "title": "Get Started",')
     output = add_line(output, '         "description": "Get a Free Trial",')
+    output = add_line(output, '         "author": "Ana Coman",')
     output = add_line(
         output,
         '         "filename": "https://oracle-livelabs.github.io/common/labs/cloud-login/cloud-login.md"',
@@ -426,8 +432,8 @@ def write_toc():
         output,
         "Building Blocks are exposed to customers. You can use these same blocks in your own workshop by adding the block to your manifest.json file.",
     )
-    output = add_line(output, "| Cloud Service | Block |  File | Description |")
-    output = add_line(output, "|---------------| ---- |  ---- |------------ |")
+    output = add_line(output, "| Cloud Service | Block |  File | Description | Author ")
+    output = add_line(output, "|---------------| ---- |  ---- |------------ | -------")
 
     # Add the workshop utilities (hard code)
     output = add_line(
@@ -436,7 +442,7 @@ def write_toc():
         + Path(relpath_blocks).as_posix()
         + "/workshop/freetier/index.html?lab=add-workshop-utilities) |  "
         + Path(relpath_blocks).as_posix()
-        + " /setup/add-workshop-utilities.md| Utilities for adding data sets and users |",
+        + " /setup/add-workshop-utilities.md| Utilities for adding data sets and users | Ana Coman",
     )
 
     for t in blocks:
@@ -449,6 +455,7 @@ def write_toc():
         )
         this_anchor = "[" + this_name + "](" + this_anchor + ")"
         this_description = t.description if t.description else " "
+        this_author = t.author if t.author else " "
         output = add_line(
             output,
             "| "
@@ -459,7 +466,9 @@ def write_toc():
             + Path(t.path).as_posix()
             + " | "
             + this_description
-            + " |",
+            + " |"  
+            + this_author
+            + " |"  ,
         )
 
     output = add_line(output, "")
@@ -473,8 +482,8 @@ def write_toc():
         output,
         "Listed below are the tasks that you can incorporate into your markdown. You can also use the navigation tree on the left to view the tasks. Again, contribute to the list of tasks!",
     )
-    output = add_line(output, "| Cloud Service | Task |  File | Description |")
-    output = add_line(output, "|---------------| ---- |  ---- |------------ |")
+    output = add_line(output, "| Cloud Service | Task |  File | Description | Author")
+    output = add_line(output, "|---------------| ---- |  ---- |------------ | ------")
 
     for t in tasks:
         this_name = t.md_name if not t.name else t.name
@@ -487,6 +496,7 @@ def write_toc():
         )
         this_anchor = "[" + this_name + "](" + this_anchor + ")"
         this_description = t.description if t.description else " "
+        this_author = t.author if t.author else " "
         output = add_line(
             output,
             "| "
@@ -497,6 +507,8 @@ def write_toc():
             + Path(t.path).as_posix()
             + " | "
             + this_description
+            + " |"
+            + this_author
             + " |",
         )
 
