@@ -1,7 +1,8 @@
 <!--
     {
         "name":"Create an Oracle Autonomous Database",
-        "description":"Learn how to provision Autonomous Database using the OCI console."
+        "description":"Learn how to provision Autonomous Database using the OCI console.",
+        "author":"Ana Coman"
     }
 -->
 # Create an Oracle Autonomous Database

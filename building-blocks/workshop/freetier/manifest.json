@@ -41,6 +41,7 @@
      {
          "title": "Get Started",
          "description": "Get a Free Trial",
+         "author": "Ana Coman",
          "filename": "https://oracle-livelabs.github.io/common/labs/cloud-login/cloud-login.md"
      },
      {
