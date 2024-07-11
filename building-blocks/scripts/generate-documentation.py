@@ -120,6 +120,7 @@ def add_task_details(this_task):
         this_task.description = j["description"]
         this_task.author=j["author"]
         this_task.last_updated=j["last_updated"]
+
     except Exception as e:
         print(
             "WARNING! "
@@ -171,6 +172,7 @@ def add_block_details(this_block):
             this_block.description = "No description found."
             this_block.author = "No author found."
             this_block.last_updated = "No last updated found."
+
             return False
         print(
             "WARNING! "
@@ -181,7 +183,6 @@ def add_block_details(this_block):
         this_block.description = "No description found."
         this_block.author = "No author found."
         this_block.last_updated = "No last updated found."
-
     else:
         # extract json from the first html comment found
         comment = c[c_begin + 5 : c_end - 1].strip()
@@ -437,10 +438,8 @@ def write_toc():
     output = add_line(
         output,
         "Building Blocks are exposed to customers. You can use these same blocks in your own workshop by adding the block to your manifest.json file.",
-    )
     output = add_line(output, "| Cloud Service | Block |  File | Description | Author | Last Updated")
     output = add_line(output, "|---------------| ---- |  ---- |------------ | ------- | ------------")
-
     # Add the workshop utilities (hard code)
     output = add_line(
         output,
@@ -493,7 +492,6 @@ def write_toc():
     )
     output = add_line(output, "| Cloud Service | Block |  File | Description | Author | Last Updated")
     output = add_line(output, "|---------------| ---- |  ---- |------------ | ------- | ------------")
-
     for t in tasks:
         this_name = t.md_name if not t.name else t.name
         this_anchor = (
