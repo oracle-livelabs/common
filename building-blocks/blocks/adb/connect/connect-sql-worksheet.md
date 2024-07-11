@@ -1,7 +1,9 @@
 <!--
     {
         "name":"Connect with SQL Worksheet",
-        "description":"Connect to Autonomous Database using the SQL Worksheet in Database Actions"
+        "description":"Connect to Autonomous Database using the SQL Worksheet in Database Actions",
+        "author":"Ana Coman",
+        "last_updated":"Ana Coman, Oracle Database Product Management, July 2024"
     }
 -->
 # Connect with SQL Worksheet
