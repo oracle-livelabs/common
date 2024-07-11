@@ -447,7 +447,7 @@ def write_toc():
         + Path(relpath_blocks).as_posix()
         + "/workshop/freetier/index.html?lab=add-workshop-utilities) |  "
         + Path(relpath_blocks).as_posix()
-        + " /setup/add-workshop-utilities.md| Utilities for adding data sets and users | Ana Coman",
+        + " /setup/add-workshop-utilities.md| Utilities for adding data sets and users | Ana Coman | Ana Coman, Oracle Database Product Management, July 2024",
     )
 
     for t in blocks:
