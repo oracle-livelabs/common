@@ -17,7 +17,9 @@ This lab assumes you have:
 ## Task 1: Configure and Enforce Static hostname
 Follow steps below to establish a unique static hostname that will be enforced on any offspring from the image. Whenever possible, this one-time task should be performed prior to installing any product that will hardcode the hostname to various config/settings in the product. e.g. DB Listener, Weblogic, etc...
 
-1.  As opc, run *sudo su -* to login as root.
+1.  Create a local SSH connection to your instance as user "opc". Click [here](https://docs.oracle.com/en-us/iaas/Content/GSG/Tasks/testingconnection.htm) for detailed instructions.
+
+2. Run the following command to login as the root user.
 
     ```
     <copy>
@@ -26,7 +28,7 @@ Follow steps below to establish a unique static hostname that will be enforced o
     </copy>
     ```
 
-2. Download setup artifacts and run *setup-firstboot.sh*.
+3. Download setup artifacts and run *setup-firstboot.sh*.
 
     ```
     <copy>
@@ -47,8 +49,8 @@ Follow steps below to establish a unique static hostname that will be enforced o
     - (3) Do you have additional host alias(es), virtualhost names, or FQDN required for labs that are using this instance? [Y/N]
     - (4) If Y, "Enter each additional host alias, FQDN, or virtualhost name (separated from each other by a space. e.g. *serv1 serv1.demo.com*)"
 
-3. Review the script output
-4. If you have additional entries you would like added to */etc/hosts* file whenever an instance is created from the image, edit */root/bootstrap/firstboot.sh* and add them under the ***Add Static Name to /etc/hosts*** block
+4. Review the script output
+5. If you have additional entries you would like added to */etc/hosts* file whenever an instance is created from the image, edit */root/bootstrap/firstboot.sh* and add them under the ***Add Static Name to /etc/hosts*** block
 
     In the example below, the following customization are added to a setup:
     - 3 Additional host aliases:  *myapp*, *app1*, and *hr.demo.com*
@@ -75,8 +77,6 @@ Follow steps below to establish a unique static hostname that will be enforced o
 ## Task 2: Deploy noVNC
 1.  From the same session started in the previous task, login again as root via SUDO and run the latest setup script. You will be prompted for the following input:
 
-    - The *OS user* for which the remote desktop will be configured. *Default: Oracle*
-
     ```
     <copy>
     sudo su -
@@ -92,9 +92,11 @@ Follow steps below to establish a unique static hostname that will be enforced o
     </copy>
     ```
 
-2. Review the output and address any issue before proceeding.
+2. When prompted for an OS user to configure your remote desktop, you can press enter to use the default user: *oracle*. 
 
-3. Test the two remote desktop URLs shown in the output
+3. Once the script finishes, you'll see the two URLs in the output. Test that both launch your remote desktop.
+
+    ![noVNC URLs](./images/novnc-urls.png)
 
 Upon successful validation as indicated above, proceed with the next lab.
 
@@ -148,17 +150,21 @@ Upon successful validation as indicated above, proceed with the next lab.
 
     ![](./images/novnc-test-browser-windows-3.png " ")
 
-9.  Keep *Make Google Chrome the default browser* checked, uncheck *Automatic Usage Statistics & Crash reporting* and click *OK*. This opens the second browser session on the right preloaded with two tabs.
+9.  Keep *Make Google Chrome the default browser* checked, uncheck *Automatic Usage Statistics & Crash reporting* and click *OK*. 
 
     ![](./images/novnc-custom-chrome-1a.png " ")
 
-10. Click on *Accept All*
+10. A Google Chrome sign-in window will then appear. Close that window.
+
+    ![Google Chrome sign-in window](./images/chrome-pop-up.png)
+
+11. On the right, you'll then see the second browser session preloaded with two tabs. Click on *Accept All*
 
     ![](./images/novnc-custom-chrome-2a.png " ")
 
-11. Close all browser windows opened.
+12. Close all browser windows opened.
 
-12. Click on *Activities* >> *Google Chrome* to Launch, then on *Get Started*, on the next 3 pages click on *Skip*, and finally on *No Thanks*.
+13. Click on *Activities* >> *Google Chrome* to Launch, then on *Get Started*, on the next 3 pages click on *Skip*, and finally on *No Thanks*.
 
     ![noVNC launch Chrome](./images/novnc-launch-chrome.png " ")
     ![noVNC custom Chrome](./images/novnc-custom-chrome-4a.png " ")
@@ -166,9 +172,32 @@ Upon successful validation as indicated above, proceed with the next lab.
     ![noVNC custom Chrome](./images/novnc-custom-chrome-6a.png " ")
     ![noVNC custom Chrome main page](./images/novnc-custom-chrome-7a.png " ")
 
-13. Close all browser windows opened.
+14. Close all browser windows opened.
 
-## Task 4: Optimize Desktop for LiveLabs
+## Task 4: Enterprise Linux 9 (EL9)
+1. Launch the terminal.
+
+    ![Terminal Icon](./images/launch-terminal.png)
+
+2. Run the following command to launch the LiveLabs browser windows.
+    ```
+    <copy>
+    $HOME/.livelabs/init_ll_windows.sh
+    </copy>
+    ```
+
+3. Keep *Make Google Chrome the default browser* checked, uncheck *Automatic Usage Statistics & Crash reporting* and click *OK*. 
+    ![](./images/initialize-livelabs-window.png)
+
+4. Don't sign in to Google Chrome.
+    ![](./images/chrome-sign-in.png)
+
+5. The Oracle website will then appear. Repeat Step 3, and the LiveLabs window will appear as well.
+    ![](./images/chrome-windows.png)
+
+6. Close all browser windows opened.
+
+## Task 5: Optimize Desktop for LiveLabs
 
 1. If the *`desktop_app1_url`* and/or *`desktop_app2_url`* are applicable to the workshop, update *`$HOME/.livelabs/init_ll_windows.sh`* with the correct URLs for those two variables and run it from a terminal session in the desktop to validate before proceeding to custom image creation. Feel free to update to update the *`desktop_guide_url`* value as well.
 
@@ -210,24 +239,57 @@ Upon successful validation as indicated above, proceed with the next lab.
 
 3. Close all browser windows opened.
 
-4. Review *`$HOME/.bash_profile`* and confirm the presence of the following default code block (add if missing).
+4. Run the following command.
 
+    ```
+    <copy>
+    cat $HOME/.bash_profile
+    </copy>
+    ```
+5. Review the output and confirm that the following code block is present. 
     ```
     # Get the aliases and functions
     if [ -f ~/.bashrc ]; then
         . ~/.bashrc
     fi
     ```
-## Task 5: Create Auto-Start SYSTEMD Services for Oracle Databases or WebLogic Domain (Optional)
+6. If the code block is not present, run the following command and add the code block from above. The file should then look like the following:
+
+    ```
+    <copy>
+    vi $HOME/.bash_profile
+    </copy>
+    ```
+
+    ```
+    # .bash_profile
+
+    # Get the aliases and functions
+    if [ -f ~/.bashrc ]; then
+	    . ~/.bashrc
+    fi
+
+    # User specific environment and startup programs
+    . ~/.set-env.sh
+    ```
+Once the code block has been added, type ":wq" to save the file and exit the vi editor.
+
+## Task 6: Create Auto-Start SYSTEMD Services for Oracle Databases or WebLogic Domain (Optional)
 
 If your workshop includes one or more Oracle Databases or WebLogic Server, proceed as indicated below to setup SYSTEMD services. This will allow for automatic management of the UP/DOWN state of these processes. As a result workshop attendees will get started faster as these processes will be up and running post provisioning and before they even connect to the instance.
 
 ### **Oracle Database**
-1. Review "*/etc/oratab*" and ensure that the switch is set to "*Y*" for any entry that will be managed by the service
+1. Run the following command. In the output, ensure that the switch is set to "*Y*" for any entry that will be managed by the service.
+
+    ```
+    <copy>
+    cat /etc/oratab
+    </copy>
+    ```
 
     ![](./images/add-db-service.png " ")
 
-2. Run the following block to create a services:
+2. Run the following block to create the services:
 
     - *oracle-database.service* - Manages all databases with an in entry in */etc/oratab* set to *Y*
     - *oracle-db-listener.service* - Manages additional listeners beside *1521* and with an entry in *~oracle/scripts/livelabs/listener-tab* set to *Y*
