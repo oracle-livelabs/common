@@ -1,7 +1,9 @@
 <!--
     {
         "name":"Create an Oracle Autonomous Database",
-        "description":"Learn how to provision Autonomous Database using the OCI console."
+        "description":"Learn how to provision Autonomous Database using the OCI console.",
+        "author":"Ana Coman",
+        "last_updated":"Ana Coman, Oracle Database Product Management, July 2024"
     }
 -->
 # Create an Oracle Autonomous Database

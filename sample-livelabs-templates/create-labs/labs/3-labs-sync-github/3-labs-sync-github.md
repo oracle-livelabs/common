@@ -252,6 +252,16 @@ If you are the **workshop team** of the workshop that you want to create an even
 
 8. After the event, if you as the event organizers want to know about the event's registration information, you can contact the LiveLabs team. We can share the number of attendees, their emails' domain names (but not their email address), and when they request the event codes, etc.
 
+## Task 10: Reverting a commit in GitHub Desktop
+
+  1. Open **GitHub Desktop**, choose your repository and go to the **History**.
+
+  ![Reversing commit](./images/reversing-commit.png " ")
+
+  2. Right-click the commit you want to revert and click **Revert Changes in Commit**.
+
+  ![Revert changes in commit](./images/revert-changes.png " ")
+
 ## Troubleshooting
 
 ### Issue 1: Commits Behind oracle:main
@@ -426,4 +436,4 @@ If you have multiple Oracle LiveLabs repositories, you need to switch to the rep
     * Brianna Ambler, Product Manager
 
 * **Last Updated By/Date:**
-    * Ana Coman, Technical Program Manager, Oracle Database Product Management, May 2024
+    * Ana Coman, Technical Program Manager, Oracle Database Product Management, July 2024
