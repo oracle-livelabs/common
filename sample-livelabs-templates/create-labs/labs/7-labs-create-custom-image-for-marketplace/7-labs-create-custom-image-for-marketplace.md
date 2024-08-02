@@ -13,9 +13,7 @@ This lab assumes you have:
 
 ## Task 1: Cleanup Instance for Image Capture   
 
-1. Start an SSH termial session to the instance as user *opc* 
-    
-    **Notes:** This session must be external to your remote desktop connection.
+1. **Outside of your remote desktop connection!** Connect to your instance via SSH as user *opc*. 
 
 2. Copy and run the following to cleanup the instance.
 
@@ -137,4 +135,4 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 ## Acknowledgements
 * **Author** - Rene Fontcha, Master Principal Solution Architect, February 2021
 * **Contributors**  -
-* **Last Updated By/Date** - Rene Fontcha, Master Principal Solution Architect, December 2022
+* **Last Updated By/Date** - Kevin Lazarz Senior Manager, Database Product Management, June 2024
