@@ -357,8 +357,48 @@ If your workshop includes one or more Oracle Databases or WebLogic Server, proce
 
 You may now proceed to the next lab.
 
+## Appendix 1: Configuring the Terminal for Auto-Start on VNC Startup  
 
-## Appendix 1: Configuring Additional Desktop Apps for Auto-Start on VNC Startup   
+1. As the oracle user, run the following command to create the startup file. 
+
+    ```
+    <copy>
+    cat >$HOME/.config/autostart/terminal.desktop <<EOB
+    [Desktop Entry]
+    Type=Application
+    Exec=gnome-terminal --geometry=95x49+1020+45
+    Hidden=false
+    NoDisplay=false
+    X-GNOME-Autostart-enabled=true
+    Name[en_US]=Terminal
+    Name=Terminal
+    Comment[en_US]=Launch Terminal on VNC Startup
+    Comment=Launch Terminal on VNC Startup
+    EOB
+    </copy>
+    ```
+2. Restart *vncserver* to test.
+
+    ```
+    <copy>sudo systemctl restart websockify.service vncserver@:1.service nginx.service</copy>
+
+    ```
+
+3. Wait for *Auto reconnect* to get back into the remote desktop
+
+    ![](./images/novnc-startup-prog-3a.png " ")
+
+    > *Notes:* Don't worry if the browser window(s) is(are) not loaded as expected on VNC startup at the moment. The required instance metadata is not yet present on the host but will be injected at provisioning to cover the following.
+
+    - `DESKTOP_GUIDE_URL` - *required*
+    - `DESKTOP_APP1_URL` - optional
+    - `DESKTOP_APP2_URL` - optional
+
+
+
+
+
+## Appendix 2: Configuring Additional Desktop Apps for Auto-Start on VNC Startup   
 LiveLabs compute instance are password-less and only accessible optionally via SSH keys. As result it's important to adjust session settings to ensure a better user experience. By default the dedicated LiveLabs custom desktop application *Get Started with your Workshop* is setup to automatically launch web browser session(s) on:
 
 - First half (left) of the screen preloaded with the workshop guide
@@ -400,13 +440,11 @@ If there are no WebApps used in the workshop, configure *Startup Programs* for a
     ```
 
 2. Restart *vncserver* to test.
+   
+    ```
+    <copy>sudo systemctl restart websockify.service vncserver@:1.service nginx.service</copy>
 
     ```
-    <copy>sudo systemctl restart vncserver_$(whoami)@\:1</copy>
-
-    ```
-
-    ![](./images/novnc-startup-prog-2a.png " ")
 
 3. Wait for *Auto reconnect* to get back into the remote desktop
 
@@ -423,7 +461,7 @@ If there are no WebApps used in the workshop, configure *Startup Programs* for a
     ![](./images/novnc-startup-prog-6a.png " ")
 
 
-## Appendix 2: Enable VNC Password Reset, and Workshop Guide and WebApps URLs injection for each instance provisioned from the image
+## Appendix 3: Enable VNC Password Reset, and Workshop Guide and WebApps URLs injection for each instance provisioned from the image
 Actions provided in this Appendix are not meant to be performed on the image. They are rather intended as guidance for workshop developers writing terraform scripts to provision instances from an image configured as prescribed in this guide.
 
 Update your Terraform/ORM stack with the tasks below to enable VNC password reset and add workshop URLs for each VM provisioned from the image.
@@ -587,7 +625,7 @@ Update your Terraform/ORM stack with the tasks below to enable VNC password rese
     **Note:** Your source image instance is now configured to generate a random VNC password for every instance created from it, provided that the provisioning requests include the needed metadata storing the random string.
 
 
-## Appendix 3: Removing Guacamole from a previously configured LiveLabs image
+## Appendix 4: Removing Guacamole from a previously configured LiveLabs image
 
 Prior to noVNC some images were configured with *Apache Guacamole*. If this applies to your image, proceed as detailed below to remove it prior to deploying noVNC
 
