@@ -47,7 +47,7 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     >**Note:** If you get a *Policy Missing* error, make sure you have navigated first to the compartment assigned to you and then launched the cloud shell. Go to the *Need Help* lab -> *Cannot Access Cloud Shell?* to see how you can do that.
 
-2.  Once the cloud shell has started, enter the following commands. Choose the key name you can remember. This will be the key name you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
+3.  Once the cloud shell has started, enter the following commands. Choose the key name you can remember. This will be the key name you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
 
     ````text
     <copy>mkdir .ssh</copy>
@@ -56,13 +56,14 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     ````text
     <copy>cd .ssh
-    ssh-keygen -b 2048 -t rsa -f cloudshellkey</copy>
+    ssh-keygen -b 2048 -t rsa -f <<sshkeyname>></copy>
     ````
     *We recommend using the name cloudshellkey for your keyname but feel free to use the name of choice.*
+    >**Note:** The angle brackets <<>> should not appear in your code.
 
     ![Generate SSH key](./images/cloudshell-ssh.png " ")
 
-3.  Examine the two files that you just created.
+4.  Examine the two files that you just created.
 
     ````
     <copy>ls</copy>
@@ -72,16 +73,16 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     >**Note:** In the output, there are two files, a *private key:* `cloudshellkey` and a *public key:* `cloudshellkey.pub`. Keep the private key safe and don't share its content with anyone. The public key will be needed for various activities and can be uploaded to certain systems as well as copied and pasted to facilitate secure communications in the cloud.
 
-4. To list the contents of the public key, use the cat command:
+5. To list the contents of the public key, use the cat command:
      ```text
-    <copy>cat cloudshellkey.pub</copy>
+    <copy>cat <<sshkeyname>>.pub</copy>
      ```
 
     >**Note:** The angle brackets <<>> should not appear in your code.
 
     ![Cat in cloud shell](./images/cat.png " ")
 
-5.  Copy the contents of the public key and save it somewhere for later. When pasting the key into the compute instance in future labs, make sure that you remove any hard returns that may have been added when copying. *The .pub key should be one line.*
+6.  Copy the contents of the public key and save it somewhere for later. When pasting the key into the compute instance in future labs, make sure that you remove any hard returns that may have been added when copying. *The .pub key should be one line.*
 
     ![Copy public key](./images/copy-cat.png " ")
 
@@ -90,4 +91,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 * **Author** - Dan Kingsley, Enablement Specialist, OSPA
 * **Contributors** - Jaden McElvey, Kamryn Vinson, Arabella Yao
-* **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Dec 2022
+* **Last Updated By/Date** - Carmen Berdant, Technical Project Manager, Database Product Management, Mar 2024

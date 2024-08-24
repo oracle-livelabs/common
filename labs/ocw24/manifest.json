@@ -1,0 +1,30 @@
+{
+    "workshoptitle": "The Title of the Workshop is defined in the manifest",
+    "help": "livelabs-help-**enterarea**_us@oracle.com",
+    "variables": [
+        "../../variables/variables.json",
+        "../../variables/variables-in-another-file.json"
+    ],
+    "tutorials": [
+        {
+            "title": "Your OCI GenAI key",
+            "filename": "https://oracle-livelabs.github.io/common/labs/ocw24/hol2383.md"
+        },
+        {
+            "title": "Your OCI GenAI key",
+            "filename": "https://oracle-livelabs.github.io/common/labs/ocw24/hol3008.md"
+        },
+        {
+            "title": "Your OCI GenAI key",
+            "filename": "https://oracle-livelabs.github.io/common/labs/ocw24/hol3015.md"
+        },
+        {
+            "title": "Your OCI GenAI key",
+            "filename": "https://oracle-livelabs.github.io/common/labs/ocw24/hol3253.md"
+        },
+        {
+            "title": "Your OCI GenAI key",
+            "filename": "https://oracle-livelabs.github.io/common/labs/ocw24/hol3335.md"
+        }
+    ]
+}

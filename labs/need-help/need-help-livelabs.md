@@ -12,7 +12,7 @@ For more about getting support using our email, click [here](#HowtoFormatYourSup
 ### Common Issues Table of Contents
   - [Can't Log in to Oracle Cloud](#CantLogintoOracleCloud)
   - [Can't Create An Oracle Database? Nothing In Your Compartment?](#CantCreateanOracleDatabase?NothinginYourCompartment?)
-  - [Connectivity Issues? Unable to Upload Data or Connect to the Database? Hmmm... can't reach this page? What ports should I open to gain access to the workshop?](#ConnectivityIssues?UnabletoUploadDataorConnecttotheDatabase?Hmmm...can'treachthispage?WhatportsshouldIopentogainaccesstotheworkshop?)
+  - [Connectivity Issues?](#ConnectivityIssues?)
   - [Cannot Access Cloud Shell?](#CannotAccessCloudShell?)
   - [Cannot Connect to the Marketplace Compute Instance Using a Private SSH Key?](#CannotConnecttotheMarketplaceComputeInstanceUsingaPrivateSSHKey?)
   - [Cannot Create Passwords for Database Users?](#CannotCreatePasswordsforDatabaseUsers?)
@@ -20,7 +20,7 @@ For more about getting support using our email, click [here](#HowtoFormatYourSup
 ## How to Format Your Support Email Request
 This will construct an email in your default mail application that is auto-populated to address our LiveLabs support inbox and will also include your current workshop in the subject line. Follow the steps below to contact us and get a quick resolution to your issue.
 
-1. Do not change the subject line.
+1. In the subject line please provide the **Workshop Name** (see example).
     ![Email](./images/e-mail.png)
 
 2. Include the **Lab Number**, **Task Number**, and **Step Number** where you've encounter the issue. Also, include the **environment** where you are running this workshop (your tenancy or the LiveLabs sandbox tenancy).
@@ -49,7 +49,7 @@ This will construct an email in your default mail application that is auto-popul
 
     ![Set region](./images/compartment-select.png)
 
-## Connectivity Issues? Unable to Upload Data or Connect to the Database? Hmmm... can't reach this page? What ports should I open to gain access to the workshop?
+## Connectivity Issues?
 
 Are you connected to a **VPN**, **Corporate Network**, or behind a strict **Firewall**?
 
