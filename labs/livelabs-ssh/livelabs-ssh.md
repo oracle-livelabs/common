@@ -136,7 +136,7 @@ You must have Putty installed. [Download Putty](https://www.putty.org/)
 
     ![copy ppk to dekstop](images/putty-config.png)
 
-    4. Provide connection details (optional step 2 and 3: save the settings for later use)
+4. Provide connection details (optional step 2 and 3: save the settings for later use)
 
     ![connect using putty](../../support/sshconnect/images/putty-connect.png)
 
