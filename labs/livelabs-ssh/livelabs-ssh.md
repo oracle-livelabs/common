@@ -138,11 +138,9 @@ You must have Putty installed. [Download Putty](https://www.putty.org/)
 
 4. Provide connection details (optional step 2 and 3: save the settings for later use)
 
-    ![connect using putty](images/putty-connect.png)
+    ![connect using putty](../../support/sshconnect/images/putty-connect.png)
 
 You will be prompted for the username once you click 'Open'
-
-
 
 ## Learn More
 
@@ -152,4 +150,4 @@ You will be prompted for the username once you click 'Open'
 ## Acknowledgements
 
 * **Author** - Kevin Lazarz, Oracle Database Product Management, Senior Manager, Database Product Management
-* **Last Updated By/Date** - Kevin Lazarz, June 2024
+* **Last Updated By/Date** - Ana Coman, September 2024
