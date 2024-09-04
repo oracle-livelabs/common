@@ -35,11 +35,11 @@ To create the table:
 
 	![SQL script to create Customers360 table](images/scratchpad-run.png)
 
-	After the script runs successfully, the paragraph status changes to `FINISHED`, as shown in the screenshot:
+	After the script runs successfully, the phrase **"Successful run: No result returned"** is shown at the bottom of the paragraph, as shown in the screenshot:
 
 	![SQL script to create Customers360 table](images/scratchpad-finished.png)
 
-6. In the next paragraph, edit the paragraph tag to change it to `%sql`, and run the following statement to view the data:
+4. In the next paragraph, edit the paragraph tag to change it to `%sql`, and run the following statement to view the data:
 
 	```
 		<copy>
@@ -50,4 +50,4 @@ To create the table:
 
 	![Script to view Customers360 table](images/script-view-customers360.png)
 
-This completes the task of creating the CUSTOMERS360 table. You may now **proceed to the next lab.**
+If the listing shows the columns and rows from the dataset as indicated in the image, you have completed the task of creating the `CUSTOMERS360` table. You may now **proceed to the next lab.**

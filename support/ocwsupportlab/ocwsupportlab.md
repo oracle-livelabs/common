@@ -185,7 +185,7 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
    
     ```
     <copy>
-    wget https://developer.oracle.com/livelabs/ssh
+    wget https://livelabs.oracle.com/ssh
     </copy>
     ```
 3. Unzip the archive
@@ -238,7 +238,7 @@ If you are using MacOS, you can also connect using a terminal application such a
    
     ```
     <copy>
-    wget https://developer.oracle.com/livelabs/ssh
+    wget https://livelabs.oracle.com/ssh
     </copy>
     ```
 3. Unzip the archive
@@ -285,7 +285,7 @@ You must have Putty installed. [Download Putty](https://www.putty.org/)
 
     ```
     <copy>
-    https://developer.oracle.com/livelabs/ssh
+    https://livelabs.oracle.com/ssh
     </copy>
     ```
 2. Unzip the file and copy the file ocw23-rsa.ppk to a folder of your choice, for example to your Windows Desktop.
@@ -315,7 +315,7 @@ More information on using SSH in PowerShell can be found here: [PowerShell remot
    
     ```
     <copy>
-    wget https://developer.oracle.com/livelabs/ssh -outfile ocw23-keys.zip
+    wget https://livelabs.oracle.com/ssh -outfile ocw23-keys.zip
     </copy>
     ```
 3. Unzip the archive
@@ -353,7 +353,7 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
    
     ```
     <copy>
-    wget https://developer.oracle.com/livelabs/ssh
+    wget https://livelabs.oracle.com/ssh
     </copy>
     ```
 3. Unzip the archive
@@ -397,7 +397,7 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
    
     ```
     <copy>
-    wget https://developer.oracle.com/livelabs/ssh
+    wget https://livelabs.oracle.com/ssh
     </copy>
     ```
 3. Unzip the archive

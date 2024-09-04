@@ -41,6 +41,8 @@
      {
          "title": "Get Started",
          "description": "Get a Free Trial",
+         "author": "Ana Coman",
+         "last_updated": "Ana Coman, Oracle Database Product Management, July 2024",
          "filename": "https://oracle-livelabs.github.io/common/labs/cloud-login/cloud-login.md"
      },
      {

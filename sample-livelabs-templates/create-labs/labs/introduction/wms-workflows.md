@@ -34,6 +34,9 @@ If something is unclear or more details are needed to understand the workshop, t
 7. The workshop is *completed* and is ready for publishing! Workshop teams will submit a publishing request, and the LiveLabs team will approve it. Steps to complete publishing are in Lab 5. After the publishing request is approved, the workshop will be live in LiveLabs automatically within a business day.
   ![Completed](./images/completed.png " ")
 
+  Check the LiveLabs Workshop Management Flow
+
+  ![LiveLabs Workshop Management Flow ](./images/livelabs-publishing-flow.png " ")
 
 ### **What's Next?**
 
@@ -41,7 +44,7 @@ Now that you know all about Oracle LiveLabs GitHub project repository and LiveLa
 
 ## Want to learn more about LiveLabs workshops?
 
-* [Oracle LiveLabs](https://apexapps.oracle.com/pls/apex/f?p=133:1)
+* [Oracle LiveLabs](https://livelabs.oracle.com/pls/apex/f?p=133:1)
 * [Get started with GitHub](https://docs.github.com/en/get-started)
 
 ## Acknowledgements
