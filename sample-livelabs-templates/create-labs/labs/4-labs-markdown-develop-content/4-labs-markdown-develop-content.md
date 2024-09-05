@@ -458,6 +458,119 @@ If you have installed the LiveServer extension in your VSCode by following the s
 
 3. With the workshop now open in your browser, you have the flexibility to modify your files as needed. Save the changes you make to the files. To see the changes reflected in real-time, simply reload the page in your browser and the Live Server ensures that any modifications you make to the files are immediately visible.
 
+
+## Additional optional task: Tables
+
+You can define a table in Markdown just like so:
+
+```
+| Tables        |      Are      |  Cool |
+| ------------- | :-----------: | ----: |
+| **col 3 is**  | right-aligned | $1600 |
+| col 2 is      |  *centered*   |   $12 |
+| zebra stripes | ~~are neat~~  |    $1 |
+```
+The result looks like this:
+
+| Tables        |      Are      |  Cool |
+| ------------- | :-----------: | ----: |
+| **col 3 is**  | right-aligned | $1600 |
+| col 2 is      |  *centered*   |   $12 |
+| zebra stripes | ~~are neat~~  |    $1 |
+
+You can see that there is a default table caption provided which is by default a concatenation of the workshop title and the lab title.
+
+If you don't like the default, you can also provide your own table title by adding the below the table definition:
+
+```
+{: title="My table title"}
+```
+
+The complete markdown looks like this:
+
+```
+| Tables        |      Are      |  Cool |
+| ------------- | :-----------: | ----: |
+| **col 3 is**  | right-aligned | $1600 |
+| col 2 is      |  *centered*   |   $12 |
+| zebra stripes | ~~are neat~~  |    $1 |
+{: title="My table title"}
+```
+
+Now our table looks like this:
+
+| Tables        |      Are      |  Cool |
+| ------------- | :-----------: | ----: |
+| **col 3 is**  | right-aligned | $1600 |
+| col 2 is      |  *centered*   |   $12 |
+| zebra stripes | ~~are neat~~  |    $1 |
+{: title="My table title"}
+
+As you can see, the numbering is added automatically.
+
+Isn't that cool?
+
+You can also refer to the [LiveLabs Markdown Cheatsheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/labfiles/LiveLabs_MD_Cheat_Sheet.pdf)
+
+## Additional optional task: Variables
+
+You can specify variables in another file and refer to them in your Markdown.
+
+1. Add the following to your manifest.json in the top section:
+
+```
+   "variables": ["../../variables/variables.json",
+                 "../../variables/variables-in-another-file.json"],
+```
+
+2. Specify the variables in the .json file like this:
+
+*Example: variables.json*
+```
+{
+    "var1": "Variable 1 value",
+    "var2": "Variable 2 value",
+    "random_name": "LiveLabs rocks!",
+    "number_of_ocpu_paid": "24"
+    "number_of_ocpu_always_free": "2"
+ }
+ ```
+
+You can also add multiple files that specify variables (see the example in Task 1).
+
+ *Example: variables_in_another_file.json*
+```
+{
+    "var11": "Variable 1 value but yet different",
+    "var22": "Variable 2 value is different",
+    "random_name2": "LiveLabs rocks & rules!",``
+    "name_of_database": "My-Database-Name-is-the-best",
+    "magic": "What is 2*2?"
+ }
+ ```
+
+3. Now, you can refer to those variables using the following syntax (**Please note that you can see the syntax only in markdown**):
+
+[](var:var1)
+
+or
+
+[](var:magic)
+
+### Examples
+
+(Check the markdown to see the syntax - the bold text is the value of the variable)
+
+- Do you know math? This is **[](var:magic)**
+
+- How many OCPUs do I need to run this service in my paid tenancy? You need **[](var:number_of_ocpu_paid)**
+
+- But what if am using 'Always free'? Then you need **[](var:number_of_ocpu_always_free)**
+
+- What is the best name for my database? It is **[](var:name_of_database)**
+
+- Here you can find more info: **[](var:doc_link)**
+
 You may now **proceed to the next lab**.
 
 ## Acknowledgements
@@ -475,4 +588,4 @@ You may now **proceed to the next lab**.
     * Brianna Ambler, Product Manager
 
 * **Last Updated By/Date:**
-    * Ana Coman, Technical Program Manager, Oracle Database Product Management, May 2024
+    * Ana Coman, Technical Program Manager, Oracle Database Product Management, September 2024
