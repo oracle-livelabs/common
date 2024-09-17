@@ -19,7 +19,7 @@ Watch the video below for a quick walk-through of the lab.
 ### Prerequisites
 
 - Should have an Oracle Autonomous Database instance provisioned with Lifecycle Status - Available or Stopped.
-- To provision an Oracle Autonomous Database, there are detailed instructions in Lab 1 of [Autonomous Database 15 minute quick start](https://apexapps.oracle.com/pls/apex/dbpm/r/livelabs/view-workshop?wid=928) workshop.
+- To provision an Oracle Autonomous Database, there are detailed instructions in Lab 1 of [Autonomous Database 15 minute quick start](https://livelabs.oracle.com/pls/apex/dbpm/r/livelabs/view-workshop?wid=928) workshop.
 
 ## Task 1: Terminate a Provisioned Oracle Autonomous Database Instance
 

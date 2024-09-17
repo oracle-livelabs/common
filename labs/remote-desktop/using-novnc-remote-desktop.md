@@ -101,7 +101,9 @@ This assumes that you already have an RSA-type SSH key-pair available on the loc
 7. Test/Validate connectivity using the private key (for Unix/Linux/MacOS Terminal, OCI cloud shell, and Terminal emulators on Windows such as Cygwin and MobaXterm).
 
     ```text
+    <copy>
     ssh -i [path to private key] remote-user@[instance-public-ip-address]
+    </copy>
     ```
 
     e.g.

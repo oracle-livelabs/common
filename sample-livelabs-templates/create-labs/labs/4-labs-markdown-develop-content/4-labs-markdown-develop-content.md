@@ -318,8 +318,119 @@ Without using video scaling, all the video you embed will have small as the defa
 
 	[Video hosted on YouTube](youtube:lHriX403Oz4:large)
 
+## Task 11: Tables
 
-## Task 11: Use the LintChecker
+You can define a table in Markdown just like so:
+
+```
+| Tables        |      Are      |  Cool |
+| ------------- | :-----------: | ----: |
+| **col 3 is**  | right-aligned | $1600 |
+| col 2 is      |  *centered*   |   $12 |
+| zebra stripes | ~~are neat~~  |    $1 |
+```
+The result looks like this:
+
+| Tables        |      Are      |  Cool |
+| ------------- | :-----------: | ----: |
+| **col 3 is**  | right-aligned | $1600 |
+| col 2 is      |  *centered*   |   $12 |
+| zebra stripes | ~~are neat~~  |    $1 |
+
+You can see that there is a default table caption provided which is by default a concatenation of the workshop title and the lab title.
+
+If you don't like the default, you can also provide your own table title by adding the below the table definition:
+
+```
+{: title="My table title"}
+```
+
+The complete markdown looks like this:
+
+```
+| Tables        |      Are      |  Cool |
+| ------------- | :-----------: | ----: |
+| **col 3 is**  | right-aligned | $1600 |
+| col 2 is      |  *centered*   |   $12 |
+| zebra stripes | ~~are neat~~  |    $1 |
+{: title="My table title"}
+```
+
+Now our table looks like this:
+
+| Tables        |      Are      |  Cool |
+| ------------- | :-----------: | ----: |
+| **col 3 is**  | right-aligned | $1600 |
+| col 2 is      |  *centered*   |   $12 |
+| zebra stripes | ~~are neat~~  |    $1 |
+{: title="My table title"}
+
+As you can see, the numbering is added automatically.
+
+Isn't that cool?
+
+You can also refer to the [LiveLabs Markdown Cheatsheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/labfiles/LiveLabs_MD_Cheat_Sheet.pdf)
+
+## Task 12: Variables
+
+You can specify variables in another file and refer to them in your Markdown.
+
+1. Add the following to your manifest.json in the top section:
+
+```
+   "variables": ["../../variables/variables.json",
+                 "../../variables/variables-in-another-file.json"],
+```
+
+2. Specify the variables in the .json file like this:
+
+*Example: variables.json*
+```
+{
+    "var1": "Variable 1 value",
+    "var2": "Variable 2 value",
+    "random_name": "LiveLabs rocks!",
+    "number_of_ocpu_paid": "24"
+    "number_of_ocpu_always_free": "2"
+ }
+ ```
+
+You can also add multiple files that specify variables (see the example in Task 1).
+
+ *Example: variables_in_another_file.json*
+```
+{
+    "var11": "Variable 1 value but yet different",
+    "var22": "Variable 2 value is different",
+    "random_name2": "LiveLabs rocks & rules!",``
+    "name_of_database": "My-Database-Name-is-the-best",
+    "magic": "What is 2*2?"
+ }
+ ```
+
+3. Now, you can refer to those variables using the following syntax (**Please note that you can see the syntax only in markdown**):
+
+[](var:var1)
+
+or
+
+[](var:magic)
+
+### Examples
+
+(Check the markdown to see the syntax - the bold text is the value of the variable)
+
+- Do you know math? This is **[](var:magic)**
+
+- How many OCPUs do I need to run this service in my paid tenancy? You need **[](var:number_of_ocpu_paid)**
+
+- But what if am using 'Always free'? Then you need **[](var:number_of_ocpu_always_free)**
+
+- What is the best name for my database? It is **[](var:name_of_database)**
+
+- Here you can find more info: **[](var:doc_link)**
+
+## Task 13: Use the LintChecker
 
 The LintChecker is a great javascript function for QAing that you should take advantage of. It is especially handy in catching some of the more easily overlooked errors such as indentation and syntax errors.
 
@@ -329,7 +440,7 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
   A box will pop up with any errors that the LintChecker caught. Keep in mind that these are not an exhaustive list of errors, they are only the ones that the function has been programmed to catch.  Also keep in mind that even though it lists something as an "error", if it was done intentionally by you, you can by all means just ignore it.
 
-## Task 12: Case Sensitivity
+## Task 14: Case Sensitivity
 
 **THIS IS IMPORTANT.** The majority of us use Windows and macOS which are **Case Insensitive** systems. This means that Windows and macOS consider "OrAcLe.PnG" to be the same as "oracle.png" or "Oracle.PNG" for file structure. GitHub and GitHub pages are **Case Sensitive**, and **do** make that distinction.
 
@@ -345,7 +456,7 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
 2. If you do run into a Case Sensitivity error on Windows or macOS, you cannot simply fix it by renaming it DIRECTLY with the correct case... because the system will not recognize that you are trying to rename it. You have to either rename that item to something else entirely and then rename it back with the correct case... or you can use **"git mv"** as described [in this article](https://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory) for more complicated fixes that involve entire directories.
 
-## Task 13: Code Snippets
+## Task 15: Code Snippets
 
 1. If you include code snippets in your workshop instruction, you can use the following syntax for code to distinguish it from other instructions.
 
@@ -408,7 +519,7 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
 **Reminder** Download this handy [Cheatsheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
 
-## Task 14: Strikethrough
+## Task 16: Strikethrough
 
 With this new feature, you can now cross out text or words in a paragraph by adding two tilde before and after the word or text in a paragraph.
 
@@ -418,15 +529,15 @@ With this new feature, you can now cross out text or words in a paragraph by add
 
   *`~~An example of Strikethrough.~~`* transforms to *~~An example of Strikethrough.~~*
 
-## Task 15: Clickable Links
+## Task 17: Clickable Links
 
 1. Old pattern of making URL clickable required markdown formatting. For example, you need to have this format in markdown to make the links clickable.
 
-  *`Please visit [https://oracle.com/livelabs](https://oracle.com/livelabs)`* or *`Please visit <https://oracle.com/livelabs>`* transforms to Please visit [https://oracle.com/livelabs](https://oracle.com/livelabs)
+  *`Please visit [https://livelabs.oracle.com](https://livelabs.oracle.com)`* or *`Please visit <https://livelabs.oracle.com>`* transforms to Please visit [https://livelabs.oracle.com](https://livelabs.oracle.com)
 
 2. With new pattern, type the URL (including https://) and the engine automatically creates a clickable URL.
 
-  *`Please visit https://oracle.com/livelabs`* transforms to Please visit https://oracle.com/livelabs
+  *`Please visit https://livelabs.oracle.com`* transforms to Please visit https://livelabs.oracle.com
 
 3.  The old formatting still works and is required to achieve the below formatting with alternative text in markdown format.
 
@@ -434,7 +545,7 @@ With this new feature, you can now cross out text or words in a paragraph by add
 
 4. The URLs are opened in a new tab in the browser and the same applies to email addresses as well.
 
-## Task 16: Building Blocks
+## Task 18: Building Blocks
 
 Building Blocks are a way to enhance both the workshop development and customer experience. This step focuses on how authors can use Building Blocks and Tasks to accelerate their workshop development in your repo.
 
@@ -444,7 +555,7 @@ Building Blocks are a way to enhance both the workshop development and customer 
 
 3. If you would like to leverage pre-built building blocks for your repository, feel free to check out this [how to create building block guide](https://github.com/oracle-livelabs/common/blob/main/building-blocks/how-to-author-with-blocks/how-to-author-with-blocks.md) to begin building for your repo.
 
-## Task 17: Use LiveServer extension
+## Task 19: Use LiveServer extension
 
 If you have installed the LiveServer extension in your VSCode by following the steps in Lab 2 Task4, you can conveniently utilize Live Server to open your workshop's HTML file and enjoy the seamless experience of dynamically viewing and testing your changes.
 
@@ -475,4 +586,4 @@ You may now **proceed to the next lab**.
     * Brianna Ambler, Product Manager
 
 * **Last Updated By/Date:**
-    * Ana Coman, Technical Program Manager, Oracle Database Product Management, May 2024
+    * Ana Coman, Technical Program Manager, Oracle Database Product Management, September 2024
