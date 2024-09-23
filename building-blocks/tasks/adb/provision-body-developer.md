@@ -52,16 +52,17 @@
 
 5. In the **Configure the database** section, accept the default selections as follows:
 
-    - **Always Free** - An Always Free database is especially useful for development and trying new features. You can deploy an Always Free instance in an Always Free account or paid account. The only option you specify in an Always Free database is the database version. For this lab, we recommend you leave **Always Free** unchecked unless you are in an Always Free account.
-    - **Choose database version** - Select **19c** as the database version.
+    - **Always Free** - Always Free databases are especially useful for development and trying new features. You can deploy an Always Free instance in an Always Free account or paid account. However, it must be deployed in the home region of your tenancy. The only option you specify in an Always Free database is the database version. For this lab, we recommend you leave **Always Free** turned off.
+    - **Developer** - Developer databases provide a great low cost option for developing apps with Autonomous Database. You have similar features to Always Free - but are not limited in terms of region deployments or the number of databases in your tenancy. Therefore, we will **turn on the Developer model** for this lab. You can upgrade your Developer Database to a full paid version later and benefit from greater control over resources, backups and more."
+    - **Choose database version** - Select **23ai** as the database version.
     - **ECPU count** - Number of ECPUs for your service. For this lab, specify **[](var:db_ocpu)**. If you choose an Always Free database, you do not need to specify this option.
     - **Storage (TB)** - Select your storage capacity in terabytes. For this lab, specify **[](var:db_storage)** of storage. Or, if you choose an Always Free database, it comes with 20 GB of storage.
     - **Compute auto scaling** - For this lab, keep auto scaling enabled, to enable the system to automatically use up to three times more compute and IO resources to meet workload demand.
     - **Storage auto scaling** - For this lab, there is no need to enable storage auto scaling, which would allow the system to expand up to three times the reserved storage.
 
-        > **Note:** You cannot scale up/down an Always Free autonomous database.
+        > **Note:** You cannot scale up/down an Always Free or Developer autonomous database.
 
-        ![Choose the remaining parameters.](./images/adb-create-screen-configure-db.png =65%x*)
+        ![Choose the remaining parameters.](./images/provision-developer-adb-screen.png =65%x*)
 
 6. In the **Backup retention** section, you can either accept the default value or specify your own preferred backup retention days value. Accept the default 60 days default value.
 
