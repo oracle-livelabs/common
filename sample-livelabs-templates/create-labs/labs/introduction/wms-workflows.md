@@ -44,7 +44,7 @@ Now that you know all about Oracle LiveLabs GitHub project repository and LiveLa
 
 ## Want to learn more about LiveLabs workshops?
 
-* [Oracle LiveLabs](https://apexapps.oracle.com/pls/apex/f?p=133:1)
+* [Oracle LiveLabs](https://livelabs.oracle.com/pls/apex/f?p=133:1)
 * [Get started with GitHub](https://docs.github.com/en/get-started)
 
 ## Acknowledgements

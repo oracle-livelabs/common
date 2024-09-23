@@ -115,7 +115,7 @@ Here you can find a quick guide explaining how to access the LiveLabs Sandbox en
 
 *Please note*: Some hands-on labs provide access to preconfigured environments using noVNC (see Step 2b). Your host will inform you about the applicable access method.
 
-1. Using your *Oracle Account Login* go to [LiveLabs](https://oracle.com/livelabs). Open a workshop, click **Start**, and then **Run on LiveLabs** to request a reservation for this workshop.
+1. Using your *Oracle Account Login* go to [LiveLabs](https://livelabs.oracle.com). Open a workshop, click **Start**, and then **Run on LiveLabs** to request a reservation for this workshop.
   ![Run on LiveLabs](images/run-on-livelabs.png =20%x* " ")
 
 1. Fill out information on the *Reserve Workshop* page. Check **I consent to receive emails from LiveLabs for my reservation**. Click **Submit Reservation**.
@@ -185,7 +185,7 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
    
     ```
     <copy>
-    wget https://developer.oracle.com/livelabs/ssh
+    wget https://livelabs.oracle.com/ssh
     </copy>
     ```
 3. Unzip the archive
@@ -238,7 +238,7 @@ If you are using MacOS, you can also connect using a terminal application such a
    
     ```
     <copy>
-    wget https://developer.oracle.com/livelabs/ssh
+    wget https://livelabs.oracle.com/ssh
     </copy>
     ```
 3. Unzip the archive
@@ -285,7 +285,7 @@ You must have Putty installed. [Download Putty](https://www.putty.org/)
 
     ```
     <copy>
-    https://developer.oracle.com/livelabs/ssh
+    https://livelabs.oracle.com/ssh
     </copy>
     ```
 2. Unzip the file and copy the file ocw23-rsa.ppk to a folder of your choice, for example to your Windows Desktop.
@@ -315,7 +315,7 @@ More information on using SSH in PowerShell can be found here: [PowerShell remot
    
     ```
     <copy>
-    wget https://developer.oracle.com/livelabs/ssh -outfile ocw23-keys.zip
+    wget https://livelabs.oracle.com/ssh -outfile ocw23-keys.zip
     </copy>
     ```
 3. Unzip the archive
@@ -353,7 +353,7 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
    
     ```
     <copy>
-    wget https://developer.oracle.com/livelabs/ssh
+    wget https://livelabs.oracle.com/ssh
     </copy>
     ```
 3. Unzip the archive
@@ -397,7 +397,7 @@ You can use Windows Subsystem for Linux (WSL or WSL2) to connect to a remote ser
    
     ```
     <copy>
-    wget https://developer.oracle.com/livelabs/ssh
+    wget https://livelabs.oracle.com/ssh
     </copy>
     ```
 3. Unzip the archive
