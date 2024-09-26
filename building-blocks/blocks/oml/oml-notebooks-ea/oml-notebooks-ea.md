@@ -346,7 +346,7 @@ In this task, you will use the R interpreter and run R statements:
 This completes the task of connecting to the R interpreter and running R commands in your notebook.
 
 
-## Task 4: Work with notebook features
+## Task 4: Work with Notebook Features
 
 Upon creating a notebook, it opens automatically, presenting you with a single paragraph using the default ``%sql`` interpreter. You can change the interpreter by explicitly specifying one of ``%script``, ``%python``, ``%sql`` , ``%r`` , ``%md``, or ``%conda`` to connect to the respective interpreter.
 
@@ -489,7 +489,7 @@ You can create versions of notebooks on the notebooks page, as well as in the no
 
 **Prerequisites:** The _Paragraph Dependencies Demo_ notebook. This notebook is created as part of Task 5 of this lab.
 
-### Task 6.1: Create Versions on the Notebooks EA Page
+### Task 6.1: Create Versions on the Notebooks page
 In this task, you will create Version 1 of the _Paragraph Dependencies Demo_ notebook.
 1. On the Notebooks page, select the _Paragraph Dependencies Demo_ notebook to enable all the edit options.
 	![Notebooks page with options enabled](images/nbea-options-enabled.png)
@@ -599,29 +599,185 @@ To view the version that you created in Task 6.2:
 
 ## Task 7: Create a Notebook using a Template Example
 
-In this step, you will learn how to create a notebook based on a template example.
+This task demonstrates how to create notebooks based on Example templates. You will learn how to:
+* Create the OML4Py Classification notebook based on the OML4Py Classification DT example template. The template builds and applies the classification Decision Tree algorithm to build a classification model based on the relationships between the predictor values and the target values. The template uses the Sales History (`SH`) schema.
+* Create the Time Series notebook based on the OML4SQL Time Series ESM example template. This template forecasts sales by using the Exponential Smoothing Algorithm for Time Series Data. It also used the `Sales` table in the SH schema.
 
-1. Go to the left navigation menu, expand **Templates**, and then click **Examples** to open the Example Templates page.
-	![Left navigation pane](images/left-nav-examples.png)
-2. Search for the example template _OML Run-me-first_, and click on the grey box to select the notebook. Once you select it, it is highlighted indicated by the blue border. Then click **Create Notebook**.  
-	![Run Me First Example Template](images/expl-run-me-first.png)
-3. The Create Notebook dialog opens. By default, it adds **(1)** to the original example template name, and selects the current project and workspace you are signed in to. Let's retain the defaults here. You have the option to change them. Click **OK**.   
-	![Create Notebook from Examples](images/expl-create-nb.png)
-4. A message appears stating that the notebook has been created and will appear on the Notebooks page.  Click **Open Notebook**.
-	![Open Notebook](images/open-nb-dialog.png)
+### Task 7.1: Create an OML4Py Notebook using the Classification DT Template Example
 
-5. The Notebook is open and ready to run.
-    ![Notebook OML Run-me-first](images/notebook-run-me-first.png)
+This step demonstrates how to create the OML4Py Classification notebook based on the OML4Py Classification DT (Decision Tree) Example template:
 
-6. You can go back to the Notebooks page by clicking on the Cloud menu icon to open the left navigatin pane. On the left navigation pane, expand Projects and then click **Notebooks**.
+1. Go to the Examples page by clicking the Cloud menu icon ![hamburger icon](images/hamburger.png) on the top left corner of the page to open the left navigation menu. On the left navigation menu, click **Templates** and then click **Examples**.
 
-   	![Go back to Notebook listing](images/back-to-oml-listing.png)
+	![Oracle Machine Learning home page](images/hamburger-examples.png)
 
-7. The final list of Notebooks is avaiable on the Notebooks page,as shown in the screeshot here.
-	![Notebook listing](images/oml-listing-exmpl.png)
+  Alternatively, on the Oracle Machine Learning home page, click **Examples** in the Quick Actions section to go Examples.
 
-This completes the task of creating a notebook from a template example.
+	![Oracle Machine Learning home page](images/homepage-examples.png)
 
+
+2. Navigate to the **OML4Py Classification DT** example template notebook. You can search for the notebook by typing in keywords in the search box on the upper right corner of the page. Click on the grey box around the notebook. This highlights the notebook and enables the **Create Notebook** button. Click **Create Notebook**.
+
+	![Create Notebook](images/classification-dt-example.png)
+
+3. The Create Notebook dialog opens. The Name field displays the same name as the template with the suffix `(1)`. You can edit this name. In this example, we will retain the auto-generated name `OML4PY Classification DT (1)`. Click **OK**.
+
+	> **Note:** In the Project field, the current user, project and workspace is selected by default. You have the option to choose a different project or a workspace by clicking the edit icon here.  
+
+	![Create Classification DT notebook from example template](images/create-notebook-classification.png)
+
+4. Once the notebook is created, the message _Notebook "OML4PY Classification DT (1)" created in project "OMLUSER Project"_ is displayed, as shown in the screenshot. The notebook is now available on the Notebooks page. You may also click **Open Notebook** in the message dialog to open the notebook directly from here.
+
+	![Create notebook message](images/notebook-created-message.png)
+
+5. To view the notebook that you just created, click the Cloud menu icon ![hamburger icon](images/hamburger.png) on the top left corner of the page to open the left navigation menu. Click **Notebooks** to go to the Notebooks page.
+
+	![Notebooks in left navigation menu](images/notebooks-left-nav-pane.png)
+
+6. The OML4PY Classification DT (1) notebook is now listed on the Notebooks page, as shown in the screenshot. Click it to open the notebook in the Notebooks editor. Note that you will run this notebook in the subsequent steps.
+
+	<if type="livelabs"> ![Notebook listed](images/notebook-listed.png) </if>
+	<if type="freetier"> ![Notebook listed](images/notebooks-3.png) </if>
+
+This completes the task of creating a notebook from an Example template.
+
+### Task 7.1: Create a Time Series Notebook using the OML4SQL Time Series Template Example
+
+These steps demonstrate how to create the Time Series notebook based on the Example template:
+
+7. Click the Cloud menu icon ![hamburger icon](images/hamburger.png) on the top left corner of the page to open the left navigation menu. Click **Examples** under Templates to open the Examples page. If you choose to go to the home page, then click **Home** on the left navigation pane, and then click **Examples**.
+
+	<if type="livelabs"> ![Go to Examples](images/notebook-listed.png) </if>
+	<if type="freetier"> ![Go to Examples](images/notebooks-3.png) </if>
+
+8. Navigate to the **OML4SQL Time Series ESM** example template notebook. You may type ESM in the search box on the upper right corner of the page to get a list of the ESM-related notebooks. Click the grey box around the notebook. This highlights the notebook and enables the **Create Notebook** button. Click **Create Notebook**.
+
+	![Create Notebook](images/oml4sql-time-series.png)
+
+9. The Create Notebook dialog opens. By default, the **Name** field displays the same name as the template with the suffix `(1)`. You can edit this field. In this example, we will retain the auto-generated name **OML4SQL Time Series ESM (1)** and click **OK**.
+
+	> **Note:** In the Project field, the current user, project and workspace is selected by default. You have the option to choose a different project or a workspace by clicking the edit icon here.  
+
+	![Create Time Series notebook from example template](images/create-notebook-time-series.png)
+
+10. Once the notebook is created, the message _Notebook "OML4SQL Time Series ESM (1)" created in project "OMLUSER Project"_ is displayed. The notebook is now available on the Notebooks page. You may also click **Open Notebook** in the message dialog to open the notebook directly from here.
+
+	![Time Series notebook message](images/esm-notebook-message.png)
+
+11. To view the notebook, click the Cloud menu icon ![hamburger icon](images/hamburger.png) on the top left corner of the page to open the left navigation menu. Click **Notebooks** to go to the Notebooks page.
+
+	![Notebooks in left navigation menu](images/notebooks-left-nav-pane-esm.png)
+
+
+12. The notebook **Notebook "OML4SQL Time Series ESM (1)** is now listed on the Notebooks page, as shown in the screenshot. Click on the notebook to open it in the Notebooks editor and work on it.
+
+	<if type="livelabs"> ![Notebook listed](images/notebook-list-1.png)</if>
+
+	<if type="freetier">![Notebook listed](images/notebooks-4.png) </if>
+
+This completes the task of creating the Time Series notebook from the OML4SQL Time Series ESM Example template.
+
+## Task 8: Change Notebook Service Level
+
+An interpreter allows using a specific data processing language at the backend to process commands entered in a notebook paragraph. For the notebooks in Oracle Machine Learning, you use the following interpreters:
+
+* SQL interpreter for SQL statements
+* PL/SQL  interpreter for PL/SQL scripts/statements
+* Python interpreter to process Python scripts
+* R interpreter to run R commands and scripts
+* md (MarkDown) interpreter for plain text formatting syntax so that it can be converted to HTML.
+
+This is the initial binding order of the interpreters. You can change the order of the interpreter bindings by clicking and dragging an entry above or below others (turns from white to blue). You can also deselect a binding to disable it (turns from blue to white). This does not require dragging the enabled interpreters above the disabled ones.
+
+* **Low** (Default): Provides the least level of resources for in-database operations, typically serial (non-parallel) running of database operations. It supports the maximum number of concurrent in-database operations by multiple users. The interpreter with low priority is listed at the top of the interpreter list, and hence, is the default.
+* **Medium:** Provides a fixed number of CPUs to run in-database operations in parallel, where possible. It supports a limited number of concurrent users, typically 1.25 times the number of CPUs allocated to the Autonomous Database instance.
+* **High:** Provides the highest level of CPUs to run in-database operations in parallel, up to the number of CPUs allocated to the Autonomous Database instance. It offers the highest performance but supports the minimum number of concurrent in-database operations, typically 3.
+
+	> **Note:** The interpreter binding order that is set for a notebook applies to all the paragraphs in that notebook. However, you can override the binding of an individual paragraph also. This is an advanced topic, and is not covered in this workshop.
+
+In this step, you learn how to set the interpreter bindings:
+1. Go to the Notebooks page by clicking the Cloud menu icon on the top left corner of the page. On the left navigation menu, click **Notebooks**.
+
+	![hamburger](images/hamburger-gen.png)
+
+	![Notebooks in left navigation menu](images/notebooks-left-nav-pane.png)
+
+2. On the Notebooks page, click on the **OML4PY Classification_DT (1)** notebook to open it in the Notebook editor.
+
+	<if type="livelabs"> ![Open Classification notebook](images/open-classification-dt.png) </if>
+
+	<if type="freetier"> ![Open Classification notebook](images/open-notebooks-4.png) </if>
+
+3. Click ![gear icon](images/gear.png) on the top right corner of the notebook. This opens the interpreter settings.
+
+	![Gear icon](images/interpreter-binding-icon.png)
+
+4. Click **medium**, and drag and drop it on top of the list.
+
+	![Drag and drop an interpreter binding](images/drag-int-binding.png)
+
+	> **Note:** You can disable a particular binding by deselecting it (turns from blue to white) or enable it by selecting it (turns from white to blue). However, this does not require dragging the enabled interpreters above the disabled ones.
+
+	![Enable and disable interpreter binding](images/enable-disable-int-bindings.png)
+
+5. Once you successfully drag and drop it on top of the list, click **Save**.
+
+	![Save interpreter binding order](images/save-order.png)
+
+Clicking **Save** records the changes and hides the interpreter settings. You can verify it again by clicking the gear icon ![gear icon](images/gear.png). This completes the task of changing the interpreter binding order.
+
+## Task 9: Create Jobs to Schedule Notebook Run
+
+Jobs allow you to schedule the running of notebooks. On the Jobs page, you can create jobs, duplicate jobs, start and stop jobs, delete jobs, and monitor job status by viewing job logs, which are read-only notebooks. In this lab, you will learn how to create a job to schedule the running of the notebook Classification_DT.
+
+To create a job:
+
+1. Click the Cloud menu icon ![hamburger icon](images/hamburger.png) on the top left corner of the page to open the left navigation menu, and click **Jobs** to go to the Jobs page. You can also go to Jobs from the Oracle Machine Learning home page by clicking **Jobs**.
+
+	![hamburger](images/hamburger-gen.png)
+
+	![Job](images/jobs.png)
+
+2. On the Jobs page, click **Create**. The Create Job dialog opens.
+
+	![Create Job](images/create-job.png)
+
+3. In the **Name** field, enter `Job1`. The number of characters in the job name must not exceed 128 bytes.
+
+	![Create Job](images/create-jobs1.png)
+
+4. In the **Notebook** field, click the search icon. This opens the Search Notebook dialog. In the Search Notebook dialog, navigate through the OMLUSER workspace and OMLUSER project, select `OML4PY Classification_DT (1)`, and click **OK**.
+
+	> **Note:** Only notebooks that are owned by the user or shared are available for selection.
+
+	<if type="livelabs"> ![Select notebook to schedule job](images/select-notebook-for-job-livelabs.png) </if>
+	<if type="freetier"> ![Select notebook to schedule job](images/select-notebook-for-job-freetier.png) </if>
+
+5. In the **Start Date** field, click the date-time editor to set the date and time for your job to commence. You can select the current date or any future date and time. Based on the selected date and time, the next run date is computed.
+
+6. Select **Repeat Frequency** and enter **3**, and select **Days** to set the repeat frequency and settings. You can set the frequency in minutes, hours, days, weeks, and months.
+
+7. Expand **Advanced Settings**, and specify the following settings:
+
+	![Create Job](images/create-jobs2.png)
+
+	* **Maximum Number of Runs:** Select **3**. This specifies the maximum number of times the job must run before it is stopped. When the job reaches the maximum run limit, it will stop.  
+
+	* **Timeout in Minutes:** Select **60**. This specifies the maximum amount of time a job should be allowed to run.
+
+	* **Maximum Failures Allowed:** Select **3**. This specifies the maximum number of times a job can fail on consecutive scheduled runs. When the maximum number of failures is reached, the next run date column in the Jobs UI will show an empty value to indicate the job is no longer scheduled to run. The Status column may show the status as `Failed`.
+
+		> **Note:** Select **Automatic Retry** if you do not wish to specify the maximum failures allowed manually.  
+
+8. Click **OK**. The job is now listed on the Jobs page with the status SCHEDULED.
+
+	![Job created](images/job-created1.png)
+
+9. Click on the job row to enable the options to either **Edit**, **Duplicate**, **Start**, or **Delete** the selected job.
+
+	![Job created](images/job-created.png)
+
+This completes the task of creating a job. You may now **proceed to the next lab**.
 
 ## Learn More
 
@@ -632,4 +788,4 @@ This completes the task of creating a notebook from a template example.
 
 * **Author** -  Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, June 2024
+* **Last Updated By/Date** - Moitreyee Hazarika, September 2024
