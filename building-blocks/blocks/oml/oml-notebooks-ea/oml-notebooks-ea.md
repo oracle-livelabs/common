@@ -99,12 +99,11 @@ To access the Notebooks page:
 
 	![Left Navigation](images/notebooks-ea-leftnav.png)
 
-	Alternatively, you can click **Notebooks** under Quick Actions on the home page to open the Notebooks page. On the Notebooks page, click **Go to OML Notebooks** to open the Notebooks listing page.
-		![Go to OML Notebooks](images/goto-notebooks-ea.png)
+	Alternatively, you can click **Notebooks** under Quick Actions on the home page to open the Notebooks page. 
 
 2. This opens the OML Notebooks page.
 
-	![OML Notebooks EA page](images/notebooks-ea-page.png)
+	![OML Notebooks page](images/notebooks-ea-page.png)
 
 Here, you have the option to:
 * **Create:** Click Create to create a new notebook.
@@ -522,7 +521,7 @@ By creating versions of your notebook, you can archive your work in a notebook. 
 
 To create a new notebook version and view version history:
 1. On the Notebooks page, click on the _Paragraph Dependencies Demo_ notebook to open it in the notebook editor.
-	> **Note:**  **Version 1** of this notebook is already created as part Task 6.1 in this lab. It contains the archived code to create the view ESM_SH_DATA, count the number of records, and view the data. Clicking on the notebook opens the original editable version.
+	> **Note:**  **Version 1** of this notebook is already created as part Task 6.1 in this lab. It contains the archived code to create the view `ESM_SH_DATA`, count the number of records, and view the data. Clicking on the notebook opens the original editable version.
 
 	![Notebooks versions page](images/click-para-dep-nb.png)
 
@@ -630,7 +629,7 @@ This step demonstrates how to create the OML4Py Classification notebook based on
 
 	![Create notebook message](images/notebook-created-message.png)
 
-5. To view the notebook that you just created, click the Cloud menu icon ![hamburger icon](images/hamburger.png) on the top left corner of the page to open the left navigation menu. Click **Notebooks** to go to the Notebooks page.
+5. To view the notebook that you just created, click the Cloud menu icon ![Cloud menu icon](images/cloud-menu-icon.png) on the top left corner of the page to open the left navigation menu. Click **Notebooks** to go to the Notebooks page.
 
 	![Notebooks in left navigation menu](images/notebooks-left-nav-pane.png)
 
@@ -645,10 +644,11 @@ This completes the task of creating a notebook from an Example template.
 
 These steps demonstrate how to create the Time Series notebook based on the Example template:
 
-7. Click the Cloud menu icon ![hamburger icon](images/hamburger.png) on the top left corner of the page to open the left navigation menu. Click **Examples** under Templates to open the Examples page. If you choose to go to the home page, then click **Home** on the left navigation pane, and then click **Examples**.
+7. Click the Cloud menu icon ![Cloud menu icon](images/cloud-menu-icon.png) on the top left corner of the page to open the left navigation menu. Click **Examples** under Templates to open the Examples page. 
 
-	<if type="livelabs"> ![Go to Examples](images/notebook-listed.png) </if>
-	<if type="freetier"> ![Go to Examples](images/notebooks-3.png) </if>
+	![Examples in Left Navigation menu](images/left-nav-examples.png)
+
+If you choose to go to the home page, then click **Home** on the left navigation pane, and then click **Examples**.	
 
 8. Navigate to the **OML4SQL Time Series ESM** example template notebook. You may type ESM in the search box on the upper right corner of the page to get a list of the ESM-related notebooks. Click the grey box around the notebook. This highlights the notebook and enables the **Create Notebook** button. Click **Create Notebook**.
 
@@ -664,7 +664,7 @@ These steps demonstrate how to create the Time Series notebook based on the Exam
 
 	![Time Series notebook message](images/esm-notebook-message.png)
 
-11. To view the notebook, click the Cloud menu icon ![hamburger icon](images/hamburger.png) on the top left corner of the page to open the left navigation menu. Click **Notebooks** to go to the Notebooks page.
+11. To view the notebook, click the Cloud menu icon ![Cloud menu icon icon](images/cloud-menu-icon.png) on the top left corner of the page to open the left navigation menu. Click **Notebooks** to go to the Notebooks page.
 
 	![Notebooks in left navigation menu](images/notebooks-left-nav-pane-esm.png)
 
@@ -679,7 +679,7 @@ This completes the task of creating the Time Series notebook from the OML4SQL Ti
 
 ## Task 8: Change Notebook Service Level
 
-An interpreter allows using a specific data processing language at the backend to process commands entered in a notebook paragraph. For the notebooks in Oracle Machine Learning, you use the following interpreters:
+Notebook type corresponds to the ADB service levels — low, medium, high and gpu. These service levels affect parallelism in the database. The notebook type that is set for a notebook applies to all the paragraphs in that notebook. For the notebooks in Oracle Machine Learning UI, you use the following interpreters:
 
 * SQL interpreter for SQL statements
 * PL/SQL  interpreter for PL/SQL scripts/statements
@@ -687,15 +687,10 @@ An interpreter allows using a specific data processing language at the backend t
 * R interpreter to run R commands and scripts
 * md (MarkDown) interpreter for plain text formatting syntax so that it can be converted to HTML.
 
-This is the initial binding order of the interpreters. You can change the order of the interpreter bindings by clicking and dragging an entry above or below others (turns from white to blue). You can also deselect a binding to disable it (turns from blue to white). This does not require dragging the enabled interpreters above the disabled ones.
 
-* **Low** (Default): Provides the least level of resources for in-database operations, typically serial (non-parallel) running of database operations. It supports the maximum number of concurrent in-database operations by multiple users. The interpreter with low priority is listed at the top of the interpreter list, and hence, is the default.
-* **Medium:** Provides a fixed number of CPUs to run in-database operations in parallel, where possible. It supports a limited number of concurrent users, typically 1.25 times the number of CPUs allocated to the Autonomous Database instance.
-* **High:** Provides the highest level of CPUs to run in-database operations in parallel, up to the number of CPUs allocated to the Autonomous Database instance. It offers the highest performance but supports the minimum number of concurrent in-database operations, typically 3.
+	> **Note:** The service level that is set for a notebook applies to all the paragraphs in that notebook. 
 
-	> **Note:** The interpreter binding order that is set for a notebook applies to all the paragraphs in that notebook. However, you can override the binding of an individual paragraph also. This is an advanced topic, and is not covered in this workshop.
-
-In this step, you learn how to set the interpreter bindings:
+In this step, you learn how to change the notebook service levels:
 1. Go to the Notebooks page by clicking the Cloud menu icon on the top left corner of the page. On the left navigation menu, click **Notebooks**.
 
 	![hamburger](images/hamburger-gen.png)
@@ -708,23 +703,26 @@ In this step, you learn how to set the interpreter bindings:
 
 	<if type="freetier"> ![Open Classification notebook](images/open-notebooks-4.png) </if>
 
-3. Click ![gear icon](images/gear.png) on the top right corner of the notebook. This opens the interpreter settings.
+3. Click on the **Update Notebook Type** icon ![Update Notebook type icon](images/update-notebook-type-icon.png)on the top right corner. The available notebook types are displayed. The current notebook type is indicated by a tick mark, and is also displayed next to the **Update Notebook Type** icon. 
 
-	![Gear icon](images/interpreter-binding-icon.png)
+	![Update Notebook Type icon](images/classification-dt-nbtype-icon.png)
 
-4. Click **medium**, and drag and drop it on top of the list.
+	The Notebook Types (ADB service levels) are: 
 
-	![Drag and drop an interpreter binding](images/drag-int-binding.png)
+	* **low** — Provides the least level of resources for in-database operations, typically serial (non-parallel) execution. It supports the maximum number of concurrent in-database operations by multiple users. The interpreter with low priority is listed at the top of the interpreter list, and hence, is the default.
+	* **medium** — Provides a fixed number of CPUs to run in-database operations in parallel, where possible. It supports a limited number of concurrent users, typically 1.25 times the number of CPUs allocated to the pluggable database.
+	* **high** — Provides the highest level of CPUs to run in-database operations in parallel, up to the number of CPUs allocated to the pluggable database. It offers the highest performance, but supports the minimum number of concurrent in-database operations, typically 3.
+	* **gpu** — Provides GPU compute capabilities in a notebook through the Python interpreter with the database service level set to high. The notebook memory setting is 32 GB (DDR4), by default. It is extensible up to 200 GB.
 
-	> **Note:** You can disable a particular binding by deselecting it (turns from blue to white) or enable it by selecting it (turns from white to blue). However, this does not require dragging the enabled interpreters above the disabled ones.
+	![Notebook Type low](images/notebook-type-low.png)
 
-	![Enable and disable interpreter binding](images/enable-disable-int-bindings.png)
+4. To change the notebook type, click on the type that you want to select. In this example, let's click high. A confirmation message is displayed stating: `Notebook Type is updated to "high".`
 
-5. Once you successfully drag and drop it on top of the list, click **Save**.
+	![Notebook Type high](images/notebook-type-high.png)
 
-	![Save interpreter binding order](images/save-order.png)
+	> **Note:** The updated notebook type is applicable to all the paragraphs in the notebook. You cannot change the notebook type at the paragraph level.
 
-Clicking **Save** records the changes and hides the interpreter settings. You can verify it again by clicking the gear icon ![gear icon](images/gear.png). This completes the task of changing the interpreter binding order.
+
 
 ## Task 9: Create Jobs to Schedule Notebook Run
 
