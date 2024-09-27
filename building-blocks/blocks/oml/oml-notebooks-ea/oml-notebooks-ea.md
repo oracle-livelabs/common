@@ -606,9 +606,9 @@ This task demonstrates how to create notebooks based on Example templates. You w
 
 This step demonstrates how to create the OML4Py Classification notebook based on the OML4Py Classification DT (Decision Tree) Example template:
 
-1. Go to the Examples page by clicking the Cloud menu icon ![hamburger icon](images/hamburger.png) on the top left corner of the page to open the left navigation menu. On the left navigation menu, click **Templates** and then click **Examples**.
+1. Go to the Examples page by clicking the Cloud menu icon ![Cloud menu icon](images/cloud-menu-icon.png)  on the top left corner of the page to open the left navigation menu. On the left navigation menu, click **Templates** and then click **Examples**.
 
-	![Oracle Machine Learning home page](images/hamburger-examples.png)
+	![Left Navigation menu - Examples](images/left-nav-pane-examples.png)
 
   Alternatively, on the Oracle Machine Learning home page, click **Examples** in the Quick Actions section to go Examples.
 
@@ -631,22 +631,22 @@ This step demonstrates how to create the OML4Py Classification notebook based on
 
 5. To view the notebook that you just created, click the Cloud menu icon ![Cloud menu icon](images/cloud-menu-icon.png) on the top left corner of the page to open the left navigation menu. Click **Notebooks** to go to the Notebooks page.
 
-	![Notebooks in left navigation menu](images/notebooks-left-nav-pane.png)
+	![Notebooks in left navigation menu](images/left-nav-pane-notebooks.png)
 
 6. The OML4PY Classification DT (1) notebook is now listed on the Notebooks page, as shown in the screenshot. Click it to open the notebook in the Notebooks editor. Note that you will run this notebook in the subsequent steps.
 
-	<if type="livelabs"> ![Notebook listed](images/notebook-listed.png) </if>
-	<if type="freetier"> ![Notebook listed](images/notebooks-3.png) </if>
+	![Notebook listed](images/notebook-listed.png)
+	
 
 This completes the task of creating a notebook from an Example template.
 
-### Task 7.1: Create a Time Series Notebook using the OML4SQL Time Series Template Example
+### Task 7.2: Create a Time Series Notebook using the OML4SQL Time Series Template Example
 
 These steps demonstrate how to create the Time Series notebook based on the Example template:
 
 7. Click the Cloud menu icon ![Cloud menu icon](images/cloud-menu-icon.png) on the top left corner of the page to open the left navigation menu. Click **Examples** under Templates to open the Examples page. 
 
-	![Examples in Left Navigation menu](images/left-nav-examples.png)
+	![Examples in Left Navigation menu](images/left-nav-pane-examples.png)
 
 If you choose to go to the home page, then click **Home** on the left navigation pane, and then click **Examples**.	
 
@@ -671,9 +671,8 @@ If you choose to go to the home page, then click **Home** on the left navigation
 
 12. The notebook **Notebook "OML4SQL Time Series ESM (1)** is now listed on the Notebooks page, as shown in the screenshot. Click on the notebook to open it in the Notebooks editor and work on it.
 
-	<if type="livelabs"> ![Notebook listed](images/notebook-list-1.png)</if>
+	![Notebook listed](images/notebook-list-1.png)
 
-	<if type="freetier">![Notebook listed](images/notebooks-4.png) </if>
 
 This completes the task of creating the Time Series notebook from the OML4SQL Time Series ESM Example template.
 
@@ -691,17 +690,15 @@ Notebook type corresponds to the ADB service levels — low, medium, high and gp
 	> **Note:** The service level that is set for a notebook applies to all the paragraphs in that notebook. 
 
 In this step, you learn how to change the notebook service levels:
-1. Go to the Notebooks page by clicking the Cloud menu icon on the top left corner of the page. On the left navigation menu, click **Notebooks**.
+1. Go to the Notebooks page by clicking the Cloud menu icon on ![Cloud menu icon](images/cloud-menu-icon.png) the top left corner of the page. On the left navigation menu, click **Notebooks**.
+	
 
-	![hamburger](images/hamburger-gen.png)
-
-	![Notebooks in left navigation menu](images/notebooks-left-nav-pane.png)
+	![Notebooks in left navigation menu](images/left-nav-pane-notebooks.png)
 
 2. On the Notebooks page, click on the **OML4PY Classification_DT (1)** notebook to open it in the Notebook editor.
 
-	<if type="livelabs"> ![Open Classification notebook](images/open-classification-dt.png) </if>
-
-	<if type="freetier"> ![Open Classification notebook](images/open-notebooks-4.png) </if>
+	![Open Classification notebook](images/open-classification-dt.png)
+	
 
 3. Click on the **Update Notebook Type** icon ![Update Notebook type icon](images/update-notebook-type-icon.png)on the top right corner. The available notebook types are displayed. The current notebook type is indicated by a tick mark, and is also displayed next to the **Update Notebook Type** icon. 
 
@@ -722,6 +719,7 @@ In this step, you learn how to change the notebook service levels:
 
 	> **Note:** The updated notebook type is applicable to all the paragraphs in the notebook. You cannot change the notebook type at the paragraph level.
 
+	This completes the task of changing notebook service level.
 
 
 ## Task 9: Create Jobs to Schedule Notebook Run
@@ -730,11 +728,13 @@ Jobs allow you to schedule the running of notebooks. On the Jobs page, you can c
 
 To create a job:
 
-1. Click the Cloud menu icon ![hamburger icon](images/hamburger.png) on the top left corner of the page to open the left navigation menu, and click **Jobs** to go to the Jobs page. You can also go to Jobs from the Oracle Machine Learning home page by clicking **Jobs**.
+1. Click the Cloud menu icon ![Cloud menu icon](images/cloud-menu-icon.png) on the top left corner of the page to open the left navigation menu, and click **Jobs** to go to the Jobs page. 
 
-	![hamburger](images/hamburger-gen.png)
+	![Job](images/left-nav-pane-jobs.png)
 
-	![Job](images/jobs.png)
+You can also go to Jobs from the Oracle Machine Learning home page by clicking **Jobs**.
+
+![Homepage Jobs](images/homepage-jobs.png)
 
 2. On the Jobs page, click **Create**. The Create Job dialog opens.
 
@@ -748,8 +748,8 @@ To create a job:
 
 	> **Note:** Only notebooks that are owned by the user or shared are available for selection.
 
-	<if type="livelabs"> ![Select notebook to schedule job](images/select-notebook-for-job-livelabs.png) </if>
-	<if type="freetier"> ![Select notebook to schedule job](images/select-notebook-for-job-freetier.png) </if>
+	![Select notebook to schedule job](images/select-notebook-for-job-livelabs.png)
+	
 
 5. In the **Start Date** field, click the date-time editor to set the date and time for your job to commence. You can select the current date or any future date and time. Based on the selected date and time, the next run date is computed.
 
