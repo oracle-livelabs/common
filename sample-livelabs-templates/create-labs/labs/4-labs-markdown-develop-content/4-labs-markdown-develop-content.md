@@ -88,6 +88,7 @@ Leverage LiveLabs [Markdown Cheat Sheet](https://c4u04.objectstorage.us-ashburn-
 1. Mandatory requirements (Check links, code snippets, help email address, grammar issues)
 2. Make sure that all filenames are lowercase, markdown filenames and directories generally match
 3. Pay attention on lab section (each lab has a title(#), Introduction (##), Objectives(###), Prerequisites(###), Acknowledgements (##))
+4. Third-party URL shorteners like bit.ly and tiny are no longer permitted in public-facing content, as they can obscure the destination link, making it easier for malicious sites to go undetected. Instead, using clickable URLs formatted in markdown is a better option. This approach not only enhances the visual appeal of your content but also conceals long, non-memorable URLs in a safer and more transparent way.
 
 ## Task 4: Security
 
