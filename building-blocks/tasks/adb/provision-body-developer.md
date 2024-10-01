@@ -80,6 +80,7 @@
         ![Enter password and confirm password.](./images/adb-create-screen-password.png =70%x*)
 
 7. In the **Choose network access** section, select one of the following options:
+
     - For this lab, accept the default, **Secure access from everywhere**.
     - If you want to allow traffic only from the IP addresses and VCNs you specify - where access to the database from all public IPs or VCNs is blocked, select **Secure access from allowed IPs and VCNs only** in the Choose network access area.
     - If you want to restrict access to a private endpoint within an OCI VCN, select **Private endpoint access only** in the Choose network access area.
