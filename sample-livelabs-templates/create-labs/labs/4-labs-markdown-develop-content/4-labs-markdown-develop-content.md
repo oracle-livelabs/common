@@ -259,7 +259,7 @@ LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or
   ![The Video Hub URL](images/video-hub-url.png =60%x* " ")
 
 ### Embedding a video from YouTube
-1
+
 1. Take a look at this example of a video linked in the introduction of a workshop.
 
   ![Example of a video link.](./images/youtube-vsc.png =60%x* " ")
