@@ -142,7 +142,7 @@ To create a Conda environment named _myrenv_ with R-4.0.5 for OML4R compatibilit
 	* ``--override-channels`` : This argument ensures that the system does not search default, and requires a channel to be mentioned.
 	* ``--strict-channel-priority`` : This argument ensures that packages in lower priority channels are not considered if a package with the same name appears in a higher priority channel. In this example, the priority is given to R-4.0.5, forecast, and ggplot2.
 
-	>*Note:* You must set ``r-base`` to ``4.0.5`` for compatibility with the version you are using in your notebooks.
+	>*Note:* You must set ``r-base`` to ``4.0.5`` for compatibility with the R version you are using in your notebooks.
 
 	The command returns the following:
 
