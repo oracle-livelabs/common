@@ -267,12 +267,18 @@ The steps in task 4 must be performed as the non-ADMIN OML user with the `OML_DE
 	<copy>
 	%python
 
-	df = sns.load_dataset("iris")
+	import ssl
+	ssl._create_default_https_context = ssl._create_unverified_context
 
+	df = sns.load_dataset("iris")
 	z.show(df)
 	</copy>
 	```
-	![Command to load data](images/cmd-load-data.png)
+	![Command to load the iris data](images/cmd-load-iris-data.png)
+
+	After you run the command successfully, the iris dataset is displayed.
+
+	![Iris dataset](images/iris-data-loaded.png)
 
 
 4. Plot the relationship pairwise
@@ -291,8 +297,6 @@ The steps in task 4 must be performed as the non-ADMIN OML user with the `OML_DE
 	Scroll down to view the output:
 	![Viewing the Plotwise relationship](images/output-plotwise-relship.png)
 
-
-5. 
 
 ## Task 5: Download, Activate and Use the Conda environment for R
 
