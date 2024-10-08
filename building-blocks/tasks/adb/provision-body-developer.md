@@ -52,22 +52,19 @@
 
 5. In the **Configure the database** section, accept the default selections as follows:
 
-    - **Always Free** - An Always Free database is especially useful for development and trying new features. You can deploy an Always Free instance in an Always Free account or paid account. The only option you specify in an Always Free database is the database version. For this lab, we recommend you leave **Always Free** unchecked unless you are in an Always Free account.
-    - **Choose database version** - Select **19c** as the database version.
+    - **Always Free** - Always Free databases are especially useful for development and trying new features. You can deploy an Always Free instance in an Always Free account or paid account. However, it must be deployed in the home region of your tenancy. The only option you specify in an Always Free database is the database version. For this lab, we recommend you leave **Always Free** turned off.
+    - **Developer** - Developer databases provide a great low cost option for developing apps with Autonomous Database. You have similar features to Always Free - but are not limited in terms of region deployments or the number of databases in your tenancy. Therefore, we will **turn on the Developer model** for this lab. You can upgrade your Developer Database to a full paid version later and benefit from greater control over resources, backups and more."
+    - **Choose database version** - Select **23ai** as the database version.
     - **ECPU count** - Number of ECPUs for your service. For this lab, specify **[](var:db_ocpu)**. If you choose an Always Free database, you do not need to specify this option.
     - **Storage (TB)** - Select your storage capacity in terabytes. For this lab, specify **[](var:db_storage)** of storage. Or, if you choose an Always Free database, it comes with 20 GB of storage.
     - **Compute auto scaling** - For this lab, keep auto scaling enabled, to enable the system to automatically use up to three times more compute and IO resources to meet workload demand.
     - **Storage auto scaling** - For this lab, there is no need to enable storage auto scaling, which would allow the system to expand up to three times the reserved storage.
 
-        > **Note:** You cannot scale up/down an Always Free autonomous database.
+        > **Note:** You cannot scale up/down an Always Free or Developer autonomous database.
 
-        ![Choose the remaining parameters.](./images/adb-create-screen-configure-db.png =65%x*)
+        ![Choose the remaining parameters.](./images/provision-developer-adb-screen.png =65%x*)
 
-6. In the **Backup retention** section, you can either accept the default value or specify your own preferred backup retention days value. Accept the default 60 days default value.
-
-     ![Choose backup retention.](./images/choose-backup-retention.png =70%x*)
-
-7. In the **Create administrator** credentials section, specify the following:
+6. In the **Create administrator** credentials section, specify the following:
 
     - **Username:** This read-only field displays the default administrator username, **`ADMIN`**. _**Important:** Make a note of this **username** as you will need it to perform later tasks._
     - **Password:** Enter a password for the **`ADMIN`** user of the service instance choice such as **`Training4ADW`**. _**Important:** Make a note of this **password** as you will need it to perform later tasks._
@@ -82,7 +79,8 @@
 
         ![Enter password and confirm password.](./images/adb-create-screen-password.png =70%x*)
 
-8. In the **Choose network access** section, select one of the following options:
+7. In the **Choose network access** section, select one of the following options:
+
     - For this lab, accept the default, **Secure access from everywhere**.
     - If you want to allow traffic only from the IP addresses and VCNs you specify - where access to the database from all public IPs or VCNs is blocked, select **Secure access from allowed IPs and VCNs only** in the Choose network access area.
     - If you want to restrict access to a private endpoint within an OCI VCN, select **Private endpoint access only** in the Choose network access area.
@@ -90,21 +88,21 @@
 
         ![Choose the network access.](./images/adb-create-screen-choose-network.png =70%x*)
 
-9. In the **Choose a license and Oracle Database edition** section, accept the default selection, **This Database is provisioned with License included license type**.
+8. In the **Choose a license and Oracle Database edition** section, accept the default selection, **This Database is provisioned with License included license type**.
     
     >**Note:** Select the **Bring Your Own License (BYOL)** type when your organization has existing database licenses.
 
     ![Choose a license.](./images/choose-license.png =70%x*)
 
-10. For this lab, do not provide a contact email address. The "Contact Email" field allows you to list contacts to receive operational notices and announcements as well as unplanned maintenance notifications.
+9. For this lab, do not provide a contact email address. The "Contact Email" field allows you to list contacts to receive operational notices and announcements as well as unplanned maintenance notifications.
 
     ![Do not provide a contact email address.](images/adb-create-screen-contact-email.png "email")
 
-11. Click **Create Autonomous Database**.
+10. Click **Create Autonomous Database**.
 
     ![Click Create Autonomous Database.](./images/click-create-adb.png =70%x*)
 
-12.  The **Autonomous Database details** page is displayed. The status of your ADB instance is **PROVISIONING**.
+11.  The **Autonomous Database details** page is displayed. The status of your ADB instance is **PROVISIONING**.
 
     <if type="freetier">
     ![Database Provisioning message.](./images/adb-create-provisioning-message.png " ")
@@ -126,7 +124,7 @@
     ![Database complete message.](./images/adb-create-complete-message.png " ")
     </if>
 
-13. Click the **Autonomous Database** link in the breadcrumbs. The **Autonomous Database** page is displayed. The new Autonomous Database instance is displayed. In the following screen capture, the instance display name is **MyQuickStart**.
+12. Click the **Autonomous Database** link in the breadcrumbs. The **Autonomous Database** page is displayed. The new Autonomous Database instance is displayed. In the following screen capture, the instance display name is **MyQuickStart**.
 
     <if type="livelabs">
     ![Database instance displayed.](./images/ll-adb-page.png " ")
