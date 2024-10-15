@@ -2,13 +2,13 @@
 
 ## Introduction
 
-This lab walks you through the steps to sign into Oracle Machine Learning UI, create an Oracle Machine Learning (OML) notebook from scratch using the enhanced notebook environment, and explore the features.
+This lab walks you through the steps to sign into Oracle Machine Learning UI, create an Oracle Machine Learning (OML) notebook from scratch using the notebook environment, and explore the features.
 
 Estimated Time: 15 minutes
 
 ### About Oracle Machine Learning Notebooks
 
-Oracle Machine Learning Notebooks s an enhanced web-based notebook platform for data engineers, data analysts, R and Python users, and data scientists. You can write code, text, create visualizations, and perform data analytics and machine learning modeling. You can also leverage third-party packages from the R and Python ecosystems. In Oracle Machine Learning, notebooks are organized in projects, and projects within a workspace. You can create, edit, delete, copy, move, and version notebooks, and even save notebooks as private or sharable templates.
+Oracle Machine Learning Notebooks is a web-based notebook platform for data engineers, data analysts, R and Python users, and data scientists. You can write code, text, create visualizations, and perform data analytics and machine learning modeling. You can also leverage third-party packages from the R and Python ecosystems. In Oracle Machine Learning, notebooks are organized in projects, and projects within a workspace. You can create, edit, delete, copy, move, and version notebooks, and even save notebooks as private or sharable templates.
 
 To support data science team collaboration, you can post  and respond to comments on individual paragraphs within a notebook and share notebooks as templates.
 The Oracle Machine Learning Notebooks provides:
@@ -24,7 +24,7 @@ The Oracle Machine Learning Notebooks provides:
 ### Objectives
 
 In this lab, you will learn how to:
-* Access the enhanced notebook environment
+* Access the notebook environment
 * Create and run a Notebook
 * Edit notebooks
 * Create notebook versions
