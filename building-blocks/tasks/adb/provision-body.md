@@ -28,7 +28,7 @@
 <if type="livelabs">
     - **Compartment** - Use the default compartment created for you.
     - **Display Name** - Enter a memorable name for the database for display purposes. For this lab, use **[](var:db_display_name)**.
-    - **Database Name** - Use letters and numbers only, starting with a letter. Maximum length is 14 characters. (Underscores not supported.) For this lab, use **[](var:db_name_livelabs)**. For example, if your assigned username for the workshop is **LL81481-USER**, then your database name will be something like **[](var:db_name_livelabs_example)**.
+    - **Database Name** - Use letters and numbers only, starting with a letter. Maximum length is 14 characters. (Underscores not supported.) For this lab, use **[](var:db_name_livelabs)**. For example, if your assigned username for the workshop is **LL2252-USER**, then your database name will be something like **[](var:db_name_livelabs_example)**.
 
     ![Enter the required details.](./images/adb-create-screen-names.png =70%x*)
 
