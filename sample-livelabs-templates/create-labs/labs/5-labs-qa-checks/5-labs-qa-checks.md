@@ -62,7 +62,7 @@ You have finished developing your workshop. To publish your workshop, you still 
 
   ![Tags](images/tags.png " ")
 
-4.  If you have changed your Status to **Self QA** or your workshop status is in **Quarterly QA**, click on the **Self QA Checklist** tab and check your workshop against the form. Update your workshop and create a new pull request if necessary for the workshop to follow LiveLabs standards.
+4.  If you have changed your Status to **Self QA** or your workshop status is in **Quarterly QA**, click on the **Self QA Checklist** tab and check your workshop against the form. Update your workshop and create a new pull request if necessary for the workshop to follow LiveLabs standards. After creating the Pull Request, come back in this tab and insert the link to your PR in *Insert Github Pull Request Link* field and also the link to the workshop from your personal Github in *Your [github_username].github.io workshop link* field.
 
   ![Self QA Checklist](./images/self-qa-checklist-1.png " ")
   ![Self QA Checklist](./images/self-qa-checklist-2.png " ")
