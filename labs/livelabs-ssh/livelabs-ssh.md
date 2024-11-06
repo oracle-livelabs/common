@@ -34,7 +34,7 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
 
     ```bash
     <copy>
-    wget https://oracle-livelabs.github.io/common/labs/livelabs-ssh/files/id_rsa_livelabs.zip 
+    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/75QkYvgn8zNo7vSaI8M4k5GGvs62bRQzeHPQFCxoQQZD1nwD5sl8oDyWjkBvAScE/n/c4u04/b/OCW2024/o/id_rsa_livelabs.zip 
     </copy>
     ```
 3. Unzip the archive
@@ -83,7 +83,7 @@ The instructions below also apply if you are using Microsoft Windows Subsystem f
 
     ```bash
     <copy>
-    wget https://oracle-livelabs.github.io/common/labs/livelabs-ssh/files/id_rsa_livelabs.zip 
+    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/75QkYvgn8zNo7vSaI8M4k5GGvs62bRQzeHPQFCxoQQZD1nwD5sl8oDyWjkBvAScE/n/c4u04/b/OCW2024/o/id_rsa_livelabs.zip 
     </copy>
     ```
 3. Unzip the archive
@@ -122,11 +122,11 @@ The instructions below also apply if you are using Microsoft Windows Subsystem f
 You can also use Putty to connect to the remote server.
 You must have Putty installed. [Download Putty](https://www.putty.org/)
 
-1. Download the id_rsa_livelabs.zip using a browser of your choice from the following URL or click [here]([id_rsa_livelabs.zip](https://oracle-livelabs.github.io/common/labs/livelabs-ssh/files/id_rsa_livelabs.zip )):
+1. Download the id_rsa_livelabs.zip using a browser of your choice from the following URL or click [here]([id_rsa_livelabs.zip](https://objectstorage.us-ashburn-1.oraclecloud.com/p/75QkYvgn8zNo7vSaI8M4k5GGvs62bRQzeHPQFCxoQQZD1nwD5sl8oDyWjkBvAScE/n/c4u04/b/OCW2024/o/id_rsa_livelabs.zip )):
 
     ```bash
     <copy>
-    https://oracle-livelabs.github.io/common/labs/livelabs-ssh/files/id_rsa_livelabs.zip 
+    https://objectstorage.us-ashburn-1.oraclecloud.com/p/75QkYvgn8zNo7vSaI8M4k5GGvs62bRQzeHPQFCxoQQZD1nwD5sl8oDyWjkBvAScE/n/c4u04/b/OCW2024/o/id_rsa_livelabs.zip 
     </copy>
     ```
 
@@ -138,11 +138,9 @@ You must have Putty installed. [Download Putty](https://www.putty.org/)
 
 4. Provide connection details (optional step 2 and 3: save the settings for later use)
 
-    ![connect using putty](images/putty-connect.png)
+    ![connect using putty](../../support/sshconnect/images/putty-connect.png)
 
 You will be prompted for the username once you click 'Open'
-
-
 
 ## Learn More
 
@@ -152,4 +150,4 @@ You will be prompted for the username once you click 'Open'
 ## Acknowledgements
 
 * **Author** - Kevin Lazarz, Oracle Database Product Management, Senior Manager, Database Product Management
-* **Last Updated By/Date** - Kevin Lazarz, June 2024
+* **Last Updated By/Date** - Ana Coman, September 2024

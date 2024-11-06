@@ -28,6 +28,11 @@ For seamless desktop integration and to make the best use of your display, perfo
     ![Click full screen](./images/novnc-fullscreen-2.png " ")
     ![Open full screen](./images/novnc-fullscreen-3.png " ")
 
+3. Select the Activities button to find out the applications already installed
+
+    ![Click Activities](./images/click-activities.png " ")
+    ![Open full screen](./images/see-activities.png " ")
+
 ## Task 2: Enable Copy/Paste from Local to Remote Desktop
 During the execution of your labs, you may need to copy text from your *local PC/Mac* to the *remote desktop*, such as commands from the lab guide. While such direct copy/paste isn't supported as you will realize, you may proceed as indicated below to enable an alternative *local-to-remote clipboard* with Input Text Field.
 
@@ -50,7 +55,6 @@ During the execution of your labs, you may need to copy text from your *local PC
 2. On the left window is your workshop guide and depending on your workshop, you may also have one or two browser tabs loaded with web apps. e.g. Weblogic console, Enterprise Manager Cloud Console, or a relevant application to your workshop such as SQL Developer, JDeveloper, etc.
 
     ![Workshop guide and sample webapp](./images/novnc-launch-get-started-2.png " ")
-    ![Workshop guide and Oracle SQL Developer](./images/novnc-launch-get-started-3.png " ")
 
 You may now **proceed to the next lab**.
 
@@ -64,7 +68,11 @@ This assumes that you already have an RSA-type SSH key-pair available on the loc
 
 1. Open the remote clipboard on the remote desktop as shown in *Task 2* and launch a terminal session
 
-2. Paste the block below onto the remote clipboard first, then onto the terminal to create or update the file *$HOME/.ssh/authorized_keys* with the *Vi* editor
+2. Click on the Activities button, then on Terminal Icon
+
+    ![Update authorized keys](./images/novnc-copy-pub-key-5.png " ")
+
+3. Paste the block below onto the remote clipboard first, then onto the terminal to create or update the file *$HOME/.ssh/authorized_keys* with the *Vi* editor
 
     ```text
     <copy>
@@ -101,7 +109,9 @@ This assumes that you already have an RSA-type SSH key-pair available on the loc
 7. Test/Validate connectivity using the private key (for Unix/Linux/MacOS Terminal, OCI cloud shell, and Terminal emulators on Windows such as Cygwin and MobaXterm).
 
     ```text
+    <copy>
     ssh -i [path to private key] remote-user@[instance-public-ip-address]
+    </copy>
     ```
 
     e.g.
@@ -116,4 +126,4 @@ This assumes that you already have an RSA-type SSH key-pair available on the loc
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology
 * **Contributors** - Arabella Yao, Product Manager, Database Product Management
-* **Last Updated By/Date** - Ramona Magadan, March 2024
+* **Last Updated By/Date** - Ramona Magadan, October 2024

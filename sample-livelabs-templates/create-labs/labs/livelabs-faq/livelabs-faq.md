@@ -14,7 +14,7 @@ For questions related to LiveLabs please review this FAQ. If you don't see an an
     -	Brown Button / Customer's own tenancy – Customers do need anything to run the workshop.
     -	Green Button / LiveLabs sandbox tenancy - An account of any type registered with Oracle (Eg: Gmail).
 4.	How to register for a workshop?
-    -	Navigate to [LiveLabs](https://apexapps.oracle.com/pls/apex/f?p=133:1).
+    -	Navigate to [LiveLabs](https://livelabs.oracle.com/pls/apex/f?p=133:1).
     -	Click on View All Workshops to search for the workshop you want to run or type the keyword in Search Bar on top of the LiveLabs homepage.
     -	Filter the workshops based on the Role, Focus Area, and Product, etc filter option on the right side of the page.
     -	Once you finalize the workshop you want to run, Click on Launch Workshop.
@@ -29,7 +29,7 @@ For questions related to LiveLabs please review this FAQ. If you don't see an an
         - Then click **Open these workshop instructions in a new tab** available at the bottom of the page to run through the instructions.
 5.	How do I extend the LiveLabs tenancy workshop execution time?
     -	If you have an active reservation, you can extend the reservation of a workshop:
-        - Navigate to My reservations on [LiveLabs](https://apexapps.oracle.com/pls/apex/f?p=133:1) homepage.
+        - Navigate to My reservations on [LiveLabs](https://livelabs.oracle.com/pls/apex/f?p=133:1) homepage.
         - Click on Launch Workshop of the active reservation workshop that you want to extend.
         - Click on Extend Workshop Reservation button available on the last row of the Workshop Details section.
 6.	What do I do if I have a feedback for a workshop? Whom to reach if I face errors running through the workshop? What to do if I have similar content in WMS and want to add more content to the existing workshop?
@@ -50,7 +50,7 @@ For questions related to LiveLabs please review this FAQ. If you don't see an an
     -	Tenancy / Brown button
         - We track only the view count of the workshop, i.e., The number of hits for the apex link of a workshop. We do not track usage, it violates privacy rules set up by security and legal.
         - The views report is only available to Oracle employees, you must login with your SSO to view it.
-        - To get the view count, go to [LiveLabs](https://apexapps.oracle.com/pls/apex/f?p=133:1) homepage, click the Question mark icon on the top right corner of the page, then select Dashboard.
+        - To get the view count, go to [LiveLabs](https://livelabs.oracle.com/pls/apex/f?p=133:1) homepage, click the Question mark icon on the top right corner of the page, then select Dashboard.
         - Scroll down the Dashboard to the Workshop Views, select your workshop from the drop-down list.
     -	Sandbox / Green button
         - We track who took a workshop on the LiveLabs tenancy. We are allowed via CSSAP to track the workshop id and email for those who click the green button.
@@ -58,7 +58,7 @@ For questions related to LiveLabs please review this FAQ. If you don't see an an
     -	Share only the Apex URLs for the workshops in production. This helps in tracking the views for the workshop by counting the number of hits on the Apex URL of the workshop.
     -	Don’t share the github.io links, we do not track this URL and that may change.
 7.	How to look for a specific workshop to run?
-    -	Search in [LiveLabs](https://apexapps.oracle.com/pls/apex/f?p=133:1). It is self-service.
+    -	Search in [LiveLabs](https://livelabs.oracle.com/pls/apex/f?p=133:1). It is self-service.
     -	Or click [here](https://apex.oraclecorp.com/pls/apex/f?p=24885:51) to navigate to WMS.
     -	Look through the catalog or search the workshop using the Search bar on the top.
     -	If the status of the workshop is in production on the tile, click on the tile.
