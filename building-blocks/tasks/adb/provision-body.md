@@ -1,7 +1,9 @@
 <!--
     {
         "name":"Provision Autonomous Database",
-        "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more."
+        "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more.",
+        "author":"Lauran K. Serhal",
+        "lastUpdated":"October 2024"
     }
 -->
 1. Click **Create Autonomous Database** to start the instance creation process. The **Create Autonomous Database** page is displayed. Select the desired region and compartment. If you get a **Forbidden** message, that indicates you are in the wrong compartment.
