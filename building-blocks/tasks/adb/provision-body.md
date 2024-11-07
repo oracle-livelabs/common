@@ -1,13 +1,15 @@
 <!--
     {
         "name":"Provision Autonomous Database",
-        "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more."
+        "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more.",
+        "author":"Lauran K. Serhal",
+        "lastUpdated":"October 2024"
     }
 -->
-1. Click **Create Autonomous Database** to start the instance creation process. The **Create Autonomous Database** page is displayed. Select the desired region and compartment. If you get a **Forbidden** message, that indicates you are in the wrong compartment.
+1. Click **Create Autonomous Database** to start the instance creation process. The **Create Autonomous Database** page is displayed. Select your desired **region** and **compartment**. If you are using a sandbox environment (green button) and get a **Forbidden** message, that indicates you are in the wrong compartment. In the **Compartment** drop-down list, select your assigned compartment that is listed on the **Reservation Information** page.
 
     <if type="livelabs">
-    ![Click Create Autonomous Database.](images/ll-adb-click-create-adb.png " ")
+    ![Click Create Autonomous Database.](images/ll-adb-click-create-adb-new.png " ")
     </if>
 
     <if type="freetier">
@@ -26,9 +28,9 @@
     >**Note:** Ensure that you use the suggested database names as instructed in this step, and not those shown in the screenshots.
 </if>
 <if type="livelabs">
-    - **Compartment** - Use the default compartment created for you.
-    - **Display Name** - Enter a memorable name for the database for display purposes. For this lab, use **[](var:db_display_name)**.
-    - **Database Name** - Use letters and numbers only, starting with a letter. Maximum length is 14 characters. (Underscores not supported.) For this lab, use **[](var:db_name_livelabs)**. For example, if your assigned username for the workshop is **LL2252-USER**, then your database name will be something like **[](var:db_name_livelabs_example)**.
+    - **Compartment**: Use the default compartment created for you.
+    - **Display Name**: Enter a memorable name for the database for display purposes. For this lab, use **[](var:db_display_name)**.
+    - **Database Name**: Use letters and numbers only, starting with a letter. Maximum length is 14 characters. (Underscores not supported.) For this lab, use **[](var:db_name_livelabs)**. For example, if your assigned username for the workshop is **LL2252-USER**, then your database name will be something like **[](var:db_name_livelabs_example)**.
 
     ![Enter the required details.](./images/adb-create-screen-names.png =70%x*)
 
@@ -52,16 +54,18 @@
 
 5. In the **Configure the database** section, accept the default selections as follows:
 
-    - **Always Free** - An Always Free database is especially useful for development and trying new features. You can deploy an Always Free instance in an Always Free account or paid account. The only option you specify in an Always Free database is the database version. For this lab, we recommend you leave **Always Free** unchecked unless you are in an Always Free account.
-    - **Choose database version** - Select **19c** as the database version.
-    - **ECPU count** - Number of ECPUs for your service. For this lab, specify **[](var:db_ocpu)**. If you choose an Always Free database, you do not need to specify this option.
-    - **Storage (TB)** - Select your storage capacity in terabytes. For this lab, specify **[](var:db_storage)** of storage. Or, if you choose an Always Free database, it comes with 20 GB of storage.
-    - **Compute auto scaling** - For this lab, keep auto scaling enabled, to enable the system to automatically use up to three times more compute and IO resources to meet workload demand.
-    - **Storage auto scaling** - For this lab, there is no need to enable storage auto scaling, which would allow the system to expand up to three times the reserved storage.
+    - **Always Free**: An Always Free database is especially useful for development and trying new features. You can deploy an Always Free instance in an Always Free account or paid account. The only option you specify in an Always Free database is the database version. For this lab, we recommend you leave **Always Free** unchecked unless you are in an Always Free account.
+    - **Choose database version**: Select your database version from this drop-down list.
+    - **ECPU count**: Choose the number of ECPUs for your service. For this lab, specify **[](var:db_ocpu)**. If you choose an Always Free database, you do not need to specify this option.
+    - **Storage (TB)**: Select your storage capacity in terabytes. For this lab, specify **[](var:db_storage)** of storage. Or, if you choose an Always Free database, it comes with 20 GB of storage.
+    - **Compute auto scaling**: Accept the default which is enabled. This enables the system to automatically use up to three times more compute and IO resources to meet workload demand.
+    - **Storage auto scaling**: For this lab, there is no need to enable storage auto scaling, which would allow the system to expand up to three times the reserved storage.
 
         > **Note:** You cannot scale up/down an Always Free autonomous database.
 
-        ![Choose the remaining parameters.](./images/adb-create-screen-configure-db.png =65%x*)
+        ![Choose the remaining parameters.](./images/adb-create-screen-configure-db-new.png =65%x*)
+
+        >**Note:** You can click the **Show advanced options** link to use your organization's on-premise licenses with **bring your own license** or to take advantage of database consolidation savings with **elastic pools**.
 
 6. In the **Backup retention** section, you can either accept the default value or specify your own preferred backup retention days value. Accept the default 60 days default value.
 
@@ -90,28 +94,22 @@
 
         ![Choose the network access.](./images/adb-create-screen-choose-network.png =70%x*)
 
-9. In the **Choose a license and Oracle Database edition** section, accept the default selection, **This Database is provisioned with License included license type**.
-    
-    >**Note:** Select the **Bring Your Own License (BYOL)** type when your organization has existing database licenses.
-
-    ![Choose a license.](./images/choose-license.png =70%x*)
-
-10. For this lab, do not provide a contact email address. The "Contact Email" field allows you to list contacts to receive operational notices and announcements as well as unplanned maintenance notifications.
+9. In the **Provide contacts for operational notifications and announcements** section, do not provide a contact email address. The **Contact email** field allows you to list contacts to receive operational notices and announcements as well as unplanned maintenance notifications.
 
     ![Do not provide a contact email address.](images/adb-create-screen-contact-email.png "email")
 
-11. Click **Create Autonomous Database**.
+10. Click **Create Autonomous Database**.
 
     ![Click Create Autonomous Database.](./images/click-create-adb.png =70%x*)
 
-12.  The **Autonomous Database details** page is displayed. The status of your ADB instance is **PROVISIONING**.
+11.  The **Autonomous Database details** page is displayed. The status of your ADB instance is **PROVISIONING**.
 
     <if type="freetier">
-    ![Database Provisioning message.](./images/adb-create-provisioning-message.png " ")
+    ![Database Provisioning message.](./images/adb-create-provisioning-message-new.png " ")
     </if>
 
     <if type="livelabs">
-    ![Database Provisioning message.](./images/ll-adb-create-provisioning-message.png " ")
+    ![Database Provisioning message.](./images/ll-adb-create-provisioning-message-new.png " ")
     </if>
 
     A **Check database lifecycle state** informational box is displayed. You can navigate through this tour or choose to skip it. Click **Skip tour**. A **Skip guided tour** dialog box is displayed. Click **Skip**.
@@ -119,17 +117,17 @@
     In a few minutes, the instance status changes to **AVAILABLE**. At this point, your Autonomous Data Warehouse database instance is ready to use! Review your instance's details including its name, database version, ECPU count, and storage size.
 
     <if type="livelabs">
-    ![Database complete message.](./images/ll-adb-create-complete-message.png " ")
+    ![Database complete message.](./images/ll-adb-create-complete-message-new.png " ")
     </if>
 
     <if type="freetier">
-    ![Database complete message.](./images/adb-create-complete-message.png " ")
+    ![Database complete message.](./images/adb-create-complete-message-new.png " ")
     </if>
 
-13. Click the **Autonomous Database** link in the breadcrumbs. The **Autonomous Database** page is displayed. The new Autonomous Database instance is displayed. In the following screen capture, the instance display name is **MyQuickStart**.
+12. Click the **Autonomous Database** link in the breadcrumbs. The **Autonomous Database** page is displayed. The new Autonomous Database instance is displayed. In the following screen capture, the instance display name is **MyQuickStart**.
 
     <if type="livelabs">
-    ![Database instance displayed.](./images/ll-adb-page.png " ")
+    ![Database instance displayed.](./images/ll-adb-page-new.png " ")
     </if>
 
     <if type="freetier">
