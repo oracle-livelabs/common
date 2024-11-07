@@ -6,10 +6,10 @@
         "lastUpdated":"October 2024"
     }
 -->
-1. Click **Create Autonomous Database** to start the instance creation process. The **Create Autonomous Database** page is displayed. Select your desired **region** and **compartment**. If you are using a sandbox environment (green button) and get a **Forbidden** message, that indicates you are in the wrong compartment. In the **Compartment** drop-down list, select your assigned compartment.
+1. Click **Create Autonomous Database** to start the instance creation process. The **Create Autonomous Database** page is displayed. Select your desired **region** and **compartment**. If you are using a sandbox environment (green button) and get a **Forbidden** message, that indicates you are in the wrong compartment. In the **Compartment** drop-down list, select your assigned compartment that is listed on the **Reservation Information** page.
 
     <if type="livelabs">
-    ![Click Create Autonomous Database.](images/ll-adb-click-create-adb.png " ")
+    ![Click Create Autonomous Database.](images/ll-adb-click-create-adb-new.png " ")
     </if>
 
     <if type="freetier">
@@ -109,7 +109,7 @@
     </if>
 
     <if type="livelabs">
-    ![Database Provisioning message.](./images/ll-adb-create-provisioning-message.png " ")
+    ![Database Provisioning message.](./images/ll-adb-create-provisioning-message-new.png " ")
     </if>
 
     A **Check database lifecycle state** informational box is displayed. You can navigate through this tour or choose to skip it. Click **Skip tour**. A **Skip guided tour** dialog box is displayed. Click **Skip**.
@@ -117,7 +117,7 @@
     In a few minutes, the instance status changes to **AVAILABLE**. At this point, your Autonomous Data Warehouse database instance is ready to use! Review your instance's details including its name, database version, ECPU count, and storage size.
 
     <if type="livelabs">
-    ![Database complete message.](./images/ll-adb-create-complete-message.png " ")
+    ![Database complete message.](./images/ll-adb-create-complete-message-new.png " ")
     </if>
 
     <if type="freetier">
@@ -127,7 +127,7 @@
 12. Click the **Autonomous Database** link in the breadcrumbs. The **Autonomous Database** page is displayed. The new Autonomous Database instance is displayed. In the following screen capture, the instance display name is **MyQuickStart**.
 
     <if type="livelabs">
-    ![Database instance displayed.](./images/ll-adb-page.png " ")
+    ![Database instance displayed.](./images/ll-adb-page-new.png " ")
     </if>
 
     <if type="freetier">
