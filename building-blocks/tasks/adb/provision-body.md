@@ -3,7 +3,7 @@
         "name":"Provision Autonomous Database",
         "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more.",
         "author":"Lauran K. Serhal",
-        "lastUpdated":"October 2024"
+        "lastUpdated":"November 2024"
     }
 -->
 1. Click **Create Autonomous Database** to start the instance creation process. The **Create Autonomous Database** page is displayed. Select your desired **region** and **compartment**. If you are using a sandbox environment (green button) and get a **Forbidden** message, that indicates you are in the wrong compartment. In the **Compartment** drop-down list, select your assigned compartment that is listed on the **Reservation Information** page.
@@ -16,7 +16,7 @@
     ![Click Create Autonomous Database.](images/click-create-new-adb.png " ")
     </if>
 
-2.  In the **Provide basic information for the Autonomous Database** section, specify the following:
+2. In the **Provide basic information for the Autonomous Database** section, specify the following:
 
 <if type="freetier">
     - **Compartment**: Select the compartment you just created.
@@ -30,7 +30,7 @@
 <if type="livelabs">
     - **Compartment**: Use the default compartment created for you.
     - **Display Name**: Enter a memorable name for the database for display purposes. For this lab, use **[](var:db_display_name)**.
-    - **Database Name**: Use letters and numbers only, starting with a letter. Maximum length is 14 characters. (Underscores not supported.) For this lab, use **[](var:db_name_livelabs)**. For example, if your assigned username for the workshop is **LL2252-USER**, then your database name will be something like **[](var:db_name_livelabs_example)**.
+    - **Database Name**: Use letters and numbers only, starting with a letter. Maximum length is 14 characters. (Underscores not supported.) For this lab, use **[](var:db_name_livelabs)**.
 
     ![Enter the required details.](./images/adb-create-screen-names.png =70%x*)
 
@@ -54,7 +54,8 @@
 
 5. In the **Configure the database** section, accept the default selections as follows:
 
-    - **Always Free**: An Always Free database is especially useful for development and trying new features. You can deploy an Always Free instance in an Always Free account or paid account. The only option you specify in an Always Free database is the database version. For this lab, we recommend you leave **Always Free** unchecked unless you are in an Always Free account.
+    - **Always Free**: An Always Free databases are especially useful for development and trying new features. You can deploy an Always Free instance in an Always Free account or paid account. However, it must be deployed in the home region of your tenancy. The only option you specify in an Always Free database is the database version. For this lab, we recommend you leave **Always Free** unchecked unless you are in an Always Free account.
+    - **Developer**: Developer databases provide a great low cost option for developing apps with Autonomous Database. You have similar features to Always Free - but are not limited in terms of region deployments or the number of databases in your tenancy. You can upgrade your Developer Database to a full paid version later and benefit from greater control over resources, backups and more.
     - **Choose database version**: Select your database version from this drop-down list.
     - **ECPU count**: Choose the number of ECPUs for your service. For this lab, specify **[](var:db_ocpu)**. If you choose an Always Free database, you do not need to specify this option.
     - **Storage (TB)**: Select your storage capacity in terabytes. For this lab, specify **[](var:db_storage)** of storage. Or, if you choose an Always Free database, it comes with 20 GB of storage.
