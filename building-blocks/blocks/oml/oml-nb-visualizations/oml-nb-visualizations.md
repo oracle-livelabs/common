@@ -106,63 +106,7 @@ In these examples, we will use the example template notebook OML-Run-me-first.
 
 		* **Columns to Display:** By default, all the columns are listed. If you want to remove any column from displaying, click on the X in the column name. To view the column again, click inside the Columns to Show field. The hidden columns are displayed. Click on the column that you want to view again. In this example the column MARITAL_STATUS was removed. Clicking on the Columns to Show field displays it; click on it to include in the display. 
 
-
-
-## Task 2: Visualiza Data in an Area Chart
-An area chart uses lines to connect the data points and fills the area below these lines to the x-axis. Each data series contributes to the formation of a distinct shaded region. This emphasizes its contribution to the overall trend. 
-
-As the data points fluctuate, the shaded areas expand or contract. The shaded regions in an area chart imply significant meaning.
-
-**When to use this chart:** Use this chart to gain visual insight into the changes within the dataset.
-
-**Dataset:** `CUSTOMER_INSURANCE_LTV`
-
-Let's use the previous example to explore the area chart. 
-
-1. To view the data in an area chart icon, click the area chart icon. 
-
-2. The data in the `CUSTOMER_INSURANCE_LTV` table is now presented in an area chart. 
-
-3. In the Settings dialog, under Setup, you can change the entries in these fields to view the data
-
-	* Series to Show field: Lists the values of the column CREDIT_BALANCE. This value is plotted against the y-axis. You can change the entry in this field to view the data. You can select an additional entry also. Let's change the values in the Series to Show and select BANK_FUNDS and MORTGAGE_AMOUNT.  The area chart is now a stacked chart, and shows the average of BANK_FUNDS and MORTGAGE_AMOUNT along the Y-axis. The data is grouped by MARITAL_STATUS (along the x-axis).
-
-	* Group By field. Lists the values of the column MARITAL_STATUS. This value is plotted along the x-axis. You can select an additional entry also.
-
-	* Height: Click on the up or down arrow, as applicable, to increase or decrease the paragraph height
-
-	* Aggregate Duplicates: Displays the statistical computations of the selected columns in the Series to Show and Group By fields. You can choose to view any one of the following computations in the graphical output - Average, Sum, Maximum, Minimum, Last, and Count. 
-
-4. Under Customization in the Settings dialog, you can customize the following parameters of the graph: 
-
-* Visualizations: 
-	 **Cartesian Coordinate:** By default, the data points of the area chart are plotted on a cartesian coordinate grid.  A cartesian coordinate is a system in which the location of a point is given by coordinates that represent its distances from perpendicular lines that intersect at a point called the origin. You can view the same data points on a polar coordinate grid as well.
-
-	**Polar Coordinates:** Polar Coordinates do not apply to time-oriented data
-	**Orientation:** The chart orientation. Either horizontal or vertical.
-	**Stack:** Defines whether the data items are stacked. Supported Values: on, off.
-	**Sorting:** Specifies the sorting of the data. It should only be used for pie charts, bar/line/area charts with one series, or stacked bar/area charts.
- 
-* Series: Click Series to expand the options of the series.
-    * Line Type: Use this option to redefine the look of the lines in the chart. The available types are Straight, Curved, Stepped, and Center Stepped.
-    * Fill Color: Use this option to fill in the color of the series element in the chart.
-    * Pattern: Use this option to fill the pattern of the series element in the chart.
-    * Border Width: Use this option to edit the border width of the series element in pixels.
-    * Border Color: Use this option to edit the border color of the series element.
-
-* X-Axis: Expand this field to edit texts and visual settings related to the X-axis. You can enter a name for the X-axis in the Title field, and edit the color and font size under Text. 
- You can also edit the X-axis line color and width in the fields under Line. 
- * Y-Axis: Expand this field to edit the texts and visual settings related to the Y-axis. You can enter a name for the Y-axis in the Text field, and edit the color and font size. You can also edit the Y-axis line color and width. 
-
- * Description: In the description field, you can provide a name for the chart, subtitles and footnote for the chart. 
-
-
-
-
-
-
-
-## Task 3: Visualiza Data in a Bar Chart
+## Task 2: Visualiza Data in a Bar Chart
 
 A bar graph is a graphical representation of data in rectangular bars. The length or height  of the bars, depending on the horizontal or vertical orientation, depict the dataset distribution. One axis represents a category, while the other represents values or counts.
 
@@ -209,7 +153,7 @@ To visualize data in a bar chart:
 The bar chart now presents the data in a stacked manner, and in ascending order, as shown in the screenshot below:
 
 
-## Task 4: Visualiza Data in a Funnel Chart
+## Task 3: Visualiza Data in a Funnel Chart
 
 A funnel chart is a graphical representation that resembles the shape of a funnel where each segment gets progressively narrower. The segments are arranged vertically and depict a hierarchy. Within the funnel chart, each segment corresponds to a step or stage in a sequential process.
 
@@ -238,14 +182,72 @@ To view the data in a funnel chart:
 
 	![Funnel Charts](images/funnel-charts2.png)
 
-## Task 5: Visualiza Data in a Line Chart
+
+## Task 4: Visualiza Data in Pyramid Chart
+
+Pyramid charts present your data in a distinctive triangular configuration, horizontally segmented into partitions. Each segment in the pyramid charts represents points or steps in ascending or descending order. 
+
+**When to use this chart:**  Use this chart to depict hierarchical structures and the relative proportions of different values. They are typically used for displaying demographic data, market segmentation, or organizational structures. In any case, the data must have a progressive order. 
+
+To visualize data in a pyramid chart, let's use the `CUSTOMER_INSURANCE_LTV` table. 
+
+1. In the OML-Run-Me-First notebook, go to the paragraph where you viewed the `CUSTOMER_INSURANCE_LTV.`
+
+2. Click on the pyramid chart icon.
+
+	![Toolbar](images/visual-toolbar-pyramid.png)
+
+3. Click the Settings icon ![Settings icon](images/settings-icon.png). Under **Setup:**
+
+	* **Aggregate Duplicates:** Select **Average.**
+	* **Series to Show:** Select **`INCOME`** and **`MORTGAGE_AMOUNT`.**
+	* **Group By:** Select **`MARITAL_STATUS`**
+	* Click the settings icon. Under Customization expand Visualization and click click 3D under Dimension
+	* Under **Setup,** change Group By to **GENDER.** 
+
+	![Pyramid chart](images/pyramid-chart1.png)
+
+	* Once again, click the Settings icon ![Settings icon](images/settings-icon.png). Under **Customization,** expand **Visualization** and click **3D** under **Dimension.**
+
+	![Pyramid chart](images/pyramid-chart2.png)
+
+	* Open the Settings dialog again, and under **Setup** change **Group By** to **GENDER.**
+
+	![Pyramid chart](images/pyramid-chart3.png)
+
+	The pyramid chart shows a clear correlation between the two genders, and their income level and mortgage amount. For both the categories, the average income and mortgage amount taken is higher for Females.
+
+
+
+## Task 5: Visualiza Data in a Scatter Plot
+Scatter plots represent the relationship between two numeric variables in a data set. It represents data points on a two-dimensional plane and show how much one variable is affected by another. The independent variable is plotted on the X-axis, while the dependent variable is plotted on the Y-axis. You can display points by one or more grouping variables such that each group has a distinct color and shape. 
+
+**When to use this chart:** Use the scatter plot when you have paired numerical data, and you want to determine the relationship between the related variables in certain scenarios, identifying correlations and trends (linear and non-linear relationships), detecting outliers, understanding data distribution, identifying groupings or clusters of data. Scatterplots can also be useful when comparing multiple datasets where each datasets values are represented as a different group. Scatterplots are also useful for evaluating regression models by plotting, e.g., actual versus predicted values, 
+
+**Dataset:** `CUSTOMER_INSURANCE_LTV`.
+
+To visualize data in a scatter plot, we will use the table `CUSTOMER_INSURANCE_LTV`. For this, we will use the example template OML-Run-me-first notebook.  
+
+1. Click on the Scatter plot icon. A default scatter plot is shown that you will customize in the next step. 
+
+	![Toolbar](images/visual-toolbar-scatterplot.png)
+
+2. Click the settings icon. In the Settings dialog, under **Setup:**
+
+* **Series to show on X-axis:** Click and select `INCOME`.
+* **Series to show on Y-axis:** Click and select `MORTGAGE_AMOUNT`.
+* **Group By:** Select `MARITAL_STATUS`.
+* Click **Customization.** Under **Visualization**, retain the default settings.  Under **Description,** under **Title** Setup, enter `Scatter plot to show the correlation between income and mortgage amount.` 
+
+	![Scatterplot](images/scatterplot1.png)
+ The scatter plot shows a strong correlation between Income and Mortgage amount in the income range 50k to 80k.
+
+## Task 6: Visualiza Data in a Line Chart
 A line chart is a graphical representation used to display data points connected by straight lines.
 
 **When to use this chart:** Use this chart to visualize trends, changes, and relationships in data over a continuous period.
 
-For visualizing data in a line chart, we'll use the `SALES` table that is present in the `SH` schema. 
-
-**About the dataset:** The sales dataset comprises 
+**Dataset:**  `SH.SALES` table. For visualizing data in a line chart, we'll use the `SALES` table that is present in the `SH` schema. 
 
 1. In a sql paragraph in your notebook, run the following command:
 
@@ -282,8 +284,63 @@ For visualizing data in a line chart, we'll use the `SALES` table that is presen
 	![Line chart](images/line-chart2.png)
 
 
-. 
-## Task 6: Visualiza Data in a Pie Chart
+
+
+## Task 7: Visualiza Data in an Area Chart
+An area chart uses lines to connect the data points and fills the area below these lines to the x-axis. Each data series contributes to the formation of a distinct shaded region. This emphasizes its contribution to the overall trend. 
+
+As the data points fluctuate, the shaded areas expand or contract. The shaded regions in an area chart imply significant meaning.
+
+**When to use this chart:** Use this chart to gain visual insight into the changes within the dataset.
+
+**Dataset:** `SH.SALES` table. For visualizing data in an area, we'll use the `SALES` table that is present in the `SH` schema. 
+
+To use the area chart: 
+
+1. In another `%sql` paragraph, run the following script:
+
+	```
+	<copy>
+	SELECT
+  		TIME_ID,
+  		-- Use MAX(TOTAL_SOLD) to handle cases with duplicate TIME_ID and CHANNEL_ID
+  		MAX(CASE WHEN CHANNEL_ID = 2 THEN TOTAL_SOLD ELSE NULL END) AS Channel_2,
+  		MAX(CASE WHEN CHANNEL_ID = 4 THEN TOTAL_SOLD ELSE NULL END) AS Channel_4,
+  		MAX(CASE WHEN CHANNEL_ID = 3 THEN TOTAL_SOLD ELSE NULL END) AS Channel_3,
+  		MAX(CASE WHEN CHANNEL_ID = 9 THEN TOTAL_SOLD ELSE NULL END) AS Channel_9
+	FROM (SELECT TIME_ID, CHANNEL_ID, sum(AMOUNT_SOLD) TOTAL_SOLD
+      FROM SH.SALES
+      	WHERE TIME_ID >= TO_DATE('2001-09-01', 'YYYY-MM-DD')
+      	GROUP BY TIME_ID, CHANNEL_ID
+      	ORDER BY TIME_ID)
+	GROUP BY TIME_ID
+	ORDER BY TIME_ID
+
+	</copy>
+	```
+	This script groups the data by TIME_ID and CHANNEL_ID. It presents the data from 2001-09-01 and later. It shows the value for TOTAL_SOLD for each of the four channels grouped by `CHANNEL_2,` `CHANNEL_3,` `CHANNEL_4` and `CHANNEL_9.` 
+
+2. The data from the SALES table is now presented for the following columns - `TIME_ID,` `CHANNEL_2,` `CHANNEL_3,` `CHANNEL_4` and `CHANNEL_9.` 
+
+	![Table for area chart](images/area-chart-table.png)
+
+3. Now, click on the the Area chart icon ![Area chart icon](images/area-chart-icon.png) in the tool bar to visualize the data in an area chart. 
+
+	![Area chart 1](images/area-chart1.png)
+
+3. Click on the Settings icon ![Settings icon](images/settings-icon.png) to open the Settings dialog. Under Setup:
+
+	* **Series to Show:** Click to add `CHANNEL_3,` `CHANNEL_4` and `CHANNEL_9.` 
+	* **Group By:** Retain the default, that is, `TIME_ID.`
+	* **Aggregate Duplicates:** Retain the default, that is, `SUM.`
+
+	Click on Customization and under **Visualization,** click **Stacked.**
+	The area chart is now presented as shown in the screenshot. 
+
+	![Area chart 2](images/area-chart2.png)
+
+ 
+## Task 8: Visualiza Data in a Pie Chart
 
 A pie chart is a graphical representation of data in a circular form, with each slice of the circle representing a fraction that is a proportionate part of the whole.
 
@@ -347,42 +404,11 @@ To visualize data in a pie chart
 
 	![Pie Chart](images/pie-chart2.png)
 
-## Task 7: Visualiza Data in Pyramid Chart
-
-Pyramid charts present your data in a distinctive triangular configuration, horizontally segmented into partitions. Each segment in the pyramid charts represents points or steps in ascending or descending order. 
-
-**When to use this chart:**  Use this chart to depict hierarchical structures and the relative proportions of different values. They are typically used for displaying demographic data, market segmentation, or organizational structures. In any case, the data must have a progressive order. 
-
-To visualize data in a pyramid chart, let's use the `CUSTOMER_INSURANCE_LTV` table. 
-
-1. In the OML-Run-Me-First notebook, go to the paragraph where you viewed the `CUSTOMER_INSURANCE_LTV.`
-
-2. Click on the pyramid chart icon.
-
-	![Toolbar](images/visual-toolbar-pyramid.png)
-
-3. Click the Settings icon ![Settings icon](images/settings-icon.png). Under **Setup:**
-
-	* **Aggregate Duplicates:** Select **Average.**
-	* **Series to Show:** Select **`INCOME`** and **`MORTGAGE_AMOUNT`.**
-	* **Group By:** Select **`MARITAL_STATUS`**
-	* Click the settings icon. Under Customization expand Visualization and click click 3D under Dimension
-	* Under **Setup,** change Group By to **GENDER.** 
-
-	![Pyramid chart](images/pyramid-chart1.png)
-
-	* Once again, click the Settings icon ![Settings icon](images/settings-icon.png). Under **Customization,** expand **Visualization** and click **3D** under **Dimension.**
-
-	![Pyramid chart](images/pyramid-chart2.png)
-
-	* Open the Settings dialog again, and under **Setup** change **Group By** to **GENDER.**
-
-	![Pyramid chart](images/pyramid-chart3.png)
-
-	The pyramid chart shows a clear correlation between the two genders, and their income level and mortgage amount. For both the categories, the average income and mortgage amount taken is higher for Females.
 
 
-## Task 8: Visualiza Data in a Box Plot
+
+
+## Task 9: Visualiza Data in a Box Plot
 A box plot provides an overview of data distributions in numeric data. It provides general information about the symmetry, skewness, variance, and outliers in a dataset. The box plot uses boxes and lines to depict the data distribution. The box plot has the following components:
 
 
@@ -459,29 +485,6 @@ To visualize data in a box plot, let's consider the iris data set.
 	![Boxplot chart 5](images/boxplot5.png)
 
 
-
-## Task 9: Visualiza Data in a Scatter Plot
-Scatter plots represent the relationship between two numeric variables in a data set. It represents data points on a two-dimensional plane and show how much one variable is affected by another. The independent variable is plotted on the X-axis, while the dependent variable is plotted on the Y-axis. You can display points by one or more grouping variables such that each group has a distinct color and shape. 
-
-**When to use this chart:** Use the scatter plot when you have paired numerical data, and you want to determine the relationship between the related variables in certain scenarios, identifying correlations and trends (linear and non-linear relationships), detecting outliers, understanding data distribution, identifying groupings or clusters of data. Scatterplots can also be useful when comparing multiple datasets where each datasets values are represented as a different group. Scatterplots are also useful for evaluating regression models by plotting, e.g., actual versus predicted values, 
-
-**Dataset:** `CUSTOMER_INSURANCE_LTV`.
-
-To visualize data in a scatter plot, we will use the table `CUSTOMER_INSURANCE_LTV`. For this, we will use the example template OML-Run-me-first notebook.  
-
-1. Click on the Scatter plot icon. A default scatter plot is shown that you will customize in the next step. 
-
-	![Toolbar](images/visual-toolbar-scatterplot.png)
-
-2. Click the settings icon. In the Settings dialog, under **Setup:**
-
-* **Series to show on X-axis:** Click and select `INCOME`.
-* **Series to show on Y-axis:** Click and select `MORTGAGE_AMOUNT`.
-* **Group By:** Select `MARITAL_STATUS`.
-* Click **Customization.** Under **Visualization**, retain the default settings.  Under **Description,** under **Title** Setup, enter `Scatter plot to show the correlation between income and mortgage amount.` 
-
-	![Scatterplot](images/scatterplot1.png)
- The scatter plot shows a strong correlation between Income and Mortgage amount in the income range 50k to 80k.
 
 
 
