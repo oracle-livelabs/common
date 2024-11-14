@@ -421,7 +421,7 @@ A box plot provides an overview of data distributions in numeric data. It provid
     * Q3 (Third Quartile): This represents the value below which 75% of the data falls, serving as a border between the lowest 75% and highest 25% of values.
     * Interquartile Range (IQR): The IQR is the range in which the central 50% of the values fall. IQR = Q3 - Q1
  * Whiskers: The whiskers of the box plot extend from the central box to the minimum and maximum data values that are not considered outliers. They provide a graphical representation of the majority of the data's distribution.
-* Outliers: Outliers are data points that deviate significantly from other data points, typically due to data variability or errors.
+* Outliers: Outliers are data points that deviate significantly from other data points, typically due to data variability or errors. An outlier is plotted as a dot beyond the ends of the whiskers of a box plot.
 * Median: The median is the value that divides the dataset into two halves, with 50% of the values falling below it and 50% falling above it. In the box plot, a line or a mark inside the central frame represents the median.
 
 **When to use this chart:** Use this chart to show distributions of numeric data, especially if you want to compare them between multiple groups. 
