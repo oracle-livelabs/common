@@ -1,8 +1,8 @@
-# Introduction to Oracle Machine Learning Notebooks 
+# Visualiza Data in Oracle Machine Learning Notebooks 
 
 ## Introduction
 
-This lab walks you through the steps to sign into Oracle Machine Learning UI, create an Oracle Machine Learning (OML) notebook from scratch using the notebook environment, and explore the features.
+This lab walks you through the steps to visualiza your data by using the powerful data visualization options available in Oracle Machine Learning notebooks.
 
 Estimated Time: 15 minutes
 
@@ -16,12 +16,12 @@ The Oracle Machine Learning Notebooks provides:
 
 In this lab, you will learn how to visualiza your data in:
 * Tables
-* Area Chart
 * Bar Chart
 * Funnel Chart
 * Line Chart
-* Pie-chart
+* Area Chart
 * Pyramid Chart
+* Pie-chart
 * Box Plot
 * Scatter Plot 
 
@@ -29,16 +29,15 @@ In this lab, you will learn how to visualiza your data in:
 
 This lab assumes you have:
 * An Oracle Machine Learning account
-* Access to Oracle Machine Learning USER account.
+* Access to Oracle Machine Learning
 
 ## Task 1: Visualiza Data in a Table
 
 A table is an arrangement of information or data in rows and columns. Using OML Notebooks, you can create database tables, and also view the information in a tabular format. 
 
-**Dataset:** `CUSTOMER_INSURANCE_LTV`
-In these examples, we will use the example template notebook OML-Run-me-first.
+**Dataset:** `CUSTOMER_INSURANCE_LTV`. In this example, we will use the example template notebook OML-Run-me-first.
 
-1. On the OML UI homepage, click **Examples.** 
+1. On the Oracle Machine Learning UI homepage, click **Examples.** 
 	![Examples on Homepage](images/homepage-examples.png)
 	Or, open the left navigation menu by clicking the Cloud menu icon click ![Cloud menu icon](images/cloud-menu-icon.png) on the top left corner of the page. Click **Templates** and then click **Examples.** 
 	![Examples on Left Navigation menu](images/left-nav-examples.png)
@@ -112,11 +111,11 @@ A bar graph is a graphical representation of data in rectangular bars. The lengt
 
 **When to use this chart:** Use bar charts to show a distribution of data points, and perform a comparison of metric values across different subgroups of your data. 
 
-**Dataset:** `CUSTOMER_INSURANCE_LTV`
+**Dataset:** `CUSTOMER_INSURANCE_LTV`. In this example, we will use the example template notebook OML-Run-me-first.
 
 To visualize data in a bar chart:
 
-1. Click on the bar chart icon.
+1. In the OML-Run-Me-First notebook, go to the paragraph where you viewed the `CUSTOMER_INSURANCE_LTV.` Click on the bar chart icon.
 
 	![Toolbar](images/visual-toolbar-bar.png)
 
@@ -128,9 +127,9 @@ To visualize data in a bar chart:
 
 	![Bar chart settings](images/settings1-bar-chart.png)
 
-	* In **Series to Show**, select CREDIT_BALANCE, MORTGAGE_AMOUNT, and BANK_FUNDS.
+	* In **Series to Show**, select `CREDIT_BALANCE`, `MORTGAGE_AMOUNT`, and `BANK_FUNDS`.
 
-	* In **Group By**, select MARITAL_STATUS
+	* In **Group By**, select `MARITAL_STATUS`
 
 4. The average of `CREDIT_BALANCE`, `MORTGAGE_AMOUNT`, and `BANK_FUNDS` are each represented by adjacent bar charts, and the bar charts are grouped by `MARITAL_STATUS` - single, married, divorced, widowed, and others. The bar chart now looks like this, as shown in the screenshot below:
 
@@ -157,12 +156,12 @@ The bar chart now presents the data in a stacked manner, and in ascending order,
 
 A funnel chart is a graphical representation that resembles the shape of a funnel where each segment gets progressively narrower. The segments are arranged vertically and depict a hierarchy. Within the funnel chart, each segment corresponds to a step or stage in a sequential process.
 
-**When to use this chart:* Use this chart to visualize a linear sequential process, mostly in business and sales contexts. For example, you can use a funnel chart to track the sales process, order fulfillment, website visitor trends, and so on.   
+**When to use this chart:** Use this chart to visualize a linear sequential process, mostly in business and sales contexts. For example, you can use a funnel chart to track the sales process, order fulfillment, website visitor trends, and so on.   
 
-**Dataset:** `CUSTOMER_INSURANCE_LTV` 
+**Dataset:** `CUSTOMER_INSURANCE_LTV`. In this example, we will use the example template notebook OML-Run-me-first.
 
 To view the data in a funnel chart:
-1. Click on the Funnel chart icon.
+1. In the OML-Run-Me-First notebook, go to the paragraph where you viewed the `CUSTOMER_INSURANCE_LTV.` Click on the Funnel chart icon.
 
 	![Toolbar](images/visual-toolbar-funnel.png)
 
@@ -183,13 +182,15 @@ To view the data in a funnel chart:
 	![Funnel Charts](images/funnel-charts2.png)
 
 
-## Task 4: Visualiza Data in Pyramid Chart
+## Task 4: Visualiza Data in a Pyramid Chart
 
 Pyramid charts present your data in a distinctive triangular configuration, horizontally segmented into partitions. Each segment in the pyramid charts represents points or steps in ascending or descending order. 
 
 **When to use this chart:**  Use this chart to depict hierarchical structures and the relative proportions of different values. They are typically used for displaying demographic data, market segmentation, or organizational structures. In any case, the data must have a progressive order. 
 
-To visualize data in a pyramid chart, let's use the `CUSTOMER_INSURANCE_LTV` table. 
+**Dataset:** `CUSTOMER_INSURANCE_LTV`. In this example, we will use the example template notebook OML-Run-me-first.
+
+To visualize data in a Pyramid Chart:
 
 1. In the OML-Run-Me-First notebook, go to the paragraph where you viewed the `CUSTOMER_INSURANCE_LTV.`
 
@@ -224,11 +225,11 @@ Scatter plots represent the relationship between two numeric variables in a data
 
 **When to use this chart:** Use the scatter plot when you have paired numerical data, and you want to determine the relationship between the related variables in certain scenarios, identifying correlations and trends (linear and non-linear relationships), detecting outliers, understanding data distribution, identifying groupings or clusters of data. Scatterplots can also be useful when comparing multiple datasets where each datasets values are represented as a different group. Scatterplots are also useful for evaluating regression models by plotting, e.g., actual versus predicted values, 
 
-**Dataset:** `CUSTOMER_INSURANCE_LTV`.
+**Dataset:** `CUSTOMER_INSURANCE_LTV`. In this example, we will use the example template notebook OML-Run-me-first.
 
-To visualize data in a scatter plot, we will use the table `CUSTOMER_INSURANCE_LTV`. For this, we will use the example template OML-Run-me-first notebook.  
+To visualiza data in a scatter Plot: 
 
-1. Click on the Scatter plot icon. A default scatter plot is shown that you will customize in the next step. 
+1. In the OML-Run-Me-First notebook, go to the paragraph where you viewed the `CUSTOMER_INSURANCE_LTV.` Click on the Scatter plot icon. A default scatter plot is shown that you will customize in the next step. 
 
 	![Toolbar](images/visual-toolbar-scatterplot.png)
 
@@ -237,7 +238,10 @@ To visualize data in a scatter plot, we will use the table `CUSTOMER_INSURANCE_L
 * **Series to show on X-axis:** Click and select `INCOME`.
 * **Series to show on Y-axis:** Click and select `MORTGAGE_AMOUNT`.
 * **Group By:** Select `MARITAL_STATUS`.
-* Click **Customization.** Under **Visualization**, retain the default settings.  Under **Description,** under **Title** Setup, enter `Scatter plot to show the correlation between income and mortgage amount.` 
+
+3. Under **Customization:** 
+* **Visualization:** Retain the default settings.  
+* **Description:** Under **Title**, enter `Scatter plot to show the correlation between income and mortgage amount.` 
 
 	![Scatterplot](images/scatterplot1.png)
  The scatter plot shows a strong correlation between Income and Mortgage amount in the income range 50k to 80k.
@@ -247,7 +251,7 @@ A line chart is a graphical representation used to display data points connected
 
 **When to use this chart:** Use this chart to visualize trends, changes, and relationships in data over a continuous period.
 
-**Dataset:**  `SH.SALES` table. For visualizing data in a line chart, we'll use the `SALES` table that is present in the `SH` schema. 
+**Dataset:**  `SH.SALES` table. The `SALES` table that is present in the `SH` schema. 
 
 1. In a sql paragraph in your notebook, run the following command:
 
@@ -287,13 +291,11 @@ A line chart is a graphical representation used to display data points connected
 
 
 ## Task 7: Visualiza Data in an Area Chart
-An area chart uses lines to connect the data points and fills the area below these lines to the x-axis. Each data series contributes to the formation of a distinct shaded region. This emphasizes its contribution to the overall trend. 
-
-As the data points fluctuate, the shaded areas expand or contract. The shaded regions in an area chart imply significant meaning.
+An area chart uses lines to connect the data points and fills the area below these lines to the x-axis. Each data series contributes to the formation of a distinct shaded region. This emphasizes its contribution to the overall trend. As the data points fluctuate, the shaded areas expand or contract. 
 
 **When to use this chart:** Use this chart to gain visual insight into the changes within the dataset.
 
-**Dataset:** `SH.SALES` table. For visualizing data in an area, we'll use the `SALES` table that is present in the `SH` schema. 
+**Dataset:** `SH.SALES` table. The `SALES` table that is present in the `SH` schema. 
 
 To use the area chart: 
 
@@ -318,7 +320,7 @@ To use the area chart:
 
 	</copy>
 	```
-	This script groups the data by TIME_ID and CHANNEL_ID. It presents the data from 2001-09-01 and later. It shows the value for TOTAL_SOLD for each of the four channels grouped by `CHANNEL_2,` `CHANNEL_3,` `CHANNEL_4` and `CHANNEL_9.` 
+	This script groups the data by `TIME_ID` and `CHANNEL_ID`. It presents the data from 2001-09-01 and later. It shows the value for TOTAL_SOLD for each of the four channels grouped by `CHANNEL_2,` `CHANNEL_3,` `CHANNEL_4` and `CHANNEL_9.` 
 
 2. The data from the SALES table is now presented for the following columns - `TIME_ID,` `CHANNEL_2,` `CHANNEL_3,` `CHANNEL_4` and `CHANNEL_9.` 
 
@@ -346,7 +348,7 @@ A pie chart is a graphical representation of data in a circular form, with each 
 
 **When to use this chart:** Use this chart to visualize the numerical proportion of the parts to the whole. 
 
-**About the data set:** The iris data set contains 3 classes (three different Iris species - Setosa, Versicolor, and Virginica) along with 50 samples each, and four numeric properties about those classes: Sepal Length, Sepal Width, Petal Length, and Petal Width.
+**Dataset:** The iris data set contains 3 classes (three different Iris species - Setosa, Versicolor, and Virginica) along with 50 samples each, and four numeric properties about those classes: Sepal Length, Sepal Width, Petal Length, and Petal Width. 
 
 To visualize data in a pie chart
 1. Run the following script in an R paragraph to create the Iris dataset:
@@ -386,26 +388,26 @@ To visualize data in a pie chart
 4. The data is now displayed in a pie chart. By default, the pie chart shows the average of the sepal length for each of the three species of iris. It also shows a 5% threshold for others.  
 	![Pie Chart](images/pie-chart1.png)
 
-5. Click on the settings icon ![Settings icon](images/settings-icon.png). In the Settings dialog, click Customization. 
-	* Under **Variant,** click **Donut.** 
+5. Click on the settings icon ![Settings icon](images/settings-icon.png). In the Settings dialog, click **Customization.** 
+	* **Variant:** click **Donut.** 
 	* **Inner Radius:** Click the up arrow and set it to **40.**
-	* **Label:** Type `Sepal Length of the 3 iris species.` Close the dialog. The data is now rendered in a donut chart, as shown below:
+	* **Label:** Type `Sepal Length of the 3 iris species.` 
+	* Close the dialog. The data is now rendered in a donut chart, as shown below:
 
 	![Donut Chart](images/donut-chart.png)
 
 6. Once again, click on the Settings icon ![Settings icon](images/settings-icon.png). In the Settings dialog, 
 
 	* **Setup:** Under **Series to Show**, select **Petal Length** while retaining **Sepal Length.** 
-	* **Customization:** Under **Variant,** click **Pie.**
-	* **Customization:** Under **Dimension,** click **3D.**
-	* **Customization:** Under **Sorting,** click **Ascending.**
+	
+7. Click **Customization:** 
+	* Under **Variant,** click **Pie.**
+	* Under **Dimension,** click **3D.**
+	* Under **Sorting,** click **Ascending.**
 	
 	The data is now displayed in two 3D pie charts, one showing the average sepal length, and the other showing the average petal length for each of the three species of the iris flower.  
 
 	![Pie Chart](images/pie-chart2.png)
-
-
-
 
 
 ## Task 9: Visualiza Data in a Box Plot
@@ -422,38 +424,12 @@ A box plot provides an overview of data distributions in numeric data. It provid
 
 **When to use this chart:** Use this chart to show distributions of numeric data, especially if you want to compare them between multiple groups. 
 
-To visualize data in a box plot, let's consider the iris data set.
-
-**About the data set:** The iris data set contains 3 classes (three different Iris species - Setosa, Versicolor, and Virginica) alongwith 50 samples each, and four numeric properties about those classes: Sepal Length, Sepal Width, Petal Length, and Petal Width.
+**Dataset:** The iris data set contains 3 classes (three different Iris species - Setosa, Versicolor, and Virginica) alongwith 50 samples each, and four numeric properties about those classes: Sepal Length, Sepal Width, Petal Length, and Petal Width.
 
 
-1. Run the following script in an R paragraph to create the Iris dataset:
+1. We have already created the Iris dataset in Task 8. 
 
-	<copy>
-	%r
-
-	library(ORE)
-
-	if (ore.exists("IRIS_R")) ore.drop(table="IRIS_R")
-
-	ore.create(iris, table = "IRIS_R", overwrite=TRUE)
-
-	ore.exec("ANALYZE TABLE IRIS_R COMPUTE STATISTICS")
-
-	z.show(cat("Shape:", dim(IRIS_R)))
-	</copy>
-
-2. Run the following SQL command to view the dataset. 
-
-	```
-	<copy>
-	%sql
-
-	select * from IRIS_R
-	</copy>
-	```
-
-3. By default, the dataset is displayed in a table. Click the box plot icon.
+3. Click the box plot icon ![Boxplot icon](images/boxplot-icon.png).
 
 	![Iris dataset in a Table](images/iris-table-boxplot.png)
 
@@ -467,10 +443,11 @@ To visualize data in a box plot, let's consider the iris data set.
 	![Boxplot chart 2](images/boxplot2.png)
 
 6. Under Settings, click **Customizations,** edit the following settings:
-	* Visualization: Click **Show Outliers.**
-	* X-Axis: Text Enter `Iris Species;` Color enter **rgb(7, 17, 215, 0.88)**
-	* Y-Axis: Text Enter `Petal & Sepal Properties;` Color: Enter **rgb(7, 17, 215, 0.88)**
-	* Description: Enter Box Plot of the Iris flower dimension`. Color: Enter **rgb(241, 8, 24)**
+	* **Visualization:** Click **Show Outliers.**
+	* **X-Axis:** In the **Text** field, enter `Iris Species;` Color enter **rgb(7, 17, 215, 0.88)**
+	* **Y-Axis:** In the **Text** field, enter `Petal & Sepal Properties;` Color: Enter **rgb(7, 17, 215, 0.88)**
+	* **Description:** Enter the following - `Box Plot of the Iris flower dimension`. 
+	* **Color:** Enter **rgb(241, 8, 24)**
 	* Once done, close the dialog. 
 
 	![Boxplot chart 3](images/boxplot3.png)
@@ -483,9 +460,6 @@ To visualize data in a box plot, let's consider the iris data set.
 	b) Hover your cursor over the dot that indicates the outlier for the group virginica. It shows the outlier value at `4.9` for Virginica sepal length. This means that in the species Virginica, there are sepals whose length is significantly below the lower count `(5.6)`.
 
 	![Boxplot chart 5](images/boxplot5.png)
-
-
-
 
 
 ## Learn More
