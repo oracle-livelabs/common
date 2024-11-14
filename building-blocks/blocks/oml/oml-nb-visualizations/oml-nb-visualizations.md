@@ -149,7 +149,9 @@ To visualize data in a bar chart:
 
 	* **Zoom:** Specifies the zoom and scroll behavior of the chart. Live behavior means that the chart will be updated continuously as it is being manipulated, while "delayed" means that the update will wait until the zoom/scroll action is done. While "live" zoom and scroll provides the best end user experience, no guarantees are made about the rendering performance or usability for large data sets or slow client environments. If performance is an issue, "delayed" zoom and scroll should be used instead.
 
-The bar chart now presents the data in a stacked manner, and in ascending order, as shown in the screenshot below:
+	The bar chart now presents the data in a stacked manner, and in ascending order, as shown in the screenshot below:
+
+	![Bar chart](images/bar-chart3.png)
 
 
 ## Task 3: Visualiza Data in a Funnel Chart
