@@ -782,23 +782,23 @@ The following visualization options are available.
 
 To visualiza your data, let's consider the _Test Notebook_ that you created in **Task 3-Create a Notebook and Define Paragraphs using the md, SQL, PL/SQL, Python, and R Interpreters** in this lab. 
 
-1. Open the Test Notebook and go to the paragraph where you have created and viewed the Iris dataset in a table. The tabular format presents the data in rows and columns. The iris data set contains:
+1. Open the _Test Notebook_ and go to the paragraph where you created and viewed the Iris dataset in a table. The tabular format presents the data in rows and columns. The Iris data set contains:
 	* Three classes (three different species of the Iris flower) - Setosa, Versicolor, and Virginica. 
 	* Four numeric properties about those classes - Sepal Length, Sepal Width, Petal Length, and Petal Width. 
 
 	![View IRIS table](images/iris-temp-table.png)
 
-2. Now, go to the notebook toolbar and click on the pie chart icon. The size of each slice of the pie chart represents the fraction that is proportionate to the whole, along with the percentage of these classes. 	
+2. On the notebook toolbar,click on the pie chart icon. The tabular data is now rendered in a pie chart. The size of each slice of the pie chart represents a fraction that is proportionate to the whole. It also depicts the percentage for each class. Hover your cursor over each slice to view additional details of the respective class that is displayed.  	
 
 	![pie-chart](images/pie-chart.png)
 
-3. You may also visualize this dataset in a box plot by clicking on the box plot icons. 
+3. You may also visualize this dataset in a box plot by clicking on the box plot icon. The box plot shows the data distribution of the 3 classes - Setosa, Versicolor, and Virginica. Hover your cursor over each slice to view additional details such as the inter-quartile ranges and quartiles, outliers (additional customization required) and so on.
 
-	Visualization of the data in a box plot. The box plot shows the data distribution of the 3 classes. 
+	Visualization of the data in a box plot.  
 
 	![boxplot](images/boxplot1.png)
 	
-4. For details about the visualization of the Iris Dataset, and all the other visualization options, settings, and customizations, see [Oracle Machine Learning Notebooks Workshop](https://<placeholder>).
+4. For details about the Iris dataset visualization, and all the other visualization options, settings, and customizations, see [Oracle Machine Learning Notebooks Workshop](https://<placeholder>) <Link to be added later after PR of the OML NOtebooks workshop>.
 
 This completes the task of visualizing your data in a notebook. You may now **proceed to the next lab**.
 
