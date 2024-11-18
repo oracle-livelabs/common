@@ -1,15 +1,15 @@
-# Visualiza Data in Oracle Machine Learning Notebooks 
+# Visualize Data in Oracle Machine Learning Notebooks 
 
 ## Introduction
 
-This lab walks you through the steps to visualize your data by using the rich visualization features available in Oracle Machine Learning notebooks.
+Oracle Machine Learning Notebooks offer rich visualization capabilities of your data. The visualizations depend on the type of your dataset. This lab walks you through the steps to visualize your data by using the rich visualization features available in Oracle Machine Learning Notebooks.
 
 Estimated Time: 15 minutes
 
 ### Objectives
 
-In this lab, you will learn how to visualiza your data in:
-* Tables
+In this lab, you will learn how to visualize your data in:
+* Table
 * Bar Chart
 * Funnel Chart
 * Line Chart
@@ -25,7 +25,7 @@ This lab assumes you have:
 * An Oracle Machine Learning account
 * Access to Oracle Machine Learning User Interface
 
-## Task 1: Visualiza Data in a Table
+## Task 1: Visualize Data in a Table
 
 A table is an arrangement of information or data in rows and columns. Using OML Notebooks, you can create database tables, and also view the information in a tabular format. 
 
@@ -99,7 +99,7 @@ A table is an arrangement of information or data in rows and columns. Using OML 
 
 		* **Columns to Display:** By default, all the columns are listed. If you want to remove any column from displaying, click on the X in the column name. To view the column again, click inside the Columns to Show field. The hidden columns are displayed. Click on the column that you want to view again. In this example the column MARITAL_STATUS was removed. Clicking on the Columns to Show field displays it; click on it to include in the display. 
 
-## Task 2: Visualiza Data in a Bar Chart
+## Task 2: Visualize Data in a Bar Chart
 
 A bar graph is a graphical representation of data in rectangular bars. The length or height  of the bars, depending on the horizontal or vertical orientation, depict the dataset distribution. One axis represents a category, while the other represents values or counts.
 
@@ -148,7 +148,7 @@ To visualize data in a bar chart:
 	![Bar chart](images/bar-chart3.png)
 
 
-## Task 3: Visualiza Data in a Funnel Chart
+## Task 3: Visualize Data in a Funnel Chart
 
 A funnel chart is a graphical representation that resembles the shape of a funnel where each segment gets progressively narrower. The segments are arranged vertically and depict a hierarchy. Within the funnel chart, each segment corresponds to a step or stage in a sequential process.
 
@@ -178,7 +178,7 @@ To view the data in a funnel chart:
 	![Funnel Charts](images/funnel-charts2.png)
 
 
-## Task 4: Visualiza Data in a Pyramid Chart
+## Task 4: Visualize Data in a Pyramid Chart
 
 Pyramid charts present your data in a distinctive triangular configuration, horizontally segmented into partitions. Each segment in the pyramid charts represents points or steps in ascending or descending order. 
 
@@ -216,14 +216,14 @@ To visualize data in a Pyramid Chart:
 
 
 
-## Task 5: Visualiza Data in a Scatter Plot
+## Task 5: Visualize Data in a Scatter Plot
 Scatter plots represent the relationship between two numeric variables in a data set. It represents data points on a two-dimensional plane and show how much one variable is affected by another. The independent variable is plotted on the X-axis, while the dependent variable is plotted on the Y-axis. You can display points by one or more grouping variables such that each group has a distinct color and shape. 
 
 **When to use this chart:** Use the scatter plot when you have paired numerical data, and you want to determine the relationship between the related variables in certain scenarios, identifying correlations and trends (linear and non-linear relationships), detecting outliers, understanding data distribution, identifying groupings or clusters of data. Scatterplots can also be useful when comparing multiple datasets where each datasets values are represented as a different group. Scatterplots are also useful for evaluating regression models by plotting, e.g., actual versus predicted values, 
 
 **Dataset:** `CUSTOMER_INSURANCE_LTV`. In this example, we will use the example template notebook OML-Run-me-first.
 
-To visualiza data in a scatter Plot: 
+To visualize data in a scatter Plot: 
 
 1. In the OML-Run-Me-First notebook, go to the paragraph where you viewed the `CUSTOMER_INSURANCE_LTV.` Click on the Scatter plot icon. A default scatter plot is shown that you will customize in the next step. 
 
@@ -242,7 +242,7 @@ To visualiza data in a scatter Plot:
 	![Scatterplot](images/scatterplot1.png)
  The scatter plot shows a strong correlation between Income and Mortgage amount in the income range 50k to 80k.
 
-## Task 6: Visualiza Data in a Line Chart
+## Task 6: Visualize Data in a Line Chart
 A line chart is a graphical representation used to display data points connected by straight lines.
 
 **When to use this chart:** Use this chart to visualize trends, changes, and relationships in data over a continuous period.
@@ -286,7 +286,7 @@ A line chart is a graphical representation used to display data points connected
 
 
 
-## Task 7: Visualiza Data in an Area Chart
+## Task 7: Visualize Data in an Area Chart
 An area chart uses lines to connect the data points and fills the area below these lines to the x-axis. Each data series contributes to the formation of a distinct shaded region. This emphasizes its contribution to the overall trend. As the data points fluctuate, the shaded areas expand or contract. 
 
 **When to use this chart:** Use this chart to gain visual insight into the changes within the dataset.
@@ -338,7 +338,7 @@ To use the area chart:
 	![Area chart 2](images/area-chart2.png)
 
  
-## Task 8: Visualiza Data in a Pie Chart
+## Task 8: Visualize Data in a Pie Chart
 
 A pie chart is a graphical representation of data in a circular form, with each slice of the circle representing a fraction that is a proportionate part of the whole.
 
@@ -406,7 +406,7 @@ To visualize data in a pie chart
 	![Pie Chart](images/pie-chart2.png)
 
 
-## Task 9: Visualiza Data in a Box Plot
+## Task 9: Visualize Data in a Box Plot
 A box plot provides an overview of data distributions in numeric data. It provides general information about the symmetry, skewness, variance, and outliers in a dataset. The box plot uses boxes and lines to depict the data distribution. The box plot has the following components:
 
 
