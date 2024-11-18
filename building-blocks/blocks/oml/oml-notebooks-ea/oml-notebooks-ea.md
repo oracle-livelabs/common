@@ -115,7 +115,7 @@ Here, you have the option to:
 * **Export:** To export a notebook, click **Export.** You can export Noteboooks in the `.dsnb` format, Zeppelin format (`.json` ) file and in Jupyter format (`.ipynb`), and later import them in to the same or a different environment. You can also export the notebook in HTML format, and optionally exclude paragraph code, results, and timestamps.
 * **Version:** To create versions of a notebook, select it and click **Version.** The Versions page for that particular notebook opens. Here, you can create a new version of the notebook by clicking **+Version.** The Create Version dialog opens. Enter a name of the notebook version, a description, and click **OK.** The new version of the notebook gets created by the same name with a suffix `_2` for the second version. For subsequent versions, suffix (number) increments by one. To revert to an older version by clicking Revert Version. You also have the option to delete any version of the notebook. Click **Back to Notebooks** to go to the OML Notebooks page.
 
-## Task 3: Create a notebook and define paragraphs using the md, SQL, PL/SQL, Python, and R Interpreters
+## Task 3: Create a Notebook and Define Paragraphs using the md, SQL, PL/SQL, Python, and R Interpreters
 
 In this task, you will create a new notebook, and add paragraphs to connect to the Markdown, SQL, Script, Python, and R interpreters. Interpreters are independent backend engines. R and Python engines are stateful while the notebook is open, and database objects are valid for the duration the database connection is active. You can change the interpreter by explicitly specifying one of `%script`, `%python`, `%sql` , `%r` , `%md`, or `%conda` to connect to the respective interpreter.
 
@@ -302,45 +302,29 @@ In this task, you will use the R interpreter and run R statements:
 	```
 	![Load R libraries](images/load-ore-lattice.png)
 
-3. In this step, we load the IRIS data from a R data.frame into the database by using the `ore.push` function. This function creates the temporary table `IRIS_TMP` and returns a proxy object to which the variable IRIS_TMP is assigned. Run the following command:
+3. In this step, run the following script in an R paragraph to create the Iris dataset:
 
 	```
 	<copy>
 	%r
-	IRIS_TMP <- ore.push(iris)
-	dim(IRIS_TMP)
-	colnames(IRIS_TMP)
-	z.show(head(IRIS_TMP,10))
+	library(ORE)
+
+	if (ore.exists("IRIS_R")) ore.drop(table="IRIS_R")
+
+	ore.create(iris, table = "IRIS_R", overwrite=TRUE)
+
+	ore.exec("ANALYZE TABLE IRIS_R COMPUTE STATISTICS")
+
+	z.show(cat("Shape:", dim(IRIS_R)))
 	</copy>
 	```
 	![Create IRIS table](images/create-iris-temp.png)
 
-	Scroll down to view the table:
+	
+4. 	Run the following SQL command to view the dataset:
 	![View IRIS table](images/iris-temp-table.png)
 
-4. Run the following command to visualize the data in a histogram. In the histogram, the sepal length of the flower is plotted along the X-axis, and the frequency or count of the iris flower is plotted along the y-axis.   	
 
-	```
-	<copy>
-	%r
-
-	hist(IRIS_TMP$Sepal.Length, col="darkred")
-	</copy>
-	```
-
-	![Explore data in histogram](images/iris-temp-histogram.png)
-5. Run the following command to visualize the attribute distribution of the sepal length of the iris flower in a boxplot. The boxplot shows the distribution in quartiles.
-
-	```
-	<copy>
-	%r
-
-	boxplot(IRIS_TMP$Sepal.Length, horizontal=TRUE, notch=TRUE, col="darkgreen",
-		        showmeans=TRUE, xlab="cm", main="Distribution of IRIS Attributes")
-	</copy>					
-	```
-
-	![Attribute distribution in boxplot](images/boxplot-iris-attribute-dist.png)
 
 This completes the task of connecting to the R interpreter and running R commands in your notebook.
 
@@ -775,13 +759,48 @@ You can also go to Jobs from the Oracle Machine Learning home page by clicking *
 
 	![Job created](images/job-created.png)
 
+This completes the task of creating a job. 
 
 ## Task 10: Visualize your Data in OML Notebooks
 
+OML Notebooks offer rich visualization capabilities of your data. The visualizations depend on the type of your dataset.
+The following visualization options are available.  
 
+* Table - A table is an arrangement of information or data in rows and columns. Using OML Notebooks, you can create database tables, and also view the information in a tabular format. 
+* Area Chart - An area chart uses lines to connect the data points and fills the area below these lines to the x-axis. Each data series contributes to the formation of a distinct shaded region. This emphasizes its contribution to the overall trend. As the data points fluctuate, the shaded areas expand or contract.
+* Bar Graph - A bar graph is a graphical representation of data in rectangular bars. The length and height  of the bars, depending on the horizontal or vertical orientation, depict the dataset distribution. One axis represents a category, while the other represents values or counts.
+* Funnel Chart - A funnel chart is a graphical representation that resembles the shape of a funnel where each segment gets progressively narrower. The segments are arranged vertically and depict a hierarchy. Within the funnel chart, each segment corresponds to a step or stage in a sequential process.
+* Line Chart - A line chart is a graphical representation used to display data points connected by straight lines.
+* Pie Chart - A pie chart is a graphical representation of data in a circular form, with each slice of the circle representing a fraction that is a proportionate part of the whole.
+* Pyramid Chart - Pyramid charts present your data in a distinctive triangular configuration, horizontally segmented into partitions. Each segment in the pyramid charts represents points or steps in ascending or descending order. 
+* Box Plot - A box plot provides an overview of data distributions in numeric data. It provides general information about the symmetry, skewness, variance, and outliers in a dataset. The box plot uses boxes and lines to depict the data distribution. 
+* Scatter Plot - Scatter plots represent the relationship between two numeric variables in a data set. It represents data points on a two-dimensional plane and show how much one variable is affected by another. The independent variable is plotted on the X-axis, while the dependent variable is plotted on the Y-axis. You can display points by one or more grouping variables such that each group has a distinct color and shape. 
+* Tree Map - A treemap is a visualization composed of nested rectangles, that represent certain categories within a selected dimension and are ordered in a hierarchy, or “tree.” Quantities and patterns can be compared and displayed in a limited chart space. Treemaps also show the relationship of each part (or nested rectangles) to the whole (tree). 
+* Sun-burst - The sunburst chart is typically used to visualize hierarchical data structures - with part-to-whole relationships in data depicted additionally.
+* Tag Cloud - A tag cloud is a visual representation of the most popular words (or tags) found in free-form text.
+* Maps - Map plots display data points on a geographical map.
 
+To visualiza your data, let's consider the _Test Notebook_ that you created in **Task 3-Create a Notebook and Define Paragraphs using the md, SQL, PL/SQL, Python, and R Interpreters** in this lab. 
 
-This completes the task of creating a job. You may now **proceed to the next lab**.
+1. Open the Test Notebook and go to the paragraph where you have created and viewed the Iris dataset in a table. The tabular format presents the data in rows and columns. The iris data set contains:
+	* Three classes (three different species of the Iris flower) - Setosa, Versicolor, and Virginica. 
+	* Four numeric properties about those classes - Sepal Length, Sepal Width, Petal Length, and Petal Width. 
+
+	![View IRIS table](images/iris-temp-table.png)
+
+2. Now, go to the notebook toolbar and click on the pie chart icon. The size of each slice of the pie chart represents the fraction that is proportionate to the whole, along with the percentage of these classes. 	
+
+	![pie-chart](images/pie-chart.png)
+
+3. You may also visualize this dataset in a box plot by clicking on the box plot icons. 
+
+	Visualization of the data in a box plot. The box plot shows the data distribution of the 3 classes. 
+
+	![boxplot](images/boxplot1.png)
+	
+4. For details about the visualization of the Iris Dataset, and all the other visualization options, settings, and customizations, see [Oracle Machine Learning Notebooks Workshop](https://<placeholder>).
+
+This completes the task of visualizing your data in a notebook. You may now **proceed to the next lab**.
 
 ## Learn More
 
@@ -792,4 +811,4 @@ This completes the task of creating a job. You may now **proceed to the next lab
 
 * **Author** -  Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, October 2024
+* **Last Updated By/Date** - Moitreyee Hazarika, November 2024
