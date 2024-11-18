@@ -2,15 +2,9 @@
 
 ## Introduction
 
-This lab walks you through the steps to visualiza your data by using the powerful data visualization options available in Oracle Machine Learning notebooks.
+This lab walks you through the steps to visualize your data by using the rich visualization features available in Oracle Machine Learning notebooks.
 
 Estimated Time: 15 minutes
-
-### About Visualizations in Oracle Machine Learning Notebooks
-
-
-The Oracle Machine Learning Notebooks provides:
-* Faster notebook loading time than the original notebook interface.
 
 ### Objectives
 
@@ -29,7 +23,7 @@ In this lab, you will learn how to visualiza your data in:
 
 This lab assumes you have:
 * An Oracle Machine Learning account
-* Access to Oracle Machine Learning
+* Access to Oracle Machine Learning User Interface
 
 ## Task 1: Visualiza Data in a Table
 
