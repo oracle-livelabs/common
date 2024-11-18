@@ -9,15 +9,15 @@ Estimated Time: 15 minutes
 ### Objectives
 
 In this lab, you will learn how to visualize your data in:
-* Table
-* Bar Chart
-* Funnel Chart
-* Line Chart
-* Area Chart
-* Pyramid Chart
-* Pie-chart
-* Box Plot
-* Scatter Plot 
+* Tables
+* Bar Charts
+* Funnel Charts
+* Line Charts
+* Area Charts
+* Pyramid Charts
+* Pie-charts
+* Box Plots
+* Scatter Plots
 
 ### Prerequisites
 
