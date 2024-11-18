@@ -788,11 +788,11 @@ To visualiza your data, let's consider the _Test Notebook_ that you created in *
 
 	![View IRIS table](images/iris-temp-table.png)
 
-2. On the notebook toolbar,click on the pie chart icon. The tabular data is now rendered in a pie chart. The size of each slice of the pie chart represents a fraction that is proportionate to the whole. It also depicts the percentage for each class. Hover your cursor over each slice to view additional details of the respective class that is displayed.  	
+2. On the paragraph notebook toolbar, click on the pie chart icon. The tabular data is now rendered in a pie chart. The size of each slice of the pie chart represents a fraction that is proportionate to the whole. It also depicts the percentage of each class. Hover your cursor over each slice to view additional details about the respective class it represents. 	
 
 	![pie-chart](images/pie-chart.png)
 
-3. You may also visualize this dataset in a box plot by clicking on the box plot icon. The box plot shows the data distribution of the 3 classes - Setosa, Versicolor, and Virginica. Hover your cursor over each slice to view additional details such as the inter-quartile ranges and quartiles, outliers (additional customization required) and so on.
+3. You may also visualize this dataset in a box plot by clicking on the box plot icon. The box plot shows the data distribution of the 3 classes - Setosa, Versicolor, and Virginica. Hover your cursor over each slice to view additional details such as the inter-quartile ranges and quartiles, outliers (additional customization required) and so on for each class. This box plot displays the data for one property (sepal length) for the three classes. You can customize the box plot view all the properties of the three classes. 
 
 	Visualization of the data in a box plot.  
 
