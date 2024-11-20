@@ -791,7 +791,7 @@ The following visualization options are available.
 * Tag Cloud - A tag cloud is a visual representation of the most popular words (or tags) found in free-form text.
 * Maps - Map plots display data points on a geographical map.
 
-To visualiza your data, let's consider the _Test Notebook_ that you created in **Task 3-Create a Notebook and Define Paragraphs using the md, SQL, PL/SQL, Python, and R Interpreters** in this lab. 
+To visualize your data, let's consider the _Test Notebook_ that you created in **Task 3-Create a Notebook and Define Paragraphs using the md, SQL, PL/SQL, Python, and R Interpreters** in this lab. 
 
 1. Open the _Test Notebook_ and go to the paragraph where you created and viewed the Iris dataset in a table. The tabular format presents the data in rows and columns. The Iris data set contains:
 	* Three classes (three different species of the Iris flower) - Setosa, Versicolor, and Virginica. 
