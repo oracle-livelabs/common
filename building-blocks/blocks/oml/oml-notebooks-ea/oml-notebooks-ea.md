@@ -355,9 +355,9 @@ To edit an existing notebook:
 2. When the notebook is open, you can use the following notebook features from the  toolbars:
 ![Notebook Edit options](images/notebook-ea-edit-options.png)
 
-* Click ![Run all paragraph](images/run-paragraphs-icon.png=50%x*) to run all paragraphs in the notebook.
-* Click ![Invalidate Sessions](images/invalidate-sessions-icon.png=50%x*) to invalidate and reset the notebook session.
-* Click ![Versioning](images/versioning-nb-editor.png=50%x*) to create a new version this notebook, or to view the earlier versions of the notebook.
+* Click ![Run all paragraph](images/run-paragraphs-icon.png) to run all paragraphs in the notebook.
+* Click ![Invalidate Sessions](images/invalidate-sessions-icon.png) to invalidate and reset the notebook session.
+* Click ![Versioning](images/versioning-nb-editor.png) to create a new version this notebook, or to view the earlier versions of the notebook.
 
 	- **Create Version:** Click this option to create a new version of this notebook. You have the option to provide a new name for the version, and a description about it. When you create a new notebook version, the paragraph results of each run session are stored in the versioned notebook. When you restore a notebook, its paragraph results are also restored. You can also create notebook versions from the editor. For more information, see Work with Notebook Versions in the Notebook Editor.
 
@@ -365,50 +365,50 @@ To edit an existing notebook:
 
 	>**Note:**  You can also create notebook versions, view version history, and delete older versions from the Versions option on Notebooks page option on the Notebooks page.
 
-* Click ![Clear Results](images/clear-results.png=50%x*) to clear paragraph results.
-* Click ![Clear Paragraph Dependencies](images/clear-para-dep-icon.png=50%x*) clear paragraph dependencies to clear paragraph dependencies.
-* Click ![Export Notebook](images/export-icon.png=50%x*) export notebook to export the notebook. You can export the notebook as a ``.dsnb`` file (OML Notebook), ``.zpln`` file (Zeppelin notebook) and ``.ipynb`` file (Jupyter notebook). You have these additional settings while exporting a notebook:
-![Export Notebook](images/export-notebook-dialog.png=75%x*)
+* Click ![Clear Results](images/clear-results.png) to clear paragraph results.
+* Click ![Clear Paragraph Dependencies](images/clear-para-dep-icon.png) clear paragraph dependencies to clear paragraph dependencies.
+* Click ![Export Notebook](images/export-icon.png) export notebook to export the notebook. You can export the notebook as a ``.dsnb`` file (OML Notebook), ``.zpln`` file (Zeppelin notebook) and ``.ipynb`` file (Jupyter notebook). You have these additional settings while exporting a notebook:
+![Export Notebook](images/export-notebook-dialog.png)
 	- **Exclude code:** Click to exclude the code in the notebook paragraphs. The exported notebook will only contain the paragraph outputs.
 	- **Exclude results:** Click to exclude the paragraph output. The exported notebook will only contain the codes in the paragraphs.
 	- **Exclude timestamps:** Click to exclude the timestamps from each paragraph.
 	- **Export Type:** Select an option from the drop-down list. The supported types are Native (.dsnb), Zeppelin, Zupyter, and HTML.
-* Click ![Print Notebook](images/print-icon.png=50%x*) to print the notebook. You can also print the notebook in PDF format.
-* Click ![Hide code](images/hide-code.png=50%x*) to hide the code of all paragraphs in the notebook.
-* Click ![Hide results](images/hide-results.png=50%x*) to hide the results of all the paragraph in the notebook.
-* Click ![Enable read-only](images/read-only.png=50%x*)  to enable read-only mode for this notebook.
+* Click ![Print Notebook](images/print-icon.png) to print the notebook. You can also print the notebook in PDF format.
+* Click ![Hide code](images/hide-code.png) to hide the code of all paragraphs in the notebook.
+* Click ![Hide results](images/hide-results.png) to hide the results of all the paragraph in the notebook.
+* Click ![Enable read-only](images/read-only.png)  to enable read-only mode for this notebook.
 	>**Note:** The read-only mode is available only for the Oracle Machine Learning Notebooks.
 
-* Click ![Show panel](images/show-panel.png=50%x*) to open the settings option in the side panel. The settings option in the side panel are the same settings option available in the paragraph.
+* Click ![Show panel](images/show-panel.png) to open the settings option in the side panel. The settings option in the side panel are the same settings option available in the paragraph.
 	- This is the screenshot of the settings option on the side panel that open when you click the Show Panel icon. Note that the settings option in the paragraph is hidden when the side panel is open. Click the close icon on the panel to close the pane.
 	![Settings in the panel](images/settings-option-panel.png)
 	- Once you close the edit pane on the right, the settings option in the paragraph are displayed, as shown in the screenshot here.
 	![Settings in the panel](images/settings-option-para.png)
 
-* Click ![Update interpreter](images/update-nb-type.png=50%x*) to change the interpreter binding to either low, medium, or high.
-* Click ![Update notebook layout](images/update-nb-layout.png=50%x*) Zeppelin to switch the OML Notebook to either Zeppelin or Jupyter notebook.
+* Click ![Update interpreter](images/update-nb-type.png) to change the interpreter binding to either low, medium, or high.
+* Click ![Update notebook layout](images/update-nb-layout.png) Zeppelin to switch the OML Notebook to either Zeppelin or Jupyter notebook.
 
 
 ### Paragraph level features:
-* Click ![Run](images/run-para.png=50%x*) to run the selected paragraph.
-* Click ![Enter Dependency Mode](images/enter-dep-mode.png=50%x*) to enter into Dependency Mode. In Dependency Mode, you select and deselect paragraphs to add or remove them as dependents.
+* Click ![Run](images/run-para.png) to run the selected paragraph.
+* Click ![Enter Dependency Mode](images/enter-dep-mode-icon.png) to enter into Dependency Mode. In Dependency Mode, you select and deselect paragraphs to add or remove them as dependents.
 
 	>**Note:** The Paragraph Dependencies feature allows you to add dependencies between paragraphs. The dependents of a paragraph automatically run after the original paragraph is run.
 
-* Click ![Comments](images/add-comments-icon.png=50%x*) to open the Comments dialog. Type in your comments here, and press Enter to add the comment. You can also delete any comments by clicking the corresponding **Delete** icon. Click the comments icon to close the dialog. You can provide comments for each paragraph in a notebook. Paragraphs with comments are indicated by a green dot on the comments icon.
-* Click ![Expand](images/expand-icon.png=50%x*) to view the notebook paragraph in full screen mode. To view the paragraph in the normal mode, click the collapse icon.
-* Click ![Show Hide Line Numbers](images/showhide-line-nos.png=50%x*) to show line numbers in the paragraph.
-* Click ![Visibility](images/visibility.png=50%x*) to view the paragraph title, code, results, and the paragraph settings.
-* Click ![Settings](images/settings.png=50%x*) to:
-	- **Move up:** Click ![Move up](images/move-up.png=50%x*) to move the paragraph up in the notebook.
-	- **Move down:** Click ![Move down](images/move-down.png=50%x*) to move the paragraph down in the notebook.
-	- **Run all Above:** Click ![Move down](images/run-all-above.png=50%x*) to run all the paragraphs above the current paragraph.
-	- **Run all Below:** Click ![Move down](images/run-all-below1.png=50%x*) to run all the paragraphs below the current paragraph.
-	- **Clear results:** Click ![Clear results](images/clear-results.png=50%x*) to clear the paragraph results.
-	- **Open as Embedded Window:** Click ![Copy embedded paragraph path](images/open-embedded-para.png=50%x*) to view the current paragraph separately in your browser.
-	- **Clone Paragraph:** Click ![Clone paragraph](images/clone-para.png=50%x*) to clone the paragraph. The paragraph is cloned in the same notebook.
-	- **Disable Run:** Click ![Disable run](images/disable-run.png=50%x*) to disable running of the paragraph. To enable run, go to **Settings** and click **Enable Run.**
-	- **Delete Paragraph:** Click ![Delete paragraph](images/delete-para.png=50%x*) to delete the paragraph.
+* Click ![Comments](images/add-comments-icon.png) to open the Comments dialog. Type in your comments here, and press Enter to add the comment. You can also delete any comments by clicking the corresponding **Delete** icon. Click the comments icon to close the dialog. You can provide comments for each paragraph in a notebook. Paragraphs with comments are indicated by a green dot on the comments icon.
+* Click ![Expand](images/expand-icon.png) to view the notebook paragraph in full screen mode. To view the paragraph in the normal mode, click the collapse icon.
+* Click ![Show Hide Line Numbers](images/showhide-line-nos.png) to show line numbers in the paragraph.
+* Click ![Visibility](images/visibility.png) to view the paragraph title, code, results, and the paragraph settings.
+* Click ![Settings](images/settings.png) to:
+	- **Move up:** Click ![Move up](images/move-up.png) to move the paragraph up in the notebook.
+	- **Move down:** Click ![Move down](images/move-down.png) to move the paragraph down in the notebook.
+	- **Run all Above:** Click ![Move down](images/run-all-above.png) to run all the paragraphs above the current paragraph.
+	- **Run all Below:** Click ![Move down](images/run-all-below1.png) to run all the paragraphs below the current paragraph.
+	- **Clear results:** Click ![Clear results](images/clear-results.png) to clear the paragraph results.
+	- **Open as Embedded Window:** Click ![Copy embedded paragraph path](images/open-embedded-para.png) to view the current paragraph separately in your browser.
+	- **Clone Paragraph:** Click ![Clone paragraph](images/clone-para.png) to clone the paragraph. The paragraph is cloned in the same notebook.
+	- **Disable Run:** Click ![Disable run](images/disable-run.png) to disable running of the paragraph. To enable run, go to **Settings** and click **Enable Run.**
+	- **Delete Paragraph:** Click ![Delete paragraph](images/delete-para.png) to delete the paragraph.
 * Click HTML to view the paragraph in HTML format.
 * Click Text to view the paragraph in text format.
 * Click Settings to adjust settings of the notebook paragraph output. This setting is specifically applicable to visualizations in graphs, charts, vertical height of paragraph output etc.
