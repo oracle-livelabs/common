@@ -326,6 +326,13 @@ In this task, you will use the R interpreter and run R statements:
 
 	
 4. 	Run the following SQL command to view the dataset:
+
+	```
+	<copy>
+	%sql
+	select * from OMLUSER.IRIS_R
+	</copy>
+	```
 	![View IRIS table](images/iris-temp-table.png)
 
 
@@ -801,8 +808,17 @@ To visualiza your data, let's consider the _Test Notebook_ that you created in *
 	Visualization of the data in a box plot.  
 
 	![boxplot](images/boxplot1.png)
-	
-4. For details about the Iris dataset visualization, and all the other visualization options, settings, and customizations, see [Oracle Machine Learning Notebooks Workshop](https://<placeholder>) <Link to be added later after PR of the OML NOtebooks workshop>.
+	 
+4. The output in any of the visualization option depends on the default visualization behavior. The tool automatically selects the columns to show. You can change these settings. 
+
+	Click the Settings icon ![Settings icon](images/settings-icon.png) to open the Settings dialog. 
+	* In the **Setup** tab, you have the option to increase or decrease the height of the box plot, select or deselect columns (series) to display, and so on.
+	![Setup](images/setup-tab.png)
+
+	* In the **Customization** tab, you have the option to customize the layout, define values for the interquartile range (specific to boxplot), define the maximum number of elements, add labels to X axis and Y axis, change the display color, and even add description to the chart.
+	![Customization](images/customization-tab.png)
+
+	For details about the Iris dataset visualization, and all the other visualization options, settings, and customizations, see the workshop [Introduction to Oracle Machine Learning Notebooks](https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=891&p210_wec=&session=7943398560266).
 
 This completes the task of visualizing your data in a notebook. You may now **proceed to the next lab**.
 
