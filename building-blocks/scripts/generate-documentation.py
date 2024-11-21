@@ -17,7 +17,7 @@ path_tasks     = path_root + "/tasks"
 path_blocks    = path_root + "/blocks"
 
 # relative path used for forming URLs
-relpath_blocks = "/building-blocks"
+relpath_blocks = os.path.normpath("/common/building-blocks")
 
 tasks = []
 blocks = []
@@ -57,8 +57,10 @@ def load_labs(type):
     else:
         this_path = path_tasks
 
-    files = sorted(filter( os.path.isfile, glob.glob(this_path + '/**/*.md', recursive=True)))
-    
+    files = sorted(
+        filter(os.path.isfile, glob.glob(this_path + "/**/*.md", recursive=True))
+    )
+
     for f in files:
 
         t = Lab()
@@ -66,9 +68,9 @@ def load_labs(type):
         t.md_name = f[f.rfind("/")+1:]
         t.path = f[f.rfind(relpath_blocks):]
 
-        # get the service name from the path. 
-        s = t.physical_path[len(this_path)+1:]
-        t.cloud_service = s[:s.find("/")]
+        # get the service name from the path.
+        s = t.physical_path[len(this_path) + 1 :]
+        t.cloud_service = s[: s.find(os.path.normpath("/"))]
 
         t.include_name = t.cloud_service + "-" + t.md_name
         
@@ -166,7 +168,7 @@ def add_block_details(this_block):
         # parse the json
         j = None
         try:
-            j = json.loads(comment, strict=False)
+            j = json.loads(comment)
             this_block.name = j["name"]
             this_block.description = j["description"]
             this_block.author=j["author"]
@@ -243,33 +245,67 @@ def write_task_manifest():
     output = add_line(output, ' "help": "livelabs-help-db_us@oracle.com",')
     output = add_line(output, ' "variables": ["' + relpath_blocks + '/variables/variables.json"],')
     output = add_line(output, ' "tutorials": [  ')
-    output = add_line(output, '')
-    output = add_line(output, '     {')
-    output = add_line(output, '         "title": "Authoring using Blocks and Tasks",' )
-    output = add_line(output, '         "type": "freetier",' )
-    output = add_line(output, '         "filename": "' + relpath_blocks + '/how-to-author-with-blocks/how-to-author-with-blocks.md"' )
-    output = add_line(output, '     },')
-    output = add_line(output, '     {')
-    output = add_line(output, '         "title": "Creating Blocks and Tasks",' )
-    output = add_line(output, '         "type": "freetier",' )
-    output = add_line(output, '         "filename": "' + relpath_blocks + '/how-to-author-with-blocks/creating-blocks-tasks.md"' )
-    output = add_line(output, '     },')
-    output = add_line(output, '     {')
-    output = add_line(output, '         "title": "List of Building Blocks and Tasks",' )
-    output = add_line(output, '         "type": "freetier",' )
-    output = add_line(output, '         "filename": "' + relpath_blocks + '/how-to-author-with-blocks/all-blocks-tasks.md"' )
-    output = add_line(output, '     },')
+    output = add_line(output, "")
+    output = add_line(output, "     {")
+    output = add_line(output, '         "title": "Authoring using Blocks and Tasks",')
+    output = add_line(output, '         "type": "freetier",')
+    output = add_line(
+        output,
+        '         "filename": "'
+        + Path(relpath_blocks).as_posix()
+        + '/how-to-author-with-blocks/how-to-author-with-blocks.md"',
+    )
+    output = add_line(output, "     },")
+    output = add_line(output, "     {")
+    output = add_line(
+        output, '         "title": "Workshop Utilities - Add Users and Data Sets",'
+    )
+    output = add_line(output, '         "type": "freetier",')
+    output = add_line(
+        output,
+        '         "filename": "'
+        + Path(relpath_blocks).as_posix()
+        + '/how-to-author-with-blocks/data-sets.md"',
+    )
+    output = add_line(output, "     },")
+    output = add_line(output, "     {")
+    output = add_line(output, '         "title": "Creating Blocks and Tasks",')
+    output = add_line(output, '         "type": "freetier",')
+    output = add_line(
+        output,
+        '         "filename": "'
+        + Path(relpath_blocks).as_posix()
+        + '/how-to-author-with-blocks/creating-blocks-tasks.md"',
+    )
+    output = add_line(output, "     },")
+    output = add_line(output, "     {")
+    output = add_line(output, '         "title": "List of Building Blocks and Tasks",')
+    output = add_line(output, '         "type": "freetier",')
+    output = add_line(
+        output,
+        '         "filename": "'
+        + Path(relpath_blocks).as_posix()
+        + '/how-to-author-with-blocks/all-blocks-tasks.md"',
+    )
+    output = add_line(output, "     },")
 
     current_cloud_service = None
     for t in tasks:
         if t.cloud_service != current_cloud_service:
             current_cloud_service = t.cloud_service
-            filename = relpath_blocks + "/how-to-author-with-blocks/" + t.cloud_service + ".md"
-            output = add_line(output, '     {')
-            output = add_line(output, '         "title": "' + t.cloud_service.upper() + ' Tasks",' )
-            output = add_line(output, '         "type": "freetier",' )
-            output = add_line(output, '         "filename": "' + filename + '"' )
-            output = add_line(output, '     },')
+            filename = (
+                Path(relpath_blocks).as_posix()
+                + "/how-to-author-with-blocks/"
+                + t.cloud_service
+                + ".md"
+            )
+            output = add_line(output, "     {")
+            output = add_line(
+                output, '         "title": "' + t.cloud_service.upper() + ' Tasks",'
+            )
+            output = add_line(output, '         "type": "freetier",')
+            output = add_line(output, '         "filename": "' + filename + '"')
+            output = add_line(output, "     },")
 
     output = output[:len(output)-1]    
     output = add_line(output, '  ]')
@@ -345,16 +381,43 @@ def write_toc():
     output = add_line(output, "|---------------| ---- |  ---- |------------ | ------- | ------------")
 
     # Add the workshop utilities (hard code)
-    output = add_line(output, '| setup | [Add Workshop Utilities](' + relpath_blocks + '/workshop/freetier/index.html?lab=add-workshop-utilities) |  ' + relpath_blocks + ' /setup/add-workshop-utilities.md| Utilities for adding data sets and users |')
+    output = add_line(
+        output,
+        "| setup | [Add Workshop Utilities]("
+        + Path(relpath_blocks).as_posix()
+        + "/workshop/freetier/index.html?lab=add-workshop-utilities) |  "
+        + Path(relpath_blocks).as_posix()
+        + " /setup/add-workshop-utilities.md| Utilities for adding data sets and users | Ana Coman | Ana Coman, Oracle Database Product Management, July 2024",
+    )
+
     for t in blocks:
         this_name = t.md_name if not t.name else t.name
-        this_anchor = relpath_blocks + '/workshop/freetier/index.html?lab=' + t.cloud_service + '#' + re.sub('[^0-9a-zA-Z]+','', this_name)
-        this_anchor = relpath_blocks + '/workshop/freetier/index.html?lab=' + t.md_name
+        # this_anchor = relpath_blocks + '/workshop/freetier/index.html?lab=' + t.cloud_service + '#' + re.sub('[^0-9a-zA-Z]+','', this_name)
+        this_anchor = (
+            Path(relpath_blocks).as_posix()
+            + "/workshop/freetier/index.html?lab="
+            + t.md_name
+        )
         this_anchor = "[" + this_name + "](" + this_anchor + ")"
         this_description = t.description if t.description else " "
-        this_author=t.author if t.author else " "
-        this_lastUpdated =t.lastUpdated if t.lastUpdated else " "
-        output = add_line(output, "| " + t.cloud_service + " | " + this_anchor + " | " + t.path + " | " + this_description + " |" + this_author + " |"+ this_lastUpdated + " |")
+        this_author = t.author if t.author else " "
+        this_last_updated = t.last_updated if t.last_updated else " "
+        output = add_line(
+            output,
+            "| "
+            + t.cloud_service
+            + " | "
+            + this_anchor
+            + " | "
+            + Path(t.path).as_posix()
+            + " | "
+            + this_description
+            + " |"  
+            + this_author
+            + " |"
+            + this_last_updated
+            + " |"   ,
+        )
 
     output = add_line(output, "")
     output = add_line(output, "[Go here for the customer view of Building Blocks](/building-blocks/workshop/freetier/index.html)")
@@ -370,9 +433,23 @@ def write_toc():
         this_anchor = "[" + this_name + "](" + this_anchor + ")"
         this_description= t.description if t.description else " "
         this_author = t.author if t.author else " "
-        this_lastUpdated = t.lastUpdated if t.lastUpdated else " "
-        output = add_line(output, "| " + t.cloud_service + " | " + this_anchor + " | " + t.path + " | " + this_description + " |" + this_author + " |"+ this_lastUpdated + " |")
-
+        this_last_updated = t.last_updated if t.last_updated else " "
+        output = add_line(
+            output,
+            "| "
+            + t.cloud_service
+            + " | "
+            + this_anchor
+            + " | "
+            + Path(t.path).as_posix()
+            + " | "
+            + this_description
+            + " |"
+            + this_author
+            + " |"
+            + this_last_updated
+            + " |",
+        )
 
     output = add_line(output, "")
     output = add_line(output, "## Variable Defaults")
@@ -435,8 +512,10 @@ def write_cloud_service_tasks():
         output = add_line(output, '**Add to your manifest.json:**')
         output = add_line(output, "```")
         output = add_line(output, '"include": {')
-        output = add_line(output, '     "' + t.include_name + '":"' + t.path)
-        output = add_line(output, '}')
+        output = add_line(
+            output, '     "' + t.include_name + '":"' + Path(t.path).as_posix() + '"'
+        )
+        output = add_line(output, "}")
         output = add_line(output, "```")
         output = add_line(output, "")
         output = add_line(output, "**Add to your workshop markdown:**")
