@@ -1,6 +1,8 @@
 {
   "workshoptitle": "New Workshop Step by Step",
   "help": "livelabs-help-db_us@oracle.com",
+  "variables": ["../../4-labs-markdown-develop-content/variables.json",
+  "../../4-labs-markdown-develop-content/variables-in-another-file.json"],
 	"tutorials": [
     {
       "title": "Introduction",

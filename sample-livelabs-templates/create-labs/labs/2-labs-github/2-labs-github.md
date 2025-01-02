@@ -98,7 +98,7 @@ Live Server is an extension for Visual Studio Code (VS Code) that provides a loc
 
     ![tab spacing is set to 4](./images/spacing4.png " ")
 
-2. Install Markdownlink Extension in Visual Studio Code - This extension is helpful to check markdown files linting and styling in VS Code. This extension has a library of rules to encourage standards and consistency for markdown files. 
+2. Install Markdownlint Extension in Visual Studio Code - This extension is helpful to check markdown files linting and styling in VS Code. This extension has a library of rules to encourage standards and consistency for markdown files.
 
   To install this extension, search for markdownlint in the VS Code marketplace, select the first one and click on Install to install it.
 

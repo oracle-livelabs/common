@@ -1,15 +1,15 @@
-# Verify compute instance setup
+# Access the NoVNC Remote Desktop
 
 ## Introduction
 This lab will show you how to log in to your pre-created compute instance running on Oracle Cloud.
 
-Estimated Time: 5 minutes
+**_Estimated Time: 5 minutes_**
 
-### Objectives
+### **Objectives**
 In this lab, you will:
 - Learn how to connect to your compute instance using Remote Desktop
 
-### Prerequisites
+### **Prerequisites**
 
 This lab assumes you have:
 - Successfully submitted a reservation using the **Run on LiveLabs** option
@@ -18,26 +18,26 @@ This lab assumes you have:
 ## Task 1: Access the Graphical Remote Desktop
 For ease of execution of this workshop, your VM instance has been pre-configured with a remote graphical desktop - accessible using any modern browser on your laptop or workstation. Proceed as detailed below to log in.
 
-1. Now that your instance has been provisioned. If you are not already on the **My Reservations** page, then:
-    - Sign in to [LiveLabs](https://oracle.com/livelabs)
+1. Access the **My Reservations** page, by doing the following:
+    - Sign in to [LiveLabs](https://livelabs.oracle.com)
     - Click the drop-down arrow next to your **Username**
     - Click **My Reservations**
 
-   ![my reservation](./images/my-reservations.png "my reservation")
+   ![my reservation](./images/livelabs-user-dropdown.png "my reservation")
 
 2. Find the request you submitted from the list displayed (only one item will be displayed if this is your first request), then click **Launch Workshop**
 
-    ![my reservation completed](./images/my-reservation-completed.png "my reservation completed")
+    ![my reservation completed](./images/my-reservations-page.png "my reservation completed")
 
     >**Note:** The *Launch Workshop* link will be visible only when provisioning is completed
 
 3. Click **View Login Info** and then **Launch Remote Desktop**.
 
-    ![Login information](./images/login-info.png "Login Information")
+    ![Login information](images/launch-remote-desktop.png)
 
     This should take you directly to your remote desktop in a single click.  A sample of another lab is shown below.
 
-    ![noVNC launch remote desktop](./images/novnc-launch-get-started-2.png "noVNC launch remote desktop ")
+    ![noVNC launch remote desktop](./images/novnc-landing-page.png "noVNC launch remote desktop ")
 
     >**Note:**  While rare, you may see an error titled **Deceptive Site Ahead** or similar depending on your browser type as shown below.
 
@@ -58,4 +58,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology
 * **Contributors** - LiveLabs Team
-* **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Dec 2022
+* **Last Updated By/Date** - Brianna Ambler, Database Product Management, October 2024

@@ -253,4 +253,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology
 * **Contributors** - Arabella Yao, Product Manager, Database Product Management
-* **Last Updated By/Date** - Ramona Magadan, March 2024
+* **Last Updated By/Date** - Ramona Magadan, October 2024

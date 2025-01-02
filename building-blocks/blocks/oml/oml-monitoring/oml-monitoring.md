@@ -3,7 +3,7 @@
 
 This lab demonstrates how to use the OML monitoring feature. OML monitoring provides you with the functionality to monitor your data as well as monitor your machine learning models. 
 
-*Data Monitoring* evaluates how your data evolves over time. It helps you with insights on trends and multivariate dependencies in the data. It also gwarns you about data drift.
+*Data Monitoring* evaluates how your data evolves over time. It helps you with insights on trends and multivariate dependencies in the data. It also warns you about data drift.
 
 Data drift occurs when data diverges from the original baseline data over time. Data drift can happen for a variety of reasons, such as a changing business environment, evolving user behavior and interest, data modifications from third-party sources, data quality issues, or issues with upstream data processing pipelines.
 

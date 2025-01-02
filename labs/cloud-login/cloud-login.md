@@ -30,9 +30,14 @@ If you've signed out of the Oracle Cloud, use these steps to sign back in.
 
     ![Cloud Account Name](./images/cloud-oracle.png " ")
 
-2. Click **Continue** to reveal the login input fields.
+2. Choose **Identity Domain**
 
-    ![Click Continue Single Sign-In](./images/cloud-login-tenant.png " ")
+    ![Click Continue Single Sign-In](./images/cloud-login-default.png " ")
+
+
+    ![Click Continue Single Sign-In](./images/cloud-login-oracle-identity.png " ")
+
+    Click **Next** to reveal the login input fields.
 
 3. Enter your Cloud Account credentials and click **Sign In**. Your username is your email address. The password is what you chose when you signed up for an account.
 
@@ -53,4 +58,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 - **Created By/Date** - Kay Malcolm, Database Product Management, March 2020
 - **Contributors** - John Peach, Kamryn Vinson, Rene Fontcha, Madhusudhan Rao, Arabella Yao
-- **Last Updated By** - Ramona Magadan, March 2024
+- **Last Updated By** - Ana Coman, July 2024

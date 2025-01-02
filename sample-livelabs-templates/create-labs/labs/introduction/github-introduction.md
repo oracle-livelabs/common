@@ -21,7 +21,7 @@ Oracle LiveLabs has its own GitHub project that has 30 active repositories. This
 
 + You can access the **oracle-livelabs** GitHub project using the following URL:
 
-  [https://oracle.com/livelabs](https://oracle.com/livelabs)
+  [https://github.com/oracle-livelabs](https://github.com/oracle-livelabs)
 
   ![Oracle LiveLabs GitHub Project](./images/oracle-livelabs-github-project.png " ")
 
