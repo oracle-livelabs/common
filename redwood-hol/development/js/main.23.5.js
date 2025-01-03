@@ -1359,7 +1359,12 @@ let main = function () {
         return articleElement;
     }
 
-    let alphaNumOnly = function (text) { return text.replace(/[^[A-Za-z0-9:?\(\)]+?/g, ''); }
+    // let alphaNumOnly = function (text) { return text.replace(/[^[A-Za-z0-9:?\(\)]+?/g, ''); }
+
+
+    function alphaNumOnly(str) {
+        return str.replace(/[^\w\u4e00-\u9fff\u3040-\u30ff]+/g, '');
+    }
 
 
     // QA part of the code
