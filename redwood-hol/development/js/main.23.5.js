@@ -944,7 +944,7 @@ let main = function () {
     let addLanguageMenu = function () {
 
 
-        const language_dict = { 'en': 'English', 'es': 'Español', 'pt-br': 'Português (BR)', 'ja': '日本', 'zh-cn': '简体中文', 'zh-tw': '繁體中文', 'ko': '한국인', 'fr': 'Français', 'de': 'Deutsch' };
+        const language_dict = { 'en': 'English', 'es': 'Español', 'pt-BR': 'Português (BR)', 'ja': '日本', 'zh-CN': '简体中文', 'zh-TW': '繁體中文', 'ko': '한국인', 'fr': 'Français', 'de': 'Deutsch' };
         const selected_lang = getParam('available_languages');
         let lang_code = 'en';
         let full_lang = 'English';
