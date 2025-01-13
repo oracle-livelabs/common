@@ -89,6 +89,6 @@ Estimated Time: 5 minutes
 
     ![The Autonomous Database Information tab displays many details about your provisioned database.](./images/adb-provisioned.png " ")
 
-13. Click the **Autonomous Database** link in the breadcrumbs. The **Autonomous Database** page is displayed. The new Autonomous Database instance is displayed.
+14. Click the **Autonomous Database** link in the breadcrumbs. The **Autonomous Database** page is displayed. The new Autonomous Database instance is displayed.
 
     ![The provisioned Autonomous Database instance is displayed on the Autonomous Databases page. The state of the instance is AVAILABLE.](./images/adb-page.png " ")
