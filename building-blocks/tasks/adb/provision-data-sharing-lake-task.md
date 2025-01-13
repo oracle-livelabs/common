@@ -7,6 +7,7 @@
     }
 -->
 
+
 This lab walks you through how to provision an Autonomous Database instance.
 
 > **Note:** This workshop is directed at administrator users because they have the required privileges.
@@ -14,6 +15,48 @@ This lab walks you through how to provision an Autonomous Database instance.
 Estimated Time: 5 minutes
 
 > **Note:** If you have a **Free Trial** account, when your Free Trial expires your account will be converted to an **Always Free** account. You will not be able to conduct Free Tier workshops unless the Always Free environment is available. [Click here for the Free Tier FAQ page.](https://www.oracle.com/cloud/free/faq.html)
+
+
+## Introduction
+
+This lab walks you through the steps to set up the workshop environment.
+
+> **Note:** This workshop is directed at administrator users because they are have the required privileges.
+
+Estimated Time: 5 minutes
+
+### Objectives
+
+In this lab, you will:
+
+- Log in to the Oracle Cloud Console.
+- (Optional) Create a compartment for your resources.
+- Create an Autonomous Warehouse instance.
+
+### Prerequisites
+
+- An Oracle Cloud Account - Please view this workshop's LiveLabs landing page to see which environments are supported.
+
+> **Note:** If you have a **Free Trial** account, when your Free Trial expires your account will be converted to an **Always Free** account. You will not be able to conduct Free Tier workshops unless the Always Free environment is available. [Click here for the Free Tier FAQ page.](https://www.oracle.com/cloud/free/faq.html)
+
+## Task 1: Log in to the Oracle Cloud Console
+
+1. Log in to the **Oracle Cloud Console** as the Cloud Administrator. You will complete all the labs in this workshop using this Cloud Administrator.
+   See [Signing In to the Console](https://docs.cloud.oracle.com/en-us/iaas/Content/GSG/Tasks/signingin.htm) in the _Oracle Cloud Infrastructure_ documentation.
+
+2. On the **Sign In** page, select your tenancy, enter your username and password, and then click **Sign In**.
+
+   ![The blurred username and masked password are displayed on the OCI Sign in screen.](./images/sign-in.png " ")
+
+   The **Oracle Cloud Console** Home page is displayed.
+
+   ![The partial Oracle Cloud Console Home Page is displayed.](./images/oracle-cloud-console-home.png "Partial Oracle Cloud Console is displayed.")
+
+   > **Note:** To zoom in (magnify) a displayed image in this workshop, hover over the image to display the magnifying glass icon, and then then click the image.
+
+   ![An example of magnifying an image. The magnifying glass icon with a plus sign is shown as hoovering over a sample image.](./images/magnify-image.png "Click an image to magnify it.")
+
+## Task 2: Create an Autonomous Data Warehouse Instance
 
 1. Log in to the **Oracle Cloud Console** as the Cloud Administrator, if you are not already logged in. On the **Sign In** page, select your tenancy, enter your username and password, and then click **Sign In**. The **Oracle Cloud Console** Home page is displayed.
 
@@ -92,3 +135,22 @@ Estimated Time: 5 minutes
 13. Click the **Autonomous Database** link in the breadcrumbs. The **Autonomous Database** page is displayed. The new Autonomous Database instance is displayed.
 
     ![The provisioned Autonomous Database instance is displayed on the Autonomous Databases page. The state of the instance is AVAILABLE.](./images/adb-page.png " ")
+
+You may now proceed to the next lab.
+
+## Learn More
+
+- [Oracle Cloud Infrastructure Documentation](https://docs.cloud.oracle.com/en-us/iaas/Content/GSG/Concepts/baremetalintro.htm)
+- [Using Oracle Autonomous Database Serverless](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/index.html)
+
+## Acknowledgements
+
+- **Author:** Lauran K. Serhal, Consulting User Assistance Developer
+- **Last Updated By/Date:** Lauran Serhal, January 2025
+- **Built with Building Blocks**
+
+Data about movies in this workshop were sourced from Wikipedia.
+
+Copyright (C), 2025 Oracle Corporation.
+
+Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.3 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A copy of the license is included in the section entitled [GNU Free Documentation License](https://oracle-livelabs.github.io/adb/shared/adb-15-minutes/introduction/files/gnu-free-documentation-license.txt)
