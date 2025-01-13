@@ -7,6 +7,16 @@
     }
 -->
 
+
+This lab walks you through how to provision an Autonomous Database instance.
+
+> **Note:** This workshop is directed at administrator users because they have the required privileges.
+
+Estimated Time: 5 minutes
+
+> **Note:** If you have a **Free Trial** account, when your Free Trial expires your account will be converted to an **Always Free** account. You will not be able to conduct Free Tier workshops unless the Always Free environment is available. [Click here for the Free Tier FAQ page.](https://www.oracle.com/cloud/free/faq.html)
+
+
 ## Introduction
 
 This lab walks you through the steps to set up the workshop environment.
