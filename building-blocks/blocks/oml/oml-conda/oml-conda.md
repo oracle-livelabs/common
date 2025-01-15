@@ -170,7 +170,7 @@ The application tag is required for use with embedded execution. For example, OM
 1. Run the following command to upload the mypyenv to the Object Storage bucket associated with the ADB.
 	```
 	<copy>
-	upload mypyenv --overwrite --description 'Install Python seaborn and tensorflow packages' -t user 'OMLUSER' -t application OML4PY
+	upload mypyenv --overwrite --description 'Install Python seaborn and tensorflow packages' -t user 'OMLUSER' -t application 'OML4PY'
 	</copy>
 	```
 	![Command to upload the Py environment mypyenv and Py packages the to object storage](images/cmd-load-mypyenv.png)
@@ -197,7 +197,7 @@ The application tag is required for use with embedded execution. For example, OM
 	<copy>
 	%conda
 
-	upload myrenv --overwrite --description 'Install R forecast and ggplot2 packages' -t user 'OMLUSER' -t application 'OML4R
+	upload myrenv --overwrite --description 'Install R forecast and ggplot2 packages' -t user 'OMLUSER' -t application 'OML4R'
 	</copy>
 	```
 	The command returns the following:

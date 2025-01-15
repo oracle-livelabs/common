@@ -50,4 +50,4 @@ To create the table:
 
 	![Script to view Customers360 table](images/script-view-customers360.png)
 
-If the listing shows the columns and rows from the dataset as indicated in the image, you have completed the task of creating the `CUSTOMERS360` table. You may now **proceed to the next lab.**
+If the listing shows the columns and rows from the dataset as indicated in the image, you have completed the task of creating the `CUSTOMERS360` table. 

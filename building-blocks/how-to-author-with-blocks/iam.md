@@ -2,13 +2,13 @@
 ## Create an OCI Compartment
 **Markdown file location:**
 ```
-/common/building-blocks/tasks/iam/compartment-create-body.md
+/building-blocks/tasks/iam/compartment-create-body.md
 ```
 
 **Add to your manifest.json:**
 ```
 "include": {
-     "iam-compartment-create-body.md":"/common/building-blocks/tasks/iam/compartment-create-body.md"
+     "iam-compartment-create-body.md":"/building-blocks/tasks/iam/compartment-create-body.md
 }
 ```
 

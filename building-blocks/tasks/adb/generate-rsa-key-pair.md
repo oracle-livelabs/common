@@ -1,14 +1,12 @@
 <!--
     {
         "name":"Generate an RSA key pair",
-        "description":"Generate an RSA key pair and get the key's values and fingerprint"
+        "description":"Generate an RSA key pair and get the key's values and fingerprint",
+        "author": "Lauran K. Serhal",
+        "lastUpdated": "November 2024"
     }
 -->
 
-<!--
-**Author:** Lauran K. Serhal, Consulting User Assistance Developer
-**Last Updated By/Date:** Lauran Serhal, February 2024
--->
 
 _**IMPORTANT:** If you already have an RSA key pair in PEM format (minimum 2048 bits) and a fingerprint of the public key, you can skip this optional task and proceed to the next task in the workshop; however, going through this entire task might be easier for you. The **Console** displays the **Configuration file preview** dialog box that shows the **user ocid**, **fingerprint**, **tenancy ocid**, and **region**._ For additional information see the [How to Generate an API Signing Key](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#two), [How to Get the Key's Fingerprint](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#four), and [Where to Get the Tenancy's OCID and User's OCID](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#five) documentation resources.
 
