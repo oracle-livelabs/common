@@ -107,10 +107,10 @@ def add_task_details(this_task):
     j = None
     try:
         j = json.loads(comment)
-        this_task.name = j["name"]
-        this_task.description = j["description"]
-        this_task.author = j["author"]
-        this_task.lastUpdated = j["lastUpdated"]
+        this_task.name = j.get("name", "")
+        this_task.description = j.get("description","")
+        this_task.author = j.get("author","")
+        this_task.lastUpdated = j.get("lastUpdated","")
     except Exception as e:
         print ("WARNING! " + this_task.md_name + ": no valid comment with name and description found.")
         return False
@@ -170,10 +170,10 @@ def add_block_details(this_block):
         j = None
         try:
             j = json.loads(comment)
-            this_block.name = j["name"]
-            this_block.description = j["description"]
-            this_block.author=j["author"]
-            this_block.lastUpdated = j["lastUpdated"]
+            this_block.name = j.get("name","")
+            this_block.description = j.get("description","")
+            this_block.author=j.get("author", "")
+            this_block.lastUpdated = j.get("lastUpdated","")
         except Exception as e:
             print ("WARNING! " + this_block.md_name + ": no valid comment with name and description found.")
             return False
