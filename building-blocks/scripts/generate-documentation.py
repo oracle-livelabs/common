@@ -7,6 +7,7 @@ import glob
 import json
 import re
 from datetime import date
+from pathlib import Path
 
 # Initialize
 ### get physical paths - required to write manifest files and markdown
@@ -401,7 +402,7 @@ def write_toc():
         this_anchor = "[" + this_name + "](" + this_anchor + ")"
         this_description = t.description if t.description else " "
         this_author = t.author if t.author else " "
-        this_last_updated = t.last_updated if t.last_updated else " "
+        this_last_updated = t.lastUpdated if t.lastUpdated else " "
         output = add_line(
             output,
             "| "
@@ -433,7 +434,7 @@ def write_toc():
         this_anchor = "[" + this_name + "](" + this_anchor + ")"
         this_description= t.description if t.description else " "
         this_author = t.author if t.author else " "
-        this_last_updated = t.last_updated if t.last_updated else " "
+        this_last_updated = t.lastUpdated if t.lastUpdated else " "
         output = add_line(
             output,
             "| "

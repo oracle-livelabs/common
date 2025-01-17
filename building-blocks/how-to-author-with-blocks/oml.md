@@ -2,13 +2,13 @@
 ## Sign into Oracle Machine Learning UI
 **Markdown file location:**
 ```
-/building-blocks/tasks/oml/access-notebook-ea.md
+/common/building-blocks/tasks/oml/access-notebook-ea.md
 ```
 
 **Add to your manifest.json:**
 ```
 "include": {
-     "oml-access-notebook-ea.md":"/building-blocks/tasks/oml/access-notebook-ea.md
+     "oml-access-notebook-ea.md":"/common/building-blocks/tasks/oml/access-notebook-ea.md"
 }
 ```
 
@@ -24,13 +24,13 @@
 ## Create the Customer360 table
 **Markdown file location:**
 ```
-/building-blocks/tasks/oml/create-cust360-table.md
+/common/building-blocks/tasks/oml/create-cust360-table.md
 ```
 
 **Add to your manifest.json:**
 ```
 "include": {
-     "oml-create-cust360-table.md":"/building-blocks/tasks/oml/create-cust360-table.md
+     "oml-create-cust360-table.md":"/common/building-blocks/tasks/oml/create-cust360-table.md"
 }
 ```
 
@@ -46,13 +46,13 @@
 ## Create an OML User
 **Markdown file location:**
 ```
-/building-blocks/tasks/oml/create-oml-user.md
+/common/building-blocks/tasks/oml/create-oml-user.md
 ```
 
 **Add to your manifest.json:**
 ```
 "include": {
-     "oml-create-oml-user.md":"/building-blocks/tasks/oml/create-oml-user.md
+     "oml-create-oml-user.md":"/common/building-blocks/tasks/oml/create-oml-user.md"
 }
 ```
 
@@ -65,16 +65,38 @@
  
 [](include:oml-create-oml-user.md)
  
-## Sign into Oracle Machine Learning UI
+## nb-visualizations.md
 **Markdown file location:**
 ```
-/building-blocks/tasks/oml/notebook-features.md
+/common/building-blocks/tasks/oml/nb-visualizations.md
 ```
 
 **Add to your manifest.json:**
 ```
 "include": {
-     "oml-notebook-features.md":"/building-blocks/tasks/oml/notebook-features.md
+     "oml-nb-visualizations.md":"/common/building-blocks/tasks/oml/nb-visualizations.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:oml-nb-visualizations.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:oml-nb-visualizations.md)
+ 
+## Sign into Oracle Machine Learning UI
+**Markdown file location:**
+```
+/common/building-blocks/tasks/oml/notebook-features.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "oml-notebook-features.md":"/common/building-blocks/tasks/oml/notebook-features.md"
 }
 ```
 
@@ -90,13 +112,13 @@
 ## Provision an Autonomous Database
 **Markdown file location:**
 ```
-/building-blocks/tasks/oml/prov-an-adb.md
+/common/building-blocks/tasks/oml/prov-an-adb.md
 ```
 
 **Add to your manifest.json:**
 ```
 "include": {
-     "oml-prov-an-adb.md":"/building-blocks/tasks/oml/prov-an-adb.md
+     "oml-prov-an-adb.md":"/common/building-blocks/tasks/oml/prov-an-adb.md"
 }
 ```
 
@@ -112,13 +134,13 @@
 ## Sign into Oracle Machine Learning UI
 **Markdown file location:**
 ```
-/building-blocks/tasks/oml/sign-into-oml.md
+/common/building-blocks/tasks/oml/sign-into-oml.md
 ```
 
 **Add to your manifest.json:**
 ```
 "include": {
-     "oml-sign-into-oml.md":"/building-blocks/tasks/oml/sign-into-oml.md
+     "oml-sign-into-oml.md":"/common/building-blocks/tasks/oml/sign-into-oml.md"
 }
 ```
 
@@ -134,13 +156,13 @@
 ## Sign into Oracle Machine Learning UI
 **Markdown file location:**
 ```
-/building-blocks/tasks/oml/use-md-interpreter.md
+/common/building-blocks/tasks/oml/use-md-interpreter.md
 ```
 
 **Add to your manifest.json:**
 ```
 "include": {
-     "oml-use-md-interpreter.md":"/building-blocks/tasks/oml/use-md-interpreter.md
+     "oml-use-md-interpreter.md":"/common/building-blocks/tasks/oml/use-md-interpreter.md"
 }
 ```
 
@@ -156,13 +178,13 @@
 ## Sign into Oracle Machine Learning UI
 **Markdown file location:**
 ```
-/building-blocks/tasks/oml/use-plsql-interpreter.md
+/common/building-blocks/tasks/oml/use-plsql-interpreter.md
 ```
 
 **Add to your manifest.json:**
 ```
 "include": {
-     "oml-use-plsql-interpreter.md":"/building-blocks/tasks/oml/use-plsql-interpreter.md
+     "oml-use-plsql-interpreter.md":"/common/building-blocks/tasks/oml/use-plsql-interpreter.md"
 }
 ```
 
@@ -178,13 +200,13 @@
 ## Sign into Oracle Machine Learning UI
 **Markdown file location:**
 ```
-/building-blocks/tasks/oml/use-py-interpreter.md
+/common/building-blocks/tasks/oml/use-py-interpreter.md
 ```
 
 **Add to your manifest.json:**
 ```
 "include": {
-     "oml-use-py-interpreter.md":"/building-blocks/tasks/oml/use-py-interpreter.md
+     "oml-use-py-interpreter.md":"/common/building-blocks/tasks/oml/use-py-interpreter.md"
 }
 ```
 
@@ -200,13 +222,13 @@
 ## Sign into Oracle Machine Learning UI
 **Markdown file location:**
 ```
-/building-blocks/tasks/oml/use-r-interpreter.md
+/common/building-blocks/tasks/oml/use-r-interpreter.md
 ```
 
 **Add to your manifest.json:**
 ```
 "include": {
-     "oml-use-r-interpreter.md":"/building-blocks/tasks/oml/use-r-interpreter.md
+     "oml-use-r-interpreter.md":"/common/building-blocks/tasks/oml/use-r-interpreter.md"
 }
 ```
 
@@ -222,13 +244,13 @@
 ## Sign into Oracle Machine Learning UI
 **Markdown file location:**
 ```
-/building-blocks/tasks/oml/use-sql-interpreter.md
+/common/building-blocks/tasks/oml/use-sql-interpreter.md
 ```
 
 **Add to your manifest.json:**
 ```
 "include": {
-     "oml-use-sql-interpreter.md":"/building-blocks/tasks/oml/use-sql-interpreter.md
+     "oml-use-sql-interpreter.md":"/common/building-blocks/tasks/oml/use-sql-interpreter.md"
 }
 ```
 
