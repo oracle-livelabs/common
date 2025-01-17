@@ -244,7 +244,7 @@ def write_task_manifest():
     output = add_line(output, ' "workshoptitle":"LiveLabs Building Blocks",')
     output = add_line(output, get_manifest_include())
     output = add_line(output, ' "help": "livelabs-help-db_us@oracle.com",')
-    output = add_line(output, ' "variables": ["' + relpath_blocks + '/variables/variables.json"],')
+    output = add_line(output, ' "variables": ["' + Path(relpath_blocks).as_posix() + '/variables/variables.json"],')
     output = add_line(output, ' "tutorials": [  ')
     output = add_line(output, "")
     output = add_line(output, "     {")
@@ -456,7 +456,7 @@ def write_toc():
     output = add_line(output, "## Variable Defaults")
     output = add_line(output, "You can use the default variables or copy the default file to your project and override the settings. See the **Authoring using Blocks and Tasks** topic for details.")
     output = add_line(output, "")
-    output = add_line(output, '[View default variable values](' + relpath_blocks + '/variables/variables.json)')
+    output = add_line(output, '[View default variable values](' + Path(relpath_blocks).as_posix() + '/variables/variables.json)')
     output = add_line(output, "")
 
 
