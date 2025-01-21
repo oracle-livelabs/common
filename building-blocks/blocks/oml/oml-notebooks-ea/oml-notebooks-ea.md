@@ -752,9 +752,15 @@ You can also go to Jobs from the Oracle Machine Learning home page by clicking *
 
 7. Expand **Advanced Settings**, and specify the following settings:
 
-	![Create Job](images/create-jobs2.png)
+	![Create Job](images/create-jobs-adv-settings1.png)
 
+	* **Send Notifications:** Click this option and in the **Email Address(es)** field, enter the email addresses to which you want to send notifications about the selected events for the job. By default, you can enter three email IDs, separated by comma.
+
+	* **Events:** Click to select the events for which you want to send the notification. The supported job events are `JOB_START, JOB_SUCCEEDED, JOB_FAILED, JOB_BROKEN, JOB_COMPLETED` and `JOB_STOPPED`. 
+	
 	* **Maximum Number of Runs:** Select **3**. This specifies the maximum number of times the job must run before it is stopped. When the job reaches the maximum run limit, it will stop.  
+
+	![Create Job](images/create-jobs-adv-settings2.png)
 
 	* **Timeout in Minutes:** Select **60**. This specifies the maximum amount of time a job should be allowed to run.
 
