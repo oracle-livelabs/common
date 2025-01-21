@@ -12,22 +12,32 @@ Watch the video below for a walk-through of the Environment Setup lab.
 For more information about Terraform and Resource Manager, please see the appendix.
 
 ### Objectives
+- Download ORM Stack Zip File
 - Create Stack: Compute + Networking (New VCN) or Compute only (Existing VCN)
 - Terraform Apply
+- Access Graphical Remote Desktop
 
 ### Prerequisites
 This lab assumes you have:
 - An Oracle Cloud account
 - SSH Keys (optional)
 
-## Task 1: Create Stack: Choose a Path
+## Task 1: Download Oracle Resource Manager (ORM) Stack Zip File
+1.  Click on the link below to download the Resource Manager zip file you need to build your environment:
+
+<if type="data-masking-subsetting">
+    - [`dbseclabs-init-vm-dms.zip`](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/security-library/dbseclabs-v90_init-vm-dms.zip)
+</if>
+
+2.  Save in your downloads folder
+
 Proceed to deploy your workshop environment using Oracle Resource Manager (ORM) stack.  
 
 Your options are:
-- Task 1A: Create Stack:  **Compute + Networking** *(recommended)*
-- Task 1B: Create Stack:  **Compute Only**
+- Task 2A: Create Stack:  **Compute + Networking** *(recommended)*
+- Task 2B: Create Stack:  **Compute Only**
 
-## Task 1A: Create Stack:  Compute + Networking
+## Task 2A: Create Stack:  Compute + Networking
 1. Identify the ORM stack zip file downloaded in *Task 1*
 2. Log in to Oracle Cloud account
 3. Open up the hamburger menu in the top left corner.  Click **Developer Services**, and choose **Resource Manager > Stacks**. Choose the compartment in which you would like to install the stack. Click **Create Stack**.
@@ -93,7 +103,7 @@ Your options are:
 
 You may now proceed to Task 3 (skip Task 2B).
 
-## Task 1B: Create Stack:  Compute Only
+## Task 2B: Create Stack:  Compute Only
 If you just completed Task 2A, please proceed to Task 3.  If you have an existing VCN and are comfortable updating VCN configurations, please proceed as below.
 
   >**Note:** We recommend letting our stack create the VCN to reduce the potential for errors.
@@ -171,7 +181,7 @@ If you just completed Task 2A, please proceed to Task 3.  If you have an existin
 
   ![Apply job in progress](./images/apply-in-progress.png " ")
 
-## Task 2: Terraform Apply
+## Task 3: Terraform Apply
 In the prior steps, we elected to trigger the *terraform apply action* on stack creation.
 
 1.  Review the job output.
@@ -182,7 +192,7 @@ In the prior steps, we elected to trigger the *terraform apply action* on stack 
 
 3.  Your public IP address(es), instance name(s), and remote desktop URL are displayed.
 
-## Task 3: Access the Graphical Remote Desktop
+## Task 4: Access the Graphical Remote Desktop
 For ease of execution of this workshop, your VM instance has been pre-configured with a remote graphical desktop accessible using any modern browser on your laptop or workstation. Proceed as detailed below to log in.
 
 1. Navigate to **Stack Details** -> **Application Information** tab, and click the **Remote Desktop** URL.
@@ -193,7 +203,7 @@ For ease of execution of this workshop, your VM instance has been pre-configured
 
   This should take you directly to your remote desktop in a single click.
 
-  ![Remote desktop displayed](./images/novnc-launch-get-started.png " ")
+  ![Remote desktop displayed](./images/dms-landingpage.png " ")
 
     >**Note:** While rare, you may see an error on the browser - “*Deceptive Site Ahead*” or similar depending on your browser type as shown below.
 
