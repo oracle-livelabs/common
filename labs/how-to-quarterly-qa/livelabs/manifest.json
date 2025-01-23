@@ -1,0 +1,11 @@
+{
+  "workshoptitle": "Livelabs Documentation",
+  "help": "livelabs-help-db_us@oracle.com",
+	"tutorials": [
+    {
+      "title": "Quarterly QA checks and steps",
+      "description": "This lab prepares you for performing Quarterly QA of your workshop, details to look for and adjust before updating your workshop.",
+      "filename": "./../qa-checks/qa-checks.md"
+    }
+  ]
+}

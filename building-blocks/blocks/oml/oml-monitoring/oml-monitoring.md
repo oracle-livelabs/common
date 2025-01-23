@@ -3,12 +3,11 @@
 
 This lab demonstrates how to use the OML monitoring feature. OML monitoring provides you with the functionality to monitor your data as well as monitor your machine learning models. 
 
-*Data Monitoring* evaluates how your data evolves over time. It helps you with insights on trends and multivariate dependencies in the data. It also gwarns you about data drift.
+*Data Monitoring* evaluates how your data evolves over time. It helps you with insights on trends and multivariate dependencies in the data. It also warns you about data drift.
 
 Data drift occurs when data diverges from the original baseline data over time. Data drift can happen for a variety of reasons, such as a changing business environment, evolving user behavior and interest, data modifications from third-party sources, data quality issues, or issues with upstream data processing pipelines.
 
 *Model monitoring* allows you to monitor the quality of model predictions over time and helps you with insights on the causes of model quality issues.
-
 
 In this workshop, you will learn how to:
 * Create a data monitor to monitor your data
@@ -23,11 +22,15 @@ This lab takes approximately 30 minutes to complete.
 
 * Access to your Oracle Machine Learning user interface
 
-In this lab, you will learn how to create a data monitor and a model monitor. The use case here uses the `Individual household electricity consumption` dataset which includes various consumption metrics of a household from 2007 to 2010. The goal is to understand if and how household consumption has changed over four years.  
+In this lab, you will learn how to create a data monitor and a model monitor. The use case here uses the  `HOUSEHOLD_POWER_BASE` and `HOUSEHOLD_POWER_NEW` dataset which includes various consumption metrics of a household for the year 2007. The goal is to understand if and how household consumption has changed over the year.
 
+## Task 1: Load Dataset for Data Monitoring
+
+Before you begin with data and model monitoring, you must first load these datasets - `HOUSEHOLD_POWER_BASE` and `HOUSEHOLD_POWER_NEW` in your schema. 
 The dataset comprises the following columns:
 
-* `DATE_TIME` — Contains the date and time related information in dd:mm:yyyy:hh:mm:ss format.
+* `DATES` — Contains the date in yyyy:mm:dd format.
+* `TIMES` - Contains the timestamp in hh:mm:ss format.
 * `GLOBAL_ACTIVE_POWER` — This is the household global minute-averaged active power (in kilowatt).
 * `GLOBAL_REACTIVE_POWER` — This is the household global minute-averaged reactive power (in kilowatt).
 * `VOLTAGE` — This is the Minute-averaged voltage (in volt).
@@ -36,8 +39,91 @@ The dataset comprises the following columns:
 * `SUB_METERING_2` — This is the energy sub-metering No. 2 (in watt-hour of active energy). It corresponds to the laundry room.
 * `SUB_METERING_3` — This is the energy sub-metering No. 2 (in watt-hour of active energy). It corresponds to an electric water heater and air conditioner.
 
+To create the datasset:
+1. Create a notebook and in a `%script` paragraph, run the following pl/sql script to create the `HOUSEHOLD_POWER_BASE` dataset:
 
-## Task 1: Create a Data Monitor
+    ```
+    <copy>
+    %script
+
+    DECLARE
+        uri_data        VARCHAR2(1000) := 'https://objectstorage.us-sanjose-1.oraclecloud.com/n/adwc4pm/b/OML_public_data/o/household_power_base.csv';
+        csv_format      VARCHAR2(1000) := '{"dateformat":"YYYY-MM-DD", "skipheaders":"1", "delimiter":",", "ignoreblanklines":"true", "removequotes":"true", "blankasnull":"true", "trimspaces":"lrtrim", "truncatecol":"true", "ignoremissingcolumns":"true"}';
+    BEGIN
+        BEGIN
+            EXECUTE IMMEDIATE 'DROP TABLE EXT_HOUSEHOLD_POWER_BASE';
+            EXECUTE IMMEDIATE 'DROP TABLE HOUSEHOLD_POWER_BASE';
+        EXCEPTION
+            WHEN OTHERS THEN NULL;
+        END;
+
+        -- Create the external table
+        DBMS_CLOUD.CREATE_EXTERNAL_TABLE(
+            TABLE_NAME => 'EXT_HOUSEHOLD_POWER_BASE',
+            FILE_URI_LIST => uri_data,
+            FORMAT => csv_format,
+            COLUMN_LIST => 'DATES TIMESTAMP (6), 
+                            TIMES VARCHAR2(50 BYTE), 
+                            GLOBAL_ACTIVE_POWER BINARY_DOUBLE, 
+                            GLOBAL_REACTIVE_POWER BINARY_DOUBLE, 
+                            VOLTAGE BINARY_DOUBLE, 
+                            GLOBAL_INTENSITY BINARY_DOUBLE, 
+                            SUB_METERING_1 BINARY_DOUBLE, 
+                            SUB_METERING_2 BINARY_DOUBLE, 
+                            SUB_METERING_3 BINARY_DOUBLE');
+
+        -- Create the target table
+        EXECUTE IMMEDIATE 'CREATE TABLE HOUSEHOLD_POWER_BASE AS 
+                        SELECT DATES, TIMES, GLOBAL_ACTIVE_POWER, GLOBAL_REACTIVE_POWER, 
+                                VOLTAGE, GLOBAL_INTENSITY, SUB_METERING_1, SUB_METERING_2, SUB_METERING_3 
+                        FROM EXT_HOUSEHOLD_POWER_BASE';
+    END;
+
+    </copy>
+    ```
+
+2. In another `%script` paragraph, run the following pl/sql script to create the `HOUSEHOLD_POWER_NEW` dataset:
+
+    ```
+    <copy>
+    %script
+
+    DECLARE
+        uri_data        VARCHAR2(1000) := 'https://objectstorage.us-sanjose-1.oraclecloud.com/n/adwc4pm/b/OML_public_data/o/household_power_new.csv';
+        csv_format      VARCHAR2(1000) := '{"dateformat":"YYYY-MM-DD", "skipheaders":"1", "delimiter":",", "ignoreblanklines":"true", "removequotes":"true", "blankasnull":"true", "trimspaces":"lrtrim", "truncatecol":"true", "ignoremissingcolumns":"true"}';
+    BEGIN
+        BEGIN
+            EXECUTE IMMEDIATE 'DROP TABLE EXT_HOUSEHOLD_POWER_NEW';
+            EXECUTE IMMEDIATE 'DROP TABLE HOUSEHOLD_POWER_NEW';
+        EXCEPTION
+            WHEN OTHERS THEN NULL;
+        END;
+
+        DBMS_CLOUD.CREATE_EXTERNAL_TABLE(
+            TABLE_NAME => 'EXT_HOUSEHOLD_POWER_NEW',
+            FILE_URI_LIST => uri_data,
+            FORMAT => csv_format,
+            COLUMN_LIST => 'DATES TIMESTAMP (6), 
+                            TIMES VARCHAR2(50 BYTE), 
+                            GLOBAL_ACTIVE_POWER BINARY_DOUBLE, 
+                            GLOBAL_REACTIVE_POWER BINARY_DOUBLE, 
+                            VOLTAGE BINARY_DOUBLE, 
+                            GLOBAL_INTENSITY BINARY_DOUBLE, 
+                            SUB_METERING_1 BINARY_DOUBLE, 
+                            SUB_METERING_2 BINARY_DOUBLE, 
+                            SUB_METERING_3 BINARY_DOUBLE');
+
+        EXECUTE IMMEDIATE 'CREATE TABLE HOUSEHOLD_POWER_NEW AS 
+                        SELECT DATES, TIMES, GLOBAL_ACTIVE_POWER, GLOBAL_REACTIVE_POWER, 
+                                VOLTAGE, GLOBAL_INTENSITY, SUB_METERING_1, SUB_METERING_2, SUB_METERING_3 
+                        FROM EXT_HOUSEHOLD_POWER_NEW';
+    END;
+
+    </copy>
+    ```
+This completes the task of creating the dataset. 
+
+## Task 2: Create a Data Monitor
 
 In this lab, you will learn how to create a data monitor. Data Monitoring allows you to detect data drift over time. On the Data Monitor page, you can create, run, and track data monitors and the results. To monitor data and detect data drift, you must create a data monitor. 
 
@@ -60,16 +146,20 @@ To create a data monitor:
     ![Create data monitor Data monitor - additional settings](images/new-data-monitor2.png)
 4. **Monitor Name:** Enter a name for the data monitor. In this example, let's enter `Monitor power consumption`.
 5. **Comments:** Enter comments. This is an optional field.
-6. **Baseline Data:** This is a table or view that contains baseline data to monitor. Click the search icon to open the Select Table dialog. In the Select Table dialog, under Schema, scroll to select the schema `OMLUSER`. Under Table, select the table `HOUSEHOLD_POWER_CONSUMPTION 2007`.
-    ![Select table - Baseline data](images/select-table-2007.png)
+6. **Baseline Data:** This is a table or view that contains baseline data to monitor. Click the search icon to open the Select Table dialog. In the Select Table dialog, under Schema, scroll to select the schema `OMLUSER`. Under Table, select the table `HOUSEHOLD_POWER_CONSUMPTION_BASE`.
+    ![Select table - Baseline data](images/select-table-base.png)
+    
     > **Note:** The supported data types for data monitoring are `NUMBER`, `BINARY_DOUBLE`, `FLOAT`, `BINARY_FLOAT`, `VARCHAR2`, `CHAR`, `NCHAR`, and `NVARCHAR2` with length `<=4000`. 
-7. **New Data:** This is also a table or view with new data to be compared against the table that you have selected in the Baseline Data field. Click the search icon to open the Select Table dialog. Here, once again select the `OMLUSER` schema, and then the table `HOUSEHOLD_POWER_CONSUMPTION 2009`. 
+7. **New Data:** This is also a table or view with new data to be compared against the table that you have selected in the Baseline Data field. Click the search icon to open the Select Table dialog. Here, once again select the `OMLUSER` schema, and then the table `HOUSEHOLD_POWER_CONSUMPTION_NEW`. 
+    
     >**Note:** The New Data field can have multiple periods in it, and new data can get added to it as well. 
-    ![Select table - New data](images/select-table-2009.png)
+    
+    ![Select table - New data](images/select-table-new.png)
 8. **Crosstab:** Select an attribute from the drop-down list. This attribute in the baseline and new data acts as an anchor or target for bi-variate analysis of your data. Select `GLOBAL_ACTIVE_POWER`.
-9. **Case ID:** This is an optional field. Enter a case identifier for the baseline and new data to improve the repeatability of the results. Select `ID`. 
-10. **Time Column:** This is the name of a column storing time information in the New Data table or view. Select the column `DATE_TIME` from the drop-down list.
-    > **Note:**  If the Time Column is blank, the entire New Data is treated as one period. 
+9. **Case ID:** This is an optional field. Enter a case identifier for the baseline and new data to improve the repeatability of the results. Let's leave it blank. 
+10. **Time Column:** This is the name of a column storing time information in the New Data table or view. Select the column `DATES` from the drop-down list.
+        
+    > **Note:**  If the Time Column is blank, the entire `New Data` is treated as one period. 
 11. **Analysis Period:** This is the length of time for which data monitoring is performed on the New Data. Select the analysis period for data monitoring. The options are Day, Week, Month, Year.
 12. **Start Date:** This is the start date of your data monitor schedule. If you do not provide a start date, the current date will be used as the start date. 
 13. **Repeat:** This value defines the number of times the data monitor run will be repeated for the frequency defined. Enter a number between 1 and 99. For example, if you enter 2 in the Repeat field here, and Minutes in the Frequency field, then the data monitor will run every 2 minutes.
@@ -85,18 +175,17 @@ To create a data monitor:
     * **Maximum Number of Runs:** This is the maximum number of times the data monitor can be run according to this schedule. The default is 3. 
 17. The **Features** grid displays the list of features to monitor. Here, you can select or deselect features to include or exclude from monitoring. By default, all features are selected. Feature statistics are provided if the selected data is a table and has RDBMS statistics automatically gathered by Autonomous Database. Oracle Machine Learning Services calculates the statistics on the first run for both, tables and views, and the computations are displayed here after the first run. The statistics are updated by subsequent runs.
 ![Data monitor - Features](images/dm-features-grid.png)
-18. Click **Save.** This completes the task of creating a data monitor and takes you to the Data Monitors page. 
+18.Now scroll up to the page and on the top right corner, click **Save.** This completes the task of creating a data monitor and takes you to the Data Monitors page. 
 
-![Data monitor - Save](images/new-data-monitor-save.png)
 19. On the Data Monitors page, click to select the monitor that you just created, and then click **Start**. 
 ![Data monitor - Start](images/data-monitor-start.png)    
 
-20. After the data monitor runs successfully, the Last Status shows as SUCCEEDED. Click on the checkbox against the data monitor name to view the data drift on the lower pane of the page.  . 
+20. After the data monitor runs successfully, the Last Status shows as SUCCEEDED. Click on the checkbox against the data monitor name to view the data drift on the lower pane of the page. You may also hover your cursor over the grapg to view the data monitoring details. 
 ![Data monitor - Data Drift](images/dmpage-datadrift.png)
 
 This completes the task of creating and running a data monitor. 
 
-## Task 1.1: View Data Monitor Results
+## Task 2.1: View Data Monitor Results
 
 After your data monitor runs successfully, data monitoring results are available for review. The _Data Monitor Results_ page displays the information on the selected data monitor. To view data monitor results:
 
@@ -164,7 +253,7 @@ After your data monitor runs successfully, data monitoring results are available
 
 This completes the task of viewing the data monitor details and statistical computations of the monitored data.
 
-## Task 1.2: View Data Monitor History
+## Task 2.2: View Data Monitor History
 
 1. The History page displays the runtime details of data monitors.
     ![Data Monitor - History](images/dm-history.png)
@@ -182,7 +271,7 @@ This completes the task of viewing the data monitor details and statistical comp
 
 This completes the task of viewing the data monitor runtime history.
 
-## Task 2: Create a Model Monitor
+## Task 3: Create a Model Monitor
 
 A model monitor helps you monitor several compatible models and compute the model drift metric. Compatible models refer to those models that are trained on the same target and using the same mining function. The model drift chart consists of multiple series of data drift points, one for each monitored model. 
 
@@ -191,13 +280,13 @@ A model monitor helps you monitor several compatible models and compute the mode
 To create a model monitor:
 We will begin by creating an AutoML Experiment to create and deploy a few machine learning models. We will use these models for monitoring.  
 
-1. Follow the steps in _Lab 6 Introduction to Oracle Machine Learning AutoML UI_ to:
-    * Create an AutoML UI Experiment: Follow the steps in _Lab 6 Task 2: Create an Experiment_ to create an AutoML experiment by the name `power-consumption-2007`. Use the following parameters:
-        * **Data Source:** `HOUSEHOLD_2007`
+1. Follow the steps in _Lab 5 Introduction to Oracle Machine Learning AutoML UI_ to:
+    * Create an AutoML UI Experiment: Follow the steps in _Lab 5 Task 2: Create an Experiment_ to create an AutoML experiment by the name `power-consumption-2007`. Use the following parameters:
+        * **Data Source:** `HOUSEHOLD_POWER_BASE` and `HOUSEHOLD_POWER_NEW`
         * **Predict:** `GLOBAL_ACTIVE_POWER`
         * **Prediction Type:** `Regression`
-        * **Case ID:** `ID` 
-    * Deploy the machine learning models: After the experiment `PC 2007` runs successfully, follow the steps in _Lab 6 Task 3: Deploy a Top Model to Oracle Machine Learning Services_ to deploy the models built by the experiment to OML Services. 
+        
+    * Deploy the machine learning models: After the experiment `power-consumption-2007` runs successfully, follow the steps in _Lab 5 Task 3: Deploy a Top Model to Oracle Machine Learning Services_ to deploy the models built by the experiment to OML Services. 
       ![Deploy Models](images/leaderboard-models-deploy.png)  
 
 2. Let's begin with creating a model monitor. Click on the ![](images/icon-cloud.png) icon to open the left navigation menu. Expand **Monitoring** and then click **Models** to open the Model Monitors page. 
@@ -214,20 +303,21 @@ We will begin by creating an AutoML Experiment to create and deploy a few machin
     ![Model Monitors - Power Consumption](images/new-model-monitor1.png)
     * **Monitor Name:** Enter a name for the model monitor. In this lab, the name `Power Consumption` is used.
     * **Comment:** Enter comments. This is an optional field.
-    * **Baseline Data:** This is a table or view with new data to be compared against the baseline data. Click the search icon ![](images/icon-search.png) to open the Select Table dialog. Under Schema, select `OMLUSER`, and under Table, select the table `HOUSEHOLD_POWER_CONSUMPTION 2007`. This table contains the data for the year 2007.
-    ![](images/select-table-2007.png) 
-    * **New Data:** This is a table or view with new data to be compared against the baseline data. Click the search icon ![](images/icon-search.png) to open the Select Table dialog. Under Schema, select `OMLUSER`, and under Table, select the table `HOUSEHOLD_POWER_CONSUMPTION 2008`. This table contains the data for the year 2008.
-    ![](images/select-table-2008.png) 
-    * **Case ID:** Enter `GLOBAL_REACTIVE-POWER`. This entry serves as a case identifier for the baseline and new data to improve the repeatability of the results. This is an optional field. 
-    * **Time Column:** This is the name of a column storing time information in the New Data table or view. Select `DATE_TIME` from the drop-down list.
+    * **Baseline Data:** This is a table or view with new data to be compared against the baseline data. Click the search icon to open the Select Table dialog. Under Schema, select `OMLUSER`, and under Table, select the table `HOUSEHOLD_POWER_BASE`. This table contains the data for the year 2007.
+    ![](images/select-table-base.png) 
+    * **New Data:** This is a table or view with new data to be compared against the baseline data. Click the search icon to open the Select Table dialog. Under Schema, select `OMLUSER`, and under Table, select the table `HOUSEHOLD_POWER_NEW`. This table contains the data for the year 2008.
+    ![](images/select-table-new.png) 
+    * **Case ID:** Enter `GLOBAL_REACTIVE_POWER`. This entry serves as a case identifier for the baseline and new data to improve the repeatability of the results. This is an optional field. 
+    * **Time Column:** This is the name of a column storing time information in the New Data table or view. Select `DATES` from the drop-down list.
     * **Analysis Period:** This is the length of time for which model monitoring is performed on the New Data. Select `Week` from the drop-down list. The options are Day, Week, Month, Year. 
     * **Start Date:** This is the start date of your model monitor schedule. If you do not provide a start date, the current date will be used as the start date.
     * **Repeat:** This value defines the number of times the model monitor run will be repeated for the frequency defined. Enter `1` in this field..
     * **Frequency:** This value determines how frequently the model monitor run will be performed on the New Data. Select `Days` in this field. The options are Minutes, Hours, Days, Weeks, Months. In this lab, you have entered `1` in the **Repeat** field, and `Days` in the **Frequency** field. The **Start Date** field has 3/18/24. This means that as per the schedule, the model monitor will run from 3/18/24 once every day.
     * **Mining Function:** The available mining functions are Regression and Classification. Select a function as applicable. In this example, `Regression` is selected.
     * **Target:** Select an attribute from the drop-down list. In this example, `GLOBAL_ACTIVE_POWER` is used as the target for regression models.
+    When you provide a value in the **Mining Function** and **Target** fields, the models that have been deployed are obtained and is displayed in the Models section on the Model Monitor page.
     * **Recompute:** Select this option to update the already computed periods. This means that only time periods not present in the output result table will be computed. By default, Recompute is disabled. 
-    * **Monitor Data:** Select this option to enable data monitoring for the specified data. When enabled, a data monitor is also created along with the model monitor to compute the Predictive Feature Impact versus Drift Feature Impact in the model specific results. In this lab, we will deselect this option.
+    * **Monitor Data:** Select this option to enable data monitoring for the specified data. When enabled, a data monitor is also created along with the model monitor to compute the Predictive Feature Impact versus Drift Feature Impact in the model specific results. Select this option.
 4. Click **Additional Settings** to expand this section and provide advanced settings for your model monitor:
 
     ![Model Monitor - Additional Settings](images/mm-add-settings.png)
@@ -236,34 +326,36 @@ We will begin by creating an AutoML Experiment to create and deploy a few machin
     * **Database Service Level:** This is the service level for the job, which can be LOW, MEDIUM, or HIGH. Retain the default value `Low` here as well. 
     * **Analysis Filter:** Enable this option if you want the model monitoring analysis for a specific time period. Move the slider to the right to enable it, and then select a date in From Date and To Date fields respectively. By default, this field is disabled.
     * **Maximum Number of Runs:** This is the maximum number of times the model monitor can be run according to this schedule. The default is `3`. Let's retain the default value. 
-5. In the **Models** section, select all the three models that you deployed.  
+5. In the **Models** section, select all the four models that you deployed.  
 
     ![Model Monitor - Models section](images/mm-models-select.png)
 
     > **Note:** If you drop any models, you must redeploy the models. Models are not schema-based models, but models deployed to OML Services.
 
 6. Click **Save** on the top right corner of the page. This takes you back to the Model Monitors page. 
-   >**Note:** Note: On the Model Monitors page, you must select the model monitor and click Start to begin model monitoring. 
+       >**Note:** On the Model Monitors page, you must select the model monitor and click **Start** to begin model monitoring. 
 
-   ![Model Monitor - Save](images/new-model-monitor-save.png)
- 
-7. On the Model Monitors page, select the model monitor that you just created, and click **Start**. Once the monitor starts running, the Status indicates it so. Once the running is completed, it shows the Last Status as SUCCEEDED, and the Status as SCHEDULED.    
+7. On the Model Monitors page, select the model monitor that you just created, and click **Start**.
 
-    ![Model Monitor - Start](images/model-monitor-start.png)
-    Click on the checkbox against the model name to view the model drift on the lower pane of the page. 
-    
-   ![Model Monitor - Model Drift](images/model-drift-mmpage.png)
+    * Once the running is completed, it shows the Last Status as SUCCEEDED, and the Status as SCHEDULED.    
 
-Once you provide a value in the **Mining Function** and **Target** fields, the models that have been deployed are obtained and is displayed here in the Models section. 
+        ![Model Monitor - Start](images/model-monitor-start.png)
+    * Click on the checkbox against the model name to view the model drift on the lower pane of the page.     
+        ![Model Monitor - Model Drift](images/model-drift-mmpage.png)
+
+    * Click on the ellipsis to view the details of the data monitor. Click **Results** to view the data monitoring results. Click **Settings** to view the data monitor settings.
+        ![Model Monitor - Model Drift](images/mm-dm-results-settings.png) 
+
+
 
 This completes the task of creating and running a model monitor.
 
 
-## Task 2.1: View Model Monitor Results
+## Task 3.1: View Model Monitor Results
 
 After your model monitor runs successfully, you can view the model monitoring results. 
 1. On the Model Monitors page, click on the checkbox against the model monitor name to view the model drift on the lower pane of the page.
-![Model Monitor - Model Drift](images/model-drift-mmpage2.png)
+![Model Monitor - Model Drift](images/model-drift-mmpage.png)
 2. On the Model Monitors page, click on the model monitor name to view other details on the **Model Monitor Results** page. 
 ![Model Monitor - Model Drift](images/mmpage-nameclick1.png)
 
@@ -274,7 +366,7 @@ The Model Monitor Results page comprises these sections:
 ![Model Monitor Results - Name, Settings, Models](images/mm1-results-name.png)
 * **Settings** — The Settings section displays the model monitor settings. Click on the arrow against Settings to expand this section. You have the option to edit the model monitor settings by clicking Edit on the top right corner of the page. 
 ![Model Monitor Results - Name, Settings, Models](images/mm1-results-settings.png)
-* **Models** — The models `GLM_15867CBA65`, `GLMR_9C866BD0C`, `NN_2C1F017882`, `SVMG_4FDDEC2628` and `SVML_8C58496CC0` monitored by the _Power consumption_ monitor are listed in the **Models** section. By default, the details of all the monitored models are displayed. You can choose to view the details of one monitor at a time by deselecting the other monitors.  
+* **Models** — The models `GLMR_5AB2CD8B0B`, `NN_83B18FB175`, `SVMG_D4F6A2E769`, and `SVML_8C6DC0F049` monitored by the _Power consumption_ monitor are listed in the **Models** section. By default, the details of all the monitored models are displayed. You can choose to view the details of one monitor at a time by deselecting the other monitors.  
 ![Model Monitor Results - Models](images/mm1-results1.png)
 You can choose to view and compare the results of one or more monitored models by deselecting the ones that you want to exclude. You can also view the results of each feature of the model by clicking on the model. These results — Feature Impact chart, Prediction Distribution, and Predictive Impact versus Drift Importance chart are displayed on a separate pane that slides in. The Predictive Impact versus Drift Importance chart is computed only if the Monitor Data option is selected while creating the model monitor. 
 * **Model Drift** — The Model Drift section is displayed just below the Models section. Model drift is the percentage change in the performance metric between the baseline period and the new period. A negative value indicates that the new period has a better performance metric which could happen due to noise.
@@ -339,22 +431,26 @@ The computed details of the model features are:
     * Click ![](images/icon-table.png) to view the feature impact computation in a tabular format.
     * Click **Limit the most impactful features to** drop down list to select a value.
 
-    In this screenshot, the feature `GLOBAL_INTENSITY`, that is, the global minute-averaged current intensity of the household electric consumption is seen to have the maximum impact on the model `NN_2C1F017882` as compared to the other features. 
+    In this screenshot, the feature `GLOBAL_INTENSITY`, that is, the global minute-averaged current intensity of the household electric consumption is seen to have the maximum impact on the model `NN_83B18FB175` as compared to the other features. 
 
     Click X on the top right corner of the pane to exit. 
 
 * **Prediction Distribution** — Scroll down to view the Prediction Distribution. Prediction Distribution is plotted for each analysis period. The Baseline data is displayed, if selected. The bins are plotted along X-axis, and the values are plotted along the Y-axis. Hover your mouse over each histogram to view the computed details. Click X on the top right corner of the pane to exit. 
     ![Model Monitor Details - Prediction Distribution](images/mm1-pred-distribution.png)
 
+    In the **Time Period** field, click to select more time period to view prediction distribution, or click X over a selected time period to remove it.
+
+    ![Model Monitor Details - Prediction Distribution](images/mm1-pred-distribution1.png)
+
 * **Predictive Impact vs Drift Importance** — Scroll further down the pane to view the Prediction Impact versus Drift Importance chart. This chart helps in understanding how the most impactful features drift over time. Drift Feature Importance is plotted along the Y-axis and Prediction Feature Impact is plotted along the X-axis. Click X on the top right corner of the pane to exit. 
-    > **Note:** The Prediction Impact vs Drift Importance chart is computed only if you select the Monitor Data option while creating the model monitor. 
+    > **Note:** The Prediction Impact vs Drift Importance chart is computed only if you select the **Monitor Data** option while creating the model monitor. 
 
     ![Model Monitor Details - Predictive Impact vs Drift Importance](images/mm1-predimmpact-vs-driftimp.png)
-    In this screenshot, you can see that the feature `GLOBAL_INTENSITY` has the maximum impact on the selected predictive model `NN_2C1F017882` as compared to the other features - `SUB_METERING_3`, `GLOBAL_REACTIVE_POWER`, `VOLTAGE`, and `SUB-METERING_1`. 
+    In this screenshot, you can see that the feature `GLOBAL_INTENSITY` has the maximum impact on the selected predictive model `NN_83B18FB175` as compared to the other features - `SUB_METERING_3`, `GLOBAL_REACTIVE_POWER`, `VOLTAGE`, and `SUB-METERING_1`. 
 
 This completes the task of viewing the model monitor details and statistical computations of the monitored model.
 
-## Task 2.2: View Model Monitor History
+## Task 3.2: View Model Monitor History
 
 The History page displays the runtime details of the model monitors.
 
@@ -371,7 +467,9 @@ The History page displays the runtime details of the model monitors.
     * **Detail:** If a model monitor fails, the details are listed here.
     * **Duration:** This is the time taken to run the model monitor.
 
-3. Click **Model Monitors** to return to the Model Monitors page. 
+   Since you selected **Monitor Data** option while creating the model monitor, the Data Monitor results are also displayed in the lower pane of this page. 
+
+3. Click **Monitors** to return to the Model Monitors page. 
 
 This completes the task of viewing the model monitor runtime history.
 
@@ -381,6 +479,8 @@ You may now **proceed to the next lab.**
 
 ## Acknowledgements
 
-* **Author** : Mark Hornick, Sr. Director, Data Science / Machine Learning PM; Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
+* **Author** : Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
 
-* **Last Updated By/Date**: Moitreyee Hazarika, March 2024
+* **Contributors:** Mark Hornick, Sr. Director, Data Science / Machine Learning PM; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
+
+* **Last Updated By/Date**: Moitreyee Hazarika, December 2024

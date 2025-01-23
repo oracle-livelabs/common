@@ -1,67 +1,58 @@
-# Get started - LiveLabs login
+# Get started - Login to the LiveLabs Sandbox Environment
 
 ## Introduction
 
-To get started, you need to have an active Oracle Cloud account and a LiveLabs reservation. An Oracle Cloud account is free and needed to gain access to your LiveLabs reservation, Oracle Support, and other Oracle publicly-accessible content.
+Welcome to LiveLabs.
+You have successfully created a LiveLabs Sandbox environment.
 
-If you already have an Oracle Cloud account, you can skip to Task 2.
-
-If you already have a reservation, skip to the next lab to start your workshop!
+In this lab, we will show you where you can find the login information and how to log in to the LiveLabs Sandbox.
 
 Estimated Time: 5 minutes
 
 ### Objectives
 
-- Create an Oracle cloud account
-- Request workshop reservation on LiveLabs
-- Launch workshop
+- Login to LiveLabs Sandbox
+- Find your LiveLabs Sandbox reservations
 
-### Prerequisites
 
-- A valid email address
-- Valid phone number
+## Task 1: View Login Information and login to your LiveLabs Sandbox
 
-## Task 1: Create an Oracle Account
+1. Right above the workshop instructions you can find two information:
 
-Creating an Oracle account can be summarized in the following two simple steps.
+    a. **View Login Info:** You can find credentials and other information to access the LiveLabs Sandbox
 
-1. Navigate to [oracle.com](http://www.oracle.com), Click on *View Accounts*, and Select *Create an Account*
+    b. **Time Remaining:** This shows you the remaining time before your access to the LiveLabs Sandbox expires. Please note: You may be able to extend the reservation time.
 
-  ![Create account](./images/create-account-oracle-1.png " ")
+      ![View Login Info](../need-help/images/view-login-info.png " ")
 
-2. Fill out the form and click *Create Account*.
 
-  ![Fill out the form](./images/create-account-oracle-2.png " ")
+2. Click **View Login Info** and click **Launch Remote Desktop** to access the VM instance.
 
-## Task 2: Request Workshop Reservation
+    ![Remote Desktop](./images/launch-ll-workshop-novnc.png " ")
 
-1. Using your *Oracle Account Login* go to [LiveLabs](https://oracle.com/livelabs). Open a workshop, click **Start**, and then **Run on LiveLabs Sandbox** to request a reservation for this workshop.
-  ![Run on LiveLabs](./images/run-on-livelabs.png " ")
 
-2. Fill out the information on the *Reserve Workshop* page. Check **I consent to receive emails from LiveLabs for my reservation**. Click **Submit Reservation**.
-  ![Submit Reservation](./images/submit-reservation.png " ")
+3. Congratulations! You are now connected to the LiveLabs Sandbox environment.
 
-3. After creating a reservation for a LiveLab Workshop, you will receive an e-mail indicating that your reservation is being processed, followed by an e-mail indicating that your environment has been created.
+    ![Novnc login](./images/novnc-start.png " ")
 
-  ![Reservation email](./images/livelab-env-created-email.png " ")
 
-  >**Note:** You will receive the second created e-mail just before your selected reservation time.
+4. If you need to view your login information anytime, click **View Login Info**.
+  
+    ![View Login Info](../need-help/images/view-login-info.png " ")
 
-4. Log into LiveLabs. Click your username, and click **My Reservations**. Then click the **Launch Workshop** link for the Workshop environment you'd like to use. Note that you may have several Workshops listed.
 
-  ![My reservations](./images/ll-reservations.png " ")
+## Task 2: Find your LiveLabs Sandbox reservations
 
-5. Click **View Login Info** and click **Launch Remote Desktop** to access the VM instance.
+1. If you close your browser, and you want to launch your workshop again, open [livelabs.oracle.com](https://livelabs.oracle.com), login using your Oracle account, and click on **My Reservations**. You can find here a complete history of all LiveLabs workshops you signed up for. Click on **Launch Workshop** to start a workshop with an existing LiveLabs Sandbox environment.
 
-  ![Remote Desktop](./images/launch-ll-workshop-novnc.png " ")
 
-6. If you need to view your login information anytime, click **View Login Info**.
-  ![View Login Info](../need-help/images/view-login-info.png " ")
+    ![View My Reservations](./images/ll-reservations.png " ")
+
 
 You may now **proceed to the next lab**.
 
 ## Acknowledgements
 
 - **Created By/Date** - Kay Malcolm, Database Product Management March 2020
-- **Contributors** - Rene Fontcha, Kamryn Vinson, Anoosha Pilli, Arabella Yao
-- **Last Updated By/Date** - Carmen Berdant, Mar 2024
+- **Contributors** - Rene Fontcha, Kamryn Vinson
+- **Last Updated By/Date** - Kevin Lazarz, September 2024

@@ -2,7 +2,7 @@
 
 ## The best place to get quick help and suport
 
-Need to create an account first? Have a look at our LiveLab Sprint [How to create a Oracle DevRel Slack account?](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=3469).
+Need to create an account first? Have a look at our LiveLab Sprint [How to create a Oracle DevRel Slack account?](https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=3469).
 
 Join the #support-discovery-lab Slack channel in our public Slack workspace if you have questions about any of the Oracle CloudWorld hands-on labs.
 

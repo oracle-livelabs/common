@@ -1,7 +1,9 @@
 <!--
     {
         "name":"Provision Your Oracle Analytics Cloud (OAC) Instance",
-        "description":"Show how to create a new OAC instance"
+        "description":"Show how to create a new OAC instance",
+        "author":"Ana Coman",
+        "last_updated":"Ana Coman, Oracle Database Product Management, July 2024"
     }
 -->
 # Provision Your Oracle Analytics Cloud (OAC) Instance
