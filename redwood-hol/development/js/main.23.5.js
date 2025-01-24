@@ -944,7 +944,7 @@ let main = function () {
     let addLanguageMenu = function () {
 
 
-        const language_dict = { 'en': 'English', 'es': 'Español', 'pt-br': 'Português (BR)', 'ja': '日本', 'zh-cn': '简体中文', 'zh-tw': '繁體中文', 'ko': '한국인', 'fr': 'Français', 'de': 'Deutsch' };
+        const language_dict = { 'en': 'English', 'es': 'Español', 'pt-BR': 'Português (BR)', 'ja': '日本', 'zh-CN': '简体中文', 'zh-TW': '繁體中文', 'ko': '한국인', 'fr': 'Français', 'de': 'Deutsch' };
         const selected_lang = getParam('available_languages');
         let lang_code = 'en';
         let full_lang = 'English';
@@ -1359,7 +1359,12 @@ let main = function () {
         return articleElement;
     }
 
-    let alphaNumOnly = function (text) { return text.replace(/[^[A-Za-z0-9:?\(\)]+?/g, ''); }
+    // let alphaNumOnly = function (text) { return text.replace(/[^[A-Za-z0-9:?\(\)]+?/g, ''); }
+
+
+    function alphaNumOnly(str) {
+        return str.replace(/[^\w\u4e00-\u9fff\u3040-\u30ff]+/g, '');
+    }
 
 
     // QA part of the code
