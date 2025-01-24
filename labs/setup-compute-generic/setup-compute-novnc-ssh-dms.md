@@ -174,7 +174,7 @@ If you just completed Task 2A, please proceed to Task 3.  If you have an existin
 
   ![Use existing VCN](./images/use-exisiting-vcn.png " ")
 
-9. Select **Run Apply** and click **Create**.
+8. Select **Run Apply** and click **Create**.
   ![Click Create](./images/click-create.png " ")
 
 9. Your stack is now created and the *Apply* action triggered is running to deploy your environment!
