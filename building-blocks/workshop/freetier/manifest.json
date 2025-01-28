@@ -15,7 +15,9 @@
      "adb-load-public-db-actions-15-min-quickstart.md":"/common/building-blocks/tasks/adb/load-public-db-actions-15-min-quickstart.md",
      "adb-load-public-db-actions-no-sales.md":"/common/building-blocks/tasks/adb/load-public-db-actions-no-sales.md",
      "adb-load-public-db-actions.md":"/common/building-blocks/tasks/adb/load-public-db-actions.md",
+     "adb-provision-body-developer.md":"/common/building-blocks/tasks/adb/provision-body-developer.md",
      "adb-provision-body.md":"/common/building-blocks/tasks/adb/provision-body.md",
+     "adb-provision-data-sharing-lake-task.md":"/common/building-blocks/tasks/adb/provision-data-sharing-lake-task.md",
      "adb-query-json-arrays.md":"/common/building-blocks/tasks/adb/query-json-arrays.md",
      "adb-query-json-simple.md":"/common/building-blocks/tasks/adb/query-json-simple.md",
      "adb-query-object-store-contents-with-sql.md":"/common/building-blocks/tasks/adb/query-object-store-contents-with-sql.md",
@@ -25,6 +27,7 @@
      "oml-access-notebook-ea.md":"/common/building-blocks/tasks/oml/access-notebook-ea.md",
      "oml-create-cust360-table.md":"/common/building-blocks/tasks/oml/create-cust360-table.md",
      "oml-create-oml-user.md":"/common/building-blocks/tasks/oml/create-oml-user.md",
+     "oml-nb-visualizations.md":"/common/building-blocks/tasks/oml/nb-visualizations.md",
      "oml-notebook-features.md":"/common/building-blocks/tasks/oml/notebook-features.md",
      "oml-prov-an-adb.md":"/common/building-blocks/tasks/oml/prov-an-adb.md",
      "oml-sign-into-oml.md":"/common/building-blocks/tasks/oml/sign-into-oml.md",
@@ -41,13 +44,11 @@
      {
          "title": "Get Started",
          "description": "Get a Free Trial",
-         "author": "Ana Coman",
-         "last_updated": "Ana Coman, Oracle Database Product Management, July 2024",
          "filename": "https://oracle-livelabs.github.io/common/labs/cloud-login/cloud-login.md"
      },
      {
          "title": "Add Workshop Utilities",
-         "filename": "/common/building-blocks/setup/add-workshop-utilities.md"
+         "filename": "/common/building-blocks/setup/setup.md"
      },
      {
          "title": "[adb] Delete your workshop resources",
@@ -58,6 +59,11 @@
          "title": "[adb] Connect with SQL Worksheet",
          "type": "freetier",
          "filename": "/common/building-blocks/blocks/adb/connect/connect-sql-worksheet.md"
+     },
+     {
+         "title": "[adb] Integrate GenAI models with Autonomous Database",
+         "type": "freetier",
+         "filename": "/common/building-blocks/blocks/adb/integrate-genai/integrate-genai.md"
      },
      {
          "title": "[adb] Load and Analyze Data from REST Services",
@@ -80,6 +86,11 @@
          "filename": "/common/building-blocks/blocks/adb/provision/provision-console.md"
      },
      {
+         "title": "[adb] Provision an ADB instance for Data Sharing/Data Lake workshops",
+         "type": "freetier",
+         "filename": "/common/building-blocks/blocks/adb/provision/provision-data-sharing-lake-block.md"
+     },
+     {
          "title": "[adb] Access and Load Partitioned Object Storage Data",
          "type": "freetier",
          "filename": "/common/building-blocks/blocks/adb/use-partitioned-external-table/use-partitioned-external-table.md"
@@ -98,6 +109,11 @@
          "title": "[oml] Use the OML Monitoring Functionality to monitor your data and machine learning models",
          "type": "freetier",
          "filename": "/common/building-blocks/blocks/oml/oml-monitoring/oml-monitoring.md"
+     },
+     {
+         "title": "[oml] Visualize Data in Oracle Machine Learning Notebooks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/blocks/oml/oml-nb-visualizations/oml-nb-visualizations.md"
      },
      {
          "title": "[oml] Introduction to Oracle Machine Learning Notebooks",
