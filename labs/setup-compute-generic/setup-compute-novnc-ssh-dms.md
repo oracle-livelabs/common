@@ -25,9 +25,8 @@ This lab assumes you have:
 ## Task 1: Download Oracle Resource Manager (ORM) Stack Zip File
 1.  Click on the link below to download the Resource Manager zip file you need to build your environment:
 
-<if type="data-masking-subsetting">
     - [`dbseclabs-init-vm-dms.zip`](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/security-library/dbseclabs-v90_init-vm-dms.zip)
-</if>
+
 
 2.  Save in your downloads folder
 
