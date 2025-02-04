@@ -7,6 +7,7 @@ import glob
 import json
 import re
 from datetime import date
+from pathlib import Path
 
 # Initialize
 ### get physical paths - required to write manifest files and markdown
@@ -65,7 +66,7 @@ def load_labs(type):
 
         t = Lab()
         t.physical_path = f
-        t.md_name = f[f.rfind("/")+1:]
+        t.md_name = f[Path(f).as_posix().rfind("/")+1:]
         t.path = f[f.rfind(relpath_blocks):]
 
         # get the service name from the path.
@@ -86,7 +87,7 @@ def add_task_details(this_task):
     c = None  # file contents
 
     # read the file
-    with open(this_task.physical_path) as f:
+    with open(this_task.physical_path, encoding='utf-8') as f:
         c = f.read()
     
     c_begin = c.find("<!--")
@@ -106,10 +107,10 @@ def add_task_details(this_task):
     j = None
     try:
         j = json.loads(comment)
-        this_task.name = j["name"]
-        this_task.description = j["description"]
-        this_task.author = j["author"]
-        this_task.lastUpdated = j["lastUpdated"]
+        this_task.name = j.get("name", "")
+        this_task.description = j.get("description","")
+        this_task.author = j.get("author","")
+        this_task.lastUpdated = j.get("lastUpdated","")
     except Exception as e:
         print ("WARNING! " + this_task.md_name + ": no valid comment with name and description found.")
         return False
@@ -139,7 +140,7 @@ def add_block_details(this_block):
     c = None  # file contents
 
     # read the file
-    with open(this_block.physical_path) as f:
+    with open(this_block.physical_path, encoding='utf-8') as f:
         c = f.read()
     
     c_begin = c.find("<!--")
@@ -169,10 +170,10 @@ def add_block_details(this_block):
         j = None
         try:
             j = json.loads(comment)
-            this_block.name = j["name"]
-            this_block.description = j["description"]
-            this_block.author=j["author"]
-            this_block.lastUpdated = j["lastUpdated"]
+            this_block.name = j.get("name","")
+            this_block.description = j.get("description","")
+            this_block.author=j.get("author", "")
+            this_block.lastUpdated = j.get("lastUpdated","")
         except Exception as e:
             print ("WARNING! " + this_block.md_name + ": no valid comment with name and description found.")
             return False
@@ -195,7 +196,7 @@ def get_manifest_include():
     
     include = ' "include": {' + "\n"
     for t in tasks:
-        include = include + '     "' + t.include_name + '":"' + t.path + '",\n'
+        include = include + '     "' + t.include_name + '":"' + Path(t.path).as_posix() + '",\n'
 
     include = include[:len(include)-2]
 
@@ -243,7 +244,7 @@ def write_task_manifest():
     output = add_line(output, ' "workshoptitle":"LiveLabs Building Blocks",')
     output = add_line(output, get_manifest_include())
     output = add_line(output, ' "help": "livelabs-help-db_us@oracle.com",')
-    output = add_line(output, ' "variables": ["' + relpath_blocks + '/variables/variables.json"],')
+    output = add_line(output, ' "variables": ["' + Path(relpath_blocks).as_posix() + '/variables/variables.json"],')
     output = add_line(output, ' "tutorials": [  ')
     output = add_line(output, "")
     output = add_line(output, "     {")
@@ -304,7 +305,7 @@ def write_task_manifest():
                 output, '         "title": "' + t.cloud_service.upper() + ' Tasks",'
             )
             output = add_line(output, '         "type": "freetier",')
-            output = add_line(output, '         "filename": "' + filename + '"')
+            output = add_line(output, '         "filename": "' + Path(filename).as_posix() + '"')
             output = add_line(output, "     },")
 
     output = output[:len(output)-1]    
@@ -329,7 +330,7 @@ def write_blocks_manifest():
     output = add_line(output, ' "workshoptitle":"LiveLabs Building Blocks",')
     output = add_line(output, get_manifest_include())
     output = add_line(output, ' "help": "livelabs-help-db_us@oracle.com",')
-    output = add_line(output, ' "variables": ["' + relpath_blocks + '/variables/variables.json"],')
+    output = add_line(output, ' "variables": ["' + Path(relpath_blocks).as_posix() + '/variables/variables.json"],')
     output = add_line(output, ' "tutorials": [  ')
     output = add_line(output, '')
     output = add_line(output, '     {')
@@ -339,7 +340,7 @@ def write_blocks_manifest():
     output = add_line(output, '     },')
     output = add_line(output, '     {')
     output = add_line(output, '         "title": "Add Workshop Utilities",' )
-    output = add_line(output, '         "filename": "' + relpath_blocks + '/setup/setup.md"' )
+    output = add_line(output, '         "filename": "' + Path(relpath_blocks).as_posix() + '/setup/setup.md"' )
     output = add_line(output, '     },')
 
     for t in blocks:
@@ -348,7 +349,7 @@ def write_blocks_manifest():
         output = add_line(output, '     {')
         output = add_line(output, '         "title": "[' + t.cloud_service + "] " + t.name + '",' )
         output = add_line(output, '         "type": "freetier",' )
-        output = add_line(output, '         "filename": "' + t.path + '"' )
+        output = add_line(output, '         "filename": "' + Path(t.path).as_posix() + '"' )
         output = add_line(output, '     },')
 
     output = output[:len(output)-1]    
@@ -356,7 +357,7 @@ def write_blocks_manifest():
     output = add_line(output, '}')
     print(output)
     try:
-        filename = path_root + "/workshop/freetier/manifest.json"    
+        filename = Path(path_root).as_posix() + "/workshop/freetier/manifest.json"    
         h_manifest = open(filename, "w")
         h_manifest.write(output)
         h_manifest.close
@@ -401,7 +402,7 @@ def write_toc():
         this_anchor = "[" + this_name + "](" + this_anchor + ")"
         this_description = t.description if t.description else " "
         this_author = t.author if t.author else " "
-        this_last_updated = t.last_updated if t.last_updated else " "
+        this_last_updated = t.lastUpdated if t.lastUpdated else " "
         output = add_line(
             output,
             "| "
@@ -429,11 +430,11 @@ def write_toc():
 
     for t in tasks:
         this_name = t.md_name if not t.name else t.name
-        this_anchor = relpath_blocks + '/how-to-author-with-blocks/workshop/index.html?lab=' + t.cloud_service + '#' + re.sub('[^0-9a-zA-Z]+','', this_name)
+        this_anchor = Path(relpath_blocks).as_posix() + '/how-to-author-with-blocks/workshop/index.html?lab=' + t.cloud_service + '#' + re.sub('[^0-9a-zA-Z]+','', this_name)
         this_anchor = "[" + this_name + "](" + this_anchor + ")"
         this_description= t.description if t.description else " "
         this_author = t.author if t.author else " "
-        this_last_updated = t.last_updated if t.last_updated else " "
+        this_last_updated = t.lastUpdated if t.lastUpdated else " "
         output = add_line(
             output,
             "| "
@@ -455,7 +456,7 @@ def write_toc():
     output = add_line(output, "## Variable Defaults")
     output = add_line(output, "You can use the default variables or copy the default file to your project and override the settings. See the **Authoring using Blocks and Tasks** topic for details.")
     output = add_line(output, "")
-    output = add_line(output, '[View default variable values](' + relpath_blocks + '/variables/variables.json)')
+    output = add_line(output, '[View default variable values](' + Path(relpath_blocks).as_posix() + '/variables/variables.json)')
     output = add_line(output, "")
 
 
@@ -506,7 +507,7 @@ def write_cloud_service_tasks():
         output = add_line(output, '## ' + this_name)
         output = add_line(output, '**Markdown file location:**')
         output = add_line(output, "```")
-        output = add_line(output, t.path)
+        output = add_line(output, Path(t.path).as_posix())
         output = add_line(output, "```")
         output = add_line(output, "")
         output = add_line(output, '**Add to your manifest.json:**')
