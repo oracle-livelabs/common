@@ -1,4 +1,4 @@
-# LiveLabs Test Templa
+# LiveLabs Test Template
 
 *About this template: This file is used to demonstrate all of the features built into the LiveLabs conversion engine. Many of the features described here are optional and are so marked.
 
