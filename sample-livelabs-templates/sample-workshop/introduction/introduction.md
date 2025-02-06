@@ -8,21 +8,17 @@ Estimated Workshop Time: -- hours -- minutes
 ### Objectives
 In this workshop, you will learn how to:
 * Create a custom dimension in Oracle EPCM
-* Designing of multi-step allocations using the anchor dimension
-* Reporting in Oracle EPCM using the anchor dimension
+* Design multi-step allocations using the anchor dimension
+* Report in Oracle EPCM using the anchor dimension
 
 ### Prerequisites (Optional)
 This lab assumes you have:
 * Understanding of Oracle Enterprise Profitability and Cost Management (EPCM)
 * EPM Enterprise Cloud subscription
 
-*This is the "fold" - below items are collapsed by default*
-
-In general, the Introduction does not have Steps.
-
 ## Learn More
-* [URL text 1]([http://docs.oracle.com](https://docs.oracle.com/en/cloud/saas/enterprise-profitability-cost-management-cloud/index.html))
+* [Oracle EPCM Admin Guide](https://docs.oracle.com/en/cloud/saas/enterprise-profitability-cost-management-cloud/index.html)
 
 ## Acknowledgements
-* **Author** - <Sameer Chitragar, Senior Associate - Oracle Cloud & Digital, PwC>
-* **Last Updated By/Date** - <Sameer Chitragar, February 2025>
+* **Author** - Sameer Chitragar, Senior Associate - Oracle Cloud & Digital, PwC
+* **Last Updated By/Date** - Sameer Chitragar, February 2025
