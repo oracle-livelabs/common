@@ -90,3 +90,11 @@ After you create (or modify or delete too) new blocks and tasks, regenerate the 
     * `adb.md`
     * `how-to-author-with-blocks.md`
     * `manifest.json`
+
+5. Push your changes to your fork. In this example, we are using GitHub Desktop.
+
+    ![Push changes to fork](./images/push-to-fork.png " ")
+
+    ![Push origin](./images/push-origin.png " ")
+
+6. 
