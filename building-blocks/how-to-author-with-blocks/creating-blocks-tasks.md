@@ -91,10 +91,13 @@ After you create (or modify or delete too) new blocks and tasks, regenerate the 
     * `how-to-author-with-blocks.md`
     * `manifest.json`
 
-5. Push your changes to your fork. In this example, we are using GitHub Desktop.
+5. Push your changes to the common repo to your fork. In this example, we are using GitHub Desktop.
 
     ![Push changes to fork](./images/push-to-fork.png " ")
 
     ![Push origin](./images/push-origin.png " ")
 
-6. 
+6. Submit a Pull Request to move your changes to production.
+
+    ![Submit a Pull Request](./images/submit-pr.png " ")
+
