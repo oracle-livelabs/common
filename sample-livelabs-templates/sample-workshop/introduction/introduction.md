@@ -1,45 +1,28 @@
 # Introduction
 
 ## About this Workshop
+The workshop is a stepwise guide to use a custom dimension as an anchor through multi-step allocations in Oracle Cloud EPCM, to help facilitate better reporting abilities at different steps of allocation within Oracle Cloud EPCM.
 
-This introduction covers the complete "parent" workshop. Use this text to set up the story for the workshop. Be engaging - what will the learner get from spending their time on this workshop?
-
-Estimated Workshop Time: -- hours -- minutes (This estimate is for the entire workshop - it is the sum of the estimates provided for each of the labs included in the workshop.)
-
-*You may add an option video, using this format: [](youtube:YouTube video id)*
-
-  [](youtube:zNKxJjkq0Pw)
+Estimated Workshop Time: -- hours -- minutes
 
 ### Objectives
-
-*List objectives for the workshop*
-
 In this workshop, you will learn how to:
-* Provision
-* Setup
-* Load
-* Query
+* Create a custom dimension in Oracle EPCM
+* Designing of multi-step allocations using the anchor dimension
+* Reporting in Oracle EPCM using the anchor dimension
 
 ### Prerequisites (Optional)
-
-*List the prerequisites for this lab using the format below. Fill in whatever knowledge, accounts, etc. is needed to complete the lab. **Do NOT list** each previous lab as a prerequisite.*
-
 This lab assumes you have:
-* An Oracle account
-* All previous labs successfully completed
+* Understanding of Oracle Enterprise Profitability and Cost Management (EPCM)
+* EPM Enterprise Cloud subscription
 
 *This is the "fold" - below items are collapsed by default*
 
 In general, the Introduction does not have Steps.
 
 ## Learn More
-
-*(optional - include links to docs, white papers, blogs, etc)*
-
-* [URL text 1](http://docs.oracle.com)
-* [URL text 2](http://docs.oracle.com)
+* [URL text 1]([http://docs.oracle.com](https://docs.oracle.com/en/cloud/saas/enterprise-profitability-cost-management-cloud/index.html))
 
 ## Acknowledgements
-* **Author** - <Name, Title, Group>
-* **Contributors** -  <Name, Group> -- optional
-* **Last Updated By/Date** - <Name, Month Year>
+* **Author** - <Sameer Chitragar, Senior Associate - Oracle Cloud & Digital, PwC>
+* **Last Updated By/Date** - <Sameer Chitragar, February 2025>
