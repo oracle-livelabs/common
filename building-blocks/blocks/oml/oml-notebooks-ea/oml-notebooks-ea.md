@@ -95,7 +95,7 @@ A notebook is a web-based interface for data analysis, data discovery, data visu
 </if>
 This completes the task of accessing Oracle Machine Learning user interface.
 
-## Task 2: Access Oracle Machine Learning Notebook 
+## Task 2: Access Oracle Machine Learning Notebooks 
 
 You can access the Notebooks page from the left navigation pane of Oracle Machine Learning Notebook UI, or from the Notebooks listing page.
 To access the Notebooks page:
@@ -118,6 +118,8 @@ Here, you have the option to:
 * **Import:** To import a notebook, click **Import.** The following notebook formats are supported for import - ``.json`` , ``.zpln`` (Zeppelin notebook), ``.ipynb`` (Jupyter notebook) and ``.dsnb`` (native). Select the project and workspace in which to import the notebook.
 * **Export:** To export a notebook, click **Export.** You can export Noteboooks in the `.dsnb` format, Zeppelin format (`.json` ) file and in Jupyter format (`.ipynb`), and later import them in to the same or a different environment. You can also export the notebook in HTML format, and optionally exclude paragraph code, results, and timestamps.
 * **Version:** To create versions of a notebook, select it and click **Version.** The Versions page for that particular notebook opens. Here, you can create a new version of the notebook by clicking **+Version.** The Create Version dialog opens. Enter a name of the notebook version, a description, and click **OK.** The new version of the notebook gets created by the same name with a suffix `_2` for the second version. For subsequent versions, suffix (number) increments by one. To revert to an older version by clicking Revert Version. You also have the option to delete any version of the notebook. Click **Back to Notebooks** to go to the OML Notebooks page.
+
+This completes the task of accessing Oracle Machine Learning Notebooks.
 
 ## Task 3: Create a Notebook and Define Paragraphs using the md, SQL, PL/SQL, Python, and R Interpreters
 
