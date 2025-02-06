@@ -93,7 +93,7 @@ A notebook is a web-based interface for data analysis, data discovery, data visu
 	![Oracle Machine Learning UI Sign in page](images/oml-signin-page.png)
 
 </if>
-This completes the task of accessing Oracle Machine Learning user interface.
+This completes the task of signing into Oracle Machine Learning user interface.
 
 ## Task 2: Access Oracle Machine Learning Notebooks 
 
