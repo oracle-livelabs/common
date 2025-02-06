@@ -3,7 +3,7 @@
         "name":"goto-service-body.md",
         "description":"Navigate to ADB using the OCI Navigation menu. AUTHORS: For expediency, this task uses the ADMIN user/password to open Database Actions. In your workshop, you might want to substitute a different user/password to open Database Actions.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "last_updated":"Lauran K. Serhal, January 2025"
+        "lastUpdated":"Lauran K. Serhal, February 2025"
     }
 -->
 1. Open the **Navigation** menu.

@@ -86,7 +86,7 @@
          "filename": "/common/building-blocks/blocks/adb/provision/provision-console.md"
      },
      {
-         "title": "[adb] Provision an ADB instance for Data Sharing/Data Lake workshops",
+         "title": "[adb] Provision an ADB instance for the Data Sharing and Data Lake workshops",
          "type": "freetier",
          "filename": "/common/building-blocks/blocks/adb/provision/provision-data-sharing-lake-block.md"
      },

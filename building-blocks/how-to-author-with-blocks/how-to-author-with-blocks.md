@@ -18,9 +18,9 @@ As a LiveLabs workshop author, there are two types of components you may want to
 
 >**Note:** Both Building **Blocks** and **Tasks** are located in the **`common`** repository; therefore, in this workshop we will refer to Building Blocks and Tasks as **`common`** **blocks** and **tasks** interchangeably.
 
-Let's look at the folder structure for the Building Blocks and Tasks. 
+Let's look at the folder structure for the Building Blocks and Tasks:
 
-![Building Blocks and Tasks structure](images/common-blocks-tasks-structure.png " ")
+  ![Building Blocks and Tasks structure](images/common-blocks-tasks-structure.png " ")
 
 Let's examine the above folders structure:
 
@@ -29,22 +29,24 @@ This is the root folder that contains all of your repositories that you use in y
 pre-requisite; _otherwise, you'll have issues implementing and running common blocks and tasks_.
 
 * **`common` repository:**    
-This is the the repo that contains the Building Blocks and Tasks among other things.
+This is the the repo that contains the common Building Blocks and Tasks among other things.
 
 * **`building-blocks`:**    
 This is the root folder that contains all common blocks and tasks.
 
-* 
+* **`blocks`:**    
+This is the folder that contains all common blocks.
+
+* **`tasks`:**    
+This is the folder that contains all common tasks.
 
 ### Pre-requisite 1 to Using Building Blocks and Tasks
-
-
 
 Let's examine these two concepts and how they map to your workshop development:
 
 ![Blocks and Tasks](images/lab-to-block.png " ")
 
-Just as a lab is comprised of multiple tasks, a Block is comprised of multiple Tasks.
+Just as a _lab_ is comprised of _multiple tasks_, a _Block_ is comprised of _multiple Tasks.
 
 For example: ADB provisioning has two tasks:
 * Selecting the ADB Service from the OCI menu
