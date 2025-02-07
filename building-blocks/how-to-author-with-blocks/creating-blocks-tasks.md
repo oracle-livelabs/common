@@ -6,10 +6,9 @@
 
 ## Create your lab's markdown
 
-Create your workshop as you normally would. Try to keep content generic enough so that it can be used in multiple contexts. And, it may mean using variables instead of hardcoding names. Create the common block or task in the appropriate folder (repo). For example, if you are creating a common task for the an ADB workshop, you'll create the common task in the **`common > building-blocks > tasks > adb`** folder.
+Create your workshop as you normally would. Try to keep content generic enough so that it can be used in multiple contexts. And, it may mean using variables instead of hardcoding names. Create the common block or task in the appropriate folder (repo). For example, if you are creating a common task for an ADB workshop, you'll create the common task in the **`common > building-blocks > tasks > adb`** folder.
 
 To create a new folder or file in the your chosen folder such as the adb folder, click the **New File...** or **New Folder...** icons in Visual Studio Code.
-
 
   ![Create a new common block or task](images/create-file-folder-icon-vsc.png " ")
 
@@ -23,13 +22,14 @@ Don't forget to use tasks when creating your block :).
 
 ## Add a comment block to your markdown
 
-The one addition you'll need to make to your markdown is a comment block. This comment block provides a title and description for your block or task. The documentation's master list of blocks and tasks is derived from these comment blocks.
+The one addition you'll need to make to your markdown is a comment block. This comment block provides a name, description, author, and last updated fields for your block or task. **The documentation's master list of blocks and tasks is derived from these comment blocks**.
 
-    **Important:** _You must use the exact spelling of the comment block fields names. Pay attention to the `lastUpdated` field where the camel case convention name is used. If you don't use the exact spelling, your common block or task will not appear in the list of available blocks or tasks._
+**_Important:_** _You must use the exact spelling of the comment block fields names. Pay attention to the `lastUpdated` field where the camel case naming convention is used. If you don't use the exact spelling, your common block or task will not appear in the list of available blocks or tasks._
 
 Example block:
+
 ```
-&lt;!--
+<!--
     {
         "name":"Provision an ADB instance for the Data Sharing and Data Lake workshops",
         "description":"Learn how to provision Autonomous Database using the OCI console.",
@@ -44,6 +44,7 @@ Example block:
 In this lab, you will connect to Autonomous Database using the SQL Worksheet and explore its capabilities.
 
 Estimated Time: 5 minutes
+
 ```
 
 ## Save your markdown to the building-blocks workshop
@@ -63,15 +64,16 @@ adb
 ```
 
 ## Regenerate the documentation
-After you create (or modify or delete too) new blocks and tasks, regenerate the documentation by running the **generate-documentation.py** python script found in the `/adb/building-blocks/scripts` folder. This script generates much of the how-to-author-with-blocks documentation.
 
-1. Navigate to the `/adb/building-blocks/scripts` folder.
+After you create (or modify or delete too) new blocks and tasks, regenerate the documentation by running the **generate-documentation.py** python script found in the `/common/building-blocks/scripts` folder. This script generates much of the how-to-author-with-blocks documentation.
+
+1. Navigate to the `/common/building-blocks/scripts` folder.
 
 2. Right-click the **generate-documentation.py** file name, and then select **Open in Integrated Terminal** from the context menu.
 
-![Navigate to script and open in terminal](images/open-integrated-terminal.png " ")
+    ![Navigate to script and open in terminal](images/open-integrated-terminal.png " ")
 
-3. Run the script. Copy the following code and then paste it on the command prompt.
+3. Run the script. Copy the following code and then paste it on the command prompt. Next, press the `[Enter]` key. 
 
     ```
     <copy>
@@ -101,3 +103,13 @@ After you create (or modify or delete too) new blocks and tasks, regenerate the 
 
     ![Submit a Pull Request](./images/submit-pr.png " ")
 
+7. Wait for your PR to be approved and merged and then use the following URL to confirm your changes.
+
+    https://oracle-livelabs.github.io/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=how-to-author-with-blocks
+
+## Acknowledgements
+
+* **Authors:**
+    * Lauran K. Serhal, Consulting User Assistance Developer
+    * Marty Gubar, Product Manager
+* **Last Updated By/Date** Lauran K. Serhal, February 2025

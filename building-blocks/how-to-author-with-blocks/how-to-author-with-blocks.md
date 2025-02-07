@@ -42,15 +42,22 @@ This is the folder that contains all common tasks.
 
 ### Pre-requisite 1 to Using Building Blocks and Tasks
 
+To use building blocks, your repositories where you save your LiveLabs workshops (such as the adb, common, and other folders) must be under a root folder that contains all of the repositories (repos) that you need for your workshops. You can choose your own root folder name. In our example, we created a parent folder named **livelabs-clones** folder under the **Documents** folder in MS-Windows. We will be creating workshops that will use the adb, common, oci, and sprints repos.
+
+![Folders structure](images/folder-structure.png " ")
+
+_**Important:_** _Prior to using Building Blocks, most of us authoring LiveLabs workshops didn’t use the concept of a root folder to store all our clones (repos that we need); instead, we cloned each repo under the Documents folder (or some other folder of your choice) in Windows. If you have this folder structure, you'll need to delete your clones and re-clone the folders and save them under the same root folder._
+
 Let's examine these two concepts and how they map to your workshop development:
 
 ![Blocks and Tasks](images/lab-to-block.png " ")
 
-Just as a _lab_ is comprised of _multiple tasks_, a _Block_ is comprised of _multiple Tasks.
+Just as a _lab_ is comprised of _multiple tasks_, a _Block_ is comprised of multiple Tasks.
 
 For example: ADB provisioning has two tasks:
-* Selecting the ADB Service from the OCI menu
-* Creating the ADB instance
+
+* **goto-service-body.md**: Selects the ADB Service from the OCI menu
+* **provision-console-body.md**Creating the ADB instance
 
 In this case, there is a **Building Block** that directly maps to this lab. You can simply take this Building Block, add it to your workshop's manifest, update LiveLab variables (the database name, # CPUs, etc.) to match your lab's requirements, and your done. In the future, when updates are made to ADB provisioning, your lab will update automatically when the Building Block is updated.
 
@@ -61,11 +68,17 @@ Having this Task is really useful because numerous labs (including ADB Provision
 Hope it's clear - Blocks and Tasks will simplify your workshop authoring and on-going maintenance.
 
 ## How Building Blocks use Tasks
-Let's take a look at the markdown for Provisioning an Autonomous Database:
+Let's take a look at the markdown for a Provisioning an Autonomous Database common block named **`provision-console.md`** that uses two common tasks:
 
-```
-Here is markdown specific to my workshop. 
+* `goto-service-body.md`
+* `provision-console-body.md`
 
+![provision-console common block](images/folder-structure.png " ")
+
+
+**Here is markdown specific to my workshop.**
+
+```md
 Let's create an ADB instance.
 
 &num;# Task 1: Choose Autonomous Database from the services menu
@@ -76,22 +89,29 @@ Let's create an ADB instance.
 
 ```
 
-As you can see, the markdown for this block is pretty simple. It is including two Tasks: 1) go to the service and 2) provision using the console. It may be that the format of this Block does not meet your workshop requirements. No problem. Your workshop markdown can use these Tasks in a similar way to the Building Block. Simply include the Task within your markdown. 
+As you can see, the markdown for this block is pretty simple. It includes two common Tasks:
 
-See below for how the markdown was rendered
+1. Go to the service, and
+
+2. provision using the console.
+
+It may be that the format of this Block does not meet your workshop requirements. No problem. Your workshop markdown can use these Tasks in a similar way to the Building Block. Simply include the Task within your markdown.
+
+**See below for how the markdown was rendered**
 
 ## Example: Provision using the OCI Console
-Here is markdown specific to my workshop. 
+Here is markdown specific to my workshop.
 
 Let's create an ADB instance.
 
 ### Task 1: Choose Autonomous Database from the services menu
 [](include:adb-goto-service-body.md)
 
-###  Task 2: Create the Autonomous Database instance
+### Task 2: Create the Autonomous Database instance
 [](include:adb-provision-body.md)
 
 ## The workshop manifest and variables
+
 ### variables.json
 Workshops have different requirements. Database names, OCPUs and other options may differ. LiveLabs uses variables to allow authors to update content. It may be that you need to make updates to the Task in order to make it more flexible; please share any required updates with the LiveLabs team.
 
@@ -134,3 +154,9 @@ The manifest.json file describes the content of your workshop. It also contains 
     ]
 }
 ```
+
+## Acknowledgements
+* **Authors:
+    * Lauran K. Serhal, Consulting User Assistance Developer
+    * Marty Gubar, Product Manager
+* **Last Updated By/Date** Lauran K. Serhal, February 2025
