@@ -93,9 +93,9 @@ A notebook is a web-based interface for data analysis, data discovery, data visu
 	![Oracle Machine Learning UI Sign in page](images/oml-signin-page.png)
 
 </if>
-This completes the task of accessing Oracle Machine Learning user interface.
+This completes the task of signing into Oracle Machine Learning user interface.
 
-## Task 2: Access Oracle Machine Learning Notebook 
+## Task 2: Access Oracle Machine Learning Notebooks 
 
 You can access the Notebooks page from the left navigation pane of Oracle Machine Learning Notebook UI, or from the Notebooks listing page.
 To access the Notebooks page:
@@ -119,11 +119,13 @@ Here, you have the option to:
 * **Export:** To export a notebook, click **Export.** You can export Noteboooks in the `.dsnb` format, Zeppelin format (`.json` ) file and in Jupyter format (`.ipynb`), and later import them in to the same or a different environment. You can also export the notebook in HTML format, and optionally exclude paragraph code, results, and timestamps.
 * **Version:** To create versions of a notebook, select it and click **Version.** The Versions page for that particular notebook opens. Here, you can create a new version of the notebook by clicking **+Version.** The Create Version dialog opens. Enter a name of the notebook version, a description, and click **OK.** The new version of the notebook gets created by the same name with a suffix `_2` for the second version. For subsequent versions, suffix (number) increments by one. To revert to an older version by clicking Revert Version. You also have the option to delete any version of the notebook. Click **Back to Notebooks** to go to the OML Notebooks page.
 
+This completes the task of accessing Oracle Machine Learning Notebooks.
+
 ## Task 3: Create a Notebook and Define Paragraphs using the md, SQL, PL/SQL, Python, and R Interpreters
 
 In this task, you will create a new notebook, and add paragraphs to connect to the Markdown, SQL, Script, Python, and R interpreters. Interpreters are independent backend engines. R and Python engines are stateful while the notebook is open, and database objects are valid for the duration the database connection is active. You can change the interpreter by explicitly specifying one of `%script`, `%python`, `%sql` , `%r` , `%md`, or `%conda` to connect to the respective interpreter.
 
-To learn about Conda, refer to [Use the Conda Interpreter in a Notebook Paragraph](https://docs.oracle.com/en/database/oracle/machine-learning/oml-notebooks/omlug/notebooks.html#GUID-0AAB3590-4422-450D-BE91-4EC435FD4254)
+To learn about Conda, refer to [Use the Conda Interpreter in a Notebook Paragraph](https://docs.oracle.com/en/database/oracle/machine-learning/oml-notebooks/omlug/run-notebook-conda-interpreter.html).
 
 1. On the Notebooks page, click **Create.**
 		![Create OML Notebooks](images/notebooks-ea-create.png)
