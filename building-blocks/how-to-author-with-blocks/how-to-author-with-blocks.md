@@ -54,10 +54,10 @@ Let's examine these two concepts and how they map to your workshop development:
 
 Just as a _lab_ is comprised of _multiple tasks_, a _Block_ is comprised of multiple Tasks.
 
-For example: ADB provisioning has two tasks:
+For example, the **provision-console.md** common block has two common tasks:
 
-* **goto-service-body.md**: Selects the ADB Service from the OCI menu
-* **provision-console-body.md**Creating the ADB instance
+* **goto-service-body.md:** Selects the ADB Service from the OCI menu
+* **provision-console-body.md:** Creates the ADB instance
 
 In this case, there is a **Building Block** that directly maps to this lab. You can simply take this Building Block, add it to your workshop's manifest, update LiveLab variables (the database name, # CPUs, etc.) to match your lab's requirements, and your done. In the future, when updates are made to ADB provisioning, your lab will update automatically when the Building Block is updated.
 
@@ -74,7 +74,6 @@ Let's take a look at the markdown for a Provisioning an Autonomous Database comm
 * `provision-console-body.md`
 
 ![provision-console common block](images/folder-structure.png " ")
-
 
 **Here is markdown specific to my workshop.**
 
