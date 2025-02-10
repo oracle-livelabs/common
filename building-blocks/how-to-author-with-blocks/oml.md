@@ -65,6 +65,28 @@
  
 [](include:oml-create-oml-user.md)
  
+## nb-visualizations.md
+**Markdown file location:**
+```
+/common/building-blocks/tasks/oml/nb-visualizations.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "oml-nb-visualizations.md":"/common/building-blocks/tasks/oml/nb-visualizations.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:oml-nb-visualizations.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:oml-nb-visualizations.md)
+ 
 ## Sign into Oracle Machine Learning UI
 **Markdown file location:**
 ```
