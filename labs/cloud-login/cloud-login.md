@@ -58,4 +58,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 - **Created By/Date** - Kay Malcolm, Database Product Management, March 2020
 - **Contributors** - John Peach, Kamryn Vinson, Rene Fontcha, Madhusudhan Rao, Arabella Yao
-- **Last Updated By** - Ana Coman, July 2024
+- **Last Updated By** - Ramona Magadan, February 2025
