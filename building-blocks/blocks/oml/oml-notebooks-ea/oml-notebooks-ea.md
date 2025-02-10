@@ -26,13 +26,7 @@ The Oracle Machine Learning Notebooks provides:
 In this lab, you will learn how to:
 * Access the notebook environment
 * Create and run a Notebook
-* Edit notebooks
-* Create notebook versions
-* View version history and compare notebook versions
-* Create paragraph dependencies, and run the paragraphs based on paragraph dependency order
-* Create a notebook using the Example template
-* Change notebook service levels
-* Create jobs to schedule notebook run
+* Explore the basic features of Oracle Machine Learning Notebooks
 * Visualize data in Oracle Machine Learning Notebooks
 
 ### Prerequisites
