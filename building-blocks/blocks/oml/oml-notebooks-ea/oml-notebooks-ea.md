@@ -410,7 +410,7 @@ To edit an existing notebook:
 * Click Settings to adjust settings of the notebook paragraph output. This setting is specifically applicable to visualizations in graphs, charts, vertical height of paragraph output etc.
 * Click download-as to download the paragraph as a text file, or as ``.png`` or ``.svg`` files, as applicable, for paragraphs that contains graphs or charts as output.
 
-This completes the task of working with various notebook features. To learn more about advanced notebook features, see Lab 4: Advanced Notebooks Options in the workshop [Oracle Machine Learning Notebooks](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=891&p210_wec=&session=17495085944752)
+This completes the task of working with various notebook features. To learn more about advanced notebook features, see _Lab 6: Advanced Notebooks Options_ in the workshop [Oracle Machine Learning Notebooks](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=891&p210_wec=&session=17495085944752).
 
 ## Task 5: Visualize your Data in OML Notebooks
 
@@ -460,7 +460,8 @@ To visualize your data, let's consider the _Test Notebook_ that you created in *
 
 	For details about the Iris dataset visualization, and all the other visualization options, settings, and customizations, see the workshop [Introduction to Oracle Machine Learning Notebooks](https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=891&p210_wec=&session=7943398560266).
 
-This completes the task of visualizing your data in a notebook. You may now **proceed to the next lab**.
+This completes the task of visualizing your data in a notebook. To learn more about all the visualization options available in Oracle Machine Learning Notebooks, see see _Lab 3: Visualize Data in Oracle Machine Learning Notebooks_ in the workshop [Oracle Machine Learning Notebooks](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=891&p210_wec=&session=17495085944752).
+You may now **proceed to the next lab**.
 
 ## Learn More
 
@@ -471,4 +472,4 @@ This completes the task of visualizing your data in a notebook. You may now **pr
 
 * **Author** -  Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, November 2024
+* **Last Updated By/Date** - Moitreyee Hazarika, February 2025
