@@ -460,7 +460,8 @@ To visualize your data, let's consider the _Test Notebook_ that you created in *
 
 	For details about the Iris dataset visualization, and all the other visualization options, settings, and customizations, see the workshop [Introduction to Oracle Machine Learning Notebooks](https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=891&p210_wec=&session=7943398560266).
 
-This completes the task of visualizing your data in a notebook. To learn more about all the visualization options available in Oracle Machine Learning Notebooks, see see _Lab 3: Visualize Data in Oracle Machine Learning Notebooks_ in the workshop [Oracle Machine Learning Notebooks](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=891&p210_wec=&session=17495085944752).
+This completes the task of visualizing your data in a notebook. To learn more about all the visualization options available in Oracle Machine Learning Notebooks, see _Lab 3: Visualize Data in Oracle Machine Learning Notebooks_ in the workshop [Oracle Machine Learning Notebooks](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=891&p210_wec=&session=17495085944752).
+
 You may now **proceed to the next lab**.
 
 ## Learn More
