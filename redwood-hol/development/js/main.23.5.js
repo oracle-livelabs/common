@@ -89,6 +89,9 @@ let main = function () {
                     });
                 }
 
+                const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+                console.log(currentDomain);
+
                 // added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
                 for (let short_name in manifestFile.include) {
                     let include_fname = manifestFile.include[short_name];
@@ -96,12 +99,11 @@ let main = function () {
                     if (include_fname.indexOf("http") === -1 && include_fname[0] !== "/") { // If the link is relative
                         include_fname = manifestFileName.substring(0, manifestFileName.lastIndexOf("/") + 1) + include_fname;
                     }
-                
-                    // Modify include_fname based on manifestFileName's base URL
-                    if (manifestFileName.startsWith("https://livelabs.oracle.com/")) {
-                        include_fname += "/cdn"; // Append "cdn/"
-                    } else if (manifestFileName.startsWith("https://apexapps-stage.oracle.com/")) {
-                        include_fname += "/livelabs/cdn"; // Append "livelabs/cdn/"
+                 // Modify include_fname based on the current domain
+                    if (currentDomain.startsWith("https://livelabs.oracle.com")) {
+                        include_fname = "cdn/" + include_fname.replace(/^\/+/, ""); // Remove leading slash if present and prepend /cdn/
+                    } else if (currentDomain.startsWith("https://apexapps-stage.oracle.com")) {
+                        include_fname += "livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Prepend livelabs/cdn/
                     }
 
                     console.log(include_fname);
