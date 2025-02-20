@@ -23,7 +23,6 @@ Version     Date             Author          Summary
 23.3        Mar-13-23       Dan Williams    Provided an example of imperative text (eg.'Start' not 'Starting) (LLAPEX-699)
 23.4        Mar-17-23       Dan Williams    Updated imperative text ( eg. 'Start' not 'Starting') to include where issue is within Lab (LLAPEX-701)
 23.4.1      Oct-24-24       Kevin Lazarz    Fixed Lintchecker
-23.5        Oct-24-24       Kaylien Phan    Fixing "includes" functionality to accommodate for CDN
 */
 
 "use strict";
@@ -91,53 +90,28 @@ let main = function () {
                 }
 
                 // added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
-
-                // Base URLs for fallback
-                const BASE_URLS = [
-                    "https://livelabs.oracle.com/cdn/",
-                    "https://oracle-livelabs.github.io/",
-                    "https://apexapps-stage.oracle.com/livelabs/cdn/"
-                ];
-
-                // Function to fetch the include file with fallback logic
-                const fetchWithFallback = (fname, index = 0) => {
-                    return new Promise((resolve, reject) => {
-                        if (index >= BASE_URLS.length) {
-                            return reject(`Failed to fetch: ${fname} from all base URLs`);
-                        }
-
-                        let url = fname.startsWith("http") ? fname : BASE_URLS[index] + fname.replace(/^\/+/, ""); // Ensure no leading slash
-                        $.get(url)
-                            .done(content => resolve({ path: url, content }))
-                            .fail(() => resolve(fetchWithFallback(fname, index + 1))); // Try the next base URL
-                    });
-                };
+                for (let short_name in manifestFile.include) {
+                    let include_fname = manifestFile.include[short_name];
                 
-
-                // Updated loop for includes
-                const processIncludes = async () => {
-                    for (let short_name in manifestFile.include) {
-                        let include_fname = manifestFile.include[short_name];
-
-                        if (!include_fname.startsWith("http") && !include_fname.startsWith("/")) { // If relative, make absolute
-                            include_fname = manifestFileName.substring(0, manifestFileName.lastIndexOf("/") + 1) + include_fname;
-                        }
-
-                        try {
-                            let result = await fetchWithFallback(include_fname);
-                            manifestFile.include[short_name] = result;
-                        } catch (error) {
-                            console.error(error);
-                        }
+                    if (include_fname.indexOf("http") === -1 && include_fname[0] !== "/") { // If the link is relative
+                        include_fname = manifestFileName.substring(0, manifestFileName.lastIndexOf("/") + 1) + include_fname;
                     }
-
-                    // Once all includes are processed, update markdown content
-                    // markdownContent = include(markdownContent, manifestFile.include);
-                };
-
-
-                // Call processIncludes() to fetch all includes before rendering
-                processIncludes();
+                
+                    // Modify include_fname based on manifestFileName's base URL
+                    if (manifestFileName.startsWith("https://livelabs.oracle.com/")) {
+                        include_fname += "/cdn"; // Append "cdn/"
+                    } else if (manifestFileName.startsWith("https://apexapps-stage.oracle.com/")) {
+                        include_fname += "/livelabs/cdn"; // Append "livelabs/cdn/"
+                    }
+                
+                    $.get(include_fname, function (included_file_content) {
+                        manifestFile.include[short_name] = {
+                            'path': include_fname,
+                            'content': included_file_content
+                        };
+                    });
+                }
+                
                 
                 if (manifestFile.variables) {
                     if (!Array.isArray(manifestFile.variables)) {
