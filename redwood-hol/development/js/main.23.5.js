@@ -90,31 +90,37 @@ let main = function () {
                 }
 
                 const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
-                console.log(currentDomain);
+                console.log("Current domain:", currentDomain);
 
-                // added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
+                // Added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
                 for (let short_name in manifestFile.include) {
                     let include_fname = manifestFile.include[short_name];
-                
+
                     if (include_fname.indexOf("http") === -1 && include_fname[0] !== "/") { // If the link is relative
                         include_fname = manifestFileName.substring(0, manifestFileName.lastIndexOf("/") + 1) + include_fname;
                     }
-                 // Modify include_fname based on the current domain
+
+                    // Modify include_fname based on the current domain
                     if (currentDomain.includes("livelabs.oracle.com")) {
-                        include_fname = "cdn/" + include_fname.replace(/^\/+/, ""); // Remove leading slash if present and prepend /cdn/
+                        include_fname = currentDomain + "/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
                     } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
-                        include_fname = "livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Prepend livelabs/cdn/
+                        include_fname = currentDomain + "/livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
+                    } else {
+                        include_fname = currentDomain + "/" + include_fname.replace(/^\/+/, ""); // Default case
                     }
 
-                    console.log(include_fname);
-                
+                    console.log("Fetching:", include_fname);
+
                     $.get(include_fname, function (included_file_content) {
                         manifestFile.include[short_name] = {
                             'path': include_fname,
                             'content': included_file_content
                         };
+                    }).fail(function () {
+                        console.error("Failed to load:", include_fname);
                     });
                 }
+
                 
                 
                 if (manifestFile.variables) {
