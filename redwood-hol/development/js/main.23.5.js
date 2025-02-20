@@ -100,10 +100,10 @@ let main = function () {
                         include_fname = manifestFileName.substring(0, manifestFileName.lastIndexOf("/") + 1) + include_fname;
                     }
                  // Modify include_fname based on the current domain
-                    if (currentDomain.startsWith("https://livelabs.oracle.com")) {
+                    if (currentDomain.includes("livelabs.oracle.com")) {
                         include_fname = "cdn/" + include_fname.replace(/^\/+/, ""); // Remove leading slash if present and prepend /cdn/
-                    } else if (currentDomain.startsWith("https://apexapps-stage.oracle.com")) {
-                        include_fname += "livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Prepend livelabs/cdn/
+                    } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
+                        include_fname = "livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Prepend livelabs/cdn/
                     }
 
                     console.log(include_fname);
