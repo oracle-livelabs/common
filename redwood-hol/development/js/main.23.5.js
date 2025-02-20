@@ -9,7 +9,7 @@ Version     Date             Author          Summary
 22.2        Feb-17-22       Kevin Lazarz    Role back LLAPEX-400 due issues in some workshops
 22.3        Mar-08-22       Kevin Lazarz    Temp fix for list issues LLAPEX-400, added QA check for images missing alt-text, changed numbering for table header
 22.4        Mar-30-22       Ashwin Agarwal  Added alt-text for modal images (LLAPEX-431)
-22.5        Apr-01-22       Ashwin Agarwal  Created global main.js (merge main.js * main.sprint.js) - LLAPEX-440
+22.5        Apr-1-22        Ashwin Agarwal  Created global main.js (merge main.js * main.sprint.js) - LLAPEX-440
 22.6        Apr-18-22       Ashwin Agarwal  Accessibility bugs in JavaScript - anchor not in <li> - LLAPEX-400
 22.7        Apr-20-22       Ashwin Agarwal  Add a static header for sprints - LLAPEX-448
 22.8        May-09-22       Ashwin Agarwal  Single sourcing does not work for included files - LLAPEX-477
@@ -22,7 +22,8 @@ Version     Date             Author          Summary
 23.2        Nov-10-22       Kevin Lazarz    Added LLAPEX-637 & LLAPEX-642
 23.3        Mar-13-23       Dan Williams    Provided an example of imperative text (eg.'Start' not 'Starting) (LLAPEX-699)
 23.4        Mar-17-23       Dan Williams    Updated imperative text ( eg. 'Start' not 'Starting') to include where issue is within Lab (LLAPEX-701)
-23.5        Jul-03-23       Brianna Ambler  Added functionality to support multiple languages
+23.4.1      Oct-24-24       Kevin Lazarz    Fixed Lintchecker
+23.5        Oct-24-24       Kaylien Phan    Fixing "includes" functionality to accommodate for CDN
 */
 
 "use strict";
@@ -31,8 +32,7 @@ var highlight = "https://oracle-livelabs.github.io/common/redwood-hol/js/highlig
 const related_path = "https://oracle-livelabs.github.io/common/related/";
 
 let main = function () {
-
-
+    let manifestFileName = "manifest.json";
     let expandText = "Expand All Tasks";
     let collapseText = "Collapse All Tasks";
     const copyButtonText = "Copy";
@@ -65,20 +65,12 @@ let main = function () {
     $.ajaxSetup({ cache: true });
 
     let manifest_global;
-    let manifestFileName;
-    let manifestFileContent;
-
 
     $(document).ready(function () {
-
-        // If a language has been selected, use the selected language tag, otherwise default to English
-        if (getParam("available_languages")) {
-            manifestFileName = "manifest_" + getParam("available_languages") + '.json';
-        } else {
-            manifestFileName = 'manifest_en.json';
+        let manifestFileContent;
+        if (getParam("manifest")) {
+            manifestFileName = getParam("manifest");
         }
-        console.log(manifestFileName);
-
         $.when(
             $.getScript(showdown, function () {
                 console.log("Showdown library loaded!");
@@ -105,14 +97,47 @@ let main = function () {
                     if (include_fname.indexOf("http") == -1 && include_fname[0] !== "/") { // if the link used is relative
                         include_fname = manifestFileName.substring(0, manifestFileName.lastIndexOf("/") + 1) + include_fname;
                     }
-
-                    $.get(include_fname, function (included_file_content) {
-                        manifestFile.include[short_name] = {
-                            'path': include_fname,
-                            'content': included_file_content
-                        }
-                    });
+                
+                    (function(short_name, include_fname) {
+                        $.ajax({
+                            url: include_fname,
+                            type: 'GET',
+                            success: function(included_file_content) {
+                                manifestFile.include[short_name] = {
+                                    'path': include_fname,
+                                    'content': included_file_content
+                                };
+                            },
+                            error: function(xhr) {
+                                console.error(`Failed to load ${include_fname}. Status: ${xhr.status}`);
+                
+                                // Try an alternative path if needed
+                                if (xhr.status === 404 && include_fname.startsWith("/common/")) {
+                                    let alternative_fname = "cdn" + include_fname;
+                                    console.log(`Trying alternative path: ${alternative_fname}`);
+                
+                                    $.ajax({
+                                        url: alternative_fname,
+                                        type: 'GET',
+                                        success: function(included_file_content) {
+                                            manifestFile.include[short_name] = {
+                                                'path': alternative_fname,
+                                                'content': included_file_content
+                                            };
+                                        },
+                                        error: function(xhr) {
+                                            console.error(`Alternative path also failed: ${alternative_fname}. Status: ${xhr.status}`);
+                                            delete manifestFile.include[short_name]; // Remove the entry if both fail
+                                        }
+                                    });
+                                } else {
+                                    delete manifestFile.include[short_name]; // Remove the entry if no alternative path is available
+                                }
+                            }
+                        });
+                    })(short_name, include_fname);
                 }
+                
                 if (manifestFile.variables) {
                     if (!Array.isArray(manifestFile.variables)) {
                         manifestFile['variables'] = Array(manifestFile.variables);
@@ -127,10 +152,7 @@ let main = function () {
                     })
                 }
 
-                manifest_global = manifestFileContent = manifestFile; //reading the manifest file and storing content in manifestFileContent variable   
-                addLanguageMenu();
-                addNeedHelpLink(manifestFileContent.help, manifestFileContent.workshoptitle);
-
+                manifest_global = manifestFileContent = manifestFile; //reading the manifest file and storing content in manifestFileContent variable                
             }),
             $.getScript(highlight, function () {
                 console.log("Highlight.js loaded!");
@@ -269,8 +291,7 @@ let main = function () {
             // adding social media link to the header
             // addSocialMediaLink(manifestFileContent.help, manifestFileContent.workshoptitle);
             // adding link to the Neep Help URL in the header if the manifest file contains it (DBDOC-2496)
-            // addNeedHelpLink(manifestFileContent.help, manifestFileContent.workshoptitle);
-
+            addNeedHelpLink(manifestFileContent.help, manifestFileContent.workshoptitle);
 
             if (getParam("qa") == "true") {
                 articleElement = performQA(articleElement, markdownContent, manifestFileContent);
@@ -940,48 +961,6 @@ let main = function () {
             // $('div#container').append(need_help_div);
         }
     }
-    // Adding the language menu to the i-frame
-    let addLanguageMenu = function () {
-
-
-        const language_dict = { 'en': 'English', 'es': 'Español', 'pt-BR': 'Português (BR)', 'ja': '日本', 'zh-CN': '简体中文', 'zh-TW': '繁體中文', 'ko': '한국인', 'fr': 'Français', 'de': 'Deutsch' };
-        const selected_lang = getParam('available_languages');
-        let lang_code = 'en';
-        let full_lang = 'English';
-
-        // If the user has selected a language, set the variables accordingly
-        if (selected_lang) {
-            lang_code = selected_lang;
-            full_lang = language_dict[lang_code];
-        }
-
-        // Add the menu to index.html and display the current language
-        const nav_header = document.getElementsByClassName("hol-Header-wrap")[0];
-        nav_header.innerHTML += "<div id='language_menu'><form class='custom-select'><select class='selectVal' name ='available_languages' id='available_languages' onchange='submit()'><option value=" + lang_code + " selected>" + full_lang + "</option></select></form></div>";
-
-        const select = document.getElementById('available_languages');
-        const keys = Object.keys(language_dict);
-
-        // Add the menu options based on which manifest files exist
-        for (let i = 0; i < keys.length; i++) {
-            if (keys[i] == lang_code) {
-                continue;
-            }
-            $.getJSON('manifest_' + keys[i] + '.json')
-                .done(function () {
-                    let new_opt = new Option(language_dict[keys[i]], keys[i]);
-                    select.add(new_opt, undefined);
-                    console.log('manifest_' + keys[i] + '.json has been loaded!');
-
-                })
-                .fail(function () {
-                    console.log('manifest_' + keys[i] + '.json not found! Make sure the manifest file is located in the same directory as the local index.html.');
-                });
-        }
-        console.log('Finished adding the language menu');
-    }
-
-
 
     /* Add the Social Media link in the header */
     // let addSocialMediaLink = function(help, wtitle) {   
@@ -1359,12 +1338,7 @@ let main = function () {
         return articleElement;
     }
 
-    // let alphaNumOnly = function (text) { return text.replace(/[^[A-Za-z0-9:?\(\)]+?/g, ''); }
-
-
-    function alphaNumOnly(str) {
-        return str.replace(/[^\w\u4e00-\u9fff\u3040-\u30ff]+/g, '');
-    }
+    let alphaNumOnly = function (text) { return text.replace(/[^[A-Za-z0-9:?\(\)]+?/g, ''); }
 
 
     // QA part of the code
@@ -1643,17 +1617,6 @@ let main = function () {
 
 }();
 
-// let switch_language = function() {
-//     console.log('switch_language started!');
-//     const queryString = document.location.search;
-//     const urlParams = new URLSearchParams(queryString);
-//     const new_language = urlParams.get('available_languages');
-
-//     console.log(new_language);
-//     manifestFileName = "manifest_" + new_language + '.json';
-//     console.log('switch_language finished!');
-// }
-
 let download = function () {
 
     //enables download of files
@@ -1683,29 +1646,3 @@ let download = function () {
             download_file($('.selected span').text().replace(/[^[A-Za-z0-9:?]+?/g, '') + '.html', '<html><head><link rel="stylesheet" href="https://oracle-livelabs.github.io/common/redwood-hol/img/favicon.ico" /></head><body style="padding-top: 0px;">' + $('#contentBox')[0].outerHTML + '</body></html>');
         });
 }
-
-var isTest=-1!=location.host.indexOf("-stage")||-1!=location.host.indexOf("dev-")||-1!=location.host.indexOf("-dev")||-1!=location.host.indexOf("-uat")||-1!=location.host.indexOf("webstandards-us")||-1!=location.host.indexOf("localhost"),enable_tracking=!0,ora_root=isTest?"://www-stage.oracle.com":"://www.oracle.com",host_type=-1!=window.location.protocol.toLowerCase().indexOf("https")?"https":"http";if(enable_tracking){var sc_script=document.createElement("script");sc_script.type="text/javascript";sc_script.onload=function(){window.sn=s_setAccount()[1];window.ln=s_setAccount()[2]};sc_script.src=host_type+ora_root+"/us/assets/metrics/ora_code.js";document.body?document.body.appendChild(sc_script):document.head.appendChild(sc_script)}
-
-/*! ORA_CODE_APEX.JS - v1.01 */
-if(enable_tracking){var siteID="",language="";
-
-/*! REPORT SUITE SET UP */
-function s_setAccount(){var sa=["oracleglobal","apex","en-us"];if(-1!=location.host.indexOf("-stage")||-1!=location.host.indexOf("dev-")||-1!=location.host.indexOf("-dev")||-1!=location.host.indexOf("-uat")||-1!=location.host.indexOf("webstandards-us")||-1!=location.host.indexOf("localhost"))var sa=["oracledevall","apex","en-us"];else var sa=["oracleglobal","apex","en-us"];var siteLang={de:{site_lang_val:"de-de"},es:{site_lang_val:"es-es"},fr:{site_lang_val:"fr-fr"},it:{site_lang_val:"it-it"},"pt-br":{site_lang_val:"pt-br"},"zh-tw":{site_lang_val:"zh-tw"},"zh-cn":{site_lang_val:"zh-cn"},ja:{site_lang_val:"ja-jp"},ko:{site_lang_val:"ko-kr"}},site_ID=location.pathname.split("/").length>1?location.pathname.split("/")[1]:"";language=""!=site_ID&&siteLang.hasOwnProperty(site_ID)?siteLang[site_ID].site_lang_val:"en-us";siteID=sa[1];return sa}
-
-/*! PrePlugins */
-function s_prePlugins(s){s_oraVer(":"+siteID,":1.01");setPageName(s)}function setPageName(s){s.pageName=siteID+":"+language+":/"+document.title}
-
-/*! PostPlugins */
-function s_postPlugins(s){"undefined"!=typeof s_eVar24?s.eVar24=s_eVar24:s.eVar24="no value";oraSetInternalFilters()}
-
-/*! Set the code version, oraVersion comes from ora_code.js */
-function s_oraVer(_s,_v){_v=_s+_v;oraVersion=-1==oraVersion.indexOf(_s)?oraVersion+_v:oraVersion.substr(0,oraVersion.indexOf(_s))+_v}
-
-/*! Set filter exit links */
-function oraSetInternalFilters(){s.linkInternalFilters="javascript:,.oracle.,.oraclecorp.com";-1===location.href.indexOf(":8888")&&-1===location.href.indexOf("webstandards-us")||(s.linkInternalFilters="javascript:,localhost,webstandards-us.oracle.com")}
-
-/*! Test and Flag for jQuery */
-function gotjQ(){try{var jq=!!jQuery}catch(err){var jq=!1}return jq}
-
-/*! JQUERY FUNCTIONS */
-gotjQ()&&jQuery(document).ready(function($){var trackas=[];$('a[rel*="lightbox"],a[rel*="opop"]').each(function(){var type="opop"==$(this).attr("rel")?"popup":"lightbox";!$(this).attr("data-lbl")&&$(this).attr("title")?$(this).attr("data-lbl",type+"-open-"+$(this).attr("title").toLowerCase().replace(/ /g,"-")):!$(this).attr("data-lbl")&&$(this).text()?$(this).attr("data-lbl",type+"-open-"+$(this).text().toLowerCase().replace(/ /g,"-")):$(this).attr("data-lbl")?$(this).attr("data-lbl",$(this).attr("data-lbl")+"-"+type+"-open"):$(this).attr("data-lbl",type+"-open");$(this).attr("data-trackas")||$(this).attr("data-trackas",type)});for(var sn=s_setAccount()[1],ln=s_setAccount()[2],i=0;i<trackas.length;i++){!$(trackas[i][0]).attr("data-trackas")&&trackas[i][1]&&$(trackas[i][0]).attr("data-trackas",trackas[i][1]);trackas[i][2]&&"resetpage"==trackas[i][2]?$(trackas[i][0]).attr("data-pgreset","true"):trackas[i][2]&&!$(trackas[i][0]).attr("data-lbl")&&$(trackas[i][0]).attr("data-lbl",trackas[i][2])}$(document).on("click","*[data-trackas] a,a[data-trackas]",function(e){var lbl="",o=$(this);if("notrack"!=o.attr("data-lbl")){if(o.attr("data-lbl"))lbl=o.attr("data-lbl");else if(o.attr("name"))lbl=o.attr("name");else if(o.attr("title"))lbl=o.attr("title");else if(o.find("img")&&o.find("img").first().attr("title"))lbl=o.find("img").first().attr("title");else if(o.find("img")&&o.find("img").first().attr("alt"))lbl=o.find("img").first().attr("alt");else if(o.find("img").first().attr("src")){lbl=o.find("img").first().attr("src");lbl=lbl.split("/")[lbl.split("/").length-1]}else lbl=o.text();var d=o.closest("[data-trackas]").attr("data-trackas");d="hnav"==d||"header"==d?":":"-";if(!o.attr("data-trackas"))for(;o.parent();){o=o.parent();o.attr("data-lbl")&&(lbl=o.attr("data-lbl")+d+lbl);if(o.attr("data-trackas"))break}lbl=lbl.toLowerCase().replace(/ /g,"-").replace(/-+/g,"-");var sec=o.attr("data-trackas")?o.attr("data-trackas"):o.closest("*[data-trackas]").attr("data-trackas");-1!=location.href.indexOf(":8888")&&console.log(sn+":"+ln+":"+sec+":"+lbl);navTrack(sn,ln,sec,lbl);if("true"==o.attr("data-pgreset")){s.clearVars();if(0==o.attr("href").indexOf("#")&&s.pageName){if($("body").attr("data-pgname"))var pn=$("body").attr("data-pgname");else{$("body").attr("data-pgname",s.pageName);var pn=s.pageName}s.pageName=pn+"/"+o.attr("href").split("#")[1]}else s_orapageName(o.attr("href"));oraSetInternalFilters();s.linkInternalFilters=s.linkInternalFilters+","+o.attr("href");var s_code=s.t();s_code&&document.write(s_code);oraSetInternalFilters()}}})})}
