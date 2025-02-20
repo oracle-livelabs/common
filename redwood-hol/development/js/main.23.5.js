@@ -103,6 +103,8 @@ let main = function () {
                     } else if (manifestFileName.startsWith("https://apexapps-stage.oracle.com/")) {
                         include_fname += "/livelabs/cdn"; // Append "livelabs/cdn/"
                     }
+
+                    console.log(include_fname);
                 
                     $.get(include_fname, function (included_file_content) {
                         manifestFile.include[short_name] = {
