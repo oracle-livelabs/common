@@ -226,7 +226,20 @@ let main = function () {
     }
     // the main function that loads the tutorial
     let loadTutorial = function (articleElement, selectedTutorial, manifestFileContent, callbackFunc = null) {
-        $.get(selectedTutorial.filename, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
+        let tut_fname;
+
+        const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+
+        // Modify tut_fname based on the current domain
+        if (selectedTutorial.filename.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
+            tut_fname = "/cdn/" + selectedTutorial.filename.replace(/^\/+/, ""); // Ensure correct path
+        } else if (selectedTutorial.filename.startsWith("/") && currentDomain.includes("apexapps-stage.oracle.com")) {
+            tut_fname = "/livelabs/cdn/" + selectedTutorial.filename.replace(/^\/+/, ""); // Ensure correct path
+        } else {
+            tut_fname = selectedTutorial.filename;
+        }
+
+        $.get(tut_fname, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
             console.log(selectedTutorial.filename + " loaded!");
 
             if (selectedTutorial.filename == 'preview' && markdownContent == "None") {
