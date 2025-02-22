@@ -612,19 +612,20 @@ let main = function () {
             let div = document.createElement('div');
             $(div).attr('id', 'toc' + i).addClass('toc');
 
-            // // Modify include_fname based on the current domain
-            // if (currentDomain.includes("livelabs.oracle.com")) {
-            //     tut_fname = currentDomain + "/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
-            // } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
-            //     tut_fname = currentDomain + "/livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
-            // } else {
-            //     tut_fname = currentDomain + "/" + include_fname.replace(/^\/+/, ""); // Default case
-            // }
+            // Modify tut_fname based on the current domain
+            if (tutorial.filename.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
+                tut_fname = "/cdn/" + tutorial.filename.replace(/^\/+/, ""); // Ensure correct path
+            } else if (tutorial.filename.startsWith("/") && currentDomain.includes("apexapps-stage.oracle.com")) {
+                tut_fname = "/livelabs/cdn/" + tutorial.filename.replace(/^\/+/, ""); // Ensure correct path
+            } else {
+                tut_fname = tutorial.filename;
+            }
 
             console.log(tutorial.filename);
+            console.log(tut_fname);
 
-            $.get(tutorial.filename, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
-                if (tutorial.filename == 'preview' && markdownContent == "None") {
+            $.get(tut_fname, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
+                if (tut_fname == 'preview' && markdownContent == "None") {
                     markdownContent = window.localStorage.getItem("mdValue");
                 }
                 markdownContent = include(markdownContent, manifestFileContent.include);
@@ -641,7 +642,7 @@ let main = function () {
                                 location.hash = alphaNumOnly($(this).text());
                                 expandSectionBasedOnHash($(this).find('li').attr('data-unique'));
                             } else {
-                                changeTutorial(getMDFileName(tutorial.filename), alphaNumOnly($(this).text()));
+                                changeTutorial(getMDFileName(tut_fname), alphaNumOnly($(this).text()));
                             }
 
                         });
@@ -650,7 +651,7 @@ let main = function () {
                         $(ul).each(function () {
                             if (tutorial !== selectTutorial(manifestFileContent)) {
                                 let li = $(this).find('li')[0];
-                                $(li).wrapInner('<a href="' + unescape(setParam(window.location.href, queryParam, getMDFileName(tutorial.filename))) + '#' + $(li).attr('data-unique') + '"></a>');
+                                $(li).wrapInner('<a href="' + unescape(setParam(window.location.href, queryParam, getMDFileName(tut_fname))) + '#' + $(li).attr('data-unique') + '"></a>');
                             }
                         });
                         $(ul).appendTo(div);
