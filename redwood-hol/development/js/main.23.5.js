@@ -622,7 +622,7 @@ let main = function () {
             }
 
             $.get(tut_fname, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
-                if (tut_fname == 'preview' && markdownContent == "None") {
+                if (tutorial.filename == 'preview' && markdownContent == "None") {
                     markdownContent = window.localStorage.getItem("mdValue");
                 }
                 markdownContent = include(markdownContent, manifestFileContent.include);
@@ -639,7 +639,7 @@ let main = function () {
                                 location.hash = alphaNumOnly($(this).text());
                                 expandSectionBasedOnHash($(this).find('li').attr('data-unique'));
                             } else {
-                                changeTutorial(getMDFileName(tut_fname), alphaNumOnly($(this).text()));
+                                changeTutorial(getMDFileName(tutorial.filename), alphaNumOnly($(this).text()));
                             }
 
                         });
@@ -648,7 +648,7 @@ let main = function () {
                         $(ul).each(function () {
                             if (tutorial !== selectTutorial(manifestFileContent)) {
                                 let li = $(this).find('li')[0];
-                                $(li).wrapInner('<a href="' + unescape(setParam(window.location.href, queryParam, getMDFileName(tut_fname))) + '#' + $(li).attr('data-unique') + '"></a>');
+                                $(li).wrapInner('<a href="' + unescape(setParam(window.location.href, queryParam, getMDFileName(tutorial.filename))) + '#' + $(li).attr('data-unique') + '"></a>');
                             }
                         });
                         $(ul).appendTo(div);
