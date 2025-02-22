@@ -91,7 +91,7 @@ let main = function () {
                 }
 
                 const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
-                console.log("Current domain:", currentDomain);
+                // console.log("Current domain:", currentDomain);
 
                 // Added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
                 for (let short_name in manifestFile.include) {
