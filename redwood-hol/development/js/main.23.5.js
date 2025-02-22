@@ -23,6 +23,7 @@ Version     Date             Author          Summary
 23.3        Mar-13-23       Dan Williams    Provided an example of imperative text (eg.'Start' not 'Starting) (LLAPEX-699)
 23.4        Mar-17-23       Dan Williams    Updated imperative text ( eg. 'Start' not 'Starting') to include where issue is within Lab (LLAPEX-701)
 23.4.1      Oct-24-24       Kevin Lazarz    Fixed Lintchecker
+23.5        Oct-24-24       Kaylien Phan    Fixing "includes" functionality to accommodate for CDN
 */
 
 "use strict";
@@ -107,7 +108,7 @@ let main = function () {
                         include_fname = "/livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
                     }
 
-                    console.log("Fetching:", include_fname);
+                    // console.log("Fetching:", include_fname);
 
                     $.get(include_fname, function (included_file_content) {
                         manifestFile.include[short_name] = {
