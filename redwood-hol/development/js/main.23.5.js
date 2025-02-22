@@ -102,11 +102,9 @@ let main = function () {
 
                     // Modify include_fname based on the current domain
                     if (currentDomain.includes("livelabs.oracle.com")) {
-                        include_fname = currentDomain + "/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
+                        include_fname = "/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
                     } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
-                        include_fname = currentDomain + "/livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
-                    } else {
-                        include_fname = currentDomain + "/" + include_fname.replace(/^\/+/, ""); // Default case
+                        include_fname = "/livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
                     }
 
                     console.log("Fetching:", include_fname);
@@ -608,7 +606,6 @@ let main = function () {
         let tut_fname;
 
         const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
-        console.log("Current domain - 2: ", currentDomain);
 
         $(manifestFileContent.tutorials).each(function (i, tutorial) {
             let ul;
@@ -623,9 +620,6 @@ let main = function () {
             } else {
                 tut_fname = tutorial.filename;
             }
-
-            console.log(tutorial.filename);
-            console.log(tut_fname);
 
             $.get(tut_fname, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
                 if (tut_fname == 'preview' && markdownContent == "None") {
