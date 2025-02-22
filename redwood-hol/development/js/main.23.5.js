@@ -601,16 +601,27 @@ let main = function () {
             }
         }
     }
-
     let prepareToc = function (manifestFileContent) {
         let h2_regex = new RegExp(/^##\s(.+)*/gm);
         let h2s_list = [];
         let matches;
+        let tut_fname;
 
         $(manifestFileContent.tutorials).each(function (i, tutorial) {
             let ul;
             let div = document.createElement('div');
             $(div).attr('id', 'toc' + i).addClass('toc');
+
+            // // Modify include_fname based on the current domain
+            // if (currentDomain.includes("livelabs.oracle.com")) {
+            //     tut_fname = currentDomain + "/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
+            // } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
+            //     tut_fname = currentDomain + "/livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
+            // } else {
+            //     tut_fname = currentDomain + "/" + include_fname.replace(/^\/+/, ""); // Default case
+            // }
+
+            console.log(tutorial.filename);
 
             $.get(tutorial.filename, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
                 if (tutorial.filename == 'preview' && markdownContent == "None") {
