@@ -607,6 +607,9 @@ let main = function () {
         let matches;
         let tut_fname;
 
+        const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+        console.log("Current domain - 2: ", currentDomain);
+
         $(manifestFileContent.tutorials).each(function (i, tutorial) {
             let ul;
             let div = document.createElement('div');
