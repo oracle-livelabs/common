@@ -91,7 +91,7 @@ let main = function () {
                 }
 
                 const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
-                // console.log("Current domain:", currentDomain);
+                console.log("Current domain:", currentDomain);
 
                 // Added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
                 for (let short_name in manifestFile.include) {
@@ -108,7 +108,7 @@ let main = function () {
                         include_fname = "/livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
                     }
 
-                    // console.log("Fetching:", include_fname);
+                    console.log("Fetching:", include_fname);
 
                     $.get(include_fname, function (included_file_content) {
                         manifestFile.include[short_name] = {
@@ -230,6 +230,7 @@ let main = function () {
         let tut_fname;
 
         const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+        console.log("Current domain:", currentDomain);
 
         // Modify tut_fname based on the current domain
         if (selectedTutorial.filename.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
