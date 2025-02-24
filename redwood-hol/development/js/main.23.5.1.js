@@ -23,6 +23,7 @@ Version     Date             Author          Summary
 23.3        Mar-13-23       Dan Williams    Provided an example of imperative text (eg.'Start' not 'Starting) (LLAPEX-699)
 23.4        Mar-17-23       Dan Williams    Updated imperative text ( eg. 'Start' not 'Starting') to include where issue is within Lab (LLAPEX-701)
 23.4.1      Oct-24-24       Kevin Lazarz    Fixed Lintchecker
+23.5        Oct-24-24       Kaylien Phan    Fixing "includes" functionality to accommodate for CDN
 */
 
 "use strict";
@@ -89,21 +90,38 @@ let main = function () {
                     });
                 }
 
-                // added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
+                const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+                // console.log("Current domain:", currentDomain);
+
+                // Added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
                 for (let short_name in manifestFile.include) {
                     let include_fname = manifestFile.include[short_name];
 
-                    if (include_fname.indexOf("http") == -1 && include_fname[0] !== "/") { // if the link used is relative
+                    if (include_fname.indexOf("http") === -1 && include_fname[0] !== "/") { // If the link is relative
                         include_fname = manifestFileName.substring(0, manifestFileName.lastIndexOf("/") + 1) + include_fname;
                     }
+
+                    // Modify include_fname based on the current domain
+                    if (currentDomain.includes("livelabs.oracle.com")) {
+                        include_fname = "/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
+                    } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
+                        include_fname = "/livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
+                    }
+
+                    // console.log("Fetching:", include_fname);
 
                     $.get(include_fname, function (included_file_content) {
                         manifestFile.include[short_name] = {
                             'path': include_fname,
                             'content': included_file_content
-                        }
+                        };
+                    }).fail(function () {
+                        console.error("Failed to load:", include_fname);
                     });
                 }
+
+                
+                
                 if (manifestFile.variables) {
                     if (!Array.isArray(manifestFile.variables)) {
                         manifestFile['variables'] = Array(manifestFile.variables);
@@ -209,7 +227,20 @@ let main = function () {
     }
     // the main function that loads the tutorial
     let loadTutorial = function (articleElement, selectedTutorial, manifestFileContent, callbackFunc = null) {
-        $.get(selectedTutorial.filename, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
+        let tut_fname;
+
+        const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+
+        // Modify tut_fname based on the current domain
+        if (selectedTutorial.filename.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
+            tut_fname = "/cdn/" + selectedTutorial.filename.replace(/^\/+/, ""); // Ensure correct path
+        } else if (selectedTutorial.filename.startsWith("/") && currentDomain.includes("apexapps-stage.oracle.com")) {
+            tut_fname = "/livelabs/cdn/" + selectedTutorial.filename.replace(/^\/+/, ""); // Ensure correct path
+        } else {
+            tut_fname = selectedTutorial.filename;
+        }
+
+        $.get(tut_fname, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
             console.log(selectedTutorial.filename + " loaded!");
 
             if (selectedTutorial.filename == 'preview' && markdownContent == "None") {
@@ -220,7 +251,7 @@ let main = function () {
             markdownContent = substituteVariables(markdownContent, manifestFileContent.variable_values); // added for variable feature
             markdownContent = singlesource(markdownContent, selectedTutorial.type); // implement show/hide feature based on the if tag (DBDOC-2430)
             markdownContent = convertBracketInsideCopyCode(markdownContent); // converts <> tags inside copy tag to &lt; and &gt; (DBDOC-2404)
-            markdownContent = addPathToImageSrc(markdownContent, selectedTutorial.filename); //adding the path for the image based on the filename in manifest
+            markdownContent = addPathToImageSrc(markdownContent, tut_fname); //adding the path for the image based on the filename in manifest
             markdownContent = addPathToTypeHrefs(markdownContent); // if type is specified in the markdown, then add absolute path for it.
             markdownContent = convertSingleLineCode(markdownContent);
             markdownContent = convertCodeBlocks(markdownContent); // codeblock with multiple breaks don't render correctly, so I convert to codeblock here itself
@@ -240,7 +271,7 @@ let main = function () {
             articleElement = updateH1Title(articleElement); //adding the h1 title in the Tutorial before the container div and removing it from the articleElement
             articleElement = wrapSectionTag(articleElement); //adding each section within section tag
             articleElement = wrapImgWithFigure(articleElement); //Wrapping images with figure, adding figcaption to all those images that have title in the MD
-            articleElement = addPathToAllRelativeHref(articleElement, selectedTutorial.filename); //adding the path for all HREFs based on the filename in manifest
+            articleElement = addPathToAllRelativeHref(articleElement, tut_fname); //adding the path for all HREFs based on the filename in manifest
             articleElement = setH2Name(articleElement);
             articleElement = makeAnchorLinksWork(articleElement); //if there are links to anchors (for example: #hash-name), this function will enable it work
             articleElement = addTargetBlank(articleElement); //setting target for all ahrefs to _blank
@@ -582,18 +613,29 @@ let main = function () {
             }
         }
     }
-
     let prepareToc = function (manifestFileContent) {
         let h2_regex = new RegExp(/^##\s(.+)*/gm);
         let h2s_list = [];
         let matches;
+        let tut_fname;
+
+        const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
 
         $(manifestFileContent.tutorials).each(function (i, tutorial) {
             let ul;
             let div = document.createElement('div');
             $(div).attr('id', 'toc' + i).addClass('toc');
 
-            $.get(tutorial.filename, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
+            // Modify tut_fname based on the current domain
+            if (tutorial.filename.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
+                tut_fname = "/cdn/" + tutorial.filename.replace(/^\/+/, ""); // Ensure correct path
+            } else if (tutorial.filename.startsWith("/") && currentDomain.includes("apexapps-stage.oracle.com")) {
+                tut_fname = "/livelabs/cdn/" + tutorial.filename.replace(/^\/+/, ""); // Ensure correct path
+            } else {
+                tut_fname = tutorial.filename;
+            }
+
+            $.get(tut_fname, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
                 if (tutorial.filename == 'preview' && markdownContent == "None") {
                     markdownContent = window.localStorage.getItem("mdValue");
                 }
@@ -1612,7 +1654,6 @@ let download = function () {
             download_file($('.selected span').text().replace(/[^[A-Za-z0-9:?]+?/g, '') + '.html', '<html><head><link rel="stylesheet" href="https://oracle-livelabs.github.io/common/redwood-hol/img/favicon.ico" /></head><body style="padding-top: 0px;">' + $('#contentBox')[0].outerHTML + '</body></html>');
         });
 }
-
 
 var isTest=-1!=location.host.indexOf("-stage")||-1!=location.host.indexOf("dev-")||-1!=location.host.indexOf("-dev")||-1!=location.host.indexOf("-uat")||-1!=location.host.indexOf("webstandards-us")||-1!=location.host.indexOf("localhost"),enable_tracking=!0,ora_root=isTest?"://www-stage.oracle.com":"://www.oracle.com",host_type=-1!=window.location.protocol.toLowerCase().indexOf("https")?"https":"http";if(enable_tracking){var sc_script=document.createElement("script");sc_script.type="text/javascript";sc_script.onload=function(){window.sn=s_setAccount()[1];window.ln=s_setAccount()[2]};sc_script.src=host_type+ora_root+"/us/assets/metrics/ora_code.js";document.body?document.body.appendChild(sc_script):document.head.appendChild(sc_script)}
 
