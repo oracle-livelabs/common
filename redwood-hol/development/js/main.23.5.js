@@ -90,53 +90,37 @@ let main = function () {
                     });
                 }
 
-                // added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
+                const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+                // console.log("Current domain:", currentDomain);
+
+                // Added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
                 for (let short_name in manifestFile.include) {
                     let include_fname = manifestFile.include[short_name];
 
-                    if (include_fname.indexOf("http") == -1 && include_fname[0] !== "/") { // if the link used is relative
+                    if (include_fname.indexOf("http") === -1 && include_fname[0] !== "/") { // If the link is relative
                         include_fname = manifestFileName.substring(0, manifestFileName.lastIndexOf("/") + 1) + include_fname;
                     }
-                
-                    (function(short_name, include_fname) {
-                        $.ajax({
-                            url: include_fname,
-                            type: 'GET',
-                            success: function(included_file_content) {
-                                manifestFile.include[short_name] = {
-                                    'path': include_fname,
-                                    'content': included_file_content
-                                };
-                            },
-                            error: function(xhr) {
-                                console.error(`Failed to load ${include_fname}. Status: ${xhr.status}`);
-                
-                                // Try an alternative path if needed
-                                if (xhr.status === 404 && include_fname.startsWith("/common/")) {
-                                    let alternative_fname = "cdn" + include_fname;
-                                    console.log(`Trying alternative path: ${alternative_fname}`);
-                
-                                    $.ajax({
-                                        url: alternative_fname,
-                                        type: 'GET',
-                                        success: function(included_file_content) {
-                                            manifestFile.include[short_name] = {
-                                                'path': alternative_fname,
-                                                'content': included_file_content
-                                            };
-                                        },
-                                        error: function(xhr) {
-                                            console.error(`Alternative path also failed: ${alternative_fname}. Status: ${xhr.status}`);
-                                            delete manifestFile.include[short_name]; // Remove the entry if both fail
-                                        }
-                                    });
-                                } else {
-                                    delete manifestFile.include[short_name]; // Remove the entry if no alternative path is available
-                                }
-                            }
-                        });
-                    })(short_name, include_fname);
+
+                    // Modify include_fname based on the current domain
+                    if (currentDomain.includes("livelabs.oracle.com")) {
+                        include_fname = "/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
+                    } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
+                        include_fname = "/livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
+                    }
+
+                    // console.log("Fetching:", include_fname);
+
+                    $.get(include_fname, function (included_file_content) {
+                        manifestFile.include[short_name] = {
+                            'path': include_fname,
+                            'content': included_file_content
+                        };
+                    }).fail(function () {
+                        console.error("Failed to load:", include_fname);
+                    });
                 }
+
+                
                 
                 if (manifestFile.variables) {
                     if (!Array.isArray(manifestFile.variables)) {
@@ -243,7 +227,20 @@ let main = function () {
     }
     // the main function that loads the tutorial
     let loadTutorial = function (articleElement, selectedTutorial, manifestFileContent, callbackFunc = null) {
-        $.get(selectedTutorial.filename, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
+        let tut_fname;
+
+        const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+
+        // Modify tut_fname based on the current domain
+        if (selectedTutorial.filename.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
+            tut_fname = "/cdn/" + selectedTutorial.filename.replace(/^\/+/, ""); // Ensure correct path
+        } else if (selectedTutorial.filename.startsWith("/") && currentDomain.includes("apexapps-stage.oracle.com")) {
+            tut_fname = "/livelabs/cdn/" + selectedTutorial.filename.replace(/^\/+/, ""); // Ensure correct path
+        } else {
+            tut_fname = selectedTutorial.filename;
+        }
+
+        $.get(tut_fname, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
             console.log(selectedTutorial.filename + " loaded!");
 
             if (selectedTutorial.filename == 'preview' && markdownContent == "None") {
@@ -254,7 +251,7 @@ let main = function () {
             markdownContent = substituteVariables(markdownContent, manifestFileContent.variable_values); // added for variable feature
             markdownContent = singlesource(markdownContent, selectedTutorial.type); // implement show/hide feature based on the if tag (DBDOC-2430)
             markdownContent = convertBracketInsideCopyCode(markdownContent); // converts <> tags inside copy tag to &lt; and &gt; (DBDOC-2404)
-            markdownContent = addPathToImageSrc(markdownContent, selectedTutorial.filename); //adding the path for the image based on the filename in manifest
+            markdownContent = addPathToImageSrc(markdownContent, tut_fname); //adding the path for the image based on the filename in manifest
             markdownContent = addPathToTypeHrefs(markdownContent); // if type is specified in the markdown, then add absolute path for it.
             markdownContent = convertSingleLineCode(markdownContent);
             markdownContent = convertCodeBlocks(markdownContent); // codeblock with multiple breaks don't render correctly, so I convert to codeblock here itself
@@ -274,7 +271,7 @@ let main = function () {
             articleElement = updateH1Title(articleElement); //adding the h1 title in the Tutorial before the container div and removing it from the articleElement
             articleElement = wrapSectionTag(articleElement); //adding each section within section tag
             articleElement = wrapImgWithFigure(articleElement); //Wrapping images with figure, adding figcaption to all those images that have title in the MD
-            articleElement = addPathToAllRelativeHref(articleElement, selectedTutorial.filename); //adding the path for all HREFs based on the filename in manifest
+            articleElement = addPathToAllRelativeHref(articleElement, tut_fname); //adding the path for all HREFs based on the filename in manifest
             articleElement = setH2Name(articleElement);
             articleElement = makeAnchorLinksWork(articleElement); //if there are links to anchors (for example: #hash-name), this function will enable it work
             articleElement = addTargetBlank(articleElement); //setting target for all ahrefs to _blank
@@ -616,18 +613,29 @@ let main = function () {
             }
         }
     }
-
     let prepareToc = function (manifestFileContent) {
         let h2_regex = new RegExp(/^##\s(.+)*/gm);
         let h2s_list = [];
         let matches;
+        let tut_fname;
+
+        const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
 
         $(manifestFileContent.tutorials).each(function (i, tutorial) {
             let ul;
             let div = document.createElement('div');
             $(div).attr('id', 'toc' + i).addClass('toc');
 
-            $.get(tutorial.filename, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
+            // Modify tut_fname based on the current domain
+            if (tutorial.filename.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
+                tut_fname = "/cdn/" + tutorial.filename.replace(/^\/+/, ""); // Ensure correct path
+            } else if (tutorial.filename.startsWith("/") && currentDomain.includes("apexapps-stage.oracle.com")) {
+                tut_fname = "/livelabs/cdn/" + tutorial.filename.replace(/^\/+/, ""); // Ensure correct path
+            } else {
+                tut_fname = tutorial.filename;
+            }
+
+            $.get(tut_fname, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
                 if (tutorial.filename == 'preview' && markdownContent == "None") {
                     markdownContent = window.localStorage.getItem("mdValue");
                 }
