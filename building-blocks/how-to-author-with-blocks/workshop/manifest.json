@@ -42,19 +42,19 @@
  "tutorials": [  
 
      {
-         "title": "Authoring using Blocks and Tasks",
+         "title": "Author LiveLabs Workshops Using Building Blocks and Tasks",
          "type": "freetier",
          "filename": "/common/building-blocks/how-to-author-with-blocks/how-to-author-with-blocks.md"
+     },
+     {
+         "title": "Create Common Blocks and Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/creating-blocks-tasks.md"
      },
      {
          "title": "Workshop Utilities - Add Users and Data Sets",
          "type": "freetier",
          "filename": "/common/building-blocks/how-to-author-with-blocks/data-sets.md"
-     },
-     {
-         "title": "Creating Blocks and Tasks",
-         "type": "freetier",
-         "filename": "/common/building-blocks/how-to-author-with-blocks/creating-blocks-tasks.md"
      },
      {
          "title": "List of Building Blocks and Tasks",
