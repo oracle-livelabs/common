@@ -26,6 +26,8 @@ The one addition you'll need to make to your markdown is a comment block. This c
 
 **_Important:_** _You must use the exact spelling of the comment block fields names. Pay attention to the `lastUpdated` field where the camel case naming convention is used. If you don't use the exact spelling, your common block or task will not appear in the list of available blocks or tasks._
 
+    **Important:** _You must use the exact spelling of the comment block fields names. Pay attention to the `lastUpdated` field where the camel case convention name is used. If you don't use the exact spelling, your common block or task will not appear in the list of available blocks or tasks._
+
 Example block:
 
 ```
