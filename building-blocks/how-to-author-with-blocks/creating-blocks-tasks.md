@@ -18,8 +18,6 @@ Ensure that have met the pre-requisites covered in the **Author LiveLabs Worksho
 
 ## Task 1: Create your lab's markdown file
 
-    **Important:** _You must use the exact spelling of the comment block fields names. Pay attention to the `lastUpdated` field where the camel case convention name is used. If you don't use the exact spelling, your common block or task will not appear in the list of available blocks or tasks._
-
 Create your workshop as you normally would. Try to keep content generic enough so that it can be used in multiple contexts. And, it may mean using variables instead of hardcoding names. Create the common block or task in the appropriate folder (repo). For example, if you are creating a common task for an ADB workshop, you'll create the common task in the **`common > building-blocks > tasks > adb`** folder.
 
 To create a new folder or file in the your chosen folder such as the adb folder, click the **New File...** or **New Folder...** icons in Visual Studio Code.
