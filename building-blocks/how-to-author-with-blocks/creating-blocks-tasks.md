@@ -104,7 +104,6 @@ After you create (or modify or delete too) new blocks and tasks, regenerate the 
 
     https://oracle-livelabs.github.io/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=how-to-author-with-blocks
 
-
 ## Acknowledgements
 * **Author:**
     * Lauran K. Serhal, Consulting User Assistance Developer
