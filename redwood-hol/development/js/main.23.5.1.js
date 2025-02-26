@@ -199,7 +199,7 @@ let main = function () {
 
 
             // Cause a subtle change in the parent page to trigger Google Translate
-            if (window.parent && window.parent.document) {
+            // if (window.parent && window.parent.document) {
                 let body = window.parent.document.body;
 
                 // Find or create a subtle trigger element
@@ -213,7 +213,8 @@ let main = function () {
 
                 // Toggle text content to force translation detection
                 triggerElement.textContent = triggerElement.textContent === "." ? " " : ".";
-            }
+                console.log(triggerElement);
+            // }
         } catch (e) { };
     });
 
