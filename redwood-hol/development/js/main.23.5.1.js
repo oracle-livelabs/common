@@ -822,7 +822,10 @@ let main = function () {
     let changeTutorial = function (file_name, anchor = "") {
         // parent.location.reload();
         // window.parent.document.body.setAttribute("title", Date.now());
-        window.parent.document.body.classList.add("apex-no-scroll");
+        // Safely modify the parent page’s style
+        if (window.parent && window.parent.document) {
+            window.parent.document.body.style.textShadow = "rgba(0, 0, 0, 0.001) 0px 0px 1px";
+        }
 
         if (anchor !== "") anchor = '#' + anchor;
         location.href = unescape(setParam(window.location.href, queryParam, file_name) + anchor);
