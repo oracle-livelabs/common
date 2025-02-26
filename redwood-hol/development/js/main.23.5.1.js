@@ -196,6 +196,25 @@ let main = function () {
             let position = extendedNav[e.target.location.hash]
             if (position !== undefined)
                 changeTutorial(getMDFileName(selectTutorial(manifest_global, position).filename));
+
+
+            // Cause a subtle change in the parent page to trigger Google Translate
+            if (window.parent && window.parent.document) {
+                let body = window.parent.document.body;
+
+                // Find or create a subtle trigger element
+                let triggerElement = window.parent.document.getElementById("translation-trigger");
+                if (!triggerElement) {
+                    triggerElement = window.parent.document.createElement("span");
+                    triggerElement.id = "translation-trigger";
+                    triggerElement.style.display = "none"; // Keep it invisible
+                    body.appendChild(triggerElement);
+                }
+
+                // Toggle text content to force translation detection
+                triggerElement.textContent = triggerElement.textContent === "." ? " " : ".";
+                console.log(triggerElement);
+            }
         } catch (e) { };
     });
 
@@ -354,6 +373,7 @@ let main = function () {
 
             if (callbackFunc)
                 callbackFunc();
+            
 
         }).fail(function () {
             console.log(selectedTutorial.filename + ' not found! Please check that the file is available in the location provided in the manifest file.');
@@ -815,9 +835,10 @@ let main = function () {
         $('#toc').appendTo(".hol-Nav-list .selected");
         $('.selected div.arrow').click();
     }
-
+    
     /* The following function performs the event that must happen when the lab links in the navigation is clicked */
     let changeTutorial = function (file_name, anchor = "") {
+
         if (anchor !== "") anchor = '#' + anchor;
         location.href = unescape(setParam(window.location.href, queryParam, file_name) + anchor);
     }
