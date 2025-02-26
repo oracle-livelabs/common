@@ -821,7 +821,8 @@ let main = function () {
     /* The following function performs the event that must happen when the lab links in the navigation is clicked */
     let changeTutorial = function (file_name, anchor = "") {
         // parent.location.reload();
-        window.parent.document.body.setAttribute("title", Date.now());
+        // window.parent.document.body.setAttribute("title", Date.now());
+        window.parent.document.body.classList.add("tutorial-updated");
 
         if (anchor !== "") anchor = '#' + anchor;
         location.href = unescape(setParam(window.location.href, queryParam, file_name) + anchor);
