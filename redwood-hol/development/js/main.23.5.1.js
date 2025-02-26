@@ -355,12 +355,6 @@ let main = function () {
 
             if (callbackFunc)
                 callbackFunc();
-
-            if (getParam("reload") == "true") {
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000); // Add a slight delay to ensure content loads before refresh
-            }
             
 
         }).fail(function () {
@@ -826,6 +820,7 @@ let main = function () {
 
     /* The following function performs the event that must happen when the lab links in the navigation is clicked */
     let changeTutorial = function (file_name, anchor = "") {
+        parent.location.reload();
         if (anchor !== "") anchor = '#' + anchor;
         location.href = unescape(setParam(window.location.href, queryParam, file_name) + anchor);
     }
