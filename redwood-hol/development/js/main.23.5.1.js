@@ -243,6 +243,7 @@ let main = function () {
 
         $.get(tut_fname, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
             console.log(tut_fname + " loaded!");
+            console.log("KP Test");
 
             if (selectedTutorial.filename == 'preview' && markdownContent == "None") {
                 markdownContent = window.localStorage.getItem("mdValue");
