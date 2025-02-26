@@ -832,8 +832,12 @@ let main = function () {
             }
             
             triggerElement.textContent = new Date().getTime(); // Change the text to force re-translation
+            console.log("Translation triggered at:", triggerElement.textContent); // Debugging log
+        } else {
+            console.warn("Parent window or document not accessible.");
         }
     };
+    
     
     /* The following function performs the event that must happen when the lab links in the navigation is clicked */
     let changeTutorial = function (file_name, anchor = "") {
