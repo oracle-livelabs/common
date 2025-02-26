@@ -199,7 +199,7 @@ let main = function () {
 
 
             // Cause a subtle change in the parent page to trigger Google Translate
-            // if (window.parent && window.parent.document) {
+            if (window.parent && window.parent.document) {
                 let body = window.parent.document.body;
 
                 // Find or create a subtle trigger element
@@ -214,7 +214,7 @@ let main = function () {
                 // Toggle text content to force translation detection
                 triggerElement.textContent = triggerElement.textContent === "." ? " " : ".";
                 console.log(triggerElement);
-            // }
+            }
         } catch (e) { };
     });
 
@@ -837,41 +837,11 @@ let main = function () {
         $('.selected div.arrow').click();
     }
     
-    // let triggerTranslation = function () {
-    //     if (window.parent && window.parent.document) {
-    //         let body = window.parent.document.body;
-            
-    //         // Add a hidden character to an element that Chrome might watch
-    //         let triggerElement = window.parent.document.getElementById("translation-trigger");
-    //         if (!triggerElement) {
-    //             triggerElement = window.parent.document.createElement("span");
-    //             triggerElement.id = "translation-trigger";
-    //             triggerElement.style.display = "none";
-    //             body.appendChild(triggerElement);
-    //         }
-            
-    //         triggerElement.textContent = new Date().getTime(); // Change the text to force re-translation
-    //         console.log("Translation triggered at:", triggerElement.textContent); // Debugging log
-    //     } else {
-    //         console.warn("Parent window or document not accessible.");
-    //     }
-    // };
-    
-    
     /* The following function performs the event that must happen when the lab links in the navigation is clicked */
     let changeTutorial = function (file_name, anchor = "") {
 
         if (anchor !== "") anchor = '#' + anchor;
         location.href = unescape(setParam(window.location.href, queryParam, file_name) + anchor);
-
-
-        // parent.location.reload();
-        // window.parent.document.body.setAttribute("title", Date.now());
-        // Safely modify the parent page’s style
-        // if (window.parent && window.parent.document) {
-        //     window.parent.document.body.style.textShadow = "rgba(0, 0, 0, 0.001) 0px 0px 1px";
-        // }
-        // triggerTranslation();
     }
 
     /*the following function changes the path of images as per the path of the MD file.
