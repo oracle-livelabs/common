@@ -356,6 +356,13 @@ let main = function () {
             if (callbackFunc)
                 callbackFunc();
 
+            if (getParam("reload") == "true") {
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000); // Add a slight delay to ensure content loads before refresh
+            }
+            
+
         }).fail(function () {
             console.log(selectedTutorial.filename + ' not found! Please check that the file is available in the location provided in the manifest file.');
         });
