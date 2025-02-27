@@ -93,26 +93,17 @@ Let's take a look at the markdown for a Provisioning an Autonomous Database comm
 
 ![provision-console common block](images/provision-console.png " ")
 
-**The following is the markdown specific to this common block.**
+_The following is the markdown that is specific to this common block. We simply provided a title for the two tasks and then referenced the two existing common tasks._
 
-```md
-Let's create an ADB instance.
-
-&num;# Task 1: Choose Autonomous Database from the services menu
-[]&lpar;include:adb-goto-service-body.md)
-
-&num;# Task 2: Create the Autonomous Database instance
-[]&lpar;include:adb-provision-console-body.md)
-
-```
+![Common tasks reference](images/common-tasks-reference.png =65%x*)
 
 >**Note:** When you reference a common task, in addition to its name, you must include in a prefix to the repository in which the task exists, **`adb`** in this example.
 
 As you can see, the markdown for this block is pretty simple. It includes two common Tasks:
 
-1. **Choose Autonomous Database from the services menu**
+1. **Task 1: Choose Autonomous Database from the services menu**
 
-2. **Create the Autonomous Database instance**
+2. **Task 2: Create the Autonomous Database instance**
 
 It may be that the format of this Block does not meet your workshop requirements. No problem. Your workshop markdown can use these Tasks in a similar way to the Building Block. Simply include the Task within your markdown.
 
@@ -121,9 +112,11 @@ It may be that the format of this Block does not meet your workshop requirements
 Let's create an ADB instance.
 
 ### Task 1: Choose Autonomous Database from the services menu
+
 [](include:adb-goto-service-body.md)
 
 ### Task 2: Create the Autonomous Database instance
+
 [](include:adb-provision-body.md)
 
 ## Task 4: The workshop manifest and variables files
