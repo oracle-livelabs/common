@@ -102,9 +102,9 @@ let main = function () {
                     }
 
                     // Modify include_fname based on the current domain
-                    if (selectedTutorial.filename.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
+                    if (include_fname.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
                         include_fname = "/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
-                    } else if (selectedTutorial.filename.startsWith("/") && currentDomain.includes("apexapps-stage.oracle.com")) {
+                    } else if (include_fname.startsWith("/") && currentDomain.includes("apexapps-stage.oracle.com")) {
                         include_fname = "/livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
                     }
 
