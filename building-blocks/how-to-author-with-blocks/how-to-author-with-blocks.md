@@ -125,7 +125,7 @@ Let's create an ADB instance.
 
 Workshops have different requirements. Database names, OCPUs and other options may differ. LiveLabs uses variables to allow authors to update content. It may be that you need to make updates to the Task in order to make it more flexible; please share any required updates with the LiveLabs team.
 
-The master list of all variables used in Blocks are stored in the [/common/building-blocks/variables/variables.json](../variables/variables.json) file. 
+The master list of all variables used in Blocks are stored in the [/common/building-blocks/variables/variables.json](../variables/variables.json) file.
 
 ![Variables file](images/variables-file.png =55%x*)
 
