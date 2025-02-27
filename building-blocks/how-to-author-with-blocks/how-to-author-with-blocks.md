@@ -20,18 +20,20 @@ As a LiveLabs workshop author, there are two types of components you may want to
 
 >**Note:** Both Building **Blocks** and **Tasks** are located in the **`common`** repository; therefore, in this workshop we will refer to Building Blocks and Tasks as **`common`** **blocks** and **tasks** interchangeably.
 
-As an example, let's say all of your ADB workshops have a Setup Lab that shows how to navigate to the Oracle Database service and then how to provision a new ADB instance. If you don't use Building Blocks and Tasks, you'll have to create or use the same .md file in _all_ of your ADB workshops. If you need to make changes to the lab and tasks, you'll need to make the changes in every lab and task in every ADB workshop.
+As an example, let's say all of your ADB LiveLabs workshops will have a Setup Lab that shows how to navigate to the Oracle Database service and then how to provision a new ADB instance. If you don't use Building Blocks and Tasks, you'll have to create or use the same .md file in _all_ of your ADB workshops. If you need to make any changes to the lab and tasks, _you'll need to make the changes in every lab and task in every ADB workshop._
 
-If you use Building Blocks and Tasks, you can create the Building Block and Tasks only once and then reference them in every workshop that uses them. If you need to make changes in the future, you only make the changes to the Building Block and Tasks once. _Any workshop that references the Building Block and Tasks_ will automatically reflect the new changes. That is Reusability!
+On the other hand, if you use Building Blocks and Tasks, you can create the Building Block and Tasks only once and then only _reference them_ in every workshop that uses them. If you need to make changes in the future, you only make the changes to the Building Block and Tasks once. _Any workshop that references the Building Block and Tasks_ will automatically reflect the new changes. That is Reusability with minimum effort!
 
 Let's examine these two concepts and how they map to your workshop development. Just as a _lab_ in your workshop is comprised of _multiple tasks_, a _Block_ is comprised of _multiple Tasks_.
 
-For example, we have a **provision-console.md** _common block_ which uses _two common tasks_:
+For example, we have a **provision-console.md** _common block_ which uses the following _two common tasks_:
 
 * **goto-service-body.md:** Selects the ADB Service from the OCI navigation menu
 * **provision-console-body.md:** Creates the ADB instance
 
 ![Blocks and Tasks](images/lab-to-block-diagram.png " ")
+
+>**Note:** Notice that the reference to the two common tasks also requires that you specify the repo in which they were created, **adb** in this example.
 
 In this case, there is a **Building Block** that directly maps to this **lab**. You can simply take this Building Block, add it to your workshop's `manifest.json` file, update the LiveLab variables if needed (the database name, # CPUs, and so on) to match your lab's requirements, and your done! In the future, when you make updates to ADB provisioning, your lab will update automatically when the Building Block is updated.
 
@@ -104,11 +106,13 @@ Let's create an ADB instance.
 
 ```
 
+>**Note:** When you reference a common task, in addition to its name, you must include in a prefix to the repository in which the task exists, **`adb`** in this example.
+
 As you can see, the markdown for this block is pretty simple. It includes two common Tasks:
 
-1. Go to the service, and
+1. **Choose Autonomous Database from the services menu**
 
-2. Provision an ADB instance using the Console.
+2. **Create the Autonomous Database instance**
 
 It may be that the format of this Block does not meet your workshop requirements. No problem. Your workshop markdown can use these Tasks in a similar way to the Building Block. Simply include the Task within your markdown.
 
@@ -128,7 +132,11 @@ Let's create an ADB instance.
 
 Workshops have different requirements. Database names, OCPUs and other options may differ. LiveLabs uses variables to allow authors to update content. It may be that you need to make updates to the Task in order to make it more flexible; please share any required updates with the LiveLabs team.
 
-The master list of all variables used in Blocks are stored in the [/building-blocks/variables/variables.json](../variables/variables.json) file. Copy this variables.json file to your own workshop directory if the default variable values need changing:
+The master list of all variables used in Blocks are stored in the [/common/building-blocks/variables/variables.json](../variables/variables.json) file. 
+
+![Variables file](images/variables-file.png =55%x*)
+
+Copy this **`variables.json`** file to your own workshop directory if you need to change the default variable values for your workshop.
 
 variables.json
 ```
