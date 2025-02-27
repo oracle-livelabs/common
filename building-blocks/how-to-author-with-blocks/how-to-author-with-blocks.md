@@ -146,7 +146,7 @@ variables.json
 
 ### The manifest.json file
 
-The manifest.json file describes the content of your workshop. It also contains references that will be used in your markdown. These references include:
+The **`manifest.json`** file describes the content of your workshop. It also contains references that will be used in your markdown. These references include:
 
 * ```include```: these are markdown files that will be referenced. Tasks (or Blocks) will be listed here
 * ```variables```: these are the variables that will be referenced in your markdown

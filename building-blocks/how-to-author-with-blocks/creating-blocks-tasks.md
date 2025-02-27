@@ -18,7 +18,9 @@ Let's review the process of creating and using building blocks at high level bef
 
 ### Prerequisites
 
-Ensure that have met the pre-requisites covered in the **Author LiveLabs Workshops with Building (Common) Blocks and Tasks lab > Task 2: Pre-requisites to Using Building Blocks and Tasks**.
+Ensure that you have met the pre-requisites covered in the **Author LiveLabs Workshops with Building (Common) Blocks and Tasks lab > Task 2: Pre-requisites to Using Building Blocks and Tasks**.
+
+[Ensure that you have met the pre-requisites covered in the following lab and task.](how-to-author-with-blocks.md#task2-prerequisites-to-using-building-blocks-and-tasks)
 
 ## Task 1: Create a building block
 
@@ -28,17 +30,17 @@ Create your workshop as you normally would. Try to keep content generic enough s
 
     ![Create a new common block or task](images/create-file-folder-icon-vsc.png " ")
 
-2. In our example, we will create a new common block named **`provision-data-sharing-lake-block.md`** in an existing folder named **provision**. This folder will eventually contain different variations of the the provisioning block.
+2. In our example, we will create a new common block named **`provision-data-sharing-lake-block.md`** in an existing folder named **provision**. This folder will eventually contain different variations of the the provisioning block. We will reference this new building block in several LiveLabs workshops. To create a new file in the current directory, click the **New File...** icon, and then enter the file's name and extension.
 
     ![Create the common block in the provision folder](images/create-common-block.png =50%x*)
 
-3. Add the required comment block at the beginning of the new `.md` file. This comment block provides a name, description, author, and last updated fields for your block or task. **The documentation's master list of building blocks and tasks that is listed in this workshop is derived from these comment blocks**.
+3. Add the required comment block at the beginning of the new `.md` file. This comment block provides a name, description, author, and last updated fields for your block or task. The LiveLabs Building Blocks documentation's (this workshop) master list of building blocks and tasks is derived from the comment blocks.
 
     ![Add the comment block to the .md file](images/comment-block.png " ")
 
     **_Important:_** _You must use the exact spelling of the comment block fields names. Pay attention to the **`lastUpdated`** field where the camel case naming convention is used. If you don't use the exact spelling, your common block or task will not appear in the list of available blocks or tasks._
 
-    The information that you provide in the comment block will be displayed in this **LiveLabs Building Blocks** workshop in the **List of Building Blocks and Tasks** lab under **List of Building Blocks**.
+    The information that you provide in the building block comment block will be displayed in this **LiveLabs Building Blocks** workshop in the **List of Building Blocks and Tasks** lab under **List of Building Blocks**.
 
     ![List of building blocks](images/list-building-blocks.png " ")
 
