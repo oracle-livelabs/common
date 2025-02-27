@@ -12,53 +12,70 @@ Very frequently, a lab has tasks that are very generic. For example, Navigating 
 
 Don't forget to use tasks when creating your block :).
 
+Let's review the process of creating and using building blocks at high level before we delve into the details.
+
+  ![Building Blocks and Tasks overview](images/building-blocks-overview-diagram.png " ")
+
 ### Prerequisites
 
 Ensure that have met the pre-requisites covered in the **Author LiveLabs Workshops with Building (Common) Blocks and Tasks lab > Task 2: Pre-requisites to Using Building Blocks and Tasks**.
 
-## Task 1: Create your lab's markdown file
+## Task 1: Create a building block
 
-Create your workshop as you normally would. Try to keep content generic enough so that it can be used in multiple contexts. And, it may mean using variables instead of hardcoding names. Create the common block or task in the appropriate folder (repo). For example, if you are creating a common task for an ADB workshop, you'll create the common task in the **`common > building-blocks > tasks > adb`** folder.
+Create your workshop as you normally would. Try to keep content generic enough so that it can be used in multiple contexts. And, it may mean using variables instead of hardcoding names. Create the common block in the appropriate folder (repo). For example, if you are creating a common block for an ADB workshop, you'll create the common block in the **`common > building-blocks > blocks > adb`** folder.
 
-To create a new folder or file in the your chosen folder such as the adb folder, click the **New File...** or **New Folder...** icons in Visual Studio Code.
+1. To create a new folder or file for your building block in the your chosen folder such as the adb folder, click the **New File...** or the **New Folder...** icons in Visual Studio Code.
 
-![Create a new common block or task](images/create-file-folder-icon-vsc.png " ")
+    ![Create a new common block or task](images/create-file-folder-icon-vsc.png " ")
 
-In our example, we will create the new common block in a folder named **provision**.
+2. In our example, we will create a new common block named **`provision-data-sharing-lake-block.md`** in an existing folder named **provision**. This folder will eventually contain different variations of the the provisioning block.
 
-![Create the common block in the provision folder](images/create-common-block.png =50%x*)
+    ![Create the common block in the provision folder](images/create-common-block.png =50%x*)
 
-## Task 2: Add the required comment block to your markdown file
+3. Add the required comment block at the beginning of the new `.md` file. This comment block provides a name, description, author, and last updated fields for your block or task. **The documentation's master list of building blocks and tasks that is listed in this workshop is derived from these comment blocks**.
 
-The one addition you'll need to make to your markdown is a comment block at the beginning of the file. This comment block provides a name, description, author, and last updated fields for your block or task. **The documentation's master list of blocks and tasks in listed in this workshop is derived from these comment blocks**.
+    ![Add the comment block to the .md file](images/comment-block.png " ")
 
-![Add the comment block to the .md file](images/comment-block.png " ")
+    **_Important:_** _You must use the exact spelling of the comment block fields names. Pay attention to the **`lastUpdated`** field where the camel case naming convention is used. If you don't use the exact spelling, your common block or task will not appear in the list of available blocks or tasks._
 
-**_Important:_** _You must use the exact spelling of the comment block fields names. Pay attention to the **`lastUpdated`** field where the camel case naming convention is used. If you don't use the exact spelling, your common block or task will not appear in the list of available blocks or tasks._
+    The information that you provide in the comment block will be displayed in this **LiveLabs Building Blocks** workshop in the **List of Building Blocks and Tasks** lab under **List of Building Blocks**.
 
-## Task 3: Enter the content of the building block
+    ![List of building blocks](images/list-building-blocks.png " ")
 
-1. Enter the remaining content of the building block. Here's the complete building block. Notice that this building block uses two common tasks! We will cover how to create and use common tasks a little bit later.
+4. Enter the remaining content for the building block. Here's the complete building block. Notice that this building block uses two common tasks! We will cover how to create and use common tasks later.
 
     ![The complete building block](images/completed-building-block-example.png =75%x*)
 
-2. Save your markdown file to the appropriate repo folder (block or task) under the **building-blocks** root folder to which you already navigated. Each cloud service has its own folder in either the blocks or tasks parent folder. If your cloud service's folder doesn't exist yet, then simply add a new folder. In this example, we created the building block in the using the following path: 
+5. Save your building block's `.md` file to the appropriate repo folder under the **building-blocks** root folder to which you already navigated. Each cloud service has its own folder in either the blocks or tasks parent folder. If your cloud service's folder doesn't exist yet, then simply add a new folder.
 
-C:\Users\LSERHAL\Documents\livelabs-clones\common\building-blocks\blocks\adb\provision\provision-data-sharing-lake-block.md 
+    ```
+    common
+    .. building-blocks
+    .... blocks
+    ........adb
+    ........oac
+    ........oml
+    .... tasks
+    ........adb
+    ........iam
+    ........oml
+    ```
 
-```
-adb
-.. building-blocks
-.... blocks
-........adb
-........oac
-.... tasks
-........adb
-........iam
+6. Preview the newly created building block using Live Server and make any necessary changes.
 
-```
+## Task 2: Use building blocks in other workshops
 
-## Task 4: Regenerate the documentation
+To use the building block in other workshops, simply add a reference to the building block in the workshop's `manifest.json` file as follows:
+
+![Common block reference](images/common-block-reference.png " ")
+
+In the above example, you simply add an entry for the common block in the workshop's manifest.json file. The **filename** attribute points to the exact location of this common block in the common repo. That's all you need to do to use a common block!
+
+Here's a complete example of the workshop that uses this common block and another common block named cleanup.md.
+
+![Building blocks example](images/use-common-blocks.png " ")
+
+## Task 3: Regenerate the documentation
 
 After you create (or modify or delete too) new blocks and tasks, regenerate the documentation by running the **generate-documentation.py** python script found in the `/common/building-blocks/scripts` folder. This script generates much of the how-to-author-with-blocks documentation.
 
@@ -88,7 +105,7 @@ After you create (or modify or delete too) new blocks and tasks, regenerate the 
     * `how-to-author-with-blocks.md`
     * `manifest.json`
 
-## Task 5: Push your changes to your fork and production
+## Task 4: Push your changes to your fork and production
 
 1. Push your changes to the common repo to your fork. In this example, we are using GitHub Desktop.
 
@@ -104,12 +121,10 @@ After you create (or modify or delete too) new blocks and tasks, regenerate the 
 
     https://oracle-livelabs.github.io/common/building-blocks/how-to-author-with-blocks/workshop/index.html?lab=how-to-author-with-blocks
 
-4. 
-
 ## Acknowledgements
-* **Author:**
+* **Authors:**
     * Lauran K. Serhal, Consulting User Assistance Developer
-* **Contributors:**
     * Marty Gubar, Product Manager
+* **Contributor:**
     * Kevin Lazarz, Senior Manager, Product Management
 * **Last Updated By/Date:** Lauran K. Serhal, March 2025

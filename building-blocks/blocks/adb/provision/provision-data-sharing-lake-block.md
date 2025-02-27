@@ -3,7 +3,7 @@
         "name":"Provision an ADB instance for the Data Sharing and Data Lake workshops",
         "description":"Learn how to provision Autonomous Database using the OCI console.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "lastUpdated":"Lauran K. Serhal, March 2025"
+        "lastUpdated":"Lauran K. Serhal, February 2025"
     }
 -->
 
