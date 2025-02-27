@@ -91,7 +91,7 @@ let main = function () {
                 }
 
                 const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
-                // console.log("Current domain:", currentDomain);
+                console.log("Current domain:", currentDomain);
 
                 // Added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
                 for (let short_name in manifestFile.include) {
@@ -102,13 +102,13 @@ let main = function () {
                     }
 
                     // Modify include_fname based on the current domain
-                    if (currentDomain.includes("livelabs.oracle.com")) {
+                    if (include_fname.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
                         include_fname = "/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
-                    } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
+                    } else if (include_fname.startsWith("/") && currentDomain.includes("apexapps-stage.oracle.com")) {
                         include_fname = "/livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
                     }
 
-                    // console.log("Fetching:", include_fname);
+                    console.log("Fetching:", include_fname);
 
                     $.get(include_fname, function (included_file_content) {
                         manifestFile.include[short_name] = {
@@ -196,6 +196,26 @@ let main = function () {
             let position = extendedNav[e.target.location.hash]
             if (position !== undefined)
                 changeTutorial(getMDFileName(selectTutorial(manifest_global, position).filename));
+
+            setTimeout(function () {
+                // Cause a subtle change in the parent page to trigger Google Translate
+                if (window.parent && window.parent.document) {
+                    let body = window.parent.document.body;
+            
+                    // Find or create a subtle trigger element
+                    let triggerElement = window.parent.document.getElementById("translation-trigger");
+                    if (!triggerElement) {
+                        triggerElement = window.parent.document.createElement("span");
+                        triggerElement.id = "translation-trigger";
+                        triggerElement.style.display = "none"; // Keep it invisible
+                        body.appendChild(triggerElement);
+                    }
+            
+                    // Toggle text content to force translation detection
+                    triggerElement.textContent = triggerElement.textContent === "." ? " " : ".";
+                    console.log("Translation trigger updated:", triggerElement);
+                }
+            }, 500); // Adjust delay as needed (500ms is usually a good balance)
         } catch (e) { };
     });
 
@@ -230,6 +250,7 @@ let main = function () {
         let tut_fname;
 
         const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+        console.log("Current domain:", currentDomain);
 
         // Modify tut_fname based on the current domain
         if (selectedTutorial.filename.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
@@ -241,7 +262,7 @@ let main = function () {
         }
 
         $.get(tut_fname, function (markdownContent) { //reading MD file in the manifest and storing content in markdownContent variable
-            console.log(selectedTutorial.filename + " loaded!");
+            console.log(tut_fname + " loaded!");
 
             if (selectedTutorial.filename == 'preview' && markdownContent == "None") {
                 markdownContent = window.localStorage.getItem("mdValue");
@@ -353,6 +374,7 @@ let main = function () {
 
             if (callbackFunc)
                 callbackFunc();
+            
 
         }).fail(function () {
             console.log(selectedTutorial.filename + ' not found! Please check that the file is available in the location provided in the manifest file.');
@@ -814,9 +836,10 @@ let main = function () {
         $('#toc').appendTo(".hol-Nav-list .selected");
         $('.selected div.arrow').click();
     }
-
+    
     /* The following function performs the event that must happen when the lab links in the navigation is clicked */
     let changeTutorial = function (file_name, anchor = "") {
+
         if (anchor !== "") anchor = '#' + anchor;
         location.href = unescape(setParam(window.location.href, queryParam, file_name) + anchor);
     }
