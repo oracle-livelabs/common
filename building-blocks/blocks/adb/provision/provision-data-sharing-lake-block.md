@@ -54,7 +54,7 @@ You may now **proceed to the next lab**.
 
 - **Author:** Lauran K. Serhal, Consulting User Assistance Developer
 - **Last Updated By/Date:** Lauran K. Serhal, March 2025
-_**Built with Building Blocks**_
+- **Built with Building Blocks**_
 
 Data about movies in this workshop were sourced from Wikipedia.
 
