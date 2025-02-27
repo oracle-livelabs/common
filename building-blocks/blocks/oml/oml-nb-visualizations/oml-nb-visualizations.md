@@ -7,10 +7,6 @@ This lab walks you through the steps to visualize your data by using the rich vi
 
 Estimated Time: 15 minutes
 
-### About Visualization in Oracle Machine Learning Notebooks
-
-Oracle Machine Learning Notebooks offer rich visualization capabilities of your data. The visualizations depend on the type of your dataset. 
-
 ### Objectives
 
 In this lab, you will learn how to visualize your data in:

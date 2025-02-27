@@ -460,11 +460,7 @@ To visualize your data, let's consider the _Test Notebook_ that you created in *
 
 	For details about the Iris dataset visualization, and all the other visualization options, settings, and customizations, [Lab 3: Visualize Data in Oracle Machine Learning Notebooks](https://oracle-livelabs.github.io/oml/oml/workshops/freetier/index.html?lab=oml-nb-visualizations) in the workshop _Introduction to Oracle Machine Learning Notebooks_ in the workshop _Introduction to Oracle Machine Learning Notebooks._
 
-This completes the task of visualizing your data in a box plot in a notebook. 
-
-To learn about the advanced options available in Oracle Machine Learning Notebooks, see [Lab 6: Advanced Options in Oracle Machine Learning Notebooks](https://oracle-livelabs.github.io/oml/oml/workshops/freetier/index.html?lab=adv-notebooks-options) in the workshop _Introduction to Oracle Machine Learning Notebooks_.
-
-You may now **proceed to the next lab**.
+This completes the task of visualizing your data in a notebook. You may now **proceed to the next lab**.
 
 ## Learn More
 
