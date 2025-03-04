@@ -2,7 +2,11 @@
 
 ## Introduction
 
-Oracle Machine Learning Notebooks offer rich visualization capabilities of your data. The visualizations depend on the type of your dataset. This lab walks you through the steps to visualize your data by using the rich visualization features available in Oracle Machine Learning Notebooks.
+This lab walks you through the steps to visualize your data by using the rich visualization features available in Oracle Machine Learning Notebooks.
+
+### About Visualizations in Oracle Machine Learning Notebooks
+
+Oracle Machine Learning Notebooks offer rich visualization capabilities of your data. The visualizations depend on the type of your dataset. 
 
 Estimated Time: 15 minutes
 
@@ -462,4 +466,4 @@ A box plot provides an overview of data distributions in numeric data. It provid
 
 * **Author** -  Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, November 2024
+* **Last Updated By/Date** - Moitreyee Hazarika, February 2025
