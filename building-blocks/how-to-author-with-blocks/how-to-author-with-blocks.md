@@ -86,7 +86,7 @@ You need to _enable_ your _common_ fork so that you can preview your changes on 
 
 ## Task 3: How common blocks use common tasks
 
-Let's take a look at the markdown for a Provisioning an Autonomous Database common block named **`provision-console.md`** that uses two common tasks:
+Let's take a look at the markdown for a Provisioning an Autonomous Database common block named **`provision-console.md`** that uses two common tasks that we already created:
 
 * **`goto-service-body.md`**
 * **`provision-console-body.md`**
@@ -105,7 +105,7 @@ As you can see, the markdown for this block is pretty simple. It includes two co
 
 2. **Task 2: Create the Autonomous Database instance**
 
-It may be that the format of this Block does not meet your workshop requirements. No problem. Your workshop markdown can use these Tasks in a similar way to the Building Block. Simply include the Task within your markdown.
+It may be that the format of this Block does not meet your workshop requirements. No problem. Your workshop markdown can use these Tasks in a similar way to the Building Block. Simply include the Task within your markdown. You will learn how to create and use common task soon!
 
 **The above markdown is rendered as follows:**
 
