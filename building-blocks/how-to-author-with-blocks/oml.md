@@ -134,6 +134,28 @@
 ## Sign into Oracle Machine Learning UI
 **Markdown file location:**
 ```
+/common/building-blocks/tasks/oml/sign-into-oml-livelabs.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "oml-sign-into-oml-livelabs.md":"/common/building-blocks/tasks/oml/sign-into-oml-livelabs.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:oml-sign-into-oml-livelabs.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:oml-sign-into-oml-livelabs.md)
+ 
+## Sign into Oracle Machine Learning UI
+**Markdown file location:**
+```
 /common/building-blocks/tasks/oml/sign-into-oml.md
 ```
 
