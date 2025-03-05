@@ -30,6 +30,7 @@
      "oml-nb-visualizations.md":"/common/building-blocks/tasks/oml/nb-visualizations.md",
      "oml-notebook-features.md":"/common/building-blocks/tasks/oml/notebook-features.md",
      "oml-prov-an-adb.md":"/common/building-blocks/tasks/oml/prov-an-adb.md",
+     "oml-sign-into-oml-livelabs.md":"/common/building-blocks/tasks/oml/sign-into-oml-livelabs.md",
      "oml-sign-into-oml.md":"/common/building-blocks/tasks/oml/sign-into-oml.md",
      "oml-use-md-interpreter.md":"/common/building-blocks/tasks/oml/use-md-interpreter.md",
      "oml-use-plsql-interpreter.md":"/common/building-blocks/tasks/oml/use-plsql-interpreter.md",
@@ -116,7 +117,7 @@
          "filename": "/common/building-blocks/blocks/oml/oml-nb-visualizations/oml-nb-visualizations.md"
      },
      {
-         "title": "[oml] Introduction to Oracle Machine Learning Notebooks",
+         "title": "[oml] Create and Run Notebooks in Oracle Machine Learning User Interface",
          "type": "freetier",
          "filename": "/common/building-blocks/blocks/oml/oml-notebooks-ea/oml-notebooks-ea.md"
      }
