@@ -862,7 +862,6 @@ let main = function () {
     This ensures that the images are picked up from the same location as the MD file.
     The manifest file can be in any location.*/
     let addPathToImageSrc = function (markdownContent, myUrl) {
-        console.log(myUrl);
         let imagesRegExp = new RegExp(/!\[.*?\]\((.*?)\)/g);
         let contentToReplace = []; // content that needs to be replaced
         let matches;
@@ -880,11 +879,25 @@ let main = function () {
 
             // if (myUrl.indexOf("/") !== 1) {
             matches[1] = matches[1].split(' ')[0];
-            if (matches[1].indexOf("http") === -1 && matches[1][0] !== "/") {
+            if (matches[1].indexOf("http") === -1) { 
+                let newPath = matches[1].trim();
+    
+                if (newPath.startsWith("/")) {
+                    // Modify absolute paths based on currentDomain
+                    if (currentDomain.includes("livelabs.oracle.com")) {
+                        newPath = "/cdn/" + newPath.replace(/^\/+/, ""); 
+                    } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
+                        newPath = "/livelabs/cdn/" + newPath.replace(/^\/+/, "");
+                    }
+                } else {
+                    // Modify relative paths to be based on myUrl
+                    newPath = myUrl + newPath;
+                }
+                console.log(newPath);
+    
                 contentToReplace.push({
                     "replace": '(' + matches[1],
-                    /* "with": '(' + myUrl + matches[1] TMM: changed 10/6/20*/
-                    "with": '(' + myUrl + matches[1].trim()
+                    "with": '(' + newPath
                 });
             }
             // }
