@@ -35,6 +35,9 @@ let main = function () {
     let manifestFileName = "manifest.json";
     let expandText = "Expand All Tasks";
     let collapseText = "Collapse All Tasks";
+    const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+    console.log("Current domain:", currentDomain);
+
     const copyButtonText = "Copy";
     const queryParam = "lab";
     const utmParams = [
@@ -90,8 +93,8 @@ let main = function () {
                     });
                 }
 
-                const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
-                console.log("Current domain:", currentDomain);
+                // const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+                // console.log("Current domain:", currentDomain);
 
                 // Added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
                 for (let short_name in manifestFile.include) {
@@ -127,7 +130,18 @@ let main = function () {
                         manifestFile['variables'] = Array(manifestFile.variables);
                     }
                     $(manifestFile.variables).each(function (_, i) {
-                        $.getJSON(i, function (variables) {
+                        let include_fname = i;
+                        console.log("Variables:" , include_fname);
+
+                        // Modify include_fname based on the current domain
+                        if (include_fname.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
+                            include_fname = "/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
+                        } else if (include_fname.startsWith("/") && currentDomain.includes("apexapps-stage.oracle.com")) {
+                            include_fname = "/livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
+                        }
+                        console.log("Variables:" , include_fname);
+
+                        $.getJSON(include_fname, function (variables) {
                             if (!manifestFile['variable_values']) {
                                 manifestFile['variable_values'] = {};
                             }
@@ -249,8 +263,8 @@ let main = function () {
     let loadTutorial = function (articleElement, selectedTutorial, manifestFileContent, callbackFunc = null) {
         let tut_fname;
 
-        const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
-        console.log("Current domain:", currentDomain);
+        // const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+        // console.log("Current domain:", currentDomain);
 
         // Modify tut_fname based on the current domain
         if (selectedTutorial.filename.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
@@ -641,7 +655,7 @@ let main = function () {
         let matches;
         let tut_fname;
 
-        const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+        // const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
 
         $(manifestFileContent.tutorials).each(function (i, tutorial) {
             let ul;
