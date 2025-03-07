@@ -871,6 +871,7 @@ let main = function () {
 
         do {
             matches = imagesRegExp.exec(markdownContent);
+            // console.log(matches);
             if (matches === null) {
                 $(contentToReplace).each(function (index, value) {
                     markdownContent = markdownContent.replace(value.replace, value.with);
@@ -886,6 +887,27 @@ let main = function () {
                     /* "with": '(' + myUrl + matches[1] TMM: changed 10/6/20*/
                     "with": '(' + myUrl + matches[1].trim()
                 });
+            }
+
+            if (["livelabs.oracle.com", "apexapps-stage.oracle.com", "127.0.0.1:5500"].some(domain => currentDomain.includes(domain))) {
+                let origImg = matches[1].trim();
+                let replaceImg = origImg; // Default to the original path
+            
+                if (origImg.startsWith("/")) {
+                    if (currentDomain.includes("livelabs.oracle.com")) {
+                        replaceImg = "/cdn" + origImg;
+                    } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
+                        replaceImg = "/livelabs/cdn" + origImg;
+                    }
+                    // console.log(`(${origImg}`);
+                    // console.log(`(${replaceImg}`);
+                
+                    contentToReplace.push({
+                        replace: `(${origImg}`,
+                        with: `(${replaceImg}`
+                    });
+                }
+
             }
             // }
         } while (matches);
