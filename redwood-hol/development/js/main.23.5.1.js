@@ -862,38 +862,47 @@ let main = function () {
   /*the following function changes the path of images as per the path of the MD file.
     This ensures that the images are picked up from the same location as the MD file.
     The manifest file can be in any location.*/
-    let addPathToImageSrc = function (markdownContent, myUrl) {
-    let imagesRegExp = /!\[.*?\]\((.*?)\)/g;
-    let contentToReplace = [];
-
-    myUrl = myUrl.substring(0, myUrl.lastIndexOf('/') + 1); // Removing filename from the URL
-
-    let matches;
-    while ((matches = imagesRegExp.exec(markdownContent)) !== null) {
-        let imagePath = matches[1].split(' ')[0].trim(); // Extract image path
-
-        if (!imagePath.startsWith("http")) {
-            let newPath = imagePath;
-
-            if (imagePath.startsWith("/")) {
-                // Modify absolute paths only for specific domains
-                if (currentDomain.includes("livelabs.oracle.com")) {
-                    newPath = "/cdn/" + imagePath.replace(/^\/+/, "");
-                } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
-                    newPath = "/livelabs/cdn/" + imagePath.replace(/^\/+/, "");
+    let addPathToImageSrc = function (markdownContent, myUrl, currentDomain) {
+        let imagesRegExp = /!\[.*?\]\((.*?)\)/g;
+        let contentToReplace = [];
+    
+        myUrl = myUrl.substring(0, myUrl.lastIndexOf('/') + 1); // Removing filename from the URL
+    
+        let matches;
+        while ((matches = imagesRegExp.exec(markdownContent)) !== null) {
+            let imagePath = matches[1].split(' ')[0].trim(); // Extract image path
+    
+            if (!imagePath.startsWith("http")) {
+                let newPath = imagePath;
+    
+                if (imagePath.startsWith("/")) {
+                    // Modify absolute paths only for specific domains, but ensure it's only applied once
+                    if (currentDomain.includes("livelabs.oracle.com") && !imagePath.startsWith("/cdn/")) {
+                        newPath = "/cdn/" + imagePath.replace(/^\/+/, "");
+                    } else if (currentDomain.includes("apexapps-stage.oracle.com") && !imagePath.startsWith("/livelabs/cdn/")) {
+                        newPath = "/livelabs/cdn/" + imagePath.replace(/^\/+/, "");
+                    }
+                    // Else, keep absolute paths unchanged
+                } else {
+                    // Modify relative paths based on myUrl
+                    newPath = myUrl + imagePath;
                 }
-                // Else, keep absolute paths unchanged
-            } else {
-                // Modify relative paths based on myUrl
-                newPath = myUrl + imagePath;
+    
+                contentToReplace.push({
+                    replace: `(${imagePath}`,
+                    with: `(${newPath}`
+                });
             }
-
-            contentToReplace.push({
-                replace: `(${imagePath}`,
-                with: `(${newPath}`
-            });
         }
-    }
+    
+        // Apply all replacements
+        contentToReplace.forEach(({ replace, with: replacement }) => {
+            markdownContent = markdownContent.replace(replace, replacement);
+        });
+    
+        return markdownContent;
+    };
+    
 
     // Apply all replacements
     contentToReplace.forEach(({ replace, with: replacement }) => {
