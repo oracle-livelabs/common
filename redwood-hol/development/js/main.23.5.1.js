@@ -898,9 +898,6 @@ let main = function () {
                     replaceImg = "/cdn" + origImg;
                 } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
                     replaceImg = "/livelabs/cdn" + origImg;
-
-                console.log(`(${origImg}`);
-                console.log(`(${replaceImg}`)
                     
                 
                 contentToReplace.push({
