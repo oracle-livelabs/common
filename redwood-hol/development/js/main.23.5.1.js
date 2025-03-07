@@ -131,7 +131,7 @@ let main = function () {
                     }
                     $(manifestFile.variables).each(function (_, i) {
                         let include_fname = i;
-                        console.log("Variables:" , include_fname);
+                        // console.log("Variables:" , include_fname);
 
                         // Modify include_fname based on the current domain
                         if (include_fname.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
@@ -859,7 +859,7 @@ let main = function () {
         location.href = unescape(setParam(window.location.href, queryParam, file_name) + anchor);
     }
 
-  /*the following function changes the path of images as per the path of the MD file.
+    /*the following function changes the path of images as per the path of the MD file.
     This ensures that the images are picked up from the same location as the MD file.
     The manifest file can be in any location.*/
     let addPathToImageSrc = function (markdownContent, myUrl) {
@@ -881,8 +881,6 @@ let main = function () {
             // if (myUrl.indexOf("/") !== 1) {
             matches[1] = matches[1].split(' ')[0];
             if (matches[1].indexOf("http") === -1 && matches[1][0] !== "/") {
-                console.log("first: ",'(' + matches[1]);
-                console.log("second: ",'(' + myUrl + matches[1].trim());
                 contentToReplace.push({
                     "replace": '(' + matches[1],
                     /* "with": '(' + myUrl + matches[1] TMM: changed 10/6/20*/
