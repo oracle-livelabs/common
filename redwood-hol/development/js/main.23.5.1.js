@@ -880,9 +880,9 @@ let main = function () {
 
             // if (myUrl.indexOf("/") !== 1) {
             matches[1] = matches[1].split(' ')[0];
-            console.log('(' + matches[1]);
-            console.log('(' + myUrl + matches[1].trim());
             if (matches[1].indexOf("http") === -1 && matches[1][0] !== "/") {
+                console.log("first: ",'(' + matches[1]);
+                console.log("second: ",'(' + myUrl + matches[1].trim());
                 contentToReplace.push({
                     "replace": '(' + matches[1],
                     /* "with": '(' + myUrl + matches[1] TMM: changed 10/6/20*/
