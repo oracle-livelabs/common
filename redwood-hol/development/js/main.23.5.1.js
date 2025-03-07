@@ -862,6 +862,7 @@ let main = function () {
     This ensures that the images are picked up from the same location as the MD file.
     The manifest file can be in any location.*/
     let addPathToImageSrc = function (markdownContent, myUrl) {
+        console.log(myUrl);
         let imagesRegExp = new RegExp(/!\[.*?\]\((.*?)\)/g);
         let contentToReplace = []; // content that needs to be replaced
         let matches;
