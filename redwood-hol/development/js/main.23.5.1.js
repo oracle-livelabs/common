@@ -893,7 +893,7 @@ let main = function () {
                 let origImg = matches[1].trim();
                 let replaceImg = origImg; // Default to the original path
             
-                if (origImg.startsWith("/")) {
+                if (origImg.startsWith("/") && !origImg.startsWith("/cdn/") && !origImg.startsWith("/livelabs/cdn/")) {
                     if (currentDomain.includes("livelabs.oracle.com")) {
                         replaceImg = "/cdn" + origImg;
                     } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
