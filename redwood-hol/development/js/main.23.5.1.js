@@ -892,6 +892,12 @@ let main = function () {
 
             console.log("origImg: ",`${origImg}`);
 
+            if (origImg.trim().startsWith("/")) {
+                console.log("Conditional passed: ",`${origImg}`);
+            } else {
+                console.log("Conditional failed");
+            }
+
             if (["livelabs.oracle.com", "apexapps-stage.oracle.com"].some(domain => currentDomain.includes(domain))
             && !origImg.trim().startsWith("/cdn/") && !origImg.trim().startsWith("/livelabs/cdn/") && origImg.trim().startsWith("/")) {
                 let replaceImg = origImg; // Default to the original path
