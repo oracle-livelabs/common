@@ -534,6 +534,7 @@ let main = function () {
             if (typeof include[short_name] !== 'object')
                 continue;
             include[short_name]['content'] = addPathToImageSrc(include[short_name]['content'], include[short_name]['path']);
+            // console.log("include function: " ,include[short_name]['path'] );
             markdown = markdown.split("[](include:" + short_name + ")").join(include[short_name]['content']);
         }
         return markdown;
@@ -867,6 +868,7 @@ let main = function () {
         let matches;
 
         myUrl = myUrl.substring(0, myUrl.lastIndexOf('/') + 1); //removing filename from the url
+        // console.log("myUrl: ",myUrl);
 
         do {
             matches = imagesRegExp.exec(markdownContent);
@@ -879,25 +881,14 @@ let main = function () {
 
             // if (myUrl.indexOf("/") !== 1) {
             matches[1] = matches[1].split(' ')[0];
-            if (matches[1].indexOf("http") === -1) { 
-                let newPath = matches[1].trim();
-    
-                if (newPath.startsWith("/")) {
-                    // Modify absolute paths based on currentDomain
-                    if (currentDomain.includes("livelabs.oracle.com")) {
-                        newPath = "/cdn/" + newPath.replace(/^\/+/, ""); 
-                    } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
-                        newPath = "/livelabs/cdn/" + newPath.replace(/^\/+/, "");
-                    }
-                } else {
-                    // Modify relative paths to be based on myUrl
-                    newPath = myUrl + newPath;
-                }
-                console.log(newPath);
-    
+            // console.log("Matches[1]: ",matches[1]);
+            // console.log("Matches[1][0]: ",matches[1][0]);
+            if (matches[1].indexOf("http") === -1 && matches[1][0] !== "/") {
+                console.log("Matches[1][0] reached: ",matches[1][0]);
                 contentToReplace.push({
                     "replace": '(' + matches[1],
-                    "with": '(' + newPath
+                    /* "with": '(' + myUrl + matches[1] TMM: changed 10/6/20*/
+                    "with": '(' + myUrl + matches[1].trim()
                 });
             }
             // }
