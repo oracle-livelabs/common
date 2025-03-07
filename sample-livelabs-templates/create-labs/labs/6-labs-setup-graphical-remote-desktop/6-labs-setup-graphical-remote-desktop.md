@@ -1,4 +1,5 @@
 # Setup Graphical Remote Desktop
+<h2><span style="color: red;"> NOTE: Oracle Enterprise Linux versions prior to version 8 are officially deprecated and no longer receive support or updates from the Oracle Linux team. It is strongly recommended to upgrade to the latest release to ensure security, stability, and access to ongoing technical assistance.</h2>
 
 ## Introduction
 This lab shows you how to deploy and configure noVNC Graphical Remote Desktop on an Oracle Enterprise Linux (OEL) instance prior to capturing the custom image.
