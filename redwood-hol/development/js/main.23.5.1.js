@@ -859,7 +859,7 @@ let main = function () {
         location.href = unescape(setParam(window.location.href, queryParam, file_name) + anchor);
     }
 
-    /*the following function changes the path of images as per the path of the MD file.
+  /*the following function changes the path of images as per the path of the MD file.
     This ensures that the images are picked up from the same location as the MD file.
     The manifest file can be in any location.*/
     let addPathToImageSrc = function (markdownContent, myUrl) {
@@ -868,7 +868,6 @@ let main = function () {
         let matches;
 
         myUrl = myUrl.substring(0, myUrl.lastIndexOf('/') + 1); //removing filename from the url
-        // console.log("myUrl: ",myUrl);
 
         do {
             matches = imagesRegExp.exec(markdownContent);
@@ -881,19 +880,31 @@ let main = function () {
 
             // if (myUrl.indexOf("/") !== 1) {
             matches[1] = matches[1].split(' ')[0];
-            // console.log("Matches[1]: ",matches[1]);
-            // console.log("Matches[1][0]: ",matches[1][0]);
             if (matches[1].indexOf("http") === -1 && matches[1][0] !== "/") {
-                console.log("Matches[1][0] reached: ",matches[1][0]);
                 contentToReplace.push({
                     "replace": '(' + matches[1],
                     /* "with": '(' + myUrl + matches[1] TMM: changed 10/6/20*/
                     "with": '(' + myUrl + matches[1].trim()
                 });
+            } else if ((matches[1].startsWith("http") || matches[1].startsWith("/")) && 
+            (currentDomain.includes("livelabs.oracle.com") || currentDomain.includes("apexapps-stage.oracle.com"))) {
+                if (currentDomain.includes("livelabs.oracle.com")) {
+                    myUrl = "/cdn/" + myUrl.replace(/^\/+/, ""); 
+                } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
+                    myUrl = "/livelabs/cdn/" + myUrl.replace(/^\/+/, "");
+                }
+
+                contentToReplace.push({
+                    "replace": '(' + matches[1],
+                    /* "with": '(' + myUrl + matches[1] TMM: changed 10/6/20*/
+                    "with": '(' + myUrl + matches[1].trim()
+                });
+
             }
             // }
         } while (matches);
     }
+
     /* The following function adds the h1 title before the container div. It picks up the h1 value from the MD file. */
     let updateH1Title = function (articleElement) {
         $('#tutorial-title').text("\t\t›\t\t" + $(articleElement).find('h1').text());
