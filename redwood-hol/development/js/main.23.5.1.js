@@ -890,23 +890,20 @@ let main = function () {
                 });
             }
 
-            if (["livelabs.oracle.com", "apexapps-stage.oracle.com", "127.0.0.1:5500"].some(domain => currentDomain.includes(domain))
-            && !origImg.startsWith("/cdn/") && !origImg.startsWith("/livelabs/cdn/")) {
+            if (["livelabs.oracle.com", "apexapps-stage.oracle.com"].some(domain => currentDomain.includes(domain))
+            && !origImg.startsWith("/cdn/") && !origImg.startsWith("/livelabs/cdn/") && origImg.startsWith("/")) {
                 let replaceImg = origImg; // Default to the original path
             
-                if (origImg.startsWith("/")) {
-                    if (currentDomain.includes("livelabs.oracle.com")) {
-                        replaceImg = "/cdn" + origImg;
-                    } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
-                        replaceImg = "/livelabs/cdn" + origImg;
-                    }
-                    console.log(`(${origImg}`);
-                    console.log(`(${replaceImg}`);
+                if (currentDomain.includes("livelabs.oracle.com")) {
+                    replaceImg = "/cdn" + origImg;
+                } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
+                    replaceImg = "/livelabs/cdn" + origImg;
+                    
                 
-                    contentToReplace.push({
-                        replace: `(${origImg}`,
-                        with: `(${replaceImg}`
-                    });
+                contentToReplace.push({
+                    replace: `(${origImg}`,
+                    with: `(${replaceImg}`
+                });
                 }
 
             }
