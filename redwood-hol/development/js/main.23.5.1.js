@@ -893,8 +893,7 @@ let main = function () {
             console.log("origImg: ",`${origImg}`);
 
             if (["livelabs.oracle.com", "apexapps-stage.oracle.com"].some(domain => currentDomain.includes(domain))
-            && !origImg.startsWith("/cdn/") 
-        && !origImg.startsWith("/livelabs/cdn/") && origImg.startsWith("/")) {
+            && !origImg.trim().startsWith("/cdn/") && !origImg.trim().startsWith("/livelabs/cdn/") && origImg.trim().startsWith("/")) {
                 let replaceImg = origImg; // Default to the original path
             
                 if (currentDomain.includes("livelabs.oracle.com")) {
