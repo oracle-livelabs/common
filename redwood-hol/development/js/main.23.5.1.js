@@ -902,15 +902,7 @@ let main = function () {
     
         return markdownContent;
     };
-    
 
-    // Apply all replacements
-    contentToReplace.forEach(({ replace, with: replacement }) => {
-        markdownContent = markdownContent.replace(replace, replacement);
-    });
-
-    return markdownContent;
-};
 
     // let addPathToImageSrc = function (markdownContent, myUrl) {
     //     let imagesRegExp = new RegExp(/!\[.*?\]\((.*?)\)/g);
