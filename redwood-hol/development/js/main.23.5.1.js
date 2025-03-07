@@ -881,6 +881,7 @@ let main = function () {
 
             // if (myUrl.indexOf("/") !== 1) {
             matches[1] = matches[1].split(' ')[0];
+            let origImg = matches[1].trim();
             if (matches[1].indexOf("http") === -1 && matches[1][0] !== "/") {
                 contentToReplace.push({
                     "replace": '(' + matches[1],
@@ -889,11 +890,11 @@ let main = function () {
                 });
             }
 
-            if (["livelabs.oracle.com", "apexapps-stage.oracle.com", "127.0.0.1:5500"].some(domain => currentDomain.includes(domain))) {
-                let origImg = matches[1].trim();
+            if (["livelabs.oracle.com", "apexapps-stage.oracle.com", "127.0.0.1:5500"].some(domain => currentDomain.includes(domain))
+            && !origImg.startsWith("/cdn/") && !origImg.startsWith("/livelabs/cdn/")) {
                 let replaceImg = origImg; // Default to the original path
             
-                if (origImg.startsWith("/") && !origImg.startsWith("/cdn/") && !origImg.startsWith("/livelabs/cdn/")) {
+                if (origImg.startsWith("/")) {
                     if (currentDomain.includes("livelabs.oracle.com")) {
                         replaceImg = "/cdn" + origImg;
                     } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
