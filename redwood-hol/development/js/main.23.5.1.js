@@ -890,17 +890,8 @@ let main = function () {
                 });
             }
 
-            // console.log("origImg: ",`${origImg}`);
-                // console.log("Current domain: ", currentDomain);
-
-            if (currentDomain.includes("livelabs.oracle.com") || currentDomain.includes("apexapps-stage.oracle.com")) {
-                console.log("Conditional passed: ",`${origImg}`);
-            } else {
-                console.log("Conditional failed: ",`${origImg}`);
-            }
-
             if ((currentDomain.includes("livelabs.oracle.com") || currentDomain.includes("apexapps-stage.oracle.com"))
-            && !origImg.trim().startsWith("/cdn/") && !origImg.trim().startsWith("/livelabs/cdn/") && origImg.trim().startsWith("/")) {
+            && !origImg.startsWith("/cdn/") && !origImg.startsWith("/livelabs/cdn/") && origImg.startsWith("/")) {
                 let replaceImg = origImg; // Default to the original path
             
                 if (currentDomain.includes("livelabs.oracle.com")) {
@@ -917,6 +908,8 @@ let main = function () {
                 });
                 }
 
+            } else {
+                console.log("Conditional failed: ",`${origImg}`);
             }
             // }
         } while (matches);
