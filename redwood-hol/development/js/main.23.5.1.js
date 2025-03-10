@@ -895,7 +895,7 @@ let main = function () {
             if (origImg.trim().startsWith("/")) {
                 console.log("Conditional passed: ",`${origImg}`);
             } else {
-                console.log("Conditional failed");
+                console.log("Conditional failed: ",`${origImg}`);
             }
 
             if (["livelabs.oracle.com", "apexapps-stage.oracle.com"].some(domain => currentDomain.includes(domain))
