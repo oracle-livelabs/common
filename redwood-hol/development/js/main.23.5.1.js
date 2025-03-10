@@ -891,15 +891,15 @@ let main = function () {
             }
 
             // console.log("origImg: ",`${origImg}`);
-                console.log("Current domain: ", currentDomain);
+                // console.log("Current domain: ", currentDomain);
 
-            if (["livelabs.oracle.com", "apexapps-stage.oracle.com"].some(domain => currentDomain.includes(domain))) {
+            if (currentDomain.includes("livelabs.oracle.com") || currentDomain.includes("apexapps-stage.oracle.com")) {
                 console.log("Conditional passed: ",`${origImg}`);
             } else {
                 console.log("Conditional failed: ",`${origImg}`);
             }
 
-            if (["livelabs.oracle.com", "apexapps-stage.oracle.com"].some(domain => currentDomain.includes(domain))
+            if ((currentDomain.includes("livelabs.oracle.com") || currentDomain.includes("apexapps-stage.oracle.com"))
             && !origImg.trim().startsWith("/cdn/") && !origImg.trim().startsWith("/livelabs/cdn/") && origImg.trim().startsWith("/")) {
                 let replaceImg = origImg; // Default to the original path
             
