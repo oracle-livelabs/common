@@ -892,7 +892,7 @@ let main = function () {
 
             // console.log("origImg: ",`${origImg}`);
 
-            if (origImg.trim().startsWith("/")) {
+            if (origImg.trim().startsWith("/") && !origImg.trim().startsWith("/cdn/") && !origImg.trim().startsWith("/livelabs/cdn/")) {
                 console.log("Conditional passed: ",`${origImg}`);
             } else {
                 console.log("Conditional failed: ",`${origImg}`);
