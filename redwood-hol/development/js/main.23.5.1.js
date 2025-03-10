@@ -890,10 +890,10 @@ let main = function () {
                 });
             }
 
-            console.log("reaches here: ",  `(${origImg}`);
 
             if ((currentDomain.includes("livelabs.oracle.com") || currentDomain.includes("apexapps-stage.oracle.com"))
             && !origImg.startsWith("/cdn/") && !origImg.startsWith("/livelabs/cdn/") && origImg.startsWith("/")) {
+                console.log("reaches here: ",  `(${origImg}`);
                 let replaceImg = origImg; // Default to the original path
             
                 if (currentDomain.includes("livelabs.oracle.com")) {
