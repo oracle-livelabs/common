@@ -891,34 +891,23 @@ let main = function () {
             }
 
 
-            if ((currentDomain.includes("livelabs.oracle.com") || currentDomain.includes("apexapps-stage.oracle.com"))
+            if (["livelabs.oracle.com", "apexapps-stage.oracle.com"].some(domain => currentDomain.includes(domain))
             && !origImg.startsWith("/cdn/") && !origImg.startsWith("/livelabs/cdn/") && origImg.startsWith("/")) {
-                console.log("reaches here: ",  `${origImg}`);
                 let replaceImg = origImg; // Default to the original path
-                console.log("reaches here again: ",  `${replaceImg}`);
             
                 if (currentDomain.includes("livelabs.oracle.com")) {
-                    console.log("reaches in the conditional: ",  `${replaceImg}`);
                     replaceImg = "/cdn" + origImg;
-
-                    console.log("reaches in the conditional after reassignment: ",  `${replaceImg}`);
                 } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
                     replaceImg = "/livelabs/cdn" + origImg;
                 }
                     
-                console.log("ReplaceImg: ", `${replaceImg}`);
-
-                
                 contentToReplace.push({
                     replace: `(${origImg}`,
                     with: `(${replaceImg}`
                 });
                 
-
-            } else {
-                console.log("Conditional failed: ",`${origImg}`);
             }
-            // }
+            
         } while (matches);
     }
     /* The following function adds the h1 title before the container div. It picks up the h1 value from the MD file. */
