@@ -890,7 +890,6 @@ let main = function () {
                 });
             }
 
-
             if (["livelabs.oracle.com", "apexapps-stage.oracle.com"].some(domain => currentDomain.includes(domain))
             && !origImg.startsWith("/cdn/") && !origImg.startsWith("/livelabs/cdn/") && origImg.startsWith("/")) {
                 let replaceImg = origImg; // Default to the original path
