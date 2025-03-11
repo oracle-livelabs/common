@@ -898,16 +898,15 @@ let main = function () {
                     replaceImg = "/cdn" + origImg;
                 } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
                     replaceImg = "/livelabs/cdn" + origImg;
+                }
                     
-                
                 contentToReplace.push({
                     replace: `(${origImg}`,
                     with: `(${replaceImg}`
                 });
-                }
-
+                
             }
-            // }
+            
         } while (matches);
     }
     /* The following function adds the h1 title before the container div. It picks up the h1 value from the MD file. */
