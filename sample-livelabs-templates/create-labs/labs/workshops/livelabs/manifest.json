@@ -50,6 +50,11 @@
       "filename": "./../../6-labs-publish/6-labs-publish.md"
     },
     {
+      "title": "Additional optional labs: Publish to Live SQL",
+      "description": "This lab shows you how to create a tutorial in Live SQL",
+      "filename": "./../../11-labs-create-livesql/11-create-livesql.md"
+    },
+    {
         "title": "Additional optional labs: Develop LiveLabs Sprints",
         "description": "This lab shows you how to create a Sprint for LiveLabs",
         "filename": "./../../10-labs-create-sprints-workflow/10-create-sprints-workflow.md"

@@ -32,7 +32,7 @@ To get started with Oracle LiveLabs Sprints development, you should have complet
 
 ## Task 1: Set up Oracle LiveLabs Sprints GitHub Repository
 
-> **Note:** Before you create a new sprint, check if there is a sprint with same content in [WMS](http://bit.ly/oraclewms). If there is no sprint with the content you want to create, please proceed.
+> **Note:** Before you create a new sprint, check if there is a sprint with same content in [WMS](http://livelabs.oracle.com/wms). If there is no sprint with the content you want to create, please proceed.
 
 1.  Navigate to [oracle-livelabs/sprints](https://github.com/oracle-livelabs/sprints) repository in Oracle Livelabs GitHub Project
 
