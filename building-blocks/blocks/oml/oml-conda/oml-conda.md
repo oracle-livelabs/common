@@ -15,6 +15,8 @@ Conda is an open source package and environment management system that enables t
 The Conda environments and package installation are done by the administrator (ADMIN role). You can then download and activate the environment in an OML notebook, logged in as a user with the OML_DEVELOPER role.
 
 > *Note:* Conda environments can be used with OML4Py and OML4R embedded execution from the Python, R, SQL, and REST APIs.
+
+
 ### Objectives
 
 In this lab, you will learn how to:
@@ -26,20 +28,20 @@ In this lab, you will learn how to:
 
 ### Prerequisites
 
-This lab assumes you have:
+This lab assumes:
 * An Oracle Machine Learning account
 * OML administrator role (ADMIN)
-* OML developer role (OML_DEVELOPER)
+* A separate non-administrator user account with the developer role (OML_DEVELOPER)
 * Access to Oracle Machine Learning USER account
 
 ## Task 1: Create a Conda Environment for Python and Install Python Packages
 
-This task demonstrates how to create a Conda environment called `mypyenv` for Python packages, with Python 3.10 that is compatible with OML4Py. Here, you will also install the Python packages - _tensorflow_ and _seaborn_ from the _conda-forge_ channel.
+This task demonstrates how to create a Conda environment called `mypyenv` for Python packages, with Python 3.12 that is compatible with OML4Py. Here, you will also install the Python packages - _tensorflow_ and _seaborn_ from the _conda-forge_ channel.
 
 * Conda channels are the locations where packages are stored. They serve as the base for hosting and managing packages. Conda packages are downloaded from remote channels, which are URLs to directories containing conda packages. The conda command searches a set of channels. By default, packages are automatically downloaded and updated from the default channel.
-* The _conda-forge_ channel is a community channel made up of thousands of contributors, and is free for all to use. You can modify what remote channels are automatically searched. You might want to do this to maintain a private or internal channel.
+* The _conda-forge_ channel is a community channel made up of thousands of contributors, and is free for all to use. You can modify what remote channels are automatically searched.
 
->*Note:* You must be signed in as ADMIN user to create the Conda environment.
+>*Note:* You must be signed in as ADMIN user to create the Conda environment and upload it to Object Storage.
 
 
 To create a Conda environment:
@@ -65,7 +67,7 @@ To create a Conda environment:
 	<copy>
 	%conda
 
-	create -n mypyenv -c conda-forge --override-channels --strict-channel-priority python=3.10 tensorflow seaborn
+	create -n mypyenv -c conda-forge --strict-channel-priority python=3.12.1 pandas==2.1.1 numpy==1.26.4 seaborn tensorflow
 
 	</copy>
 	```
@@ -73,7 +75,7 @@ To create a Conda environment:
 	* ``-n`` : This is the name of the environment. In this example, it is _mypyenv_.
 	* ``-c`` : This is the channel name. In this example, it is _conda-forge_
 	* ``--override-channels`` : This argument ensures that the system does not search default, and requires a channel to be mentioned.
-	* ``--strict-channel-priority`` : This argument ensures that packages in lower priority channels are not considered if a package with the same name appears in a higher priority channel. In this example, the priority is given to python 3.10, tensorflow, and seaborn
+	* ``--strict-channel-priority`` : This argument ensures that packages in lower priority channels are not considered if a package with the same name appears in a higher priority channel. In this example, the priority is given to python 3.12, tensorflow, and seaborn
 
 
 
@@ -94,7 +96,7 @@ To create a Conda environment:
 
 	![Command to list env and shows mypyenv](images/env-list-mypyenv.png)
 
-	>*Note:* The _mypyenv_ environment is not yet active. The active environment is marked with an asterisk (*), and in this list, it is present against the base environment usr.
+	>*Note:* The _mypyenv_ environment is not yet active. The active environment is marked with an asterisk (*), and in this list, it is present against the base environment /opt/conda.
 
 4. Now, run the following command to activate the environment _mypyenv_.
 	```
@@ -119,7 +121,7 @@ The asterisk (*) next to the environment name confirms the activation. This comp
 ## Task 2: Create a Conda Environment for R and Install R Packages
 In this task, you will create a Conda environment called _myrenv_ for R packages, with R-4.0.5 for OML4R compatibility, and install the forecast and ggplot2 packages.
 
->*Note:* You must be signed in as ADMIN user to create the Conda environment.
+>*Note:* You must be signed in as ADMIN user to create the Conda environment and upload it to Object Storage.
 
 To create a Conda environment named _myrenv_ with R-4.0.5 for OML4R compatibility and install the _forecast_ and _ggplot2_ packages:
 
@@ -131,7 +133,7 @@ To create a Conda environment named _myrenv_ with R-4.0.5 for OML4R compatibilit
 	<copy>
 	%conda
 
-	create -n myrenv -c conda-forge --override-channels --strict-channel-priority r-base=4 r-forecast r-ggplot2
+	create -n myrenv -c conda-forge --override-channels --strict-channel-priority r-base=4.0.5 r-forecast r-ggplot2
 	</copy>
 	```
 	In this command:
@@ -140,6 +142,7 @@ To create a Conda environment named _myrenv_ with R-4.0.5 for OML4R compatibilit
 	* ``--override-channels`` : This argument ensures that the system does not search default, and requires a channel to be mentioned.
 	* ``--strict-channel-priority`` : This argument ensures that packages in lower priority channels are not considered if a package with the same name appears in a higher priority channel. In this example, the priority is given to R-4.0.5, forecast, and ggplot2.
 
+	>*Note:* You must set ``r-base`` to ``4.0.5`` for compatibility with the R version you are using in your notebooks.
 
 	The command returns the following:
 
@@ -163,12 +166,11 @@ The application tag is required for use with embedded execution. For example, OM
 
 >*Note:* There is one Object Storage bucket for each data center region. The Conda environment is saved to a folder in Object Storage corresponding to the tenancy and database. The folder is managed by Autonomous Database and is only available to users through OML Notebooks. There is an 8G maximum size for a single Conda environment, and no size limit on Object Storage.
 
-To get help for the upload command, type upload --help in the %conda interpreter.
 
 1. Run the following command to upload the mypyenv to the Object Storage bucket associated with the ADB.
 	```
 	<copy>
-	upload mypyenv --overwrite --description 'Install Python seaborn and tensorflow packages' -t user 'OMLUSER' -t application OML4PY
+	upload mypyenv --overwrite --description 'Install Python seaborn and tensorflow packages' -t user 'OMLUSER' -t application 'OML4PY'
 	</copy>
 	```
 	![Command to upload the Py environment mypyenv and Py packages the to object storage](images/cmd-load-mypyenv.png)
@@ -195,7 +197,7 @@ To get help for the upload command, type upload --help in the %conda interpreter
 	<copy>
 	%conda
 
-	upload myrenv --overwrite --description 'Install R forecast and ggplot2 packages' -t user 'OMLUSER' -t application 'OML4R
+	upload myrenv --overwrite --description 'Install R forecast and ggplot2 packages' -t user 'OMLUSER' -t application 'OML4R'
 	</copy>
 	```
 	The command returns the following:
@@ -245,7 +247,7 @@ The steps in task 4 must be performed as the non-ADMIN OML user with the `OML_DE
 	import keras
 	from keras.models import Sequential
 	from keras.layers import Dense
-	from tensorflow.keras.optimizers import Adam
+	from keras.optimizers import Adam
 
 	import seaborn as sns
 	import pandas as pd
@@ -265,12 +267,18 @@ The steps in task 4 must be performed as the non-ADMIN OML user with the `OML_DE
 	<copy>
 	%python
 
-	df = sns.load_dataset("iris")
+	import ssl
+	ssl._create_default_https_context = ssl._create_unverified_context
 
+	df = sns.load_dataset("iris")
 	z.show(df)
 	</copy>
 	```
-	![Command to load data](images/cmd-load-data.png)
+	![Command to load the iris data](images/cmd-load-iris-data.png)
+
+	After you run the command successfully, the iris dataset is displayed.
+
+	![Iris dataset](images/iris-data-loaded.png)
 
 
 4. Plot the relationship pairwise
@@ -288,6 +296,7 @@ The steps in task 4 must be performed as the non-ADMIN OML user with the `OML_DE
 	![Command to pair plotwise relationship in the dataset](images/cmd-plotwise-relship.png)
 	Scroll down to view the output:
 	![Viewing the Plotwise relationship](images/output-plotwise-relship.png)
+
 
 ## Task 5: Download, Activate and Use the Conda environment for R
 
@@ -346,4 +355,4 @@ The steps in task 5 must be performed as the non-ADMIN OML user with the `OML_DE
 
 * **Author** -  Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, March 2024
+* **Last Updated By/Date** - Moitreyee Hazarika, October 2024

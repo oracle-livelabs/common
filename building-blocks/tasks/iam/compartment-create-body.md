@@ -1,7 +1,9 @@
 <!--
     {
         "name":"Create an OCI Compartment",
-        "description":"Create a new compartment using the OCI service console"
+        "description":"Create a new compartment using the OCI service console",
+        "author":"Lauran K. Serhal, Consulting User Assistance Developer",
+        "last_updated":"Lauran K. Serhal, March 2025"
     }
 -->
 

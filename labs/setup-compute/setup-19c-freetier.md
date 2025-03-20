@@ -121,8 +121,11 @@ There are multiple ways to connect to your cloud instance.  Choose the way to co
     ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png " ")
 
 2.  Enter the command below to login into to your instance.
-    ````text
+
+     ````
+    <copy>
     ssh -i ~/.ssh/<sshkeyname> opc@<Your Compute Instance Public IP Address>
+    </copy>
     ````
 
     >**Note:** The angle brackets <> should not appear in your code.
@@ -139,8 +142,10 @@ There are multiple ways to connect to your cloud instance.  Choose the way to co
 
 1.  Open up a terminal (MAC) or cygwin emulator. Enter the command below to log in to your instance. Enter yes when prompted.
 
-    ````text
+    ````
+    <copy>
     ssh -i ~/.ssh/<sshkeyname> opc@<Your Compute Instance Public IP Address>
+    </copy>
     ````
 
     ![SSH command](./images/ssh-first-time.png " ")

@@ -2,15 +2,16 @@
     {
         "name":"Create an Oracle Autonomous Database",
         "description":"Learn how to provision Autonomous Database using the OCI console.",
-        "author":"Ana Coman",
-        "last_updated":"Ana Coman, Oracle Database Product Management, July 2024"
+        "author":"Lauran K. Serhal, Consulting User Assistance Developer",
+        "lastUpdated":"Lauran K. Serhal, March 2025"
     }
 -->
+
 # Create an Oracle Autonomous Database
 
 ## Introduction
 
-Learn how to provision Autonomous Database using the OCI console.
+Learn how to provision an Autonomous Database instance using the OCI console.
 
 Estimated Time: 5 minutes
 
@@ -38,7 +39,6 @@ Please [proceed to the next lab](#next).
 
 ## Acknowledgements
 
-- **Author** - Nilay Panchal, Oracle Autonomous Database Product Management
-- **Adapted for Cloud by** - Richard Green, Principal Developer, Database User Assistance
-- **Last Updated By/Date** - Hope Fisher, Product Manager / Aug 2024
+- **Author:** - Lauran K. Serhal, Consulting User Assistance Developer
+- **Last Updated By/Date:** - Lauran K. Serhal, January 2025
 - **Built with Blocks**
