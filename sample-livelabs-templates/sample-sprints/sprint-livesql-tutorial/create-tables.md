@@ -1,5 +1,5 @@
 # How can I create tables in the Oracle database?
-<!-- If your code can fit in a 2048 character URL, we advise using the sprint-livesql-worksheet template, as this does not require the creation of a Live SQL tutorial. -->
+<!-- If your code can fit in a 2048 character URL, we advise using the sprint-livesql-worksheet template, as this does not require the creation of a Live SQL tutorial. Otherwise, include the link to your tutorial using the src attribute.-->
 <livesql-button src="https://livesql.oracle.com/next/worksheet?tutorial=json-duality-views-quick-start-D3wdHG&share_key=jCX1875rL3">
 
 <b>Live SQL Execution:</b> Sign-In Required</br>
