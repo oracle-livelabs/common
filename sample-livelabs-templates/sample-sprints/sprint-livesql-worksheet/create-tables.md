@@ -1,5 +1,5 @@
 # How can I create tables in the Oracle database?
-<!-- This HTML tag creates a Live SQL button that takes you to a LiveSQL Worksheet. It will auto-populate that worksheet with the code statements you have wrapped with the <livesql> tag. -->
+<!-- This HTML tag creates a Live SQL button that takes you to a LiveSQL Worksheet. It will auto-populate that worksheet with the code statements you have wrapped with the LiveSQL tag. -->
 <livesql-button>
 
 <b>Live SQL Execution:</b> Sign-In Required</br>
@@ -27,7 +27,7 @@ For example, you define a table with a table name, such as employees, and a set 
 
 You can specify rules for each column of a table. These rules are called integrity constraints. One example is a NOT NULL integrity constraint. This constraint forces the column to contain a value in every row.
 
-<!-- Notice how this code is wrapped with the <livesql> tag. -->
+<!-- Notice how this code is wrapped with the LiveSQL tag. -->
 ```
 <livesql> 
 create table DEPARTMENTS (  
@@ -41,7 +41,7 @@ create table DEPARTMENTS (
 
 Tables can declarative specify relationships between tables, typically referred to as referential integrity. To see how this works we can create a "child" table of the DEPARTMENTS table by including a foreign key in the EMPLOYEES table that references the DEPARTMENTS table.
 
-<!-- Notice how this code is wrapped with the <livesql> tag too. -->
+<!-- Notice how this code is wrapped with the LiveSQL tag too. -->
 ```
 <livesql>
 create table EMPLOYEES (  
