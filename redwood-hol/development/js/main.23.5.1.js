@@ -35,6 +35,9 @@ let main = function () {
     let manifestFileName = "manifest.json";
     let expandText = "Expand All Tasks";
     let collapseText = "Collapse All Tasks";
+    const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+    console.log("Current domain:", currentDomain);
+
     const copyButtonText = "Copy";
     const queryParam = "lab";
     const utmParams = [
@@ -90,8 +93,8 @@ let main = function () {
                     });
                 }
 
-                const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
-                console.log("Current domain:", currentDomain);
+                // const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+                // console.log("Current domain:", currentDomain);
 
                 // Added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
                 for (let short_name in manifestFile.include) {
@@ -127,7 +130,18 @@ let main = function () {
                         manifestFile['variables'] = Array(manifestFile.variables);
                     }
                     $(manifestFile.variables).each(function (_, i) {
-                        $.getJSON(i, function (variables) {
+                        let include_fname = i;
+                        // console.log("Variables:" , include_fname);
+
+                        // Modify include_fname based on the current domain
+                        if (include_fname.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
+                            include_fname = "/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
+                        } else if (include_fname.startsWith("/") && currentDomain.includes("apexapps-stage.oracle.com")) {
+                            include_fname = "/livelabs/cdn/" + include_fname.replace(/^\/+/, ""); // Ensure correct path
+                        }
+                        console.log("Variables:" , include_fname);
+
+                        $.getJSON(include_fname, function (variables) {
                             if (!manifestFile['variable_values']) {
                                 manifestFile['variable_values'] = {};
                             }
@@ -249,8 +263,8 @@ let main = function () {
     let loadTutorial = function (articleElement, selectedTutorial, manifestFileContent, callbackFunc = null) {
         let tut_fname;
 
-        const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
-        console.log("Current domain:", currentDomain);
+        // const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+        // console.log("Current domain:", currentDomain);
 
         // Modify tut_fname based on the current domain
         if (selectedTutorial.filename.startsWith("/") && currentDomain.includes("livelabs.oracle.com")) {
@@ -520,6 +534,7 @@ let main = function () {
             if (typeof include[short_name] !== 'object')
                 continue;
             include[short_name]['content'] = addPathToImageSrc(include[short_name]['content'], include[short_name]['path']);
+            // console.log("include function: " ,include[short_name]['path'] );
             markdown = markdown.split("[](include:" + short_name + ")").join(include[short_name]['content']);
         }
         return markdown;
@@ -641,7 +656,7 @@ let main = function () {
         let matches;
         let tut_fname;
 
-        const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
+        // const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
 
         $(manifestFileContent.tutorials).each(function (i, tutorial) {
             let ul;
@@ -856,6 +871,7 @@ let main = function () {
 
         do {
             matches = imagesRegExp.exec(markdownContent);
+            // console.log(matches);
             if (matches === null) {
                 $(contentToReplace).each(function (index, value) {
                     markdownContent = markdownContent.replace(value.replace, value.with);
@@ -865,6 +881,7 @@ let main = function () {
 
             // if (myUrl.indexOf("/") !== 1) {
             matches[1] = matches[1].split(' ')[0];
+            let origImg = matches[1].trim();
             if (matches[1].indexOf("http") === -1 && matches[1][0] !== "/") {
                 contentToReplace.push({
                     "replace": '(' + matches[1],
@@ -872,7 +889,24 @@ let main = function () {
                     "with": '(' + myUrl + matches[1].trim()
                 });
             }
-            // }
+
+            if (["livelabs.oracle.com", "apexapps-stage.oracle.com"].some(domain => currentDomain.includes(domain))
+            && !origImg.startsWith("/cdn/") && !origImg.startsWith("/livelabs/cdn/") && origImg.startsWith("/")) {
+                let replaceImg = origImg; // Default to the original path
+            
+                if (currentDomain.includes("livelabs.oracle.com")) {
+                    replaceImg = "/cdn" + origImg;
+                } else if (currentDomain.includes("apexapps-stage.oracle.com")) {
+                    replaceImg = "/livelabs/cdn" + origImg;
+                }
+                    
+                contentToReplace.push({
+                    replace: `(${origImg}`,
+                    with: `(${replaceImg}`
+                });
+                
+            }
+            
         } while (matches);
     }
     /* The following function adds the h1 title before the container div. It picks up the h1 value from the MD file. */
