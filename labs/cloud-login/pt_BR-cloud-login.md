@@ -1,7 +1,11 @@
 # Login to Oracle Cloud #
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 ## Introduction
+=======
+## Introduction - TEST 2345
+>>>>>>> Stashed changes
 =======
 ## Introduction - TEST 2345
 >>>>>>> Stashed changes
