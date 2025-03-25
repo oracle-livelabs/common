@@ -29,17 +29,19 @@ Estimated Time: 5 minutes
 
 In this lab, you will:
 
--   Create an Oracle Cloud Infrastructure compartment
--   Provision a new Autonomous Database
+* Create an Oracle Cloud Infrastructure compartment
+* Provision a new Autonomous Database
 
 ### Prerequisites
 
-- This lab requires completion of the Get Started section in the Contents menu on the left.
+This lab requires completion of the Get Started section in the Contents menu on the left.
 
 ## Task 1: (Optional) Create a Compartment
+
 [](include:iam-compartment-create-body.md)
 
 ## Task 2: Provision the Autonomous Database Instance
+
 [](include:adb-provision-data-sharing-lake-task.md)
 
 You may now **proceed to the next lab**.
@@ -51,8 +53,8 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 
 - **Author:** Lauran K. Serhal, Consulting User Assistance Developer
-- **Last Updated By/Date:** Lauran K. Serhal, January 2025
-- _**Built with Building Blocks**_
+- **Last Updated By/Date:** Lauran K. Serhal, March 2025
+- **Built with Building Blocks**
 
 Data about movies in this workshop were sourced from Wikipedia.
 
