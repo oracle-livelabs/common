@@ -24,6 +24,7 @@ Version     Date             Author          Summary
 23.4        Mar-17-23       Dan Williams    Updated imperative text ( eg. 'Start' not 'Starting') to include where issue is within Lab (LLAPEX-701)
 23.4.1      Oct-24-24       Kevin Lazarz    Fixed Lintchecker
 23.5        Oct-24-24       Kaylien Phan    Fixing "includes" functionality to accommodate for CDN
+23.6        Mar-20-25       Brianna Ambler  Adding support for LiveSQL integration with LiveLabs sprints
 */
 
 "use strict";
@@ -123,8 +124,6 @@ let main = function () {
                     });
                 }
 
-                
-                
                 if (manifestFile.variables) {
                     if (!Array.isArray(manifestFile.variables)) {
                         manifestFile['variables'] = Array(manifestFile.variables);
@@ -285,6 +284,7 @@ let main = function () {
             markdownContent = include(markdownContent, manifestFileContent.include); // added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
             markdownContent = substituteVariables(markdownContent, manifestFileContent.variable_values); // added for variable feature
             markdownContent = singlesource(markdownContent, selectedTutorial.type); // implement show/hide feature based on the if tag (DBDOC-2430)
+            markdownContent = convertLiveSQLButtonTags(markdownContent); // converts <livesql-button> tags to actual LiveSQL buttons
             markdownContent = convertBracketInsideCopyCode(markdownContent); // converts <> tags inside copy tag to &lt; and &gt; (DBDOC-2404)
             markdownContent = addPathToImageSrc(markdownContent, tut_fname); //adding the path for the image based on the filename in manifest
             markdownContent = addPathToTypeHrefs(markdownContent); // if type is specified in the markdown, then add absolute path for it.
@@ -1290,6 +1290,58 @@ let main = function () {
 
         return markdownContent;
     }
+    // Defines the LiveSQL Buttons for Sprints
+    let convertLiveSQLButtonTags = function (markdownContent) {
+        let sqlCode = "";
+        let link = "";
+
+        // If the markdown includes a LiveSQL button...
+        if (markdownContent.includes('<livesql-button')) {
+            console.log('<livesql-button> tag detected. Now replacing it with the real button.');
+            
+            // and the author is using a tutorial...
+            if (markdownContent.includes('<livesql-button src=')) {
+                console.log("<livesql-button> tag includes a source. Using the provided url as the button's link.");
+                
+                // extract the tutorial link
+                markdownContent = markdownContent.replace(new RegExp(/<livesql-button src="([\s\S|\n]*?)">/gm), function (code) {
+                    link = code;
+                    link = link.replace('<livesql-button src="',"");
+                    link = link.replace('">',"");
+                    return code;});
+                console.log("Tutorial Link: " + link);
+
+            // and the author is using a worksheet...
+            } else if (markdownContent.includes('<livesql-button>')) {
+                console.log("<livesql-button> tag does not include a source. Building a LiveSQL worksheet link.");
+                let worksheetRegExp = new RegExp(/<livesql>([\s\S|\n]*?)<\/livesql>/gm); // Finds all content between the livesql tag. 
+    
+                // find all code wrapped in <livesql>, concatenate it and...
+                markdownContent = markdownContent.replace(worksheetRegExp, function (code){
+                    code = code.replace('<livesql>', '');
+                    code = code.replace('</livesql>', '');
+                    sqlCode += code;
+                    return code;
+                });
+
+                // create the worksheet's link using the encoded SQL.
+                link = 'https://livesql.oracle.com/next/worksheet?code=' + encodeURIComponent(sqlCode);
+                console.log('Worksheet Link: ' + link);
+            } else {console.log('LiveSQL button is not properly formatted.')};
+        
+
+            // Replace <livesql-button> with the actual button.
+            markdownContent = markdownContent.replace(new RegExp(/<livesql-button([\s\S|\n]*?)>/gm), function (code) {
+                code = code.replace(code, '<a href="' + link + 
+                    '" target = "_blank"> <button class="livesql-button">Try It Now w/ Live SQL</button></br></a>');
+                console.log("The Live SQL button is now added.")
+                return code;
+            });
+        } else {console.log('No <livesql-button> tag detected');}
+        
+        return markdownContent; 
+    }
+
     /* injects tracking code into links specified in the utmParams variable */
     let injectUtmParams = function (articleElement) {
         let currentUrl = window.location.href;
