@@ -21,7 +21,7 @@ By the end of this guide, you will be able to:
 * **Push changes** to your feature branch.
 * **Open a pull request** using GitHub Desktop and GitHub UI, ensuring the correct branch is selected for review.
 
-These steps will help you update your workshop effectively while maintaining version control best practices.
+> These steps will help you update your workshop effectively while maintaining version control best practices.
 
 
 ## Task 1: Fork and clone repository (GitHub UI + GitHub Desktop)
@@ -80,7 +80,7 @@ After making edits in VS Code, you need to **commit and push** your changes to y
 4. Click **Commit to main** to save the changes locally.
 5. Click **Push Origin** to upload the changes to your GitHub repository.
 
-📌 **This step ensures your updates are stored in your GitHub fork.**
+> 📌 **This step ensures your updates are stored in your GitHub fork.**
 
 ![Commit Main](./images/github_commit_main.png " ")
 
@@ -100,8 +100,8 @@ After pushing your changes, you need to open a **Pull Request (PR)** to submit y
    - **Base Branch:** `ui-update-2025` (from the base repository).
    - **Compare Branch:** `main` (from your forked repository).
 4. Add a title using the following format:
-   - `Workshop###<your workshop> + OCI-UI-UPDATE-2025`
-   > Replace `###<your workshop>` with the actual workshop number and title you are updating.
+   - Workshop###<your workshop> + OCI-UI-UPDATE-2025
+   - > Replace `###<your workshop>` with the actual workshop number and title you are updating.
 5. Fill in the **description** field with relevant details about your changes.
 6. Click **Create Pull Request** to allow review (this prevents merging until approved).
 7. If any merge conflicts appear, resolve them before proceeding.
