@@ -64,7 +64,7 @@ This is the folder that contains all common blocks.
 * **`tasks`:**    
 This is the folder that contains all common tasks.
 
-## Task 2: Pre-requisites to Using Building Blocks and Tasks
+## Task 2: Prerequisites to Using Building Blocks and Tasks
 
 ### **Pre-requisite 1**
 
