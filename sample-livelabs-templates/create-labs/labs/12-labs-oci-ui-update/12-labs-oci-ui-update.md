@@ -121,9 +121,9 @@ After pushing your changes, you need to open a **Pull Request (PR)** to submit y
 
 ![Resolve Conflict cont'd](./images/github_resolve_conflict_contd.png " ")
 
-![Merge PR](./images/github_merge_pr.png " ")
+<!-- ![Merge PR](./images/github_merge_pr.png " ") -->
 
-![Confirm PR](./images/github_confirm_merge.png " ")
+<!-- ![Confirm PR](./images/github_confirm_merge.png " ") -->
 
 > 📌 **Note:** **This process ensures content is reviewed progressively while avoiding premature merges.**
 
