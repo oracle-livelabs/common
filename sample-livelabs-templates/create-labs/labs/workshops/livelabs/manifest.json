@@ -55,6 +55,11 @@
       "filename": "./../../11-labs-create-livesql/11-create-livesql.md"
     },
     {
+      "title": "Additional optional labs: Live SQL Integration",
+      "description": "This lab shows you how to integrate Live SQL in your workshop",
+      "filename": "../../../labs/12-livesql-integration/12-livesql-integration.md"
+    },
+    {
         "title": "Additional optional labs: Develop LiveLabs Sprints",
         "description": "This lab shows you how to create a Sprint for LiveLabs",
         "filename": "./../../10-labs-create-sprints-workflow/10-create-sprints-workflow.md"
