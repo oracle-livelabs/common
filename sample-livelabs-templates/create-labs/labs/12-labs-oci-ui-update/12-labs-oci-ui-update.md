@@ -123,7 +123,7 @@ After pushing your changes, you need to open a **Pull Request (PR)** to submit y
 
 ![Merge PR](./images/github_merge_pr.png " ")
 
-![Confirm PR](./images/github_confirm_merge.png " ")
+<!-- ![Confirm PR](./images/github_confirm_merge.png " ") -->
 
 > 📌 **Note:** **This process ensures content is reviewed progressively while avoiding premature merges.**
 
