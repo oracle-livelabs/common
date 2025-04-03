@@ -1,4 +1,4 @@
-# LiveSQL Integration
+# Live SQL Integration
 
 ## Introduction
 
