@@ -428,7 +428,7 @@ By default, you are assigned into a project. Select the project that contains th
 
 To edit an existing notebook:
 
-1. On the Oracle Machine Learning Notebook page, click the notebook name that you want to open. The selected notebook opens in the edit mode. In this lab, create a notebook by the name **Notebook Demo**.
+1. On the Oracle Machine Learning Notebook page, click the notebook name that you want to open. The selected notebook opens in the edit mode. 
 
 2. When the notebook is open, you can use the following notebook features from the  toolbars:
 ![Notebook Edit options](images/notebook-ea-edit-options.png)
