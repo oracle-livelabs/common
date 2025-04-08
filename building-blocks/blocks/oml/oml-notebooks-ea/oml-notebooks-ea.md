@@ -540,7 +540,7 @@ To visualize your data, let's consider the _Test Notebook_ that you created in *
 	* In the **Customization** tab, you have the option to customize the layout, define values for the interquartile range (specific to boxplot), define the maximum number of elements, add labels to X axis and Y axis, change the display color, and even add description to the chart.
 	![Customization](images/customization-tab.png)
 
-	For details about the Iris dataset visualization, and all the other visualization options, settings, and customizations, [Lab 3: Visualize Data in Oracle Machine Learning Notebooks](https://oracle-livelabs.github.io/oml/oml/workshops/freetier/index.html?lab=oml-nb-visualizations) in the workshop _Introduction to Oracle Machine Learning Notebooks_ in the workshop _Introduction to Oracle Machine Learning Notebooks._
+	For details about the Iris dataset visualization, and all the other visualization options, settings, and customizations, see [Lab 3: Visualize Data in Oracle Machine Learning Notebooks](https://oracle-livelabs.github.io/oml/oml/workshops/freetier/index.html?lab=oml-nb-visualizations) in the workshop _Introduction to Oracle Machine Learning Notebooks_.
 
 This completes the task of visualizing your data in a notebook. 
 
