@@ -323,7 +323,8 @@ let main = function () {
             // adding social media link to the header
             // addSocialMediaLink(manifestFileContent.help, manifestFileContent.workshoptitle);
             // adding link to the Neep Help URL in the header if the manifest file contains it (DBDOC-2496)
-            addNeedHelpLink(manifestFileContent.help, manifestFileContent.workshoptitle);
+            addTranslateIcon(manifestFileContent.help, manifestFileContent.workshoptitle);
+            addNeedHelpLink(manifestFileContent.help);
 
             if (getParam("qa") == "true") {
                 articleElement = performQA(articleElement, markdownContent, manifestFileContent);
@@ -1026,6 +1027,40 @@ let main = function () {
             // $('div#container').append(need_help_div);
         }
     }
+
+    let addTranslateIcon = function (help) {
+        const help_text = "Need another language? Learn how to translate this page.";
+        const translate_url = "https://google.com"; // 🔁 Change to your actual help page
+    
+        if (help !== undefined) {
+            // the Need Help? URL is taken from the manifest file (key is help)
+            let need_help = $(document.createElement('a')).attr({ 
+                'href': translate_url, 
+                'title': help_text, 
+                'id': 'need_help', 
+                'tabindex': '0',
+                'target': '_blank'
+            }).text('🌐');
+
+            $('header .hol-Header-wrap').append(need_help);
+
+            // let need_help_div = $(document.createElement('div')).attr({ 'href': 'mailto:' + help + '?subject=' + subject, 'title': help_text, 'id': 'need_help', 'tabindex': '0' }).text('?');
+            // $('div#container').append(need_help_div);
+        }
+        // const translate_text = "Need another language? Click here to learn how to translate this page.";
+        // const translate_url = "https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/page_help"; // 🔁 Change to your actual help page
+    
+        // let translate_link = $(document.createElement('a')).attr({
+        //     'href': translate_url,
+        //     'title': translate_text,
+        //     'id': 'translate_icon',
+        //     'tabindex': '0',
+        //     'target': '_blank'
+        // }).html('🌐');
+    
+        // $('header .hol-Header-wrap').append(translate_link);
+    };
+    
 
     /* Add the Social Media link in the header */
     // let addSocialMediaLink = function(help, wtitle) {   
@@ -1762,4 +1797,180 @@ let download = function () {
         $('#btn_toggle').remove()).done(function () {
             download_file($('.selected span').text().replace(/[^[A-Za-z0-9:?]+?/g, '') + '.html', '<html><head><link rel="stylesheet" href="https://oracle-livelabs.github.io/common/redwood-hol/img/favicon.ico" /></head><body style="padding-top: 0px;">' + $('#contentBox')[0].outerHTML + '</body></html>');
         });
+}
+
+/*!
+######################################################
+
+# ORA_APEX.JS
+
+# Version: 1.03
+
+# BUILD DATE: Fri Feb 28 2025 15:52:58 GMT+0530 (India Standard Time)
+
+# COPYRIGHT ORACLE CORP 2025 [UNLESS STATED OTHERWISE]
+
+######################################################
+*/
+if (location.hostname.includes("livelabs.oracle.com")) {
+    var isTest = -1 != location.host.indexOf("-stage") || -1 != location.host.indexOf("dev-") || -1 != location.host.indexOf("-dev") || -1 != location.host.indexOf("-uat") || -1 != location.host.indexOf("webstandards-us") || -1 != location.host.indexOf("localhost"),
+        enable_tracking = !0,
+        ora_root = isTest ? "://www-stage.oracle.com" : "://www.oracle.com",
+        host_type = -1 != window.location.protocol.toLowerCase().indexOf("https") ? "https" : "http";
+    if (enable_tracking) {
+        var sc_script = document.createElement("script");
+        sc_script.type = "text/javascript";
+        sc_script.onload = function () {
+            // Wait until s_setAccount is available
+            const waitForSSet = setInterval(function () {
+                if (typeof s_setAccount === "function") {
+                    clearInterval(waitForSSet);
+                    window.sn = s_setAccount()[1];
+                    window.ln = s_setAccount()[2];
+                }
+            }, 100);
+        };
+        
+        sc_script.src = "https://www.oracle.com/us/assets/metrics/ora_code.js";
+        document.body ? document.body.appendChild(sc_script) : document.head.appendChild(sc_script)
+    }
+
+    /*! ORA_CODE_APEX.JS - v1.03 */
+    if (enable_tracking) {
+        var siteID = "",
+            language = "";
+
+        /*! REPORT SUITE SET UP */
+        function s_setAccount() {
+            var sa = ["oracleglobal", "apex", "en-us"];
+            if (-1 != location.host.indexOf("-stage") || -1 != location.host.indexOf("dev-") || -1 != location.host.indexOf("-dev") || -1 != location.host.indexOf("-uat") || -1 != location.host.indexOf("webstandards-us") || -1 != location.host.indexOf("localhost")) var sa = ["oracledevall", "apex", "en-us"];
+            else var sa = ["oracleglobal", "apex", "en-us"];
+            var siteLang = {
+                    de: {
+                        site_lang_val: "de-de"
+                    },
+                    es: {
+                        site_lang_val: "es-es"
+                    },
+                    fr: {
+                        site_lang_val: "fr-fr"
+                    },
+                    it: {
+                        site_lang_val: "it-it"
+                    },
+                    "pt-br": {
+                        site_lang_val: "pt-br"
+                    },
+                    "zh-tw": {
+                        site_lang_val: "zh-tw"
+                    },
+                    "zh-cn": {
+                        site_lang_val: "zh-cn"
+                    },
+                    ja: {
+                        site_lang_val: "ja-jp"
+                    },
+                    ko: {
+                        site_lang_val: "ko-kr"
+                    }
+                },
+                site_ID = location.pathname.split("/").length > 1 ? location.pathname.split("/")[1] : "";
+            language = "" != site_ID && siteLang.hasOwnProperty(site_ID) ? siteLang[site_ID].site_lang_val : "en-us"; - 1 != location.host.indexOf("ace.oracle.com") ? sa[1] = "ace" : -1 != location.host.indexOf("livelabs.oracle.com") ? sa[1] = "livelabs" : sa[1] = "apex";
+            siteID = sa[1];
+            return sa
+        }
+
+        /*! PrePlugins */
+        function s_prePlugins(s) {
+            s_oraVer(":" + siteID, ":1.03");
+            setPageName(s)
+        }
+
+        function setPageName(s) {
+            s.pageName = siteID + ":" + language + ":" + location.pathname
+        }
+
+        /*! PostPlugins */
+        function s_postPlugins(s) {
+            "undefined" != typeof s_eVar24 ? s.eVar24 = s_eVar24 : s.eVar24 = "no value";
+            oraSetInternalFilters()
+        }
+
+        /*! Set the code version, oraVersion comes from ora_code.js */
+        function s_oraVer(_s, _v) {
+            _v = _s + _v;
+            oraVersion = -1 == oraVersion.indexOf(_s) ? oraVersion + _v : oraVersion.substr(0, oraVersion.indexOf(_s)) + _v
+        }
+
+        /*! Set filter exit links */
+        function oraSetInternalFilters() {
+            s.linkInternalFilters = "javascript:,.oracle.,.oraclecorp.com"; - 1 === location.href.indexOf(":8888") && -1 === location.href.indexOf("webstandards-us") || (s.linkInternalFilters = "javascript:,localhost,webstandards-us.oracle.com")
+        }
+
+        /*! Test and Flag for jQuery */
+        function gotjQ() {
+            try {
+                var jq = !!jQuery
+            } catch (err) {
+                var jq = !1
+            }
+            return jq
+        }
+
+        /*! JQUERY FUNCTIONS */
+        gotjQ() && jQuery(document).ready(function($) {
+            var trackas = [];
+            $('a[rel*="lightbox"],a[rel*="opop"]').each(function() {
+                var type = "opop" == $(this).attr("rel") ? "popup" : "lightbox";
+                !$(this).attr("data-lbl") && $(this).attr("title") ? $(this).attr("data-lbl", type + "-open-" + $(this).attr("title").toLowerCase().replace(/ /g, "-")) : !$(this).attr("data-lbl") && $(this).text() ? $(this).attr("data-lbl", type + "-open-" + $(this).text().toLowerCase().replace(/ /g, "-")) : $(this).attr("data-lbl") ? $(this).attr("data-lbl", $(this).attr("data-lbl") + "-" + type + "-open") : $(this).attr("data-lbl", type + "-open");
+                $(this).attr("data-trackas") || $(this).attr("data-trackas", type)
+            });
+            for (var sn = s_setAccount()[1], ln = s_setAccount()[2], i = 0; i < trackas.length; i++) {
+                !$(trackas[i][0]).attr("data-trackas") && trackas[i][1] && $(trackas[i][0]).attr("data-trackas", trackas[i][1]);
+                trackas[i][2] && "resetpage" == trackas[i][2] ? $(trackas[i][0]).attr("data-pgreset", "true") : trackas[i][2] && !$(trackas[i][0]).attr("data-lbl") && $(trackas[i][0]).attr("data-lbl", trackas[i][2])
+            }
+            $(document).on("click", "*[data-trackas] a,a[data-trackas]", function(e) {
+                var lbl = "",
+                    o = $(this);
+                if ("notrack" != o.attr("data-lbl")) {
+                    if (o.attr("data-lbl")) lbl = o.attr("data-lbl");
+                    else if (o.attr("name")) lbl = o.attr("name");
+                    else if (o.attr("title")) lbl = o.attr("title");
+                    else if (o.find("img") && o.find("img").first().attr("title")) lbl = o.find("img").first().attr("title");
+                    else if (o.find("img") && o.find("img").first().attr("alt")) lbl = o.find("img").first().attr("alt");
+                    else if (o.find("img").first().attr("src")) {
+                        lbl = o.find("img").first().attr("src");
+                        lbl = lbl.split("/")[lbl.split("/").length - 1]
+                    } else lbl = o.text();
+                    var d = o.closest("[data-trackas]").attr("data-trackas");
+                    d = "hnav" == d || "header" == d ? ":" : "-";
+                    if (!o.attr("data-trackas"))
+                        for (; o.parent();) {
+                            o = o.parent();
+                            o.attr("data-lbl") && (lbl = o.attr("data-lbl") + d + lbl);
+                            if (o.attr("data-trackas")) break
+                        }
+                    lbl = lbl.toLowerCase().replace(/ /g, "-").replace(/-+/g, "-");
+                    var sec = o.attr("data-trackas") ? o.attr("data-trackas") : o.closest("*[data-trackas]").attr("data-trackas"); - 1 != location.href.indexOf(":8888") && console.log(sn + ":" + ln + ":" + sec + ":" + lbl);
+                    navTrack(sn, ln, sec, lbl);
+                    if ("true" == o.attr("data-pgreset")) {
+                        s.clearVars();
+                        if (0 == o.attr("href").indexOf("#") && s.pageName) {
+                            if ($("body").attr("data-pgname")) var pn = $("body").attr("data-pgname");
+                            else {
+                                $("body").attr("data-pgname", s.pageName);
+                                var pn = s.pageName
+                            }
+                            s.pageName = pn + "/" + o.attr("href").split("#")[1]
+                        } else s_orapageName(o.attr("href"));
+                        oraSetInternalFilters();
+                        s.linkInternalFilters = s.linkInternalFilters + "," + o.attr("href");
+                        var s_code = s.t();
+                        s_code && document.write(s_code);
+                        oraSetInternalFilters()
+                    }
+                }
+            })
+        })
+    }
 }
