@@ -24,8 +24,6 @@ Let's review the process of creating building tasks at high level before we delv
 
 Ensure that you have met the pre-requisites listed in the **Author LiveLabs Workshops with Building (Common) Blocks and Tasks lab > Task 2: Pre-requisites to Using Building Blocks and Tasks**.
 
-[Ensure that you have met the pre-requisites covered in the following lab and task.](#Task2:PrerequisitestoUsingBuildingBlocksandTasks)
-
 ## Task 1: Use an existing building (common) block
 
 Before you create a new building block, check to see if there is a similar block that already exists that you can use. Let's say you are looking for a building block on how to connect to Oracle Autonomous Database (ADB) using the SQL Worksheet.
@@ -42,7 +40,7 @@ Before you create a new building block, check to see if there is a similar block
     
     ![The complete building block](images/completed-connect-sqlworksheet-example.png =75%x*)
 
-3. If this is a block that you can use in your workshop, go the next **Task 3** to learn how to use an existing building block in your workshop.
+3. If this is a block that you can use in your workshop, go to **Task 3** to learn how to use an existing building block in your workshop.
 
 ## Task 2: Create a new building (common) block
 
