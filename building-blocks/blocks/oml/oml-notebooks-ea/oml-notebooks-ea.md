@@ -26,6 +26,7 @@ The Oracle Machine Learning Notebooks provides:
 In this lab, you will learn how to:
 * Access the notebook environment
 * Create and run a Notebook
+* Create a notebook using the Example template
 * Explore the basic features of Oracle Machine Learning Notebooks
 * Visualize data in Oracle Machine Learning Notebooks
 
@@ -335,18 +336,99 @@ In this task, you will use the R interpreter and run R statements:
 
 This completes the task of connecting to the R interpreter and running R commands in your notebook.
 
+## Task 4: Create a Notebook using a Template Example
 
-## Task 4: Work with Notebook Features
+This task demonstrates how to create notebooks based on Example templates. You will learn how to:
+* Create the OML4Py Classification notebook based on the OML4Py Classification DT example template. The template builds and applies the classification Decision Tree algorithm to build a classification model based on the relationships between the predictor values and the target values. The template uses the Sales History (`SH`) schema.
+* Create the Time Series notebook based on the OML4SQL Time Series ESM example template. This template forecasts sales by using the Exponential Smoothing Algorithm for Time Series Data. It also used the `Sales` table in the SH schema.
+
+### Task 4.1: Create an OML4Py Notebook using the Classification DT Template Example
+
+This step demonstrates how to create the OML4Py Classification notebook based on the OML4Py Classification DT (Decision Tree) Example template:
+
+1. Go to the Examples page by clicking the Cloud menu icon ![Cloud menu icon](images/cloud-menu-icon.png)  on the top left corner of the page to open the left navigation menu. On the left navigation menu, click **Templates** and then click **Examples**.
+
+	![Left Navigation menu - Examples](images/left-nav-pane-examples.png)
+
+  Alternatively, on the Oracle Machine Learning home page, click **Examples** in the Quick Actions section to go Examples.
+
+	![The Oracle Machine Learning UI home page](images/homepage-examples.png)
+
+
+2. Navigate to the **OML4Py Classification DT** example template notebook. You can search for the notebook by typing in the name in the search box on the upper right corner of the page. Click on the grey box around the notebook. This highlights the notebook and enables the **Create Notebook** button. Click **Create Notebook**.
+
+	![The Create Notebook button activated with OML4Py Classification DT example notebook selected](images/classification-dt-example.png)
+
+3. The Create Notebook dialog opens. The Name field displays the same name as the template with the suffix `(1)`. You can edit this name. In this example, we will retain the original name `OML4PY Classification DT`. Delete the suffix (1) and click **OK**.
+
+	> **Note:** In the Project field, the current user, project, and workspace is selected by default. You have the option to choose a different project or a workspace by clicking the edit icon here.  
+
+	![Create Classification DT notebook dialog](images/create-notebook-classification.png)
+
+4. Once the notebook is created, the message _This Notebook was created in project "OMLUSER Project" and will appear under the Notebooks Listing "_ is displayed, as shown in the screenshot. The notebook is now available on the Notebooks page. You may also click **Open Notebook** in the message dialog to open the notebook directly from here.
+
+	![The notebook created message for the OML4Py Classification DT notebook](images/notebook-created-message.png)
+
+5. To view the notebook that you just created, click the Cloud menu icon ![Cloud menu icon](images/cloud-menu-icon.png) on the top left corner of the page to open the left navigation menu. Click **Notebooks** to go to the Notebooks page.
+
+	![Notebooks entry in the left navigation menu](images/left-nav-pane-notebooks.png)
+
+6. The OML4PY Classification DT notebook is now listed on the Notebooks page, as shown in the screenshot. Click it to open the notebook in the Notebooks editor. Note that you will run this notebook in the subsequent steps.
+
+	![The list of notebooks created as listed on the Listing page](images/notebook-listed.png)
+	
+
+This completes the task of creating a notebook from an Example template.
+
+### Task 4.2: Create a Time Series Notebook using the OML4SQL Time Series Template Example
+
+These steps demonstrate how to create the Time Series notebook based on the Example template:
+
+1. Click the Cloud menu icon ![Cloud menu icon](images/cloud-menu-icon.png) on the top left corner of the page to open the left navigation menu. Click **Examples** under Templates to open the Examples page. 
+
+	![Examples entry in Left Navigation menu](images/left-nav-pane-examples.png)
+
+If you choose to go to the home page, then click **Home** on the left navigation pane, and then click **Examples**.	
+
+2. Navigate to the **OML4SQL Time Series ESM** example template notebook. You may type ESM in the search box on the upper right corner of the page to get a list of the ESM-related notebooks. Click the grey box around the notebook. This highlights the notebook and enables the **Create Notebook** button. Click **Create Notebook**.
+
+	![The Create Notebook button activated with OML4SQL Time Series notebook selected](images/oml4sql-time-series.png)
+
+3. The Create Notebook dialog opens. By default, the **Name** field displays the same name as the template with the suffix `(1)`. You can edit this field. In this example, let's remove the suffix and retain the original name **OML4SQL Time Series ESM** and click **OK**.
+
+	> **Note:** In the Project field, the current user, project and workspace is selected by default. You have the option to choose a different project or a workspace by clicking the edit icon here.  
+
+	![Create Time Series notebook dialog. The notebook is being created on the Example page.](images/create-notebook-time-series.png)
+
+4. Once the notebook is created, the message _This Notebook was created in project "OMLUSER Project" and will appear under the Notebooks Listing "_ is displayed. The notebook is now available on the Notebooks page. You may also click **Open Notebook** in the message dialog to open the notebook directly from here.
+
+	![The notebook created message for the Time Series notebook](images/notebook-created-message.png)
+
+5. To view the notebook, click the Cloud menu icon ![Cloud menu icon icon](images/cloud-menu-icon.png) on the top left corner of the page to open the left navigation menu. Click **Notebooks** to go to the Notebooks page.
+
+	![The Notebooks entry in left navigation menu. It has the OML4SQL Time Series notebook selected on the Examples page on the right pane.](images/notebooks-left-nav-pane-esm.png)
+
+
+6. The notebook **Notebook "OML4SQL Time Series ESM** is now listed on the Notebooks page, as shown in the screenshot. Click on the notebook to open it in the Notebooks editor and work on it.
+
+	![The list of notebooks on the Listing page](images/notebook-list-1.png)
+
+
+This completes the task of creating the Time Series notebook from the OML4SQL Time Series ESM Example template.
+
+
+
+## Task 5: Work with Notebook Features
 
 Upon creating a notebook, it opens automatically, presenting you with a single paragraph using the default ``%sql`` interpreter. You can change the interpreter by explicitly specifying one of ``%script``, ``%python``, ``%sql`` , ``%r`` , ``%md``, or ``%conda`` to connect to the respective interpreter.
 
-To learn about Conda, refer to [Use the Conda Interpreter in a Notebook Paragraph](https://docs.oracle.com/en/database/oracle/machine-learning/oml-notebooks/omlug/notebooks.html#GUID-0AAB3590-4422-450D-BE91-4EC435FD4254)
+To learn about Conda, refer to [Use the Conda Interpreter in a Notebook Paragraph](https://docs.oracle.com/en/database/oracle/machine-learning/oml-notebooks/omlug/run-notebook-conda-interpreter.html).
 
 By default, you are assigned into a project. Select the project that contains the notebook you want to use.
 
 To edit an existing notebook:
 
-1. On the Oracle Machine Learning Notebook page, click the notebook name that you want to open. The selected notebook opens in the edit mode. In this lab, you click the **Notebook Demo**.
+1. On the Oracle Machine Learning Notebook page, click the notebook name that you want to open. The selected notebook opens in the edit mode. 
 
 2. When the notebook is open, you can use the following notebook features from the  toolbars:
 ![Notebook Edit options](images/notebook-ea-edit-options.png)
@@ -412,7 +494,7 @@ To edit an existing notebook:
 
 This completes the task of working with various notebook features. To learn more about advanced notebook features, see _Lab 6: Advanced Notebooks Options_ in the workshop [Oracle Machine Learning Notebooks](https://apexapps.oracle.com/pls/apex/r/dbpm/livelabs/run-workshop?p210_wid=891&p210_wec=&session=17495085944752).
 
-## Task 5: Visualize your Data in OML Notebooks
+## Task 6 Visualize your Data in OML Notebooks
 
 OML Notebooks offer rich visualization capabilities of your data. The visualizations depend on the type of your dataset.
 The following visualization options are available.  
@@ -458,7 +540,7 @@ To visualize your data, let's consider the _Test Notebook_ that you created in *
 	* In the **Customization** tab, you have the option to customize the layout, define values for the interquartile range (specific to boxplot), define the maximum number of elements, add labels to X axis and Y axis, change the display color, and even add description to the chart.
 	![Customization](images/customization-tab.png)
 
-	For details about the Iris dataset visualization, and all the other visualization options, settings, and customizations, [Lab 3: Visualize Data in Oracle Machine Learning Notebooks](https://oracle-livelabs.github.io/oml/oml/workshops/freetier/index.html?lab=oml-nb-visualizations) in the workshop _Introduction to Oracle Machine Learning Notebooks_ in the workshop _Introduction to Oracle Machine Learning Notebooks._
+	For details about the Iris dataset visualization, and all the other visualization options, settings, and customizations, see [Lab 3: Visualize Data in Oracle Machine Learning Notebooks](https://oracle-livelabs.github.io/oml/oml/workshops/freetier/index.html?lab=oml-nb-visualizations) in the workshop _Introduction to Oracle Machine Learning Notebooks_.
 
 This completes the task of visualizing your data in a notebook. 
 
@@ -475,4 +557,4 @@ You may now **proceed to the next lab**.
 
 * **Author** -  Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, February 2025
+* **Last Updated By/Date** - Moitreyee Hazarika, April 2025
