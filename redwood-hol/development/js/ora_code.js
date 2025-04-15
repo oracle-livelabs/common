@@ -2739,10 +2739,11 @@ function navTrack(sitename, language, pagearea, linklabel) {
     }
     var linkvalue = "";
     var s_account = ["oracledevall", "ocom", "en-us"];
-    var s_account = ["oracleglobal", "livelabs", "en-us"];
     if (window.s_setAccount) {
         s_account = s_setAccount();
     }
+
+    var s_account = ["oracleglobal", "livelabs", "en-us"];
     if (s_reportSuites.includes("oracleglobal")) {
         s_account[0] = "oracleglobal";
     } else {
