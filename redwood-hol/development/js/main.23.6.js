@@ -1047,18 +1047,6 @@ let main = function () {
             // let need_help_div = $(document.createElement('div')).attr({ 'href': 'mailto:' + help + '?subject=' + subject, 'title': help_text, 'id': 'need_help', 'tabindex': '0' }).text('?');
             // $('div#container').append(need_help_div);
         }
-        // const translate_text = "Need another language? Click here to learn how to translate this page.";
-        // const translate_url = "https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/page_help"; // 🔁 Change to your actual help page
-    
-        // let translate_link = $(document.createElement('a')).attr({
-        //     'href': translate_url,
-        //     'title': translate_text,
-        //     'id': 'translate_icon',
-        //     'tabindex': '0',
-        //     'target': '_blank'
-        // }).html('🌐');
-    
-        // $('header .hol-Header-wrap').append(translate_link);
     };
     
 
@@ -1831,7 +1819,7 @@ if (location.hostname.includes("livelabs.oracle.com")) {
             }, 100);
         };
         
-        sc_script.src = "https://www.oracle.com/us/assets/metrics/ora_code.js";
+        sc_script.src = "https://kaylien.github.io/common/redwood-hol/development/js/ora_code.js";
         document.body ? document.body.appendChild(sc_script) : document.head.appendChild(sc_script)
     }
 
