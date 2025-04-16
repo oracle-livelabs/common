@@ -1094,7 +1094,7 @@ let main = function () {
             <ol>
                 <li>Click the <strong>translate icon</strong>
                 <img 
-                    src="https://livelabs.oracle.com/cdn/common/redwood-hol/img/translate-icon2.png" 
+                    src="https://livelabs.oracle.com/cdn/common/redwood-hol/img/translate-icon-safari.png" 
                     alt="Translate icon" 
                     style="height: 30px; vertical-align: middle; margin-left: 4px;" 
                     referrerpolicy="no-referrer"
