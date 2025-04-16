@@ -323,7 +323,17 @@ let main = function () {
             // adding social media link to the header
             // addSocialMediaLink(manifestFileContent.help, manifestFileContent.workshoptitle);
             // adding link to the Neep Help URL in the header if the manifest file contains it (DBDOC-2496)
-            addTranslateIcon(manifestFileContent.help, manifestFileContent.workshoptitle);
+            
+    
+            $(document).ready(function () {
+                addTranslateIcon('fake@email.com'); 
+            
+                $(document).on('click', function (e) {
+                    if (!$(e.target).closest('#translate_icon, #translate_popup').length) {
+                        $('#translate_popup').hide();
+                    }
+                });
+            });
             addNeedHelpLink(manifestFileContent.help);
 
             if (getParam("qa") == "true") {
@@ -1020,34 +1030,58 @@ let main = function () {
         const help_text = "Need help? Send us an email.";
         if (help !== undefined) {
             // the Need Help? URL is taken from the manifest file (key is help)
-            let need_help = $(document.createElement('a')).attr({ 'href': 'mailto:' + help + '?subject=' + subject, 'title': help_text, 'id': 'need_help', 'tabindex': '0' }).text('?');
+            let need_help = $(document.createElement('a')).attr({ 'href': 'mailto:' + help + '?subject=' + subject, 'title': help_text, 'id': 'need_help', 'tabindex': '0' }).text('?').addClass('header-icon');
             $('header .hol-Header-wrap').append(need_help);
 
             // let need_help_div = $(document.createElement('div')).attr({ 'href': 'mailto:' + help + '?subject=' + subject, 'title': help_text, 'id': 'need_help', 'tabindex': '0' }).text('?');
             // $('div#container').append(need_help_div);
         }
     }
-
     let addTranslateIcon = function (help) {
-        const help_text = "Need another language? Learn how to translate this page.";
-        const translate_url = "https://google.com"; // 🔁 Change to your actual help page
+        const help_text = "Need another language? Learn how to translate this page?";
     
         if (help !== undefined) {
-            // the Need Help? URL is taken from the manifest file (key is help)
-            let need_help = $(document.createElement('a')).attr({ 
-                'href': translate_url, 
-                'title': help_text, 
-                'id': 'need_help', 
-                'tabindex': '0',
-                'target': '_blank'
-            }).text('🌐');
+            let translate_icon = $('<a>', {
+                href: '#',
+                title: help_text,
+                id: 'translate_icon',
+                tabindex: '0'
+            }).text('🌐').addClass('header-icon');
+    
+            translate_icon.on('click', function (e) {
+                e.preventDefault();
+                $('#translate_popup').toggle();
+            });
+    
+            let popupContent = `
+            <div class="translation-popup-content">
+            <h2>How to Translate This Page</h2>
 
-            $('header .hol-Header-wrap').append(need_help);
+            <p>For the best translation experience, we recommend using <strong>Google Chrome</strong>.</p>
 
-            // let need_help_div = $(document.createElement('div')).attr({ 'href': 'mailto:' + help + '?subject=' + subject, 'title': help_text, 'id': 'need_help', 'tabindex': '0' }).text('?');
-            // $('div#container').append(need_help_div);
+            <h3>Google Chrome</h3>
+            <ol>
+                <li><strong>Right-click</strong> anywhere on the page and choose <em>“Translate to [Your Language]”</em>.</li>
+                <li>If that option doesn’t appear, click the <strong>⋮ three-dot menu</strong> in the top-right corner of Chrome.</li>
+                <li>Select <em>“Translate”</em> from the dropdown.</li>
+                <li>Then, click the <strong>translate icon</strong> in the address bar to activate translation.</li>
+                <li>If needed, click the <strong>⋮ three-dot menu</strong> within the Google Translate popup and choose your preferred language.</li>
+            </ol>
+            </div>
+            `;
+    
+            let popup = $('<div>', {
+                id: 'translate_popup',
+                class: 'translate-popup'
+            }).html(popupContent);
+    
+            $('header .hol-Header-wrap').append(translate_icon);
+            $('body').append(popup);
         }
     };
+    
+    
+    
     
 
     /* Add the Social Media link in the header */
@@ -1865,6 +1899,7 @@ if (location.hostname.includes("livelabs.oracle.com")) {
                 site_ID = location.pathname.split("/").length > 1 ? location.pathname.split("/")[1] : "";
             language = "" != site_ID && siteLang.hasOwnProperty(site_ID) ? siteLang[site_ID].site_lang_val : "en-us"; - 1 != location.host.indexOf("ace.oracle.com") ? sa[1] = "ace" : -1 != location.host.indexOf("livelabs.oracle.com") ? sa[1] = "livelabs" : sa[1] = "apex";
             siteID = sa[1];
+            console.log("s_setAccount: ", sa)
             return sa
         }
 

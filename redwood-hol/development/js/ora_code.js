@@ -2411,6 +2411,7 @@ var oraVersion = "ora_code:2.5:JS 2.25.0";
 var s_account = ["oracledevall", "ocom", "en-us"];
 if (window.s_setAccount) {
     s_account = s_setAccount();
+    console.log("Line 2414: ", s_setAccount)
 }
 var s_reportSuites = s_account[0].split(",");
 if (s_reportSuites.includes("oracleglobal")) {
@@ -2743,7 +2744,7 @@ function navTrack(sitename, language, pagearea, linklabel) {
         s_account = s_setAccount();
     }
 
-    var s_account = ["oracleglobal", "livelabs", "en-us"];
+    // var s_account = ["oracleglobal", "livelabs", "en-us"];
     if (s_reportSuites.includes("oracleglobal")) {
         s_account[0] = "oracleglobal";
     } else {
