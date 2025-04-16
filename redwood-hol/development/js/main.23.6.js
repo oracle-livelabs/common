@@ -324,16 +324,16 @@ let main = function () {
             // addSocialMediaLink(manifestFileContent.help, manifestFileContent.workshoptitle);
             // adding link to the Neep Help URL in the header if the manifest file contains it (DBDOC-2496)
             
-    
-            $(document).ready(function () {
-                addTranslateIcon('fake@email.com'); 
+            // KP Translate 
+            // $(document).ready(function () {
+            //     addTranslateIcon(manifestFileContent.help); 
             
-                $(document).on('click', function (e) {
-                    if (!$(e.target).closest('#translate_icon, #translate_popup').length) {
-                        $('#translate_popup').hide();
-                    }
-                });
-            });
+            //     $(document).on('click', function (e) {
+            //         if (!$(e.target).closest('#translate_icon, #translate_popup').length) {
+            //             $('#translate_popup').hide();
+            //         }
+            //     });
+            // });
             addNeedHelpLink(manifestFileContent.help);
 
             if (getParam("qa") == "true") {
@@ -1823,21 +1823,13 @@ let download = function () {
 
 /*!
 ######################################################
-
 # ORA_APEX.JS
-
-# Version: 1.03
-
-# BUILD DATE: Fri Feb 28 2025 15:52:58 GMT+0530 (India Standard Time)
-
-# COPYRIGHT ORACLE CORP 2025 [UNLESS STATED OTHERWISE]
-
 ######################################################
 */
 if (location.hostname.includes("livelabs.oracle.com")) {
     var script = document.createElement("script");
     script.type = "text/javascript";
     script.src = "https://www.oracle.com/us/assets/metrics/ora_apex.js";
-    document.head.appendChild(script); // or document.body.appendChild(script);
+    document.head.appendChild(script); 
   }
   
