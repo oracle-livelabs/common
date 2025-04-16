@@ -1092,15 +1092,20 @@ let main = function () {
 
             <div class="tab-content" id="safari" style="display: none;">
             <ol>
-                <li>Click the <strong>translate icon</strong> in the address bar.</li>
-                <li>If you don't see the icon, go to the Safari menu bar at the top of<br> your screen.</li>
+                <li>Click the <strong>translate icon</strong> in the Safari address bar.</li>
+                <li>If the icon doesn’t appear, go to the Safari menu bar at the top of<br> your screen.</li>
                 <li>Select <strong>View</strong> → <strong>Translation</strong> → <em>“Translate to [Your Language]”</em>.</li>
-                <li>If no languages are available to translate to, click <strong>Preferred<br> Languages</strong> in the prompt.</li>
-                <li>This will open <strong>System Settings → Language & Region</strong>.</li>
-                <li>Click the <strong>+</strong> button under Preferred Languages, add your desired<br> language, and close Settings.</li>
-                <li>Return to Safari and repeat step 3 to translate the page.</li>
+                <li>
+                If no translation languages are available, click <strong>Preferred<br> Languages</strong> in the prompt, and follow these steps:
+                <ol type="a">
+                    <li>System Settings will open to <strong>Language & Region</strong>.</li>
+                    <li>Click the <strong>+</strong> button under Preferred Languages, add your <br>desired language, and close Settings.</li>
+                    <li>Return to Safari and repeat step 3 to translate the page.</li>
+                </ol>
+                </li>
             </ol>
             </div>
+
 
             <div class="tab-content" id="firefox" style="display: none;">
                 <ol>
