@@ -1113,7 +1113,7 @@ let main = function () {
                 <ol type="a">
                     <li>System Settings will open to <strong>Language & Region</strong>.</li>
                     <li>Click the <strong>+</strong> button under Preferred Languages, add your <br>desired language, and close Settings.</li>
-                    <li>Return to Safari and repeat step 3 to translate the page.</li>
+                    <li>Return to Safari and repeat step 2 to translate the page.</li>
                 </ol>
                 </li>
             </ol>
