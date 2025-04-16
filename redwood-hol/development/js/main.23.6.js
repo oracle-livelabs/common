@@ -1085,7 +1085,13 @@ let main = function () {
                     <li><strong>Right-click</strong> anywhere on the page and choose <em>“Translate to<br> [Your Language]”</em>.</li>
                     <li>If that option doesn’t appear, click the <strong>⋮ three-dot menu</strong> in<br> the top-right corner of Chrome.</li>
                     <li>Select <em>“Translate”</em> from the dropdown.</li>
-                    <li>Then, click the <strong>translate icon</strong> in the address bar.</li>
+                    <li>Then, click the <strong>translate icon</strong>
+                    <img 
+                        src="https://livelabs.oracle.com/cdn/common/redwood-hol/img/translate-icon-chrome.png" 
+                        alt="Translate icon" 
+                        style="height: 30px; vertical-align: middle; margin-left: 4px;" 
+                        referrerpolicy="no-referrer"
+                    /> in the address bar.</li>
                     <li>If needed, click the <strong>⋮ three-dot menu</strong> within the Google<br> Translate popup and choose your preferred language.</li>
                 </ol>
             </div>
