@@ -1092,8 +1092,15 @@ let main = function () {
 
             <div class="tab-content" id="safari" style="display: none;">
             <ol>
-                <li>Click the <strong>translate icon</strong> in the Safari address bar.</li>
-                <li>If the icon doesn’t appear, go to the Safari menu bar at the top of<br> your screen.</li>
+                <li>Click the <strong>translate icon</strong>
+                <img 
+                    src="https://livelabs.oracle.com/cdn/common/redwood-hol/img/translate-icon2.png" 
+                    alt="Translate icon" 
+                    style="height: 30px; vertical-align: middle; margin-left: 4px;" 
+                    referrerpolicy="no-referrer"
+                    />
+                in the Safari address bar.</li>
+                <li>If the icon doesn’t appear, use the menu bar at the top of your<br> screen (next to the Apple  icon).</li>
                 <li>Select <strong>View</strong> → <strong>Translation</strong> → <em>“Translate to [Your Language]”</em>.</li>
                 <li>
                 If no translation languages are available, click <strong>Preferred<br> Languages</strong> in the prompt, and follow these steps:
