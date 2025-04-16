@@ -2411,8 +2411,10 @@ var oraVersion = "ora_code:2.5:JS 2.25.0";
 var s_account = ["oracledevall", "ocom", "en-us"];
 if (window.s_setAccount) {
     s_account = s_setAccount();
-    console.log("Line 2414: ", s_setAccount)
 }
+
+console.log("Line 2416: ",s_setAccount);
+console.log("Line 2417: ",window.s_setAccount);
 var s_reportSuites = s_account[0].split(",");
 if (s_reportSuites.includes("oracleglobal")) {
     s_account[0] = "oracleglobal";
