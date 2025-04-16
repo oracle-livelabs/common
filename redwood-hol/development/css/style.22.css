@@ -196,7 +196,10 @@ a:active {
 /* Header Buttons */
 
 
-.header-icon {
+.header-icon,
+.header-icon:hover,
+.header-icon:focus,
+.header-icon:active {
     width: 32px;
     height: 32px;
     text-align: center;
@@ -209,6 +212,12 @@ a:active {
     cursor: pointer;
     line-height: 32px;
 }
+
+.header-icon svg {
+    transform: scale(0.88);
+}
+  
+
 
 .hol-Header-button {
     position: relative;
@@ -233,7 +242,7 @@ a:active {
     background-color: #46423f;
 }
 
-.translate-popup {
+#translate_popup {
     display: none;
     position: absolute;
     top: 60px;
@@ -245,8 +254,68 @@ a:active {
     border-radius: 5px;
     z-index: 1000;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+  }
+  
+#translate_popup,
+#translate_popup * {
+    font-size: 15px;
+    line-height: 1.15;
+  }
 
+#translate_popup h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  #translate_popup h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 12px;
+    margin-bottom: 1px; /* smaller gap before list */
+  }
+  
+  #translate_popup ol {
+    margin-top: .4; /* removes extra space at top of the list */
+    margin-bottom: 10px;
+    padding-left: 20px;
+  }
+  
+  
+  .translation-tabs {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .translation-tabs .tab {
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .translation-tabs .tab:hover {
+    color: #000;
+    background-color: #f6f6f6;
+  }
+  
+  .translation-tabs .tab.active {
+    color: #0078d4;
+    border-bottom: 3px solid #0078d4;
+    font-weight: 600;
+    background-color: #f9f9f9;
+    border-radius: 4px 4px 0 0;
+  }
+  
+  
 
 /* Menu Button */
 

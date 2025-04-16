@@ -1046,37 +1046,100 @@ let main = function () {
                 title: help_text,
                 id: 'translate_icon',
                 tabindex: '0'
-            }).text('🌐').addClass('header-icon');
+            }).html(`
+                <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 511.997"><path fill="#fff" fill-rule="nonzero" d="M456.103 372.929c.76 0 1.503.076 2.221.22 18.883-32.877 29.294-67.765 30.989-105.931h-70.387c-1.273 35.725-11.943 70.959-31.822 105.711h68.999zm-12.274 22.439h-70.885c-21.522 31.176-50.508 61.962-86.825 92.362 62.484-7.736 120.355-41.731 157.71-92.362zM225.876 487.73c-36.317-30.401-65.302-61.187-86.824-92.362H68.171c37.351 50.625 95.219 84.622 157.705 92.362zM53.549 372.929h71.343c-19.881-34.752-30.548-69.986-31.822-105.711H22.687c1.692 38.09 12.06 72.896 30.862 105.711zM22.687 244.778h70.82c2.607-35.001 14.22-70.236 35.03-105.71H53.549c-18.805 32.824-29.17 67.626-30.862 105.71zm45.484-128.15h74.743c21.286-30.671 49.426-61.521 84.54-92.551-63.108 7.382-121.587 41.459-159.283 92.551zM284.54 24.077c35.114 31.03 63.256 61.878 84.542 92.551h74.746c-37.692-51.087-96.176-85.172-159.288-92.551zm173.91 114.991h-74.99c20.812 35.473 32.424 70.709 35.03 105.71h70.823c-1.692-38.095-12.061-72.891-30.863-105.71zM256 0c85.059 0 164.712 41.638 212.305 112.556C497.103 155.464 512 203.909 512 256c0 52.06-14.832 100.437-43.695 143.441C420.677 470.412 341.002 511.997 256 511.997c-85.06 0-164.713-41.638-212.306-112.556C14.897 356.535 0 308.089 0 256c0-52.063 14.83-100.439 43.694-143.444C91.322 41.585 170.997 0 256 0zm11.218 38.617v78.011h74.275c-19.514-25.73-44.246-51.733-74.275-78.011zm0 100.451v105.71h128.845c-2.917-34.714-15.788-69.947-38.83-105.71h-90.015zm0 128.15v105.711h93.793c22.204-34.986 34.125-70.221 35.547-105.711h-129.34zm0 128.15v78.971c31.859-26.182 57.931-52.505 78.111-78.971h-78.111zm-22.439 78.976v-78.976h-78.112c20.182 26.467 46.25 52.792 78.112 78.976zm0-101.415V267.218h-129.34c1.421 35.49 13.34 70.725 35.547 105.711h93.793zm0-128.151v-105.71h-90.015c-23.04 35.763-35.913 70.996-38.83 105.71h128.845zm0-128.15V38.609c-30.032 26.281-54.763 52.286-74.275 78.019h74.275z"/></svg>
+                `)                
+                .addClass('header-icon');
     
             translate_icon.on('click', function (e) {
                 e.preventDefault();
                 $('#translate_popup').toggle();
             });
+
+            // Detect browser
+            let userAgent = navigator.userAgent.toLowerCase();
+            let defaultTab = 'chrome'; // fallback
+            if (userAgent.includes('firefox')) {
+                defaultTab = 'firefox';
+            } else if (userAgent.includes('safari') && !userAgent.includes('chrome')) {
+                defaultTab = 'safari';
+            } else if (userAgent.includes('chrome')) {
+                defaultTab = 'chrome';
+            }
+    
     
             let popupContent = `
-            <div class="translation-popup-content">
+           <div class="translation-popup-content">
             <h2>How to Translate This Page</h2>
+            <p>For the best translation experience, we recommend <strong>Google Chrome</strong>.</p>
 
-            <p>For the best translation experience, we recommend using <strong>Google Chrome</strong>.</p>
+            <!-- Tabs -->
+            <div class="translation-tabs">
+                <button class="tab active" data-tab="chrome">Google Chrome</button>
+                <button class="tab" data-tab="safari">Safari</button>
+                <button class="tab" data-tab="firefox">Mozilla Firefox</button>
+            </div>
+            <!-- Tab Content Areas -->
+            <div class="tab-content" id="chrome">
+                <ol>
+                    <li><strong>Right-click</strong> anywhere on the page and choose <em>“Translate to<br> [Your Language]”</em>.</li>
+                    <li>If that option doesn’t appear, click the <strong>⋮ three-dot menu</strong> in<br> the top-right corner of Chrome.</li>
+                    <li>Select <em>“Translate”</em> from the dropdown.</li>
+                    <li>Then, click the <strong>translate icon</strong> in the address bar.</li>
+                    <li>If needed, click the <strong>⋮ three-dot menu</strong> within the Google<br> Translate popup and choose your preferred language.</li>
+                </ol>
+            </div>
 
-            <h3>Google Chrome</h3>
+            <div class="tab-content" id="safari" style="display: none;">
             <ol>
-                <li><strong>Right-click</strong> anywhere on the page and choose <em>“Translate to [Your Language]”</em>.</li>
-                <li>If that option doesn’t appear, click the <strong>⋮ three-dot menu</strong> in the top-right corner of Chrome.</li>
-                <li>Select <em>“Translate”</em> from the dropdown.</li>
-                <li>Then, click the <strong>translate icon</strong> in the address bar to activate translation.</li>
-                <li>If needed, click the <strong>⋮ three-dot menu</strong> within the Google Translate popup and choose your preferred language.</li>
+                <li>Click the <strong>translate icon</strong> in the address bar.</li>
+                <li>If you don't see the icon, go to the Safari menu bar at the top of<br> your screen.</li>
+                <li>Select <strong>View</strong> → <strong>Translation</strong> → <em>“Translate to [Your Language]”</em>.</li>
+                <li>If no languages are available to translate to, click <strong>Preferred<br> Languages</strong> in the prompt.</li>
+                <li>This will open <strong>System Settings → Language & Region</strong>.</li>
+                <li>Click the <strong>+</strong> button under Preferred Languages, add your desired<br> language, and close Settings.</li>
+                <li>Return to Safari and repeat step 3 to translate the page.</li>
             </ol>
             </div>
+
+            <div class="tab-content" id="firefox" style="display: none;">
+                <ol>
+                    <li><a href="${window.location.href}" target="_blank">Click here to open this workshop in a new tab.</a></li>
+                    <li>In the new tab, click the <strong>☰ menu</strong> (three horizontal lines) in the<br> upper-right corner of Firefox.</li>
+                    <li>Select <em>“Translate Page”</em> from the dropdown menu.</li>
+                    <li>Then, choose the language you want to translate the page into.</li>
+                </ol>
+                <p><em>Note: Translation is only available in Firefox version 118 and above.<br> If you don’t see this option, make sure your browser is up to date.</em></p>
+            </div>
+            </div>
             `;
-    
+
+
             let popup = $('<div>', {
-                id: 'translate_popup',
-                class: 'translate-popup'
+                id: 'translate_popup'
             }).html(popupContent);
     
             $('header .hol-Header-wrap').append(translate_icon);
             $('body').append(popup);
+    
+            // After popup is appended, activate the default tab
+            $(document).ready(function () {
+                // Set default active tab
+                $('.translation-tabs .tab').removeClass('active');
+                $('.translation-tabs .tab[data-tab="' + defaultTab + '"]').addClass('active');
+    
+                $('.tab-content').hide();
+                $('#' + defaultTab).show();
+            });
+    
+            // Tab click behavior
+            $(document).on('click', '.translation-tabs .tab', function () {
+                const selectedTab = $(this).data('tab');
+                $('.translation-tabs .tab').removeClass('active');
+                $(this).addClass('active');
+                $('.tab-content').hide();
+                $('#' + selectedTab).show();
+            });
         }
     };
     
