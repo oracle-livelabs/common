@@ -1,0 +1,33 @@
+{
+   "workshoptitle": "LiveLabs Sprints",
+   "help": "livelabs-help-db_us@oracle.com",
+   "tutorials": [
+      {
+         "title": "How can I create tables in the Oracle database?",
+         "description": "",
+         "filename": "./create-tables.md"
+      },
+      {
+         "title": "How can I insert data into a table in the Oracle database?",
+         "description": "",
+         "filename": "../insert-data/insert-data.md"
+      },
+      {
+         "title": "How can I query a table in the Oracle database?",
+         "description": "",
+         "filename": "../query-tables/query-tables.md"
+      },
+      {
+         "title": "How can I index columns in the Oracle database?",
+         "description": "",
+         "filename": "../index-columns/index-columns.md"
+      },
+      {
+         "title": "How can I create triggers for a table in the Oracle database?",
+         "description": "",
+         "filename": "../create-triggers/create-triggers.md"
+      }
+   ],
+   "task_type": "Sections", 
+   "hide_button": "true"
+}

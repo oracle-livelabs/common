@@ -1,9 +1,9 @@
 <!--
     {
-        "name":"Provision an ADB instance for Data Sharing/Data Lake workshops",
+        "name":"Provision an ADB instance for the Data Sharing and Data Lake workshops",
         "description":"Learn how to provision Autonomous Database using the OCI console.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "lastupdated":"Lauran K. Serhal, January 2025"
+        "lastUpdated":"Lauran K. Serhal, February 2025"
     }
 -->
 
@@ -29,17 +29,19 @@ Estimated Time: 5 minutes
 
 In this lab, you will:
 
--   Create an Oracle Cloud Infrastructure compartment
--   Provision a new Autonomous Database
+* Create an Oracle Cloud Infrastructure compartment
+* Provision a new Autonomous Database
 
 ### Prerequisites
 
-- This lab requires completion of the Get Started section in the Contents menu on the left.
+This lab requires completion of the Get Started section in the Contents menu on the left.
 
 ## Task 1: (Optional) Create a Compartment
+
 [](include:iam-compartment-create-body.md)
 
 ## Task 2: Provision the Autonomous Database Instance
+
 [](include:adb-provision-data-sharing-lake-task.md)
 
 You may now **proceed to the next lab**.
@@ -51,8 +53,8 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 
 - **Author:** Lauran K. Serhal, Consulting User Assistance Developer
-- **Last Updated By/Date:** Lauran K. Serhal, January 2025
-- **Built with Building Blocks**
+- **Last Updated By/Date:** Lauran K. Serhal, April 2025
+- **Developed with Building Blocks**
 
 Data about movies in this workshop were sourced from Wikipedia.
 

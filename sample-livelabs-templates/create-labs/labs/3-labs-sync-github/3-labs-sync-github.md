@@ -17,7 +17,7 @@ Oracle LiveLabs has a set folder structure that you will need to follow for deve
 
   We create workshops and labs in the repositories of the **oracle-livelabs** organization. You must fork a repository to create a duplicate personal copy of the repository on your GitHub account. You own the forked (stage) repository, and you can edit its contents without affecting the main (production) repository.
 
-  For example, if a user named arabellayao forks the **database** repository in the **oracle-livelabs** project, a duplicate repository [user1/database](https://github.com/arabellayao/database) is created.
+  For example, if a user named janedoe forks the **database** repository in the **oracle-livelabs** project, a duplicate repository [user1/database](https://github.com/janedoe/database) is created.
 
   You should also fork the [user repository](https://github.com/oracle-livelabs/common). Even though you will not be changing files here, you can use the common/images that are available and the sample workshops you will be using for templates are contained here.
 
@@ -173,7 +173,7 @@ To commit your changes:
 
 After you upload the content from your clone to your fork, request your review team members to review this content by providing them with access to **your GitHub Pages site URL** (or the URL of your forked repository).
 
->**Note:** You should perform the following actions in your forked GitHub repository (e.g. [https://github.com/username/em-omc](https://github.com/arabellayao/em-omc)), instead of the production repository (e.g. [https://github.com/oracle-livelabs/em-omc](https://github.com/oracle-livelabs/em-omc)).
+>**Note:** You should perform the following actions in your forked GitHub repository (e.g. [https://github.com/username/em-omc](https://github.com/janedoe/em-omc)), instead of the production repository (e.g. [https://github.com/oracle-livelabs/em-omc](https://github.com/oracle-livelabs/em-omc)).
 
 The GitHub Web UI has a feature called **Set Up GitHub Pages for Your Fork** to Test Your Content. This feature performs a dynamic conversion of the Markdown files (.md files you have developed using your Atom Editor) to HTML. You can preview your workshop and labs on your forked repository and provide this URL to your reviewers.
 
@@ -196,7 +196,7 @@ To publish your GitHub Pages site:
 
 <!-- 5. Optional: Under **Theme Chooser**, click **Change Theme** and select a theme of your choice. -->
 
-5. This may take a few minutes to complete. After the GitHub Pages are enabled, the message under **GitHub Pages** changes to **Your site  is published at https://arabellayao.github.io/em-omc/**
+5. This may take a few minutes to complete. After the GitHub Pages are enabled, the message under **GitHub Pages** changes to **Your site  is published at https://janedoe.github.io/em-omc/**
   ![Changes are published.](./images/git-hub-stage-git-hub-pages-settings-page-published.png " ")
 
 ## Task 8: Access your workshop on GitHub

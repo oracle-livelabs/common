@@ -15,7 +15,7 @@ A notebook is a web-based interface for data analysis, data discovery, data visu
 
 	![Database Actions](images/db-users-db-actions.png)
 
-2. On the Database Actions page, go to the Development section and click **Oracle Machine Learning**. This opens the Oracle Machine Learning sign in page.
+2. On the Database Actions page, go to **Development** and then go to **Machine Learning**. Click **Open.** You may also click directly on **Machine Learning.** This opens the Oracle Machine Learning sign in page.
 
 	 ![Oracle Machine Learning Notebooks in ADW](images/adb-dev-oml.png)
 
@@ -37,9 +37,9 @@ To access the URL for the Oracle Machine Learning sign in page directly from the
 
 	![ADB console Tool configuration tab](images/adb-console-tool.png)
 
-2. Scroll down to locate the URL, copy the direct URL and paste it on the browser to sign into Oracle Machine Learning user interface.
+2. Go to the **Oracle Machine Learning user interface** section and click **Copy.** Paste the URL on the browser to sign into Oracle Machine Learning user interface.
 
-	![OML URL in ADB Tool configuration tab](images/oml-ui-tool-adb-console.png)
+	![OML URL in ADB Tool configuration tab](images/oml-ui-url-toolconfig.png)
 
 This completes the task of signing into Oracle Machine Learning user interface.
 

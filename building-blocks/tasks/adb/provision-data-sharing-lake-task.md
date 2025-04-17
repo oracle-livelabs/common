@@ -3,7 +3,7 @@
         "name":"Provision an ADB instance for Data Sharing/Data Lake workshops",
         "description":"Learn how to provision Autonomous Database using the OCI console.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "lastupdated":"Lauran K. Serhal, January 2025"
+        "lastUpdated":"Lauran K. Serhal, January 2025"
     }
 -->
 
@@ -33,8 +33,8 @@ This lab walks you through how to provision an Autonomous Database instance.
 5. In the **Provide basic information for the Autonomous Database** section, specify the following:
 
        * **Compartment:** Select your own compartment.
-       * **Display Name:** **`ADW-Data-Lake`**.
-       * **Database Name:** **`TrainingADW`**.
+       * **Display Name:** **[](var:db_display_name)**.
+       * **Database Name:** **[](var:db_name)**.
 
        ![The completed "Provide basic information for the Autonomous Database" section is displayed.](./images/adb-basic-info.png =75%x*)
 

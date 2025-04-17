@@ -3,7 +3,7 @@
         "name":"Create an Oracle Autonomous Database",
         "description":"Learn how to provision Autonomous Database using the OCI console.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "last_updated":"Lauran K. Serhal, January 2025"
+        "lastUpdated":"Lauran K. Serhal, March 2025"
     }
 -->
 
@@ -39,6 +39,6 @@ Please [proceed to the next lab](#next).
 
 ## Acknowledgements
 
-- **Author:** - Lauran K. Serhal, Consulting User Assistance Developer
-- **Last Updated By/Date:** - Lauran K. Serhal, January 2025
+- **Author:** Lauran K. Serhal, Consulting User Assistance Developer
+- **Last Updated By/Date:** Lauran K. Serhal, January 2025
 - **Built with Blocks**
