@@ -53,8 +53,8 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 
 - **Author:** Lauran K. Serhal, Consulting User Assistance Developer
-- **Last Updated By/Date:** Lauran K. Serhal, March 2025
-- **Built with Building Blocks**
+- **Last Updated By/Date:** Lauran K. Serhal, April 2025
+- **Developed with Building Blocks**
 
 Data about movies in this workshop were sourced from Wikipedia.
 
