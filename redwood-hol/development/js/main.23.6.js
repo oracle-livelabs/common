@@ -325,15 +325,15 @@ let main = function () {
             // adding link to the Neep Help URL in the header if the manifest file contains it (DBDOC-2496)
             
             // KP Translate 
-            // $(document).ready(function () {
-            //     addTranslateIcon(manifestFileContent.help); 
+            $(document).ready(function () {
+                addTranslateIcon(manifestFileContent.help); 
             
-            //     $(document).on('click', function (e) {
-            //         if (!$(e.target).closest('#translate_icon, #translate_popup').length) {
-            //             $('#translate_popup').hide();
-            //         }
-            //     });
-            // });
+                $(document).on('click', function (e) {
+                    if (!$(e.target).closest('#translate_icon, #translate_popup').length) {
+                        $('#translate_popup').hide();
+                    }
+                });
+            });
             addNeedHelpLink(manifestFileContent.help);
 
             if (getParam("qa") == "true") {
