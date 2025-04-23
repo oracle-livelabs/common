@@ -39,6 +39,6 @@ Please [proceed to the next lab](#next).
 
 ## Acknowledgements
 
-- **Author:** - Lauran K. Serhal, Consulting User Assistance Developer
-- **Last Updated By/Date:** - Lauran K. Serhal, January 2025
+- **Author:** Lauran K. Serhal, Consulting User Assistance Developer
+- **Last Updated By/Date:** Lauran K. Serhal, January 2025
 - **Built with Blocks**
