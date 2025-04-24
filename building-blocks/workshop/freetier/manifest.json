@@ -102,6 +102,11 @@
          "filename": "/common/building-blocks/blocks/oac/provision/oac-provision.md"
      },
      {
+         "title": "[oml] Introduction to Oracle Machine Learning AutoML UI",
+         "type": "freetier",
+         "filename": "/common/building-blocks/blocks/oml/oml-automl/oml-automl.md"
+     },
+     {
          "title": "[oml] Introduction to the Conda Environments in Oracle Machine Learning Notebooks",
          "type": "freetier",
          "filename": "/common/building-blocks/blocks/oml/oml-conda/oml-conda.md"
