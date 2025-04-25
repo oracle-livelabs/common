@@ -325,15 +325,15 @@ let main = function () {
             // adding link to the Neep Help URL in the header if the manifest file contains it (DBDOC-2496)
             
             // KP Translate 
-            // $(document).ready(function () {
-            //     addTranslateIcon(manifestFileContent.help); 
+            $(document).ready(function () {
+                addTranslateIcon(manifestFileContent.help); 
             
-            //     $(document).on('click', function (e) {
-            //         if (!$(e.target).closest('#translate_icon, #translate_popup').length) {
-            //             $('#translate_popup').hide();
-            //         }
-            //     });
-            // });
+                $(document).on('click', function (e) {
+                    if (!$(e.target).closest('#translate_icon, #translate_popup').length) {
+                        $('#translate_popup').hide();
+                    }
+                });
+            });
             addNeedHelpLink(manifestFileContent.help);
 
             if (getParam("qa") == "true") {
@@ -1085,22 +1085,40 @@ let main = function () {
                     <li><strong>Right-click</strong> anywhere on the page and choose <em>“Translate to<br> [Your Language]”</em>.</li>
                     <li>If that option doesn’t appear, click the <strong>⋮ three-dot menu</strong> in<br> the top-right corner of Chrome.</li>
                     <li>Select <em>“Translate”</em> from the dropdown.</li>
-                    <li>Then, click the <strong>translate icon</strong> in the address bar.</li>
+                    <li>Then, click the <strong>translate icon</strong>
+                    <img 
+                        src="https://livelabs.oracle.com/cdn/common/redwood-hol/img/translate-icon-chrome.png" 
+                        alt="Translate icon" 
+                        style="height: 30px; vertical-align: middle; margin-left: 4px;" 
+                        referrerpolicy="no-referrer"
+                    /> in the address bar.</li>
                     <li>If needed, click the <strong>⋮ three-dot menu</strong> within the Google<br> Translate popup and choose your preferred language.</li>
                 </ol>
             </div>
 
             <div class="tab-content" id="safari" style="display: none;">
             <ol>
-                <li>Click the <strong>translate icon</strong> in the address bar.</li>
-                <li>If you don't see the icon, go to the Safari menu bar at the top of<br> your screen.</li>
+                <li>Click the <strong>translate icon</strong>
+                <img 
+                    src="https://livelabs.oracle.com/cdn/common/redwood-hol/img/translate-icon-safari.png" 
+                    alt="Translate icon" 
+                    style="height: 30px; vertical-align: middle; margin-left: 4px;" 
+                    referrerpolicy="no-referrer"
+                    />
+                in the Safari address bar.</li>
+                <li>If the icon doesn’t appear, use the menu bar at the top of your<br> screen (next to the Apple  icon).</li>
                 <li>Select <strong>View</strong> → <strong>Translation</strong> → <em>“Translate to [Your Language]”</em>.</li>
-                <li>If no languages are available to translate to, click <strong>Preferred<br> Languages</strong> in the prompt.</li>
-                <li>This will open <strong>System Settings → Language & Region</strong>.</li>
-                <li>Click the <strong>+</strong> button under Preferred Languages, add your desired<br> language, and close Settings.</li>
-                <li>Return to Safari and repeat step 3 to translate the page.</li>
+                <li>
+                If no translation languages are available, click <strong>Preferred<br> Languages</strong> in the prompt, and follow these steps:
+                <ol type="a">
+                    <li>System Settings will open to <strong>Language & Region</strong>.</li>
+                    <li>Click the <strong>+</strong> button under Preferred Languages, add your <br>desired language, and close Settings.</li>
+                    <li>Return to Safari and repeat step 2 to translate the page.</li>
+                </ol>
+                </li>
             </ol>
             </div>
+
 
             <div class="tab-content" id="firefox" style="display: none;">
                 <ol>
