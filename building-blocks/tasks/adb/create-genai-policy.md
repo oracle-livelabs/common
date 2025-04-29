@@ -6,8 +6,6 @@
         "lastUpdated": "April 2025"
     }
 -->
-**Note:** This task is only required if you are using **OCI Generative AI** as your AI provider.
-
 Your Autonomous Database is using a resource principal to access OCI services. Create a policy that will enable your Autonomous Database to use **OCI Generative AI**. The following policy will enable any Autonomous Database within the specified compartment to access the AI service. **Make sure your policy uses the compartment where your Autonomous Database is deployed.** 
 
 1. From the **Console,** open the **Navigation** menu and click **Identity & Security.** Under **Identity,** click **Policies.**.
