@@ -47,7 +47,7 @@ We also have a set of common images that are included in the common directory
 - **Additional optional labs:** Develop LiveLabs Sprints
 - **Additional optional labs:** Setup graphical remote desktop
 - **Additional optional labs:** Create custom image for marketplace
-- **Maintenance:** OCI UI Update 2025
+<!-- - **Maintenance:** OCI UI Update 2025 -->
 
 
 ## Want to learn more about LiveLabs workshops and GitHub?
