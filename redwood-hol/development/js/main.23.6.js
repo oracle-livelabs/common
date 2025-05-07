@@ -39,12 +39,14 @@ let main = function () {
     const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
     console.log("Current domain:", currentDomain);let wid = null;
 
+    // KP Test
     try {
       const parentUrl = new URL(window.parent.location.href);
       wid = parentUrl.searchParams.get('p210_wid');
     } catch (err) {
       console.error('Error accessing parent URL:', err);
     }
+    // 
 
     const copyButtonText = "Copy";
     const queryParam = "lab";
@@ -1077,7 +1079,7 @@ let main = function () {
     
             let popupContent = `
            <div class="translation-popup-content">
-            <h2>How to Translate This Page</h2>
+            <h2>How to Translate This Page ${wid}</h2>
             <p>For the best translation experience, we recommend <strong>Google Chrome</strong>.</p>
 
             <!-- Tabs -->
