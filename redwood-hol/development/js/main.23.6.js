@@ -37,7 +37,14 @@ let main = function () {
     let expandText = "Expand All Tasks";
     let collapseText = "Collapse All Tasks";
     const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
-    console.log("Current domain:", currentDomain);
+    console.log("Current domain:", currentDomain);let wid = null;
+
+    try {
+      const parentUrl = new URL(window.parent.location.href);
+      wid = parentUrl.searchParams.get('p210_wid');
+    } catch (err) {
+      console.error('Error accessing parent URL:', err);
+    }
 
     const copyButtonText = "Copy";
     const queryParam = "lab";
