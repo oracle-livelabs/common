@@ -64,7 +64,7 @@ This is the folder that contains all common blocks.
 * **`tasks`:**    
 This is the folder that contains all common tasks.
 
-## Task 2: Pre-requisites to Using Building Blocks and Tasks
+## Task 2: Prerequisites to Using Building Blocks and Tasks
 
 ### **Pre-requisite 1**
 
@@ -131,6 +131,10 @@ The master list of all variables used in Blocks are stored in the [/common/build
 
 Copy this **`variables.json`** file to your own workshop directory if you need to change the default variable values for your workshop.
 
+![Variables file example](images/variables-file-example.png =75%x*)
+
+The following is an example of the contents of the file which is a collection of variable names and values that you can reference in your workshop's .md file.
+
 variables.json
 ```
 {
@@ -143,6 +147,14 @@ variables.json
     "db_workload_type":"Autonomous Data Warehouse"
  }
  ```
+
+ Next, reference the variables in your workshop's `.md` file. In the following example, we reference the `db_display_name` and `db_name` variables.
+
+![Reference variables file in manifest file](images/manifest-reference-variables-file.png =75%x*)
+
+ The **`provision-body.md`** building task uses variables in the markdown that are derived from the **`variables.json`** file. You must specify values for the variables that you use in your `.md` file in your `variables.json` file' otherwise, the rendered file would show blanks for the values.
+
+
 
 ### The manifest.json file
 
@@ -160,7 +172,7 @@ The **`manifest.json`** file describes the content of your workshop. It also con
       "adb-provision-body.md":"/common/building-blocks/tasks/adb/provision-body.md",
       "adb-goto-service-body.md":"/common/building-blocks/tasks/adb/goto-service-body.md"
     },
-    "variables": ["/common/building-blocks/variables/variables.json"],
+    "variables": ["./variables.json"],
     "help": "livelabs-help-db_us@oracle.com",
     "tutorials": [
         {
@@ -177,4 +189,4 @@ The **`manifest.json`** file describes the content of your workshop. It also con
 * **Authors:** 
     * Lauran K. Serhal, Consulting User Assistance Developer
     * Marty Gubar, Product Manager
-* **Last Updated By/Date:** Lauran K. Serhal, March 2025
+* **Last Updated By/Date:** Lauran K. Serhal, April 2025
