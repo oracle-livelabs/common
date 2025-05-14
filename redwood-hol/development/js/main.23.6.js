@@ -1909,42 +1909,54 @@ let download = function () {
 ######################################################
 */
 if (location.hostname.includes("livelabs.oracle.com")) {
-    var script = document.createElement("script");
+    const script = document.createElement("script");
     script.type = "text/javascript";
     script.src = "https://www.oracle.com/us/assets/metrics/ora_apex.js";
   
     script.onload = function () {
-      console.log('Adobe Analytics script loaded.');
+      console.log("Adobe Analytics script loaded. Waiting for 's'...");
   
-      // Only run if inside an iframe
-      if (window.self !== window.top) {
-        try {
-          const parentUrl = new URL(window.parent.location.href);
-          const wid = parentUrl.searchParams.get('p210_wid');
-  
-          if (wid) {
-            if (typeof s !== 'undefined') {
-              s.eVar24 = wid;
-              console.log('eVar24 set to WID:', wid);
-              console.log('eVar24 value (for debugging):', s.eVar24);
-            } else {
-              console.warn('Adobe Analytics object (s) not found even after script load.');
-            }
-          } else {
-            console.warn('p210_wid not found in parent URL.');
-          }
-        } catch (err) {
-          console.error('Error accessing parent URL:', err);
-        }
-      } else {
-        console.log('Page is not inside an iframe — skipping WID extraction.');
+      // Only run if in an iframe
+      if (window.self === window.top) {
+        console.log("Not in iframe — skipping WID extraction.");
+        return;
       }
+  
+      let attempts = 0;
+      const maxAttempts = 10;
+      const interval = 300;
+  
+      const checkForS = setInterval(() => {
+        attempts++;
+  
+        if (typeof window.s !== "undefined") {
+          try {
+            const parentUrl = new URL(window.parent.location.href);
+            const wid = parentUrl.searchParams.get("p210_wid");
+  
+            if (wid) {
+              s.eVar24 = wid;
+              console.log("✅ eVar24 set to WID:", wid);
+            } else {
+              console.warn("p210_wid not found in parent URL.");
+            }
+          } catch (err) {
+            console.error("Error accessing parent URL:", err);
+          }
+  
+          clearInterval(checkForS);
+        } else if (attempts >= maxAttempts) {
+          console.warn("Adobe Analytics object (s) still not found after retries.");
+          clearInterval(checkForS);
+        }
+      }, interval);
     };
   
     script.onerror = function () {
-      console.error('Failed to load Adobe Analytics script.');
+      console.error("❌ Failed to load Adobe Analytics script.");
     };
   
     document.head.appendChild(script);
   }
+  
   
