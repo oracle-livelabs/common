@@ -41,13 +41,32 @@ let main = function () {
     let wid = null;
 
     // KP Test
-    // try {
-    //   const parentUrl = new URL(window.parent.location.href);
-    //   wid = parentUrl.searchParams.get('p210_wid');
-    // } catch (err) {
-    //   console.error('Error accessing parent URL:', err);
-    // }
-    // 
+    (function() {
+        // Check if this page is inside an iframe
+        if (window.self !== window.top) {
+          try {
+            const parentUrl = new URL(window.parent.location.href);
+            const wid = parentUrl.searchParams.get('p210_wid');
+      
+            if (wid) {
+              if (typeof s !== 'undefined') {
+                s.eVar24 = wid;
+                console.log('eVar24 set to WID:', wid);
+              } else {
+                console.warn('Adobe Analytics object (s) not found.');
+              }
+            } else {
+              console.warn('p210_wid not found in parent URL.');
+            }
+          } catch (err) {
+            console.error('Error accessing parent URL:', err);
+          }
+        } else {
+          console.log('Page is not inside an iframe — skipping WID extraction.');
+        }
+      })();
+      
+    
 
     const copyButtonText = "Copy";
     const queryParam = "lab";
