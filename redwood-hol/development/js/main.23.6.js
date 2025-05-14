@@ -1912,36 +1912,39 @@ if (location.hostname.includes("livelabs.oracle.com")) {
     var script = document.createElement("script");
     script.type = "text/javascript";
     script.src = "https://www.oracle.com/us/assets/metrics/ora_apex.js";
-    document.head.appendChild(script); 
-
-    let wid = null;
-
-        // KP Test
-        (function() {
-            // Check if this page is inside an iframe
-            if (window.self !== window.top) {
-              try {
-                const parentUrl = new URL(window.parent.location.href);
-                const wid = parentUrl.searchParams.get('p210_wid');
-          
-                if (wid) {
-                  if (typeof s !== 'undefined') {
-                    s.eVar24 = wid;
-                    console.log('eVar24 set to WID:', wid);
-                    console.log('eVar24 value (for debugging):', s.eVar24);
-                  } else {
-                    console.warn('Adobe Analytics object (s) not found.');
-                  }
-                } else {
-                  console.warn('p210_wid not found in parent URL.');
-                }
-              } catch (err) {
-                console.error('Error accessing parent URL:', err);
-              }
+  
+    script.onload = function () {
+      console.log('Adobe Analytics script loaded.');
+  
+      // Only run if inside an iframe
+      if (window.self !== window.top) {
+        try {
+          const parentUrl = new URL(window.parent.location.href);
+          const wid = parentUrl.searchParams.get('p210_wid');
+  
+          if (wid) {
+            if (typeof s !== 'undefined') {
+              s.eVar24 = wid;
+              console.log('eVar24 set to WID:', wid);
+              console.log('eVar24 value (for debugging):', s.eVar24);
             } else {
-              console.log('Page is not inside an iframe — skipping WID extraction.');
+              console.warn('Adobe Analytics object (s) not found even after script load.');
             }
-          })();
-          
+          } else {
+            console.warn('p210_wid not found in parent URL.');
+          }
+        } catch (err) {
+          console.error('Error accessing parent URL:', err);
+        }
+      } else {
+        console.log('Page is not inside an iframe — skipping WID extraction.');
+      }
+    };
+  
+    script.onerror = function () {
+      console.error('Failed to load Adobe Analytics script.');
+    };
+  
+    document.head.appendChild(script);
   }
   
