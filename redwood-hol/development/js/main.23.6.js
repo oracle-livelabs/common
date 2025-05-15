@@ -38,6 +38,7 @@ let main = function () {
     let collapseText = "Collapse All Tasks";
     const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
     console.log("Current domain:", currentDomain);
+    let wid = null;
     
 
     const copyButtonText = "Copy";
@@ -174,6 +175,34 @@ let main = function () {
             }, 1000);
         });
     });
+
+    (function appendWidToIframeUrl() {
+        // Only proceed if inside an iframe
+        if (window.self !== window.top) {
+          try {
+            const parentUrl = new URL(window.parent.location.href);
+            const wid = parentUrl.searchParams.get('p210_wid');
+      
+            if (wid) {
+              const currentUrl = new URL(window.location.href);
+      
+              // Avoid infinite reloads if ?wid is already present
+              if (!currentUrl.searchParams.has('wid')) {
+                currentUrl.searchParams.set('wid', wid);
+                console.log("Reloading with WID param:", currentUrl.toString());
+                window.location.replace(currentUrl.toString()); // Use replace to avoid adding to browser history
+              }
+            } else {
+              console.log("Parent URL does not contain p210_wid.");
+            }
+          } catch (err) {
+            console.error("Error accessing parent URL or modifying iframe URL:", err);
+          }
+        } else {
+          console.log("Not in an iframe — skipping wid injection.");
+        }
+      })();
+      
 
     // specifies when to do when window is scrolled
     $(window).scroll(function () {
@@ -1909,54 +1938,9 @@ let download = function () {
 ######################################################
 */
 if (location.hostname.includes("livelabs.oracle.com")) {
-    const script = document.createElement("script");
+    var script = document.createElement("script");
     script.type = "text/javascript";
     script.src = "https://www.oracle.com/us/assets/metrics/ora_apex.js";
-  
-    script.onload = function () {
-      console.log("Adobe Analytics script loaded. Waiting for 's'...");
-  
-      // Only run if in an iframe
-      if (window.self === window.top) {
-        console.log("Not in iframe — skipping WID extraction.");
-        return;
-      }
-  
-      let attempts = 0;
-      const maxAttempts = 10;
-      const interval = 300;
-  
-      const checkForS = setInterval(() => {
-        attempts++;
-  
-        if (typeof window.s !== "undefined") {
-          try {
-            const parentUrl = new URL(window.parent.location.href);
-            const wid = parentUrl.searchParams.get("p210_wid");
-  
-            if (wid) {
-              s.eVar24 = wid;
-              console.log("✅ eVar24 set to WID:", wid);
-            } else {
-              console.warn("p210_wid not found in parent URL.");
-            }
-          } catch (err) {
-            console.error("Error accessing parent URL:", err);
-          }
-  
-          clearInterval(checkForS);
-        } else if (attempts >= maxAttempts) {
-          console.warn("Adobe Analytics object (s) still not found after retries.");
-          clearInterval(checkForS);
-        }
-      }, interval);
-    };
-  
-    script.onerror = function () {
-      console.error("❌ Failed to load Adobe Analytics script.");
-    };
-  
-    document.head.appendChild(script);
+    document.head.appendChild(script); 
   }
-  
   
