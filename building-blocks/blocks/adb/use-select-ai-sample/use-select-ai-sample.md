@@ -18,7 +18,7 @@ Estimated Time: 10 minutes.
 
 Watch the video below for a detailed walk-through of using the Oracle APEX-based ADB Chat demo application and the Select AI feature.
 
-[](youtube:htVeX8loT6c)
+[](youtube:2C-wirdC0aw)
 
 ### Objectives
 
