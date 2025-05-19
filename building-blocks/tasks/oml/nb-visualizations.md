@@ -1,3 +1,9 @@
+<!--
+    {
+        "name":"Visualize your data in OML notebooks",
+        "description":"Learn how to visualize your data using different types of graphs"
+    }
+-->
 # Introduction to Oracle Machine Learning Notebooks 
 
 ## Introduction
