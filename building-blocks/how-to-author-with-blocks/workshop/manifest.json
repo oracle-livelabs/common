@@ -4,6 +4,7 @@
      "adb-cleanup.md":"/common/building-blocks/tasks/adb/cleanup.md",
      "adb-connect-with-sql-worksheet-body.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-body.md",
      "adb-connect-with-sql-worksheet-non-admin.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-non-admin.md",
+     "adb-create-genai-policy.md":"/common/building-blocks/tasks/adb/create-genai-policy.md",
      "adb-create-graph.md":"/common/building-blocks/tasks/adb/create-graph.md",
      "adb-create-load-json-collection.md":"/common/building-blocks/tasks/adb/create-load-json-collection.md",
      "adb-create-user.md":"/common/building-blocks/tasks/adb/create-user.md",
@@ -36,7 +37,8 @@
      "oml-use-plsql-interpreter.md":"/common/building-blocks/tasks/oml/use-plsql-interpreter.md",
      "oml-use-py-interpreter.md":"/common/building-blocks/tasks/oml/use-py-interpreter.md",
      "oml-use-r-interpreter.md":"/common/building-blocks/tasks/oml/use-r-interpreter.md",
-     "oml-use-sql-interpreter.md":"/common/building-blocks/tasks/oml/use-sql-interpreter.md"
+     "oml-use-sql-interpreter.md":"/common/building-blocks/tasks/oml/use-sql-interpreter.md",
+     "stacks-provision-adb-select-ai.md":"/common/building-blocks/tasks/stacks/provision-adb-select-ai.md"
   },
  "help": "livelabs-help-db_us@oracle.com",
  "variables": ["/common/building-blocks/variables/variables.json"],
@@ -76,6 +78,11 @@
          "title": "OML Tasks",
          "type": "freetier",
          "filename": "/common/building-blocks/how-to-author-with-blocks/oml.md"
+     },
+     {
+         "title": "STACKS Tasks",
+         "type": "freetier",
+         "filename": "/common/building-blocks/how-to-author-with-blocks/stacks.md"
      }
   ]
 }
