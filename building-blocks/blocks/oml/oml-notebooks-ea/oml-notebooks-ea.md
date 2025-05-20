@@ -42,7 +42,7 @@ A notebook is a web-based interface for data analysis, data discovery, data visu
 
 <if type="freetier">
 
-If you are not signed in, then follow the steps in Task 3 in the lab _Provision an Autonomous Database._
+In the freetier setup, you should be already signed in to Oracle Machine Learning user interface now. If not, then follow the steps in Task 3 in the lab _Provision an Autonomous Database._
 
 </if>
 
@@ -65,8 +65,10 @@ If you are not signed in, then follow the steps in Task 3 in the lab _Provision 
 
 	![Oracle Machine Learning UI Sign in page](images/oml-signin-page.png)
 
-</if>
 This completes the task of signing into Oracle Machine Learning user interface.
+
+</if>
+
 
 ## Task 2: Access Oracle Machine Learning Notebooks 
 
