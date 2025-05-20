@@ -7,9 +7,9 @@
 
 A notebook is a web-based interface for data analysis, data discovery, data visualization, and collaboration. You create and run notebooks in Oracle Machine Learning user interface. You can access Oracle Machine Learning user interface from Autonomous Database.
 
-1. On your Oracle ADW console, click the **Database actions** pull-down menu, and then select the option **View all database actions**.
+1. On your Oracle Autonomous Database console, click the **Database actions**, and then select the option **View all database actions**.
 
-	![Database Actions in ADW](images/dbactions-view-all-dbusers.png)
+	![Database Actions in ADW](images/dbactions-view-all-dbusers-rw.png)
 
 	 If you had it already open in the Database Users section, you can go to Database Actions home page clicking in the **Database Actions** on the top left corner of the page, as shown in the screenshot below.
 
