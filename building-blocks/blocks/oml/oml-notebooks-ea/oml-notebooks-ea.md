@@ -42,30 +42,8 @@ A notebook is a web-based interface for data analysis, data discovery, data visu
 
 <if type="freetier">
 
-1. Sign into your OCI account, click the Cloud menu on the left to open the left navigation pane, and click **Oracle Database**. On the right pane under Autonomous Database, click **Autonomous Data Warehouse**.
+If you are not signed in, then follow the steps in Task 3 in the lab _Provision an Autonomous Database._
 
-	![ADB in OCI](images/adw.png)
-
-2. The Autonomous Database dashboard lists all the databases that are provisioned in the tenancy. Click the Oracle Autonomous Database that you have provisioned.
-
-  ![List of provisioned ADBs](images/provisioned-adb.png)        	  
-
-3. On your Oracle Autonomous Database instance page, click the **Database Actions** pull-down menu, and then select the option `View all database actions`. Wait till the Database Actions opens.
-
-	![ADW Service Console](images/database_actions.png)
-
-4. On the Database Actions page, go to the **Development** tab and click **Oracle Machine Learning**. This opens the Oracle Machine Learning sign in page.
-
-	![Development option in ADW Service Console](images/adb-dev-oml.png)
-
-5. Enter your user credentials and click **Sign in**.
-
-	> **Note:** The credential is what you have defined while creating the Oracle Machine Learning user.
-
-	![Oracle Machine Learning UI Sign in page](images/omluser-signin.png)
-
-	This opens the Oracle Machine Learning user interface home page.
-	![Notebooks option in OML homepage](images/homepage.png)
 </if>
 
 <if type="livelabs">
