@@ -69,14 +69,10 @@ To provision an Oracle Autonomous Database:
 10. Under Advanced Options:
 
 
-11. Click **Create**. 
-    ![ADB create](images/adb-create-rw.png " ")
+11. Click **Create**.  The Oracle Autonomous Database instance starts provisioning. It will show the status **Provisioning**. .
+    ![ADB listed](images/adw-starts-provisioning-rw.png " ")
 
-    The Oracle Autonomous Database instance starts provisioning. It will show the status **Provisioning** and once it is complete, it will be listed on the Autonomous Databases page. 
-
-      ![ADB listed](images/adw-omllabs-listed.png " ")
-
-12. Click on the ADB instance to view the ADB details. 
+    Once the provisioning is complete, the database details are listed with the status Available.
 
 	  ![ADB details](images/adw-details-rw.png " ")
 
