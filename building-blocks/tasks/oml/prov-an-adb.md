@@ -70,14 +70,14 @@ To provision an Oracle Autonomous Database:
     * **Encryption Key:** 
         ![Encryption key](images/encryption-key-adb.png " ")
         * **Encrypt using an Oracle-managed key:** By default, Autonomous Database uses Oracle-managed encryption keys. Using Oracle-managed keys, Autonomous Database creates and manages the encryption keys that protect your data and Oracle handles rotation of the TDE master key. We will use this option for this workshop. 
-        * **Encrypt using a Customer Managed-key.in this tenancy**
-        * **Encrypt using a customer Managed-key in a different tenancy**        * 
+        * **Encrypt using a customer managed-key in this tenancy**
+        * **Encrypt using a customer managed-key in a different tenancy** 
     * **Maintenance:** By default, the patch level is set to _Regular_ for an Always Free database. 
     * **Tools:** The following tools are enabled for an Always Free database - Oracle APEX, Database Actions, Graph Studio, Oracle Machine Learning user interface, Data Transforms, and Web Access. 
         
         > **Note:** You cannot edit the configuration of these tools for an Always Free database. 
     * **Security Attributes:** You can add a security attribute to control access for your resources using Zero Trust Packet Routing (ZPR) policies. To enter security attributes during provisioning, you must already have set up security attributes with Zero Trust Packet Routing. You also can add security attributes after provisioning. For this workshop, we will leave this field as is. 
-    * **Tags:** You can add additional metadata to reorganize your resources. The options are:
+    * **Tags:** If you want to use **Tags**, enter the **Tag key** and **Tag value**. Tagging is a metadata system that allows you to organize and track resources within your tenancy. Tags are composed of keys and values which can be attached to resources. The options are:
         * In Namespace, if you select **None (free-form)**, enter a **Key** and add a **Value** to it. 
         * In Namespace, if you select **Oracle-tags** you have the option to choose _CreatedBy_ or _CreatedOn_ in the **Key** field. Assign a value to the selected key, as applicable. 
         ![Oracle Tags](images/oracle-tags.png " ")
