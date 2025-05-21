@@ -65,7 +65,7 @@
  
 [](include:oml-create-oml-user.md)
  
-## nb-visualizations.md
+## Visualize your data in OML notebooks
 **Markdown file location:**
 ```
 /common/building-blocks/tasks/oml/nb-visualizations.md
@@ -131,7 +131,7 @@
  
 [](include:oml-prov-an-adb.md)
  
-## Sign into Oracle Machine Learning UI
+## Sign into Oracle Machine Learning UI - green button
 **Markdown file location:**
 ```
 /common/building-blocks/tasks/oml/sign-into-oml-livelabs.md
@@ -153,7 +153,7 @@
  
 [](include:oml-sign-into-oml-livelabs.md)
  
-## Sign into Oracle Machine Learning UI
+## Sign into Oracle Machine Learning UI from databae actions
 **Markdown file location:**
 ```
 /common/building-blocks/tasks/oml/sign-into-oml.md

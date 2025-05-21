@@ -1,7 +1,7 @@
 <!--
     {
-        "name":"Sign into Oracle Machine Learning UI",
-        "description":"Steps to sign into Oracle Machine Learning UI"
+        "name":"Sign into Oracle Machine Learning UI from databae actions",
+        "description":"Steps to sign into Oracle Machine Learning UI from database actions"
     }
 -->
 
