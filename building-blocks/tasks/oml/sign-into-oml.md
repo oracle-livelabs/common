@@ -33,13 +33,13 @@ A notebook is a web-based interface for data analysis, data discovery, data visu
 
 To access the URL for the Oracle Machine Learning sign in page directly from the ADB Console Tool configuration tab:
 
-1. Go to your Autonomous Database details page and click **Tool cofiguration**. 
+1. Go to your Autonomous Database details page and click **Tool configuration**. 
 
 	![ADB console Tool configuration tab](images/adb-console-tool.png)
 
 2. Go to the **Oracle Machine Learning user interface** section and click **Copy.** Paste the URL on the browser to sign into Oracle Machine Learning user interface.
 
-	![OML URL in ADB Tool configuration tab](images/oml-ui-url-toolconfig.png)
+	![OML URL in ADB Tool configuration tab](images/oml-ui-url-toolconfig-rw.png)
 
 This completes the task of signing into Oracle Machine Learning user interface.
 
