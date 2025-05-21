@@ -17,7 +17,7 @@ To create a user account:
 
 2. The Autonomous Databases dashboard lists all the databases that are provisioned in the tenancy. Click the Oracle Autonomous Database that you have provisioned for this workshop. Here, click the instance **OMLLABS**.
 
-	![Oracle Autonomous Data Warehouse](images/adw-omllabs-listed.png " ")
+	![Oracle Autonomous Data Warehouse](images/adw-omllabs-listed-rw.png " ")
 
 3. On the Autonomous Database details page, click **Database Actions**, and then select the **Database Users** option.
 
