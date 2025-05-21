@@ -11,11 +11,11 @@ To provision an Oracle Autonomous Database:
 
 	![Create ADW Database](images/adw-database-rw.png " ")
 
-	 Alternatively, you may click the left navigation pane on the upper left corner, click **Oracle Database** and then click **Autonomous Database**.
+	 Alternatively, you may click the Cloud menu icon on the upper left corner. This opens the left nagivation menu. Click **Oracle Database** and then click **Autonomous Database**.
 
 	![Autonomous Database under Oracle Database](images/database-adw-rw.png " ")
 
-2. From the Oracle Cloud Infrastructure console, on the Oracle Autonomous Database page choose your region and optionally select a compartment. By default, it will show the root compartment. Click **Create Autonomous Database**. This opens the _Create Autonomous Database Serverless_ page.
+2. On the Autonomous Databases page, click **Compartment** to select a compartment. By default, it will show the root compartment. Click **Create Autonomous Database**. This opens the _Create Autonomous Database Serverless_ page.
 
    ![Create Autonomous Database option](images/create-autonomous-db-rw.png " ")
 
@@ -48,7 +48,7 @@ To provision an Oracle Autonomous Database:
 
         > ![Configure Database](images/db-configuration-backup-rw.png " ")
 
-    * The **Advanced options** - **Compute Model** and **Bring your own license** are available only for a paid version.   
+    * The Advanced options - **Compute Model** and **Bring your own license** are available only for a paid version.   
 
         ![Configure Database](images/adv-options-rw.png " ") 
 
@@ -68,15 +68,19 @@ To provision an Oracle Autonomous Database:
 
 9. Under Advanced Options, the following options are available:
     * **Encryption Key:** 
-        * **Encrypt using an Oracle-managed key:** By default, Autonomous Database uses Oracle-managed encryption keys. Using Oracle-managed keys, Autonomous Database creates and manages the encryption keys that protect your data and Oracle handles rotation of the TDE master key. 
-        * Encrypt using a Customer Managed key. 
+        ![Encryption key](images/encryption-key-adb.png " ")
+        * **Encrypt using an Oracle-managed key:** By default, Autonomous Database uses Oracle-managed encryption keys. Using Oracle-managed keys, Autonomous Database creates and manages the encryption keys that protect your data and Oracle handles rotation of the TDE master key. We will use this option for this workshop. 
+        * **Encrypt using a Customer Managed-key.in this tenancy**
+        * **Encrypt using a customer Managed-key in a different tenancy**        * 
     * **Maintenance:** By default, the patch level is set to _Regular_ for an Always Free database. 
     * **Tools:** The following tools are enabled for an Always Free database - Oracle APEX, Database Actions, Graph Studio, Oracle Machine Learning user interface, Data Transforms, and Web Access. 
-        > **Note:** You cannot edit the configuration of these tools for an Always Free version. 
-    * **Security Attributes:**
+        
+        > **Note:** You cannot edit the configuration of these tools for an Always Free database. 
+    * **Security Attributes:** You can add a security attribute to control access for your resources using Zero Trust Packet Routing (ZPR) policies. To enter security attributes during provisioning, you must already have set up security attributes with Zero Trust Packet Routing. You also can add security attributes after provisioning. For this workshop, we will leave this field as is. 
     * **Tags:** You can add additional metadata to reorganize your resources. The options are:
         * In Namespace, if you select **None (free-form)**, enter a **Key** and add a **Value** to it. 
         * In Namespace, if you select **Oracle-tags** you have the option to choose _CreatedBy_ or _CreatedOn_ in the **Key** field. Assign a value to the selected key, as applicable. 
+        ![Oracle Tags](images/oracle-tags.png " ")
 
 10. Click **Create**.  The Oracle Autonomous Database instance starts provisioning. It will show the status **Provisioning**. .
     ![ADB listed](images/adw-starts-provisioning-rw.png " ")
