@@ -38,36 +38,19 @@ This lab assumes you have:
 
 ## Task 1: Sign into Oracle Machine Learning User Interface
 
-A notebook is a web-based interface for data analysis, data discovery, data visualization, and collaboration. You create and run notebooks using Oracle Machine Learning Notebooks, which is accessed through the Oracle Machine Learning user interface on Oracle Autonomous Database.
 
 <if type="freetier">
 
-In the freetier setup, you should be already signed in to Oracle Machine Learning user interface now. If not, then follow the steps in Task 3 in the lab _Provision an Autonomous Database._
+[](include:oml-sign-into-oml.md)
 
 </if>
 
 <if type="livelabs">
-1. On your workshop page, click **Launch Workshop** under **My Reservations**.
 
-   ![Launch Workshop](images/launch-workshop.png)
-
-2. On the **Get Started - LiveLabs login** page, click **View Login Info** at the top left.
-
-	![ADB in OCI](images/get-started-page-livelabs.png)
-
-3. In the panel that opens with the **Reservation Information**, click at the bottom of the panel on the **OML Notebooks** link.
-
-	![ADB in OCI](images/livelabs-reservation-info.png)
-
-4. In the page that opens, enter your user credentials and click **Sign in**. This opens the Oracle Machine Learning user interface home page.
-
-	> **Note:** The username is `OMLUSER`, and password is `AAbbcc123456`.
-
-	![Oracle Machine Learning UI Sign in page](images/oml-signin-page.png)
-
-This completes the task of signing into Oracle Machine Learning user interface.
+[](include:oml-sign-into-oml-livelabs.md)
 
 </if>
+
 
 
 ## Task 2: Access Oracle Machine Learning Notebooks 
