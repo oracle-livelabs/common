@@ -1,0 +1,13 @@
+{
+  "workshoptitle": "The Title of the Workshop is defined in the manifest",
+  "help": "livelabs-help-**enterarea**_us@oracle.com",
+  "variables": ["../../variables/variables.json",
+    "../../variables/variables-in-another-file.json"],
+  "tutorials": [
+    {
+      "title": "Introduction",
+      "description": "The Introduction is always second for LiveLabs. The title and contents menu title match for the Introduction.",
+      "filename": "../../sandbox-testing-access.md"
+    }
+  ]
+}
