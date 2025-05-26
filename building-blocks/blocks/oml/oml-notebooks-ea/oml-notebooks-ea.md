@@ -41,7 +41,9 @@ This lab assumes you have:
 
 <if type="freetier">
 
-[](include:oml-sign-into-oml.md)
+A notebook is a web-based interface for data analysis, data discovery, data visualization, and collaboration. You create and run notebooks in Oracle Machine Learning user interface. You can access Oracle Machine Learning user interface from Autonomous Database.
+
+Sign in to Oracle Machine Learning user interface. Follow the steps in *Task 3 Sign into Oracle Machine Learning User Interface* in the lab _Provision an Autonomous Database with OMLUSERS_ 
 
 </if>
 
