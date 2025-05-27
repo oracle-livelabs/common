@@ -12,7 +12,7 @@ Estimated Time: 5 minutes
 
 - Verify that you can access the Oracle LiveLabs sandbox environment from your current network.
 
-- heck if your corporate firewall or proxy blocks access to Oracle Cloud Infrastructure (OCI) IP addresses via HTTP.
+- Check if your corporate firewall or proxy blocks access to Oracle Cloud Infrastructure (OCI) IP addresses via HTTP.
 
 - Ensure your environment is ready before attending a LiveLabs workshop.
 
@@ -31,7 +31,7 @@ If you don’t have one yet, you can create one for [free](https://www.oracle.co
 Visit [livelabs.oracle.com](livelabs.oracle.com) and sign in with your Oracle SSO.
 
 
-## Task 1: Open the Workshop Page
+## Task 1: Open the workshop page
 
 1. Start by navigating to your selected workshop on [LiveLabs](livelabs.oracle.com).
 
@@ -39,22 +39,20 @@ Visit [livelabs.oracle.com](livelabs.oracle.com) and sign in with your Oracle SS
 
   ![Start button](./images/start-button.png " ")
 
-## Task 2: Choose the Sandbox Environment
+3. Next, you may see 2 option: ***Run on your own tenancy*** or ***Run on LiveLbs Sandbox***.
 
-You may see 2 option: ***Run on your own tenancy*** or ***Run on LiveLbs Sandbox***.
-
-1. Select the option to run the lab in the LiveLabs Sandbox environment.
+    Select the option to run the lab in the LiveLabs Sandbox environment.
 
   ![Run on LiveLbs Sandbox](./images/run-sandbox.png " ")
 
-## Task 3: Log in with Your Oracle SSO
+## Task 2: Log in with your Oracle SSO
 
 Next, log in using your **Oracle Single Sign-On (SSO) ID**.
 If you don’t have one, follow the prompts to create a [free Oracle account](https://profile.oracle.com/myprofile/account/create-account.jspx).
 
   ![Create a free Oracle account](./images/new-oracle-account.png " ")
 
-## Task 4: Reserve Your Workshop
+## Task 3: Reserve your workshop
 
 In the Reserve Workshop window, toggle the **Start Workshop Now** option. Confirm your selection to begin provisioning the environment.
 
@@ -66,13 +64,13 @@ In the Reserve Workshop window, toggle the **Start Workshop Now** option. Confir
 
 Now your reservation was submitted!
 
-## Task 5: View Your Reservation
+## Task 4: View your reservation
 
 Once reserved, head to the **My Reservations** page. If you don’t see your workshop right away, simply refresh your browser.
 
 ![View reservation](./images/my-reservation.png " ")
 
-## Task 6: Wait for the Environment to Be Ready
+## Task 5: Wait for the environment to be ready
 
 It typically takes 10–20 minutes for the sandbox environment to be fully provisioned.
 
@@ -80,7 +78,7 @@ It typically takes 10–20 minutes for the sandbox environment to be fully provi
 
 You’ll know it’s ready when the status shows as active.
 
-## Task 7: Test the Login Process
+## Task 6: Test the login process
 
 Click **Launch Workshop**.
 
@@ -90,9 +88,9 @@ At the top-left of the page, a link labeled “View Login Info” will appear �
 
 ![iew Login Info](./images/view-login-info.png " ")
 
-## Task 8: Launch the Remote Desktop
+## Task 7: Launch the remote desktop
 
-Now, click the dark **Launch Remote Desktop** button.
+Now, click the **Launch Remote Desktop** button.
 
 ![Launch Workshop](./images/launch-remote-desktop.png " ")
 
