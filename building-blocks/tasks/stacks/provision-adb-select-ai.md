@@ -54,7 +54,7 @@ Use an OCI Cloud Stack to set up your workshop environment by creating an ADB in
 
     * In the **Pick one of the listed regions that your tenancy it's subscribed to access the LLM** drop-down list, select a region _to which your tenancy is subscribed that has access to the OCI GenAI LLM_. In our example, we accepted the default `us-chicago-1` region. For the current list of regions with **Generative AI**, see [Regions with Generative AI](https://docs.oracle.com/en-us/iaas/Content/generative-ai/overview.htm).
 
-    * In the **Pick the datasets to load** drop-down list, accept the default **`gen-ai** value.
+    * In the **Pick the datasets to load** drop-down list, accept the default **`gen-ai`** value.
 
         >**Note:** In the **Workshop Settings** section, if a **Secret API key used to connect to AI model** field is displayed, that is not **_not Required_** for this Lab since OCI Generative AI does not use a secret key for Resource Operations.
    
