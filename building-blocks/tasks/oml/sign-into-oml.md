@@ -5,7 +5,7 @@
     }
 -->
 
-A notebook is a web-based interface for data analysis, data discovery, data visualization, and collaboration. You create and run notebooks in Oracle Machine Learning user interface. You can access Oracle Machine Learning user interface from Autonomous Database.
+A notebook is a web-based interface for data analysis, data discovery, data visualization, and collaboration. You create and run notebooks in the Oracle Machine Learning user interface. You can access the Oracle Machine Learning user interface from Autonomous Database.
 
 1. On your Oracle Autonomous Database console, click the **Database actions**, and then select the option **View all database actions**.
 
