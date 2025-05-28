@@ -5,7 +5,7 @@
     }
 -->
 
-You can access Oracle Machine Learning user interface from Autonomous Database. Oracle Machine Learning user interface provides you the following functionalities: 
+You can access Oracle Machine Learning User Interface from Autonomous Database. Oracle Machine Learning User Interface provides you the following functionalities: 
 
 * Notebooks - A web-based interface for data analysis, data discovery, data visualization, and collaboration
 * AutoML UI - An interface for no-code automated machine learning modeling and model deployment
@@ -14,7 +14,7 @@ You can access Oracle Machine Learning user interface from Autonomous Database. 
 * Templates - A repository of example template notebooks, and a space to store your notebooks as personal templates, and share notebooks
 * Jobs - An interface to create jobs to schedule your notebooks
 
-To access Oracle Machine Learning user interface:
+To access Oracle Machine Learning User Interface:
 
 1. On your workshop page, click **Launch Workshop** under **My Reservations**.
 	![Launch Workshop](images/launch-workshop.png)
