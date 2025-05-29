@@ -1,9 +1,9 @@
 <!--
     {
         "name":"Provision ADB with Select AI using Resource Manager Stack",
-        "description":"Deploys a database and data using a stack. Specify variable 'terraform_url' for the pointer to the stack",
-        "author": "Marty Gubar",
-        "lastUpdated": "April 2025"
+        "description":"Deploys a database and data using a stack. Specify variable 'terraform_url' for the pointer to the stack-Redwood",
+        "author": "Marty Gubar/Lauran Serhal",
+        "lastUpdated": "May 2025"
     }
 -->
 
@@ -37,21 +37,30 @@ Use an OCI Cloud Stack to set up your workshop environment by creating an ADB in
 
         >**Note:** Your database name that you choose must be unique in the tenancy that you are using; otherwise, you will get an error message.
 
-    * **Do you want an always Free Oracle Autonomous Database instance?** Accept the default **`false`** value. Select **`true`** from the drop-down list if you want to deploy an Always Free database.
+    * **Do you want an always Free Oracle Autonomous Database instance?:** Accept the default **`false`** value. Select **`true`** from the drop-down list if you want to deploy an Always Free database.
 
         ![Provision an always free ADB instance](./images/provision-always-free.png "")
 
-    * **Password:** Enter a password for the `ADMIN` user of your choice such as **`Training4ADW`**. **Important**: Make a note of this password as you will need it to perform later tasks.
-    
+    * **Provision Paid Oracle Autonomous Database instance (4 ECPUs 1 TB Storage) - License Included or BYOL?:**
+    Accept the default **`BRING_YOUR_OWN_LICENSE`** value.
+
+    * **Password:** Enter and confirm a password for the `ADMIN` user of your choice such as **`Training4ADW`**. **Important**: Make a note of this password as you will need it to perform later tasks.
+
+    * **The quantity of data in the database, in terabytes:** Accept the default selection of **`1`**.
+
+    * **Indicates if auto scaling is enabled for the Autonomous Database CPU core count:** Accept the default selection of **`false`**.
+
+    * **The number of ECPUs cores to be made available to the database:** Enter **`2`**.
+
+    * In the **Pick one of the listed regions that your tenancy it's subscribed to access the LLM** drop-down list, select a region _to which your tenancy is subscribed that has access to the OCI GenAI LLM_. In our example, we accepted the default `us-chicago-1` region. For the current list of regions with **Generative AI**, see [Regions with Generative AI](https://docs.oracle.com/en-us/iaas/Content/generative-ai/overview.htm).
+
+    * In the **Pick the datasets to load** drop-down list, accept the default **`gen-ai`** value.
+
         >**Note:** In the **Workshop Settings** section, if a **Secret API key used to connect to AI model** field is displayed, that is not **_not Required_** for this Lab since OCI Generative AI does not use a secret key for Resource Operations.
    
-    * For the other fields, accept the default selections. For the **A valid Oracle Database version for Autonomous Database** field, you can click the drop-down list and select the database version as either **19c** or **23ai**.
-    
-        ![The Configure variables step 2 of the wizard](./images/configure-variables-updated.png " ")
+        ![The Configure variables step 2 of the wizard](./images/configure-variables.png " ")
 
-4. Click **Next**. If clicking **Next** does not take you to the page 3 of the wizard, check the **Region** field. It may have been reset.
-
-    ![Click next in step 2 of the wizard](./images/click-next.png "")
+4. Click **Next**. 
 
 5. In the **Review** step 3 of the wizard, review your configuration variables and make any necessary changes on the previous pages. If everything looks good, then it's time for you to create and apply your stack! Ensure that the **Run apply** check box is checked, and then click **Create**.
 
@@ -59,11 +68,11 @@ Use an OCI Cloud Stack to set up your workshop environment by creating an ADB in
 
 6. The **Job details** page is displayed. The initial status (in orange color) is **ACCEPTED** and then **IN PROGRESS**.
 
-  ![Job in progress](./images/in-progress.png "")
+    ![Job in progress](./images/in-progress.png "")
 
-  If the job completes successfully, the status changes to **SUCCEEDED** (in green color). This process can take 5 to 10 minutes to complete.
+    If the job completes successfully, the status changes to **SUCCEEDED** (in green color). This process can take 5 to 10 minutes to complete.
 
-  ![Job has been successful](./images/stack-success.png "")
+    ![Job has been successful](./images/stack-success.png "")
 
 7. Scroll-down to the **Resources** section at the bottom of **Job details** page, and then click **Outputs**. The keys and values are displayed in the **Outputs** section.
 
@@ -81,7 +90,7 @@ Use an OCI Cloud Stack to set up your workshop environment by creating an ADB in
 
 1. Let's view the newly created stack and job. From the Console, open the **Navigation** menu.
 
-    ![Click the Navigation menu.](./images/click-navigation-menu.png =60%x*)
+    ![Click the Navigation menu.](./images/click-navigation-menu.png " ")
 
 2. Click **Developer Services**. Under **Resource Manager**, click **Stacks**.
 
@@ -109,8 +118,14 @@ Use an OCI Cloud Stack to set up your workshop environment by creating an ADB in
 
 Let's view the newly provisioned ADB instance.
 
-1. From the Console, open the **Navigation** menu and click **Oracle Database**. Under **Autonomous Database**, click **Autonomous Data Warehouse**.
+1. From the Console, open the **Navigation** menu.
 
-2. On the **Autonomous Databases** page, select the _compartment and region_ that you specified in the **Configure variables** step 2 of the wizard. The Autonomous Database that was provisioned by the stack is displayed, **``TrainingAIWorkshop``**.
+    ![Click the Navigation menu](./images/click-navigation.png "")
+
+2.  Click **Oracle Database**, and then click **Autonomous Data**.
+
+    ![Click oracle database > autonomous database](./images/click-adb.png "")
+
+3. On the **Autonomous Databases** page, select the _compartment and region_ that you specified in the **Configure variables** step 2 of the wizard, if not already selected. The Autonomous Database that was provisioned by the stack is displayed, **``TrainingAIWorkshop``**.
 
     ![The Autonomous Databases page](./images/adb-instances.png "")
