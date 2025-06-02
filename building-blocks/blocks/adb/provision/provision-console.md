@@ -1,21 +1,25 @@
 <!--
     {
         "name":"Create an Oracle Autonomous Database",
-        "description":"Learn how to provision Autonomous Database using the OCI console."
+        "description":"Learn how to provision Autonomous Database using the OCI console.",
+        "author":"Lauran K. Serhal, Consulting User Assistance Developer",
+        "lastUpdated":"Lauran K. Serhal, May 2025"
     }
 -->
-# Create an Oracle Autonomous Database 
+
+# Create an Oracle Autonomous Database
 
 ## Introduction
 
-Learn how to provision Autonomous Database using the OCI console.
+Learn how to provision an Autonomous Database instance using the OCI console.
 
 Estimated Time: 5 minutes
 
 ### Objectives
 
 In this lab, you will:
-- Learn how to provision a new OracleAutonomous Database
+- Learn how to provision a new Oracle Autonomous Database.
+
 ### Prerequisites
 
 -   This lab requires completion of the Get Started section in the Contents menu on the left.
@@ -30,12 +34,11 @@ Please [proceed to the next lab](#next).
 
 ## Learn more
 
-- See the [documentation](https://docs.oracle.com/en/cloud/paas/autonomous-data-warehouse-cloud/user/autonomous-workflow.html#GUID-5780368D-6D40-475C-8DEB-DBA14BA675C3) on the typical workflow for using Autonomous Data Warehouse.
+- See the [documentation](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/work-with-workflows.html) on the typical workflow for using Autonomous Database Serverless.
 - Go to the [Data Warehousing Insider blog](https://blogs.oracle.com/datawarehousing/) for more information on network connectivity options mentioned in this workshop.
 
 ## Acknowledgements
 
-- **Author** - Nilay Panchal, Oracle Autonomous Database Product Management
-- **Adapted for Cloud by** - Richard Green, Principal Developer, Database User Assistance
-- **Last Updated By/Date** - Marty Gubar, ADB PM, July 2022
+- **Author:** Lauran K. Serhal, Consulting User Assistance Developer
+- **Last Updated By/Date:** Lauran K. Serhal, May 2025
 - **Built with Blocks**

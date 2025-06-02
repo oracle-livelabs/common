@@ -13,16 +13,14 @@ This lab assumes you have:
 
 ## Task 1: Cleanup Instance for Image Capture   
 
-1. Start an SSH termial session to the instance as user *opc* 
-    
-    **Notes:** This session must be external to your remote desktop connection.
+1. **Outside of your remote desktop connection!** Connect to your instance via SSH as user *opc*. 
 
 2. Copy and run the following to cleanup the instance.
 
     ```
     <copy>
     cd /tmp
-    wget -q https://objectstorage.us-ashburn-1.oraclecloud.com/p/M8Q8E0Y8nmagcCPqUV3xHxqU21DN0acGe_J2wgNAg2XdxnPdTAJcmznu59NhlJ-E/n/natdsecurity/b/misc/o/livelabs-image-cleanup.zip -O /tmp/livelabs-image-cleanup.zip
+    wget -q https://objectstorage.us-ashburn-1.oraclecloud.com/p/hzy0xAZy0sLOIuzargHjyWykBnjf9TmLwup-QsjL13t4h2z41T642JfplesXCR6l/n/c4u02/b/hosted_workshops/o/stacks/livelabs-image-cleanup.zip -O /tmp/livelabs-image-cleanup.zip
     unzip -qo livelabs-image-cleanup.zip 
     chmod +x livelabs-image-cleanup.sh
     sudo /tmp/livelabs-image-cleanup.sh
@@ -57,7 +55,7 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
 1. Download the sample ORM stack zip archive
 
-    - [ll-orm-mkplc-freetier.zip](https://objectstorage.us-ashburn-1.oraclecloud.com/p/Ma3anAntwyF54E289zRxemySTIA2RZcOcq1jPZ_ZRiV3lhedYJSw3qCRnnU9K__M/n/natdsecurity/b/stack/o/ll-orm-mkplc-freetier.zip)
+    - [ll-orm-mkplc-freetier.zip](https://objectstorage.us-ashburn-1.oraclecloud.com/p/D0dAdNNBbmxXM8UJyt13DU8nzLEXBXOCdf-BgrMFquLMsIVJtnSDAJVBpvGM_2Jb/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-freetier.zip)
 
 2. Unzip it locally on your computer to *ll-orm-mkplc-freetier*.
 3. Delete the downloaded file *ll-orm-mkplc-freetier.zip*.
@@ -96,7 +94,7 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
     *Notes:* If the setup was successful you should see two sample Google-chrome browser windows preloaded.
 
-## Task 4: Share with LiveLabs Team   
+## Task 4: Share with LiveLabs Team
 1. Export the custom image to an Object Storage Standard bucket (Do not an Archive bucket)
 
     - Select *Export to an Object Storage bucket* unless you have a remote bucket URL with the right permissions to accept your export
@@ -112,20 +110,17 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
     ![](./images/create-pre-auth-url.png " ")
 
-3. Send an email to *`livelabs-help-db_us@oracle.com`* and *`livelabs-help-license_us@oracle.com`* with the following content
+3. Navigate to the **Publishing** Tab in the [WMS](https://bit.ly/oraclewms).
 
-    - Pre-authenticated URL created and copied above
-    - **`desktop_guide_url`**: Link to github.io guide ending with "*../workshop/desktop*".
-      ```
-      e.g.
-      https://oracle-livelabs.github.io/em-omc/enterprise-manager/emcc/workshops/desktop/
-      ```
-    - **`desktop_app1_url`** (Optional): Link to any webapp that should be loaded on the desktop on noVNC boot.
-      ```
-      e.g. Enterprise Manager Console
-      https://emcc.livelabs.oraclevcn.com:7803/em
-      ```
-    - **`desktop_app2_url`** (Optional): Same as above a second webapp loaded on the second Google-Chrome browser tab
+    ![](./images/publish-to-livelabs.png " ")
+
+    Press the button **Publish to LiveLabs**, and the information you need to complete about your workshop will appear.
+
+    ![](./images/publishing-information.png " ")
+
+    Then you need to scroll down, and you'll see the button **Open Jira Ticket" where it will be redirected to Jira, and here you need to complete the ticket.
+
+    ![](./images/jira-request-green-button.png " ")
 
 4. Next, please wait for our LiveLabs team to validate the image and publish it to marketplace. We will provide the ORM stack needed for brown button (run on customers' tenancies) provisioning and set up the green button (LiveLabs sandbox tenancy).
 
@@ -135,6 +130,6 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
 
 ## Acknowledgements
-* **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, February 2021
+* **Author** - Rene Fontcha, Master Principal Solution Architect, February 2021
 * **Contributors**  -
-* **Last Updated By/Date** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, December 2022
+* **Last Updated By/Date** - Ana Coman, Database Product Management, July 2024

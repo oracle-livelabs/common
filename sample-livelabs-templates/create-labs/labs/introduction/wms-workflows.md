@@ -7,13 +7,12 @@ For a workshop to go from an idea to a LiveLabs workshop in production, it has t
 1. After the workshop team submits the workshop request (see details in Lab 1 -> Task 1), the workshop is in *Submitted* status. The workshop's *council* group will review the workshop within 2-3 business days. Council will either approve the workshop and move it to *Approved*, or ask the workshop team for more information and move it to *More Info Needed*.
 
 This is the status you are currently at if you worked through the first couple steps of this lab. When you hit save on the information you provided as details about your new workshop, it saves it in submitted status. Which means it is ready for the council to review and either approve your workshop or ask for more details. The council does receive an automated email message alerting them to this submission as well as having this appear on their dashboard in WMS for newly submitted workshops.
-
->**Note:** If workshop teams have not heard back from the council for more than 3 business days, please follow up with your council group. To find your council members, go to WMS, under **People & Role Reports**, select **Workshop Council Members**, and you can find your council members.
+x . To find your council members, go to WMS, under **People & Role Reports**, select **Workshop Council Members**, and you can find your council members.
 
    ![Submitted](./images/submitted.png " ")
 
 1. Council asks workshop team for *more information*. The workshop team will respond to the council via the **Message the Team** tab in WMS to get the workshop approved.
-
+fWorkshop authors can watch the video below on how to self-QA your workshop. Stakeholders can also watch the video below to learn how to verify the QA of a workshop.
 If something is unclear or more details are needed to understand the workshop, the council will ask for more information before continuing. This is to validate the use case make sure that what is being highlighted is clear or could be just wanting more details to how this is going to be accomplished.
   ![More Info Needed](./images/more-info-needed.png " ")
 
@@ -26,15 +25,15 @@ If something is unclear or more details are needed to understand the workshop, t
 5. After development, the workshop team will move the workshop status to *Self QA*. Follow Lab 4 to self-QA the workshop. After Self QA, the workshop team will move the workshop status to *Self QA Complete* and send the completed Self QA form to the stakeholders. Again, when the status is moved into *Self QA Complete* automated email messages are sent to the stakeholders and appears on their dashboard in WMS for completed workshops.
   ![Self QA](./images/self-qa.png " ")
 
-  Workshop authors can watch the video below on how to self-QA your workshop. Stakeholders can also watch the video below to learn how to verify the QA of a workshop.
-  [](youtube:8tirP-hibsk)
-
 6. The workshop's *stakeholders* will verify the QA within 2 business days. They will either send workshop team issues to fix, or move the workshop to *Completed* status, meaning the workshop is ready for production.
   ![Self QA Complete](./images/self-qa-complete.png " ")
 
 7. The workshop is *completed* and is ready for publishing! Workshop teams will submit a publishing request, and the LiveLabs team will approve it. Steps to complete publishing are in Lab 5. After the publishing request is approved, the workshop will be live in LiveLabs automatically within a business day.
   ![Completed](./images/completed.png " ")
 
+  Check the LiveLabs Workshop Management Flow
+
+  ![LiveLabs Workshop Management Flow ](./images/livelabs-publishing-flow.png " ")
 
 ### **What's Next?**
 
@@ -42,7 +41,7 @@ Now that you know all about Oracle LiveLabs GitHub project repository and LiveLa
 
 ## Want to learn more about LiveLabs workshops?
 
-* [Oracle LiveLabs](https://apexapps.oracle.com/pls/apex/f?p=133:1)
+* [Oracle LiveLabs](https://livelabs.oracle.com/pls/apex/f?p=133:1)
 * [Get started with GitHub](https://docs.github.com/en/get-started)
 
 ## Acknowledgements
@@ -55,4 +54,4 @@ Now that you know all about Oracle LiveLabs GitHub project repository and LiveLa
     * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
     * Arabella Yao, Product Manager, Database Product Management
 * **Last Updated By/Date:**
-    * Michelle Malcher, August 2022
+    * Ramona Magadan, Technical Program Manager, December 2024

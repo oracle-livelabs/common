@@ -10,14 +10,14 @@ After reading those troubleshooting tips, if you still find yourself stuck or wo
 For more about getting support using our email, click [here](#HowtoFormatYourSupportEmailRequest).
 
 ### Common Issues Table of Contents
-  - [Connectivity Issues? Unable to Upload Data or Connect to the Database? Hmmm... can't reach this page? What ports should I open to gain access to the workshop?](#ConnectivityIssues?UnabletoUploadDataorConnecttotheDatabase?Hmmm...can'treachthispage?WhatportsshouldIopentogainaccesstotheworkshop?)
+  - [Connectivity Issues?](#ConnectivityIssues?)
   - [Cannot Create Passwords for Database Users?](#CannotCreatePasswordsforDatabaseUsers?)
-  - [Cannot find Groups under Identity & Security in my tenancy?](CannotfindGroupsunderIdentity&Securityinmytenancy?)
+  - [Cannot find Groups under Identity and Security in my tenancy?](#CannotfindGroupsunderIdentityandSecurityinmytenancy?)
 
 ## How to Format Your Support Email Request
 This will construct an email in your default mail application that is auto-populated to address our LiveLabs support inbox and will also include your current workshop in the subject line. Follow the steps below to contact us and get a quick resolution to your issue.
 
-1. Do not change the subject line.
+1. In the subject line please provide the **Workshop Name** (see example).
     ![Email](./images/e-mail.png)
 
 2. Include the **Lab Number**, **Task Number**, and **Step Number** where you've encounter the issue. Also, include the **environment** where you are running this workshop (your tenancy or the LiveLabs sandbox tenancy).
@@ -26,7 +26,7 @@ This will construct an email in your default mail application that is auto-popul
 
 4. Attach a **Screenshot** and **Any Troubleshooting Steps** you've tried, so that we can recreate the issue and provide a timely and accurate solution.
 
-## Connectivity Issues? Unable to Upload Data or Connect to the Database? Hmmm... can't reach this page? What ports should I open to gain access to the workshop?
+## Connectivity Issues?
 
 Are you connected to a **VPN**, **Corporate Network**, or behind a strict **Firewall**?
 
@@ -56,21 +56,25 @@ Try these options to access the environment again:
 
 1. Make sure the password you enter satisfies the following [restrictions](https://docs.oracle.com/en/cloud/saas/marketing/responsys-user/Account_PasswordRestrictions.htm).
 
-## Cannot find Groups under Identity & Security in my tenancy?
+## Cannot find Groups under Identity and Security in my tenancy?
 
 1. From the navigation menu, click **Identity & Security** and select **Domains** under **Identity**.
 
-  ![Select Domains](./images/select-domain.png " ")
+  ![Select Domains](../../images/console/id-domains.png " ")
 
 2. Make sure you are in the correct compartment and click **Default(Current domain)**
 
-  ![Click Default](./images/domain-groups.png " ")
+  ![Click Default](../../images/console/id-default-domain.png " ")
 
-3. From the Identity domain section on the left, click **Groups** to access the groups.
+3. From the menu under the domain you chose, click **User management**.
 
-  ![Click Groups](./images/click-groups.png " ")
+  ![Click Groups](../../images/console/id-user-management.png " ")
+
+4. Scroll until you see **Groups** section.
+
+  ![Click Groups](../../images/console/id-groups.png " ")
 
 ## Acknowledgements
 * **Author** - LiveLabs Team
-* **Contributors** - LiveLabs Team, Arabella Yao
-* **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Dec 2022
+* **Contributors** - LiveLabs Team
+* **Last Updated By/Date** - Ramona Magadan, Technical Program Manager, Database Product Management, May 2025

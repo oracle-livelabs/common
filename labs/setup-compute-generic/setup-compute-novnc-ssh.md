@@ -1,38 +1,36 @@
-# Set up compute instance
+# Environment Setup
 
 ## Introduction
-This lab will show you how to set up a Resource Manager stack that will generate the Oracle Cloud objects needed to run your workshop.
+This lab will show you how to set up a Oracle Resource Manager (ORM) stack that will generate the Oracle Cloud objects needed to run your workshop.
 
-Estimated Time: 15 minutes
+Estimated Time: 25 minutes
 
 Watch the video below for a walk-through of the Environment Setup lab.
 [Lab walk-through](videohub:1_icfgp61i)
 
 ### About Terraform and Oracle Cloud Resource Manager
-For more information about Terraform and Resource Manager, please see the appendix below.
+For more information about Terraform and Resource Manager, please see the appendix.
 
 ### Objectives
--   Create Compute + Networking using Resource Manager Stack
--   Connect to compute instance
+- Create Stack: Compute + Networking (New VCN) or Compute only (Existing VCN)
+- Terraform Apply
 
 ### Prerequisites
 This lab assumes you have:
 - An Oracle Cloud account
 - SSH Keys (optional)
-- You have completed:
-    - Lab: Prepare Setup
 
 ## Task 1: Create Stack: Choose a Path
-Proceed to deploy your workshop environment using Oracle Resource Manager (ORM) stack
+Proceed to deploy your workshop environment using Oracle Resource Manager (ORM) stack.  
 
 Your options are:
-1. Task 1A: Create Stack:  **Compute + Networking** *(recommended)*
-2. Task 1B: Create Stack:  **Compute Only**
+- Task 1A: Create Stack:  **Compute + Networking** *(recommended)*
+- Task 1B: Create Stack:  **Compute Only**
 
 ## Task 1A: Create Stack:  Compute + Networking
-1. Identify the ORM stack zip file downloaded in *Lab: Prepare Setup*
-2. Log in to Oracle Cloud
-3.  Open up the hamburger menu in the top left corner.  Click **Developer Services**, and choose **Resource Manager > Stacks**. Choose the compartment in which you would like to install the stack. Click **Create Stack**.
+1. Identify the ORM stack zip file downloaded in *Task 1*
+2. Log in to Oracle Cloud account
+3. Open up the hamburger menu in the top left corner.  Click **Developer Services**, and choose **Resource Manager > Stacks**. Choose the compartment in which you would like to install the stack. Click **Create Stack**.
 
   ![Select Stacks](https://oracle-livelabs.github.io/common/images/console/developer-resmgr-stacks.png " ")
 
@@ -58,19 +56,17 @@ Your options are:
                 - *Paste SSH Keys*: Paste the plaintext key strings or
                 - *Choose SSH Key Files*: Drag-n-drop or browse and select valid public keys of *openssh* format from your computer
 
-        ![Paste SSH keys](./images/paste-ssh.png " ")
-
         ![Choose SSH keys](./images/choose-ssh.png " ")
 
         >**Notes:**
-        1. This assumes that you already have an RSA-type SSH key pair available on the local system where you will be connecting from. If you don't and for more info on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key)
-        2. If you used the Oracle Cloud Shell to create your key, make sure you paste the pub file in a notepad, and remove any hard returns. The file should be one line or you will not be able to login to your compute instance
+        1. This assumes that you already have an RSA-type SSH key pair available on the local system where you will be connecting from. If you don't and need more details on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key).
+        2. If you used the Oracle Cloud Shell to create your key, make sure you paste the pub file in a notepad, and remove any hard returns. The file should be one line or you will not be able to login to your compute instance.
 
         - **Option (C)** - Check *Need Remote Access via SSH?* and *Auto Generate SSH Key Pair* to have the keys auto-generated for you during provisioning. If you select this option you will be provided with the private key post provisioning.
 
         ![Auto-generate SSH keys](./images/auto-ssh.png " ")
 
-    Depending on the quota you have in your tenancy you can choose from standard Compute shapes or Flex shapes. Please visit the Appendix: Troubleshooting Tips for instructions on checking your quota
+    Depending on the quota you have in your tenancy you can choose from standard Compute shapes or Flex shapes. Please visit the Appendix: Troubleshooting Tips.
 
     - **Use Flexible Instance Shape with Adjustable OCPU Count?:** Keep the default as checked (unless you plan on using a fixed shape)
     - **Instance Shape:** Keep the default or select from the list of Flex shapes in the dropdown menu (e.g *VM.Standard.E4.Flex*).
@@ -95,10 +91,10 @@ Your options are:
 
   ![Apply is successful](./images/apply-job-success.png " ")
 
-You may now proceed to Task 2 (skip Task 1B).
+You may now proceed to Task 3 (skip Task 2B).
 
 ## Task 1B: Create Stack:  Compute Only
-If you just completed Task 1A, please proceed to Task 2.  If you have an existing VCN and are comfortable updating VCN configurations, please ensure your VCN meets the minimum requirements. Refer to *Lab: Prepare Setup*.
+If you just completed Task 2A, please proceed to Task 3.  If you have an existing VCN and are comfortable updating VCN configurations, please proceed as below.
 
   >**Note:** We recommend letting our stack create the VCN to reduce the potential for errors.
 
@@ -137,19 +133,17 @@ If you just completed Task 1A, please proceed to Task 2.  If you have an existin
                 - *Paste SSH Keys*: Paste the plaintext key strings or
                 - *Choose SSH Key Files*: Drag-n-drop or browse and select valid public keys of *openssh* format from your computer
 
-        ![Paste SSH keys](./images/paste-ssh.png " ")
-
         ![select SSH keys](./images/choose-ssh.png " ")
 
         >**Notes:**
-        1. This assumes that you already have an RSA-type SSH key pair available on the local system where you will be connecting from. If you don't and for more info on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key)
+        1. This assumes that you already have an RSA-type SSH key pair available on the local system where you will be connecting from. If you don't and need more details on creating and using SSH keys for your specific platform and client, please refer to the guide [Generate SSH Keys](https://oracle-livelabs.github.io/common/labs/generate-ssh-key)
         2. If you used the Oracle Cloud Shell to create your key, make sure you paste the pub file in a notepad, and remove any hard returns. The file should be one line or you will not be able to login to your compute instance
 
         - **Option (C)** - Check *Need Remote Access via SSH?* and *Auto Generate SSH Key Pair* to have the keys auto-generated for you during provisioning. If you select this option you will be provided with the private key post provisioning.
 
         ![Auto-generate SSH keys](./images/auto-ssh.png " ")
 
-    Depending on the quota you have in your tenancy you can choose from standard Compute shapes or Flex shapes. Please visit the Appendix: Troubleshooting Tips for instructions on checking your quota
+    Depending on the quota you have in your tenancy you can choose from standard Compute shapes or Flex shapes. Please visit the Appendix: Troubleshooting Tips for instructions on checking your quota.
 
     - **Use Flexible Instance Shape with Adjustable OCPU Count?:** Keep the default as checked (unless you plan on using a fixed shape)
     - **Instance Shape:** Keep the default or select from the list of Flex shapes in the dropdown menu (e.g *VM.Standard.E4.Flex*).
@@ -162,7 +156,7 @@ If you just completed Task 1A, please proceed to Task 2.  If you have an existin
 
   ![Use fixed shapes](./images/fixed-shape.png " ")
 
-7. For this section we will an existing VNC.  Please make sure it has all of the correct ingress and egress rules otherwise go back to *Task 1A* and deploy with a self-contained VCN.
+7. For this section we will be using an existing VCN. Please make sure it has all of the correct ingress and egress rules otherwise go back to *Task 1A* and deploy with a self-contained VCN.
     - **Use Existing VCN?:** Check to select.
     - **Select Existing VCN:** Select existing VCN with the regional public subnet and required security list.
 
@@ -239,7 +233,7 @@ In this example, we will be illustrating a connection from a Unix-style terminal
     ![SSH connect to instance](./images/ssh-login.png " ")
 
 ## Appendix 2:  Terraform and Resource Manager
-Terraform is a tool for building, changing, and versioning infrastructure safely and efficiently.  Configuration files describe to Terraform the components needed to run a single application or your entire datacenter.  In this lab, a configuration file has been created for you to build a network and compute components.  The compute component you will build creates an image out of Oracle's Cloud Marketplace.  This image is running Oracle Linux 7.
+Terraform is a tool for building, changing, and versioning infrastructure safely and efficiently.  Configuration files describe to Terraform the components needed to run a single application or your entire datacenter.  In this lab, a configuration file has been created for you to build a network and compute components.  The compute component you will build creates an image out of Oracle's Cloud Marketplace.  This image is running Oracle Linux 8.
 
 Resource Manager is an Oracle Cloud Infrastructure service that allows you to automate the process of provisioning your Oracle Cloud Infrastructure resources. Using Terraform, Resource Manager helps you install, configure, and manage resources through the "infrastructure-as-code" model. To learn more about OCI Resource Manager, watch the video below.
 
@@ -332,4 +326,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology
 * **Contributors** - Marion Smith, Technical Program Manager, Arabella Yao, Database Product Manager
-* **Last Updated By/Date** - Arabella Yao, Jan 2023
+* **Last Updated By/Date** - Kajal Singh, January 2025

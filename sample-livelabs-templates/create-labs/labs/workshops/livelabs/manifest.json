@@ -1,6 +1,8 @@
 {
   "workshoptitle": "New Workshop Step by Step",
   "help": "livelabs-help-db_us@oracle.com",
+  "variables": ["../../4-labs-markdown-develop-content/variables.json",
+  "../../4-labs-markdown-develop-content/variables-in-another-file.json"],
 	"tutorials": [
     {
       "title": "Introduction",
@@ -48,6 +50,16 @@
       "filename": "./../../6-labs-publish/6-labs-publish.md"
     },
     {
+      "title": "Additional optional labs: Publish to Live SQL",
+      "description": "This lab shows you how to create a tutorial in Live SQL",
+      "filename": "./../../11-labs-create-livesql/11-create-livesql.md"
+    },
+    {
+      "title": "Additional optional labs: Live SQL Integration",
+      "description": "This lab shows you how to integrate Live SQL in your workshop",
+      "filename": "../../../labs/12-livesql-integration/12-livesql-integration.md"
+    },
+    {
         "title": "Additional optional labs: Develop LiveLabs Sprints",
         "description": "This lab shows you how to create a Sprint for LiveLabs",
         "filename": "./../../10-labs-create-sprints-workflow/10-create-sprints-workflow.md"
@@ -61,7 +73,6 @@
         "title": "Additional optional labs: Create custom image for marketplace",
         "description": "This lab will describe how to create and use a marketplace image for your workshop.",
         "filename": "./../../7-labs-create-custom-image-for-marketplace/7-labs-create-custom-image-for-marketplace.md"
-
     },
     {
       "title": "Need Help?",

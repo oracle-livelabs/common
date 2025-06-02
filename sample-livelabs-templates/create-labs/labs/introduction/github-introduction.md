@@ -21,7 +21,7 @@ Oracle LiveLabs has its own GitHub project that has 30 active repositories. This
 
 + You can access the **oracle-livelabs** GitHub project using the following URL:
 
-  [https://oracle.com/livelabs](https://oracle.com/livelabs)
+  [https://github.com/oracle-livelabs](https://github.com/oracle-livelabs)
 
   ![Oracle LiveLabs GitHub Project](./images/oracle-livelabs-github-project.png " ")
 
@@ -37,10 +37,9 @@ Oracle LiveLabs has its own GitHub project that has 30 active repositories. This
 ## Acknowledgements
 
 * **Authors:**
-    * Anuradha Chepuri, Principal User Assistance Developer, Oracle GoldenGate
-    * Lauran Serhal, Principal User Assistance Developer, Oracle Database and Big Data
+    * Anuradha Chepuri, Consulting User Assistance Developer, Oracle GoldenGate
+    * Lauran Serhal, Consulting User Assistance Developer, Oracle Database and Big Data
 * **Contributors:**
-    * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
-    * Arabella Yao, Product Manager, Database Product Management
+    * Aslam Khan, Senior Manager, ODI, OGG, EDQ
 * **Last Updated By/Date:**
-    * Anoosha Pilli, October 2023
+    * Ana Coman, Technical Program Manager, Oracle Database Product Management, March 2024
