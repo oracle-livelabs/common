@@ -334,7 +334,7 @@ let main = function () {
                     }
                 });
             });
-            addNeedHelpLink(manifestFileContent.help);
+            addNeedHelpLink(manifestFileContent.help, manifestFileContent.workshoptitle)
 
             if (getParam("qa") == "true") {
                 articleElement = performQA(articleElement, markdownContent, manifestFileContent);
