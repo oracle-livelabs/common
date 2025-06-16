@@ -1059,9 +1059,10 @@ let main = function () {
             // Detect browser
             let userAgent = navigator.userAgent.toLowerCase();
             let defaultTab = 'chrome'; // fallback
-            if (userAgent.includes('firefox')) {
-                defaultTab = 'firefox';
-            } else if (userAgent.includes('safari') && !userAgent.includes('chrome')) {
+            // if (userAgent.includes('firefox')) {
+            //     defaultTab = 'firefox';
+            // } else 
+            if (userAgent.includes('safari') && !userAgent.includes('chrome')) {
                 defaultTab = 'safari';
             } else if (userAgent.includes('chrome')) {
                 defaultTab = 'chrome';
@@ -1071,13 +1072,13 @@ let main = function () {
             let popupContent = `
            <div class="translation-popup-content">
             <h2>How to Translate This Page</h2>
+            <p>You must be on the <strong>livelabs.oracle.com</strong> domain to use translations.<br> They are not available on apexapps.oracle.com</em>.</p>
             <p>For the best translation experience, we recommend <strong>Google Chrome</strong>.</p>
 
             <!-- Tabs -->
             <div class="translation-tabs">
                 <button class="tab active" data-tab="chrome">Google Chrome</button>
                 <button class="tab" data-tab="safari">Safari</button>
-                <button class="tab" data-tab="firefox">Mozilla Firefox</button>
             </div>
             <!-- Tab Content Areas -->
             <div class="tab-content" id="chrome">
@@ -1118,20 +1119,19 @@ let main = function () {
                 </li>
             </ol>
             </div>
-
-
-            <div class="tab-content" id="firefox" style="display: none;">
-                <ol>
-                    <li><a href="${window.location.href}" target="_blank">Click here to open this workshop in a new tab.</a></li>
-                    <li>In the new tab, click the <strong>☰ menu</strong> (three horizontal lines) in the<br> upper-right corner of Firefox.</li>
-                    <li>Select <em>“Translate Page”</em> from the dropdown menu.</li>
-                    <li>Then, choose the language you want to translate the page into.</li>
-                </ol>
-                <p><em>Note: Translation is only available in Firefox version 118 and above.<br> If you don’t see this option, make sure your browser is up to date.</em></p>
-            </div>
-            </div>
             `;
 
+
+            // <div class="tab-content" id="firefox" style="display: none;">
+            //     <ol>
+            //         <li><a href="${window.location.href}" target="_blank">Click here to open this workshop in a new tab.</a></li>
+            //         <li>In the new tab, click the <strong>☰ menu</strong> (three horizontal lines) in the<br> upper-right corner of Firefox.</li>
+            //         <li>Select <em>“Translate Page”</em> from the dropdown menu.</li>
+            //         <li>Then, choose the language you want to translate the page into.</li>
+            //     </ol>
+            //     <p><em>Note: Translation is only available in Firefox version 118 and above.<br> If you don’t see this option, make sure your browser is up to date.</em></p>
+            // </div>
+            // </div>
 
             let popup = $('<div>', {
                 id: 'translate_popup'
