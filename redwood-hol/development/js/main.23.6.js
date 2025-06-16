@@ -1059,9 +1059,10 @@ let main = function () {
             // Detect browser
             let userAgent = navigator.userAgent.toLowerCase();
             let defaultTab = 'chrome'; // fallback
-            if (userAgent.includes('firefox')) {
-                defaultTab = 'firefox';
-            } else if (userAgent.includes('safari') && !userAgent.includes('chrome')) {
+            // if (userAgent.includes('firefox')) {
+            //     defaultTab = 'firefox';
+            // } 
+            if (userAgent.includes('safari') && !userAgent.includes('chrome')) {
                 defaultTab = 'safari';
             } else if (userAgent.includes('chrome')) {
                 defaultTab = 'chrome';
