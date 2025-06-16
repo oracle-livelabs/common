@@ -1072,7 +1072,7 @@ let main = function () {
             let popupContent = `
            <div class="translation-popup-content">
             <h2>How to Translate This Page</h2>
-            <p>You must be on an <strong>livelabs.oracle.com</strong> domain to be able to use <em>translations, not apexapps.oracle.com.</p>
+            <p>You must be on the <strong>livelabs.oracle.com</strong> domain to use translations.<em> They are not available on apexapps.oracle.com</em>.</p>
             <p>For the best translation experience, we recommend <strong>Google Chrome</strong>.</p>
 
             <!-- Tabs -->
