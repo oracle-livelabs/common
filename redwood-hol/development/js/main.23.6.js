@@ -1079,7 +1079,6 @@ let main = function () {
             <div class="translation-tabs">
                 <button class="tab active" data-tab="chrome">Google Chrome</button>
                 <button class="tab" data-tab="safari">Safari</button>
-                <button class="tab" data-tab="firefox">Mozilla Firefox</button>
             </div>
             <!-- Tab Content Areas -->
             <div class="tab-content" id="chrome">
