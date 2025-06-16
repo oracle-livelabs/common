@@ -38,8 +38,6 @@ let main = function () {
     let collapseText = "Collapse All Tasks";
     const currentDomain = window.location.origin; // e.g., "https://livelabs.oracle.com"
     console.log("Current domain:", currentDomain);
-    let wid = null;
-    
 
     const copyButtonText = "Copy";
     const queryParam = "lab";
@@ -175,34 +173,6 @@ let main = function () {
             }, 1000);
         });
     });
-
-    (function appendWidToIframeUrl() {
-        // Only proceed if inside an iframe
-        if (window.self !== window.top) {
-          try {
-            const parentUrl = new URL(window.parent.location.href);
-            const wid = parentUrl.searchParams.get('p210_wid');
-      
-            if (wid) {
-              const currentUrl = new URL(window.location.href);
-      
-              // Avoid infinite reloads if ?wid is already present
-              if (!currentUrl.searchParams.has('wid')) {
-                currentUrl.searchParams.set('wid', wid);
-                console.log("Reloading with WID param:", currentUrl.toString());
-                window.location.replace(currentUrl.toString()); // Use replace to avoid adding to browser history
-              }
-            } else {
-              console.log("Parent URL does not contain p210_wid.");
-            }
-          } catch (err) {
-            console.error("Error accessing parent URL or modifying iframe URL:", err);
-          }
-        } else {
-          console.log("Not in an iframe — skipping wid injection.");
-        }
-      })();
-      
 
     // specifies when to do when window is scrolled
     $(window).scroll(function () {
@@ -1148,20 +1118,19 @@ let main = function () {
                 </li>
             </ol>
             </div>
-
-
-            <div class="tab-content" id="firefox" style="display: none;">
-                <ol>
-                    <li><a href="${window.location.href}" target="_blank">Click here to open this workshop in a new tab.</a></li>
-                    <li>In the new tab, click the <strong>☰ menu</strong> (three horizontal lines) in the<br> upper-right corner of Firefox.</li>
-                    <li>Select <em>“Translate Page”</em> from the dropdown menu.</li>
-                    <li>Then, choose the language you want to translate the page into.</li>
-                </ol>
-                <p><em>Note: Translation is only available in Firefox version 118 and above.<br> If you don’t see this option, make sure your browser is up to date.</em></p>
-            </div>
-            </div>
             `;
 
+
+            // <div class="tab-content" id="firefox" style="display: none;">
+            //     <ol>
+            //         <li><a href="${window.location.href}" target="_blank">Click here to open this workshop in a new tab.</a></li>
+            //         <li>In the new tab, click the <strong>☰ menu</strong> (three horizontal lines) in the<br> upper-right corner of Firefox.</li>
+            //         <li>Select <em>“Translate Page”</em> from the dropdown menu.</li>
+            //         <li>Then, choose the language you want to translate the page into.</li>
+            //     </ol>
+            //     <p><em>Note: Translation is only available in Firefox version 118 and above.<br> If you don’t see this option, make sure your browser is up to date.</em></p>
+            // </div>
+            // </div>
 
             let popup = $('<div>', {
                 id: 'translate_popup'
