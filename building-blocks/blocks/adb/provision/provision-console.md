@@ -3,7 +3,7 @@
         "name":"Create an Oracle Autonomous Database",
         "description":"Learn how to provision Autonomous Database using the OCI console.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "lastUpdated":"Lauran K. Serhal, March 2025"
+        "lastUpdated":"Lauran K. Serhal, May 2025"
     }
 -->
 
@@ -28,7 +28,7 @@ In this lab, you will:
 [](include:adb-goto-service-body.md)
 
 ## Task 2: Create the Autonomous Database instance
-[](include:adb-provision-body.md)
+[](include:adb-provision-body-developer.md)
 
 Please [proceed to the next lab](#next).
 
@@ -40,5 +40,5 @@ Please [proceed to the next lab](#next).
 ## Acknowledgements
 
 - **Author:** Lauran K. Serhal, Consulting User Assistance Developer
-- **Last Updated By/Date:** Lauran K. Serhal, January 2025
+- **Last Updated By/Date:** Lauran K. Serhal, May 2025
 - **Built with Blocks**

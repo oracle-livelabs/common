@@ -1,6 +1,6 @@
 <!--
     {
-        "name":"Sign into Oracle Machine Learning UI",
+        "name":"Sign into Oracle Machine Learning UI - green button",
         "description":"Steps to sign into Oracle Machine Learning UI"
     }
 -->

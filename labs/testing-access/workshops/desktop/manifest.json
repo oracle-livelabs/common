@@ -1,0 +1,11 @@
+{
+  "workshoptitle": "How to test access to your sandbox environments",
+  "help": "livelabs-help-**enterarea**_us@oracle.com",
+  "tutorials": [
+    {
+      "title": "How to test access to your sandbox environments",
+      "description": "How to test access to your sandbox environments",
+      "filename": "../../sandbox-testing-access.md"
+    }
+  ]
+}
