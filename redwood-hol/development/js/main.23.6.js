@@ -1141,7 +1141,7 @@ let main = function () {
                     referrerpolicy="no-referrer"
                 > in the Edge address<br> bar and select the desired language.
             </li>
-            <li> Click the Translate button.<li>
+            <li> Click the Translate button.</li>
             <li>If you navigate to a new lab and the translation disappears, <br> repeat steps 1 and 2 to re-enable it.</li>
         </ol>
     </div>
