@@ -211,24 +211,17 @@ let main = function () {
                 changeTutorial(getMDFileName(selectTutorial(manifest_global, position).filename));
 
             setTimeout(function () {
-                // Cause a subtle change in the parent page to trigger Google Translate
-                if (window.parent && window.parent.document) {
-                    let body = window.parent.document.body;
-            
-                    // Find or create a subtle trigger element
-                    let triggerElement = window.parent.document.getElementById("translation-trigger");
-                    if (!triggerElement) {
-                        triggerElement = window.parent.document.createElement("span");
-                        triggerElement.id = "translation-trigger";
-                        triggerElement.style.display = "none"; // Keep it invisible
-                        body.appendChild(triggerElement);
-                    }
-            
-                    // Toggle text content to force translation detection
-                    triggerElement.textContent = triggerElement.textContent === "." ? " " : ".";
-                    console.log("Translation trigger updated:", triggerElement);
+                const body = document.body;
+                let el = document.getElementById("translation-trigger");
+                if (!el) {
+                    el = document.createElement("span");
+                    el.id = "translation-trigger";
+                    el.style.position = "absolute";
+                    el.style.left = "-9999px";
+                    body.appendChild(el);
                 }
-            }, 500); // Adjust delay as needed (500ms is usually a good balance)
+                el.textContent = el.textContent === "." ? " " : ".";
+                }, 1000); // allow enough time for content to be injected
         } catch (e) { };
     });
 
