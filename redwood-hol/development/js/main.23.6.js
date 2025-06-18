@@ -1139,7 +1139,7 @@ let main = function () {
                     alt="Translate icon" 
                     style="height: 30px; vertical-align: middle; margin-left: 4px;" 
                     referrerpolicy="no-referrer"
-                > in the Edge address bar and select the desired language.
+                > in the Edge address<br> bar and select the desired language.
             </li>
             <li> Click the Translate button.<li>
             <li>If you navigate to a new lab and the translation disappears, <br> repeat steps 1 and 2 to re-enable it.</li>
@@ -1149,7 +1149,7 @@ let main = function () {
     <!-- Firefox Instructions -->
     <div class="tab-content" id="firefox" style="display: none;">
         <ol>
-            Firefox Translations is still in beta and may not work on all pages.<br> For the most consistent experience, we recommend using Chrome, <br> Safari, or Edge.
+            Firefox Translations is still in beta and may not work on all pages.<br> For the most consistent experience, we recommend using <br>Chrome, Safari, or Edge.
         </ol>
     </div>
 </div>
