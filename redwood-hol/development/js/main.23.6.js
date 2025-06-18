@@ -1085,9 +1085,9 @@ let main = function () {
 
     <!-- Chrome Instructions -->
     <div class="tab-content" id="chrome">
-        <ol>
-            <li><strong>Right-click</strong> anywhere on the page and choose <em>“Translate to [Your Language]”</em>.</li>
-            <li>If that option doesn’t appear, click the <strong>⋮ three-dot menu</strong> in the top-right corner of Chrome.</li>
+        <ol>            
+            <li><strong>Right-click</strong> anywhere on the page and choose <em>“Translate to <br>[Your Language]”</em>.</li>
+            <li>If that option doesn’t appear, click the <strong>⋮ three-dot menu</strong> in the <br> top-right corner of Chrome.</li>
             <li>Select <em>“Translate”</em> from the dropdown.</li>
             <li>
                 Then, click the <strong>translate icon</strong>
@@ -1098,7 +1098,7 @@ let main = function () {
                     referrerpolicy="no-referrer"
                 > in the address bar.
             </li>
-            <li>If needed, click the <strong>⋮ three-dot menu</strong> within the Google Translate popup and choose your preferred language.</li>
+            <li>If needed, click the <strong>⋮ three-dot menu</strong> within the Google <br>Translate popup and choose your preferred language.</li>
         </ol>
     </div>
 
@@ -1114,13 +1114,13 @@ let main = function () {
                     referrerpolicy="no-referrer"
                 > in the Safari address bar.
             </li>
-            <li>If the icon doesn’t appear, use the menu bar at the top of your screen (next to the Apple  icon).</li>
-            <li>Select <strong>View</strong> → <strong>Translation</strong> → <em>“Translate to [Your Language]”</em>.</li>
+            <li>If the icon doesn’t appear, use the menu bar at the top of your screen <br> (next to the Apple  icon).</li>
+            <li>Select <strong>View</strong> → <strong>Translation</strong> → <br><em>“Translate to [Your Language]”</em>.</li>
             <li>
-                If no translation languages are available, click <strong>Preferred Languages</strong> in the prompt and follow these steps:
+                If no translation languages are available, click <strong>Preferred <br>Languages</strong> in the prompt and follow these steps:
                 <ol type="a">
                     <li>System Settings will open to <strong>Language & Region</strong>.</li>
-                    <li>Click the <strong>+</strong> button under Preferred Languages, add your desired language, and close Settings.</li>
+                    <li>Click the <strong>+</strong> button under Preferred Languages, <br>add your desired language, and close Settings.</li>
                     <li>Return to Safari and repeat step 2 to translate the page.</li>
                 </ol>
             </li>
@@ -1132,14 +1132,14 @@ let main = function () {
         <ol>
             <li><a href="${window.location.href}" target="_blank">Click here to open this workshop in a new tab.</a></li>
             <li>Right-click anywhere on the page and select <em>“Translate to [Your Language]”</em>.</li>
-            <li>If you click on any of the labs and the translation does not persist, please follow steps 1 and 2 again to reactivate it.</li>
+            <li>If you navigate to a new lab and the translation disappears, repeat steps <br> 1 and 2 to re-enable it.</li>
         </ol>
     </div>
 
     <!-- Firefox Instructions -->
     <div class="tab-content" id="firefox" style="display: none;">
         <ol>
-            <li>Firefox Translations are currently in beta. For a more reliable experience, we recommend using Chrome, Safari, or Edge.</li>
+            <li>Firefox Translations is still in beta and may not work on all pages. For the <br>most consistent experience, we recommend using Chrome, Safari, or Edge.</li>
         </ol>
     </div>
 </div>
