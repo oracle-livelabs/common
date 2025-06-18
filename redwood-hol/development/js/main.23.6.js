@@ -1132,6 +1132,16 @@ let main = function () {
         <ol>
             <li><a href="${window.location.href}" target="_blank">Click here to open this workshop in a new tab.</a></li>
             <li>Right-click anywhere on the page and select <em>“Translate to [Your Language]”</em>.</li>
+            <li>
+                If necessary, click the <strong>translate icon</strong>
+                <img 
+                    src="https://livelabs.oracle.com/cdn/common/redwood-hol/img/translate-icon-edge.png" 
+                    alt="Translate icon" 
+                    style="height: 30px; vertical-align: middle; margin-left: 4px;" 
+                    referrerpolicy="no-referrer"
+                > in the Edge address bar and select the desired language.
+            </li>
+            <li> Click the Translate button.<li>
             <li>If you navigate to a new lab and the translation disappears, repeat steps <br> 1 and 2 to re-enable it.</li>
         </ol>
     </div>
