@@ -1069,68 +1069,80 @@ let main = function () {
                 defaultTab = 'chrome';
             }
     
-            let popupContent = `
-           <div class="translation-popup-content">
-            <h2>How to Translate This Page</h2>
-            <p>You must be on the <strong>livelabs.oracle.com</strong> domain to use translations.<br> They are not available on apexapps.oracle.com</em>.</p>
-            <p>For the best translation experience, we recommend <strong>Google Chrome</strong>.</p>
+            let popupContent = `<div class="translation-popup-content">
+    <h2>How to Translate This Page</h2>
+    <p>You must be on the <strong>livelabs.oracle.com</strong> domain to use translations.<br>
+       They are not available on <em>apexapps.oracle.com</em>.</p>
+    <p>For the best translation experience, we recommend <strong>Google Chrome</strong>.</p>
 
-            <!-- Tabs -->
-            <div class="translation-tabs">
-                <button class="tab active" data-tab="chrome">Google Chrome</button>
-                <button class="tab" data-tab="safari">Safari</button>
-            </div>
-            <!-- Tab Content Areas -->
-            <div class="tab-content" id="chrome">
-                <ol>
-                    <li><strong>Right-click</strong> anywhere on the page and choose <em>“Translate to<br> [Your Language]”</em>.</li>
-                    <li>If that option doesn’t appear, click the <strong>⋮ three-dot menu</strong> in<br> the top-right corner of Chrome.</li>
-                    <li>Select <em>“Translate”</em> from the dropdown.</li>
-                    <li>Then, click the <strong>translate icon</strong>
-                    <img 
-                        src="https://livelabs.oracle.com/cdn/common/redwood-hol/img/translate-icon-chrome.png" 
-                        alt="Translate icon" 
-                        style="height: 30px; vertical-align: middle; margin-left: 4px;" 
-                        referrerpolicy="no-referrer"
-                    /> in the address bar.</li>
-                    <li>If needed, click the <strong>⋮ three-dot menu</strong> within the Google<br> Translate popup and choose your preferred language.</li>
-                </ol>
-            </div>
+    <!-- Tabs -->
+    <div class="translation-tabs">
+        <button class="tab active" data-tab="chrome">Google Chrome</button>
+        <button class="tab" data-tab="safari">Safari</button>
+        <button class="tab" data-tab="edge">Microsoft Edge</button>
+        <button class="tab" data-tab="firefox">Firefox</button>
+    </div>
 
-            <div class="tab-content" id="safari" style="display: none;">
-            <ol>
-                <li>Click the <strong>translate icon</strong>
+    <!-- Chrome Instructions -->
+    <div class="tab-content" id="chrome">
+        <ol>
+            <li><strong>Right-click</strong> anywhere on the page and choose <em>“Translate to [Your Language]”</em>.</li>
+            <li>If that option doesn’t appear, click the <strong>⋮ three-dot menu</strong> in the top-right corner of Chrome.</li>
+            <li>Select <em>“Translate”</em> from the dropdown.</li>
+            <li>
+                Then, click the <strong>translate icon</strong>
+                <img 
+                    src="https://livelabs.oracle.com/cdn/common/redwood-hol/img/translate-icon-chrome.png" 
+                    alt="Translate icon" 
+                    style="height: 30px; vertical-align: middle; margin-left: 4px;" 
+                    referrerpolicy="no-referrer"
+                > in the address bar.
+            </li>
+            <li>If needed, click the <strong>⋮ three-dot menu</strong> within the Google Translate popup and choose your preferred language.</li>
+        </ol>
+    </div>
+
+    <!-- Safari Instructions -->
+    <div class="tab-content" id="safari" style="display: none;">
+        <ol>
+            <li>
+                Click the <strong>translate icon</strong>
                 <img 
                     src="https://livelabs.oracle.com/cdn/common/redwood-hol/img/translate-icon-safari.png" 
                     alt="Translate icon" 
                     style="height: 30px; vertical-align: middle; margin-left: 4px;" 
                     referrerpolicy="no-referrer"
-                    />
-                in the Safari address bar.</li>
-                <li>If the icon doesn’t appear, use the menu bar at the top of your<br> screen (next to the Apple  icon).</li>
-                <li>Select <strong>View</strong> → <strong>Translation</strong> → <em>“Translate to [Your Language]”</em>.</li>
-                <li>
-                If no translation languages are available, click <strong>Preferred<br> Languages</strong> in the prompt, and follow these steps:
-                    <ol type="a">
-                        <li>System Settings will open to <strong>Language & Region</strong>.</li>
-                        <li>Click the <strong>+</strong> button under Preferred Languages, add your <br>desired language, and close Settings.</li>
-                        <li>Return to Safari and repeat step 2 to translate the page.</li>
-                    </ol>
+                > in the Safari address bar.
+            </li>
+            <li>If the icon doesn’t appear, use the menu bar at the top of your screen (next to the Apple  icon).</li>
+            <li>Select <strong>View</strong> → <strong>Translation</strong> → <em>“Translate to [Your Language]”</em>.</li>
+            <li>
+                If no translation languages are available, click <strong>Preferred Languages</strong> in the prompt and follow these steps:
+                <ol type="a">
+                    <li>System Settings will open to <strong>Language & Region</strong>.</li>
+                    <li>Click the <strong>+</strong> button under Preferred Languages, add your desired language, and close Settings.</li>
+                    <li>Return to Safari and repeat step 2 to translate the page.</li>
                 </ol>
-            </div>
-            <div class="tab-content" id="edge" style="display: none;">
-                <ol>
-                <li><a href="${window.location.href}" target="_blank">Click here to open this workshop in a new tab.</a></li>
-                <li>Right click anywhere on the page and then click <em>“Translate to [Your Language]”</em></li>
-                <If you click on any of the labs and the translation does not persist, please follow steps 1 and 2 again to reactivate it.</li>
-                </ol>
-            </div>
-            <div class="tab-content" id="firefox" style="display: none;">
-                <ol>
-                    <li>Firefox Translations are currently in beta mode. We recommend using another one of the browsers listed within this tooltip.</li>
-                </ol>
-            </div>
-            </div>
+            </li>
+        </ol>
+    </div>
+
+    <!-- Edge Instructions -->
+    <div class="tab-content" id="edge" style="display: none;">
+        <ol>
+            <li><a href="${window.location.href}" target="_blank">Click here to open this workshop in a new tab.</a></li>
+            <li>Right-click anywhere on the page and select <em>“Translate to [Your Language]”</em>.</li>
+            <li>If you click on any of the labs and the translation does not persist, please follow steps 1 and 2 again to reactivate it.</li>
+        </ol>
+    </div>
+
+    <!-- Firefox Instructions -->
+    <div class="tab-content" id="firefox" style="display: none;">
+        <ol>
+            <li>Firefox Translations are currently in beta. For a more reliable experience, we recommend using Chrome, Safari, or Edge.</li>
+        </ol>
+    </div>
+</div>
             `;
 
 
