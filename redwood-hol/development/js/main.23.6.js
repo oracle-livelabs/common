@@ -1111,25 +1111,25 @@ let main = function () {
                 <li>Select <strong>View</strong> → <strong>Translation</strong> → <em>“Translate to [Your Language]”</em>.</li>
                 <li>
                 If no translation languages are available, click <strong>Preferred<br> Languages</strong> in the prompt, and follow these steps:
-                <ol type="a">
-                    <li>System Settings will open to <strong>Language & Region</strong>.</li>
-                    <li>Click the <strong>+</strong> button under Preferred Languages, add your <br>desired language, and close Settings.</li>
-                    <li>Return to Safari and repeat step 2 to translate the page.</li>
+                    <ol type="a">
+                        <li>System Settings will open to <strong>Language & Region</strong>.</li>
+                        <li>Click the <strong>+</strong> button under Preferred Languages, add your <br>desired language, and close Settings.</li>
+                        <li>Return to Safari and repeat step 2 to translate the page.</li>
+                    </ol>
                 </ol>
-                </li>
-                <div class="tab-content" id="edge" style="display: none;">
-                    <ol>
-                        <li><a href="${window.location.href}" target="_blank">Click here to open this workshop in a new tab.</a></li>
-                        <li>Right click anywhere on the page and then click <em>“Translate to [Your Language]”</em></li>
-                    </ol>
-                </div>
-                <div class="tab-content" id="firefox" style="display: none;">
-                    <ol>
-                        <li>Firefox Translations are currently in beta mode. We recommend using another one of the browsers listed within this tooltip.</li>
-                    </ol>
-                </div>
             </div>
-            </ol>
+            <div class="tab-content" id="edge" style="display: none;">
+                <ol>
+                <li><a href="${window.location.href}" target="_blank">Click here to open this workshop in a new tab.</a></li>
+                <li>Right click anywhere on the page and then click <em>“Translate to [Your Language]”</em></li>
+                <If you click on any of the labs and the translation does not persist, please follow steps 1 and 2 again to reactivate it.</li>
+                </ol>
+            </div>
+            <div class="tab-content" id="firefox" style="display: none;">
+                <ol>
+                    <li>Firefox Translations are currently in beta mode. We recommend using another one of the browsers listed within this tooltip.</li>
+                </ol>
+            </div>
             </div>
             `;
 
