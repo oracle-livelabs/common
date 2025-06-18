@@ -1059,15 +1059,15 @@ let main = function () {
             // Detect browser
             let userAgent = navigator.userAgent.toLowerCase();
             let defaultTab = 'chrome'; // fallback
-            // if (userAgent.includes('firefox')) {
-            //     defaultTab = 'firefox';
-            // } else 
-            if (userAgent.includes('safari') && !userAgent.includes('chrome')) {
+            if (userAgent.includes('edg')) {
+                defaultTab = 'edge';
+            } else if (userAgent.includes('firefox')) {
+                defaultTab = 'firefox';
+            } else if (userAgent.includes('safari') && !userAgent.includes('chrome') && !userAgent.includes('edg')) {
                 defaultTab = 'safari';
-            } else if (userAgent.includes('chrome')) {
+            } else if (userAgent.includes('chrome') && !userAgent.includes('edg')) {
                 defaultTab = 'chrome';
             }
-    
     
             let popupContent = `
            <div class="translation-popup-content">
@@ -1117,9 +1117,22 @@ let main = function () {
                     <li>Return to Safari and repeat step 2 to translate the page.</li>
                 </ol>
                 </li>
+                <div class="tab-content" id="edge" style="display: none;">
+                    <ol>
+                        <li><a href="${window.location.href}" target="_blank">Click here to open this workshop in a new tab.</a></li>
+                        <li>Right click anywhere on the page and then click <em>“Translate to [Your Language]”</em></li>
+                    </ol>
+                </div>
+                <div class="tab-content" id="firefox" style="display: none;">
+                    <ol>
+                        <li>Firefox Translations are currently in beta mode. We recommend using another one of the browsers listed within this tooltip.</li>
+                    </ol>
+                </div>
+            </div>
             </ol>
             </div>
             `;
+
 
 
             // <div class="tab-content" id="firefox" style="display: none;">
