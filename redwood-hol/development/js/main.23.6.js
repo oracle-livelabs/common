@@ -1135,7 +1135,7 @@ let main = function () {
             <li>
                 If necessary, click the <strong>translate icon</strong>
                 <img 
-                    src="https://livelabs.oracle.com/cdn/common/redwood-hol/img/translate-icon-edge.png" 
+                    src="https://livelabs.oracle.com/cdn/common/redwood-hol/img/translate-icon-edge.jpg" 
                     alt="Translate icon" 
                     style="height: 30px; vertical-align: middle; margin-left: 4px;" 
                     referrerpolicy="no-referrer"
