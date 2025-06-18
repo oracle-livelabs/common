@@ -203,34 +203,61 @@ let main = function () {
         $('.selected .toc .toc-item').removeClass('active');
         $('.selected .toc').find('[data-unique="' + $(active).attr('data-unique') + '"]').addClass('active');
     });
-
+    
     $(window).on('hashchange load', function (e) {
-        try { // if next or previous is not available then it raises exception
-            let position = extendedNav[e.target.location.hash]
-            if (position !== undefined)
+        try {
+            let position = extendedNav[e.target.location.hash];
+            if (position !== undefined) {
                 changeTutorial(getMDFileName(selectTutorial(manifest_global, position).filename));
+            }
 
             setTimeout(function () {
-                // Cause a subtle change in the parent page to trigger Google Translate
+                // ✅ DOM mutation trick (existing)
                 if (window.parent && window.parent.document) {
                     let body = window.parent.document.body;
-            
-                    // Find or create a subtle trigger element
+
                     let triggerElement = window.parent.document.getElementById("translation-trigger");
                     if (!triggerElement) {
                         triggerElement = window.parent.document.createElement("span");
                         triggerElement.id = "translation-trigger";
-                        triggerElement.style.display = "none"; // Keep it invisible
+                        triggerElement.style.display = "none";
                         body.appendChild(triggerElement);
                     }
-            
-                    // Toggle text content to force translation detection
+
                     triggerElement.textContent = triggerElement.textContent === "." ? " " : ".";
                     console.log("Translation trigger updated:", triggerElement);
                 }
-            }, 1000); // Adjust delay as needed (500ms is usually a good balance)
-        } catch (e) { };
+
+                // ✅ Force retranslation bait (new)
+                forceRetranslate();
+
+            }, 1000); // Allow time for content to render
+        } catch (e) {
+            console.warn("Translation retrigger failed:", e);
+        }
     });
+
+    // ✅ Add this function globally
+    function forceRetranslate() {
+        const html = document.documentElement;
+
+        // Temporarily switch language
+        html.setAttribute('lang', 'fr'); // or 'es', 'de', etc.
+        
+        // Optional: Add off-screen bait text
+        const bait = document.createElement("div");
+        bait.textContent = "Ceci est un texte en français destiné à forcer la traduction.";
+        bait.style.position = "absolute";
+        bait.style.left = "-9999px";
+        bait.id = "translation-bait";
+        document.body.appendChild(bait);
+
+        setTimeout(() => {
+            html.setAttribute('lang', 'en'); // restore
+            document.body.removeChild(bait);
+            console.log("Translation bait removed.");
+        }, 1500);
+    }
 
     let init = function () {
         // hide header if the url contains header=hide
