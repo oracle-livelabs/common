@@ -228,7 +228,7 @@ let main = function () {
                     triggerElement.textContent = triggerElement.textContent === "." ? " " : ".";
                     console.log("Translation trigger updated:", triggerElement);
                 }
-            }, 500); // Adjust delay as needed (500ms is usually a good balance)
+            }, 1000); // Adjust delay as needed (500ms is usually a good balance)
         } catch (e) { };
     });
 
