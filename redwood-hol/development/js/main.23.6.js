@@ -1114,7 +1114,7 @@ let main = function () {
                     referrerpolicy="no-referrer"
                 > in the Safari address bar.
             </li>
-            <li>If the icon doesn’t appear, use the menu bar at the top of your screen <br> (next to the Apple  icon).</li>
+            <li>If the icon doesn’t appear, use the menu bar at the top of your <br> screen (next to the Apple  icon).</li>
             <li>Select <strong>View</strong> → <strong>Translation</strong> → <br><em>“Translate to [Your Language]”</em>.</li>
             <li>
                 If no translation languages are available, click <strong>Preferred <br>Languages</strong> in the prompt and follow these steps:
@@ -1131,7 +1131,7 @@ let main = function () {
     <div class="tab-content" id="edge" style="display: none;">
         <ol>
             <li><a href="${window.location.href}" target="_blank">Click here to open this workshop in a new tab.</a></li>
-            <li>Right-click anywhere on the page and select <em>“Translate to [Your Language]”</em>.</li>
+            <li>Right-click anywhere on the page and select <em>“Translate to [Your<br> Language]”</em>.</li>
             <li>
                 If necessary, click the <strong>translate icon</strong>
                 <img 
@@ -1142,14 +1142,14 @@ let main = function () {
                 > in the Edge address bar and select the desired language.
             </li>
             <li> Click the Translate button.<li>
-            <li>If you navigate to a new lab and the translation disappears, repeat steps <br> 1 and 2 to re-enable it.</li>
+            <li>If you navigate to a new lab and the translation disappears, <br> repeat steps 1 and 2 to re-enable it.</li>
         </ol>
     </div>
 
     <!-- Firefox Instructions -->
     <div class="tab-content" id="firefox" style="display: none;">
         <ol>
-            <li>Firefox Translations is still in beta and may not work on all pages. For the <br>most consistent experience, we recommend using Chrome, Safari, or Edge.</li>
+            Firefox Translations is still in beta and may not work on all pages.<br> For the most consistent experience, we recommend using Chrome, <br> Safari, or Edge.
         </ol>
     </div>
 </div>
