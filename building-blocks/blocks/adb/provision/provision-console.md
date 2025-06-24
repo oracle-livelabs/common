@@ -28,7 +28,7 @@ In this lab, you will:
 [](include:adb-goto-service-body.md)
 
 ## Task 2: Create the Autonomous Database instance
-[](include:adb-provision-body.md)
+[](include:adb-provision-body-developer.md)
 
 Please [proceed to the next lab](#next).
 

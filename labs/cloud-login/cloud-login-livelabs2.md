@@ -32,7 +32,7 @@ Estimated Time: 5 minutes
 
   a. Check the tenancy. If it is different, click on change tenancy.
 
-  ![Login information](./images/check-tenancy.png " ")
+  ![Login information](./images/check-tenancy2.png " ")
 
   b. Add the user name and the password from the reservation information.
 
