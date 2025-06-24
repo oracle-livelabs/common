@@ -1,6 +1,6 @@
 <!--
     {
-        "name":"Provision Autonomous Database",
+        "name":"Provision Autonomous Database - Developer",
         "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more.",
         "author":"Lauran K. Serhal",
         "lastUpdated":"June 2025"
