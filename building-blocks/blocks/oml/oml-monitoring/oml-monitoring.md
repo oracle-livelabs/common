@@ -483,4 +483,4 @@ You may now **proceed to the next lab.**
 
 * **Contributors:** Mark Hornick, Sr. Director, Data Science / Machine Learning PM; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
 
-* **Last Updated By/Date**: Moitreyee Hazarika, December 2024
+* **Last Updated By/Date**: Moitreyee Hazarika, June 2025
