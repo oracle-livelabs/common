@@ -281,12 +281,12 @@ To create a model monitor:
 We will begin by creating an AutoML Experiment to create and deploy a few machine learning models. We will use these models for monitoring.  
 
 1. Follow the steps in _Lab 5 Introduction to Oracle Machine Learning AutoML UI_ to:
-    * Create an AutoML UI Experiment: Follow the steps in _Lab 5 Task 2: Create an Experiment_ to create an AutoML experiment by the name `power-consumption-2007`. Use the following parameters:
-        * **Data Source:** `HOUSEHOLD_POWER_BASE` and `HOUSEHOLD_POWER_NEW`
+    * Create an AutoML UI Experiment: Follow the steps in _Lab 5 Task 2: Create an Experiment_ to create an AutoML experiment by the name `Prediction of Global Active Power`. Use the following parameters:
+        * **Data Source:** `HOUSEHOLD_POWER_BASE`
         * **Predict:** `GLOBAL_ACTIVE_POWER`
         * **Prediction Type:** `Regression`
         
-    * Deploy the machine learning models: After the experiment `power-consumption-2007` runs successfully, follow the steps in _Lab 5 Task 3: Deploy a Top Model to Oracle Machine Learning Services_ to deploy the models built by the experiment to OML Services. 
+    * Deploy the machine learning models: After the experiment `Prediction of Global Active Power` runs successfully, follow the steps in _Lab 5 Task 3: Deploy a Top Model to Oracle Machine Learning Services_ to deploy each of the models built by the experiment to OML Services. 
       ![Deploy Models](images/leaderboard-models-deploy.png)  
 
 2. Let's begin with creating a model monitor. Click on the ![](images/icon-cloud.png) icon to open the left navigation menu. Expand **Monitoring** and then click **Models** to open the Model Monitors page. 
@@ -483,4 +483,4 @@ You may now **proceed to the next lab.**
 
 * **Contributors:** Mark Hornick, Sr. Director, Data Science / Machine Learning PM; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
 
-* **Last Updated By/Date**: Moitreyee Hazarika, December 2024
+* **Last Updated By/Date**: Moitreyee Hazarika, June 2025
