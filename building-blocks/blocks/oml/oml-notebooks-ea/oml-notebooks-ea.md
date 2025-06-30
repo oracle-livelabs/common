@@ -38,57 +38,30 @@ This lab assumes you have:
 
 ## Task 1: Sign into Oracle Machine Learning User Interface
 
-A notebook is a web-based interface for data analysis, data discovery, data visualization, and collaboration. You create and run notebooks using Oracle Machine Learning Notebooks, which is accessed through the Oracle Machine Learning user interface on Oracle Autonomous Database.
 
 <if type="freetier">
 
-1. Sign into your OCI account, click the Cloud menu on the left to open the left navigation pane, and click **Oracle Database**. On the right pane under Autonomous Database, click **Autonomous Data Warehouse**.
+You can access Oracle Machine Learning User Interface from Autonomous Database. Oracle Machine Learning User Interface provides you the following functionalities: 
 
-	![ADB in OCI](images/adw.png)
+* Notebooks - A web-based interface for data analysis, data discovery, data visualization, and collaboration
+* AutoML UI - An interface for no-code automated machine learning modeling and model deployment
+* Models - For model deployment
+* Monitoring - For data monitoring and model monitoring
+* Templates - A repository of example template notebooks, and a space to store your notebooks as personal templates, and share notebooks
+* Jobs - An interface to create jobs to schedule your notebooks
 
-2. The Autonomous Database dashboard lists all the databases that are provisioned in the tenancy. Click the Oracle Autonomous Database that you have provisioned.
 
-  ![List of provisioned ADBs](images/provisioned-adb.png)        	  
+Sign in to Oracle Machine Learning User Interface. Follow the steps in *Task 3 Sign into Oracle Machine Learning User Interface* in the lab _Provision an Autonomous Database with OMLUSERS_ 
 
-3. On your Oracle Autonomous Database instance page, click the **Database Actions** pull-down menu, and then select the option `View all database actions`. Wait till the Database Actions opens.
-
-	![ADW Service Console](images/database_actions.png)
-
-4. On the Database Actions page, go to the **Development** tab and click **Oracle Machine Learning**. This opens the Oracle Machine Learning sign in page.
-
-	![Development option in ADW Service Console](images/adb-dev-oml.png)
-
-5. Enter your user credentials and click **Sign in**.
-
-	> **Note:** The credential is what you have defined while creating the Oracle Machine Learning user.
-
-	![Oracle Machine Learning UI Sign in page](images/omluser-signin.png)
-
-	This opens the Oracle Machine Learning user interface home page.
-	![Notebooks option in OML homepage](images/homepage.png)
 </if>
 
 <if type="livelabs">
-1. On your workshop page, click **Launch Workshop** under **My Reservations**.
 
-   ![Launch Workshop](images/launch-workshop.png)
-
-2. On the **Get Started - LiveLabs login** page, click **View Login Info** at the top left.
-
-	![ADB in OCI](images/get-started-page-livelabs.png)
-
-3. In the panel that opens with the **Reservation Information**, click at the bottom of the panel on the **OML Notebooks** link.
-
-	![ADB in OCI](images/livelabs-reservation-info.png)
-
-4. In the page that opens, enter your user credentials and click **Sign in**. This opens the Oracle Machine Learning user interface home page.
-
-	> **Note:** The username is `OMLUSER`, and password is `AAbbcc123456`.
-
-	![Oracle Machine Learning UI Sign in page](images/oml-signin-page.png)
+[](include:oml-sign-into-oml-livelabs.md)
 
 </if>
-This completes the task of signing into Oracle Machine Learning user interface.
+
+
 
 ## Task 2: Access Oracle Machine Learning Notebooks 
 
@@ -557,4 +530,4 @@ You may now **proceed to the next lab**.
 
 * **Author** -  Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, April 2025
+* **Last Updated By/Date** - Moitreyee Hazarika, June 2025

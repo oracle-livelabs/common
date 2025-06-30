@@ -3,7 +3,7 @@
         "name":"Create an Oracle Autonomous Database",
         "description":"Learn how to provision Autonomous Database using the OCI console.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "lastUpdated":"Lauran K. Serhal, March 2025"
+        "lastUpdated":"Lauran K. Serhal, June 2025"
     }
 -->
 
@@ -18,11 +18,11 @@ Estimated Time: 5 minutes
 ### Objectives
 
 In this lab, you will:
-- Learn how to provision a new Oracle Autonomous Database.
+- Learn how to provision a new Oracle Autonomous Database instance.
 
 ### Prerequisites
 
--   This lab requires completion of the Get Started section in the Contents menu on the left.
+-   This lab requires the completion of the **Get Started** lab in the **Contents** menu on the left.
 
 ## Task 1: Choose Autonomous Database from the services menu
 [](include:adb-goto-service-body.md)
@@ -40,5 +40,5 @@ Please [proceed to the next lab](#next).
 ## Acknowledgements
 
 - **Author:** Lauran K. Serhal, Consulting User Assistance Developer
-- **Last Updated By/Date:** Lauran K. Serhal, January 2025
+- **Last Updated By/Date:** Lauran K. Serhal, June 2025
 - **Built with Blocks**

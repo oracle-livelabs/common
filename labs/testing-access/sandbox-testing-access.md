@@ -45,7 +45,6 @@ Visit [livelabs.oracle.com](livelabs.oracle.com) and sign in with your Oracle SS
 
   ![Run on LiveLabs Sandbox](./images/run-sandbox.png " ")
 
-
 ## Task 2: Log in with your Oracle SSO
 
 Next, log in using your **Oracle Single Sign-On (SSO) ID**.
