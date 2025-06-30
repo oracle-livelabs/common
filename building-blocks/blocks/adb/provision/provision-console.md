@@ -34,11 +34,12 @@ Please [proceed to the next lab](#next).
 
 ## Learn more
 
-- See the [documentation](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/work-with-workflows.html) on the typical workflow for using Autonomous Database Serverless.
-- Go to the [Data Warehousing Insider blog](https://blogs.oracle.com/datawarehousing/) for more information on network connectivity options mentioned in this workshop.
+- [Using Oracle Autonomous Database Serverless
+](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/autonomous-intro-adb.html)
+- [Data Warehousing Insider blog](https://blogs.oracle.com/datawarehousing/)
 
 ## Acknowledgements
 
 - **Author:** Lauran K. Serhal, Consulting User Assistance Developer
-- **Last Updated By/Date:** Lauran K. Serhal, June 2025
+- **Last Updated By/Date:** Lauran K. Serhal, July 2025
 - **Built with Blocks**
