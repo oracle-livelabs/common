@@ -67,7 +67,9 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 1. You can use your local machine's clipboard by using the buttons on the left side of the screen. 
 
     - The top button imports your clipboard to the secure desktop. Use the top button to send information from your computer to the desktop.
+        ![Import clipboard](./images/importclipboard.png)
     - The second button exports the secure desktop's clipboard to your local machine. Use the second button to get information from the desktop to your machine. 
+        ![Export clipboard](./images/exportclipboard.png)
 
 2. If you are using a NoVNC image in LiveLabs, you may be confused with multiple layers of browser and remote desktop views. In order to minmize these intrutions, you can do the following: 
 
