@@ -1,0 +1,13 @@
+{
+ "workshoptitle":"Secure Desktops",
+ "help": "livelabs-help-db_us@oracle.com",
+ "variables": ["/common/building-blocks/variables/variables.json"],
+ "tutorials": [  
+
+     {
+         "title": "Get Started",
+         "description": "Get Started with Secure Desktops",
+         "filename": "./securedesktops.md"
+     }
+  ]
+}
