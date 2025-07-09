@@ -28,30 +28,29 @@ Estimated Time: 5 minutes
 
 2. Click **View Login Info** to see your detailed reservation information such as tenancy, username, password, assigned compartment and more. Click **Launch OCI**.
 
-    ![Launch OCI](./images/launch-oci-new.png " ")
+    ![Launch OCI](./images/launch-oci-new.png =65%x*)
 
 3. Follow the provided workshop instructions to log in to your Oracle Cloud account, change your password, and complete your login to Oracle Cloud.
 
     a. On the **Oracle Cloud** page, check the tenancy. If it is different than your assigned tenancy, click the **Change tenancy** link.
 
-    ![Login information](./images/check-tenancy-new.png " ")
+    ![Login information](./images/check-tenancy-new.png =65%x*)
 
     b. On the **Oracle Cloud Account Sign In** page, enter your username and password from the **Reservation Information** page, and then click **Sign In**.
 
-    ![Login information](./images/username-password-new.png " ")
+    ![Login information](./images/username-password-new.png =65%x*)
 
     c. On the **Reset your password** page, enter your old and new passwords, and then click **Reset Password**.
 
-    ![Login information](./images/change-password-new.png " ")
+    ![Login information](./images/change-password-new.png =65%x*)
 
-3. Congratulations! You are now connected to an Oracle Cloud Infrastructure tenancy. You can now execute the different tasks and steps for the selected LiveLabs workshop.
+4. Congratulations! You are now connected to an Oracle Cloud Infrastructure tenancy. You can now execute the different tasks and steps for the selected LiveLabs workshop.
 
-    ![OCI console](./images/oci-console-new.png " ")
+    ![OCI console](./images/oci-console-new.png =65%x*)
 
-4. If you need to view your login information at any time, click the **View Login Info** link in **Run Workshop** browser tab. **Important:** Please be aware of the **Time Remaining** for your sandbox environment. Your environment will be deleted once the remaining time has expired.
+5. If you need to view your login information at any time, click the **View Login Info** link in **Run Workshop** browser tab. **Important:** Please be aware of the **Time Remaining** for your sandbox environment. Your environment will be deleted once the remaining time has expired.
 
-    ![View Login Info](../need-help/images/view-login-info-new-2.png " ")
-
+    ![View Login Info](../need-help/images/view-login-info-new-2.png =65%x*)
 
 ## Task 2: Find your LiveLabs Sandbox Reservations
 
@@ -59,15 +58,15 @@ If you close your browser, and you want to launch your workshop again, use the f
 
 1. Go to [livelabs.oracle.com](https://livelabs.oracle.com), and then click **Sign In**.
 
-    ![Click Sign In](./images/click-sign-in-new.png " ")
+    ![Click Sign In](./images/click-sign-in-new.png =65%x*)
 
 2. Login using your Oracle account. Next, click the drop-down menu next to your account name, and then select **My Reservations**.
 
-    ![Signed In](./images/signed-in-new.png " ")
+    ![Signed In](./images/signed-in-new.png =65%x*)
 
 3. The **My Reservations** page is displayed. You can find here a complete history of all LiveLabs workshops that you had signed up for. Click **Launch Workshop** to start a workshop with an available (current) LiveLabs Sandbox environment.
 
-    ![View My Reservations](./images/ll-reservations-new.png " ")
+    ![View My Reservations](./images/ll-reservations-new.png =65%x*)
 
 You may now **proceed to the next lab**.
 
