@@ -44,14 +44,13 @@ Estimated Time: 5 minutes
 
     ![Login information](./images/change-password-new.png =65%x*)
 
-3. Congratulations! You are now connected to an Oracle Cloud Infrastructure tenancy. You can now execute the different tasks and steps for the selected LiveLabs workshop.
+4. Congratulations! You are now connected to an Oracle Cloud Infrastructure tenancy. You can now execute the different tasks and steps for the selected LiveLabs workshop.
 
     ![OCI console](./images/oci-console-new.png =65%x*)
 
-4. If you need to view your login information at any time, click the **View Login Info** link in **Run Workshop** browser tab. **Important:** Please be aware of the **Time Remaining** for your sandbox environment. Your environment will be deleted once the remaining time has expired.
+5. If you need to view your login information at any time, click the **View Login Info** link in **Run Workshop** browser tab. **Important:** Please be aware of the **Time Remaining** for your sandbox environment. Your environment will be deleted once the remaining time has expired.
 
     ![View Login Info](../need-help/images/view-login-info-new-2.png =65%x*)
-
 
 ## Task 2: Find your LiveLabs Sandbox Reservations
 
