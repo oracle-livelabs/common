@@ -65,6 +65,28 @@
  
 [](include:adb-connect-with-sql-worksheet-non-admin.md)
  
+## Create a policy enabling ADB access to OCI GenAI
+**Markdown file location:**
+```
+/common/building-blocks/tasks/adb/create-genai-policy.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "adb-create-genai-policy.md":"/common/building-blocks/tasks/adb/create-genai-policy.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:adb-create-genai-policy.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:adb-create-genai-policy.md)
+ 
 ## Create Graph
 **Markdown file location:**
 ```
@@ -307,7 +329,7 @@
  
 [](include:adb-load-public-db-actions.md)
  
-## Provision Autonomous Database
+## Provision Autonomous Database - Developer
 **Markdown file location:**
 ```
 /common/building-blocks/tasks/adb/provision-body-developer.md

@@ -60,19 +60,19 @@ Try these options to access the environment again:
 
 1. From the navigation menu, click **Identity & Security** and select **Domains** under **Identity**.
 
-  ![Select Domains](../../images/console-2025/id-domains.png " ")
+  ![Select Domains](../../images/console/id-domains.png " ")
 
 2. Make sure you are in the correct compartment and click **Default(Current domain)**
 
-  ![Click Default](../../images/console-2025/id-default-domain.png " ")
+  ![Click Default](../../images/console/id-default-domain.png " ")
 
 3. From the menu under the domain you chose, click **User management**.
 
-  ![Click Groups](../../images/console-2025/id-user-management.png " ")
+  ![Click Groups](../../images/console/id-user-management.png " ")
 
 4. Scroll until you see **Groups** section.
 
-  ![Click Groups](../../images/console-2025/id-groups.png " ")
+  ![Click Groups](../../images/console/id-groups.png " ")
 
 ## Acknowledgements
 * **Author** - LiveLabs Team
