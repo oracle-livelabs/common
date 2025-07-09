@@ -136,13 +136,17 @@
     ![Database instance displayed.](./images/ll-adb-page-new.png =65%x*)
     </if>
 
-    Your new Autonomous Database instance is displayed. In the following sample screen capture, the instance display name is **`Training-Database`**.
+    Your new Autonomous Database instance is displayed. 
 
     <if type="freetier">
+    In the following sample screen capture, the instance display name is **`Training-Database`**.
+
     ![Click left arrow.](./images/adb-home-page.png =65%x*)
     </if>
 
     <if type="livelabs">
+    In the following sample screen capture, the instance display name is **`MyQuickStart`**.
+
     ![Database instance displayed.](./images/ll-adb-page-new.png =65%x*)
     </if>
 
