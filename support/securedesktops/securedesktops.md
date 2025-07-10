@@ -18,7 +18,7 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 
     ![Login to Secure Desktop](./images/securedesktoplogin.png)
 
-3. Login with the Secure Desktop user information. You will have to provide a new password since this is the first login of the user. 
+3. Login with the Secure Desktop user information. You will have to provide a new password since this is the first login of the user. **NOTE:** If after logging in you see a blank page, simply refresh the page to reach the reset password screen.
 
     ![Login with User Info](./images/securedesktopuserlogin.png)
 
