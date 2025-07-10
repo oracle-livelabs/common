@@ -3,17 +3,17 @@
         "name":"Provision Autonomous Database",
         "description":"provision-body.md common task. Uses the Redwood UI. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more.",
         "author":"Lauran K. Serhal",
-        "lastUpdated":"June 2025"
+        "lastUpdated":"July 2025"
     }
 -->
-1. Click **Create Autonomous Database** to start the instance creation process. The **Create Autonomous Database** page is displayed. Select your desired **region** and **compartment**. If you are using a sandbox environment (green button) and get a **Forbidden** message, that indicates you are in the wrong compartment. Click the **Compartment** field, and then select your assigned compartment that you can find on the **Reservation Information** page.
+1. On the **Autonomous Databases** page, select your desired **region** and **compartment**. Click **Create Autonomous Database** to start the instance creation process. The **Create Autonomous Database** page is displayed.
 
     <if type="livelabs">
-    ![Click Create Autonomous Database.](images/ll-adb-click-create-adb-new.png " ")
+    ![Click Create Autonomous Database.](images/ll-adb-click-create-adb-new.png =65%x*)
     </if>
 
     <if type="freetier">
-    ![Click Create Autonomous Database.](images/click-create-new-adb.png " ")
+    ![Click Create Autonomous Database.](images/click-create-new-adb.png =65%x*)
     </if>
 
 2. On the **Create Autonomous Database Serverless** page, specify the following:
@@ -23,7 +23,7 @@
     - **Database Name**: Use letters and numbers only, starting with a letter. Maximum length is 14 characters. _Underscores are not supported_. For this lab, use **[](var:db_name)**.
     - **Compartment**: Select your compartment from the drop-down list.
 
-        ![Enter the required details.](./images/adb-create-screen-names.png " ")
+    ![Enter the required details.](./images/adb-create-screen-names.png =65%x*)
 
     >**Note:** Ensure that you use the suggested database names as instructed in this step, and not those shown in the screenshots.
 </if>
@@ -33,7 +33,7 @@
     - **Database Name**: Use letters and numbers only, starting with a letter. Maximum length is 14 characters. _Underscores are not supported_. For this lab, use **[](var:db_name_livelabs)**.
     - **Compartment**: Use the default compartment created for your reservation.
 
-    ![Enter the required details.](./images/adb-create-screen-names.png =70%x*)
+    ![Enter the required details.](./images/adb-create-screen-names.png =65%x*)
 
 > **Note:** Ensure that you use the suggested database names as instructed in this step, and not those shown in the screenshots.
 </if>
@@ -47,7 +47,7 @@
 
     For this workshop, accept the **Data Warehouse** default selection.
 
-    ![Choose a workload type.](images/adb-create-screen-workload.png " ")
+    ![Choose a workload type.](images/adb-create-screen-workload.png =65%x*)
 
 4. In the **Database configuration** section, specify the following:
 
@@ -61,7 +61,7 @@
 
         > **Note:** You cannot scale up/down an Always Free autonomous database.
 
-        ![Choose the remaining parameters.](./images/adb-create-database-configuration.png " ")
+        ![Choose the remaining parameters.](./images/adb-create-database-configuration.png =65%x*)
 
         >**Note:** You can drill down on the **Advanced options** option to take advantage of database consolidation savings with **elastic pools** or to use your organization's on-premise licenses with **bring your own license**. 
 
@@ -69,7 +69,7 @@
     - **Automatic backup retention period in days:** You can either accept the default value or specify your own preferred backup retention days value. For this lab, accept the default `60` days default value.
     - **Immutable backup retention:** Accept the disabled default selection.
 
-     ![Choose backup retention.](./images/choose-backup-retention.png " ")
+     ![Choose backup retention.](./images/choose-backup-retention.png =65%x*)
 
 6. In the **Administrator credentials creation** section, specify the following:
 
@@ -84,7 +84,7 @@
             - Must be different from the last 4 passwords used.    
             - Must not be the same password that you set less than 24 hours ago.
 
-        ![Enter password and confirm password.](./images/adb-create-screen-password.png =75%x*)
+        ![Enter password and confirm password.](./images/adb-create-screen-password.png =65%x*)
 
 7. In the **Network access** section, select one of the following options:
     - For this lab, accept the default selection, **Secure access from everywhere**.
@@ -92,58 +92,64 @@
     - If you want to restrict access to a private endpoint within an OCI VCN, select **Private endpoint access only** in the Choose network access area.
     - If the **Require mutual TLS (mTLS) authentication** option is selected, mTLS will be required to authenticate connections to your Autonomous Database. TLS connections allow you to connect to your Autonomous Database without a wallet, if you use a JDBC thin driver with JDK8 or above. See the [documentation for network options](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/support-tls-mtls-authentication.html#GUID-3F3F1FA4-DD7D-4211-A1D3-A74ED35C0AF5) for options to allow TLS, or to require only mutual TLS (mTLS) authentication.
 
-        ![Choose the network access.](./images/adb-create-network-access.png " ")
+        ![Choose the network access.](./images/adb-create-network-access.png =65%x*)
 
 8. In the **Contacts for operational notifications and announcements** section, provide a contact email address. The **Contact email** field allows you to list contacts to receive operational notices and announcements as well as unplanned maintenance notifications.
 
-    ![Provide a contact email address.](images/adb-create-contact-email.png "email")
+    ![Provide a contact email address.](images/adb-create-contact-email.png =65%x*)
 
 9. Click **Create**.
 
 10.  The **Autonomous Database details** page is displayed. The status of your ADB instance is **`Provisioning`**.
 
     <if type="freetier">
-    ![Database Provisioning message.](./images/adb-create-provisioning-message-new.png " ")
+    ![Database Provisioning message.](./images/adb-create-provisioning-message-new.png =65%x*)
     </if>
 
     <if type="livelabs">
-    ![Database Provisioning message.](./images/ll-adb-create-provisioning-message-new.png " ")
+    ![Database Provisioning message.](./images/ll-adb-create-provisioning-message-new.png =65%x*)
     </if>
 
     A **Check database lifecycle state** informational box is displayed. You can navigate through this tour or choose to skip it. Click **Skip tour**. A **Skip guided tour** dialog box is displayed. Click **Skip**.
 
     In a few minutes, the instance status changes to **`Available`**. At this point, your Autonomous Data Warehouse database instance is ready to use! Review your instance's details including its name, database version, ECPU count, and storage size.
-    
-    >**Note:** In the following screen sample, the database dispay name is **`Training-Database`** and the database name is **`TrainingDatabase`**. _In your example, your **database display name** and **database name** will be different_.
-    
+       
     <if type="livelabs">
-    ![Database complete message.](./images/ll-adb-create-complete-message-new.png " ")
+    >**Note:** In the following screen sample, the database display name is **`MyQuickStart`** and the database name is **`MOVIExxxxxx`**. _In your example, your **database display name** and **database name** might be different_.
+
+    ![Database complete message.](./images/ll-adb-create-complete-message-new.png =65%x*)
     </if>
 
     <if type="freetier">
-    ![Database complete message.](./images/adb-created.png " ")
+    >**Note:** In the following screen sample, the database display name is **`Training-Database`** and the database name is **`TrainingDatabase`**. _In your example, your **database display name** and **database name** might be different_.
+
+    ![Database complete message.](./images/adb-created.png =65%x*)
     </if>
 
-11. Click the **Autonomous Databases** link in the top left of the page. The **Autonomous Database** page is displayed. 
+11. Click the **Autonomous Databases** link in the top left of the page. The **Autonomous Database** page is displayed.
 
     <if type="freetier">
-    ![Click left arrow.](./images/click-left-arrow.png " ")
+    ![Click left arrow.](./images/click-left-arrow.png =65%x*)
     </if>
 
     <if type="livelabs">
-    ![Database instance displayed.](./images/ll-adb-page-new.png " ")
+    ![Database instance displayed.](./images/ll-adb-page-new.png =65%x*)
     </if>
 
-    Your new Autonomous Database instance is displayed. In the following sample screen capture, the instance display name is **`Training-Database`**.
+    Your new Autonomous Database instance is displayed. 
 
     <if type="freetier">
-    ![Click left arrow.](./images/adb-home-page.png " ")
+    In the following sample screen capture, the instance display name is **`Training-Database`**.
+
+    ![Click left arrow.](./images/adb-home-page.png =65%x*)
     </if>
 
     <if type="livelabs">
-    ![Database instance displayed.](./images/ll-adb-page-new.png " ")
+    In the following sample screen capture, the instance display name is **`MyQuickStart`**.
+
+    ![Database instance displayed.](./images/ll-adb-page-new.png =65%x*)
     </if>
 
 12. An email message is sent to the contact email that you provided. The email contains useful links that you can use to launch Database Actions, view the Get Started with Autonomous Database Web page, and access the online forums to post a question and collaborate with other Autonomous Database experts. 
 
-    ![provisioning email sent.](./images/provisioning-email-generic.png " ")
+    ![provisioning email sent.](./images/provisioning-email-generic.png =65%x*)
