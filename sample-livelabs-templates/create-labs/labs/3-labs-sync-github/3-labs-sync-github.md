@@ -245,10 +245,9 @@ If you are the **workshop team** of the workshop that you want to create an even
 
 6. Finally, push your changes and create a pull request to one of the oracle-livelabs GitHub repos. After your pull request is approved and merged, you can proceed to Step 7.
 
-7. Go to the Workshop Management System (WMS). Expand **Events**, then click **Request an Event Code**. Watch this [**video**](https://otube.oracle.com/media/t/1_vuoemxyl) to learn how to request an event code. If you perform Steps 1 - 6, then you need to click **Edit Workshop Links** and put the customized links (for example, links ending with *workshops/events/index.html*).
+7. Go to the Workshop Management System (WMS). Expand **Events**, then click **Request an Event Code**. Watch this [**video**](https://livelabs.oracle.com/create-event) to learn how to request an event code. If you perform Steps 1 - 6, then you need to click **Edit Workshop Links** and put the customized links (for example, links ending with *workshops/events/index.html*).
 
   ![Request an Event Code](./images/request.png " ")
-  ![Customize URLs](./images/url.png " ")
 
 8. After the event, if you as the event organizers want to know about the event's registration information, you can contact the LiveLabs team. We can share the number of attendees, their emails' domain names (but not their email address), and when they request the event codes, etc.
 
@@ -436,4 +435,4 @@ If you have multiple Oracle LiveLabs repositories, you need to switch to the rep
     * Brianna Ambler, Product Manager
 
 * **Last Updated By/Date:**
-    * Ana Coman, Technical Program Manager, Oracle Database Product Management, July 2024
+    * Ramona Magadan, Technical Program Manager, Oracle Database Product Management, July 2025
