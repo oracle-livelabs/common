@@ -14,9 +14,17 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 
     ![Secure Desktop Information](./images/livelabs-resinfo.png)
 
-2. Enter the Desktop Teanncy name, found in the Secure Desktop Infromation section in LiveLabs. 
+2. If you have another OCI session in your browser, you will need to click the "Sign in with a different user account" option after launching secure desktops. 
+
+    ![Sign in with a different user](./images/signin-differentuser.png)
+
+2. Enter the Desktop Tenancy name, found in the Secure Desktop Information section in LiveLabs. 
 
     ![Login to Secure Desktop](./images/securedesktoplogin.png)
+
+4. If you have to select an identity domain for the tenancy, please select the **Default** domain. 
+
+    ![Select the Default Identity Domain](./images/signin-domain.png)
 
 3. Login with the Secure Desktop user information. You will have to provide a new password since this is the first login of the user. **NOTE:** If after logging in you see a blank page, simply refresh the page to reach the reset password screen.
 
@@ -24,7 +32,9 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 
     ![Reset User Password](./images/userresetpassword.png)
 
-4. Now you will see the Secure Desktops home page. You will see the desktops you have available to you. Click on the available desktop pool. This will begin provisioning a brand-new desktop for you to use. Please allow for 5 minutes for the compute instance to stand up. 
+4. Now you will see the Secure Desktops home page. You will see the desktops you have available to you. Click on the available desktop pool. This will begin provisioning a brand-new desktop for you to use. Please allow for 5-10 minutes for the compute instance to stand up. 
+
+    **Note:** Secure Desktops use pop-ups. Please enable pop-ups in your browser settings before clicking on a Desktop Pool. 
 
     ![Select a Secure Desktop](./images/securedesktoppools.png)
 
@@ -57,7 +67,7 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 
     ![Open Firefox](./images/linuxactivities.png)
 
-8. With the browser open, you can navigate to livelabs.oracle.com to sign in and use your LiveLabs environment. 
+8. With the browser open, you can navigate to **livelabs.oracle.com** to sign in and use your LiveLabs environment. 
 
     ![Go to LiveLabs](./images/livelabs-securedesktop.png)
 
