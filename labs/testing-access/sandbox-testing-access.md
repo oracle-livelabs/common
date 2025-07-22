@@ -43,7 +43,7 @@ Visit [livelabs.oracle.com](livelabs.oracle.com) and sign in with your Oracle SS
 
     Select the option to run the lab in the LiveLabs Sandbox environment.
 
-  ![Run on LiveLbs Sandbox](./images/run-sandbox.png " ")
+  ![Run on LiveLabs Sandbox](./images/run-sandbox.png " ")
 
 ## Task 2: Log in with your Oracle SSO
 
@@ -101,4 +101,4 @@ If a browser window opens showing the virtual environment, your network supports
 ## Acknowledgements
 
 - **Created By/Date** - Ramona Magadan, Database Product Management, May 2025
-- **Last Updated By/Date** - Ramona Magadan, May 2025
+- **Last Updated By/Date** - Ramona Magadan, June 2025
