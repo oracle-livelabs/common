@@ -31,18 +31,18 @@ This lab assumes you have:
 
 3. Under List Scope, in the Compartment list, click the name of the compartment where you want to create a bastion.
 
-	![Compartment](./images/list-scope-comp.png)
+	![Compartment](../../images/console/list-scope-comp.png)
 
 	Change name of Instance to your specification.
 
 4. Click **Create bastion**.
 
-	![Create bastion](./images/create-bastion.png)
+	![Create bastion](../../images/console/create-bastion.png)
 
 5. Enter a name for the Bastion
 	- Avoid entering any confidential information in this field. Only alphanumeric characters are supported.
 
-	![Bastion name](./images/name-bastion.png)
+	![Bastion name](../../images/console/name-bastion.png)
 
 6. Under Configure networking, select the Target virtual cloud network of the target resource that you intend to connect to by using sessions hosted on this bastion.
 If needed, change the compartment to find the VCN.
@@ -55,7 +55,7 @@ For example, 203.0.113.0/24 or 0.0.0.0/0 allows all.
 
 	Enter a CIDR block into the input field, and then either click the value or press Enter to add the value to the list. The maximum allowed number of CIDR blocks is 20.
 
-	![CIDR](./images/cidr.png " ")
+	![CIDR](../../images/console/cidr.png " ")
 
 	A more limited address range offers better security.
 
@@ -73,24 +73,24 @@ Before creating a Managed SSH session, verify that:
 
 3. Click the name of the session
 
-	![Session name](./images/bastion.png)
+	![Session name](../../images/console/bastion.png)
 
 4. Click "Create Session"
 
-	![Create Session](./images/create-session.png)
+	![Create Session](../../images/console/create-session.png)
 
 5. Choose a session type by selecting "Managed SSH Session"
 
 6. Enter a display name for the new session
 
-	![Display name](./images/managed.png)
+	![Display name](../../images/console/managed.png)
 
 7. Choose Compute instance and under Add SSH Key, provide the public key file of the SSH key pair that you want to use for the session.
 Later, when you connect to the session, you must provide the private key of the same SSH key pair.
 
 8. When you are finished, click "Create session"
 
-	![Create session](./images/create-session2.png)
+	![Create session](../../images/console/create-session-bastion.png)
 
 ## Task 3: Allow Network Access From the Bastion
 
@@ -157,5 +157,5 @@ You may now **proceed to the next lab**.
 
 ## Acknowledgements
 * **Author** - Thea Lazarova, Solution Engineer Santa Monica
-* **Contributors** -  Andrew Hong, Solution Santa Monica, Arabella Yao
-* **Last Updated By/Date** - Arabella Yao, Database Product Management, Dec 2022
+* **Contributors** -  Andrew Hong, Solution Santa Monica
+* **Last Updated By/Date** - Ramona Magadan, Database Product Management, August 2025
