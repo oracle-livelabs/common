@@ -30,25 +30,23 @@ This lab assumes you have:
 
 1. After logging into your Oracle Cloud account, click the hamburger icon to open your Cloud Services navigation menu. This will reveal your top-level menu options.
 
-    ![Click the hamburger icon to expand the navigation menu.](./images/navigate-to-hamburger-icon-oci-console.png " ")
+    ![Click the hamburger icon to expand the navigation menu.](../../images/console/home-dashboard.png " ")
 
 2. From the available options, click `Oracle Database`.
 
-    ![Locate Oracle Database from the available options.](./images/navigate-to-oracle-database-from-navigation-menu.png " ")
-
 3. The Oracle Database sub-menu will appear. Select `Autonomous Database`.
 
-    ![Locate Oracle Database from the available options.](./images/select-autonomous-database-from-oci-navigation-sub-menu.png " ")
+    ![Locate Oracle Database from the available options.](../../images/console/database-adb.png " ")
 
 4. A screen with your available databases will appear. Ensure `root` has been selected under the `Compartment` in your `List scope`. Additionally, ensure you've selected `All` for your `Workload type` (found under your `Filters`). <if type="livelabs">Check your login credentials to find the **compartment** assigned to you. Enter your compartment number, for example, `LL185`, in the Search Compartments field to quickly locate your compartment.</if>
 
-    ![Viewing your available databases.](./images/available-autonomous-databases-view-in-oci.png " ")
+    ![Viewing your available databases.](../../images/console/adb-database.png " ")
 
 5. From the databases displayed, click the name of your database to navigate to your Autonomous Database's Details page.
 
 6. Your selected Autonomous Database's Details page will appear. Click `Database Actions` then `SQL` to launch in a new window.
 
-    ![Clicking the Database Actions Button from your details page.](./images/clicking-database-actions-button-from-selected-database.png " ")
+    ![Clicking the Database Actions Button from your details page.](../../images/console/clicking-database-actions-button-from-selected-database.png " ")
 
 7. After this, you'll be automatically redirected to Database Actions SQL screen.
 
@@ -75,4 +73,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 
 - **Author** - Troy Anthony, Database Product Management, May 2020
-- **Last Updated By/Date** - Ramona Magadan, Database Product Management, May 2024
+- **Last Updated By/Date** - Ramona Magadan, Database Product Management, August 2025
