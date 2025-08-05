@@ -1,7 +1,9 @@
 <!--
     {
         "name":"Query JSON arrays",
-        "description":"Use JSON_TABLE to convert arrays into rows."
+        "description":"(Redwood UI) Use JSON_TABLE to convert arrays into rows.",
+        "author":"Lauran K. Serhal, Consulting User Assistance Developer",
+        "lastUpdated":"Lauran K. Serhal, July 2025"
     }
 -->
 ### Query JSON Arrays
