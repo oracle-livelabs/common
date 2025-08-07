@@ -1,16 +1,16 @@
 <!--
     {
         "name":"Provision Your Oracle Analytics Cloud (OAC) Instance",
-        "description":"Show how to create a new OAC instance",
-        "author":"Ana Coman",
-        "last_updated":"Ana Coman, Oracle Database Product Management, July 2024"
+        "description":"Create a new OAC instance",
+        "author":"Lauran K. Serhal, Consulting User Assistance Developer",
+        "last_Updated":"Lauran K. Serhal, June 2025"
     }
 -->
 # Provision Your Oracle Analytics Cloud (OAC) Instance
 
 ## Introduction
 
-> **Important:** _Oracle Analytics Cloud (OAC) is not available with Oracle Cloud Free Tier (Always Free), nor is it supported in Oracle LiveLabs Sandbox hosted environments (the Green button). If you run this workshop using an Always Free database or a LiveLabs Sandbox environment, you can review **Lab 1** and **Lab 5** **without provisioning and using OAC**, and later practice the two labs on **Oracle Autonomous Database** and **OAC** in your organization’s own tenancy._
+> _**Important:** Oracle Analytics Cloud (OAC) is not available with Oracle Cloud Free Tier (Always Free), nor is it supported in Oracle LiveLabs Sandbox hosted environments (the Green button). If you run this workshop using an Always Free database or a LiveLabs Sandbox environment, you can review **Lab 1** and **Lab 5** **without provisioning and using OAC**, and later practice the two labs on **Oracle Autonomous Database** and **OAC** in your organization’s own tenancy.**_
 
 In this lab, you provision an **Oracle Analytics Cloud (OAC)** instance on Oracle Cloud Infrastructure, which you will use to analyze your data in the **Develop Self-Service Analytics Cloud Dashboards** lab in this workshop.
 
@@ -37,47 +37,49 @@ Estimated Time: 20+ minutes.
 
 2. Click the **Profile** icon in the top right side of the banner. 
 
-    If your username is shown in the following format, then you are **connected** as a **Single Sign On** user.
+    - If your username is shown in the following format, then you are **connected** as a **Single Sign On** user using a domain other than the default domain.
 
-    - oracleidentitycloudservice/&lt;your username&gt;
+        `oracleidentitycloudservice/<your username>`
 
-        ![Federated User](./images/federated-user.png)
+    - If your username is shown in the following format, then you are **signed in** as an **Oracle Cloud Infrastructure** user using the default domain.
+    
+        ![sso user User](./images/sso-user.png =60%x*)
 
-    If your username is shown in the following format, then you are **signed in** as an **Oracle Cloud Infrastructure** user.
+    >**Note:** For more information about federated users, see the [User Provisioning for Federated Users](https://docs.cloud.oracle.com/en-us/iaas/Content/Identity/Tasks/usingscim.htm) documentation.
 
-    - &lt;your username&gt;
+3. Return to the **Console** Home page. Click the Navigation menu.
 
-    >**Note:** If your user does not contain the identity provider (**oracleidentitycloudprovider**), please log out and select to authenticate
-    using **Single Sign On**. To enable using **Oracle Analytics Cloud**, we need to sign on as a **Single Sign-On** (SSO) user. For more information about federated users, see the [User Provisioning for Federated Users](https://docs.cloud.oracle.com/en-us/iaas/Content/Identity/Tasks/usingscim.htm) documentation.
+    ![Click the Navigation menu.](./images/click-navigation.png)
 
-3. Return to the **Console** Home page. Open the Navigation menu and click **Analytics & AI**. Under **Analytics**, click **Analytics Cloud**.
+4. Click **Analytics & AI**. Under **Analytics**, click **Analytics Cloud**.
 
     ![Navigate to Analytics Cloud.](./images/analytics-cloud.png)
 
     > **Note**: You must be connected as a **Single Sign On** (**Federated user**) user to a tenancy, which has available cloud credits to see this menu item. Local OCI users are not able to do this.
 
-4. On the **Analytics Instances** page, select your compartment from the **Compartment** drop-down list in the **List Scope** section. Next, click **Create Instance**.
+5. On the **Analytics Instances** page, select your compartment from the **Compartment** drop-down list in the **List Scope** section. Next, click **Create Instance**.
 
     ![Click create instance.](./images/create-instance.png)
 
-5. On the **Create Analytics Instance** panel, specify the following: 
+6. On the **Create Analytics Instance** panel, specify the following: 
+    * **Name:** [](var:oac_instance_name).
     * **Compartment:** Select your compartment.
-    * **Instance Name:** [](var:oac_instance_name).
     * **Description:** Analytics Instance for the cloud.
     * **Capacity Type:** OCPU.
     * **OCPU Count:** 1 (Non Production).
     * **License Type:** License Included.
     * **License Edition:** Enterprise Edition.
+    * **Update Cycle:** Regular.
 
         ![OAC Instance Creation](./images/create-analytics-instance.png)
 
-6. Click **Create**. The Analytics instance page will be displayed with a status of **CREATING**.
+7. Click **Create**. The Analytics instance page will be displayed with a status of **CREATING**.
 
     ![OAC Instance Creating](./images/oac-creating.png)
 
-    ***Reminder***: Provisioning an Oracle Analytics Cloud instance can take over **20+ minutes**.
+    >**Note:** Provisioning an Oracle Analytics Cloud instance can take over **20 minutes**.
 
-6. When provisioning is complete, the status of your Analytics instance changes to **ACTIVE**.
+8. When provisioning is complete, the status of your Analytics instance changes to **ACTIVE**.
 
     ![OAC Instance Active](./images/oac-created.png)
 
@@ -95,4 +97,4 @@ You may now proceed to the next lab.
     * Melanie Ashworth-March
     * Andrea Zengin
 
-- **Last Updated By/Date:** Lauran K. Serhal, March 2024
+- **Last Updated By/Date:** Lauran K. Serhal, July 2025

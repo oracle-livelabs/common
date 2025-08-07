@@ -1,9 +1,11 @@
-<!---
-{
-    "name":"Create and load JSON Collection from object storage",
-    "description":"<ul><li>Loads data using DBMS_CLOUD.COPY_COLLECTION</li><li>Introduces JSON_SERIALIZE, JSON_VALUE and JSON_QUERY (minimal)</li><li>Creates a view over JSON data</li><li>Performs basic JSON queries</li></ul>"
-}
---->
+<!--
+    {
+        "name":"Create and load JSON Collection from object storage",
+        "description":"(Redwood UI) Loads data using DBMS_CLOUD.COPY_COLLECTION. Introduces JSON_SERIALIZE, JSON_VALUE and JSON_QUERY .",
+        "author":"Lauran K. Serhal, Consulting User Assistance Developer",
+        "lastUpdated":"Lauran K. Serhal, July 2025"
+    }
+-->
 ### What is JSON?
 JSON provides a language independent, flexible, and powerful data model. It was derived from JavaScript, but many modern programming languages include code to generate and parse JSON-format data. For more information see [https://en.wikipedia.org/wiki/JSON](https://en.wikipedia.org/wiki/JSON). No wonder that it is such a popular storage format for developers.
 
@@ -27,7 +29,7 @@ If you already have the SQL Worksheet open from the previous lab, skip to **step
 
 4. The SQL Worksheet is displayed.
 
-    ![The SQL worksheet is displayed.](./images/sql-worksheet-displayed.png " ")
+    ![The SQL worksheet is displayed.](./images/sql-worksheet-displayed.png =65%x*)
 
 5. Use the Autonomous Database ``DBMS_CLOUD.COPY_COLLECTION`` procedure to create and load the movie collection from object storage. Copy and paste the following script into your SQL Worksheet, and then click the **Run Script (F5)** icon in the Worksheet toolbar.
     ```
@@ -45,17 +47,19 @@ If you already have the SQL Worksheet open from the previous lab, skip to **step
     </copy>
     ```
 
-    ![Create JSON movie collection](images/adb-create-json-collection.png)
+    ![Create JSON movie collection](images/adb-create-json-collection.png =65%x*)
 
     This single step creates a table called **`MOVIE_COLLECTION`** and populates it with JSON documents. You can access this table thru SQL, Oracle Database API for MongoDB, SODA REST, and more.
 
     > **Note:** There is extra metadata captured for SODA collections that is not removed by dropping the table directly using SQL ``drop table``. To properly drop a collection, use PL/SQL function [`DMBS_SODA.DROP_COLLECTION`](https://docs.oracle.com/en/database/oracle/oracle-database/18/adsdp/using-soda-pl-sql.html#GUID-D29C4FFF-D093-4C1B-889A-5C29B63756C6).
 
-6. Let's take a look at the documents. The documents are stored in a highly optimized binary format. Use the `JSON_SERIALIZE` function to view the JSON text. Copy and paste the following SQL code into the worksheet, and then click the **Run Statement** icon in the Worksheet toolbar.
+6. Let's take a look at the documents. The documents are stored in a highly optimized binary format. Use the `JSON_SERIALIZE` function to view the JSON text. Copy and paste the following SQL code into the worksheet, and then click the **Run Script (F5)** icon in the Worksheet toolbar.    
+
+    _**Note:** If you are using Autonomous Database `19c` when importing a JSON collection, the default column name for JSON is **`JSON_DOCUMENT`**. The default column name has changed to **`DATA`** in Autonomous Database `23ai`._
 
     ```
     <copy>
-    select json_serialize(json_document) as json
+    select json_serialize(data) as json
     from movie_collection
     where rownum < 10;
     </copy>
