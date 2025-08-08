@@ -28,10 +28,10 @@ If you are still on the newly created database details page from the previous la
 
     ![Click SQL from Database actions drop-down list.](images/click-sql.png " ")
 
-5. The first time you open the SQL Worksheet, a warning and an informational  message box may appear. Close those boxes.
+5. The first time you open the SQL Worksheet, a warning and an informational message boxes may appear. Close those boxes.
 
     ![SQL Worksheet with informational boxes.](./images/informational-boxes.png " ")
 
-    The SQL Worksheet is displayed.
+    The SQL Worksheet is displayed. You can click the **Tour** icon (binoculars) in the upper right corner to get a tour that introduces the main features.
 
     ![The SQL Worksheet is displayed.](./images/sql-worksheet.png " ")
