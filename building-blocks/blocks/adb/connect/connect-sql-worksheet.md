@@ -28,7 +28,6 @@ In this lab, you will:
 ## Task 1: Connect with SQL Worksheet
 [](include:adb-connect-with-sql-worksheet-body.md)
 
-
 Please *proceed to the next lab*.
 
 ## Learn more
@@ -37,7 +36,8 @@ See the [documentation](https://docs.oracle.com/en/cloud/paas/autonomous-data-wa
 
 ## Acknowledgements
 
-- **Author** - Nilay Panchal, Oracle Autonomous Database Product Management
-- **Adapted for Cloud by** - Richard Green, Principal Developer, Database User Assistance
-- **Last Updated By/Date** - Marty Gubar, ADB PM
+- **Authors:** 
+    - Lauran K. Serhal, Consulting User Assistance Developer
+    - Nilay Panchal, Oracle Autonomous Database Product Management
+- **Last Updated By/Date** - Lauran K. Serhal, August 2025
 - **Built with Blocks**

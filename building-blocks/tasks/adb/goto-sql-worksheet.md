@@ -3,7 +3,7 @@
         "name":"Go to SQL Worksheet in Database Actions",
         "description":"(Redwood UI) Navigate to SQL Worksheet from the OCI service console.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "lastUpdated":"Lauran K. Serhal, July 2025"
+        "lastUpdated":"Lauran K. Serhal, August 2025"
     }
 -->
 
@@ -22,11 +22,11 @@ Although you can connect to your Oracle Autonomous Database using desktop tools 
 
     ![From the Database Actions drop-down list, click SQL.](./images/click-db-actions-sql.png " ")
 
-    The SQL Worksheet is displayed. A **Logged in as ADMIN user** warning box and a **Run Statement** information box are displayed, close the boxes. The first time you access the SQL Worksheet, a series of pop-up informational boxes may appear, providing you a tour that introduces the main features. If not, click the **Tour** icon (binoculars) in the upper right corner.
+    The SQL Worksheet is displayed. The first time you access the SQL Worksheet, a **Logged in as ADMIN user** warning box and a **Run Statement** information box are displayed, close the boxes. 
 
     ![Two boxes are displayed.](./images/displayed-boxes.png " ")
 
-    The SQL Worksheet is displayed.
+    The SQL Worksheet is displayed. You can click the **Tour** icon (binoculars) in the upper right corner to get a tour that introduces the main features.
 
     ![The SQL Worksheet is displayed.](./images/sql-worksheet.png " ")
 
