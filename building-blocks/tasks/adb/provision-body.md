@@ -133,7 +133,7 @@
     </if>
 
     <if type="livelabs">
-    ![Database instance displayed.](./images/ll-adb-page-new.png =65%x*)
+    ![Database instance displayed.](./images/click-left-arrow.png =65%x*)
     </if>
 
     Your new Autonomous Database instance is displayed. 

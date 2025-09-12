@@ -86,7 +86,13 @@ Use an OCI Cloud Stack to set up your workshop environment by creating an ADB in
 
       ![Save values in file.](./images/save-values.png "")
 
+<if type="aiw2025-sandbox">
+## Task 2: Review Your Deployment
+</if>
+
+<if type="tenancy">
 ## Task 4: Review Your Deployment
+</if>
 
 1. Let's view the newly created stack and job. From the Console, open the **Navigation** menu.
 
@@ -114,7 +120,13 @@ Use an OCI Cloud Stack to set up your workshop environment by creating an ADB in
 
     ![Failed job](./images/failed-job.png "")
 
+<if type="aiw2025-sandbox">
+## Task 3: Navigate to Your New Autonomous Database Instance
+</if>
+
+<if type="tenancy">
 ## Task 5: Navigate to Your New Autonomous Database Instance
+</if>
 
 Let's view the newly provisioned ADB instance.
 
