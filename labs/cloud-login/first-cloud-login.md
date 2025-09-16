@@ -4,7 +4,7 @@
 
 Oracle Cloud is the industry's broadest and most integrated cloud provider, with deployment options ranging from the public cloud to your data center. Oracle Cloud offers best-in-class services across Software as a Service (SaaS), Platform as a Service (PaaS), and Infrastructure as a Service (IaaS).
 
-Estimated Time: 5 minutes
+Estimated Time: 5 minutes.
 
 ### Types of Cloud Accounts
 
@@ -35,29 +35,27 @@ When you receive your cloud account email invitation, follow these steps to comp
 
 1. **Activate Your Account**  
    Open your email and click the **Activate Your Account** button.  
-   ![Activate Email](images/firstlogin_activate_email.png)
+   ![Activate Email](./images/firstlogin_activate_email.png)
 
 2. **Reset Your Password**  
    Create a strong password that meets the security requirements.  
-   ![Reset Password](images/firstlogin_reset_password.png)
+   ![Reset Password](./images/firstlogin_reset_password.png)
 
 3. **Set Up Secure Verification** *(Mandatory)*  
    To protect your account, you must enable secure verification.  
-   ![QR Code](images/firstlogin_enable_secure_verification.png)
+   ![QR Code](./images/firstlogin_enable_secure_verification.png)
 
 4. **Download and Configure the Oracle Mobile Authenticator App**  
    A QR code will be displayed on your screen. Use your phone’s camera or the authenticator setup option to scan this QR code.
 
    *Note: If you don’t already have the app installed, download the **Oracle Mobile Authenticator App** from your device’s App Store or Google Play.*  
 
-   ![Download App](images/firstlogin_scan_download_authenticator.png)  
-   ![Scan QR Code](images/firstlogin_mobile_scan_qr_code.png)
+   ![Download App](./images/firstlogin_scan_download_authenticator.png)  
+   ![Scan QR Code](./images/firstlogin_mobile_scan_qr_code.png)
 
 5. **Complete Enrollment**  
    Once enrolled, your setup is complete. You can now use the Oracle Mobile Authenticator App for secure verification each time you log in.  
-   ![Secure Verification Enrolled](images/firstlogin_verification_enrolled.png)
-
-
+   ![Secure Verification Enrolled](./images/firstlogin_verification_enrolled.png)
 
 
 ## Task 2:  Regular Log in to Oracle Cloud
