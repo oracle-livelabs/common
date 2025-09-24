@@ -1,21 +1,24 @@
 # Submit new workshop in WMS
 
-## Introduction
+## 🧭 Introduction
 
 Oracle Workshop Management System (WMS) is used to submit workshops, follow a process for team approvals, develop and publish the workshop. Most of our focus in these step by step guides will talk about publishing to LiveLabs, which will use the workshop that was published in LiveLabs.
 
 The WMS workflow is shown with statuses and gives visibility into the development steps. WMS also hosts ways to market the workshop with social media, and keep track of regular quality checks to keep the workshop relevant.
 
-### Objectives
+---
 
-* Submit a LiveLabs workshop request using the **Oracle Workshop Management System (WMS)**.
-* Understand roles and responsibilities.
-* Follow the status and workflow.
+| 🎯 Objectives                                      | ![Submit Workshop](images/submit_workshop.png)          |
+| ------------------------------------------------- | ------------------------------------------------------- |
+| - Submit a LiveLabs workshop request using WMS    |                                                         |
+| - Understand roles and responsibilities            |                                                         |
+| - Follow the status and workflow                    |                                                         |
+| **What Do You Need?**                              |                                                         |
+| - Access to Oracle Workshop Management System (WMS) |                                                         |
+| - [WMS](https://bit.ly/oraclewms)                  |                                                         |
 
-### What Do You Need?
 
-* Access to the **Oracle Workshop Management System (WMS)**
-* [WMS](https://bit.ly/oraclewms)
+---
 
 ## Task 1: Submit a workshop request to the Oracle Workshop Management System
 

@@ -307,7 +307,7 @@
  
 [](include:adb-load-public-db-actions-no-sales.md)
  
-## Load data from public buckets using Database Actions
+## Provision an ADB instance for Data Sharing/Data Lake workshops
 **Markdown file location:**
 ```
 /common/building-blocks/tasks/adb/load-public-db-actions.md
