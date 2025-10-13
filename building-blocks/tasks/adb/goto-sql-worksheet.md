@@ -1,9 +1,12 @@
 <!--
     {
         "name":"Go to SQL Worksheet in Database Actions",
-        "description":"Navigate to SQL Worksheet from the OCI service console. "
+        "description":"(Redwood UI) Navigate to SQL Worksheet from the OCI service console.",
+        "author":"Lauran K. Serhal, Consulting User Assistance Developer",
+        "lastUpdated":"Lauran K. Serhal, August 2025"
     }
 -->
+
 
 Although you can connect to your Oracle Autonomous Database using desktop tools such as Oracle SQL Developer, you can conveniently access the browser-based SQL Worksheet directly from your Autonomous Database Console.
 
@@ -19,10 +22,15 @@ Although you can connect to your Oracle Autonomous Database using desktop tools 
 
     ![From the Database Actions drop-down list, click SQL.](./images/click-db-actions-sql.png " ")
 
-    The SQL Worksheet is displayed. A **Logged in as ADMIN user** warning box is displayed, close this box. The first time you access the SQL Worksheet, a series of pop-up informational boxes may appear, providing you a tour that introduces the main features. If not, click the Tour button (labeled with binoculars symbol) in the upper right corner. Click **Next** to take a tour through the informational boxes.
+    The SQL Worksheet is displayed. The first time you access the SQL Worksheet, a **Logged in as ADMIN user** warning box and a **Run Statement** information box are displayed, close the boxes. 
 
-    ![An information box is displayed.](./images/information-box.png " ")
+    ![Two boxes are displayed.](./images/displayed-boxes.png " ")
 
-    In this example, close the **Data Loading** box.
+    The SQL Worksheet is displayed. You can click the **Tour** icon (binoculars) in the upper right corner to get a tour that introduces the main features.
 
     ![The SQL Worksheet is displayed.](./images/sql-worksheet.png " ")
+
+    >**Note:** The first time you try to paste text in your SQL Worksheet from your clipboard, an informational box is displayed. Click **Allow**.
+
+    ![Click Allow.](./images/click-allow.png =50%x*)
+
