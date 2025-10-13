@@ -9,7 +9,7 @@ This lab shows you how to deploy and configure noVNC Graphical Remote Desktop on
 - Deploy NoVNC Remote Desktop
 - Configure Desktop
 - Optimize Browser Settings
-- Create systemd services for Oracle Database(s) and WebLogic (Optional)
+- Create systemd services for Oracle AI Database(s) and WebLogic (Optional)
 
 ### Prerequisites
 This lab assumes you have:
@@ -275,11 +275,11 @@ Upon successful validation as indicated above, proceed with the next lab.
     ```
 Once the code block has been added, type ":wq" to save the file and exit the vi editor.
 
-## Task 6: Create Auto-Start SYSTEMD Services for Oracle Databases or WebLogic Domain (Optional)
+## Task 6: Create Auto-Start SYSTEMD Services for Oracle AI Databases or WebLogic Domain (Optional)
 
-If your workshop includes one or more Oracle Databases or WebLogic Server, proceed as indicated below to setup SYSTEMD services. This will allow for automatic management of the UP/DOWN state of these processes. As a result workshop attendees will get started faster as these processes will be up and running post provisioning and before they even connect to the instance.
+If your workshop includes one or more Oracle AI Databases or WebLogic Server, proceed as indicated below to setup SYSTEMD services. This will allow for automatic management of the UP/DOWN state of these processes. As a result workshop attendees will get started faster as these processes will be up and running post provisioning and before they even connect to the instance.
 
-### **Oracle Database**
+### **Oracle AI Database**
 1. Run the following command. In the output, ensure that the switch is set to "*Y*" for any entry that will be managed by the service.
 
     ```
@@ -680,4 +680,4 @@ Prior to noVNC some images were configured with *Apache Guacamole*. If this appl
 ## Acknowledgements
 * **Author** - Rene Fontcha, Master Principal Solution Architect,September 2020
 * **Contributors** - Robert Pastijn, Distinguished Product Manager
-* **Last Updated By/Date** - Kevin Lazarz, Senior Manager,  Oracle Database Product Management, June 2024
+* **Last Updated By/Date** - Sania Bolla, Oct 2025
