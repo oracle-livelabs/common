@@ -27,7 +27,7 @@ Watch the video below for a quick walk-through of the lab.
 
     ![Select region on the far upper-right corner of the page.](https://oracle-livelabs.github.io/common/images/console/region.png " ")
 
-2. Click the navigation menu, select **Oracle Database** and choose **Autonomous Transaction Processing** (ATP). While this lab terminates an Oracle Autonomous AI Transaction Processing database, the steps are the same for terminating an Oracle Autonomous AI Lakehouse database.
+2. Click the navigation menu, select **Oracle AI Database** and choose **Autonomous Transaction Processing** (ATP). While this lab terminates an Oracle Autonomous AI Transaction Processing database, the steps are the same for terminating an Oracle Autonomous AI Lakehouse database.
 
     >**Note:** You can also directly access your Oracle Autonomous AI Transaction Processing service in the **Quick Actions** section of the dashboard.
 
