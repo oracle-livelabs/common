@@ -105,4 +105,4 @@ You may now **proceed to the next lab**.
 
 - **Created By/Date** - Anoosha Pilli, Product Manager, February 2021
 - **Contributors** - Madhusudhan Rao, Arabella Yao
-- **Last Updated By** - Anoosha Pilli, October 2023
+- **Last Updated By** - Ramona Magadan, Database Product Management, October 2025
