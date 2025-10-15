@@ -41,7 +41,7 @@ This lab assumes you have:
 
 <if type="freetier">
 
-You can access Oracle Machine Learning User Interface from Autonomous Database. Oracle Machine Learning User Interface provides you the following functionalities: 
+You can access Oracle Machine Learning User Interface from Autonomous AI Database. Oracle Machine Learning User Interface provides you the following functionalities: 
 
 * Notebooks - A web-based interface for data analysis, data discovery, data visualization, and collaboration
 * AutoML UI - An interface for no-code automated machine learning modeling and model deployment
@@ -51,7 +51,7 @@ You can access Oracle Machine Learning User Interface from Autonomous Database. 
 * Jobs - An interface to create jobs to schedule your notebooks
 
 
-Sign in to Oracle Machine Learning User Interface. Follow the steps in *Task 3 Sign into Oracle Machine Learning User Interface* in the lab _Provision an Autonomous Database with OMLUSERS_ 
+Sign in to Oracle Machine Learning User Interface. Follow the steps in *Task 3 Sign into Oracle Machine Learning User Interface* in the lab _Provision an Autonomous AI Database with OMLUSERS_ 
 
 </if>
 
@@ -251,7 +251,7 @@ Let’s create another paragraph to call the Python interpreter and run Python s
 
 This completes the task of connecting to the Python interpreter and running Python commands in your notebook.
 ### Task 3.5: Use the R Interpreter and run R Statements
-Oracle Machine Learning for R (OML4R) makes the open source R scripting language and environment ready for the enterprise and big data. OML4R integrates R with Oracle Autonomous Database. It allows you to run R commands and scripts for statistical, machine learning, and visualization analyses on database tables and views using R syntax.
+Oracle Machine Learning for R (OML4R) makes the open source R scripting language and environment ready for the enterprise and big data. OML4R integrates R with Oracle Autonomous AI Database. It allows you to run R commands and scripts for statistical, machine learning, and visualization analyses on database tables and views using R syntax.
 
 In this task, you will use the R interpreter and run R statements:
 
@@ -528,6 +528,6 @@ You may now **proceed to the next lab**.
 
 ## Acknowledgements
 
-* **Author** -  Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
+* **Author** -  Moitreyee Hazarika, Consulting User Assistance Developer, Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, June 2025
+* **Last Updated By/Date** - Moitreyee Hazarika, October 2025
