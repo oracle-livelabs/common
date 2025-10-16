@@ -13,7 +13,7 @@ With LiveLabs, there are several options for the user to access instructions.
 | Instruction Type | Button Color | Description |
 | ---------------- | ------------ | ----------- |
 | Run on Your Tenancy | Brown | Opens instructions for the user to run in their own environment, using their own resources as needed |
-| Run on LiveLabs Sandbox | Green | Uses Oracle LiveLabs resources in a temporay environment, free to the user |
+| Run on LiveLabs Sandbox | Green | Uses Oracle LiveLabs resources in a temporary environment, free to the user |
 | Run on Live SQL | Orange | Opens the instructions on the Live SQL platform, more user friendly for SQL and PL/SQL exercises |
 
 
@@ -29,7 +29,7 @@ In this lab, we'll focus on the orange "Run on Live SQL" option.
 ## Task 1: Create a Tutorial
 1. Navigate to [Oracle Live SQL](https://livesql.oracle.com/).
 
-2. Select your Oracle database
+2. Select your Oracle AI Database
     * For 23ai, select **Learn and share SQL**
     * For 19c, select **Live SQL Classic**
 
@@ -134,4 +134,4 @@ Keep in mind that Live SQL does not pull from our GitHub repo like the brown and
 ## Acknowledgements
 
 * **Author** - Hope Fisher, Database Product Management
-* **Last Updated By/Date** - Hope Fisher, March 2025
+* **Last Updated By/Date** - Sania Bolla, Oct 2025

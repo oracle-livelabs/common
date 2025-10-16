@@ -1,8 +1,8 @@
-# Connect to Oracle Autonomous Database
+# Connect to Oracle Autonomous AI Database
 
 ## Introduction
 
-This lab guides you through accessing the Oracle Autonomous Database instance on Oracle Cloud and connecting to your Autonomous Database using Database Actions as the *built-in* `ADMIN` Administrator account.
+This lab guides you through accessing the Oracle Autonomous AI Database instance on Oracle Cloud and connecting to your Autonomous AI Database using Database Actions as the *built-in* `ADMIN` Administrator account.
 
 Database Actions is included with Oracle REST Data Services. It is the web-based version of Oracle SQL Developer. Database Actions enables users to perform actions like:
 
@@ -13,44 +13,44 @@ Database Actions is included with Oracle REST Data Services. It is the web-based
 
 Oracle REST Data Services powers and makes Database Actions accessible through schema-based authentication. Once a user's database schema has been REST-enabled, that user can sign into Database Actions.
 
-The ADMIN user is pre-enabled for Database Actions in the Oracle Autonomous Database.
+The ADMIN user is pre-enabled for Database Actions in the Oracle Autonomous AI Database.
 
 Estimated time: 5 minutes
 
 ### Objectives
 In this lab, you will:
-- Connect to your Autonomous Database using Database Actions
+- Connect to your Autonomous AI Database using Database Actions
 
 ### Prerequisites
 This lab assumes you have:
 - An Oracle Free Tier account, Paid Cloud account, or access to the LiveLabs Sandbox environment
-- Access to an available Autonomous Database
+- Access to an available Autonomous AI Database
 
-## Task 1: Connect to Your Autonomous Database Using Database Actions
+## Task 1: Connect to Your Autonomous AI Database Using Database Actions
 
 1. After logging into your Oracle Cloud account, click the hamburger icon to open your Cloud Services navigation menu. This will reveal your top-level menu options.
 
     ![Click the hamburger icon to expand the navigation menu.](../../images/console/home-dashboard.png " ")
 
-2. From the available options, click `Oracle Database`.
+2. From the available options, click `Oracle AI Database`.
 
-3. The Oracle Database sub-menu will appear. Select `Autonomous Database`.
+3. The Oracle AI Database sub-menu will appear. Select `Autonomous Database`.
 
-    ![Locate Oracle Database from the available options.](../../images/console/database-adb.png " ")
+    ![Locate Oracle AI Database from the available options.](../../images/console/database-adb.png " ")
 
 4. A screen with your available databases will appear. Ensure `root` has been selected under the `Compartment` in your `List scope`. Additionally, ensure you've selected `All` for your `Workload type` (found under your `Filters`). <if type="livelabs">Check your login credentials to find the **compartment** assigned to you. Enter your compartment number, for example, `LL185`, in the Search Compartments field to quickly locate your compartment.</if>
 
     ![Viewing your available databases.](../../images/console/adb-database.png " ")
 
-5. From the databases displayed, click the name of your database to navigate to your Autonomous Database's Details page.
+5. From the databases displayed, click the name of your database to navigate to your Autonomous AI Database's Details page.
 
-6. Your selected Autonomous Database's Details page will appear. Click `Database Actions` then `SQL` to launch in a new window.
+6. Your selected Autonomous AI Database's Details page will appear. Click `Database Actions` then `SQL` to launch in a new window.
 
     ![Clicking the Database Actions Button from your details page.](../../images/console/clicking-database-actions-button-from-selected-database.png " ")
 
 7. After this, you'll be automatically redirected to Database Actions SQL screen.
 
-   > Note: You are logged with the ADMIN username and password selected when you first created your Autonomous Database.
+   > Note: You are logged with the ADMIN username and password selected when you first created your Autonomous AI Database.
 
    ![Database Actions SQL screen](./images/database-actions-sql-complete-view.png " ")
 
@@ -66,11 +66,11 @@ This lab assumes you have:
 
     ![Close information box](./images/tour-button-upon-sql-worksheet-first-load-screen.png " ")
 
-Congratulations! You are now connected to your Autonomous Database using Database Actions.
+Congratulations! You are now connected to your Autonomous AI Database using Database Actions.
 
 You may now **proceed to the next lab**.
 
 ## Acknowledgements
 
 - **Author** - Troy Anthony, Database Product Management, May 2020
-- **Last Updated By/Date** - Ramona Magadan, Database Product Management, August 2025
+- **Last Updated By/Date** - Richard Piantini Cid, Oct 2025
