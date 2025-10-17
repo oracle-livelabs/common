@@ -3,7 +3,7 @@
         "name":"Provision an ADB instance for the Data Sharing and Data Lake workshops",
         "description":"common block, provision-data-sharing-lake-block.md.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "lastUpdated":"Lauran K. Serhal, June 2025"
+        "lastUpdated":"Lauran K. Serhal, October 2025"
     }
 -->
 
@@ -53,7 +53,7 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 
 - **Author:** Lauran K. Serhal, Consulting User Assistance Developer
-- **Last Updated By/Date:** Lauran K. Serhal, June 2025
+- **Last Updated By/Date:** Lauran K. Serhal, October 2025
 - **Developed with Building Blocks**
 
 Data about movies in this workshop were sourced from Wikipedia.
