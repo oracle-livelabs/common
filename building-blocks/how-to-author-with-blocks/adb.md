@@ -351,7 +351,7 @@
  
 [](include:adb-provision-body-developer.md)
  
-## Provision Autonomous Database
+## Provision Autonomous AI Database
 **Markdown file location:**
 ```
 /common/building-blocks/tasks/adb/provision-body.md
