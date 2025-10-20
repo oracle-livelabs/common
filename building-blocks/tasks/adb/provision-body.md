@@ -9,11 +9,11 @@
 1. On the **Autonomous AI Databases** page, select your desired **region** and **compartment**. Click **Create Autonomous AI Database** to start the instance creation process. The **Create Autonomous AI Database Serverless** page is displayed.
 
     <if type="livelabs">
-    ![Click Create Autonomous Database.](images/click-create-new-adb.png =65%x*)
+    ![Click Create Autonomous AI Database.](images/click-create-new-adb.png =65%x*)
     </if>
 
     <if type="freetier">
-    ![Click Create Autonomous Database.](images/click-create-new-adb.png =65%x*)
+    ![Click Create Autonomous AI Database.](images/click-create-new-adb.png =65%x*)
     </if>
 
 2. Specify the following:
@@ -52,14 +52,14 @@
 4. In the **Database configuration** section, specify the following:
 
     - **Always Free**: An Always Free databases are especially useful for development and trying new features. You can deploy an Always Free instance in an Always Free account or paid account. However, it must be deployed in the home region of your tenancy. The only option you specify in an Always Free database is the database version. For this lab, we recommend you leave the **Always Free** slider disabled unless you are in an Always Free account.
-    - **Developer**: Developer databases provide a great low cost option for developing apps with Autonomous Database. You have similar features to Always Free - but are not limited in terms of region deployments or the number of databases in your tenancy. You can upgrade your Developer Database to a full paid version later and benefit from greater control over resources, backups and more. For this lab, leave the **Developer** slider disabled.
+    - **Developer**: Developer databases provide a great low cost option for developing apps with Autonomous AI Database. You have similar features to Always Free - but are not limited in terms of region deployments or the number of databases in your tenancy. You can upgrade your Developer Database to a full paid version later and benefit from greater control over resources, backups and more. For this lab, leave the **Developer** slider disabled.
     - **Choose database version**: Select **26ai** for the database version from this drop-down list.
     - **ECPU count**: Choose the number of ECPUs for your service. For this lab, specify **[](var:db_ocpu)**. If you choose an Always Free database, you do not need to specify this option.
     - **Compute auto scaling**: Accept the default which is enabled. This enables the system to automatically use up to three times more compute and IO resources to meet workload demand.
     - **Storage (TB)**: Select your storage capacity in terabytes. For this lab, specify **[](var:db_storage)** of storage. Or, if you choose an Always Free database, it comes with 20 GB of storage.
     - **Storage auto scaling**: For this lab, there is no need to enable storage auto scaling, which would allow the system to expand up to three times the reserved storage. Accept the default which is disabled.
 
-        > **Note:** You cannot scale up/down an Always Free autonomous database.
+        > **Note:** You cannot scale up/down an Always Free Autonomous AI Database.
 
         ![Choose the remaining parameters.](./images/adb-create-database-configuration.png =75%x*)
 
@@ -90,7 +90,7 @@
     - For this lab, accept the default selection, **Secure access from everywhere**.
     - If you want to allow traffic only from the IP addresses and VCNs you specify - where access to the database from all public IPs or VCNs is blocked, select **Secure access from allowed IPs and VCNs only** in the Choose network access area.
     - If you want to restrict access to a private endpoint within an OCI VCN, select **Private endpoint access only** in the Choose network access area.
-    - If the **Require mutual TLS (mTLS) authentication** option is selected, mTLS will be required to authenticate connections to your Autonomous Database. TLS connections allow you to connect to your Autonomous Database without a wallet, if you use a JDBC thin driver with JDK8 or above. See the [documentation for network options](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/support-tls-mtls-authentication.html#GUID-3F3F1FA4-DD7D-4211-A1D3-A74ED35C0AF5) for options to allow TLS, or to require only mutual TLS (mTLS) authentication.
+    - If the **Require mutual TLS (mTLS) authentication** option is selected, mTLS will be required to authenticate connections to your Autonomous AI Database. TLS connections allow you to connect to your Autonomous AI Database without a wallet, if you use a JDBC thin driver with JDK8 or above. See the [documentation for network options](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/support-tls-mtls-authentication.html#GUID-3F3F1FA4-DD7D-4211-A1D3-A74ED35C0AF5) for options to allow TLS, or to require only mutual TLS (mTLS) authentication.
 
         ![Choose the network access.](./images/adb-create-network-access.png =65%x*)
 
@@ -100,7 +100,7 @@
 
 9. Click **Create**.
 
-10.  The **Autonomous Database details** page is displayed. The status of your ADB instance is **`Provisioning`**.
+10.  The **Autonomous AI Database details** page is displayed. The status of your ADB instance is **`Provisioning`**.
 
    ![Database Provisioning message.](./images/adb-create-provisioning-message-new.png =75%x*)
 
@@ -116,12 +116,12 @@
 
     ![Click left arrow.](./images/click-left-arrow.png =75%x*)
 
-    Your new Autonomous Database instance is displayed. 
+    Your new Autonomous AI Database instance is displayed. 
 
     In the following sample screen capture, the instance display name is **`Training-Database`**.
 
     ![Click left arrow.](./images/adb-home-page.png =75%x*)  
 
-12. An email message is sent to the contact email that you provided. The email contains useful links that you can use to launch Database Actions, view the Get Started with Autonomous Database Web page, and access the online forums to post a question and collaborate with other Autonomous Database experts. 
+12. An email message is sent to the contact email that you provided. The email contains useful links that you can use to launch Database Actions, view the Get Started with Autonomous AI Database Web page, and access the online forums to post a question and collaborate with other Autonomous AI Database experts. 
 
     ![provisioning email sent.](./images/provisioning-email-generic.png =65%x*)
