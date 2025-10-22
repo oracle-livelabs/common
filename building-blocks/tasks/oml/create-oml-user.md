@@ -21,7 +21,7 @@ To create a user account:
 
 3. On the Autonomous AI Database details page, click **Database Actions**, and then select the **Database Users** option.
 
-	![Database Actions button in ADB Console](images/Autonomous AI Database.png " ")
+	![Database Actions button in ADB Console](images/database-actions-dbusers-rw.png " ")
 
 4. Before you get to the Oracle Database Actions Launchpad page, you might be asked to log in, depending on the browser you are using.  If this is the case make sure to enter **ADMIN** and the password you gave the administrator user in Task 1, Step 7.
    

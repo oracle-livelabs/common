@@ -11,7 +11,7 @@ To provision an Oracle Autonomous AI Database:
 
 	![Create ADW Database](images/adw-database-rw.png " ")
 
-	 Alternatively, you may click the Cloud menu icon on the upper left corner. This opens the left nagivation menu. Click **Oracle Database** and then click **Autonomous AI Database**.
+	 Alternatively, you may click the Cloud menu icon on the upper left corner. This opens the left nagivation menu. Click **Oracle AI Database** and then click **Autonomous AI Database**.
 
 	![Autonomous AI Database under Oracle Database](images/database-adw-rw.png " ")
 
