@@ -19,4 +19,4 @@
 
     >**Note:** Logging into **Database Actions** from the OCI Service Console expects you to be the `ADMIN` user. Log in as `ADMIN` if you are not automatically logged into **Database Actions**. Enter the administrator **Password** that you specified when you created the database, and then click **Sign in**.
 
-    ![Enter the admin password.](./images/admin-username-and-password.png =55%x*)
+    ![Enter the admin password.](./images/admin-username-and-password.png =50%x*)

@@ -3,14 +3,14 @@
         "name":"Provision Your Oracle Analytics Cloud (OAC) Instance",
         "description":"Create a new OAC instance",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "last_Updated":"Lauran K. Serhal, June 2025"
+        "last_Updated":"Lauran K. Serhal, October 2025"
     }
 -->
 # Provision Your Oracle Analytics Cloud (OAC) Instance
 
 ## Introduction
 
-> _**Important:** Oracle Analytics Cloud (OAC) is not available with Oracle Cloud Free Tier (Always Free), nor is it supported in Oracle LiveLabs Sandbox hosted environments (the Green button). If you run this workshop using an Always Free database or a LiveLabs Sandbox environment, you can review **Lab 1** and **Lab 5** **without provisioning and using OAC**, and later practice the two labs on **Oracle Autonomous Database** and **OAC** in your organization’s own tenancy.**_
+> _**Important:** Oracle Analytics Cloud (OAC) is not available with Oracle Cloud Free Tier (Always Free), nor is it supported in Oracle LiveLabs Sandbox hosted environments (the Green button). If you run this workshop using an Always Free database or a LiveLabs Sandbox environment, you can review **Lab 1** and **Lab 5** **without provisioning and using OAC**, and later practice the two labs on **Oracle Autonomous AI Database** and **OAC** in your organization’s own tenancy.**_
 
 In this lab, you provision an **Oracle Analytics Cloud (OAC)** instance on Oracle Cloud Infrastructure, which you will use to analyze your data in the **Develop Self-Service Analytics Cloud Dashboards** lab in this workshop.
 
@@ -63,8 +63,8 @@ Estimated Time: 20+ minutes.
 
 6. On the **Create Analytics Instance** panel, specify the following: 
     * **Name:** [](var:oac_instance_name).
-    * **Compartment:** Select your compartment.
     * **Description:** Analytics Instance for the cloud.
+    * **Compartment:** Select your compartment.
     * **Capacity Type:** OCPU.
     * **OCPU Count:** 1 (Non Production).
     * **License Type:** License Included.
@@ -85,7 +85,7 @@ Estimated Time: 20+ minutes.
 
 You may now proceed to the next lab.
 
-## **Acknowledgements**
+## Acknowledgements
 
 - **Authors:**
     * Lauran K. Serhal, Consulting User Assistance Developer
@@ -97,4 +97,4 @@ You may now proceed to the next lab.
     * Melanie Ashworth-March
     * Andrea Zengin
 
-- **Last Updated By/Date:** Lauran K. Serhal, July 2025
+- **Last Updated By/Date:** Lauran K. Serhal, October 2025
