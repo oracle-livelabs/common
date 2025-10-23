@@ -7,11 +7,11 @@
 
 To provision an Oracle Autonomous AI Database:
 
-1. Sign into your OCI account, and under the Build section, click **Create an ADW database**.
+1. Sign into your OCI account, and under the Build section, click **Create an LH database**.
 
-	![Create ADW Database](images/adw-database-rw.png " ")
+	![Create ADW Database](images/adw-database-lh.png " ")
 
-	 Alternatively, you may click the Cloud menu icon on the upper left corner. This opens the left nagivation menu. Click **Oracle AI Database** and then click **Autonomous AI Database**.
+	 Alternatively, you may click the Cloud menu icon on the upper left corner. This opens the left navigation menu. Click **Oracle AI Database** and then click **Autonomous AI Database**.
 
 	![Autonomous AI Database under Oracle Database](images/database-adw-rw.png " ")
 
@@ -30,7 +30,7 @@ To provision an Oracle Autonomous AI Database:
 
    ![Autonomous AI Database information](images/adb-basic-info-rw.png " ")
 
-4. For Workload Type, select **Data Warehouse**.
+4. For Workload Type, select **Lakehouse**.
 
    ![Autonomous AI Database Workload type](images/workload-type-rw.png " ")
 
@@ -64,9 +64,13 @@ To provision an Oracle Autonomous AI Database:
 
 	 ![Contact details](images/contact-details-rw.png " ")
 
-9. Under **Advanced Options**, let's retain the default for this workshop. 
+9.  Under **Advanced Options**, let's retain the default for this workshop.
 
-10. Click **Create**.  The Oracle Autonomous AI Database instance starts provisioning. It will show the status **Provisioning**. .
+10. Click **Create**.  
+
+    ![ADB Create](images/adw-create.png " ")
+
+    The Oracle Autonomous AI Database instance starts provisioning. It will show the status **Provisioning**. .
     ![ADB listed](images/adw-starts-provisioning-rw.png " ")
 
     Once the provisioning is complete, the database details are listed with the status Available.
