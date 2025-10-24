@@ -42,7 +42,7 @@ To provision an Oracle Autonomous AI Database:
    
     * If you are using a standard **Paid Account** and decide to provision a **paid database** instead of an **Always Free**, you will see more options available that include ECPU count, Compute auto scaling and Storage auto scaling. For this workshop **the minimum compute unit of 2 ECPUs with auto scaling is sufficient**.  If you decide to use a **Developer Database** option, it already has the configuration necessary for this workshop.
 
-        > ![Configure Database](images/db-configuration-ecpu-rw.png " ")
+        > ![Configure Database](images/db-configuration-ecpu-26ai.png " ")
 
 	    > You will also be offered an **Immutable Backup Retention** plan billed separately. This option is not available in the Always Free Autonomous AI Database. We will not be using backups in this workshop, so you can easily put it to a minimum of 1 day without issues.
 
