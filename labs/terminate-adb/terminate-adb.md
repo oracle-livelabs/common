@@ -19,7 +19,7 @@ Watch the video below for a quick walk-through of the lab.
 ### Prerequisites
 
 - Should have an Oracle Autonomous AI Database instance provisioned with Lifecycle Status - Available or Stopped.
-- To provision an Oracle Autonomous AI Database, there are detailed instructions in Lab 1 of [Autonomous Database 15 minute quick start](https://livelabs.oracle.com/pls/apex/dbpm/r/livelabs/view-workshop?wid=928) workshop.
+- To provision an Oracle Autonomous AI Database, there are detailed instructions in Lab 1 of [Autonomous AI Database 15 minute quick start](https://livelabs.oracle.com/pls/apex/dbpm/r/livelabs/view-workshop?wid=928) workshop.
 
 ## Task 1: Terminate a Provisioned Oracle Autonomous AI Database Instance
 
@@ -54,11 +54,11 @@ Watch the video below for a quick walk-through of the lab.
 
     ![Click Terminate](./images/terminate.png " ")
 
-7. Confirm that you wish to terminate your Oracle Autonomous AI Database in the confirmation dialog. Type the database name in the input field and click **Terminate Autonomous Database**.
+7. Confirm that you wish to terminate your Oracle Autonomous AI Database in the confirmation dialog. Type the database name in the input field and click **Terminate Autonomous AI Database**.
 
-    In this lab, type **DEMOATP** and click **Terminate Autonomous Database**.
+    In this lab, type **DEMOATP** and click **Terminate Autonomous AI Database**.
 
-    ![Click Terminate Autonomous Database](./images/demoatp-terminate.png " ")
+    ![Click Terminate Autonomous AI Database](./images/demoatp-terminate.png " ")
 
 8.  Your instance will begin to terminate. The Lifecycle State will turn from Available to Terminating.
 
