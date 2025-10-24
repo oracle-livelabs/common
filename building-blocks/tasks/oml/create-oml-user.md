@@ -11,15 +11,15 @@ An administrator creates a new user account and user credentials for Oracle Mach
 
 To create a user account:
 
-1. If you are not already signed in, sign into your OCI account, click the cloud menu on the left to open the left navigation pane, and click **Oracle Database**. On the right, click **Autonomous Database**.
+1. If you are not already signed in, sign into your OCI account, click the cloud menu on the left to open the left navigation pane, and click **Oracle Database**. On the right, click **Autonomous AI Database**.
 
-	![Autonomous Database under Oracle Database](images/database-adw-rw.png " ")
+	![Autonomous AI Database under Oracle Database](images/database-adw-rw.png " ")
 
-2. The Autonomous Databases dashboard lists all the databases that are provisioned in the tenancy. Click the Oracle Autonomous Database that you have provisioned for this workshop. Here, click the instance **OMLLABS**.
+2. The Autonomous AI Databases dashboard lists all the databases that are provisioned in the tenancy. Click the Oracle Autonomous AI Database that you have provisioned for this workshop. Here, click the instance **OMLLABS**.
 
 	![Oracle Autonomous Data Warehouse](images/adw-omllabs-listed-rw.png " ")
 
-3. On the Autonomous Database details page, click **Database Actions**, and then select the **Database Users** option.
+3. On the Autonomous AI Database details page, click **Database Actions**, and then select the **Database Users** option.
 
 	![Database Actions button in ADB Console](images/database-actions-dbusers-rw.png " ")
 
