@@ -36,7 +36,7 @@ To provision an Oracle Autonomous AI Database:
 
 5. For Database Configuration, select **Always Free**. 
 
-    * For the Always Free option, both releases 19c and 23ai are available.  Let’s use the default **23ai**.  You can create **Always Free** resources both in Free Tier and Paid accounts, with the requirement of it being created in your **OCI Home Region** as mentioned above in Task 2.
+    * For the Always Free option, both releases 19c and 26ai are available.  Let’s use the default **26ai**.  You can create **Always Free** resources both in Free Tier and Paid accounts, with the requirement of it being created in your **OCI Home Region** as mentioned above in Task 2.
 
         ![Autonomous AI Database always free](images/db-config-always-free-rw.png " ")
    
