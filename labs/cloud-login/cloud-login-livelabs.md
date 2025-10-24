@@ -67,4 +67,4 @@ You may now **proceed to the next lab**.
 
 - **Created By/Date** - Kay Malcolm, Database Product Management, March 2020
 - **Contributors** - Rene Fontcha, Kamryn Vinson, Anoosha Pilli, Arabella Yao
-- **Last Updated By/Date** - Arabella Yao, Dec 2022
+- **Last Updated By/Date** - Hope Fisher, Aug 2025

@@ -21,9 +21,9 @@ Version     Date             Author          Summary
 */
 
 "use strict";
-var showdown = "https://objectstorage.us-phoenix-1.oraclecloud.com/p/SJgQwcGUvQ4LqtQ9xGsxRcgoSN19Wip9vSdk-D_lBzi7bhDP6eG1zMBl0I21Qvaz/n/c4u02/b/common/o/redwood-hol/js/showdown.min.js";
-var highlight = "https://objectstorage.us-phoenix-1.oraclecloud.com/p/SJgQwcGUvQ4LqtQ9xGsxRcgoSN19Wip9vSdk-D_lBzi7bhDP6eG1zMBl0I21Qvaz/n/c4u02/b/common/o/redwood-hol/js/highlight.min.js";
-const related_path = "https://objectstorage.us-phoenix-1.oraclecloud.com/p/SJgQwcGUvQ4LqtQ9xGsxRcgoSN19Wip9vSdk-D_lBzi7bhDP6eG1zMBl0I21Qvaz/n/c4u02/b/common/o/related/";
+var showdown = "https://oracle-livelabs.github.io/common/redwood-hol/js/showdown.min.js";
+var highlight = "https://oracle-livelabs.github.io/common/redwood-hol/js/highlight.min.js";
+const related_path = "https://oracle-livelabs.github.io/common/related/";
 
 let main = function() {
     let manifestFileName = "manifest.json";
@@ -1567,6 +1567,6 @@ let download = function() {
         $("#module-content h2:not(:eq(0))").nextAll().show('fast'),
         $('h2').removeClass('plus minus'),
         $('#btn_toggle').remove()).done(function() {
-        download_file($('.selected span').text().replace(/[^[A-Za-z0-9:?]+?/g, '') + '.html', '<html><head><link rel="stylesheet" href="https://objectstorage.us-phoenix-1.oraclecloud.com/p/SJgQwcGUvQ4LqtQ9xGsxRcgoSN19Wip9vSdk-D_lBzi7bhDP6eG1zMBl0I21Qvaz/n/c4u02/b/common/o/redwood-hol/css/style.min.css" /><link rel="shortcut icon" href="https://objectstorage.us-phoenix-1.oraclecloud.com/p/SJgQwcGUvQ4LqtQ9xGsxRcgoSN19Wip9vSdk-D_lBzi7bhDP6eG1zMBl0I21Qvaz/n/c4u02/b/common/o/redwood-hol/img/favicon.ico" /></head><body style="padding-top: 0px;">' + $('#contentBox')[0].outerHTML + '</body></html>');
+        download_file($('.selected span').text().replace(/[^[A-Za-z0-9:?]+?/g, '') + '.html', '<html><head><link rel="stylesheet" href="https://oracle-livelabs.github.io/common/redwood-hol/css/style.min.css" /><link rel="shortcut icon" href="https://oracle-livelabs.github.io/common/redwood-hol/img/favicon.ico" /></head><body style="padding-top: 0px;">' + $('#contentBox')[0].outerHTML + '</body></html>');
     });
 }
