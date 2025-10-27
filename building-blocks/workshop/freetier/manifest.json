@@ -84,7 +84,7 @@
          "filename": "/common/building-blocks/blocks/adb/provision-python-api/provision-python-api.md"
      },
      {
-         "title": "[adb] Create an Oracle Autonomous Database",
+         "title": "[adb] Create an Oracle Autonomous AI Database",
          "type": "freetier",
          "filename": "/common/building-blocks/blocks/adb/provision/provision-console.md"
      },

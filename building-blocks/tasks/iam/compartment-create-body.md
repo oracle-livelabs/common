@@ -3,7 +3,7 @@
         "name":"Create an OCI Compartment",
         "description":"Create a new compartment using the OCI service console",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "last_updated":"Lauran K. Serhal, May 2025"
+        "last_updated":"Lauran K. Serhal, October 2025"
     }
 -->
 
