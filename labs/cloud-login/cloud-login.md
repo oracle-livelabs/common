@@ -51,6 +51,6 @@ If you've signed out of the Oracle Cloud, use these steps to sign back in.
 You may now **proceed to the next lab**.
 
 ## Acknowledgements
-- **Created By/Date** - Kay Malcolm, Database Product Management, March 2020
-- **Contributors** - John Peach, Kamryn Vinson, Rene Fontcha, Madhusudhan Rao, Ramona Magadan, Lauran K. Serhal
-- **Last Updated By** - Lauran K. Serhal, June 2025
+- **Created By/Date:** - Lauran K. Serhal, Consulting User Assistance Developer
+- **Contributors:** - Kay Malcolm, John Peach, Rene Fontcha, Ramona Magadan
+- **Last Updated By:** - Lauran K. Serhal, October 2025
