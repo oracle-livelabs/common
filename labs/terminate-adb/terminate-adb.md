@@ -21,6 +21,7 @@ Watch the video below for a quick walk-through of the lab.
 - Should have an Oracle Autonomous AI Database instance provisioned with Lifecycle Status - Available or Stopped.
 - To provision an Oracle Autonomous AI Database, there are detailed instructions in Lab 1 of [Autonomous AI Database 15 minute quick start](https://livelabs.oracle.com/pls/apex/dbpm/r/livelabs/view-workshop?wid=928) workshop.
 
+
 ## Task 1: Terminate a Provisioned Oracle Autonomous AI Database Instance
 
 1. If you are using an Oracle Cloud trial account, in the Oracle Cloud console, you need to be in the region where your Oracle Autonomous AI Database resources are provisioned. You can see your current default **Region** in the top right-hand corner of the page. To change the default region, click the **Region** drop-down and choose the region where your Oracle Autonomous AI Database resource is provisioned.
@@ -54,9 +55,10 @@ Watch the video below for a quick walk-through of the lab.
 
     ![Click Terminate](./images/terminate.png " ")
 
+
 7. Confirm that you wish to terminate your Oracle Autonomous AI Database in the confirmation dialog. Type the database name in the input field and click **Terminate Autonomous AI Database**.
 
-    In this lab, type **DEMOATP** and click **Terminate Autonomous AI Database**.
+  In this lab, type **DEMOATP** and click **Terminate Autonomous AI Database**.
 
     ![Click Terminate Autonomous AI Database](./images/demoatp-terminate.png " ")
 
