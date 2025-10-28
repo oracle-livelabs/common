@@ -18,7 +18,7 @@ Estimated Time: 5 minutes
 
 1. Right above the workshop instructions you can find two information:
 
-    a. **View Login Info:** Clink this link to find your assigned credentials, resources, and other information to access your LiveLabs Sandbox.
+    a. **View Login Info:** Click this link to find your assigned credentials, resources, and other information to access your LiveLabs Sandbox.
 
     b. **Time Remaining:** This shows the remaining time before your access to the LiveLabs Sandbox expires. 
 
@@ -75,5 +75,5 @@ You may now **proceed to the next lab**.
 * **Authors:**
     * Lauran K. Serhal, Consulting User Assistance Developer
     * Kay Malcolm, Database Product Management
-* **Contributors** - Kevin Lazarz, Rene Fontcha, Kamryn Vinson
-* **Last Updated By/Date:** Lauran K. Serhal, July 2025
+* **Contributors** - Kevin Lazarz, Rene Fontcha
+* **Last Updated By/Date:** Lauran K. Serhal, October 2025

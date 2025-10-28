@@ -1,13 +1,13 @@
 <!--
     {
         "name":"Provision an ADB instance for Data Sharing/Data Lake workshops",
-        "description":"(Redwood UI) Learn how to provision Autonomous Database using the OCI console.",
+        "description":"(Redwood UI) Learn how to provision Autonomous AI Database using the OCI console.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
         "lastUpdated":"Lauran K. Serhal, October 2025"
     }
 -->
 
-This lab walks you through how to provision an Autonomous Database instance.
+This lab walks you through how to provision an Autonomous AI Database instance.
 
 > **Note:** If you have a **Free Trial** account, when your Free Trial expires your account will be converted to an **Always Free** account. You will not be able to conduct Free Tier workshops unless the Always Free environment is available. [Click here for the Free Tier FAQ page.](https://www.oracle.com/cloud/free/faq.html)
 
@@ -20,15 +20,15 @@ This lab walks you through how to provision an Autonomous Database instance.
 
 3. Click **Oracle AI Database**. Under **Oracle AI Database**, click **Autonomous AI Database**.
 
-   ![Click Oracle Database > Autonomous Database.](./images/click-autonomous-database.png =65%x*)
+   ![Click Oracle Database > Autonomous AI Database.](./images/click-autonomous-database.png =65%x*)
 
    The **Autonomous AI Databases** page is displayed. 
 
    ![The Autonomous Databases page is displayed.](images/autonomous-databases-page.png =65%x*)
 
-4. OCI resources are organized into compartments. Click the **Compartment** field to select the compartment where you want to create your Autonomous Database. In this example, we selected our **`training-adw-compartment`**. <if type="livelabs">To quickly locate the compartment that has been assigned to you for this workshop, enter the first part of your user name such as `LL81481` (if that is your assigned username) in the **Compartment** field, and then click it from the list.</if>
+4. OCI resources are organized into compartments. Click the **Compartment** field to select the compartment where you want to create your Autonomous AI Database. In this example, we selected our **`training-adw-compartment`**. <if type="livelabs">To quickly locate the compartment that has been assigned to you for this workshop, enter the first part of your user name such as `LL81481` (if that is your assigned username) in the **Compartment** field, and then click it from the list.</if>
 
-5. You can use the **Search and Filter** field to control the list of Autonomous Databases that are displayed on the page. This is useful when you are managing many Autonomous Databases. For example, you can use **Workload type** to filter the Autonomous Database list by selecting your workload type. You can also use the **State** filter to view databases that are `available`, `stopped`, `terminated` and much more.
+5. You can use the **Search and Filter** field to control the list of Autonomous Databases that are displayed on the page. This is useful when you are managing many Autonomous Databases. For example, you can use **Workload type** to filter the Autonomous AI Database list by selecting your workload type. You can also use the **State** filter to view databases that are `available`, `stopped`, `terminated` and much more.
 
     ![Database list.](images/search-and-filter.png =65%x*)
 
@@ -40,7 +40,7 @@ This lab walks you through how to provision an Autonomous Database instance.
 
 6. Click **Create Autonomous AI Database** to start the instance creation process. The **Create Autonomous AI Database** page is displayed. Select your desired **region** and **compartment**. If you are using a sandbox environment (green button) and get a **Forbidden** message, that indicates you are in the wrong compartment. Click the **Compartment** field, and then select your assigned compartment that you can find on the **Reservation Information** page.
 
-   ![Click Create Autonomous Database.](images/click-create-new-adb.png =65%x*)
+   ![Click Create Autonomous AI Database.](images/click-create-new-adb.png =65%x*)
    
 7. On the **Create Autonomous AI Database Serverless** page, specify the following:
 
@@ -76,14 +76,14 @@ This lab walks you through how to provision an Autonomous Database instance.
 9. In the **Database configuration** section, specify the following:
 
     - **Always Free**: An Always Free databases are especially useful for development and trying new features. You can deploy an Always Free instance in an Always Free account or paid account. However, it must be deployed in the home region of your tenancy. The only option you specify in an Always Free database is the database version. For this lab, we recommend you leave the **Always Free** slider disabled unless you are in an Always Free account.
-    - **Developer**: Developer databases provide a great low cost option for developing apps with Autonomous Database. You have similar features to Always Free - but are not limited in terms of region deployments or the number of databases in your tenancy. You can upgrade your Developer Database to a full paid version later and benefit from greater control over resources, backups and more. For this lab, leave the **Developer** slider disabled.
+    - **Developer**: Developer databases provide a great low cost option for developing apps with Autonomous AI Database. You have similar features to Always Free - but are not limited in terms of region deployments or the number of databases in your tenancy. You can upgrade your Developer Database to a full paid version later and benefit from greater control over resources, backups and more. For this lab, leave the **Developer** slider disabled.
     - **Choose database version**: Select **26ai** for the database version from this drop-down list.
     - **ECPU count**: Choose the number of ECPUs for your service. For this lab, specify **[](var:db_ocpu)**. If you choose an Always Free database, you do not need to specify this option.
     - **Compute auto scaling**: Accept the default which is enabled. This enables the system to automatically use up to three times more compute and IO resources to meet workload demand.
     - **Storage (TB)**: Select your storage capacity in terabytes. For this lab, specify **[](var:db_storage)** of storage. Or, if you choose an Always Free database, it comes with 20 GB of storage.
     - **Storage auto scaling**: For this lab, there is no need to enable storage auto scaling, which would allow the system to expand up to three times the reserved storage. Accept the default which is disabled.
 
-        > **Note:** You cannot scale up/down an Always Free autonomous database.
+        > **Note:** You cannot scale up/down an Always Free Autonomous AI Database.
 
         ![Choose the remaining parameters.](./images/adb-create-database-configuration.png =65%x*)
 
@@ -114,7 +114,7 @@ This lab walks you through how to provision an Autonomous Database instance.
     - For this lab, accept the default selection, **Secure access from everywhere**.
     - If you want to allow traffic only from the IP addresses and VCNs you specify - where access to the database from all public IPs or VCNs is blocked, select **Secure access from allowed IPs and VCNs only** in the Choose network access area.
     - If you want to restrict access to a private endpoint within an OCI VCN, select **Private endpoint access only** in the Choose network access area.
-    - If the **Require mutual TLS (mTLS) authentication** option is selected, mTLS will be required to authenticate connections to your Autonomous Database. TLS connections allow you to connect to your Autonomous Database without a wallet, if you use a JDBC thin driver with JDK8 or above. See the [documentation for network options](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/support-tls-mtls-authentication.html#GUID-3F3F1FA4-DD7D-4211-A1D3-A74ED35C0AF5) for options to allow TLS, or to require only mutual TLS (mTLS) authentication.
+    - If the **Require mutual TLS (mTLS) authentication** option is selected, mTLS will be required to authenticate connections to your Autonomous AI Database. TLS connections allow you to connect to your Autonomous AI Database without a wallet, if you use a JDBC thin driver with JDK8 or above. See the [documentation for network options](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/support-tls-mtls-authentication.html#GUID-3F3F1FA4-DD7D-4211-A1D3-A74ED35C0AF5) for options to allow TLS, or to require only mutual TLS (mTLS) authentication.
 
         ![Choose the network access.](./images/adb-create-network-access.png =65%x*)
 
@@ -144,6 +144,6 @@ This lab walks you through how to provision an Autonomous Database instance.
 
     ![Click left arrow.](./images/adb-home-page-lake.png =65%x*)    
 
-17. An email message is sent to the contact email that you provided. The email contains useful links that you can use to launch Database Actions, view the Get Started with Autonomous Database Web page, and access the online forums to post a question and collaborate with other Autonomous Database experts. 
+17. An email message is sent to the contact email that you provided. The email contains useful links that you can use to launch Database Actions, view the Get Started with Autonomous AI Database Web page, and access the online forums to post a question and collaborate with other Autonomous AI Database experts. 
 
     ![provisioning email sent.](./images/provisioning-email.png =65%x*)
