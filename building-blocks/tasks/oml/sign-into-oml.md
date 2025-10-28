@@ -5,7 +5,7 @@
     }
 -->
 
-You can access Oracle Machine Learning User Interface from Autonomous Database. Oracle Machine Learning User Interface provides you the following functionalities: 
+You can access Oracle Machine Learning User Interface from Autonomous AI Database. Oracle Machine Learning User Interface provides you the following functionalities: 
 
 * Notebooks - A web-based interface for data analysis, data discovery, data visualization, and collaboration
 * AutoML UI - An interface for no-code automated machine learning modeling and model deployment
@@ -16,7 +16,7 @@ You can access Oracle Machine Learning User Interface from Autonomous Database. 
 
 To access Oracle Machine Learning User Interface:
 
-1. On your Oracle Autonomous Database console, click **Database actions**, and then select the option **View all database actions**.
+1. On your Oracle Autonomous AI Database console, click **Database actions**, and then select the option **View all database actions**.
 
 	![Database Actions in ADW](images/dbactions-view-all-dbusers-rw.png)
 
@@ -42,7 +42,7 @@ To access Oracle Machine Learning User Interface:
 
 To access the URL for the Oracle Machine Learning sign in page directly from the ADB Console **Tool configuration** tab:
 
-1. Go to your Autonomous Database details page and click **Tool configuration**. 
+1. Go to your Autonomous AI Database details page and click **Tool configuration**. 
 
 	![ADB console Tool configuration tab](images/adb-console-tool.png)
 

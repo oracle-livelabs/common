@@ -34,7 +34,7 @@ This lab assumes you have:
 
 2. From the available options, click `Oracle AI Database`.
 
-3. The Oracle AI Database sub-menu will appear. Select `Autonomous Database`.
+3. The Oracle AI Database sub-menu will appear. Select `Autonomous AI Database`.
 
     ![Locate Oracle AI Database from the available options.](../../images/console/database-adb.png " ")
 
