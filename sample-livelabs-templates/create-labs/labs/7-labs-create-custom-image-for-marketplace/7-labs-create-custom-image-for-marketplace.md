@@ -20,7 +20,7 @@ This lab assumes you have:
     ```
     <copy>
     cd /tmp
-    wget -q https://objectstorage.us-ashburn-1.oraclecloud.com/p/fO0NcBz9iBfZlIrNybUep-_HFslPZrv7C7zQwiTD09HA4sFboxfTss29nMxmKo9S/n/c4u02/b/hosted_workshops/o/stacks/livelabs-image-cleanup.zip -O /tmp/livelabs-image-cleanup.zip
+    wget -q https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/livelabs-image-cleanup.zip -O /tmp/livelabs-image-cleanup.zip
     unzip -qo livelabs-image-cleanup.zip 
     chmod +x livelabs-image-cleanup.sh
     sudo /tmp/livelabs-image-cleanup.sh
@@ -55,7 +55,7 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
 1. Download the sample ORM stack zip archive
 
-    - [ll-orm-mkplc-freetier.zip](https://objectstorage.us-ashburn-1.oraclecloud.com/p/Z3SEFFbpwfx9-dcLcKQD46hWDHxaT059lr3nMRdepbTg8oYZuVvDMpojUWpo6FLJ/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-freetier.zip)
+    - [ll-orm-mkplc-freetier.zip](https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-freetier.zip)
 
 2. Unzip it locally on your computer to *ll-orm-mkplc-freetier*.
 3. Delete the downloaded file *ll-orm-mkplc-freetier.zip*.
