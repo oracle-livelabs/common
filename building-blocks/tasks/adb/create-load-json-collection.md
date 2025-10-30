@@ -3,7 +3,7 @@
         "name":"Create and load JSON Collection from object storage",
         "description":"(Redwood UI) Loads data using DBMS_CLOUD.COPY_COLLECTION. Introduces JSON_SERIALIZE, JSON_VALUE and JSON_QUERY .",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "lastUpdated":"Lauran K. Serhal, July 2025"
+        "lastUpdated":"Lauran K. Serhal, October 2025"
     }
 -->
 ### What is JSON?
@@ -23,15 +23,15 @@ If you already have the SQL Worksheet open from the previous lab, skip to **step
 
 1. Log in to the **Oracle Cloud Console**, if you are not already logged as the Cloud Administrator.
 
-2. Open the **Navigation** menu and click **Oracle Database**. Under **Oracle Database**, click **Autonomous Database**. On the **Autonomous Databases** page, click your ADB instance name.
+2. Open the **Navigation** menu and click **Oracle AI Database**. Under **Oracle Database**, click **Autonomous AI Database**. On the **Autonomous AI Databases** page, click your ADB instance name.
 
-3. On the **Autonomous Database details** page, click the **Database actions** drop-down list, and then click **SQL**.
+3. On the **Autonomous AI Database details** page, click the **Database actions** drop-down list, and then click **SQL**.
 
 4. The SQL Worksheet is displayed.
 
     ![The SQL worksheet is displayed.](./images/sql-worksheet-displayed.png =65%x*)
 
-5. Use the Autonomous Database ``DBMS_CLOUD.COPY_COLLECTION`` procedure to create and load the movie collection from object storage. Copy and paste the following script into your SQL Worksheet, and then click the **Run Script (F5)** icon in the Worksheet toolbar.
+5. Use the Autonomous AI Database ``DBMS_CLOUD.COPY_COLLECTION`` procedure to create and load the movie collection from object storage. Copy and paste the following script into your SQL Worksheet, and then click the **Run Script (F5)** icon in the Worksheet toolbar.
     ```
     <copy>
     -- create and load movie json collection from a public bucket on object storage
@@ -55,7 +55,7 @@ If you already have the SQL Worksheet open from the previous lab, skip to **step
 
 6. Let's take a look at the documents. The documents are stored in a highly optimized binary format. Use the `JSON_SERIALIZE` function to view the JSON text. Copy and paste the following SQL code into the worksheet, and then click the **Run Script (F5)** icon in the Worksheet toolbar.    
 
-    _**Note:** If you are using Autonomous Database `19c` when importing a JSON collection, the default column name for JSON is **`JSON_DOCUMENT`**. The default column name has changed to **`DATA`** in Autonomous Database `23ai`._
+    _**Note:** If you are using Autonomous AI Database `19c` when importing a JSON collection, the default column name for JSON is **`JSON_DOCUMENT`**. The default column name has changed to **`DATA`** in Autonomous AI Database `26ai`._
 
     ```
     <copy>
