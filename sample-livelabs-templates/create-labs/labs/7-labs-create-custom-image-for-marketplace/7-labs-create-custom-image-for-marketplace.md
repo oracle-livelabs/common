@@ -104,25 +104,9 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
     ![](./images/export-image.png " ")
 
-2. Navigate to the bucket, select the exported object, and Create a pre-authenticated URL
+2. Navigate to the bucket, select the exported object, and create a pre-authenticated URL that expires at least 1 month from now. **Be sure to copy the PAR link with a dedicated endpoint.**
+![](./images/par-dedicated-endpoints.png " ")
 
-    - Set the expiration to a year ahead or at least 1 month ahead
-
-    ![](./images/create-pre-auth-url.png " ")
-
-3. Navigate to the **Publishing** Tab in the [WMS](https://bit.ly/oraclewms).
-
-    ![](./images/publish-to-livelabs.png " ")
-
-    Press the button **Publish to LiveLabs**, and the information you need to complete about your workshop will appear.
-
-    ![](./images/publishing-information.png " ")
-
-    Then you need to scroll down, and you'll see the button **Open Jira Ticket" where it will be redirected to Jira, and here you need to complete the ticket.
-
-    ![](./images/jira-request-green-button.png " ")
-
-4. Next, please wait for our LiveLabs team to validate the image and publish it to marketplace. We will provide the ORM stack needed for brown button (run on customers' tenancies) provisioning and set up the green button (LiveLabs sandbox tenancy).
 
 ## Learn More
 * [Oracle Cloud Marketplace Partner Portal Documentation](https://docs.oracle.com/en/cloud/marketplace/partner-portal/index.html)

@@ -1,10 +1,20 @@
 {
-  "workshoptitle": "Creating Compute Images for Marketplace",
+  "workshoptitle": "Publishing Compute Images to Oracle Marketplace",
   "help": "livelabs-help-license_us@oracle.com",
   "tutorials": [
     {
-      "title": "Lab 1: Publish Custom Compute Image to OCI Marketplace",
+      "title": "Lab 1: Create a Custom Compute Image for Marketplace",
       "description": "This lab will show you how to create an OCI marketplace compute based artifact from your custom image, and use it to create a private listing on marketplace exclusively dedicated to your LiveLabs workshop.",
+      "filename": "./../../7-labs-create-custom-image-for-marketplace/7-labs-create-custom-image-for-marketplace.md"
+    },
+    {
+      "title": "Lab 2: Request Publisher Access in Oracle Marketplace",
+      "description": "This lab will show you how to get publish privileges in Oracle Marketplace.",
+      "filename": "./../../12-labs-get-omp-publisher-access/12-labs-get-omp-publisher-access.md"
+    },
+    {
+      "title": "Lab 3: Publish Your Image to Oracle Marketplace",
+      "description": "This lab will show you how to publish your image to Oracle Marketplace.",
       "filename": "./../../8-labs-publish-custom-image-to-marketplace/8-labs-publish-custom-image-to-marketplace.md"
     },
     {
