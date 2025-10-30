@@ -7,6 +7,10 @@
     }
 -->
 
+<if type="livelabs">
+>_**Note:** Since you are using a sandbox environment, an Autonomous AI Database is already provisioned for you. You can skip this optional task._
+</if>
+
 This lab walks you through how to provision an Autonomous AI Database instance.
 
 > **Note:** If you have a **Free Trial** account, when your Free Trial expires your account will be converted to an **Always Free** account. You will not be able to conduct Free Tier workshops unless the Always Free environment is available. [Click here for the Free Tier FAQ page.](https://www.oracle.com/cloud/free/faq.html)
