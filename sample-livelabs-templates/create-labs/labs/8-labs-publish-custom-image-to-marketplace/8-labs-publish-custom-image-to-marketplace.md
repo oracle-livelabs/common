@@ -43,7 +43,7 @@ For custom images received from authors via imports from Object Storage pre-auth
 
 6. Download the sample ORM stack zip archive
 
-    - [ll-orm-mkplc-freetier.zip](https://objectstorage.us-ashburn-1.oraclecloud.com/p/D0dAdNNBbmxXM8UJyt13DU8nzLEXBXOCdf-BgrMFquLMsIVJtnSDAJVBpvGM_2Jb/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-freetier.zip)
+    - [ll-orm-mkplc-freetier.zip](https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-freetier.zip)
 
 7. Unzip it locally on your computer to *ll-orm-mkplc-freetier*.
 8. Delete the downloaded file *ll-orm-mkplc-freetier.zip*.
@@ -117,7 +117,7 @@ For custom images received from authors via imports from Object Storage pre-auth
     <copy>
     cd /tmp
     rm -rf ll-setup
-    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/GOsnDGZTmd1hZsH5TdsrT8ePf8_099TbUyly6WZ8WZawpLagHMBpAOpXao4KTEPc/n/c4u02/b/hosted_workshops/o/stacks/setup-novnc-livelabs.zip -O setup-novnc-livelabs.zip
+    wget https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/setup-novnc-livelabs.zip -O setup-novnc-livelabs.zip
     unzip -o  setup-novnc-livelabs.zip -d ll-setup
     cd ll-setup/
     chmod +x *.sh .*.sh

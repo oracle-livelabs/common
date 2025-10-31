@@ -35,7 +35,7 @@ Follow steps below to establish a unique static hostname that will be enforced o
     <copy>
     cd /tmp
     rm -rf ll-setup
-    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/GOsnDGZTmd1hZsH5TdsrT8ePf8_099TbUyly6WZ8WZawpLagHMBpAOpXao4KTEPc/n/c4u02/b/hosted_workshops/o/stacks/setup-novnc-livelabs.zip -O setup-novnc-livelabs.zip
+    wget https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/setup-novnc-livelabs.zip -O setup-novnc-livelabs.zip
     unzip -o  setup-novnc-livelabs.zip -d ll-setup
     cd ll-setup/
     chmod +x *.sh .*.sh
@@ -299,7 +299,7 @@ If your workshop includes one or more Oracle AI Databases or WebLogic Server, pr
     <copy>
     cd /tmp
     rm -rf ll_tmp
-    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/8i4KgBjWw5ghjvqKU8i-C-hCg3c3C2XYoJaTBJHSO5Byzo0Rtm8lo_LjmuhUGEmt/n/c4u02/b/hosted_workshops/o/stacks/create-services-multi-db.zip -O create-services-multi-db.zip
+    wget https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/create-services-multi-db.zip -O create-services-multi-db.zip
     unzip -o  create-services-multi-db.zip -d ll_tmp
     cd ll_tmp/
     chmod +x *.sh .*.sh
@@ -348,7 +348,7 @@ If your workshop includes one or more Oracle AI Databases or WebLogic Server, pr
     <copy>
     cd /tmp
     rm -rf ll_tmp
-    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/JdxdqCv0t-oaOyHn84DXHVxJKwpRJWSZNkwpbF1jEGHaQ4X07hwPNus8xDlVs8on/n/c4u02/b/hosted_workshops/o/stacks/create-services-weblogic.zip -O create-services-weblogic.zip
+    wget https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/create-services-weblogic.zip -O create-services-weblogic.zip
     unzip -o  create-services-weblogic.zip -d ll_tmp
     cd ll_tmp/
     chmod +x *.sh .*.sh
