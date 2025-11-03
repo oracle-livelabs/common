@@ -94,19 +94,6 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
     *Notes:* If the setup was successful you should see two sample Google-chrome browser windows preloaded.
 
-## Task 4: Share with LiveLabs Team
-1. Export the custom image to an Object Storage Standard bucket (Do not an Archive bucket)
-
-    - Select *Export to an Object Storage bucket* unless you have a remote bucket URL with the right permissions to accept your export
-    - Update the image name field
-    - Set format to *Oracle Cloud Infrastructure file with QCOW2 image and OCI metadata (.oci)*
-    - Click *Export image*
-
-    ![](./images/export-image.png " ")
-
-2. Navigate to the bucket, select the exported object, and create a pre-authenticated URL that expires at least 1 month from now. **Be sure to copy the PAR link with a dedicated endpoint.**
-![](./images/par-dedicated-endpoints.png " ")
-
 
 ## Learn More
 * [Oracle Cloud Marketplace Partner Portal Documentation](https://docs.oracle.com/en/cloud/marketplace/partner-portal/index.html)
