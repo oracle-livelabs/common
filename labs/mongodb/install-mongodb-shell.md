@@ -95,7 +95,11 @@ An output of `x86_64` indicates your Mac has an Intel processor; an output of `a
     </copy>
     ```
 
-    **Note**: If you encounter any issues with the download or the version listed here, then please visit https://www.mongodb.com/try/download/shell or https://www.mongodb.com/try/download/database-tools to download the most recent shell for your operating system. All subsequent instructions continue to be the same.
+    **Note**: If you encounter any issues with the download or the version listed here, then please visit:
+    * [MongoDB Download Shell Instructions](https://www.mongodb.com/try/download/shell)
+    * [Mongodb Download Database Tools Instructions](https://www.mongodb.com/try/download/database-tools)
+
+    All subsequent instructions continue to be the same.
 
     **Note**: tar is a built-in command in Windows 11 and recent Windows 10 builds. If for any reason it is not available, you will need to expand the zip file using Windows Explorer. On Mac, you could use the command 'unzip mongosh.zip' to the same effect.
 
@@ -148,9 +152,10 @@ Mongo Shell is now set up on your PC or Mac.
 
 ## Task 4 (optional): Install MongoDB Compass, the GUI for MongoDB
 
-1. Identify the appropriate MongoDB Compass download for your local machine on https://www.mongodb.com/docs/compass/install/?operating-system=linux&package-type=.deb#std-label-download-install, download and install it. MongoDB Compass offers you both a graphical user interface, as well as a built-in MongoDB shell.
+1. Identify the appropriate MongoDB Compass download for your local machine at:
+* [MongoDB Download and Install Compass](https://www.mongodb.com/docs/compass/install/?operating-system=linux&package-type=.deb#std-label-download-install)
 
-This step is optional, so it is not described in more detail here, although the installation itself is intuitive and self-describing.
+    MongoDB Compass offers you both a graphical user interface, as well as a built-in MongoDB shell. This step is optional, so it is not described in more detail here, although the installation itself is intuitive and self-describing.
 
 ## Learn More
 
