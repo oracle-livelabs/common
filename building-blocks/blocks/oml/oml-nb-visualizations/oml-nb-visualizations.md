@@ -457,6 +457,219 @@ A box plot provides an overview of data distributions in numeric data. It provid
 	![Boxplot chart 5](images/boxplot5.png)
 
 
+## Task 10: Visualize Data in a Sunburst chart
+
+The sunburst chart is typically used to visualize hierarchical data structures - with part-to-whole relationships in data depicted additionally.
+This is a Sunburst chart that depicts the four continents in four slices. The slices are of different sizes and color. After customization, the slices are segmented to depict the countries of that continent. The size of the slices is determined by the count in the Population column. 
+
+**When to use this chart:** Sunburst charts handle multi-level pie chart data more effectively than regular pie charts. Sunburst charts enhance efficiency and clarity by integrating the functionality of multiple pie charts into a single visual.
+**Data set:** Custom dataset on continents, country and population.
+To visualize your data in a sunburst chart:
+
+1. Open a notebook and in a %python paragraph, import the following python libraries—oml and pandas.
+	```
+	<copy>
+	%python
+	data = [
+	["Asia", "India", 800],
+	["Asia", "China", 900],
+	["Asia", "Japan", 425],
+	["Europe", "Germany", 383],
+	["Europe", "France", 467],
+	["Europe", "Italy", 360],
+	["Africa", "Nigeria", 416],
+	["Africa", "Egypt", 510],
+	["Americas", "USA", 631],
+	["Americas", "Brazil", 413]
+	]
+
+	print("Continent\tCountry\tPopulation")
+	for row in data:
+		print(f"{row[0]}\t{row[1]}\t{row[2]}")
+	</copy>
+	```
+
+2. Run the following command to create a dataset on continent, country and population:
+
+
+3. Once the code is run, the data is displayed in a table with three columns—Continent, Country and Population. 
+
+
+4. Click on the sunburst icon.
+
+
+5. The data is now displayed in a sunburst chart as shown in the screenshot here. The four continents are depicted in four slices of the sunburst chart. The slices are of different sizes and color. The size of the slices is determined by the count in the Population column.
+
+
+6. Click on the Settings icon and on the Setup tab, enter the following: 
+
+	* **Aggregate Duplicates:** Click and select Count.
+	* **Radius Column:** The value provided in this field defines the radius by its value. Click to add Population. If Population is not available for selection, type Population.
+	* **Group By:** Click to add `Country` to it. The countries are now depicted in smaller segments of the slices representing the `Continents`. By default, Continents is already added to the **Group By** field.
+
+7. Click **Customization** and edit the following under **Description**: 
+
+	* **Title Setup:** Enter the text Countries and Continents.
+	* **Color:** Click on the color palette. Move your cursor and click on a color of your choice. Click **Select.**
+
+
+
+8. The sunburst chart now displays the data in the Country and Continent columns in segmented slices of the sunburst chart. Inside each slice representing the four continents, the countries are depicted by separate segments of different color and sizes. This shows the relation between countries and continents. Hover your cursor over each segment to view more details.
+
+
+
+## Task 11: Visualize Data in a Tag Cloud
+
+A tag cloud is a visual representation of the most popular words or tags found in free-form text. The font size or the color of the text represents the frequency of occurrence.
+Here is a tag cloud representing some emotions picked up from user comments. The font size implies the average count of the emotions.
+
+**When to use this chart:** Use Tag Cloud to visualize text data, and to conduct word-frequency analysis across tags, keywords etc.
+**Data set:** In this example, we create a data set that contains user comments.
+To visualize your data in a tag cloud:
+
+1. Open a notebook and in a %python paragraph, enter the following code and run the paragraph:
+
+	```
+	<copy>
+	import pandas as pd
+	import random
+
+	emotions = ["happy", "sad", "angry", "excited", "nervous", "calm", "anxious", "confident",
+				"bored", "curious", "frustrated", "hopeful", "jealous", "lonely", "grateful",
+				"afraid", "embarrassed", "relieved", "surprised", "proud"]
+
+	weights = [random.randint(1, 10) for _ in emotions]
+	total_weight = sum(weights)
+	probabilities = [w / total_weight for w in weights]
+
+	random.seed(21)
+	emotion_samples = random.choices(emotions, weights=probabilities, k=500)
+
+	df_emotions = pd.DataFrame(emotion_samples, columns=["emotion"])
+	df_emotions.insert(0, "id", range(1, len(df_emotions) + 1))
+	</copy>
+	```
+
+
+2. Click on the Tag cloud icon to view the data in a tag cloud. Here is the image of a default tag cloud output. The data is generated in a rectangular layout. 
+
+3. Click on the Settings icon. This opens the Settings dialog. It has the Setup and Customization tabs.
+
+
+4. On the Setup tab, you can configure the columns or series to display, and other settings:
+
+	* **Height:** This parameter determines the height of the visualization.
+	* **Aggregate Duplicates:** Determines the computation of the values for display. The available values are —Average, Sum, Maximum, Minimum, Count, and Last.
+	* **Series to Show:** All applicable fields in the result-set are available for selection. Selecting multiple fields will add additional diagrams to the visualization.
+	* **Group By:** All applicable fields in the result-set are available for selection. The more groups exist, the more the data set shrinks since it collects all fields and concatenates the same values.
+	* **Other Threshold:** All applicable fields in the result-set are available for selection.
+
+	On the **Customization** tab, you have the option to customize the **Title setup**, **Subtitle setup**, and **Footnote setup**.
+
+	* **Visualization:** The options are Rectangle and Cloud. Click Cloud.
+	* **Title Setup:** Enter values in each of these fields to customize the appearance. The fields are Title, Color, Font Size.
+	* **Subtitle Setup:** Enter values in each of these fields to customize the appearance. The fields are Subtitle, Color, Font Size.
+	* **Footnote Setup:** Enter values in each of these fields to customize the appearance. The fields are Footnote, Color, Font Size.
+
+	Here is a tag cloud after customizing the settings. It shows the average count of the emotions. You may hover your cursor to view the count. Note the change in layout format and the title in blue. 
+
+## Task 12: Visualize Data in a Treemap
+
+A treemap is a visualization composed of nested rectangles, that represent certain categories within a selected dimension and are ordered in a hierarchy, or “tree.” Quantities and patterns can be compared and displayed in a limited chart space.
+Treemaps also show the relationship of each part (or nested rectangles) to the whole (tree). Here is a treemap depicting the relationship between the parts (countries) and the whole (continents). 
+
+When to use this chart: Use this chart to visualize a large number of related categories, and also to analyze the part-to-whole relationship in your data set.
+Data set: Custom dataset on continents, country and population.
+To visualize your data in a tree map:
+
+1. Open a notebook and in a %python paragraph, import the following python libraries— `oml` and `pandas`.
+2. Run the following command to create a dataset on continent, country and population:
+
+	```
+	<copy>
+	%python
+
+	data = [
+		["Asia", "India", 1400],
+		["Asia", "China", 1440],
+		["Asia", "Japan", 125],
+		["Europe", "Germany", 83],
+		["Europe", "France", 67],
+		["Europe", "Italy", 60],
+		["Africa", "Nigeria", 216],
+		["Africa", "Egypt", 110],
+		["Americas", "USA", 331],
+		["Americas", "Brazil", 213]
+	]
+
+	print("Continent\tCountry\tPopulation")
+	for row in data:
+		print(f"{row[0]}\t{row[1]}\t{row[2]}")
+
+	</copy>
+	```
+
+	Once the code is run, the data is displayed in a table with three columns—Continent, Country and Population. 
+3. Click on the tree map icon.
+	The data is now displayed in a treemap as shown in the screenshot here. The treemap represents the four continents in four rectangles of different sizes and color. The size is defined by the count in the Population column.
+4. Click **Settings** and on the **Setup** tab, click the **Group By** field. Click on Country to add it. Now, the countries are depicted in nested rectangles inside the super set rectangles representing the Continents. By default, Continents is already added to the **Group By** field.
+5. Click on the **Customization** tab, edit the following under Description:
+
+	* **Title Setup:** Enter the text Continents and Countries in a Treemap.
+	* **Color:** Click on the color palette. Move your cursor and click on a color of your choice. Click **Select.**
+
+	The Treemap now displays the relation between countries and continents in nested rectangles. The continents are represented as supersets. And the countries of the continent are depicted as nested rectangles inside the rectangles representing the continents. Hover your cursor over each rectangle to view more details.
+
+
+## Task 13: Visualize Data in a Map 
+The map visualization of OML Notebooks plots data points on a geographical map. For visualizing your data in a map in OML Notebooks, your data must contain explicit latitude and longitude values of locations to correctly position data on the map.
+
+Here is a visualization of a dataset containing information about countries, capital, geographical coordinates and other related information. The displayed map type is OSM Positron style. It has the pushpin on USA clicked. The marker dialog displays the country name and its capital. 
+
+When to use this chart: Use map charts to visualize your data with geographical implications
+*Data set:* In this example, we create a table containing data about countries and related information with geographical coordinates.
+To visualize data in a map:
+1. In a Python paragraph in your notebook, run the following statements to create a table with five columns— `Country Name`, `Longitude`, `Latitude`, `Capital`, and `Population` with five entries for each:
+
+	```
+	<copy>
+	%python
+	print('Country Name\tLongitude\tLatitude\tCapital\tPopulation')
+	print('Morocco\t34.0218454\t-6.8408929\tRabat\t257000')
+	print('USA\t38.89\t-77.036\tWashington\t67900000')
+	print('India\t28.7041\t77.1025\tDelhi\t3380000')
+	print('Australia\t-36.2048\t138.2529\tCanberra\t45700000')
+	print('Japan\t35.6768601\t139.7638947\tTokyo\t3700000')
+	</copy>
+	```
+
+
+	A table is created with these columns—`Country Name`, `Longitude`, `Latitude`, `Capital`, and `Population`.
+
+2. Click on the map icon. The data is displayed on a world map in OSM Positron style. This is a non-obtrusive light vector tile basemap based on OpenStreetMap (OSM) data. This is the default style. 
+
+3. Under **Settings**, on the Setup tab, you can adjust the height of the map. You can also show and hide the zoom controls by clicking Show Zoom Control.
+
+
+4. Under **Settings**, in the **Customizations** tab, you can edit the following settings. Click on the arrow to change any entries for these columns.
+
+
+    * **Latitude column:** Select the column from the dataset which can be considered as latitude value. The column must contain numeric values (float or integer) with valid geographic coordinates. Latitude values must be between -90 and 90.
+    * **Longitude column:** Select the column from the dataset which can be considered as longitude value. The column must contain numeric values (float or integer) with valid geographic coordinates. Longitude values must be between -180 and 180.
+    * **Title Columns:** Select one or more columns from the dataset to be displayed as a tooltip label and marker. If you select two columns, it will be concatenated with a dash and displayed in the marker dialog that opens when you click on any pushpin on the map.
+    * **Description Columns:** Select one or more columns from the dataset to be displayed in the marker dialog that opens when you click on any pushpin on the map.
+
+	As shown in the Map Settings screenshot above, the Title Columns have Country Name and Capital selected, and the Description Columns have Capital selected. On clicking the pushpin for USA on the map, the marker dialog displays USA - Washington and Capital: Washington displayed based on the selections in Settings—Customization. 
+
+
+* Map Type: By default, the OSM Positron type is selected. This is a map style built using the OpenStreetMap (OSM) data. The other map types you can choose are:
+	* OSM Bright: This is a general purpose vector tile basemap based on OpenStreetMap (OSM) data. Use this basemap style to view detailed location context for your data.
+	* OSM Dark Matter: This is a non-obtrusive dark vector tile basemap based on OpenStreetMap (OSM) data. Use this basemap style to accentuate visualizations of your data.
+	* World Map: This is a 2D physical map, a type of map where the geographical information is displayed in color. Use this map style to visualize the geography of a region in terms of elevation, landforms and other geospatial information.
+	* Customize Type: Here, you have the option to change the map source and map style.
+
+
+
 ## Learn More
 
 * [Oracle Machine Learning UI](https://docs.oracle.com/en/database/oracle/machine-learning/oml-notebooks/)
@@ -464,6 +677,6 @@ A box plot provides an overview of data distributions in numeric data. It provid
 
 ## Acknowledgements
 
-* **Author** -  Moitreyee Hazarika, Consulting User Assistance Developer, Database User Assistance Development
+* **Author** -  Moitreyee Hazarika, Consulting User Assistance Developer, Oracle AI Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, October 2025
+* **Last Updated By/Date** - Moitreyee Hazarika, November 2025
