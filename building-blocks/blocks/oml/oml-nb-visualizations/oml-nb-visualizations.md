@@ -33,6 +33,10 @@ This lab assumes you have:
 
 A table is an arrangement of information or data in rows and columns. Using OML Notebooks, you can create database tables, and also view the information in a tabular format. 
 
+Here is the data from the `CUSTOMER_INSURANCE_LTV` table presented in a tabular format. The table has 8 columns and 200 rows. 
+
+![Customer Insurance table](images/view-cust-insur-table.png)
+
 **Dataset:** `CUSTOMER_INSURANCE_LTV`. In this example, we will use the example template notebook _OML-Run-me-first_.
 
 1. On the Oracle Machine Learning UI homepage, click **Examples.** 
