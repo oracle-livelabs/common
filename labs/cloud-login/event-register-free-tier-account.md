@@ -41,14 +41,13 @@ If you already have a cloud account, skip to **Task 2**.
 
 4. Once you have entered a valid email address, select the **Verify my email** button. You will see the **Special Oracle Offer** dialog box, click on **Select Offer**.
 
-5. Enter the following information to create your Oracle Cloud Free Tier account.
-       * Choose a **Password**
-       * Enter your **Company Name**
-       * Your **Cloud Account Name** will generate automatically based on your inputs, you can change that name by entering a new value. Remember what you wrote. You'll need this name later to sign in.
-       * Choose a **Home Region**.  Your Home Region cannot be changed once you sign-up.
-       >**Note:** Based on the current design of the workshop and resource availability, it is recommended not to use the London region for this workshop at this time.
-
-       * Click **Continue**
+5.  Enter the following information to create your Oracle Cloud Free Tier account.
+    * Choose a **Password**
+    * Enter your **Company Name**
+    * Your **Cloud Account Name** will generate automatically based on your inputs, you can change that name by entering a new value. Remember what you wrote. You'll need this name later to sign in.
+    * Choose a **Home Region**.  Your Home Region cannot be changed once you sign-up.
+    * **Note:** Based on the current design of the workshop and resource availability, it is recommended not to use the London region for this workshop at this time.
+    * Click **Continue**
 
     ![Account Info](./images/account-info.png " ")
 
@@ -105,4 +104,4 @@ You may now **proceed to the next lab**.
 
 - **Created By/Date** - Anoosha Pilli, Product Manager, February 2021
 - **Contributors** - Madhusudhan Rao, Arabella Yao
-- **Last Updated By** - Ramona Magadan, Database Product Management, October 2025
+- **Last Updated By** - Abby Mulry, November 2025
