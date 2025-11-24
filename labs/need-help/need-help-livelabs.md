@@ -32,11 +32,11 @@ This will construct an email in your default mail application that is auto-popul
 ## Can't Log in to Oracle Cloud
 1. Double-check that you are using the information and credentials provided to you in the lab banner.
 
-    ![Lab banner](./images/banner-info-highlight-update.png)
+    ![Lab banner](./images/banner-info-highlight.png)
 
 2. Make sure you are using the tenancy, username, and password provided to you in the lab banner.
 
-    ![Login information](./images/login-demo1-update.png)
+    ![Login information](./images/login-demo1.png)
 
 3. If you need to view your login information anytime, click **View Login Info**.
 
@@ -47,7 +47,7 @@ This will construct an email in your default mail application that is auto-popul
 
 2. If you can't find your compartment in the drop-down box, make sure you *set your region* to the one provided in the lab banner.
 
-    ![Set region](./images/login-ai-database.png)
+    ![Set region](./images/compartment-select.png)
 
 ## Connectivity Issues?
 
@@ -82,10 +82,10 @@ If the workshop asks you to open the cloud shell, but you cannot access it, plea
 
 1. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**.
 
-   ![Compute Instances](./images/compute.png " ")
+   ![Compute Instances](../../images/console/compute-instances.png " ")
 
 2. Select the compartment you are assigned to (check which compartment you are assigned to on the LiveLabs *Login Info* page). Expand the **root** compartment and then the **Livelabs** compartment. Select the compartment assigned to you.
-   ![Lab banner](./images/compartment-assigned-to-you.png)
+   ![Lab banner](./images/banner-info-highlight.png)
    ![Select Compartment](../../images/console/select-compartment.png " ")
 
 3. Relaunch your cloud shell. You should be able to open your cloud shell.
@@ -104,4 +104,4 @@ If the workshop asks you to open the cloud shell, but you cannot access it, plea
 ## Acknowledgements
 * **Author** - LiveLabs Team
 * **Contributors** - LiveLabs Team, Arabella Yao
-* **Last Updated By/Date** - Sania Bolla, Eileen Beck, November 2025
+* **Last Updated By/Date** - Abby Mulry, November 2025

@@ -34,12 +34,11 @@ Watch the video below for a quick walk-through of the lab.
 
     ![Select ATP.](https://oracle-livelabs.github.io/common/images/console/database-atp.png " ")
 
-3. From the compartment drop-down menu select the **Compartment** where your Oracle Autonomous AI Database resource is provisioned. If there were a long list of databases, you could filter the list by the **State** of the databases (Available, Stopped, Terminated, etc) to view the database you wish to terminate. You can also sort by **Workload Type**.
+3. From the compartment drop-down menu select the **Compartment** where your Oracle Autonomous AI Database resource is provisioned.
 
     In this lab, as **DEMOATP** is an Oracle Autonomous AI Transaction Processing database that is already provisioned, we selected the **Transaction Processing** workload type to filter the database.
 
     ![Choose compartment](./images/choose-compartment.png " ")
-    ![Choose state](./images/choose-state.png " ")
 
 4. From the databases displayed, click **Display Name** of the database you wish to terminate.
 
@@ -79,4 +78,4 @@ Watch the video below for a quick walk-through of the lab.
 ## Acknowledgements
 
 * **Author** - Anoosha Pilli, Oracle Database Product Management, Product Manager
-* **Last Updated By/Date** - Richard Piantini Cid, Oct 2025
+* **Last Updated By/Date** - Abby Mulry, November 2025

@@ -58,4 +58,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 * **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology
 * **Contributors** - LiveLabs Team
-* **Last Updated By/Date** - Brianna Ambler, Database Product Management, October 2024
+* **Last Updated By/Date** - Abby Mulry, November 2025
