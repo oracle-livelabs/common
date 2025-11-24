@@ -16,10 +16,6 @@ As you can see from the previous labs, **Select AI** makes it easy to build apps
 
 Estimated Time: 10 minutes.
 
-Watch the video below for a detailed walk-through of using the Oracle APEX-based ADB Chat demo application and the Select AI feature.
-
-[](youtube:2C-wirdC0aw)
-
 ### Objectives
 
 In this lab, you will:

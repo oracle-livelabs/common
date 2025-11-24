@@ -34,9 +34,6 @@ In this lab, you will find the latest news about actors and then perform a senti
 
 Estimated Time: 10 minutes
 
-Watch the video below for a quick walk-through of the lab.
-[Load and Analyze the News from REST Endpoints](videohub:1_sznobm6z)
-
 ### Objectives
 
 In this lab, you will:
