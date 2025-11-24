@@ -108,6 +108,10 @@ This completes the task of creating a table, and visualizing the data in it.
 
 A bar graph is a graphical representation of data in rectangular bars. The length or height  of the bars, depending on the horizontal or vertical orientation, depict the dataset distribution. One axis represents a category, while the other represents values or counts.
 
+Here is a stacked bar chart generated for the `CUSTOMER_INSURANCE_LTV` table. The average of `CREDIT_BALANCE`, `MORTGAGE_AMOUNT`, and `BANK_FUNDS` are plotted along the Y-axis, and `MARITAL_STATUS` is depicted along the X-axis. Here, `CREDIT_BALANCE`, `MORTGAGE_AMOUNT`, and `BANK_FUNDS` are stacked in ascending order in each bar for the groups—`SINGLE`, `MARRIED`, `DIVORCED`, `WIDOWED`, and `OTHERS`. 
+
+![Bar chart](images/bar-chart3.png)
+
 **When to use this chart:** Use bar charts to show a distribution of data points, and perform a comparison of metric values across different subgroups of your data. 
 
 **Dataset:** `CUSTOMER_INSURANCE_LTV`. In this example, we will use the example template notebook OML-Run-me-first.
@@ -158,6 +162,10 @@ To visualize data in a bar chart:
 
 A funnel chart is a graphical representation that resembles the shape of a funnel where each segment gets progressively narrower. The segments are arranged vertically and depict a hierarchy. Within the funnel chart, each segment corresponds to a step or stage in a sequential process.
 
+In this data visualization, the attributes `CREDIT_BALANCE`, `MORTGAGE_AMOUNT` and `INCOME` are depicted for each of these groups—`SINGLE`, `MARRIED`, `DIVORCED`, `WIDOWED`, and `OTHERS` in three funnel charts. This is the data visualization after customizing the funnel chart. 
+
+![Funnel Charts](images/funnel-charts2.png)
+
 **When to use this chart:** Use this chart to visualize a linear sequential process, mostly in business and sales contexts. For example, you can use a funnel chart to track the sales process, order fulfillment, website visitor trends, and so on.   
 
 **Dataset:** `CUSTOMER_INSURANCE_LTV`. In this example, we will use the example template notebook OML-Run-me-first.
@@ -181,10 +189,16 @@ To view the data in a funnel chart:
 
 	![Funnel Charts](images/funnel-charts2.png)
 
+	This completes the task of visualizing your data in a funnel chart.
+
 
 ## Task 4: Visualize Data in a Pyramid Chart
 
 Pyramid charts present your data in a distinctive triangular configuration, horizontally segmented into partitions. Each segment in the pyramid charts represents points or steps in ascending or descending order. 
+
+Here are two pyramid charts depicting the attributes `MORTGAGE_AMOUNT` and `INCOME` for the two groups M (Male) and F (Female). Each pyramid is divided into two segments to represent the two groups in ascending order. 
+
+![Pyramid chart](images/pyramid-chart3.png)
 
 **When to use this chart:**  Use this chart to depict hierarchical structures and the relative proportions of different values. They are typically used for displaying demographic data, market segmentation, or organizational structures. In any case, the data must have a progressive order. 
 
@@ -218,10 +232,14 @@ To visualize data in a Pyramid Chart:
 
 	The pyramid chart shows a clear correlation between the two genders, and their income level and mortgage amount. For both the categories, the average income and mortgage amount taken is higher for Females.
 
-
+	This completes the task of visualizing your data in a pyramid chart.
 
 ## Task 5: Visualize Data in a Scatter Plot
 Scatter plots represent the relationship between two numeric variables in a data set. It represents data points on a two-dimensional plane and show how much one variable is affected by another. The independent variable is plotted on the X-axis, while the dependent variable is plotted on the Y-axis. You can display points by one or more grouping variables such that each group has a distinct color and shape. 
+
+This is a scatter plot rendered for the `CUSTOMER_INSURANCE_LTV` table. The scatter plot shows a strong correlation between `INCOME` and `MORTGAGE_AMOUNT` in the income range 50k to 80k. Along the X-axis, `INCOME` is plotted and along the Y-axis, `MORTGAGE_AMOUNT` is plotted. The data is grouped by `MARITAL_STATUS`. 
+
+![Scatterplot](images/scatterplot1.png)
 
 **When to use this chart:** Use the scatter plot when you have paired numerical data, and you want to determine the relationship between the related variables in certain scenarios, identifying correlations and trends (linear and non-linear relationships), detecting outliers, understanding data distribution, identifying groupings or clusters of data. Scatter plots can also be useful when comparing multiple datasets where each datasets values are represented as a different group. Scatter plots are also useful for evaluating regression models by plotting, e.g., actual versus predicted values. 
 
@@ -244,8 +262,14 @@ To visualize data in a scatter Plot:
 	![Scatterplot](images/scatterplot1.png)
  The scatter plot shows a strong correlation between Income and Mortgage amount in the income range 50k to 80k.
 
+ 	This completes the task of visualizing your data in a scatter plot.
+
 ## Task 6: Visualize Data in a Line Chart
 A line chart is a graphical representation used to display data points connected by straight lines.
+
+Here is a line chart displaying the sum of the amount sold from the year 1998 to 2001. It also shows the cursor hovering over the highest point in the line chart to view the values. The image shows that on 5/30/2000, the product recorded the highest sale in terms of the sum of the amount sold. 
+
+![Line chart](images/line-chart2.png)
 
 **When to use this chart:** Use this chart to visualize trends, changes, and relationships in data over a continuous period.
 
@@ -285,8 +309,14 @@ A line chart is a graphical representation used to display data points connected
 
 	![Line chart](images/line-chart2.png)
 
+	This completes the task of visualizing your data in a line chart.
+
 ## Task 7: Visualize Data in an Area Chart
-An area chart uses lines to connect the data points and fills the area below these lines to the x-axis. Each data series contributes to the formation of a distinct shaded region. This emphasizes its contribution to the overall trend. As the data points fluctuate, the shaded areas expand or contract. 
+An area chart uses lines to connect the data points and fills the area below these lines to the x-axis. Each data series contributes to the formation of a distinct shaded region. This emphasizes its contribution to the overall trend. As the data points fluctuate, the shaded areas expand or contract.
+
+Here is an area chart rendered for the SALES table. It is customized to depict the sum of the three attributes — `CHANNEL_3`, `CHANNEL_4` and `CHANNEL_9` in stacks. Along the X-axis, `time` is plotted, and along the Y-axis, `sum` is plotted. 
+
+![Area chart 2](images/area-chart2.png)
 
 **When to use this chart:** Use this chart to gain visual insight into the changes within the dataset.
 
@@ -336,10 +366,16 @@ To visualize your data in an area chart:
 
 	![Area chart 2](images/area-chart2.png)
 
+	This completes the task of visualizing your data in an area chart.
+
  
 ## Task 8: Visualize Data in a Pie Chart
 
 A pie chart is a graphical representation of data in a circular form, with each slice of the circle representing a fraction that is a proportionate part of the whole.
+
+Here are two pie charts generated for the IRIS dataset. The pie charts have been customized to render the visualization in 3D. One pie chart shows the average sepal length, and the other shows the average petal length for each of the three species of the iris flower. 
+
+![Pie Chart](images/pie-chart2.png)
 
 **When to use this chart:** Use this chart to visualize the numerical proportion of the parts to the whole. 
 
@@ -373,9 +409,6 @@ To visualize data in a pie chart
 	</copy>
 
 	```
-	
-
-
 3. By default, the dataset is displayed in a table. Click on the pie chart icon ![Pie Chart icon](images/pie-chart-icon.png). 
 
 	![Iris dataset in a table](images/iris-table.png)
@@ -404,9 +437,16 @@ To visualize data in a pie chart
 
 	![Pie Chart](images/pie-chart2.png)
 
+	This completes the task of visualizing your data in a pie chart.
 
 ## Task 9: Visualize Data in a Box Plot
-A box plot provides an overview of data distributions in numeric data. It provides general information about the symmetry, skewness, variance, and outliers in a dataset. The box plot uses boxes and lines to depict the data distribution. The box plot has the following components:
+A box plot provides an overview of data distributions in numeric data. It provides general information about the symmetry, skewness, variance, and outliers in a dataset. The box plot uses boxes and lines to depict the data distribution. 
+
+Here is a box plot generated for the `IRIS` dataset. The box plot depicts the numeric distribution of the dimensions (Sepal Length, Sepal Width, Petal Length, and Petal Width) of the three species of the iris flower — Setosa, Versicolor, and Virginica. This box plot has been customized to display the outlier value for each of the three species. In this image, the cursor is over the outlier dot for the class Virginica. It highlights the outlier value at 4.9 for the sepal length of Virginica. This implies that in the species Virginica, there are sepals whose length is significantly below the lower count 5.6. 
+
+![Boxplot chart 5](images/boxplot5.png)
+
+A box plot has the following components:
 
 
 * Central Box - Inter-quartile range and quartiles:
@@ -456,6 +496,7 @@ A box plot provides an overview of data distributions in numeric data. It provid
 
 	![Boxplot chart 5](images/boxplot5.png)
 
+	This completes the task of visualizing your data in a box plot.
 
 ## Task 10: Visualize Data in a Sunburst chart
 
@@ -529,6 +570,8 @@ To visualize your data in a sunburst chart:
 
 A tag cloud is a visual representation of the most popular words or tags found in free-form text. The font size or the color of the text represents the frequency of occurrence.
 Here is a tag cloud representing some emotions picked up from user comments. The font size implies the average count of the emotions.
+
+![Tag cloud in rectangular layout](images/tag-cloud-2.png)
 
 **When to use this chart:** Use Tag Cloud to visualize text data, and to conduct word-frequency analysis across tags, keywords etc.
 **Data set:** In this example, we create a data set that contains user comments.
@@ -611,7 +654,7 @@ Treemaps also show the relationship of each part (or nested rectangles) to the w
 ![Tree map](images/treemap-2.png)
 
 **When to use this chart:** Use this chart to visualize a large number of related categories, and also to analyze the part-to-whole relationship in your data set.
-Data set: Custom dataset on continents, country and population.
+**Data set:** Custom dataset on continents, country and population.
 To visualize your data in a tree map:
 
 1. Open a notebook and in a %python paragraph, import the following python libraries— `oml` and `pandas`.
@@ -670,8 +713,8 @@ The map visualization of OML Notebooks plots data points on a geographical map. 
 Here is a visualization of a dataset containing information about countries, capital, geographical coordinates and other related information. The displayed map type is OSM Positron style. It has the pushpin on USA clicked. The marker dialog displays the country name and its capital. 
 ![Map with marker dialog after customization](images/map-2.png)
 
-When to use this chart: Use map charts to visualize your data with geographical implications
-*Data set:* In this example, we create a table containing data about countries and related information with geographical coordinates.
+**When to use this chart:** Use map charts to visualize your data with geographical implications
+**Data set:** In this example, we create a table containing data about countries and related information with geographical coordinates.
 To visualize data in a map:
 1. In a Python paragraph in your notebook, run the following statements to create a table with five columns— `Country Name`, `Longitude`, `Latitude`, `Capital`, and `Population` with five entries for each:
 
