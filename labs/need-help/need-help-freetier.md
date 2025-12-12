@@ -60,7 +60,7 @@ Try these options to access the environment again:
 
 1. From the navigation menu, click **Identity & Security** and select **Domains** under **Identity**.
 
-  ![Select Domains](../../images/console/id-domains.png " ")
+  ![Select Domains](../need-help/images/id-domains-update.png " ")
 
 2. Make sure you are in the correct compartment and click **Default(Current domain)**
 
@@ -77,4 +77,4 @@ Try these options to access the environment again:
 ## Acknowledgements
 * **Author** - LiveLabs Team
 * **Contributors** - LiveLabs Team
-* **Last Updated By/Date** - Ramona Magadan, Technical Program Manager, Database Product Management, May 2025
+* **Last Updated By/Date** - Eileen Beck, November 2025

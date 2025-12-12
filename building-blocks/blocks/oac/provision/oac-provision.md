@@ -20,12 +20,6 @@ Also...
 
 > **Note**: If you attend this workshop at CloudWorld or another in-person instructor-led event, your instructor will direct you to skip this lab, providing you a link to  an already-provisioned OAC instance.
 
-Watch our short video that explains how to provision your Oracle Analytics Cloud instance:
-
-> Note: Please disregard the video's reference to **Lab 2**.
-
-[](youtube:ZAqXlhivQCg)
-
 Estimated Time: 20+ minutes.
 
 ### Objectives
