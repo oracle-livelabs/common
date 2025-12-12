@@ -51,7 +51,7 @@ jobs:
             h="${dims#*x}"
 
             if [[ "$w" -gt "$MAX" || "$h" -gt "$MAX" ]]; then
-              echo "::error file=$f::Image is ${w}x${h}. Max allowed is ${MAX}px (either dimension)."
+              echo "::error file=$f::${f} is ${w}x${h}. Max allowed is ${MAX}px (either dimension)."
               bad=1
             fi
           done
@@ -59,9 +59,19 @@ jobs:
           if [[ "$bad" -eq 1 ]]; then
             echo ""
             echo "One or more images exceed ${MAX}px."
-            echo "Fix locally in your fork:"
-            echo "Copy scripts/resize-images.sh from the COMMON repo to the root folder of your workshop."
-            echo "Execute resize-images.sh. It will convert only images which dimensions larger than 1280px!"
-            echo "  ./scripts/resize-images.sh"
+            echo "Please fix this locally in your fork."
+            echo ""
+            echo "Note: this script requires 'ffmpeg' to be installed on your system."
+            echo "  macOS (Homebrew): brew install ffmpeg"
+            echo "  Ubuntu/Debian:    sudo apt-get install ffmpeg"
+            echo ""
+            echo "Download the resize script from the COMMON repo:"
+            echo "  curl -fsSL https://raw.githubusercontent.com/oracle-livelabs/common/main/scripts/resize-images.sh -o resize-images.sh"
+            echo ""
+            echo "Make it executable and run it from the root of your workshop:"
+            echo "  chmod +x resize-images.sh"
+            echo "  ./resize-images.sh"
+            echo ""
+            echo "The script will only resize images whose width or height is greater than ${MAX}px."
             exit 1
           fi
