@@ -33,7 +33,7 @@ Visit [livelabs.oracle.com](https://livelabs.oracle.com) and sign in with your O
 
 ## Task 1: Open the workshop page
 
-1. Start by navigating to your selected workshop on [LiveLabs](https://livelabs.oracle.com).
+1. Start by navigating to your selected workshop on [LiveLabs](https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=3943).
 
 2. Look for the green **START** button and click it to begin the reservation process.
 
