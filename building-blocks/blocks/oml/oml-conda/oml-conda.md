@@ -353,6 +353,6 @@ The steps in task 5 must be performed as the non-ADMIN OML user with the `OML_DE
 
 ## Acknowledgements
 
-* **Author** -  Moitreyee Hazarika, Consulting User Assistance Developer, Database User Assistance Development
+* **Author** -  Moitreyee Hazarika, Consulting User Assistance Developer, Oracle AI Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, October 2025
+* **Last Updated By/Date** - Moitreyee Hazarika, November 2025
