@@ -75,5 +75,5 @@ You may now **proceed to the next lab**.
 * **Authors:**
     * Lauran K. Serhal, Consulting User Assistance Developer
     * Kay Malcolm, Database Product Management
-* **Contributors** - Kevin Lazarz, Rene Fontcha, Kamryn Vinson
-* **Last Updated By/Date:** Abby Mulry, November 2025
+* **Contributors** - Kevin Lazarz, Rene Fontcha
+* **Last Updated By/Date:** Lauran K. Serhal, November 2025
