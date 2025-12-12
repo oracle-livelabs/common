@@ -1,0 +1,112 @@
+name: Enforce image size on PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write   # needed to comment on PR
+
+jobs:
+  check-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install ffmpeg (includes ffprobe)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Detect oversized images (>1280px)
+        id: scan
+        shell: bash
+        run: |
+          set -euo pipefail
+          MAX=1280
+
+          git fetch --no-tags --prune origin "${GITHUB_BASE_REF}:${GITHUB_BASE_REF}" || true
+
+          mapfile -d '' files < <(
+            git diff --name-only --diff-filter=AM -z "origin/${GITHUB_BASE_REF}...HEAD" -- \
+              '*.png' '*.jpg' '*.jpeg' '*.PNG' '*.JPG' '*.JPEG' || true
+          )
+
+          oversized=""
+          for f in "${files[@]}"; do
+            [[ -f "$f" ]] || continue
+
+            read -r w h < <(
+              ffprobe -v error -select_streams v:0 -show_entries stream=width,height \
+                -of default=noprint_wrappers=1:nokey=1 "$f" | tr '\n' ' '
+            )
+
+            if [[ "${w:-0}" -gt "${MAX}" || "${h:-0}" -gt "${MAX}" ]]; then
+              oversized+="${f} (${w}x${h})\n"
+            fi
+          done
+
+          if [[ -n "$oversized" ]]; then
+            {
+              echo "oversized<<EOF"
+              echo -e "$oversized"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+            echo "has_oversized=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_oversized=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Comment on PR with fix instructions
+        if: steps.scan.outputs.has_oversized == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const marker = "<!-- image-size-check -->";
+            const max = 1280;
+            const oversized = `${{ steps.scan.outputs.oversized }}`.trim();
+
+            const body =
+              `${marker}\n` +
+              `👋 Thanks for the PR! A quick heads-up: some images in this PR exceed **${max}px** (width or height).\n\n` +
+              `**Oversized images:**\n` +
+              "```\n" + oversized + "\n```\n\n" +
+              `**How to fix (in your fork):**\n` +
+              `1) Pull latest changes\n` +
+              `2) Run:\n` +
+              "```bash\n" +
+              "chmod +x scripts/resize-images.sh\n" +
+              "./scripts/resize-images.sh\n" +
+              "```\n" +
+              `3) Commit + push the updated images\n\n` +
+              `This check will turn green automatically after you push the resize commit. 🙌`;
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.pull_request.number;
+
+            // Find existing bot comment and update it to avoid spam
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner, repo, issue_number, per_page: 100
+            });
+
+            const existing = comments.find(c => c.user?.type === "Bot" && c.body?.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner, repo, comment_id: existing.id, body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number, body
+              });
+            }
+
+      - name: Fail if oversized images found
+        if: steps.scan.outputs.has_oversized == 'true'
+        run: |
+          echo "Oversized images detected. See PR comment for instructions."
+          exit 1
