@@ -15,7 +15,7 @@ To create the table:
 
 	![Notebooks option in OML homepage](images/homepage-scratchpad.png)
 
-2. By default, the Scratchpad opens with three paragraphs: `%sql` (to run SQL statements), `%script` (to run PL/SQL scripts), and `%python` (to run Python scripts). Here, you will use the SQL paragraph to run a SQL statement to create the CUSTOMER360 table. On the SQL paragraph, click after the `%sql` tag, and press enter.
+2. By default, the Scratchpad opens with four paragraphs: `%sql` (to run SQL statements), `%script` (to run PL/SQL scripts), `%python` (to run Python scripts), and `%r` (to run R scripts). Here, you will use the SQL paragraph to run a SQL statement to create the CUSTOMER360 table. On the SQL paragraph, click after the `%sql` tag, and press enter.
 
 	![Create Notebook dialog](images/scratchpad.png)
 

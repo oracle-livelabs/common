@@ -11,7 +11,7 @@ For more about getting support using our email, click [here](#HowtoFormatYourSup
 
 ### Common Issues Table of Contents
   - [Can't Log in to Oracle Cloud](#CantLogintoOracleCloud)
-  - [Can't Create An Oracle Database? Nothing In Your Compartment?](#CantCreateanOracleDatabase?NothinginYourCompartment?)
+  - [Can't Create An Oracle AI Database? Nothing In Your Compartment?](#CantCreateanOracleAIDatabase?NothinginYourCompartment?)
   - [Connectivity Issues?](#ConnectivityIssues?)
   - [Cannot Access Cloud Shell?](#CannotAccessCloudShell?)
   - [Cannot Connect to the Marketplace Compute Instance Using a Private SSH Key?](#CannotConnecttotheMarketplaceComputeInstanceUsingaPrivateSSHKey?)
@@ -42,7 +42,7 @@ This will construct an email in your default mail application that is auto-popul
 
     ![View Login Info](./images/view-login-info.png)
 
-## Can't Create an Oracle Database? Nothing in Your Compartment?
+## Can't Create an Oracle AI Database? Nothing in Your Compartment?
 1. Ensure that under "List Scope", you are selecting the compartment provided to you in the lab banner.
 
 2. If you can't find your compartment in the drop-down box, make sure you *set your region* to the one provided in the lab banner.
@@ -104,4 +104,4 @@ If the workshop asks you to open the cloud shell, but you cannot access it, plea
 ## Acknowledgements
 * **Author** - LiveLabs Team
 * **Contributors** - LiveLabs Team, Arabella Yao
-* **Last Updated By/Date** - Ramona Magadan, Technical Program Manager, Database Product Management, May 2025
+* **Last Updated By/Date** - Abby Mulry, November 2025
