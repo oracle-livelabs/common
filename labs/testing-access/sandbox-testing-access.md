@@ -31,7 +31,7 @@ If you don’t have one yet, you can create one for [free](https://www.oracle.co
 Visit [livelabs.oracle.com](https://livelabs.oracle.com) and sign in with your Oracle SSO.
 
 
-## Task 1: Open the workshop page
+## Task 1: Open the workshop page   
 
 1. Start by navigating to your selected workshop on [LiveLabs](https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=3943).
 
