@@ -4,13 +4,11 @@
         "description":"Create a bipartite Graph for MOVIESTREAM watched movies."
     }
 -->
-
-
-1. Click the **Graph** icon to navigate to create your graph. Then click **Create Graph**.  
+1. Click the **Graph** icon to navigate to create your graph. Then click **Create Graph**.
     
-    ![Shows where the create button modeler is.](images/graph/graph-create-button.png " ")  
+    ![Shows where the create button modeler is.](images/graph/graph-create-button.png " ")
 
-2. Enter **`MOVIE_RECOMMENDATIONS`** as the graph name. That graph name is used throughout the next lab. Do not enter a different name because then the queries and code snippets in the next lab will fail. 
+2. Enter **`MOVIE_RECOMMENDATIONS`** as the graph name. That graph name is used throughout the next lab. Do not enter a different name because then the queries and code snippets in the next lab will fail.
 
     ![Shows the create graph window where you assign the graph a name.](./images/graph/create-graph-dialog.png " ")
 
@@ -26,17 +24,15 @@
 
     Click **Next**.  
 
-4.  The suggested model has the `MOVIE` and `CUSTOMER_SAMPLE`, as a vertex tables since there are foreign key constraints specified on table `WATCHED` that reference them.   
-
+4. The suggested model has the `MOVIE` and `CUSTOMER_SAMPLE`, as a vertex tables since there are foreign key constraints specified on table `WATCHED` that reference them.   
 
     ![Shows the vertex and edge table.](./images/graph/create-graph-suggested-model.png " ")    
 
-
-5.  You can view and change properties of the graph by clicking on one of the tables. For example, click `WATCHED` and notice the edge label. You will see this label when viewing and querying the graph. Keep the `WATCHED` label because it will be used in the next lab when querying the graph.  
+5. You can view and change properties of the graph by clicking on one of the tables. For example, click `WATCHED` and notice the edge label. You will see this label when viewing and querying the graph. Keep the `WATCHED` label because it will be used in the next lab when querying the graph.  
 
     ![Changed the label name of the edge to Transfers.](images/graph/edit-edge-label.png " ")  
 
-    Click **Next**.        
+    Click **Next**.
  
 
 <!---
@@ -73,7 +69,7 @@
 
     ![Shows the job tab with the job status as successful](./images/graph/jobs-create-graph.png " ")  
 
-    This will open a Create Graph tab. Click **Create Graph**. 
+    This will open a Create Graph tab. Click **Create Graph**.
 
     ![Shows in-memory enabled and the create graph button](./images/graph/create-graph-in-memory.png " ")
 
