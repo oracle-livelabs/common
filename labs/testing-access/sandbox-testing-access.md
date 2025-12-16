@@ -28,12 +28,12 @@ Estimated Time: 5 minutes
 If you don’t have one yet, you can create one for [free](https://www.oracle.com/uk/cloud/sign-in.html).
 
 - Access to the Oracle LiveLabs platform
-Visit [livelabs.oracle.com](livelabs.oracle.com) and sign in with your Oracle SSO.
+Visit [livelabs.oracle.com](https://livelabs.oracle.com) and sign in with your Oracle SSO.
 
 
 ## Task 1: Open the workshop page
 
-1. Start by navigating to your selected workshop on [LiveLabs](livelabs.oracle.com).
+1. Start by navigating to your selected workshop on [LiveLabs](https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=3943).
 
 2. Look for the green **START** button and click it to begin the reservation process.
 
@@ -101,4 +101,4 @@ If a browser window opens showing the virtual environment, your network supports
 ## Acknowledgements
 
 - **Created By/Date** - Ramona Magadan, Database Product Management, May 2025
-- **Last Updated By/Date** - Ramona Magadan, June 2025
+- **Last Updated By/Date** - Ramona Magadan, December 2025

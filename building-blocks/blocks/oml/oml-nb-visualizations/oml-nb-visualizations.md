@@ -33,6 +33,10 @@ This lab assumes you have:
 
 A table is an arrangement of information or data in rows and columns. Using OML Notebooks, you can create database tables, and also view the information in a tabular format. 
 
+Here is the data from the `CUSTOMER_INSURANCE_LTV` table presented in a tabular format. The table has 8 columns and 200 rows. 
+
+![Customer Insurance table](images/view-cust-insur-table.png)
+
 **Dataset:** `CUSTOMER_INSURANCE_LTV`. In this example, we will use the example template notebook _OML-Run-me-first_.
 
 1. On the Oracle Machine Learning UI homepage, click **Examples.** 
@@ -108,6 +112,10 @@ This completes the task of creating a table, and visualizing the data in it.
 
 A bar graph is a graphical representation of data in rectangular bars. The length or height  of the bars, depending on the horizontal or vertical orientation, depict the dataset distribution. One axis represents a category, while the other represents values or counts.
 
+Here is a stacked bar chart generated for the `CUSTOMER_INSURANCE_LTV` table. The average of `CREDIT_BALANCE`, `MORTGAGE_AMOUNT`, and `BANK_FUNDS` are plotted along the Y-axis, and `MARITAL_STATUS` is depicted along the X-axis. Here, `CREDIT_BALANCE`, `MORTGAGE_AMOUNT`, and `BANK_FUNDS` are stacked in ascending order in each bar for the groups—`SINGLE`, `MARRIED`, `DIVORCED`, `WIDOWED`, and `OTHERS`. 
+
+![Bar chart](images/bar-chart3.png)
+
 **When to use this chart:** Use bar charts to show a distribution of data points, and perform a comparison of metric values across different subgroups of your data. 
 
 **Dataset:** `CUSTOMER_INSURANCE_LTV`. In this example, we will use the example template notebook OML-Run-me-first.
@@ -158,6 +166,10 @@ To visualize data in a bar chart:
 
 A funnel chart is a graphical representation that resembles the shape of a funnel where each segment gets progressively narrower. The segments are arranged vertically and depict a hierarchy. Within the funnel chart, each segment corresponds to a step or stage in a sequential process.
 
+In this data visualization, the attributes `CREDIT_BALANCE`, `MORTGAGE_AMOUNT` and `INCOME` are depicted for each of these groups—`SINGLE`, `MARRIED`, `DIVORCED`, `WIDOWED`, and `OTHERS` in three funnel charts. This is the data visualization after customizing the funnel chart. 
+
+![Funnel Charts](images/funnel-charts2.png)
+
 **When to use this chart:** Use this chart to visualize a linear sequential process, mostly in business and sales contexts. For example, you can use a funnel chart to track the sales process, order fulfillment, website visitor trends, and so on.   
 
 **Dataset:** `CUSTOMER_INSURANCE_LTV`. In this example, we will use the example template notebook OML-Run-me-first.
@@ -181,10 +193,16 @@ To view the data in a funnel chart:
 
 	![Funnel Charts](images/funnel-charts2.png)
 
+	This completes the task of visualizing your data in a funnel chart.
+
 
 ## Task 4: Visualize Data in a Pyramid Chart
 
 Pyramid charts present your data in a distinctive triangular configuration, horizontally segmented into partitions. Each segment in the pyramid charts represents points or steps in ascending or descending order. 
+
+Here are two pyramid charts depicting the attributes `MORTGAGE_AMOUNT` and `INCOME` for the two groups M (Male) and F (Female). Each pyramid is divided into two segments to represent the two groups in ascending order. 
+
+![Pyramid chart](images/pyramid-chart3.png)
 
 **When to use this chart:**  Use this chart to depict hierarchical structures and the relative proportions of different values. They are typically used for displaying demographic data, market segmentation, or organizational structures. In any case, the data must have a progressive order. 
 
@@ -218,10 +236,14 @@ To visualize data in a Pyramid Chart:
 
 	The pyramid chart shows a clear correlation between the two genders, and their income level and mortgage amount. For both the categories, the average income and mortgage amount taken is higher for Females.
 
-
+	This completes the task of visualizing your data in a pyramid chart.
 
 ## Task 5: Visualize Data in a Scatter Plot
 Scatter plots represent the relationship between two numeric variables in a data set. It represents data points on a two-dimensional plane and show how much one variable is affected by another. The independent variable is plotted on the X-axis, while the dependent variable is plotted on the Y-axis. You can display points by one or more grouping variables such that each group has a distinct color and shape. 
+
+This is a scatter plot rendered for the `CUSTOMER_INSURANCE_LTV` table. The scatter plot shows a strong correlation between `INCOME` and `MORTGAGE_AMOUNT` in the income range 50k to 80k. Along the X-axis, `INCOME` is plotted and along the Y-axis, `MORTGAGE_AMOUNT` is plotted. The data is grouped by `MARITAL_STATUS`. 
+
+![Scatterplot](images/scatterplot1.png)
 
 **When to use this chart:** Use the scatter plot when you have paired numerical data, and you want to determine the relationship between the related variables in certain scenarios, identifying correlations and trends (linear and non-linear relationships), detecting outliers, understanding data distribution, identifying groupings or clusters of data. Scatter plots can also be useful when comparing multiple datasets where each datasets values are represented as a different group. Scatter plots are also useful for evaluating regression models by plotting, e.g., actual versus predicted values. 
 
@@ -244,8 +266,14 @@ To visualize data in a scatter Plot:
 	![Scatterplot](images/scatterplot1.png)
  The scatter plot shows a strong correlation between Income and Mortgage amount in the income range 50k to 80k.
 
+ 	This completes the task of visualizing your data in a scatter plot.
+
 ## Task 6: Visualize Data in a Line Chart
 A line chart is a graphical representation used to display data points connected by straight lines.
+
+Here is a line chart displaying the sum of the amount sold from the year 1998 to 2001. It also shows the cursor hovering over the highest point in the line chart to view the values. The image shows that on 5/30/2000, the product recorded the highest sale in terms of the sum of the amount sold. 
+
+![Line chart](images/line-chart2.png)
 
 **When to use this chart:** Use this chart to visualize trends, changes, and relationships in data over a continuous period.
 
@@ -285,8 +313,14 @@ A line chart is a graphical representation used to display data points connected
 
 	![Line chart](images/line-chart2.png)
 
+	This completes the task of visualizing your data in a line chart.
+
 ## Task 7: Visualize Data in an Area Chart
-An area chart uses lines to connect the data points and fills the area below these lines to the x-axis. Each data series contributes to the formation of a distinct shaded region. This emphasizes its contribution to the overall trend. As the data points fluctuate, the shaded areas expand or contract. 
+An area chart uses lines to connect the data points and fills the area below these lines to the x-axis. Each data series contributes to the formation of a distinct shaded region. This emphasizes its contribution to the overall trend. As the data points fluctuate, the shaded areas expand or contract.
+
+Here is an area chart rendered for the SALES table. It is customized to depict the sum of the three attributes — `CHANNEL_3`, `CHANNEL_4` and `CHANNEL_9` in stacks. Along the X-axis, `time` is plotted, and along the Y-axis, `sum` is plotted. 
+
+![Area chart 2](images/area-chart2.png)
 
 **When to use this chart:** Use this chart to gain visual insight into the changes within the dataset.
 
@@ -336,10 +370,16 @@ To visualize your data in an area chart:
 
 	![Area chart 2](images/area-chart2.png)
 
+	This completes the task of visualizing your data in an area chart.
+
  
 ## Task 8: Visualize Data in a Pie Chart
 
 A pie chart is a graphical representation of data in a circular form, with each slice of the circle representing a fraction that is a proportionate part of the whole.
+
+Here are two pie charts generated for the IRIS dataset. The pie charts have been customized to render the visualization in 3D. One pie chart shows the average sepal length, and the other shows the average petal length for each of the three species of the iris flower. 
+
+![Pie Chart](images/pie-chart2.png)
 
 **When to use this chart:** Use this chart to visualize the numerical proportion of the parts to the whole. 
 
@@ -373,9 +413,6 @@ To visualize data in a pie chart
 	</copy>
 
 	```
-	
-
-
 3. By default, the dataset is displayed in a table. Click on the pie chart icon ![Pie Chart icon](images/pie-chart-icon.png). 
 
 	![Iris dataset in a table](images/iris-table.png)
@@ -404,9 +441,16 @@ To visualize data in a pie chart
 
 	![Pie Chart](images/pie-chart2.png)
 
+	This completes the task of visualizing your data in a pie chart.
 
 ## Task 9: Visualize Data in a Box Plot
-A box plot provides an overview of data distributions in numeric data. It provides general information about the symmetry, skewness, variance, and outliers in a dataset. The box plot uses boxes and lines to depict the data distribution. The box plot has the following components:
+A box plot provides an overview of data distributions in numeric data. It provides general information about the symmetry, skewness, variance, and outliers in a dataset. The box plot uses boxes and lines to depict the data distribution. 
+
+Here is a box plot generated for the `IRIS` dataset. The box plot depicts the numeric distribution of the dimensions (Sepal Length, Sepal Width, Petal Length, and Petal Width) of the three species of the iris flower — Setosa, Versicolor, and Virginica. This box plot has been customized to display the outlier value for each of the three species. In this image, the cursor is over the outlier dot for the class Virginica. It highlights the outlier value at 4.9 for the sepal length of Virginica. This implies that in the species Virginica, there are sepals whose length is significantly below the lower count 5.6. 
+
+![Boxplot chart 5](images/boxplot5.png)
+
+A box plot has the following components:
 
 
 * Central Box - Inter-quartile range and quartiles:
@@ -456,6 +500,281 @@ A box plot provides an overview of data distributions in numeric data. It provid
 
 	![Boxplot chart 5](images/boxplot5.png)
 
+	This completes the task of visualizing your data in a box plot.
+
+## Task 10: Visualize Data in a Sunburst chart
+
+The sunburst chart is typically used to visualize hierarchical data structures - with part-to-whole relationships in data depicted additionally.
+This is a Sunburst chart that depicts the four continents in four slices. The slices are of different sizes and color. After customization, the slices are segmented to depict the countries of that continent. The size of the slices is determined by the count in the `Population` column. 
+
+![Sunburst chart after customization](images/sunburst-2.png)
+
+**When to use this chart:** Sunburst charts handle multi-level pie chart data more effectively than regular pie charts. Sunburst charts enhance efficiency and clarity by integrating the functionality of multiple pie charts into a single visual.
+**Data set:** Custom dataset on continents, country and population.
+To visualize your data in a sunburst chart:
+
+1. Open a notebook and in a `%python` paragraph, import the following python libraries — `oml` and `pandas`. Run the command to create a dataset on continent, country and population:
+	```
+	<copy>
+	%python
+	import pandas as pd
+	import oml
+	data = [
+	["Asia", "India", 800],
+	["Asia", "China", 900],
+	["Asia", "Japan", 425],
+	["Europe", "Germany", 383],
+	["Europe", "France", 467],
+	["Europe", "Italy", 360],
+	["Africa", "Nigeria", 416],
+	["Africa", "Egypt", 510],
+	["Americas", "USA", 631],
+	["Americas", "Brazil", 413]
+	]
+
+	print("Continent\tCountry\tPopulation")
+	for row in data:
+		print(f"{row[0]}\t{row[1]}\t{row[2]}")
+	</copy>
+	```
+
+2. Once the code is run, the data is displayed in a table with three columns—Continent, Country and Population. 
+
+	![Table on Countries and Continents](images/sunburst-table.png)
+
+4. Click on the sunburst icon on the toolbar.
+
+	![Table on Countries and Continents](images/sunburst-toolbar.png)
+
+5. The data is now displayed in a sunburst chart as shown in the screenshot here. The four continents are depicted in four slices of the sunburst chart. The slices are of different sizes and color. The size of the slices is determined by the count in the **Population** column.
+
+	![Sunburst chart](images/sunburst-1.png)
+
+6. Click on the Settings icon![](images/settings-icon.png) and on the **Setup** tab, enter the following: 
+
+	![Setup of the Sunburst chart](images/sunburst-setup.png)
+
+	* **Aggregate Duplicates:** Click and select `Count.`
+	* **Radius Column:** The value provided in this field defines the radius by its value. Click to add `Population.` If Population is not available for selection, type `Population.`
+	* **Group By:** Click to add `Country` to it. The countries are now depicted in smaller segments of the slices representing the `Continents`. By default, Continents is already added to the **Group By** field.
+
+7. Click **Customization** and edit the following under **Description**: 
+	![Customization of the sunburst chart](images/sunburst-customization.png)
+
+	* **Title Setup:** Enter the text `Countries and Continents.`
+	* **Color:** Click on the color palette. Move your cursor and click on a color of your choice. Click **Select.**
+
+8. The sunburst chart now displays the data in the Country and Continent columns in segmented slices of the sunburst chart. Inside each slice representing the four continents, the countries are depicted by separate segments of different color and sizes. This shows the relation between countries and continents. Hover your cursor over each segment to view more details.
+
+	![Sunburst chart after customization](images/sunburst-2.png)
+
+	This completes the task of visualizing your data in a sunburst chart. 
+
+## Task 11: Visualize Data in a Tag Cloud
+
+A tag cloud is a visual representation of the most popular words or tags found in free-form text. The font size or the color of the text represents the frequency of occurrence.
+Here is a tag cloud representing some emotions picked up from user comments. The font size implies the average count of the emotions.
+
+![Tag cloud in rectangular layout](images/tag-cloud-2.png)
+
+**When to use this chart:** Use Tag Cloud to visualize text data, and to conduct word-frequency analysis across tags, keywords etc.
+**Data set:** In this example, we create a data set that contains user comments.
+To visualize your data in a tag cloud:
+
+1. Open a notebook and in a %python paragraph, enter the following code and run the paragraph:
+
+	```
+	<copy>
+	import pandas as pd
+	import random
+
+	emotions = ["happy", "sad", "angry", "excited", "nervous", "calm", "anxious", "confident",
+				"bored", "curious", "frustrated", "hopeful", "jealous", "lonely", "grateful",
+				"afraid", "embarrassed", "relieved", "surprised", "proud"]
+
+	weights = [random.randint(1, 10) for _ in emotions]
+	total_weight = sum(weights)
+	probabilities = [w / total_weight for w in weights]
+
+	random.seed(21)
+	emotion_samples = random.choices(emotions, weights=probabilities, k=500)
+
+	df_emotions = pd.DataFrame(emotion_samples, columns=["emotion"])
+	df_emotions.insert(0, "id", range(1, len(df_emotions) + 1))
+	</copy>
+	```
+
+	Once the code runs successfully, it returns the message:
+
+	```
+	<code>Successful run. No result returned. </code>
+	```
+
+2. In another %python paragraph, type the following to view the dataset:
+
+	```
+	<copy>
+	z.show(df_emotions)
+	</copy>
+	```
+
+3. Click on the Tag cloud icon to view the data in a tag cloud. 
+
+	![Tag cloud icon on the toolbar](images/tagcloud-icon.png)
+
+	Here is the image of a default tag cloud output. The data is generated in a rectangular layout. 
+	![Tag cloud in rectangular layout](images/tag-cloud-1.png)
+
+3. Click on the Settings icon ![](images/settings-icon.png). This opens the Settings dialog. It has the **Setup** and **Customization** tabs.
+
+4. On the Setup tab, you can configure the columns or series to display, and other settings:
+
+	![Tag cloud in rectangular layout](images/settings-tag-cloud.png)
+
+	* **Height:** This parameter determines the height of the visualization.
+	* **Aggregate Duplicates:** Determines the computation of the values for display. The available values are —`Average`, `Sum`, `Maximum`, `Minimum`, `Count`, and `Last`.
+	* **Series to Show:** All applicable fields in the result-set are available for selection. Selecting multiple fields will add additional diagrams to the visualization.
+	* **Group By:** All applicable fields in the result-set are available for selection. The more groups exist, the more the data set shrinks since it collects all fields and concatenates the same values.
+	* **Other Threshold:** All applicable fields in the result-set are available for selection.
+
+	On the **Customization** tab, you have the option to customize the **Title setup**, **Subtitle setup**, and **Footnote setup**.
+
+	* **Visualization:** The options are Rectangle and Cloud. Click **Cloud**.
+	* **Title Setup:** Enter values in each of these fields to customize the appearance. The fields are **Title**, **Color**, and **Font Size**.
+	* **Subtitle Setup:** Enter values in each of these fields to customize the appearance. The fields are **Subtitle**, **Color**, and **Font Size**.
+	* **Footnote Setup:** Enter values in each of these fields to customize the appearance. The fields are **Footnote**, **Color**, and **Font Size**.
+
+	Here is a tag cloud after customizing the settings. It shows the average count of the emotions. You may hover your cursor to view the count. Note the change in layout format and the title in blue. 
+
+	![Tag cloud in rectangular layout](images/tag-cloud-2.png)
+
+	This completes the task of visualizing your data in a tag cloud.
+
+## Task 12: Visualize Data in a Treemap
+
+A treemap is a visualization composed of nested rectangles, that represent certain categories within a selected dimension and are ordered in a hierarchy, or “tree.” Quantities and patterns can be compared and displayed in a limited chart space.
+Treemaps also show the relationship of each part (or nested rectangles) to the whole (tree). Here is a treemap depicting the relationship between the parts (countries) and the whole (continents). 
+
+![Tree map](images/treemap-2.png)
+
+**When to use this chart:** Use this chart to visualize a large number of related categories, and also to analyze the part-to-whole relationship in your data set.
+**Data set:** Custom dataset on continents, country and population.
+To visualize your data in a tree map:
+
+1. Open a notebook and in a %python paragraph, import the following python libraries— `oml` and `pandas`.
+2. Run the following command to create a dataset on continent, country and population:
+
+	```
+	<copy>
+	%python
+
+	data = [
+		["Asia", "India", 1400],
+		["Asia", "China", 1440],
+		["Asia", "Japan", 125],
+		["Europe", "Germany", 83],
+		["Europe", "France", 67],
+		["Europe", "Italy", 60],
+		["Africa", "Nigeria", 216],
+		["Africa", "Egypt", 110],
+		["Americas", "USA", 331],
+		["Americas", "Brazil", 213]
+	]
+
+	print("Continent\tCountry\tPopulation")
+	for row in data:
+		print(f"{row[0]}\t{row[1]}\t{row[2]}")
+
+	</copy>
+	```
+
+	Once the code is run, the data is displayed in a table with three columns—Continent, Country and Population. 
+	![Tree map](images/treemap-table.png)
+
+3. Click on the tree map icon.
+
+	![Tree map](images/treemap-icon.png)
+	The data is now displayed in a treemap as shown in the screenshot here. The treemap represents the four continents in four rectangles of different sizes and color. The size is defined by the count in the Population column.
+	![Tree map - Basic](images/treemap-1.png)
+4. Click **Settings** and on the **Setup** tab, click the **Group By** field. Click on `Country` to add it. Now, the countries are depicted in nested rectangles inside the super set rectangles representing the Continents. By default, Continents is already added to the **Group By** field.
+	![Tree map settings](images/treemap-setup.png)
+5. Click on the **Customization** tab, edit the following under Description:
+
+	![Tree map customization](images/treemap-customization.png)
+
+	* **Title Setup:** Enter the text - `Continents and Countries in a Treemap`.
+	* **Color:** Click on the color palette. Move your cursor and click on a color of your choice. Click **Select.**
+
+	The Treemap now displays the relation between countries and continents in nested rectangles. The continents are represented as supersets. And the countries of the continent are depicted as nested rectangles inside the rectangles representing the continents. Hover your cursor over each rectangle to view more details.
+	![Tree map after customization](images/treemap-2.png)
+
+	This completes the task of visualizing your data in a treemap. 
+
+
+## Task 13: Visualize Data in a Map 
+The map visualization of OML Notebooks plots data points on a geographical map. For visualizing your data in a map in OML Notebooks, your data must contain explicit latitude and longitude values of locations to correctly position data on the map.
+
+Here is a visualization of a dataset containing information about countries, capital, geographical coordinates and other related information. The displayed map type is OSM Positron style. It has the pushpin on USA clicked. The marker dialog displays the country name and its capital. 
+![Map with marker dialog after customization](images/map-2.png)
+
+**When to use this chart:** Use map charts to visualize your data with geographical implications
+**Data set:** In this example, we create a table containing data about countries and related information with geographical coordinates.
+To visualize data in a map:
+1. In a Python paragraph in your notebook, run the following statements to create a table with five columns— `Country Name`, `Longitude`, `Latitude`, `Capital`, and `Population` with five entries for each:
+
+	```
+	<copy>
+	%python
+	print('Country Name\tLongitude\tLatitude\tCapital\tPopulation')
+	print('Morocco\t34.0218454\t-6.8408929\tRabat\t257000')
+	print('USA\t38.89\t-77.036\tWashington\t67900000')
+	print('India\t28.7041\t77.1025\tDelhi\t3380000')
+	print('Australia\t-36.2048\t138.2529\tCanberra\t45700000')
+	print('Japan\t35.6768601\t139.7638947\tTokyo\t3700000')
+	</copy>
+	```
+
+
+	A table is created with these columns—`Country Name`, `Longitude`, `Latitude`, `Capital`, and `Population`.
+
+	![Table for map](images/map-table.png)
+
+2. Click on the map icon on the toolbar. 
+
+	![Map icon](images/map-icon.png)
+
+	The data is displayed on a world map in OSM Positron style. This is a non-obtrusive light vector tile basemap based on OpenStreetMap (OSM) data. This is the default style. 
+
+	![Map ](images/map-1.png)
+
+3. Under **Settings**, on the Setup tab, you can adjust the height of the map. You can also show and hide the zoom controls by clicking Show Zoom Control.
+
+	![Map settings on the Setup tab](images/map-setup.png)
+
+4. Under **Settings**, in the **Customizations** tab, you can edit the following settings. Click on the arrow to change any entries for these columns.
+
+	![Map settings on the Customization tab](images/map-customization.png)
+
+
+    * **Latitude column:** Select the column from the dataset which can be considered as latitude value. The column must contain numeric values (float or integer) with valid geographic coordinates. Latitude values must be between -90 and 90.
+    * **Longitude column:** Select the column from the dataset which can be considered as longitude value. The column must contain numeric values (float or integer) with valid geographic coordinates. Longitude values must be between -180 and 180.
+    * **Title Columns:** Select one or more columns from the dataset to be displayed as a tooltip label and marker. If you select two columns, it will be concatenated with a dash and displayed in the marker dialog that opens when you click on any pushpin on the map.
+    * **Description Columns:** Select one or more columns from the dataset to be displayed in the marker dialog that opens when you click on any pushpin on the map.
+
+	As shown in the Map Settings screenshot above, the Title Columns have Country Name and Capital selected, and the Description Columns have Capital selected. On clicking the pushpin for USA on the map, the marker dialog displays USA - Washington and Capital: Washington displayed based on the selections in Settings—Customization. 
+	![Map after customization](images/map-2.png)
+
+
+* **Map Type:** By default, the `OSM Positron` type is selected. This is a map style built using the OpenStreetMap (OSM) data. The other map types you can choose are:
+	* **OSM Bright:** This is a general purpose vector tile basemap based on OpenStreetMap (OSM) data. Use this basemap style to view detailed location context for your data.
+	![Map type - OSM Bright](images/map-osm-bright.png)
+	* **OSM Dark Matter:** This is a non-obtrusive dark vector tile basemap based on OpenStreetMap (OSM) data. Use this basemap style to accentuate visualizations of your data.
+	![Map type - OSM Dark Matter](images/map-osm-dark-matter.png)
+	* **World Map:** This is a 2D physical map, a type of map where the geographical information is displayed in color. Use this map style to visualize the geography of a region in terms of elevation, landforms and other geospatial information.
+	![Map type - World map](images/map-world-map.png)
+	* **Customize Type:** Here, you have the option to change the map source and map style.
+
+	This completes the task of visualizing your data in a geographical map.
 
 ## Learn More
 
@@ -464,6 +783,6 @@ A box plot provides an overview of data distributions in numeric data. It provid
 
 ## Acknowledgements
 
-* **Author** -  Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
+* **Author** -  Moitreyee Hazarika, Consulting User Assistance Developer, Oracle AI Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, June 2025
+* **Last Updated By/Date** - Moitreyee Hazarika, November 2025

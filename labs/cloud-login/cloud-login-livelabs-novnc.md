@@ -17,7 +17,7 @@ Estimated Time: 5 minutes
 
 ## Task 1: View Login Information and login to your LiveLabs Sandbox
 
-1. Right above the workshop instructions you can find two information:
+1. Right above the workshop instructions you can find two pieces of information:
 
     a. **View Login Info:** You can find credentials and other information to access the LiveLabs Sandbox
 
@@ -26,7 +26,7 @@ Estimated Time: 5 minutes
       ![View Login Info](../need-help/images/view-login-info.png " ")
 
 
-2. Click **View Login Info** and click **Launch Remote Desktop** to access the VM instance.
+2. Click **View Login Info** and click **Launch Desktop** to access the VM instance.
 
     ![Remote Desktop](./images/launch-ll-workshop-novnc.png " ")
 
@@ -55,4 +55,4 @@ You may now **proceed to the next lab**.
 
 - **Created By/Date** - Kay Malcolm, Database Product Management March 2020
 - **Contributors** - Rene Fontcha, Kamryn Vinson
-- **Last Updated By/Date** - Kevin Lazarz, September 2024
+- **Last Updated By/Date** - Abby Mulry, November 2025

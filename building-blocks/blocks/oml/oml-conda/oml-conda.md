@@ -159,12 +159,12 @@ To create a Conda environment named _myrenv_ with R-4.0.5 for OML4R compatibilit
 	![Command to view the R conda environment](images/view-myrenv.png)
 	Note that the _myrenv_ environment is now listed along with the _mypyenv_ in the output. Note that the asterisk (*) is against the _mypyenv_, indicating that this environment is active currently.
 
-## Task 3: Upload the Conda environments to an Object Storage bucket associated with the Autonomous Database
-In this task, you will upload the environments _mypyenv_ and _myrenv_ to the Object Storage bucket associated with the Autonomous Database instance using the `upload` command. You will provide environment descriptions and tags, one for the user name and one for the application name. You will also overwrite any environment with the same name if it exists.
+## Task 3: Upload the Conda environments to an Object Storage bucket associated with the Autonomous AI Database
+In this task, you will upload the environments _mypyenv_ and _myrenv_ to the Object Storage bucket associated with the Autonomous AI Database instance using the `upload` command. You will provide environment descriptions and tags, one for the user name and one for the application name. You will also overwrite any environment with the same name if it exists.
 
 The application tag is required for use with embedded execution. For example, OML4Py embedded Python execution works with Conda environments containing the OML4PY tag.
 
->*Note:* There is one Object Storage bucket for each data center region. The Conda environment is saved to a folder in Object Storage corresponding to the tenancy and database. The folder is managed by Autonomous Database and is only available to users through OML Notebooks. There is an 8G maximum size for a single Conda environment, and no size limit on Object Storage.
+>*Note:* There is one Object Storage bucket for each data center region. The Conda environment is saved to a folder in Object Storage corresponding to the tenancy and database. The folder is managed by Autonomous AI Database and is only available to users through OML Notebooks. There is an 8G maximum size for a single Conda environment, and no size limit on Object Storage.
 
 
 1. Run the following command to upload the mypyenv to the Object Storage bucket associated with the ADB.
@@ -353,6 +353,6 @@ The steps in task 5 must be performed as the non-ADMIN OML user with the `OML_DE
 
 ## Acknowledgements
 
-* **Author** -  Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
+* **Author** -  Moitreyee Hazarika, Consulting User Assistance Developer, Oracle AI Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, June 2025
+* **Last Updated By/Date** - Moitreyee Hazarika, November 2025

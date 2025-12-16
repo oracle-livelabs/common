@@ -223,7 +223,7 @@ This task walks you through the steps to customize a workshop for events and cre
 
 An Event code is a fully customizable way to run a customized set of focused labs for your target audience. We now fully support hidden workshops for Oracle sales/PM and marketing purposes. The hidden workshops won’t be accessible to the general audience, and cannot be indexed by search engines. The user must log in with Oracle SSO and have the event code to proceed.
 
-If for an event, you want to add additional labs, remove some labs, have a different version of a lab, or change the workshop's meta info (including its title, description, outline, prerequisites, workshop time, promotion video, etc.) you can do that via an event code, without affecting the workshop already in production. PMs and Sales at Oracle have widely used event codes for big events like Oracle CloudWorld, as well as smaller events like training sessions, both internally and externally.
+If for an event, you want to add additional labs, remove some labs, have a different version of a lab, or change the workshop's meta info (including its title, description, outline, prerequisites, workshop time, promotion video, etc.) you can do that via an event code, without affecting the workshop already in production. PMs and Sales at Oracle have widely used event codes for big events like Oracle AI World, as well as smaller events like training sessions, both internally and externally.
 
 The following screenshot shows the landing page of an event code. Any information squared in red can be customized.
 
@@ -435,4 +435,4 @@ If you have multiple Oracle LiveLabs repositories, you need to switch to the rep
     * Brianna Ambler, Product Manager
 
 * **Last Updated By/Date:**
-    * Ramona Magadan, Technical Program Manager, Oracle Database Product Management, July 2025
+    * Sania Bolla, Oct 2025

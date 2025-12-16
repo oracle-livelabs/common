@@ -32,7 +32,7 @@ This lab assumes you have:
 
 ## Task 1: Access Oracle Machine Learning AutoML UI
 
-To access AutoML UI, you must sign into the Oracle Machine Learning User Interface, which also includes Oracle Machine Learning notebooks, on Autonomous Database:
+To access AutoML UI, you must sign into the Oracle Machine Learning User Interface, which also includes Oracle Machine Learning notebooks, on Autonomous AI Database:
 
 1. Sign into Oracle Machine Learning user interface (following Lab1, Task 1 instructions).
 
@@ -93,7 +93,7 @@ To create an Experiment:
 	*  **High** level gives the greatest parallelism but significantly limits the number of concurrent jobs.
 	*  **Medium** level enables some parallelism but allows greater concurrency for job processing.
 
-	> **Note:** Changing the database service level setting on the Always Free Tier will have no effect since there is a 1 OCPU limit. However, if you increase the OCPUs allocated to your autonomous database, then you can increase the Database Service Level to Medium or High.
+	> **Note:** Changing the database service level setting on the Always Free Tier will have no effect since there is a 1 OCPU limit. However, if you increase the OCPUs allocated to your Autonomous AI Database, then you can increase the Database Service Level to Medium or High.
 
 13. Leave the default algorithms selected. 
 
@@ -331,6 +331,6 @@ You may now **proceed to the next lab**.
 
 ## Acknowledgements
 
-* **Author** - Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
+* **Author** - Moitreyee Hazarika, Consulting User Assistance Developer, Oracle AI Database User Assistance Development
 * **Contributors** -  Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia, Senior Principal Product Manager, Machine Learning; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, June 2025
+* **Last Updated By/Date** - Moitreyee Hazarika, November 2025

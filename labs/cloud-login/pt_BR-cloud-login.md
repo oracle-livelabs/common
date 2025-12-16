@@ -46,5 +46,5 @@ You may now proceed to the next lab.
 ## Acknowledgements
 - **Created By/Date** - Kay Malcolm, Database Product Management, March 2020
 - **Contributors** - John Peach, Kamryn Vinson, Rene Fontcha
-- **Last Updated By** - Rene Fontcha, February 2021
+- **Last Updated By** - Abby Mulry, November 2025
 

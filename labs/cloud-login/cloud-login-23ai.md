@@ -43,4 +43,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 
 - **Created By/Date** -  Ramona Magadan, Technical Product Manager, Database Product Management, August 2024
-- **Last Updated By/Date** - Kevin Lazarz, September 2024
+- **Last Updated By/Date** - Abby Mulry, November 2025

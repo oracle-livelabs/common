@@ -3,13 +3,13 @@
         "name":"Query simple JSON attributes",
         "description":"(Redwood UI) Use dot notation and JSON_VALUE to query JSON documents. Creates a view to simplify subsequent access.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "lastUpdated":"Lauran K. Serhal, July 2025"
+        "lastUpdated":"Lauran K. Serhal, October 2025"
     }
 -->
 
 Oracle Database offers a wide range of SQL functions that help you analyze JSON data ([see Query JSON Data](https://docs.oracle.com/en/database/oracle/oracle-database/19/adjsn/query-json-data.html#GUID-119E5069-77F2-45DC-B6F0-A1B312945590) for details). The SQL capabilities include simple extraction of JSON attributes using dot notation, array and object manipulation, JSON aggregations and more.
 
-_**Note:** If you are using Autonomous Database `19c` when importing a JSON collection, the default column name for JSON is **`JSON_DOCUMENT`**. The default column name has changed to **`DATA`** in Autonomous Database `23ai`._
+_**Note:** If you are using Autonomous AI Database `19c` when importing a JSON collection, the default column name for JSON is **`JSON_DOCUMENT`**. The default column name has changed to **`DATA`** in Autonomous AI Database `26ai`._
 
 1. Use the simple dot (.) notation to extract fields in a tabular format.
 
