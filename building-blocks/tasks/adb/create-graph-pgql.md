@@ -14,13 +14,17 @@
 
     Click **Next**.
 
-3. Expand **MOVIESTREAM** and select the `CUSTOMER_SAMPLE`, `WATCHED` and `MOVIE` tables.
+3. Change Graph Type to PGQL Property Graph
 
-    ![Shows how to select tables](./images/graph/selected-tables.png " ")
+    ![Change graph type to PGQL Property Graph](./images/graph/change-graph-type.png " ")
+
+4. Expand **MOVIESTREAM** and select the `CUSTOMER_SAMPLE`, `WATCHED` and `MOVIE` tables.
+
+    ![Shows how to select tables](./images/graph/selected-tables-pgql.png " ")
 
     Shuttle them to the right using the first icon on the shuttle control.
 
-    ![Shows the selected tables.](./images/graph/select-tables.png " ")
+    ![Shows the selected tables.](./images/graph/select-tables-pgql.png " ")
 
     Click **Next**.  
 
@@ -36,7 +40,7 @@
 
 6. You may receive a message saying "Errors and warnings for SQL Property Graph. Click **Fix all** to fix the issues Graph Studio detected.
 
-    ![Graph window indicating potential issues](images/graph/warning-window.png " ")
+    ![Graph window indicating potential issues](images/graph/warning-window-pgql.png " ")
 
 <!---
   **An alternate approach:** In the earlier Step 5 you could have just updated the CREATE PROPERTY GRAPH statement and saved the updates. That is, you could have just replaced the existing statement with the following one which specifies that the SOURCE KEY is  `from_acct_id`  and the DESTINATION KEY is `to_acct_id`.  
