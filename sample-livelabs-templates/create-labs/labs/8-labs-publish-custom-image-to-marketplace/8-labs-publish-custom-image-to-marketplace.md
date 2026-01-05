@@ -58,6 +58,7 @@ Your artifact will be available in a few hours, depending on the size of your im
 ![](./images/go-to-listings.png)
 
 2. Create an OCI Application Listing.
+
 ![](./images/create-listing-1.png)
 
 3. Fill out the header details. 
