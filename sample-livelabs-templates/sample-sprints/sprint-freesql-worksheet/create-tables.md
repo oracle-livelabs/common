@@ -1,8 +1,8 @@
 # How can I create tables in the Oracle database?
-<!-- If your code can fit in a 2048 character URL, we advise using the sprint-livesql-worksheet template, as this does not require the creation of a Live SQL tutorial. Otherwise, include the link to your tutorial using the src attribute.-->
-<livesql-button src="https://livesql.oracle.com/next/worksheet?tutorial=json-duality-views-quick-start-D3wdHG&share_key=jCX1875rL3">
+<!-- This HTML tag creates a Free SQL button that takes you to a Free SQL Worksheet. It will auto-populate that worksheet with the code statements you have wrapped with the Free SQL tag. -->
+<freesql-button>
 
-<b>Live SQL Execution:</b> Sign-In Required</br>
+<b>Free SQL Execution:</b> Sign-In Required</br>
 <b>Duration:</b> 2 minutes 
 
 
@@ -27,18 +27,23 @@ For example, you define a table with a table name, such as employees, and a set 
 
 You can specify rules for each column of a table. These rules are called integrity constraints. One example is a NOT NULL integrity constraint. This constraint forces the column to contain a value in every row.
 
+<!-- Notice how this code is wrapped with the Free SQL tag. -->
 ```
+<freesql> 
 create table DEPARTMENTS (  
     deptno        number,  
     name          varchar2(50) not null,  
     location      varchar2(50),  
     constraint pk_departments primary key (deptno)  
 );
+</freesql>
 ```
 
 Tables can declarative specify relationships between tables, typically referred to as referential integrity. To see how this works we can create a "child" table of the DEPARTMENTS table by including a foreign key in the EMPLOYEES table that references the DEPARTMENTS table.
 
+<!-- Notice how this code is wrapped with the Free SQL tag too. -->
 ```
+<freesql>
 create table EMPLOYEES (  
     empno             number,  
     name              varchar2(50) not null,  
@@ -52,6 +57,7 @@ create table EMPLOYEES (
     constraint fk_employees_deptno foreign key (deptno) 
         references DEPARTMENTS (deptno)  
 );
+</freesql>
 ```
 
 Foreign keys must reference primary keys, so to create a "child" table the "parent" table must have a primary key for the foreign key to reference.
