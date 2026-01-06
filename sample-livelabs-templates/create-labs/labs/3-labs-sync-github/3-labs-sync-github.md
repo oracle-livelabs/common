@@ -17,7 +17,7 @@ Oracle LiveLabs has a set folder structure that you will need to follow for deve
 
   We create workshops and labs in the repositories of the **oracle-livelabs** organization. You must fork a repository to create a duplicate personal copy of the repository on your GitHub account. You own the forked (stage) repository, and you can edit its contents without affecting the main (production) repository.
 
-  For example, if a user named arabellayao forks the **database** repository in the **oracle-livelabs** project, a duplicate repository [user1/database](https://github.com/arabellayao/database) is created.
+  For example, if a user named janedoe forks the **database** repository in the **oracle-livelabs** project, a duplicate repository [user1/database](https://github.com/janedoe/database) is created.
 
   You should also fork the [user repository](https://github.com/oracle-livelabs/common). Even though you will not be changing files here, you can use the common/images that are available and the sample workshops you will be using for templates are contained here.
 
@@ -173,7 +173,7 @@ To commit your changes:
 
 After you upload the content from your clone to your fork, request your review team members to review this content by providing them with access to **your GitHub Pages site URL** (or the URL of your forked repository).
 
->**Note:** You should perform the following actions in your forked GitHub repository (e.g. [https://github.com/username/em-omc](https://github.com/arabellayao/em-omc)), instead of the production repository (e.g. [https://github.com/oracle-livelabs/em-omc](https://github.com/oracle-livelabs/em-omc)).
+>**Note:** You should perform the following actions in your forked GitHub repository (e.g. [https://github.com/username/em-omc](https://github.com/janedoe/em-omc)), instead of the production repository (e.g. [https://github.com/oracle-livelabs/em-omc](https://github.com/oracle-livelabs/em-omc)).
 
 The GitHub Web UI has a feature called **Set Up GitHub Pages for Your Fork** to Test Your Content. This feature performs a dynamic conversion of the Markdown files (.md files you have developed using your Atom Editor) to HTML. You can preview your workshop and labs on your forked repository and provide this URL to your reviewers.
 
@@ -196,7 +196,7 @@ To publish your GitHub Pages site:
 
 <!-- 5. Optional: Under **Theme Chooser**, click **Change Theme** and select a theme of your choice. -->
 
-5. This may take a few minutes to complete. After the GitHub Pages are enabled, the message under **GitHub Pages** changes to **Your site  is published at https://arabellayao.github.io/em-omc/**
+5. This may take a few minutes to complete. After the GitHub Pages are enabled, the message under **GitHub Pages** changes to **Your site  is published at https://janedoe.github.io/em-omc/**
   ![Changes are published.](./images/git-hub-stage-git-hub-pages-settings-page-published.png " ")
 
 ## Task 8: Access your workshop on GitHub
@@ -223,7 +223,7 @@ This task walks you through the steps to customize a workshop for events and cre
 
 An Event code is a fully customizable way to run a customized set of focused labs for your target audience. We now fully support hidden workshops for Oracle sales/PM and marketing purposes. The hidden workshops won’t be accessible to the general audience, and cannot be indexed by search engines. The user must log in with Oracle SSO and have the event code to proceed.
 
-If for an event, you want to add additional labs, remove some labs, have a different version of a lab, or change the workshop's meta info (including its title, description, outline, prerequisites, workshop time, promotion video, etc.) you can do that via an event code, without affecting the workshop already in production. PMs and Sales at Oracle have widely used event codes for big events like Oracle CloudWorld, as well as smaller events like training sessions, both internally and externally.
+If for an event, you want to add additional labs, remove some labs, have a different version of a lab, or change the workshop's meta info (including its title, description, outline, prerequisites, workshop time, promotion video, etc.) you can do that via an event code, without affecting the workshop already in production. PMs and Sales at Oracle have widely used event codes for big events like Oracle AI World, as well as smaller events like training sessions, both internally and externally.
 
 The following screenshot shows the landing page of an event code. Any information squared in red can be customized.
 
@@ -245,10 +245,9 @@ If you are the **workshop team** of the workshop that you want to create an even
 
 6. Finally, push your changes and create a pull request to one of the oracle-livelabs GitHub repos. After your pull request is approved and merged, you can proceed to Step 7.
 
-7. Go to the Workshop Management System (WMS). Expand **Events**, then click **Request an Event Code**. Watch this [**video**](https://otube.oracle.com/media/t/1_vuoemxyl) to learn how to request an event code. If you perform Steps 1 - 6, then you need to click **Edit Workshop Links** and put the customized links (for example, links ending with *workshops/events/index.html*).
+7. Go to the Workshop Management System (WMS). Expand **Events**, then click **Request an Event Code**. Watch this [**video**](https://livelabs.oracle.com/create-event) to learn how to request an event code. If you perform Steps 1 - 6, then you need to click **Edit Workshop Links** and put the customized links (for example, links ending with *workshops/events/index.html*).
 
   ![Request an Event Code](./images/request.png " ")
-  ![Customize URLs](./images/url.png " ")
 
 8. After the event, if you as the event organizers want to know about the event's registration information, you can contact the LiveLabs team. We can share the number of attendees, their emails' domain names (but not their email address), and when they request the event codes, etc.
 
@@ -436,4 +435,4 @@ If you have multiple Oracle LiveLabs repositories, you need to switch to the rep
     * Brianna Ambler, Product Manager
 
 * **Last Updated By/Date:**
-    * Ana Coman, Technical Program Manager, Oracle Database Product Management, July 2024
+    * Sania Bolla, Oct 2025

@@ -41,12 +41,13 @@ We also have a set of common images that are included in the common directory
 - **Lab 2:** Set up GitHub and install tools
 - **Lab 3:** Stay in sync with GitHub environment
 - **Lab 4.** Develop Markdown content
-- **Lab 4:** QA checks and steps
-- **Lab 5:** Publish your workshop
+- **Lab 5:** QA checks and steps
+- **Lab 6:** Publish your workshop
+- **Additional optional labs:** Publish to Live SQL
 - **Additional optional labs:** Develop LiveLabs Sprints
 - **Additional optional labs:** Setup graphical remote desktop
 - **Additional optional labs:** Create custom image for marketplace
-
+<!-- - **Maintenance:** OCI UI Update 2025 -->
 
 
 ## Want to learn more about LiveLabs workshops and GitHub?

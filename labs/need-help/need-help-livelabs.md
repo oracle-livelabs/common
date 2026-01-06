@@ -11,7 +11,7 @@ For more about getting support using our email, click [here](#HowtoFormatYourSup
 
 ### Common Issues Table of Contents
   - [Can't Log in to Oracle Cloud](#CantLogintoOracleCloud)
-  - [Can't Create An Oracle Database? Nothing In Your Compartment?](#CantCreateanOracleDatabase?NothinginYourCompartment?)
+  - [Can't Create An Oracle AI Database? Nothing In Your Compartment?](#CantCreateanOracleAIDatabase?NothinginYourCompartment?)
   - [Connectivity Issues?](#ConnectivityIssues?)
   - [Cannot Access Cloud Shell?](#CannotAccessCloudShell?)
   - [Cannot Connect to the Marketplace Compute Instance Using a Private SSH Key?](#CannotConnecttotheMarketplaceComputeInstanceUsingaPrivateSSHKey?)
@@ -42,7 +42,7 @@ This will construct an email in your default mail application that is auto-popul
 
     ![View Login Info](./images/view-login-info.png)
 
-## Can't Create an Oracle Database? Nothing in Your Compartment?
+## Can't Create an Oracle AI Database? Nothing in Your Compartment?
 1. Ensure that under "List Scope", you are selecting the compartment provided to you in the lab banner.
 
 2. If you can't find your compartment in the drop-down box, make sure you *set your region* to the one provided in the lab banner.
@@ -82,14 +82,14 @@ If the workshop asks you to open the cloud shell, but you cannot access it, plea
 
 1. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**.
 
-   ![Compute Instances](https://oracle-livelabs.github.io/common/images/console/compute-instances.png " ")
+   ![Compute Instances](../../images/console/compute-instances.png " ")
 
 2. Select the compartment you are assigned to (check which compartment you are assigned to on the LiveLabs *Login Info* page). Expand the **root** compartment and then the **Livelabs** compartment. Select the compartment assigned to you.
    ![Lab banner](./images/banner-info-highlight.png)
-   ![Select Compartment](./images/select-compartment.png " ")
+   ![Select Compartment](../../images/console/select-compartment.png " ")
 
 3. Relaunch your cloud shell. You should be able to open your cloud shell.
-   ![Cloud Shell](https://oracle-livelabs.github.io/common/images/console/cloud-shell.png " ")
+   ![Cloud Shell](../../images/console//cloud-shell.png " ")
 
 ## Cannot Connect to the Marketplace Compute Instance Using a Private SSH Key?
 
@@ -104,4 +104,4 @@ If the workshop asks you to open the cloud shell, but you cannot access it, plea
 ## Acknowledgements
 * **Author** - LiveLabs Team
 * **Contributors** - LiveLabs Team, Arabella Yao
-* **Last Updated By/Date** - Arabella Yao, Product Manager, Database Product Management, Dec 2022
+* **Last Updated By/Date** - Abby Mulry, November 2025

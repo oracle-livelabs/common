@@ -1,14 +1,16 @@
-<!---
-{
-    "name":"Load and Analyze Data from REST Services",
-    "description":"Analyze data sourced from REST services. Using the News API as an example.<ul><li>Create an Account on https://newsapi.org</li><li>Create a PL/SQL function that retrieves news for actors</li><li>Perform a sentiment analysis on the article descriptions</li><li>Find which actors are generating buzz - both good and bad</li></ul>"
-}
---->
+<!--
+    {
+        "name":"Load and Analyze Data from REST Services",
+        "description":"Analyze data sourced from REST services. Using the News API as an example, create an Account on https://newsapi.org. Create a PL/SQL function that retrieves news for actors. Perform a sentiment analysis on the article descriptions. Find which actors are generating buzz - both good and bad.",
+        "author":"Lauran K. Serhal",
+        "lastUpdated":"October 2025"
+    }
+-->
 # Load and Analyze the News from REST Endpoints
 
 ## Introduction
 
-There are so many interesting and potentially useful data sets available today via REST: social, financial, science, health, weather and so on. Autonomous Database makes it really easy to integrate these sources using SQL queries. This eliminates the need for intermediate processing and storage and making that data available to any SQL client.
+There are so many interesting and potentially useful data sets available today via REST: social, financial, science, health, weather and so on. Autonomous AI Database makes it really easy to integrate these sources using SQL queries. This eliminates the need for intermediate processing and storage and making that data available to any SQL client.
 
 **News API** is a simple HTTP REST API for searching and retrieving live articles from all over the web. It can help you answer questions such as:
 
@@ -31,9 +33,6 @@ You can sort the results in the following order:
 In this lab, you will find the latest news about actors and then perform a sentiment analysis of that news. This information can help decide which movies to promote on the MovieStream site - allowing MovieStream to take advantage of "buzz" to drive revenue.
 
 Estimated Time: 10 minutes
-
-Watch the video below for a quick walk-through of the lab.
-[Load and Analyze the News from REST Endpoints](videohub:1_sznobm6z)
 
 ### Objectives
 
@@ -85,11 +84,11 @@ Now that you have the API key, create a PL/SQL function that queries the REST en
 
 1. Log in to the **Oracle Cloud Console**, if you are not already logged as the Cloud Administrator.
 
-2. Open the **Navigation** menu and click **Oracle Database**. Under **Oracle Database**, click **Autonomous Database**.
+2. Open the **Navigation** menu and click **Oracle AI Database**. Under **Oracle AI Database**, click **Autonomous AI Database**.
 
-3. On the **Autonomous Databases** page, click your ADB instance.
+3. On the **Autonomous AI Databases** page, click your ADB instance.
 
-4. On the **Autonomous Database details** page, click the **Database actions** drop-down list, and then click **SQL**.
+4. On the **Autonomous AI Database details** page, click the **Database actions** drop-down list, and then click **SQL**.
 
 5. The SQL Worksheet is displayed.
 
@@ -328,7 +327,7 @@ Now that you have the latest news for each actor, you will derive the sentiment 
 
     ![Ranking by buzz](images/adb-ranking-by-buzz.png)
 
-This completes this lab. You now know how to integrate and analyze data coming from REST endpoints in Autonomous Database.
+This completes this lab. You now know how to integrate and analyze data coming from REST endpoints in Autonomous AI Database.
 
 You may now proceed to the next lab.
 
@@ -338,11 +337,11 @@ You may now proceed to the next lab.
 * [DBMS_CLOUD Subprograms and REST APIs](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/dbms-cloud-subprograms.html#GUID-3D0A5361-672C-467D-AA90-656B1B4D4E37)
 * [Oracle Text](https://docs.oracle.com/en/database/oracle/oracle-database/19/ccref/index.html)
 * [Oracle Cloud Infrastructure Documentation](https://docs.cloud.oracle.com/en-us/iaas/Content/GSG/Concepts/baremetalintro.htm)
-* [Using Oracle Autonomous Database Serverless](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/index.html)
+* [Using Oracle Autonomous AI Database Serverless](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/index.html)
 
 ## Acknowledgements
 
 * **Authors:**
-    * Marty Gubar, Autonomous Database Product Management
+    * Marty Gubar (Retired), Autonomous AI Database Product Management
     * Lauran K. Serhal, Consulting User Assistance Developer
-* **Last Updated By/Date:** Lauran K. Serhal, April 2024
+* **Last Updated By/Date:** Lauran K. Serhal, October 2025

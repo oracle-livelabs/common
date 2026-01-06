@@ -20,7 +20,7 @@ This lab assumes you have:
     ```
     <copy>
     cd /tmp
-    wget -q https://objectstorage.us-ashburn-1.oraclecloud.com/p/hzy0xAZy0sLOIuzargHjyWykBnjf9TmLwup-QsjL13t4h2z41T642JfplesXCR6l/n/c4u02/b/hosted_workshops/o/stacks/livelabs-image-cleanup.zip -O /tmp/livelabs-image-cleanup.zip
+    wget -q https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/livelabs-image-cleanup.zip -O /tmp/livelabs-image-cleanup.zip
     unzip -qo livelabs-image-cleanup.zip 
     chmod +x livelabs-image-cleanup.sh
     sudo /tmp/livelabs-image-cleanup.sh
@@ -33,35 +33,35 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
 1. Launch your browser to OCI console, then navigate to *"Compute > Instances"*
 
-    ![](./images/select-instance-1.png " ")
+    ![Navigate menu for instances](./images/select-instance-1.png " ")
 
 2. Select the instance on which you just performed the prior cleanup steps. Make sure to select the right compartment
 
-    ![](./images/select-instance-2.png " ")
+    ![Select compartment and instance](./images/select-instance-2.png " ")
 
 3. Click on *"More Actions"* and select *"Create Custom Image"*
 
-    ![](./images/create-image-1.png " ")
+    ![Use More Actions for Create Custome Image](./images/create-image-1.png " ")
 
 4. Enter a name for the image and click *"Create Custom Image"*
 
-    ![](./images/create-image-2.png " ")
+    ![Name image](./images/create-image-2.png " ")
 
 5. Edit image details and select all shapes except *BM.Standard.A1.160* and *VM.Standard.A1.Flex*
 
-    ![](./images/create-image-3.png " ")
+    ![Edit image details](./images/create-image-3.png " ")
 
 ## Task 3: Test Custom Image   
 
 1. Download the sample ORM stack zip archive
 
-    - [ll-orm-mkplc-freetier.zip](https://objectstorage.us-ashburn-1.oraclecloud.com/p/D0dAdNNBbmxXM8UJyt13DU8nzLEXBXOCdf-BgrMFquLMsIVJtnSDAJVBpvGM_2Jb/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-freetier.zip)
+    - [ll-orm-mkplc-freetier.zip](https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-freetier.zip)
 
 2. Unzip it locally on your computer to *ll-orm-mkplc-freetier*.
 3. Delete the downloaded file *ll-orm-mkplc-freetier.zip*.
 4. Copy the OCID of the new image
 
-    ![](./images/get-image-ocid.png " ")
+    ![OCID details](./images/get-image-ocid.png " ")
 
 5. Navigate to *ll-orm-mkplc-freetier* and open the file *variables.tf*
 
@@ -73,12 +73,12 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
     - **`desktop_app1_url`** - Enter your first desktop webapp URL if applicable, unset by setting to `""`, or just keep unchanged *(optional)*
     - **`desktop_app2_url`** - Enter your second desktop webapp URL if applicable, unset by setting to `""`, or just keep unchanged *(optional)*
 
-    ![](./images/update-image-ocid.png " ")
+    ![Update default variables](./images/update-image-ocid.png " ")
 
 7. Save *variables.tf*
 8. Repackage the entire content of *ll-orm-mkplc-freetier* as  *ll-orm-mkplc-freetier.zip*
 
-    ![](./images/zip-orm-stack.png " ")
+    ![Repackage content](./images/zip-orm-stack.png " ")
 
 9. Using the new zip file above, navigate to "*Developer Services > Stacks*" and create a test instance with Oracle Resources Manager (ORM).
 
@@ -86,11 +86,11 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 
 10. After successful instance creation, get the remote desktop URL and logon to validate
 
-    ![](./images/get-remote-desktop-url.png " ")
+    ![Remote desktop URL](./images/get-remote-desktop-url.png " ")
 
 11. Launch a browser session and navigate to the copied URL to validate
 
-    ![](./images/remote-desktop-landing.png " ")
+    ![Remote desktop landing page](./images/remote-desktop-landing.png " ")
 
     *Notes:* If the setup was successful you should see two sample Google-chrome browser windows preloaded.
 
@@ -103,4 +103,4 @@ Your instance at this point is ready for clean capture. Proceed to OCI console t
 ## Acknowledgements
 * **Author** - Rene Fontcha, Master Principal Solution Architect, February 2021
 * **Contributors**  -
-* **Last Updated By/Date** - Ana Coman, Database Product Management, July 2024
+* **Last Updated By/Date** - Hope Fisher, Database Product Management, Sept 2025

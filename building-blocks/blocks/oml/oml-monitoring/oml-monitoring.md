@@ -170,10 +170,10 @@ To create a data monitor:
 16. Click **Additional Settings** to expand this section and provide advanced settings for your data monitor:
     ![Data monitor - additional settings](images/dm-add-settings.png)
     * **Drift Threshold:** Drift captures the relative change in performance between the baseline data and the new data period. Based on your specific machine learning problem, set the threshold value for your data drift detection. This may require adjusting after you see how your specific data behaves. The default is 0.7. 
-    * **Database Service Level:** This is the Autonomous Database service levels - Low, Medium, High. The default is Low. Service level Medium provides more resources to the data monitor run compared to Low. Service level High provides more resources to the data monitor run compared to Medium.
+    * **Database Service Level:** This is the Autonomous AI Database service levels - Low, Medium, High. The default is Low. Service level Medium provides more resources to the data monitor run compared to Low. Service level High provides more resources to the data monitor run compared to Medium.
     * **Analysis Filter:** Enable this option if you want the data monitoring analysis for a specific time period. Move the slider to the right to enable it, and then select a date in From Date and To Date fields respectively. By default, this field is disabled.
     * **Maximum Number of Runs:** This is the maximum number of times the data monitor can be run according to this schedule. The default is 3. 
-17. The **Features** grid displays the list of features to monitor. Here, you can select or deselect features to include or exclude from monitoring. By default, all features are selected. Feature statistics are provided if the selected data is a table and has RDBMS statistics automatically gathered by Autonomous Database. Oracle Machine Learning Services calculates the statistics on the first run for both, tables and views, and the computations are displayed here after the first run. The statistics are updated by subsequent runs.
+17. The **Features** grid displays the list of features to monitor. Here, you can select or deselect features to include or exclude from monitoring. By default, all features are selected. Feature statistics are provided if the selected data is a table and has RDBMS statistics automatically gathered by Autonomous AI Database. Oracle Machine Learning Services calculates the statistics on the first run for both, tables and views, and the computations are displayed here after the first run. The statistics are updated by subsequent runs.
 ![Data monitor - Features](images/dm-features-grid.png)
 18.Now scroll up to the page and on the top right corner, click **Save.** This completes the task of creating a data monitor and takes you to the Data Monitors page. 
 
@@ -281,12 +281,12 @@ To create a model monitor:
 We will begin by creating an AutoML Experiment to create and deploy a few machine learning models. We will use these models for monitoring.  
 
 1. Follow the steps in _Lab 5 Introduction to Oracle Machine Learning AutoML UI_ to:
-    * Create an AutoML UI Experiment: Follow the steps in _Lab 5 Task 2: Create an Experiment_ to create an AutoML experiment by the name `power-consumption-2007`. Use the following parameters:
-        * **Data Source:** `HOUSEHOLD_POWER_BASE` and `HOUSEHOLD_POWER_NEW`
+    * Create an AutoML UI Experiment: Follow the steps in _Lab 5 Task 2: Create an Experiment_ to create an AutoML experiment by the name `Prediction of Global Active Power`. Use the following parameters:
+        * **Data Source:** `HOUSEHOLD_POWER_BASE`
         * **Predict:** `GLOBAL_ACTIVE_POWER`
         * **Prediction Type:** `Regression`
         
-    * Deploy the machine learning models: After the experiment `power-consumption-2007` runs successfully, follow the steps in _Lab 5 Task 3: Deploy a Top Model to Oracle Machine Learning Services_ to deploy the models built by the experiment to OML Services. 
+    * Deploy the machine learning models: After the experiment `Prediction of Global Active Power` runs successfully, follow the steps in _Lab 5 Task 3: Deploy a Top Model to Oracle Machine Learning Services_ to deploy each of the models built by the experiment to OML Services. 
       ![Deploy Models](images/leaderboard-models-deploy.png)  
 
 2. Let's begin with creating a model monitor. Click on the ![](images/icon-cloud.png) icon to open the left navigation menu. Expand **Monitoring** and then click **Models** to open the Model Monitors page. 
@@ -479,8 +479,8 @@ You may now **proceed to the next lab.**
 
 ## Acknowledgements
 
-* **Author** : Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
+* **Author** : Moitreyee Hazarika, Consulting User Assistance Developer, Oracle AI Database User Assistance Development
 
 * **Contributors:** Mark Hornick, Sr. Director, Data Science / Machine Learning PM; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
 
-* **Last Updated By/Date**: Moitreyee Hazarika, December 2024
+* **Last Updated By/Date**: Moitreyee Hazarika, November 2025
