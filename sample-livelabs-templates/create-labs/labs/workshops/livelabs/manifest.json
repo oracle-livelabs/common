@@ -50,14 +50,14 @@
       "filename": "./../../6-labs-publish/6-labs-publish.md"
     },
     {
-      "title": "Additional optional labs: Publish to Live SQL",
-      "description": "This lab shows you how to create a tutorial in Live SQL",
-      "filename": "./../../11-labs-create-livesql/11-create-livesql.md"
+      "title": "Additional optional labs: Publish to FreeSQL",
+      "description": "This lab shows you how to create a tutorial in FreeSQL",
+      "filename": "./../../11-labs-create-freesql/11-create-freesql.md"
     },
     {
-      "title": "Additional optional labs: Live SQL Integration",
-      "description": "This lab shows you how to integrate Live SQL in your workshop",
-      "filename": "../../../labs/12-livesql-integration/12-livesql-integration.md"
+      "title": "Additional optional labs: FreeSQL Integration",
+      "description": "This lab shows you how to integrate FreeSQL in your workshop",
+      "filename": "../../../labs/12-freesql-integration/12-freesql-integration.md"
     },
     {
         "title": "Additional optional labs: Develop LiveLabs Sprints",

@@ -1,12 +1,12 @@
-# Create a LiveLab on Live SQL
+# Create a LiveLab on FreeSQL
 
 ## Introduction
 
-This lab walks you through the steps to setup a LiveLabs workshop on the Live SQL platform.
+This lab walks you through the steps to setup a LiveLabs workshop on the FreeSQL platform.
 
-### What is Oracle Live SQL?
+### What is Oracle FreeSQL?
 
-Live SQL allows instant access to Oracle Database versions 19c and 23ai, letting users learn from a collection of community scripts and tutorials. The user friendly interface facilitates a simplified practice environment for SQL and PL/SQL exercises.
+FreeSQL allows instant access to Oracle Database versions 19c and 23ai, letting users learn from a collection of community scripts and tutorials. The user friendly interface facilitates a simplified practice environment for SQL and PL/SQL exercises.
 
 With LiveLabs, there are several options for the user to access instructions.
 
@@ -14,26 +14,26 @@ With LiveLabs, there are several options for the user to access instructions.
 | ---------------- | ------------ | ----------- |
 | Run on Your Tenancy | Brown | Opens instructions for the user to run in their own environment, using their own resources as needed |
 | Run on LiveLabs Sandbox | Green | Uses Oracle LiveLabs resources in a temporary environment, free to the user |
-| Run on Live SQL | Orange | Opens the instructions on the Live SQL platform, more user friendly for SQL and PL/SQL exercises |
+| Run on FreeSQL | Orange | Opens the instructions on the FreeSQL platform, more user friendly for SQL and PL/SQL exercises |
 
 
-In this lab, we'll focus on the orange "Run on Live SQL" option.
+In this lab, we'll focus on the orange "Run on FreeSQL" option.
 
 ### Objectives
 
-* Create a Tutorial in Live SQL
+* Create a Tutorial in FreeSQL
 * Add Tasks as Modules
 * View and Edit Content
 * Publish to LiveLabs
 
 ## Task 1: Create a Tutorial
-1. Navigate to [Oracle Live SQL](https://livesql.oracle.com/).
+1. Navigate to [Oracle FreeSQL](https://freesql.com/).
 
 2. Select your Oracle AI Database
     * For 23ai, select **Learn and share SQL**
-    * For 19c, select **Live SQL Classic**
+    * For 19c, select **FreeSQL Classic**
 
-    ![Live SQL landing page](./images/livesql-landing.png " ")
+    ![FreeSQL landing page](./images/livesql-landing.png " ")
 
 3. Sign in.
 
@@ -76,13 +76,13 @@ In this lab, we'll focus on the orange "Run on Live SQL" option.
 4. Repeat as needed until all tasks are included.
 
 ## Task 3: View and Edit Content
-1. View your tutorial in the Live SQL worksheet by clicking the green **Open Tutorial in Worksheet** button.
+1. View your tutorial in the FreeSQL worksheet by clicking the green **Open Tutorial in Worksheet** button.
 
-    ![Open the tutorial in Live SQL worksheet](./images/open-worksheet.png " ")
+    ![Open the tutorial in FreeSQL worksheet](./images/open-worksheet.png " ")
 
 2. Your instructions will be on the right panel, with the worksheet in the top center. Review your instructions to ensure they are working and formatted correctly.
 
-    ![View the tutorial in Live SQL worksheet](./images/tutorial-worksheet-view.png " ")
+    ![View the tutorial in FreeSQL worksheet](./images/tutorial-worksheet-view.png " ")
 
 3. Use this icon in the top right to return to your details page and make edits as needed.
 
@@ -111,23 +111,23 @@ In this lab, we'll focus on the orange "Run on Live SQL" option.
 
     ![Edit or create a new publish entry](./images/publish-entry.png " ")
 
-5.  Paste in your LiveSQL link to the **Run on LiveSQL URL** field.
-    a. Be sure to enable the **Run on LiveSQL Enabled?** slider.
+5.  Paste in your FreeSQL link to the **Run on FreeSQL URL** field.
+    a. Be sure to enable the **Run on FreeSQL Enabled?** slider.
 
-    ![Add the Live SQL URL to your publish entry](./images/add-livesql-url.png " ")
+    ![Add the FreeSQL URL to your publish entry](./images/add-livesql-url.png " ")
 
 6. Click **Save**.
     a. Existing entries will be updated with this option typically within one business day.
     b. New entries will be reviewed before they are published to the LiveLabs platform.
 
-7. This option will now appear as an orange **Run on LiveSQL** option for users, where they can then choose **Open Tutorial in Worksheet**.
+7. This option will now appear as an orange **Run on FreeSQL** option for users, where they can then choose **Open Tutorial in Worksheet**.
 
-Keep in mind that Live SQL does not pull from our GitHub repo like the brown and green button options do.
+Keep in mind that FreeSQL does not pull from our GitHub repo like the brown and green button options do.
 * Brown or Green button instruction updates - edit the relevant [GitHub](https://github.com/orgs/oracle-livelabs/repositories) markdown files and submit a PR.
-* Orage button instruction updates - update the relevant tutorial modules through [Oracle Live SQL](https://livesql.oracle.com/).
+* Orage button instruction updates - update the relevant tutorial modules through [Oracle FreeSQL](https://freesql.com/).
 
 ## Helpful Links
-* [Oracle Live SQL](https://livesql.oracle.com/)
+* [Oracle FreeSQL](https://freesql.com/)
 * [Oracle LiveLabs GitHub Repositories](https://github.com/orgs/oracle-livelabs/repositories)
 * [New Workshop Step By Step Guide](https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/)
 
