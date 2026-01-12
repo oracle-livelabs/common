@@ -1,38 +1,28 @@
-# LiveLabs Test Template
+# Introduction
 
-*About this template: This file is used to demonstrate all of the features built into the LiveLabs conversion engine. Many of the features described here are optional and are so marked.
+## About this Workshop
+The workshop is a stepwise guide to create an EPCM (Enterprise Profitability and Costing Management) application to help facilitate costing and allocation  solutions in Oracle.
 
-## Introduction
+Estimated Workshop Time: -- hours -- minutes
 
-*Describe the lab in one or two sentences, for example:* This lab walks you through the Steps to ...
-
-*You may add an option video, using this format: [](youtube:YouTube video id)*
-
-  [](youtube:zNKxJjkq0Pw)
-
-Estimated Time: -- minutes
 
 ### About <Product/Technology> (Optional)
 Enter background information here about the technology/feature or product used in this lab - no need to repeat what you covered in the introduction. Keep this section fairly concise. If you find yourself needing more than to sections/paragraphs, please utilize the "Learn More" section.
 
 ### Objectives
+In this workshop, you will learn how to:
+* Create and configure an EPCM application from scratch
+* Migration from PCM to EPCM
+* Optimising the usage with tips, tricks and best practices in the configuration
 
-*List objectives for the lab - if this is the intro lab, list objectives for the workshop*
-
-In this lab, you will:
-* Objective 1
-* Objective 2
-* Objective 3
-* [relative lab url test](?lab=need-help)
-
-### Prerequisites (Optional)
-
-*List the prerequisites for this lab using the format below. Fill in whatever knowledge, accounts, etc. is needed to complete the lab. **Do NOT list** each previous lab as a prerequisite.*
+### Prerequisites
 
 This lab assumes you have:
 
-* An Oracle account
-* All previous labs successfully completed
+* Understanding of Oracle Enterprise Performance Management (EPM)
+* EPM Enterprise Cloud subscription
+* Basic knowledge about Cloud EPM platform
+* Knowledge of PCM (Optional, but useful for the migration from PCM to EPCM)
 
   > **Note:** If you have a **Free Trial** account, when your Free Trial expires your account will be converted to an **Always Free** account. You will not be able to conduct Free Tier workshops unless the Always Free environment is available. **[Click here for the Free Tier FAQ page.](https://www.oracle.com/cloud/free/faq.html)**
 
