@@ -221,7 +221,7 @@ Once you deploy your compute instance, tail the log to determine when the databa
 
     ![Switch to oracle](./images/sudo-oracle.png " ")
 
-5.  Set the environment variables to point to the Oracle binaries.  When prompted for the SID (Oracle Database System Identifier), enter **ORCL**.
+5.  Set the environment variables to point to the Oracle binaries.  When prompted for the SID (Oracle AI Database System Identifier), enter **ORCL**.
     ````
     <copy>
     . oraenv

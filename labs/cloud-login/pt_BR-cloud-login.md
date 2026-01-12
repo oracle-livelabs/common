@@ -1,6 +1,6 @@
 # Login to Oracle Cloud #
 
-## Introduction
+## Introduction - TEST
 
 Oracle Cloud is the industry's broadest and most integrated cloud provider, with deployment options ranging from the public cloud to your data center. Oracle Cloud offers best-in-class services across Software as a Service (SaaS), Platform as a Service (PaaS), and Infrastructure as a Service (IaaS).
 
@@ -46,5 +46,5 @@ You may now proceed to the next lab.
 ## Acknowledgements
 - **Created By/Date** - Kay Malcolm, Database Product Management, March 2020
 - **Contributors** - John Peach, Kamryn Vinson, Rene Fontcha
-- **Last Updated By** - Rene Fontcha, February 2021
+- **Last Updated By** - Abby Mulry, November 2025
 

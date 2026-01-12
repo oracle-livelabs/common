@@ -14,9 +14,9 @@ Estimated Time: 5 minutes
 
 ## Task 1: Install Sample Data
 
-In this step, you will install a selection of the Oracle Database Sample Schemas.  For more information on these schemas, please review the Schema agreement at the end of this lab.
+In this step, you will install a selection of the Oracle AI Database Sample Schemas.  For more information on these schemas, please review the Schema agreement at the end of this lab.
 
-By completing the instructions below the sample schemas **SH**, **OE**, and **HR** will be installed. These schemas are used in Oracle documentation to show SQL language concepts and other database features. The schemas themselves are documented in Oracle Database Sample Schemas [Oracle Database Sample Schemas](https://www.oracle.com/pls/topic/lookup?ctx=dblatest&id=COMSC).
+By completing the instructions below the sample schemas **SH**, **OE**, and **HR** will be installed. These schemas are used in Oracle documentation to show SQL language concepts and other database features. The schemas themselves are documented in Oracle AI Database Sample Schemas [Oracle AI Database Sample Schemas](https://www.oracle.com/pls/topic/lookup?ctx=dblatest&id=COMSC).
 
 1.  Copy the following commands into your terminal. These commands download the files needed to run the lab.  (*You should run these scripts as the opc user*.  Run a *whoami* to ensure the value *opc* comes back.  If you are still the oracle user, type the **exit** command to return to opc)
 
@@ -66,9 +66,9 @@ Congratulations! Now you have the environment to run the labs.
 
 You may now **proceed to the next lab**.
 
-## Oracle Database Sample Schemas Agreement
+## Oracle AI Database Sample Schemas Agreement
 
-Copyright (c) 2019 Oracle
+Copyright (c) 2025 Oracle
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -79,5 +79,4 @@ The above copyright notice and this permission notice shall be included in all c
 ## **Acknowledgements**
 
 - **Author** - Troy Anthony, DB Product Management
-- **Contributors** - Anoosha Pilli, Arabella Yao, LiveLabs Team
-- **Last Updated By/Date** - Arabella Yao, Dec 2022
+- **Last Updated By/Date** - Sania Bolla, Oct 2025

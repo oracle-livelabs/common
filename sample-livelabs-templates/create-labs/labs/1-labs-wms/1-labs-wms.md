@@ -1,6 +1,6 @@
 # Submit new workshop in WMS
 
-## Introduction
+## 🧭 Introduction
 
 Oracle Workshop Management System (WMS) is used to submit workshops, follow a process for team approvals, develop and publish the workshop. Most of our focus in these step by step guides will talk about publishing to LiveLabs, which will use the workshop that was published in LiveLabs.
 

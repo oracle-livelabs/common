@@ -1,3 +1,9 @@
+<!--
+    {
+        "name":"Visualize your data in OML notebooks",
+        "description":"Learn how to visualize your data using different types of graphs"
+    }
+-->
 # Introduction to Oracle Machine Learning Notebooks 
 
 ## Introduction
@@ -161,7 +167,7 @@ Let's use the previous example to explore the area chart.
 
 
 
-## Task 3: Visualiza Data in a Bar Chart
+## Task 3: Visualize Data in a Bar Chart
 
 A bar graph is a graphical representation of data in rectangular bars. The length or height  of the bars, depending on the horizontal or vertical orientation, depict the dataset distribution. One axis represents a category, while the other represents values or counts.
 
@@ -200,7 +206,7 @@ To visualize data in a bar chart:
 The bar chart now presents the data in a stacked manner, and in ascending order, as shown in the screenshot below:
 
 
-## Task 4: Visualiza Data in a Funnel Chart
+## Task 4: Visualize Data in a Funnel Chart
 
 A funnel chart is a graphical representation that resembles the shape of a funnel where each segment gets progressively narrower. The segments are arranged vertically and depict a hierarchy. Within the funnel chart, each segment corresponds to a step or stage in a sequential process.
 
@@ -229,7 +235,7 @@ To view the data in a funnel chart:
 
 
 
-## Task 5: Visualiza Data in a Line Chart
+## Task 5: Visualize Data in a Line Chart
 A line chart is a graphical representation used to display data points connected by straight lines.
 
 When to use this chart: Use this chart to visualize trends, changes, and relationships in data over a continuous period.
@@ -266,7 +272,7 @@ About the dataset: The sales dataset comprises
 
 
 . 
-## Task 6: Visualiza Data in a Pie Chart
+## Task 6: Visualize Data in a Pie Chart
 
 A pie chart is a graphical representation of data in a circular form, with each slice of the circle representing a fraction that is a proportionate part of the whole.
 
@@ -309,7 +315,7 @@ To visualize data in a pie chart
 	The data is now displayed in two 3D pie charts, one showing the average sepal length, and the other showing the average petal length for each of the three species of the iris flower.  
 7. 
 
-## Task 7: Visualiza Data in Pyramid Chart
+## Task 7: Visualize Data in Pyramid Chart
 
 Pyramid charts present your data in a distinctive triangular configuration, horizontally segmented into partitions. Each segment in the pyramid charts represents points or steps in ascending or descending order. 
 
@@ -335,7 +341,7 @@ To visualize data in a pyramid chart, let's use the CUSTOMER_INSURANCE_LTV table
 	The pyramid chart shows a clear correlation between the two genders, and their income level and mortgage amount. For both the categories, the average income and mortgage amount taken is higher for Females.
 
 
-## Task 8: Visualiza Data in a Box Plot
+## Task 8: Visualize Data in a Box Plot
 A box plot provides an overview of data distributions in numeric data. It provides general information about the symmetry, skewness, variance, and outliers in a dataset. The box plot uses boxes and lines to depict the data distribution. The box plot has the following components:
 
 
@@ -403,7 +409,7 @@ z.show(cat("Shape:", dim(IRIS_R)))
 
 
 
-## Task 9: Visualiza Data in a Scatter Plot
+## Task 9: Visualize Data in a Scatter Plot
 Scatter plots represent the relationship between two numeric variables in a data set. It represents data points on a two-dimensional plane and show how much one variable is affected by another. The independent variable is plotted on the X-axis, while the dependent variable is plotted on the Y-axis. You can display points by one or more grouping variables such that each group has a distinct color and shape. 
 
 **When to use this chart:** Use the scatter plot when you have paired numerical data, and you want to determine the relationship between the related variables in certain scenarios, identifying correlations and trends (linear and non-linear relationships), detecting outliers, understanding data distribution, identifying groupings or clusters of data. Scatterplots can also be useful when comparing multiple datasets where each datasets values are represented as a different group. Scatterplots are also useful for evaluating regression models by plotting, e.g., actual versus predicted values, 
@@ -422,7 +428,7 @@ c) **Group By:** Select MARITAL_STATUS
 d) Click **Customization.** Under Visualization, retain the default settings.  Under **Description,** under Title Setup, enter Scatter plot to show the correlation between income and mortgage amount. 
 The scatter plot shows a strong correlation between Income and Mortgage amount in the income range 50k to 80k.
 
-
+## Task 9: Visualize Data in a Scatter Plot
 
 ## Learn More
 
@@ -431,6 +437,6 @@ The scatter plot shows a strong correlation between Income and Mortgage amount i
 
 ## Acknowledgements
 
-* **Author** -  Moitreyee Hazarika, Principal User Assistance Developer, Database User Assistance Development
+* **Author** -  Moitreyee Hazarika, Principal User Assistance Developer, Oracle AI Database User Assistance Development
 * **Contributors** -   Mark Hornick, Senior Director, Data Science and Machine Learning; Marcos Arancibia Coddou, Product Manager, Oracle Data Science; Sherry LaMonica, Consulting Member of Tech Staff, Machine Learning
-* **Last Updated By/Date** - Moitreyee Hazarika, November 2024
+* **Last Updated By/Date** - Moitreyee Hazarika, December 2025
