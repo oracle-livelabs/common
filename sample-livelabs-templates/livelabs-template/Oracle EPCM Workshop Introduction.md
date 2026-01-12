@@ -5,10 +5,6 @@ The workshop is a stepwise guide to create an EPCM (Enterprise Profitability and
 
 Estimated Workshop Time: -- hours -- minutes
 
-
-### About <Product/Technology> (Optional)
-Enter background information here about the technology/feature or product used in this lab - no need to repeat what you covered in the introduction. Keep this section fairly concise. If you find yourself needing more than to sections/paragraphs, please utilize the "Learn More" section.
-
 ### Objectives
 In this workshop, you will learn how to:
 * Create and configure an EPCM application from scratch
@@ -24,8 +20,9 @@ This lab assumes you have:
 * Basic knowledge about Cloud EPM platform
 * Knowledge of PCM (Optional, but useful for the migration from PCM to EPCM)
 
+## Learn More
+* [Oracle EPCM Admin Guide](https://docs.oracle.com/en/cloud/saas/enterprise-profitability-cost-management-cloud/index.html)
 
 ## Acknowledgements
-* **Author** - <Name, Title, Group>
-* **Contributors** -  <Name, Group> (optional)
-* **Last Updated By/Date** - <Name, Month Year>
+* **Author** - Sameer Chitragar, Senior Associate - Oracle Cloud & Digital, PwC
+* **Last Updated By/Date** - Sameer Chitragar, February 2025
