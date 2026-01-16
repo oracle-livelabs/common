@@ -305,6 +305,18 @@ To distribute:
 Compress-Archive -Path "dist\OptiShot" -DestinationPath "OptiShot-Windows.zip"
 ```
 
+### Windows SmartScreen Warning
+
+When users download and run the executable, Windows may show a SmartScreen warning: "Windows protected your PC - Microsoft Defender SmartScreen prevented an unrecognized app from starting."
+
+This occurs because the executable is not signed with a code signing certificate. **To bypass:**
+
+1. **Before extracting** (recommended): Right-click the downloaded ZIP file → Properties → Check "Unblock" → Apply. Then extract. This removes the warning for all files.
+
+2. **After extracting**: When the SmartScreen dialog appears, click "More info" → "Run anyway"
+
+This is normal behavior for unsigned applications and is not a security issue with OptiShot.
+
 ### Troubleshooting Build Issues
 
 **"running scripts is disabled on this system"**
