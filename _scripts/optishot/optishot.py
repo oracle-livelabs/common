@@ -37,8 +37,10 @@ def is_gui_mode():
     """Check if running as a GUI app (no console available)."""
     if getattr(sys, 'frozen', False):
         # Running as compiled executable
-        # Check if we have a console
         if sys.platform == "win32":
+            # When built with --windowed, sys.stdout is None
+            if sys.stdout is None:
+                return True
             try:
                 sys.stdout.write("")
                 return False
