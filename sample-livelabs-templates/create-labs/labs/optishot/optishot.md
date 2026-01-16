@@ -4,6 +4,8 @@
 
 OptiShot is a cross-platform image optimization tool that resizes and compresses JPEG and PNG images recursively within a directory. It provides a simple graphical interface for users who prefer not to use the command line.
 
+**Use OptiShot to ensure workshop screenshots comply with LiveLabs standards: images must not exceed 1,280 px in width or height.**
+
 Estimated Time: 5 minutes
 
 ### About OptiShot
