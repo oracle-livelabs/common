@@ -7,3 +7,6 @@ env.sh
 labs/.DS_Store
 .vscode
 building-blocks/how-to-author-with-blocks/all-blocks-tasks.md
+/_scripts/__pycache__
+/_scripts/optishot/build
+/_scripts/optishot/dist
