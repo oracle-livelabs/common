@@ -28,11 +28,34 @@ This lab assumes you have:
 
 ## Task 0: Download OptiShot
 
-Download the app and unzip.
+### MacOS (Arm only)
 
-MacOS (ARM): [OptiShot for MacOS](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-MacOS-arm.zip)
+1. Open a new terminl window
+2. Execute the following command:
 
-Windows (x64): [OptiShot for Windows](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-Windows.zip)
+    ```
+    <copy>
+    curl -L -o OptiShot.zip https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-MacOS-arm.zip
+    </copy>
+    ```
+3. Unzip OptiShot.zip in a Finder window by double-clicking
+4. You can find the OptiShop.app in the OptiShot folder.
+   
+
+
+### Windows (x64):
+
+1. Open a new Windows PowerShell window
+2. Execute the following command:
+
+    ```
+    <copy>
+    curl.exe -L -o OptiShot.zip https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-Windows.zip
+    </copy>
+    ```
+3. Unzip OptiShot.zip in your Windows Explorer (right-click, extract all)
+4. You can find the OptiShot.exe file in the OptiShot folder
+
 
 ## Task 1: Launch OptiShot
 
@@ -42,9 +65,9 @@ Launch the OptiShot application on your operating system.
 
 2. **macOS**: Navigate to the OptiShot folder and double-click **OptiShot.app**.
 
-   > **Note:** On macOS, you may need to right-click and select "Open" the first time you run the application if you see a security warning.
-
 3. The folder picker dialog will appear automatically.
+
+> Note: If the app does not start or you get security warning, check the FAQ at the end of this document.
 
 ## Task 2: Select a Folder to Process
 
@@ -146,6 +169,44 @@ For advanced users, OptiShot supports command-line options.
     <copy>./OptiShot.app/Contents/MacOS/OptiShot /path/to/images --dry-run</copy>
     ```
 
+
+## FAQ
+
+### **MacOS: I cannot start the app on macOS (Security Warning)**
+If you see a security warning stating that the app "cannot be opened because the developer cannot be verified," this is expected. It occurs because the app is currently unsigned.
+
+  ![mac error](./images/mac1.png )
+
+**How to resolve this:**
+
+1. Open **System Settings** and navigate to **Privacy & Security**.
+
+2. Scroll down to the **Security** section.
+
+3. You will see a message regarding "OptiShot" being blocked. Click **Open Anyway**.
+
+4. If prompted, enter your Mac password and confirm by clicking Open on the final pop-up.
+
+>Note: You only need to perform these steps once. After the first successful launch, the app will open normally.
+
+  ![mac resolution](./images/mac2.png =50%x*)
+
+
+### **Windows: I cannot start the app on Windows (SmartScreen Warning)**
+
+When launching the app for the first time, you may see a blue Windows Protected your PC popup from Microsoft Defender SmartScreen. This appears because the application is currently unsigned.
+
+  ![win error](./images/win1.png =50%x*)
+
+**How to resolve this:**
+
+1. On the warning popup, click the "**More info**" link (located under the main text).
+
+2. An "**Run anyway**" button will now appear at the bottom of the window.
+
+3. Click **Run anyway** to launch the application.
+
+  ![win error](./images/win2.png =50%x*)
 
 ## Acknowledgements
 * **Author** - LiveLabs Team
