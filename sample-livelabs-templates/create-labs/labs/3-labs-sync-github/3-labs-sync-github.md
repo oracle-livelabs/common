@@ -1,31 +1,31 @@
-# Stay in sync with GitHub environment
+# Stay in Sync with GitHub Environment
 
 ## Introduction
 
-Oracle LiveLabs has a set folder structure that you will need to follow for developing your workshops. The folder structure is only part of the development since the workshop content is contained in the Markdown files and images that you write and edit as your workshop development. You can use your preferred editor to author and edit your Markdown (.md) content for rendering the Workshop output.
+Oracle LiveLabs requires a specific folder structure for workshop development. Workshop content consists of Markdown files and images that you write and edit. Use your preferred editor to author Markdown (.md) content.
 
 ### Objectives
 
-* Clone and fork Oracle LiveLabs GitHub repositories.
-* Understand the **Oracle LiveLabs** folder structure.
-* Familiarize yourself with the components of the workshop and the lab folders.
-* Learn about the tools that are available to develop and host your content.
-* Learn how to merge content.
+* Clone and fork Oracle LiveLabs GitHub repositories
+* Understand the **Oracle LiveLabs** folder structure
+* Learn the components of workshop and lab folders
+* Use tools to develop and host content
+* Merge content from the main repository
 
 
-## Task 1: Fork repositories of the oracle-livelabs organization on your GitHub account
+## Task 1: Fork Repositories from the oracle-livelabs Organization
 
-  We create workshops and labs in the repositories of the **oracle-livelabs** organization. You must fork a repository to create a duplicate personal copy of the repository on your GitHub account. You own the forked (stage) repository, and you can edit its contents without affecting the main (production) repository.
+Workshops and labs are created in the **oracle-livelabs** organization repositories. Fork a repository to create a personal copy on your GitHub account. You own the forked repository and can edit it without affecting the main (production) repository.
 
-  For example, if a user named janedoe forks the **database** repository in the **oracle-livelabs** project, a duplicate repository [user1/database](https://github.com/janedoe/database) is created.
+For example, if janedoe forks the **database** repository, a duplicate [janedoe/database](https://github.com/janedoe/database) is created.
 
-  You should also fork the [user repository](https://github.com/oracle-livelabs/common). Even though you will not be changing files here, you can use the common/images that are available and the sample workshops you will be using for templates are contained here.
+Also fork the [common repository](https://github.com/oracle-livelabs/common) to access common images and sample workshop templates.
 
-  After your workshop is approved by the council group, you first need to identify **which one repository among the [29 repositories](https://github.com/orgs/oracle-livelabs/repositories) you want to create your workshop in**. That decision depends on what product your workshop is about, or which council your workshop belongs to. For example, if your workshop is about GoldenGate, you should create your workshop in the [oracle-livelabs/goldengate](https://github.com/oracle-livelabs/goldengate) repository. Click [here](https://github.com/orgs/oracle-livelabs/repositories) to see the complete list of the repositories, and select one repository that fits your workshop.
+After council approval, identify which repository fits your workshop among the [available repositories](https://github.com/orgs/oracle-livelabs/repositories). Choose based on your product or council. For example, GoldenGate workshops belong in [oracle-livelabs/goldengate](https://github.com/oracle-livelabs/goldengate).
 
-  If you are not sure which repository to put your workshop in or do not see a repository that fits your workshop, please contact your council group or contact our LiveLabs team. We can give you some suggestions, and even create a new repository for you if necessary.
+If unsure which repository to use, contact your council group or the LiveLabs team.
 
-  For example, I want to create a workshop about GoldenGate, so I select the [oracle-livelabs/goldengate](https://github.com/oracle-livelabs/goldengate) repository. Next, I **only** need to fork the **goldengate** repository. The following steps walk you through forking the **goldengate** repository, but the steps are the same if you are forking any other repositories in the oracle-livelabs GitHub project.
+The following steps demonstrate forking the **goldengate** repository, but the process is the same for any repository.
 
 1. Log in to the [GitHub Web UI](http://github.com), using your GitHub account.
 
@@ -49,9 +49,9 @@ Oracle LiveLabs has a set folder structure that you will need to follow for deve
 
 In the next Task, you will clone this forked repository.
 
-## Task 2: Clone the forked repository
-A clone is a copy of your forked repository that lives on your local computer instead of on [GitHub Web UI](http://github.com). When you clone your forked repository, you can edit the files in your preferred editor, recommended **Visual Studio Code**, and use the **GitHub Desktop** client to keep track of your changes without having to be online.
+## Task 2: Clone the Forked Repository
 
+A clone is a copy of your forked repository on your local computer. Edit files in your preferred editor (recommended: **Visual Studio Code**) and use **GitHub Desktop** to track changes offline.
 
 To clone the forked repository:
 1. Open your **GitHub Desktop** application and log in using your GitHub account.
@@ -87,13 +87,13 @@ To clone the forked repository:
 
   ![Synchronize with GitHub.](./images/github-desktop-sync.png " ")
 
-## Task 3: Merge content from Git before you start editing your content
-  Every day before you start editing your content, ensure to do a Merge in **GitHub Desktop**.
-  Merging synchronizes the content in your cloned repository with the latest content on the **upstream/main** repository and ensures that you have the most recent versions of the templates and other workshops/labs.
+## Task 3: Merge Content from Git Before Editing
 
-  >**Note**: If you don't do that, you may get merge conflicts later when you commit your changes, which can be complex to fix.
+Before editing content each day, merge in **GitHub Desktop**. Merging synchronizes your clone with the latest content from **upstream/main**, ensuring you have the most recent templates and workshops.
 
-  To merge content:
+> **Note:** Skipping this step can cause merge conflicts when you commit changes.
+
+To merge content:
   1. Start your **GitHub Desktop** client.
 
   2. If you have multiple Oracle LiveLabs repositories, first switch to the repository that you will work on. Expand the dropdown list of **Current Repository**. Click the repository that you want to sync. In this case, I select the *em-omc* repository as an example, but the following process is the same for syncing other repositories.
@@ -125,17 +125,17 @@ To clone the forked repository:
 
   ![Synchronized repositories.](./images/fetch-origin.png " ")
 
-## Task 4: Folder structure of the Oracle LiveLabs
+## Task 4: Oracle LiveLabs Folder Structure
 
-  The following image shows a folder structure of the **sample-workshop** that is opened in the **Visual Studio Code** Editor. Inside each repository in [Oracle LiveLabs](https://github.com/oracle-livelabs), there is a **sample-livelabs-templates**  folder. You can see this structure at the following URL [https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop](https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop). You can get started with workshop development by copying this sample workshop folder.
+The following image shows the **sample-workshop** folder structure in Visual Studio Code. Each repository in [Oracle LiveLabs](https://github.com/oracle-livelabs) contains a **sample-livelabs-templates** folder. View the structure at [sample-workshop](https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop). Copy this folder to start workshop development.
 
   ![Example of workshop structure.](./images/sample-workshop-structure.png " ")
 
-## Task 5: Understand the components of the workshop and lab folders
-The following describes the components of the above example:
-    * The root folder of this example is the name of the workshop, **sample-workshop**. Direct links to the workshop files will be coming soon.
+## Task 5: Understand Workshop and Lab Folder Components
 
-  > **Note:** You will be creating your project folder anywhere within your cloned repository. If you have not done so, please look into the [Oracle LiveLabs GitHub organization](https://github.com/oracle-livelabs) to see different repositories and decide on a repository for your workshop. If no existing repository fits your workshop, please contact our LiveLabs team. (See more details about this back in Task 1.)
+The root folder is the workshop name (e.g., **sample-workshop**).
+
+> **Note:** Create your project folder within your cloned repository. Review the [Oracle LiveLabs GitHub organization](https://github.com/oracle-livelabs) to select a repository. Contact the LiveLabs team if no existing repository fits your workshop.
 
   * Each lab has its own folder, for example, **data-load**, **introduction**, **provision**, etc., each containing:
       * a **files** folder (optional) that contains the files used in this lab.
@@ -152,9 +152,9 @@ The following describes the components of the above example:
 
       ![Sample manifest json file.](./images/manifest.png " ")
 
-## Task 6: Commit your changes in your clone
-When you create, delete, or modify assets in your clone (local copy), you should commit (save) those changes to your clone, and then push those changes from your clone to your fork. Then these changes get saved to your forked repository.
+## Task 6: Commit Your Changes
 
+When you create, delete, or modify assets in your clone, commit (save) those changes and push them to your fork.
 
 To commit your changes:
 1. Start your **GitHub Desktop** client.
@@ -169,13 +169,13 @@ To commit your changes:
 
   ![Push updated content to the origin.](./images/push-origin.png " ")
 
-## Task 7: Set up GitHub pages for your fork to test your content
+## Task 7: Set Up GitHub Pages for Your Fork
 
-After you upload the content from your clone to your fork, request your review team members to review this content by providing them with access to **your GitHub Pages site URL** (or the URL of your forked repository).
+After uploading content to your fork, share your **GitHub Pages site URL** with reviewers.
 
->**Note:** You should perform the following actions in your forked GitHub repository (e.g. [https://github.com/username/em-omc](https://github.com/janedoe/em-omc)), instead of the production repository (e.g. [https://github.com/oracle-livelabs/em-omc](https://github.com/oracle-livelabs/em-omc)).
+> **Note:** Perform these actions in your forked repository (e.g., https://github.com/janedoe/em-omc), not the production repository.
 
-The GitHub Web UI has a feature called **Set Up GitHub Pages for Your Fork** to Test Your Content. This feature performs a dynamic conversion of the Markdown files (.md files you have developed using your Atom Editor) to HTML. You can preview your workshop and labs on your forked repository and provide this URL to your reviewers.
+GitHub Pages converts your Markdown files to HTML for preview. Share this URL with reviewers.
 
 To publish your GitHub Pages site:
 1. Log in to [GitHub Web UI](http://github.com) using your GitHub account credentials, and then click your fork's link in the **Repositories** section to display your fork.
@@ -199,9 +199,9 @@ To publish your GitHub Pages site:
 5. This may take a few minutes to complete. After the GitHub Pages are enabled, the message under **GitHub Pages** changes to **Your site  is published at https://janedoe.github.io/em-omc/**
   ![Changes are published.](./images/git-hub-stage-git-hub-pages-settings-page-published.png " ")
 
-## Task 8: Access your workshop on GitHub
+## Task 8: Access Your Workshop on GitHub
 
-Every time you have successfully pushed your committed changes to Github, Github Pages can take several minutes to process the changes to copy.
+After pushing committed changes to GitHub, GitHub Pages may take several minutes to process the changes.
 
 1. This workshop for example is located in the link below.
 
@@ -215,15 +215,15 @@ Every time you have successfully pushed your committed changes to Github, Github
     https://user.github.io/em-omc/enterprise-manager/emcc/workshops/freetier/index.html
     ```
 
-## (Optional) Task 9: Customize your Workshop for Events
+## (Optional) Task 9: Customize Your Workshop for Events
 
-This task walks you through the steps to customize a workshop for events and create an event code.
+This task explains how to customize a workshop for events and create an event code.
 
-### What is Event Code?
+### What Is an Event Code?
 
-An Event code is a fully customizable way to run a customized set of focused labs for your target audience. We now fully support hidden workshops for Oracle sales/PM and marketing purposes. The hidden workshops won’t be accessible to the general audience, and cannot be indexed by search engines. The user must log in with Oracle SSO and have the event code to proceed.
+An event code provides a customized set of labs for your target audience. Hidden workshops are accessible only to users with Oracle SSO and the event code—they are not indexed by search engines.
 
-If for an event, you want to add additional labs, remove some labs, have a different version of a lab, or change the workshop's meta info (including its title, description, outline, prerequisites, workshop time, promotion video, etc.) you can do that via an event code, without affecting the workshop already in production. PMs and Sales at Oracle have widely used event codes for big events like Oracle AI World, as well as smaller events like training sessions, both internally and externally.
+Use event codes to add, remove, or modify labs, or change workshop metadata (title, description, outline, prerequisites, time, video) without affecting the production workshop. Oracle PMs and Sales use event codes for events of all sizes.
 
 The following screenshot shows the landing page of an event code. Any information squared in red can be customized.
 
@@ -251,27 +251,29 @@ If you are the **workshop team** of the workshop that you want to create an even
 
 8. After the event, if you as the event organizers want to know about the event's registration information, you can contact the LiveLabs team. We can share the number of attendees, their emails' domain names (but not their email address), and when they request the event codes, etc.
 
-## Task 10: Reverting a commit in GitHub Desktop
+## Task 10: Revert a Commit in GitHub Desktop
 
-  1. Open **GitHub Desktop**, choose your repository and go to the **History**.
+1. Open **GitHub Desktop**, select your repository, and go to **History**.
 
-  ![Reversing commit](./images/reversing-commit.png " ")
+    ![Reversing commit](./images/reversing-commit.png " ")
 
-  2. Right-click the commit you want to revert and click **Revert Changes in Commit**.
+2. Right-click the commit to revert and click **Revert Changes in Commit**.
 
-  ![Revert changes in commit](./images/revert-changes.png " ")
+    ![Revert changes in commit](./images/revert-changes.png " ")
 
 ## Troubleshooting
 
 ### Issue 1: Commits Behind oracle:main
+
   ![Sync GitHub with the main repository.](./images/git-hub-sync-behind.png " ")
 
-1. Follow the steps in Task 1: Get the Latest Updates from Production.
+Follow the steps in Task 3 to merge content from upstream/main.
 
-### Issue 2: Clone failed
+### Issue 2: Clone Failed
+
   ![Clone failed.](./images/clone-failed.png " ")
 
-  1. Execute the following commands to make sure .gitconfig is updated:
+Execute the following commands to update .gitconfig:
 
     ```
     <copy> git config --global core.longpaths true </copy>
@@ -282,27 +284,32 @@ If you are the **workshop team** of the workshop that you want to create an even
     ```
 
 ### Issue 3: GitHub Merge Conflicts
-GitHub merge conflicts happen when you and some other contributors are changing the same content in the oracle-livelabs repositories. Merge conflicts prevent you from pushing your changes to your GitHub repository.
+
+Merge conflicts occur when multiple contributors change the same content. Conflicts prevent you from pushing changes.
+
   ![Merge Conflicts](./images/merge-conflicts.png)
 
-1. When you fetch origin and merge changes into your current branch (as in Task 1), you may encounter merge conflicts, as shown in the screenshot above. In the screenshot, you have 3 files that have merge conflicts.
+1. When merging (as in Task 3), you may encounter conflicts. The screenshot shows 3 files with conflicts.
 
-2. Since you are changing the same content as other people, you need to manually decide which version of changes you want to keep. Open your text editor. Go to the files that have conflicts. Conflicts are highlighted by your text editor, and you will choose to use either your changes or other people's changes.
-  ![Resolve Conflicts](./images/resolve-conflicts.png)
+2. Manually decide which changes to keep. Open conflicting files in your editor—conflicts are highlighted. Choose your changes or the other version.
 
-3. After you resolve all the conflicts and save your changes, your GitHub Desktop should look like the screenshot below. There will be a green checkmark beside each file, indicating there are no conflicts. Enter the **Summary** and click **Commit to main**. After the commit finishes, you can click **Push origin**, and your changes are pushed to your GitHub repository.
-  ![Conflicts Resolved](./images/conflicts-resolved.png)
+    ![Resolve Conflicts](./images/resolve-conflicts.png)
 
-4. To confirm, press refresh on your personal GitHub repo on the web, you should have no commits *behind* now, only *ahead*.
+3. After resolving conflicts and saving, GitHub Desktop shows a green checkmark beside each file. Enter a **Summary** and click **Commit to main**, then **Push origin**.
 
-  ![Refresh your personal GitHub repository.](./images/git-hub-sync-ahead.png " ")
+    ![Conflicts Resolved](./images/conflicts-resolved.png)
 
-### Issue 4: Cannot Use GitHub Desktop to Pull Changes from Production
-If you have not updated your local GitHub repo with GitHub repo in oracle-livelabs for a long time, and you are too many commits behind the oracle-livelabs:main, you may not get the latest changes from production using GitHub Desktop. It is simply because there are too commits to merge. In that case, you can use git commands to perform the same actions.
+4. Refresh your GitHub repo in the browser. You should have no commits *behind*, only *ahead*.
 
-*Git commands are not as straightforward as GitHub Desktop, so feel free to reach out to our team for help in the Slack channel, and our team is there to help you.*
+    ![Refresh your personal GitHub repository.](./images/git-hub-sync-ahead.png " ")
 
->**Note:** Make sure you are performing the following actions **off VPN**.
+### Issue 4: Cannot Pull Changes from Production via GitHub Desktop
+
+If your local repo is significantly behind oracle-livelabs:main, GitHub Desktop may fail to merge due to too many commits. Use git commands instead.
+
+Contact the LiveLabs team in Slack for help with git commands.
+
+> **Note:** Perform these actions **off VPN**.
 
 1. Find below some instructions of Git Bash
 
@@ -352,9 +359,9 @@ If you have not updated your local GitHub repo with GitHub repo in oracle-livela
   Navigate to the conflicting files and resolve the conflicts by choosing the incoming changes or current changes.
   Once conflicts are resolved, commit the changes in your GitHub desktop and push them.
 
-### Issue 5: Mess up GitHub Repo and Want to Delete the Repo
+### Issue 5: Delete and Recreate Your Repository
 
-In the worst case, if you cannot resolve issues in your local or staging repo, and want to delete your entire repository, follow the below steps:
+If you cannot resolve issues in your local or staging repo, delete the entire repository and start over:
 
 1. Open up a browser. Go to your repository (your fork). Click **Settings**.
 
@@ -370,13 +377,13 @@ In the worst case, if you cannot resolve issues in your local or staging repo, a
 
   This deletes the entire repo in your local/laptop. Follow the labs in this guide to set up your repo again.
 
-### Issue 6: Authentication error
+### Issue 6: Authentication Error
 
   ![Authentication failed.](./images/authentication-failed.png " ")
 
-First, make sure that you are logged into your GitHub account in GitHub Desktop. If it still does not solve the error, try the following steps.
+First, verify you are logged into GitHub in GitHub Desktop. If the error persists, try the following steps.
 
-If you have already created an SSH key in your local computer and added the key to your GitHub account, you can go directly to Step 5.
+If you already have an SSH key added to your GitHub account, skip to Step 5.
 
 1. If you have not generated SSH keys in your local computer, first follow the *(Optional) Lab 5: Generate SSH keys* on the left to generate SSH keys in your local computer.
 
@@ -414,25 +421,13 @@ If you have already created an SSH key in your local computer and added the key 
   ![Push origin.](./images/push-origin.png " ")
 
 
-### Issue 7: GitHub Desktop does not reflect the repo I work on
+### Issue 7: GitHub Desktop Does Not Reflect the Correct Repository
 
-If you have multiple Oracle LiveLabs repositories, you need to switch to the repository that you will work on in GitHub Desktop. Expand the dropdown list of **Current Repository**, and click the repository that you need.
+If you have multiple repositories, switch to the correct one in GitHub Desktop. Expand the **Current Repository** dropdown and select the repository you need.
 
   ![Switch repository.](./images/switch-repo.png " ")
 
 
 ## Acknowledgements
-* **Author:**
-    * Michelle Malcher, Director, Oracle Database Product Management
-* **Contributors:**
-    * Lauran Serhal, Consulting User Assistance Developer, Oracle Database and Big Data
-    * Anuradha Chepuri, Consulting User Assistance Developer, Oracle GoldenGate
 
-* **Reviewed by:**
-    * Aslam Khan, Senior Manager, ODI, OGG, EDQ
-    * Kay Malcolm, Vice President, Database Product Management
-    * Andres Quintana, Senior Product Manager
-    * Brianna Ambler, Product Manager
-
-* **Last Updated By/Date:**
-    * Sania Bolla, Oct 2025
+* **Last Updated By/Date:** LiveLabs Team, January 2026

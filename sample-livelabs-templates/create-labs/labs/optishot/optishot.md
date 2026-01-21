@@ -26,48 +26,73 @@ This lab assumes you have:
 * OptiShot application installed on your computer
 * A folder containing JPEG or PNG images to optimize
 
-## Task 0: Download OptiShot
+## Task 0: Install OptiShot
 
-### MacOS (Arm only)
+### macOS (Arm Only)
 
-1. Open a new terminl window
-2. Execute the following command:
+**One-line installation** — Open Terminal and run:
 
-    ```
-    <copy>
-    curl -L -o OptiShot.zip https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-MacOS-arm.zip
-    </copy>
-    ```
-3. Unzip OptiShot.zip in a Finder window by double-clicking
-4. You can find the OptiShop.app in the OptiShot folder.
-   
+```
+<copy>
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/oracle-livelabs/common/main/sample-livelabs-templates/create-labs/labs/optishot/install-macos.sh)"
+</copy>
+```
 
+This downloads and installs OptiShot to `/Applications`. After installation, find **OptiShot.app** in your Applications folder.
 
-### Windows (x64):
+<details>
+<summary>Alternative: Manual installation</summary>
 
-1. Open a new Windows PowerShell window
-2. Execute the following command:
+1. Open Terminal and run:
 
     ```
     <copy>
-    curl.exe -L -o OptiShot.zip https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-Windows.zip
+    curl -fsSL -o /tmp/OptiShot.zip "https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-MacOS-arm.zip" && unzip -o /tmp/OptiShot.zip -d /tmp && cp -R /tmp/OptiShot.app /Applications/ && rm -rf /tmp/OptiShot.zip /tmp/OptiShot.app /tmp/__MACOSX && echo "OptiShot installed to /Applications"
     </copy>
     ```
-3. Unzip OptiShot.zip in your Windows Explorer (right-click, extract all)
-4. You can find the OptiShot.exe file in the OptiShot folder
+
+2. Find **OptiShot.app** in your Applications folder.
+</details>
+
+
+### Windows (x64)
+
+**One-line installation** — Open PowerShell (as Administrator) and run:
+
+```
+<copy>
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/oracle-livelabs/common/main/sample-livelabs-templates/create-labs/labs/optishot/install-windows.ps1'))
+</copy>
+```
+
+This downloads and installs OptiShot to your user's Programs folder and creates a Start Menu shortcut. Search for **OptiShot** in the Start Menu to launch.
+
+<details>
+<summary>Alternative: Manual installation</summary>
+
+1. Open PowerShell and run:
+
+    ```
+    <copy>
+    $tmp="$env:TEMP\OptiShot"; $dest="$env:LOCALAPPDATA\Programs\OptiShot"; $lnk="$env:APPDATA\Microsoft\Windows\Start Menu\Programs\OptiShot.lnk"; New-Item -ItemType Directory -Force -Path $tmp | Out-Null; Invoke-WebRequest -Uri "https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-Windows.zip" -OutFile "$tmp\OptiShot.zip"; Expand-Archive -Path "$tmp\OptiShot.zip" -DestinationPath "$tmp" -Force; New-Item -ItemType Directory -Force -Path $dest | Out-Null; Copy-Item -Path "$tmp\OptiShot\*" -Destination $dest -Recurse -Force; $ws=(New-Object -ComObject WScript.Shell).CreateShortcut($lnk); $ws.TargetPath="$dest\OptiShot.exe"; $ws.Save(); Remove-Item -Path $tmp -Recurse -Force; Write-Host "OptiShot installed. Search 'OptiShot' in Start Menu."
+    </copy>
+    ```
+
+2. Search for **OptiShot** in the Start Menu, or find the exe at `%LOCALAPPDATA%\Programs\OptiShot\OptiShot.exe`.
+</details>
 
 
 ## Task 1: Launch OptiShot
 
 Launch the OptiShot application on your operating system.
 
-1. **Windows**: Navigate to the OptiShot folder and double-click **OptiShot.exe**.
+1. **Windows**: Search for **OptiShot** in the Start Menu, or navigate to `%LOCALAPPDATA%\Programs\OptiShot` and double-click **OptiShot.exe**.
 
-2. **macOS**: Navigate to the OptiShot folder and double-click **OptiShot.app**.
+2. **macOS**: Open **Applications** in Finder and double-click **OptiShot.app**, or use Spotlight (Cmd+Space) and search for "OptiShot".
 
-3. The folder picker dialog will appear automatically.
+3. The folder picker dialog appears automatically.
 
-> Note: If the app does not start or you get security warning, check the FAQ at the end of this document.
+> **Note:** If the app does not start or you get a security warning, see the FAQ at the end of this document.
 
 ## Task 2: Select a Folder to Process
 
@@ -93,7 +118,7 @@ The status window displays real-time information about the image processing.
       Saved: 0.45 MB (471859 bytes)
     ```
 
-2. Images that are already smaller than the maximum dimension are skipped:
+2. Images smaller than the maximum dimension are skipped:
 
     ```
     Skipping (already <= 1280px): ./images/icon.png (256x256)
@@ -111,7 +136,7 @@ The status window displays real-time information about the image processing.
     | After | Total size of all images after processing |
     | Saved | Total space saved |
 
-4. Click the **Close** button to exit OptiShot.
+4. Click **Close** to exit OptiShot.
 
 ## Task 4: Using Drag and Drop
 
@@ -172,12 +197,12 @@ For advanced users, OptiShot supports command-line options.
 
 ## FAQ
 
-### **MacOS: I cannot start the app on macOS (Security Warning)**
+### **MacOS: I Cannot Start the App on macOS (Security Warning)**
 If you see a security warning stating that the app "cannot be opened because the developer cannot be verified," this is expected. It occurs because the app is currently unsigned.
 
   ![mac error](./images/mac1.png )
 
-**How to resolve this:**
+**How to Resolve This:**
 
 1. Open **System Settings** and navigate to **Privacy & Security**.
 
@@ -192,13 +217,13 @@ If you see a security warning stating that the app "cannot be opened because the
   ![mac resolution](./images/mac2.png =50%x*)
 
 
-### **Windows: I cannot start the app on Windows (SmartScreen Warning)**
+### **Windows: I Cannot Start the App on Windows (SmartScreen Warning)**
 
 When launching the app for the first time, you may see a blue Windows Protected your PC popup from Microsoft Defender SmartScreen. This appears because the application is currently unsigned.
 
   ![win error](./images/win1.png =50%x*)
 
-**How to resolve this:**
+**How to Resolve This:**
 
 1. On the warning popup, click the "**More info**" link (located under the main text).
 
@@ -208,6 +233,43 @@ When launching the app for the first time, you may see a blue Windows Protected 
 
   ![win error](./images/win2.png =50%x*)
 
+
+## Uninstall OptiShot
+
+### macOS
+
+**One-line uninstall** — Open Terminal and run:
+
+```
+<copy>
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/oracle-livelabs/common/main/sample-livelabs-templates/create-labs/labs/optishot/uninstall-macos.sh)"
+</copy>
+```
+
+Or manually remove:
+```
+<copy>
+rm -rf /Applications/OptiShot.app && echo "OptiShot uninstalled"
+</copy>
+```
+
+### Windows
+
+**One-line uninstall** — Open PowerShell and run:
+
+```
+<copy>
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/oracle-livelabs/common/main/sample-livelabs-templates/create-labs/labs/optishot/uninstall-windows.ps1'))
+</copy>
+```
+
+Or manually remove:
+```
+<copy>
+Remove-Item -Path "$env:LOCALAPPDATA\Programs\OptiShot" -Recurse -Force; Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\OptiShot.lnk" -Force; Write-Host "OptiShot uninstalled"
+</copy>
+```
+
+
 ## Acknowledgements
-* **Author** - LiveLabs Team
-* **Last Updated By/Date** - January 2026
+* **Last Updated By/Date:** LiveLabs Team, January 2026
