@@ -26,7 +26,7 @@ This lab assumes you have:
 * OptiShot application installed on your computer
 * A folder containing JPEG or PNG images to optimize
 
-## Task 0: Install OptiShot
+## Task 1: Install OptiShot
 
 ### macOS (Arm Only)
 
@@ -82,7 +82,7 @@ This downloads and installs OptiShot to your user's Programs folder and creates 
 </details>
 
 
-## Task 1: Launch OptiShot
+## Task 2: Launch OptiShot
 
 Launch the OptiShot application on your operating system.
 
@@ -94,7 +94,7 @@ Launch the OptiShot application on your operating system.
 
 > **Note:** If the app does not start or you get a security warning, see the FAQ at the end of this document.
 
-## Task 2: Select a Folder to Process
+## Task 3a: Select a Folder to Process
 
 Choose the folder containing the images you want to optimize.
 
@@ -106,52 +106,7 @@ Choose the folder containing the images you want to optimize.
 
 3. The status window will appear showing the processing progress.
 
-## Task 3: Understanding the Output
-
-The status window displays real-time information about the image processing.
-
-1. The output shows each image being processed:
-
-    ```
-    Found 25 images. Processing with 4 parallel jobs...
-    Resizing: ./images/photo.jpg (2400x1600 → max 1280px)
-      Saved: 0.45 MB (471859 bytes)
-    ```
-
-2. Images smaller than the maximum dimension are skipped:
-
-    ```
-    Skipping (already <= 1280px): ./images/icon.png (256x256)
-    ```
-
-3. When processing completes, a summary is displayed:
-
-    | Field | Description |
-    | --- | --- |
-    | Resized | Number of images that were resized |
-    | Optimized | Number of PNG images optimized without resizing |
-    | Skipped | Number of images already within size limits |
-    | Failed | Number of images that could not be processed |
-    | Before | Total size of all images before processing |
-    | After | Total size of all images after processing |
-    | Saved | Total space saved |
-
-4. Click **Close** to exit OptiShot.
-
-## Task 4: Using Drag and Drop
-
-You can also use drag and drop to process images quickly.
-
-1. Locate the folder containing images you want to optimize.
-
-2. Drag the folder onto the OptiShot application icon:
-
-    - **Windows**: Drag the folder onto **OptiShot.exe**
-    - **macOS**: Drag the folder onto **OptiShot.app**
-
-3. The status window will appear and processing will begin automatically.
-
-## Task 5: Using Command-Line Options (Optional)
+## Task 3b: Using Command-Line Options (Optional)
 
 For advanced users, OptiShot supports command-line options.
 
@@ -194,6 +149,38 @@ For advanced users, OptiShot supports command-line options.
     <copy>./OptiShot.app/Contents/MacOS/OptiShot /path/to/images --dry-run</copy>
     ```
 
+## Task 3: Understanding the Output
+
+The status window displays real-time information about the image processing.
+
+1. The output shows each image being processed:
+
+    ```
+    Found 25 images. Processing with 4 parallel jobs...
+    Resizing: ./images/photo.jpg (2400x1600 → max 1280px)
+      Saved: 0.45 MB (471859 bytes)
+    ```
+
+2. Images smaller than the maximum dimension are skipped:
+
+    ```
+    Skipping (already <= 1280px): ./images/icon.png (256x256)
+    ```
+
+3. When processing completes, a summary is displayed:
+
+    | Field | Description |
+    | --- | --- |
+    | Resized | Number of images that were resized |
+    | Optimized | Number of PNG images optimized without resizing |
+    | Skipped | Number of images already within size limits |
+    | Failed | Number of images that could not be processed |
+    | Before | Total size of all images before processing |
+    | After | Total size of all images after processing |
+    | Saved | Total space saved |
+
+4. Click **Close** to exit OptiShot.
+
 
 ## FAQ
 
@@ -227,7 +214,7 @@ When launching the app for the first time, you may see a blue Windows Protected 
 
 1. On the warning popup, click the "**More info**" link (located under the main text).
 
-2. An "**Run anyway**" button will now appear at the bottom of the window.
+2. A "**Run anyway**" button will now appear at the bottom of the window.
 
 3. Click **Run anyway** to launch the application.
 
