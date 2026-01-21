@@ -164,22 +164,33 @@ def log_message(message):
 def get_bundled_path(filename):
     """Get path to a file bundled with the executable (PyInstaller support)."""
     if getattr(sys, 'frozen', False):
-        # Running as compiled executable
-        base_path = Path(sys._MEIPASS)
+        # Running as compiled executable - check multiple locations for PyInstaller 6.x compatibility
+        locations = [
+            Path(sys._MEIPASS),                    # _internal folder (PyInstaller 6.x onedir)
+            Path(sys.executable).parent,           # Same folder as the exe
+            Path(sys._MEIPASS).parent,             # Parent of _internal (app root)
+        ]
+        for base_path in locations:
+            bundled = base_path / filename
+            if bundled.exists():
+                return str(bundled)
+        return None
     else:
         # Running as script
         base_path = Path(__file__).parent
-
-    bundled = base_path / filename
-    if bundled.exists():
-        return str(bundled)
-    return None
+        bundled = base_path / filename
+        if bundled.exists():
+            return str(bundled)
+        return None
 
 
 def get_oxipng_path():
     """Get path to oxipng binary (bundled or system)."""
-    # Check for bundled oxipng first
-    bundled = get_bundled_path("oxipng")
+    # Check for bundled oxipng first (try platform-specific name)
+    if sys.platform == "win32":
+        bundled = get_bundled_path("oxipng.exe")
+    else:
+        bundled = get_bundled_path("oxipng")
     if bundled:
         return bundled
 
@@ -296,10 +307,13 @@ def process_file(filepath, max_dim, dry_run, use_oxipng, results):
 
             try:
                 oxipng_bin = get_oxipng_path()
+                # Hide console window on Windows
+                kwargs = {"capture_output": True, "check": False}
+                if sys.platform == "win32":
+                    kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
                 subprocess.run(
                     [oxipng_bin, "-o", "4", "--strip", "safe", str(filepath)],
-                    capture_output=True,
-                    check=False
+                    **kwargs
                 )
             except Exception:
                 pass  # oxipng optimization is best-effort

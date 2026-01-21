@@ -2,6 +2,10 @@
 # Build script for creating a standalone Windows executable
 # Includes: Python, Pillow, tkinter, and oxipng
 #
+# Prerequisites:
+#   1. Python 3 with tkinter (from https://python.org)
+#   2. oxipng.exe in this directory (download from https://github.com/shssoichiro/oxipng/releases)
+#
 # Run in PowerShell: .\build-windows.ps1
 #
 
@@ -11,7 +15,6 @@ $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $BuildDir = Join-Path $ScriptDir "build"
 $DistDir = Join-Path $ScriptDir "dist"
 $VenvDir = Join-Path $BuildDir "venv"
-$OxipngVersion = "9.1.3"
 
 Write-Host "========================================"
 Write-Host "  OptiShot - Windows Build"
@@ -88,48 +91,23 @@ pip install pillow pyinstaller -q
 Write-Host "Dependencies installed."
 Write-Host ""
 
-# Download oxipng
-$OxipngUrl = "https://github.com/shssoichiro/oxipng/releases/download/v$OxipngVersion/oxipng-$OxipngVersion-x86_64-pc-windows-msvc.zip"
-$OxipngZip = Join-Path $BuildDir "oxipng-$OxipngVersion.zip"
-$OxipngBin = Join-Path $BuildDir "oxipng.exe"
+# Check for oxipng.exe in script directory
+$OxipngBin = Join-Path $ScriptDir "oxipng.exe"
 
+Write-Host "Checking for oxipng.exe..."
 if (Test-Path $OxipngBin) {
-    Write-Host "oxipng already downloaded."
+    Write-Host "oxipng: OK ($($(& $OxipngBin --version 2>&1) -split '\n' | Select-Object -First 1))"
 } else {
-    Write-Host "Downloading oxipng v$OxipngVersion..."
-
-    try {
-        Invoke-WebRequest -Uri $OxipngUrl -OutFile $OxipngZip -UseBasicParsing
-    } catch {
-        Write-Host "Warning: Failed to download oxipng. PNG optimization will not be available." -ForegroundColor Yellow
-        Write-Host "You can manually download from: https://github.com/shssoichiro/oxipng/releases"
-        Write-Host ""
-        $OxipngBin = $null
-    }
-
-    if ($OxipngBin -and (Test-Path $OxipngZip)) {
-        Write-Host "Extracting oxipng..."
-        Expand-Archive -Path $OxipngZip -DestinationPath $BuildDir -Force
-
-        # Move oxipng.exe to build directory root
-        $extractedExe = Join-Path $BuildDir "oxipng-$OxipngVersion-x86_64-pc-windows-msvc\oxipng.exe"
-        if (Test-Path $extractedExe) {
-            Move-Item -Path $extractedExe -Destination $OxipngBin -Force
-        }
-
-        # Cleanup
-        $extractedDir = Join-Path $BuildDir "oxipng-$OxipngVersion-x86_64-pc-windows-msvc"
-        if (Test-Path $extractedDir) {
-            Remove-Item -Path $extractedDir -Recurse -Force
-        }
-        Remove-Item -Path $OxipngZip -Force
-    }
-}
-
-if ($OxipngBin -and (Test-Path $OxipngBin)) {
-    Write-Host "oxipng: OK"
-} else {
-    Write-Host "oxipng: Not available (PNG optimization disabled)" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "ERROR: oxipng.exe not found!" -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Please download oxipng and place oxipng.exe in:" -ForegroundColor Yellow
+    Write-Host "  $ScriptDir"
+    Write-Host ""
+    Write-Host "Download from: https://github.com/shssoichiro/oxipng/releases"
+    Write-Host "  (Get the Windows x86_64 MSVC zip file)"
+    Write-Host ""
+    exit 1
 }
 Write-Host ""
 
@@ -137,47 +115,71 @@ Write-Host ""
 Write-Host "Building application with PyInstaller..."
 Set-Location $ScriptDir
 
-$pyinstallerArgs = @(
-    "--onedir",
-    "--name", "OptiShot",
-    "--windowed",
-    "--noconfirm"
-)
-
-# Add icon if it exists
 $iconPath = Join-Path $ScriptDir "OptiShot.ico"
+$scriptPath = Join-Path $ScriptDir "optishot.py"
+
+Write-Host "Bundling oxipng: $OxipngBin"
+
 if (Test-Path $iconPath) {
-    $pyinstallerArgs += "--icon"
-    $pyinstallerArgs += $iconPath
     Write-Host "Using custom icon: OptiShot.ico"
+    pyinstaller --onedir --name "OptiShot" --windowed --noconfirm --icon "$iconPath" --add-binary "$OxipngBin;." "$scriptPath"
+} else {
+    pyinstaller --onedir --name "OptiShot" --windowed --noconfirm --add-binary "$OxipngBin;." "$scriptPath"
 }
 
-# Add oxipng if available
-if ($OxipngBin -and (Test-Path $OxipngBin)) {
-    $pyinstallerArgs += "--add-binary"
-    $pyinstallerArgs += "$OxipngBin;."
-    Write-Host "Bundling oxipng for PNG optimization"
+Write-Host ""
+
+# Debug: Show what files are in the dist folder
+Write-Host "Contents of dist\OptiShot:" -ForegroundColor Cyan
+Get-ChildItem -Path (Join-Path $DistDir "OptiShot") -ErrorAction SilentlyContinue | ForEach-Object { Write-Host "  $($_.Name)" }
+$internalDir = Join-Path $DistDir "OptiShot\_internal"
+if (Test-Path $internalDir) {
+    Write-Host "Contents of dist\OptiShot\_internal (first 20):" -ForegroundColor Cyan
+    Get-ChildItem -Path $internalDir -ErrorAction SilentlyContinue | Select-Object -First 20 | ForEach-Object { Write-Host "  $($_.Name)" }
+}
+Write-Host ""
+
+# Verify oxipng was bundled (check both old and new PyInstaller structures)
+$bundledOxipng = Join-Path $DistDir "OptiShot\oxipng.exe"
+$bundledOxipngInternal = Join-Path $DistDir "OptiShot\_internal\oxipng.exe"
+
+if (Test-Path $bundledOxipngInternal) {
+    $bundledOxipng = $bundledOxipngInternal
 }
 
-$pyinstallerArgs += (Join-Path $ScriptDir "optishot.py")
-
-# Run PyInstaller
-pyinstaller @pyinstallerArgs
-
-Write-Host ""
-Write-Host "========================================"
-Write-Host "  Build Complete!"
-Write-Host "========================================"
-Write-Host ""
-Write-Host "Output: $DistDir\OptiShot\OptiShot.exe"
-Write-Host ""
-Write-Host "To use:"
-Write-Host "  1. Double-click OptiShot.exe to open folder picker"
-Write-Host "  2. Or drag a folder onto the executable"
-Write-Host ""
-Write-Host "To distribute:"
-Write-Host "  Compress-Archive -Path `"$DistDir\OptiShot`" -DestinationPath `"OptiShot-Windows.zip`""
-Write-Host ""
+if (Test-Path $bundledOxipng) {
+    Write-Host "========================================"
+    Write-Host "  Build Complete!"
+    Write-Host "========================================"
+    Write-Host ""
+    Write-Host "Output: $DistDir\OptiShot\OptiShot.exe"
+    Write-Host ""
+    Write-Host "Bundled components verified:" -ForegroundColor Green
+    Write-Host "  - OptiShot.exe: OK"
+    Write-Host "  - oxipng.exe: OK"
+    Write-Host ""
+    Write-Host "To use:"
+    Write-Host "  1. Double-click OptiShot.exe to open folder picker"
+    Write-Host "  2. Or drag a folder onto the executable"
+    Write-Host ""
+    Write-Host "To distribute:"
+    Write-Host "  Compress-Archive -Path `"$DistDir\OptiShot`" -DestinationPath `"OptiShot-Windows.zip`""
+    Write-Host ""
+} else {
+    Write-Host "========================================"
+    Write-Host "  Build Warning!"
+    Write-Host "========================================"
+    Write-Host ""
+    Write-Host "WARNING: oxipng.exe was NOT bundled in the final build!" -ForegroundColor Red
+    Write-Host "The application was built but PNG optimization will not work." -ForegroundColor Red
+    Write-Host ""
+    Write-Host "Expected location: $bundledOxipng"
+    Write-Host ""
+    Write-Host "To fix, delete build and dist folders and try again:"
+    Write-Host "  Remove-Item -Recurse -Force '$BuildDir', '$DistDir'"
+    Write-Host ""
+    exit 1
+}
 
 # Deactivate virtual environment
 deactivate

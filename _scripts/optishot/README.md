@@ -193,9 +193,14 @@ You can create a standalone `.exe` that runs without requiring Python or any lib
 
 ### Prerequisites
 
-**Python 3.8+** from [python.org](https://python.org)
-- Check "Add Python to PATH" during installation
-- The python.org installer includes tkinter (required for GUI)
+1. **Python 3.8+** from [python.org](https://python.org)
+   - Check "Add Python to PATH" during installation
+   - The python.org installer includes tkinter (required for GUI)
+
+2. **oxipng.exe** (required for PNG optimization)
+   - Download from https://github.com/shssoichiro/oxipng/releases
+   - Get the `oxipng-X.X.X-x86_64-pc-windows-msvc.zip` file
+   - Extract `oxipng.exe` and place it in the same folder as `optishot.py`
 
 ### Automated Build (Recommended)
 
@@ -206,44 +211,39 @@ A build script is provided that handles everything automatically:
    ```powershell
    cd path\to\optishot
    ```
-3. Run the build script:
+3. Ensure `oxipng.exe` is in the directory (see Prerequisites above)
+4. Run the build script:
    ```powershell
    .\build-windows.ps1
    ```
-4. The executable will be created at:
+5. The executable will be created at:
    ```
    dist\OptiShot\OptiShot.exe
    ```
 
 The build script will:
 - Check Python and tkinter installation
+- Verify oxipng.exe is present
 - Create a virtual environment
 - Install Pillow and PyInstaller
-- Download oxipng automatically
+- Bundle oxipng with the executable
 - Build the executable with the custom icon
 
 ### Manual Build (Alternative)
 
 If you prefer to build manually:
 
-1. **Install build dependencies:**
-   ```powershell
-   pip install pillow pyinstaller
-   ```
-
-2. **Download oxipng** (optional, for PNG optimization):
+1. **Download oxipng** (required for PNG optimization):
    - Download from https://github.com/shssoichiro/oxipng/releases
    - Get the `oxipng-X.X.X-x86_64-pc-windows-msvc.zip` file
    - Extract `oxipng.exe` to the same folder as `optishot.py`
 
-3. **Run PyInstaller:**
-
-   **Basic build (without oxipng):**
+2. **Install build dependencies:**
    ```powershell
-   pyinstaller --onedir --name OptiShot --icon OptiShot.ico --windowed --noconfirm optishot.py
+   pip install pillow pyinstaller
    ```
 
-   **Full build with oxipng (recommended):**
+3. **Run PyInstaller:**
    ```powershell
    pyinstaller --onedir --name OptiShot --icon OptiShot.ico --add-binary "oxipng.exe;." --windowed --noconfirm optishot.py
    ```
