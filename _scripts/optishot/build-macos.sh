@@ -109,16 +109,56 @@ pyinstaller \
     "$SCRIPT_DIR/optishot.py"
 
 echo ""
-echo "========================================"
-echo "  Build Complete!"
-echo "========================================"
-echo ""
-echo "Output: $DIST_DIR/OptiShot.app"
-echo ""
-echo "To use:"
-echo "  1. Double-click the app to open folder picker"
-echo "  2. Or drag a folder onto the app icon"
-echo ""
+
+# Verify oxipng was bundled (check both old and new PyInstaller structures)
+APP_CONTENTS="$DIST_DIR/OptiShot.app/Contents"
+BUNDLED_OXIPNG=""
+
+# Check possible locations for oxipng in the app bundle
+if [ -f "$APP_CONTENTS/MacOS/oxipng" ]; then
+    BUNDLED_OXIPNG="$APP_CONTENTS/MacOS/oxipng"
+elif [ -f "$APP_CONTENTS/MacOS/_internal/oxipng" ]; then
+    BUNDLED_OXIPNG="$APP_CONTENTS/MacOS/_internal/oxipng"
+elif [ -f "$APP_CONTENTS/Frameworks/oxipng" ]; then
+    BUNDLED_OXIPNG="$APP_CONTENTS/Frameworks/oxipng"
+fi
+
+if [ -n "$BUNDLED_OXIPNG" ]; then
+    echo "========================================"
+    echo "  Build Complete!"
+    echo "========================================"
+    echo ""
+    echo "Output: $DIST_DIR/OptiShot.app"
+    echo ""
+    echo -e "Bundled components verified: \033[32m"
+    echo "  - OptiShot.app: OK"
+    echo "  - oxipng: OK (found at: $BUNDLED_OXIPNG)"
+    echo -e "\033[0m"
+    echo "To use:"
+    echo "  1. Double-click the app to open folder picker"
+    echo "  2. Or drag a folder onto the app icon"
+    echo ""
+else
+    echo "========================================"
+    echo "  Build Warning!"
+    echo "========================================"
+    echo ""
+    echo -e "\033[31mWARNING: oxipng was NOT bundled in the final build!\033[0m"
+    echo "The application was built but PNG optimization will not work."
+    echo ""
+    echo "Contents of app bundle:"
+    ls -la "$APP_CONTENTS/MacOS/" 2>/dev/null || echo "  (MacOS folder not found)"
+    if [ -d "$APP_CONTENTS/MacOS/_internal" ]; then
+        echo ""
+        echo "Contents of _internal (first 20):"
+        ls "$APP_CONTENTS/MacOS/_internal/" 2>/dev/null | head -20
+    fi
+    echo ""
+    echo "To fix, delete build and dist folders and try again:"
+    echo "  rm -rf '$BUILD_DIR' '$DIST_DIR'"
+    echo ""
+    exit 1
+fi
 
 # Cleanup virtual environment (optional)
 # rm -rf "$VENV_DIR"
