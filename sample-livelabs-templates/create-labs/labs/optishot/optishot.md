@@ -47,7 +47,7 @@ This downloads and installs OptiShot to `/Applications`. After installation, fin
 
     ```
     <copy>
-    curl -fsSL -o /tmp/OptiShot.zip "https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-MacOS-arm.zip" && unzip -o /tmp/OptiShot.zip -d /tmp && cp -R /tmp/OptiShot/OptiShot.app /Applications/ && rm -rf /tmp/OptiShot.zip /tmp/OptiShot && echo "OptiShot installed to /Applications"
+    curl -fsSL -o /tmp/OptiShot.zip "https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-MacOS-arm.zip" && unzip -o /tmp/OptiShot.zip -d /tmp && cp -R /tmp/OptiShot.app /Applications/ && rm -rf /tmp/OptiShot.zip /tmp/OptiShot.app /tmp/__MACOSX && echo "OptiShot installed to /Applications"
     </copy>
     ```
 
@@ -74,11 +74,11 @@ This downloads and installs OptiShot to your user's Programs folder and creates 
 
     ```
     <copy>
-    $tmp="$env:TEMP\OptiShot"; New-Item -ItemType Directory -Force -Path $tmp | Out-Null; Invoke-WebRequest -Uri "https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-Windows.zip" -OutFile "$tmp\OptiShot.zip"; Expand-Archive -Path "$tmp\OptiShot.zip" -DestinationPath "$tmp" -Force; $dest="$env:LOCALAPPDATA\Programs\OptiShot"; New-Item -ItemType Directory -Force -Path $dest | Out-Null; Copy-Item -Path "$tmp\OptiShot\*" -Destination $dest -Recurse -Force; Remove-Item -Path $tmp -Recurse -Force; Write-Host "OptiShot installed to $dest"
+    $tmp="$env:TEMP\OptiShot"; $dest="$env:LOCALAPPDATA\Programs\OptiShot"; $lnk="$env:APPDATA\Microsoft\Windows\Start Menu\Programs\OptiShot.lnk"; New-Item -ItemType Directory -Force -Path $tmp | Out-Null; Invoke-WebRequest -Uri "https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-Windows.zip" -OutFile "$tmp\OptiShot.zip"; Expand-Archive -Path "$tmp\OptiShot.zip" -DestinationPath "$tmp" -Force; New-Item -ItemType Directory -Force -Path $dest | Out-Null; Copy-Item -Path "$tmp\OptiShot\*" -Destination $dest -Recurse -Force; $ws=(New-Object -ComObject WScript.Shell).CreateShortcut($lnk); $ws.TargetPath="$dest\OptiShot.exe"; $ws.Save(); Remove-Item -Path $tmp -Recurse -Force; Write-Host "OptiShot installed. Search 'OptiShot' in Start Menu."
     </copy>
     ```
 
-2. Find **OptiShot.exe** at `%LOCALAPPDATA%\Programs\OptiShot\OptiShot.exe`.
+2. Search for **OptiShot** in the Start Menu, or find the exe at `%LOCALAPPDATA%\Programs\OptiShot\OptiShot.exe`.
 </details>
 
 
@@ -232,6 +232,44 @@ When launching the app for the first time, you may see a blue Windows Protected 
 3. Click **Run anyway** to launch the application.
 
   ![win error](./images/win2.png =50%x*)
+
+
+## Uninstall OptiShot
+
+### macOS
+
+**One-line uninstall** — Open Terminal and run:
+
+```
+<copy>
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/oracle-livelabs/common/main/sample-livelabs-templates/create-labs/labs/optishot/uninstall-macos.sh)"
+</copy>
+```
+
+Or manually remove:
+```
+<copy>
+rm -rf /Applications/OptiShot.app && echo "OptiShot uninstalled"
+</copy>
+```
+
+### Windows
+
+**One-line uninstall** — Open PowerShell and run:
+
+```
+<copy>
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/oracle-livelabs/common/main/sample-livelabs-templates/create-labs/labs/optishot/uninstall-windows.ps1'))
+</copy>
+```
+
+Or manually remove:
+```
+<copy>
+Remove-Item -Path "$env:LOCALAPPDATA\Programs\OptiShot" -Recurse -Force; Remove-Item -Path "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\OptiShot.lnk" -Force; Write-Host "OptiShot uninstalled"
+</copy>
+```
+
 
 ## Acknowledgements
 * **Last Updated By/Date:** LiveLabs Team, January 2026

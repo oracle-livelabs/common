@@ -24,7 +24,7 @@ echo "Installing to $INSTALL_DIR..."
 if [ -d "$INSTALL_DIR/OptiShot.app" ]; then
     rm -rf "$INSTALL_DIR/OptiShot.app"
 fi
-cp -R "$TEMP_DIR/OptiShot/OptiShot.app" "$INSTALL_DIR/"
+cp -R "$TEMP_DIR/OptiShot.app" "$INSTALL_DIR/"
 
 # Cleanup
 rm -rf "$TEMP_DIR"
