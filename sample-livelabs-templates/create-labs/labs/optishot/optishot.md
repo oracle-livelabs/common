@@ -57,18 +57,7 @@ This downloads and installs OptiShot to `/Applications`. After installation, fin
 
 ### Windows (x64)
 
-**One-line installation** — Open PowerShell (as Administrator) and run:
-
-```
-<copy>
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/oracle-livelabs/common/main/sample-livelabs-templates/create-labs/labs/optishot/install-windows.ps1'))
-</copy>
-```
-
-This downloads and installs OptiShot to your user's Programs folder and creates a Start Menu shortcut. Search for **OptiShot** in the Start Menu to launch.
-
-<details>
-<summary>Alternative: Manual installation</summary>
+**One-line installation** 
 
 1. Open PowerShell and run:
 
@@ -79,7 +68,6 @@ This downloads and installs OptiShot to your user's Programs folder and creates 
     ```
 
 2. Search for **OptiShot** in the Start Menu, or find the exe at `%LOCALAPPDATA%\Programs\OptiShot\OptiShot.exe`.
-</details>
 
 
 ## Task 2: Launch OptiShot
