@@ -10,11 +10,6 @@
       "filename": "./../../introduction/introduction.md"
     },
     {
-        "title": "Need more information on GitHub?",
-        "description": "Describes what GitHub is and general information on projects and repositories",
-        "filename": "./../../introduction/github-introduction.md"
-    },
-    {
         "title": "Need to understand the status workflow in WMS?",
         "description": "Details the status in WMS and what comes next, who is responsible.",
         "filename": "./../../introduction/wms-workflows.md"
@@ -55,27 +50,27 @@
       "filename": "./../../6-labs-publish/6-labs-publish.md"
     },
     {
-      "title": "Additional optional labs: Publish to FreeSQL",
+      "title": "Lab 8a: Publish to FreeSQL",
       "description": "This lab shows you how to create a tutorial in FreeSQL",
       "filename": "./../../11-labs-create-freesql/11-create-freesql.md"
     },
     {
-      "title": "Additional optional labs: FreeSQL Integration",
+      "title": "Lab 8b: FreeSQL Integration",
       "description": "This lab shows you how to integrate FreeSQL in your workshop",
       "filename": "../../../labs/12-freesql-integration/12-freesql-integration.md"
     },
     {
-        "title": "Additional optional labs: Develop LiveLabs Sprints",
+        "title": "Lab 9: Develop LiveLabs Sprints",
         "description": "This lab shows you how to create a Sprint for LiveLabs",
         "filename": "./../../10-labs-create-sprints-workflow/10-create-sprints-workflow.md"
     },
     {
-        "title": "Additional optional labs: Setup graphical remote desktop",
+        "title": "Lab 10a: Setup graphical remote desktop",
         "description": "This lab will describe how to create and use a graphical remote desktop for your workshop.",
         "filename": "./../../6-labs-setup-graphical-remote-desktop/6-labs-setup-graphical-remote-desktop.md"
     },
     {
-        "title": "Additional optional labs: Create custom image for marketplace",
+        "title": "Lab 10b: Create custom image for marketplace",
         "description": "This lab will describe how to create and use a marketplace image for your workshop.",
         "filename": "./../../7-labs-create-custom-image-for-marketplace/7-labs-create-custom-image-for-marketplace.md"
     },

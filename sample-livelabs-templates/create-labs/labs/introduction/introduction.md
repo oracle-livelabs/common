@@ -1,68 +1,60 @@
-# Introduction to labs and workshops
+# Introduction to Labs and Workshops
 
 > **Note:** Internal systems are not referenced by their URL.
 
+Welcome to LiveLabs. This platform provides hands-on experiences for Oracle products and technologies, demonstrating use cases and helping users explore Oracle Cloud, Applications, and Database.
 
-Welcome to LiveLabs and creating workshops to give practical hands on experiences for Oracle Products and technologies. This is the place to demonstrate use cases and allow users to explore and gain valuable knowledge with Oracle Cloud, Applications and Database.
+This workshop guides you through creating your own workshop, covering each step from development to publishing, including quality checks and the Workshop Management System (WMS) workflow.
 
-This workshop is to help walk you through the process of creating your own workshop. It will walk you through all of the steps, processes even how to do quality checks to build a successful workshop. This workshop will also explain the workflow using Workshop Management System (WMS), from development to publishing.
+## What Are Labs and Workshops?
 
-## What are labs and workshops?
+A **lab** contains step-by-step instructions to complete a specific task. A **workshop** is a collection of labs arranged in a specific order. Each workshop should include an introduction and at least two labs.
 
-Labs are a set of step by step instructions to complete a task as part of the hands-on experience. A workshop is the collection of the labs provided in a specific order to complete the overall set of instructions. A workshop should have an introduction and then at least two labs to work through. The workshop has the big picture of the what the user is going to accomplish by completing all or some of the labs listed in the workshop.
+Each lab consists of a Markdown (.md) file containing the instructions. The workshop manifest file determines the order of labs. Most LiveLabs workshops include a common **Get Started** lab that guides users through Cloud account options.
 
-An individual Markdown (.md) file is the document and text that makes up a lab. For each lab there is a markdown and the workshop has files that will call each lab and put them in order. In most cases, this is not a problem since most of the LiveLabs workshops contain at least one common lab titled **Get Started** that guides the user on the different types of Cloud accounts.
+Markdown files and images are stored in the oracle-livelabs GitHub repository. Workshops are published to the LiveLabs platform.
 
-Markdown files and images that are part of the lab instructions are kept in oracle-livelabs a GitHub repository, which we will give details on later, and the workshops can be published in LiveLabs.
+### **What's Next?**
 
-### **What's next?**
+Before starting development:
+- Browse existing workshops in LiveLabs for inspiration
+- Check WMS to see workshops currently in development
+- Review the videos in the WMS "Need Help" section
 
-Before you get started with the development of labs and workshop, check out existing workshops in LiveLabs, and see what workshops are currently being developed in Workshop Management (WMS). There are some great examples out there and can give you new ideas or allow you to contribute to existing workshops.
+Use the sample workshop in the [oracle-livelabs/common](https://github.com/oracle-livelabs/common) repository under `sample-livelabs-templates` as your starting template. This repository also contains common images you can use in your workshop.
 
+Review the QA document for image guidelines, markdown formatting, and workshop standards.
 
-Also get familiar with WMS to see the process, check out videos under new here and need help sections of the menu. Use the sample workshop that is found in https://github.com/oracle-livelabs/common under the  sample-livelabs-templates directory. (Steps will be provided later on setting up your GitHub repos). This common repository also has a set of common images that you can use as part of your workshop.
+### **Workshop Objectives**
 
-Another important step is to take look at the QA document since it provides how to do images, format markdown and gets you started in the right direction for the workshop standards. We also have a set of common images that are included in the common directory for you to use as part of your workshop.
+* Submit a new workshop in WMS
+* Set up your development environment
+* Learn Markdown features and best practices
+* Perform QA on your workshop
+* Publish your workshop
 
-We also have a set of common images that are included in the common directory
-
-### **Workshop objectives**
-
-
-* Enter new workshop in WMS
-* Prepare your environment to develop the workshop.
-* Review a few Markdown features and other tips.
-* Perform QA on your workshop.
-* Get your workshop ready to publish.
-
-### **Lab breakdown**
+### **Lab Breakdown**
 
 - **Lab 1:** Submit new workshop in WMS
 - **Lab 2:** Set up GitHub and install tools
 - **Lab 3:** Stay in sync with GitHub environment
-- **Lab 4.** Develop Markdown content
-- **Lab 5:** QA checks and steps
-- **Lab 6:** Publish your workshop
-- **Additional optional labs:** Publish to Live SQL
-- **Additional optional labs:** Develop LiveLabs Sprints
-- **Additional optional labs:** Setup graphical remote desktop
-- **Additional optional labs:** Create custom image for marketplace
-<!-- - **Maintenance:** OCI UI Update 2025 -->
+- **Lab 4:** Develop Markdown content
+- **Lab 5:** How to use OptiShot to optimize screenshots
+- **Lab 6:** QA checks and steps
+- **Lab 7:** Publish your workshop
+- **Lab 8a:** Publish to FreeSQL
+- **Lab 8b:** FreeSQL Integration
+- **Lab 9:** Develop LiveLabs Sprints
+- **Lab 10a:** Set up graphical remote desktop
+- **Lab 10b:** Create custom image for marketplace
 
 
-## Want to learn more about LiveLabs workshops and GitHub?
+## Learn More
 
 * [Oracle LiveLabs](https://livelabs.oracle.com)
-* [Get started with GitHub](https://docs.github.com/en/get-started)
+* [Get Started with GitHub](https://docs.github.com/en/get-started)
 * [Oracle LiveLabs Common Repository](https://github.com/oracle-livelabs/common/tree/main/images)
 
 ## Acknowledgements
 
-* **Authors:**
-    * Michelle Malcher, Director, Oracle Database Product Management
-* **Contributors:**
-    * Anuradha Chepuri, Consulting User Assistance Developer, Oracle GoldenGate
-    * Lauran Serhal, Consulting User Assistance Developer, Oracle Database and Big Data
-    * Aslam Khan, Senior Manager, ODI, OGG, EDQ
-* **Last Updated By/Date:**
-    * Ana Coman, Technical Program Manager, Oracle Database Product Management, April 2024
+* **Last Updated By/Date:** LiveLabs Team, January 2026

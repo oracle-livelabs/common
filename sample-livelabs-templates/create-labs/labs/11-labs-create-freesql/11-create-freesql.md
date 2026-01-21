@@ -2,22 +2,22 @@
 
 ## Introduction
 
-This lab walks you through the steps to setup a LiveLabs workshop on the FreeSQL platform.
+This lab walks you through the steps to set up a LiveLabs workshop on the FreeSQL platform.
 
-### What is Oracle FreeSQL?
+### What Is Oracle FreeSQL?
 
-FreeSQL allows instant access to Oracle Database versions 19c and 23ai, letting users learn from a collection of community scripts and tutorials. The user friendly interface facilitates a simplified practice environment for SQL and PL/SQL exercises.
+FreeSQL provides instant access to Oracle Database versions 19c and 23ai, letting users learn from community scripts and tutorials. The user-friendly interface simplifies SQL and PL/SQL practice.
 
-With LiveLabs, there are several options for the user to access instructions.
+LiveLabs offers several options for users to access instructions.
 
 | Instruction Type | Button Color | Description |
 | ---------------- | ------------ | ----------- |
-| Run on Your Tenancy | Brown | Opens instructions for the user to run in their own environment, using their own resources as needed |
-| Run on LiveLabs Sandbox | Green | Uses Oracle LiveLabs resources in a temporary environment, free to the user |
-| Run on FreeSQL | Orange | Opens the instructions on the FreeSQL platform, more user friendly for SQL and PL/SQL exercises |
+| Run on Your Tenancy | Brown | Opens instructions for users to run in their own environment, using their own resources |
+| Run on LiveLabs Sandbox | Green | Uses Oracle LiveLabs resources in a temporary environment, free to users |
+| Run on FreeSQL | Orange | Opens instructions on the FreeSQL platform, more user-friendly for SQL and PL/SQL exercises |
 
 
-In this lab, we'll focus on the orange "Run on FreeSQL" option.
+This lab focuses on the orange "Run on FreeSQL" option.
 
 ### Objectives
 
@@ -38,49 +38,49 @@ In this lab, we'll focus on the orange "Run on FreeSQL" option.
 3. Sign in.
 
 4. Navigate to **My Content** -> **Create tutorial or script**
-    > Note - this is also available from the library tab, then **My Content** -> **Create tutorial or script**. Navigating from the worksheet or from the library will both open the sidebar form.
+    > Note - This option is also available from the library tab, then **My Content** -> **Create tutorial or script**. You can navigate from the worksheet or library to open the sidebar form.
 
     ![Navigate to create new tutorial from the worksheet](./images/nav-create-tutorial.png " ")
 
 5. Fill in the form fields. Match the information from your [WMS Workshop Details](https://livelabs.oracle.com/wms).
     | Field | Details |
     | ----- | ------- |
-    | Content Type | Tutorial will allow for modules, which allows to create section similar to Labs. A script will only allow one SQL query or Pl/SQL code block |
-    | Name | Your workshop name from your WMS Workshop Details |
+    | Content Type | Tutorial allows modules, letting you create sections similar to Labs. A script allows only one SQL query or PL/SQL code block |
+    | Name | Your workshop name from WMS Workshop Details |
     | Minimum database version | Options are 19c or 23ai |
-    | Description | Short description from your WMS Workshop Details |
-    | Tags | Optionally include any product tags |
+    | Description | Short description from WMS Workshop Details |
+    | Tags | Optionally include product tags |
     | Setup Code Language | Options are SQL or PL/SQL |
-    | Setup Code | this section can be left blank for now |
+    | Setup Code | Leave this section blank for now |
 
     ![Fill in the form to create a new tutorial or script](./images/create-new-form.png " ")
 
-6. Click "Create" - This will create your tutorial or script, but only publish privately so it's not available to the public library for other users to browse.
-    Your new content will automatically open. You can also navigate to it by selecting the library tab, then "My Content", and select the correct card.
+6. Click "Create" - This creates your tutorial or script but publishes it privately, making it unavailable to the public library.
+    Your new content opens automatically. You can also navigate to it by selecting the library tab, then "My Content", and selecting the correct card.
 
 ## Task 2: Add Tasks as Modules
 1. From your details page, click the actions dropdown. Choose "Add tutorial module" to add your workshop's lab tasks.
 
     ![Actions - Add a tutorial module](./images/add-tutorial-module.png " ")
 
-2. A sidebar form will open. Fill in these to match your workshop. Each module should match with one task, but you'll need one to handle the introduction and details as well.
-    * Name - This first module is your introduction, so the name will be "Introduction".
+2. A sidebar form opens. Fill in these fields to match your workshop. Each module should match one task, but you'll need one to handle the introduction and details.
+    * Name - This first module is your introduction, so name it "Introduction".
     * Module content - The introductory module should include your introduction, estimated time, and objectives.
 
-3. Now we'll need to add in the actual lab tasks as modules. Adding each task as a module ensures easy navigation for the user. Select "Add tutorial module".
-    * Name - match your lab's task titles.
+3. Add the actual lab tasks as modules. Adding each task as a module ensures easy navigation for users. Select "Add tutorial module".
+    * Name - Match your lab's task titles.
     * Module Content - Enter the instructions for the task.
 
     ![Fill in the form to add a new module](./images/module-form.png " ")
 
-4. Repeat as needed until all tasks are included.
+4. Repeat as needed until you include all tasks.
 
 ## Task 3: View and Edit Content
 1. View your tutorial in the FreeSQL worksheet by clicking the green **Open Tutorial in Worksheet** button.
 
     ![Open the tutorial in FreeSQL worksheet](./images/open-worksheet.png " ")
 
-2. Your instructions will be on the right panel, with the worksheet in the top center. Review your instructions to ensure they are working and formatted correctly.
+2. Your instructions appear in the right panel, with the worksheet in the top center. Review your instructions to ensure they work and display correctly.
 
     ![View the tutorial in FreeSQL worksheet](./images/tutorial-worksheet-view.png " ")
 
@@ -88,16 +88,16 @@ In this lab, we'll focus on the orange "Run on FreeSQL" option.
 
     ![Box with arrow point to the top right](./images/arrow-box-icon.png " ")
 
-4. To edit your Tutorial information (such as Name, Description, Tags, etc.) select **Edit tutorial properties** from the tutorial **Actions** dropdown.
+4. To edit your Tutorial information (such as Name, Description, Tags), select **Edit tutorial properties** from the tutorial **Actions** dropdown.
 
-5. To edit modules, hover over the module. You can now click the **Actions** dropdown for that module, and select **Update tutorial module**.
+5. To edit modules, hover over the module. Click the **Actions** dropdown for that module, and select **Update tutorial module**.
 
     ![Actions - Update the modules](./images/update-module.png " ")
 
-6. To reorder the modules, select **Reorder** from the tutorial **Actions** dropdown. Use the arrows next to the modules to move them up or down. Once they are in order, use the same **Actions** dropdown to now select **Save Reorder**.
+6. To reorder modules, select **Reorder** from the tutorial **Actions** dropdown. Use the arrows next to the modules to move them up or down. Once they are in order, use the same **Actions** dropdown to select **Save Reorder**.
 
 ## Task 4: Publish to LiveLabs
-1. Once your instructions are finalized, select **Share** from the tutorial **Actions** dropdown.
+1. Once you finalize your instructions, select **Share** from the tutorial **Actions** dropdown.
 
 2. Follow the prompts to **Copy link**.
 
@@ -107,24 +107,24 @@ In this lab, we'll focus on the orange "Run on FreeSQL" option.
 3. Navigate to your [WMS Workshop Details](https://livelabs.oracle.com/wms).
 
 4. Go to the **Publishing** tab. Click the Edit icon to expand your publishing details.
-    a. Note: if you do not have an existing publishing entry, you will need to create one using the green **+Publish to LiveLabs** button.
+    a. Note: If you don't have an existing publishing entry, create one using the green **+Publish to LiveLabs** button.
 
     ![Edit or create a new publish entry](./images/publish-entry.png " ")
 
-5.  Paste in your FreeSQL link to the **Run on FreeSQL URL** field.
-    a. Be sure to enable the **Run on FreeSQL Enabled?** slider.
+5.  Paste your FreeSQL link into the **Run on FreeSQL URL** field.
+    a. Enable the **Run on FreeSQL Enabled?** slider.
 
     ![Add the FreeSQL URL to your publish entry](./images/add-livesql-url.png " ")
 
 6. Click **Save**.
-    a. Existing entries will be updated with this option typically within one business day.
-    b. New entries will be reviewed before they are published to the LiveLabs platform.
+    a. The system typically updates existing entries with this option within one business day.
+    b. The system reviews new entries before publishing them to the LiveLabs platform.
 
-7. This option will now appear as an orange **Run on FreeSQL** option for users, where they can then choose **Open Tutorial in Worksheet**.
+7. This option now appears as an orange **Run on FreeSQL** button for users, where they can choose **Open Tutorial in Worksheet**.
 
-Keep in mind that FreeSQL does not pull from our GitHub repo like the brown and green button options do.
-* Brown or Green button instruction updates - edit the relevant [GitHub](https://github.com/orgs/oracle-livelabs/repositories) markdown files and submit a PR.
-* Orage button instruction updates - update the relevant tutorial modules through [Oracle FreeSQL](https://freesql.com/).
+FreeSQL does not pull from our GitHub repo like the brown and green button options.
+* Brown or Green button instruction updates - Edit the relevant [GitHub](https://github.com/orgs/oracle-livelabs/repositories) markdown files and submit a PR.
+* Orange button instruction updates - Update the relevant tutorial modules through [Oracle FreeSQL](https://freesql.com/).
 
 ## Helpful Links
 * [Oracle FreeSQL](https://freesql.com/)
@@ -133,5 +133,4 @@ Keep in mind that FreeSQL does not pull from our GitHub repo like the brown and 
 
 ## Acknowledgements
 
-* **Author** - Hope Fisher, Database Product Management
-* **Last Updated By/Date** - Sania Bolla, Oct 2025
+* **Last Updated By/Date:** LiveLabs Team, January 2026
