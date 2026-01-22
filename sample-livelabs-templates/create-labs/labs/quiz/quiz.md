@@ -39,7 +39,8 @@ Quizzes are defined using fenced code blocks with the `quiz` language identifier
 
 1. The basic structure of a quiz block:
 
-You need to place the question text in a code block with the `quiz
+
+![quizid](images/quizid.png)
 
 ```
 Q: Your question text here?
@@ -50,7 +51,7 @@ Q: Your question text here?
 ```
 
 
-2. Syntax reference:
+1. Syntax reference:
 
     | Element | Syntax | Description |
     | --- | --- | --- |
@@ -59,7 +60,7 @@ Q: Your question text here?
     | Wrong answer | `-` | Marks an incorrect answer |
     | Explanation | `>` | Optional explanation shown after answering |
 
-3. The quiz renderer automatically determines the input type:
+2. The quiz renderer automatically determines the input type:
     - **Single correct answer** = Radio buttons (select one)
     - **Multiple correct answers** = Checkboxes (select all that apply)
 
@@ -132,6 +133,8 @@ You can include multiple questions in a single quiz block by adding another `Q:`
 
 1. Add multiple questions:
 
+![multi quiz](images/quiz.png)
+
 ```quiz
 Q: What does OCI stand for?
 * Oracle Cloud Infrastructure
@@ -144,7 +147,6 @@ Q: Which service provides object storage in OCI?
 - File Storage
 > Object Storage is ideal for unstructured data like images, videos, and backups.
 ```
-
 
 2. Each question is rendered as a separate quiz component:
 
@@ -166,6 +168,8 @@ Q: Which service provides object storage in OCI?
 Track learner progress across multiple quizzes and reward completion with a downloadable badge.
 
 1. Add `score` after `quiz` to mark a quiz as contributing to the total score:
+
+![quiz score](images/quizscore.png)
 
 ```
 Q: What is the capital of France?
@@ -191,9 +195,9 @@ Q: What is the capital of the Netherlands?
 - Utrecht
 ```
 
-2. Scored quizzes display a "Scored Quiz" label and have an orange left border to distinguish them from practice quizzes.
+1. Scored quizzes display a "Scored Quiz" label and have an orange left border to distinguish them from practice quizzes.
 
-3. A progress tracker automatically appears at the bottom of the page showing:
+2. A progress tracker automatically appears at the bottom of the page showing:
     - Number of quizzes answered
     - Current score percentage
     - Pass/fail status when all quizzes are completed
@@ -203,6 +207,9 @@ Q: What is the capital of the Netherlands?
 Set a passing percentage and provide a badge image for learners who pass.
 
 1. Add a `quiz-config` block anywhere in your markdown (typically at the top):
+
+![quiz config](images/quizconfig.png)
+
 
 ```
 passing: 80
