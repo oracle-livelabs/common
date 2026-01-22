@@ -1,7 +1,7 @@
 /*
  * ============================================
  * Oracle LiveLabs Workshop Framework
- * Version: 24.2
+ * Version: 24.3
  * ============================================
  *
  * Version     Date             Author          Summary
@@ -33,6 +33,7 @@
  * 24.0        Jan-22-26       Kevin Lazarz     Added lazy loading images
  * 24.1        Jan-22-26       Kevin Lazarz     Added interactive quiz feature
  * 24.2        Jan-22-26       Kevin Lazarz     Added quiz scoring with badge download
+ * 24.3        Jan-22-26       Kevin Lazarz     Enhanced badge UI with preview and disclaimer
  */
 
 /*
