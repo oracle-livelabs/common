@@ -1,8 +1,8 @@
 /*
 Author: Ashwin Agarwal
 Contributors:  Suresh Mohan, Jon Russell
-Last updated: Jan 22, 2026 by Claude Code
-Version: 24.0
+Last updated: Jan 22, 2026 by Kevin Lazarz
+Version: 24.2
 
 Version     Date             Author          Summary
 ---------------------------------------------------------
@@ -13,7 +13,8 @@ Version     Date             Author          Summary
 21.8        Aug-18-23       Brianna Ambler  Added translations related formatting.
 22.0        Mar-20-25       Brianna Ambler  Added formatting for LiveSQL integration witb LiveLabs Sprints
 22.1        Jan-06-26       Brianna Ambler  Renaming LiveSQL to FreeSQL
-24.0        Jan-22-26       Kevin Lazarz     Added interactive quiz component styles
+24.0        Jan-22-26       Kevin Lazarz    Added interactive quiz component styles
+24.2        Jan-22-26       Kevin Lazarz    Added quiz scoring and badge download styles
 */
 
 @import "highlight.min.css";
@@ -1789,4 +1790,138 @@ blockquote p {
     border-left: 4px solid #0066cc;
     border-radius: 0 6px 6px 0;
     color: #004085;
+}
+
+/* Retry button */
+.ll-quiz-retry {
+    margin-top: 15px;
+    margin-left: 10px;
+    padding: 10px 24px;
+    background: #6c757d;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.ll-quiz-retry:hover {
+    background: #5a6268;
+}
+
+/* Scored quiz indicator */
+.ll-quiz-scored {
+    border-left: 4px solid #AE562C;
+}
+
+.ll-quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ll-quiz-badge-label {
+    display: inline-block;
+    background: #AE562C;
+    color: white;
+    font-size: 0.75em;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+.ll-quiz-score-display {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #495057;
+    background: #e9ecef;
+    padding: 4px 12px;
+    border-radius: 4px;
+}
+
+.ll-quiz-score-display.passing {
+    background: #d4edda;
+    color: #155724;
+}
+
+.ll-quiz-score-display.failing {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ============================================
+ * QUIZ SCORE TRACKER
+ * Badge download container
+ * ============================================ */
+
+#ll-quiz-score-tracker {
+    margin: 30px 0;
+    text-align: center;
+}
+
+/* Badge download section */
+.ll-quiz-badge-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid #dee2e6;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.ll-quiz-badge-message {
+    font-size: 1.1em;
+    color: #155724;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.ll-quiz-badge-message.ll-quiz-not-passed {
+    color: #721c24;
+    margin-bottom: 0;
+}
+
+.ll-quiz-badge-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.ll-quiz-badge-preview {
+    width: 80px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ll-quiz-badge-download {
+    display: inline-block;
+    padding: 8px 20px;
+    background: #5F7D4F;
+    color: #ffffff !important;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    box-shadow: 0 3px 10px rgba(95, 125, 79, 0.3);
+}
+
+.ll-quiz-badge-download:hover {
+    transform: translateY(-2px);
+    background: #4a6340;
+    box-shadow: 0 5px 15px rgba(95, 125, 79, 0.4);
+    text-decoration: none;
+}
+
+.ll-quiz-badge-disclaimer {
+    font-style: italic;
+    font-size: 0.8em;
+    color: #6c757d;
+    margin: 0;
+    padding-top: 10px;
+    border-top: 1px solid #dee2e6;
 }

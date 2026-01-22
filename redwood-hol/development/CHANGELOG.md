@@ -1,5 +1,46 @@
 # Oracle LiveLabs Workshop Framework - Changelog
 
+## Version 24.2 (January 22, 2026)
+
+### Summary
+Added quiz scoring system with badge download rewards.
+
+### New Features
+
+#### Quiz Scoring with Badge Download
+Track learner progress across multiple quizzes and reward completion.
+
+**Scored Quiz Syntax:**
+```markdown
+```quiz score
+Q: Your question?
+* Correct answer
+- Wrong answer
+```
+```
+
+**Configuration Block:**
+```markdown
+```quiz-config
+passing: 80
+badge: images/badge.png
+```
+```
+
+**Features:**
+- `score` flag marks quiz as contributing to total score
+- Visual progress bar tracks answered quizzes
+- Pass/fail indication when all scored quizzes completed
+- Badge download button appears when passing score achieved
+- "Try Again" button allows unlimited retries
+- Score updates in real-time as learners improve
+
+**Files:**
+- `main.24.js`: `convertQuizConfig()`, `retryQuiz()`, `updateQuizScore()` functions
+- `style.24.css`: `.ll-quiz-scored`, `#ll-quiz-score-tracker`, badge download styles
+
+---
+
 ## Version 24.0 / 24.1 (January 22, 2026)
 
 ### Summary
@@ -78,10 +119,10 @@ Copy-to-clipboard now uses modern `navigator.clipboard.writeText()` API with fal
 ### New Files
 | File | Size | Description |
 |------|------|-------------|
-| `development/js/main.24.js` | 112 KB | Main JS with all new features |
-| `development/js/main.24.min.js` | 44 KB | Minified JS |
-| `development/css/style.24.css` | 42 KB | CSS with quiz styles |
-| `development/css/style.24.min.css` | 29 KB | Minified CSS |
+| `development/js/main.24.js` | 120 KB | Main JS with all new features |
+| `development/js/main.24.min.js` | 47 KB | Minified JS |
+| `development/css/style.24.css` | 44 KB | CSS with quiz styles |
+| `development/css/style.24.min.css` | 31 KB | Minified CSS |
 
 ### Modified Files
 | File | Description |
@@ -112,8 +153,9 @@ To deploy version 24:
 | Version | Date | Author | Summary |
 |---------|------|--------|---------|
 | 23.7 | Jan-06-26 | Brianna Ambler | Renaming LiveSQL to FreeSQL |
-| 24.0 | Jan-22-26 | Claude Code | Added lazy loading images |
-| 24.1 | Jan-22-26 | Claude Code | Added interactive quiz feature |
+| 24.0 | Jan-22-26 | Kevin Lazarz | Added lazy loading images |
+| 24.1 | Jan-22-26 | Kevin Lazarz | Added interactive quiz feature |
+| 24.2 | Jan-22-26 | Kevin Lazarz | Added quiz scoring with badge download |
 
 ---
 
