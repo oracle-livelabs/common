@@ -1,5 +1,40 @@
 # Oracle LiveLabs Workshop Framework - Changelog
 
+## Version 24.3 (January 22, 2026)
+
+### Summary
+Enhanced badge download UI with preview image and disclaimer.
+
+### Changes
+
+#### Badge Download Enhancements
+- Added badge preview image (80px) displayed next to download button
+- Smaller, more compact download button
+- Changed button color to `#5F7D4F` (muted green)
+- Added disclaimer text in italic: "This badge is not an official Oracle Certification. We do not track or store any user data."
+
+**Visual Layout:**
+```
+┌─────────────────────────────────────────────────────┐
+│ Congratulations! You passed with X%!                │
+│                                                     │
+│ [Badge Image]  [Download Your Badge]                │
+│ ─────────────────────────────────────────────────── │
+│ Disclaimer: This badge is not an official Oracle... │
+└─────────────────────────────────────────────────────┘
+```
+
+**CSS Classes Added:**
+- `.ll-quiz-badge-content` - Flexbox container for badge and button
+- `.ll-quiz-badge-preview` - Badge image styling
+- `.ll-quiz-badge-disclaimer` - Italic disclaimer text
+
+**Files:**
+- `main.24.js`: Updated `updateQuizScore()` HTML output
+- `style.24.css`: New badge preview and disclaimer styles
+
+---
+
 ## Version 24.2 (January 22, 2026)
 
 ### Summary
@@ -156,6 +191,7 @@ To deploy version 24:
 | 24.0 | Jan-22-26 | Kevin Lazarz | Added lazy loading images |
 | 24.1 | Jan-22-26 | Kevin Lazarz | Added interactive quiz feature |
 | 24.2 | Jan-22-26 | Kevin Lazarz | Added quiz scoring with badge download |
+| 24.3 | Jan-22-26 | Kevin Lazarz | Enhanced badge UI with preview and disclaimer |
 
 ---
 
