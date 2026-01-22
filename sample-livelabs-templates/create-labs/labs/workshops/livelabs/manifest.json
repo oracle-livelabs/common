@@ -44,9 +44,14 @@
       "filename": "./../../optishot/optishot.md"
     },
     {
-      "title": "Lab 6: QA checks and steps",
+      "title": "Lab 6a: QA checks and steps",
       "description": "This lab prepares you for QA of your workshop, details to look for and adjust before publishing your workshop.",
       "filename": "./../../5-labs-qa-checks/5-labs-qa-checks.md"
+    },
+    {
+      "title": "Lab 6b: Pull Request Automated Checks",
+      "description": "This lab prepares you for QA of your workshop, details to look for and adjust before publishing your workshop.",
+      "filename": "./../../prcheck/prcheck.md"
     },
     {
       "title": "Lab 7: Publish your workshop",
