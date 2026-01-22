@@ -1,5 +1,10 @@
 # Adding Interactive Quizzes to Your Workshop
 
+```quiz-config
+  passing: 80
+  badge: images/badge.png
+```
+
 ## Introduction
 
 Interactive quizzes allow workshop authors to test learners' knowledge directly within the lab content. Quizzes are written in markdown using a simple syntax and are automatically rendered as interactive components with visual feedback.
@@ -19,6 +24,7 @@ In this lab, you will:
 * Create single-answer questions
 * Create multiple-answer questions
 * Add explanations to quiz answers
+* Enable quiz scoring with badge rewards
 * Understand best practices for quiz placement
 
 ### Prerequisites
@@ -155,7 +161,85 @@ Q: Which service provides object storage in OCI?
 > Object Storage is ideal for unstructured data like images, videos, and backups.
 ```
 
-## Task 5: Best Practices
+## Task 5: Enable Quiz Scoring
+
+Track learner progress across multiple quizzes and reward completion with a downloadable badge.
+
+1. Add `score` after `quiz` to mark a quiz as contributing to the total score:
+
+```
+Q: What is the capital of France?
+* Paris
+- London
+- Berlin
+```
+
+When you add score it changes to quiz score (see Task 2 for example without score):
+
+```quiz score
+Q: What is the capital of France?
+* Paris
+- London
+- Berlin
+```
+
+
+```quiz score
+Q: What is the capital of the Netherlands?
+* Amsterdam
+- The Hague
+- Utrecht
+```
+
+2. Scored quizzes display a "Scored Quiz" label and have an orange left border to distinguish them from practice quizzes.
+
+3. A progress tracker automatically appears at the bottom of the page showing:
+    - Number of quizzes answered
+    - Current score percentage
+    - Pass/fail status when all quizzes are completed
+
+## Task 6: Configure Passing Score and Badge
+
+Set a passing percentage and provide a badge image for learners who pass.
+
+1. Add a `quiz-config` block anywhere in your markdown (typically at the top):
+
+```
+passing: 80
+badge: images/badge.png
+```
+
+![badge](images/badge.png)
+
+2. Configuration options:
+
+    | Option | Default | Description |
+    | --- | --- | --- |
+    | `passing` | 80 | Minimum percentage to pass (0-100) |
+    | `badge` | none | Path to badge image for download |
+
+3. Create your badge image and place it in the `images` folder:
+
+    ```
+    labs/
+      myworkshop/
+        myworkshop.md
+        images/
+          badge.png      <- Your badge image
+          screenshot1.png
+    ```
+
+4. When learners complete all scored quizzes with a passing score:
+    - The progress bar turns green
+    - A "Download Your Badge" button appears
+    - Clicking the button downloads the badge image
+
+5. If learners don't pass:
+    - The progress bar turns red
+    - They can click "Try Again" on any quiz to retry
+    - The score updates in real-time as they improve
+
+## Task 7: Best Practices
 
 Follow these guidelines to create effective quizzes.
 
@@ -185,9 +269,11 @@ You have learned how to:
 - Create single-answer quizzes with radio buttons
 - Create multiple-answer quizzes with checkboxes
 - Add explanations to provide educational context
+- Enable quiz scoring to track learner progress
+- Configure passing scores and badge rewards
 - Follow best practices for quiz design
 
-Quizzes are a powerful way to engage learners and help them validate their understanding of workshop content.
+Quizzes are a powerful way to engage learners, validate their understanding, and reward completion with badges.
 
 ## Acknowledgements
 
