@@ -30,9 +30,13 @@
       "filename": "./../../3-labs-sync-github/3-labs-sync-github.md"
     },
     {
-      "title": "Lab 4: Develop Markdown and content",
+      "title": "Lab 4a: Develop Markdown and content",
       "description": "This labs give you tips and tricks for editing and how to develop your lab (markdown) content using LiveLabs standards and accessibility for your workshops.",
       "filename": "./../../4-labs-markdown-develop-content/4-labs-markdown-develop-content.md"
+    },
+        {
+      "title": "Lab 4b: Add LiveLabs Quizzes to your workshops (Beta)",
+      "filename": "./../../quiz/quiz.md"
     },
     {
       "title": "Lab 5: How to use OptiShot to optimize screenshots",
