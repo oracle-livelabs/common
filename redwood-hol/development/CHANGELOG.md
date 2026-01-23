@@ -1,5 +1,45 @@
 # Oracle LiveLabs Workshop Framework - Changelog
 
+## Version 24.4 (January 23, 2026)
+
+### Summary
+Auto-calculate estimated reading time for markdown files.
+
+### New Feature
+
+#### Automatic Estimated Time Calculation
+Automatically calculates reading time when `Estimated Time: X` or `Estimated Time: x` placeholder is used.
+
+**Usage:**
+```markdown
+Estimated Time: X
+```
+or
+```markdown
+Estimated Time: x
+```
+
+**Calculation Formula:**
+- Regular text: 225 words/minute
+- Code blocks: 200 words/minute (10% slower)
+- Images: 12 seconds each
+- Final result: +10% added for hands-on instructions
+- Rounded up to next 5-minute increment (minimum 5 minutes)
+
+**Examples:**
+| Calculated | Rounded |
+|------------|---------|
+| 3 min | 5 min |
+| 11 min | 15 min |
+| 18 min | 20 min |
+| 22 min | 25 min |
+
+**Note:** If markdown contains an actual value (e.g., `Estimated Time: 25 minutes`), it will NOT be replaced.
+
+**File:** `main.24.js` - `calculateEstimatedTime()` function
+
+---
+
 ## Version 24.3 (January 22, 2026)
 
 ### Summary
@@ -192,6 +232,7 @@ To deploy version 24:
 | 24.1 | Jan-22-26 | Kevin Lazarz | Added interactive quiz feature |
 | 24.2 | Jan-22-26 | Kevin Lazarz | Added quiz scoring with badge download |
 | 24.3 | Jan-22-26 | Kevin Lazarz | Enhanced badge UI with preview and disclaimer |
+| 24.4 | Jan-23-26 | Kevin Lazarz | Auto-calculate estimated reading time |
 
 ---
 
