@@ -4,6 +4,8 @@
 
 Oracle LiveLabs requires a specific folder structure for workshop development. Workshop content consists of Markdown files and images that you write and edit. Use your preferred editor to author Markdown (.md) content.
 
+Estimated Time: x
+
 ### Objectives
 
 * Clone and fork Oracle LiveLabs GitHub repositories

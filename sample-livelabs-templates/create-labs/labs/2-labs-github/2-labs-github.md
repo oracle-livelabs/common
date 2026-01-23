@@ -8,6 +8,8 @@ Complete these steps once to set up your environment for current and future deve
 
 > **Note:** Oracle recommends using **Visual Studio Code (VS Code)**.
 
+Estimated Time: x
+
 ### Objectives
 
 * Configure your environment (one-time setup)

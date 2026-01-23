@@ -11,11 +11,11 @@ Interactive quizzes allow workshop authors to test learners' knowledge directly 
 
 **Use quizzes to reinforce key concepts and help learners validate their understanding before moving to the next task.**
 
-Estimated Time: 5 minutes
-
 ### About Quizzes
 
 Quizzes support both single-answer (radio buttons) and multiple-answer (checkboxes) questions. After submitting an answer, learners receive immediate visual feedback showing correct and incorrect selections. Optional explanations can be displayed after answering.
+
+Estimated Time: x
 
 ### Objectives
 

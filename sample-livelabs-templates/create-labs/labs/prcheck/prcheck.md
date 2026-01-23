@@ -6,7 +6,7 @@ When you submit a Pull Request (PR) to the LiveLabs repository, automated checks
 
 This document explains the automated workflows that run on your PR and how to resolve any issues they may flag.
 
-Estimated Time: 10 minutes
+Estimated Time: x
 
 ### About PR Checks
 

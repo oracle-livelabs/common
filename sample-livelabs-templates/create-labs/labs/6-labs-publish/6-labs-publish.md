@@ -4,6 +4,8 @@
 
 After you complete self QA and your workshop has been reviewed, publish your workshop to LiveLabs Production. Complete two areas: create a GitHub Pull Request to merge your files with the oracle-livelabs main production repository, and complete the WMS **Publish** tab to update LiveLabs production.
 
+Estimated Time: x
+
 ### Objectives
 
 * Commit your changes

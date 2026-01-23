@@ -14,6 +14,8 @@ The following diagram shows the general LiveLabs Sprints Development Workflow pr
 
 ![Sprints Workflow](./images/sprints-workflow.png " ")
 
+Estimated Time: x
+
 ### Objectives
 
 * Set Up Oracle LiveLabs Sprints GitHub Repository

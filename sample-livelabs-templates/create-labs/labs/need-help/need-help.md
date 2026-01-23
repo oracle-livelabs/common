@@ -4,6 +4,8 @@
 
 Learn how to get help when developing your workshops. We provide several resources to ensure you receive the assistance you need.
 
+Estimated Time: x
+
 ### Objectives
 - Learn about LiveLabs helpful resources
 

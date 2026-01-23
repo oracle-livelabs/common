@@ -10,6 +10,8 @@ With the LiveLabs x FreeSQL integration, users can execute a workshop's SQL code
 
 Our new FreeSQL button can link to a FreeSQL Worksheet or a custom FreeSQL Tutorial. The worksheet link is dynamically built for you. The URL contains the code you want users to run and auto-populates the worksheet with it (example). This is a great option for SQL-heavy sprints. However, note that the code must fit within a 2048-character URL. If your code exceeds this limit, create a FreeSQL Tutorial (instructions in Task 1B).
 
+Estimated Time: x
+
 ### Objectives
 
 * Create a Tutorial in FreeSQL
