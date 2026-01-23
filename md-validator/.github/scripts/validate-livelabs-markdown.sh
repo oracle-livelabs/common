@@ -149,12 +149,23 @@ for file in $FILES; do
         log_warning "$file: Consider adding an '### Objectives' section"
     fi
 
-    # Rule 12: Check for Estimated Time
-    if ! grep -qi "Estimated.*Time:" "$file" && ! grep -qi "Estimated.*Workshop.*Time:" "$file"; then
-        log_warning "$file: Consider adding 'Estimated Time:' information"
+    # Rule 12 & 13: Check for Estimated Time
+    basename_file=$(basename "$file")
+    if [ "$basename_file" = "introduction.md" ]; then
+        # Rule 13: introduction.md must have "Estimated Workshop Time:"
+        if ! grep -q "Estimated Workshop Time:" "$file"; then
+            log_error "$file: introduction.md must contain 'Estimated Workshop Time:'"
+            ((FILE_ERRORS++))
+        fi
+    else
+        # Rule 12: Other files must have "Estimated Time:"
+        if ! grep -qi "Estimated.*Time:" "$file"; then
+            log_error "$file: Missing 'Estimated Time:' information"
+            ((FILE_ERRORS++))
+        fi
     fi
 
-    # Rule 13: Check filenames in image references are lowercase
+    # Rule 14: Check filenames in image references are lowercase
     image_refs=$(grep -oE '!\[.*?\]\((images/[^)]+)\)' "$file" | grep -oE 'images/[^)]+' || true)
     for img in $image_refs; do
         lowercase_img=$(echo "$img" | tr '[:upper:]' '[:lower:]')
@@ -164,7 +175,7 @@ for file in $FILES; do
         fi
     done
 
-    # Rule 14: Check for Learn More section (optional but recommended)
+    # Rule 15: Check for Learn More section (optional but recommended)
     # Just a soft check, no warning
 
     if [ $FILE_ERRORS -eq 0 ]; then

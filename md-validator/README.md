@@ -87,7 +87,8 @@ To block PRs that fail validation:
 | Copy Tags | ERROR | `<copy>` and `</copy>` tags must be balanced |
 | Introduction | WARNING | Labs with Tasks should have `## Introduction` |
 | Objectives | WARNING | Consider adding `### Objectives` section |
-| Estimated Time | WARNING | Consider adding `Estimated Time:` |
+| Estimated Time | ERROR | Non-introduction files must have `Estimated Time:` |
+| Workshop Time | ERROR | `introduction.md` must contain `Estimated Workshop Time:` |
 | Lowercase Images | ERROR | Image filenames must be lowercase |
 
 ### Additional Checks
