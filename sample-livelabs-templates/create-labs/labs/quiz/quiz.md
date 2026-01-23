@@ -9,7 +9,9 @@
 
 Interactive quizzes allow workshop authors to test learners' knowledge directly within the lab content. Quizzes are written in markdown using a simple syntax and are automatically rendered as interactive components with visual feedback.
 
-**Use quizzes to reinforce key concepts and help learners validate their understanding before moving to the next task.**
+Use quizzes to reinforce key concepts and help learners validate their understanding before moving to the next task.
+
+> **Note: We do not store progress, personal data, or any other information on our servers. This feature operates entirely within the user's browser, and all data remains local to their device.**
 
 ### About Quizzes
 
