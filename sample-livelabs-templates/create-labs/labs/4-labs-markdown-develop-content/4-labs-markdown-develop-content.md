@@ -16,6 +16,7 @@ To optimize your workflow while developing workshop content, we recommend using 
 * Use conditional formatting
 * Add videos and scale images
 * Use the LintChecker
+* Use auto-estimated time calculation
 * **IMPORTANT!** Case sensitivity
 
 ### What Do You Need?
@@ -586,6 +587,52 @@ If you have installed the LiveServer extension in your VSCode by following the s
   ![view-in-live-server](./images/view-in-live-server.png " ")
 
 3. With the workshop now open in your browser, you can modify your files as needed. Save the changes you make to the files. To see the changes reflected in real-time, reload the page in your browser. Live Server ensures that any modifications you make to the files are immediately visible.
+
+## Task 21: Auto-Estimated Time
+
+The framework can automatically calculate the estimated reading time for your lab based on its content. This saves you from manually estimating and keeps the time accurate as your content changes.
+
+1. To enable automatic time calculation, use `X` (uppercase or lowercase) as the placeholder value:
+
+    ```
+    <copy>
+    Estimated Time: X
+    </copy>
+    ```
+
+    or
+
+    ```
+    <copy>
+    Estimated Time: x
+    </copy>
+    ```
+
+2. The framework calculates reading time using the following formula:
+
+    | Content Type | Reading Speed |
+    | --- | --- |
+    | Regular text | 225 words/minute |
+    | Code blocks | 200 words/minute (10% slower) |
+    | Images | 12 seconds each |
+    | Hands-on adjustment | +10% added to total |
+
+3. The final result is rounded up to the next 5-minute increment, with a minimum of 5 minutes:
+
+    | Calculated Time | Displayed Time |
+    | --- | --- |
+    | 3 minutes | 5 minutes |
+    | 11 minutes | 15 minutes |
+    | 18 minutes | 20 minutes |
+    | 22 minutes | 25 minutes |
+
+4. If you prefer to set a specific time manually, simply provide the actual value. The framework will not replace explicit values:
+
+    ```
+    Estimated Time: 25 minutes
+    ```
+
+    > **Note:** Use the `X` placeholder when you want the time to automatically update as your content changes. Use an explicit value when you need precise control over the displayed time.
 
 You may now **proceed to the next lab**.
 
