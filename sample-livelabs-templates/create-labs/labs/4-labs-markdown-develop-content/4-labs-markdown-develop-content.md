@@ -237,7 +237,7 @@ Without using image scaling, all the screenshots you take for your workshop will
 ## Task 10: Add and Embed a Video
 
 Adding videos is very similar to adding images. We most commonly see videos added in the introductions for labs to familiarize the audience with the product before they dive into the workshop.
-LiveLabs supports embedding videos from [YouTube](https://www.youtube.com) or [Oracle Video Hub](https://videohub.oracle.com).
+LiveLabs supports embedding videos from [YouTube](https://www.youtube.com), [Oracle Video Hub](https://videohub.oracle.com), or direct video file URLs (such as videos hosted on OCI Object Storage).
 
 ### Embedding a Video from Oracle Video Hub (Recommended)
 
@@ -264,6 +264,35 @@ LiveLabs supports embedding videos from [YouTube](https://www.youtube.com) or [O
 2. The video link address is the characters you'll find at the end of the URL for the video you want to link.
 
   ![How to link a youtube video.](./images/youtube-url.png =60%x* " ")
+
+### Embedding a Direct Video File
+
+You can also embed video files directly from a URL, such as videos hosted on OCI Object Storage or any other web server. This is useful when you have your own video files that aren't hosted on YouTube or Video Hub.
+
+1. Use the `video:` prefix followed by the full URL to your video file:
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/your-video.mp4)
+    </copy>
+    ```
+
+2. The video will be embedded using the HTML5 video player with playback controls.
+
+3. Supported video formats:
+    - `.mp4` (recommended, most widely supported)
+    - `.webm`
+    - `.ogg` / `.ogv`
+
+4. Example with an OCI Object Storage URL:
+
+    ```
+    <copy>
+    [](video:https://objectstorage.us-ashburn-1.oraclecloud.com/n/namespace/b/bucket/o/my-video.mp4)
+    </copy>
+    ```
+
+    > **Note:** Ensure your video file is publicly accessible if you want users to view it without authentication.
 
 ## Task 11: Scale a Video
 
@@ -336,6 +365,42 @@ Without using video scaling, all the videos you embed will have small as the def
 	```
 
 	[Video hosted on YouTube](youtube:lHriX403Oz4:large)
+
+### Resizing a Direct Video File
+
+You can apply the same sizing options to direct video files by appending the size to the URL.
+
+1. Default size (small):
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/video.mp4)
+    </copy>
+    ```
+
+2. Small size (explicit):
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/video.mp4:small)
+    </copy>
+    ```
+
+3. Medium size:
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/video.mp4:medium)
+    </copy>
+    ```
+
+4. Large size (full width):
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/video.mp4:large)
+    </copy>
+    ```
 
 ## Task 12: Tables
 
