@@ -40,9 +40,11 @@ Review the QA document for image guidelines, markdown formatting, and workshop s
 - **Lab 1:** Submit new workshop in WMS
 - **Lab 2:** Set up GitHub and install tools
 - **Lab 3:** Stay in sync with GitHub environment
-- **Lab 4:** Develop Markdown content
+- **Lab 4a:** Develop Markdown content
+- **Lab 4b:** Adding LiveLabs quizzes
 - **Lab 5:** How to use OptiShot to optimize screenshots
-- **Lab 6:** QA checks and steps
+- **Lab 6a:** QA checks and steps
+- **Lab 6b:** Pull Request Automated Checks
 - **Lab 7:** Publish your workshop
 - **Lab 8a:** Publish to FreeSQL
 - **Lab 8b:** FreeSQL Integration
