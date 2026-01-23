@@ -34,6 +34,7 @@
  * 24.1        Jan-22-26       Kevin Lazarz     Added interactive quiz feature
  * 24.2        Jan-22-26       Kevin Lazarz     Added quiz scoring with badge download
  * 24.3        Jan-22-26       Kevin Lazarz     Enhanced badge UI with preview and disclaimer
+ * 24.4        Jan-23-26       Kevin Lazarz     Auto-calculate estimated reading time for "Estimated Time: X" placeholder
  */
 
 /*
@@ -334,6 +335,7 @@ let main = function () {
 
             markdownContent = include(markdownContent, manifestFileContent.include); // added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
             markdownContent = substituteVariables(markdownContent, manifestFileContent.variable_values); // added for variable feature
+            markdownContent = calculateEstimatedTime(markdownContent); // calculates and replaces "Estimated Time: X" placeholder
             markdownContent = singlesource(markdownContent, selectedTutorial.type); // implement show/hide feature based on the if tag (DBDOC-2430)
             markdownContent = convertFreeSQLButtonTags(markdownContent); // converts <freesql-button> tags to actual FreeSQL buttons
             markdownContent = convertBracketInsideCopyCode(markdownContent); // converts <> tags inside copy tag to &lt; and &gt; (DBDOC-2404)
@@ -767,6 +769,81 @@ let main = function () {
         for (let variable in all_variables) {
             markdown = markdown.split("[](var:" + variable + ")").join(all_variables[variable]);
         }
+        return markdown;
+    }
+
+    /**
+     * Calculates estimated reading time and replaces "Estimated Time: X" or "Estimated Time: x"
+     * Only replaces if the pattern contains exactly X or x as placeholder
+     * @param {string} markdown - The markdown content
+     * @returns {string} - Markdown with calculated time replacing placeholder
+     */
+    let calculateEstimatedTime = function (markdown) {
+        // Only match exactly "Estimated Time: X" or "Estimated Time: x"
+        // Use [ \t]* instead of \s* to avoid consuming newlines
+        const placeholderPattern = /Estimated Time:[ \t]*([Xx])[ \t]*(?:minutes?)?/;
+        const match = markdown.match(placeholderPattern);
+
+        // If no placeholder found, return unchanged
+        if (!match) {
+            return markdown;
+        }
+
+        // Extract code blocks first (to count separately)
+        const codeBlockPattern = /```[\s\S]*?```/g;
+        const codeBlocks = markdown.match(codeBlockPattern) || [];
+
+        // Remove code blocks from markdown for regular word count
+        let textContent = markdown.replace(codeBlockPattern, '');
+
+        // Count images
+        const imagePattern = /!\[.*?\]\(.*?\)/g;
+        const imageCount = (markdown.match(imagePattern) || []).length;
+
+        // Remove markdown syntax for cleaner word count
+        textContent = textContent
+            .replace(/!\[.*?\]\(.*?\)/g, '')           // Remove images
+            .replace(/\[.*?\]\(.*?\)/g, '')            // Remove links
+            .replace(/#{1,6}\s*/g, '')                 // Remove headers
+            .replace(/[*_`~]/g, '')                    // Remove formatting
+            .replace(/<[^>]+>/g, '')                   // Remove HTML tags
+            .replace(/\|/g, ' ')                       // Replace table pipes
+            .replace(/[-=]{3,}/g, '');                 // Remove horizontal rules
+
+        // Count words in regular text
+        const textWords = textContent.split(/\s+/).filter(word => word.length > 0).length;
+
+        // Count words in code blocks
+        let codeWords = 0;
+        codeBlocks.forEach(block => {
+            const codeContent = block.replace(/```\w*\n?/g, '').replace(/```/g, '');
+            codeWords += codeContent.split(/\s+/).filter(word => word.length > 0).length;
+        });
+
+        // Calculate reading time
+        // Text: 225 words per minute (middle of 200-250)
+        // Code: 200 words per minute (10% slower)
+        // Images: 12 seconds each
+        const textMinutes = textWords / 225;
+        const codeMinutes = codeWords / 200;
+        const imageMinutes = (imageCount * 12) / 60;
+
+        // Total time with 10% added for hands-on instructions
+        let totalMinutes = (textMinutes + codeMinutes + imageMinutes) * 1.10;
+
+        // Round up to next 5-minute increment
+        totalMinutes = Math.ceil(totalMinutes / 5) * 5;
+
+        // Ensure minimum of 5 minutes
+        if (totalMinutes < 5) {
+            totalMinutes = 5;
+        }
+
+        // Replace the placeholder with calculated time
+        markdown = markdown.replace(placeholderPattern, 'Estimated Time: ' + totalMinutes + ' minutes');
+
+        console.log('Estimated Time calculated:', totalMinutes, 'minutes (text:', textWords, 'words, code:', codeWords, 'words, images:', imageCount + ')');
+
         return markdown;
     }
 
