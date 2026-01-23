@@ -4,6 +4,8 @@
 
 Quality checks and reviews ensure users enjoy workshops and experience Oracle technologies at their best. QA steps enforce LiveLabs standards and verify checks completed throughout workshop development.
 
+Estimated Time: x
+
 ### Objectives
 
 * Request a review

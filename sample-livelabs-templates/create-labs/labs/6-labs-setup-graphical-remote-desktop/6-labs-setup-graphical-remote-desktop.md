@@ -4,6 +4,8 @@
 ## Introduction
 This lab shows you how to deploy and configure noVNC Graphical Remote Desktop on an Oracle Enterprise Linux (OEL) instance before capturing the custom image.
 
+
+
 ### Objectives
 - Configure image for preserved static hostname
 - Deploy NoVNC Remote Desktop

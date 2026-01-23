@@ -19,6 +19,8 @@ LiveLabs offers several options for users to access instructions.
 
 This lab focuses on the orange "Run on FreeSQL" option.
 
+Estimated Time: x
+
 ### Objectives
 
 * Create a Tutorial in FreeSQL

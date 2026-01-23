@@ -6,6 +6,8 @@ Oracle Workshop Management System (WMS) manages workshop submissions, team appro
 
 WMS displays the workflow through statuses, providing visibility into development progress. It also supports marketing through social media and tracks regular quality checks.
 
+Estimated Time: x
+
 ### Objectives
 
 * Submit a LiveLabs workshop request using WMS

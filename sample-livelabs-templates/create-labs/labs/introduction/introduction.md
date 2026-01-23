@@ -2,6 +2,8 @@
 
 > **Note:** Internal systems are not referenced by their URL.
 
+Estimated Time: x
+
 Welcome to LiveLabs. This platform provides hands-on experiences for Oracle products and technologies, demonstrating use cases and helping users explore Oracle Cloud, Applications, and Database.
 
 This workshop guides you through creating your own workshop, covering each step from development to publishing, including quality checks and the Workshop Management System (WMS) workflow.

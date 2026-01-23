@@ -9,6 +9,8 @@ To optimize your workflow while developing workshop content, we recommend using 
 <!-- **Helpful tips from your LiveLabs Team**
 [Video walking through markdown editing](youtube:rOj5APIU-XU) -->
 
+Estimated Time: x
+
 ### Objectives
 
 * Create workshop and lab content

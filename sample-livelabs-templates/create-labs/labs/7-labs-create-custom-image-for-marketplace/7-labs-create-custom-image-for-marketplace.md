@@ -3,6 +3,8 @@
 ## Introduction
 This lab shows you how to prepare a host for custom image capture and create the custom image that meets stringent OCI marketplace requirements.
 
+Estimated Time: x
+
 ### Objectives
 - Perform cleanup tasks to get the image in the desired state for custom image capture
 - Create Custom Image
