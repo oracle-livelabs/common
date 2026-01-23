@@ -16,6 +16,7 @@ To optimize your workflow while developing workshop content, we recommend using 
 * Use conditional formatting
 * Add videos and scale images
 * Use the LintChecker
+* Use auto-estimated time calculation
 * **IMPORTANT!** Case sensitivity
 
 ### What Do You Need?
@@ -236,7 +237,7 @@ Without using image scaling, all the screenshots you take for your workshop will
 ## Task 10: Add and Embed a Video
 
 Adding videos is very similar to adding images. We most commonly see videos added in the introductions for labs to familiarize the audience with the product before they dive into the workshop.
-LiveLabs supports embedding videos from [YouTube](https://www.youtube.com) or [Oracle Video Hub](https://videohub.oracle.com).
+LiveLabs supports embedding videos from [YouTube](https://www.youtube.com), [Oracle Video Hub](https://videohub.oracle.com), or direct video file URLs (such as videos hosted on OCI Object Storage).
 
 ### Embedding a Video from Oracle Video Hub (Recommended)
 
@@ -263,6 +264,35 @@ LiveLabs supports embedding videos from [YouTube](https://www.youtube.com) or [O
 2. The video link address is the characters you'll find at the end of the URL for the video you want to link.
 
   ![How to link a youtube video.](./images/youtube-url.png =60%x* " ")
+
+### Embedding a Direct Video File
+
+You can also embed video files directly from a URL, such as videos hosted on OCI Object Storage or any other web server. This is useful when you have your own video files that aren't hosted on YouTube or Video Hub.
+
+1. Use the `video:` prefix followed by the full URL to your video file:
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/your-video.mp4)
+    </copy>
+    ```
+
+2. The video will be embedded using the HTML5 video player with playback controls.
+
+3. Supported video formats:
+    - `.mp4` (recommended, most widely supported)
+    - `.webm`
+    - `.ogg` / `.ogv`
+
+4. Example with an OCI Object Storage URL:
+
+    ```
+    <copy>
+    [](video:https://objectstorage.us-ashburn-1.oraclecloud.com/n/namespace/b/bucket/o/my-video.mp4)
+    </copy>
+    ```
+
+    > **Note:** Ensure your video file is publicly accessible if you want users to view it without authentication.
 
 ## Task 11: Scale a Video
 
@@ -335,6 +365,42 @@ Without using video scaling, all the videos you embed will have small as the def
 	```
 
 	[Video hosted on YouTube](youtube:lHriX403Oz4:large)
+
+### Resizing a Direct Video File
+
+You can apply the same sizing options to direct video files by appending the size to the URL.
+
+1. Default size (small):
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/video.mp4)
+    </copy>
+    ```
+
+2. Small size (explicit):
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/video.mp4:small)
+    </copy>
+    ```
+
+3. Medium size:
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/video.mp4:medium)
+    </copy>
+    ```
+
+4. Large size (full width):
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/video.mp4:large)
+    </copy>
+    ```
 
 ## Task 12: Tables
 
@@ -586,6 +652,52 @@ If you have installed the LiveServer extension in your VSCode by following the s
   ![view-in-live-server](./images/view-in-live-server.png " ")
 
 3. With the workshop now open in your browser, you can modify your files as needed. Save the changes you make to the files. To see the changes reflected in real-time, reload the page in your browser. Live Server ensures that any modifications you make to the files are immediately visible.
+
+## Task 21: Auto-Estimated Time
+
+The framework can automatically calculate the estimated reading time for your lab based on its content. This saves you from manually estimating and keeps the time accurate as your content changes.
+
+1. To enable automatic time calculation, use `X` (uppercase or lowercase) as the placeholder value:
+
+    ```
+    <copy>
+    Estimated Time: X
+    </copy>
+    ```
+
+    or
+
+    ```
+    <copy>
+    Estimated Time: x
+    </copy>
+    ```
+
+2. The framework calculates reading time using the following formula:
+
+    | Content Type | Reading Speed |
+    | --- | --- |
+    | Regular text | 225 words/minute |
+    | Code blocks | 200 words/minute (10% slower) |
+    | Images | 12 seconds each |
+    | Hands-on adjustment | +10% added to total |
+
+3. The final result is rounded up to the next 5-minute increment, with a minimum of 5 minutes:
+
+    | Calculated Time | Displayed Time |
+    | --- | --- |
+    | 3 minutes | 5 minutes |
+    | 11 minutes | 15 minutes |
+    | 18 minutes | 20 minutes |
+    | 22 minutes | 25 minutes |
+
+4. If you prefer to set a specific time manually, simply provide the actual value. The framework will not replace explicit values:
+
+    ```
+    Estimated Time: 25 minutes
+    ```
+
+    > **Note:** Use the `X` placeholder when you want the time to automatically update as your content changes. Use an explicit value when you need precise control over the displayed time.
 
 You may now **proceed to the next lab**.
 

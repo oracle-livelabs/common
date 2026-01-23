@@ -1,7 +1,7 @@
 /*
  * ============================================
  * Oracle LiveLabs Workshop Framework
- * Version: 24.3
+ * Version: 24.5
  * ============================================
  *
  * Version     Date             Author          Summary
@@ -35,6 +35,7 @@
  * 24.2        Jan-22-26       Kevin Lazarz     Added quiz scoring with badge download
  * 24.3        Jan-22-26       Kevin Lazarz     Enhanced badge UI with preview and disclaimer
  * 24.4        Jan-23-26       Kevin Lazarz     Auto-calculate estimated reading time for "Estimated Time: X" placeholder
+ * 24.5        Jan-23-26       Kevin Lazarz     Added direct video file embedding support [](video:URL)
  */
 
 /*
@@ -357,6 +358,7 @@ let main = function () {
             articleElement = showRightAndLeftArrow(articleElement, manifestFileContent);
             articleElement = renderVideoHubVideos(articleElement); //adds iframe to Oracle Video Hub videos
             articleElement = renderYouTubeVideos(articleElement); //adds iframe to YouTube videos
+            articleElement = renderDirectVideos(articleElement); //adds HTML5 video element for direct video URLs
             articleElement = updateH1Title(articleElement); //adding the h1 title in the Tutorial before the container div and removing it from the articleElement
             articleElement = wrapSectionTag(articleElement); //adding each section within section tag
             articleElement = wrapImgWithFigure(articleElement); //Wrapping images with figure, adding figcaption to all those images that have title in the MD
@@ -1783,6 +1785,38 @@ let main = function () {
     let renderVideoHubVideos = function (articleElement) {
         $(articleElement).find('a[href^="videohub:"]').each(function () {
             $(this).after('<div class="video-container' + '-' + $(this).attr("href").split(":")[2] + '"><iframe id="kaltura_player" title="video iframe" src="https://cdnapisec.kaltura.com/p/2171811/sp/217181100/embedIframeJs/uiconf_id/35965902/partner_id/2171811?iframeembed=true&playerId=kaltura_player&entry_id=' + $(this).attr('href').split(":")[1] + '&flashvars[streamerType]=auto" frameborder="0" allowfullscreen></div>');
+            $(this).remove();
+        });
+        return articleElement;
+    }
+
+    /* adds HTML5 video element for direct video file URLs.
+    The MD code should be in the format [](video:<enter_video_url>) or [](video:<enter_video_url>:size) for it to render as video.
+    Supported sizes: small, medium, large (default: small)
+    Supported formats: mp4, webm, ogg/ogv */
+    let renderDirectVideos = function (articleElement) {
+        $(articleElement).find('a[href^="video:"]').each(function () {
+            let href = $(this).attr('href');
+            // Remove the 'video:' prefix
+            let videoPath = href.substring(6);
+            let size = 'small'; // default size
+
+            // Check if size is specified at the end (e.g., :small, :medium, :large)
+            let sizeMatch = videoPath.match(/:(small|medium|large)$/);
+            if (sizeMatch) {
+                size = sizeMatch[1];
+                videoPath = videoPath.replace(/:(small|medium|large)$/, '');
+            }
+
+            // Determine video type from extension
+            let videoType = 'video/mp4'; // default
+            if (videoPath.endsWith('.webm')) {
+                videoType = 'video/webm';
+            } else if (videoPath.endsWith('.ogg') || videoPath.endsWith('.ogv')) {
+                videoType = 'video/ogg';
+            }
+
+            $(this).after('<div class="video-container-' + size + '"><video controls preload="metadata" title="video"><source src="' + videoPath + '" type="' + videoType + '">Your browser does not support the video tag.</video></div>');
             $(this).remove();
         });
         return articleElement;

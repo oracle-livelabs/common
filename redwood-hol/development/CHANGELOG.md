@@ -1,5 +1,53 @@
 # Oracle LiveLabs Workshop Framework - Changelog
 
+## Version 24.5 (January 23, 2026)
+
+### Summary
+Added support for embedding direct video files (MP4, WebM, OGG) using HTML5 video element.
+
+### New Feature
+
+#### Direct Video File Embedding
+Embed video files directly from URLs (e.g., OCI Object Storage) without relying on YouTube or Video Hub.
+
+**Syntax:**
+```markdown
+[](video:https://example.com/path/to/video.mp4)
+```
+
+**With size option:**
+```markdown
+[](video:https://example.com/path/to/video.mp4:large)
+```
+
+**Supported Sizes:**
+| Size | Description |
+|------|-------------|
+| `small` | Default size, 35% width |
+| `medium` | 50% width |
+| `large` | 100% width |
+
+**Supported Formats:**
+- `.mp4` (video/mp4)
+- `.webm` (video/webm)
+- `.ogg` / `.ogv` (video/ogg)
+
+**Example:**
+```markdown
+[](video:https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/.../o/fastlab-createadb.mp4:large)
+```
+
+**Features:**
+- Uses native HTML5 `<video>` element with controls
+- `preload="metadata"` for faster initial load
+- Responsive design matching existing video container styles
+
+**Files:**
+- `main.24.js`: `renderDirectVideos()` function
+- `style.24.css`: Video element styles mirroring iframe styles
+
+---
+
 ## Version 24.4 (January 23, 2026)
 
 ### Summary
@@ -233,6 +281,7 @@ To deploy version 24:
 | 24.2 | Jan-22-26 | Kevin Lazarz | Added quiz scoring with badge download |
 | 24.3 | Jan-22-26 | Kevin Lazarz | Enhanced badge UI with preview and disclaimer |
 | 24.4 | Jan-23-26 | Kevin Lazarz | Auto-calculate estimated reading time |
+| 24.5 | Jan-23-26 | Kevin Lazarz | Direct video file embedding support |
 
 ---
 
