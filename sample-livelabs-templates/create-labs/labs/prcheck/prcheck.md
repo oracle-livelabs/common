@@ -161,7 +161,7 @@ After you submit a PR, you can view the status of automated checks in GitHub.
 
 ## Task 4: Running Checks Locally (Optional)
 
-You can run the same checks locally before submitting a PR to catch issues early.
+You can run the same checks locally before submitting a PR to catch issues early. This saves time by identifying issues before the automated checks run on your PR.
 
 ### Image Size Check
 
@@ -169,7 +169,17 @@ You can run the same checks locally before submitting a PR to catch issues early
 
 ### Markdown Validation Check
 
-1. Download the validation script from the LiveLabs common repository.
+The markdown validation script is available for both **Linux/macOS (Bash)** and **Windows (PowerShell)**.
+
+#### Option A: Linux / macOS (Bash)
+
+1. Download the validation script:
+
+    ```bash
+    <copy>
+    curl -O https://raw.githubusercontent.com/oracle-livelabs/common/main/md-validator/.github/scripts/validate-livelabs-markdown.sh
+    </copy>
+    ```
 
 2. Make it executable:
 
@@ -187,7 +197,117 @@ You can run the same checks locally before submitting a PR to catch issues early
     </copy>
     ```
 
-4. Review the output and fix any errors or warnings.
+4. Or run on specific files:
+
+    ```bash
+    <copy>
+    ./validate-livelabs-markdown.sh introduction.md lab1.md lab2.md
+    </copy>
+    ```
+
+5. Or run on all markdown files in the current directory:
+
+    ```bash
+    <copy>
+    ./validate-livelabs-markdown.sh
+    </copy>
+    ```
+
+#### Option B: Windows (PowerShell)
+
+1. Download the PowerShell validation script:
+
+    ```powershell
+    <copy>
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/oracle-livelabs/common/main/md-validator/.github/scripts/validate-livelabs-markdown.ps1" -OutFile "validate-livelabs-markdown.ps1"
+    </copy>
+    ```
+
+2. If you encounter an execution policy error, you may need to allow script execution for the current session:
+
+    ```powershell
+    <copy>
+    Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+    </copy>
+    ```
+
+3. Run on your workshop directory:
+
+    ```powershell
+    <copy>
+    .\validate-livelabs-markdown.ps1 C:\path\to\your\workshop
+    </copy>
+    ```
+
+4. Or run on specific files:
+
+    ```powershell
+    <copy>
+    .\validate-livelabs-markdown.ps1 introduction.md lab1.md lab2.md
+    </copy>
+    ```
+
+5. Or run on all markdown files in the current directory:
+
+    ```powershell
+    <copy>
+    .\validate-livelabs-markdown.ps1
+    </copy>
+    ```
+
+#### Understanding the Output
+
+Both scripts provide color-coded output:
+
+| Color | Meaning |
+| --- | --- |
+| Red (ERROR) | Must be fixed before PR can be merged |
+| Yellow (WARNING) | Recommended to fix, but not blocking |
+| Green (PASS) | File passed all required checks |
+
+Example output:
+
+```
+================================================
+LiveLabs Markdown Formatting Validator
+================================================
+
+Checking: introduction.md
+PASS: introduction.md passed all required checks
+
+Checking: lab1.md
+ERROR: lab1.md: Missing '## Acknowledgements' section
+WARNING: lab1.md: Consider adding an '### Objectives' section
+
+================================================
+Summary
+================================================
+Errors: 1
+Warnings: 1
+
+Validation FAILED
+```
+
+#### Validation Rules Reference
+
+The script checks for the following rules:
+
+| Rule | Type | Description |
+| --- | --- | --- |
+| H1 Title | Error | First non-empty line must be an H1 (`# Title`) |
+| Single H1 | Error | Only one H1 header allowed per file |
+| Acknowledgements | Error | Must have `## Acknowledgements` section |
+| Author Format | Warning | Acknowledgements should include `**Author**` |
+| Image Alt Text | Error | Images must have alt text: `![alt text](image.png)` |
+| YouTube Format | Warning | Use format `[](youtube:VIDEO_ID)` |
+| Task Format | Warning | Tasks should use `## Task N: Description` |
+| Copy Tags | Error | `<copy>` and `</copy>` tags must be balanced |
+| Introduction | Warning | Labs with Tasks should have `## Introduction` |
+| Objectives | Warning | Consider adding `### Objectives` section |
+| Estimated Time | Error | Must include `Estimated Time:` (or `Estimated Workshop Time:` for introduction.md) |
+| Lowercase Images | Error | Image filenames must be lowercase |
+
+5. Review the output and fix any errors or warnings before submitting your PR.
 
 ## FAQ
 
