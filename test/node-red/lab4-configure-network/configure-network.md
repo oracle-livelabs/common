@@ -37,7 +37,7 @@ Estimated time: 20 minutes
    - **Destination Port Range:** 1880
    - Click on **Add Ingress Rules** at the bottom.
 
-   ![Add Ingress Rule](images/addIngress1.png " ")
+ 
 
 ## Task 2: Update the OAL Firewall service
 
