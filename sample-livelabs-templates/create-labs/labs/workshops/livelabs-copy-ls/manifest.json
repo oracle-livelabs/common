@@ -78,6 +78,11 @@
         "title": "Additional optional labs: Create custom image for marketplace",
         "description": "This lab will describe how to create and use a marketplace image for your workshop.",
         "filename": "./../../7-labs-create-custom-image-for-marketplace/7-labs-create-custom-image-for-marketplace.md"
+    },
+    {
+      "title": "Need Help?",
+      "description": "Solutions to Common Problems and Directions for Receiving Live Help",
+      "filename":"./../../need-help/need-help.md"
     }
   ]
 }
