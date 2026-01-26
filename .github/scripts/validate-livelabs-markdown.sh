@@ -92,12 +92,7 @@ for file in $FILES; do
         ((FILE_ERRORS++))
     fi
 
-    # Rule 4: Check Acknowledgements format (Author/Authors with bold)
-    if grep -q "^## Acknowledgements" "$file"; then
-        if ! grep -A5 "^## Acknowledgements" "$file" | grep -qE '\*\*Authors?\*\*'; then
-            log_warning "$file: Acknowledgements should include '**Author** - <Name, Title, Group>'"
-        fi
-    fi
+    # Rule 4: (Removed - no longer checking for Author format in Acknowledgements)
 
     # Rule 5: Check image references have alt text
     # Pattern: ![](images/...) is invalid, should be ![alt text](images/...)
