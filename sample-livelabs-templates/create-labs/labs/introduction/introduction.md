@@ -2,7 +2,7 @@
 
 > **Note:** Internal systems are not referenced by their URL.
 
-Estimated Time: x
+Estimated Workshop Time: 240 min
 
 Welcome to LiveLabs. This platform provides hands-on experiences for Oracle products and technologies, demonstrating use cases and helping users explore Oracle Cloud, Applications, and Database.
 
