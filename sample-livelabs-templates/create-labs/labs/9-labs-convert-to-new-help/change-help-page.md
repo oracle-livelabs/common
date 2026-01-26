@@ -12,6 +12,8 @@ Converting to the help lab pages will allow you to only have to edit 1 or 2 Mark
 
 Implementing the help button will allow users to quickly construct an email pre-filled to direct toward the given address, as well as a pre-filled subject line that describes the workshop they are sending the email from.
 
+Estimated Time: x
+
 ## Task 1: Adding a Help Button
 
 [](youtube:grvsGwSkylg)
