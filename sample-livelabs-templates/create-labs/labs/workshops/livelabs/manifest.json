@@ -10,6 +10,11 @@
       "filename": "./../../introduction/introduction.md"
     },
     {
+        "title": "Need more information on GitHub?",
+        "description": "Describes what GitHub is and general information on projects and repositories",
+        "filename": "./../../introduction/github-introduction.md"
+    },
+    {
         "title": "Need to understand the status workflow in WMS?",
         "description": "Details the status in WMS and what comes next, who is responsible.",
         "filename": "./../../introduction/wms-workflows.md"
@@ -30,61 +35,47 @@
       "filename": "./../../3-labs-sync-github/3-labs-sync-github.md"
     },
     {
-        "title": "Lab 4a: Capture effective screens - Best practices",
+        "title": "Lab 4: Capture effective screens - Best practices",
         "description": "This lab will describe the best practices when capturing screens.",
-        "filename": "./../../13-labs-capture-screens-best-practices/13-labs-capture-screens-best-practices.md"
+        "filename": "./../../4-labs-capture-screens-best-practices/13-labs-capture-screens-best-practices.md"
     },    
     {
-      "title": "Lab 4b: How to use OptiShot to optimize screenshots",
-      "description": "OptiShot is a MacOS/Wndows tool to optimize screenshots",
-      "filename": "./../../optishot/optishot.md"
-    },
-    {
-      "title": "Lab 5a: Develop Markdown and content",
+      "title": "Lab 5: Develop Markdown and content",
       "description": "This labs give you tips and tricks for editing and how to develop your lab (markdown) content using LiveLabs standards and accessibility for your workshops.",
-      "filename": "./../../4-labs-markdown-develop-content/4-labs-markdown-develop-content.md"
-    },
-        {
-      "title": "Lab 5b: Add LiveLabs Quizzes to your workshops (Beta)",
-      "filename": "./../../quiz/quiz.md"
+      "filename": "./../../5-labs-markdown-develop-content/4-labs-markdown-develop-content.md"
     },
     {
-      "title": "Lab 6a: QA checks and steps",
+      "title": "Lab 6: QA checks and steps",
       "description": "This lab prepares you for QA of your workshop, details to look for and adjust before publishing your workshop.",
-      "filename": "./../../5-labs-qa-checks/5-labs-qa-checks.md"
-    },
-    {
-      "title": "Lab 6b: Pull Request Automated Checks",
-      "description": "This lab prepares you for QA of your workshop, details to look for and adjust before publishing your workshop.",
-      "filename": "./../../prcheck/prcheck.md"
+      "filename": "./../../6-labs-qa-checks/5-labs-qa-checks.md"
     },
     {
       "title": "Lab 7: Publish your workshop",
       "description": "This lab walks you through the WMS steps to publish your workshop.",
-      "filename": "./../../6-labs-publish/6-labs-publish.md"
+      "filename": "./../../7-labs-publish/6-labs-publish.md"
     },
     {
-      "title": "Lab 8a: Publish to FreeSQL",
-      "description": "This lab shows you how to create a tutorial in FreeSQL",
-      "filename": "./../../11-labs-create-freesql/11-create-freesql.md"
+      "title": "Additional optional labs: Publish to Live SQL",
+      "description": "This lab shows you how to create a tutorial in Live SQL",
+      "filename": "./../../11-labs-create-livesql/11-create-livesql.md"
     },
     {
-      "title": "Lab 8b: FreeSQL Integration",
-      "description": "This lab shows you how to integrate FreeSQL in your workshop",
-      "filename": "../../../labs/12-freesql-integration/12-freesql-integration.md"
+      "title": "Additional optional labs: Live SQL Integration",
+      "description": "This lab shows you how to integrate Live SQL in your workshop",
+      "filename": "../../../labs/12-livesql-integration/12-livesql-integration.md"
     },
     {
-        "title": "Lab 9: Develop LiveLabs Sprints",
+        "title": "Additional optional labs: Develop LiveLabs Sprints",
         "description": "This lab shows you how to create a Sprint for LiveLabs",
         "filename": "./../../10-labs-create-sprints-workflow/10-create-sprints-workflow.md"
     },
     {
-        "title": "Lab 10a: Setup graphical remote desktop",
+        "title": "Additional optional labs: Setup graphical remote desktop",
         "description": "This lab will describe how to create and use a graphical remote desktop for your workshop.",
         "filename": "./../../6-labs-setup-graphical-remote-desktop/6-labs-setup-graphical-remote-desktop.md"
     },
     {
-        "title": "Lab 10b: Create custom image for marketplace",
+        "title": "Additional optional labs: Create custom image for marketplace",
         "description": "This lab will describe how to create and use a marketplace image for your workshop.",
         "filename": "./../../7-labs-create-custom-image-for-marketplace/7-labs-create-custom-image-for-marketplace.md"
     }
