@@ -72,17 +72,18 @@ jobs:
           while IFS= read -r file; do
             [ -z "$file" ] && continue
             dir=$(dirname "$file")
-            # Extract image paths from markdown
-            images=$(grep -oE '!\[.*?\]\(images/[^)]+\)' "$file" | grep -oE 'images/[^)]+' || true)
-            for img in $images; do
+            # Extract image paths from markdown - handle optional title like ![alt](images/file.png "title")
+            # Use perl regex for non-greedy matching and extract just the path before any space or quote
+            grep -oP '\!\[[^\]]*\]\(images/[^"\s\)]+' "$file" 2>/dev/null | grep -oP 'images/[^"\s\)]+' | while IFS= read -r img; do
               full_path="$dir/$img"
               if [ ! -f "$full_path" ]; then
                 echo "ERROR: Missing image in $file: $img"
-                MISSING=1
+                echo "MISSING" > /tmp/missing_flag
               fi
             done
           done <<< "${{ steps.changed-files.outputs.all_changed_files }}"
-          if [ $MISSING -eq 1 ]; then
+          if [ -f /tmp/missing_flag ]; then
+            rm -f /tmp/missing_flag
             echo "Some referenced images are missing!"
             exit 1
           fi
