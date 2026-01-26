@@ -6,7 +6,7 @@ In this lab, you will learn how to start up Node-RED and start using it.
 
 Estimated time: 20 minutes
 
-### Objetives:
+### Objectives
 * Start up Node-RED
 * Create a quick project
 

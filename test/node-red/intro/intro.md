@@ -9,6 +9,7 @@ Estimated workshop time: 60-90 minutes
 
 We hope you enjoy this LiveLab. Go ahead and start the first Lab.
 
+### Objectives
 
 If you are interested in more information about Oracle Linux, please watch the following video:
 
@@ -25,7 +26,7 @@ If you are interested in more information about Oracle Linux, please watch the f
 * [Node-RED](https://nodered.org/)
 
 
-## Acknowledgments
+## Acknowledgements
 
 * **Author:** Kevin Lazarz, Product Manager
 * **Last Updated By/Date:** Kevin Lazarz, Product Manager, November 2021

@@ -20,7 +20,7 @@ Estimated time: 20 minutes
 
 1. Click the **Navigation Menu** in the upper left, navigate to **Networking**, and select **Virtual Cloud Networks**. Select the VCN by clicking on its name
 
-	![](https://oracle-livelabs.github.io/common/images/console/networking-vcn.png " ")
+	![dddd](https://oracle-livelabs.github.io/common/images/console/networking-vcn.png " ")
 
 2. Now click on **Security Lists** on the left navigation bar for the VCN.
 
