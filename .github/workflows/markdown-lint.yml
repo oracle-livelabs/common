@@ -12,58 +12,48 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Find all markdown files
-        id: find-files
-        run: |
-          # Find all markdown files, excluding node_modules and .github
-          MD_FILES=$(find . -name "*.md" -type f \
-            ! -path "./node_modules/*" \
-            ! -path "./.github/*" \
-            | sort)
-
-          if [ -z "$MD_FILES" ]; then
-            echo "No markdown files found"
-            echo "has_files=false" >> $GITHUB_OUTPUT
-          else
-            echo "Found markdown files:"
-            echo "$MD_FILES"
-            # Store files in a file for later use (handles large file lists)
-            echo "$MD_FILES" > /tmp/md_files.txt
-            echo "has_files=true" >> $GITHUB_OUTPUT
-            echo "file_count=$(echo "$MD_FILES" | wc -l | tr -d ' ')" >> $GITHUB_OUTPUT
-          fi
+      - name: Get markdown files from PR
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            **/*.md
+          files_ignore: |
+            node_modules/**
+            .github/**/*.md
 
       - name: Setup Node.js
-        if: steps.find-files.outputs.has_files == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install markdownlint-cli
-        if: steps.find-files.outputs.has_files == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: npm install -g markdownlint-cli
 
       - name: Run markdownlint
-        if: steps.find-files.outputs.has_files == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
-          echo "Running markdownlint on all markdown files..."
-          # Use xargs to handle large file lists
-          cat /tmp/md_files.txt | xargs markdownlint --config .markdownlint.json || true
+          echo "Running markdownlint on PR files..."
+          echo "Files in PR: ${{ steps.changed-files.outputs.all_changed_files }}"
+          markdownlint ${{ steps.changed-files.outputs.all_changed_files }} --config .markdownlint.json || true
 
       - name: Run LiveLabs format validation
-        if: steps.find-files.outputs.has_files == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           chmod +x .github/scripts/validate-livelabs-markdown.sh
-          # Pass files to the validation script
-          cat /tmp/md_files.txt | xargs .github/scripts/validate-livelabs-markdown.sh
+          .github/scripts/validate-livelabs-markdown.sh ${{ steps.changed-files.outputs.all_changed_files }}
 
       - name: Check image references exist
-        if: steps.find-files.outputs.has_files == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           echo "Checking if referenced images exist..."
           MISSING=0
-          while IFS= read -r file; do
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             dir=$(dirname "$file")
             # Extract image paths from markdown
             images=$(grep -oE '!\[.*?\]\(images/[^)]+\)' "$file" | grep -oE 'images/[^)]+' || true)
@@ -74,7 +64,7 @@ jobs:
                 MISSING=1
               fi
             done
-          done < /tmp/md_files.txt
+          done
           if [ $MISSING -eq 1 ]; then
             echo "Some referenced images are missing!"
             exit 1
@@ -82,11 +72,11 @@ jobs:
           echo "All referenced images exist."
 
       - name: Check filename conventions
-        if: steps.find-files.outputs.has_files == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           echo "Checking filename conventions..."
           INVALID=0
-          while IFS= read -r file; do
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             filename=$(basename "$file")
             lowercase=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
             if [ "$filename" != "$lowercase" ]; then
@@ -97,19 +87,22 @@ jobs:
               echo "ERROR: Filename contains spaces: $file"
               INVALID=1
             fi
-          done < /tmp/md_files.txt
+          done
           if [ $INVALID -eq 1 ]; then
             exit 1
           fi
           echo "All filenames follow conventions."
 
       - name: Summary
-        if: always() && steps.find-files.outputs.has_files == 'true'
+        if: always() && steps.changed-files.outputs.any_changed == 'true'
         run: |
           echo "## Markdown Validation Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Checked ${{ steps.find-files.outputs.file_count }} markdown files" >> $GITHUB_STEP_SUMMARY
+          echo "Checked files from PR:" >> $GITHUB_STEP_SUMMARY
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "- $file" >> $GITHUB_STEP_SUMMARY
+          done
 
-      - name: No markdown files
-        if: steps.find-files.outputs.has_files != 'true'
-        run: echo "No markdown files found in repository."
+      - name: No markdown files in PR
+        if: steps.changed-files.outputs.any_changed != 'true'
+        run: echo "No markdown files in this PR."
