@@ -8,6 +8,8 @@ Screen captures are powerful productivity and communication tools. By following 
 
 This lab outlines best practices for creating LiveLabs workshops with screen captures. It highlights how to plan, capture, and edit images effectively, maintaining professionalism, security, and accessibility in line with Oracle standards.
 
+Estimated Time: 20 minutes
+
 ### Objectives
 
 * Obtain and use Techsmith Snagit to capture screens
