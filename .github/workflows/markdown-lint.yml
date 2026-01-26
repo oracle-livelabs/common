@@ -2,11 +2,7 @@ name: LiveLabs Markdown Validation
 
 on:
   pull_request:
-    paths:
-      - '**/*.md'
-      - '.markdownlint.json'
-      - '.github/workflows/markdown-lint.yml'
-      - '.github/scripts/validate-livelabs-markdown.sh'
+    types: [opened, synchronize, reopened]
 
 jobs:
   markdown-validation:
@@ -19,7 +15,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get changed markdown files
+      - name: Get markdown files from PR
         id: changed-files
         uses: tj-actions/changed-files@v44
         with:
@@ -42,8 +38,8 @@ jobs:
       - name: Run markdownlint
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
-          echo "Running markdownlint on changed files..."
-          echo "Changed files: ${{ steps.changed-files.outputs.all_changed_files }}"
+          echo "Running markdownlint on PR files..."
+          echo "Files in PR: ${{ steps.changed-files.outputs.all_changed_files }}"
           markdownlint ${{ steps.changed-files.outputs.all_changed_files }} --config .markdownlint.json || true
 
       - name: Run LiveLabs format validation
@@ -102,11 +98,11 @@ jobs:
         run: |
           echo "## Markdown Validation Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Checked files:" >> $GITHUB_STEP_SUMMARY
+          echo "Checked files from PR:" >> $GITHUB_STEP_SUMMARY
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "- $file" >> $GITHUB_STEP_SUMMARY
           done
 
-      - name: No markdown changes
+      - name: No markdown files in PR
         if: steps.changed-files.outputs.any_changed != 'true'
-        run: echo "No markdown files changed in this PR."
+        run: echo "No markdown files in this PR."
