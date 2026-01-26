@@ -2,7 +2,7 @@
 
 > **Note:** Internal systems are not referenced by their URL.
 
-Estimated Time: x
+Estimated Workshop Time: 240 min
 
 Welcome to LiveLabs. This platform provides hands-on experiences for Oracle products and technologies, demonstrating use cases and helping users explore Oracle Cloud, Applications, and Database.
 
@@ -27,30 +27,13 @@ Use the sample workshop in the [oracle-livelabs/common](https://github.com/oracl
 
 Review the QA document for image guidelines, markdown formatting, and workshop standards.
 
-### **Workshop Objectives**
+### Objectives
 
 * Submit a new workshop in WMS
 * Set up your development environment
 * Learn Markdown features and best practices
 * Perform QA on your workshop
 * Publish your workshop
-
-### **Lab Breakdown**
-
-- **Lab 1:** Submit new workshop in WMS
-- **Lab 2:** Set up GitHub and install tools
-- **Lab 3:** Stay in sync with GitHub environment
-- **Lab 4a:** Develop Markdown content
-- **Lab 4b:** Adding LiveLabs quizzes
-- **Lab 5:** How to use OptiShot to optimize screenshots
-- **Lab 6a:** QA checks and steps
-- **Lab 6b:** Pull Request Automated Checks
-- **Lab 7:** Publish your workshop
-- **Lab 8a:** Publish to FreeSQL
-- **Lab 8b:** FreeSQL Integration
-- **Lab 9:** Develop LiveLabs Sprints
-- **Lab 10a:** Set up graphical remote desktop
-- **Lab 10b:** Create custom image for marketplace
 
 
 ## Learn More
