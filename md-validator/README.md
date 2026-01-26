@@ -12,7 +12,7 @@ This validator ensures that Markdown content submitted in PRs follows the establ
 - Checks both standard Markdown formatting and LiveLabs-specific syntax
 - Verifies referenced images exist
 - Enforces filename conventions
-- Provides detailed error and warning messages
+- Provides detailed error messages
 - Generates GitHub Actions summary report
 
 ## Installation
@@ -76,20 +76,20 @@ To block PRs that fail validation:
 
 ### LiveLabs-Specific Rules (via custom script)
 
-| Rule | Severity | Description |
-|------|----------|-------------|
-| H1 Title | ERROR | First line must be `# Title` |
-| Single H1 | ERROR | Only one H1 heading per file |
-| Acknowledgements | ERROR | Must have `## Acknowledgements` section |
-| Author Format | WARNING | Acknowledgements should include `**Author**` or `**Authors**` |
-| Image Alt Text | ERROR | Images must have alt text: `![description](images/file.png)` |
-| Task Format | WARNING | Task headers should be `## Task N: Description` |
-| Copy Tags | ERROR | `<copy>` and `</copy>` tags must be balanced |
-| Introduction | WARNING | Labs with Tasks should have `## Introduction` |
-| Objectives | WARNING | Consider adding `### Objectives` section |
-| Estimated Time | ERROR | Non-introduction files must have `Estimated Time:` |
-| Workshop Time | ERROR | `introduction.md` must contain `Estimated Workshop Time:` |
-| Lowercase Images | ERROR | Image filenames must be lowercase |
+| Rule | Description |
+|------|-------------|
+| H1 Title | First line must be `# Title` |
+| Single H1 | Only one H1 heading per file |
+| Acknowledgements | Must have `## Acknowledgements` section |
+| Image Alt Text | Images must have alt text: `![description](images/file.png)` |
+| YouTube Format | YouTube embeds should use `[](youtube:VIDEO_ID)` |
+| Task Format | Task headers should be `## Task N: Description` |
+| Copy Tags | `<copy>` and `</copy>` tags must be balanced |
+| Introduction | Labs with Tasks should have `## Introduction` |
+| Objectives | Must have `### Objectives` section |
+| Estimated Time | Non-introduction files must have `Estimated Time:` |
+| Workshop Time | `introduction.md` must contain `Estimated Workshop Time:` |
+| Lowercase Images | Image filenames must be lowercase |
 
 ### Additional Checks
 
@@ -121,6 +121,19 @@ Test files locally before pushing:
 
 The script automatically detects if the argument is a directory and recursively finds all `.md` files within it.
 
+#### Windows (PowerShell)
+
+```powershell
+# Validate all markdown files in a directory (recursive)
+.\.github\scripts\validate-livelabs-markdown.ps1 C:\path\to\workshop
+
+# Validate specific files
+.\.github\scripts\validate-livelabs-markdown.ps1 path\to\lab.md another\file.md
+
+# Validate all markdown files in current directory
+.\.github\scripts\validate-livelabs-markdown.ps1
+```
+
 ### Example Output
 
 ```
@@ -133,13 +146,12 @@ PASS: ./introduction/introduction.md passed all required checks
 
 Checking: ./my-lab/my-lab.md
 ERROR: ./my-lab/my-lab.md: Missing '## Acknowledgements' section
-WARNING: ./my-lab/my-lab.md: Consider adding 'Estimated Time:' information
+ERROR: ./my-lab/my-lab.md: Missing 'Estimated Time:' information
 
 ================================================
 Summary
 ================================================
-Errors: 1
-Warnings: 1
+Errors: 2
 
 Validation FAILED
 ```
@@ -239,20 +251,8 @@ Edit `.markdownlint.json` to modify standard Markdown rules. See [markdownlint r
 
 Edit `.github/scripts/validate-livelabs-markdown.sh` to modify LiveLabs-specific rules:
 
-- Change `log_error` to `log_warning` to downgrade a rule
 - Comment out checks you don't want to enforce
 - Add new checks following the existing patterns
-
-### Example: Make Acknowledgements Optional
-
-In `validate-livelabs-markdown.sh`, change:
-```bash
-log_error "$file: Missing '## Acknowledgements' section"
-```
-to:
-```bash
-log_warning "$file: Missing '## Acknowledgements' section"
-```
 
 ## Troubleshooting
 
@@ -283,10 +283,104 @@ md-validator/
 ├── .markdownlint.json                     # Markdownlint configuration
 └── .github/
     ├── scripts/
-    │   └── validate-livelabs-markdown.sh  # LiveLabs validation script
+    │   ├── validate-livelabs-markdown.sh  # LiveLabs validation script (Bash)
+    │   └── validate-livelabs-markdown.ps1 # LiveLabs validation script (PowerShell)
     └── workflows/
         └── markdown-lint.yml              # GitHub Actions workflow
 ```
+
+## Maintainer's Guide: File Locations
+
+When adding or modifying validation rules, **multiple files must be updated** to keep everything in sync. This section documents all file locations.
+
+### Source Files (Template for Other Repos)
+
+These are the template files that users copy to their own repositories:
+
+| File | Purpose |
+|------|---------|
+| `md-validator/.github/scripts/validate-livelabs-markdown.sh` | Bash validation script (Linux/macOS) |
+| `md-validator/.github/scripts/validate-livelabs-markdown.ps1` | PowerShell validation script (Windows) |
+| `md-validator/.github/workflows/markdown-lint.yml` | GitHub Actions workflow definition |
+| `md-validator/.markdownlint.json` | Markdownlint configuration |
+| `md-validator/README.md` | This documentation |
+
+### Active Files (Running in oracle-livelabs/common)
+
+These are the deployed files that actually run on PRs to the common repository:
+
+| File | Purpose |
+|------|---------|
+| `.github/scripts/validate-livelabs-markdown.sh` | Active Bash validation script |
+| `.github/workflows/markdown-lint.yml` | Active GitHub Actions workflow |
+| `.github/workflows/enforce-image-size.yml` | Image size validation workflow |
+| `.markdownlint.json` | Active markdownlint configuration |
+
+### User Documentation
+
+These files document the validation system for end users:
+
+| File | Purpose |
+|------|---------|
+| `sample-livelabs-templates/create-labs/labs/prcheck/prcheck.md` | User guide for PR checks |
+
+### Checklist: When Adding/Modifying Validation Rules
+
+When you need to add or change a validation rule, update these files:
+
+1. **Bash script** (2 locations):
+   - `md-validator/.github/scripts/validate-livelabs-markdown.sh`
+   - `.github/scripts/validate-livelabs-markdown.sh`
+
+2. **PowerShell script** (1 location):
+   - `md-validator/.github/scripts/validate-livelabs-markdown.ps1`
+
+3. **Documentation** (3 locations):
+   - `md-validator/README.md` - Update "LiveLabs-Specific Rules" table
+   - `sample-livelabs-templates/create-labs/labs/prcheck/prcheck.md` - Update user-facing docs
+   - This maintainer's guide if adding new files
+
+4. **Workflow file** (if changing how checks run):
+   - `md-validator/.github/workflows/markdown-lint.yml`
+   - `.github/workflows/markdown-lint.yml`
+
+5. **Markdownlint config** (if changing standard MD rules):
+   - `md-validator/.markdownlint.json`
+   - `.markdownlint.json`
+
+### Quick Sync Commands
+
+After updating the source files in `md-validator/`, sync to the active locations:
+
+```bash
+# Sync validation script
+cp md-validator/.github/scripts/validate-livelabs-markdown.sh .github/scripts/
+
+# Sync workflow
+cp md-validator/.github/workflows/markdown-lint.yml .github/workflows/
+
+# Sync markdownlint config
+cp md-validator/.markdownlint.json .markdownlint.json
+```
+
+### Rule Implementation Locations
+
+| Rule Type | Implemented In |
+|-----------|---------------|
+| Standard Markdown rules (MD001, MD003, etc.) | `.markdownlint.json` |
+| H1 Title, Single H1 | `validate-livelabs-markdown.sh` (Rules 1-2) |
+| Acknowledgements section | `validate-livelabs-markdown.sh` (Rule 3) |
+| Image alt text | `validate-livelabs-markdown.sh` (Rule 5) |
+| YouTube format | `validate-livelabs-markdown.sh` (Rule 6) |
+| Task format | `validate-livelabs-markdown.sh` (Rule 7) |
+| Copy tags | `validate-livelabs-markdown.sh` (Rule 8) |
+| Introduction section | `validate-livelabs-markdown.sh` (Rule 10) |
+| Objectives section | `validate-livelabs-markdown.sh` (Rule 11) |
+| Estimated Time | `validate-livelabs-markdown.sh` (Rules 12-13) |
+| Lowercase image filenames | `validate-livelabs-markdown.sh` (Rule 14) |
+| Image existence check | `markdown-lint.yml` workflow |
+| Filename conventions | `markdown-lint.yml` workflow |
+| Image size validation | `enforce-image-size.yml` workflow |
 
 ## Contributing
 
@@ -294,7 +388,8 @@ To improve the validator:
 
 1. Test changes locally with sample files
 2. Ensure no false positives on valid LiveLabs content
-3. Update this README if adding new rules
+3. Update ALL files listed in the Maintainer's Guide
+4. Update this README if adding new rules
 
 ## License
 

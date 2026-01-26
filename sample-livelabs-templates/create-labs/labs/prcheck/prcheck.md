@@ -6,16 +6,18 @@ When you submit a Pull Request (PR) to the LiveLabs repository, automated checks
 
 This document explains the automated workflows that run on your PR and how to resolve any issues they may flag.
 
-Estimated Time: x
+Estimated Time: 10 minutes
 
 ### About PR Checks
 
 LiveLabs uses GitHub Actions to automatically validate PRs. Two main workflows run on every PR:
 
-1. **Image Size Enforcement** - Ensures all images are within the 1280px maximum dimension
-2. **Markdown Validation** - Checks that your markdown files follow LiveLabs formatting standards
+1. **LiveLabs Image Validation** - Ensures all images are within the 1280px maximum dimension
+2. **LiveLabs Markdown Validation** - Checks that your markdown files follow LiveLabs formatting standards
 
 If any check fails, your PR will show a red "X" next to the failing check. You must fix the issues before your PR can be merged.
+
+![PR fails](images/prerror.png)
 
 ### Objectives
 
@@ -34,7 +36,7 @@ This lab assumes you have:
 
 ## Task 1: Understanding the Image Size Check
 
-The **Enforce Image Size** workflow ensures that all images in your PR do not exceed 1280 pixels in width or height. Large images slow down page load times and create a poor user experience.
+The **LiveLabs Image Validation** workflow ensures that all images in your PR do not exceed 1280 pixels in width or height. Large images slow down page load times and create a poor user experience.
 
 1. What the check validates:
 
@@ -56,11 +58,13 @@ The **Enforce Image Size** workflow ensures that all images in your PR do not ex
     ERROR: images/screenshot.png is 1920x1080. Max allowed is 1280px (either dimension).
     ```
 
+    ![image dim wrong](images/imagedimwrong.png)
+
 4. To fix oversized images, use the **OptiShot** tool. For detailed instructions on using OptiShot, see the [OptiShot User Manual](../optishot/optishot.md).
 
 ## Task 2: Understanding the Markdown Validation Check
 
-The **Markdown Validation** workflow ensures your markdown files follow LiveLabs formatting standards. It checks both standard markdown rules and LiveLabs-specific conventions.
+The **LiveLabs Markdown Validation** workflow ensures your markdown files follow LiveLabs formatting standards. It checks both standard markdown rules and LiveLabs-specific conventions.
 
 1. What the check validates:
 
@@ -78,55 +82,49 @@ The **Markdown Validation** workflow ensures your markdown files follow LiveLabs
     | --- | --- | --- |
     | Title | `# Lab Title` | Yes |
     | Acknowledgements | `## Acknowledgements` | Yes |
-    | Author | `* **Author** - Name, Title` | Yes |
+    | Objectives | `### Objectives` | Yes |
+    | Introduction | `## Introduction` (for labs with Tasks) | Yes |
+    | Estimated Time | `Estimated Time: X minutes` | Yes |
 
-3. Recommended sections:
-
-    | Section | Format |
-    | --- | --- |
-    | Introduction | `## Introduction` |
-    | Objectives | `### Objectives` |
-    | Estimated Time | `Estimated Time: X minutes` |
-
-4. Common errors and how to fix them:
+3. Common errors and how to fix them:
 
     **Missing Acknowledgements section:**
+
     ```markdown
-    <copy>
     ## Acknowledgements
+
     * **Author** - Your Name, Your Title
     * **Last Updated By/Date** - Your Name, Month Year
-    </copy>
     ```
 
     **Image missing alt text:**
     ```markdown
-    <!-- Wrong -->
+    Wrong
     ![](images/screenshot.png)
 
-    <!-- Correct -->
+    Correct
     ![Description of the image](images/screenshot.png)
     ```
 
     **Mismatched copy tags:**
     ```markdown
-    <!-- Wrong - missing closing tag -->
+    Wrong
     <copy>SELECT * FROM table
 
-    <!-- Correct -->
+    Correct
     <copy>SELECT * FROM table</copy>
     ```
 
     **Task header format:**
     ```markdown
-    <!-- Wrong -->
+    Wrong
     ## Task One: Do Something
 
-    <!-- Correct -->
+    Correct
     ## Task 1: Do Something
     ```
 
-5. Files that are checked:
+4. Files that are checked:
 
     - All `.md` files in your PR
     - Excludes `node_modules/` and `.github/` directories
@@ -262,7 +260,6 @@ Both scripts provide color-coded output:
 | Color | Meaning |
 | --- | --- |
 | Red (ERROR) | Must be fixed before PR can be merged |
-| Yellow (WARNING) | Recommended to fix, but not blocking |
 | Green (PASS) | File passed all required checks |
 
 Example output:
@@ -277,13 +274,12 @@ PASS: introduction.md passed all required checks
 
 Checking: lab1.md
 ERROR: lab1.md: Missing '## Acknowledgements' section
-WARNING: lab1.md: Consider adding an '### Objectives' section
+ERROR: lab1.md: Missing '### Objectives' section
 
 ================================================
 Summary
 ================================================
-Errors: 1
-Warnings: 1
+Errors: 2
 
 Validation FAILED
 ```
@@ -292,22 +288,21 @@ Validation FAILED
 
 The script checks for the following rules:
 
-| Rule | Type | Description |
-| --- | --- | --- |
-| H1 Title | Error | First non-empty line must be an H1 (`# Title`) |
-| Single H1 | Error | Only one H1 header allowed per file |
-| Acknowledgements | Error | Must have `## Acknowledgements` section |
-| Author Format | Warning | Acknowledgements should include `**Author**` |
-| Image Alt Text | Error | Images must have alt text: `![alt text](image.png)` |
-| YouTube Format | Warning | Use format `[](youtube:VIDEO_ID)` |
-| Task Format | Warning | Tasks should use `## Task N: Description` |
-| Copy Tags | Error | `<copy>` and `</copy>` tags must be balanced |
-| Introduction | Warning | Labs with Tasks should have `## Introduction` |
-| Objectives | Warning | Consider adding `### Objectives` section |
-| Estimated Time | Error | Must include `Estimated Time:` (or `Estimated Workshop Time:` for introduction.md) |
-| Lowercase Images | Error | Image filenames must be lowercase |
+| Rule | Description |
+| --- | --- |
+| H1 Title | First non-empty line must be an H1 (`# Title`) |
+| Single H1 | Only one H1 header allowed per file |
+| Acknowledgements | Must have `## Acknowledgements` section |
+| Image Alt Text | Images must have alt text: `![alt text](image.png)` |
+| YouTube Format | Use format `[](youtube:VIDEO_ID)` |
+| Task Format | Tasks should use `## Task N: Description` |
+| Copy Tags | `<copy>` and `</copy>` tags must be balanced |
+| Introduction | Labs with Tasks must have `## Introduction` |
+| Objectives | Must have `### Objectives` section |
+| Estimated Time | Must include `Estimated Time:` (or `Estimated Workshop Time:` for introduction.md) |
+| Lowercase Images | Image filenames must be lowercase |
 
-5. Review the output and fix any errors or warnings before submitting your PR.
+5. Review the output and fix any errors before submitting your PR.
 
 ## FAQ
 

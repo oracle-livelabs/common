@@ -6,22 +6,15 @@
 set +e
 
 ERRORS=0
-WARNINGS=0
 
 # Colors for output
 RED='\033[0;31m'
-YELLOW='\033[1;33m'
 GREEN='\033[0;32m'
 NC='\033[0m' # No Color
 
 log_error() {
     echo -e "${RED}ERROR${NC}: $1"
     ((ERRORS++))
-}
-
-log_warning() {
-    echo -e "${YELLOW}WARNING${NC}: $1"
-    ((WARNINGS++))
 }
 
 log_success() {
@@ -104,7 +97,8 @@ for file in $FILES; do
 
     # Rule 6: Check YouTube format is correct
     if grep -E '\[.*\]\(youtube:' "$file" | grep -v '^\[]\(youtube:' > /dev/null 2>&1; then
-        log_warning "$file: YouTube embeds should use format: [](youtube:VIDEO_ID)"
+        log_error "$file: YouTube embeds should use format: [](youtube:VIDEO_ID)"
+        ((FILE_ERRORS++))
     fi
 
     # Rule 7: Check for proper Task format (## Task N: Description)
@@ -113,7 +107,8 @@ for file in $FILES; do
         while IFS= read -r line; do
             if [[ ! "$line" =~ ^[0-9]+:##\ Task\ [0-9]+: ]]; then
                 linenum=$(echo "$line" | cut -d: -f1)
-                log_warning "$file (line $linenum): Task headers should follow format '## Task N: Description'"
+                log_error "$file (line $linenum): Task headers should follow format '## Task N: Description'"
+                ((FILE_ERRORS++))
             fi
         done <<< "$task_headers"
     fi
@@ -126,22 +121,20 @@ for file in $FILES; do
         ((FILE_ERRORS++))
     fi
 
-    # Rule 9: Check Note format
-    if grep -n '^>' "$file" | grep -v '> \*\*Note:\*\*' > /dev/null 2>&1; then
-        # This is a soft warning - blockquotes might be used for other purposes
-        :
-    fi
+    # Rule 9: Check Note format (skipped - blockquotes used for other purposes)
 
     # Rule 10: Check for Introduction or About section in labs
     if grep -q "^## Task" "$file"; then
         if ! grep -q "^## Introduction" "$file"; then
-            log_warning "$file: Labs with Tasks should have an '## Introduction' section"
+            log_error "$file: Labs with Tasks should have an '## Introduction' section"
+            ((FILE_ERRORS++))
         fi
     fi
 
     # Rule 11: Check for Objectives section
     if ! grep -q "^### Objectives" "$file" && ! grep -q "^## Objectives" "$file"; then
-        log_warning "$file: Consider adding an '### Objectives' section"
+        log_error "$file: Missing '### Objectives' section"
+        ((FILE_ERRORS++))
     fi
 
     # Rule 12 & 13: Check for Estimated Time
@@ -170,8 +163,7 @@ for file in $FILES; do
         fi
     done
 
-    # Rule 15: Check for Learn More section (optional but recommended)
-    # Just a soft check, no warning
+    # Rule 15: Check for Learn More section (optional - no check)
 
     if [ $FILE_ERRORS -eq 0 ]; then
         log_success "$file passed all required checks"
@@ -183,7 +175,6 @@ echo "================================================"
 echo "Summary"
 echo "================================================"
 echo "Errors: $ERRORS"
-echo "Warnings: $WARNINGS"
 echo ""
 
 if [ $ERRORS -gt 0 ]; then

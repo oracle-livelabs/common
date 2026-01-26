@@ -7,20 +7,12 @@ param(
 )
 
 $script:ERRORS = 0
-$script:WARNINGS = 0
 
 function Log-Error {
     param([string]$Message)
     Write-Host "ERROR" -ForegroundColor Red -NoNewline
     Write-Host ": $Message"
     $script:ERRORS++
-}
-
-function Log-Warning {
-    param([string]$Message)
-    Write-Host "WARNING" -ForegroundColor Yellow -NoNewline
-    Write-Host ": $Message"
-    $script:WARNINGS++
 }
 
 function Log-Success {
@@ -112,17 +104,7 @@ foreach ($file in $Files) {
         $FileErrors++
     }
 
-    # Rule 4: Check Acknowledgements format (Author/Authors with bold)
-    if ($content -match '(?m)^## Acknowledgements') {
-        # Get content after Acknowledgements header
-        $ackMatch = $content -split '(?m)^## Acknowledgements'
-        if ($ackMatch.Count -gt 1) {
-            $ackSection = ($ackMatch[1] -split '(?m)^## ')[0]
-            if ($ackSection -notmatch '\*\*Authors?\*\*') {
-                Log-Warning "$file`: Acknowledgements should include '**Author** - <Name, Title, Group>'"
-            }
-        }
-    }
+    # Rule 4: (Removed - no longer checking for Author format in Acknowledgements)
 
     # Rule 5: Check image references have alt text
     # Pattern: ![](images/...) is invalid, should be ![alt text](images/...)
@@ -142,7 +124,8 @@ foreach ($file in $Files) {
 
     # Rule 6: Check YouTube format is correct
     if ($content -match '\[.+\]\(youtube:' -and $content -notmatch '^\[\]\(youtube:') {
-        Log-Warning "$file`: YouTube embeds should use format: [](youtube:VIDEO_ID)"
+        Log-Error "$file`: YouTube embeds should use format: [](youtube:VIDEO_ID)"
+        $FileErrors++
     }
 
     # Rule 7: Check for proper Task format (## Task N: Description)
@@ -151,7 +134,8 @@ foreach ($file in $Files) {
         $lineNum++
         if ($line -match '^## Task') {
             if ($line -notmatch '^## Task \d+:') {
-                Log-Warning "$file (line $lineNum): Task headers should follow format '## Task N: Description'"
+                Log-Error "$file (line $lineNum): Task headers should follow format '## Task N: Description'"
+                $FileErrors++
             }
         }
     }
@@ -164,18 +148,20 @@ foreach ($file in $Files) {
         $FileErrors++
     }
 
-    # Rule 9: Check Note format (soft check - skipped like in bash version)
+    # Rule 9: Check Note format (skipped - blockquotes used for other purposes)
 
     # Rule 10: Check for Introduction or About section in labs
     if ($content -match '(?m)^## Task') {
         if ($content -notmatch '(?m)^## Introduction') {
-            Log-Warning "$file`: Labs with Tasks should have an '## Introduction' section"
+            Log-Error "$file`: Labs with Tasks should have an '## Introduction' section"
+            $FileErrors++
         }
     }
 
     # Rule 11: Check for Objectives section
     if ($content -notmatch '(?m)^###? Objectives') {
-        Log-Warning "$file`: Consider adding an '### Objectives' section"
+        Log-Error "$file`: Missing '### Objectives' section"
+        $FileErrors++
     }
 
     # Rule 12 & 13: Check for Estimated Time
@@ -205,7 +191,7 @@ foreach ($file in $Files) {
         }
     }
 
-    # Rule 15: Check for Learn More section (optional but recommended - soft check)
+    # Rule 15: Check for Learn More section (optional - no check)
 
     if ($FileErrors -eq 0) {
         Log-Success "$file passed all required checks"
@@ -217,7 +203,6 @@ Write-Host "================================================"
 Write-Host "Summary"
 Write-Host "================================================"
 Write-Host "Errors: $script:ERRORS"
-Write-Host "Warnings: $script:WARNINGS"
 Write-Host ""
 
 if ($script:ERRORS -gt 0) {

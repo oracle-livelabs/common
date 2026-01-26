@@ -1,4 +1,4 @@
-name: Enforce image size on PR
+name: LiveLabs Image Validation
 
 on:
   pull_request:
