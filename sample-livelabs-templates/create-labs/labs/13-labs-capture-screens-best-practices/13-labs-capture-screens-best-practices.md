@@ -31,7 +31,7 @@ The **Snagit Editor**.
 
 ![Sangit editor software](./images/snagit-editor.png " ")
 
-## Task 1: Best Practices for Screen captures
+## Task 1: Use screen captures best practices
 
 Here are best practices steps to follow at a very high level which we will explain below in detail.
 
@@ -65,7 +65,7 @@ Here are best practices steps to follow at a very high level which we will expla
     ![Partial screen capture](./images/partial-screen.png " ")
 
 **4. Edit and Enhance**     
-- **Consistent Markups for Clarity:** Use the same editing software and styles across all content to maintain visual consistency among multiple authors and workshops. We highly recommend that you use Snagit to both capture and edit screens. This promotes consistency across all workshops.
+- **Use Consistent Markups for Clarity:** Use the same editing software and styles across all content to maintain visual consistency among multiple authors and workshops. We highly recommend that you use Snagit to both capture and edit screens. This promotes consistency across all workshops.
 
 - **Annotate with Purpose:**
     - Use the same editing software and styles across all content to maintain consistency among multiple authors and workshops.
@@ -103,30 +103,47 @@ Here are best practices steps to follow at a very high level which we will expla
 - Add accurate, descriptive alt text for each image
 - Follow Oracle’s security, accessibility, and privacy protocols throughout
 
-## Task 2: Resize images to the new max allowed size 1280 pixels
+## Task 2: Resize images to the new max allowed size of 1280 pixels
 
 You can force image resizing in Snagit. Snagit provides several ways to resize images either during capture or after the image has been captured in the Snagit Editor.
 
 ### **How to Resize Images in Snagit**
 
-**After Capturing (Snagit Editor)**
+**After Capturing an Image (Snagit Editor)**
 
-1. Open your image in Snagit Editor.   
-2. Go to **Image > Resize Image**.   
-3. In the **Resize Image** dialog box, you can set the new width and height. You may set the dimensions in pixels, percent, or inches. 
-    > _**Important:** Make sure that you choose a max size of **1280 pixels** or less as this is the new LiveLabs requirement starting in 2026. If you don't, your image will be resized when you submit a pull request._
+>**Note:** For detailed information on how to resize a captured image, see Techsmith blogs and [tutorials](https://www.techsmith.com/learn/tutorials/snagit/) such as [How to Resize an Image or Picture the Right Way](https://www.techsmith.com/blog/how-to-resize-an-image-correctly/).
 
-4. Click **Apply** to resize.
+1. Open your image in Snagit Editor. 
 
-**During Capture (Presets)**
+2. To resize your image, go to **Image > Resize Image** from the menu bar; alternatively, click the **Resize Image** box in the **Recent Captures Tray** under the image. The **Resize Image** dialog box is displayed.
 
-1. Snagit doesn’t resize during capture by default, but you can set up capture presets for specific capture dimensions.    
-2. Use the Capture Window and choose the area to match your desired size, but automatic resizing to a specific size must be done post-capture in the editor for more precise control.
+3. Before you change the dimensions, enable the **lock** icon if it's not already activated. With the lock activated, Snagit maintains the image’s original proportions (aspect ration). Now, you can adjust the height or width of your image to the desired dimensions without worrying about stretching or warping it.
+
+    ![Activate the aspect ratio icon, if not activated](./images/lock-icon.png " ")
+
+    >**Note:** If the aspect ratio icon is not activated, it would look as follows:
+
+    ![Aspect ratio icon not activated](./images/lock-icon-inactive.png " ")
+
+4. In the **Resize Image** dialog box, you can set the new width and height. The available options for dimensions are `pixels` (default), `percent`, or `inches`. Set your dimensions in `pixels`. Since the lock icon is active, you can simply set the Width to **1280 or less**. The height value is automatically resized for you. Generally speaking, dimensions between 600 and 1280 pixels should be a good fit for most screens without compromising quality. As a general rule, we’d suggest aiming for a file size of less than 200KB (a few exceptions are OK). This size tends to provide a good balance between image quality and file size.
+
+    > _**Important:** Make sure that you choose a max size of **1280 pixels** or less as this is the new LiveLabs requirement starting in February 2026. If you don't, your pull request will be blocked until you resize the unconforming images._
+
+5. After you change the image's width, click **Apply** to resize it.
+
+**During Capturing of an Image (Presets)**
+
+Snagit doesn’t resize during capture by default, but you can set up capture **presets** for specific capture dimensions. For detailed information about presets, see [Save Capture Settings as Presets](https://www.techsmith.com/learn/tutorials/snagit/presets/#:~:text=Import%20a%20Preset,Click%20Save).
 
 **Batch Image Resizing**
 
-1. In Snagit Editor, go to **File > Batch Convert**.
-2. Select images, then choose Image Size as a step in the batch process to uniformly resize multiple images.
+You can use the batch convert images feature to apply a change to a group of images, such as changing the file format, applying effects, resizing, 
+or changing the filenames. This might be a good option to test and use given the new LiveLabs requirements of a maximum image size of 1280 pixels.
+
+>**Note:** The steps for batch image resizing might be different depending on your version of Snagit and the OS that you are using. In our example, we are using Snagit 2022 on a Windows machine.
+
+For detailed information on Batch Convert Images, see [Batch Convert Images](https://www.techsmith.com/learn/tutorials/snagit/batch-convert-images/#:~:text=and%20numbering%20options.-,Click%20Next.,images%20to%20the%20selected%20location.).
+
 
 ## Task 3: Redact sensitive information in screen captures — The right way
 
@@ -139,7 +156,7 @@ Redacting information in a screenshot means making it truly disappear—so it ca
 ### **Redact Images Automatically Using Snagit Smart Redact Tool**    
 Smart Redact is a feature in Snagit that automatically detects and redacts sensitive information such as email addresses, phone numbers, and other identifiable text from your images. 
 
->**Note:** Smart Redact is only available in Snagit 2023 and later versions. If you don’t see this option, you might need to update your version.
+>_**Note:** Smart Redact is only available in Snagit 2023 and later versions. If you don’t see this option, you might need to update your version. If that is not an option, use the **Redact Manually Using Snagit** information described later in this section._
 
 Here’s how to use **Smart Redact** in Snagit:
 
@@ -178,7 +195,8 @@ If you have an older version of Snagit, you can manually redact screen captures 
 
 4. Flatten all image layers, **Image > Flatten All**.
 
-    ![Shapes added over deleted fields](./images/shapes-over-deleted-fields.png " ")
+    ![Shapes added over deleted fields](./images/image-flatten-all.png " ")
+
 5. Save the edited capture as a new **`.PNG`** file to avoid leaving hidden data.
 
 **Check and Share**
@@ -190,17 +208,96 @@ For true security, always erase or overwrite sensitive data, flatten the file, a
  
 ## Task 4: Remove unused images from a lab using the Check Unused Images Tool
 
-The Check Unused Images (CUI) tool helps you identify unused or missing images from the images folder that is associated with a LiveLabs Markdown file (your lab) that you specify in this tool. The tool:
+### About the Check Unused Images Tool
 
-* Lists all extra (unused) images in the images folder that is associated with your lab's .md file that you specify in this tool. 
-* The unused images in the selected lab are displayed on the right-hand side of the page.
-* Lists any images that are referenced in the lab (.MD) file that you select which are missing from the images folder. 
-* The missing images are displayed on the left-hand side of the page.
+The Check Unused Images (CUI) tool helps you identify unused or missing images from the images folder that is associated with a LiveLabs Markdown file (your lab) that you specify in this tool. 
 
-**Summary:**
+The tool:
+
+* Lists all extra (unused) images in the `images` folder that is associated with your lab's `.md` file that you specify in this tool. 
+* Lists the unused images in the your selected lab on the right-hand side of the page.
+* Lists any images that are referenced in the lab `.md` file that you select which are missing from the images folder. 
+* List missing images on the left-hand side of the page.
+
+>**Note:** During the development of this lab, we used several of the Snagit tools that we suggested earlier to enhance and optimize the screen captures. Some of the tools that we used: 
+
+- The following styles in the **Cut Out** tool in the Snagit Editor: `Horizontal`, `Vertical`, `Horizontal Wave` to remove extra white space and areas that are not in focus or relevant to the step being discussed. 
+- Resized the captured images to a max height size of 1280 (if it was larger) with the aspect ration lock automatically selected. 
+- Added red rectangular shapes to highlight areas on the screen. 
+- Added red text to supplement the UI area(s) being discussed. 
+- Added red arrows to bring the users focus to what is being discussed. 
+- Used the **Selection > Auto-fill** tool to remove personal or irrelevant areas in a Web browser capture.
+- Yellow and blue highlighters to highlight parts of the captured screen. 
+- The red step tool to show the process on a captured screen. 
+
+### How to Use the Check Unused Images Tool?
+
+To access and use the CUI tool, use the following steps:
+
+1. Navigate to the [Lab Creator Tool](https://oracle-livelabs.github.io/common/tutorial_creator/), and then click the **Check Unused Images** link at the top of the page. 
+
+    ![Navigate to Lab Creator Tool](./images/lab-creator-tool.png " ")
+
+2. The **Check Unused Images** page is displayed. 
+
+    ![The Check Unused Images page is displayed](./images/cui-page-displayed.png " ")
+
+3. In the **Markdown** section, click the **Click here to select the MD file for a LiveLabs lab that you want to check** box. 
+
+    ![Select the .md blue box](./images/select-md-box.png " ")
+
+4. In the **Open** dialog box, navigate to the lab that contains the `.md` file that you'd like to check for extra images, and then click **Open**.
+
+    ![Open the .md file](./images/open-md-file.png " ")
+
+    A message about the number of images that are referenced by your selected `.md` file and that were uploaded is displayed. 
+
+    ![Number if images message](./images/number-images-message.png " ")
+
+5. In the **Images** section, the click **Click here to select the images folder associated with the MD file you selected** box, and choose the folder associated with your lab's `.md` file. 
+
+    ![Select the images folder](./images/click-select-images-folder.png " ")
+
+6. In the **Open** dialog box, select the **images** folder that is associated with the `.md` file that you already selected, and then click **Upload**. This will upload all of the image files in the **images** folder.
+
+   ![Open the images folder](./images/click-upload.png " ")
+
+7. A confirmation message box about the number of image files that will be uploaded is displayed. Click **Upload**. 
+
+    ![Click Upload in the message box](./images/click-upload-message-box.png " ")
+
+8. The results page displays the following information based on your selections:
+    - The markdown file that you selected.
+    - Images referenced in the `.md` file but that are missing in the `images` folder. If this applies to your lab, add the missing images to the folder.
+    - The number of images in your selected `images` folder. 
+    - All images in the `images` folder.
+    - Extra images in the `images` folder. If this applies to your lab, simply delete the extra image files. In this example, we have (5) extra images that we need to delete. 
+
+    ![The results are displayed](./images/results-displayed.png " ")
+
+9. Navigate to the lab's `images` folder. Select and delete the extra images. **Important:** In this example, we selected the `create-credential.png` file that is not an extra file and is actually used in the lab so that we can re-test the tool again. 
+
+    ![Select and delete the extra images](./images/select-delete-extra-images.png " ")
+
+10. Re-run the **Check Unused Images** tool to ensure that you did delete all of the extra images; more importantly, you want to make sure that you didn't delete any file that is needed accidentally. Click the `images` folder. A confirmation message box about the number of image files that will be uploaded is displayed. Click **Upload**. The Extra images in the images folder field show **`None`**; however, the
+**Images referenced in the MD file but missing in the images folder** section, shows that the `create-credential.png` file that we deleted on purpose. We'll need to restore this file! 
+
+    ![The updated results are displayed](./images/updated-results-displayed.png " ")
+
+11. In our example, we are using a MS-Windows machine. To restore a deleted file, open the Recycle Bin icon on your desktop. Locate and right-click the deleted file. Select **Restore** from the context menu.
+
+    ![Restore the deleted file](./images/restore-image.png " ")
+
+12. Re-run the **Check Unused Images** tool. At last, no extra or missing images! 
+
+    ![The updated results are displayed](./images/final-results-displayed.png " ")
+
+13. It is a good practice to run **Live Server** for lab for which you deleted the extra images to make sure all the images are visible. 
+
+14. When you complete your workshop and before you submit a pull request, it is also a good practice to run this tool on the images of every lab in the workshop to avoid extra image files that are not used. 
+
+**Capture Screens Effectively Summary:**
 Good static screen captures should be clear, focused, free of sensitive data, and professionally annotated. 
-
-
 
 You may now **proceed to the next lab**.
 
