@@ -27,7 +27,7 @@ Use the sample workshop in the [oracle-livelabs/common](https://github.com/oracl
 
 Review the QA document for image guidelines, markdown formatting, and workshop standards.
 
-### **Workshop Objectives**
+### Objectives
 
 * Submit a new workshop in WMS
 * Set up your development environment
