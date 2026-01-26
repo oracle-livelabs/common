@@ -28,7 +28,7 @@ If you are interested in more information about Oracle Linux, please watch the f
 
 ## Acknowledgements
 
-* **Author:** Kevin Lazarz, Product Manager, DB Product Management
+* **Author:** Kevin Lazarz, Product Manager
 * **Last Updated By/Date:** Kevin Lazarz, Product Manager, November 2021
 
 ## Need Help?
