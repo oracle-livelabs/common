@@ -35,23 +35,6 @@ Review the QA document for image guidelines, markdown formatting, and workshop s
 * Perform QA on your workshop
 * Publish your workshop
 
-### **Lab Breakdown**
-
-- **Lab 1:** Submit new workshop in WMS
-- **Lab 2:** Set up GitHub and install tools
-- **Lab 3:** Stay in sync with GitHub environment
-- **Lab 4a:** Develop Markdown content
-- **Lab 4b:** Adding LiveLabs quizzes
-- **Lab 5:** How to use OptiShot to optimize screenshots
-- **Lab 6a:** QA checks and steps
-- **Lab 6b:** Pull Request Automated Checks
-- **Lab 7:** Publish your workshop
-- **Lab 8a:** Publish to FreeSQL
-- **Lab 8b:** FreeSQL Integration
-- **Lab 9:** Develop LiveLabs Sprints
-- **Lab 10a:** Set up graphical remote desktop
-- **Lab 10b:** Create custom image for marketplace
-
 
 ## Learn More
 
