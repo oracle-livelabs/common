@@ -145,11 +145,18 @@ After you submit a PR, you can view the status of automated checks in GitHub.
     | Red X | Check failed - action required |
     | Yellow circle | Check is running |
 
+    Example
+    ![one issue in PR](images/oneissue.png)
+
 4. To view details of a failed check:
 
     - Click on **Details** next to the failed check
     - Review the error messages in the log output
     - The log will indicate which file(s) and line(s) have issues
+
+    ![view details](images/errordetails.png)
+
+    ![the problem](images/viewdetails.png)
 
 5. After fixing issues locally:
 
