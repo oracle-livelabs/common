@@ -4,7 +4,7 @@
 
 High-quality screen captures are essential for creating professional workshops, documentation, technical support, and product demonstrations. By mastering the art of the screenshot—prioritizing environment preparation, data privacy, and technical optimization—you can transform simple images into powerful communication tools that minimize risk and maximize clarity. 
 
-This lab outlines some of the best practices for creating Oracle LiveLabs workshops. You will learn to plan, capture, and edit images that maintain the high standards of professionalism, security, and accessibility required for global documentation.
+In this lab, you'll discover practical tips for capturing screens for your LiveLabs workshops. Learn how to plan, capture, and edit images.
 
 Estimated Time: 20 minutes
 
