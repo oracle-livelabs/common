@@ -10,6 +10,11 @@
       "filename": "./../../introduction/introduction.md"
     },
     {
+      "title": "LiveLabs SLAs",
+      "description": "This document outlines the Service Level Agreements (SLAs) for the Oracle LiveLabs platform, including response times for PRs, approvals, publishing, and support.",
+      "filename": "./../../sla/sla.md"
+    },
+    {
         "title": "Need more information on GitHub?",
         "description": "Describes what GitHub is and general information on projects and repositories",
         "filename": "./../../introduction/github-introduction.md"
