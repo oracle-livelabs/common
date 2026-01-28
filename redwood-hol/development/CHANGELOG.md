@@ -1,5 +1,55 @@
 # Oracle LiveLabs Workshop Framework - Changelog
 
+## Version 25.0 (January 28, 2026)
+
+### Summary
+Fixed copy-to-clipboard for SQL code blocks to ensure the last statement executes when pasted into SQL clients.
+
+### Bug Fix
+
+#### SQL Copy-to-Clipboard Trailing Newline
+Previously, when copying SQL code blocks and pasting into a SQL client (like SQL*Plus, SQLcl), all statements would execute except the last one. The last statement would remain in the prompt waiting for the user to press Enter. This could cause users to miss executing the final statement, especially with bulk INSERT statements.
+
+**The Problem:**
+```
+SQL> -- Query products
+SQL> SELECT * FROM products;SQL> SQL>   2    3
+```
+The last statement waits for Enter, which users might not notice.
+
+**The Fix:**
+Added a trailing newline to copied text, but **only for SQL code blocks** (` ```sql ` or ` ```plsql `). Other languages (shell, python, etc.) retain the original behavior where the last line waits for Enter.
+
+**Usage:**
+To enable trailing newline, use the `sql` or `plsql` language identifier:
+```markdown
+```sql
+<copy>
+SELECT * FROM employees;
+</copy>
+```                        ← Trailing newline added automatically
+```
+
+For shell/other code, the original behavior is preserved:
+```markdown
+```bash
+<copy>
+echo "Hello World"
+</copy>
+```                        ← No trailing newline (user reviews before Enter)
+```
+
+**Supported Language Identifiers:**
+- `sql`
+- `plsql`
+- `language-sql`
+- `language-plsql`
+
+**Files:**
+- `main.25.js`: Updated `allowCodeCopy()` function with SQL detection
+
+---
+
 ## Version 24.5 (January 23, 2026)
 
 ### Summary
@@ -282,6 +332,7 @@ To deploy version 24:
 | 24.3 | Jan-22-26 | Kevin Lazarz | Enhanced badge UI with preview and disclaimer |
 | 24.4 | Jan-23-26 | Kevin Lazarz | Auto-calculate estimated reading time |
 | 24.5 | Jan-23-26 | Kevin Lazarz | Direct video file embedding support |
+| 25.0 | Jan-28-26 | Kevin Lazarz | SQL copy-to-clipboard: trailing newline for ```sql blocks |
 
 ---
 
