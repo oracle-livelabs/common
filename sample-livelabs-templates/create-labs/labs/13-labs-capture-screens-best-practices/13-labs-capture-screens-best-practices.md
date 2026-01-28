@@ -2,11 +2,9 @@
 
 ## Introduction
 
-Screen captures (screenshots) are vital for documentation, technical support, process training, product demonstrations, and error reporting. Taking high-quality and consistent static screen captures is important for clarity, security, and professionalism. 
+High-quality screen captures are essential for creating professional workshops, documentation, technical support, and product demonstrations. By mastering the art of the screenshot—prioritizing environment preparation, data privacy, and technical optimization—you can transform simple images into powerful communication tools that minimize risk and maximize clarity. 
 
-Screen captures are powerful productivity and communication tools. By following established best practices—preparing the environment, ensuring data privacy and compliance, optimizing technical quality, and sharing responsibly—you can minimize risk and maximize clarity in your documentation.
-
-This lab outlines best practices for creating LiveLabs workshops with screen captures. It highlights how to plan, capture, and edit images effectively, maintaining professionalism, security, and accessibility in line with Oracle standards.
+In this lab, you'll discover practical tips for capturing screens for your LiveLabs workshops. Learn how to plan, capture, and edit images.
 
 Estimated Time: 20 minutes
 
@@ -23,7 +21,7 @@ Estimated Time: 20 minutes
 * Techsmith Snagit annual subscription which you can order using iProcurement. 
 * Learn how to how use Snagit: https://www.techsmith.com/learn/tutorials/snagit/
 
-Snagit's core components are the **Capture Window** (for selecting what to capture – image, video, scrolling, etc.) and the **Snagit Editor** (where you annotate, edit, and organize your captures), supported by a customizable Toolbar, the Library (for storage), and various Capture Presets and features like AI step capture, scrolling capture, and video recording tools, all working together for visual communication. 
+Snagit's core components are the **Capture Window** (for selecting what to capture – image, video, scrolling, etc.) and the **Snagit Editor** (where you annotate, edit, and organize your captures). You can customize the Toolbar, the Library (for storage), and various Capture Presets and features like AI step capture (if your Snagit version supports that), scrolling capture, and video recording tools. 
 
 The **Capture Window**.
 
@@ -35,7 +33,7 @@ The **Snagit Editor**.
 
 ## Task 1: Use screen captures best practices
 
-Here are best practices steps to follow at a very high level which we will explain below in detail.
+Here are the best practices steps to follow at a very high level which we will explain below in detail.
 
 ![Taking screen captures general guidelines](./images/screen-captures-general-guidelines.png =60%x*)
 
@@ -43,13 +41,13 @@ Here are best practices steps to follow at a very high level which we will expla
 - **Be Selective:** Only capture screens that add value to your content.
 - **Focus on the Result:** For multi-step or complex tasks, prioritize showing the end state instead of every intermediate step.
 - **Avoid Redundancy:** Don’t capture every basic or repetitive action; describe simple or repeated navigation steps with text instead.
-- **Reuse When Possible:** If you already included a certain navigation screen, reuse it rather than capturing again.
-- **Text Alternatives:** Use text instructions for repeated or simple navigation steps (such as navigating to ADB or SQL worksheet).
+- **Reuse When Possible:** If you already captured and annotated a screen, reuse it (if you must) rather than capturing and editing again.
+- **Text Alternatives:** Use text instructions for repeated or simple navigation steps (such as navigating to ADB or the SQL worksheet).
 
 **2. Prepare Before Capturing**    
-- **Resize for Clarity:** Avoid full-screen captures, especially on large/high-resolution monitors. Set captured windows to a maximum width of **1280 pixels or less** in line with the new LiveLabs screen captures guidance. Tools such as Snagit enables you to specify dimensions.
+- **Resize for Clarity:** Avoid full-screen captures, especially on large/high-resolution monitors. Set captured windows to a maximum width or height of **1280 pixels or less** in line with the new LiveLabs screen captures guidance. Tools such as Snagit enables you to specify dimensions.
 - **Clear Your Workspace:** Close unnecessary applications, tabs, and windows. Hide any personal bookmarks or sensitive browser elements to avoid accidental disclosure.
-- **Crop to Content:** Capture only the relevant content. You can crop in your capture tool such as Snagit’s **Cut Out** tool to remove distractions and excess white space as needed.
+- **Crop to Content:** Capture only the relevant content. You can crop in your capture tool such as Snagit’s **Cut Out** and **Selection** tools to remove distractions and excess white space as needed.
 
 **3. Capture Screens Effectively**
 - **Use the Right Tool and Area:** Tools such as Snagit (**Capture > All-in-one or Image options**) let you select only what you need such as a window, scrolling window, panel, dialog box, menu, section and so on.
@@ -70,7 +68,6 @@ Here are best practices steps to follow at a very high level which we will expla
 - **Use Consistent Markups for Clarity:** Use the same editing software and styles across all content to maintain visual consistency among multiple authors and workshops. We highly recommend that you use Snagit to both capture and edit screens. This promotes consistency across all workshops.
 
 - **Annotate with Purpose:**
-    - Use the same editing software and styles across all content to maintain consistency among multiple authors and workshops.
     - Use simple shapes (rectangles, arrows, callouts, shapes, and so on) to highlight important elements.
     - Keep annotations simple and avoid overcrowding.
     - Add brief and clear text labels where/if helpful.
@@ -89,7 +86,7 @@ Here are best practices steps to follow at a very high level which we will expla
     - Use **`PNG`** for UI elements and text-heavy images.
     - Use **`JPEG`** only for photos or images with gradients.
 - **Image Quality:** Avoid saving highly compressed or visibly low-quality images.
-- **File Naming:** Use clear, standardized, and descriptive filenames such as adb-home-page.png or service-step02-nav.png.
+- **File Naming:** Use clear, standardized, and descriptive filenames such as adb-home-page.png.
 - **Accessibility:**  Every image must have descriptive alt text (e.g., “Screen capture showing the Database Actions drop-down list with SQL highlighted”). See current Oracle Accessibility Guidelines, https:oracle.com/corporate/accessibility/, for more on writing alt text.
 - **Maintain Consistency:** Ensure similar resolution, annotation styles, and borders throughout your workshop. This helps reinforce a professional and trustworthy experience.
 
@@ -119,7 +116,7 @@ You can force image resizing in Snagit. Snagit provides several ways to resize i
 
 2. To resize your image, go to **Image > Resize Image** from the menu bar; alternatively, click the **Resize Image** box in the **Recent Captures Tray** under the image. The **Resize Image** dialog box is displayed.
 
-3. Before you change the dimensions, enable the **lock** icon if it's not already activated. With the lock activated, Snagit maintains the image’s original proportions (aspect ration). Now, you can adjust the height or width of your image to the desired dimensions without worrying about stretching or warping it.
+3. Before you change the dimensions, enable the **lock** icon if it's not already activated. With the lock activated, Snagit maintains the image’s original proportions (aspect ratio). Now, you can adjust the height or width of your image to the desired dimensions without worrying about stretching or warping it.
 
     ![Activate the aspect ratio icon, if not activated](./images/lock-icon.png " ")
 
@@ -127,7 +124,7 @@ You can force image resizing in Snagit. Snagit provides several ways to resize i
 
     ![Aspect ratio icon not activated](./images/lock-icon-inactive.png " ")
 
-4. In the **Resize Image** dialog box, you can set the new width and height. The available options for dimensions are `pixels` (default), `percent`, or `inches`. Set your dimensions in `pixels`. Since the lock icon is active, you can simply set the Width to **1280 or less**. The height value is automatically resized for you. Generally speaking, dimensions between 600 and 1280 pixels should be a good fit for most screens without compromising quality. As a general rule, we’d suggest aiming for a file size of less than 200KB (a few exceptions are OK). This size tends to provide a good balance between image quality and file size.
+4. In the **Resize Image** dialog box, you can set the new width and height. The available options for dimensions are `pixels` (default), `percent`, or `inches`. Set your dimensions in `pixels`. Since the lock icon is active, you can simply set the Width to **1280 or less**. The height value is automatically resized for you. Generally speaking, dimensions between 600 and 1280 pixels should be a good fit for most screens without compromising quality. As a general rule, we’d suggest aiming for a file size of less than 100KB-200KB or less (a few exceptions are OK). This size tends to provide a good balance between image quality and file size.
 
     > _**Important:** Make sure that you choose a max size of **1280 pixels** or less as this is the new LiveLabs requirement starting in February 2026. If you don't, your pull request will be blocked until you resize the unconforming images._
 
@@ -224,7 +221,8 @@ The tool:
 >**Note:** During the development of this lab, we used several of the Snagit tools that we suggested earlier to enhance and optimize the screen captures. Some of the tools that we used: 
 
 - The following styles in the **Cut Out** tool in the Snagit Editor: `Horizontal`, `Vertical`, `Horizontal Wave` to remove extra white space and areas that are not in focus or relevant to the step being discussed. 
-- Resized the captured images to a max height size of 1280 (if it was larger) with the aspect ration lock automatically selected. 
+- Used the **Selection** tool to remove certain parts of a screen.
+- Resized the captured images to a max width size of 1280 (if it was larger) with the aspect ratio (lock icon) automatically active. 
 - Added red rectangular shapes to highlight areas on the screen. 
 - Added red text to supplement the UI area(s) being discussed. 
 - Added red arrows to bring the users focus to what is being discussed. 
@@ -281,7 +279,7 @@ To access and use the CUI tool, use the following steps:
 
     ![Select and delete the extra images](./images/select-delete-extra-images.png " ")
 
-10. Re-run the **Check Unused Images** tool to ensure that you did delete all of the extra images; more importantly, you want to make sure that you didn't delete any file that is needed accidentally. Click the `images` folder. A confirmation message box about the number of image files that will be uploaded is displayed. Click **Upload**. The Extra images in the images folder field show **`None`**; however, the
+10. Re-run the **Check Unused Images** tool to ensure that you did delete all of the extra images; more importantly, you want to make sure that you didn't delete any file that is needed accidentally. Click the `images` folder. A confirmation message box about the number of image files that will be uploaded is displayed. Click **Upload**. The **Extra images in the images folder** field shows **`None`**; however, the
 **Images referenced in the MD file but missing in the images folder** section, shows that the `create-credential.png` file that we deleted on purpose. We'll need to restore this file! 
 
     ![The updated results are displayed](./images/updated-results-displayed.png " ")
