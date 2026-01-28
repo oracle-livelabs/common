@@ -3,6 +3,8 @@
 ## Introduction
 This lab will show you how to create an OCI marketplace compute based artifact from your custom image, and use it to create a private listing on marketplace exclusively dedicated to your LiveLabs workshop.
 
+Estimated Time: x
+
 ### Objectives
 - Create Marketplace Artifacts
 - Create Marketplace Listing
