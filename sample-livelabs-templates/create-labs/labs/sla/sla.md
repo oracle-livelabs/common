@@ -8,7 +8,7 @@
 | Workshop Approval (No Council Response) | 5 business days | Escalation if council does not react |
 | Stakeholder QA Verification | 2 business days | Stakeholders verify Self QA submission |
 | Move to Completed Status | 1 business day | After stakeholder QA verification |
-| Workshop Publishing | 1 business day | Once workshop team requested publishing request in Publishing Tab in WMS |
+| Workshop Publishing | 1 business day | Once workshop team requested publishing request in Publishing Tab in WMS. Note: Allow up to 24 hours for content to appear on the CDN. |
 | Green Button Lite Creation | 1 business day | Automatic creation after approval |
 | Custom Green Button to Production | Depends on requirements | After confirmation email received |
 | Event Code Request Review | 1 business day | LiveLabs team reviews request |
