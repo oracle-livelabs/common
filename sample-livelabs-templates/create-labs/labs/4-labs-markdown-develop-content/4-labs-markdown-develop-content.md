@@ -624,6 +624,7 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
 4. If you do not want anything highlighted in your code snippet, simply add the `text` tag.
 
     ![Add text tag to remove all highlighting](./images/text.png " ")
+
     ```text
     {
       "firstName": "John",
@@ -632,9 +633,32 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
     }
     ```
 
-5. You can hide and reveal a code snippet, to challenge the users first, but still provide them with support when they get stumped.
+5. **SQL Code Blocks with Auto-Execute:** When you use the `sql` or `plsql` language identifier within `<copy> </copy>` tag, the copied text automatically includes a trailing newline. This ensures that when users paste SQL code into a SQL client (like SQL*Plus or SQLcl), **all statements execute immediately** including the last one.
+
+    Without this feature, the last SQL statement would remain in the prompt waiting for the user to press Enter, which could cause users to miss executing the final statement.
+
+    **Recommended for SQL code:**
+
+    ![sql id](images/sqlid.png)
+
+    ```sql
+    <copy>
+    SELECT * FROM employees;
+    SELECT * FROM departments;
+    </copy>
+    ```
+
+
+  **Supported SQL language identifiers:**
+  - `sql`
+  - `plsql`
+
+  > **Note:** Other language identifiers (like `bash`, `python`, `json`, etc.) retain the original behavior where the last line waits for the user to press Enter before executing. This is intentional. For shell commands, users typically want to review the command before pressing Enter.
+
+1. You can hide and reveal a code snippet, to challenge the users first, but still provide them with support when they get stumped.
 
   ![Code Block Reveal](./images/code-block-reveal.png " ")
+
   <details>
         <summary>*Reveal code block*</summary>
         ```python
@@ -747,4 +771,4 @@ You may now **proceed to the next lab**.
 
 ## Acknowledgements
 
-* **Last Updated By/Date:** LiveLabs Team, January 2026
+* **Last Updated By/Date:** Kevin Lazarz, February 2026
