@@ -300,6 +300,8 @@ You can also embed video files directly from a URL, such as videos hosted on OCI
 
 Without using video scaling, all the videos you embed will have small as the default size for your workshop. You can override the default video scaling by applying these manual controls below.
 
+>Note: 2026-02-06: PLEASE DO NOT USE MEDIUM SIZE!
+
 ### Resizing a Video from Video Hub (Recommended)
 
 1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need a particular scaling to drive emphasis on a subject.
