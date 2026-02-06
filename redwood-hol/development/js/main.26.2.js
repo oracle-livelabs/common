@@ -2204,16 +2204,6 @@ let main = function () {
             })
         }
 
-        let checkForCopyTag = function (article) {
-            let count = 0;
-            $(article).find('pre > code').each(function () {
-                if ($(this).find('.copy-code').length == 0) {
-                    count += 1;
-                    $(this).addClass(getFollowId());
-                    add_issue("You have a code block (```) without a &lt;copy&gt; tag. Please review your Markdown and make the necessary changes.", "", getFollowId());
-                }
-            });
-        }
 
         let checkCodeBlockFormat = function (markdown) {
             let count = (markdown.match(/\````/g) || []).length;
@@ -2288,7 +2278,7 @@ let main = function () {
 
                     if ($.inArray("PRE", tag_list) > $.inArray("OL", tag_list)) {
                         $(this).children('pre').addClass('format-error ' + getFollowId());
-                        add_issue("Your codeblock is not indented correctly. Add spaces to indent your codeblock.", "minor-error", getFollowId());
+                        add_issue("Your codeblock is not indented correctly. Add spaces to indent your codeblock. Use one tab stop (4 spaces).", "minor-error", getFollowId());
                     }
 
                     $(this).find('img').each(function () {
@@ -2312,7 +2302,6 @@ let main = function () {
         checkImagesAltText(articleElement);
         checkCodeBlockFormat(markdownContent);
         checkSecondH2Tag(articleElement);
-        checkForCopyTag(articleElement);
         if (!window.location.href.indexOf("localhost") && window.location.href.indexOf("127.0.0.1")) {
             checkLinkExists(articleElement);
         }

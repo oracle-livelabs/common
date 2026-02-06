@@ -207,9 +207,9 @@ if task_indices:
             line_no = section_start + offset + 1
 
             if stripped.startswith('```') and indent < 4:
-                errors.append(f"line {line_no}: Code blocks inside Task sections must be indented within the numbered step.")
+                errors.append(f"line {line_no}: Code blocks inside Task sections must be indented within the numbered step. Use one tab stop (4 spaces).")
             if stripped.startswith('![') and indent < 4:
-                errors.append(f"line {line_no}: Images inside Task sections must be indented to align with the numbered step.")
+                errors.append(f"line {line_no}: Images inside Task sections must be indented to align with the numbered step. Use one tab stop (4 spaces).")
 
 if errors:
     sys.stdout.write("\n".join(errors))
