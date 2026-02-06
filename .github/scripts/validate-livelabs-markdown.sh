@@ -95,6 +95,17 @@ for file in $FILES; do
         ((FILE_ERRORS++))
     fi
 
+    # Rule 5b: Disallow inline HTML anchor tags
+    anchor_lines=$(grep -ni '<a[[:space:]]*href=' "$file" || true)
+    if [ -n "$anchor_lines" ]; then
+        while IFS= read -r anchor_line; do
+            [ -z "$anchor_line" ] && continue
+            anchor_lineno=${anchor_line%%:*}
+            log_error "$file (line $anchor_lineno): HTML anchor tags (<a href=...>) are not allowed; use Markdown links instead."
+            ((FILE_ERRORS++))
+        done <<< "$anchor_lines"
+    fi
+
     # Rule 6: Check YouTube format is correct
     if grep -E '\[.*\]\(youtube:' "$file" | grep -v '^\[]\(youtube:' > /dev/null 2>&1; then
         log_error "$file: YouTube embeds should use format: [](youtube:VIDEO_ID)"
@@ -105,11 +116,13 @@ for file in $FILES; do
     task_headers=$(grep -n "^## Task" "$file" || true)
     if [ -n "$task_headers" ]; then
         while IFS= read -r line; do
+            [ -z "$line" ] && continue
             if [[ ! "$line" =~ ^[0-9]+:##\ Task\ [0-9]+: ]]; then
                 linenum=$(echo "$line" | cut -d: -f1)
                 log_error "$file (line $linenum): Task headers should follow format '## Task N: Description'"
                 ((FILE_ERRORS++))
             fi
+
         done <<< "$task_headers"
     fi
 
@@ -162,6 +175,54 @@ for file in $FILES; do
             ((FILE_ERRORS++))
         fi
     done
+
+    # Rule 16-18: Task sections need numbered steps with indented assets/code
+    indentation_errors=$(python3 - "$file" <<'PY'
+import sys, re
+path = sys.argv[1]
+with open(path, encoding='utf-8') as handle:
+    lines = handle.readlines()
+
+task_indices = []
+for idx, raw in enumerate(lines):
+    if raw.lstrip().startswith('## Task'):
+        task_indices.append(idx)
+
+errors = []
+if task_indices:
+    for pos_index, start in enumerate(task_indices):
+        section_start = start + 1
+        section_end = task_indices[pos_index + 1] if pos_index + 1 < len(task_indices) else len(lines)
+        block = lines[section_start:section_end]
+        if not block:
+            continue
+
+        # Rule: numbered steps must be present
+        if not any(re.match(r'\s*[0-9]+\.', ln) for ln in block):
+            errors.append(f"line {start+1}: Task sections should contain numbered steps following the heading.")
+
+        for offset, ln in enumerate(block):
+            stripped = ln.lstrip(' \t')
+            indent = len(ln) - len(stripped)
+            line_no = section_start + offset + 1
+
+            if stripped.startswith('```') and indent < 4:
+                errors.append(f"line {line_no}: Code blocks inside Task sections must be indented within the numbered step.")
+            if stripped.startswith('![') and indent < 4:
+                errors.append(f"line {line_no}: Images inside Task sections must be indented to align with the numbered step.")
+
+if errors:
+    sys.stdout.write("\n".join(errors))
+PY
+)
+
+    if [ -n "$indentation_errors" ]; then
+        while IFS= read -r err_line; do
+            [ -z "$err_line" ] && continue
+            log_error "$file: $err_line"
+            ((FILE_ERRORS++))
+        done <<< "$indentation_errors"
+    fi
 
     # Rule 15: Check for Learn More section (optional - no check)
 

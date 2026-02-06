@@ -531,9 +531,7 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
     | Rule | Severity | Description |
     | --- | --- | --- |
     | **Single Title** | Major | Only one H1 heading (#) is allowed per lab. Multiple H1 headings will be flagged. |
-    | **Imperative Workshop Title** | Major | Workshop titles should use imperative verbs (e.g., "Build" not "Building"). Titles containing "ing " are flagged. |
-    | **Imperative Lab Titles** | Major | Lab titles in manifest.json should use imperative verbs. Gerunds (words ending in "ing ") are flagged. |
-    | **No HTML Tags** | Error | Avoid embedding HTML like `<a href=...>` in Markdown. Use Markdown link syntax instead. |
+    | **No Inline HTML** | Error | Avoid embedded `<a href=...>` tags; use Markdown links instead. |
     | **Task Sections** | Error | The second H2 heading (##) should start with "Task" (e.g., "Task 1: Create..."). |
     | **Images Folder** | Error | All images must be located in an `images` folder. |
     | **Image Alt Text** | Error | All images must have alternate (alt) text for accessibility. |
@@ -564,7 +562,6 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
     | Missing `<copy>` tag | Wrap your code with `<copy>...</copy>` inside the code block. |
     | Image not in images folder | Move images to an `images` subdirectory and update paths. |
     | Missing alt text | Add description in brackets: `![Description](image.png " ")` |
-    | Gerund in title | Change "Building an App" to "Build an App". |
     | HTML in Markdown | Replace `<a href="url">text</a>` with `[text](url)`. |
     | Steps not numbered | Use `1.`, `2.`, etc. instead of `*` or `-` for steps. |
     {: title="Common fixes"}

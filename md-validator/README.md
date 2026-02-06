@@ -4,6 +4,17 @@ A GitHub Action workflow that validates Markdown files in Pull Requests against 
 
 ## Overview
 
+### New in Version 26.2 / Feb 2026 Update
+
+The validator scripts and browser QA now share one rule set:
+
+- Removed gerund/imperative verb checks from both the JS lint checker and the GitHub workflow scripts.
+- Added inline `<a>` detection so HTML anchors must be written as Markdown links.
+- Added Task-numbering and indentation validation (code blocks and images must live under their numbered steps).
+- Synced the PowerShell script with the bash script so Windows authors see identical output.
+- Published a new browser runtime (`redwood-hol/development/js/main.26.2.js`) carrying the same QA behavior.
+
+
 This validator ensures that Markdown content submitted in PRs follows the established LiveLabs workshop formatting conventions. It runs automatically on any PR that modifies `.md` files.
 
 ## Features
@@ -84,7 +95,10 @@ To block PRs that fail validation:
 | Image Alt Text | Images must have alt text: `![description](images/file.png)` |
 | YouTube Format | YouTube embeds should use `[](youtube:VIDEO_ID)` |
 | Task Format | Task headers should be `## Task N: Description` |
+| Task Numbering | Task sections should include numbered steps (`1.`, `2.`, etc.) |
+| Task Indentation | Code blocks and images must be indented within the numbered step |
 | Copy Tags | `<copy>` and `</copy>` tags must be balanced |
+| No Inline HTML | Raw `<a href=...>` tags are not allowed; use Markdown links |
 | Introduction | Labs with Tasks should have `## Introduction` |
 | Objectives | Must have `### Objectives` section |
 | Estimated Time | Non-introduction files must have `Estimated Time:` |
@@ -394,3 +408,10 @@ To improve the validator:
 ## License
 
 Internal use for Oracle LiveLabs workshops.
+
+## Changelog
+
+- **Feb 2026**
+  - Added inline HTML detection and Task indentation rules to both bash and PowerShell scripts.
+  - Removed gerund checks to match the unified QA guidance.
+  - Published `main.26.2.js` to keep the in-browser lint checker consistent with GitHub workflows.

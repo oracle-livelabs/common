@@ -71,9 +71,9 @@ The **LiveLabs Markdown Validation** workflow ensures your markdown files follow
     | Category | Checks Performed |
     | --- | --- |
     | Structure | Single H1 per file, required sections present |
-    | Headers | Proper hierarchy (H1 > H2 > H3), correct task format |
-    | Images | Alt text present, referenced images exist, lowercase filenames |
-    | LiveLabs syntax | Balanced `<copy>` tags, proper note format |
+    | Headers | Proper hierarchy (H1 > H2 > H3), correct task format and numbered steps |
+    | Images | Alt text present, referenced images exist, lowercase filenames, images indented under steps |
+    | LiveLabs syntax | Balanced `<copy>` tags, no inline `<a>` tags, proper note format |
     | Filenames | Lowercase, no spaces |
 
 2. Required sections in every lab:
@@ -104,15 +104,6 @@ The **LiveLabs Markdown Validation** workflow ensures your markdown files follow
 
     Correct
     ![Description of the image](images/screenshot.png)
-    ```
-
-    **Mismatched copy tags:**
-    ```markdown
-    Wrong
-    <copy>SELECT * FROM table
-
-    Correct
-    <copy>SELECT * FROM table</copy>
     ```
 
     **Task header format:**
@@ -301,9 +292,11 @@ The script checks for the following rules:
 | Single H1 | Only one H1 header allowed per file |
 | Acknowledgements | Must have `## Acknowledgements` section |
 | Image Alt Text | Images must have alt text: `![alt text](image.png)` |
-| YouTube Format | Use format `[](youtube:VIDEO_ID)` |
+| No Inline HTML | Replace raw `<a href=...>` tags with Markdown links |
 | Task Format | Tasks should use `## Task N: Description` |
 | Copy Tags | `<copy>` and `</copy>` tags must be balanced |
+| Task Numbering | Each Task section should contain numbered steps |
+| Task Indentation | Code blocks and images must be indented within steps |
 | Introduction | Labs with Tasks must have `## Introduction` |
 | Objectives | Must have `### Objectives` section |
 | Estimated Time | Must include `Estimated Time:` (or `Estimated Workshop Time:` for introduction.md) |
