@@ -4,6 +4,9 @@ A GitHub Action workflow that validates Markdown files in Pull Requests against 
 
 ## Overview
 
+> **Note:** The GitHub workflow compares the pull request head to the PR base commit (`github.event.pull_request.base.sha`), so only Markdown files changed in the PR are validated.
+
+
 ### New in Version 26.2 / Feb 2026 Update
 
 The validator scripts and browser QA now share one rule set:
