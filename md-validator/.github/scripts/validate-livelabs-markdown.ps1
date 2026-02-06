@@ -122,6 +122,16 @@ foreach ($file in $Files) {
         $FileErrors++
     }
 
+    # Rule 5b: Disallow inline HTML anchor tags
+    $lineNum = 0
+    foreach ($line in $lines) {
+        $lineNum++
+        if ($line -match '<a\s+href=') {
+            Log-Error "$file (line $lineNum): HTML anchor tags (<a href=...>) are not allowed; use Markdown links instead."
+            $FileErrors++
+        }
+    }
+
     # Rule 6: Check YouTube format is correct
     if ($content -match '\[.+\]\(youtube:' -and $content -notmatch '^\[\]\(youtube:') {
         Log-Error "$file`: YouTube embeds should use format: [](youtube:VIDEO_ID)"
@@ -191,7 +201,47 @@ foreach ($file in $Files) {
         }
     }
 
-    # Rule 15: Check for Learn More section (optional - no check)
+    # Rule 15+: Task indentation / numbering rules
+    $taskIndices = @()
+    for ($i = 0; $i -lt $lines.Count; $i++) {
+        if ($lines[$i] -match '^## Task') {
+            $taskIndices += $i
+        }
+    }
+
+    if ($taskIndices.Count -gt 0) {
+        for ($idx = 0; $idx -lt $taskIndices.Count; $idx++) {
+            $sectionStart = $taskIndices[$idx] + 1
+            $sectionEnd = ($idx + 1 -lt $taskIndices.Count) ? $taskIndices[$idx + 1] : $lines.Count
+
+            if ($sectionStart -ge $sectionEnd) {
+                continue
+            }
+
+            $section = $lines[$sectionStart..($sectionEnd - 1)]
+            if (-not ($section | Where-Object { $_ -match '^\s*\d+\.' })) {
+                $headingLine = $taskIndices[$idx] + 1
+                Log-Error "$file`: line $headingLine: Task sections should contain numbered steps following the heading."
+                $FileErrors++
+            }
+
+            for ($offset = 0; $offset -lt $section.Length; $offset++) {
+                $currentLine = $section[$offset]
+                $trimmed = $currentLine.TrimStart(' ', "`t")
+                $indent = $currentLine.Length - $trimmed.Length
+                $lineNumber = $sectionStart + $offset + 1
+
+                if ($trimmed -like '```*' -and $indent -lt 4) {
+                    Log-Error "$file`: line $lineNumber: Code blocks inside Task sections must be indented within the numbered step."
+                    $FileErrors++
+                }
+                if ($trimmed -like '![*' -and $indent -lt 4) {
+                    Log-Error "$file`: line $lineNumber: Images inside Task sections must be indented to align with the numbered step."
+                    $FileErrors++
+                }
+            }
+        }
+    }
 
     if ($FileErrors -eq 0) {
         Log-Success "$file passed all required checks"
