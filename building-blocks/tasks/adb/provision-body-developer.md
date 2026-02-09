@@ -1,9 +1,9 @@
 <!--
     {
-        "name":"Provision Autonomous Database",
+        "name":"Provision Autonomous Database - Developer",
         "description":"Provision an ADB. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more.",
         "author":"Lauran K. Serhal",
-        "lastUpdated":"November 2024"
+        "lastUpdated":"June 2025"
     }
 -->
 1. Click **Create Autonomous Database** to start the instance creation process. The **Create Autonomous Database** page is displayed. Select your desired **region** and **compartment**. If you are using a sandbox environment (green button) and get a **Forbidden** message, that indicates you are in the wrong compartment. In the **Compartment** drop-down list, select your assigned compartment that is listed on the **Reservation Information** page.
@@ -16,23 +16,25 @@
     ![Click Create Autonomous Database.](images/click-create-new-adb.png " ")
     </if>
 
-2. In the **Provide basic information for the Autonomous Database** section, specify the following:
+2. On the **Create Autonomous Database Serverless** page, specify the following:
 
 <if type="freetier">
-    - **Compartment**: Select the compartment you just created.
     - **Display name**: Enter a memorable name for the database for display purposes. For this lab, use **[](var:db_display_name)**.
-    - **Database Name**: Use letters and numbers only, starting with a letter. Maximum length is 14 characters. (Underscores not supported.) For this lab, use **[](var:db_name)**.
+    - **Database Name**: Use letters and numbers only, starting with a letter. Maximum length is 14 characters. _Underscores not supported_. For this lab, use **[](var:db_name)**.
+     - **Compartment**: Select the your compartment.
 
         ![Enter the required details.](./images/adb-create-screen-names.png =70%x*)
 
     >**Note:** Ensure that you use the suggested database names as instructed in this step, and not those shown in the screenshots.
 </if>
+
 <if type="livelabs">
-    - **Compartment**: Use the default compartment created for you.
     - **Display Name**: Enter a memorable name for the database for display purposes. For this lab, use **[](var:db_display_name)**.
-    - **Database Name**: Use letters and numbers only, starting with a letter. Maximum length is 14 characters. (Underscores not supported.) For this lab, use **[](var:db_name_livelabs)**.
+    - **Database Name**: Use letters and numbers only, starting with a letter. Maximum length is 14 characters. _Underscores not supported_. For this lab, use **[](var:db_name_livelabs)**.
+    - **Compartment**: Use the default compartment created for you.
 
     ![Enter the required details.](./images/adb-create-screen-names.png =70%x*)
+
 
 > **Note:** Ensure that you use the suggested database names as instructed in this step, and not those shown in the screenshots.
 </if>
@@ -41,7 +43,7 @@
 
     - **Data Warehouse**: Designed to support all standard SQL and business intelligence (BI) tools, and provides all of the performance of the market-leading Oracle Database in an environment that is tuned and optimized for data warehouse workloads
     - **Transaction Processing**: Provides all of the performance of the market-leading Oracle Database in an environment that is tuned and optimized to meet the demands of a variety of applications, including: mission-critical transaction processing, mixed transactions and analytics, IoT, and JSON document store
-    - **JSON Database**: It is Oracle Autonomous Transaction Processing, but designed for developing NoSQL-style applications that use JavaScript Object Notation (JSON) documents. You can store up to 20 GB of data other than JSON document collections. There is no storage limit for JSON collections.
+    - **JSON**: It is Oracle Autonomous Transaction Processing, but designed for developing NoSQL-style applications that use JavaScript Object Notation (JSON) documents. You can store up to 20 GB of data other than JSON document collections. There is no storage limit for JSON collections.
     - **APEX**: It is a low cost, Oracle Cloud service offering convenient access to the Oracle APEX platform for rapidly building and deploying low-code applications
 
     For this workshop, accept the **Data Warehouse** default selection.

@@ -1,25 +1,26 @@
-# Submit new workshop in WMS
+# Submit New Workshop in WMS
 
 ## Introduction
 
-Oracle Workshop Management System (WMS) is used to submit workshops, follow a process for team approvals, develop and publish the workshop. Most of our focus in these step by step guides will talk about publishing to LiveLabs, which will use the workshop that was published in LiveLabs.
+Oracle Workshop Management System (WMS) manages workshop submissions, team approvals, development, and publishing. This guide focuses on publishing to LiveLabs.
 
-The WMS workflow is shown with statuses and gives visibility into the development steps. WMS also hosts ways to market the workshop with social media, and keep track of regular quality checks to keep the workshop relevant.
+WMS displays the workflow through statuses, providing visibility into development progress. It also supports marketing through social media and tracks regular quality checks.
+
+Estimated Time: x
 
 ### Objectives
 
-* Submit a LiveLabs workshop request using the **Oracle Workshop Management System (WMS)**.
-* Understand roles and responsibilities.
-* Follow the status and workflow.
+* Submit a LiveLabs workshop request using WMS
+* Understand roles and responsibilities
+* Follow the status workflow
 
 ### What Do You Need?
 
-* Access to the **Oracle Workshop Management System (WMS)**
-* [WMS](https://bit.ly/oraclewms)
+* Access to the Oracle Workshop Management System (WMS)
 
-## Task 1: Submit a workshop request to the Oracle Workshop Management System
+## Task 1: Submit a Workshop Request to WMS
 
-Before getting started, you should submit your LiveLabs workshop request to the WMS. Submitting a workshop informs the Oracle ecosystem that you are working on a workshop and submits your idea to the Workshop Council. We urge you not to delay this step. There are hundreds of workshops already, this step is important to help us preserve the quality and integrity of the workshop catalog.
+Before starting development, submit your LiveLabs workshop request to WMS. This informs the Oracle ecosystem that you are working on a workshop and submits your idea to the Workshop Council. Do not delay this step—it preserves the quality and integrity of the workshop catalog.
 
 1. Log in to Corporate VPN.
 
@@ -39,104 +40,99 @@ Before getting started, you should submit your LiveLabs workshop request to the 
 
 6.  We recommend you don't start working on your workshop until your workshop has been approved by a council member.
 
-Once your workshop is submitted, it will be sent to the workshop council.  The workshop council will approve your workshop or ask for more details within 3 business days. If you have not heard back from your council group after 3 business days, please message them via WMS. Once approved, you will be entered into the workflow and given additional steps to progress through to production.
+After submission, the workshop council reviews your request within 3 business days. If you have not received a response after 3 business days, message them via WMS. Once approved, you enter the workflow with additional steps toward production.
 
-To find your council members, go to WMS, under **People & Role Reports**, select **Workshop Council Members**, and you can find your council members.
+To find your council members, go to WMS and select **People & Role Reports** > **Workshop Council Members**.
 
-> **Note:** There are reports that can be created and subscribed to get all of the details and follow the status of the workshop.
-[WMS Report](https://apex.oraclecorp.com/pls/apex/f?p=24885:18)
+> **Note:** You can create and subscribe to reports in WMS to track workshop status.
 
-## Task 2: Plan workshop development and social
+## Task 2: Plan Workshop Development and Social
 
-Once your workshop is **Approved**, development starts with using the sample template or another similar workshop. Before you get going, there are some LiveLabs standards, things to keep in mind and plan for while developing that we will discuss here. Setup of the environment is in the next lab.
+Once your workshop is **Approved**, start development using the sample template or a similar existing workshop. Review the LiveLabs standards below before you begin. Environment setup is covered in the next lab.
 
-There are different ways to deploy your workshop. It can run in a free tier account, paid account and LiveLabs sandbox. How to deploy in these options will be discussed later but you should be thinking of how to keep resources in a compartment and other resources that would be needed to run in the LiveLabs sandbox.
+Workshops can run in free tier accounts, paid accounts, or LiveLabs sandbox. Plan how to organize resources in a compartment for LiveLabs sandbox compatibility.
 
-1. Development standards
-**Naming standards** - File names should all be lower case, which means markdowns, images, csv, etc., basically all of the workshop files including folders. Match the folders and file names where possible. Also be descriptive, not just step numbers or auto-generated names.
-**Titles** - Start titles with imperative verbs, keep short, concise and consistent.
-**Lab Sections** - Each labs has a title and objectives and then tasks.
-**Screenshots** - Keep screenshots in one folder - images. Keep them clear and big, which means trimming whitespace and using what is needed in the screenshot. Blur out personal/sensitive information. Provide alternate text as part of the markdown (described in detail later) but this is for accessibility.
+1. **Development standards**:
+    - **Naming**: Use lowercase for all file names (markdowns, images, csv, folders). Use descriptive names, not step numbers or auto-generated names.
+    - **Titles**: Start with imperative verbs. Keep them short, concise, and consistent.
+    - **Lab sections**: Each lab has a title, objectives, and tasks.
+    - **Screenshots**: Store in an `images` folder. Keep them clear and properly cropped. Blur personal or sensitive information. Include alt text for accessibility.
 
-2. If you are a developer, QA, or PM, you can create and publish a Custom image of the on-premises product to OCI Marketplace. See the [Creating Compute Images for Marketplace](https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/compute/index.html?lab=6-labs-setup-graphical-remote-desktop) LiveLabs workshop.
+2. If you are a developer, QA, or PM, you can create and publish a custom image of an on-premises product to OCI Marketplace. See [Creating Compute Images for Marketplace](https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/compute/index.html?lab=6-labs-setup-graphical-remote-desktop).
 
-3. Click the *Go to Market - Social* tab to include a link to the blog of your workshop, write a couple of sentences that would accompany a LinkedIn or Twitter post about your workshop, and write a tweet to be used to promote your workshop. Of course this can be done anytime while working on your workshop, or maybe you are using a blog to create the workshop. These details should be completed for when your workshop is published. Be sure to check the approved box when ready to use for social media posting and blogs.
+3. Click the **Go to Market - Social** tab to add a blog link, LinkedIn/Twitter post text, and a promotional tweet for your workshop. Complete these details before publishing and check the approved box when ready.
 
   ![Select social](images/socialtab1.png " ")
 
-  There is also a video script for recording some details about the workshop. Keep it short and simple to highlight the objectives or use case. Again, just check the box when the script is ready for publishing.
+    The **Video script** field records workshop highlights. Keep it short and focused on objectives or use cases. Check the box when the script is ready.
 
-  ![Video script](images/socialtab2.png " ")
+    ![Video script](images/socialtab2.png " ")
 
-  You can also upload images and video files for marketing the workshop.
+    You can also upload images and video files for marketing.
 
-  ![Image Upload](images/socialtab3.png " ")
+    ![Image Upload](images/socialtab3.png " ")
 
-  [Video walking through the social tab](https://otube.oracle.com/media/LiveLabsA+Go+to+Market+-+Social+Tab+in+WMS./1_hr3dmmwx)
+    [Video: Go to Market - Social Tab in WMS](https://otube.oracle.com/media/LiveLabsA+Go+to+Market+-+Social+Tab+in+WMS./1_hr3dmmwx)
 
 
-## Task 3: Workshop workflow - Status
+## Task 3: Workshop Workflow - Status
 
-For a workshop to go from an idea to a LiveLabs workshop in production, it has to go through the following phases or statuses in WMS. You can refer to this section to see your current and next steps.
+A workshop progresses through the following phases (statuses) in WMS before reaching production. Refer to this section for your current and next steps.
 
-1. After the workshop team submits the workshop request (see details in Lab 1 -> Task 1), the workshop is in *Submitted* status. The workshop's *council* group will review the workshop within 2-3 business days. Council will either approve the workshop and move it to *Approved*, or ask the workshop team for more information and move it to *More Info Needed*.
+1. After submitting the workshop request (see Task 1), the workshop enters *Submitted* status. The council reviews submissions within 2-3 business days and either approves or requests more information.
 
-  This is the status you are currently at if you worked through the first couple steps of this lab. When you hit save on the information you provided as details about your new workshop, it saves it in submitted status. Which means it is ready for the council to review and either approve your workshop or ask for more details. The council does receive an automated email message alerting them to this submission as well as having this appear on their dashboard in WMS for newly submitted workshops.
+    > **Note:** If you have not heard back within 3 business days, follow up with your council group. Find council members in WMS under **People & Role Reports** > **Workshop Council Members**.
 
-    >**Note:** If workshop teams have not heard back from the council for more than 3 business days, please follow up with your council group. To find your council members, go to WMS, under **People & Role Reports**, select **Workshop Council Members**, and you can find your council members.
+    ![Submitted](./images/submitted.png " ")
 
-  ![Submitted](./images/submitted.png " ")
+2. Council requests *more information*. Respond via the **Message the Team** tab in WMS to clarify the use case or provide additional details.
 
-2. Council asks workshop team for *more information*. The workshop team will respond to the council via the **Message the Team** tab in WMS to get the workshop approved.
+    ![More Info Needed](./images/more-info-needed.png " ")
 
-  If something is unclear or more details are needed to understand the workshop, the council will ask for more information before continuing. This is to validate the use case make sure that what is being highlighted is clear or could be just wanting more details to how this is going to be accomplished.
+3. Council *approves* the workshop. Development can begin. The notification email contains your action items.
 
-  ![More Info Needed](./images/more-info-needed.png " ")
+    ![Approved](./images/approved.png " ")
 
-3. Council *approves* the workshop. Now, the workshop team can start developing the workshop. Refer to the notification email to see your action items. Congratulations - you will receive an email notifying of this approval and the next steps.
-  ![Approved](./images/approved.png " ")
+4. Move the workshop to *In Development* when starting. The next labs explain how to proceed.
 
-4. Workshop team will move the workshop to *In Development* when they start workshop development. Now it is time to work through the development of the content. The next couple of labs will tell you how to get started.
-  ![In Development](./images/in-development.png " ")
+    ![In Development](./images/in-development.png " ")
 
-5. After development, the workshop team will move the workshop status to *Self QA*. Workshop team will perform the end to end testing of the workshop functionality.
+5. After development, move to *Self QA* status. Perform end-to-end testing of the workshop.
 
-  ![Self QA](./images/self-qa.png " ")
+    ![Self QA](./images/self-qa.png " ")
 
-6. Click on *Self QA Checklist* tab to thoroughly perform the self QA of the workshop. Follow Lab 4 to more details on performing the self-QA of the workshop.
+6. Complete the **Self QA Checklist** tab. See Lab 6 for self-QA details.
 
-  ![Self QA Checklist](./images/self-qa-checklist-1.png " ")
-  ![Self QA Checklist](./images/self-qa-checklist-2.png " ")
+    ![Self QA Checklist](./images/self-qa-checklist-1.png " ")
+    ![Self QA Checklist](./images/self-qa-checklist-2.png " ")
 
-7. After Self QA, the workshop team will move the workshop status to *Self QA Complete*. When the status is moved into *Self QA Complete* automated email messages are sent to the stakeholders and appears on their dashboard in WMS for completed workshops.
+7. After Self QA, move to *Self QA Complete*. Stakeholders receive automated notifications and see the workshop on their WMS dashboard.
 
-  ![Self QA Complete](./images/self-qa-complete.png " ")
+    ![Self QA Complete](./images/self-qa-complete.png " ")
 
-  The workshop's *stakeholders* will verify the QA within 2 business days. They will either send workshop team issues to fix, or move the workshop to *Completed* status, meaning the workshop is ready for production.
+    Stakeholders verify QA within 2 business days. They either return issues to fix or move the workshop to *Completed* status.
 
-8. The workshop is *completed* and is ready for publishing! Workshop teams will submit a publishing request, and the LiveLabs team will approve it. Steps to complete publishing are in Lab 6. After the publishing request is approved, the workshop will be live in LiveLabs automatically within a business day.
+8. The workshop is *completed* and ready for publishing. Submit a publishing request (see Lab 7). After approval, the workshop goes live within one business day.
 
-  ![Completed](./images/completed.png " ")
+    ![Completed](./images/completed.png " ")
 
-9. For the published workshops, we want to ensure that customers benefit from workshops that contain up-to-date information. So, the workshop team needs to perform Quarterly QA of the workshop within every 90 days.
+9. Published workshops require Quarterly QA every 90 days to ensure current information. The status automatically updates to *Quarterly QA* after 60 days, and you receive an email with instructions. Complete the Self QA Checklist to perform Quarterly QA.
 
-  The workshop status will automatically update to Quarterly QA after 60 days and workshop team will receive an email to perform Quarterly QA of the workshop. In the stage, the workshop team needs to follow the instructions in the email and complete the self QA Checklist as in step 6 to perform the Quarterly QA of the workshop.
+    ![Quarterly QA](./images/quarterly-qa.png " ")
 
-  ![Quarterly QA](./images/quarterly-qa.png " ")
+10. After completing Quarterly QA using the Self QA Checklist, update the status to *Quarterly QA Complete*.
 
-10. Once you complete the Quarterly QA using the Self QA Checklist and save it, update the workshop status to Quarterly QA Complete.
+    ![Quarterly QA Complete](./images/quarterly-qa-complete.png " ")
 
-  ![Quarterly QA Complete](./images/quarterly-qa-complete.png " ")
+11. If Quarterly QA is not completed within 90 days, the LiveLabs team removes the workshop from production. The workshop remains in the WMS catalog for 30 days before being purged.
 
-11. If the workshop team does not perform the Quarter QA within the 90 days period, the LiveLabs publishers will remove the published workshop from production. The workshop will remain in the WMS catalog and will be purged after 30 days.
+    ![Disabled](./images/disabled.png " ")
 
-  ![Disabled](./images/disabled.png " ")
+## Task 4: Workshop Development Workflow
 
-## Task 4: Workshop development workflow
+Now that you understand the status workflow and approvals, you can begin content development. The following labs cover GitHub and Markdown in detail. The steps below outline the general workflow for setting up your environment. Most tasks are one-time setup; your configured environment can be reused for future workshops.
 
-Now that you understand the general status workflow and approvals involved, it is time to get started with developing the content. In the next couple of labs we will walk through the details of using GitHub and Markdown content, but the following steps show the general workflow process that you need to follow to set up your environment to develop labs and workshops. Most of the tasks are performed only once, but there are others that will be repeated and you can use your configured environment to develop other new workshops.
-
-This is the overview of the steps, and in the next lab these topics will be covered to walk you through setting up your environment, writing and editing and QA of your workshop to get it ready to publish. We have videos for these steps that are also part of the labs and in the WMS **I Need Help** menu.
+Videos for these steps are available in the labs and in the WMS **I Need Help** menu.
 
 1. Create, set up, and access GitHub account
 2. Install GitHub Desktop
@@ -151,21 +147,10 @@ This is the overview of the steps, and in the next lab these topics will be cove
 
 Ready to publish!
 
->**Note:** If you want more information about how to perform each step above, click on labs on the left.
+> **Note:** For detailed instructions on each step, see the corresponding labs in the left menu.
 
-This concludes this lab. You may now **proceed to the next lab**.
-
+You may now **proceed to the next lab**.
 
 ## Acknowledgements
 
-* **Authors:**
-    * Michelle Malcher, Senior Manager, Oracle Database Product Management
-* **Contributors:**
-    * Anuradha Chepuri, Principal User Assistance Developer, Oracle GoldenGate
-    * Lauran Serhal, Principal User Assistance Developer, Oracle Database and Big Data
-    * Kay Malcolm, Database Product Management
-    * Madhusudhan Rao, Principal Product Manager, Database
-    * Aslam Khan, Senior User Assistance Manager, ODI, OGG, EDQ
-    * Arabella Yao, Product Manager, Database
-
-* **Last Updated By/Date:** Ana Coman, March 2024
+* **Last Updated By/Date:** LiveLabs Team, January 2026

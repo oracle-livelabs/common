@@ -53,4 +53,4 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 - **Created By/Date** - Anoosha Pilli, Database Product Management, August 2023
 - **Contributors** - John Peach, Kamryn Vinson, Kay Malcolm, Rene Fontcha, Madhusudhan Rao, Arabella Yao
-- **Last Updated By** - Anoosha Pilli, Database Product Management, October 2023
+- **Last Updated By** - Ramona Magadan, Database Product Management, October 2025

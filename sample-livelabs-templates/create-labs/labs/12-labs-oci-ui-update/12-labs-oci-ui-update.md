@@ -11,6 +11,8 @@ By following these steps, you will:
 
 Using a feature branch allows for a structured and controlled way to make updates without affecting the main branch until the changes are reviewed and approved.
 
+Estimated Time: x
+
 ### Objectives
 
 By the end of this guide, you will be able to:

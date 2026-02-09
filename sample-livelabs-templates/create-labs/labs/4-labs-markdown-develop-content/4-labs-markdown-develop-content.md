@@ -2,12 +2,14 @@
 
 ## Introduction
 
-To optimize your workflow while developing workshop content, we highly recommend utilizing VSCode as your preferred editor. Leveraging the power of VSCode you can use the optional tasks below and efficiently edit the Markdown files according to your specific needs. As demonstrated in the previous lab, Task 1 has templates that will provide a solid foundation for you to get started with editing process. By incorporating these recommendations from Task 2 to 15 (optional tasks), you can streamline your content development and enhance productivity.
+To optimize your workflow while developing workshop content, we recommend using VSCode as your editor. VSCode allows you to efficiently edit Markdown files using the optional tasks below. As demonstrated in the previous lab, Task 1 provides templates that give you a solid foundation to start editing. Tasks 2 to 15 (optional) streamline your content development and enhance productivity.
 
-> **Note:** For a comprehensive workshop development experience, we recommended to utilize the sample workshop folder provided in Task 1, while tasks 2 to 15 are optional.
+> **Note:** For a comprehensive workshop development experience, we recommend using the sample workshop folder provided in Task 1, while tasks 2 to 15 are optional.
 
 <!-- **Helpful tips from your LiveLabs Team**
 [Video walking through markdown editing](youtube:rOj5APIU-XU) -->
+
+Estimated Time: x
 
 ### Objectives
 
@@ -15,32 +17,27 @@ To optimize your workflow while developing workshop content, we highly recommend
 * Link to absolute path images
 * Use conditional formatting
 * Add videos and scale images
-* Use the LintChecker
+* Use the LintChecker and understand validation rules
+* Use auto-estimated time calculation
 * **IMPORTANT!** Case sensitivity
 
 ### What Do You Need?
 * An IDE, such as Visual Studio Code.
 
 
-## Understanding how it works the include and varibles section in manifest.json
+## Task 1: Create Your Labs and Workshop Content
+Use the content from the **[sample-livelabs-templates/sample-workshop](https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop)** folder to start creating lab and workshop content for your project. Fork and clone the **[oracle-livelabs/common repository](https://github.com/oracle-livelabs/common/)** to get the sample-workshop folder on your local computer by following Task 1 and Task 2 of this workshop.
 
-The "include" section of a workshop manifest file have a critical role in seamlessly incorporating external resources into the workshop content. These resources can include a variety of files, including code snippets, data files, images. Utilizing the "include" directive, you can embed links to local files, enabling readers to conveniently download essential resources.
-
-Variables stored in JSON format gives you the possibility to define configurable parameters, such as database names, compute resources, or workload types.
-
-## Task 1: Create your labs and workshop content
-Leverage the content from the **[sample-livelabs-templates/sample-workshop](https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop)** folder to start creating lab and workshop content for your project. Fork and clone the **[oracle-livelabs/common repository](https://github.com/oracle-livelabs/common/)** to get the sample-workshop folder on your local computer, by following Task 1 and Task 2 of this workshop.
-
-> **Note:** Ensure to update your clone from the **upstream/main** repository (detailed in **Task 3**) regularly whenever we are working on the markdown files.
+> **Note:** Update your clone from the **upstream/main** repository (detailed in **Task 3**) regularly when working on markdown files.
 
 To create your lab and workshop content:
 1. Open your cloned repository (where you want to put your workshop, not the common repository) using Windows Explorer (Windows) or Finder (Mac).
 
 2. Create your workshop folder anywhere in your cloned repository. If a folder already exists for the workshop, then you can create your subfolders within that.
 
-4. In your cloned *common* repository, Go to **sample-livelabs-templates/sample-workshop**. This has a few lab folders, such as **provision**, **query**, etc. Every lab folder contains the following: a **files** folder, an **images** folder, and the respective `.md` file. You can use **Live Server** (see in Task 6) to open up **sample-workshop/workshops/tenancy/index.html** to see how a workshop will show up in production, and play with it.
+4. In your cloned *common* repository, go to **sample-livelabs-templates/sample-workshop**. This has a few lab folders, such as **provision**, **query**, etc. Every lab folder contains a **files** folder, an **images** folder, and the respective `.md` file. You can use **Live Server** (see Task 6) to open **sample-workshop/workshops/tenancy/index.html** to see how a workshop appears in production.
 
-5. Copy any lab folder (except the folder named `workshops`), such as the **query** folder, to your project folder. In your project folder, rename the folder **query** and the respective `.md` file within it as per your requirement.  Based on the sample **query** folder, you can create and rename as many labs (folders) and the respective `.md` files as per your requirement.
+5. Copy any lab folder (except the folder named `workshops`), such as the **query** folder, to your project folder. In your project folder, rename the **query** folder and the respective `.md` file within it as needed. Based on the sample **query** folder, you can create and rename as many labs (folders) and `.md` files as needed.
 
       >**Note:** The **files** folder within every sample lab folder is currently not required and is reserved for future use. You can remove it if you don't need it.
 
@@ -60,35 +57,35 @@ To create your lab and workshop content:
   The project folder along with the labs and **workshops** folder will then be displayed in your text editor.
     ![Workshops folder displayed in text editor.](./images/project-folder-displayed.png " ")
 
-9. Select the `.md` file you want to edit, for example, select the `data-load/data-load.md` file and edit your lab content. Similarly, edit the `.md` files of the rest of your labs.
+9. Select the `.md` file you want to edit, for example, select the `data-load/data-load.md` file and edit your lab content. Edit the `.md` files of the rest of your labs in the same way.
     ![Select markdown file to edit.](./images/open-mdfile-editing.png " ")
 
-10. If you want to add images in your lab, then include them within the **images** folder. You can insert images in the respective `.md` file.
+10. To add images in your lab, include them within the **images** folder. You can insert images in the respective `.md` file.
 
-11. Similarly to edit your workshop content, expand the **workshops/tenancy** (if you are creating a workshop running on users' tenancies), **workshops/sandbox** (if you are creating a sandbox/green button workshop), and/or **workshops/desktop** (if you are creating a noVNC workshop) folder in your text editor. Edit the `manifest.json` to list the labs you have added to your workshop (or plan to add) and update the title of the workshop. The `manifest.json` is like your book map file in SDL.
+11. To edit your workshop content, expand the **workshops/tenancy** (if you are creating a workshop running on users' tenancies), **workshops/sandbox** (if you are creating a sandbox/green button workshop), and/or **workshops/desktop** (if you are creating a noVNC workshop) folder in your text editor. Edit the `manifest.json` to list the labs you have added to your workshop (or plan to add) and update the workshop title. The `manifest.json` is like your book map file in SDL.
 
-  Besides the list of labs, also update the `workshoptitle` field, and update the `help` field to point to the workshop's stakeholders group email. If the `include` and `variables` field do not apply to your workshop, please remove them, otherwise, your workshop will not render properly.=
+  Besides the list of labs, also update the `workshoptitle` field and the `help` field to point to the workshop's stakeholders group email. If the `include` and `variables` fields do not apply to your workshop, remove them, otherwise your workshop will not render properly.
 
   ![Edit manifest json file](./images/manifest.png " ")
 
-12. If you want to add an introduction to your workshop, then navigate to **sample-livelabs-templates/sample-workshop** and copy the `introduction` folder to your project folder. You can rename the introduction folder if you would want to.
+12. To add an introduction to your workshop, navigate to **sample-livelabs-templates/sample-workshop** and copy the `introduction` folder to your project folder. You can rename the introduction folder if needed.
 
-13. You can also create a `README.md` file within **workshops/tenancy**, **workshops/sandbox**, and/or **workshops/desktop**, and update the `README.md` with a summary of your workshop. Note that the `README.md` file is optional for your workshop.
+13. You can also create a `README.md` file within **workshops/tenancy**, **workshops/sandbox**, and/or **workshops/desktop**, and update the `README.md` with a summary of your workshop. The `README.md` file is optional for your workshop.
 
-## Task 2: Use common labs and images
+## Task 2: Use Common Labs and Images
 
-1. Some labs can be shared by many LiveLabs workshops, so we put together a list of [common labs](https://github.com/oracle-livelabs/common/tree/main/labs), including "Generate SSH Key," "Register an Oracle Cloud account," "Need Help," etc. for easier workshop development. You can leverage the [common labs](https://github.com/oracle-livelabs/common/tree/main/labs) located in the **[oracle-livelabs/common repository](https://github.com/oracle-livelabs/common/)**.
+1. Some labs can be shared by many LiveLabs workshops, so we put together a list of [common labs](https://github.com/oracle-livelabs/common/tree/main/labs), including "Generate SSH Key," "Register an Oracle Cloud account," "Need Help," etc. for easier workshop development. You can use the [common labs](https://github.com/oracle-livelabs/common/tree/main/labs) located in the **[oracle-livelabs/common repository](https://github.com/oracle-livelabs/common/)**.
 
-2. To use a common lab, you need to use an absolute link to the lab in your workshop's manifest.json file. For example, if you want to use the "Generate SSH Key" common lab located in [https://github.com/oracle-livelabs/common/blob/main/**labs/generate-ssh-key-cloud-shell/generate-ssh-keys-cloud-shell.md**](https://github.com/oracle-livelabs/common/blob/main/labs/generate-ssh-key-cloud-shell/generate-ssh-keys-cloud-shell.md), you should use this link in the manifest.json file: [https://oracle-livelabs.github.io/common/**labs/generate-ssh-key-local/generate-ssh-keys-local.md**](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-local/generate-ssh-keys-local.md).
+2. To use a common lab, you need to use an absolute link to the lab in your workshop's manifest.json file. For example, to use the "Generate SSH Key" common lab located in [https://github.com/oracle-livelabs/common/blob/main/**labs/generate-ssh-key-cloud-shell/generate-ssh-keys-cloud-shell.md**](https://github.com/oracle-livelabs/common/blob/main/labs/generate-ssh-key-cloud-shell/generate-ssh-keys-cloud-shell.md), use this link in the manifest.json file: [https://oracle-livelabs.github.io/common/**labs/generate-ssh-key-local/generate-ssh-keys-local.md**](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-local/generate-ssh-keys-local.md).
 
-Leverage LiveLabs [Markdown Cheat Sheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf)
+Use the LiveLabs [Markdown Cheat Sheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf)
 
-## Task 3: DONT's
+## Task 3: Don'ts
 
 1. Mandatory requirements (Check links, code snippets, help email address, grammar issues)
-2. Make sure that all filenames are lowercase, markdown filenames and directories generally match
-3. Pay attention on lab section (each lab has a title(#), Introduction (##), Objectives(###), Prerequisites(###), Acknowledgements (##))
-4. Third-party URL shorteners like bit.ly and tiny.url are no longer permitted in LiveLabs content, as they can obscure the destination link, making it easier for malicious sites to go undetected. Instead, using clickable URLs formatted in markdown is a better option. This approach not only enhances the visual appeal of your content but also conceals long, non-memorable URLs in a safer and more transparent way. Check the example in **Task 5**.
+2. Ensure all filenames are lowercase and markdown filenames and directories match
+3. Pay attention to lab sections (each lab has a title (#), Introduction (##), Objectives (###), Prerequisites (###), Acknowledgements (##))
+4. Third-party URL shorteners like bit.ly and tiny.url are no longer permitted in LiveLabs content because they can obscure the destination link, making it easier for malicious sites to go undetected. Using clickable URLs formatted in markdown is a better option. This approach enhances the visual appeal of your content and conceals long, non-memorable URLs in a safer and more transparent way. See the example in **Task 5**.
 
 ## Task 4: Security
 
@@ -103,7 +100,7 @@ Leverage LiveLabs [Markdown Cheat Sheet](https://c4u04.objectstorage.us-ashburn-
 
 ## Task 5: Formatting of URLs
 
-Markdown simplifies the process of adding hyperlinks (clickable links) to your text. You can create a hyperlink using the following syntax:
+Markdown simplifies adding hyperlinks (clickable links) to your text. You can create a hyperlink using the following syntax:
 
 ```
 <copy>
@@ -123,11 +120,11 @@ b. **URL**:
 * You must include the full URL, starting with https:// or http://.
 * If the link is broken, the markdown won’t produce an error, but users will be taken to a non-functioning page.
 
-## Task 6: Link to absolute path images
+## Task 6: Link to Absolute Path Images
 
-Rather than pointing to images within your lab folder or workshop directory with a relative path, you can just as easily point your images to URLs. This comes in handy if you use [common images](https://github.com/oracle-livelabs/common/tree/main/images), or reuse an image a lot, the code you write to display it in markdown will always be the same no matter where the image is in relation to markdown. Using absolute image paths is also handy if you need to keep an image updated, as changing the destination file image will affect every instance where you pointed an image to it. This is also useful when you want to *point to an image in a different repository* (you don't need to clone or fork that repository). This is the same concept and implementation as using absolute paths for common labs in your manifest.json files.
+Rather than pointing to images within your lab folder or workshop directory with a relative path, you can point your images to URLs. This is useful if you use [common images](https://github.com/oracle-livelabs/common/tree/main/images) or reuse an image frequently—the code you write to display it in markdown will always be the same regardless of the image location. Using absolute image paths is also useful if you need to keep an image updated, as changing the destination file image will affect every instance where you pointed an image to it. This is also useful when you want to *point to an image in a different repository* (you don't need to clone or fork that repository). This is the same concept and implementation as using absolute paths for common labs in your manifest.json files.
 
-*For screenshots of OCI menu navigation, use the images with absolute links*
+*For screenshots of OCI menu navigation, use images with absolute links*
 
 1. Here is an example of what the image code block looks like for pointing to a local image using relative pathing.
 
@@ -148,11 +145,11 @@ Rather than pointing to images within your lab folder or workshop directory with
 
   ![Recommended to use GitHub path for images.](./images/home-page.png " ")
 
-## Task 7: Use conditional formatting
+## Task 7: Use Conditional Formatting
 
-If your workshop supports multiple instance types, but the bulk of the content stays the same, then conditional formatting can save you a lot of work. Most commonly, if you have differences between the "Free Tier" and "LiveLabs" (Green button) versions such as provisioning a database instance in Free Tier and just checking that it's created properly for LiveLabs, then conditional formatting will allow your workshop to use a singular markdown for both. This will save you immense effort and prevent accidental oversights if you need to update your workshop in the future since you won't have to maintain a duplicate markdown.
+If your workshop supports multiple instance types but the bulk of the content stays the same, conditional formatting can save you work. For example, if you have differences between the "Free Tier" and "LiveLabs" (Green button) versions such as provisioning a database instance in Free Tier and checking that it's created properly for LiveLabs, conditional formatting will allow your workshop to use a single markdown for both. This will save you effort and prevent accidental oversights when you need to update your workshop in the future since you won't have to maintain duplicate markdown.
 
-  1. Conditional formatting is using the "if" conditional to choose what to display in your markdown, based on an additional attribute "type" you attach to a lab element in your manifest.json file. Take a look at this example to understand the components involved in making conditional formatting work.
+  1. Conditional formatting uses the "if" conditional to choose what to display in your markdown, based on an additional attribute "type" you attach to a lab element in your manifest.json file. Review this example to understand the components involved in making conditional formatting work.
 
   ![Example of conditional formatting.](./images/conditional-vsc1.png " ")
 
@@ -166,44 +163,44 @@ If your workshop supports multiple instance types, but the bulk of the content s
 
   On lines 12, 17, and 23, you can see the same thing except that the type is "livelabs" for this file. The actual word doesn't matter, as long as the "type" in the manifest.json and the "type" in the markdown matches, the contents of the markdown conditional will be displayed.
 
-2. You may have noticed that the numbering of the substeps within a step that uses conditional formatting may get out of line. Don't worry, as long as you use a number greater than 0, markdown will automatically number them sequentially when it gets rendered on a webpage. Also, note that conditional formatting can be used in-line if needed, you don't **HAVE TO** envelope content in a neat code block... though it's recommended to keep things organized and easy to read.
+2. You may have noticed that the numbering of the substeps within a step that uses conditional formatting may get out of line. Don't worry—as long as you use a number greater than 0, markdown will automatically number them sequentially when it renders on a webpage. Note that conditional formatting can be used in-line if needed. You don't **HAVE TO** envelope content in a neat code block, though it's recommended to keep things organized and easy to read.
 
   ![Recommended to keep code block organization.](./images/conditional-note.png " ")
 
-3. **Conditional Formatting Tabs** - Conditional formatting can also be utilized to showcase distinct content based on various programming languages. You can follow the steps below to achieve this objective, by incorporating either a single task or multiple tasks, depending on your specific needs.
+3. **Conditional Formatting Tabs** - Conditional formatting can also showcase distinct content based on various programming languages. You can follow the steps below to achieve this by incorporating either a single task or multiple tasks, depending on your needs.
 
-  Determine the specific programming languages for which you want to display different content. Create if blocks in a task, or multiple tasks if necessary, for each programming language you identified. Make sure to include the relevant instructions and content specific to each language.
+  Determine the specific programming languages for which you want to display different content. Create if blocks in a task, or multiple tasks if necessary, for each programming language you identified. Include the relevant instructions and content specific to each language.
 
-  In the manifest.json file, in the corresponding lab section add the attribute "type" and reference all the programming language elements referenced in the in your manifest.json file. This association will allow the system to identify and display the appropriate content based on the programming language selected.
+  In the manifest.json file, add the attribute "type" in the corresponding lab section and reference all the programming language elements in your manifest.json file. This association allows the system to identify and display the appropriate content based on the programming language selected.
 
   The following example screenshot demonstrates the implementation of blocks for Java and Python programming languages on lines 69 and 78, respectively. Each if block contains the necessary steps specific to each programming language.
 
   ![mutiple-type-conditional-formatting-instructions](./images/mutiple-type-conditional-formatting-instructions.png " ")
 
-  To ensure proper integration, the respective lab section in the manifest.json file should include the "type" attribute, referencing all the programming languages mentioned in the lab's markdown file. In the provided example, along with other programming languages, "java" and "python" are included.
+  To ensure proper integration, the respective lab section in the manifest.json file should include the "type" attribute, referencing all the programming languages mentioned in the lab's markdown file. In the provided example, "java" and "python" are included along with other programming languages.
 
   ![mutiple-type-conditional-formatting](./images/mutiple-type-conditional-formatting.png " ")
 
-  To validate these modifications, you can utilize LiveServer to initiate testing. Tabs will be generated for each language, enabling users to switch between them. Upon selecting a specific tab, language-specific instructions will be displayed in the associated task(s). This interactive approach enhances the user experience by providing relevant instructions based on the selected programming language.
+  To validate these modifications, use LiveServer to test. Tabs will be generated for each language, enabling users to switch between them. When selecting a specific tab, language-specific instructions will be displayed in the associated task(s). This interactive approach enhances the user experience by providing relevant instructions based on the selected programming language.
 
   ![tabs-conditional-formatting](./images/tabs-conditional-formatting.png " ")
 
-## Task 8: Link within a workshop (Hotlinks)
+## Task 8: Link Within a Workshop (Hotlinks)
 
-Sometimes you may want to link to something within your lab or workshop.  Most commonly, this is used in pages to link from the introduction or objectives to a specific section in the lab. This section in particular is hot-linked from the introduction to driving home that point. We'll take a look at the "Need Help?" lab to demonstrate how to incorporate this in your workshop.
+Sometimes you may want to link to something within your lab or workshop. Most commonly, this is used in pages to link from the introduction or objectives to a specific section in the lab. This section in particular is hot-linked from the introduction to drive home that point. We'll look at the "Need Help?" lab to demonstrate how to incorporate this in your workshop.
 
-1. First, take a look at the format of the hotlink. It's the same as when you construct a regular hyperlink, except that you preface the URL section with a **#** and then you use a seemingly condensed version of the section name you want to link to.
+1. First, review the format of the hotlink. It's the same as when you construct a regular hyperlink, except that you preface the URL section with a **#** and then you use a condensed version of the section name you want to link to.
 
   ![Example of a hotlink.](./images/hotlink-vsc.png " ")
 
-2. The condensed version of the section name is derived from the title of the section, without any spaces and most punctuations. This is the **name** attribute of the section (**division** in this case, and most cases). To view this and ensure your hotlink is correct... right-click on the element you want to link to and select **Inspect Element** and find the **"Name"** attribute.
+2. The condensed version of the section name is derived from the title of the section, without any spaces and most punctuation. This is the **name** attribute of the section (**division** in this case, and most cases). To view this and ensure your hotlink is correct, right-click on the element you want to link to and select **Inspect Element** and find the **"Name"** attribute.
 
   ![Inspect element of a hotlink.](./images/hotlink-element.png " ")
 
 
-## Task 9: Scale an image
+## Task 9: Scale an Image
 
-Without using image scaling, all the screenshots you take for your workshop will be of different sizes (unless you're a master of making pixel-perfect crops). To remedy this, we HIGHLY recommend you to stick with a scaling and use it throughout your workshop. This will make all the images scale to the same width (if possible) and contribute to a more consistent and polished feel. You can override the default image scaling by applying these manual controls below. **We highly recommend you use #4's format by default.**
+Without using image scaling, all the screenshots you take for your workshop will be of different sizes (unless you're a master of making pixel-perfect crops). To remedy this, we recommend you stick with a scaling and use it throughout your workshop. This will make all the images scale to the same width (if possible) and contribute to a more consistent and polished feel. You can override the default image scaling by applying these manual controls below. **We recommend you use #4's format by default.**
 
 1. This is a demo image with no image sizing applied:
 
@@ -237,44 +234,75 @@ Without using image scaling, all the screenshots you take for your workshop will
 
   ![Recommended format for all images.](./images/livelabs-homepage.png " ")
 
-5. As a final note, it's in your best interest to take as large of a picture as you can and then scale it down using the parameters above. LiveLabs allows the magnification of images so if you have a larger base image, the audience will have more clarity.
+5. As a final note, it's in your best interest to take as large of a picture as you can and then scale it down using the parameters above. LiveLabs allows the magnification of images, so if you have a larger base image, the audience will have more clarity.
 
-## Task 10: Add and embed a Video
+## Task 10: Add and Embed a Video
 
 Adding videos is very similar to adding images. We most commonly see videos added in the introductions for labs to familiarize the audience with the product before they dive into the workshop.
-LiveLabs supports embedding of videos from [YouTube](https://www.youtube.com) or [Oracle Video Hub](https://videohub.oracle.com).
+LiveLabs supports embedding videos from [YouTube](https://www.youtube.com), [Oracle Video Hub](https://videohub.oracle.com), or direct video file URLs (such as videos hosted on OCI Object Storage).
 
-### Embedding a video from Oracle Video Hub (recommended)
+### Embedding a Video from Oracle Video Hub (Recommended)
 
-1. Take a look at his example of a video hosted on Oracle Video Hub in this lab.
+1. Review this example of a video hosted on Oracle Video Hub in this lab.
 
   ![The Video Hub markdown](images/videhub-markdown.png =60%x* " ")
 
-  Markdown does the work of embedding the video for you, all you need to provide is a video hosting site and the video link address.
+  Markdown does the work of embedding the video for you. All you need to provide is a video hosting site and the video link address.
 
 2. You can find the video identifier code in the URL (in this example, the code is **1_yido2qmq**).
 
-  *Please note:* Oracle Video Hub identifiers are usually prefixed with either `0_` or `1_` filled by a unique code.
+  *Please note:* Oracle Video Hub identifiers are usually prefixed with either `0_` or `1_` followed by a unique code.
 
   ![The Video Hub URL](images/video-hub-url.png =60%x* " ")
 
-### Embedding a video from YouTube
+### Embedding a Video from YouTube
 
-1. Take a look at this example of a video linked in the introduction of a workshop.
+1. Review this example of a video linked in the introduction of a workshop.
 
   ![Example of a video link.](./images/youtube-vsc.png =60%x* " ")
 
-  Markdown does the work of embedding the video for you, all you need to provide is a video hosting site and the video link address.
+  Markdown does the work of embedding the video for you. All you need to provide is a video hosting site and the video link address.
 
 2. The video link address is the characters you'll find at the end of the URL for the video you want to link.
 
   ![How to link a youtube video.](./images/youtube-url.png =60%x* " ")
 
-## Task 11: Scale a video
+### Embedding a Direct Video File
 
-Without using video scaling, all the video you embed will have small as the default size for your workshop. You can override the default video scaling by applying these manual controls below.
+You can also embed video files directly from a URL, such as videos hosted on OCI Object Storage or any other web server. This is useful when you have your own video files that aren't hosted on YouTube or Video Hub.
 
-### Resizing a video from Video Hub (Recommended)
+1. Use the `video:` prefix followed by the full URL to your video file:
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/your-video.mp4)
+    </copy>
+    ```
+
+2. The video will be embedded using the HTML5 video player with playback controls.
+
+3. Supported video formats:
+    - `.mp4` (recommended, most widely supported)
+    - `.webm`
+    - `.ogg` / `.ogv`
+
+4. Example with an OCI Object Storage URL:
+
+    ```
+    <copy>
+    [](video:https://objectstorage.us-ashburn-1.oraclecloud.com/n/namespace/b/bucket/o/my-video.mp4)
+    </copy>
+    ```
+
+    > **Note:** Ensure your video file is publicly accessible if you want users to view it without authentication.
+
+## Task 11: Scale a Video
+
+Without using video scaling, all the videos you embed will have small as the default size for your workshop. You can override the default video scaling by applying these manual controls below.
+
+>Note: 2026-02-06: PLEASE DO NOT USE MEDIUM SIZE!
+
+### Resizing a Video from Video Hub (Recommended)
 
 1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need a particular scaling to drive emphasis on a subject.
 
@@ -308,9 +336,9 @@ Without using video scaling, all the video you embed will have small as the defa
 
 	[Video hosted on Oracle Video Hub](videohub:1_yido2qmq:large)
 
-### Resizing a video from YouTube
+### Resizing a Video from YouTube
 
-1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need a particular scaling to drive emphasis on a subject.
+1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need particular scaling to emphasize a subject.
 
 	```
 	[YouTube video with no sizing](youtube:lHriX403Oz4)
@@ -341,6 +369,42 @@ Without using video scaling, all the video you embed will have small as the defa
 	```
 
 	[Video hosted on YouTube](youtube:lHriX403Oz4:large)
+
+### Resizing a Direct Video File
+
+You can apply the same sizing options to direct video files by appending the size to the URL.
+
+1. Default size (small):
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/video.mp4)
+    </copy>
+    ```
+
+2. Small size (explicit):
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/video.mp4:small)
+    </copy>
+    ```
+
+3. Medium size:
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/video.mp4:medium)
+    </copy>
+    ```
+
+4. Large size (full width):
+
+    ```
+    <copy>
+    [](video:https://example.com/path/to/video.mp4:large)
+    </copy>
+    ```
 
 ## Task 12: Tables
 
@@ -397,7 +461,7 @@ You can also refer to the [LiveLabs Markdown Cheatsheet](https://c4u04.objectsto
 
 ## Task 13: Variables
 
-You can specify variables in another file and refer to them in your Markdown.
+You can specify variables in another file and refer to them in your markdown.
 
 1. Add the following to your manifest.json in the top section:
 
@@ -456,19 +520,58 @@ or
 
 ## Task 14: Use the LintChecker
 
-The LintChecker is a great javascript function for QAing that you should take advantage of. It is especially handy in catching some of the more easily overlooked errors such as indentation and syntax errors.
+The LintChecker is a useful JavaScript function for QA that you should use. It is especially handy in catching easily overlooked errors such as indentation, syntax errors, and formatting issues.
 
-1. To enable the LintChecker, just tack on **?qa=true** to the URL. You can do this from the github.io webpage or through LiveServer in your chosen IDE.
+1. To enable the LintChecker, add **?qa=true** to the URL. You can do this from the github.io webpage or through LiveServer in your chosen IDE.
 
-  ![Enable LintChecker.](./images/lintchecker.png " ")
+    ![Enable LintChecker.](./images/lintchecker.png " ")
 
-  A box will pop up with any errors that the LintChecker caught. Keep in mind that these are not an exhaustive list of errors, they are only the ones that the function has been programmed to catch.  Also keep in mind that even though it lists something as an "error", if it was done intentionally by you, you can by all means just ignore it.
+    A box will pop up with any errors that the LintChecker caught. You can click "(show)" next to an error to jump directly to the problematic element in your content.
 
+2. The LintChecker validates the following rules:
+
+    | Rule | Severity | Description |
+    | --- | --- | --- |
+    | **Single Title** | Major | Only one H1 heading (#) is allowed per lab. Multiple H1 headings will be flagged. |
+    | **No Inline HTML** | Error | Avoid embedded `<a href=...>` tags; use Markdown links instead. |
+    | **Task Sections** | Error | The second H2 heading (##) should start with "Task" (e.g., "Task 1: Create..."). |
+    | **Images Folder** | Error | All images must be located in an `images` folder. |
+    | **Image Alt Text** | Error | All images must have alternate (alt) text for accessibility. |
+    | **Copy Tags** | Error | Code blocks should include `<copy>` tags to enable the copy button. |
+    | **Code Block Format** | Error | Use exactly 3 backticks (\`\`\`) for code blocks, not 4. |
+    | **Broken Links** | Major | URLs that return errors are flagged as potentially broken. |
+    | **Broken Images** | Major | Image paths that cannot be found are flagged. |
+    | **Acknowledgements Section** | Error | Every lab must include an "Acknowledgements" section. |
+    | **Numbered Steps** | Minor | Steps within Task sections should be numbered (ordered list), not bulleted. |
+    | **Code Indentation** | Minor | Code blocks should be indented under list items, not at the root level. |
+    | **Image Indentation** | Minor | Images should be aligned with text blocks (indented under list items). |
+    {: title="LintChecker rules"}
+
+3. **Error Severity Levels:**
+    - **Major Errors** (red): Critical issues that must be fixed before publishing.
+    - **Minor Errors** (blue): Formatting issues that should be corrected but won't break the workshop.
+
+4. **Tips for using the LintChecker:**
+    - Run the LintChecker frequently during development to catch issues early.
+    - Double-click the error count header to collapse/expand the error list.
+    - The error panel is draggable—move it if it covers content you need to see.
+    - Some "errors" may be intentional (e.g., using HTML for special formatting). Use your judgment.
+
+5. **Common fixes:**
+
+    | Error | Fix |
+    | --- | --- |
+    | Missing `<copy>` tag | Wrap your code with `<copy>...</copy>` inside the code block. |
+    | Image not in images folder | Move images to an `images` subdirectory and update paths. |
+    | Missing alt text | Add description in brackets: `![Description](image.png " ")` |
+    | HTML in Markdown | Replace `<a href="url">text</a>` with `[text](url)`. |
+    | Steps not numbered | Use `1.`, `2.`, etc. instead of `*` or `-` for steps. |
+    {: title="Common fixes"}
 ## Task 15: Case Sensitivity
 
-**THIS IS IMPORTANT.** The majority of us use Windows and macOS which are **Case Insensitive** systems. This means that Windows and macOS consider "OrAcLe.PnG" to be the same as "oracle.png" or "Oracle.PNG" for file structure. GitHub and GitHub pages are **Case Sensitive**, and **do** make that distinction.
+**THIS IS IMPORTANT.** Most of us use Windows and macOS, which are **Case Insensitive** systems. This means that Windows and macOS consider "OrAcLe.PnG" to be the same as "oracle.png" or "Oracle.PNG" for file structure. GitHub and GitHub pages are **Case Sensitive** and **do** make that distinction.
 
-1. This means that, for example, if you had an image file that you tested locally (on LiveServer for your IDE on your local Windows or macOS machine) for a markdown called "case-sensitive.png", it would display just fine if you used "case-sensitive.png" or "case-sensitive.PNG" as the image link.  But if you viewed it up on GitHub pages at [this link](https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/freetier/index.html?lab=3a-labs-misc-develop-content-features), only the "case-sensitive.png" image link would be displayed since it matches the image file name perfectly (case sensitive) and it could not find the image link for "case-sensitive.PNG" and so it cannot display it.
+1. For example, if you had an image file that you tested locally (on LiveServer for your IDE on your local Windows or macOS machine) for a markdown called "case-sensitive.png", it would display fine if you used "case-sensitive.png" or "case-sensitive.PNG" as the image link. But if you viewed it on GitHub pages at [this link](https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/freetier/index.html?lab=3a-labs-misc-develop-content-features), only the "case-sensitive.png" image link would be displayed since it matches the image file name perfectly (case sensitive), and it could not find the image link for "case-sensitive.PNG" and so it cannot display it.
 
   ![Proper case format.](./images/case-sensitive.png " ")
 
@@ -478,11 +581,11 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
    If you are viewing this page on github.io, you should only see **one** image. Even with the same name, the case sensitivity does not allow you to see the second image.
 
-2. If you do run into a Case Sensitivity error on Windows or macOS, you cannot simply fix it by renaming it DIRECTLY with the correct case... because the system will not recognize that you are trying to rename it. You have to either rename that item to something else entirely and then rename it back with the correct case... or you can use **"git mv"** as described [in this article](https://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory) for more complicated fixes that involve entire directories.
+2. If you run into a Case Sensitivity error on Windows or macOS, you cannot fix it by renaming it directly with the correct case because the system will not recognize that you are trying to rename it. You have to either rename that item to something else entirely and then rename it back with the correct case, or you can use **"git mv"** as described [in this article](https://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory) for more complicated fixes that involve entire directories.
 
 ## Task 16: Code Snippets
 
-1. If you include code snippets in your workshop instruction, you can use the following syntax for code to distinguish it from other instructions.
+1. If you include code snippets in your workshop instruction, use the following syntax for code to distinguish it from other instructions.
 
     ![Code Snippet](./images/code-snippet.png " ")
 
@@ -520,6 +623,7 @@ The LintChecker is a great javascript function for QAing that you should take ad
 4. If you do not want anything highlighted in your code snippet, simply add the `text` tag.
 
     ![Add text tag to remove all highlighting](./images/text.png " ")
+
     ```text
     {
       "firstName": "John",
@@ -528,9 +632,32 @@ The LintChecker is a great javascript function for QAing that you should take ad
     }
     ```
 
-5. You can hide and reveal a code snippet, to challenge the users first, but still provide them with support when they get stumped.
+5. **SQL Code Blocks with Auto-Execute:** When you use the `sql` or `plsql` language identifier within `<copy> </copy>` tag, the copied text automatically includes a trailing newline. This ensures that when users paste SQL code into a SQL client (like SQL*Plus or SQLcl), **all statements execute immediately** including the last one.
+
+    Without this feature, the last SQL statement would remain in the prompt waiting for the user to press Enter, which could cause users to miss executing the final statement.
+
+    **Recommended for SQL code:**
+
+    ![sql id](images/sqlid.png)
+
+    ```sql
+    <copy>
+    SELECT * FROM employees;
+    SELECT * FROM departments;
+    </copy>
+    ```
+
+
+  **Supported SQL language identifiers:**
+  - `sql`
+  - `plsql`
+
+  > **Note:** Other language identifiers (like `bash`, `python`, `json`, etc.) retain the original behavior where the last line waits for the user to press Enter before executing. This is intentional. For shell commands, users typically want to review the command before pressing Enter.
+
+1. You can hide and reveal a code snippet, to challenge the users first, but still provide them with support when they get stumped.
 
   ![Code Block Reveal](./images/code-block-reveal.png " ")
+
   <details>
         <summary>*Reveal code block*</summary>
         ```python
@@ -545,7 +672,7 @@ The LintChecker is a great javascript function for QAing that you should take ad
 
 ## Task 17: Strikethrough
 
-With this new feature, you can now cross out text or words in a paragraph by adding two tilde before and after the word or text in a paragraph.
+With this feature, you can cross out text or words in a paragraph by adding two tildes before and after the word or text in a paragraph.
 
 1. Use this format to cross out a word - *`~~strikethrough~~`* transforms to *~~strikethrough~~*.
 
@@ -555,33 +682,33 @@ With this new feature, you can now cross out text or words in a paragraph by add
 
 ## Task 18: Clickable Links
 
-1. Old pattern of making URL clickable required markdown formatting. For example, you need to have this format in markdown to make the links clickable.
+1. The old pattern of making a URL clickable required markdown formatting. For example, you needed to have this format in markdown to make the links clickable.
 
   *`Please visit [https://livelabs.oracle.com](https://livelabs.oracle.com)`* or *`Please visit <https://livelabs.oracle.com>`* transforms to Please visit [https://livelabs.oracle.com](https://livelabs.oracle.com)
 
-2. With new pattern, type the URL (including https://) and the engine automatically creates a clickable URL.
+2. With the new pattern, type the URL (including https://) and the engine automatically creates a clickable URL.
 
   *`Please visit https://livelabs.oracle.com`* transforms to Please visit https://livelabs.oracle.com
 
-3.  The old formatting still works and is required to achieve the below formatting with alternative text in markdown format.
+3. The old formatting still works and is required to achieve the formatting below with alternative text in markdown format.
 
   *`Please visit [LiveLabs](https://developer.oracle.com)`* transforms to Please visit [LiveLabs](https://developer.oracle.com).
 
-4. The URLs are opened in a new tab in the browser and the same applies to email addresses as well.
+4. The URLs open in a new tab in the browser. The same applies to email addresses.
 
 ## Task 19: Building Blocks
 
-Building Blocks are a way to enhance both the workshop development and customer experience. This step focuses on how authors can use Building Blocks and Tasks to accelerate their workshop development in your repo.
+Building Blocks enhance both workshop development and customer experience. This step focuses on how authors can use Building Blocks and Tasks to accelerate their workshop development in your repo.
 
-1. You can view the sample on building block [here](https://github.com/oracle-livelabs/common/blob/main/building-blocks/blocks/adb/provision/provision-console.md) and sample task [here](https://github.com/oracle-livelabs/common/blob/main/building-blocks/tasks/adb/provision-body.md)
+1. You can view the sample building block [here](https://github.com/oracle-livelabs/common/blob/main/building-blocks/blocks/adb/provision/provision-console.md) and sample task [here](https://github.com/oracle-livelabs/common/blob/main/building-blocks/tasks/adb/provision-body.md)
 
 2. You can view more building blocks and tasks by navigating to the [building-blocks](https://github.com/oracle-livelabs/common/tree/main/building-blocks) folder in the common repo.
 
-3. If you would like to leverage pre-built building blocks for your repository, feel free to check out this [how to create building block guide](https://github.com/oracle-livelabs/common/blob/main/building-blocks/how-to-author-with-blocks/how-to-author-with-blocks.md) to begin building for your repo.
+3. To leverage pre-built building blocks for your repository, check out this [how to create building block guide](https://github.com/oracle-livelabs/common/blob/main/building-blocks/how-to-author-with-blocks/how-to-author-with-blocks.md) to begin building for your repo.
 
-## Task 20: Use LiveServer extension
+## Task 20: Use LiveServer Extension
 
-If you have installed the LiveServer extension in your VSCode by following the steps in Lab 2 Task4, you can conveniently utilize Live Server to open your workshop's HTML file and enjoy the seamless experience of dynamically viewing and testing your changes.
+If you have installed the LiveServer extension in your VSCode by following the steps in Lab 2 Task 4, you can use Live Server to open your workshop's HTML file and dynamically view and test your changes.
 
 1. In the "workshops" folder of your workshop project, locate either your "tenancy" or "sandbox" folder. Right-click on the index.html file within the chosen folder. From the context menu, select **Open with Live Server**.
 
@@ -591,23 +718,56 @@ If you have installed the LiveServer extension in your VSCode by following the s
 
   ![view-in-live-server](./images/view-in-live-server.png " ")
 
-3. With the workshop now open in your browser, you have the flexibility to modify your files as needed. Save the changes you make to the files. To see the changes reflected in real-time, simply reload the page in your browser and the Live Server ensures that any modifications you make to the files are immediately visible.
+3. With the workshop now open in your browser, you can modify your files as needed. Save the changes you make to the files. To see the changes reflected in real-time, reload the page in your browser. Live Server ensures that any modifications you make to the files are immediately visible.
+
+## Task 21: Auto-Estimated Time
+
+The framework can automatically calculate the estimated reading time for your lab based on its content. This saves you from manually estimating and keeps the time accurate as your content changes.
+
+1. To enable automatic time calculation, use `X` (uppercase or lowercase) as the placeholder value:
+
+    ```
+    <copy>
+    Estimated Time: X
+    </copy>
+    ```
+
+    or
+
+    ```
+    <copy>
+    Estimated Time: x
+    </copy>
+    ```
+
+2. The framework calculates reading time using the following formula:
+
+    | Content Type | Reading Speed |
+    | --- | --- |
+    | Regular text | 225 words/minute |
+    | Code blocks | 200 words/minute (10% slower) |
+    | Images | 12 seconds each |
+    | Hands-on adjustment | +10% added to total |
+
+3. The final result is rounded up to the next 5-minute increment, with a minimum of 5 minutes:
+
+    | Calculated Time | Displayed Time |
+    | --- | --- |
+    | 3 minutes | 5 minutes |
+    | 11 minutes | 15 minutes |
+    | 18 minutes | 20 minutes |
+    | 22 minutes | 25 minutes |
+
+4. If you prefer to set a specific time manually, simply provide the actual value. The framework will not replace explicit values:
+
+    ```
+    Estimated Time: 25 minutes
+    ```
+
+    > **Note:** Use the `X` placeholder when you want the time to automatically update as your content changes. Use an explicit value when you need precise control over the displayed time.
 
 You may now **proceed to the next lab**.
 
 ## Acknowledgements
 
-* **Author:**
-    * Michelle Malcher, Director, Oracle Database Product Management
-* **Contributors:**
-    * Lauran Serhal, Consulting User Assistance Developer, Oracle Database and Big Data
-    * Anuradha Chepuri, Consulting User Assistance Developer, Oracle GoldenGate
-
-* **Reviewed by:**
-    * Aslam Khan, Senior Manager, ODI, OGG, EDQ
-    * Kay Malcolm, Vice President, Database Product Management
-    * Andres Quintana, Senior Product Manager
-    * Brianna Ambler, Product Manager
-
-* **Last Updated By/Date:**
-    * Ramona Magadan, Technical Program Manager, Oracle Database Product Management, September 2024
+* **Last Updated By/Date:** Kevin Lazarz, February 2026
