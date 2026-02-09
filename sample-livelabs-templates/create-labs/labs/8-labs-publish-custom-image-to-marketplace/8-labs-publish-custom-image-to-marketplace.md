@@ -122,9 +122,11 @@ Be sure to set the following:
 > **NOTE:** Be sure to leave the allowed tenancies field blank.
 ![](./images/publish-listing-1.png)
 
-> For more information on publishing listings please see the [OMP documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/Tasks/publish-listing.htm).
+**Publishing can take anywhere from 1 to 3 business days.** If you experience longer wait times or have questions specifically about Oracle Marketplace, please post your inquiries in their [help channel](https://oracle.enterprise.slack.com/archives/CEKCPA98B).
 
-For questions specifically about Oracle Marketplace, please post your inquiries in their [help channel](https://oracle.enterprise.slack.com/archives/CEKCPA98B).
+For more information on publishing listings please see the [OMP documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/Tasks/publish-listing.htm).
+
+
 
 ## Need Help?
 - Ask questions in the [Marketplace Slack channel](https://oracle.enterprise.slack.com/archives/CEKCPA98B)

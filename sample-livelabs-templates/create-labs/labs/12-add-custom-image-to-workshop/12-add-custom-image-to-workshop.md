@@ -2,7 +2,8 @@
 
 ## Introduction
 
-Yay! You have an image published to Oracle Marketplace. This lab shows you how to update your LiveLab image, accordingly.
+Yay! You have an image published to Oracle Marketplace. This lab shows you how to update your LiveLab image, accordingly. 
+> _**NOTE:** Self-service image updates are only possible for pre-existing Sandbox environments. Otherwise, please refer to our [step-by-step guide](https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/?lab=6-labs-publish) on how to request a new Sandbox Environment._
 
 ### Objectives
 
