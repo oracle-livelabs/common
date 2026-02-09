@@ -12,15 +12,15 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
 }
 
 
-/* Base color: saturation 0; */
+/* Base color: dark for readability on light grey background */
 
 .hljs,
 .hljs-subst {
-  color: #444;
+  color: #1A1816;
 }
 
 .hljs-comment {
-  color: #888888;
+  color: #5a5a5a;
 }
 
 .hljs-keyword,
