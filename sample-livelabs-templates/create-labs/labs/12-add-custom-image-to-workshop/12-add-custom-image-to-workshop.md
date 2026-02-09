@@ -49,6 +49,7 @@ Yay! You have an image published to Oracle Marketplace. This lab shows you how t
 ## Task 3: Update the Image for Your Sandbox Environment
 
 1. Go to the publishing information page for your workshop.
+
 ![](./images/update-image-1.png)
 
 2. Click the "Publishing" tab. Then, click "Edit" on the LiveLab you wish to update.
