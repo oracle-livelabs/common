@@ -17,7 +17,7 @@ Estimated Time: x
 * Link to absolute path images
 * Use conditional formatting
 * Add videos and scale images
-* Use the LintChecker
+* Use the LintChecker and understand validation rules
 * Use auto-estimated time calculation
 * **IMPORTANT!** Case sensitivity
 
@@ -300,6 +300,8 @@ You can also embed video files directly from a URL, such as videos hosted on OCI
 
 Without using video scaling, all the videos you embed will have small as the default size for your workshop. You can override the default video scaling by applying these manual controls below.
 
+>Note: 2026-02-06: PLEASE DO NOT USE MEDIUM SIZE!
+
 ### Resizing a Video from Video Hub (Recommended)
 
 1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need a particular scaling to drive emphasis on a subject.
@@ -518,14 +520,53 @@ or
 
 ## Task 14: Use the LintChecker
 
-The LintChecker is a useful javascript function for QA that you should use. It is especially handy in catching easily overlooked errors such as indentation and syntax errors.
+The LintChecker is a useful JavaScript function for QA that you should use. It is especially handy in catching easily overlooked errors such as indentation, syntax errors, and formatting issues.
 
 1. To enable the LintChecker, add **?qa=true** to the URL. You can do this from the github.io webpage or through LiveServer in your chosen IDE.
 
-  ![Enable LintChecker.](./images/lintchecker.png " ")
+    ![Enable LintChecker.](./images/lintchecker.png " ")
 
-  A box will pop up with any errors that the LintChecker caught. Keep in mind that these are not an exhaustive list of errors—they are only the ones that the function has been programmed to catch. Also keep in mind that even though it lists something as an "error," if it was done intentionally by you, you can ignore it.
+    A box will pop up with any errors that the LintChecker caught. You can click "(show)" next to an error to jump directly to the problematic element in your content.
 
+2. The LintChecker validates the following rules:
+
+    | Rule | Severity | Description |
+    | --- | --- | --- |
+    | **Single Title** | Major | Only one H1 heading (#) is allowed per lab. Multiple H1 headings will be flagged. |
+    | **No Inline HTML** | Error | Avoid embedded `<a href=...>` tags; use Markdown links instead. |
+    | **Task Sections** | Error | The second H2 heading (##) should start with "Task" (e.g., "Task 1: Create..."). |
+    | **Images Folder** | Error | All images must be located in an `images` folder. |
+    | **Image Alt Text** | Error | All images must have alternate (alt) text for accessibility. |
+    | **Copy Tags** | Error | Code blocks should include `<copy>` tags to enable the copy button. |
+    | **Code Block Format** | Error | Use exactly 3 backticks (\`\`\`) for code blocks, not 4. |
+    | **Broken Links** | Major | URLs that return errors are flagged as potentially broken. |
+    | **Broken Images** | Major | Image paths that cannot be found are flagged. |
+    | **Acknowledgements Section** | Error | Every lab must include an "Acknowledgements" section. |
+    | **Numbered Steps** | Minor | Steps within Task sections should be numbered (ordered list), not bulleted. |
+    | **Code Indentation** | Minor | Code blocks should be indented under list items, not at the root level. |
+    | **Image Indentation** | Minor | Images should be aligned with text blocks (indented under list items). |
+    {: title="LintChecker rules"}
+
+3. **Error Severity Levels:**
+    - **Major Errors** (red): Critical issues that must be fixed before publishing.
+    - **Minor Errors** (blue): Formatting issues that should be corrected but won't break the workshop.
+
+4. **Tips for using the LintChecker:**
+    - Run the LintChecker frequently during development to catch issues early.
+    - Double-click the error count header to collapse/expand the error list.
+    - The error panel is draggable—move it if it covers content you need to see.
+    - Some "errors" may be intentional (e.g., using HTML for special formatting). Use your judgment.
+
+5. **Common fixes:**
+
+    | Error | Fix |
+    | --- | --- |
+    | Missing `<copy>` tag | Wrap your code with `<copy>...</copy>` inside the code block. |
+    | Image not in images folder | Move images to an `images` subdirectory and update paths. |
+    | Missing alt text | Add description in brackets: `![Description](image.png " ")` |
+    | HTML in Markdown | Replace `<a href="url">text</a>` with `[text](url)`. |
+    | Steps not numbered | Use `1.`, `2.`, etc. instead of `*` or `-` for steps. |
+    {: title="Common fixes"}
 ## Task 15: Case Sensitivity
 
 **THIS IS IMPORTANT.** Most of us use Windows and macOS, which are **Case Insensitive** systems. This means that Windows and macOS consider "OrAcLe.PnG" to be the same as "oracle.png" or "Oracle.PNG" for file structure. GitHub and GitHub pages are **Case Sensitive** and **do** make that distinction.
@@ -582,6 +623,7 @@ The LintChecker is a useful javascript function for QA that you should use. It i
 4. If you do not want anything highlighted in your code snippet, simply add the `text` tag.
 
     ![Add text tag to remove all highlighting](./images/text.png " ")
+
     ```text
     {
       "firstName": "John",
@@ -590,9 +632,32 @@ The LintChecker is a useful javascript function for QA that you should use. It i
     }
     ```
 
-5. You can hide and reveal a code snippet, to challenge the users first, but still provide them with support when they get stumped.
+5. **SQL Code Blocks with Auto-Execute:** When you use the `sql` or `plsql` language identifier within `<copy> </copy>` tag, the copied text automatically includes a trailing newline. This ensures that when users paste SQL code into a SQL client (like SQL*Plus or SQLcl), **all statements execute immediately** including the last one.
+
+    Without this feature, the last SQL statement would remain in the prompt waiting for the user to press Enter, which could cause users to miss executing the final statement.
+
+    **Recommended for SQL code:**
+
+    ![sql id](images/sqlid.png)
+
+    ```sql
+    <copy>
+    SELECT * FROM employees;
+    SELECT * FROM departments;
+    </copy>
+    ```
+
+
+  **Supported SQL language identifiers:**
+  - `sql`
+  - `plsql`
+
+  > **Note:** Other language identifiers (like `bash`, `python`, `json`, etc.) retain the original behavior where the last line waits for the user to press Enter before executing. This is intentional. For shell commands, users typically want to review the command before pressing Enter.
+
+1. You can hide and reveal a code snippet, to challenge the users first, but still provide them with support when they get stumped.
 
   ![Code Block Reveal](./images/code-block-reveal.png " ")
+
   <details>
         <summary>*Reveal code block*</summary>
         ```python
@@ -705,4 +770,4 @@ You may now **proceed to the next lab**.
 
 ## Acknowledgements
 
-* **Last Updated By/Date:** LiveLabs Team, January 2026
+* **Last Updated By/Date:** Kevin Lazarz, February 2026
