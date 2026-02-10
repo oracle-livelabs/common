@@ -96,35 +96,6 @@ Your instance is now ready for clean capture. Proceed to the OCI console to perf
 
     *Note:* If the setup was successful, you should see two sample Google Chrome browser windows preloaded.
 
-## Task 4: Share with LiveLabs Team
-1. Export the custom image to an Object Storage Standard bucket (do not use an Archive bucket).
-
-    - Select *Export to an Object Storage bucket* unless you have a remote bucket URL with the right permissions to accept your export.
-    - Update the image name field.
-    - Set format to *Oracle Cloud Infrastructure file with QCOW2 image and OCI metadata (.oci)*.
-    - Click *Export image*.
-
-    ![Export custom image](./images/export-image.png " ")
-
-2. Navigate to the bucket, select the exported object, and create a pre-authenticated URL.
-
-    - Set the expiration to a year ahead or at least 1 month ahead.
-
-    ![Create a PAR](./images/create-pre-auth-url.png " ")
-
-3. Navigate to the **Publishing** Tab in the [WMS](https://bit.ly/oraclewms).
-
-    ![LiveLabs publishing](./images/publish-to-livelabs.png " ")
-
-    Press **Publish to LiveLabs**, and the information you need to complete about your workshop will appear.
-
-    ![Click for Green Button](./images/publishing-information.png " ")
-
-    Scroll down to see the **Open Jira Ticket** button, which will redirect you to Jira. Complete the ticket.
-
-    ![Click for Open Jira Ticket button](./images/jira-request-green-button.png " ")
-
-4. Wait for the LiveLabs team to validate the image and publish it to marketplace. We will provide the ORM stack needed for brown button (run on customers' tenancies) provisioning and set up the green button (LiveLabs sandbox tenancy).
 
 ## Learn More
 * [Oracle Cloud Marketplace Partner Portal Documentation](https://docs.oracle.com/en/cloud/marketplace/partner-portal/index.html)
