@@ -110,7 +110,7 @@ If you don’t have one, follow the prompts to create a [free Oracle account](ht
 
     ![Submit reservation](./images/submit-reservation.png " ")
 
-*Note: You can Preview Sandbox Instructions before submitting your reservation.*
+2. *Note: You can Preview Sandbox Instructions before submitting your reservation.*
 
     ![Fill out form](./images/preview-instructions.png " ")
 
@@ -136,7 +136,7 @@ You’ll know it’s ready when the status shows as active.
 
     ![Launch Workshop](./images/launch-workshop.png " ")
 
-At the top-left of the page, a link labeled “View Login Info” will appear – click it to see your credentials.
+2. At the top-left of the page, a link labeled “View Login Info” will appear – click it to see your credentials.
 
     ![View Login Info](./images/view-login-info.png " ")
 
@@ -147,7 +147,7 @@ At the top-left of the page, a link labeled “View Login Info” will appear �
 
     ![Start the Demo](./images/start-the-demo.png " ")
 
-If a browser window opens showing the Seer Holdings login page, your network supports access to the Streamlit demo environment.
+2. If a browser window opens showing the Seer Holdings login page, your network supports access to the Streamlit demo environment.
 
     ![Seer Holding Demo](./images/seer-holding-demo-screenshot.png " ")
 
@@ -157,7 +157,7 @@ If a browser window opens showing the Seer Holdings login page, your network sup
 
     ![Start the Development IDE](./images/start-the-development-ide.png " ")
 
-If a browser window opens showing the Jupyter Notebook login page, your network supports access to the Jupyter Notebook IDE environment.
+2. If a browser window opens showing the Jupyter Notebook login page, your network supports access to the Jupyter Notebook IDE environment.
 
     ![Jupyter Notebook Development IDE](./images/jupyter-notebook.png)
 
@@ -167,20 +167,20 @@ If a browser window opens showing the Jupyter Notebook login page, your network 
 
     ![Start SQL Worksheet](./images/start-the-sql-worksheet.png)
 
-If a browser window opens showing the database login page, your network supports access to the SQL Worksheet environment.
+2. If a browser window opens showing the database login page, your network supports access to the SQL Worksheet environment.
 
     ![SQL Worksheet](./images/sql-worksheet.png " ")
 
 You're all set, and happy labbing!
 
 
-## Task 9: Launch the remote desktop (Optional)
+## Task 10: Launch the remote desktop (Optional)
 
 1. Click the **Launch Remote Desktop** button.
 
     ![Launch Workshop](./images/launch-remote-desktop.png " ")
 
-If a browser window opens showing the virtual environment, your network supports LiveLabs access – you’re all set!
+2. If a browser window opens showing the virtual environment, your network supports LiveLabs access – you’re all set!
 
     ![Launch Workshop](./images/remote-desktop.png " ")
 
