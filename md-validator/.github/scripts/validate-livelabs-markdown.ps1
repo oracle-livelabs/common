@@ -201,43 +201,105 @@ foreach ($file in $Files) {
         }
     }
 
-    # Rule 15+: Task indentation / numbering rules
+    # Rule 15+: Task sections with ordered lists need indented content inside numbered steps.
+    # Task sections without ordered lists are exempt from indentation rules.
+    $headingIndices = @()
     $taskIndices = @()
     for ($i = 0; $i -lt $lines.Count; $i++) {
-        if ($lines[$i] -match '^## Task') {
-            $taskIndices += $i
+        if ($lines[$i] -match '^## ') {
+            $headingIndices += $i
+            if ($lines[$i] -match '^## Task') {
+                $taskIndices += $i
+            }
         }
     }
 
     if ($taskIndices.Count -gt 0) {
         for ($idx = 0; $idx -lt $taskIndices.Count; $idx++) {
             $sectionStart = $taskIndices[$idx] + 1
-            $sectionEnd = ($idx + 1 -lt $taskIndices.Count) ? $taskIndices[$idx + 1] : $lines.Count
+            # Bound section at the next ## heading (not just next Task)
+            $nextHeadings = $headingIndices | Where-Object { $_ -gt $taskIndices[$idx] }
+            $sectionEnd = if ($nextHeadings) { ($nextHeadings | Select-Object -First 1) } else { $lines.Count }
 
             if ($sectionStart -ge $sectionEnd) {
                 continue
             }
 
             $section = $lines[$sectionStart..($sectionEnd - 1)]
-            if (-not ($section | Where-Object { $_ -match '^\s*\d+\.' })) {
-                $headingLine = $taskIndices[$idx] + 1
-                Log-Error "$file`: line $headingLine: Task sections should contain numbered steps following the heading."
-                $FileErrors++
+
+            # Check if this task section contains a top-level ordered list
+            $hasOrderedList = $false
+            foreach ($sline in $section) {
+                if ($sline -match '^\d+\. ') {
+                    $hasOrderedList = $true
+                    break
+                }
             }
 
+            # If no ordered list, indentation rules do not apply
+            if (-not $hasOrderedList) {
+                continue
+            }
+
+            # Find where the first numbered step begins
+            $firstStepOffset = -1
             for ($offset = 0; $offset -lt $section.Length; $offset++) {
+                if ($section[$offset] -match '^\d+\. ') {
+                    $firstStepOffset = $offset
+                    break
+                }
+            }
+
+            if ($firstStepOffset -lt 0) {
+                continue
+            }
+
+            # Check indentation for all content after the first numbered step
+            $inCodeBlock = $false
+            for ($offset = $firstStepOffset; $offset -lt $section.Length; $offset++) {
                 $currentLine = $section[$offset]
-                $trimmed = $currentLine.TrimStart(' ', "`t")
+                $trimmed = $currentLine.TrimStart(' ')
                 $indent = $currentLine.Length - $trimmed.Length
                 $lineNumber = $sectionStart + $offset + 1
 
-                if ($trimmed -like '```*' -and $indent -lt 4) {
-                    Log-Error "$file`: line $lineNumber: Code blocks inside Task sections must be indented within the numbered step."
-                    $FileErrors++
+                # Track fenced code blocks
+                if ($trimmed -like '```*') {
+                    if (-not $inCodeBlock) {
+                        $inCodeBlock = $true
+                        if ($indent -lt 4) {
+                            Log-Error "$file`: line $lineNumber`: Code blocks inside numbered steps must be indented with 4 spaces."
+                            $FileErrors++
+                        }
+                    } else {
+                        $inCodeBlock = $false
+                    }
+                    continue
                 }
-                if ($trimmed -like '![*' -and $indent -lt 4) {
-                    Log-Error "$file`: line $lineNumber: Images inside Task sections must be indented to align with the numbered step."
-                    $FileErrors++
+
+                # Skip lines inside code blocks
+                if ($inCodeBlock) {
+                    continue
+                }
+
+                # Skip empty lines
+                if ([string]::IsNullOrWhiteSpace($trimmed)) {
+                    continue
+                }
+
+                # Skip top-level numbered step lines (e.g. "1. Step description")
+                if ($currentLine -match '^\d+\. ') {
+                    continue
+                }
+
+                # All other content after the first step must be indented >= 4 spaces
+                if ($indent -lt 4) {
+                    if ($trimmed -like '![*') {
+                        Log-Error "$file`: line $lineNumber`: Images inside numbered steps must be indented with 4 spaces."
+                        $FileErrors++
+                    } else {
+                        Log-Error "$file`: line $lineNumber`: Content inside numbered steps must be indented with 4 spaces."
+                        $FileErrors++
+                    }
                 }
             }
         }
