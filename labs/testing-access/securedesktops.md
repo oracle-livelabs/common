@@ -17,7 +17,7 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 
 ## Task 1: Open the workshop page
 
-1. Start by navigating to your selected workshop on [LiveLabs](https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?clear=RR,180&wid=4126).
+1. Start by navigating to your selected workshop provided to you by your account team.
 
 2. Look for the green **START** button and click it to begin the reservation process.
 
@@ -32,7 +32,7 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 ## Task 2: Log in with your Oracle SSO
 
 1. Login using your **Oracle Single Sign-On (SSO) ID**.
-If you don’t have one, follow the prompts to create a [free Oracle account](https://profile.oracle.com/myprofile/account/create-account.jspx).
+    If you don’t have one, follow the prompts to create a [free Oracle account](https://profile.oracle.com/myprofile/account/create-account.jspx).
 
     ![Create a free Oracle account](./images/new-oracle-account.png " ")
 
@@ -46,7 +46,7 @@ If you don’t have one, follow the prompts to create a [free Oracle account](ht
 
     ![Fill out form](./images/preview-instructions.png " ")
 
-Now your reservation was submitted!
+    Now your reservation was submitted!
 
 ## Task 4: View your reservation
 
@@ -60,7 +60,7 @@ Now your reservation was submitted!
 
     ![View reservation](./images/reservation-waiting-time.png " ")
 
-You’ll know it’s ready when the status shows as active.
+    You’ll know it’s ready when the status shows as active.
 
 ## Task 6: Test the login process
 
