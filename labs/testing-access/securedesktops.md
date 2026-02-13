@@ -8,6 +8,13 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 - Make sure you have pop-ups enabled in your browser. 
 - You are logged out of any OCI tenants in the browser. 
 
+### Objectives
+
+* **Validate Connectivity:** Confirm that participants can reach and use Secure Desktops.
+
+**Estimated Time:** 10 minutes
+
+
 ## Task 1: Open the workshop page
 
 1. Start by navigating to your selected workshop on [LiveLabs](https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?clear=RR,180&wid=4126).
