@@ -176,40 +176,87 @@ for file in $FILES; do
         fi
     done
 
-    # Rule 16-18: Task sections need numbered steps with indented assets/code
+    # Rule 16-18: Task sections with ordered lists need indented content inside numbered steps.
+    # Task sections without ordered lists are exempt from indentation rules.
     indentation_errors=$(python3 - "$file" <<'PY'
 import sys, re
 path = sys.argv[1]
 with open(path, encoding='utf-8') as handle:
     lines = handle.readlines()
 
+# Find all ## headings and ## Task headings
+heading_indices = []
 task_indices = []
 for idx, raw in enumerate(lines):
-    if raw.lstrip().startswith('## Task'):
-        task_indices.append(idx)
+    if re.match(r'^## ', raw):
+        heading_indices.append(idx)
+        if re.match(r'^## Task', raw):
+            task_indices.append(idx)
 
 errors = []
-if task_indices:
-    for pos_index, start in enumerate(task_indices):
-        section_start = start + 1
-        section_end = task_indices[pos_index + 1] if pos_index + 1 < len(task_indices) else len(lines)
-        block = lines[section_start:section_end]
-        if not block:
+for pos_index, start in enumerate(task_indices):
+    section_start = start + 1
+    # Bound section at the next ## heading (not just next Task)
+    next_headings = [h for h in heading_indices if h > start]
+    section_end = next_headings[0] if next_headings else len(lines)
+    block = lines[section_start:section_end]
+    if not block:
+        continue
+
+    # Check if this task section contains a top-level ordered list
+    has_ordered_list = any(re.match(r'[0-9]+\. ', ln) for ln in block)
+
+    # If no ordered list, indentation rules do not apply
+    if not has_ordered_list:
+        continue
+
+    # Find where the first numbered step begins
+    first_step_offset = None
+    for offset, ln in enumerate(block):
+        if re.match(r'[0-9]+\. ', ln):
+            first_step_offset = offset
+            break
+
+    if first_step_offset is None:
+        continue
+
+    # Check indentation for all content after the first numbered step
+    in_code_block = False
+    for offset in range(first_step_offset, len(block)):
+        ln = block[offset]
+        raw_line = ln.rstrip('\n\r')
+        stripped = raw_line.lstrip(' ')
+        indent = len(raw_line) - len(stripped)
+        line_no = section_start + offset + 1
+
+        # Track fenced code blocks
+        if stripped.startswith('```'):
+            if not in_code_block:
+                in_code_block = True
+                if indent < 4:
+                    errors.append(f"line {line_no}: Code blocks inside numbered steps must be indented with 4 spaces.")
+            else:
+                in_code_block = False
             continue
 
-        # Rule: numbered steps must be present
-        if not any(re.match(r'\s*[0-9]+\.', ln) for ln in block):
-            errors.append(f"line {start+1}: Task sections should contain numbered steps following the heading.")
+        # Skip lines inside code blocks
+        if in_code_block:
+            continue
 
-        for offset, ln in enumerate(block):
-            stripped = ln.lstrip(' \t')
-            indent = len(ln) - len(stripped)
-            line_no = section_start + offset + 1
+        # Skip empty lines
+        if not stripped:
+            continue
 
-            if stripped.startswith('```') and indent < 4:
-                errors.append(f"line {line_no}: Code blocks inside Task sections must be indented within the numbered step. Use one tab stop (4 spaces).")
-            if stripped.startswith('![') and indent < 4:
-                errors.append(f"line {line_no}: Images inside Task sections must be indented to align with the numbered step. Use one tab stop (4 spaces).")
+        # Skip top-level numbered step lines (e.g. "1. Step description")
+        if re.match(r'[0-9]+\. ', raw_line):
+            continue
+
+        # All other content after the first step must be indented >= 4 spaces
+        if indent < 4:
+            if stripped.startswith('!['):
+                errors.append(f"line {line_no}: Images inside numbered steps must be indented with 4 spaces.")
+            else:
+                errors.append(f"line {line_no}: Content inside numbered steps must be indented with 4 spaces.")
 
 if errors:
     sys.stdout.write("\n".join(errors))
