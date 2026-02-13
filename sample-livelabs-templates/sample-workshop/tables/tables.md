@@ -1,6 +1,17 @@
 # Tables in LiveLabs
 
-## Tables are cool!
+## Introduction
+
+Learn how to use tables in LiveLabs.
+
+Estimated Time: X
+
+### Objectives
+* How to use tables in LiveLabs
+
+
+
+## Task 1: Create a table
 
 You can define a table in Markdown just like so:
 
@@ -52,3 +63,7 @@ As you can see, the numbering is added automatically.
 Isn't that cool?
 
 You can also refer to the [LiveLabs Markdown Cheatsheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/labfiles/LiveLabs_MD_Cheat_Sheet.pdf)
+
+## Acknowledgements
+* **Author** - LiveLabs Team
+* **Last Updated By/Date** - LiveLabs Team, 2026
