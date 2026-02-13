@@ -2,13 +2,15 @@
 
 ## Introduction
 
-Learn how to use tables in LiveLabs.
+Learn how to introduce and caption tables in LiveLabs.
 
-Estimated Time: X
+Estimated Time: ## minutes
 
 ### Objectives
-* How to use tables in LiveLabs
 
+- Create Markdown tables that render well in LiveLabs.
+- Add custom titles/captions when needed.
+- Reference the LiveLabs Markdown cheatsheet for formatting tips.
 
 
 ## Task 1: Create a table

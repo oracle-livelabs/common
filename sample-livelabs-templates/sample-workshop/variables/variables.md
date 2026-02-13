@@ -2,22 +2,25 @@
 
 ## Introduction
 
-You can specify variables in another file and refer to them in your Markdown.
+Define variables in a JSON file and reference them inside your Markdown.
 
-Estimated Time: -- minutes
+Estimated Time: ## minutes
 
 ### Objectives
-* Understand how to use variables in Markdown files
+
+- Understand how to define variables in JSON.
+- Reference variables from manifests and markdown.
+- Reuse variable files across labs.
 
 
 ## Task 1: Add variables to your manifest.json
 
 1. Add the following to your manifest.json in the top section:
 
-      ```
-         "variables": ["../../variables/variables.json",
-                     "../../variables/variables-in-another-file.json"],
-      ```
+    ```
+        "variables": ["../../variables/variables.json",
+                    "../../variables/variables-in-another-file.json"],
+    ```
 
 ## Task 2: Add a variable file
 
@@ -25,39 +28,39 @@ Estimated Time: -- minutes
 
       *Example: variables.json*
 
-      ```
-      {
-         "var1": "Variable 1 value",
-         "var2": "Variable 2 value",
-         "random_name": "LiveLabs rocks!",
-         "number_of_ocpu_paid": "24"
-         "number_of_ocpu_always_free": "2"
-      }
-      ```
+    ```
+    {
+        "var1": "Variable 1 value",
+        "var2": "Variable 2 value",
+        "random_name": "LiveLabs rocks!",
+        "number_of_ocpu_paid": "24"
+        "number_of_ocpu_always_free": "2"
+    }
+    ```
 
 2. You can also add multiple files that specify variables (see the example in Task 1).
 
-      *Example: variables_in_another_file.json*
+    *Example: variables_in_another_file.json*
 
-      ```
-      {
-         "var11": "Variable 1 value but yet different",
-         "var22": "Variable 2 value is different",
-         "random_name2": "LiveLabs rocks & rules!",``
-         "name_of_database": "My-Database-Name-is-the-best",
-         "magic": "What is 2*2?"
-      }
-      ```
+    ```
+    {
+      "var11": "Variable 1 value but yet different",
+      "var22": "Variable 2 value is different",
+      "random_name2": "LiveLabs rocks & rules!",``
+      "name_of_database": "My-Database-Name-is-the-best",
+      "magic": "What is 2*2?"
+    }
+    ```
 
 ## Task 3: Add a variable reference
 
 1. Now, you can refer to those variables using the following syntax (**Please note that you can see the syntax only in markdown**):
 
-   [](var:var1)
+    [](var:var1)
 
-   or
+    or
 
-   [](var:magic)
+    [](var:magic)
 
 
 ## Examples

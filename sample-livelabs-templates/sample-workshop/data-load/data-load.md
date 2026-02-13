@@ -2,9 +2,9 @@
 
 ## Introduction
 
-*Describe the lab in one or two sentences, for example:* This lab walks you through the steps to ...
+Summarize the outcome (e.g., "This lab loads sample data into ...").
 
-Estimated Time: -- minutes
+Estimated Time: ## minutes
 
 ### About <Product/Technology> (Optional)
 Enter background information here about the technology/feature or product used in this lab - no need to repeat what you covered in the introduction. Keep this section fairly concise. If you find yourself needing more than two sections/paragraphs, please utilize the "Learn More" section.
@@ -78,9 +78,9 @@ This lab assumes you have:
 
     ```
     Adding code examples
-  	Indentation is important for the code example to appear inside the step
+    Indentation is important for the code example to appear inside the step
     Multiple lines of code
-  	<copy>Enclose the text you want to copy in <copy></copy>.</copy>
+    <copy>Enclose the text you want to copy in <copy></copy>.</copy>
     ```
 
 4. Code examples that include variables
