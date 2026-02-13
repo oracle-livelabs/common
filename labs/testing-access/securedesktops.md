@@ -17,7 +17,7 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 
 ## Task 1: Open the workshop page
 
-1. Start by navigating to your selected workshop on [LiveLabs](https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?clear=RR,180&wid=4126).
+1. Start by navigating to your selected workshop provided to you by your account team.
 
 2. Look for the green **START** button and click it to begin the reservation process.
 
