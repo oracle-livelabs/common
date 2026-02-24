@@ -6,6 +6,16 @@
       "title": "How to test access to your sandbox environments",
       "description": "How to test access to your sandbox environments",
       "filename": "../../sandbox-testing-access.md"
+    },
+    {
+      "title": "Lab 1: Test Access to LiveLabs Sandbox ",
+      "description": "How to test access to your sandbox environments",
+      "filename": "../../livelabs-sandbox.md"
+    },
+    {
+      "title": "Lab 2: Secure Desktops",
+            "description": "Labs that follow the introduction are numbered, starting with Lab 1",
+            "filename": "../../securedesktops.md"
     }
   ]
 }

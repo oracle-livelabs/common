@@ -64,8 +64,9 @@ jobs:
       - name: Run LiveLabs format validation
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
-          chmod +x .github/scripts/validate-livelabs-markdown.sh
-          echo "${{ steps.changed-files.outputs.all_changed_files }}" | xargs .github/scripts/validate-livelabs-markdown.sh
+          curl -sSfL https://raw.githubusercontent.com/oracle-livelabs/common/refs/heads/main/.github/scripts/validate-livelabs-markdown.sh -o /tmp/validate-livelabs-markdown.sh
+          chmod +x /tmp/validate-livelabs-markdown.sh
+          echo "${{ steps.changed-files.outputs.all_changed_files }}" | xargs /tmp/validate-livelabs-markdown.sh
 
       - name: Check image references exist
         if: steps.changed-files.outputs.any_changed == 'true'
