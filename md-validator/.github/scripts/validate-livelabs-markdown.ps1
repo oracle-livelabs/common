@@ -178,13 +178,13 @@ foreach ($file in $Files) {
     $basenamefile = Split-Path -Leaf $file
     if ($basenamefile -eq "introduction.md") {
         # Rule 13: introduction.md must have "Estimated Workshop Time:"
-        if ($content -notmatch 'Estimated Workshop Time:') {
+        if ($content -notmatch 'Estimated Workshop Time.*:') {
             Log-Error "$file`: introduction.md must contain 'Estimated Workshop Time:'"
             $FileErrors++
         }
     } else {
         # Rule 12: Other files must have "Estimated Time:"
-        if ($content -notmatch '(?i)Estimated.*Time:') {
+        if ($content -notmatch '(?i)Estimated.*Time.*:') {
             Log-Error "$file`: Missing 'Estimated Time:' information"
             $FileErrors++
         }

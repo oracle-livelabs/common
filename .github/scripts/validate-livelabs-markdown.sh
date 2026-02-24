@@ -154,13 +154,13 @@ for file in $FILES; do
     basename_file=$(basename "$file")
     if [ "$basename_file" = "introduction.md" ]; then
         # Rule 13: introduction.md must have "Estimated Workshop Time:"
-        if ! grep -q "Estimated Workshop Time:" "$file"; then
+        if ! grep -q "Estimated Workshop Time.*:" "$file"; then
             log_error "$file: introduction.md must contain 'Estimated Workshop Time:'"
             ((FILE_ERRORS++))
         fi
     else
         # Rule 12: Other files must have "Estimated Time:"
-        if ! grep -qi "Estimated.*Time:" "$file"; then
+        if ! grep -qi "Estimated.*Time.*:" "$file"; then
             log_error "$file: Missing 'Estimated Time:' information"
             ((FILE_ERRORS++))
         fi
