@@ -73,7 +73,7 @@ The **LiveLabs Markdown Validation** workflow ensures your markdown files follow
     | Structure | Single H1 per file, required sections present |
     | Headers | Proper hierarchy (H1 > H2 > H3), correct task format and numbered steps |
     | Images | Alt text present, referenced images exist, lowercase filenames, images indented under steps |
-    | LiveLabs syntax | Balanced `<copy>` tags, no inline `<a>` tags, proper note format |
+    | LiveLabs syntax | Balanced `<copy></copy>` tags, no inline `<a>` tags, proper note format |
     | Filenames | Lowercase, no spaces |
 
 2. Required sections in every lab:
