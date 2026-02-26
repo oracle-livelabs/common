@@ -160,6 +160,36 @@ foreach ($file in $Files) {
 
     # Rule 9: Check Note format (skipped - blockquotes used for other purposes)
 
+    # Rule 9b: Check for tab characters after numbered list items (e.g. "1.\t" instead of "1. ")
+    $lineNum = 0
+    $tabLines = @()
+    foreach ($line in $lines) {
+        $lineNum++
+        if ($line -match '^\s*\d+\.\t') {
+            $tabLines += $lineNum
+        }
+    }
+    if ($tabLines.Count -gt 0) {
+        $tabLinesList = $tabLines -join ','
+        Log-Error "$file (line $tabLinesList): Numbered list items use a tab after the period - use a space instead (e.g. '1. ' not '1.`t')"
+        $FileErrors++
+    }
+
+    # Rule 9c: Check for multiple spaces after numbered list items (e.g. "1.  " instead of "1. ")
+    $lineNum = 0
+    $multSpaceLines = @()
+    foreach ($line in $lines) {
+        $lineNum++
+        if ($line -match '^\s*\d+\.  ') {
+            $multSpaceLines += $lineNum
+        }
+    }
+    if ($multSpaceLines.Count -gt 0) {
+        $multSpaceLinesList = $multSpaceLines -join ','
+        Log-Error "$file (line $multSpaceLinesList): Numbered list items have multiple spaces after the period - use a single space (e.g. '1. ' not '1.  ')"
+        $FileErrors++
+    }
+
     # Rule 10: Check for Introduction or About section in labs
     if ($content -match '(?m)^## Task') {
         if ($content -notmatch '(?m)^## Introduction') {

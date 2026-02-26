@@ -318,6 +318,7 @@ These are the template files that users copy to their own repositories:
 |------|---------|
 | `md-validator/.github/scripts/validate-livelabs-markdown.sh` | Bash validation script (Linux/macOS) |
 | `md-validator/.github/scripts/validate-livelabs-markdown.ps1` | PowerShell validation script (Windows) |
+| `md-validator/.github/scripts/fix-livelabs-markdown.sh` | Auto-fixer script (Linux/macOS) |
 | `md-validator/.github/workflows/markdown-lint.yml` | GitHub Actions workflow definition |
 | `md-validator/.markdownlint.json` | Markdownlint configuration |
 | `md-validator/README.md` | This documentation |
@@ -329,6 +330,7 @@ These are the deployed files that actually run on PRs to the common repository:
 | File | Purpose |
 |------|---------|
 | `.github/scripts/validate-livelabs-markdown.sh` | Active Bash validation script |
+| `.github/scripts/fix-livelabs-markdown.sh` | Active auto-fixer script |
 | `.github/workflows/markdown-lint.yml` | Active GitHub Actions workflow |
 | `.github/workflows/enforce-image-size.yml` | Image size validation workflow |
 | `.markdownlint.json` | Active markdownlint configuration |
@@ -345,11 +347,15 @@ These files document the validation system for end users:
 
 When you need to add or change a validation rule, update these files:
 
-1. **Bash script** (2 locations):
+1. **Bash validation script** (2 locations):
    - `md-validator/.github/scripts/validate-livelabs-markdown.sh`
    - `.github/scripts/validate-livelabs-markdown.sh`
 
-2. **PowerShell script** (1 location):
+2. **Bash fixer script** (2 locations):
+   - `md-validator/.github/scripts/fix-livelabs-markdown.sh`
+   - `.github/scripts/fix-livelabs-markdown.sh`
+
+3. **PowerShell script** (1 location):
    - `md-validator/.github/scripts/validate-livelabs-markdown.ps1`
 
 3. **Documentation** (3 locations):
@@ -372,6 +378,9 @@ After updating the source files in `md-validator/`, sync to the active locations
 ```bash
 # Sync validation script
 cp md-validator/.github/scripts/validate-livelabs-markdown.sh .github/scripts/
+
+# Sync fixer script
+cp md-validator/.github/scripts/fix-livelabs-markdown.sh .github/scripts/
 
 # Sync workflow
 cp md-validator/.github/workflows/markdown-lint.yml .github/workflows/
