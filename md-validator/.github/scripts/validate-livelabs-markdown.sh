@@ -136,6 +136,20 @@ for file in $FILES; do
 
     # Rule 9: Check Note format (skipped - blockquotes used for other purposes)
 
+    # Rule 9b: Check for tab characters after numbered list items (e.g. "1.\t" instead of "1. ")
+    tab_lines=$(grep -En $'^[[:space:]]*[0-9]+\\.\\t' "$file" | cut -d: -f1 | tr '\n' ',' | sed 's/,$//')
+    if [ -n "$tab_lines" ]; then
+        log_error "$file (line $tab_lines): Numbered list items use a tab after the period - use a space instead (e.g. '1. ' not '1.\t')"
+        ((FILE_ERRORS++))
+    fi
+
+    # Rule 9c: Check for multiple spaces after numbered list items (e.g. "1.  " instead of "1. ")
+    multspace_lines=$(grep -En '^[[:space:]]*[0-9]+\.  ' "$file" | cut -d: -f1 | tr '\n' ',' | sed 's/,$//')
+    if [ -n "$multspace_lines" ]; then
+        log_error "$file (line $multspace_lines): Numbered list items have multiple spaces after the period - use a single space (e.g. '1. ' not '1.  ')"
+        ((FILE_ERRORS++))
+    fi
+
     # Rule 10: Check for Introduction or About section in labs
     if grep -q "^## Task" "$file"; then
         if ! grep -q "^## Introduction" "$file"; then
