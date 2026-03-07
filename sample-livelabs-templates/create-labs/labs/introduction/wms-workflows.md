@@ -1,5 +1,11 @@
 # Understanding WMS Status Workflow
 
+Estimated Time: x
+
+### Objectives:
+* Understand the WMS lifecycle
+
+
 ## WMS Workflow - Status
 
 A workshop progresses through several phases (statuses) in WMS before reaching production. Refer to this section to understand your current status and next steps.

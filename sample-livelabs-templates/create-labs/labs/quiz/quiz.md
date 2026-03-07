@@ -42,18 +42,18 @@ Quizzes are defined using fenced code blocks with the `quiz` language identifier
 1. The basic structure of a quiz block:
 
 
-![quizid](images/quizid.png)
+    ![quizid](images/quizid.png)
 
-```
-Q: Your question text here?
-* Correct answer (marked with asterisk)
-- Wrong answer (marked with dash)
-- Another wrong answer
-> Optional explanation shown after answering
-```
+    ```
+    Q: Your question text here?
+    * Correct answer (marked with asterisk)
+    - Wrong answer (marked with dash)
+    - Another wrong answer
+    > Optional explanation shown after answering
+    ```
 
 
-1. Syntax reference:
+2. Syntax reference:
 
     | Element | Syntax | Description |
     | --- | --- | --- |
@@ -62,7 +62,7 @@ Q: Your question text here?
     | Wrong answer | `-` | Marks an incorrect answer |
     | Explanation | `>` | Optional explanation shown after answering |
 
-2. The quiz renderer automatically determines the input type:
+3. The quiz renderer automatically determines the input type:
     - **Single correct answer** = Radio buttons (select one)
     - **Multiple correct answers** = Checkboxes (select all that apply)
 
@@ -72,27 +72,28 @@ Create a quiz where only one answer is correct.
 
 1. Add a quiz block to your markdown file:
 
-```
-Q: What is the maximum image width allowed in LiveLabs workshops?
-* 1280 pixels
-- 1920 pixels
-- 800 pixels
-- 2560 pixels
-> Images must not exceed 1,280 px in width or height to ensure proper display across all devices.
-```
+    ```
+    Q: What is the maximum image width allowed in LiveLabs workshops?
+    * 1280 pixels
+    - 1920 pixels
+    - 800 pixels
+    - 2560 pixels
+    > Images must not exceed 1,280 px in width or height to ensure proper display across all devices.
+    ```
 
 2. This renders as a quiz with radio buttons when adding quiz as the code identifier:
 
-```quiz
-Q: What is the maximum image width allowed in LiveLabs workshops?
-* 1280 pixels
-- 1920 pixels
-- 800 pixels
-- 2560 pixels
-> Images must not exceed 1,280 px in width or height to ensure proper display across all devices.
-```
+    ```quiz
+    Q: What is the maximum image width allowed in LiveLabs workshops?
+    * 1280 pixels
+    - 1920 pixels
+    - 800 pixels
+    - 2560 pixels
+    > Images must not exceed 1,280 px in width or height to ensure proper display across all devices.
+    ```
 
 3. When the learner clicks **Check Answer**:
+
     - Correct selection shows a green checkmark
     - Incorrect selection shows a red X
     - Missed correct answers are highlighted in yellow
@@ -104,28 +105,28 @@ Create a quiz where multiple answers are correct. Use multiple asterisks (`*`) t
 
 1. Add a quiz block with multiple correct answers:
 
-```
-Q: Which of the following are valid Oracle Cloud Infrastructure (OCI) compute shapes? (Select all that apply)
-* VM.Standard.E4.Flex
-* BM.Standard3.64
-- VM.SuperFast.999
-* VM.Standard.A1.Flex
-- EC2.Large
-> OCI offers VM (Virtual Machine) and BM (Bare Metal) shapes. The E4, Standard3, and A1 series are all valid OCI shapes.
-```
+    ```
+    Q: Which of the following are valid Oracle Cloud Infrastructure (OCI) compute shapes? (Select all that apply)
+    * VM.Standard.E4.Flex
+    * BM.Standard3.64
+    - VM.SuperFast.999
+    * VM.Standard.A1.Flex
+    - EC2.Large
+    > OCI offers VM (Virtual Machine) and BM (Bare Metal) shapes. The E4, Standard3, and A1 series are all valid OCI shapes.
+    ```
 
 
 2. This renders as a quiz with checkboxes:
 
-```quiz
-Q: Which of the following are valid Oracle Cloud Infrastructure (OCI) compute shapes? (Select all that apply)
-* VM.Standard.E4.Flex
-* BM.Standard3.64
-- VM.SuperFast.999
-* VM.Standard.A1.Flex
-- EC2.Large
-> OCI offers VM (Virtual Machine) and BM (Bare Metal) shapes. The E4, Standard3, and A1 series are all valid OCI shapes.
-```
+    ```quiz
+    Q: Which of the following are valid Oracle Cloud Infrastructure (OCI) compute shapes? (Select all that apply)
+    * VM.Standard.E4.Flex
+    * BM.Standard3.64
+    - VM.SuperFast.999
+    * VM.Standard.A1.Flex
+    - EC2.Large
+    > OCI offers VM (Virtual Machine) and BM (Bare Metal) shapes. The E4, Standard3, and A1 series are all valid OCI shapes.
+    ```
 
 3. The learner must select ALL correct answers to see "Correct!" - partial selections show which answers were missed.
 
@@ -135,35 +136,35 @@ You can include multiple questions in a single quiz block by adding another `Q:`
 
 1. Add multiple questions:
 
-![multi quiz](images/quiz.png)
+    ![multi quiz](images/quiz.png)
 
-```quiz
-Q: What does OCI stand for?
-* Oracle Cloud Infrastructure
-- Oracle Computer Interface
-- Online Cloud Integration
+    ```quiz
+    Q: What does OCI stand for?
+    * Oracle Cloud Infrastructure
+    - Oracle Computer Interface
+    - Online Cloud Integration
 
-Q: Which service provides object storage in OCI?
-- Block Volume
-* Object Storage
-- File Storage
-> Object Storage is ideal for unstructured data like images, videos, and backups.
-```
+    Q: Which service provides object storage in OCI?
+    - Block Volume
+    * Object Storage
+    - File Storage
+    > Object Storage is ideal for unstructured data like images, videos, and backups.
+    ```
 
 2. Each question is rendered as a separate quiz component:
 
-```quiz
-Q: What does OCI stand for?
-* Oracle Cloud Infrastructure
-- Oracle Computer Interface
-- Online Cloud Integration
+    ```quiz
+    Q: What does OCI stand for?
+    * Oracle Cloud Infrastructure
+    - Oracle Computer Interface
+    - Online Cloud Integration
 
-Q: Which service provides object storage in OCI?
-- Block Volume
-* Object Storage
-- File Storage
-> Object Storage is ideal for unstructured data like images, videos, and backups.
-```
+    Q: Which service provides object storage in OCI?
+    - Block Volume
+    * Object Storage
+    - File Storage
+    > Object Storage is ideal for unstructured data like images, videos, and backups.
+    ```
 
 ## Task 5: Enable Quiz Scoring
 
@@ -171,31 +172,31 @@ Track learner progress across multiple quizzes and reward completion with a down
 
 1. Add `score` after `quiz` to mark a quiz as contributing to the total score:
 
-![quiz score](images/quizscore.png)
+    ![quiz score](images/quizscore.png)
 
-```
-Q: What is the capital of France?
-* Paris
-- London
-- Berlin
-```
+    ```
+    Q: What is the capital of France?
+    * Paris
+    - London
+    - Berlin
+    ```
 
-When you add score it changes to quiz score (see Task 2 for example without score):
+    When you add score it changes to quiz score (see Task 2 for example without score):
 
-```quiz score
-Q: What is the capital of France?
-* Paris
-- London
-- Berlin
-```
+    ```quiz score
+    Q: What is the capital of France?
+    * Paris
+    - London
+    - Berlin
+    ```
 
 
-```quiz score
-Q: What is the capital of the Netherlands?
-* Amsterdam
-- The Hague
-- Utrecht
-```
+    ```quiz score
+    Q: What is the capital of the Netherlands?
+    * Amsterdam
+    - The Hague
+    - Utrecht
+    ```
 
 1. Scored quizzes display a "Scored Quiz" label and have an orange left border to distinguish them from practice quizzes.
 
@@ -210,15 +211,15 @@ Set a passing percentage and provide a badge image for learners who pass.
 
 1. Add a `quiz-config` block anywhere in your markdown (typically at the top):
 
-![quiz config](images/quizconfig.png)
+    ![quiz config](images/quizconfig.png)
 
 
-```
-passing: 80
-badge: images/badge.png
-```
+    ```
+    passing: 80
+    badge: images/badge.png
+    ```
 
-![badge](images/badge.png)
+    ![badge](images/badge.png)
 
 2. Configuration options:
 

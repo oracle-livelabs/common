@@ -5,13 +5,12 @@ Fixomat is a small UI app that lets you:
 - Optimize images only
 - Run both (Markdown + images)
 
-It targets a **workshop root folder** and runs the existing LiveLabs Markdown auto-fixer plus OptiShot image optimization.
+It targets a **workshop root folder** and applies both Markdown and image fixes with logic built directly into `fixomat.py`.
 
 ## Requirements
 
 - Python 3
 - Pillow (for image optimization)
-- bash (for the Markdown fixer script)
 
 Install Pillow if needed:
 ```bash
@@ -34,9 +33,8 @@ Then:
 2. Choose a mode (Markdown only, Images only, or Both).
 3. Click **Run**.
 
-## What it runs
+## Behavior
 
-- Markdown fix: `common/md-validator/.github/scripts/fix-livelabs-markdown.sh`
-- Image optimization: `common/_scripts/optishot/optishot.py`
-
-Fixomat streams the output from both tools into the UI console.
+- Markdown mode applies built-in LiveLabs auto-fixes and reports any remaining manual issues.
+- Images mode resizes large JPEG/PNG files and optionally runs `oxipng` if available.
+- Combined mode runs both steps in sequence and streams logs in the UI console.

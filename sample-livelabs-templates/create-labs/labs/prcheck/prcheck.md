@@ -161,7 +161,7 @@ You can run the same checks locally before submitting a PR to catch issues early
 
 ### Image Size Check
 
-1. Use OptiShot for a graphical interface - see the [OptiShot User Manual](../optishot/optishot.md).
+Use OptiShot for a graphical interface - see the [OptiShot User Manual](../optishot/optishot.md).
 
 ### Markdown Validation Check
 
@@ -293,10 +293,10 @@ The script checks for the following rules:
 | Acknowledgements | Must have `## Acknowledgements` section |
 | Image Alt Text | Images must have alt text: `![alt text](image.png)` |
 | No Inline HTML | Replace raw `<a href=...>` tags with Markdown links |
-| Task Format | Tasks should use `## Task N: Description` |
+| Task Format | Tasks should use `## Task Number and/or string: Description` |
 | Copy Tags | `<copy>` and `</copy>` tags must be balanced |
 | Task Numbering | Each Task section should contain numbered steps |
-| Task Indentation | Code blocks and images must be indented within steps |
+| Task Indentation | Code blocks and images must be indented within steps (exceptions: raw HTML element lines are allowed, a top-level heading can terminate the list, and one trailing transition line at Task end may remain unindented) |
 | Introduction | Labs with Tasks must have `## Introduction` |
 | Objectives | Must have `### Objectives` section |
 | Estimated Time | Must include `Estimated Time:` (or `Estimated Workshop Time:` for introduction.md) |

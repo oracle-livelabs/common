@@ -133,16 +133,16 @@ foreach ($file in $Files) {
     }
 
     # ----------------------------------------------------------------
-    # Fix 5: Add placeholder alt text to empty image references
-    # ![]( -> ![image](
+    # Fix 5: Add placeholder alt text to empty/blank image references
+    # ![](...), ![ ](...) -> ![Image](...)
     # Excludes YouTube embeds: ![](youtube:...)
     # ----------------------------------------------------------------
     $content = Get-Content -Path $file -Raw -Encoding UTF8
-    if ($content -match '!\[\]\((?!youtube:)') {
-        $content = [regex]::Replace($content, '!\[\]\((?!youtube:)', '![image](')
+    if ($content -match '!\[\s*\]\((?!youtube:)') {
+        $content = [regex]::Replace($content, '!\[\s*\]\((?!youtube:)', '![Image](')
         Set-Content -Path $file -Value $content -Encoding UTF8 -NoNewline
         $lines = Get-Content -Path $file -Encoding UTF8
-        Log-Fixed "Added placeholder alt text 'image' to empty image references (review and replace with descriptive text)"
+        Log-Fixed "Added placeholder alt text 'Image' to image references with missing alt text (review and replace with descriptive text)"
         $FileFixes++
     }
 
@@ -243,19 +243,30 @@ foreach ($file in $Files) {
     # ----------------------------------------------------------------
     # Fix 10: Add Introduction section if missing (only for files with Tasks)
     # ----------------------------------------------------------------
-    $content = Get-Content -Path $file -Raw -Encoding UTF8
-    if ($content -match '(?m)^## Task' -and $content -notmatch '(?m)^## Introduction') {
-        $content = [regex]::Replace($content,
-            '(?m)(^## Task )',
-            "`n## Introduction`n`nTODO: Add introduction text here.`n`n`$1",
-            [System.Text.RegularExpressions.RegexOptions]::Multiline,
-            [System.TimeSpan]::FromSeconds(5))
-        # Only replace first occurrence
-        $content = $content -replace '(?s)(\n## Introduction\n\nTODO: Add introduction text here\.\n\n)(.*?)(\n## Introduction\n\nTODO: Add introduction text here\.\n\n)', '$1$2$3'
-        Set-Content -Path $file -Value $content -Encoding UTF8 -NoNewline
-        $lines = Get-Content -Path $file -Encoding UTF8
-        Log-Fixed "Added '## Introduction' section before first Task (update with actual content)"
-        $FileFixes++
+    $lines = Get-Content -Path $file -Encoding UTF8
+    if ($lines -match '^## Task' -and -not ($lines -match '^## Introduction')) {
+        $taskIndex = -1
+        for ($i = 0; $i -lt $lines.Count; $i++) {
+            if ($lines[$i] -match '^## Task') {
+                $taskIndex = $i
+                break
+            }
+        }
+
+        if ($taskIndex -ge 0) {
+            $newLines = [System.Collections.Generic.List[string]]::new()
+            for ($i = 0; $i -lt $taskIndex; $i++) { $newLines.Add($lines[$i]) }
+            $newLines.Add('## Introduction')
+            $newLines.Add('')
+            $newLines.Add('TODO: Add introduction text here.')
+            $newLines.Add('')
+            for ($i = $taskIndex; $i -lt $lines.Count; $i++) { $newLines.Add($lines[$i]) }
+
+            Set-Content -Path $file -Value $newLines -Encoding UTF8
+            $lines = Get-Content -Path $file -Encoding UTF8
+            Log-Fixed "Added '## Introduction' section before first Task (update with actual content)"
+            $FileFixes++
+        }
     }
 
     # ----------------------------------------------------------------
@@ -299,11 +310,24 @@ foreach ($file in $Files) {
         if ($firstStepOffset -lt 0) { continue }
 
         $inCodeBlock = $false
+        $inOrderedBlock = $false
         for ($offset = $firstStepOffset; $offset -lt $section.Count; $offset++) {
             $ln = $section[$offset]
             $stripped = $ln.TrimStart(' ')
             $indent = $ln.Length - $stripped.Length
             $absIdx = $sectionStart + $offset
+
+            # Top-level ordered list item starts/continues a list block.
+            if ($ln -match '^\d+\. ') {
+                $inOrderedBlock = $true
+                $inCodeBlock = $false
+                continue
+            }
+
+            # Outside an ordered list block, indentation rule does not apply.
+            if (-not $inOrderedBlock) {
+                continue
+            }
 
             if ($stripped -like '```*') {
                 if (-not $inCodeBlock) {
@@ -331,7 +355,29 @@ foreach ($file in $Files) {
             }
 
             if ([string]::IsNullOrWhiteSpace($stripped)) { continue }
-            if ($ln -match '^\d+\. ') { continue }
+
+            # Allow raw HTML element lines inside ordered steps without indentation.
+            if ($indent -lt 4 -and $stripped.StartsWith('<') -and $stripped.EndsWith('>')) { continue }
+
+            # A top-level header ends the ordered list block.
+            if ($indent -lt 4 -and $stripped.StartsWith('#')) {
+                $inOrderedBlock = $false
+                continue
+            }
+
+            # Exception: allow a trailing unindented transition line if no later
+            # ordered steps appear in this task section.
+            if ($indent -lt 4) {
+                $remainingSection = if (($offset + 1) -lt $section.Count) { $section[($offset + 1)..($section.Count - 1)] } else { @() }
+                $hasLaterStep = $false
+                foreach ($futureLine in $remainingSection) {
+                    if ($futureLine -match '^\d+\. ') { $hasLaterStep = $true; break }
+                }
+                if (-not $hasLaterStep) {
+                    $inOrderedBlock = $false
+                    continue
+                }
+            }
 
             if ($indent -lt 4) {
                 $linesArray[$absIdx] = '    ' + $stripped
@@ -380,9 +426,17 @@ foreach ($file in $Files) {
     foreach ($line in $lines) {
         $lineNum++
         if ($line -match '^## Task') {
-            if ($line -notmatch '^## Task \d+:') {
-                Log-Manual "Task header at line $lineNum doesn't follow '## Task N: Description' format - manually fix"
+            if ($line -notmatch '^## Task\s+[^:\s].*:') {
+                Log-Manual "Task header at line $lineNum doesn't follow '## Task Number and/or string: Description' format - manually fix"
             }
+        }
+    }
+
+    $lineNum = 0
+    foreach ($line in $lines) {
+        $lineNum++
+        if ($line -match 'youtube:' -and $line -notmatch '\[[^\]]*\]\(youtube:[^)]+\)') {
+            Log-Manual "YouTube embed at line $lineNum is not in [optional text](youtube:VIDEO_ID[:size]) format - manually fix"
         }
     }
 

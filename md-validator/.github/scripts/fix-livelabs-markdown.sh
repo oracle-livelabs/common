@@ -94,14 +94,13 @@ for file in $FILES; do
     fi
 
     # ----------------------------------------------------------------
-    # Fix 5: Add placeholder alt text to empty image references
-    # ![]( → ![image](
+    # Fix 5: Add placeholder alt text to empty/blank image references
+    # ![](...), ![ ](...) → ![Image](...)
     # Excludes YouTube embeds: ![](youtube:...)
     # ----------------------------------------------------------------
-    if grep -q '!\[\](' "$file" | grep -v 'youtube:' 2>/dev/null || \
-       grep -qP '!\[\]\((?!youtube:)' "$file" 2>/dev/null; then
-        perl -i -pe 's/!\[\]\((?!youtube:)/![image](/g' "$file"
-        log_fixed "Added placeholder alt text 'image' to empty image references (review and replace with descriptive text)"
+    if perl -e '$s=join("",<>); exit(($s =~ /!\[\s*\]\((?!youtube:)/)?0:1)' "$file"; then
+        perl -i -pe 's/!\[\s*\]\((?!youtube:)/![Image](/g' "$file"
+        log_fixed "Added placeholder alt text 'Image' to image references with missing alt text (review and replace with descriptive text)"
         ((FILE_FIXES++))
     fi
 
@@ -180,10 +179,42 @@ for file in $FILES; do
     # Fix 10: Add Introduction section if missing (only for files with Tasks)
     # ----------------------------------------------------------------
     if grep -q "^## Task" "$file" && ! grep -q "^## Introduction" "$file"; then
-        # Insert Introduction before the first Task
-        perl -i -0pe 's/(^## Task )/${\"\n## Introduction\n\nTODO: Add introduction text here.\n\n\"}$1/m' "$file"
-        log_fixed "Added '## Introduction' section before first Task (update with actual content)"
-        ((FILE_FIXES++))
+        intro_added=$(python3 - "$file" <<'PY'
+import re
+import sys
+
+path = sys.argv[1]
+with open(path, encoding='utf-8') as handle:
+    lines = handle.readlines()
+
+if any(re.match(r'^## Introduction', line) for line in lines):
+    print(0)
+    raise SystemExit
+
+task_index = next((idx for idx, line in enumerate(lines) if re.match(r'^## Task', line)), None)
+if task_index is None:
+    print(0)
+    raise SystemExit
+
+intro_block = [
+    "## Introduction\n",
+    "\n",
+    "TODO: Add introduction text here.\n",
+    "\n",
+]
+lines[task_index:task_index] = intro_block
+
+with open(path, 'w', encoding='utf-8') as handle:
+    handle.writelines(lines)
+
+print(1)
+PY
+)
+        intro_added=$(echo "$intro_added" | tr -d '[:space:]')
+        if [ "$intro_added" = "1" ]; then
+            log_fixed "Added '## Introduction' section before first Task (update with actual content)"
+            ((FILE_FIXES++))
+        fi
     fi
 
     # ----------------------------------------------------------------
@@ -230,12 +261,23 @@ for start in task_indices:
         continue
 
     in_code_block = False
+    in_ordered_block = False
     for offset in range(first_step_offset, len(block)):
         ln = block[offset]
         raw_line = ln.rstrip('\n\r')
         stripped = raw_line.lstrip(' ')
         indent = len(raw_line) - len(stripped)
         abs_idx = section_start + offset
+
+        # Top-level ordered list item starts/continues a list block.
+        if re.match(r'[0-9]+\. ', raw_line):
+            in_ordered_block = True
+            in_code_block = False
+            continue
+
+        # Outside an ordered list block, indentation rule does not apply.
+        if not in_ordered_block:
+            continue
 
         if stripped.startswith('```'):
             if not in_code_block:
@@ -260,8 +302,23 @@ for start in task_indices:
         if not stripped:
             continue
 
-        if re.match(r'[0-9]+\. ', raw_line):
+        # Allow raw HTML element lines inside ordered steps without indentation.
+        if indent < 4 and stripped.startswith('<') and stripped.endswith('>'):
             continue
+
+        # A top-level header ends the ordered list block.
+        if indent < 4 and stripped.startswith('#'):
+            in_ordered_block = False
+            continue
+
+        # Exception: allow a trailing unindented transition line if no later
+        # ordered steps appear in this task section.
+        if indent < 4:
+            remaining = block[offset + 1:]
+            has_later_step = any(re.match(r'[0-9]+\. ', future) for future in remaining)
+            if not has_later_step:
+                in_ordered_block = False
+                continue
 
         if indent < 4:
             lines[abs_idx] = '    ' + stripped + '\n'
@@ -306,11 +363,20 @@ PY
     if [ -n "$task_headers" ]; then
         while IFS= read -r line; do
             [ -z "$line" ] && continue
-            if [[ ! "$line" =~ ^[0-9]+:##\ Task\ [0-9]+: ]]; then
+            if [[ ! "$line" =~ ^[0-9]+:##\ Task\ [^:[:space:]][^:]*: ]]; then
                 linenum=$(echo "$line" | cut -d: -f1)
-                log_skipped "Task header at line $linenum doesn't follow '## Task N: Description' format - manually fix"
+                log_skipped "Task header at line $linenum doesn't follow '## Task Number and/or string: Description' format - manually fix"
             fi
         done <<< "$task_headers"
+    fi
+
+    bad_youtube_lines=$(grep -n "youtube:" "$file" | grep -vE '\[[^]]*\]\(youtube:[^)]+\)' || true)
+    if [ -n "$bad_youtube_lines" ]; then
+        while IFS= read -r yt_line; do
+            [ -z "$yt_line" ] && continue
+            yt_lineno=${yt_line%%:*}
+            log_skipped "YouTube embed at line $yt_lineno is not in [optional text](youtube:VIDEO_ID[:size]) format - manually fix"
+        done <<< "$bad_youtube_lines"
     fi
 
     if [ $FILE_FIXES -eq 0 ]; then

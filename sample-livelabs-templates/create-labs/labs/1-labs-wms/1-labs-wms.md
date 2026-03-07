@@ -24,21 +24,21 @@ Before starting development, submit your LiveLabs workshop request to WMS. This 
 
 1. Log in to Corporate VPN.
 
-2.  Access the **Oracle Workshop Management System (WMS)** page.
+2. Access the **Oracle Workshop Management System (WMS)** page.
     > **Note:** This page is only accessible to Oracle Employees.
 
-3.  Click **Submit a New Workshop Request**.
+3. Click **Submit a New Workshop Request**.
 
-4.  Fill in required *Workshop Basic Information*. Select the *Stakeholder*, *Workshop Council*, and *Workshop Owner Group* for your workshop. Fill in the *Workshop Abstract* **thoroughly**, *Workshop Outline*, and *Workshop Prerequisites*. Click **?** besides those fields to see more details.
+4. Fill in required *Workshop Basic Information*. Select the *Stakeholder*, *Workshop Council*, and *Workshop Owner Group* for your workshop. Fill in the *Workshop Abstract* **thoroughly**, *Workshop Outline*, and *Workshop Prerequisites*. Click **?** besides those fields to see more details.
 
-  ![Submit Workshop](images/submit_workshop.png " ")
-  ![Detailed Workshop Information](images/detailed_info.png " ")
+    ![Submit Workshop](images/submit_workshop.png " ")
+    ![Detailed Workshop Information](images/detailed_info.png " ")
 
-5.  Click the *Tags* tab, and select the proper tags for your workshop. You should select a *Level* tag, and at least one tag for *Role*, *Focus Area*, and *Product* respectively. Tags are required for Level, Role, Focus Area and Product, other sections are optional. Click **Create**.
+5. Click the *Tags* tab, and select the proper tags for your workshop. You should select a *Level* tag, and at least one tag for *Role*, *Focus Area*, and *Product* respectively. Tags are required for Level, Role, Focus Area and Product, other sections are optional. Click **Create**.
 
-  ![Select tags](images/tags.png " ")
+    ![Select tags](images/tags.png " ")
 
-6.  We recommend you don't start working on your workshop until your workshop has been approved by a council member.
+6. We recommend you don't start working on your workshop until your workshop has been approved by a council member.
 
 After submission, the workshop council reviews your request within 3 business days. If you have not received a response after 3 business days, message them via WMS. Once approved, you enter the workflow with additional steps toward production.
 

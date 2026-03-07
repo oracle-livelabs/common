@@ -1,5 +1,12 @@
 # LiveLabs SLAs
 
+### Objectives
+
+In this lab, you will:
+* Review the different SLAs for the LiveLabs platform
+
+Estimated Time: x minutes
+
 | Process | SLA | Notes |
 |---------|-----|-------|
 | GitHub PR Review | 1 business day | LiveLabs admin team reviews PRs |
@@ -18,3 +25,8 @@
 {: title="LiveLabs SLAs"}
 
 > **Note:** Do not submit requests for pull request merges on our Slack channel. Do not send direct messages to team members regarding these requests. If your request remains incomplete after the service level agreement period ends, post your inquiry in the #livelabs-authors-help channel.
+
+## Acknowledgements
+
+* **Author** - LiveLabs Team
+* **Last Updated By/Date** - LiveLabs Team, March 2026
