@@ -9,17 +9,10 @@ $InstallDir = "$env:LOCALAPPDATA\Programs\$AppName"
 $TempDir = "$env:TEMP\Fixomat_Install"
 $StartMenuDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
 $ShortcutPath = "$StartMenuDir\$AppName.lnk"
-
-# Replace this with the real package URL when available.
-$DefaultDownloadUrl = "https://example.com/fixomat/LiveLabs-Fixomat-2000-Windows-x64.zip"
-$DownloadUrl = if ($env:FIXOMAT_DOWNLOAD_URL) { $env:FIXOMAT_DOWNLOAD_URL } else { $DefaultDownloadUrl }
-
-if ($DownloadUrl -eq $DefaultDownloadUrl) {
-    Write-Host ""
-    Write-Host "ERROR: Download URL is still a placeholder." -ForegroundColor Red
-    Write-Host "Set FIXOMAT_DOWNLOAD_URL to the real zip URL and rerun installation." -ForegroundColor Yellow
-    Write-Host ""
-    exit 1
+$DownloadUrl = if ($env:FIXOMAT_DOWNLOAD_URL) {
+    $env:FIXOMAT_DOWNLOAD_URL
+} else {
+    "https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/fixomat/Fixomat-Windows.zip"
 }
 
 Write-Host ""

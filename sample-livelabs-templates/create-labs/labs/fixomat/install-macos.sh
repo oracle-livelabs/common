@@ -7,19 +7,7 @@ set -e
 APP_NAME="LiveLabs Fixomat 2000"
 APP_BUNDLE="${APP_NAME}.app"
 INSTALL_DIR="/Applications"
-
-# Replace this with the real package URL when available.
-DEFAULT_DOWNLOAD_URL="https://example.com/fixomat/LiveLabs-Fixomat-2000-MacOS-arm.zip"
-DOWNLOAD_URL="${FIXOMAT_DOWNLOAD_URL:-$DEFAULT_DOWNLOAD_URL}"
-
-if [ "$DOWNLOAD_URL" = "$DEFAULT_DOWNLOAD_URL" ]; then
-    echo ""
-    echo "ERROR: Download URL is still a placeholder."
-    echo "Please set FIXOMAT_DOWNLOAD_URL to the real URL, for example:"
-    echo "  FIXOMAT_DOWNLOAD_URL='https://your-download-url.zip' /bin/bash -c \"\$(curl -fsSL <script-url>)\""
-    echo ""
-    exit 1
-fi
+DOWNLOAD_URL="${FIXOMAT_DOWNLOAD_URL:-https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/fixomat/LiveLabs-Fixomat-2000-macOS-arm.zip}"
 
 TEMP_DIR=$(mktemp -d)
 ZIP_PATH="$TEMP_DIR/fixomat.zip"

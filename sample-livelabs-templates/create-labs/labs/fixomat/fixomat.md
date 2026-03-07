@@ -43,8 +43,6 @@ This lab assumes you have:
 </copy>
 ```
 
-> Note: The installer script currently uses a placeholder app ZIP URL. Replace it when the final download URL is available.
-
 ### Windows (x64)
 
 **One-line installation**
@@ -56,8 +54,6 @@ This lab assumes you have:
     Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/oracle-livelabs/common/main/sample-livelabs-templates/create-labs/labs/fixomat/install-windows.ps1'))
     </copy>
     ```
-
-2. If needed, edit the placeholder download URL in the script before running it.
 
 ## Task 2: Launch Fixomat
 
