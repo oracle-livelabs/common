@@ -3,7 +3,7 @@
         "name":"Provision an ADB instance for Data Sharing/Data Lake workshops",
         "description":"(Redwood UI) Learn how to provision Autonomous AI Database using the OCI console.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "lastUpdated":"Lauran K. Serhal, October 2025"
+        "lastUpdated":"Lauran K. Serhal, March 2026"
     }
 -->
 
@@ -30,7 +30,7 @@ This lab walks you through how to provision an Autonomous AI Database instance.
 
    ![The Autonomous Databases page is displayed.](images/autonomous-databases-page.png =65%x*)
 
-4. OCI resources are organized into compartments. Click the **Compartment** field to select the compartment where you want to create your Autonomous AI Database. In this example, we selected our **`training-adw-compartment`**. <if type="livelabs">To quickly locate the compartment that has been assigned to you for this workshop, enter the first part of your user name such as `LL81481` (if that is your assigned username) in the **Compartment** field, and then click it from the list.</if>
+4. OCI resources are organized into compartments. Click the **Compartment** field to select the compartment where you want to create your Autonomous AI Database. <if type="livelabs">To quickly locate the compartment that has been assigned to you for this workshop, enter the first part of your user name such as `LL81481` (if that is your assigned username) in the **Compartment** field, and then click it from the list.</if>
 
 5. You can use the **Search and Filter** field to control the list of Autonomous Databases that are displayed on the page. This is useful when you are managing many Autonomous Databases. For example, you can use **Workload type** to filter the Autonomous AI Database list by selecting your workload type. You can also use the **State** filter to view databases that are `available`, `stopped`, `terminated` and much more.
 
@@ -49,16 +49,16 @@ This lab walks you through how to provision an Autonomous AI Database instance.
 7. On the **Create Autonomous AI Database Serverless** page, specify the following:
 
 <if type="freetier">
-    - **Display name**: Enter a memorable name for the database for display purposes. Enter **`ADW-Data-Lake`**.
-    - **Database Name**: Use letters and numbers only, starting with a letter. Maximum length is 14 characters. _Underscores are not supported_. Enter **`TrainingADW`**.
+    - **Display name**: Enter a memorable name for the database for display purposes. Enter **`MY_AI_LAKEHOUSE`**.
+    - **Database Name**: Use letters and numbers only, starting with a letter. Maximum length is 14 characters. _Underscores are not supported_. Enter **`MYAILAKEHOUSE`**.
     - **Compartment**: Select your compartment from the drop-down list.
-
-        ![Enter the required details.](./images/adb-create-name-display.png =65%x*)
+        
+        ![Enter the required details.](./images/adb-create-name-display-new.png =65%x*)
 </if>
 
 <if type="livelabs">
-    - **Display Name**: Enter a memorable name for the database for display purposes. For this lab, use **[](var:db_display_name)**.
-    - **Database Name**: Use letters and numbers only, starting with a letter. Maximum length is 14 characters. _Underscores are not supported_. For this lab, use **[](var:db_name_livelabs)**.
+    - **Display Name**: For a sandbox reservation, the display name is automatically assigned.
+    - **Database Name**: For a sandbox reservation, the database name is automatically assigned.
     - **Compartment**: Use the default compartment created for your reservation.
 
     ![Enter the required details.](./images/adb-create-name-display.png =65%x*)
@@ -122,32 +122,22 @@ This lab walks you through how to provision an Autonomous AI Database instance.
 
         ![Choose the network access.](./images/adb-create-network-access.png =65%x*)
 
-13. In the **Contacts for operational notifications and announcements** section, provide a contact email address. The **Contact email** field allows you to list contacts to receive operational notices and announcements as well as unplanned maintenance notifications.
-
-    ![Provide a contact email address.](images/adb-create-contact-email.png =65%x*)
+13. In the **Contacts for operational notifications and announcements** section, you can provide a contact email address. The **Contact email** field allows you to list contacts to receive operational notices and announcements as well as unplanned maintenance notifications.
 
 14. Click **Create**.
 
 15.  The **Autonomous AI Database details** page is displayed. The status of your ADB instance is **`Provisioning`**.
 
-    ![Database Provisioning message.](./images/adb-create-provisining-data-lake.png =65%x*)
+    ![Database Provisioning message.](./images/adb-create-provisining-data-lake-new.png =65%x*)
  
     A **Check database lifecycle state** informational box is displayed. You can navigate through this tour or choose to skip it. Click **Skip tour**. A **Skip guided tour** dialog box is displayed. Click **Skip**.
 
     In a few minutes, the instance status changes to **`Available`**. At this point, your Autonomous AI Lakehouse database instance is ready to use! Review your instance's details including its name, database version, ECPU count, and storage size.
     
-    >**Note:** The _database display name_ is **`ADW-Data-Lake`** and the _database name_ is **`TrainingADW`**.
+    >**Note:** The _database display name_ is **`MY_AI_LAKEHOUSE`** and the _database name_ is **`MYAILAKEHOUSE`**.
     
-    ![Database complete message.](./images/adb-created-data-lake.png =65%x*)
+    ![Database complete message.](./images/adb-created-data-lake-new.png =65%x*)
     
 16. Click the **Autonomous AI Databases** link in the top left of the page. The **Autonomous AI Database** page is displayed. 
 
-    ![Click left arrow.](./images/click-autonomous-databases.png =65%x*)
-    
-    Your new Autonomous AI Database instance is displayed. 
-
-    ![Click left arrow.](./images/adb-home-page-lake.png =65%x*)    
-
-17. An email message is sent to the contact email that you provided. The email contains useful links that you can use to launch Database Actions, view the Get Started with Autonomous AI Database Web page, and access the online forums to post a question and collaborate with other Autonomous AI Database experts. 
-
-    ![provisioning email sent.](./images/provisioning-email.png =65%x*)
+    ![Click left arrow.](./images/adb-home-page-lake-new.png =65%x*)    
