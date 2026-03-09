@@ -61,9 +61,7 @@ This lab walks you through how to provision an Autonomous AI Database instance.
     - **Database Name**: For a sandbox reservation, the database name is automatically assigned.
     - **Compartment**: Use the default compartment created for your reservation.
 
-    ![Enter the required details.](./images/adb-create-name-display.png =65%x*)
-
-> **Note:** Ensure that you use the suggested database names as instructed in this step, and not those shown in the screenshots.
+> **Note:** You can find your assigned database name in your **Reservation Information** form.
 </if>
 
 8. In the **Workload type** section, choose a workload type. Select the workload type for your database from the following choices:
