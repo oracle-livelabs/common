@@ -23,26 +23,26 @@ Estimated Time: x
 
 1. Paste the following HTML tag on the line immediately after the lab title.
 
-```
-<copy>
-&lt;freesql-button&gt;
-</copy>
-```
+    ```
+    <copy>
+    &lt;freesql-button&gt;
+    </copy>
+    ```
 
 2. Enclose the SQL code to be included in the worksheet between &lt;freesql&gt; tags, as shown below. Repeat this step for every code block you want to include.
 
-```
-<copy>
-&lt;freesql&gt;
-create table DEPARTMENTS (
+    ```
+    <copy>
+    &lt;freesql&gt;
+    create table DEPARTMENTS (
     deptno        number,
     name          varchar2(50) not null,
     location      varchar2(50),
     constraint pk_departments primary key (deptno)
-);
-&lt;/freesql&gt;
-</copy>
-```
+    );
+    &lt;/freesql&gt;
+    </copy>
+    ```
 
 3. If your code modifies the database, notify users that they need to sign into FreeSQL via your markdown instructions or code commentary.
 
@@ -52,11 +52,11 @@ create table DEPARTMENTS (
 
 2. Paste the following HTML tag on the line immediately after the lab title.
 
-```
-<copy>
-&lt;freesql-button src="{tutorial-url}"&gt;
-</copy>
-```
+    ```
+    <copy>
+    &lt;freesql-button src="{tutorial-url}"&gt;
+    </copy>
+    ```
 
 ## Task 2: Test Your FreeSQL Button
 

@@ -88,11 +88,11 @@ Choose the folder containing the images you want to optimize.
 
 1. In the folder picker dialog, navigate to the folder containing your images.
 
-![select root](images/root.png)
+    ![select root](images/root.png)
 
 2. Select the folder and click **Select Folder** (Windows) or **Open** (macOS).
 
-   > **Note:** OptiShot processes all images recursively, including images in subfolders. The `.git` directory is automatically excluded.
+    > **Note:** OptiShot processes all images recursively, including images in subfolders. The `.git` directory is automatically excluded.
 
 3. The status window will appear showing the processing progress.
 
@@ -170,7 +170,7 @@ The status window displays real-time information about the image processing.
     | Saved | Total space saved |
 
 
-![example output](images/summary.png)
+    ![example output](images/summary.png)
 
 4. Click **Close** to exit OptiShot.
 

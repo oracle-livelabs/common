@@ -6,9 +6,6 @@ To optimize your workflow while developing workshop content, we recommend using 
 
 > **Note:** For a comprehensive workshop development experience, we recommend using the sample workshop folder provided in Task 1, while tasks 2 to 15 are optional.
 
-<!-- **Helpful tips from your LiveLabs Team**
-[Video walking through markdown editing](youtube:rOj5APIU-XU) -->
-
 Estimated Time: x
 
 ### Objectives
@@ -205,7 +202,7 @@ Without using image scaling, all the screenshots you take for your workshop will
 1. This is a demo image with no image sizing applied:
 
     ```
-    ![](images/livelabs-homepage.png)
+    ![no image sizing applied](images/livelabs-homepage.png)
     ```
 
     ![Demo image with no sizing.](images/livelabs-homepage.png)
@@ -213,7 +210,7 @@ Without using image scaling, all the screenshots you take for your workshop will
 2. Use this format to scale the image size in relation to the amount of lab page space available. This example uses 50% of the page width and auto height:
 
     ```
-    ![](images/livelabs-homepage.png =50%x*)
+    ![image sizing applied](images/livelabs-homepage.png =50%x*)
     ```
 
     ![Use this format.](images/livelabs-homepage.png =50%x*)
@@ -221,7 +218,7 @@ Without using image scaling, all the screenshots you take for your workshop will
 3. Use this format for an absolute width and auto-scaled height. This example uses 500 pixels for width:
 
     ```
-    ![](images/livelabs-homepage.png =500x*)
+    ![image sizing applied](images/livelabs-homepage.png =500x*)
     ```
 
     ![Absolute width and auto-scaled height.](./images/livelabs-homepage.png =500x*)
@@ -229,7 +226,7 @@ Without using image scaling, all the screenshots you take for your workshop will
 4. Lastly, **this is the format we recommend for all your images** if you don't need a particular scaling to drive emphasis on a subject. It auto-scaled to around ~3/4ths of the page width and its definition is maintained by the LiveLabs team so we can adjust the scaling platform-wide if needed:
 
     ```
-    ![](images/livelabs-homepage.png " ")
+    ![image sizing applied](images/livelabs-homepage.png " ")
     ```
 
     ![Recommended format for all images.](./images/livelabs-homepage.png " ")
@@ -255,7 +252,7 @@ LiveLabs supports embedding videos from [YouTube](https://www.youtube.com), [Ora
 
     ![The Video Hub URL](images/video-hub-url.png =60%x* " ")
 
-    ### Embedding a Video from YouTube
+### Embedding a Video from YouTube
 
 1. Review this example of a video linked in the introduction of a workshop.
 
@@ -267,9 +264,9 @@ LiveLabs supports embedding videos from [YouTube](https://www.youtube.com), [Ora
 
     ![How to link a youtube video.](./images/youtube-url.png =60%x* " ")
 
-    ### Embedding a Direct Video File
+### Embedding a Direct Video File
 
-    You can also embed video files directly from a URL, such as videos hosted on OCI Object Storage or any other web server. This is useful when you have your own video files that aren't hosted on YouTube or Video Hub.
+You can also embed video files directly from a URL, such as videos hosted on OCI Object Storage or any other web server. This is useful when you have your own video files that aren't hosted on YouTube or Video Hub.
 
 1. Use the `video:` prefix followed by the full URL to your video file:
 
@@ -301,109 +298,40 @@ LiveLabs supports embedding videos from [YouTube](https://www.youtube.com), [Ora
 Without using video scaling, all the videos you embed will have small as the default size for your workshop. You can override the default video scaling by applying these manual controls below.
 
 
-### Resizing a Video from Video Hub (Recommended)
+### Resizing Videos
 
 1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need a particular scaling to drive emphasis on a subject.
 
-    	```
-    	[Oracle Video Hub video with no sizing](videohub:1_2ubr9fo8)
-    	```
+    ```
+    [Oracle Video Hub video with no sizing](videohub:1_2ubr9fo8)
+    ```
 
-    	[Demo video with no sizing.](videohub:1_yido2qmq)
+    [Demo video with no sizing.](videohub:1_yido2qmq)
 
 2. To scale the video size to small which is also the default video size, use this format.
 
-    	```
-    	[Oracle Video Hub video scaled to small size, default video size](videohub:1_2ubr9fo8:small)
-    	```
+    ```
+    [Oracle Video Hub video scaled to small size, default video size](videohub:1_2ubr9fo8:small)
+    ```
 
-    	[Video hosted on Oracle Video Hub](videohub:1_yido2qmq:small)
+    [Video hosted on Oracle Video Hub](videohub:1_yido2qmq:small)
 
 3. Use this format to scale the video size to medium.
 
-    	```
-    	[Oracle Video Hub video scaled to medium size](videohub:1_yido2qmq:medium)
-    	```
+    ```
+    [Oracle Video Hub video scaled to medium size](videohub:1_yido2qmq:medium)
+    ```
 
-    	[Video hosted on Oracle Video Hub](videohub:1_yido2qmq:medium)
+    [Video hosted on Oracle Video Hub](videohub:1_yido2qmq:medium)
 
 4. To scale the video size to large in relation to the amount of lab page space available, use this format.
 
-    	```
-    	[Oracle Video Hub video scaled to large size](videohub:1_yido2qmq:large)
-    	```
-
-    	[Video hosted on Oracle Video Hub](videohub:1_yido2qmq:large)
-
-    ### Resizing a Video from YouTube
-
-1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need particular scaling to emphasize a subject.
-
-    	```
-    	[YouTube video with no sizing](youtube:lHriX403Oz4)
-    	```
-
-    	[Demo video with no sizing.](youtube:lHriX403Oz4)
-
-2. To scale the video size to small which is also the default video size, use this format.
-
-    	```
-    	[YouTube video scaled to small size, default video size](youtube:lHriX403Oz4:small)
-    	```
-
-    	[Video hosted on YouTube](youtube:lHriX403Oz4:small)
-
-3. Use this format to scale the video size to medium.
-
-    	```
-    	[YouTube video scaled to medium size](youtube:lHriX403Oz4:medium)
-    	```
-
-    	[Video hosted on YouTube](youtube:lHriX403Oz4:medium)
-
-4. To scale the video size to large in relation to the amount of lab page space available, use this format.
-
-    	```
-    	[YouTube video scaled to large size](youtube:lHriX403Oz4:large)
-    	```
-
-    	[Video hosted on YouTube](youtube:lHriX403Oz4:large)
-
-    ### Resizing a Direct Video File
-
-    You can apply the same sizing options to direct video files by appending the size to the URL.
-
-1. Default size (small):
-
     ```
-    <copy>
-    [](video:https://example.com/path/to/video.mp4)
-    </copy>
+    [Oracle Video Hub video scaled to large size](videohub:1_yido2qmq:large)
     ```
 
-2. Small size (explicit):
+    [Video hosted on Oracle Video Hub](videohub:1_yido2qmq:large)
 
-    ```
-    <copy>
-    [](video:https://example.com/path/to/video.mp4:small)
-    </copy>
-    ```
-
-3. Medium size:
-
-    ```
-    <copy>
-    [](video:https://example.com/path/to/video.mp4:medium)
-    </copy>
-    ```
-
-4. Large size (full width):
-
-    ```
-    <copy>
-    [](video:https://example.com/path/to/video.mp4:large)
-    </copy>
-    ```
 
 ## Task 12: Tables
 

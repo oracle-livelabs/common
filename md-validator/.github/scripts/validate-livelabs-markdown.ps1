@@ -133,18 +133,23 @@ foreach ($file in $Files) {
     }
 
     # Rule 6: Check YouTube format is correct
-    if ($content -match '\[.+\]\(youtube:' -and $content -notmatch '^\[\]\(youtube:') {
-        Log-Error "$file`: YouTube embeds should use format: [](youtube:VIDEO_ID)"
-        $FileErrors++
+    $lineNum = 0
+    foreach ($line in $lines) {
+        $lineNum++
+        if ($line -match 'youtube:' -and $line -notmatch '\[[^\]]*\]\(youtube:[^)]+\)') {
+            Log-Error "$file (line $lineNum): YouTube embeds should use format: [optional text](youtube:VIDEO_ID[:size])"
+            $FileErrors++
+        }
     }
 
-    # Rule 7: Check for proper Task format (## Task N: Description)
+    # Rule 7: Check for proper Task format
+    # (## Task Number and/or string: Description)
     $lineNum = 0
     foreach ($line in $lines) {
         $lineNum++
         if ($line -match '^## Task') {
-            if ($line -notmatch '^## Task \d+:') {
-                Log-Error "$file (line $lineNum): Task headers should follow format '## Task N: Description'"
+            if ($line -notmatch '^## Task\s+[^:\s].*:') {
+                Log-Error "$file (line $lineNum): Task headers should follow format '## Task Number and/or string: Description'"
                 $FileErrors++
             }
         }
@@ -284,13 +289,28 @@ foreach ($file in $Files) {
                 continue
             }
 
-            # Check indentation for all content after the first numbered step
+            # Validate each ordered-list block independently.
+            # A heading can terminate a list block, and a single trailing transition line
+            # is allowed when no later ordered steps exist in the task section.
             $inCodeBlock = $false
+            $inOrderedBlock = $false
             for ($offset = $firstStepOffset; $offset -lt $section.Length; $offset++) {
                 $currentLine = $section[$offset]
                 $trimmed = $currentLine.TrimStart(' ')
                 $indent = $currentLine.Length - $trimmed.Length
                 $lineNumber = $sectionStart + $offset + 1
+
+                # Top-level ordered list item starts/continues a list block.
+                if ($currentLine -match '^\d+\. ') {
+                    $inOrderedBlock = $true
+                    $inCodeBlock = $false
+                    continue
+                }
+
+                # Outside an ordered list block, indentation rule does not apply.
+                if (-not $inOrderedBlock) {
+                    continue
+                }
 
                 # Track fenced code blocks
                 if ($trimmed -like '```*') {
@@ -316,12 +336,32 @@ foreach ($file in $Files) {
                     continue
                 }
 
-                # Skip top-level numbered step lines (e.g. "1. Step description")
-                if ($currentLine -match '^\d+\. ') {
+                # Allow raw HTML element lines inside ordered steps without indentation.
+                if ($indent -lt 4 -and $trimmed.StartsWith('<') -and $trimmed.EndsWith('>')) {
                     continue
                 }
 
-                # All other content after the first step must be indented >= 4 spaces
+                # A top-level header ends the ordered list block.
+                if ($indent -lt 4 -and $trimmed.StartsWith('#')) {
+                    $inOrderedBlock = $false
+                    continue
+                }
+
+                # Exception: allow a trailing unindented transition line if no later
+                # ordered steps appear in this task section.
+                if ($indent -lt 4) {
+                    $remainingSection = if (($offset + 1) -lt $section.Length) { $section[($offset + 1)..($section.Length - 1)] } else { @() }
+                    $hasLaterStep = $false
+                    foreach ($futureLine in $remainingSection) {
+                        if ($futureLine -match '^\d+\. ') { $hasLaterStep = $true; break }
+                    }
+                    if (-not $hasLaterStep) {
+                        $inOrderedBlock = $false
+                        continue
+                    }
+                }
+
+                # All other content inside ordered list blocks must be indented >= 4 spaces
                 if ($indent -lt 4) {
                     if ($trimmed -like '![*') {
                         Log-Error "$file`: line $lineNumber`: Images inside numbered steps must be indented with 4 spaces."
