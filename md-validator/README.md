@@ -4,6 +4,20 @@ A GitHub Action workflow that validates Markdown files in Pull Requests against 
 
 ## Overview
 
+> **Note:** The GitHub workflow compares the pull request head to the PR base commit (`github.event.pull_request.base.sha`), so only Markdown files changed in the PR are validated.
+
+
+### New in Version 26.2 / Feb 2026 Update
+
+The validator scripts and browser QA now share one rule set:
+
+- Removed gerund/imperative verb checks from both the JS lint checker and the GitHub workflow scripts.
+- Added inline `<a>` detection so HTML anchors must be written as Markdown links.
+- Added Task-numbering and indentation validation (code blocks and images must live under their numbered steps).
+- Synced the PowerShell script with the bash script so Windows authors see identical output.
+- Published a new browser runtime (`redwood-hol/development/js/main.26.2.js`) carrying the same QA behavior.
+
+
 This validator ensures that Markdown content submitted in PRs follows the established LiveLabs workshop formatting conventions. It runs automatically on any PR that modifies `.md` files.
 
 ## Features
@@ -81,10 +95,13 @@ To block PRs that fail validation:
 | H1 Title | First line must be `# Title` |
 | Single H1 | Only one H1 heading per file |
 | Acknowledgements | Must have `## Acknowledgements` section |
-| Image Alt Text | Images must have alt text: `![description](images/file.png)` |
-| YouTube Format | YouTube embeds should use `[](youtube:VIDEO_ID)` |
-| Task Format | Task headers should be `## Task N: Description` |
-| Copy Tags | `<copy>` and `</copy>` tags must be balanced |
+| Image Alt Text | Images must have alt text: `![description](images/file.png)` . |
+| YouTube Format | YouTube embeds should use `[optional text](youtube:VIDEO_ID[:size])` |
+| Task Format | Task headers should be `## Task Number and/or string: Description` |
+| Task Numbering | Task sections should include numbered steps (`1.`, `2.`, etc.), and supporting content under each step must be indented by one tab stop (4 spaces). |
+| Task Indentation | Code blocks and images must be indented within the numbered step (exceptions: raw HTML element lines are allowed, a top-level heading can terminate the list, and one trailing transition line at Task end may remain unindented) |
+| Copy Tags (Optional) | Use `<copy>` when you want the Copy button; plain triple-backtick blocks are allowed (but open/close tags must still balance when used) |
+| No Inline HTML | Raw `<a href=...>` tags are not allowed; use Markdown links |
 | Introduction | Labs with Tasks should have `## Introduction` |
 | Objectives | Must have `### Objectives` section |
 | Estimated Time | Non-introduction files must have `Estimated Time:` |
@@ -222,6 +239,7 @@ This lab assumes you have:
 #### YouTube Videos
 ```markdown
 [](youtube:VIDEO_ID)
+[YouTube video scaled to small size](youtube:VIDEO_ID:small)
 ```
 
 #### Variables
@@ -301,6 +319,7 @@ These are the template files that users copy to their own repositories:
 |------|---------|
 | `md-validator/.github/scripts/validate-livelabs-markdown.sh` | Bash validation script (Linux/macOS) |
 | `md-validator/.github/scripts/validate-livelabs-markdown.ps1` | PowerShell validation script (Windows) |
+| `md-validator/.github/scripts/fix-livelabs-markdown.sh` | Auto-fixer script (Linux/macOS) |
 | `md-validator/.github/workflows/markdown-lint.yml` | GitHub Actions workflow definition |
 | `md-validator/.markdownlint.json` | Markdownlint configuration |
 | `md-validator/README.md` | This documentation |
@@ -312,6 +331,7 @@ These are the deployed files that actually run on PRs to the common repository:
 | File | Purpose |
 |------|---------|
 | `.github/scripts/validate-livelabs-markdown.sh` | Active Bash validation script |
+| `.github/scripts/fix-livelabs-markdown.sh` | Active auto-fixer script |
 | `.github/workflows/markdown-lint.yml` | Active GitHub Actions workflow |
 | `.github/workflows/enforce-image-size.yml` | Image size validation workflow |
 | `.markdownlint.json` | Active markdownlint configuration |
@@ -328,11 +348,15 @@ These files document the validation system for end users:
 
 When you need to add or change a validation rule, update these files:
 
-1. **Bash script** (2 locations):
+1. **Bash validation script** (2 locations):
    - `md-validator/.github/scripts/validate-livelabs-markdown.sh`
    - `.github/scripts/validate-livelabs-markdown.sh`
 
-2. **PowerShell script** (1 location):
+2. **Bash fixer script** (2 locations):
+   - `md-validator/.github/scripts/fix-livelabs-markdown.sh`
+   - `.github/scripts/fix-livelabs-markdown.sh`
+
+3. **PowerShell script** (1 location):
    - `md-validator/.github/scripts/validate-livelabs-markdown.ps1`
 
 3. **Documentation** (3 locations):
@@ -355,6 +379,9 @@ After updating the source files in `md-validator/`, sync to the active locations
 ```bash
 # Sync validation script
 cp md-validator/.github/scripts/validate-livelabs-markdown.sh .github/scripts/
+
+# Sync fixer script
+cp md-validator/.github/scripts/fix-livelabs-markdown.sh .github/scripts/
 
 # Sync workflow
 cp md-validator/.github/workflows/markdown-lint.yml .github/workflows/
@@ -394,3 +421,10 @@ To improve the validator:
 ## License
 
 Internal use for Oracle LiveLabs workshops.
+
+## Changelog
+
+- **Feb 2026**
+  - Added inline HTML detection and Task indentation rules to both bash and PowerShell scripts.
+  - Removed gerund checks to match the unified QA guidance.
+  - Published `main.26.2.js` to keep the in-browser lint checker consistent with GitHub workflows.

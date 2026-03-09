@@ -10,6 +10,11 @@
       "filename": "./../../introduction/introduction.md"
     },
     {
+      "title": "LiveLabs SLAs",
+      "description": "This document outlines the Service Level Agreements (SLAs) for the Oracle LiveLabs platform, including response times for PRs, approvals, publishing, and support.",
+      "filename": "./../../sla/sla.md"
+    },
+    {
         "title": "Need more information on GitHub?",
         "description": "Describes what GitHub is and general information on projects and repositories",
         "filename": "./../../introduction/github-introduction.md"
@@ -49,7 +54,7 @@
       "filename": "./../../4-labs-markdown-develop-content/4-labs-markdown-develop-content.md"
     },
     {
-      "title": "Lab 5b: Add LiveLabs Quizzes to your workshops (Beta)",
+      "title": "Lab 5b: Add LiveLabs Quizzes to your workshops",
       "filename": "./../../quiz/quiz.md"
     },
     {
@@ -82,14 +87,24 @@
         "filename": "./../../10-labs-create-sprints-workflow/10-create-sprints-workflow.md"
     },
     {
-        "title": "Lab 10a: Setup graphical remote desktop",
+        "title": "Lab 10a: Setup Graphical Remote Desktop",
         "description": "This lab will describe how to create and use a graphical remote desktop for your workshop.",
         "filename": "./../../6-labs-setup-graphical-remote-desktop/6-labs-setup-graphical-remote-desktop.md"
     },
     {
-        "title": "Lab 10b: Create custom image for marketplace",
+        "title": "Lab 10b: Create Custom Image for Marketplace",
         "description": "This lab will describe how to create and use a marketplace image for your workshop.",
         "filename": "./../../7-labs-create-custom-image-for-marketplace/7-labs-create-custom-image-for-marketplace.md"
+    },
+    {
+      "title": "Lab 10c: Publish Your Image to Oracle Marketplace",
+      "description": "This lab will show you how to publish your image to Oracle Marketplace.",
+      "filename": "./../../8-labs-publish-custom-image-to-marketplace/8-labs-publish-custom-image-to-marketplace.md"
+    },
+    {
+      "title": "Lab 10d: Update the Image on Your Sandbox Environment",
+      "description": "This lab will show you how to get your new Marketplace image added to your LiveLab.",
+      "filename": "./../../12-add-custom-image-to-workshop/12-add-custom-image-to-workshop.md"
     }
   ]
 }

@@ -99,11 +99,11 @@ After pushing your changes, you need to open a **Pull Request (PR)** to submit y
 1. Go to **GitHub** and navigate to **Your Fork**.
 2. Click on **Pull Requests** > **New Pull Request**.
 3. Set the following branch details:
-   - **Base Branch:** `ui-update-2025` (from the base repository).
-   - **Compare Branch:** `main` (from your forked repository).
+    - **Base Branch:** `ui-update-2025` (from the base repository).
+    - **Compare Branch:** `main` (from your forked repository).
 4. Add a title using the following format:
-   - Workshop###<your workshop> + OCI-UI-UPDATE-2025
-   - > Replace `###<your workshop>` with the actual workshop number and title you are updating.
+    - Workshop###<your workshop> + OCI-UI-UPDATE-2025
+    - > Replace `###<your workshop>` with the actual workshop number and title you are updating.
 5. Fill in the **description** field with relevant details about your changes.
 6. Click **Create Pull Request** to allow review (this prevents merging until approved).
 7. If any merge conflicts appear, resolve them before proceeding.

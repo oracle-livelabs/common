@@ -24,10 +24,13 @@ jobs:
         run: |
           set -euo pipefail
 
-          git fetch --no-tags --prune origin "${GITHUB_BASE_REF}:${GITHUB_BASE_REF}" || true
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          PR_SHA="${{ github.sha }}"
+
+          git fetch --no-tags --prune origin "$BASE_SHA:$BASE_SHA" || true
 
           # Get changed markdown files
-          MD_FILES=$(git diff --name-only --diff-filter=AM "origin/${GITHUB_BASE_REF}...HEAD" -- '*.md' | grep -v '^\.github/' | grep -v '^node_modules/' || true)
+          MD_FILES=$(git diff --name-only --diff-filter=AM "$BASE_SHA" "$PR_SHA" -- '*.md' | grep -v '^\.github/' | grep -v '^node_modules/' || true)
 
           if [ -z "$MD_FILES" ]; then
             echo "No markdown files changed"
@@ -61,8 +64,9 @@ jobs:
       - name: Run LiveLabs format validation
         if: steps.changed-files.outputs.any_changed == 'true'
         run: |
-          chmod +x .github/scripts/validate-livelabs-markdown.sh
-          echo "${{ steps.changed-files.outputs.all_changed_files }}" | xargs .github/scripts/validate-livelabs-markdown.sh
+          curl -sSfL https://raw.githubusercontent.com/oracle-livelabs/common/refs/heads/main/.github/scripts/validate-livelabs-markdown.sh -o /tmp/validate-livelabs-markdown.sh
+          chmod +x /tmp/validate-livelabs-markdown.sh
+          echo "${{ steps.changed-files.outputs.all_changed_files }}" | xargs /tmp/validate-livelabs-markdown.sh
 
       - name: Check image references exist
         if: steps.changed-files.outputs.any_changed == 'true'
