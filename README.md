@@ -7,7 +7,7 @@ LiveLabs is the place to explore Oracle's products and services using workshops 
 ### How do I get started?
 Visit [LiveLabs](https://livelabs.oracle.com) now to get started.  Workshops are added weekly, please visit frequently for new content.
 
-[![](https://oracle-livelabs.github.io/common/images/livelabs-new-skin.png)](https://livelabs.oracle.com)
+[![](https://oracle-livelabs.github.io/common/images/livelabs-new-skin-homepage-26.png)](https://livelabs.oracle.com)
 
 
 
@@ -15,7 +15,7 @@ Visit [LiveLabs](https://livelabs.oracle.com) now to get started.  Workshops are
 Pull requests are currently not being accepted. See [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## License
-Copyright (c) 2014, 2025 Oracle and/or its affiliates
+Copyright (c) 2014, 2026 Oracle and/or its affiliates
 The Universal Permissive License (UPL), Version 1.0
 See [LICENSE](LICENSE.txt) for details.
 
