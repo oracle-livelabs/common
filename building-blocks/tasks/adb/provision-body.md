@@ -3,7 +3,7 @@
         "name":"Provision Oracle Autonomous AI Database",
         "description":"provision-body.md common task. Uses the Redwood UI. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more.",
         "author":"Lauran K. Serhal",
-        "lastUpdated":"October 2025"
+        "lastUpdated":"March 2026"
     }
 -->
 1. On the **Autonomous AI Databases** page, select your desired **region** and **compartment**. Click **Create Autonomous AI Database** to start the instance creation process. The **Create Autonomous AI Database Serverless** page is displayed.

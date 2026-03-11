@@ -260,7 +260,7 @@ To access and use the CUI tool, use the following steps:
 
 6. In the **Open** dialog box, select the **images** folder that is associated with the `.md` file that you already selected, and then click **Upload**. This will upload all of the image files in the **images** folder.
 
-   ![Open the images folder](./images/click-upload.png " ")
+    ![Open the images folder](./images/click-upload.png " ")
 
 7. A confirmation message box about the number of image files that will be uploaded is displayed. Click **Upload**. 
 
@@ -279,8 +279,7 @@ To access and use the CUI tool, use the following steps:
 
     ![Select and delete the extra images](./images/select-delete-extra-images.png " ")
 
-10. Re-run the **Check Unused Images** tool to ensure that you did delete all of the extra images; more importantly, you want to make sure that you didn't delete any file that is needed accidentally. Click the `images` folder. A confirmation message box about the number of image files that will be uploaded is displayed. Click **Upload**. The **Extra images in the images folder** field shows **`None`**; however, the
-**Images referenced in the MD file but missing in the images folder** section, shows that the `create-credential.png` file that we deleted on purpose. We'll need to restore this file! 
+10. Re-run the **Check Unused Images** tool to ensure that you did delete all of the extra images; more importantly, you want to make sure that you didn't delete any file that is needed accidentally. Click the `images` folder. A confirmation message box about the number of image files that will be uploaded is displayed. Click **Upload**. The **Extra images in the images folder** field shows **`None`**; however, the **Images referenced in the MD file but missing in the images folder** section, shows that the `create-credential.png` file that we deleted on purpose. We'll need to restore this file! 
 
     ![The updated results are displayed](./images/updated-results-displayed.png " ")
 

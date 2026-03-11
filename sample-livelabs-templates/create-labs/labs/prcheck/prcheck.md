@@ -73,7 +73,7 @@ The **LiveLabs Markdown Validation** workflow ensures your markdown files follow
     | Structure | Single H1 per file, required sections present |
     | Headers | Proper hierarchy (H1 > H2 > H3), correct task format and numbered steps |
     | Images | Alt text present, referenced images exist, lowercase filenames, images indented under steps |
-    | LiveLabs syntax | Balanced `<copy>` tags, no inline `<a>` tags, proper note format |
+    | LiveLabs syntax | Balanced `<copy></copy>` tags, no inline `<a>` tags, proper note format |
     | Filenames | Lowercase, no spaces |
 
 2. Required sections in every lab:
@@ -161,7 +161,7 @@ You can run the same checks locally before submitting a PR to catch issues early
 
 ### Image Size Check
 
-1. Use OptiShot for a graphical interface - see the [OptiShot User Manual](../optishot/optishot.md).
+Use OptiShot for a graphical interface - see the [OptiShot User Manual](../optishot/optishot.md).
 
 ### Markdown Validation Check
 
@@ -293,10 +293,10 @@ The script checks for the following rules:
 | Acknowledgements | Must have `## Acknowledgements` section |
 | Image Alt Text | Images must have alt text: `![alt text](image.png)` |
 | No Inline HTML | Replace raw `<a href=...>` tags with Markdown links |
-| Task Format | Tasks should use `## Task N: Description` |
+| Task Format | Tasks should use `## Task Number and/or string: Description` |
 | Copy Tags | `<copy>` and `</copy>` tags must be balanced |
 | Task Numbering | Each Task section should contain numbered steps |
-| Task Indentation | Code blocks and images must be indented within steps |
+| Task Indentation | Code blocks and images must be indented within steps (exceptions: raw HTML element lines are allowed, a top-level heading can terminate the list, and one trailing transition line at Task end may remain unindented) |
 | Introduction | Labs with Tasks must have `## Introduction` |
 | Objectives | Must have `### Objectives` section |
 | Estimated Time | Must include `Estimated Time:` (or `Estimated Workshop Time:` for introduction.md) |

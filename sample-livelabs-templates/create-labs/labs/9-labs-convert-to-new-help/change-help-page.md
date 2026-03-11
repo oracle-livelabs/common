@@ -6,13 +6,18 @@
 
 This page will walk you through implementing a common help lab page and help button.
 
-![](images/help-tab-goal.png)
+![Image](images/help-tab-goal.png)
 
 Converting to the help lab pages will allow you to only have to edit 1 or 2 Markdowns to change the help sections for all your workshops.
 
 Implementing the help button will allow users to quickly construct an email pre-filled to direct toward the given address, as well as a pre-filled subject line that describes the workshop they are sending the email from.
 
 Estimated Time: x
+
+### Objectives
+
+In this lab, you will:
+* Implement a help button
 
 ## Task 1: Adding a Help Button
 
@@ -22,27 +27,27 @@ Estimated Time: x
 
 This is the result we want. The button bring up a pre-populated email directed toward your support inbox.
 
-![](images/help-button2.png)
+![Image](images/help-button2.png)
 
 1. To do this, just add the following string to the manifest.json file of the workshop. Customize the **email address** to point toward your team's dedicated support inbox. Make sure this address is in all lowercase to save your team from case sensitivity heartbreak in the future.
 
     ````
         <copy>"help": "support-inbox-address@oracle.com", </copy>
     ````
-    ![](images/manifest-temp.png)
+    ![Image](images/manifest-temp.png)
 
     Insert the line before "tutorials", don't forget the comma afterwards!
 
 2. If you've set up your workspace on VSC to only list workshop your team is responsible for, you can do a simple "search in folder" to easily access a list of all manifests in your workshops!
 
-    ![](images/find-in-folder.png)
+    ![Image](images/find-in-folder.png)
 
 3. Box 1: type in "tutorials": [, which every workshop manifest has in order to display the array of labs, you can get a list of all the instances it found. Which happens to be 1 in every manifest file.
 
     ````
         <copy>"tutorials": [ </copy>
     ````
-    ![](images/search-tutorials.png)
+    ![Image](images/search-tutorials.png)
 
 4. Box 2: has options for search strictness, regular expressions, and replace all. We'll be using regex later on to help delete the old "Need Help?" sections.
 
@@ -69,12 +74,12 @@ This is the result we want. The button bring up a pre-populated email directed t
 
   > **Note:** This assumes you have already created a Markdown file your team has decided to use to add to every one of your team's workshops. This file, or multiple files if your team decides to create different files for "freetier" and "livelabs", needs to be merged to Oracle's learning library in order to get the absolute path to add to each manifest (unless you want the path to point to another repository). Navigate to this page on github and click raw to get the url for your absolute path.
 
-![](images/raw3.png)
+![Image](images/raw3.png)
 
 
 This is the result we want, to add a help tab on the left side situated with the labs.
 
-![](images/help-tab-goal.png)
+![Image](images/help-tab-goal.png)
 
 The database team's help pages can be found below. We recommend you have seperate pages for "freetier" and "livelabs" to provide more focused support.
 
@@ -83,11 +88,11 @@ The database team's help pages can be found below. We recommend you have seperat
 
 1. To add your help page, we just need to add another entry to the "tutorials" lab array in the manifest.json files. We recommend inserting it at the end so that your help page is the last lab entry. Your "filename" link should point toward the link of your team's help pages. Don't forgot to change the link depending on the manifest location to their respective "freetier" or "livelabs" help pages if applicable.
 
-    ![](images/need-help-insert.png)
+    ![Image](images/need-help-insert.png)
 
 ***TIP: Follow #2-5 in the previous step! Doing this concurrently with Step 1 will save some time. Don't forget your can check the filepath of the manifest file in the consolidated search results.***
 
-![](images/search-path.png)
+![Image](images/search-path.png)
 
 ## Task 3: Deleting Instances of the Old "Need Help?" Sections in Every Markdown
 
@@ -103,11 +108,11 @@ This sounds like an arduous task, but we can simplify it a lot by using the "sea
         <copy>## Need Help</copy>
     ````
 
-    ![](images/need-help-count.png)
+    ![Image](images/need-help-count.png)
 
 2. From here, your approach can vary. I recommend copying an example of text you want to replace to a regex resource like regex101.com to capture as broad of a search criteria as possible WITHOUT over or under matching.
 
-    ![](images/regex-101.png)
+    ![Image](images/regex-101.png)
 
 3. Copy your newly created regex string and paste it in the search bar. As you can see, this search criteria only captured ***179 of the 196*** total instances of the need help section.  Before you hit that replace all button, confirm that your regex isn't too broad, so it won't delete any information or labs that might follow after the help section. Also confirm that it's not too narrow, so it won't leave extraneous text behind that will be require even more work to remove.
 
@@ -117,7 +122,7 @@ This sounds like an arduous task, but we can simplify it a lot by using the "sea
 
     If you.*$</copy>
     ````
-    ![](images/regex-search-result.png)
+    ![Image](images/regex-search-result.png)
 
 
 4. If you're confident, then go ahead and replace all to delete the instances. Then search the broad **"## Need Help"** string to start the process over again with a new parameter to regex search for until you've caught all occurrences.
