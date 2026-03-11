@@ -7,7 +7,7 @@ LiveLabs is the place to explore Oracle's products and services using workshops 
 ### How do I get started?
 Visit [LiveLabs](https://livelabs.oracle.com) now to get started.  Workshops are added weekly, please visit frequently for new content.
 
-[![](https://oracle-livelabs.github.io/common/images/livelabs-new-skin.png)](https://livelabs.oracle.com)
+[![](https://oracle-livelabs.github.io/common/images/livelabs-new-skin-homepage-26.png)](https://livelabs.oracle.com)
 
 
 
