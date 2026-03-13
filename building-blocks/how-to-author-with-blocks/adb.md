@@ -90,6 +90,28 @@
 ## Create Graph
 **Markdown file location:**
 ```
+/common/building-blocks/tasks/adb/create-graph-pgql.md
+```
+
+**Add to your manifest.json:**
+```
+"include": {
+     "adb-create-graph-pgql.md":"/common/building-blocks/tasks/adb/create-graph-pgql.md"
+}
+```
+
+**Add to your workshop markdown:**
+```
+[]&lpar;include:adb-create-graph-pgql.md)
+```
+
+**Markdown Output &#8595;&#8595;:**
+ 
+[](include:adb-create-graph-pgql.md)
+ 
+## Create Graph
+**Markdown file location:**
+```
 /common/building-blocks/tasks/adb/create-graph.md
 ```
 
