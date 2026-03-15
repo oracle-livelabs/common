@@ -1,6 +1,14 @@
 # Get Started with Secure Desktops
 
-Use this guide to learn more about how to start with Secure Desktops! This guide will walk you through launching the desktop and provide a few tips to make using it easier! 
+## Introduction
+
+This guide will walk you through launching the OCI Secure Desktop and provide a few tips to make using it easier. Use this guide to learn more about how to start with Secure Desktops. 
+
+### Objectives
+
+* **Validate Connectivity:** Confirm that participants can reach and use Secure Desktops.
+
+**Estimated Time:** 10 minutes
 
 ## Before you get Started
 
@@ -12,7 +20,7 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 
 1. Click the **Launch Secure Desktop** button in LiveLabs. 
 
-    ![Secure Desktop Information](./images/livelabs-resinfo.png)
+    ![Secure Desktop Information](./images/secure-dsktop.png)
 
 2. If you have another OCI session in your browser, you will need to click the "Sign in with a different user account" option after launching secure desktops. 
 
@@ -54,7 +62,7 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 
     ![Linux Startup Keyboard Select](./images/linuxstartup2.png)
 
-    ![Linux Starup Location Services](./images/linuxstartup3.png)
+    ![Linux Startup Location Services](./images/linuxstartup3.png)
 
     ![Linux Startup Online Accounts](./images/linuxstartup4.png)
 
@@ -81,7 +89,12 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
     - The second button exports the secure desktop's clipboard to your local machine. Use the second button to get information from the desktop to your machine. 
         ![Export clipboard](./images/exportclipboard.png)
 
-2. If you are using a NoVNC image in LiveLabs, you may be confused with multiple layers of browser and remote desktop views. In order to minmize these intrutions, you can do the following: 
+2. If you are using a NoVNC image in LiveLabs, you may be confused with multiple layers of browser and remote desktop views. In order to minimize these instructions, you can do the following: 
 
-    - Go fullscreen with your brower. 
+    - Go fullscreen with your browser. 
     - Remove the toolbar of your browser. In chrome, go to **View** and uncheck **Always Show Toolbar in Full Screen**. 
+
+## Acknowledgements
+
+- **Created By/Date** - William Masdon, Database Product Management
+- **Last Updated By/Date** - Linda Foinding, March 2026
