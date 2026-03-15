@@ -1,6 +1,9 @@
 # Get Started with Secure Desktops
 
-Use this guide to learn more about how to start with Secure Desktops! This guide will walk you through launching the desktop and provide a few tips to make using it easier! 
+## Introduction
+
+This guide will walk you through launching the OCI Secure Desktop and provide a few tips to make using it easier. Use this guide to learn more about how to start with Secure Desktops. 
+
 ### Objectives
 
 * **Validate Connectivity:** Confirm that participants can reach and use Secure Desktops.
