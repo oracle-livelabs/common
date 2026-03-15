@@ -1,6 +1,11 @@
 # Get Started with Secure Desktops
 
 Use this guide to learn more about how to start with Secure Desktops! This guide will walk you through launching the desktop and provide a few tips to make using it easier! 
+### Objectives
+
+* **Validate Connectivity:** Confirm that participants can reach and use Secure Desktops.
+
+**Estimated Time:** 10 minutes
 
 ## Before you get Started
 
@@ -88,5 +93,5 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 
 ## Acknowledgements
 
-- **Created By/Date** - Ramona Magadan, Database Product Management, May 2025
+- **Created By/Date** - William Masdon, Database Product Management
 - **Last Updated By/Date** - Linda Foinding, March 2026
