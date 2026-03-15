@@ -12,7 +12,7 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 
 1. Click the **Launch Secure Desktop** button in LiveLabs. 
 
-    ![Secure Desktop Information](./images/livelabs-resinfo.png)
+    ![Secure Desktop Information](./images/lauch-secure-desktop.png)
 
 2. If you have another OCI session in your browser, you will need to click the "Sign in with a different user account" option after launching secure desktops. 
 
@@ -54,7 +54,7 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 
     ![Linux Startup Keyboard Select](./images/linuxstartup2.png)
 
-    ![Linux Starup Location Services](./images/linuxstartup3.png)
+    ![Linux Startup Location Services](./images/linuxstartup3.png)
 
     ![Linux Startup Online Accounts](./images/linuxstartup4.png)
 
