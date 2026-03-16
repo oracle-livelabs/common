@@ -1,6 +1,6 @@
 # OCI Secure Desktops
 
-## Overview
+## Introduction
 
 An **OCI Secure Desktop** is a browser-accessible remote desktop environment that allows participants to access LiveLabs workshops from within a secure, controlled environment.
 
@@ -16,6 +16,12 @@ Many organizations, especially in **government, finance, and healthcare** restri
 Secure Desktops provide a **secure HTTPS-based remote desktop** that participants can access from their browser. From inside this desktop environment, they can then access LiveLabs normally.
 
 In effect, the Secure Desktop acts as a **secure jump environment** for running workshops.
+
+### Objectives
+
+* **Secure Desktop:** Understand when to request and use a secure desktop environment.
+
+**Estimated Time:** 10 minutes
 
 ## Task 1: When to Use Secure Desktops
 
@@ -58,5 +64,8 @@ If the Secure Desktop works while the standard environment does not, then Secure
 
 > **Note:** For larger events (for example **100+ participants**), testing multiple time in advance helps avoid access issues during the workshop.
 
+## Acknowledgements
+* **Author** - Linda Foinding, Principal Product Manager
+* **Last Updated By/Date** - Linda Foinding, Principal Product Manager March 2026
 
 

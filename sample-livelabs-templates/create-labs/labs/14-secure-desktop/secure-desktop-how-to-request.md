@@ -1,10 +1,18 @@
 # Requesting OCI Secure Desktops
 
+## Introduction
+
 OCI Secure Desktops provide a secure remote environment that allows workshop participants to access LiveLabs when their corporate laptop restrictions prevent direct access.
 
 They are especially useful for workshops involving participants from regulated industries where network security policies are strict.
 
 If you believe your event participants may encounter access restrictions, consider requesting Secure Desktops in advance.
+
+### Objectives
+
+* **Secure Desktop:** Understand when to request and use a secure desktop environment.
+
+**Estimated Time:** 10 minutes
 
 ## Prerequisites
 
@@ -46,3 +54,7 @@ The following steps describe how to access the Secure Desktop environment.
 * [Follow the steps in this guide to connect and access your LiveLabs workshop within an OCI secure desktop environment](https://oracle-livelabs.github.io/common/labs/testing-access/workshops/desktop/index.html?lab=livelabs-sandbox) 
 
 * [Additional documentation on how to get started with OCI Secure Desktop](https://oracle-livelabs.github.io/common/support/securedesktops/index.html#BeforeyougetStarted)
+
+## Acknowledgements
+* **Author** - Linda Foinding, Principal Product Manager
+* **Last Updated By/Date** - Linda Foinding, Principal Product Manager March 2026
