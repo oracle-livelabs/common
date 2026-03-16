@@ -77,7 +77,7 @@ Use this guide to learn more about how to start with Secure Desktops! This guide
 
 1. Click the **Launch Secure Desktop** button in LiveLabs. 
 
-    ![Secure Desktop Information](./images/livelabs-resinfo.png)
+    ![Secure Desktop Information](./images/secure-dsktop.png)
 
 2. If you have another OCI session in your browser, you will need to click the "Sign in with a different user account" option after launching secure desktops. 
 
@@ -158,4 +158,4 @@ If you encounter any blocks or require further information regarding the OCI inf
 ## Acknowledgements
 
 - **Created By/Date** - Ramona Magadan, Database Product Management, May 2025
-- **Last Updated By/Date** - Matt Kowalik, February 2026
+- **Last Updated By/Date** - Linda Foinding, March 2026
