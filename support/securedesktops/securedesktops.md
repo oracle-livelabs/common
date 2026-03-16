@@ -16,7 +16,7 @@ This guide will walk you through launching the OCI Secure Desktop and provide a 
 - Make sure you have pop-ups enabled in your browser. 
 - You are logged out of any OCI tenants in the browser. 
 
-Task 1: Login to Secure Desktops
+## Task 1: Login to Secure Desktops
 
 1. Click the **Launch Secure Desktop** button in LiveLabs. 
 
@@ -56,7 +56,7 @@ Task 1: Login to Secure Desktops
 
     ![Secure Desktop startup failure](./images/securedesktopfail.png)
 
-Task 2: Navigating OCI Secure Desktop
+## Task 2: Navigating OCI Secure Desktop
 
 1. Once the desktop has been opened, click through the Oracle Linux setup screens. 
 
