@@ -86,7 +86,7 @@ This lab assumes you have:
 
 4. Wait for completion and review the summary.
 
-    > Note: Markdown output may include `MANUAL` findings that still require human review.
+    *> Note: Markdown output may include `MANUAL` findings that still require your review.*
 
 5. Optionally click **Save Log** to export the full run output to `fixomat.log`.
 
