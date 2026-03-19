@@ -51,9 +51,11 @@ This lab assumes you have:
 
     ```
     <copy>
-    Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/oracle-livelabs/common/main/sample-livelabs-templates/create-labs/labs/fixomat/install-windows.ps1'))
+    $tmp="$env:TEMP\Fixomat"; $dest="$env:LOCALAPPDATA\Programs\LiveLabs Fixomat 2000"; $lnk="$env:APPDATA\Microsoft\Windows\Start Menu\Programs\LiveLabs Fixomat 2000.lnk"; $zip="$tmp\fixomat.zip"; $url="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/fixomat/Fixomat-Windows.zip"; New-Item -ItemType Directory -Force -Path $tmp | Out-Null; Invoke-WebRequest -Uri $url -OutFile $zip; Expand-Archive -Path $zip -DestinationPath $tmp -Force; $exe=Get-ChildItem -Path $tmp -Recurse -File -Filter "*.exe" | Where-Object { $_.Name -eq "LiveLabs Fixomat 2000.exe" -or $_.Name -match "Fixomat" } | Select-Object -First 1; if (-not $exe) { throw "Could not locate a Fixomat executable in extracted files." }; New-Item -ItemType Directory -Force -Path $dest | Out-Null; Copy-Item -Path "$($exe.Directory.FullName)\*" -Destination $dest -Recurse -Force; $target=Join-Path $dest $exe.Name; $ws=(New-Object -ComObject WScript.Shell).CreateShortcut($lnk); $ws.TargetPath=$target; $ws.WorkingDirectory=$dest; $ws.Description="LiveLabs Fixomat 2000 - LiveLabs Markdown and image fixer"; $ws.IconLocation="$target,0"; $ws.Save(); Remove-Item -Path $tmp -Recurse -Force; Write-Host "LiveLabs Fixomat 2000 installed. Search 'LiveLabs Fixomat 2000' in Start Menu."
     </copy>
     ```
+
+2. Search for **LiveLabs Fixomat 2000** in the Start Menu, or find the exe at `%LOCALAPPDATA%\Programs\LiveLabs Fixomat 2000\LiveLabs Fixomat 2000.exe`.
 
 ## Task 2: Launch Fixomat
 
@@ -68,6 +70,9 @@ This lab assumes you have:
 2. Confirm the main Fixomat window opens with mode selection, folder picker, and output console.
 
 ## Task 3: Run Fixomat on a Workshop
+
+![fixomat](./images/fixomat.png)
+
 
 1. Click **Select folder** and choose your workshop root directory.
 
