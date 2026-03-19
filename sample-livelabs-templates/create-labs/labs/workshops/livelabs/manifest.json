@@ -105,6 +105,16 @@
       "title": "Lab 10d: Update the Image on Your Sandbox Environment",
       "description": "This lab will show you how to get your new Marketplace image added to your LiveLab.",
       "filename": "./../../12-add-custom-image-to-workshop/12-add-custom-image-to-workshop.md"
+    },
+    {
+      "title": "Lab 11a: Secure Desktop Environments in LiveLabs",
+      "description": "This lab will wsho you how to get your new Marketplace image added to your LiveLab.",
+      "filename": "./../../14-secure-desktop/secure-desktop.md"
+    },
+    {
+      "title": "Lab 11b: How to Request and Access Secure Desktop Environments",
+      "description": "This lab will show you how to get your new Marketplace image added to your LiveLab.",
+      "filename": "./../../14-secure-desktop/secure-desktop-how-to-request.md"
     }
   ]
 }
