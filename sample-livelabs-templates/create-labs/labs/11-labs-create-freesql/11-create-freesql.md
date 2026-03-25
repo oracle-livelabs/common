@@ -113,7 +113,7 @@ Estimated Time: x
 
     ![Edit or create a new publish entry](./images/publish-entry.png " ")
 
-5.  Paste your FreeSQL link into the **Run on FreeSQL URL** field.
+5. Paste your FreeSQL link into the **Run on FreeSQL URL** field.
     a. Enable the **Run on FreeSQL Enabled?** slider.
 
     ![Add the FreeSQL URL to your publish entry](./images/add-livesql-url.png " ")

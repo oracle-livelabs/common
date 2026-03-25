@@ -107,19 +107,28 @@ for file in $FILES; do
     fi
 
     # Rule 6: Check YouTube format is correct
-    if grep -E '\[.*\]\(youtube:' "$file" | grep -v '^\[]\(youtube:' > /dev/null 2>&1; then
-        log_error "$file: YouTube embeds should use format: [](youtube:VIDEO_ID)"
-        ((FILE_ERRORS++))
+    # Accepts both:
+    #   [](youtube:VIDEO_ID)
+    #   [Optional text](youtube:VIDEO_ID[:size])
+    bad_youtube_lines=$(grep -n "youtube:" "$file" | grep -vE '\[[^]]*\]\(youtube:[^)]+\)' || true)
+    if [ -n "$bad_youtube_lines" ]; then
+        while IFS= read -r yt_line; do
+            [ -z "$yt_line" ] && continue
+            yt_lineno=${yt_line%%:*}
+            log_error "$file (line $yt_lineno): YouTube embeds should use format: [optional text](youtube:VIDEO_ID[:size])"
+            ((FILE_ERRORS++))
+        done <<< "$bad_youtube_lines"
     fi
 
-    # Rule 7: Check for proper Task format (## Task N: Description)
+    # Rule 7: Check for proper Task format
+    # (## Task Number and/or string: Description)
     task_headers=$(grep -n "^## Task" "$file" || true)
     if [ -n "$task_headers" ]; then
         while IFS= read -r line; do
             [ -z "$line" ] && continue
-            if [[ ! "$line" =~ ^[0-9]+:##\ Task\ [0-9]+: ]]; then
+            if [[ ! "$line" =~ ^[0-9]+:##\ Task\ [^:[:space:]][^:]*: ]]; then
                 linenum=$(echo "$line" | cut -d: -f1)
-                log_error "$file (line $linenum): Task headers should follow format '## Task N: Description'"
+                log_error "$file (line $linenum): Task headers should follow format '## Task Number and/or string: Description'"
                 ((FILE_ERRORS++))
             fi
 
@@ -135,6 +144,20 @@ for file in $FILES; do
     fi
 
     # Rule 9: Check Note format (skipped - blockquotes used for other purposes)
+
+    # Rule 9b: Check for tab characters after numbered list items (e.g. "1.\t" instead of "1. ")
+    tab_lines=$(grep -En $'^[[:space:]]*[0-9]+\\.\\t' "$file" | cut -d: -f1 | tr '\n' ',' | sed 's/,$//')
+    if [ -n "$tab_lines" ]; then
+        log_error "$file (line $tab_lines): Numbered list items use a tab after the period - use a space instead (e.g. '1. ' not '1.\t')"
+        ((FILE_ERRORS++))
+    fi
+
+    # Rule 9c: Check for multiple spaces after numbered list items (e.g. "1.  " instead of "1. ")
+    multspace_lines=$(grep -En '^[[:space:]]*[0-9]+\.  ' "$file" | cut -d: -f1 | tr '\n' ',' | sed 's/,$//')
+    if [ -n "$multspace_lines" ]; then
+        log_error "$file (line $multspace_lines): Numbered list items have multiple spaces after the period - use a single space (e.g. '1. ' not '1.  ')"
+        ((FILE_ERRORS++))
+    fi
 
     # Rule 10: Check for Introduction or About section in labs
     if grep -q "^## Task" "$file"; then
@@ -220,14 +243,27 @@ for pos_index, start in enumerate(task_indices):
     if first_step_offset is None:
         continue
 
-    # Check indentation for all content after the first numbered step
+    # Validate each ordered-list block independently.
+    # A heading can terminate a list block, and a single trailing transition line
+    # is allowed when no later ordered steps exist in the task section.
     in_code_block = False
+    in_ordered_block = False
     for offset in range(first_step_offset, len(block)):
         ln = block[offset]
         raw_line = ln.rstrip('\n\r')
         stripped = raw_line.lstrip(' ')
         indent = len(raw_line) - len(stripped)
         line_no = section_start + offset + 1
+
+        # Top-level ordered list item starts/continues a list block.
+        if re.match(r'[0-9]+\. ', raw_line):
+            in_ordered_block = True
+            in_code_block = False
+            continue
+
+        # Outside an ordered list block, indentation rule does not apply.
+        if not in_ordered_block:
+            continue
 
         # Track fenced code blocks
         if stripped.startswith('```'):
@@ -247,11 +283,25 @@ for pos_index, start in enumerate(task_indices):
         if not stripped:
             continue
 
-        # Skip top-level numbered step lines (e.g. "1. Step description")
-        if re.match(r'[0-9]+\. ', raw_line):
+        # Allow raw HTML element lines inside ordered steps without indentation.
+        if indent < 4 and stripped.startswith('<') and stripped.endswith('>'):
             continue
 
-        # All other content after the first step must be indented >= 4 spaces
+        # A top-level header ends the ordered list block.
+        if indent < 4 and stripped.startswith('#'):
+            in_ordered_block = False
+            continue
+
+        # Exception: allow a trailing unindented transition line if no later
+        # ordered steps appear in this task section.
+        if indent < 4:
+            remaining = block[offset + 1:]
+            has_later_step = any(re.match(r'[0-9]+\. ', future) for future in remaining)
+            if not has_later_step:
+                in_ordered_block = False
+                continue
+
+        # All other content inside ordered list blocks must be indented >= 4 spaces
         if indent < 4:
             if stripped.startswith('!['):
                 errors.append(f"line {line_no}: Images inside numbered steps must be indented with 4 spaces.")

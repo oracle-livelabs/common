@@ -25,29 +25,29 @@ After you complete QA and make other needed updates to your files, merge your fi
 
 The **Pull Request** asks the repository owners and code owners of the **oracle-livelabs/repository** to approve and host your content on the production **(oracle-livelabs:main)** repository.
 
-Note:  *Before executing a PR, ensure your personal GitHub repo on the web is not behind (See Lab 3 **Maintain GitHub environment** and troubleshooting steps for merge conflicts). Failure to sync will result in conflicts. You cannot issue a pull request without syncing first. PRs will not be approved without your WMS ID (Workshop ID).*
+*Before executing a PR, ensure your personal GitHub repo on the web is not behind. Failure to sync will result in conflicts. You cannot issue a pull request without syncing first. PRs will not be approved without your WMS ID (Workshop ID).*
 
 > **Note:** The LiveLabs admin team will review your PR within 1 business day. We will approve your request, ask for more information if required, or reject your request if your content does not meet the standards for Oracle LiveLabs.
 
 To create a Pull Request:
 1. In the **GitHub Desktop** client, select **Branch > Create Pull Request** to display a browser interface.
 
-  ![Create a pull request.](./images/git-hub-branch-pull-request.png " ")
+    ![Create a pull request.](./images/git-hub-branch-pull-request.png " ")
 
 2. Click **Create pull request** to display an **Open a pull request** page.
 
-  ![Open a pull request.](./images/git-hub-branch-browser-create-pull-request.png " ")
+    ![Open a pull request.](./images/git-hub-branch-browser-create-pull-request.png " ")
 
 
 3. Enter the title for the pull request and **include your WMS ID** (find this in the WMS). PRs will not be approved without this ID. Check your pull request against the **General requirements** and the short **Checklist**. This info can be found in WMS in the self QA tab. If your pull request satisfies all requirements, less time will be spent on back-and-forth communications, and your changes will be in production sooner. Add **x** in the brackets to check that item on the checklist. You can also add reasons for the pull request in this section.
 
-  ![Fill out PR title and check general requirements](./images/general-req.png " ")
-  ![Checklist](./images/checklist.png " ")
+    ![Fill out PR title and check general requirements](./images/general-req.png " ")
+    ![Checklist](./images/checklist.png " ")
 
 4. Click **Create pull request**.
     ![Include WMS id in pull request title.](./images/git-hub-pull-request-title-comment.png " ")
-  A status page displays indicating you have created a pull request along with the request number (for example, #1770), that it is pending review, and that merging is blocked.
-  ![Pending Review](./images/pending-review.png " ")
+    A status page displays indicating you have created a pull request along with the request number (for example, #1770), that it is pending review, and that merging is blocked.
+    ![Pending Review](./images/pending-review.png " ")
 
 5. On the status page, check 1) your branch does not have merge conflicts; 2) your branch is up-to-date. If your PR has either of these issues, our LiveLabs team will not approve or merge your PR.
 
@@ -58,7 +58,7 @@ To create a Pull Request:
     To ensure your branch is up-to-date, go to *Lab 3 -> Task 3: Merge content from Git before you start editing your content*.
 
 6. When your pull request is approved, the page updates with information about your commits being approved and merged into the **oracle-livelabs:main** repository (production).
-  ![PR is merged](./images/merged.png " ")
+    ![PR is merged](./images/merged.png " ")
 
     When the pull request is approved and merged into the **oracle-livelabs:main** repository, two emails are sent to the email account associated with your GitHub account.
 
@@ -73,9 +73,9 @@ To create a Pull Request:
 
 ## Task 2: Request Publishing
 
-1.  Click the **Publishing** tab, then **+ Publish to LiveLabs**.
+1. Click the **Publishing** tab, then **+ Publish to LiveLabs**.
 
-  ![Request Publishing](images/publishing-tab.png)
+    ![Request Publishing](images/publishing-tab.png)
 
 2. Fill out publishing information, including **Publish Type** and **Workshop Time**. Click **?** beside the Publishing Type to see different types of publishing. Turn on appropriate buttons for your workshop: **Brown Button Enabled?**, or **LiveLabs Sprint Enabled?**, and fill out appropriate **URL**s.
 
@@ -101,7 +101,7 @@ To create a Pull Request:
 
     ![Publishing Information](images/livelabs-publishing.png " ")
 
-If you want to request a green button (or a sandbox environment) for your workshop, see **(Optional) Task 3: Request the Green Button** below for more information.
+    If you want to request a green button (or a sandbox environment) for your workshop, see **(Optional) Task 3: Request the Green Button** below for more information.
 
 3. Embed a video on the LiveLabs homepage for the workshop from Oracle Video Hub.
 
@@ -142,78 +142,78 @@ You can add the green button to your workshop even after it is in production.
 
 2. Go to WMS and find your workshop to request the green button. Click the **Publishing** tab, then click **Edit** for the LiveLabs publishing entry you wish to request green button (if available) or click **+ Publish to LiveLabs** (if you do not have a LiveLabs publishing entry already).
 
-	![Edit LiveLabs publishing entry](images/publishing-edit.png " ")
-	![Request Publishing](images/publishing-tab.png " ")
+    ![Edit LiveLabs publishing entry](images/publishing-edit.png " ")
+    ![Request Publishing](images/publishing-tab.png " ")
 
 3. Scroll down to the **Request a Green Button section** and populate your workshop's GitHub LiveLabs/Sandbox URL.
 
-	![Request green button setup](./images/request-a-green-button.png " " )
+    ![Request green button setup](./images/request-a-green-button.png " " )
 
 4. We offer two options to create a Green Button in LiveLabs.
 
-  	- Green Button Lite: A Green Button Lite is a quick and easy way to set up a green button for your workshop. This option *DOES NOT* create any resources for the user but allows them to create them in an isolated environment in one of our LiveLabs tenancies. A Green Button Lite is created automatically and will be ready within 1 business day.
+    - Green Button Lite: A Green Button Lite is a quick and easy way to set up a green button for your workshop. This option *DOES NOT* create any resources for the user but allows them to create them in an isolated environment in one of our LiveLabs tenancies. A Green Button Lite is created automatically and will be ready within 1 business day.
 
-  		The following resources are offered in a Green Button Lite:
-		- ATP
-		- AJD
-		- ADW
-		- Standard Flex E4 Compute Instance
-		- VCN
-		- Cloud Shell
+    The following resources are offered in a Green Button Lite:
+    - ATP
+    - AJD
+    - ADW
+    - Standard Flex E4 Compute Instance
+    - VCN
+    - Cloud Shell
 
    	- Regular Green button: A regular Green Button can provision resources for the user but can take 1-3 weeks to develop, depending on the workshop's complexity.
 
 5. To request a **Green Button Lite**,
 
-	1. click on  **Green Button Lite** button.
+    1. click on  **Green Button Lite** button.
 
-		![Click Green Button Lite](./images/click-gb-lite.png " ")
+        ![Click Green Button Lite](./images/click-gb-lite.png " ")
 
-	2. Then click **OK** on the Green Button Lite popup.
+    2. Then click **OK** on the Green Button Lite popup.
 
-		![Click OK in the Green Button Lite popup](./images/gb-lite-ok.png " ")
+	    ![Click OK in the Green Button Lite popup](./images/gb-lite-ok.png " ")
 
-	3. Fill out the Green Button Lite form with the options below. Specify if you would like the USER of your workshop to be able to spin up one of the noted resources. This *does not create* any resources on the user's behalf. This merely allows the user to create it themselves (except for the VCN option, that option -- if checked -- will automatically provision a VCN for the user).
+    3. Fill out the Green Button Lite form with the options below. Specify if you would like the USER of your workshop to be able to spin up one of the noted resources. This *does not create* any resources on the user's behalf. This merely allows the user to create it themselves (except for the VCN option, that option -- if checked -- will automatically provision a VCN for the user).
 
-		![Fill the Green Button Lite form](./images/fill-gb-lite-form.png " ")
+        ![Fill the Green Button Lite form](./images/fill-gb-lite-form.png " ")
 
-	4. After filling out the form, scroll up to the top of the LiveLabs Publishing Information form and click **Save** to save the changes.
+    4. After filling out the form, scroll up to the top of the LiveLabs Publishing Information form and click **Save** to save the changes.
 
-		![Fill the Green Button Lite form](./images/save-gb-lite.png " ")
+        ![Fill the Green Button Lite form](./images/save-gb-lite.png " ")
 
 	5. The Green Button for your workshop will be created automatically and will be live in production within 1 business day. Email us at livelabs-help-db_us@oracle.com if you have any questions or issues with the green button.
 
-		![Sandbox](images/sandbox.png " ")
+        ![Sandbox](images/sandbox.png " ")
 
-	6. Test the workshop instructions against the green button setup and update them if necessary.
+	3. Test the workshop instructions against the green button setup and update them if necessary.
 
-    If you would like to request a regular green button, proceed with the below steps.
+If you would like to request a regular green button, proceed with the below steps.
 
-5. To request a regular green button or update an existing Green Button,
+6. To request a regular green button or update an existing Green Button,
 
-	1.  Click the **Green Button** button.
+	1. Click the **Green Button** button.
 
-		![Regular Green Button](./images/request-regular-gb.png " ")
+        ![Regular Green Button](./images/request-regular-gb.png " ")
 
 	2. Click **OK** on the Green Button popup.
 
-		![Click OK Green Button](./images/click-ok-gb.png " ")
+        ![Click OK Green Button](./images/click-ok-gb.png " ")
 
 	3. Scroll down the Request a Green Button section to view the Green Button Request instructions. Click the **Open Jira Ticket** button to open a Jira Ticket in the LiveLabs Project. You will be directed to the Jira platform. Click **Log In** if needed to sign into Jira.
 
-		![Click Open Jira ticket](./images/open-jira-ticket.png " ")
+        ![Click Open Jira ticket](./images/open-jira-ticket.png " ")
 
 	4. In the Jira tab, in the **Create Issue** form, fill out the **Summary** in this format: **[GB] WMS ID: (insert WMS ID) LL ID: (insert LiveLabs ID) (insert Title)** if you are requesting a new green button. If you would like to update an existing Green Button, at the beginning of your description, explain what needs to change about your current green button.
 
 	5. Copy all the content in the sections: **Basic Questions, Policies, Image and Marketplace Questions, and Additional Information** from the WMS Green Button Information form and paste it into the **Description** field of the Jira ticket.
 
-		![Copy to Jira ticket ](./images/copy-to-jira-ticket.png " ")
+        ![Copy to Jira ticket ](./images/copy-to-jira-ticket.png " ")
 
 	6. Complete the questionnaire in the Jira ticket to your knowledge. Fill out all relevant details in the description. Ignore other fields in the Jira ticket and click **Create**.
 
-	7. 	In WMS, scroll up to the top of the LiveLabs Publishing Information form and click **Save** to save the changes.
+	7. In WMS, scroll up to the top of the LiveLabs Publishing Information form and click **Save** to save the changes.
 
-		![Fill the Green Button Lite form](./images/save-gb-lite.png " ")
+        ![Fill the Green Button Lite form](./images/save-gb-lite.png " ")
 
 	>**Note:** LiveLabs cannot handle all OCI resources for green buttons so each request will be evaluated on a case-by-case basis. Also, depending on the green button's complexity, on what services and products the workshop showcases, and if we have any existing similar green buttons, the completion time for a green button can range from 1-3 weeks. The LiveLabs team will reach out through Jira with any further questions. If you have any questions, reach out to *livelabs-help-db_us@oracle.com*.
 
@@ -223,7 +223,7 @@ You can add the green button to your workshop even after it is in production.
 
 	10. After receiving the confirmation email, the LiveLabs team will move the green button to production in 1-2 business days, turn on the green button in the WMS publishing entry, and populate the workshop URL. The LiveLabs team will keep you posted once the workshop is published.
 
-		![Sandbox](images/sandbox.png " ")
+     ![Sandbox](images/sandbox.png " ")
 
 Congratulations on completing the Step by Step workshop to create your workshop in LiveLabs.
 
