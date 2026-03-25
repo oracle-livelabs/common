@@ -27,8 +27,7 @@ Follow these steps to establish a unique static hostname that will be enforced o
 
     ```
     <copy>
-    sudo su - || (sudo sed -i -e 's|root:x:0:0:root:/root:.*$|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd && sudo su -)
-
+    sudo su -
     </copy>
     ```
 
@@ -38,7 +37,7 @@ Follow these steps to establish a unique static hostname that will be enforced o
     <copy>
     cd /tmp
     rm -rf ll-setup
-    wget https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/setup-novnc-livelabs.zip -O setup-novnc-livelabs.zip
+    wget https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/0KJXHnQejxYeC2hoPMapIUn6ACWLwfsGwXnSxT_hCoxoCWj68IiFduta88Htf63-/n/c4u02/b/hosted_workshops/o/stacks/setup-novnc-livelabs-v2.zip -O setup-novnc-livelabs.zip
     unzip -o  setup-novnc-livelabs.zip -d ll-setup
     cd ll-setup/
     chmod +x *.sh .*.sh
@@ -101,8 +100,9 @@ Follow these steps to establish a unique static hostname that will be enforced o
 
     ![noVNC URLs](./images/novnc-urls.png)
 
-Upon successful validation, proceed to the next lab.
+> WARNING: The noVNC URLs should not have the password set to LiveLabs_Rocks.99. If it does, please contact the LiveLabs support team via our [Slack channel](https://oracle.enterprise.slack.com/archives/CTUPZQ5HA).
 
+Upon successful validation, proceed to the next lab.
 
 ## Task 3: Enterprise Linux 8 (EL8)
 
