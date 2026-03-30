@@ -16,7 +16,7 @@ Welcome! This quick guide will help you publish your custom image to Oracle Mark
 
 2. After registering for an OMP publisher account (step 5), you will receive an approval email shortly. This means you are now able to create listings on Oracle Marketplace!
 
-   ![Image](./images/omp-approval-email.png)
+    ![Image](./images/omp-approval-email.png)
 
 3. Add all required IAM policies to your tenancy, as described [here](https://docs.oracle.com/en-us/iaas/Content/Marketplace/publisher-iam-policy.htm).
 
