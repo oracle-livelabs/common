@@ -352,6 +352,8 @@ class FixomatApp:
             parts = set(path.parts)
             if "node_modules" in parts or ".github" in parts:
                 continue
+            if path.name.lower() == "readme.md":
+                continue
             files.append(path)
         return sorted(files)
 

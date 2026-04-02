@@ -48,6 +48,22 @@ function Get-NonCodeLineMatches {
     return $matches
 }
 
+function Filter-MarkdownFiles {
+    param([string[]]$Files)
+
+    $filtered = @()
+    foreach ($file in $Files) {
+        if (-not $file) {
+            continue
+        }
+        if ((Split-Path -Leaf $file).ToLower() -eq 'readme.md') {
+            continue
+        }
+        $filtered += $file
+    }
+    return $filtered
+}
+
 # Get markdown files from args, directory, or find all in current directory
 $Files = @()
 
@@ -71,6 +87,8 @@ if ($Paths -and $Paths.Count -gt 0) {
         Sort-Object FullName |
         Select-Object -ExpandProperty FullName
 }
+
+$Files = Filter-MarkdownFiles -Files $Files
 
 # Check if any files were found
 if ($Files.Count -eq 0) {

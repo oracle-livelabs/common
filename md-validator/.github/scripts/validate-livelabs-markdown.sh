@@ -21,6 +21,19 @@ log_success() {
     echo -e "${GREEN}PASS${NC}: $1"
 }
 
+filter_markdown_files() {
+    local filtered=()
+    local file
+    for file in "$@"; do
+        [ -z "$file" ] && continue
+        if [ "$(basename "$file" | tr '[:upper:]' '[:lower:]')" = "readme.md" ]; then
+            continue
+        fi
+        filtered+=("$file")
+    done
+    FILES=("${filtered[@]}")
+}
+
 # Get markdown files from args, directory, or find all in current directory
 FILES=()
 if [ $# -gt 0 ]; then
@@ -41,6 +54,8 @@ else
         FILES+=("$file")
     done < <(find . -name "*.md" -type f ! -path '*/node_modules/*' ! -path '*/.github/*' | LC_ALL=C sort)
 fi
+
+filter_markdown_files "${FILES[@]}"
 
 # Check if any files were found
 if [ ${#FILES[@]} -eq 0 ]; then

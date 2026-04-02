@@ -36,6 +36,7 @@ Then:
 ## Behavior
 
 - Markdown mode applies built-in LiveLabs auto-fixes and reports any remaining manual issues.
+- Markdown mode ignores `README.md` files.
 - Markdown mode lowercases actual `images/...` file paths in Markdown image references without touching alt text, optional image titles, or fenced code blocks.
 - Images mode resizes large JPEG/PNG files and optionally runs `oxipng` if available.
 - Combined mode runs both steps in sequence and streams logs in the UI console.
