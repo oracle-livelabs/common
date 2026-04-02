@@ -21,6 +21,33 @@ function Log-Success {
     Write-Host ": $Message"
 }
 
+function Get-NonCodeLineMatches {
+    param(
+        [string[]]$Lines,
+        [scriptblock]$Predicate
+    )
+
+    $matches = @()
+    $inCodeBlock = $false
+
+    for ($index = 0; $index -lt $Lines.Count; $index++) {
+        $line = $Lines[$index]
+        if ($line -match '^\s*```[^`]*$') {
+            $inCodeBlock = -not $inCodeBlock
+            continue
+        }
+
+        if (-not $inCodeBlock -and (& $Predicate $line)) {
+            $matches += [PSCustomObject]@{
+                LineNumber = $index + 1
+                Line = $line
+            }
+        }
+    }
+
+    return $matches
+}
+
 # Get markdown files from args, directory, or find all in current directory
 $Files = @()
 
@@ -85,7 +112,7 @@ foreach ($file in $Files) {
     $h1Count = 0
     foreach ($line in $lines) {
         # Check for fenced code block markers (``` alone or ```language)
-        if ($line -match '^\s*```\s*$' -or $line -match '^\s*```[a-zA-Z]+\s*$') {
+        if ($line -match '^\s*```[^`]*$') {
             $inCodeBlock = -not $inCodeBlock
             continue
         }
@@ -108,38 +135,34 @@ foreach ($file in $Files) {
 
     # Rule 5: Check image references have alt text
     # Pattern: ![](images/...) is invalid, should be ![alt text](images/...)
-    $lineNum = 0
-    $emptyAltLines = @()
-    foreach ($line in $lines) {
-        $lineNum++
-        if ($line -match '!\[\]\s*\(' -and $line -notmatch '!\[\]\(youtube:') {
-            $emptyAltLines += $lineNum
-        }
+    $emptyAltMatches = Get-NonCodeLineMatches -Lines $lines -Predicate {
+        param($line)
+        $line -match '!\[\s*\]\s*\(' -and $line -notmatch '!\[\s*\]\(youtube:'
     }
-    if ($emptyAltLines.Count -gt 0) {
-        $linesList = $emptyAltLines -join ', '
+    if ($emptyAltMatches.Count -gt 0) {
+        $linesList = ($emptyAltMatches | ForEach-Object { $_.LineNumber }) -join ', '
         Log-Error "$file (line $linesList): Image references must have alt text: ![alt text](images/file.png)"
         $FileErrors++
     }
 
     # Rule 5b: Disallow inline HTML anchor tags
-    $lineNum = 0
-    foreach ($line in $lines) {
-        $lineNum++
-        if ($line -match '<a\s+href=') {
-            Log-Error "$file (line $lineNum): HTML anchor tags (<a href=...>) are not allowed; use Markdown links instead."
-            $FileErrors++
-        }
+    $anchorMatches = Get-NonCodeLineMatches -Lines $lines -Predicate {
+        param($line)
+        $line -match '<a\s+href='
+    }
+    foreach ($match in $anchorMatches) {
+        Log-Error "$file (line $($match.LineNumber)): HTML anchor tags (<a href=...>) are not allowed; use Markdown links instead."
+        $FileErrors++
     }
 
     # Rule 6: Check YouTube format is correct
-    $lineNum = 0
-    foreach ($line in $lines) {
-        $lineNum++
-        if ($line -match 'youtube:' -and $line -notmatch '\[[^\]]*\]\(youtube:[^)]+\)') {
-            Log-Error "$file (line $lineNum): YouTube embeds should use format: [optional text](youtube:VIDEO_ID[:size])"
-            $FileErrors++
-        }
+    $youtubeMatches = Get-NonCodeLineMatches -Lines $lines -Predicate {
+        param($line)
+        $line -match 'youtube:' -and $line -notmatch '\[[^\]]*\]\(youtube:[^)]+\)'
+    }
+    foreach ($match in $youtubeMatches) {
+        Log-Error "$file (line $($match.LineNumber)): YouTube embeds should use format: [optional text](youtube:VIDEO_ID[:size])"
+        $FileErrors++
     }
 
     # Rule 7: Check for proper Task format
@@ -226,9 +249,17 @@ foreach ($file in $Files) {
     }
 
     # Rule 14: Check filenames in image references are lowercase
-    $imageRefs = [regex]::Matches($content, '!\[.*?\]\((images/[^)]+)\)')
-    foreach ($match in $imageRefs) {
-        $img = $match.Groups[1].Value
+    $imageRefs = @()
+    $imageLines = Get-NonCodeLineMatches -Lines $lines -Predicate {
+        param($line)
+        $line -match '!\[[^\]]*\]\(images/'
+    }
+    foreach ($imageLine in $imageLines) {
+        foreach ($match in [regex]::Matches($imageLine.Line, '!\[[^\]]*\]\((images/[^)"\s]+)')) {
+            $imageRefs += $match.Groups[1].Value
+        }
+    }
+    foreach ($img in $imageRefs) {
         $lowercaseImg = $img.ToLower()
         if ($img -cne $lowercaseImg) {
             Log-Error "$file`: Image filename should be lowercase: $img"

@@ -479,6 +479,8 @@ class FixomatApp:
     @staticmethod
     def _lowercase_markdown_image_paths(text: str):
         changed = False
+        in_code = False
+        out_lines = []
 
         def replace_image_ref(match):
             nonlocal changed
@@ -492,7 +494,19 @@ class FixomatApp:
                 changed = True
             return f"{pre}{new_path}{post}"
 
-        new_text = re.sub(r'(!\[[^\]]*\]\()([^)]+)(\))', replace_image_ref, text)
+        for line in text.splitlines(keepends=True):
+            if re.match(r'^\s*```[^`]*$', line.rstrip("\n\r")):
+                in_code = not in_code
+                out_lines.append(line)
+                continue
+
+            if in_code:
+                out_lines.append(line)
+                continue
+
+            out_lines.append(re.sub(r'(!\[[^\]]*\]\()([^)]+)(\))', replace_image_ref, line))
+
+        new_text = "".join(out_lines)
         return new_text, changed
 
     @staticmethod

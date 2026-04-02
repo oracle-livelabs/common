@@ -22,23 +22,28 @@ log_success() {
 }
 
 # Get markdown files from args, directory, or find all in current directory
+FILES=()
 if [ $# -gt 0 ]; then
     # Check if first argument is a directory
     if [ -d "$1" ]; then
         TARGET_DIR="$1"
         echo "Scanning directory: $TARGET_DIR"
         echo ""
-        FILES=$(find "$TARGET_DIR" -name "*.md" -type f | grep -v node_modules | grep -v .github | sort)
+        while IFS= read -r file; do
+            FILES+=("$file")
+        done < <(find "$TARGET_DIR" -name "*.md" -type f ! -path '*/node_modules/*' ! -path '*/.github/*' | LC_ALL=C sort)
     else
         # Treat arguments as individual files
-        FILES="$@"
+        FILES=("$@")
     fi
 else
-    FILES=$(find . -name "*.md" -type f | grep -v node_modules | grep -v .github | sort)
+    while IFS= read -r file; do
+        FILES+=("$file")
+    done < <(find . -name "*.md" -type f ! -path '*/node_modules/*' ! -path '*/.github/*' | LC_ALL=C sort)
 fi
 
 # Check if any files were found
-if [ -z "$FILES" ]; then
+if [ ${#FILES[@]} -eq 0 ]; then
     echo "No markdown files found."
     exit 0
 fi
@@ -48,7 +53,7 @@ echo "LiveLabs Markdown Formatting Validator"
 echo "================================================"
 echo ""
 
-for file in $FILES; do
+for file in "${FILES[@]}"; do
     if [ ! -f "$file" ]; then
         continue
     fi
@@ -67,7 +72,7 @@ for file in $FILES; do
     # Use awk to skip content inside fenced code blocks
     # Only match proper fenced code blocks: ``` alone or ```language (not inline code spans)
     h1_count=$(awk '
-        /^[[:space:]]*```[[:space:]]*$/ || /^[[:space:]]*```[a-zA-Z]+[[:space:]]*$/ {
+        /^[[:space:]]*```[^`]*$/ {
             in_code = !in_code
             next
         }
@@ -89,14 +94,32 @@ for file in $FILES; do
 
     # Rule 5: Check image references have alt text
     # Pattern: ![](images/...) is invalid, should be ![alt text](images/...)
-    if grep -n '!\[\]\s*(' "$file" | grep -v '^[0-9]*:.*!\[\](youtube:' > /dev/null 2>&1; then
-        lines=$(grep -n '!\[\]\s*(' "$file" | grep -v '!\[\](youtube:' | cut -d: -f1 | tr '\n' ', ')
+    empty_alt_lines=$(awk '
+        /^[[:space:]]*```[^`]*$/ {
+            in_code = !in_code
+            next
+        }
+        !in_code && /!\[[[:space:]]*\][[:space:]]*\(/ && $0 !~ /!\[[[:space:]]*\]\(youtube:/ {
+            print NR ":" $0
+        }
+    ' "$file")
+    if [ -n "$empty_alt_lines" ]; then
+        lines=$(printf '%s\n' "$empty_alt_lines" | cut -d: -f1 | paste -sd',' - | sed 's/,/, /g')
         log_error "$file (line $lines): Image references must have alt text: ![alt text](images/file.png)"
         ((FILE_ERRORS++))
     fi
 
     # Rule 5b: Disallow inline HTML anchor tags
-    anchor_lines=$(grep -ni '<a[[:space:]]*href=' "$file" || true)
+    anchor_lines=$(awk '
+        BEGIN { IGNORECASE = 1 }
+        /^[[:space:]]*```[^`]*$/ {
+            in_code = !in_code
+            next
+        }
+        !in_code && /<a[[:space:]]*href=/ {
+            print NR ":" $0
+        }
+    ' "$file")
     if [ -n "$anchor_lines" ]; then
         while IFS= read -r anchor_line; do
             [ -z "$anchor_line" ] && continue
@@ -110,7 +133,15 @@ for file in $FILES; do
     # Accepts both:
     #   [](youtube:VIDEO_ID)
     #   [Optional text](youtube:VIDEO_ID[:size])
-    bad_youtube_lines=$(grep -n "youtube:" "$file" | grep -vE '\[[^]]*\]\(youtube:[^)]+\)' || true)
+    bad_youtube_lines=$(awk '
+        /^[[:space:]]*```[^`]*$/ {
+            in_code = !in_code
+            next
+        }
+        !in_code && /youtube:/ && $0 !~ /\[[^]]*\]\(youtube:[^)]+\)/ {
+            print NR ":" $0
+        }
+    ' "$file")
     if [ -n "$bad_youtube_lines" ]; then
         while IFS= read -r yt_line; do
             [ -z "$yt_line" ] && continue
@@ -190,14 +221,29 @@ for file in $FILES; do
     fi
 
     # Rule 14: Check filenames in image references are lowercase
-    image_refs=$(grep -oE '!\[.*?\]\((images/[^)]+)\)' "$file" | grep -oE 'images/[^)]+' || true)
-    for img in $image_refs; do
+    image_refs=$(awk '
+        /^[[:space:]]*```[^`]*$/ {
+            in_code = !in_code
+            next
+        }
+        !in_code {
+            line = $0
+            while (match(line, /!\[[^]]*\]\((images\/[^)"[:space:]]+)/)) {
+                match_text = substr(line, RSTART, RLENGTH)
+                sub(/^.*\(/, "", match_text)
+                print match_text
+                line = substr(line, RSTART + RLENGTH)
+            }
+        }
+    ' "$file")
+    while IFS= read -r img; do
+        [ -z "$img" ] && continue
         lowercase_img=$(echo "$img" | tr '[:upper:]' '[:lower:]')
         if [ "$img" != "$lowercase_img" ]; then
             log_error "$file: Image filename should be lowercase: $img"
             ((FILE_ERRORS++))
         fi
-    done
+    done <<< "$image_refs"
 
     # Rule 16-18: Task sections with ordered lists need indented content inside numbered steps.
     # Task sections without ordered lists are exempt from indentation rules.
