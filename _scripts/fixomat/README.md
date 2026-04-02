@@ -33,10 +33,14 @@ Then:
 2. Choose a mode (Markdown only, Images only, or Both).
 3. Click **Run**.
 
+## Packaging
+
+- `./build-macos.sh` builds the `.app` bundle and also creates a verified distributable ZIP in `dist/`.
+- The macOS ZIP is generated without `__MACOSX` metadata entries, and the build script verifies that the extracted app still passes `codesign --verify --deep --strict`.
+
 ## Behavior
 
 - Markdown mode applies built-in LiveLabs auto-fixes and reports any remaining manual issues.
-- Markdown mode ignores `README.md` files.
 - Markdown mode lowercases actual `images/...` file paths in Markdown image references without touching alt text, optional image titles, or fenced code blocks.
 - Images mode resizes large JPEG/PNG files and optionally runs `oxipng` if available.
 - Combined mode runs both steps in sequence and streams logs in the UI console.
