@@ -21,7 +21,7 @@ In this lab, you will:
 
 1. Open the guided workshop entry point:
 
-   [LiveLabs AI Developer How-To Guide](https://lfoinding.github.io/livelabs-ai-playground/skills/how-to/workshops/sandbox/index.html)
+    [LiveLabs AI Developer How-To Guide](https://lfoinding.github.io/livelabs-ai-playground/skills/how-to/workshops/sandbox/index.html)
 
 2. The guide has a structured path to enable authors to go from zero to hero in minutes:
 
@@ -34,7 +34,7 @@ In this lab, you will:
 
 1. Open the LiveLabs AI Developer Hub repository:
 
-   [LiveLabs AI Developer Hub](https://github.com/lfoinding/livelabs-ai-playground)
+    [LiveLabs AI Developer Hub](https://github.com/lfoinding/livelabs-ai-playground)
 
 2. Use this repo as your home for author-facing automation workflows. Access downloadable skills and readme documents with ease.
 
