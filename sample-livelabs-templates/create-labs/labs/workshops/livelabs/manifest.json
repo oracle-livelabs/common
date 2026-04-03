@@ -147,6 +147,11 @@
       "title": "Lab 11b: How to Request and Access Secure Desktop Environments",
       "description": "This lab will show you how to get your new Marketplace image added to your LiveLab.",
       "filename": "./../../14-secure-desktop/secure-desktop-how-to-request.md"
+    },
+    {
+      "title": "Lab 12: Get Started with the LiveLabs AI Developer Hub",
+      "description": "This lab points authors to the LiveLabs AI Developer Hub for deeper workflow guides instead of repeating that content here.",
+      "filename": "./../../15-labs-livelabs-ai-developer-hub/15-labs-livelabs-ai-developer-hub.md"
     }
   ]
 }
