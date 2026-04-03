@@ -23,6 +23,7 @@ This validator ensures that Markdown content submitted in PRs follows the establ
 ## Features
 
 - Validates only changed Markdown files (not the entire repository)
+- Ignores `README.md` files
 - Checks both standard Markdown formatting and LiveLabs-specific syntax
 - Verifies referenced images exist
 - Enforces filename conventions
@@ -137,6 +138,7 @@ Test files locally before pushing:
 ```
 
 The script automatically detects if the argument is a directory and recursively finds all `.md` files within it.
+`README.md` files are skipped intentionally.
 
 #### Windows (PowerShell)
 
