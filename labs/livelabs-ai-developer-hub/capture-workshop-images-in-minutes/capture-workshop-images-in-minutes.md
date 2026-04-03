@@ -37,9 +37,9 @@ Estimated Time: 15 minutes
 3. Use a pattern like this in the lab markdown:
 
     ```md
-    ![Placeholder for Start button screenshot](images/lab2-task3-start-button.png)
+    ![Placeholder for Start button screenshot](images/01-workshop-start-highlighted-800x600.png)
 
-    ![Placeholder for sandbox launch screenshot](images/lab2-task3-run-on-sandbox.png)
+    ![Placeholder for sandbox launch screenshot](images/02-run-on-sandbox-highlighted-800x600.png)
     ```
 
 ## Task 3: Review Example Screenshots
