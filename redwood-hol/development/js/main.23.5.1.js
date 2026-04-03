@@ -27,9 +27,9 @@ Version     Date             Author          Summary
 */
 
 "use strict";
-var showdown = "https://oracle-livelabs.github.io/common/redwood-hol/js/showdown.min.js";
-var highlight = "https://oracle-livelabs.github.io/common/redwood-hol/js/highlight.min.js";
-const related_path = "https://oracle-livelabs.github.io/common/related/";
+var showdown = "https://livelabs.oracle.com/cdn/common/redwood-hol/js/showdown.min.js";
+var highlight = "https://livelabs.oracle.com/cdn/common/redwood-hol/js/highlight.min.js";
+const related_path = "https://livelabs.oracle.com/cdn/common/related/";
 
 let main = function () {
     let manifestFileName = "manifest.json";
@@ -1409,7 +1409,7 @@ let main = function () {
     // QA part of the code
     let performQA = function (articleElement, markdownContent, manifestFileContent) {
         let error_div = $(document.createElement('div')).attr('id', 'qa-report').html("<div id='qa-reportheader'></div><div id='qa-reportbody'><ol></ol></div>");
-        const more_info = "Please see <a href='https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/?lab=4-labs-markdown-develop-content' target='_blank'>using the LiveLabs template</a> for more information.";
+        const more_info = "Please see <a href='https://livelabs.oracle.com/cdn/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/?lab=4-labs-markdown-develop-content' target='_blank'>using the LiveLabs template</a> for more information.";
 
         let urlExists = function (url, callback) {
             $.ajax({
@@ -1708,7 +1708,7 @@ let download = function () {
         $("#module-content h2:not(:eq(0))").nextAll().show('fast'),
         $('h2').removeClass('plus minus'),
         $('#btn_toggle').remove()).done(function () {
-            download_file($('.selected span').text().replace(/[^[A-Za-z0-9:?]+?/g, '') + '.html', '<html><head><link rel="stylesheet" href="https://oracle-livelabs.github.io/common/redwood-hol/img/favicon.ico" /></head><body style="padding-top: 0px;">' + $('#contentBox')[0].outerHTML + '</body></html>');
+            download_file($('.selected span').text().replace(/[^[A-Za-z0-9:?]+?/g, '') + '.html', '<html><head><link rel="stylesheet" href="https://livelabs.oracle.com/cdn/common/redwood-hol/img/favicon.ico" /></head><body style="padding-top: 0px;">' + $('#contentBox')[0].outerHTML + '</body></html>');
         });
 }
 
