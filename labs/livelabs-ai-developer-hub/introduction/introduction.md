@@ -8,11 +8,11 @@ You will learn how to create workshops from source materials, capture workshop-r
 
 ## Introduction
 
-LiveLabs authors do not just write markdown. They also review learner flows, gather screenshots, refine content, validate structure, and adapt workshops for new audiences.
+LiveLabs authors do not just write markdown. They also review learner flows, gather screenshots, refine content, validate structure, and adapt workshops for new audiences. That work is often repetitive, detail-heavy, and hard to keep consistent across multiple labs and workshop variants.
 
-That work is often repetitive, detail-heavy, and hard to keep consistent across multiple labs and workshop variants.
+The LiveLabs AI Playground brings those workflows together in one place so authors can review the patterns, reuse the prompts, and adapt them to new workshops. 
 
-The LiveLabs AI Playground brings those workflows together in one place so authors can review the patterns, reuse the prompts, and adapt them to new workshops.
+**Download the latest packaged skills** and view supporting documents from the [LiveLabs AI Developer Hub](https://github.com/lfoinding/livelabs-ai-playground) in the [LiveLabs-AI-Developer](https://github.com/lfoinding/livelabs-ai-playground/tree/main/LiveLabs-AI-Developer) folder to pull the reusable skills directly.
 
 In this workshop, you will move through a set of focused examples that show how to:
 
@@ -34,9 +34,9 @@ The goal is to give LiveLabs authors practical workflows they can reuse across n
 
 ## Learn More
 
-- [Oracle LiveLabs](https://livelabs.oracle.com)
+- [LiveLabs AI Developer Hub](https://github.com/lfoinding/livelabs-ai-playground)
+- [LiveLabs AI Developer Asset Bundle](https://github.com/lfoinding/livelabs-ai-playground/tree/main/LiveLabs-AI-Developer)
 - [Oracle LiveLabs How-To](https://livelabs.oracle.com/how-to)
-- [Oracle LiveLabs Common Repository](https://github.com/oracle-livelabs/common)
 
 ## Acknowledgements
 
