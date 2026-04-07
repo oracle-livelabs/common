@@ -13,7 +13,7 @@ Estimated Time: 10 minutes
 LiveLabs uses GitHub Actions to automatically validate PRs. Two main workflows run on every PR:
 
 1. **LiveLabs Image Validation** - Ensures all images are within the 1280px maximum dimension
-2. **LiveLabs Markdown Validation** - Checks that your markdown files follow LiveLabs formatting standards
+2. **LiveLabs Markdown Validation** - Checks that your markdown files follow LiveLabs formatting standards and flags legacy `oracle-livelabs.github.io` CDN URLs in changed `index.html` and `manifest.json` files
 
 If any check fails, your PR will show a red "X" next to the failing check. You must fix the issues before your PR can be merged.
 
@@ -64,7 +64,7 @@ The **LiveLabs Image Validation** workflow ensures that all images in your PR do
 
 ## Task 2: Understanding the Markdown Validation Check
 
-The **LiveLabs Markdown Validation** workflow ensures your markdown files follow LiveLabs formatting standards. It checks both standard markdown rules and LiveLabs-specific conventions.
+The **LiveLabs Markdown Validation** workflow ensures your markdown files follow LiveLabs formatting standards. It also checks changed `index.html` and `manifest.json` files for legacy `oracle-livelabs.github.io` URLs that must be replaced with `livelabs.oracle.com/cdn`.
 
 1. What the check validates:
 
@@ -73,7 +73,7 @@ The **LiveLabs Markdown Validation** workflow ensures your markdown files follow
     | Structure | Single H1 per file, required sections present |
     | Headers | Proper hierarchy (H1 > H2 > H3), correct task format and numbered steps |
     | Images | Alt text present, referenced images exist, lowercase filenames, images indented under steps |
-    | LiveLabs syntax | Balanced `<copy></copy>` tags, no inline `<a>` tags, proper note format |
+    | LiveLabs syntax | Balanced `<copy></copy>` tags, no inline `<a>` tags, proper note format, no legacy `oracle-livelabs.github.io` CDN URLs in `index.html` / `manifest.json` |
     | Filenames | Lowercase, no spaces |
 
 2. Required sections in every lab:
@@ -118,6 +118,7 @@ The **LiveLabs Markdown Validation** workflow ensures your markdown files follow
 4. Files that are checked:
 
     - All `.md` files in your PR
+    - Any changed `index.html` or `manifest.json` files in your PR
     - Excludes `node_modules/` and `.github/` directories
 
 ## Task 3: Viewing Check Results
@@ -197,11 +198,11 @@ The markdown validation script is available for both **Linux/macOS (Bash)** and 
 
     ```bash
     <copy>
-    ./validate-livelabs-markdown.sh introduction.md lab1.md lab2.md
+    ./validate-livelabs-markdown.sh introduction.md lab1.md index.html manifest.json
     </copy>
     ```
 
-5. Or run on all markdown files in the current directory:
+5. Or run on all supported files in the current directory:
 
     ```bash
     <copy>
@@ -239,11 +240,11 @@ The markdown validation script is available for both **Linux/macOS (Bash)** and 
 
     ```powershell
     <copy>
-    .\validate-livelabs-markdown.ps1 introduction.md lab1.md lab2.md
+    .\validate-livelabs-markdown.ps1 introduction.md lab1.md index.html manifest.json
     </copy>
     ```
 
-5. Or run on all markdown files in the current directory:
+5. Or run on all supported files in the current directory:
 
     ```powershell
     <copy>
@@ -301,6 +302,7 @@ The script checks for the following rules:
 | Objectives | Must have `### Objectives` section |
 | Estimated Time | Must include `Estimated Time:` (or `Estimated Workshop Time:` for introduction.md) |
 | Lowercase Images | Image filenames must be lowercase |
+| Legacy CDN URLs | `index.html` and `manifest.json` must not contain `oracle-livelabs.github.io`; replace it with `livelabs.oracle.com/cdn` |
 
 5. Review the output and fix any errors before submitting your PR.
 
