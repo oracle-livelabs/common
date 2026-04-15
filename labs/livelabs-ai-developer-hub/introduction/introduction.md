@@ -1,4 +1,4 @@
-# Introduction to LiveLabs AI Developer
+# Introduction to LiveLabs AI Developer Hub
 
 Estimated Workshop Time: 25 minutes
 
@@ -12,7 +12,7 @@ LiveLabs authors do not just write markdown. They also review learner flows, gat
 
 The LiveLabs AI Playground brings those workflows together in one place so authors can review the patterns, reuse the prompts, and adapt them to new workshops. 
 
-**Download the latest packaged skills** and view supporting documents from the [LiveLabs AI Developer Hub](https://github.com/lfoinding/livelabs-ai-playground) in the [LiveLabs-AI-Developer](https://github.com/lfoinding/livelabs-ai-playground/tree/main/LiveLabs-AI-Developer) folder to pull the reusable skills directly.
+**Download the latest packaged skills** and view supporting documents from the [LiveLabs AI Developer Skills Repository](https://oracle-my.sharepoint.com/:f:/p/kay_malcolm/IgBlxiOi-InZRbQHn6htgExAAZVgHtxSIwjAyAxRkmXa4ag?e=OuPt5u).
 
 In this workshop, you will move through a set of focused examples that show how to:
 
@@ -34,8 +34,7 @@ The goal is to give LiveLabs authors practical workflows they can reuse across n
 
 ## Learn More
 
-- [LiveLabs AI Developer Hub](https://github.com/lfoinding/livelabs-ai-playground)
-- [LiveLabs AI Developer Asset Bundle](https://github.com/lfoinding/livelabs-ai-playground/tree/main/LiveLabs-AI-Developer)
+- [LiveLabs AI Developer Asset Bundle](https://oracle-my.sharepoint.com/:f:/p/kay_malcolm/IgBlxiOi-InZRbQHn6htgExAAZVgHtxSIwjAyAxRkmXa4ag?e=OuPt5u)
 - [Oracle LiveLabs How-To](https://livelabs.oracle.com/how-to)
 
 ## Acknowledgements

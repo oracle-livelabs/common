@@ -48,7 +48,7 @@ In this lab, you will:
    - `livelabs-industry-converter.zip` for industry-conversion workflows
    - `PROMPT-CHEAT-SHEET-livelabs-workshop-author-v2.md` for author guidance
 
-## Task 4: Use the Hub as Your Next Step
+## Task 3: Use the Hub as Your Next Step
 
 1. Start with the guided how-to workshop when you want the quickest working path.
 
