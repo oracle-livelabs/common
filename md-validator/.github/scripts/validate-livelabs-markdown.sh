@@ -21,20 +21,26 @@ log_success() {
     echo -e "${GREEN}PASS${NC}: $1"
 }
 
-filter_markdown_files() {
+filter_supported_files() {
     local filtered=()
     local file
+    local basename_lower
     for file in "$@"; do
         [ -z "$file" ] && continue
-        if [ "$(basename "$file" | tr '[:upper:]' '[:lower:]')" = "readme.md" ]; then
-            continue
-        fi
-        filtered+=("$file")
+        basename_lower=$(basename "$file" | tr '[:upper:]' '[:lower:]')
+        case "$basename_lower" in
+            readme.md)
+                continue
+                ;;
+            *.md|index.html|manifest.json)
+                filtered+=("$file")
+                ;;
+        esac
     done
     FILES=("${filtered[@]}")
 }
 
-# Get markdown files from args, directory, or find all in current directory
+# Get supported validation files from args, directory, or find all in current directory
 FILES=()
 if [ $# -gt 0 ]; then
     # Check if first argument is a directory
@@ -44,7 +50,7 @@ if [ $# -gt 0 ]; then
         echo ""
         while IFS= read -r file; do
             FILES+=("$file")
-        done < <(find "$TARGET_DIR" -name "*.md" -type f ! -path '*/node_modules/*' ! -path '*/.github/*' | LC_ALL=C sort)
+        done < <(find "$TARGET_DIR" -type f \( -name "*.md" -o -name "index.html" -o -name "manifest.json" \) ! -path '*/node_modules/*' ! -path '*/.github/*' | LC_ALL=C sort)
     else
         # Treat arguments as individual files
         FILES=("$@")
@@ -52,14 +58,14 @@ if [ $# -gt 0 ]; then
 else
     while IFS= read -r file; do
         FILES+=("$file")
-    done < <(find . -name "*.md" -type f ! -path '*/node_modules/*' ! -path '*/.github/*' | LC_ALL=C sort)
+    done < <(find . -type f \( -name "*.md" -o -name "index.html" -o -name "manifest.json" \) ! -path '*/node_modules/*' ! -path '*/.github/*' | LC_ALL=C sort)
 fi
 
-filter_markdown_files "${FILES[@]}"
+filter_supported_files "${FILES[@]}"
 
 # Check if any files were found
 if [ ${#FILES[@]} -eq 0 ]; then
-    echo "No markdown files found."
+    echo "No validation files found."
     exit 0
 fi
 
@@ -75,6 +81,26 @@ for file in "${FILES[@]}"; do
 
     echo "Checking: $file"
     FILE_ERRORS=0
+    basename_file=$(basename "$file")
+    basename_lower=$(printf '%s' "$basename_file" | tr '[:upper:]' '[:lower:]')
+
+    if [ "$basename_lower" = "index.html" ] || [ "$basename_lower" = "manifest.json" ]; then
+        legacy_url_lines=$(grep -Ein 'oracle-livelabs\.github\.io' "$file" || true)
+        if [ -n "$legacy_url_lines" ]; then
+            while IFS= read -r legacy_line; do
+                [ -z "$legacy_line" ] && continue
+                legacy_lineno=${legacy_line%%:*}
+                log_error "$file (line $legacy_lineno): Found legacy URL 'oracle-livelabs.github.io'. Replace it with 'livelabs.oracle.com/cdn'."
+                ((FILE_ERRORS++))
+            done <<< "$legacy_url_lines"
+        fi
+
+        if [ $FILE_ERRORS -eq 0 ]; then
+            log_success "$file passed all required checks"
+        fi
+        echo ""
+        continue
+    fi
 
     # Rule 1: Check for H1 title (must be first non-empty line)
     first_content=$(grep -v '^$' "$file" | head -1)
@@ -220,7 +246,6 @@ for file in "${FILES[@]}"; do
     fi
 
     # Rule 12 & 13: Check for Estimated Time
-    basename_file=$(basename "$file")
     if [ "$basename_file" = "introduction.md" ]; then
         # Rule 13: introduction.md must have "Estimated Workshop Time:"
         if ! grep -q "Estimated Workshop Time.*:" "$file"; then

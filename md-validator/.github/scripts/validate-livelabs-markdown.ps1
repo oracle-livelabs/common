@@ -48,7 +48,7 @@ function Get-NonCodeLineMatches {
     return $matches
 }
 
-function Filter-MarkdownFiles {
+function Filter-SupportedFiles {
     param([string[]]$Files)
 
     $filtered = @()
@@ -56,15 +56,18 @@ function Filter-MarkdownFiles {
         if (-not $file) {
             continue
         }
-        if ((Split-Path -Leaf $file).ToLower() -eq 'readme.md') {
+        $baseName = (Split-Path -Leaf $file).ToLower()
+        if ($baseName -eq 'readme.md') {
             continue
         }
-        $filtered += $file
+        if ($baseName -like '*.md' -or $baseName -eq 'index.html' -or $baseName -eq 'manifest.json') {
+            $filtered += $file
+        }
     }
     return $filtered
 }
 
-# Get markdown files from args, directory, or find all in current directory
+# Get supported validation files from args, directory, or find all in current directory
 $Files = @()
 
 if ($Paths -and $Paths.Count -gt 0) {
@@ -73,8 +76,11 @@ if ($Paths -and $Paths.Count -gt 0) {
         $TargetDir = $Paths[0]
         Write-Host "Scanning directory: $TargetDir"
         Write-Host ""
-        $Files = Get-ChildItem -Path $TargetDir -Filter "*.md" -Recurse -File |
-            Where-Object { $_.FullName -notmatch 'node_modules|\.github' } |
+        $Files = Get-ChildItem -Path $TargetDir -Recurse -File |
+            Where-Object {
+                $_.FullName -notmatch 'node_modules|\.github' -and
+                ($_.Name -like '*.md' -or $_.Name -ieq 'index.html' -or $_.Name -ieq 'manifest.json')
+            } |
             Sort-Object FullName |
             Select-Object -ExpandProperty FullName
     } else {
@@ -82,17 +88,20 @@ if ($Paths -and $Paths.Count -gt 0) {
         $Files = $Paths | Where-Object { Test-Path $_ -PathType Leaf }
     }
 } else {
-    $Files = Get-ChildItem -Path "." -Filter "*.md" -Recurse -File |
-        Where-Object { $_.FullName -notmatch 'node_modules|\.github' } |
+    $Files = Get-ChildItem -Path "." -Recurse -File |
+        Where-Object {
+            $_.FullName -notmatch 'node_modules|\.github' -and
+            ($_.Name -like '*.md' -or $_.Name -ieq 'index.html' -or $_.Name -ieq 'manifest.json')
+        } |
         Sort-Object FullName |
         Select-Object -ExpandProperty FullName
 }
 
-$Files = Filter-MarkdownFiles -Files $Files
+$Files = Filter-SupportedFiles -Files $Files
 
 # Check if any files were found
 if ($Files.Count -eq 0) {
-    Write-Host "No markdown files found."
+    Write-Host "No validation files found."
     exit 0
 }
 
@@ -116,6 +125,24 @@ foreach ($file in $Files) {
     $lines = Get-Content -Path $file -ErrorAction SilentlyContinue
     if (-not $lines) {
         $lines = @()
+    }
+
+    $baseName = (Split-Path -Leaf $file).ToLower()
+
+    if ($baseName -eq 'index.html' -or $baseName -eq 'manifest.json') {
+        for ($lineIndex = 0; $lineIndex -lt $lines.Count; $lineIndex++) {
+            if ($lines[$lineIndex] -match 'oracle-livelabs\.github\.io') {
+                $lineNumber = $lineIndex + 1
+                Log-Error "$file (line $lineNumber): Found legacy URL 'oracle-livelabs.github.io'. Replace it with 'livelabs.oracle.com/cdn'."
+                $FileErrors++
+            }
+        }
+
+        if ($FileErrors -eq 0) {
+            Log-Success "$file passed all required checks"
+        }
+        Write-Host ""
+        continue
     }
 
     # Rule 1: Check for H1 title (must be first non-empty line)
