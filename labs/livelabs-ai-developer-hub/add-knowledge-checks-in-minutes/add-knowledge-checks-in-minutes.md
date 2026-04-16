@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This lab shows authors how to use Codex and `livelabs-gamification` to add quiz-based checks to a LiveLabs workshop without rewriting the teaching flow.
+This lab shows authors how to use Codex and the `livelabs-gamification` skill to add quiz-based checks to a LiveLabs workshop without rewriting the teaching flow.
 
 You will learn when to add a dedicated quiz lab, when to append a short check in place, and how to keep quiz questions tied to workshop content instead of outside knowledge.
 
