@@ -40,6 +40,7 @@ IMAGE_JOBS = 4
 
 TASK_HEADER_VALID_RE = re.compile(r"^## Task [^:\s][^:]*:")
 YOUTUBE_VALID_RE = re.compile(r"\[[^\]]*\]\(youtube:[^)]+\)")
+LEGACY_CDN_HOST_RE = re.compile(r"oracle-livelabs\.github\.io", re.IGNORECASE)
 
 
 class FixomatApp:
@@ -229,20 +230,20 @@ class FixomatApp:
     def _run_markdown_fix(self, target_path: Path) -> bool:
         self._log("=== Markdown Fix ===")
 
-        files = self._collect_markdown_files(target_path)
+        files = self._collect_fixable_files(target_path)
         if not files:
-            self._log("No markdown files found.")
+            self._log("No markdown, index.html, or manifest.json files found.")
             return True
 
         fixed_total = 0
         manual_total = 0
 
-        for md_file in files:
-            rel = self._safe_relative(md_file, target_path)
+        for content_file in files:
+            rel = self._safe_relative(content_file, target_path)
             self._log(f"Processing: {rel}")
 
             try:
-                fixed_msgs, manual_msgs = self._fix_markdown_file(md_file)
+                fixed_msgs, manual_msgs = self._fix_content_file(content_file)
             except Exception as exc:
                 self._log(f"  ERROR: Failed to process file ({exc})")
                 return False
@@ -346,16 +347,44 @@ class FixomatApp:
         return True
 
     @staticmethod
-    def _collect_markdown_files(target_path: Path):
+    def _collect_fixable_files(target_path: Path):
         files = []
-        for path in target_path.rglob("*.md"):
+        for path in target_path.rglob("*"):
+            if not path.is_file():
+                continue
             parts = set(path.parts)
             if "node_modules" in parts or ".github" in parts:
                 continue
-            if path.name.lower() == "readme.md":
+            basename = path.name.lower()
+            if basename == "readme.md":
                 continue
-            files.append(path)
+            if basename.endswith(".md") or basename in {"index.html", "manifest.json"}:
+                files.append(path)
         return sorted(files)
+
+    def _fix_content_file(self, file_path: Path):
+        basename = file_path.name.lower()
+        if basename in {"index.html", "manifest.json"}:
+            return self._fix_legacy_cdn_file(file_path)
+        return self._fix_markdown_file(file_path)
+
+    @staticmethod
+    def _fix_legacy_cdn_file(file_path: Path):
+        original = file_path.read_text(encoding="utf-8")
+        text, replaced_count = FixomatApp._replace_legacy_cdn_urls(original)
+        fixed_msgs = []
+
+        if replaced_count:
+            occurrence_label = "occurrence" if replaced_count == 1 else "occurrences"
+            fixed_msgs.append(
+                f"Replaced {replaced_count} legacy 'oracle-livelabs.github.io' URL {occurrence_label} "
+                "with 'livelabs.oracle.com/cdn'"
+            )
+
+        if text != original:
+            file_path.write_text(text, encoding="utf-8")
+
+        return fixed_msgs, []
 
     def _fix_markdown_file(self, file_path: Path):
         original = file_path.read_text(encoding="utf-8")
@@ -453,6 +482,10 @@ class FixomatApp:
             file_path.write_text(text, encoding="utf-8")
 
         return fixed_msgs, manual_msgs
+
+    @staticmethod
+    def _replace_legacy_cdn_urls(text: str):
+        return LEGACY_CDN_HOST_RE.subn("livelabs.oracle.com/cdn", text)
 
     @staticmethod
     def _fix_numbered_tabs(text: str):

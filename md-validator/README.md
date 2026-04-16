@@ -4,7 +4,7 @@ A GitHub Action workflow that validates Markdown files in Pull Requests against 
 
 ## Overview
 
-> **Note:** The GitHub workflow compares the pull request head to the PR base commit (`github.event.pull_request.base.sha`), so only Markdown files changed in the PR are validated.
+> **Note:** The GitHub workflow compares the pull request head to the PR base commit (`github.event.pull_request.base.sha`), so only changed `.md`, `index.html`, and `manifest.json` files in the PR are checked.
 
 
 ### New in Version 26.2 / Feb 2026 Update
@@ -18,15 +18,16 @@ The validator scripts and browser QA now share one rule set:
 - Published a new browser runtime (`redwood-hol/development/js/main.26.2.js`) carrying the same QA behavior.
 
 
-This validator ensures that Markdown content submitted in PRs follows the established LiveLabs workshop formatting conventions. It runs automatically on any PR that modifies `.md` files.
+This validator ensures that Markdown content submitted in PRs follows the established LiveLabs workshop formatting conventions. It also checks changed `index.html` and `manifest.json` files for legacy `oracle-livelabs.github.io` URLs that must be replaced with `livelabs.oracle.com/cdn`.
 
 ## Features
 
-- Validates only changed Markdown files (not the entire repository)
+- Validates only changed Markdown files plus changed `index.html` / `manifest.json` files (not the entire repository)
 - Ignores `README.md` files
 - Checks both standard Markdown formatting and LiveLabs-specific syntax
 - Verifies referenced images exist
 - Enforces filename conventions
+- Flags legacy `oracle-livelabs.github.io` URLs in `index.html` and `manifest.json`
 - Provides detailed error messages
 - Generates GitHub Actions summary report
 
@@ -108,11 +109,13 @@ To block PRs that fail validation:
 | Estimated Time | Non-introduction files must have `Estimated Time:` |
 | Workshop Time | `introduction.md` must contain `Estimated Workshop Time:` |
 | Lowercase Images | Image filenames must be lowercase |
+| CDN URLs | `index.html` and `manifest.json` must not contain `oracle-livelabs.github.io`; use `livelabs.oracle.com/cdn` instead |
 
 ### Additional Checks
 
 - **Image Existence**: Referenced images must exist at the specified path
 - **Filename Conventions**: Markdown files must be lowercase with no spaces
+- **Legacy CDN URLs**: Changed `index.html` and `manifest.json` files must replace `oracle-livelabs.github.io` with `livelabs.oracle.com/cdn`
 
 ## Usage
 
@@ -120,36 +123,36 @@ To block PRs that fail validation:
 
 The workflow triggers automatically when:
 - A PR is opened or updated
-- The PR contains changes to `.md` files
+- The PR contains changes to `.md`, `index.html`, or `manifest.json` files
 
 ### Manual (Local Testing)
 
 Test files locally before pushing:
 
 ```bash
-# Validate all markdown files in a directory (recursive)
+# Validate all supported files in a directory (recursive)
 ./.github/scripts/validate-livelabs-markdown.sh /path/to/workshop
 
 # Validate specific files
-./.github/scripts/validate-livelabs-markdown.sh path/to/lab.md another/file.md
+./.github/scripts/validate-livelabs-markdown.sh path/to/lab.md path/to/index.html path/to/manifest.json
 
-# Validate all markdown files in current directory
+# Validate all supported files in current directory
 ./.github/scripts/validate-livelabs-markdown.sh
 ```
 
-The script automatically detects if the argument is a directory and recursively finds all `.md` files within it.
+The script automatically detects if the argument is a directory and recursively finds all `.md`, `index.html`, and `manifest.json` files within it.
 `README.md` files are skipped intentionally.
 
 #### Windows (PowerShell)
 
 ```powershell
-# Validate all markdown files in a directory (recursive)
+# Validate all supported files in a directory (recursive)
 .\.github\scripts\validate-livelabs-markdown.ps1 C:\path\to\workshop
 
 # Validate specific files
-.\.github\scripts\validate-livelabs-markdown.ps1 path\to\lab.md another\file.md
+.\.github\scripts\validate-livelabs-markdown.ps1 path\to\lab.md path\to\index.html path\to\manifest.json
 
-# Validate all markdown files in current directory
+# Validate all supported files in current directory
 .\.github\scripts\validate-livelabs-markdown.ps1
 ```
 
@@ -280,7 +283,7 @@ Edit `.github/scripts/validate-livelabs-markdown.sh` to modify LiveLabs-specific
 
 - Ensure workflow file is in `.github/workflows/`
 - Check that Actions are enabled in repository settings
-- Verify PR contains `.md` file changes
+- Verify PR contains `.md`, `index.html`, or `manifest.json` file changes
 
 ### Script Permission Denied
 
@@ -334,6 +337,7 @@ These are the deployed files that actually run on PRs to the common repository:
 |------|---------|
 | `.github/scripts/validate-livelabs-markdown.sh` | Active Bash validation script |
 | `.github/scripts/fix-livelabs-markdown.sh` | Active auto-fixer script |
+| `_scripts/fixomat/fixomat.py` | Active desktop/UI auto-fixer |
 | `.github/workflows/markdown-lint.yml` | Active GitHub Actions workflow |
 | `.github/workflows/enforce-image-size.yml` | Image size validation workflow |
 | `.markdownlint.json` | Active markdownlint configuration |
@@ -361,16 +365,20 @@ When you need to add or change a validation rule, update these files:
 3. **PowerShell script** (1 location):
    - `md-validator/.github/scripts/validate-livelabs-markdown.ps1`
 
-3. **Documentation** (3 locations):
+4. **Fixomat desktop fixer** (1 location):
+   - `_scripts/fixomat/fixomat.py`
+
+5. **Documentation** (4 locations):
    - `md-validator/README.md` - Update "LiveLabs-Specific Rules" table
    - `sample-livelabs-templates/create-labs/labs/prcheck/prcheck.md` - Update user-facing docs
+   - `_scripts/fixomat/README.md` - Update Fixomat behavior notes when auto-fix coverage changes
    - This maintainer's guide if adding new files
 
-4. **Workflow file** (if changing how checks run):
+6. **Workflow file** (if changing how checks run):
    - `md-validator/.github/workflows/markdown-lint.yml`
    - `.github/workflows/markdown-lint.yml`
 
-5. **Markdownlint config** (if changing standard MD rules):
+7. **Markdownlint config** (if changing standard MD rules):
    - `md-validator/.markdownlint.json`
    - `.markdownlint.json`
 
@@ -407,6 +415,8 @@ cp md-validator/.markdownlint.json .markdownlint.json
 | Objectives section | `validate-livelabs-markdown.sh` (Rule 11) |
 | Estimated Time | `validate-livelabs-markdown.sh` (Rules 12-13) |
 | Lowercase image filenames | `validate-livelabs-markdown.sh` (Rule 14) |
+| Legacy GitHub CDN URLs in `index.html` / `manifest.json` | `validate-livelabs-markdown.sh` (special-case file check) |
+| Legacy GitHub CDN URLs auto-fix in `index.html` / `manifest.json` | `_scripts/fixomat/fixomat.py` |
 | Image existence check | `markdown-lint.yml` workflow |
 | Filename conventions | `markdown-lint.yml` workflow |
 | Image size validation | `enforce-image-size.yml` workflow |
@@ -426,6 +436,8 @@ Internal use for Oracle LiveLabs workshops.
 
 ## Changelog
 
+- **Apr 2026**
+  - Added validation for changed `index.html` and `manifest.json` files so legacy `oracle-livelabs.github.io` URLs are rejected and must be replaced with `livelabs.oracle.com/cdn`.
 - **Feb 2026**
   - Added inline HTML detection and Task indentation rules to both bash and PowerShell scripts.
   - Removed gerund checks to match the unified QA guidance.
