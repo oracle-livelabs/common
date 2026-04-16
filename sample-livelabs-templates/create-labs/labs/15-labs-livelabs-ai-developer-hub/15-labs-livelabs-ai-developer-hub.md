@@ -46,7 +46,7 @@ In this lab, you will:
    - `freesql.zip` for FreeSQL workflow support
    - `livelabs-gamification.zip` for quiz workflows
    - `livelabs-industry-converter.zip` for industry-conversion workflows
-   - `PROMPT-CHEAT-SHEET-livelabs-workshop-author-v2.md` for author guidance
+   - `oracle-db-skills-main.zip` for library of 100+ guides for working with Oracle Database
 
 ## Task 3: Use the Hub as Your Next Step
 
