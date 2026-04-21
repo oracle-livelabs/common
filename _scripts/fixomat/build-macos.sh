@@ -22,10 +22,13 @@ ARCH=$(uname -m)
 if [ "$ARCH" = "arm64" ]; then
     echo "Detected: Apple Silicon (arm64)"
     OXIPNG_ARCH="aarch64-apple-darwin"
+    ZIP_ARCH="arm"
 else
     echo "Detected: Intel (x86_64)"
     OXIPNG_ARCH="x86_64-apple-darwin"
+    ZIP_ARCH="x86_64"
 fi
+ZIP_NAME="LiveLabs-Fixomat-2000-macOS-${ZIP_ARCH}.zip"
 echo ""
 
 # Check for Python with tkinter
@@ -133,15 +136,39 @@ elif [ -f "$APP_CONTENTS/Frameworks/oxipng" ]; then
 fi
 
 if [ -n "$BUNDLED_OXIPNG" ]; then
+    ZIP_PATH="$DIST_DIR/$ZIP_NAME"
+    TEST_EXTRACT_DIR="$BUILD_DIR/zip-test"
+
+    echo "Creating distributable ZIP..."
+    rm -f "$ZIP_PATH"
+    rm -rf "$TEST_EXTRACT_DIR"
+
+    ditto -c -k --keepParent --norsrc "$DIST_DIR/$APP_NAME.app" "$ZIP_PATH"
+
+    echo "Verifying distributable ZIP..."
+    unzip -q -o "$ZIP_PATH" -d "$TEST_EXTRACT_DIR"
+
+    if find "$TEST_EXTRACT_DIR" -path '*/__MACOSX/*' -print | grep -q .; then
+        echo "ERROR: ZIP contains __MACOSX metadata entries."
+        exit 1
+    fi
+
+    if ! codesign --verify --deep --strict "$TEST_EXTRACT_DIR/$APP_NAME.app" >/dev/null 2>&1; then
+        echo "ERROR: Extracted app from ZIP failed code signature verification."
+        exit 1
+    fi
+
     echo "========================================"
     echo "  Build Complete!"
     echo "========================================"
     echo ""
     echo "Output: $DIST_DIR/$APP_NAME.app"
+    echo "ZIP:    $ZIP_PATH"
     echo ""
     echo "Bundled components verified:"
     echo "  - $APP_NAME.app: OK"
     echo "  - oxipng: OK (found at: $BUNDLED_OXIPNG)"
+    echo "  - distributable ZIP: OK"
     echo ""
 else
     echo "========================================"
