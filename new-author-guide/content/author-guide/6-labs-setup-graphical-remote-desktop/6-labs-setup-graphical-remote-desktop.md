@@ -1,0 +1,683 @@
+# Setup Graphical Remote Desktop
+
+## Introduction
+This lab shows you how to deploy and configure noVNC Graphical Remote Desktop on an Oracle Enterprise Linux (OEL) instance before capturing the custom image.
+
+    > NOTE: Oracle Enterprise Linux versions prior to version 8 are officially deprecated and no longer receive support or updates from the Oracle Linux team. Upgrade to the latest release to ensure security, stability, and ongoing technical assistance.
+
+Estimated Time: x
+
+### Objectives
+- Configure image for preserved static hostname
+- Deploy NoVNC Remote Desktop
+- Configure Desktop
+- Optimize Browser Settings
+- Create systemd services for Oracle AI Database(s) and WebLogic (Optional)
+
+### Prerequisites
+This lab assumes you have:
+- An Oracle Enterprise Linux 8 (OEL) instance that meets marketplace publishing requirements. An instance provisioned from a stock OCI image for EL8 should meet these requirements and run successfully.
+
+## Task 1: Configure and Enforce Static Hostname
+Follow these steps to establish a unique static hostname that will be enforced on any instances created from the image. Perform this task before installing any product that hardcodes the hostname to various config/settings (e.g., DB Listener, WebLogic).
+
+1. Create a local SSH connection to your instance as user "opc". See [detailed instructions](https://docs.oracle.com/en-us/iaas/Content/GSG/Tasks/testingconnection.htm).
+
+2. Run the following command to log in as the root user.
+
+    ```
+    <copy>
+    sudo su - || (sudo sed -i -e 's|root:x:0:0:root:/root:.*$|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd && sudo su -)
+
+    </copy>
+    ```
+
+3. Download setup artifacts and run *setup-firstboot.sh*.
+
+    ```
+    <copy>
+    cd /tmp
+    rm -rf ll-setup
+    wget https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/setup-novnc-livelabs.zip -O setup-novnc-livelabs.zip
+    unzip -o  setup-novnc-livelabs.zip -d ll-setup
+    cd ll-setup/
+    chmod +x *.sh .*.sh
+    ./setup-firstboot.sh && exit
+    </copy>
+    ```
+
+    The script prompts for the following inputs:
+    - (1) Do you want to keep and preserve the current hostname? [Y/N]. The current hostname is shown for confirmation.
+    - (2) If Y, "Press *ENTER* to accept the default *holserv1* or type your preferred host shortname (not the FQDN; must be lowercase and alphanumeric):"
+    - (3) Do you have additional host aliases, virtualhost names, or FQDNs required for labs using this instance? [Y/N]
+    - (4) If Y, "Enter each additional host alias, FQDN, or virtualhost name (separated by spaces, e.g., *serv1 serv1.demo.com*)"
+
+4. Review the script output.
+5. To add additional entries to the */etc/hosts* file whenever an instance is created from the image, edit */root/bootstrap/firstboot.sh* and add them under the ***Add Static Name to /etc/hosts*** block.
+
+    In the example below, the following customizations are added to a setup:
+    - 3 additional host aliases:  *myapp*, *app1*, and *hr.demo.com*
+    - 3 additional external host entries to "/etc/hosts"
+
+    ```
+    <copy>
+    sudo cat /root/bootstrap/firstboot.sh
+    </copy>
+    ```
+
+    ![Image](./images/novnc-firstboot-1.png " ")
+
+    This customization resulted in the following */etc/hosts* file.
+
+    ```
+    <copy>
+    sudo cat /etc/hosts
+    </copy>
+    ```
+
+    ![Image](./images/novnc-firstboot-2.png " ")
+
+## Task 2: Deploy noVNC
+1. From the same session started in the previous task, log in again as root via SUDO and run the latest setup script.
+
+    ```
+    <copy>
+    sudo su -
+
+    </copy>
+    ```
+
+    ```
+    <copy>
+    cd /tmp/ll-setup/
+    ./setup-novnc-livelabs.sh
+
+    </copy>
+    ```
+
+2. When prompted for an OS user to configure your remote desktop, press enter to use the default user: *oracle*.
+
+3. Once the script finishes, you'll see two URLs in the output. Test that both launch your remote desktop.
+
+    ![noVNC URLs](./images/novnc-urls.png)
+
+Upon successful validation, proceed to the next lab.
+
+
+## Task 3: Enterprise Linux 8 (EL8)
+
+1. Launch your web browser to the URL provided in output from above execution, then *Next*
+
+    E.g.
+
+    ```
+    <copy>http://[your instance public-ip address]/livelabs/vnc.html?password=LiveLabs.Rocks_99&resize=scale&quality=9&autoconnect=true&reconnect=true</copy>
+    ```
+
+    ![noVNC english](./images/novnc-landing-2a.png " ")
+
+2. Click *Next*
+
+    ![noVNC english keyboard](./images/novnc-landing-2b.png " ")
+
+3. Click *Next*
+
+    ![noVNC privacy policy](./images/novnc-landing-2c.png " ")
+
+4. Click *Skip*
+
+    ![noVNC connect your accounts](./images/novnc-landing-2d.png " ")
+
+5. Click *Start Using Oracle Linux Server*
+
+    ![noVNC Linux Server](./images/novnc-landing-2e.png " ")
+
+6. Click on *X* to close the *Getting Started* landing page
+
+    ![noVNC getting started](./images/novnc-landing-2f.png " ")
+
+
+7. Click on *Activities* >> *Terminal* to launch the Terminal, then run the following to initialize LiveLabs browser windows.
+
+    ```
+    <copy>
+    $HOME/.livelabs/init_ll_windows.sh
+    </copy>
+    ```
+
+    ![noVNC test browser windows](./images/novnc-test-browser-windows-1.png " ")
+    ![noVNC test browser windows terminal](./images/novnc-test-browser-windows-2.png " ")
+
+
+8. Keep *Make Google Chrome the default browser* checked, uncheck *Automatic Usage Statistics & Crash reporting* and click *OK*. This opens the first browser session on the left preloaded with a sample workshop guide.
+
+    ![Image](./images/novnc-test-browser-windows-3.png " ")
+
+9. Keep *Make Google Chrome the default browser* checked, uncheck *Automatic Usage Statistics & Crash reporting* and click *OK*. 
+
+    ![Image](./images/novnc-custom-chrome-1a.png " ")
+
+10. A Google Chrome sign-in window will then appear. Close that window.
+
+    ![Google Chrome sign-in window](./images/chrome-pop-up.png)
+
+11. On the right, you'll then see the second browser session preloaded with two tabs. Click on *Accept All*
+
+    ![Image](./images/novnc-custom-chrome-2a.png " ")
+
+12. Close all browser windows opened.
+
+13. Click on *Activities* >> *Google Chrome* to launch, then on *Get Started*. On the next 3 pages, click *Skip*, and finally click *No Thanks*.
+
+    ![noVNC launch Chrome](./images/novnc-launch-chrome.png " ")
+    ![noVNC custom Chrome](./images/novnc-custom-chrome-4a.png " ")
+    ![noVNC custom Chrome background](./images/novnc-custom-chrome-5a.png " ")
+    ![noVNC custom Chrome](./images/novnc-custom-chrome-6a.png " ")
+    ![noVNC custom Chrome main page](./images/novnc-custom-chrome-7a.png " ")
+
+14. Close all browser windows opened.
+
+## Task 4: Enterprise Linux 9 (EL9)
+1. Launch the terminal.
+
+    ![Terminal Icon](./images/launch-terminal.png)
+
+2. Run the following command to launch the LiveLabs browser windows.
+    ```
+    <copy>
+    $HOME/.livelabs/init_ll_windows.sh
+    </copy>
+    ```
+
+3. Keep *Make Google Chrome the default browser* checked, uncheck *Automatic Usage Statistics & Crash reporting* and click *OK*. 
+    ![Image](./images/initialize-livelabs-window.png)
+
+4. Don't sign in to Google Chrome.
+    ![Image](./images/chrome-sign-in.png)
+
+5. The Oracle website will then appear. Repeat Step 3, and the LiveLabs window will appear as well.
+    ![Image](./images/chrome-windows.png)
+
+6. Close all browser windows opened.
+
+## Task 5: Optimize Desktop for LiveLabs
+
+1. If the *`desktop_app1_url`* and/or *`desktop_app2_url`* are applicable to the workshop, update *`$HOME/.livelabs/init_ll_windows.sh`* with the correct URLs for those variables and run it from a terminal session in the desktop to validate before proceeding to custom image creation. You can also update the *`desktop_guide_url`* value.
+
+    ```
+    <copy>
+    vi $HOME/.livelabs/init_ll_windows.sh
+    </copy>
+    ```
+
+    > *Note:* The example below borrows from the *Oracle WebLogic Kubernetes ToolKit UI* Workshop where the three URLs are updated to the following
+
+    - *`desktop_guide_url`*="https://oracle-livelabs.github.io/multicloud/weblogic-toolkit-ui/workshops/desktop"
+    - *`desktop_app1_url`*="http://localhost:7001/console"
+    - *`desktop_app2_url`*="https://container-registry.oracle.com"
+
+    ![Image](./images/novnc-test-desktop-url-1a.png " ")
+    ![Image](./images/novnc-test-desktop-url-1b.png " ")
+    ![Image](./images/novnc-test-desktop-url-1c.png " ")
+
+2. Update the *vncserver* startup script to add dependencies on primary services supporting web apps behind *`desktop_app1_url`* and/or *`desktop_app2_url`*. This prevents premature web browser startup leading to *404-page-not-found-error* when the requested app is not yet ready.
+
+    - Edit `/etc/systemd/system/vncserver_${appuser}@\:1.service` and append the dependent services at the end of the line starting with **After=**
+    - Reload systemd daemon
+    - Restart vncserver via systemctl
+
+    > *Note:* The example below is from the *EM Fundamentals* workshop. Substitute *oracle-emcc.service* in the block below with the correct service name relevant to your workshop before running it.
+
+    ```
+    <copy>
+    sudo sed -i "/^After=/ s/$/ oracle-emcc.service/" /etc/systemd/system/vncserver_$(whoami)@\:1.service
+    sudo systemctl daemon-reload
+    cat /etc/systemd/system/vncserver_$(whoami)@\:1.service |grep After
+    </copy>
+    ```
+
+    ![Image](./images/add-bookmarks-08.png " ")
+
+    - Verify the output as shown above and confirm that the service dependency was successfully added.
+
+3. Close all browser windows.
+
+4. Run the following command.
+
+    ```
+    <copy>
+    cat $HOME/.bash_profile
+    </copy>
+    ```
+5. Review the output and confirm that the following code block is present. 
+    ```
+    # Get the aliases and functions
+    if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+    fi
+    ```
+6. If the code block is not present, run the following command and add the code block from above. The file should then look like the following:
+
+    ```
+    <copy>
+    vi $HOME/.bash_profile
+    </copy>
+    ```
+
+    ```
+    # .bash_profile
+
+    # Get the aliases and functions
+    if [ -f ~/.bashrc ]; then
+    	    . ~/.bashrc
+    fi
+
+    # User specific environment and startup programs
+    . ~/.set-env.sh
+    ```
+Once the code block has been added, type ":wq" to save the file and exit the vi editor.
+
+## Task 6: Create Auto-Start SYSTEMD Services for Oracle AI Databases or WebLogic Domain (Optional)
+
+If your workshop includes one or more Oracle AI Databases or WebLogic Server, proceed as indicated below to set up SYSTEMD services. This allows automatic management of the UP/DOWN state of these processes. As a result, workshop attendees will get started faster as these processes will be up and running post-provisioning before they connect to the instance.
+
+### **Oracle AI Database**
+1. Run the following command. In the output, ensure that the switch is set to "*Y*" for any entry that will be managed by the service.
+
+    ```
+    <copy>
+    cat /etc/oratab
+    </copy>
+    ```
+
+    ![Image](./images/add-db-service.png " ")
+
+2. Run the following block to create the services:
+
+    - *oracle-database.service* - Manages all databases with an in entry in */etc/oratab* set to *Y*
+    - *oracle-db-listener.service* - Manages additional listeners beside *1521* and with an entry in *~oracle/scripts/livelabs/listener-tab* set to *Y*
+
+    ```
+    <copy>
+    cd /tmp
+    rm -rf ll_tmp
+    wget https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/create-services-multi-db.zip -O create-services-multi-db.zip
+    unzip -o  create-services-multi-db.zip -d ll_tmp
+    cd ll_tmp/
+    chmod +x *.sh .*.sh
+    ./create-services-multi-db.sh
+    </copy>
+    ```
+
+    ![Create Database Services](./images/create-db-multi-services.png "Create Database Services")
+
+3. For any additional DB listener other than *LISTENER* or using any other name but port *1521*, proceed as indicated in the output from the above execution to set the flag to "*Y*"
+
+    ```
+    e.g.
+    <copy>
+    vi /home/oracle/scripts/livelabs/listener-tab
+    </copy>
+    ```
+
+    ![Image](./images/update-db-listener-service.png " ")
+
+4. Restart *oracle-db-listener.service*
+
+    ```
+    <copy>
+    systemctl restart oracle-db-listener
+    systemctl status oracle-db-listener
+    </copy>
+    ```
+
+    ![Image](./images/check-db-listener-service.png " ")
+
+### **WebLogic Domain**
+1. Set the *`$DOMAIN_HOME`* environment variable or run the script *`$DOMAIN_HOME/bin/setDomainEnv.sh`*.
+
+    ```
+    e.g.
+    <copy>
+    export DOMAIN_HOME=/home/opc/Oracle/Middleware/Oracle_Home/user_projects/domains/test_domain
+    </copy>
+    ```
+
+2. Run the following block to create and validate *weblogic.service*.
+
+    ```
+    <copy>
+    cd /tmp
+    rm -rf ll_tmp
+    wget https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/create-services-weblogic.zip -O create-services-weblogic.zip
+    unzip -o  create-services-weblogic.zip -d ll_tmp
+    cd ll_tmp/
+    chmod +x *.sh .*.sh
+    ./create-services-weblogic.sh
+    </copy>
+    ```
+
+You may now proceed to the next lab.
+
+## Appendix 1: Configure the Terminal for Auto-Start on VNC Startup
+
+1. As the oracle user, run the following command to create the startup file. 
+
+    ```
+    <copy>
+    cat >$HOME/.config/autostart/terminal.desktop <<EOB
+    [Desktop Entry]
+    Type=Application
+    Exec=gnome-terminal --geometry=95x49+1020+45
+    Hidden=false
+    NoDisplay=false
+    X-GNOME-Autostart-enabled=true
+    Name[en_US]=Terminal
+    Name=Terminal
+    Comment[en_US]=Launch Terminal on VNC Startup
+    Comment=Launch Terminal on VNC Startup
+    EOB
+    </copy>
+    ```
+2. Restart *vncserver* to test.
+
+    ```
+    <copy>sudo systemctl restart websockify.service vncserver@:1.service nginx.service</copy>
+
+    ```
+
+3. Wait for *Auto reconnect* to return to the remote desktop.
+
+    ![Image](./images/novnc-startup-prog-3a.png " ")
+
+    > *Note:* Don't worry if the browser windows are not loaded as expected on VNC startup at the moment. The required instance metadata is not yet present on the host but will be injected at provisioning to cover the following:
+
+    - `DESKTOP_GUIDE_URL` - *required*
+    - `DESKTOP_APP1_URL` - optional
+    - `DESKTOP_APP2_URL` - optional
+
+
+
+
+
+## Appendix 2: Configure Additional Desktop Apps for Auto-Start on VNC Startup
+LiveLabs compute instances are password-less and only accessible optionally via SSH keys. As a result, it's important to adjust session settings to ensure a better user experience. By default, the dedicated LiveLabs custom desktop application *Get Started with your Workshop* is set up to automatically launch web browser sessions on:
+
+- Left half of the screen preloaded with the workshop guide
+- Right half of the screen preloaded with up to 2 tabs with relevant web apps if applicable
+
+If there are no web apps used in the workshop, configure *Startup Programs* for another application such as *SQL Developer* to open on the right next to the workshop guide on *VNC* startup.
+
+1. Create startup file  "*`$HOME/.config/autostart/<app-name>.desktop`*" in plaintext with the following inputs:
+
+    - [Desktop Entry]
+    - Type=Application
+    - Exec=*`<command or script path>`*
+    - Hidden=false
+    - NoDisplay=false
+    - X-GNOME-Autostart-enabled=true
+    - Name[en_US]=*`<Application Name>`*
+    - Name=*`<Application Name>`*
+    - Comment[en_US]=*`<Free Text Comment of your choice>`*
+    - Comment=*`<Free Text Comment of your choice>`*
+
+    The example below adds an AutoStart file for SQLDeveloper currently installed on the instance.
+
+
+    ```
+    <copy>
+    cat >$HOME/.config/autostart/sqldeveloper.desktop <<EOB
+    [Desktop Entry]
+    Type=Application
+    Exec=sqldeveloper
+    Hidden=false
+    NoDisplay=false
+    X-GNOME-Autostart-enabled=true
+    Name[en_US]=SQL Developer
+    Name=SQL Developer
+    Comment[en_US]=Launch SQL Developer on VNC Startup
+    Comment=Launch SQL Developer on VNC Startup
+    EOB
+    </copy>
+    ```
+
+2. Restart *vncserver* to test.
+   
+    ```
+    <copy>sudo systemctl restart websockify.service vncserver@:1.service nginx.service</copy>
+
+    ```
+
+3. Wait for *Auto reconnect* to return to the remote desktop.
+
+    ![Image](./images/novnc-startup-prog-3a.png " ")
+
+    > *Note:* Don't worry if the browser windows are not loaded as expected on VNC startup at the moment. The required instance metadata is not yet present on the host but will be injected at provisioning to cover the following:
+
+    - `DESKTOP_GUIDE_URL` - *required*
+    - `DESKTOP_APP1_URL` - optional
+    - `DESKTOP_APP2_URL` - optional
+
+    The following is an example from the *Boost Analytics Performance with Oracle In-Memory Database* workshop
+
+    ![Image](./images/novnc-startup-prog-6a.png " ")
+
+
+## Appendix 3: Enable VNC Password Reset and Workshop Guide and WebApps URLs Injection for Each Instance Provisioned from the Image
+Actions in this Appendix are not meant to be performed on the image. They are intended as guidance for workshop developers writing Terraform scripts to provision instances from an image configured as prescribed in this guide.
+
+Update your Terraform/ORM stack with the tasks below to enable VNC password reset and add workshop URLs for each VM provisioned from the image.
+
+1. Add provider *random* to *main.tf* or any other *TF* file in your configuration if you are not using *main.tf*.
+
+    ```
+    <copy>
+    terraform {
+      required_version = "~> 1.1.0"
+    }
+
+    provider "oci" {
+      tenancy_ocid = var.tenancy_ocid
+      region       = var.region
+    }
+
+    provider "random" {}
+    </copy>
+    ```
+2. Add the following variables to *variables.tf* and *schema.yaml*.
+
+    - `desktop_guide_url`
+    - `desktop_app1_url`
+    - `desktop_app2_url`
+
+    The example below is from the *DB Security - Key Vault* workshop
+
+    - variables.tf
+
+    ```
+    <copy>
+    variable "desktop_guide_url" {
+      default = "https://oracle-livelabs.github.io/security/database/advanced/workshops/desktop-key-vault"
+    }
+
+    variable "desktop_app1_url" {
+      default = "https://kv"
+    }
+
+    variable "desktop_app2_url" {
+      default = "https://dbsec-lab:7803/em"
+    }
+    </copy>
+    ```
+
+    - schema.yaml
+
+    ```
+    <copy>
+    variableGroups:
+      - title: General Configuration
+        visible: false
+        variables:
+        - desktop_guide_url
+        - desktop_app1_url
+        - desktop_app2_url
+
+    desktop_guide_url:
+      type: text
+      required: true
+      title: "Workshop Guide"
+      description: "Workshop Guide on noVNC Desktop"
+
+    desktop_app1_url:
+      type: text
+      required: false
+      title: "Application URL 1"
+      description: "Application URL 1 on noVNC Desktop"
+
+    desktop_app2_url:
+      type: text
+      required: false
+      title: "Application URL 2"
+      description: "Application URL 2 on noVNC Desktop"
+      </copy>
+      ```
+
+3. Add a *random* resource in your *instance.tf* or any *TF* of your choice to generate a 10-character random password with a mix of number/uppercase/lowercase characters.
+
+    ```
+    <copy>
+    resource "random_string" "vncpwd" {
+      length  = 10
+      upper   = true
+      lower   = true
+      numeric = true
+      special = false
+    }
+    </copy>
+    ```
+
+4. Add the *`random_string`* result and the URL variables to the metadata property for resource *`oci_core_instance`*. This stores the random value generated above as part of the instance metadata and uses it on first boot to reset the VNC password. The URLs will preload the workshop guide and web apps on the remote desktop on VNC startup.
+
+    ```
+    <copy>
+    metadata = {
+      vncpwd            = random_string.vncpwd.result
+      desktop_guide_url = var.desktop_guide_url
+      desktop_app1_url  = var.desktop_app1_url
+      desktop_app2_url  = var.desktop_app2_url
+    }
+    </copy>
+    ```
+
+5. Add the entry *`remote_desktop`* to your *output.tf* to provide the single-click URL for remote desktop access with auto-resizable window and auto-login. Replace [instance-name] from the snippet below with your real instance name as provided in the resource *`oci_core_instance`* block of *instance.tf*.
+
+    ```
+    <copy>
+    output "remote_desktop" {
+      value = format("http://%s%s%s%s",
+        oci_core_instance.[instance-name].public_ip,
+        "/livelabs/index.html?password=",
+        random_string.vncpwd.result,
+        "&resize=scale&autoconnect=true&quality=9&reconnect=true"
+      )
+    }
+    </copy>
+    ```
+6. Add output entry *`remote_desktop`* to your *schema.yaml* file.
+
+    ```
+    <copy>
+    outputGroups:
+      - title: Resources Access Information
+        outputs:
+          - ${remote_desktop}
+
+    outputs:
+      remote_desktop:
+        type: string
+        title: Remote Desktop
+        visible: true
+
+    </copy>
+    ```
+
+7. Add an *ingress* rule to your *network.tf* to enable remote access to port *6080* when the VCN is created.
+
+    ```
+    <copy>
+    ingress_security_rules {
+      protocol = "6"
+      source   = "0.0.0.0/0"
+      tcp_options {
+        min = 6080
+        max = 6080
+      }
+    }
+
+    </copy>
+    ```
+
+8. Test your ORM Stack and verify the output for *`remote_desktop`* as shown below.
+
+    ![Image](./images/orm-output.png " ")
+
+9. From the *Application Information Tab* as shown above, click on the single-click URL to test it.
+
+    ![Image](./images/orm-single-click-url.png " ")
+
+**Note:** Your source image instance is now configured to generate a random VNC password for every instance created from it, provided that the provisioning requests include the needed metadata storing the random string.
+
+
+## Appendix 4: Remove Guacamole from a Previously Configured LiveLabs Image
+
+Prior to noVNC, some images were configured with *Apache Guacamole*. If this applies to your image, proceed as detailed below to remove it before deploying noVNC.
+
+1. As root, create and run script */tmp/remove-guac.sh*.
+
+    ```
+    <copy>
+    sudo su - || (sudo sed -i -e 's|root:x:0:0:root:/root:.*$|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd && sudo su -)
+
+    </copy>
+    ```
+
+    ```
+    <copy>
+    cat > /tmp/remove-guac.sh <<EOF
+    #!/bin/sh
+    # Copyright (c) 2019 Oracle and/or its affiliates. All rights reserved.
+
+    cd /etc/systemd/system
+
+    for i in `ls vncserver_*.service`
+      do
+    systemctl stop $i
+    done
+
+    cd /tmp
+
+    systemctl disable guacd tomcat
+    systemctl stop guacd tomcat
+
+    yum -y remove \
+    	guacd \
+        libguac \
+        libguac-client-ssh \
+        libguac-client-vnc \
+    	tomcat \
+        tomcat-admin-webapps \
+        tomcat-webapps
+    EOF
+    chmod +x /tmp/remove-guac.sh
+    /tmp/remove-guac.sh
+
+    rm -rf /etc/guac*
+    rm -f /tmp/remove-guac.sh
+    rm -rf /opt/guac*
+    rm -rf /etc/init.d/guac*
+    cd
+    </copy>
+    ```
+
+## Acknowledgements
+* **Last Updated By/Date** - LiveLabs Team, January 2026

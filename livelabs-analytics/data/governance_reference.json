@@ -1,0 +1,320 @@
+{
+  "publish_state_policy": {
+    "active_publish_statuses": [
+      "published"
+    ],
+    "active_publish_types": [
+      "private",
+      "public"
+    ],
+    "excluded_publish_types": [
+      "disabled",
+      "event"
+    ],
+    "excluded_non_workshop_publish_types": [
+      "event"
+    ],
+    "ranking_scope": "default ranked outputs use the active enabled workshop portfolio only"
+  },
+  "stale_policy": {
+    "stale_after_months": 12,
+    "definition": "Any content older than 12 months is treated as stale."
+  },
+  "top_performer_formula": {
+    "formula": "0.45 * recent_views_12m_content_percentile + 0.35 * recent_views_90d_content_percentile + 0.20 * freshness_score",
+    "weights": {
+      "recent_views_12m_content_percentile": 0.45,
+      "recent_views_90d_content_percentile": 0.35,
+      "freshness_score": 0.2
+    },
+    "score_meaning": "Higher is better. A higher score means stronger demand plus fresher content inside the same workshop or sprint population.",
+    "variables": [
+      {
+        "name": "recent_views_12m_content_percentile",
+        "meaning": "Long-run demand compared with the same content type."
+      },
+      {
+        "name": "recent_views_90d_content_percentile",
+        "meaning": "Recent demand compared with the same content type."
+      },
+      {
+        "name": "freshness_score",
+        "meaning": "Reward for content updated in the last 12 months. Older content gets a smaller boost."
+      }
+    ]
+  },
+  "retire_score_formula": {
+    "formula": "40 * demand_pressure + 30 * staleness_score + 20 * replacement_support_score + 10 * no_owner_score",
+    "weights": {
+      "low_demand_score": 40,
+      "staleness_score": 30,
+      "superseded_score": 20,
+      "no_owner_score": 10
+    },
+    "score_meaning": "Higher is worse. A higher score means the content item should be reviewed sooner for refresh or retirement.",
+    "variables": [
+      {
+        "name": "demand_pressure",
+        "meaning": "Mostly 12-month demand, with a smaller 90-day demand check so short-term drops also count."
+      },
+      {
+        "name": "staleness_score",
+        "meaning": "How old the last meaningful content update is. Anything older than 12 months is stale."
+      },
+      {
+        "name": "replacement_support_score",
+        "meaning": "How strong the replacement path is. Confirmed replacements count more than review-only replacements."
+      },
+      {
+        "name": "no_owner_score",
+        "meaning": "Extra pressure when nobody clearly owns the workshop."
+      }
+    ]
+  },
+  "low_demand_thresholds": [
+    {
+      "band": "strong_low_demand",
+      "rule": "views_12m_percentile <= 10, with extra pressure if recent_views_90d < 25",
+      "score": 1.0
+    },
+    {
+      "band": "low_demand",
+      "rule": "views_12m_percentile <= 25",
+      "score": 0.7
+    },
+    {
+      "band": "watch",
+      "rule": "views_12m_percentile <= 40",
+      "score": 0.3
+    },
+    {
+      "band": "not_low_demand",
+      "rule": "views_12m_percentile > 40",
+      "score": 0.0
+    }
+  ],
+  "staleness_thresholds": [
+    {
+      "band": "critical",
+      "rule": "months_since_update >= 24",
+      "score": 1.0
+    },
+    {
+      "band": "very_stale",
+      "rule": "months_since_update >= 18",
+      "score": 0.75
+    },
+    {
+      "band": "stale",
+      "rule": "months_since_update > 12",
+      "score": 0.45
+    },
+    {
+      "band": "fresh",
+      "rule": "months_since_update <= 12",
+      "score": 0.0
+    }
+  ],
+  "replacement_thresholds": [
+    {
+      "replacement_exists": "true",
+      "score_band": ">= 72",
+      "governance_use": "retire-now support"
+    },
+    {
+      "replacement_exists": "review",
+      "score_band": "60-71.99",
+      "governance_use": "review before retire-now"
+    },
+    {
+      "replacement_exists": "false",
+      "score_band": "< 60",
+      "governance_use": "no clear retire-now support"
+    }
+  ],
+  "replacement_formula": {
+    "formula": "0.55 * content_similarity + 0.15 * category_similarity + 0.15 * recency_similarity + 0.10 * level_similarity + 0.05 * title_similarity",
+    "weights": {
+      "content_similarity": 0.55,
+      "category_similarity": 0.15,
+      "recency_similarity": 0.15,
+      "level_similarity": 0.1,
+      "title_similarity": 0.05
+    },
+    "score_meaning": "Higher is better. A higher score means the candidate is a stronger replacement match.",
+    "availability_rules": [
+      "Disabled rows are excluded.",
+      "Event rows are excluded.",
+      "Candidates without current content or repo evidence are excluded.",
+      "Only candidates from the same content type are compared."
+    ],
+    "content_source_order": [
+      "actual markdown content from live GitHub when available",
+      "actual markdown content from the local repo mirror",
+      "metadata-only fallback when content could not be loaded"
+    ]
+  },
+  "date_sync_policy": {
+    "green": "Dates match at the file precision shown in the acknowledgement section.",
+    "yellow": "Dates differ, but by 12 months or less.",
+    "red": "Dates differ by more than 12 months."
+  },
+  "top_to_retire_rules": [
+    {
+      "version": "strict_v1",
+      "description": "retire-now content item: high retirement score, confirmed replacement, very low demand, updated more than 24 months ago, and published more than 30 months ago",
+      "min_retire_score": 70,
+      "replacement_states": [
+        "true"
+      ],
+      "min_months_since_update": 24,
+      "min_age_months": 30,
+      "views_12m_percentile_max": 10,
+      "views_90d_max": 25,
+      "action_readiness": "retire_now_strict"
+    },
+    {
+      "version": "weighted_v2",
+      "description": "first retire-now fallback: lower the score bar slightly but still require confirmed replacement plus the strict stale and age gates",
+      "min_retire_score": 60,
+      "replacement_states": [
+        "true"
+      ],
+      "min_months_since_update": 24,
+      "min_age_months": 30,
+      "views_12m_percentile_max": 10,
+      "views_90d_max": 25,
+      "action_readiness": "retire_now_weighted"
+    },
+    {
+      "version": "weighted_v3",
+      "description": "second retire-now fallback: allow confirmed or review replacement, keep a high score, and relax stale age to 18 months",
+      "min_retire_score": 60,
+      "replacement_states": [
+        "review",
+        "true"
+      ],
+      "min_months_since_update": 18,
+      "min_age_months": 24,
+      "views_12m_percentile_max": 10,
+      "views_90d_max": 25,
+      "action_readiness": "validate_replacement_then_retire"
+    },
+    {
+      "version": "weighted_v4",
+      "description": "third retire-now fallback: broaden low-demand slightly, allow confirmed or review replacement, and require stale content older than 12 months",
+      "min_retire_score": 50,
+      "replacement_states": [
+        "review",
+        "true"
+      ],
+      "min_months_since_update": 12,
+      "min_age_months": 24,
+      "views_12m_percentile_max": 25,
+      "views_90d_max": 50,
+      "action_readiness": "validate_replacement_then_retire"
+    },
+    {
+      "version": "weighted_v5",
+      "description": "fourth retire-now fallback: keep retirement pressure visible with stale content older than 12 months, broader low-demand thresholds, and confirmed or review replacement",
+      "min_retire_score": 40,
+      "replacement_states": [
+        "review",
+        "true"
+      ],
+      "min_months_since_update": 12,
+      "min_age_months": 18,
+      "views_12m_percentile_max": 40,
+      "views_90d_max": 75,
+      "action_readiness": "validate_replacement_then_retire"
+    },
+    {
+      "version": "weighted_v6",
+      "description": "final retire-now filler: include stale low-demand content older than 12 months even when replacement still needs human confirmation",
+      "min_retire_score": 20,
+      "replacement_states": [
+        "false",
+        "review",
+        "true",
+        "unknown"
+      ],
+      "min_months_since_update": 12,
+      "min_age_months": 12,
+      "views_12m_percentile_max": 50,
+      "views_90d_max": 150,
+      "action_readiness": "confirm_replacement_or_obsolescence"
+    }
+  ],
+  "top_retire_candidate_rules": [
+    {
+      "version": "candidate_v1",
+      "description": "high-risk content item: strong retirement score, low demand, replacement path, and content older than 18 months",
+      "min_retire_score": 70,
+      "replacement_states": [
+        "review",
+        "true"
+      ],
+      "min_months_since_update": 18,
+      "min_age_months": 24,
+      "views_12m_percentile_max": 10,
+      "views_90d_max": 25,
+      "action_readiness": "retire_candidate_prioritized"
+    },
+    {
+      "version": "candidate_v2",
+      "description": "at-risk content item: strong score, low demand, replacement path, and stale content older than 12 months",
+      "min_retire_score": 60,
+      "replacement_states": [
+        "review",
+        "true"
+      ],
+      "min_months_since_update": 12,
+      "min_age_months": 24,
+      "views_12m_percentile_max": 25,
+      "views_90d_max": 50,
+      "action_readiness": "retire_candidate_review_queue"
+    },
+    {
+      "version": "candidate_v3",
+      "description": "moderate-risk content item: moderate score, low demand, replacement path, and stale content older than 12 months",
+      "min_retire_score": 40,
+      "replacement_states": [
+        "review",
+        "true"
+      ],
+      "min_months_since_update": 12,
+      "min_age_months": 18,
+      "views_12m_percentile_max": 40,
+      "views_90d_max": 75,
+      "action_readiness": "retire_candidate_review_queue"
+    },
+    {
+      "version": "candidate_v4",
+      "description": "watchlist content item: include stale low-demand content older than 12 months for human review even if replacement is not settled yet",
+      "min_retire_score": 20,
+      "replacement_states": [
+        "false",
+        "review",
+        "true",
+        "unknown"
+      ],
+      "min_months_since_update": 12,
+      "min_age_months": 12,
+      "views_12m_percentile_max": 50,
+      "views_90d_max": 150,
+      "action_readiness": "retire_candidate_review_queue"
+    }
+  ],
+  "retire_tiers": {
+    "strict_v1": "strict_retire_now",
+    "weighted_v2": "strict_retire_now",
+    "weighted_v3": "strong_retire_validation",
+    "weighted_v4": "retirement_review",
+    "weighted_v5": "retirement_review",
+    "weighted_v6": "exploratory_retirement_review",
+    "candidate_v1": "high_confidence_candidate",
+    "candidate_v2": "strong_candidate",
+    "candidate_v3": "broad_candidate",
+    "candidate_v4": "exploratory_candidate"
+  }
+}

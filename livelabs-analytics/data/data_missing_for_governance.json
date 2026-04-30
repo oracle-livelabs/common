@@ -1,0 +1,911 @@
+[
+  {
+    "workshop_key": "livelabs:3934",
+    "wms_id": "11620",
+    "livelabs_id": 3934,
+    "title": "AI Vector Search - Complete RAG Application using PL/SQL in Oracle Database 23ai",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3309",
+    "wms_id": "11088",
+    "livelabs_id": 3309,
+    "title": "How do I update the notification email for Fusion Analytics Warehouse (FAW)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3213",
+    "wms_id": "11088",
+    "livelabs_id": 3213,
+    "title": "How do I change the Data Refresh Schedule in Fusion Analytics Warehouse (FAW)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3287",
+    "wms_id": "11088",
+    "livelabs_id": 3287,
+    "title": "How do I configure the Pipeline Parameters in Fusion Analytics Warehouse (FAW)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3351",
+    "wms_id": "11088",
+    "livelabs_id": 3351,
+    "title": "How do I backup and restore my environment using bundles in Fusion Analytics Warehouse (FAW)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3212",
+    "wms_id": "11088",
+    "livelabs_id": 3212,
+    "title": "How do I migrate DV workbooks from my test environment to my production environment in Fusion Analytics Warehouse (FAW)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:763",
+    "wms_id": "4121",
+    "livelabs_id": 763,
+    "title": "Create a Web Application in Oracle Visual Builder",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3796",
+    "wms_id": "11396",
+    "livelabs_id": 3796,
+    "title": "Keep it real (time) with OCI GoldenGate Stream Analytics",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3210",
+    "wms_id": "11088",
+    "livelabs_id": 3210,
+    "title": "How do I verify that the data refresh schedule has been completed in Fusion Analytics Warehouse (FAW)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3398",
+    "wms_id": "11226",
+    "livelabs_id": 3398,
+    "title": "League of Legends Machine Learning with OCI - Data Extraction",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:800",
+    "wms_id": "4981",
+    "livelabs_id": 800,
+    "title": "Introduction to Oracle Spatial Studio",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3403",
+    "wms_id": "11228",
+    "livelabs_id": 3403,
+    "title": "Try Machine Learning and Predict Optimal Pit Strategy with Oracle Red Bull Racing",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:4075",
+    "wms_id": "11520",
+    "livelabs_id": 4075,
+    "title": "MySQL Heatwave Lakehouse: Realtime Asset Maintenance",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3919",
+    "wms_id": "11523",
+    "livelabs_id": 3919,
+    "title": "Explore the Oracle Insurance Policy Administration (OIPA) platform",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3649",
+    "wms_id": "11335",
+    "livelabs_id": 3649,
+    "title": "How do I discover the Database Connectivity Details of a pluggable database in Oracle Exadata Database Service on Cloud@Customer using the OCI Console?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3911",
+    "wms_id": "11543",
+    "livelabs_id": 3911,
+    "title": "Intelligent App Dev with MySQL Heatwave Database and Advanced Observability",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3454",
+    "wms_id": "11088",
+    "livelabs_id": 3454,
+    "title": "How do I generate content bundles in Fusion Analytics Warehouse (FAW)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:4264",
+    "wms_id": "11959",
+    "livelabs_id": 4264,
+    "title": "AI Experience Live: Customize AI Agents and Workflows with LLMs and OCI AI Agent Platform—Finance Edition",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:4292",
+    "wms_id": "11850",
+    "livelabs_id": 4292,
+    "title": "AI Experience Live: Build a GenAI-Powered Application with Oracle AI Database—Finance Edition",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:862",
+    "wms_id": "7301",
+    "livelabs_id": 862,
+    "title": "Get Started with Oracle Data Science and Red Bull Workshop",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3097",
+    "wms_id": "11011",
+    "livelabs_id": 3097,
+    "title": "Use Data Labeling Service to Create a Biomedical Image Classification Model",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3299",
+    "wms_id": "11088",
+    "livelabs_id": 3299,
+    "title": "How do I set up the reporting configurations for HCM in Fusion Analytics Warehouse (FAW)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3510",
+    "wms_id": "11136",
+    "livelabs_id": 3510,
+    "title": "Oracle Exadata Platform Performance Features",
+    "missing_fields": [
+      "months_since_update",
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3639",
+    "wms_id": "11026",
+    "livelabs_id": 3639,
+    "title": "Get Started with Oracle Exadata Database Service on Cloud@Customer",
+    "missing_fields": [
+      "months_since_update",
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3341",
+    "wms_id": "11088",
+    "livelabs_id": 3341,
+    "title": "How do I create and activate new functional areas in Fusion Analytics Warehouse (FAW)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:656",
+    "wms_id": "1681",
+    "livelabs_id": 656,
+    "title": "EM - Hybrid Multitenant Database Lifecycle Management",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:651",
+    "wms_id": "1341",
+    "livelabs_id": 651,
+    "title": "Deploy HA Applications Using Load Balancers",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:615",
+    "wms_id": "1070",
+    "livelabs_id": 615,
+    "title": "Building an App using REST Data Sources for Oracle Autonomous Cloud Services",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3910",
+    "wms_id": "11541",
+    "livelabs_id": 3910,
+    "title": "Develop apps using GenAI, Autonomous Database, and React",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:819",
+    "wms_id": "5683",
+    "livelabs_id": 819,
+    "title": "Get started with Oracle Cloud Infrastructure Anomaly Detection",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:613",
+    "wms_id": "441",
+    "livelabs_id": 613,
+    "title": "Get started with Converged Database for Developers - On Premises",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3707",
+    "wms_id": "11410",
+    "livelabs_id": 3707,
+    "title": "AI for Healthcare",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3629",
+    "wms_id": "11184",
+    "livelabs_id": 3629,
+    "title": "OCI APM Stack Monitoring fundamentals: Single-pane of glass monitoring of EBS, WebLogic, Oracle Database and Host",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:4159",
+    "wms_id": "11864",
+    "livelabs_id": 4159,
+    "title": "Get Started with Oracle Exadata Database Service on Exascale Infrastructure on Oracle Database@Azure",
+    "missing_fields": [
+      "months_since_update",
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:795",
+    "wms_id": "3520",
+    "livelabs_id": 795,
+    "title": "Configuring Private DNS ..",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3585",
+    "wms_id": "11295",
+    "livelabs_id": 3585,
+    "title": "Introduction to OCI Document Understanding",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3306",
+    "wms_id": "11114",
+    "livelabs_id": 3306,
+    "title": "Get started with MySQL HeatWave Machine Learning",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3558",
+    "wms_id": "11278",
+    "livelabs_id": 3558,
+    "title": "Use OCI Object Storage to Store Files in Oracle APEX Applications",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:649",
+    "wms_id": "1601",
+    "livelabs_id": 649,
+    "title": "Deploy an OKE Cluster Using Oracle Cloud Shell",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:693",
+    "wms_id": "2680",
+    "livelabs_id": 693,
+    "title": "Migrate Tomcat Java applications to OCI",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3338",
+    "wms_id": "8461",
+    "livelabs_id": 3338,
+    "title": "Simplify Security for Microservices on Converged Oracle Database",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:733",
+    "wms_id": "3600",
+    "livelabs_id": 733,
+    "title": "Deploying Microservices in Kubernetes and OCI Supporting Features",
+    "missing_fields": [
+      "months_since_update",
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:846",
+    "wms_id": "6242",
+    "livelabs_id": 846,
+    "title": "Deploy FortiGate Firewalls and Secure your workloads on OCI",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3259",
+    "wms_id": "11088",
+    "livelabs_id": 3259,
+    "title": "How do I sort a visualization by a column not used in the visualization in Oracle Analytics Cloud and Server (OAC & OAS)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:586",
+    "wms_id": "780",
+    "livelabs_id": 586,
+    "title": "Introduction to Machine Learning Algorithms on ADB",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:919",
+    "wms_id": "6882",
+    "livelabs_id": 919,
+    "title": "Get started with Oracle Cloud Infrastructure Data Catalog",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:801",
+    "wms_id": "4781",
+    "livelabs_id": 801,
+    "title": "Application Continuity Fundamentals",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:753",
+    "wms_id": "3780",
+    "livelabs_id": 753,
+    "title": "Migrate EBS to OCI EBS Cloud Manager",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:4051",
+    "wms_id": "11765",
+    "livelabs_id": 4051,
+    "title": "Build AI-powered apps using Autonomous Database Select AI and GenAI models",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:624",
+    "wms_id": "2040",
+    "livelabs_id": 624,
+    "title": "OCI Identity and Access Management",
+    "missing_fields": [
+      "months_since_update",
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:585",
+    "wms_id": "820",
+    "livelabs_id": 585,
+    "title": "Goldengate 19c Microservices",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3748",
+    "wms_id": "11398",
+    "livelabs_id": 3748,
+    "title": "Welcome to Bistro AI: Create an AI-Powered Recipe Generator",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:787",
+    "wms_id": "4941",
+    "livelabs_id": 787,
+    "title": "Oracle Cloud Infrastructure Data Flow",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:890",
+    "wms_id": "5601",
+    "livelabs_id": 890,
+    "title": "Oracle Analytics Cloud Business Insights into Expenses",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:622",
+    "wms_id": "1021",
+    "livelabs_id": 622,
+    "title": "Configuring Oracle Functions",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:635",
+    "wms_id": "241",
+    "livelabs_id": 635,
+    "title": "Database 19c - Python",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:4087",
+    "wms_id": "11749",
+    "livelabs_id": 4087,
+    "title": "PeopleSoft PICASO Chatbot Enhancement with GenAI Search and RAG capabilities",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:803",
+    "wms_id": "4661",
+    "livelabs_id": 803,
+    "title": "Extend EBS with Logging Analytics",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:681",
+    "wms_id": "2460",
+    "livelabs_id": 681,
+    "title": "Provision HPC Cluster from Oracle Marketplace Image",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3311",
+    "wms_id": "11024",
+    "livelabs_id": 3311,
+    "title": "Get Started with Oracle Exadata Database Service on Dedicated Infrastructure",
+    "missing_fields": [
+      "months_since_update",
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:688",
+    "wms_id": "1760",
+    "livelabs_id": 688,
+    "title": "Application integration with SOA",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3563",
+    "wms_id": "11284",
+    "livelabs_id": 3563,
+    "title": "How do I auto-assign Fusion Analytics Warehouse (FAW) licensed groups to Oracle Fusion Cloud Application (FA) users?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3704",
+    "wms_id": "11430",
+    "livelabs_id": 3704,
+    "title": "Perform OCI IAM Policy and Group Reviews with Oracle Access Governance",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3344",
+    "wms_id": "11088",
+    "livelabs_id": 3344,
+    "title": "How do I migrate content using the bundles feature in Fusion Analytics Warehouse (FAW)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:773",
+    "wms_id": "1621",
+    "livelabs_id": 773,
+    "title": "Oracle Analytics Server",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:852",
+    "wms_id": "6161",
+    "livelabs_id": 852,
+    "title": "Analyze Moviestream data in Oracle Autonomous Data Warehouse using SQL",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:805",
+    "wms_id": "5061",
+    "livelabs_id": 805,
+    "title": "Install Node RED on Oracle Autonomous Linux",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3444",
+    "wms_id": "11146",
+    "livelabs_id": 3444,
+    "title": "League of Legends Machine Learning with OCI - Introduction to Neural Networks",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:903",
+    "wms_id": "5641",
+    "livelabs_id": 903,
+    "title": "Predictive Analytics with Oracle Machine Learning & Converged Database",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:652",
+    "wms_id": "1300",
+    "livelabs_id": 652,
+    "title": "Creating Compute Instance using Custom Image",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:762",
+    "wms_id": "4101",
+    "livelabs_id": 762,
+    "title": "Get Started with Oracle Big Data Service (non-HA)",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:4132",
+    "wms_id": "11853",
+    "livelabs_id": 4132,
+    "title": "Get Started with Oracle Exadata Database Service on Exascale Infrastructure",
+    "missing_fields": [
+      "months_since_update",
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:657",
+    "wms_id": "1360",
+    "livelabs_id": 657,
+    "title": "Using Oracle Cloud Infrastructure Block Volumes",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:777",
+    "wms_id": "4003",
+    "livelabs_id": 777,
+    "title": "Running OpenFOAM on an HPC Cluster & a Standard VM on OCI",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:674",
+    "wms_id": "660",
+    "livelabs_id": 674,
+    "title": "Setup and Manage an Oracle Big Data Service(BDS) HA cluster using Oracle Distribution of Hadoop(ODH)",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3288",
+    "wms_id": "11088",
+    "livelabs_id": 3288,
+    "title": "How do I configure the global reporting parameters in Fusion Analytics Warehouse (FAW)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:654",
+    "wms_id": "1540",
+    "livelabs_id": 654,
+    "title": "Configuring NAT Gateway for Private Compute Instance",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:663",
+    "wms_id": "1560",
+    "livelabs_id": 663,
+    "title": "Deploying Infrastructure using Terraform",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:779",
+    "wms_id": "1240",
+    "livelabs_id": 779,
+    "title": "OCI Move and Improve - Third Party Applications",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3855",
+    "wms_id": "11496",
+    "livelabs_id": 3855,
+    "title": "Getting Started With Oracle Access Governance",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:816",
+    "wms_id": "2681",
+    "livelabs_id": 816,
+    "title": "Migrate JBoss/WildFly Java applications to OCI",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:4036",
+    "wms_id": "11670",
+    "livelabs_id": 4036,
+    "title": "Hybrid Search with OCI PostgreSQL",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:630",
+    "wms_id": "1520",
+    "livelabs_id": 630,
+    "title": "Building an App using a Remote Data Source for Oracle Autonomous Cloud Services",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:611",
+    "wms_id": "1820",
+    "livelabs_id": 611,
+    "title": "Creating a Resource Manager Stack",
+    "missing_fields": [
+      "months_since_update",
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3348",
+    "wms_id": "9501",
+    "livelabs_id": 3348,
+    "title": "Kubernetes Monitoring and Troubleshooting",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3255",
+    "wms_id": "11088",
+    "livelabs_id": 3255,
+    "title": "How do I enable searching for my dataset in Oracle Analytics Cloud and Server (OAC & OAS)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3717",
+    "wms_id": "11408",
+    "livelabs_id": 3717,
+    "title": "Protect & Recover Databases from Ransomware with Oracle Recovery Service",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:757",
+    "wms_id": "1622",
+    "livelabs_id": 757,
+    "title": "SecureOracle 8.0 - Oracle Identity and Access Management (IAM) Suite 12c R2",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:653",
+    "wms_id": "1582",
+    "livelabs_id": 653,
+    "title": "Using Events and Notification",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:793",
+    "wms_id": "1440",
+    "livelabs_id": 793,
+    "title": "MuShop",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3318",
+    "wms_id": "11103",
+    "livelabs_id": 3318,
+    "title": "Oracle GoldenGate Microservices for Big Data",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3591",
+    "wms_id": "11055",
+    "livelabs_id": 3591,
+    "title": "React + SpringBoot + ADB = Native Cloud App",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3316",
+    "wms_id": "11088",
+    "livelabs_id": 3316,
+    "title": "How do I reset the data warehouse in Fusion Analytics Warehouse (FAW)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:694",
+    "wms_id": "2960",
+    "livelabs_id": 694,
+    "title": "GROMACS Deployment through Resource Manager",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:775",
+    "wms_id": "4311",
+    "livelabs_id": 775,
+    "title": "Oracle Data Integrator - Advanced",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3576",
+    "wms_id": "11301",
+    "livelabs_id": 3576,
+    "title": "Classify X-Ray Images for Pneumonia using Analytics Cloud and Vision AI Services",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3342",
+    "wms_id": "11088",
+    "livelabs_id": 3342,
+    "title": "How do I re-enable the data pipeline in Fusion Analytics Warehouse (FAW)?",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3279",
+    "wms_id": "11104",
+    "livelabs_id": 3279,
+    "title": "Start Polyglot Development with Autonomous Database",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3999",
+    "wms_id": "11551",
+    "livelabs_id": 3999,
+    "title": "Build GenAI Java Apps with Oracle AI Vector Search, Spring AI, and Cohere",
+    "missing_fields": [
+      "replacement_exists"
+    ]
+  },
+  {
+    "workshop_key": "livelabs:3708",
+    "wms_id": "11308",
+    "livelabs_id": 3708,
+    "title": "Low Code eSports Analytics with Oracle Resource Manager and APEX",
+    "missing_fields": [
+      "months_since_update",
+      "replacement_exists"
+    ]
+  }
+]

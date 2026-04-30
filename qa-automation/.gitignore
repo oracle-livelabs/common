@@ -1,0 +1,9 @@
+node_modules/
+artifacts/
+.idea/
+.cache/
+coverage/
+dist/
+playwright-report/
+*.log
+*.tmp

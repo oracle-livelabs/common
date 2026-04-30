@@ -1,0 +1,1111 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Demonstration workshop page for the redesigned author guide experience.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23C74634'/%3E%3C/svg%3E">
+  <title>Psychiatry First Responder RAG | Sample Workshop Demo</title>
+  <link rel="stylesheet" href="../../assets/css/redwood-video-player.css">
+  <link rel="stylesheet" href="../../assets/css/sample-workshop-demo.css">
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="../../assets/js/redwood-video-player.js" defer></script>
+  <script src="../../assets/js/sample-workshop-demo.js" defer></script>
+</head>
+
+<body class="sample-demo">
+  <header class="sample-topbar">
+    <div class="sample-topbar-shell">
+      <div class="sample-brand-block">
+        <div class="sample-brand-row">
+          <span class="sample-kicker">Author guide refresh</span>
+          <a class="sample-brand" href="../../index.html">Psychiatry First Responder RAG sample workshop</a>
+        </div>
+        <div class="sample-brand-note">Demonstration only. The page shows how a redesigned workshop surface can teach the user to build a working Oracle-based solution, not just describe it.</div>
+      </div>
+      <nav class="sample-nav-actions" aria-label="Top actions">
+        <a class="sample-nav-link" href="../../index.html">Guide home</a>
+        <a class="sample-nav-link" href="#test-demo">Open test demo</a>
+        <a class="sample-nav-link" href="#lab-1">Start Lab 1</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="sample-main">
+    <section class="sample-panel">
+      <div class="sample-panel-inner">
+        <div class="sample-hero-grid">
+          <div>
+            <span class="sample-kicker">Workshop surface demo</span>
+            <h1 class="sample-title">Build a psychiatry first responder RAG flow that prepares the clinician before the appointment.</h1>
+            <p class="sample-lead">This demo workshop walks the learner through provisioning Oracle services, modeling a behavioral-health intake schema, grounding the assistant on approved guidance, enforcing safety routes, building patient and clinician pages, and exporting a concise clinician handoff PDF.</p>
+            <div class="sample-chip-row">
+              <span class="sample-chip">Autonomous AI Database</span>
+              <span class="sample-chip">Vector search</span>
+              <span class="sample-chip">APEX</span>
+              <span class="sample-chip">ORDS</span>
+              <span class="sample-chip">Safety guardrails</span>
+              <span class="sample-chip">PDF handoff</span>
+            </div>
+            <div class="sample-button-row">
+              <a class="sample-button is-primary" href="#test-demo">Open test demo</a>
+              <a class="sample-button is-secondary" href="#lab-1">Begin build</a>
+              <a class="sample-button is-secondary" href="#architecture">Review architecture</a>
+            </div>
+            <div class="sample-hero-callout">
+              <div class="info-card">
+                <div class="card-eyebrow">What the learner actually ships</div>
+                <ul class="sample-list">
+                  <li>A patient-facing pre-visit chat that captures presenting concern, function, safety, supports, and a short rapid assessment.</li>
+                  <li>A clinician-facing handoff page and downloadable PDF with route, risk flags, symptoms, quick assessment results, and cited guidance.</li>
+                  <li>A trusted Oracle service layer that keeps routing, retrieval, and report generation outside the browser.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <aside class="sample-sidecard">
+            <h2>Demo workshop shape</h2>
+            <p>A short Test Demo sells the product first. Five build labs then move from infrastructure to launch so the learner can see the outcome before the build path starts.</p>
+            <ul class="sample-list">
+              <li>Test Demo lets the learner try the psychiatry intake flow, quick assessment, and clinician handoff first.</li>
+              <li>Lab 1 provisions the Oracle workspace and app foundation.</li>
+              <li>Lab 2 models psychiatric intake, assessments, guidance chunks, and vector retrieval.</li>
+              <li>Lab 3 publishes the guardrailed PL/SQL and ORDS service layer.</li>
+              <li>Lab 4 builds the patient chat, clinician dashboard, and report contract.</li>
+              <li>Lab 5 validates the route logic, quiz, and PDF-ready handoff flow.</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="sample-panel" id="architecture" data-track-section>
+      <div class="sample-panel-inner">
+        <div class="section-head">
+          <div class="sample-kicker">Architecture view</div>
+          <h2 class="section-title">Keep the architecture simple: build once on the top lane, run the psychiatry intake and clinician handoff on the bottom lane.</h2>
+          <p class="section-summary">This demo stays in psychiatry and behavioral health only. The learner can see what gets provisioned, where the safety rules live, and how the patient conversation becomes a clinician handoff instead of a raw transcript.</p>
+        </div>
+
+        <div
+          data-video-card
+          data-video-title="Architecture walkthrough"
+          data-video-summary="Start with the build lane and runtime lane so the learner understands the system boundary before Lab 1."
+          data-video-features="Scope boundary|Service lane|Clinician handoff"
+        ></div>
+
+        <div class="sample-two-column" style="margin-top: 1rem;">
+          <div class="info-card">
+            <div class="card-eyebrow">Clinical scope</div>
+            <h3>Anchor the demo in psychiatry intake, not general medicine.</h3>
+            <ul class="sample-list">
+              <li>Capture mood, anxiety, sleep, function, safety, supports, substance context, and psychosis or mania flags.</li>
+              <li>Use DSM-5-informed symptom domains to structure intake without turning the demo into a diagnostic system.</li>
+              <li>Add a CBT-style thought and behavior note so the handoff is actionable for the clinician.</li>
+            </ul>
+          </div>
+
+          <div class="info-card">
+            <div class="card-eyebrow">Expected final output</div>
+            <h3>What the runtime should produce</h3>
+            <ul class="sample-list">
+              <li>A guided patient chat with safety-aware branching.</li>
+              <li>Retrieval grounded only on approved clinic guidance chunks.</li>
+              <li>A structured clinician handoff page and downloadable PDF report.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="architecture-map">
+          <div class="architecture-lane">
+            <div class="architecture-lane-head">
+              <div>
+                <h3>Build lane</h3>
+                <p>The learner configures the Oracle foundation once, then reuses it across every lab.</p>
+              </div>
+              <span class="sample-mini-chip">Provision and publish</span>
+            </div>
+            <div class="architecture-flow">
+              <article class="architecture-card">
+                <strong>1. Provision the Oracle foundation</strong>
+                <p>Create the Autonomous AI Database, enable APEX and ORDS, and capture the workspace values the rest of the labs will reuse.</p>
+                <ul>
+                  <li>OCI tenancy and compartment</li>
+                  <li>Autonomous AI Database</li>
+                  <li>APEX workspace and ORDS path</li>
+                </ul>
+              </article>
+              <div class="architecture-arrow" aria-hidden="true">&rarr;</div>
+              <article class="architecture-card">
+                <strong>2. Model psychiatric intake and knowledge</strong>
+                <p>Create the intake session, message, rapid assessment, and clinician handoff tables plus approved guidance chunks and a vector index.</p>
+                <ul>
+                  <li>Structured intake records</li>
+                  <li>Guidance chunk store</li>
+                  <li>Vector retrieval layer</li>
+                </ul>
+              </article>
+              <div class="architecture-arrow" aria-hidden="true">&rarr;</div>
+              <article class="architecture-card">
+                <strong>3. Publish the trusted service layer</strong>
+                <p>Use PL/SQL and ORDS to store messages, retrieve guidance, decide the route, and build the handoff report and PDF payload.</p>
+                <ul>
+                  <li>PL/SQL package</li>
+                  <li>ORDS handlers</li>
+                  <li>Safety and routing logic</li>
+                </ul>
+              </article>
+              <div class="architecture-arrow" aria-hidden="true">&rarr;</div>
+              <article class="architecture-card">
+                <strong>4. Wire the patient and clinician experiences</strong>
+                <p>Build the patient chat, the clinician review page, and the PDF export pattern inside APEX.</p>
+                <ul>
+                  <li>Patient chat page</li>
+                  <li>Clinician dashboard</li>
+                  <li>PDF handoff export</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+
+          <div class="architecture-bridge">The build lane publishes one trusted runtime path: patient chat enters through the app, the service layer enforces safety policy, the vector layer grounds the response, and the clinician receives a short structured handoff.</div>
+
+          <div class="architecture-lane">
+            <div class="architecture-lane-head">
+              <div>
+                <h3>Runtime lane</h3>
+                <p>This is the live path the patient and clinician experience after setup is done.</p>
+              </div>
+              <span class="sample-mini-chip">Guide and hand off</span>
+            </div>
+            <div class="architecture-flow">
+              <article class="architecture-card">
+                <strong>1. Patient opens pre-visit psychiatry intake</strong>
+                <p>The chat frames the purpose, sets safety expectations, and captures the presenting concern and recent change.</p>
+                <ul>
+                  <li>Presenting concern</li>
+                  <li>Recent change</li>
+                  <li>Context and trigger</li>
+                </ul>
+              </article>
+              <div class="architecture-arrow" aria-hidden="true">&rarr;</div>
+              <article class="architecture-card">
+                <strong>2. Service asks symptom and safety domains</strong>
+                <p>The trusted layer captures mood, anxiety, sleep, function, safety, psychosis or mania flags, current care, and supports.</p>
+                <ul>
+                  <li>Function and sleep</li>
+                  <li>Safety and acute flags</li>
+                  <li>Care and supports</li>
+                </ul>
+              </article>
+              <div class="architecture-arrow" aria-hidden="true">&rarr;</div>
+              <article class="architecture-card">
+                <strong>3. RAG layer adds grounded guidance only when needed</strong>
+                <p>Approved chunks are retrieved for safety messaging, clinician routing, and a short CBT-style note without inventing new policy.</p>
+                <ul>
+                  <li>Approved citations</li>
+                  <li>Grounded route note</li>
+                  <li>CBT-style behavior note</li>
+                </ul>
+              </article>
+              <div class="architecture-arrow" aria-hidden="true">&rarr;</div>
+              <article class="architecture-card">
+                <strong>4. Clinician receives the handoff and PDF</strong>
+                <p>The clinician opens route, risk flags, symptoms, quick assessment signals, and transcript highlights before the appointment begins.</p>
+                <ul>
+                  <li>Structured handoff</li>
+                  <li>Risk flags and assessment</li>
+                  <li>PDF export</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sample-workshop-layout">
+      <aside class="sample-lab-rail" aria-label="Lab navigation">
+        <div class="sample-rail-card">
+          <div class="sample-rail-eyebrow">Lab navigation</div>
+          <p class="sample-rail-note">This rail stays with the user through the test pass and build labs, but because it lives inside the workshop section wrapper it does not slide up over the hero or top workshop menu.</p>
+          <nav class="sample-rail-links">
+            <a class="sample-rail-link" href="#test-demo" data-section-link="test-demo"><small>Test demo</small><strong>Psychiatry first responder flow</strong></a>
+            <a class="sample-rail-link" href="#lab-1" data-section-link="lab-1"><small>Lab 1</small><strong>Foundation and workspace</strong></a>
+            <a class="sample-rail-link" href="#lab-2" data-section-link="lab-2"><small>Lab 2</small><strong>Psychiatry data and vector layer</strong></a>
+            <a class="sample-rail-link" href="#lab-3" data-section-link="lab-3"><small>Lab 3</small><strong>Guardrails and service layer</strong></a>
+            <a class="sample-rail-link" href="#lab-4" data-section-link="lab-4"><small>Lab 4</small><strong>Patient and clinician experience</strong></a>
+            <a class="sample-rail-link" href="#lab-5" data-section-link="lab-5"><small>Lab 5</small><strong>Validation and launch</strong></a>
+          </nav>
+        </div>
+      </aside>
+
+      <div class="sample-lab-stack">
+        <article class="sample-panel sample-lab" id="test-demo" data-track-section>
+          <div class="sample-panel-inner">
+            <div class="lab-head">
+              <div class="lab-meta-row">
+                <span class="lab-label">Test demo</span>
+                <span class="lab-time">Suggested first stop</span>
+              </div>
+              <h2 class="lab-title">Test the psychiatry first responder flow before you start Lab 1.</h2>
+              <p class="section-summary">Sell the product first. This short product pass lets the learner try the patient intake, quick assessment, and clinician handoff before the build labs explain how to make it.</p>
+            </div>
+
+            <div
+              data-video-card
+              data-video-title="Test demo walkthrough"
+              data-video-summary="Show the patient chat, quick assessment, and clinician handoff first so the learner understands the product before the build sequence starts."
+              data-video-features="Patient chat|Quick assessment|PDF handoff"
+            ></div>
+
+            <div class="sample-two-column" style="margin-top: 1rem;">
+              <div class="info-card">
+                <div class="card-eyebrow">What this MVP proves</div>
+                <ul class="sample-list">
+                  <li>The assistant can guide the patient through a short pre-visit psychiatry intake conversation.</li>
+                  <li>The route changes for immediate safety, urgent psychiatric review, or routine intake based on captured signals.</li>
+                  <li>The clinician receives a structured handoff and PDF instead of opening a raw transcript first.</li>
+                </ul>
+              </div>
+
+              <div class="info-card">
+                <div class="card-eyebrow">Test pattern</div>
+                <ul class="sample-list">
+                  <li>Six guided chat questions.</li>
+                  <li>Three rapid assessment items.</li>
+                  <li>One handoff preview and one PDF export action.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="showcase-grid" style="margin-top: 1rem;">
+              <section class="demo-chat-card">
+                <div class="widget-eyebrow">AI first responder MVP</div>
+                <h3>Patient conversation demo</h3>
+                <p>This demo follows a fixed safety-aware sequence. It is enough to show how the final product would feel without pretending this page is a production clinical system.</p>
+                <div class="chat-transcript" id="demoTranscript" aria-live="polite"></div>
+                <div class="quick-replies" id="demoReplies" aria-label="Suggested replies"></div>
+                <form class="chat-form" id="demoChatForm">
+                  <input class="chat-input" id="demoInput" type="text" placeholder="Type the patient answer">
+                  <div class="demo-actions">
+                    <button class="demo-action is-primary" type="submit">Send answer</button>
+                    <button class="demo-action" type="button" id="resetDemo">Reset demo</button>
+                  </div>
+                </form>
+              </section>
+
+              <div class="showcase-side-stack">
+                <section class="widget-card assessment-card">
+                  <div class="widget-eyebrow">Quick assessment</div>
+                  <h3>Capture a short mood, anxiety, and sleep snapshot</h3>
+                  <p>Demonstration only. These quick checks simply enrich the clinician handoff and PDF report.</p>
+                  <div class="assessment-grid" id="assessmentGrid">
+                    <section class="assessment-question" data-assessment-key="interest">
+                      <strong>Little interest or pleasure in activities</strong>
+                      <div class="assessment-options">
+                        <button class="assessment-choice" type="button" data-assessment-value="0">0 None</button>
+                        <button class="assessment-choice" type="button" data-assessment-value="1">1 Some days</button>
+                        <button class="assessment-choice" type="button" data-assessment-value="2">2 Many days</button>
+                        <button class="assessment-choice" type="button" data-assessment-value="3">3 Nearly daily</button>
+                      </div>
+                    </section>
+
+                    <section class="assessment-question" data-assessment-key="anxiety">
+                      <strong>Feeling nervous, anxious, or unable to settle</strong>
+                      <div class="assessment-options">
+                        <button class="assessment-choice" type="button" data-assessment-value="0">0 None</button>
+                        <button class="assessment-choice" type="button" data-assessment-value="1">1 Some days</button>
+                        <button class="assessment-choice" type="button" data-assessment-value="2">2 Many days</button>
+                        <button class="assessment-choice" type="button" data-assessment-value="3">3 Nearly daily</button>
+                      </div>
+                    </section>
+
+                    <section class="assessment-question" data-assessment-key="sleep">
+                      <strong>Sleep disrupted most nights this week</strong>
+                      <div class="assessment-options">
+                        <button class="assessment-choice" type="button" data-assessment-value="0">0 None</button>
+                        <button class="assessment-choice" type="button" data-assessment-value="1">1 Some days</button>
+                        <button class="assessment-choice" type="button" data-assessment-value="2">2 Many days</button>
+                        <button class="assessment-choice" type="button" data-assessment-value="3">3 Nearly daily</button>
+                      </div>
+                    </section>
+                  </div>
+                  <div class="assessment-summary" id="assessmentSummary" aria-live="polite">Select ratings to enrich the clinician handoff.</div>
+                </section>
+
+                <aside class="demo-report-card">
+                  <div class="widget-eyebrow">Clinician handoff</div>
+                  <h3>Structured report and PDF export</h3>
+                  <p>The route and summary update as the demo conversation finishes. The learner can then generate the final handoff and export it as a PDF.</p>
+                  <div class="report-status" id="reportStatus" aria-live="polite">Conversation not complete yet. Capture the guided intake questions first.</div>
+                  <div class="demo-actions">
+                    <button class="demo-action is-primary" type="button" id="generateReport" disabled>Generate clinician handoff</button>
+                    <button class="demo-action" type="button" id="downloadPdf" disabled>Download PDF</button>
+                  </div>
+                  <div class="report-preview" id="reportPreview">
+                    <div class="report-sheet is-empty">
+                      <div class="report-sheet-head">
+                        <div>
+                          <div class="report-sheet-kicker">Psychiatry first responder</div>
+                          <h4>Clinician handoff preview</h4>
+                        </div>
+                        <span class="route-badge is-warning">Pending</span>
+                      </div>
+                      <p>Complete the conversation and quick assessment to generate the structured clinician handoff and PDF export.</p>
+                    </div>
+                  </div>
+                </aside>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="sample-panel sample-lab" id="lab-1" data-track-section>
+          <div class="sample-panel-inner">
+            <div class="lab-head">
+              <div class="lab-meta-row">
+                <span class="lab-label">Lab 1</span>
+                <span class="lab-time">Estimated time: 20 minutes</span>
+              </div>
+              <h2 class="lab-title">Provision the Oracle foundation and enable the AI-ready workspace.</h2>
+              <p class="section-summary">The learner should leave this lab with an Oracle workspace that is ready for schema creation, APEX pages, ORDS endpoints, and later prompt wiring.</p>
+            </div>
+
+            <div
+              data-video-card
+              data-video-title="Lab 1 walkthrough"
+              data-video-summary="Show the OCI, APEX, and ORDS sequence first so the learner can follow the written tasks without getting lost in the console."
+              data-video-features="OCI setup|Workspace bootstrap|Environment capture"
+            ></div>
+
+            <div class="sample-lab-intro-grid">
+              <div class="task-card">
+                <div class="task-eyebrow">Task 1</div>
+                <h3>Provision the services in the same order the workshop will use them.</h3>
+                <ol class="task-steps">
+                  <li>Create an Autonomous AI Database and keep the admin connection details available for the next task.</li>
+                  <li>Enable APEX and ORDS in the target environment so later labs can build the patient and clinician pages without leaving the platform.</li>
+                  <li>Create the application schema owner and confirm it has only the roles required to build the workshop objects.</li>
+                  <li>Record the APEX workspace, ORDS base path, and the AI service configuration values the user needs later.</li>
+                </ol>
+              </div>
+
+              <div class="checklist-card">
+                <div class="card-eyebrow">Checkpoint</div>
+                <h3>Do not move on until this is true</h3>
+                <ul class="checklist">
+                  <li>Database is reachable and the schema owner can sign in.</li>
+                  <li>APEX workspace exists and the developer account opens cleanly.</li>
+                  <li>ORDS is enabled and the base path is known.</li>
+                  <li>Environment values are captured in one visible notes block for the learner.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="task-stack">
+              <div class="code-card">
+                <div class="code-card-header">
+                  <div class="code-card-meta">
+                    <div class="card-eyebrow">Copy-ready SQL</div>
+                    <h3>Bootstrap the psychiatry demo schema owner</h3>
+                    <p>Keep the setup explicit so the learner understands the object owner before creating tables, packages, or APIs.</p>
+                  </div>
+                  <button class="copy-button" type="button" data-copy-code="code-lab1-bootstrap">Copy</button>
+                </div>
+                <pre><code id="code-lab1-bootstrap">CREATE USER psych_app IDENTIFIED BY "PsychDemo#2026"
+  DEFAULT TABLESPACE data
+  TEMPORARY TABLESPACE temp
+  QUOTA UNLIMITED ON data;
+
+GRANT CREATE SESSION,
+      CREATE TABLE,
+      CREATE VIEW,
+      CREATE SEQUENCE,
+      CREATE PROCEDURE,
+      CREATE TRIGGER
+TO psych_app;
+
+ALTER USER psych_app DEFAULT ROLE ALL;
+
+CREATE TABLE demo_environment (
+  config_key    VARCHAR2(80) PRIMARY KEY,
+  config_value  VARCHAR2(4000)
+);</code></pre>
+              </div>
+
+              <div class="task-card">
+                <div class="task-eyebrow">Task 2</div>
+                <h3>Enable the AI and app pieces the workshop will call later.</h3>
+                <ol class="task-steps">
+                  <li>Open APEX administration and create the workspace that maps to the new schema owner.</li>
+                  <li>Configure the Generative AI connection the app will use for prompt execution and later PDF narrative generation.</li>
+                  <li>Create an application skeleton with separate patient and clinician navigation entries.</li>
+                  <li>Publish a small environment card inside the app so the learner can verify every service reference in one place.</li>
+                </ol>
+              </div>
+
+              <div class="info-card">
+                <div class="card-eyebrow">Mock console visual</div>
+                <h3>Foundation setup board</h3>
+                <div class="mock-window">
+                  <div class="mock-window-bar">
+                    <div class="mock-dots"><span></span><span></span><span></span></div>
+                    <div class="mock-window-title">OCI and workspace readiness</div>
+                  </div>
+                  <div class="mock-window-body">
+                    <div class="mock-stat-grid">
+                      <div class="mock-kpi"><strong>Autonomous AI Database</strong><span>Available and wallet downloaded</span></div>
+                      <div class="mock-kpi"><strong>APEX workspace</strong><span>Psych Intake Demo</span></div>
+                      <div class="mock-kpi"><strong>ORDS base path</strong><span>/ords/psych/</span></div>
+                      <div class="mock-kpi"><strong>AI connection</strong><span>Configured for prompt testing</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="info-card">
+                <div class="card-eyebrow">Reference links</div>
+                <h3>Useful launch points for the learner</h3>
+                <div class="resource-links">
+                  <a class="resource-link" href="https://docs.oracle.com/en/cloud/paas/autonomous-database/" target="_blank" rel="noreferrer">Autonomous Database docs</a>
+                  <a class="resource-link" href="https://docs.oracle.com/en/database/oracle/apex/index.html" target="_blank" rel="noreferrer">Oracle APEX docs</a>
+                  <a class="resource-link" href="https://docs.oracle.com/en/database/oracle/oracle-rest-data-services/" target="_blank" rel="noreferrer">ORDS docs</a>
+                  <a class="resource-link" href="https://docs.oracle.com/en-us/iaas/Content/generative-ai/home.htm" target="_blank" rel="noreferrer">OCI Generative AI docs</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="sample-panel sample-lab" id="lab-2" data-track-section>
+          <div class="sample-panel-inner">
+            <div class="lab-head">
+              <div class="lab-meta-row">
+                <span class="lab-label">Lab 2</span>
+                <span class="lab-time">Estimated time: 30 minutes</span>
+              </div>
+              <h2 class="lab-title">Model psychiatric intake, rapid assessments, and the grounded knowledge layer.</h2>
+              <p class="section-summary">This lab turns the workshop from a shell into a behavioral-health system. The user should build tables, load approved guidance, and validate how the vector layer will be used later.</p>
+            </div>
+
+            <div
+              data-video-card
+              data-video-title="Lab 2 walkthrough"
+              data-video-summary="Lead with the schema, assessment, and vector story so the learner understands what the runtime depends on."
+              data-video-features="Schema build|Knowledge chunks|Vector retrieval"
+            ></div>
+
+            <div class="task-stack">
+              <div class="task-card">
+                <div class="task-eyebrow">Task 1</div>
+                <h3>Model the intake flow as session, message, quick assessment, and doctor handoff records.</h3>
+                <ol class="task-steps">
+                  <li>Create a session header table that can store presenting concern, route, and current state.</li>
+                  <li>Store each patient or assistant turn in a message table so the transcript can be replayed and summarized later.</li>
+                  <li>Add a rapid assessment table so short scored items can enrich the handoff without living only in UI state.</li>
+                  <li>Create a clinician handoff table that stores the route, safety flags, CBT-style note, report summary, and PDF export state.</li>
+                </ol>
+              </div>
+
+              <div class="code-card">
+                <div class="code-card-header">
+                  <div class="code-card-meta">
+                    <div class="card-eyebrow">Core data model</div>
+                    <h3>Create the psychiatry intake and report tables</h3>
+                    <p>These tables keep the intake state, the scored items, and the final handoff in one trusted database layer.</p>
+                  </div>
+                  <button class="copy-button" type="button" data-copy-code="code-lab2-ddl">Copy</button>
+                </div>
+                <pre><code id="code-lab2-ddl">CREATE TABLE intake_session (
+  session_id            NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  patient_alias         VARCHAR2(120),
+  presenting_concern    VARCHAR2(400),
+  route_code            VARCHAR2(40),
+  status_code           VARCHAR2(30) DEFAULT 'IN_PROGRESS',
+  opened_at             TIMESTAMP DEFAULT SYSTIMESTAMP
+);
+
+CREATE TABLE intake_message (
+  message_id            NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  session_id            NUMBER NOT NULL REFERENCES intake_session(session_id),
+  actor_role            VARCHAR2(20),
+  domain_tag            VARCHAR2(40),
+  message_text          CLOB,
+  created_at            TIMESTAMP DEFAULT SYSTIMESTAMP
+);
+
+CREATE TABLE rapid_assessment (
+  assessment_id         NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  session_id            NUMBER NOT NULL REFERENCES intake_session(session_id),
+  item_key              VARCHAR2(60),
+  item_label            VARCHAR2(200),
+  item_score            NUMBER(1),
+  created_at            TIMESTAMP DEFAULT SYSTIMESTAMP
+);
+
+CREATE TABLE clinician_handoff (
+  handoff_id            NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  session_id            NUMBER NOT NULL REFERENCES intake_session(session_id),
+  route_code            VARCHAR2(40),
+  safety_flags          CLOB,
+  cbt_note              CLOB,
+  report_summary        CLOB,
+  pdf_status            VARCHAR2(20) DEFAULT 'NOT_GENERATED',
+  generated_at          TIMESTAMP
+);
+
+CREATE TABLE guidance_chunks (
+  chunk_id              NUMBER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+  topic                 VARCHAR2(120),
+  domain_tag            VARCHAR2(60),
+  chunk_text            CLOB,
+  citation_label        VARCHAR2(180),
+  embedding             VECTOR(1536, FLOAT32)
+);
+
+CREATE VECTOR INDEX guidance_chunks_hnsw_idx
+ON guidance_chunks (embedding)
+ORGANIZATION INMEMORY NEIGHBOR GRAPH
+DISTANCE COSINE
+WITH TARGET ACCURACY 95;</code></pre>
+              </div>
+
+              <div class="code-card">
+                <div class="code-card-header">
+                  <div class="code-card-meta">
+                    <div class="card-eyebrow">Knowledge seed</div>
+                    <h3>Load the approved psychiatry guidance pack</h3>
+                    <p>Keep the chunk set obvious. The learner should see what knowledge is allowed into the prompt.</p>
+                  </div>
+                  <button class="copy-button" type="button" data-copy-code="code-lab2-knowledge">Copy</button>
+                </div>
+                <pre><code id="code-lab2-knowledge">INSERT INTO guidance_chunks (topic, domain_tag, chunk_text, citation_label)
+VALUES ('Safety escalation', 'safety',
+  'If the patient reports active self-harm intent, current plan, inability to stay safe, or command hallucinations, stop normal intake and route to immediate safety escalation.',
+  'Psychiatry safety escalation playbook');
+
+INSERT INTO guidance_chunks (topic, domain_tag, chunk_text, citation_label)
+VALUES ('CBT functional review', 'cbt',
+  'Capture the thought, behavior, and functional impact that the clinician will want to review first during the appointment.',
+  'CBT thought and behavior note template');
+
+INSERT INTO guidance_chunks (topic, domain_tag, chunk_text, citation_label)
+VALUES ('Medication and substance context', 'care-context',
+  'Record current medications, recent changes, alcohol or substance use, therapist or psychiatrist involvement, and the patient support network.',
+  'Medication and substance context checklist');</code></pre>
+              </div>
+
+              <div class="info-card">
+                <div class="card-eyebrow">Mock knowledge visual</div>
+                <h3>Approved psychiatry guidance pack</h3>
+                <div class="mock-window">
+                  <div class="mock-window-bar">
+                    <div class="mock-dots"><span></span><span></span><span></span></div>
+                    <div class="mock-window-title">Knowledge chunk coverage</div>
+                  </div>
+                  <div class="mock-window-body">
+                    <div class="mock-column-grid">
+                      <div class="mock-panel"><strong>Domain</strong><span>Mood, anxiety, sleep, function, safety, supports, psychosis, mania, substance context</span></div>
+                      <div class="mock-panel"><strong>Retrieval output</strong><span>Safety escalation playbook, CBT thought and behavior note template, medication and substance checklist</span></div>
+                    </div>
+                    <div class="mock-pill-row">
+                      <span class="mock-pill">Grounded only</span>
+                      <span class="mock-pill">Psychiatry only</span>
+                      <span class="mock-pill">No general medicine drift</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="widget-card" id="sqlPlayground">
+                <div class="widget-eyebrow">Safe SQL playground</div>
+                <h3>Let the learner inspect setup and retrieval statements without running them</h3>
+                <p>This widget is intentionally safe. It explains what the SQL does, blocks destructive statements, and gives the learner a visual place to test the workshop tools.</p>
+                <div class="sql-toolbar">
+                  <button class="sql-chip" type="button" data-sql-preset="foundation">Foundation tables</button>
+                  <button class="sql-chip" type="button" data-sql-preset="vector">Knowledge store</button>
+                  <button class="sql-chip" type="button" data-sql-preset="retrieval">Retrieval query</button>
+                </div>
+                <textarea class="sql-editor" id="sqlEditor" spellcheck="false"></textarea>
+                <div class="sql-actions">
+                  <button class="sql-action is-primary" type="button" id="sqlExplain">Explain</button>
+                  <button class="sql-action" type="button" id="sqlReset">Reset</button>
+                </div>
+                <pre class="sql-output" id="sqlOutput"></pre>
+              </div>
+
+              <div class="checklist-card">
+                <div class="card-eyebrow">Checkpoint</div>
+                <h3>Data layer readiness</h3>
+                <ul class="checklist">
+                  <li>Session, message, rapid assessment, and clinician handoff tables exist.</li>
+                  <li>Approved psychiatry guidance topics are explicit and visible in the workshop.</li>
+                  <li>Vector retrieval can be explained as grounded search rather than magic.</li>
+                  <li>The learner understands which data belongs in structured columns and which belongs in a transcript.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="sample-panel sample-lab" id="lab-3" data-track-section>
+          <div class="sample-panel-inner">
+            <div class="lab-head">
+              <div class="lab-meta-row">
+                <span class="lab-label">Lab 3</span>
+                <span class="lab-time">Estimated time: 30 minutes</span>
+              </div>
+              <h2 class="lab-title">Publish the guardrailed service layer and the psychiatry route logic.</h2>
+              <p class="section-summary">This is where the workshop becomes safe and believable. The user should build a service boundary that decides the route, retrieves approved guidance, and produces the handoff contract.</p>
+            </div>
+
+            <div
+              data-video-card
+              data-video-title="Lab 3 walkthrough"
+              data-video-summary="Put the safety routing and ORDS contract first so the learner understands why the browser remains thin."
+              data-video-features="PL/SQL package|ORDS endpoint|Guardrail matrix"
+            ></div>
+
+            <div class="task-stack">
+              <div class="task-card">
+                <div class="task-eyebrow">Task 1</div>
+                <h3>Publish the trusted package and service endpoints.</h3>
+                <ol class="task-steps">
+                  <li>Create one package that stores chat turns, scores rapid assessment items, selects the route, and assembles the handoff.</li>
+                  <li>Keep route logic in PL/SQL so the patient page cannot bypass the safety checks.</li>
+                  <li>Expose only the minimum ORDS handlers the patient and clinician pages need.</li>
+                  <li>Log the route code, safety flags, and citations that supported the handoff.</li>
+                </ol>
+              </div>
+
+              <div class="code-card">
+                <div class="code-card-header">
+                  <div class="code-card-meta">
+                    <div class="card-eyebrow">Package contract</div>
+                    <h3>Centralize routing and handoff generation in PL/SQL</h3>
+                    <p>Keep the contract small enough to teach and strong enough to make the architecture credible.</p>
+                  </div>
+                  <button class="copy-button" type="button" data-copy-code="code-lab3-package">Copy</button>
+                </div>
+                <pre><code id="code-lab3-package">CREATE OR REPLACE PACKAGE psych_first_responder_api AS
+  FUNCTION select_route (
+    p_presenting_concern   IN CLOB,
+    p_function_impact      IN CLOB,
+    p_safety_signal        IN CLOB,
+    p_assessment_total     IN NUMBER
+  ) RETURN VARCHAR2;
+
+  FUNCTION build_handoff (
+    p_session_id IN NUMBER
+  ) RETURN CLOB;
+END;
+/
+
+CREATE OR REPLACE PACKAGE BODY psych_first_responder_api AS
+  FUNCTION select_route (
+    p_presenting_concern   IN CLOB,
+    p_function_impact      IN CLOB,
+    p_safety_signal        IN CLOB,
+    p_assessment_total     IN NUMBER
+  ) RETURN VARCHAR2 IS
+  BEGIN
+    IF REGEXP_LIKE(LOWER(p_safety_signal), 'self-harm|unsafe|command hallucination|not safe alone') THEN
+      RETURN 'IMMEDIATE_SAFETY_ESCALATION';
+    ELSIF REGEXP_LIKE(LOWER(p_safety_signal || '' '' || p_function_impact), 'three days without sleep|unable to function|severe panic')
+       OR NVL(p_assessment_total, 0) >= 6 THEN
+      RETURN 'URGENT_PSYCHIATRY_REVIEW';
+    ELSE
+      RETURN 'ROUTINE_PSYCHIATRY_INTAKE';
+    END IF;
+  END;
+END;
+/</code></pre>
+              </div>
+
+              <div class="code-card">
+                <div class="code-card-header">
+                  <div class="code-card-meta">
+                    <div class="card-eyebrow">ORDS contract</div>
+                    <h3>Expose a focused handler for the clinician handoff</h3>
+                    <p>One clean endpoint is enough for the demo. The learner can see how the app asks for the report without exposing the package internals.</p>
+                  </div>
+                  <button class="copy-button" type="button" data-copy-code="code-lab3-ords">Copy</button>
+                </div>
+                <pre><code id="code-lab3-ords">BEGIN
+  ORDS.DEFINE_MODULE(
+    p_module_name    => 'psych',
+    p_base_path      => '/psych/',
+    p_items_per_page => 0
+  );
+
+  ORDS.DEFINE_TEMPLATE(
+    p_module_name    => 'psych',
+    p_pattern        => 'handoff/:session_id'
+  );
+
+  ORDS.DEFINE_HANDLER(
+    p_module_name    => 'psych',
+    p_pattern        => 'handoff/:session_id',
+    p_method         => 'GET',
+    p_source_type    => ORDS.source_type_plsql,
+    p_source         => q'[
+      DECLARE
+        l_payload CLOB;
+      BEGIN
+        l_payload := psych_first_responder_api.build_handoff(:session_id);
+        :body := l_payload;
+      END;
+    ]'
+  );
+
+  COMMIT;
+END;
+/</code></pre>
+              </div>
+
+              <div class="info-card">
+                <div class="widget-eyebrow">Guardrail matrix</div>
+                <h3>Make the policy visible instead of burying it in prose.</h3>
+                <div class="guardrail-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Signal captured</th>
+                        <th>Service response</th>
+                        <th>Runtime outcome</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Active self-harm intent, current plan, or inability to stay safe</td>
+                        <td>Stop normal intake, surface the safety message, and flag the handoff as immediate escalation.</td>
+                        <td>Route becomes <strong>IMMEDIATE_SAFETY_ESCALATION</strong>.</td>
+                      </tr>
+                      <tr>
+                        <td>No self-harm intent, but severe panic, rapid worsening, or multiple nights without sleep</td>
+                        <td>Continue only enough to capture supports, then mark the case for urgent psychiatric review.</td>
+                        <td>Route becomes <strong>URGENT_PSYCHIATRY_REVIEW</strong>.</td>
+                      </tr>
+                      <tr>
+                        <td>Stable pre-visit intake with no acute safety flags</td>
+                        <td>Complete the guided flow, capture the rapid assessment, and assemble the standard handoff.</td>
+                        <td>Route becomes <strong>ROUTINE_PSYCHIATRY_INTAKE</strong>.</td>
+                      </tr>
+                      <tr>
+                        <td>Model tries to diagnose, prescribe, or invent citations</td>
+                        <td>Suppress that answer, return policy-safe guidance, and use approved chunks only.</td>
+                        <td>Guardrail event is logged for review.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="info-card">
+                <div class="card-eyebrow">Mock flow visual</div>
+                <h3>Trusted runtime boundary</h3>
+                <div class="mock-window">
+                  <div class="mock-window-bar">
+                    <div class="mock-dots"><span></span><span></span><span></span></div>
+                    <div class="mock-window-title">Patient app to trusted service layer</div>
+                  </div>
+                  <div class="mock-window-body">
+                    <div class="mock-column-grid">
+                      <div class="mock-panel"><strong>Patient app</strong><span>Collects answers and rapid assessment items. Sends minimal payloads only.</span></div>
+                      <div class="mock-panel"><strong>Guardrailed service</strong><span>Stores messages, scores signals, retrieves guidance, selects the route, and builds the report.</span></div>
+                    </div>
+                    <div class="mock-pill-row">
+                      <span class="mock-pill">UI stays thin</span>
+                      <span class="mock-pill">Safety stays trusted</span>
+                      <span class="mock-pill">Report stays consistent</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="checklist-card">
+                <div class="card-eyebrow">Checkpoint</div>
+                <h3>Service layer readiness</h3>
+                <ul class="checklist">
+                  <li>Package contract exists and its responsibilities are clear.</li>
+                  <li>ORDS endpoint returns a report without exposing internal implementation details.</li>
+                  <li>Guardrail triggers and outcomes are visible in a dedicated matrix.</li>
+                  <li>The learner understands that safety routing does not live in client-side JavaScript.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="sample-panel sample-lab" id="lab-4" data-track-section>
+          <div class="sample-panel-inner">
+            <div class="lab-head">
+              <div class="lab-meta-row">
+                <span class="lab-label">Lab 4</span>
+                <span class="lab-time">Estimated time: 30 minutes</span>
+              </div>
+              <h2 class="lab-title">Build the patient intake chat, clinician dashboard, and handoff report contract in APEX.</h2>
+              <p class="section-summary">This lab turns the service layer into a usable product. The user should build pages, not just read about them.</p>
+            </div>
+
+            <div
+              data-video-card
+              data-video-title="Lab 4 walkthrough"
+              data-video-summary="Put the UI walkthrough first so the learner can see the patient chat, clinician review page, and report flow before the code."
+              data-video-features="Patient chat|Clinician dashboard|Report contract"
+            ></div>
+
+            <div class="sample-two-column" style="margin-top: 1rem;">
+              <div class="task-card">
+                <div class="task-eyebrow">Task 1</div>
+                <h3>Create the patient intake page as a guided psychiatry workflow, not a generic chatbot.</h3>
+                <ol class="task-steps">
+                  <li>Show the current question, quick replies, visible safety framing, and the captured conversation highlights.</li>
+                  <li>Keep the rapid assessment controls close to the chat so they feel like part of the intake and not a hidden side task.</li>
+                  <li>Store the active session ID on the page so the clinician handoff can refresh later without rebuilding the route.</li>
+                  <li>Use one visible route status card to show whether the conversation is routine, urgent, or immediate escalation.</li>
+                </ol>
+              </div>
+
+              <div class="task-card">
+                <div class="task-eyebrow">Task 2</div>
+                <h3>Create the clinician page for review, report, and PDF export.</h3>
+                <ol class="task-steps">
+                  <li>Show route, safety flags, symptom summary, assessment totals, citations, and transcript highlights in one screen.</li>
+                  <li>Keep the raw transcript available as support context, not as the main output.</li>
+                  <li>Add a PDF export action that uses the same handoff payload the clinician page is already rendering.</li>
+                  <li>Use visual priority: route first, safety next, summary next, and supporting notes last.</li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="task-stack">
+              <div class="code-card">
+                <div class="code-card-header">
+                  <div class="code-card-meta">
+                    <div class="card-eyebrow">Prompt contract</div>
+                    <h3>System instruction the workshop can explain</h3>
+                    <p>Keep the prompt contract concrete so the learner sees what the assistant must do and what it must never do.</p>
+                  </div>
+                  <button class="copy-button" type="button" data-copy-code="code-lab4-prompt">Copy</button>
+                </div>
+                <pre><code id="code-lab4-prompt">system_role: psychiatry first responder for pre-visit intake
+goals:
+  - collect presenting concern, timeline, mood, anxiety, sleep, function, safety, current care, and supports
+  - use DSM-5-informed symptom domains without diagnosing
+  - add a CBT-style thought and behavior note for the clinician handoff
+  - retrieve approved clinic guidance only when needed
+must_do:
+  - ask safety questions directly and early
+  - stop normal intake when immediate safety escalation triggers
+  - return a concise clinician handoff and PDF payload
+must_not:
+  - diagnose
+  - prescribe or adjust medication
+  - invent policy or citations
+  - continue a normal script when the patient is unsafe</code></pre>
+              </div>
+
+              <div class="code-card">
+                <div class="code-card-header">
+                  <div class="code-card-meta">
+                    <div class="card-eyebrow">APEX wiring</div>
+                    <h3>Call pattern for handoff generation and PDF export</h3>
+                    <p>Short enough to teach, realistic enough to feel like a workshop, and directly connected to the report preview the clinician will open.</p>
+                  </div>
+                  <button class="copy-button" type="button" data-copy-code="code-lab4-apex">Copy</button>
+                </div>
+                <pre><code id="code-lab4-apex">apex.server.process(
+  "GENERATE_PSYCH_HANDOFF",
+  {
+    x01: $v("P10_SESSION_ID"),
+    x02: $v("P10_ASSESSMENT_TOTAL")
+  },
+  {
+    dataType: "json",
+    success: function (payload) {
+      apex.item("P10_ROUTE_CODE").setValue(payload.route_code);
+      apex.item("P10_REPORT_SUMMARY").setValue(payload.report_summary);
+      apex.item("P10_PDF_STATUS").setValue(payload.pdf_status);
+      apex.region("clinicianHandoffPreview").refresh();
+    }
+  }
+);</code></pre>
+              </div>
+
+              <div class="sample-two-column">
+                <div class="info-card">
+                  <div class="card-eyebrow">Mock patient page</div>
+                  <h3>Patient intake UI</h3>
+                  <div class="mock-window">
+                    <div class="mock-window-bar">
+                      <div class="mock-dots"><span></span><span></span><span></span></div>
+                      <div class="mock-window-title">Patient intake chat</div>
+                    </div>
+                    <div class="mock-window-body">
+                      <div class="mock-message"><strong>Current question</strong><span>Before the appointment, what feels hardest right now?</span></div>
+                      <div class="mock-message is-user"><strong>Patient answer</strong><span>Panic is hitting before work and I am sleeping only a few hours.</span></div>
+                      <div class="mock-pill-row">
+                        <span class="mock-pill">Quick replies</span>
+                        <span class="mock-pill">Safety framing</span>
+                        <span class="mock-pill">Route visible</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="info-card">
+                  <div class="card-eyebrow">Mock clinician page</div>
+                  <h3>Clinician handoff preview</h3>
+                  <div class="mock-window">
+                    <div class="mock-window-bar">
+                      <div class="mock-dots"><span></span><span></span><span></span></div>
+                      <div class="mock-window-title">Clinician review</div>
+                    </div>
+                    <div class="mock-window-body">
+                      <div class="mock-panel"><strong>Route</strong><span>Urgent psychiatric review</span></div>
+                      <div class="mock-panel"><strong>Summary</strong><span>Escalating panic, poor sleep, missed work, therapist already in place, no current self-harm plan.</span></div>
+                      <div class="mock-panel"><strong>PDF export</strong><span>Handoff packet ready for download and appointment prep.</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="info-card">
+                <div class="card-eyebrow">Report shape</div>
+                <h3>What the handoff has to contain</h3>
+                <ul class="sample-list">
+                  <li>Route, safety flags, and the reason the route was selected.</li>
+                  <li>Presenting concern, recent change, mood or anxiety impact, sleep, function, and current care context.</li>
+                  <li>Rapid assessment totals, transcript highlights, citations, and a CBT-style note the clinician can scan quickly.</li>
+                </ul>
+              </div>
+
+              <div class="checklist-card">
+                <div class="card-eyebrow">Checkpoint</div>
+                <h3>UX readiness before launch</h3>
+                <ul class="checklist">
+                  <li>Patient page exposes only the guided intake actions the user needs.</li>
+                  <li>Clinician page prioritizes route, safety, summary, and assessment over raw transcript content.</li>
+                  <li>Prompt contract is visible in the workshop and mapped to the UX the learner sees.</li>
+                  <li>The app can regenerate the handoff and PDF after the patient completes the conversation.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="sample-panel sample-lab" id="lab-5" data-track-section>
+          <div class="sample-panel-inner">
+            <div class="lab-head">
+              <div class="lab-meta-row">
+                <span class="lab-label">Lab 5</span>
+                <span class="lab-time">Estimated time: 20 minutes</span>
+              </div>
+              <h2 class="lab-title">Validate the route logic, launch the demo safely, and confirm the learner can explain the result.</h2>
+              <p class="section-summary">The last lab should prove that the build works and that the learner understands why it works. This is where smoke checks, a quiz, and the PDF export gate belong.</p>
+            </div>
+
+            <div
+              data-video-card
+              data-video-title="Lab 5 walkthrough"
+              data-video-summary="Show the smoke path, quiz, and PDF export gate first so the learner knows how to prove the result."
+              data-video-features="Smoke path|Knowledge check|PDF export"
+            ></div>
+
+            <div class="task-stack">
+              <div class="task-card">
+                <div class="task-eyebrow">Task 1</div>
+                <h3>Run the end-to-end smoke path before presenting the workshop as complete.</h3>
+                <ol class="task-steps">
+                  <li>Open the patient page, answer the guided questions, and confirm the session records are stored.</li>
+                  <li>Verify that the route changes for real reasons and that the clinician handoff endpoint returns a structured response.</li>
+                  <li>Open the clinician page and confirm the route, safety flags, summary, assessment totals, citations, and PDF action all render.</li>
+                  <li>Test one immediate safety case, one urgent psychiatry review case, and one routine intake case.</li>
+                </ol>
+              </div>
+
+              <div class="checklist-card">
+                <div class="card-eyebrow">Launch checklist</div>
+                <h3>Minimum release gate for the demo</h3>
+                <ul class="checklist">
+                  <li>Routine intake path completes and generates a clinician handoff.</li>
+                  <li>Immediate safety escalation interrupts the normal flow and changes the route.</li>
+                  <li>Clinician page shows citations from approved guidance only.</li>
+                  <li>Copyable snippets, quiz, SQL widget, and PDF export all work inside the guide.</li>
+                </ul>
+              </div>
+
+              <div class="code-card">
+                <div class="code-card-header">
+                  <div class="code-card-meta">
+                    <div class="card-eyebrow">Smoke test snippet</div>
+                    <h3>Verify the report endpoint</h3>
+                    <p>One short test script is enough here. The workshop demo should show validation, not bury the reader in framework plumbing.</p>
+                  </div>
+                  <button class="copy-button" type="button" data-copy-code="code-lab5-smoke">Copy</button>
+                </div>
+                <pre><code id="code-lab5-smoke">curl -X GET \
+  https://demo.example.oraclecloudapps.com/ords/psych/handoff/42 \
+  -H "Accept: application/json"</code></pre>
+              </div>
+
+              <div class="widget-card">
+                <div class="widget-eyebrow">Knowledge check</div>
+                <h3>Short launch quiz</h3>
+                <p>Use a small quiz when the workshop needs the learner to prove they understood the safety boundary, not just clicked through the page.</p>
+                <form class="quiz-form" id="launchQuiz">
+                  <fieldset class="quiz-question">
+                    <legend>1. Which layer should decide whether the intake stays routine, becomes urgent review, or moves to immediate safety escalation?</legend>
+                    <label class="quiz-choice"><input type="radio" name="q1" value="browser"><span>The browser page, because it is closest to the user.</span></label>
+                    <label class="quiz-choice"><input type="radio" name="q1" value="service"><span>The trusted PL/SQL and service layer, because safety policy and routing must stay outside the UI.</span></label>
+                    <label class="quiz-choice"><input type="radio" name="q1" value="vector"><span>The vector store, because the closest chunk should choose the route automatically.</span></label>
+                  </fieldset>
+
+                  <fieldset class="quiz-question">
+                    <legend>2. What is the clinician supposed to receive at the end of the patient intake flow?</legend>
+                    <label class="quiz-choice"><input type="radio" name="q2" value="transcript"><span>A raw transcript only.</span></label>
+                    <label class="quiz-choice"><input type="radio" name="q2" value="handoff"><span>A concise handoff with route, safety flags, symptoms, assessments, and cited guidance.</span></label>
+                    <label class="quiz-choice"><input type="radio" name="q2" value="prompt"><span>The original system prompt so the clinician can review it manually.</span></label>
+                  </fieldset>
+
+                  <fieldset class="quiz-question">
+                    <legend>3. Why does the demo include a quick assessment block?</legend>
+                    <label class="quiz-choice"><input type="radio" name="q3" value="diagnose"><span>To turn the demo into an automated diagnosis engine.</span></label>
+                    <label class="quiz-choice"><input type="radio" name="q3" value="structure"><span>To add a short, structured signal to the clinician handoff and PDF without replacing clinical judgment.</span></label>
+                    <label class="quiz-choice"><input type="radio" name="q3" value="decorative"><span>Only to make the page look more interactive.</span></label>
+                  </fieldset>
+
+                  <div class="sql-actions">
+                    <button class="sql-action is-primary" type="submit">Check answers</button>
+                  </div>
+                </form>
+                <div class="quiz-result" id="quizResult" aria-live="polite">Answer the three questions to confirm the launch logic is anchored.</div>
+              </div>
+
+              <div class="info-card">
+                <div class="card-eyebrow">Launch focus</div>
+                <h3>What the learner should be able to explain at the end</h3>
+                <ul class="sample-list">
+                  <li>Why psychiatry intake, safety logic, and PDF handoff all belong to the trusted service boundary.</li>
+                  <li>Why the demo stays limited to behavioral-health intake instead of drifting into broad medical triage.</li>
+                  <li>How the rapid assessment and chat transcript work together to make the clinician handoff faster to scan.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="sample-footer">
+    <div class="sample-footer-shell">
+      <p>This page is a UX demonstration for the redesigned author documentation. It shows a workshop surface that teaches the user how to build something real, with steps, code, checks, tools, and a visible end result.</p>
+      <p>Oracle © 2026</p>
+      <a class="sample-button is-secondary" href="../../index.html">Return to guide home</a>
+    </div>
+  </footer>
+</body>
+
+</html>

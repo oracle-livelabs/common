@@ -1,0 +1,38 @@
+{
+  "default_environment": "prod",
+  "environments": {
+    "prod": {
+      "base_url": "https://livelabs.oracle.com/ords/r/dbpm/livelabs"
+    }
+  },
+  "defaults": {
+    "browsers": [
+      "chromium"
+    ],
+    "headed": false,
+    "workers": "0",
+    "retries": "0",
+    "test_timeout_ms": 60000,
+    "expect_timeout_ms": 15000,
+    "action_timeout_ms": 15000,
+    "navigation_timeout_ms": 20000,
+    "page_ready_timeout_ms": 15000,
+    "optional_load_timeout_ms": 5000,
+    "cookie_timeout_ms": 2000,
+    "navigation_retries": 1,
+    "tracing": "retain-on-failure",
+    "video": "retain-on-failure",
+    "screenshot": "only-on-failure",
+    "full_page_screenshot": true,
+    "livelabs_search_term": "OCI",
+    "artifacts_dir": "artifacts/platform/adhoc/test-results",
+    "junit": "on",
+    "json_report": "on",
+    "capture_console": true,
+    "capture_page_errors": true,
+    "capture_request_failures": true,
+    "capture_response_errors": true,
+    "response_error_status": 400,
+    "attach_dom_snapshot_on_failure": true
+  }
+}

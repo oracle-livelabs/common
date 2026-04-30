@@ -1,0 +1,83 @@
+{
+  "total_wms_rows": 1659,
+  "canonical_wms_row_count": 1502,
+  "active_enabled_portfolio_row_count": 885,
+  "excluded_inactive_publish_state_row_count": 427,
+  "excluded_from_visible_rankings_row_count": 427,
+  "excluded_non_workshop_publish_type_row_count": 36,
+  "excluded_disabled_publish_type_row_count": 378,
+  "publish_state_counts": {
+    "active_enabled": 885,
+    "inactive": 391,
+    "excluded_non_workshop": 36
+  },
+  "publish_state_reason_counts": {
+    "published_active_enabled": 885,
+    "publish_type_disabled": 378,
+    "publish_type_event_excluded": 36,
+    "publish_status_not_published": 13
+  },
+  "active_content_kind_counts": {
+    "workshop": 585,
+    "sprint": 300
+  },
+  "disabled_content_kind_counts": {
+    "workshop": 293,
+    "sprint": 85
+  },
+  "total_rows_by_dashboard_window": {
+    "recent_views_7d": 993,
+    "recent_views_14d": 1038,
+    "recent_views_30d": 1099,
+    "recent_views_90d": 1187,
+    "recent_views_180d": 1287,
+    "recent_views_12m": 1396
+  },
+  "join_match_rate_by_window": {
+    "recent_views_7d": 98.29,
+    "recent_views_14d": 98.17,
+    "recent_views_30d": 98.18,
+    "recent_views_90d": 98.23,
+    "recent_views_180d": 97.98,
+    "recent_views_12m": 98.14
+  },
+  "unmatched_workshop_titles": [
+    "Building AI Agents with Model Context Protocol (MCP) and Oracle Database 23ai",
+    "AI - Develop an AI Agent application using LangChain and Oracle Database 23ai",
+    "William Testing - 4319",
+    "Test for William",
+    "William Testing - 4318",
+    "AI Data Platform - Build a GenIAI-Powered Release and Performance Analyst - Entertainment Industry",
+    "David Test 2",
+    "Green Button Test",
+    "David Start Test",
+    "Testing noVNC",
+    "How to Use the JDKs keytool Utility",
+    "How to Update the JDKs Timezone Data",
+    "LiveLabs FastLab: Identity-aware database access using Oracle Deep Data Security",
+    "Make Search Trusted, Faster, and Cheaper on your Application with Trusted Answer Search",
+    "Accelerating IoT applications with OCI Cache and OCI PostgreSQL",
+    "FR - Test",
+    "LiveLabs LiveStack \u2014 Social Commerce (Retail)",
+    "Oracle Integration 3 - Search FHIR Resources in an EMR Application",
+    "HOL18 - Terraform Test",
+    "Social Commerce Applicaiton",
+    "Oracle Integration 3 - Oracle Health EHR to Oracle Fusion - Create Care Request",
+    "LL Workbench",
+    "Restricted-Tenancy-Image-Test",
+    "LiveLabs LiveStack \u2014 Augmented Banking Hub",
+    "Creating Oracle JDK Container Images",
+    "DELETE - Oracle Sharded Database (PTS)"
+  ],
+  "duplicate_wms_title_groups": 132,
+  "reused_wms_family_ids": 123,
+  "duplicate_livelabs_id_groups": 0,
+  "duplicate_workshop_key_groups": 0,
+  "percent_missing_yearly_views": 0.0,
+  "percent_missing_owner": 0.0,
+  "percent_missing_wms_id": 0.0,
+  "percent_missing_livelabs_id": 0.0,
+  "percent_missing_replacement_flag": 34.15,
+  "percent_missing_repo_mapping": 1.37,
+  "percent_missing_workshop_level_last_updated": 2.13
+}

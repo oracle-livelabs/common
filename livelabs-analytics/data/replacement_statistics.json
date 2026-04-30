@@ -1,0 +1,29 @@
+{
+  "scope": "active_enabled_portfolio",
+  "replacement_exists_counts": {
+    "false": 588,
+    "review": 168,
+    "true": 108,
+    "unknown": 21
+  },
+  "replacement_exists_counts_by_content_kind": {
+    "workshop": {
+      "false": 397,
+      "review": 74,
+      "true": 96,
+      "unknown": 18
+    },
+    "sprint": {
+      "false": 191,
+      "review": 94,
+      "true": 12,
+      "unknown": 3
+    }
+  },
+  "replacement_score_bands": {
+    ">=72": 108,
+    "60-71.99": 168,
+    "<60": 608,
+    "missing": 1
+  }
+}
