@@ -1,0 +1,35 @@
+{
+    "workshoptitle": "AI Developer Setup Guide",
+    "help": "livelabs-help-db_us@oracle.com",
+    "tutorials": [
+        {
+            "title": "Introduction",
+            "description": "Workshop overview, prerequisites, and lab sequence.",
+            "type": "livelabs",
+            "filename": "../../introduction/introduction.md"
+        },
+        {
+            "title": "Lab 1: Install and Configure Codex",
+            "description": "Install Codex, choose a workspace, apply config.toml, and restart Codex.",
+            "type": "livelabs",
+            "filename": "../../lab-1-codex-installation/lab-1-codex-installation.md"
+        },
+        {
+            "title": "Lab 2: Install and Test Codex Skills",
+            "description": "Install skills from the shared Oracle bundle and confirm Codex can load them.",
+            "type": "livelabs",
+            "filename": "../../lab-2-install-codex-skills/lab-2-install-codex-skills.md"
+        },
+        {
+            "title": "Lab 3: Generate and Run a LiveStack Demo",
+            "description": "Use LiveStacks Orchestrator and Podman Compose to generate and run a local demo, or run a supplied solution zip on OCI Compute.",
+            "type": "livelabs",
+            "filename": "../../lab-3-orchestrate-and-run-livestack/lab-3-orchestrate-and-run-livestack.md"
+        },
+        {
+            "title": "Need Help?",
+            "description": "Template to link to Need Help lab at the end of workshop.",
+            "filename": "https://raw.githubusercontent.com/oracle-livelabs/common/main/labs/need-help/need-help-freetier.md"
+        }
+    ]
+}

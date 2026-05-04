@@ -8,22 +8,27 @@
       "filename": "./../../introduction/introduction.md"
     },
     {
-      "title": "Lab 1: From Idea to Publish-Ready in One Flow",
+      "title": "Lab 1: AI Developer Setup Guide",
+      "description": "Install and configure Codex, add Oracle AI Developer skills, and use LiveStacks Orchestrator with Podman to generate and run a local demo.",
+      "filename": "./../../ai-developer-set-up-guide/introduction/introduction.md"
+    },
+    {
+      "title": "Lab 2: From Idea to Publish-Ready in One Flow",
       "description": "Turn a source article into a draft LiveLabs workshop with a clear lab plan, validator-aligned markdown, and source-faithful learner tasks.",
       "filename": "./../../from-idea-to-publish-ready/from-idea-to-publish-ready.md"
     },
     {
-      "title": "Lab 2: Capture Workshop Images in Minute",
+      "title": "Lab 3: Capture Workshop Images in Minute",
       "description": "Capture workshop screenshots, annotate key UI states, blur sensitive information, and keep image assets aligned with placeholder references.",
       "filename": "./../../capture-workshop-images-in-minutes/capture-workshop-images-in-minutes.md"
     },
     {
-      "title": "Lab 3: Add Knowledge Checks in Minutes",
+      "title": "Lab 4: Add Knowledge Checks in Minutes",
       "description": "Add quiz-based knowledge checks without rewriting the teaching content and validate the result.",
       "filename": "./../../add-knowledge-checks-in-minutes/add-knowledge-checks-in-minutes.md"
     },
     {
-      "title": "Lab 4: Turn Features into Customer Outcomes",
+      "title": "Lab 5: Turn Features into Customer Outcomes",
       "description": "Create an industry-specific workshop variant, preserve source fidelity, and review the output for drift or duplication.",
       "filename": "./../../turn-features-into-customer-outcomes/turn-features-into-customer-outcomes.md"
     }

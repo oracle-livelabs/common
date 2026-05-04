@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">AI Developer setup path</title>
+  <desc id="desc">A three stage flow from Codex foundation to skill installation to running a LiveStack demo with Podman.</desc>
+  <rect width="1200" height="520" fill="#fbf9f7"/>
+  <rect x="0" y="0" width="1200" height="12" fill="#c74634"/>
+  <text x="70" y="78" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#312d2a">AI Developer Setup Guide</text>
+  <text x="70" y="114" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#5f5751">Install Codex, add reusable skills, then generate and run an Oracle-first LiveStack demo.</text>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7a736e"/>
+    </marker>
+  </defs>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="70" y="185" width="300" height="190" rx="0" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
+    <rect x="70" y="185" width="300" height="14" fill="#c74634"/>
+    <circle cx="112" cy="245" r="28" fill="#f6d7cf"/>
+    <text x="103" y="255" font-size="28" font-weight="700" fill="#c74634">1</text>
+    <text x="155" y="240" font-size="22" font-weight="700" fill="#312d2a">Codex foundation</text>
+    <text x="155" y="272" font-size="16" fill="#5f5751">Install Codex, sign in,</text>
+    <text x="155" y="296" font-size="16" fill="#5f5751">create the workspace,</text>
+    <text x="155" y="320" font-size="16" fill="#5f5751">and apply config.toml.</text>
+    <rect x="450" y="185" width="300" height="190" rx="0" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
+    <rect x="450" y="185" width="300" height="14" fill="#007d7e"/>
+    <circle cx="492" cy="245" r="28" fill="#dff3f0"/>
+    <text x="483" y="255" font-size="28" font-weight="700" fill="#007d7e">2</text>
+    <text x="535" y="240" font-size="22" font-weight="700" fill="#312d2a">Skills layer</text>
+    <text x="535" y="272" font-size="16" fill="#5f5751">Download skill zips,</text>
+    <text x="535" y="296" font-size="16" fill="#5f5751">install into skills,</text>
+    <text x="535" y="320" font-size="16" fill="#5f5751">restart, and test.</text>
+    <rect x="830" y="185" width="300" height="190" rx="0" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
+    <rect x="830" y="185" width="300" height="14" fill="#b25f00"/>
+    <circle cx="872" cy="245" r="28" fill="#faead2"/>
+    <text x="863" y="255" font-size="28" font-weight="700" fill="#b25f00">3</text>
+    <text x="915" y="240" font-size="22" font-weight="700" fill="#312d2a">Running demo</text>
+    <text x="915" y="272" font-size="16" fill="#5f5751">Use the orchestrator,</text>
+    <text x="915" y="296" font-size="16" fill="#5f5751">build with Compose,</text>
+    <text x="915" y="320" font-size="16" fill="#5f5751">open localhost:8505.</text>
+    <line x1="390" y1="280" x2="425" y2="280" stroke="#7a736e" stroke-width="3" marker-end="url(#arrow)"/>
+    <line x1="770" y1="280" x2="805" y2="280" stroke="#7a736e" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="70" y="430" width="1060" height="46" fill="#312d2a"/>
+    <text x="95" y="460" font-size="17" fill="#fff">Checkpoint: install Codex, confirm skills load, and run a generated LiveStack locally.</text>
+  </g>
+</svg>
