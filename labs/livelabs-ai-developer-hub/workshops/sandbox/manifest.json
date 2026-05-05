@@ -4,31 +4,41 @@
   "tutorials": [
     {
       "title": "Introduction",
-      "description": "Overview of the LiveLabs playground workshop and the author workflows it packages for workshop creation, screenshots, quiz checks, and industry conversion.",
+      "description": "Overview of the LiveLabs AI Developer Hub, including setup, Codex skills, optional LiveStacks demo generation, and author workflow labs.",
       "filename": "./../../introduction/introduction.md"
     },
     {
-      "title": "Lab 1: AI Developer Setup Guide",
-      "description": "Install and configure Codex, add Oracle AI Developer skills, and use LiveStacks Orchestrator with Podman to generate and run a local demo.",
-      "filename": "./../../ai-developer-set-up-guide/introduction/introduction.md"
+      "title": "Lab 1: Install and Configure Codex",
+      "description": "Install Codex, choose a workspace, apply config.toml, and restart Codex.",
+      "filename": "./../../ai-developer-set-up-guide/lab-1-codex-installation/lab-1-codex-installation.md"
     },
     {
-      "title": "Lab 2: From Idea to Publish-Ready in One Flow",
+      "title": "Lab 2: Install and Test Codex Skills",
+      "description": "Install skills from the shared Oracle bundle and confirm Codex can load them.",
+      "filename": "./../../ai-developer-set-up-guide/lab-2-install-codex-skills/lab-2-install-codex-skills.md"
+    },
+    {
+      "title": "Optional Lab: Generate and Run a LiveStack Demo",
+      "description": "Optional stretch lab: use LiveStacks Orchestrator and Podman Compose to generate and run a local demo, or run a supplied solution zip on OCI Compute.",
+      "filename": "./../../ai-developer-set-up-guide/lab-3-orchestrate-and-run-livestack/lab-3-orchestrate-and-run-livestack.md"
+    },
+    {
+      "title": "Lab 3: From Idea to Publish-Ready in One Flow",
       "description": "Turn a source article into a draft LiveLabs workshop with a clear lab plan, validator-aligned markdown, and source-faithful learner tasks.",
       "filename": "./../../from-idea-to-publish-ready/from-idea-to-publish-ready.md"
     },
     {
-      "title": "Lab 3: Capture Workshop Images in Minute",
+      "title": "Lab 4: Capture Workshop Images in Minutes",
       "description": "Capture workshop screenshots, annotate key UI states, blur sensitive information, and keep image assets aligned with placeholder references.",
       "filename": "./../../capture-workshop-images-in-minutes/capture-workshop-images-in-minutes.md"
     },
     {
-      "title": "Lab 4: Add Knowledge Checks in Minutes",
+      "title": "Lab 5: Add Knowledge Checks in Minutes",
       "description": "Add quiz-based knowledge checks without rewriting the teaching content and validate the result.",
       "filename": "./../../add-knowledge-checks-in-minutes/add-knowledge-checks-in-minutes.md"
     },
     {
-      "title": "Lab 5: Turn Features into Customer Outcomes",
+      "title": "Lab 6: Turn Features into Customer Outcomes",
       "description": "Create an industry-specific workshop variant, preserve source fidelity, and review the output for drift or duplication.",
       "filename": "./../../turn-features-into-customer-outcomes/turn-features-into-customer-outcomes.md"
     }

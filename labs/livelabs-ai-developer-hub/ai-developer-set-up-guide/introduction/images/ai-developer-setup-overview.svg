@@ -1,43 +1,58 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
-  <title id="title">AI Developer setup path</title>
-  <desc id="desc">A three stage flow from Codex foundation to skill installation to running a LiveStack demo with Podman.</desc>
+  <title id="title">AI Developer Hub setup foundation</title>
+  <desc id="desc">Codex and skills form the required foundation for the workshop authoring labs, with an optional LiveStack demo available after setup.</desc>
   <rect width="1200" height="520" fill="#fbf9f7"/>
   <rect x="0" y="0" width="1200" height="12" fill="#c74634"/>
-  <text x="70" y="78" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#312d2a">AI Developer Setup Guide</text>
-  <text x="70" y="114" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#5f5751">Install Codex, add reusable skills, then generate and run an Oracle-first LiveStack demo.</text>
+  <text x="70" y="76" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700" fill="#312d2a">AI Developer Hub Foundation</text>
+  <text x="70" y="112" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#5f5751">Set up Codex and reusable skills first. Then use them across the authoring labs; the LiveStack demo is optional.</text>
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#7a736e"/>
     </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#007d7e"/>
+    </marker>
   </defs>
   <g font-family="Arial, Helvetica, sans-serif">
-    <rect x="70" y="185" width="300" height="190" rx="0" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
-    <rect x="70" y="185" width="300" height="14" fill="#c74634"/>
-    <circle cx="112" cy="245" r="28" fill="#f6d7cf"/>
-    <text x="103" y="255" font-size="28" font-weight="700" fill="#c74634">1</text>
-    <text x="155" y="240" font-size="22" font-weight="700" fill="#312d2a">Codex foundation</text>
-    <text x="155" y="272" font-size="16" fill="#5f5751">Install Codex, sign in,</text>
-    <text x="155" y="296" font-size="16" fill="#5f5751">create the workspace,</text>
-    <text x="155" y="320" font-size="16" fill="#5f5751">and apply config.toml.</text>
-    <rect x="450" y="185" width="300" height="190" rx="0" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
-    <rect x="450" y="185" width="300" height="14" fill="#007d7e"/>
-    <circle cx="492" cy="245" r="28" fill="#dff3f0"/>
-    <text x="483" y="255" font-size="28" font-weight="700" fill="#007d7e">2</text>
-    <text x="535" y="240" font-size="22" font-weight="700" fill="#312d2a">Skills layer</text>
-    <text x="535" y="272" font-size="16" fill="#5f5751">Download skill zips,</text>
-    <text x="535" y="296" font-size="16" fill="#5f5751">install into skills,</text>
-    <text x="535" y="320" font-size="16" fill="#5f5751">restart, and test.</text>
-    <rect x="830" y="185" width="300" height="190" rx="0" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
-    <rect x="830" y="185" width="300" height="14" fill="#b25f00"/>
-    <circle cx="872" cy="245" r="28" fill="#faead2"/>
-    <text x="863" y="255" font-size="28" font-weight="700" fill="#b25f00">3</text>
-    <text x="915" y="240" font-size="22" font-weight="700" fill="#312d2a">Running demo</text>
-    <text x="915" y="272" font-size="16" fill="#5f5751">Use the orchestrator,</text>
-    <text x="915" y="296" font-size="16" fill="#5f5751">build with Compose,</text>
-    <text x="915" y="320" font-size="16" fill="#5f5751">open localhost:8505.</text>
-    <line x1="390" y1="280" x2="425" y2="280" stroke="#7a736e" stroke-width="3" marker-end="url(#arrow)"/>
-    <line x1="770" y1="280" x2="805" y2="280" stroke="#7a736e" stroke-width="3" marker-end="url(#arrow)"/>
-    <rect x="70" y="430" width="1060" height="46" fill="#312d2a"/>
-    <text x="95" y="460" font-size="17" fill="#fff">Checkpoint: install Codex, confirm skills load, and run a generated LiveStack locally.</text>
+    <rect x="70" y="170" width="285" height="170" rx="0" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
+    <rect x="70" y="170" width="285" height="14" fill="#c74634"/>
+    <circle cx="112" cy="228" r="28" fill="#f6d7cf"/>
+    <text x="103" y="238" font-size="28" font-weight="700" fill="#c74634">1</text>
+    <text x="155" y="222" font-size="22" font-weight="700" fill="#312d2a">Codex foundation</text>
+    <text x="155" y="254" font-size="16" fill="#5f5751">Install Codex, sign in,</text>
+    <text x="155" y="278" font-size="16" fill="#5f5751">create the workspace,</text>
+    <text x="155" y="302" font-size="16" fill="#5f5751">and apply config.toml.</text>
+
+    <line x1="375" y1="255" x2="430" y2="255" stroke="#7a736e" stroke-width="3" marker-end="url(#arrow)"/>
+
+    <rect x="455" y="170" width="285" height="170" rx="0" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
+    <rect x="455" y="170" width="285" height="14" fill="#007d7e"/>
+    <circle cx="497" cy="228" r="28" fill="#dff3f0"/>
+    <text x="488" y="238" font-size="28" font-weight="700" fill="#007d7e">2</text>
+    <text x="540" y="222" font-size="22" font-weight="700" fill="#312d2a">Skills layer</text>
+    <text x="540" y="254" font-size="16" fill="#5f5751">Install reusable skills,</text>
+    <text x="540" y="278" font-size="16" fill="#5f5751">restart Codex, and</text>
+    <text x="540" y="302" font-size="16" fill="#5f5751">confirm they load.</text>
+
+    <line x1="760" y1="230" x2="830" y2="210" stroke="#007d7e" stroke-width="3" marker-end="url(#arrow-teal)"/>
+    <line x1="760" y1="280" x2="830" y2="325" stroke="#7a736e" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow)"/>
+
+    <rect x="850" y="145" width="285" height="150" rx="0" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
+    <rect x="850" y="145" width="285" height="14" fill="#007d7e"/>
+    <circle cx="892" cy="202" r="28" fill="#dff3f0"/>
+    <text x="883" y="212" font-size="22" font-weight="700" fill="#007d7e">3+</text>
+    <text x="935" y="195" font-size="22" font-weight="700" fill="#312d2a">Authoring labs</text>
+    <text x="935" y="227" font-size="16" fill="#5f5751">Draft, capture images,</text>
+    <text x="935" y="251" font-size="16" fill="#5f5751">add quizzes, and adapt</text>
+    <text x="935" y="275" font-size="16" fill="#5f5751">content for outcomes.</text>
+
+    <rect x="850" y="335" width="285" height="105" rx="0" fill="#fffdf9" stroke="#b25f00" stroke-width="2" stroke-dasharray="8 6"/>
+    <rect x="850" y="335" width="285" height="12" fill="#b25f00"/>
+    <text x="875" y="378" font-size="20" font-weight="700" fill="#312d2a">Optional LiveStack demo</text>
+    <text x="875" y="407" font-size="16" fill="#5f5751">Generate and run a demo</text>
+    <text x="875" y="431" font-size="16" fill="#5f5751">after setup, if time allows.</text>
+
+    <rect x="70" y="455" width="1065" height="42" fill="#312d2a"/>
+    <text x="95" y="482" font-size="17" fill="#fff">Checkpoint: Codex and skills are ready. Continue into the authoring labs; run the demo only if time allows.</text>
   </g>
 </svg>

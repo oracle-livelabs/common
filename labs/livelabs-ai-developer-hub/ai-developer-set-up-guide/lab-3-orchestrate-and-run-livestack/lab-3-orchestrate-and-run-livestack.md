@@ -1,4 +1,4 @@
-# Lab 3: Generate and Run a LiveStack Demo
+# Optional Lab: Generate and Run a LiveStack Demo
 
 ## Introduction
 
@@ -417,7 +417,7 @@ Use this task when the instructor gives you a completed LiveStack zip. Run it on
     - The generated README names a different Compose file or app port.
     - A bind-mounted folder needs the permissions described in the generated README.
 
-## Task 9: Complete the Lab 3 checkpoint
+## Task 9: Complete the optional demo checkpoint
 
 1. Confirm each item is true:
 
