@@ -100,7 +100,7 @@
 
 9. Click **Create**.
 
-10.  The **Autonomous AI Database details** page is displayed. The status of your ADB instance is **`Provisioning`**.
+10. The **Autonomous AI Database details** page is displayed. The status of your ADB instance is **`Provisioning`**.
 
    ![Database Provisioning message.](./images/adb-create-provisioning-message-new.png =75%x*)
 
