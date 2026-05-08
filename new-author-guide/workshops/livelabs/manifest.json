@@ -1,0 +1,128 @@
+﻿{
+    "workshoptitle":  "Oracle LiveLabs Author Guide",
+    "help":  "livelabs-help-db_us@oracle.com",
+    "variables":  [
+                      "../../content/author-guide/4-labs-markdown-develop-content/variables.json",
+                      "../../content/author-guide/4-labs-markdown-develop-content/variables-in-another-file.json"
+                  ],
+    "tutorials":  [
+                      {
+                          "title":  "Introduction",
+                          "description":  "This lab provides an overview of submitting and creating workshops and labs for Oracle LiveLabs and other platforms.",
+                          "filename":  "./../../content/author-guide/introduction/introduction.md"
+                      },
+                      {
+                          "title":  "LiveLabs SLAs",
+                          "description":  "This document outlines the Service Level Agreements (SLAs) for the Oracle LiveLabs platform, including response times for PRs, approvals, publishing, and support.",
+                          "filename":  "./../../content/author-guide/sla/sla.md"
+                      },
+                      {
+                          "title":  "Need more information on GitHub?",
+                          "description":  "Describes what GitHub is and general information on projects and repositories",
+                          "filename":  "./../../content/author-guide/introduction/github-introduction.md"
+                      },
+                      {
+                          "title":  "Need to understand the status workflow in WMS?",
+                          "description":  "Details the status in WMS and what comes next, who is responsible.",
+                          "filename":  "./../../content/author-guide/introduction/wms-workflows.md"
+                      },
+                      {
+                          "title":  "Lab 1: Submit new workshop in WMS",
+                          "description":  "This lab walks you through working with Oracle Workshop Management System (WMS) and shows you the workflow for developing a workshop.",
+                          "filename":  "./../../content/author-guide/1-labs-wms/1-labs-wms.md"
+                      },
+                      {
+                          "title":  "Lab 2: Set up GitHub and install tools",
+                          "description":  "This lab helps you configure your environment for developing labs and workshops using Markdown and GitHub.",
+                          "filename":  "./../../content/author-guide/2-labs-github/2-labs-github.md"
+                      },
+                      {
+                          "title":  "Lab 3: Stay in sync with GitHub environment",
+                          "description":  "This lab shows you the Oracle LiveLabs GitHub folder structure how to fork and clone the repositories. Also use the common labs and images with the workshop templates.",
+                          "filename":  "./../../content/author-guide/3-labs-sync-github/3-labs-sync-github.md"
+                      },
+                      {
+                          "title":  "Lab 4a: Capture effective screens - Best practices",
+                          "description":  "This lab will describe the best practices when capturing screens.",
+                          "filename":  "./../../content/author-guide/13-labs-capture-screens-best-practices/13-labs-capture-screens-best-practices.md"
+                      },
+                      {
+                          "title":  "Lab 4b: How to use OptiShot to optimize screenshots",
+                          "filename":  "./../../content/author-guide/optishot/optishot.md"
+                      },
+                      {
+                          "title":  "Lab 5a: Develop Markdown and content",
+                          "description":  "This labs give you tips and tricks for editing and how to develop your lab (markdown) content using LiveLabs standards and accessibility for your workshops.",
+                          "filename":  "./../../content/author-guide/4-labs-markdown-develop-content/4-labs-markdown-develop-content.md"
+                      },
+                      {
+                          "title":  "Lab 5b: Add LiveLabs Quizzes to your workshops",
+                          "filename":  "./../../content/author-guide/quiz/quiz.md"
+                      },
+                      {
+                          "title":  "Lab 6a: Quality Assurance checks and steps",
+                          "description":  "This lab prepares you for Quality Assurance of your workshop, details to look for and adjust before publishing your workshop.",
+                          "filename":  "./../../content/author-guide/5-labs-qa-checks/5-labs-qa-checks.md"
+                      },
+                      {
+                          "title":  "Lab 6b: Pull Request Automated Checks",
+                          "filename":  "./../../content/author-guide/prcheck/prcheck.md"
+                      },
+                      {
+                          "title":  "Lab 7: Publish your workshop",
+                          "description":  "This lab walks you through the WMS steps to publish your workshop.",
+                          "filename":  "./../../content/author-guide/6-labs-publish/6-labs-publish.md"
+                      },
+                      {
+                          "title":  "Lab 8a: Publish to Live SQL",
+                          "description":  "This lab shows you how to create a tutorial in Live SQL",
+                          "filename":  "./../../content/author-guide/11-labs-create-freesql/11-create-freesql.md"
+                      },
+                      {
+                          "title":  "Lab 8b: Live SQL Integration",
+                          "description":  "This lab shows you how to integrate Live SQL in your workshop",
+                          "filename":  "./../../content/author-guide/12-freesql-integration/12-freesql-integration.md"
+                      },
+                      {
+                          "title":  "Lab 9: Develop LiveLabs Sprints",
+                          "description":  "This lab shows you how to create a Sprint for LiveLabs",
+                          "filename":  "./../../content/author-guide/10-labs-create-sprints-workflow/10-create-sprints-workflow.md"
+                      },
+                      {
+                          "title":  "Lab 10a: Setup Graphical Remote Desktop",
+                          "description":  "This lab will describe how to create and use a graphical remote desktop for your workshop.",
+                          "filename":  "./../../content/author-guide/6-labs-setup-graphical-remote-desktop/6-labs-setup-graphical-remote-desktop.md"
+                      },
+                      {
+                          "title":  "Lab 10b: Create Custom Image for Marketplace",
+                          "description":  "This lab will describe how to create and use a marketplace image for your workshop.",
+                          "filename":  "./../../content/author-guide/7-labs-create-custom-image-for-marketplace/7-labs-create-custom-image-for-marketplace.md"
+                      },
+                      {
+                          "title":  "Lab 10c: Publish Your Image to Oracle Marketplace",
+                          "description":  "This lab will show you how to publish your image to Oracle Marketplace.",
+                          "filename":  "./../../content/author-guide/8-labs-publish-custom-image-to-marketplace/8-labs-publish-custom-image-to-marketplace.md"
+                      },
+                      {
+                          "title":  "Lab 10d: Update the Image on Your Sandbox Environment",
+                          "description":  "This lab will show you how to get your new Marketplace image added to your LiveLab.",
+                          "filename":  "./../../content/author-guide/12-add-custom-image-to-workshop/12-add-custom-image-to-workshop.md"
+                      },
+                      {
+                          "title":  "Lab 11a: Secure Desktop Environments in LiveLabs",
+                          "description":  "This lab will wsho you how to get your new Marketplace image added to your LiveLab.",
+                          "filename":  "./../../content/author-guide/14-secure-desktop/secure-desktop.md"
+                      },
+                      {
+                          "title":  "Lab 11b: How to Request and Access Secure Desktop Environments",
+                          "description":  "This lab will show you how to get your new Marketplace image added to your LiveLab.",
+                          "filename":  "./../../content/author-guide/14-secure-desktop/secure-desktop-how-to-request.md"
+                      },
+                      {
+                          "title":  "Lab 12: Get Started with the LiveLabs AI Developer Hub",
+                          "description":  "This lab points authors to the LiveLabs AI Developer Hub for deeper workflow guides instead of repeating that content here.",
+                          "filename":  "./../../content/author-guide/15-labs-livelabs-ai-developer-hub/15-labs-livelabs-ai-developer-hub.md"
+                      }
+                  ]
+}
+

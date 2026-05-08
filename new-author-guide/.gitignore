@@ -1,0 +1,9 @@
+# Local-only workbench, generated assets, archived references, and QA output.
+project-assets/
+output/
+test-results/
+archive/
+archive-retired-reference/
+
+# Validation output stays local unless it is intentionally copied into tracked docs.
+VALIDATION-RESULT.md

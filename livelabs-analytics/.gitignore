@@ -1,0 +1,42 @@
+# Node deps and lock files
+node_modules/
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build and cache artifacts
+dist/
+build/
+out/
+public/
+.cache/
+coverage/
+.tmp/
+
+# System files
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.log
+*.bak
+*.tmp
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python local tooling (optional)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local dashboard debug artifacts (do not publish)
+__codex_*
+MISSING_MARKDOWN_DETAILS_LOG_*.md
+LiveLabs_Analytics_Dashboard_*/

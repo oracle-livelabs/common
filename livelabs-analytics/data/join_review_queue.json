@@ -1,0 +1,365 @@
+[
+  {
+    "workshop_key": "building ai agents with model context protocol mcp and oracle database 23ai",
+    "title": "Building AI Agents with Model Context Protocol (MCP) and Oracle Database 23ai",
+    "normalized_title": "building ai agents with model context protocol mcp and oracle database 23ai",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "ai develop an ai agent application using langchain and oracle database 23ai",
+    "title": "AI - Develop an AI Agent application using LangChain and Oracle Database 23ai",
+    "normalized_title": "ai develop an ai agent application using langchain and oracle database 23ai",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "william testing 4319",
+    "title": "William Testing - 4319",
+    "normalized_title": "william testing 4319",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "test for william",
+    "title": "Test for William",
+    "normalized_title": "test for william",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "william testing 4318",
+    "title": "William Testing - 4318",
+    "normalized_title": "william testing 4318",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "ai data platform build a geniai powered release and performance analyst entertainment industry",
+    "title": "AI Data Platform - Build a GenIAI-Powered Release and Performance Analyst - Entertainment Industry",
+    "normalized_title": "ai data platform build a geniai powered release and performance analyst entertainment industry",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "david test 2",
+    "title": "David Test 2",
+    "normalized_title": "david test 2",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "green button test",
+    "title": "Green Button Test",
+    "normalized_title": "green button test",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "david start test",
+    "title": "David Start Test",
+    "normalized_title": "david start test",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "testing novnc",
+    "title": "Testing noVNC",
+    "normalized_title": "testing novnc",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "how to use the jdks keytool utility",
+    "title": "How to Use the JDKs keytool Utility",
+    "normalized_title": "how to use the jdks keytool utility",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "how to update the jdks timezone data",
+    "title": "How to Update the JDKs Timezone Data",
+    "normalized_title": "how to update the jdks timezone data",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "livelabs fastlab identity aware database access using oracle deep data security",
+    "title": "LiveLabs FastLab: Identity-aware database access using Oracle Deep Data Security",
+    "normalized_title": "livelabs fastlab identity aware database access using oracle deep data security",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "make search trusted faster and cheaper on your application with trusted answer search",
+    "title": "Make Search Trusted, Faster, and Cheaper on your Application with Trusted Answer Search",
+    "normalized_title": "make search trusted faster and cheaper on your application with trusted answer search",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "accelerating iot applications with oci cache and oci postgresql",
+    "title": "Accelerating IoT applications with OCI Cache and OCI PostgreSQL",
+    "normalized_title": "accelerating iot applications with oci cache and oci postgresql",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "fr test",
+    "title": "FR - Test",
+    "normalized_title": "fr test",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "livelabs livestack social commerce retail",
+    "title": "LiveLabs LiveStack \u2014 Social Commerce (Retail)",
+    "normalized_title": "livelabs livestack social commerce retail",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "oracle integration 3 search fhir resources in an emr application",
+    "title": "Oracle Integration 3 - Search FHIR Resources in an EMR Application",
+    "normalized_title": "oracle integration 3 search fhir resources in an emr application",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "hol18 terraform test",
+    "title": "HOL18 - Terraform Test",
+    "normalized_title": "hol18 terraform test",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "social commerce applicaiton",
+    "title": "Social Commerce Applicaiton",
+    "normalized_title": "social commerce applicaiton",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "oracle integration 3 oracle health ehr to oracle fusion create care request",
+    "title": "Oracle Integration 3 - Oracle Health EHR to Oracle Fusion - Create Care Request",
+    "normalized_title": "oracle integration 3 oracle health ehr to oracle fusion create care request",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "ll workbench",
+    "title": "LL Workbench",
+    "normalized_title": "ll workbench",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "restricted tenancy image test",
+    "title": "Restricted-Tenancy-Image-Test",
+    "normalized_title": "restricted tenancy image test",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "livelabs livestack augmented banking hub",
+    "title": "LiveLabs LiveStack \u2014 Augmented Banking Hub",
+    "normalized_title": "livelabs livestack augmented banking hub",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "creating oracle jdk container images",
+    "title": "Creating Oracle JDK Container Images",
+    "normalized_title": "creating oracle jdk container images",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_7d",
+      "recent_views_14d",
+      "recent_views_30d",
+      "recent_views_90d",
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  },
+  {
+    "workshop_key": "delete oracle sharded database pts",
+    "title": "DELETE - Oracle Sharded Database (PTS)",
+    "normalized_title": "delete oracle sharded database pts",
+    "wms_id": null,
+    "livelabs_id": null,
+    "window_presence": [
+      "recent_views_180d",
+      "recent_views_12m"
+    ]
+  }
+]

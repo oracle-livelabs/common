@@ -1,0 +1,212 @@
+--- Page 1 ---
+ORACLE
+LiveStack AI Developer
+Oracle LiveStack AI Developer Codex Setup Guide
+Page 1
+Oracle LiveStack AI Developer Codex Setup Guide
+1. Install Codex Desktop
+Start here. This is the default path for Oracle training users who want
+the simplest Codex experience without living in a terminal.
+SIMPLEST
+Goal:
+ install the Codex Desktop app, sign in, point it at a workspace folder, and apply the sample TOML file (see
+below; contents at document end).
+Download Codex Desktop
+Codex get started
+Codex app guide
+1
+Download and install the desktop app
+Open the Codex page and choose the current download for your platform. Windows and macOS are
+supported by the Codex app; Linux users should use CLI until a desktop build is available.
+2
+Sign in the Oracle-approved way
+Use Oracle SSO if your account is enabled for it. If your workflow requires an API key instead, get it
+from the internal Oracle Confluence instructions. Do not put API keys in shared screenshots, PDFs, or
+email.
+3
+Create or choose a workspace folder
+Pick a normal local folder, for example Documents/Codex, then create one subfolder per training
+exercise or repo. Codex edits files inside the selected workspace and asks before higher-risk actions.
+4
+Install the Oracle config TOML file
+Create the .codex folder if it does not exist, then copy the sample TOML file (see below; contents at
+document end) to config.toml. macOS path: ~/.codex/config.toml. Windows path:
+%USERPROFILE%\.codex\config.toml.
+macOS quick path
+Open Finder, press 
+Cmd+Shift+G
+, enter 
+~/.codex
+,
+and copy the sample TOML file (see below;
+contents at document end) there as 
+config.toml
+.
+Restart Codex after changing the file.
+Windows quick path
+Open File Explorer and enter
+%USERPROFILE%\.codex
+. If the folder is missing,
+create it. Copy the sample TOML file (see below;
+contents at document end) there as 
+config.toml
+,
+then restart Codex.
+Most common Desktop problems
+Cannot find config.toml:
+ create the .codex folder first; it is usually hidden.
+Changed config but nothing happened:
+ fully quit and reopen Codex.
+Approval prompts:
+ expected when Codex needs network, Desktop, Downloads, or other folders outside the
+workspace.
+--- Page 2 ---
+ORACLE
+LiveStack AI Developer
+Oracle LiveStack AI Developer Codex Setup Guide
+Page 2
+Oracle LiveStack AI Developer Codex Setup Guide
+2. Install VS Code
+Use this when users want a familiar editor beside Codex. VS Code is
+optional for training, but helpful when reviewing files, markdown, and
+Git changes.
+EDITOR
+Download VS Code
+Optional: Git downloads
+Codex get started
+1
+Install Visual Studio Code
+Download VS Code for macOS or Windows, run the installer, and open the same workspace folder
+you use with Codex Desktop.
+2
+Open the training or repo folder
+Use File > Open Folder and select the exact folder Codex should edit. Keep one project per folder so
+approvals, Git changes, and generated files stay easy to understand.
+3
+Use VS Code for review, not as a second source of truth
+Let Codex make the proposed change, then use VS Code to inspect changed files, search, compare
+diffs, and make small manual edits if needed.
+4
+Only do Git when you are publishing LiveLabs Stacks
+Git is optional for normal training exercises. Use Git and PRs only if your assignment is to publish or
+contribute a LiveLabs Stack or shared repository.
+Recommended extensions
+Markdown support:
+ built in. Use Preview to
+inspect LiveLabs markdown.
+Git support:
+ built in. Install Git separately only
+when publishing.
+Oracle extensions:
+ install only when your lab
+instructions require them.
+Common VS Code problems
+Folder mismatch:
+ Codex and VS Code must point
+at the same folder.
+Git not found:
+ install Git, then restart VS Code.
+Too many files changed:
+ check that Codex did not
+open the parent folder by mistake.
+What to tell users about the Approve button
+In Codex Desktop, approval controls appear only when there is a pending action that needs consent. Git PR
+checks and remote CI reruns usually live in GitHub or the repo workflow, not in the Codex local approval UI.
+--- Page 3 ---
+ORACLE
+LiveStack AI Developer
+Oracle LiveStack AI Developer Codex Setup Guide
+Page 3
+Oracle LiveStack AI Developer Codex Setup Guide
+3. Install CLI
+Use this for advanced users, automation, repeatable scripts, or
+anyone who is comfortable in Terminal or PowerShell.
+ADVANCED
+CLI docs
+Node.js download
+npm package
+1
+Install Node.js LTS first
+The Codex CLI is installed with npm. Install the current Node.js LTS build, then close and reopen
+Terminal or PowerShell so PATH updates are loaded.
+2
+Install or upgrade the CLI
+Run the npm install command below. If Codex is already installed, you can also use the documented
+upgrade path from the CLI help article.
+npm install -g @openai/codex
+codex --version
+3
+Sign in or provide credentials
+Preferred Oracle path is SSO when available. If your workflow requires an API key, follow the internal
+Oracle Confluence instructions. Keep the key out of config.toml unless Oracle instructions explicitly
+say otherwise.
+4
+Apply the same sample TOML file
+The CLI, IDE, and desktop app share the same Codex configuration location. Copy the sample TOML
+file (see below; contents at document end) to ~/.codex/config.toml on macOS or
+%USERPROFILE%\.codex\config.toml on Windows.
+macOS commands
+mkdir -p ~/.codex
+cp sample-codex-config.toml ~/.codex/config.toml
+codex
+Windows PowerShell commands
+mkdir $env:USERPROFILE\.codex -Force
+copy .\sample-codex-config.toml
+$env:USERPROFILE\.codex\config.toml
+codex
+Most common CLI problems
+npm not found:
+ install Node.js LTS and reopen the terminal.
+codex not found after install:
+ PATH did not refresh; open a new shell or check the npm global bin path.
+proxy or network errors:
+ confirm Oracle network/VPN/proxy requirements before retrying.
+permission errors:
+ avoid sudo first; fix npm global install permissions or use the platform-recommended Node
+installer.
+--- Page 4 ---
+ORACLE
+LiveStack AI Developer
+Oracle LiveStack AI Developer Codex Setup Guide
+Page 4
+Oracle LiveStack AI Developer Codex Setup Guide
+Appendix. Sample TOML file
+Copy this into the Codex config location, or use the companion
+sample-codex-config.toml file shipped beside this PDF.
+CONFIG
+Use this sample configuration for Oracle training and demo work. It intentionally omits extra MCP services that
+most users do not need.
+Codex config reference
+Codex app page
+# Sample Codex desktop config
+# version: v20260501-sample
+# Recommended model for the training/demo workflow
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
+# Let Codex edit files in the opened workspace, but require approval outside it.
+sandbox_mode = "workspace-write"
+# Oracle preference: sign in with SSO when available.
+# If your workflow requires an API key, follow the internal Confluence page.
+# Do not paste API keys into this file unless Oracle instructions explicitly say to.
+[feedback]
+enabled = false
+[sandbox_workspace_write]
+network_access = true
+writable_roots = []
+[shell_environment_policy]
+inherit = "all"
+# No MCP servers are enabled in this sample config.
+# Add MCP services only if your team instructions explicitly require them.
+# Windows-only: allow elevated sandbox mode when needed by the desktop app.
+[windows]
+sandbox = "elevated"
+Final checks before using Codex
+1. The file is named exactly 
+config.toml
+, not config.toml.txt.
+2. The file is in the user-level 
+.codex
+ folder, not only in Downloads or Desktop.
+3. Codex was restarted after the file was changed.
+4. API keys, if required, came from the internal Oracle Confluence instructions and were not pasted into shared
+artifacts.

@@ -1,0 +1,20 @@
+AI Developer Setup Guide source traceability
+
+Source PDFs:
+- oracle-livestacks-codex-installation-guide.pdf
+- oracle-livestacks-demo-setup-guide.pdf
+
+Extracted source text:
+- .source-material/oracle-livestacks-codex-installation-guide.txt
+- .source-material/oracle-livestacks-demo-setup-guide.txt
+
+Structural templates:
+- /Users/patshepherd/GitHub/livelabs/common/sample-livelabs-templates/sample-workshop
+- /Users/patshepherd/GitHub/livelabs/common/sample-livelabs-templates/create-labs
+
+External source checks performed:
+- The provided Oracle SharePoint folder URL redirected to Microsoft sign-in in this Codex session. Lab 2 therefore instructs learners to open it in a signed-in browser and use normal Oracle support or team access processes if access is denied.
+- Official product links from the source PDFs were kept as Learn More links where useful.
+- OpenAI Codex IDE extension documentation was checked before adding Lab 1 VS Code plugin installation guidance and screenshots.
+- Podman Desktop official docs were checked before revising Lab 3 to make Desktop the primary path. Lab 3 screenshots were sourced from the Podman Desktop installation, machine creation, Compose, and container workflow pages.
+- OCI Compute and Networking docs were checked before expanding the optional OCI path. Lab 3 now includes VCN wizard setup, public subnet routing, NSG or security list rules, compute instance settings, SSH checks, outbound access checks, and safe application access guidance.
