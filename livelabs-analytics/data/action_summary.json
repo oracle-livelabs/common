@@ -1,0 +1,51 @@
+{
+  "active_enabled_portfolio_row_count": 885,
+  "active_workshop_row_count": 585,
+  "active_sprint_row_count": 300,
+  "excluded_inactive_publish_state_row_count": 427,
+  "retire_now_strict_count": 0,
+  "retire_now_selected_count": 100,
+  "retire_candidate_selected_count": 100,
+  "retire_now_selected_strong_count": 2,
+  "retire_candidate_selected_strong_count": 16,
+  "replacement_validation_count": 2,
+  "refresh_now_count": 493,
+  "data_remediation_count": 1033,
+  "selected_top_to_retire_version": "weighted_v4",
+  "selected_top_retire_candidates_version": "candidate_v2",
+  "criteria_weights": {
+    "low_demand_score": 40,
+    "staleness_score": 30,
+    "superseded_score": 20,
+    "no_owner_score": 10
+  },
+  "top_performer_weights": {
+    "recent_views_12m_content_percentile": 0.45,
+    "recent_views_90d_content_percentile": 0.35,
+    "freshness_score": 0.2
+  },
+  "replacement_weights": {
+    "content_similarity": 0.55,
+    "category_similarity": 0.15,
+    "recency_similarity": 0.15,
+    "level_similarity": 0.1,
+    "title_similarity": 0.05
+  },
+  "stale_after_months": 12,
+  "publish_state_policy": {
+    "active_publish_statuses": [
+      "published"
+    ],
+    "active_publish_types": [
+      "private",
+      "public"
+    ],
+    "excluded_publish_types": [
+      "disabled",
+      "event"
+    ],
+    "excluded_non_workshop_publish_types": [
+      "event"
+    ]
+  }
+}

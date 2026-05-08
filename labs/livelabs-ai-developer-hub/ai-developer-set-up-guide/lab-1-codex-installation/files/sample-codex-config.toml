@@ -1,0 +1,29 @@
+# Sample Codex desktop config
+# version: v20260501-sample
+# Recommended model for this training/demo workflow
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
+
+# Let Codex edit files in the opened workspace, but require approval outside it.
+sandbox_mode = "workspace-write"
+
+# Oracle preference: sign in with SSO when available.
+# If your workflow requires an API key, follow the internal Confluence page.
+# Do not paste API keys into this file unless Oracle instructions explicitly say to.
+
+[feedback]
+enabled = false
+
+[sandbox_workspace_write]
+network_access = true
+writable_roots = []
+
+[shell_environment_policy]
+inherit = "all"
+
+# No MCP servers are enabled in this sample config.
+# Add MCP services only if your team instructions explicitly require them.
+
+# Windows-only: allow elevated sandbox mode when needed by the desktop app.
+[windows]
+sandbox = "elevated"

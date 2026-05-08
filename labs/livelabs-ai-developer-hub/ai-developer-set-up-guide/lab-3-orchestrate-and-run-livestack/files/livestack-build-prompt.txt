@@ -1,0 +1,9 @@
+Use $livestacks-orchestrator and create a new folder called healthcare-no-show-risk-livestack to build a LiveStack for Healthcare focused on:
+
+Care coordinators cannot spot rising patient no-show risk early enough, which leads to wasted appointment slots, poor provider utilization, and missed opportunities to proactively re-engage high-risk patients.
+
+Requirements:
+- Generate a complete Oracle-first application package.
+- Include a stack/ directory with a compose.yml or compose.yaml file.
+- Include database assets, ORDS/API assets, application code, a README, and a guide/ workshop package.
+- Include clear run, validation, and troubleshooting steps.
