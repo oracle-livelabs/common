@@ -1,0 +1,4 @@
+interface:
+  display_name: "Task Planner"
+  short_description: "Create Codex-facing execution plans with optional plan files and QA"
+  default_prompt: "Use $task-planner to turn this task into a Codex execution plan with validation, plan QA, output checks, and post-implementation test proposals."
