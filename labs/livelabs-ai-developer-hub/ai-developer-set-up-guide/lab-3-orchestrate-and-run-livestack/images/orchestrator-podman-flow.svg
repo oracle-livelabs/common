@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="540" viewBox="0 0 1200 540" role="img" aria-labelledby="title desc">
+  <title id="title">LiveStacks orchestrator and Podman flow</title>
+  <desc id="desc">Flow from business prompt to generated LiveStack package to Podman Compose containers and browser demo.</desc>
+  <rect width="1200" height="540" fill="#fbf9f7"/>
+  <rect x="0" y="0" width="1200" height="12" fill="#b25f00"/>
+  <text x="60" y="72" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700" fill="#312d2a">Generate, build, and run a LiveStack</text>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5f5751"/></marker></defs>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <rect x="60" y="140" width="235" height="235" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
+    <text x="90" y="190" font-size="22" font-weight="700" fill="#312d2a">1. Prompt</text>
+    <text x="90" y="230" font-size="16" fill="#5f5751">Industry</text>
+    <text x="90" y="260" font-size="16" fill="#5f5751">Pain point</text>
+    <text x="90" y="290" font-size="16" fill="#5f5751">Output folder</text>
+    <line x1="315" y1="258" x2="405" y2="258" stroke="#5f5751" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="425" y="140" width="285" height="235" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
+    <text x="455" y="190" font-size="22" font-weight="700" fill="#312d2a">2. Generated package</text>
+    <text x="455" y="230" font-size="16" fill="#5f5751">stack/ compose.yml</text>
+    <text x="455" y="260" font-size="16" fill="#5f5751">database/ assets</text>
+    <text x="455" y="290" font-size="16" fill="#5f5751">ords/api services</text>
+    <text x="455" y="320" font-size="16" fill="#5f5751">guide/ walkthrough</text>
+    <line x1="730" y1="258" x2="820" y2="258" stroke="#5f5751" stroke-width="3" marker-end="url(#arrow)"/>
+    <rect x="840" y="140" width="300" height="235" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
+    <text x="870" y="190" font-size="22" font-weight="700" fill="#312d2a">3. Podman demo</text>
+    <text x="870" y="230" font-size="16" fill="#5f5751">podman compose build</text>
+    <text x="870" y="260" font-size="16" fill="#5f5751">podman compose up -d</text>
+    <text x="870" y="290" font-size="16" fill="#5f5751">containers healthy</text>
+    <text x="870" y="320" font-size="16" fill="#5f5751">open localhost:8505</text>
+    <rect x="60" y="425" width="1080" height="52" fill="#312d2a"/>
+    <text x="90" y="458" font-size="17" fill="#fff">Golden rule: run Compose from the generated stack/ directory, not from the workshop folder.</text>
+  </g>
+</svg>

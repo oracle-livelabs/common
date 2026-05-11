@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520" role="img" aria-labelledby="title desc">
+  <title id="title">Codex installation checklist</title>
+  <desc id="desc">Checklist showing Codex Desktop, optional VS Code, config file, and restart verification.</desc>
+  <rect width="1100" height="520" fill="#fbf9f7"/>
+  <rect x="0" y="0" width="1100" height="12" fill="#c74634"/>
+  <text x="60" y="72" font-family="Arial, Helvetica, sans-serif" font-size="32" font-weight="700" fill="#312d2a">Lab 1 foundation checklist</text>
+  <g font-family="Arial, Helvetica, sans-serif" font-size="17" fill="#312d2a">
+    <rect x="60" y="120" width="980" height="70" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
+    <text x="95" y="162" font-size="26" fill="#c74634">✓</text><text x="135" y="160" font-weight="700">Install Codex Desktop</text><text x="360" y="160" fill="#5f5751">Download the app, install it, then sign in with the approved Oracle path.</text>
+    <rect x="60" y="205" width="980" height="70" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
+    <text x="95" y="247" font-size="26" fill="#c74634">✓</text><text x="135" y="245" font-weight="700">Choose a workspace</text><text x="360" y="245" fill="#5f5751">Use one folder per exercise so edits and generated files stay contained.</text>
+    <rect x="60" y="290" width="980" height="70" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
+    <text x="95" y="332" font-size="26" fill="#c74634">✓</text><text x="135" y="330" font-weight="700">Apply config.toml</text><text x="360" y="330" fill="#5f5751">Copy config.toml to ~/.codex or %USERPROFILE%\.codex.</text>
+    <rect x="60" y="375" width="980" height="70" fill="#fff" stroke="#d7d0c8" stroke-width="2"/>
+    <text x="95" y="417" font-size="26" fill="#c74634">✓</text><text x="135" y="415" font-weight="700">Restart and verify</text><text x="360" y="415" fill="#5f5751">Fully quit and reopen Codex so new settings load.</text>
+  </g>
+</svg>
