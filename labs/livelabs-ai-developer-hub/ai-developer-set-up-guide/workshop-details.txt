@@ -1,0 +1,41 @@
+AI Developer Setup Guide
+
+Short Description
+
+Install Codex, add Oracle AI Developer skills, and use LiveStacks Orchestrator with Podman to generate and run a local Oracle-first demo or a supplied zip on OCI Compute.
+
+Long Description
+
+This workshop prepares a learner workstation for Oracle LiveStacks AI Developer training. Learners install Codex, apply a training-oriented configuration, install reusable Codex skills from the shared Oracle skill bundle, and verify that Codex can load those skills after restart.
+
+The final lab uses LiveStacks Orchestrator and Podman Desktop to generate, build, and run a local demo application from a business prompt. It also provides an optional OCI path for preparing a VCN, public subnet, security rules, and Oracle Linux Compute instance before installing Podman and running a supplied zip with Compose. The workshop emphasizes safe workspace setup, repeatable skill installation, clear checkpoints, and practical troubleshooting for Podman Compose.
+
+Workshop Outline
+
+1. Introduction
+2. Lab 1: Install and Configure Codex
+3. Lab 2: Install and Test Codex Skills
+4. Lab 3: Generate and Run a LiveStack Demo, with optional OCI Compute deployment
+
+Target Audience
+
+Oracle LiveLabs authors, product managers, solution engineers, and workshop builders who need a repeatable local setup for Codex-assisted LiveStacks demos.
+
+Prerequisites
+
+- macOS or Windows workstation with permission to install software.
+- Optional OCI tenancy access with permission to create or use a VCN, public subnet, NSG or security list, and Oracle Linux Compute instance.
+- Oracle SSO and access to the shared Oracle skill bundle.
+- Organization-approved Codex authentication path.
+- About 35 GB of free disk space for Podman Desktop and generated containers.
+
+Estimated Workshop Time
+
+105 minutes
+
+SME Review Notes
+
+- Confirm final shared-folder zip names before publication if the SharePoint bundle changes.
+- Confirm the current organization-approved Codex authentication path before delivery.
+- Confirm generated LiveStack default ports if the orchestrator skill changes.
+- Confirm the final supplied zip name and app port before delivery. The OCI path defaults to SSH tunneling and documents direct inbound app access only as a restricted option.
