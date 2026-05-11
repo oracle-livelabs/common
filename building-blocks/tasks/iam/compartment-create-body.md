@@ -46,3 +46,5 @@ _If you are using an Oracle LiveLabs-provided sandbox, you don't have privileges
    The **Compartments** page is re-displayed and the newly created compartment is displayed in the list of available compartments.
 
    ![The newly created compartment is highlighted with its status as Active.](./images/compartment-created.png =60%x*)
+
+   > **Note:** Wait a couple of minutes, then refresh the page to start using the new compartment.
