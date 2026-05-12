@@ -25,7 +25,7 @@
     <if type="freetier">
     The **Autonomous AI Databases** page is displayed.
 
-    ![The Autonomous Databases page is displayed.](images/autonomous-ai-databases-page.png =65%x*)
+    ![The Autonomous Databases page is displayed.](images/adb-show-compartment-button.png =65%x*)
 
     OCI resources are organized into compartments. Click the **Compartment** field to select the compartment where you want to create your Autonomous Database.
     </if>

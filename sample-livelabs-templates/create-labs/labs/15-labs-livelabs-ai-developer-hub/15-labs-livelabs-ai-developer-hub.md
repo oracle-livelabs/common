@@ -21,7 +21,7 @@ In this lab, you will:
 
 1. Open the guided workshop entry point:
 
-    [LiveLabs AI Developer How-To Guide](https://lfoinding.github.io/livelabs-ai-playground/skills/how-to/workshops/sandbox/index.html)
+    [LiveLabs AI Developer How-To Guide](https://oracle-livelabs.github.io/common/labs/livelabs-ai-developer-hub/workshops/sandbox/)
 
 2. The guide has a structured path to enable authors to go from zero to hero in minutes:
 
@@ -34,7 +34,7 @@ In this lab, you will:
 
 1. Open the LiveLabs AI Developer Hub repository:
 
-    [LiveLabs AI Developer Hub](https://github.com/lfoinding/livelabs-ai-playground)
+    [LiveLabs AI Developer Hub](https://oracle-my.sharepoint.com/:f:/p/kay_malcolm/IgBlxiOi-InZRbQHn6htgExAAZVgHtxSIwjAyAxRkmXa4ag?e=7hxGPx)
 
 2. Use this repo as your home for author-facing automation workflows. Access downloadable skills and readme documents with ease.
 
@@ -46,9 +46,9 @@ In this lab, you will:
    - `freesql.zip` for FreeSQL workflow support
    - `livelabs-gamification.zip` for quiz workflows
    - `livelabs-industry-converter.zip` for industry-conversion workflows
-   - `PROMPT-CHEAT-SHEET-livelabs-workshop-author-v2.md` for author guidance
+   - `oracle-db-skills-main.zip` for library of 100+ guides for working with Oracle Database
 
-## Task 4: Use the Hub as Your Next Step
+## Task 3: Use the Hub as Your Next Step
 
 1. Start with the guided how-to workshop when you want the quickest working path.
 
@@ -60,9 +60,8 @@ In this lab, you will:
 
 ## Learn More
 
-- [LiveLabs AI Developer How-To Guide](https://lfoinding.github.io/livelabs-ai-playground/skills/how-to/workshops/sandbox/index.html)
-- [LiveLabs AI Developer Hub](https://github.com/lfoinding/livelabs-ai-playground)
-- [LiveLabs AI Developer Skill Bundle](https://github.com/lfoinding/livelabs-ai-playground/tree/main/LiveLabs-AI-Developer)
+- [LiveLabs AI Developer How-To Guide](https://oracle-livelabs.github.io/common/labs/livelabs-ai-developer-hub/workshops/sandbox/)
+- [LiveLabs AI Developer Skill Bundle](https://oracle-my.sharepoint.com/:f:/p/kay_malcolm/IgBlxiOi-InZRbQHn6htgExAAZVgHtxSIwjAyAxRkmXa4ag?e=7hxGPx)
 
 ## Acknowledgements
 

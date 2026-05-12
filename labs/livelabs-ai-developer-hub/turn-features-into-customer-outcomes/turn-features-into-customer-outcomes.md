@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This lab shows authors how to use Codex and `livelabs-industry-converter` to create an industry-specific version of an existing Oracle LiveLabs workshop without flattening the teaching flow.
+This lab shows authors how to use Codex and the `livelabs-industry-converter` skill to create an industry-specific version of an existing Oracle LiveLabs workshop without flattening the teaching flow.
 
 You will learn how to give the skill a simple prompt, what the skill handles automatically, and what to review after conversion so the result stays close to the source workshop.
 

@@ -1,0 +1,212 @@
+--- Page 1 ---
+ORACLE
+LiveStack AI Developer
+Oracle LiveStack Demo Setup Guide
+Page 1
+Oracle LiveStack AI Developer Demo Setup Guide
+1. Install Podman Desktop
+Start here. Podman Desktop gives Mac and Windows users a visual
+way to install the Podman engine, create the Podman machine, and
+see LiveStack containers after Compose starts them.
+PODMAN
+Download Podman Desktop
+macOS install guide
+Windows install guide
+1
+Download the official installer
+Use the Podman Desktop site. On macOS, prefer the .dmg installer. On Windows, use the Windows
+installer or WinGet if your team supports it.
+2
+Run first-time onboarding
+Open Podman Desktop and click Start Onboarding. Before creating the machine, close unnecessary apps
+and confirm you have about 35 GB of free disk space.
+3
+Install Compose when prompted
+During onboarding, install the Compose CLI. If you skipped onboarding, open Settings > Resources and
+use the Compose tile Setup action.
+4
+Verify the machine is running
+In Podman Desktop, go to Settings > Resources and confirm the Podman machine is running. In a
+terminal, podman version and podman compose version should both respond.
+macOS checklist
+Use the .dmg installer, drag Podman Desktop into
+Applications, launch it, then complete onboarding.
+Keep about 35 GB free before creating the machine.
+Windows checklist
+Use the installer or WinGet. Windows needs WSL 2
+or Hyper-V. Keep about 35 GB free, close heavy
+apps, and restart if setup asks.
+podman version
+podman compose version
+Most common Podman setup problems
+Podman machine is stopped:
+ start it from Settings > Resources or run 
+podman machine start
+.
+compose command missing:
+ install Compose from Podman Desktop Settings > Resources.
+Windows WSL issues:
+ update WSL, restart Windows, then rerun Podman Desktop onboarding.
+Machine creation is slow:
+ close heavy apps, keep your laptop plugged in, and allow roughly 35 GB free disk space.
+--- Page 2 ---
+ORACLE
+LiveStack AI Developer
+Oracle LiveStack Demo Setup Guide
+Page 2
+Oracle LiveStack AI Developer Demo Setup Guide
+2. Use LiveStacks Orchestrator
+Use the attached LiveStacks Orchestrator skill to generate a full
+Oracle-first demo stack from a business problem. Everyone should
+use a unique industry and pain-point pair to avoid duplicate work.
+GENERATE
+Attached skill zip
+Codex skills folder
+Podman Desktop
+1
+Confirm the skill is installed
+If LiveStacks Orchestrator is already available in Codex, skip ahead. Otherwise unzip the attached
+livestacks-orchestrator.zip into your Codex skills folder and restart Codex.
+macOS skill location
+~/.codex/skills/livestacks-orchestrator
+Restart Codex after installing or replacing the skill.
+Windows skill location
+%USERPROFILE%\.codex\skills
+Unzip so the folder is named
+livestacks-orchestrator
+. Restart Codex after
+installing or replacing the skill.
+2
+Create a dedicated output folder
+Ask Codex to create a new folder for your generated demo. Keep the generated LiveStack separate from
+this setup guide and from other students work.
+3
+Paste the exact build prompt
+Use the prompt below. It invokes LiveStacks Orchestrator, names the folder, and includes the unique
+Healthcare no-show-risk assignment.
+Use $livestacks-orchestrator and create a new folder called
+healthcare-no-show-risk-livestack to build a LiveStack for Healthcare focused on:
+Care coordinators cannot spot rising patient no-show risk early enough, which leads
+to wasted appointment slots, poor provider utilization, and missed opportunities
+to proactively re-engage high-risk patients.
+4
+Wait for the generated package
+The finished LiveStack should include a generated application folder with a stack/ directory, a Compose
+file, database and ORDS assets, documentation, and a guide/ workshop package.
+Unique assignment for this learner
+Industry:
+ Healthcare
+Pain point:
+ care coordinators cannot spot rising patient no-show risk early enough, wasting appointment slots and
+limiting proactive re-engagement.
+Suggested folder:
+ healthcare-no-show-risk-livestack
+--- Page 3 ---
+ORACLE
+LiveStack AI Developer
+Oracle LiveStack Demo Setup Guide
+Page 3
+Oracle LiveStack AI Developer Demo Setup Guide
+3. Build and run the generated
+stack
+After Codex generates the LiveStack, point Podman at the generated
+application folder and run Compose from the stack directory. This is
+where the real demo starts.
+RUN
+Run Compose files
+Set up Compose
+Compose tutorial
+1
+Open the generated application folder
+Find the folder Codex created, for example healthcare-no-show-risk-livestack. Inside it, open the stack
+directory. That stack directory should contain compose.yml or compose.yaml.
+2
+Use the compose file that exists
+Examples below use compose.yml. If your generated stack uses compose.yaml instead, replace
+compose.yml with compose.yaml. If both exist, use the one referenced by the generated README.
+3
+Build, then start the stack
+Run build first so local images are created, then run up in detached mode so containers continue running
+while you use Podman Desktop and the browser.
+cd /path/to/healthcare-no-show-risk-livestack/stack
+podman compose -f compose.yml build
+podman compose -f compose.yml up -d
+4
+Watch it in Podman Desktop
+Open Podman Desktop > Containers. Wait for db, ords, ollama, and app to become healthy or running,
+then open http://localhost:8505 in a browser to test the new application.
+Windows PowerShell version
+cd C:\path\to\healthcare-no-show-risk-livestack\stack
+$compose = "compose.yml"; if (!(Test-Path
+$compose)) { $compose = "compose.yaml" }
+podman compose -f $compose build
+podman compose -f $compose up -d
+Open the running app
+Application:
+ http://localhost:8505
+Open this in your browser after the app container is
+running.
+ORDS:
+ http://localhost:8181
+Database:
+ localhost:1521
+Stop, restart, and troubleshoot
+Stop:
+ podman compose -f compose.yml down
+View logs:
+ podman compose -f compose.yml logs -f app
+Port already in use:
+ stop the older LiveStack or change only if the generated README explicitly supports it.
+--- Page 4 ---
+ORACLE
+LiveStack AI Developer
+Oracle LiveStack Demo Setup Guide
+Page 4
+Oracle LiveStack AI Developer Demo Setup Guide
+4. Demo day checklist
+Use this final page to avoid the most common classroom failures:
+wrong folder, stopped Podman machine, missing Compose, or using a
+compose file from the wrong directory.
+CHECK
+Before you present
+1. Podman Desktop is open, about 35 GB of disk space is free, and the Podman machine is running.
+2. You are in the generated application 
+stack/
+ directory, not the repo root and not the guide folder.
+3. The Compose file exists: 
+compose.yml
+ or 
+compose.yaml
+.
+4. You ran 
+podman compose -f compose.yml build
+ before 
+podman compose -f compose.yml up -d
+.
+5. Open 
+http://localhost:8505
+ in a browser to test the running application.
+If the app does not open
+Check Podman Desktop containers first. If app is
+stopped, open logs. If db or ords is still starting, wait
+and refresh. Some AI model warmup steps can take
+several minutes and can use significant CPU,
+memory, and disk.
+If Compose fails
+Confirm Compose is installed in Podman Desktop.
+Run 
+podman compose version
+. Then rerun from
+the stack/ directory with the exact compose filename.
+What a good generated LiveStack usually contains
+stack/
+ with compose.yml or compose.yaml, app container, ORDS, database, and supporting services.
+guide/
+ with a LiveLabs-style walkthrough aligned to the app scenes.
+database/
+ assets showing how Oracle Database powers the demo.
+docs or README
+ explaining ports, startup, validation, and customer-data replacement.
+podman compose -f compose.yml ps
+podman compose -f compose.yml logs -f app
+podman compose -f compose.yml down
