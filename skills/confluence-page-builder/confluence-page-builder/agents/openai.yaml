@@ -1,0 +1,4 @@
+interface:
+  display_name: "Confluence Page Builder"
+  short_description: "Build summary-first Confluence pages"
+  default_prompt: "Use $confluence-page-builder to turn these notes into a summary-first Confluence page with a strong landing section, useful panels, tabs, and expandable detail, then propose targeted refinement questions."

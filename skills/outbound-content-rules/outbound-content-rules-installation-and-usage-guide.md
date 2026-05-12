@@ -18,7 +18,7 @@
 Give Codex this prompt:
 
 ```text
-Install `outbound-content-rules.zip` skill into my local Codex skills directory. Inspect `SKILL.md`, use the embedded `name:` `outbound-content-rules` as the installed folder name, ignore `__MACOSX`, `__pycache__`, and `*.pyc`, and verify the installed copy after copying.
+Install `outbound-content-rules` skill into my local Codex skills directory. Inspect `SKILL.md`, use the embedded `name:` `outbound-content-rules` as the installed folder name, ignore `__MACOSX`, `__pycache__`, and `*.pyc`, and verify the installed copy after copying.
 ```
 
 After installation, ask Codex to verify that the installed folder exists and that `SKILL.md` contains the expected `name:` value.
