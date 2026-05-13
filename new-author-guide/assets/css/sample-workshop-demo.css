@@ -2,29 +2,52 @@
   color-scheme: light;
 }
 
+@font-face {
+  font-family: "Oracle Sans";
+  src: url("../fonts/OracleSans_Rg.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Oracle Sans";
+  src: url("../fonts/OracleSans_SBd.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Oracle Sans";
+  src: url("../fonts/OracleSans_Bd.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 body.sample-demo {
-  --demo-surface: #faf7f4;
-  --demo-panel: rgba(255, 255, 255, 0.9);
-  --demo-panel-strong: rgba(255, 255, 255, 0.97);
-  --demo-line: rgba(212, 204, 197, 0.92);
-  --demo-line-strong: rgba(194, 184, 178, 0.95);
-  --demo-ink: #1f1b18;
-  --demo-ink-soft: #655d58;
-  --demo-rose: #bf4b38;
-  --demo-rose-deep: #91372b;
-  --demo-sky: #437b93;
-  --demo-mint: #4d7f5e;
-  --demo-gold: #a86339;
-  --demo-shadow-soft: 0 18px 42px rgba(31, 27, 24, 0.08);
-  --demo-shadow-deep: 0 28px 60px rgba(31, 27, 24, 0.12);
+  --demo-surface: #f7f6f4;
+  --demo-panel: #fff;
+  --demo-panel-strong: #fff;
+  --demo-line: rgba(122, 115, 110, 0.26);
+  --demo-line-strong: rgba(122, 115, 110, 0.44);
+  --demo-ink: #161513;
+  --demo-ink-soft: #7a736e;
+  --demo-rose: #c74634;
+  --demo-rose-deep: #8f2f22;
+  --demo-sky: #437c94;
+  --demo-mint: #4c825c;
+  --demo-gold: #aa643b;
+  --demo-bark: #312d2a;
+  --demo-link: #00688c;
+  --demo-shadow-soft: none;
+  --demo-shadow-deep: none;
   min-height: 100vh;
   margin: 0;
   color: var(--demo-ink);
   font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
-  background:
-    radial-gradient(circle at top right, rgba(191, 75, 56, 0.08), transparent 28%),
-    radial-gradient(circle at bottom left, rgba(67, 123, 147, 0.1), transparent 30%),
-    linear-gradient(180deg, #fcfaf7 0%, #f2ede7 100%);
+  background: linear-gradient(180deg, #fbfaf9 0%, #f3f1ee 100%);
   background-color: var(--demo-surface);
 }
 
@@ -114,7 +137,7 @@ body.sample-demo textarea {
   font-size: 1.15rem;
   font-weight: 900;
   text-decoration: none;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .sample-brand-note {
@@ -282,7 +305,7 @@ body.sample-demo textarea {
   margin: 0.9rem 0 0.8rem;
   font-size: clamp(2.2rem, 4vw, 3.5rem);
   line-height: 1.02;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
 }
 
 .sample-lead,
@@ -341,7 +364,7 @@ body.sample-demo textarea {
 .sample-panel h2,
 .sample-panel h3 {
   margin: 0;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .sample-button-row {
@@ -1168,7 +1191,7 @@ body.sample-demo textarea {
   padding: 0;
   font-size: 1rem;
   font-weight: 800;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 
 .quiz-choice {
@@ -1697,4 +1720,223 @@ body.sample-demo textarea {
   .assessment-choice {
     width: 100%;
   }
+}
+
+/* Redwood refresh: keep the sample workshop readable, compact, and aligned with the main guide. */
+body.sample-demo a:not(.sample-button):not(.sample-nav-link):not(.sample-progress-link):not(.sample-rail-link):not(.resource-link) {
+  color: var(--demo-link);
+}
+
+.sample-title,
+.sample-brand,
+.sample-panel h2,
+.sample-panel h3,
+.sample-sidecard h2,
+.sample-sidecard h3,
+.section-title,
+.lab-title,
+.demo-report-card h3,
+.demo-chat-card h3 {
+  letter-spacing: 0;
+}
+
+.sample-topbar-shell,
+.sample-progress-shell,
+.sample-panel,
+.sample-panel-inner,
+.sample-sidecard,
+.info-card,
+.architecture-card,
+.architecture-lane,
+.architecture-bridge,
+.sample-rail-card,
+.sample-rail-link,
+.sample-button,
+.sample-nav-link,
+.sample-progress-link,
+.sample-chip,
+.sample-mini-chip,
+.sample-lab,
+.sample-lab-number,
+.sample-task-card,
+.demo-report-card,
+.demo-chat-card,
+.demo-action,
+.assessment-question,
+.assessment-choice,
+.assessment-summary,
+.report-sheet,
+.report-metric,
+.report-field,
+.report-callout,
+.resource-link,
+.sql-chip,
+.quick-reply,
+.sample-footer-shell {
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.sample-panel::before,
+.sample-panel::after,
+.clinical-showcase::before {
+  display: none;
+}
+
+.sample-topbar-shell {
+  background: var(--demo-bark);
+  border-color: var(--demo-bark);
+  color: #fff;
+}
+
+.sample-topbar-shell .sample-kicker,
+.sample-topbar-shell .sample-brand-note,
+.sample-topbar-shell .sample-nav-link {
+  color: #fff;
+}
+
+.sample-topbar-shell .sample-kicker,
+.sample-topbar-shell .sample-nav-link {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.sample-topbar-shell .sample-nav-link:hover,
+.sample-topbar-shell .sample-nav-link:focus-visible {
+  background: rgba(240, 204, 113, 0.16);
+  border-color: rgba(240, 204, 113, 0.56);
+}
+
+.sample-kicker {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--demo-ink-soft);
+}
+
+.sample-kicker::before,
+.sample-list li::before {
+  border-radius: 3px;
+  background: var(--demo-rose);
+}
+
+.sample-panel,
+.sample-sidecard,
+.info-card,
+.architecture-card,
+.architecture-lane,
+.architecture-bridge,
+.sample-rail-card,
+.sample-lab,
+.demo-report-card,
+.demo-chat-card,
+.report-sheet,
+.sample-footer-shell {
+  background: #fff;
+  border: 1px solid var(--demo-line);
+}
+
+.sample-panel {
+  overflow: visible;
+}
+
+.sample-title {
+  max-width: 58rem;
+}
+
+.sample-lead,
+.section-summary,
+.sample-copy,
+.sample-sidecard p,
+.sample-list,
+.report-sheet-foot {
+  color: var(--demo-ink-soft);
+}
+
+.sample-button.is-primary,
+.demo-action.is-primary,
+.assessment-choice.is-active {
+  background: var(--demo-rose);
+  border-color: var(--demo-rose);
+  color: #fff;
+}
+
+.sample-button.is-secondary,
+.demo-action,
+.sample-nav-link,
+.sample-progress-link,
+.sample-rail-link,
+.resource-link,
+.sql-chip,
+.quick-reply,
+.sample-chip,
+.sample-mini-chip {
+  background: #fff;
+  border-color: var(--demo-line);
+  color: var(--demo-ink);
+}
+
+.sample-nav-link:hover,
+.sample-progress-link:hover,
+.sample-button:hover,
+.copy-button:hover,
+.sql-chip:hover,
+.quick-reply:hover,
+.resource-link:hover,
+.sample-rail-link:hover {
+  transform: none;
+  border-color: var(--demo-rose);
+  box-shadow: none;
+}
+
+.sample-progress-link.is-active,
+.sample-rail-link.is-active {
+  background: rgba(199, 70, 52, 0.08);
+  border-color: rgba(199, 70, 52, 0.42);
+  color: var(--demo-rose);
+  box-shadow: none;
+}
+
+.sample-panel h2,
+.sample-panel h3,
+.sample-sidecard h2,
+.sample-sidecard h3 {
+  color: var(--demo-ink);
+}
+
+.architecture-card,
+.sample-task-card,
+.report-field,
+.report-metric {
+  background: #fbfaf9;
+}
+
+.architecture-arrow {
+  color: var(--demo-rose);
+}
+
+.clinical-showcase,
+.mock-browser,
+.report-sheet {
+  background: #fff;
+}
+
+.mock-browser-top,
+.report-sheet-head {
+  border-color: var(--demo-line);
+}
+
+.sample-button:focus-visible,
+.demo-action:focus-visible,
+.sample-progress-link:focus-visible,
+.sample-nav-link:focus-visible,
+.sample-rail-link:focus-visible,
+.quick-reply:focus-visible,
+.assessment-choice:focus-visible,
+.resource-link:focus-visible,
+.sql-chip:focus-visible {
+  outline: 3px solid rgba(199, 70, 52, 0.28);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 104, 140, 0.14);
 }

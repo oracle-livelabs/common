@@ -84,7 +84,7 @@
     #app h3,
     #app h4 {
       font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
-      letter-spacing: -0.02em;
+      letter-spacing: 0;
     }
 
     #app button,
@@ -1781,7 +1781,7 @@
     #app .brand-label,
     #app .hero-lockup-label {
       font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
-      letter-spacing: -0.02em;
+      letter-spacing: 0;
     }
 
     #app button:focus-visible,
@@ -3038,7 +3038,7 @@
 
     #app .guide-source-panel-prose h2 {
       font-size: clamp(1.28rem, 1.8vw, 1.55rem);
-      letter-spacing: -0.02em;
+      letter-spacing: 0;
     }
 
     #app .guide-source-panel-prose h3 {
@@ -3224,7 +3224,7 @@
 
     #app .guide-source-prose h2 {
       font-size: clamp(1.45rem, 2vw, 1.9rem);
-      letter-spacing: -0.02em;
+      letter-spacing: 0;
     }
 
     #app .guide-source-prose h3 {
@@ -5574,6 +5574,7 @@
                   <button class="btn nav-control" type="button" data-mode-target="beginner" aria-label="Open quickstart">Quickstart</button>
                   <button class="btn nav-control" type="button" data-mode-target="explorer" aria-label="Open cheatsheet">Cheatsheet</button>
                   <a class="btn nav-control" href="https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" target="_blank" rel="noreferrer" aria-label="Open full guide">Full Guide</a>
+                  <a class="btn nav-control" href="./sample-workshops/clinical-first-responder-rag/index.html" aria-label="Open the sample workshop demo">Sample Workshop</a>
                 </div>
               </div>
             </div>
@@ -5597,6 +5598,7 @@
                   <button class="btn btn-primary btn-lg rounded-pill px-4" type="button" data-mode-target="beginner">Open Quickstart</button>
                   <button class="btn btn-outline-primary btn-lg rounded-pill px-4" type="button" data-mode-target="explorer">Open Cheatsheet</button>
                   <a class="btn btn-outline-secondary btn-lg rounded-pill px-4" href="https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" target="_blank" rel="noreferrer">Open Full Guide</a>
+                  <a class="btn btn-outline-primary btn-lg rounded-pill px-4" href="./sample-workshops/clinical-first-responder-rag/index.html">Open Sample Workshop</a>
                 </div>
               </div>
 
@@ -5627,11 +5629,25 @@
                           <small>Open the full source guide when you need depth.</small>
                         </span>
                       </a>
+                      <a class="home-mini-step" href="./sample-workshops/clinical-first-responder-rag/index.html">
+                        <span class="home-mini-number">4</span>
+                        <span>
+                          <strong>Sample Workshop</strong>
+                          <small>Inspect the redesigned workshop example surface.</small>
+                        </span>
+                      </a>
                     </div>
                   </article>
                 </div>
               </div>
             </div>
+            <section class="card route-map-card mt-4" aria-labelledby="homeRouteMapHeading">
+              <div class="card-body">
+                <div class="panel-kicker">Route map</div>
+                <h2 class="visually-hidden" id="homeRouteMapHeading">Author guide route map</h2>
+                <div id="homeRouteMap"></div>
+              </div>
+            </section>
           </div>
         </div>
       </section>

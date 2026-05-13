@@ -40,3 +40,9 @@ venv/
 __codex_*
 MISSING_MARKDOWN_DETAILS_LOG_*.md
 LiveLabs_Analytics_Dashboard_*/
+test-results/
+
+# Local QA planning and source datasets
+QA_TEST_PLAN.md
+_local/
+dataset/

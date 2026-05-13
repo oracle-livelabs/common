@@ -1,3 +1,27 @@
+@font-face {
+  font-family: "Oracle Sans";
+  src: url("../fonts/OracleSans_Rg.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Oracle Sans";
+  src: url("../fonts/OracleSans_SBd.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Oracle Sans";
+  src: url("../fonts/OracleSans_Bd.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 #app .brand-token {
   margin-top: 0 !important;
   align-self: center;
@@ -255,8 +279,65 @@
   text-align: center;
 }
 
+#app .route-map-card,
+#app .route-map-entry,
+#app .route-map-branch,
+#app .route-map-list li,
+#app .route-map-ribbon {
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+#app .route-map-card {
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+#app .route-map-card .card-body {
+  gap: 1rem;
+}
+
+#app .route-map-entry,
+#app .route-map-ribbon {
+  background: #f8f6f4;
+}
+
+#app .route-map-branch {
+  background: #fff;
+}
+
+#app .route-map-branch::before {
+  height: 0.24rem;
+  background: var(--route-accent);
+}
+
+#app .route-map-list li {
+  background: #fbfaf9;
+}
+
+#app .route-map-list.is-ordered li::before {
+  border-radius: 6px;
+  background: var(--route-accent);
+  box-shadow: none;
+}
+
+#app .route-map-branch[data-accent="sienna"] .btn {
+  border-color: rgba(170, 100, 59, 0.36);
+  color: #8b4a2a;
+}
+
+#app .route-map-branch[data-accent="sienna"] .btn:hover,
+#app .route-map-branch[data-accent="sienna"] .btn:focus-visible {
+  background: rgba(170, 100, 59, 0.08);
+}
+
 @media (max-width: 767.98px) {
   #app .command-card-grid {
     grid-template-columns: 1fr;
+  }
+
+  #app .route-map-entry,
+  #app .route-map-ribbon {
+    align-items: stretch;
   }
 }

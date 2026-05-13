@@ -4,6 +4,7 @@ output/
 test-results/
 archive/
 archive-retired-reference/
+Tasks/
 
 # Validation output stays local unless it is intentionally copied into tracked docs.
 VALIDATION-RESULT.md
