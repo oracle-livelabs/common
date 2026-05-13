@@ -1,0 +1,112 @@
+{
+  "version": "2026-05-11",
+  "purpose": "Overlay examples extracted from /Users/mkowalik/projects/codey/workspace/livestack-template. These are examples for vocabulary and scene shaping, not separate golden templates.",
+  "golden_core": {
+    "baseline": "neutral-golden-livestack-core",
+    "runtime": ["db", "ords", "ollama", "app"],
+    "ui": "Oracle JET Redwood with Oracle Sans and JET framework glyph classes",
+    "constraints": ["fixed ports", "ORDS-first APIs", "Upload Your Own Data", "Oracle Internals", "no Tailwind"]
+  },
+  "overlays": {
+    "highered": {
+      "industry": "Higher Education",
+      "default_customer_name": "Seer Higher Education",
+      "story": "student success and campus service coordination",
+      "scene_labels": [
+        "Student Success Command Center",
+        "Student Need Signals",
+        "Student Support Network",
+        "Campus Service Coverage",
+        "Student Requests & Cases",
+        "Predictive Student Success Analytics",
+        "Ask Seer Higher Ed Data",
+        "Student Success Agent Console"
+      ],
+      "domain_terms": {
+        "actor": "student success coordinator",
+        "entity": "student",
+        "program": "academic program",
+        "request": "student request",
+        "signal": "student need signal",
+        "coverage": "campus service coverage",
+        "agent": "student success agent"
+      },
+      "semantic_view_prefix": "highered"
+    },
+    "lifesciences": {
+      "industry": "Life Sciences",
+      "default_customer_name": "Seer lifesciences",
+      "story": "regulated supply, quality signals, and cold-chain operations",
+      "scene_labels": [
+        "Quality & Supply Operations Dashboard",
+        "Regulatory & Quality Signals",
+        "Quality Propagation Network",
+        "Cold-Chain Service Coverage",
+        "Clinical Supply Orders & Deviations",
+        "Predictive Quality & Supply Analytics",
+        "Ask Seer lifesciences Data",
+        "Agent Console"
+      ],
+      "domain_terms": {
+        "actor": "regulated operations coordinator",
+        "entity": "trial site",
+        "program": "manufacturer",
+        "request": "clinical supply order",
+        "signal": "quality signal",
+        "coverage": "cold-chain service coverage",
+        "agent": "quality operations agent"
+      },
+      "semantic_view_prefix": "ls"
+    },
+    "media": {
+      "industry": "Media & Entertainment",
+      "default_customer_name": "Seer Media",
+      "story": "content intelligence, audience signals, rights, and distribution",
+      "scene_labels": [
+        "Content Revenue & Operations Dashboard",
+        "Audience & Market Signals",
+        "Creator Influence Network",
+        "Rights & Distribution Coverage",
+        "Campaign Orders & Rights Cases",
+        "Predictive Demand & Revenue Analytics",
+        "Ask Seer Media Data",
+        "Seer Media Agent Console"
+      ],
+      "domain_terms": {
+        "actor": "content operations lead",
+        "entity": "audience account",
+        "program": "studio or label",
+        "request": "campaign order",
+        "signal": "audience signal",
+        "coverage": "rights and distribution coverage",
+        "agent": "media operations agent"
+      },
+      "semantic_view_prefix": "media"
+    },
+    "sled": {
+      "industry": "State and Local Government",
+      "default_customer_name": "Seer State and Local Government",
+      "story": "resident services, public programs, service access, and capacity",
+      "scene_labels": [
+        "Public Service Command Center",
+        "Resident Demand Signals",
+        "Community Partner Network",
+        "Service Access & Coverage Map",
+        "Service Request Workbench",
+        "Demand & Capacity Analytics",
+        "Ask Seer Operations Data",
+        "Public Service AI Agent Console"
+      ],
+      "domain_terms": {
+        "actor": "public service coordinator",
+        "entity": "resident",
+        "program": "public program",
+        "request": "service request",
+        "signal": "resident demand signal",
+        "coverage": "service access coverage",
+        "agent": "public service agent"
+      },
+      "semantic_view_prefix": "sled"
+    }
+  }
+}

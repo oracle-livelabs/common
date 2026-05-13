@@ -1,0 +1,9 @@
+{
+  "repo_url": "https://github.com/oracle-livelabs/common.git",
+  "branch": "main",
+  "skill_path": "skills/livestack/livestacks-orchestrator",
+  "auto_install": true,
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ]
+}

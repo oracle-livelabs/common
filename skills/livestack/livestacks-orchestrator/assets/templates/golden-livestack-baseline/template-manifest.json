@@ -1,0 +1,48 @@
+{
+  "baseline": "neutral-golden-livestack-core",
+  "baseline_version": "0.1.0",
+  "status": "contract-source",
+  "description": "Neutral golden LiveStack core contract used by livestacks-orchestrator. The init script emits a provenance-bearing bundle skeleton from this contract; the production implementation must replace starter runtime surfaces with domain-specific ORDS-backed flows before release.",
+  "required_runtime": ["db", "ords", "ollama", "app"],
+  "fixed_ports": {
+    "db": "1521:1521",
+    "ords": "8181:8080",
+    "ollama": "11434:11434",
+    "app": "8505:3001"
+  },
+  "invariant_core_files": {
+    "compose": "assets/templates/golden-livestack-baseline/compose.yml",
+    "env_example": "assets/templates/golden-livestack-baseline/.env.example",
+    "rule": "Generated default LiveStacks must keep stack/compose.yml and stack/.env.example aligned to these baseline files; overlays belong in app, database, seed/config, docs, guide, and provenance artifacts."
+  },
+  "required_layers": [
+    "industry_vocabulary",
+    "pain_point_workflow",
+    "story_scenes",
+    "oracle_capability_map",
+    "data_contract",
+    "guide_runbook"
+  ],
+  "ui_contract": {
+    "oracle_jet_redwood": true,
+    "oracle_sans": true,
+    "jet_glyph_classes": "oj-fwk-icon-*",
+    "utility_controls": "top-right Oracle Internals and Upload Your Own Data",
+    "tailwind_allowed": false,
+    "non_jet_chrome_icons_allowed": false
+  },
+  "api_contract": {
+    "ords_first": true,
+    "health_route": "/healthz",
+    "destructive_route_guard": "ADMIN_TOKEN with Authorization: Bearer <ADMIN_TOKEN>, or documented equivalent",
+    "dataset_routes": [
+      "GET /api/import/dataset",
+      "GET /api/import/template",
+      "POST /api/import/validate",
+      "POST /api/import/upload",
+      "POST /api/import/restore-demo/validate",
+      "POST /api/import/restore-demo",
+      "GET /api/import/status/:jobId"
+    ]
+  }
+}
