@@ -1,4 +1,0 @@
-interface:
-  display_name: "Redwood Creator"
-  short_description: "Create, critique, and specify Oracle Redwood-aligned UI and visual assets"
-  default_prompt: "Use $redwood-creator to produce Redwood-aligned UI guidance, critique, or implementation specs from the packaged references, selected images, Oracle Sans fonts, and manifests."
