@@ -75,7 +75,7 @@
     {
       "band": "strong_low_demand",
       "rule": "views_12m_percentile <= 10, with extra pressure if recent_views_90d < 25",
-      "score": 1.0
+      "score": 1
     },
     {
       "band": "low_demand",
@@ -90,14 +90,14 @@
     {
       "band": "not_low_demand",
       "rule": "views_12m_percentile > 40",
-      "score": 0.0
+      "score": 0
     }
   ],
   "staleness_thresholds": [
     {
       "band": "critical",
       "rule": "months_since_update >= 24",
-      "score": 1.0
+      "score": 1
     },
     {
       "band": "very_stale",
@@ -112,7 +112,7 @@
     {
       "band": "fresh",
       "rule": "months_since_update <= 12",
-      "score": 0.0
+      "score": 0
     }
   ],
   "replacement_thresholds": [
