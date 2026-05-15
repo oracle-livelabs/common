@@ -15,4 +15,11 @@ Use the Contents section to move between the main views:
 - `Disabled Content` keeps already disabled workshops and sprints visible for audit context.
 - `Portfolio Stats` summarizes source coverage, scoring inputs, governance signals, and data-quality notes.
 
-Most tables support sorting, filtering, and expandable rows. Open a row to review identifiers, source evidence, ownership fields, update dates, replacement details, and the reason the item appears in that view.
+
+## Search, Sorting, And Filtering
+
+Use the sidebar search to open a focused workshop or sprint detail view, then use `Back to Dashboard` to return to the main dashboard.
+
+Most tables support sorting, filtering, pagination, and expandable rows. Filters always apply to the full table before pagination. Category filters use exact category selections so broad labels such as `Database` do not also match `AI/ML Database`. Pagination includes row-range jumps for `15 - 20` through `120 - 140`.
+
+The active improvement requirements live in `docs/requirements/livelabs-analytics-improvements-2026-05-15.md`.
