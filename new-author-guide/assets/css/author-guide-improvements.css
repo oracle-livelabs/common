@@ -341,3 +341,722 @@
     align-items: stretch;
   }
 }
+
+/* Redwood alignment pass: keep the author guide close to the LiveLabs Analytics theme. */
+#app {
+  --oracle-red: #C74634;
+  --oracle-bark: #312D2A;
+  --brand-neutral: #7A736E;
+  --paper: #FFFFFF;
+  --page: #FBF9F7;
+  --beige: #E9E1CA;
+  --line: #D4CFCA;
+  --line-soft: rgba(49, 45, 42, 0.12);
+  --ink: #161513;
+  --ink-soft: var(--brand-neutral);
+  --rose: var(--oracle-red);
+  --sky: #4F7D7B;
+  --mint: #4C825C;
+  --gold: #AA643B;
+  --shadow-soft: none;
+  --shadow-deep: none;
+  color: var(--ink);
+  background: var(--page);
+}
+
+#app,
+#app * {
+  letter-spacing: 0 !important;
+}
+
+#app .app-shell {
+  background: var(--page);
+}
+
+#app * {
+  box-shadow: none !important;
+}
+
+#app .mode-nav {
+  padding: 0;
+  background: var(--oracle-bark);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+#app .mode-nav .container {
+  max-width: 1540px;
+}
+
+#app .nav-shell {
+  padding: 0.85rem 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--oracle-bark);
+  color: #fff;
+  backdrop-filter: none;
+}
+
+#app .mode-nav .nav-main-grid {
+  align-items: center;
+}
+
+#app .mode-nav .nav-search-group {
+  display: grid;
+  grid-template-columns: minmax(15rem, 1fr) auto auto;
+  gap: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+#app .brand-token,
+#app .brand-label,
+#app .brand-token small {
+  color: #fff;
+}
+
+#app .brand-mark path {
+  fill: #fff;
+}
+
+#app .nav-control,
+#app .nav-guide-link,
+#app .tag-pill,
+#app .shortcut-chip,
+#app .search-group,
+#app .nav-search-group,
+#app .search-group .input-group-text,
+#app .search-group .form-control,
+#app .search-group .btn,
+#app .btn,
+#app .copy-snippet,
+#app .back-to-top,
+#app .mode-chip,
+#app .meta-pill,
+#app .stat-chip,
+#app .bubble-badge,
+#app .progress-button,
+#app .guide-quick-nav,
+#app .guide-quick-link,
+#app .guide-map-pill,
+#app .guide-highlight-chip,
+#app .guide-source-outline-link,
+#app .guide-source-panel-toggle,
+#app .guide-source-panel-label,
+#app .guide-source-panel-meta,
+#app .guide-source-expand-all {
+  border-radius: 8px !important;
+}
+
+#app .nav-control,
+#app .nav-guide-link,
+#app .mode-nav .search-group .input-group-text,
+#app .mode-nav .search-group .form-control,
+#app .mode-nav .search-group .btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+#app .mode-nav .nav-search-group .form-control {
+  min-height: 2.6rem;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
+}
+
+#app .mode-nav .nav-search-group .btn[type="submit"] {
+  background: var(--oracle-red) !important;
+  border-color: var(--oracle-red) !important;
+  color: #fff !important;
+}
+
+#app .mode-nav #navSearchClear {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  color: #fff !important;
+}
+
+#app .mode-nav .search-group .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+#app .nav-control:hover,
+#app .nav-guide-link:hover,
+#app .mode-nav .search-group .btn:hover,
+#app .nav-control:focus-visible,
+#app .nav-guide-link:focus-visible {
+  background: rgba(240, 204, 113, 0.16);
+  border-color: rgba(240, 204, 113, 0.56);
+  color: #fff;
+  transform: none;
+}
+
+#app .mode-nav .nav-search-group .btn[type="submit"]:hover,
+#app .mode-nav .nav-search-group .btn[type="submit"]:focus-visible {
+  background: #A43C2F !important;
+  border-color: #A43C2F !important;
+}
+
+#app .nav-control.is-active,
+#app .progress-button.is-active {
+  background: var(--oracle-red);
+  border-color: var(--oracle-red);
+  color: #fff;
+}
+
+#app .hub-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 310px;
+  padding: 3rem;
+  border: 0;
+  border-radius: 0;
+  color: #fff;
+  background:
+    linear-gradient(90deg, rgba(49, 45, 42, 0.96), rgba(49, 45, 42, 0.76) 56%, rgba(49, 45, 42, 0.42)),
+    url("../images/ill-abst-000109-16x9.png") center top / cover no-repeat;
+}
+
+#app .hub-hero::before {
+  display: none !important;
+}
+
+#app .hub-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  display: block !important;
+  width: auto;
+  height: 12px;
+  border-radius: 0;
+  background: url("../images/color-strip.png") center / cover no-repeat;
+  opacity: 1;
+  pointer-events: none;
+}
+
+#app .hub-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+#app .hub-hero .hero-title,
+#app .hub-hero .hero-lockup-label,
+#app .hub-hero .panel-kicker,
+#app .hub-hero .home-mini-step strong {
+  color: #fff;
+}
+
+#app .hub-hero .hero-lockup-note,
+#app .hub-hero .panel-copy,
+#app .hub-hero .home-mini-step span span,
+#app .hub-hero .home-mini-step small {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+#app .hub-hero .compact-panel,
+#app .hub-hero .home-mini-step {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+#app .hub-hero .home-mini-step:hover,
+#app .hub-hero .home-mini-step:focus-visible {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.42);
+}
+
+#app .hub-hero .btn-primary {
+  background: #fff;
+  border-color: #fff;
+  color: var(--oracle-bark);
+}
+
+#app .hub-hero .btn-outline-primary,
+#app .hub-hero .btn-outline-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.32);
+  color: #fff;
+}
+
+#app .hub-hero .btn-primary:hover,
+#app .hub-hero .btn-primary:focus-visible {
+  background: var(--beige);
+  border-color: var(--beige);
+  color: var(--oracle-bark);
+}
+
+#app .hub-hero .btn-outline-primary:hover,
+#app .hub-hero .btn-outline-secondary:hover,
+#app .hub-hero .btn-outline-primary:focus-visible,
+#app .hub-hero .btn-outline-secondary:focus-visible {
+  background: rgba(240, 204, 113, 0.16);
+  border-color: rgba(240, 204, 113, 0.56);
+  color: #fff;
+}
+
+#app .hub-hero .route-map-card,
+#app .hub-hero .route-map-card .route-map-entry,
+#app .hub-hero .route-map-card .route-map-branch,
+#app .hub-hero .route-map-card .route-map-ribbon,
+#app .hub-hero .route-map-card .route-map-list li {
+  color: var(--ink);
+}
+
+#app .hub-hero .route-map-card .panel-kicker,
+#app .hub-hero .route-map-card .route-map-branch-head small {
+  color: var(--oracle-red);
+}
+
+#app .hub-hero .route-map-card p,
+#app .hub-hero .route-map-card span,
+#app .hub-hero .route-map-card .route-map-branch-foot {
+  color: var(--ink-soft);
+}
+
+#app .hub-hero .route-map-card h3,
+#app .hub-hero .route-map-card h4,
+#app .hub-hero .route-map-card strong {
+  color: var(--ink);
+}
+
+#app .hub-hero .route-map-card .btn-primary {
+  background: var(--oracle-red);
+  border-color: var(--oracle-red);
+  color: #fff;
+}
+
+#app .hub-hero .route-map-card .btn-outline-primary,
+#app .hub-hero .route-map-card .btn-outline-secondary {
+  background: #fff;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+#app .hub-hero .route-map-card .btn-outline-primary:hover,
+#app .hub-hero .route-map-card .btn-outline-secondary:hover,
+#app .hub-hero .route-map-card .btn-outline-primary:focus-visible,
+#app .hub-hero .route-map-card .btn-outline-secondary:focus-visible {
+  background: rgba(199, 70, 52, 0.06);
+  border-color: var(--oracle-red);
+  color: var(--oracle-red);
+}
+
+#app .hub-hero .home-mini-number,
+#app .detail-resource-number,
+#app .step-orb,
+#app .route-map-list.is-ordered li::before,
+#app .guide-source-panel-icon,
+#app .back-to-top-icon {
+  border-radius: 6px;
+  background: var(--oracle-red);
+  color: #fff;
+}
+
+#app .hub-hero .home-mini-number {
+  background: rgba(240, 204, 113, 0.18);
+  color: #fff;
+}
+
+#app .mode-hero,
+#app .toolbar-card,
+#app .progress-card,
+#app .step-shell,
+#app .compact-panel,
+#app .content-card,
+#app .side-card,
+#app .snippet-card,
+#app .guide-panel,
+#app .modal-content,
+#app .step-mini-map,
+#app .scene-well,
+#app .route-map-card,
+#app .route-map-entry,
+#app .route-map-branch,
+#app .route-map-list li,
+#app .route-map-ribbon,
+#app .guide-map-shell,
+#app .guide-sidebar-card,
+#app .guide-nav-link,
+#app .guide-section-card,
+#app .guide-lab-card,
+#app .guide-lab-panel,
+#app .guide-source-toolbar,
+#app .guide-source-panel-card,
+#app .guide-source-error,
+#app .search-result-card,
+#app .search-empty-state,
+#app .modal-panel,
+#app .modal-media-card,
+#app .evidence-card,
+#app .home-toolkit-card,
+#app .detail-field-card,
+#app .detail-milestone-card,
+#app .detail-resource-card {
+  border: 1px solid var(--line-soft);
+  border-radius: 8px !important;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+#app .mode-hero,
+#app .toolbar-card,
+#app .step-shell,
+#app .route-map-card,
+#app .guide-map-shell,
+#app .guide-sidebar-card {
+  border-top: 6px solid var(--oracle-red);
+}
+
+#app .mode-hero::before,
+#app .mode-hero::after,
+#app .garden-shell::before,
+#app .garden-shell::after,
+#app .rabbit-step::after,
+#app .step-shell::before,
+#app .step-shell::after,
+#app .path-card::after,
+#app .compact-panel::after,
+#app .home-side-card::after,
+#app .guide-map-shell::before,
+#app .guide-map-shell::after,
+#app .scene-well::before,
+#app .bubble-button::after {
+  display: none !important;
+}
+
+#app .btn-primary,
+#app .copy-snippet,
+#app .media-player-control.is-primary {
+  background: var(--oracle-red);
+  border-color: var(--oracle-red);
+  color: #fff;
+}
+
+#app .btn-primary:hover,
+#app .btn-primary:focus-visible,
+#app .copy-snippet:hover,
+#app .copy-snippet:focus-visible {
+  background: #A43C2F;
+  border-color: #A43C2F;
+  color: #fff;
+  transform: none;
+}
+
+#app .btn-outline-primary,
+#app .tag-pill.is-active,
+#app .progress-button.is-complete {
+  background: rgba(199, 70, 52, 0.08);
+  border-color: rgba(199, 70, 52, 0.42);
+  color: var(--oracle-red);
+}
+
+#app .btn-outline-secondary,
+#app .tag-pill,
+#app .shortcut-chip,
+#app .search-group .input-group-text,
+#app .search-group .form-control,
+#app .search-group .btn,
+#app .copy-link-button,
+#app .guide-highlight-chip,
+#app .guide-source-outline-link,
+#app .guide-source-panel-toggle,
+#app .guide-quick-link,
+#app .guide-map-pill {
+  background: #fff;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+#app .btn-outline-primary:hover,
+#app .btn-outline-secondary:hover,
+#app .tag-pill:hover,
+#app .shortcut-chip:hover,
+#app .search-group .btn:hover,
+#app .guide-source-outline-link:hover,
+#app .guide-quick-link:hover,
+#app .copy-link-button:hover {
+  background: rgba(199, 70, 52, 0.06);
+  border-color: var(--oracle-red);
+  color: var(--oracle-red);
+  transform: none;
+}
+
+#app .home-mini-step,
+#app .route-map-branch,
+#app .detail-resource-card,
+#app .detail-field-card,
+#app .detail-milestone-card,
+#app .bubble-button,
+#app .guide-nav-link,
+#app .guide-quick-link,
+#app .guide-source-panel-toggle {
+  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+
+#app .home-mini-step:hover,
+#app .home-mini-step:focus-visible,
+#app .route-map-branch:hover,
+#app .detail-resource-card:hover,
+#app .detail-field-card:hover,
+#app .detail-milestone-card:hover,
+#app .bubble-button:hover,
+#app .bubble-button:focus-visible,
+#app .guide-nav-link:hover,
+#app .guide-nav-link.is-active {
+  transform: none;
+  border-color: rgba(199, 70, 52, 0.42);
+}
+
+#app .bubble-button,
+#app .guide-nav-link,
+#app .guide-section-card,
+#app .guide-quick-link {
+  background: #fff;
+}
+
+#app .bubble-button::before,
+#app .guide-nav-link::before {
+  background: var(--accent-strong, var(--oracle-red));
+}
+
+#app .guide-nav-link.is-active,
+#app .guide-quick-link.is-active,
+#app .search-result-card::before {
+  border-color: rgba(199, 70, 52, 0.42);
+}
+
+#app .panel-kicker,
+#app .mode-overline,
+#app .modal-kicker,
+#app .step-kicker,
+#app .path-badge,
+#app .bubble-badge,
+#app .guide-source-panel-label,
+#app .guide-source-panel-meta {
+  border: 0;
+  background: transparent;
+  color: var(--oracle-red);
+  text-transform: uppercase;
+}
+
+#app pre,
+#app .guide-source-pre {
+  border-radius: 8px;
+  background: #201E1C;
+  color: #FBF9F7;
+}
+
+#app .media-player-card {
+  --player-panel: #fff;
+  --player-shadow: none;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #fff;
+}
+
+#app .media-player-card::before {
+  display: none;
+}
+
+#app .media-player-kicker,
+#app .media-player-rate,
+#app .media-player-transcript-panel,
+#app .media-player-chapter-list button {
+  border-radius: 8px;
+  background: #fff;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+#app .media-player-shell {
+  border-radius: 8px;
+  background: var(--oracle-bark);
+}
+
+#app .media-player-stage,
+#app .media-player-video {
+  border-radius: 8px;
+  background: #161513;
+}
+
+#app .media-player-stage {
+  background-image: none;
+}
+
+#app .media-player-stage::after {
+  display: none;
+}
+
+#app .media-player-control,
+#app .media-player-stage-toggle,
+#app .media-player-seek {
+  border-radius: 8px;
+}
+
+#app .media-player-seek {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+#app button:focus-visible,
+#app input:focus-visible,
+#app a:focus-visible,
+#app .nav-control:focus-visible,
+#app .progress-button:focus-visible,
+#app .bubble-button:focus-visible,
+#app .shortcut-chip:focus-visible {
+  outline: 3px solid rgba(199, 70, 52, 0.32);
+  outline-offset: 2px;
+}
+
+body.home-no-scroll {
+  overflow: hidden;
+}
+
+body.home-no-scroll #app,
+body.home-no-scroll #app .app-shell {
+  min-height: 100vh;
+}
+
+body.home-no-scroll #app .app-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+body.home-no-scroll #app .mode-nav,
+body.home-no-scroll #app .app-footer {
+  flex: 0 0 auto;
+}
+
+body.home-no-scroll #app #hub.hub-screen {
+  min-height: 0;
+  padding: clamp(0.55rem, 1.35vh, 1rem) clamp(0.8rem, 1.5vw, 1.45rem);
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+body.home-no-scroll #app #hub > .container {
+  width: 100%;
+  max-width: none;
+  min-height: 0;
+  padding: 0;
+  display: flex;
+}
+
+body.home-no-scroll #app .hub-hero {
+  width: 100%;
+  min-height: 0;
+  padding: clamp(1.25rem, 2.7vw, 2.35rem);
+  display: grid;
+  align-items: center;
+}
+
+body.home-no-scroll #app .hub-hero .row {
+  width: 100%;
+  min-height: 0;
+  align-items: center !important;
+}
+
+body.home-no-scroll #app #hub .hero-title {
+  max-width: 15ch;
+  font-size: clamp(2.35rem, 5.8vw, 5.2rem);
+}
+
+body.home-no-scroll #app .home-side-stack,
+body.home-no-scroll #app .home-side-card,
+body.home-no-scroll #app .home-mini-flow {
+  min-height: 0;
+}
+
+body.home-no-scroll #app .home-side-card {
+  padding: clamp(0.95rem, 1.7vw, 1.2rem);
+}
+
+body.home-no-scroll #app .home-mini-flow {
+  display: grid;
+  gap: clamp(0.45rem, 0.85vh, 0.62rem);
+}
+
+body.home-no-scroll #app .home-mini-step {
+  min-height: clamp(3.2rem, 7vh, 4.35rem);
+  padding: clamp(0.55rem, 1.1vh, 0.72rem) clamp(0.65rem, 1.1vw, 0.82rem);
+}
+
+body.home-no-scroll #app .app-footer {
+  padding: 0.58rem 1rem;
+  min-height: 2.5rem;
+}
+
+body.home-no-scroll #app .app-footer .container {
+  max-width: none;
+}
+
+@media (max-width: 991.98px), (max-height: 820px) {
+  body.home-no-scroll #app .mode-nav .nav-search-form {
+    display: none;
+  }
+
+  body.home-no-scroll #app .hub-hero {
+    padding: 0.9rem 1rem;
+  }
+
+  body.home-no-scroll #app #hub .hero-title {
+    font-size: clamp(2rem, 5vw, 3.35rem);
+  }
+
+  body.home-no-scroll #app .panel-copy {
+    display: none;
+  }
+
+  body.home-no-scroll #app .home-mini-step small {
+    display: none;
+  }
+
+  body.home-no-scroll #app .home-side-card {
+    gap: 0.55rem;
+    padding: 0.85rem;
+  }
+
+  body.home-no-scroll #app .home-mini-flow {
+    gap: 0.4rem;
+  }
+
+  body.home-no-scroll #app .home-mini-step {
+    min-height: 2.72rem;
+    padding: 0.42rem 0.58rem;
+  }
+
+  body.home-no-scroll #app .home-mini-number {
+    width: 1.65rem;
+    height: 1.65rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  #app .hub-hero {
+    padding: 2rem 1.25rem 2.4rem;
+  }
+
+  #app .mode-nav .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #app .mode-nav .nav-main-grid,
+  #app .mode-nav .nav-search-form {
+    width: 100%;
+  }
+
+  #app .mode-nav .nav-search-group {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+
+  #app .mode-nav .nav-search-group .form-control {
+    min-width: 0;
+  }
+
+  #app .nav-shell {
+    padding: 0.85rem 0;
+  }
+}
