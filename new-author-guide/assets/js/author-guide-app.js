@@ -131,7 +131,6 @@
   var searchSummary = document.getElementById("searchSummary");
   var searchQueryChip = document.getElementById("searchQueryChip");
   var searchCountChip = document.getElementById("searchCountChip");
-  var searchBackButton = document.getElementById("searchBackButton");
   var navSearchForm = document.getElementById("navSearchForm");
   var navSearchInput = document.getElementById("navSearchInput");
   var navSearchClear = document.getElementById("navSearchClear");
@@ -819,11 +818,26 @@
       highlights: guideHighlightsForEntry(id, title, summary),
       navState: "Loading sections",
       labs: [],
-      sourcePath: filename,
+      sourcePath: resolveGuideSourcePath(filename),
       sectionHref: fullGuideHref,
       sectionLabel: "Open Full Guide",
       embedHref: guideHomeHref + "?lab=" + encodeURIComponent(id) + "&embed=1"
     };
+  }
+
+  function resolveGuideSourcePath(filename) {
+    var manifestUrl;
+
+    if (!filename) {
+      return "";
+    }
+
+    try {
+      manifestUrl = new URL(guideManifestHref, window.location.href);
+      return new URL(filename, manifestUrl).toString();
+    } catch (error) {
+      return filename;
+    }
   }
 
   function loadGuideCatalog() {
@@ -936,22 +950,6 @@
     };
   }
 
-  function previousViewLabel() {
-    if (previousView.mode === "beginner") {
-      return "Back to Quickstart";
-    }
-
-    if (previousView.mode === "explorer") {
-      return "Back to Cheatsheet";
-    }
-
-    if (previousView.mode === "guide") {
-      return "Back to Full Guide";
-    }
-
-    return "Back to Home";
-  }
-
   function updateNavSearch() {
     if (!navSearchInput) {
       return;
@@ -962,6 +960,7 @@
 
   function updateNav() {
     modeNav.classList.remove("d-none");
+    document.body.classList.toggle("home-no-scroll", state.mode === "hub");
 
     document.querySelectorAll(".nav-control").forEach(function (button) {
       var targetMode = button.getAttribute("data-mode-target");
@@ -1150,13 +1149,6 @@
       "      </ul>",
       '      <div class="route-map-branch-foot">Leads to an applied workshop example.</div>',
       "    </article>",
-      "  </div>",
-      '  <div class="route-map-ribbon">',
-      '    <div>',
-      '      <strong>Search crosses every route.</strong>',
-      '      <span>One search surface crosses Quickstart, Cheatsheet, and Full Guide.</span>',
-      "    </div>",
-      '    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-mode-target="search">Open Search</button>',
       "  </div>",
       "</div>"
     ].join("");
@@ -1918,10 +1910,6 @@
       return;
     }
 
-    if (searchBackButton) {
-      searchBackButton.textContent = previousViewLabel();
-    }
-
     if (searchQueryChip) {
       searchQueryChip.textContent = query ? 'Query: "' + query + '"' : "No query yet";
     }
@@ -2065,13 +2053,6 @@
       "      </ul>",
       '      <div class="route-map-branch-foot">Leads to an applied workshop example.</div>',
       "    </article>",
-      "  </div>",
-      '  <div class="route-map-ribbon">',
-      '    <div>',
-      '      <strong>Search crosses every redesigned route.</strong>',
-      '      <span>One search surface crosses Quickstart, Cheatsheet, and the indexed source guide.</span>',
-      "    </div>",
-      '    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-mode-target="search">Open Search</button>',
       "  </div>",
       "</div>"
     ].join("");
@@ -3040,30 +3021,6 @@
     switchMode("search");
   }
 
-  function returnFromSearch() {
-    if (previousView.mode === "beginner") {
-      state.currentStep = previousView.currentStep || 0;
-      switchMode("beginner");
-      goToStep(state.currentStep, { scroll: true, hash: true, announce: false });
-      return;
-    }
-
-    if (previousView.mode === "explorer") {
-      switchMode("explorer");
-      return;
-    }
-
-    if (previousView.mode === "guide") {
-      switchMode("guide", {
-        guideSection: previousView.guideSection || (guideSections[0] && guideSections[0].id),
-        guideFocusLab: previousView.guideFocusLab || ""
-      });
-      return;
-    }
-
-    switchMode("hub");
-  }
-
   function openSearchResult(entryId) {
     var entry = searchEntryMap[entryId];
 
@@ -3685,10 +3642,6 @@
       renderSearchResults();
       updateHashFromState({ replace: true });
     }
-  });
-
-  searchBackButton.addEventListener("click", function () {
-    returnFromSearch();
   });
 
   window.addEventListener("hashchange", function () {

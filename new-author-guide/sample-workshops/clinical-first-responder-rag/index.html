@@ -8,10 +8,9 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23C74634'/%3E%3C/svg%3E">
   <title>Psychiatry First Responder RAG | Sample Workshop Demo</title>
   <link rel="stylesheet" href="../../assets/css/redwood-video-player.css">
-  <link rel="stylesheet" href="../../assets/css/sample-workshop-demo.css">
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="../../assets/css/sample-workshop-demo.css?v=20260516-demo6">
   <script src="../../assets/js/redwood-video-player.js" defer></script>
-  <script src="../../assets/js/sample-workshop-demo.js" defer></script>
+  <script src="../../assets/js/sample-workshop-demo.js?v=20260516-demo6" defer></script>
 </head>
 
 <body class="sample-demo">
@@ -20,14 +19,15 @@
       <div class="sample-brand-block">
         <div class="sample-brand-row">
           <span class="sample-kicker">Author guide refresh</span>
-          <a class="sample-brand" href="../../index.html">Psychiatry First Responder RAG sample workshop</a>
+          <span class="sample-brand" aria-current="page">Psychiatry First Responder RAG sample workshop</span>
         </div>
-        <div class="sample-brand-note">Demonstration only. The page shows how a redesigned workshop surface can teach the user to build a working Oracle-based solution, not just describe it.</div>
+        <div class="sample-brand-note">A sample workshop surface that teaches a build path, not a brochure.</div>
       </div>
       <nav class="sample-nav-actions" aria-label="Top actions">
-        <a class="sample-nav-link" href="../../index.html">Guide home</a>
-        <a class="sample-nav-link" href="#test-demo">Open test demo</a>
-        <a class="sample-nav-link" href="#lab-1">Start Lab 1</a>
+        <a class="sample-nav-link" href="../../index.html">Homepage</a>
+        <a class="sample-nav-link" href="../../index.html#quickstart">Quickstart</a>
+        <a class="sample-nav-link" href="../../index.html#cheatsheet">Cheatsheet</a>
+        <a class="sample-nav-link" href="https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" target="_blank" rel="noreferrer">Guide</a>
       </nav>
     </div>
   </header>
@@ -39,7 +39,7 @@
           <div>
             <span class="sample-kicker">Workshop surface demo</span>
             <h1 class="sample-title">Build a psychiatry first responder RAG flow that prepares the clinician before the appointment.</h1>
-            <p class="sample-lead">This demo workshop walks the learner through provisioning Oracle services, modeling a behavioral-health intake schema, grounding the assistant on approved guidance, enforcing safety routes, building patient and clinician pages, and exporting a concise clinician handoff PDF.</p>
+            <p class="sample-lead">This sample shows how a workshop can teach a real build path: provision Oracle services, model intake data, ground responses, enforce safety routes, build patient and clinician pages, and export a clinician handoff PDF.</p>
             <div class="sample-chip-row">
               <span class="sample-chip">Autonomous AI Database</span>
               <span class="sample-chip">Vector search</span>
@@ -48,34 +48,25 @@
               <span class="sample-chip">Safety guardrails</span>
               <span class="sample-chip">PDF handoff</span>
             </div>
-            <div class="sample-button-row">
-              <a class="sample-button is-primary" href="#test-demo">Open test demo</a>
-              <a class="sample-button is-secondary" href="#lab-1">Begin build</a>
-              <a class="sample-button is-secondary" href="#architecture">Review architecture</a>
-            </div>
-            <div class="sample-hero-callout">
-              <div class="info-card">
-                <div class="card-eyebrow">What the learner actually ships</div>
-                <ul class="sample-list">
-                  <li>A patient-facing pre-visit chat that captures presenting concern, function, safety, supports, and a short rapid assessment.</li>
-                  <li>A clinician-facing handoff page and downloadable PDF with route, risk flags, symptoms, quick assessment results, and cited guidance.</li>
-                  <li>A trusted Oracle service layer that keeps routing, retrieval, and report generation outside the browser.</li>
-                </ul>
-              </div>
-            </div>
           </div>
 
           <aside class="sample-sidecard">
             <h2>Demo workshop shape</h2>
-            <p>A short Test Demo sells the product first. Five build labs then move from infrastructure to launch so the learner can see the outcome before the build path starts.</p>
+            <p>Start with the product, then build it in five labs.</p>
             <ul class="sample-list">
-              <li>Test Demo lets the learner try the psychiatry intake flow, quick assessment, and clinician handoff first.</li>
-              <li>Lab 1 provisions the Oracle workspace and app foundation.</li>
-              <li>Lab 2 models psychiatric intake, assessments, guidance chunks, and vector retrieval.</li>
-              <li>Lab 3 publishes the guardrailed PL/SQL and ORDS service layer.</li>
-              <li>Lab 4 builds the patient chat, clinician dashboard, and report contract.</li>
-              <li>Lab 5 validates the route logic, quiz, and PDF-ready handoff flow.</li>
+              <li>Test Demo previews intake, assessment, and handoff.</li>
+              <li>Lab 1 provisions the Oracle foundation.</li>
+              <li>Lab 2 builds intake data and vector retrieval.</li>
+              <li>Lab 3 publishes guardrails and ORDS services.</li>
+              <li>Lab 4 builds patient and clinician pages.</li>
+              <li>Lab 5 validates routing, quiz results, and PDF export.</li>
             </ul>
+            <div class="info-type-legend" aria-label="Workshop content type indicators">
+              <span class="info-type-pill is-concept">Concept</span>
+              <span class="info-type-pill is-action">Action</span>
+              <span class="info-type-pill is-warning">Warning</span>
+              <span class="info-type-pill is-tip">Tip</span>
+            </div>
           </aside>
         </div>
       </div>
@@ -84,9 +75,12 @@
     <section class="sample-panel" id="architecture" data-track-section>
       <div class="sample-panel-inner">
         <div class="section-head">
-          <div class="sample-kicker">Architecture view</div>
+          <div class="section-meta-row">
+            <div class="sample-kicker">Architecture view</div>
+            <span class="info-type-pill is-concept">Concept</span>
+          </div>
           <h2 class="section-title">Keep the architecture simple: build once on the top lane, run the psychiatry intake and clinician handoff on the bottom lane.</h2>
-          <p class="section-summary">This demo stays in psychiatry and behavioral health only. The learner can see what gets provisioned, where the safety rules live, and how the patient conversation becomes a clinician handoff instead of a raw transcript.</p>
+          <p class="section-summary">The flow stays in behavioral-health intake. It shows what to provision, where safety rules live, and how a patient chat becomes a clinician handoff.</p>
         </div>
 
         <div
@@ -229,8 +223,31 @@
     <section class="sample-workshop-layout">
       <aside class="sample-lab-rail" aria-label="Lab navigation">
         <div class="sample-rail-card">
-          <div class="sample-rail-eyebrow">Lab navigation</div>
-          <p class="sample-rail-note">This rail stays with the user through the test pass and build labs, but because it lives inside the workshop section wrapper it does not slide up over the hero or top workshop menu.</p>
+          <div class="workshop-search" role="search" aria-label="Search within workshop">
+            <form class="workshop-search-form" id="workshopSearchForm">
+              <label for="workshopSearchInput">Search within workshop</label>
+              <div class="workshop-search-row">
+                <input id="workshopSearchInput" type="search" placeholder="safety, ORDS, PDF">
+              </div>
+            </form>
+            <div class="workshop-search-results" id="workshopSearchResults">Type a keyword to find matching sections.</div>
+          </div>
+          <div class="workshop-progress-card" aria-live="polite">
+            <div class="workshop-progress-top">
+              <span>Progress</span>
+              <strong id="workshopProgressPercent">0% complete</strong>
+            </div>
+            <div class="workshop-progress-bar" aria-hidden="true"><span id="workshopProgressBar"></span></div>
+            <p id="workshopProgressLabel">Step 0 of 9: 0 of 6 sections complete; quiz 0 of 3 correct.</p>
+          </div>
+          <div class="workshop-gamification" aria-live="polite">
+            <div class="workshop-xp-row">
+              <span>Workshop XP</span>
+              <strong id="workshopXp">0 / 0</strong>
+            </div>
+            <p id="workshopAchievement">XP comes from completed sections and correct quiz answers.</p>
+          </div>
+          <div class="sample-rail-eyebrow">Demo and labs</div>
           <nav class="sample-rail-links">
             <a class="sample-rail-link" href="#test-demo" data-section-link="test-demo"><small>Test demo</small><strong>Psychiatry first responder flow</strong></a>
             <a class="sample-rail-link" href="#lab-1" data-section-link="lab-1"><small>Lab 1</small><strong>Foundation and workspace</strong></a>
@@ -243,21 +260,22 @@
       </aside>
 
       <div class="sample-lab-stack">
-        <article class="sample-panel sample-lab" id="test-demo" data-track-section>
+        <article class="sample-panel sample-lab" id="test-demo" data-track-section data-workshop-step>
           <div class="sample-panel-inner">
             <div class="lab-head">
               <div class="lab-meta-row">
                 <span class="lab-label">Test demo</span>
                 <span class="lab-time">Suggested first stop</span>
+                <span class="info-type-pill is-action">Action</span>
               </div>
-              <h2 class="lab-title">Test the psychiatry first responder flow before you start Lab 1.</h2>
-              <p class="section-summary">Sell the product first. This short product pass lets the learner try the patient intake, quick assessment, and clinician handoff before the build labs explain how to make it.</p>
+              <h2 class="lab-title">Try the psychiatry first responder before Lab 1.</h2>
+              <p class="section-summary">Start with the finished flow: intake, quick assessment, route logic, and clinician handoff.</p>
             </div>
 
             <div
               data-video-card
               data-video-title="Test demo walkthrough"
-              data-video-summary="Show the patient chat, quick assessment, and clinician handoff first so the learner understands the product before the build sequence starts."
+              data-video-summary="Show the patient chat, quick assessment, and handoff before the build sequence starts."
               data-video-features="Patient chat|Quick assessment|PDF handoff"
             ></div>
 
@@ -265,9 +283,9 @@
               <div class="info-card">
                 <div class="card-eyebrow">What this MVP proves</div>
                 <ul class="sample-list">
-                  <li>The assistant can guide the patient through a short pre-visit psychiatry intake conversation.</li>
-                  <li>The route changes for immediate safety, urgent psychiatric review, or routine intake based on captured signals.</li>
-                  <li>The clinician receives a structured handoff and PDF instead of opening a raw transcript first.</li>
+                  <li>The chat captures concern, timing, impact, safety, care context, and support.</li>
+                  <li>The route changes when the intake captures urgent or immediate safety signals.</li>
+                  <li>The clinician receives a structured handoff before reading the raw transcript.</li>
                 </ul>
               </div>
 
@@ -276,7 +294,7 @@
                 <ul class="sample-list">
                   <li>Six guided chat questions.</li>
                   <li>Three rapid assessment items.</li>
-                  <li>One handoff preview and one PDF export action.</li>
+                  <li>One scrollable handoff preview and one generated PDF file.</li>
                 </ul>
               </div>
             </div>
@@ -285,8 +303,9 @@
               <section class="demo-chat-card">
                 <div class="widget-eyebrow">AI first responder MVP</div>
                 <h3>Patient conversation demo</h3>
-                <p>This demo follows a fixed safety-aware sequence. It is enough to show how the final product would feel without pretending this page is a production clinical system.</p>
+                <p>The demo adapts to the patient text, updates suggested replies, and keeps the flow inside a safe intake boundary.</p>
                 <div class="chat-transcript" id="demoTranscript" aria-live="polite"></div>
+                <div class="quick-replies-label">Proposed responses</div>
                 <div class="quick-replies" id="demoReplies" aria-label="Suggested replies"></div>
                 <form class="chat-form" id="demoChatForm">
                   <input class="chat-input" id="demoInput" type="text" placeholder="Type the patient answer">
@@ -295,13 +314,25 @@
                     <button class="demo-action" type="button" id="resetDemo">Reset demo</button>
                   </div>
                 </form>
+                <div class="report-preview" id="reportPreview">
+                  <div class="report-sheet is-empty">
+                    <div class="report-sheet-head">
+                      <div>
+                        <div class="report-sheet-kicker">Psychiatry first responder</div>
+                        <h4>Clinician handoff paper</h4>
+                      </div>
+                      <span class="route-badge is-warning">Pending</span>
+                    </div>
+                    <p>Complete the conversation and quick assessment, then generate the clinician handoff here.</p>
+                  </div>
+                </div>
               </section>
 
               <div class="showcase-side-stack">
                 <section class="widget-card assessment-card">
                   <div class="widget-eyebrow">Quick assessment</div>
-                  <h3>Capture a short mood, anxiety, and sleep snapshot</h3>
-                  <p>Demonstration only. These quick checks simply enrich the clinician handoff and PDF report.</p>
+                  <h3>Capture mood, anxiety, and sleep.</h3>
+                  <p>Three ratings add score context to the handoff.</p>
                   <div class="assessment-grid" id="assessmentGrid">
                     <section class="assessment-question" data-assessment-key="interest">
                       <strong>Little interest or pleasure in activities</strong>
@@ -338,24 +369,12 @@
 
                 <aside class="demo-report-card">
                   <div class="widget-eyebrow">Clinician handoff</div>
-                  <h3>Structured report and PDF export</h3>
-                  <p>The route and summary update as the demo conversation finishes. The learner can then generate the final handoff and export it as a PDF.</p>
+                  <h3>Generate and download the handoff.</h3>
+                  <p>Finish the intake and assessment, then download a PDF built from the demo data and chat transcript.</p>
                   <div class="report-status" id="reportStatus" aria-live="polite">Conversation not complete yet. Capture the guided intake questions first.</div>
                   <div class="demo-actions">
                     <button class="demo-action is-primary" type="button" id="generateReport" disabled>Generate clinician handoff</button>
                     <button class="demo-action" type="button" id="downloadPdf" disabled>Download PDF</button>
-                  </div>
-                  <div class="report-preview" id="reportPreview">
-                    <div class="report-sheet is-empty">
-                      <div class="report-sheet-head">
-                        <div>
-                          <div class="report-sheet-kicker">Psychiatry first responder</div>
-                          <h4>Clinician handoff preview</h4>
-                        </div>
-                        <span class="route-badge is-warning">Pending</span>
-                      </div>
-                      <p>Complete the conversation and quick assessment to generate the structured clinician handoff and PDF export.</p>
-                    </div>
                   </div>
                 </aside>
               </div>
@@ -363,15 +382,16 @@
           </div>
         </article>
 
-        <article class="sample-panel sample-lab" id="lab-1" data-track-section>
+        <article class="sample-panel sample-lab" id="lab-1" data-track-section data-workshop-step>
           <div class="sample-panel-inner">
             <div class="lab-head">
               <div class="lab-meta-row">
                 <span class="lab-label">Lab 1</span>
                 <span class="lab-time">Estimated time: 20 minutes</span>
+                <span class="info-type-pill is-action">Action</span>
               </div>
               <h2 class="lab-title">Provision the Oracle foundation and enable the AI-ready workspace.</h2>
-              <p class="section-summary">The learner should leave this lab with an Oracle workspace that is ready for schema creation, APEX pages, ORDS endpoints, and later prompt wiring.</p>
+              <p class="section-summary">End this lab with an Oracle workspace ready for schema objects, APEX pages, ORDS endpoints, and prompt wiring.</p>
             </div>
 
             <div
@@ -404,6 +424,11 @@
                 </ul>
               </div>
             </div>
+
+            <details class="more-details is-warning">
+              <summary><span class="info-type-pill is-warning">Warning</span><strong>More details: if the workspace setup stalls.</strong></summary>
+              <p>Pause before moving into schema work. Confirm the database is reachable, the workspace opens with the intended schema owner, and the ORDS base path responds. Most later failures are harder to debug if these three values are only assumed.</p>
+            </details>
 
             <div class="task-stack">
               <div class="code-card">
@@ -480,15 +505,16 @@ CREATE TABLE demo_environment (
           </div>
         </article>
 
-        <article class="sample-panel sample-lab" id="lab-2" data-track-section>
+        <article class="sample-panel sample-lab" id="lab-2" data-track-section data-workshop-step>
           <div class="sample-panel-inner">
             <div class="lab-head">
               <div class="lab-meta-row">
                 <span class="lab-label">Lab 2</span>
                 <span class="lab-time">Estimated time: 30 minutes</span>
+                <span class="info-type-pill is-concept">Concept</span>
               </div>
               <h2 class="lab-title">Model psychiatric intake, rapid assessments, and the grounded knowledge layer.</h2>
-              <p class="section-summary">This lab turns the workshop from a shell into a behavioral-health system. The user should build tables, load approved guidance, and validate how the vector layer will be used later.</p>
+              <p class="section-summary">Build the data layer: intake tables, approved guidance, and vector retrieval.</p>
             </div>
 
             <div
@@ -578,7 +604,7 @@ WITH TARGET ACCURACY 95;</code></pre>
                   <div class="code-card-meta">
                     <div class="card-eyebrow">Knowledge seed</div>
                     <h3>Load the approved psychiatry guidance pack</h3>
-                    <p>Keep the chunk set obvious. The learner should see what knowledge is allowed into the prompt.</p>
+                    <p>Make the approved knowledge set visible before it reaches a prompt.</p>
                   </div>
                   <button class="copy-button" type="button" data-copy-code="code-lab2-knowledge">Copy</button>
                 </div>
@@ -637,6 +663,11 @@ VALUES ('Medication and substance context', 'care-context',
                 <pre class="sql-output" id="sqlOutput"></pre>
               </div>
 
+              <details class="more-details is-tip">
+                <summary><span class="info-type-pill is-tip">Tip</span><strong>More details: recover from vector setup mismatches.</strong></summary>
+                <p>If retrieval returns no useful chunks, check the embedding dimension, the distance metric, and the domain filters before changing prompt text. In this workshop, the data layer must prove that grounded search works before the patient page calls it.</p>
+              </details>
+
               <div class="checklist-card">
                 <div class="card-eyebrow">Checkpoint</div>
                 <h3>Data layer readiness</h3>
@@ -650,15 +681,16 @@ VALUES ('Medication and substance context', 'care-context',
             </div>
           </div>
         </article>
-        <article class="sample-panel sample-lab" id="lab-3" data-track-section>
+        <article class="sample-panel sample-lab" id="lab-3" data-track-section data-workshop-step>
           <div class="sample-panel-inner">
             <div class="lab-head">
               <div class="lab-meta-row">
                 <span class="lab-label">Lab 3</span>
                 <span class="lab-time">Estimated time: 30 minutes</span>
+                <span class="info-type-pill is-warning">Warning</span>
               </div>
               <h2 class="lab-title">Publish the guardrailed service layer and the psychiatry route logic.</h2>
-              <p class="section-summary">This is where the workshop becomes safe and believable. The user should build a service boundary that decides the route, retrieves approved guidance, and produces the handoff contract.</p>
+              <p class="section-summary">Build the trusted service boundary for routing, retrieval, and handoff generation.</p>
             </div>
 
             <div
@@ -803,6 +835,11 @@ END;
                 </div>
               </div>
 
+              <details class="more-details is-warning">
+                <summary><span class="info-type-pill is-warning">Warning</span><strong>More details: common route-logic mistake.</strong></summary>
+                <p>Do not let the browser choose the route. Keep escalation policy in the trusted PL/SQL and ORDS layer.</p>
+              </details>
+
               <div class="info-card">
                 <div class="card-eyebrow">Mock flow visual</div>
                 <h3>Trusted runtime boundary</h3>
@@ -838,15 +875,16 @@ END;
             </div>
           </div>
         </article>
-        <article class="sample-panel sample-lab" id="lab-4" data-track-section>
+        <article class="sample-panel sample-lab" id="lab-4" data-track-section data-workshop-step>
           <div class="sample-panel-inner">
             <div class="lab-head">
               <div class="lab-meta-row">
                 <span class="lab-label">Lab 4</span>
                 <span class="lab-time">Estimated time: 30 minutes</span>
+                <span class="info-type-pill is-action">Action</span>
               </div>
               <h2 class="lab-title">Build the patient intake chat, clinician dashboard, and handoff report contract in APEX.</h2>
-              <p class="section-summary">This lab turns the service layer into a usable product. The user should build pages, not just read about them.</p>
+              <p class="section-summary">Turn the service layer into patient and clinician pages.</p>
             </div>
 
             <div
@@ -957,7 +995,7 @@ must_not:
 
                 <div class="info-card">
                   <div class="card-eyebrow">Mock clinician page</div>
-                  <h3>Clinician handoff preview</h3>
+                  <h3>Clinician review mock</h3>
                   <div class="mock-window">
                     <div class="mock-window-bar">
                       <div class="mock-dots"><span></span><span></span><span></span></div>
@@ -982,6 +1020,11 @@ must_not:
                 </ul>
               </div>
 
+              <details class="more-details is-tip">
+                <summary><span class="info-type-pill is-tip">Tip</span><strong>More details: keep the clinician page scan-first.</strong></summary>
+                <p>Put route, safety flags, and the summary above raw transcript details. The transcript still matters, but the clinician should be able to understand the case before scrolling.</p>
+              </details>
+
               <div class="checklist-card">
                 <div class="card-eyebrow">Checkpoint</div>
                 <h3>UX readiness before launch</h3>
@@ -995,15 +1038,16 @@ must_not:
             </div>
           </div>
         </article>
-        <article class="sample-panel sample-lab" id="lab-5" data-track-section>
+        <article class="sample-panel sample-lab" id="lab-5" data-track-section data-workshop-step>
           <div class="sample-panel-inner">
             <div class="lab-head">
               <div class="lab-meta-row">
                 <span class="lab-label">Lab 5</span>
                 <span class="lab-time">Estimated time: 20 minutes</span>
+                <span class="info-type-pill is-action">Action</span>
               </div>
               <h2 class="lab-title">Validate the route logic, launch the demo safely, and confirm the learner can explain the result.</h2>
-              <p class="section-summary">The last lab should prove that the build works and that the learner understands why it works. This is where smoke checks, a quiz, and the PDF export gate belong.</p>
+              <p class="section-summary">Prove the build works with smoke checks, quiz results, and PDF export.</p>
             </div>
 
             <div
@@ -1041,7 +1085,7 @@ must_not:
                   <div class="code-card-meta">
                     <div class="card-eyebrow">Smoke test snippet</div>
                     <h3>Verify the report endpoint</h3>
-                    <p>One short test script is enough here. The workshop demo should show validation, not bury the reader in framework plumbing.</p>
+                    <p>Use one short test script. Show validation, not framework plumbing.</p>
                   </div>
                   <button class="copy-button" type="button" data-copy-code="code-lab5-smoke">Copy</button>
                 </div>
@@ -1083,6 +1127,11 @@ must_not:
                 <div class="quiz-result" id="quizResult" aria-live="polite">Answer the three questions to confirm the launch logic is anchored.</div>
               </div>
 
+              <details class="more-details is-warning">
+                <summary><span class="info-type-pill is-warning">Warning</span><strong>More details: recover from a failed smoke path.</strong></summary>
+                <p>When the smoke path fails, start with the route value and handoff payload before changing the UI. If the service returns the expected route and report, the remaining issue is usually page rendering or PDF wiring.</p>
+              </details>
+
               <div class="info-card">
                 <div class="card-eyebrow">Launch focus</div>
                 <h3>What the learner should be able to explain at the end</h3>
@@ -1092,6 +1141,15 @@ must_not:
                   <li>How the rapid assessment and chat transcript work together to make the clinician handoff faster to scan.</li>
                 </ul>
               </div>
+
+              <div class="completion-card" id="completionPanel">
+                <h3>Finish the sample workshop</h3>
+                <div class="completion-actions">
+                  <button class="sample-button is-primary" type="button" id="completeWorkshop">Finish workshop</button>
+                  <button class="sample-button is-secondary" type="button" id="resetWorkshopProgress">Reset local progress</button>
+                </div>
+                <div class="completion-feedback" id="completionFeedback" aria-live="polite"></div>
+              </div>
             </div>
           </div>
         </article>
@@ -1099,13 +1157,8 @@ must_not:
     </section>
   </main>
 
-  <footer class="sample-footer">
-    <div class="sample-footer-shell">
-      <p>This page is a UX demonstration for the redesigned author documentation. It shows a workshop surface that teaches the user how to build something real, with steps, code, checks, tools, and a visible end result.</p>
-      <p>Oracle © 2026</p>
-      <a class="sample-button is-secondary" href="../../index.html">Return to guide home</a>
-    </div>
-  </footer>
+  <footer class="sample-footer" data-shared-footer data-footer-variant="app"></footer>
+  <script src="../../assets/js/shared-footer.js?v=20260516-followup"></script>
 </body>
 
 </html>

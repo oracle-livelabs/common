@@ -11,7 +11,7 @@
       var url = new URL(window.location.href);
       var experience = url.searchParams.get("experience");
       var lab = url.searchParams.get("lab");
-      var fullGuideHref = "https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/";
+      var fullGuideHref = "https://livelabs.oracle.com/cdn/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/";
       var markdownLabMap = {
         "start-here": "introduction",
         "core-workflow": "1-labs-wms",
@@ -4714,8 +4714,7 @@
         align-items: stretch;
       }
 
-      #app .search-result-actions .btn,
-      #app #searchBackButton {
+      #app .search-result-actions .btn {
         width: 100%;
       }
 
@@ -5531,7 +5530,7 @@
     }
   </style>
   <link rel="stylesheet" href="./assets/css/redwood-video-player.css">
-  <link rel="stylesheet" href="./assets/css/author-guide-improvements.css">
+  <link rel="stylesheet" href="./assets/css/author-guide-improvements.css?v=20260516-followup">
 </head>
 <body>
   <div id="app">
@@ -5573,7 +5572,7 @@
                   <button class="btn nav-control" type="button" data-mode-target="hub" aria-label="Open the author guide home">Home</button>
                   <button class="btn nav-control" type="button" data-mode-target="beginner" aria-label="Open quickstart">Quickstart</button>
                   <button class="btn nav-control" type="button" data-mode-target="explorer" aria-label="Open cheatsheet">Cheatsheet</button>
-                  <a class="btn nav-control" href="https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" target="_blank" rel="noreferrer" aria-label="Open full guide">Full Guide</a>
+                  <a class="btn nav-control" href="https://livelabs.oracle.com/cdn/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" target="_blank" rel="noreferrer" aria-label="Open full guide">Full Guide</a>
                   <a class="btn nav-control" href="./sample-workshops/clinical-first-responder-rag/index.html" aria-label="Open the sample workshop demo">Sample Workshop</a>
                 </div>
               </div>
@@ -5593,20 +5592,14 @@
                     <span class="hero-lockup-note">Author guide</span>
                   </span>
                 </div>
-                <h1 class="hero-title" id="hubHeading">Author quick guide from request to publish.</h1>
-                <div class="hero-actions">
-                  <button class="btn btn-primary btn-lg rounded-pill px-4" type="button" data-mode-target="beginner">Open Quickstart</button>
-                  <button class="btn btn-outline-primary btn-lg rounded-pill px-4" type="button" data-mode-target="explorer">Open Cheatsheet</button>
-                  <a class="btn btn-outline-secondary btn-lg rounded-pill px-4" href="https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" target="_blank" rel="noreferrer">Open Full Guide</a>
-                  <a class="btn btn-outline-primary btn-lg rounded-pill px-4" href="./sample-workshops/clinical-first-responder-rag/index.html">Open Sample Workshop</a>
-                </div>
+                <h1 class="hero-title" id="hubHeading">One guide, many doors into LiveLabs authoring.</h1>
               </div>
 
               <div class="col-xl-4">
                 <div class="home-side-stack">
                   <article class="compact-panel home-side-card is-modern h-100">
                     <div class="panel-kicker">Guide at a glance</div>
-                    <p class="panel-copy">Quickstart walks the sequence, Cheatsheet solves focused blockers, and Full Guide keeps the complete canonical flow.</p>
+                    <p class="panel-copy">Choose the path that matches the job: a fast route, a focused answer, the complete guide, or a workshop example.</p>
                     <div class="home-mini-flow mt-2">
                       <button type="button" class="home-mini-step" data-mode-target="beginner">
                         <span class="home-mini-number">1</span>
@@ -5622,7 +5615,7 @@
                           <small>Find one answer fast and jump back to work.</small>
                         </span>
                       </button>
-                      <a class="home-mini-step" href="https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" target="_blank" rel="noreferrer">
+                      <a class="home-mini-step" href="https://livelabs.oracle.com/cdn/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" target="_blank" rel="noreferrer">
                         <span class="home-mini-number">3</span>
                         <span>
                           <strong>Full Guide</strong>
@@ -5641,13 +5634,6 @@
                 </div>
               </div>
             </div>
-            <section class="card route-map-card mt-4" aria-labelledby="homeRouteMapHeading">
-              <div class="card-body">
-                <div class="panel-kicker">Route map</div>
-                <h2 class="visually-hidden" id="homeRouteMapHeading">Author guide route map</h2>
-                <div id="homeRouteMap"></div>
-              </div>
-            </section>
           </div>
         </div>
       </section>
@@ -5678,7 +5664,7 @@
                       </div>
                       <div class="d-flex flex-wrap gap-2 mt-3">
                         <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-mode-target="explorer">Open Cheatsheet</button>
-                        <a class="btn btn-outline-secondary rounded-pill px-4" href="https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" target="_blank" rel="noreferrer">Open Full Guide</a>
+                        <a class="btn btn-outline-secondary rounded-pill px-4" href="https://livelabs.oracle.com/cdn/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" target="_blank" rel="noreferrer">Open Full Guide</a>
                       </div>
                       <div class="feature-switch d-none">
                         <label class="form-check-label" for="fastTrackToggle">Fast Track</label>
@@ -6350,7 +6336,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
                               <button class="copy-snippet" type="button" data-copy-target="snippet-step-3-production-url">Copy</button>
                             </div>
                             <p class="snippet-description">Use this after merge and publishing approval, when the workshop is available from the production repository.</p>
-                            <pre><code id="snippet-step-3-production-url">https://oracle-livelabs.github.io/&lt;repository-name&gt;/&lt;path&gt;/workshops/&lt;variant&gt;/</code></pre>
+                            <pre><code id="snippet-step-3-production-url">https://livelabs.oracle.com/cdn/&lt;repository-name&gt;/&lt;path&gt;/workshops/&lt;variant&gt;/</code></pre>
                           </div>
                         </article>
                         <article class="card snippet-card command-card">
@@ -6363,7 +6349,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
                               <button class="copy-snippet" type="button" data-copy-target="snippet-step-3-brown-button-url">Copy</button>
                             </div>
                             <p class="snippet-description">Use this pattern when the workshop launch button should open the tenancy variant.</p>
-                            <pre><code id="snippet-step-3-brown-button-url">https://oracle-livelabs.github.io/&lt;repository-name&gt;/&lt;path&gt;/workshops/tenancy/</code></pre>
+                            <pre><code id="snippet-step-3-brown-button-url">https://livelabs.oracle.com/cdn/&lt;repository-name&gt;/&lt;path&gt;/workshops/tenancy/</code></pre>
                           </div>
                         </article>
                         <article class="card snippet-card command-card">
@@ -6376,7 +6362,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
                               <button class="copy-snippet" type="button" data-copy-target="snippet-step-3-sprint-url">Copy</button>
                             </div>
                             <p class="snippet-description">Use this pattern only for sprint content that belongs under the Oracle LiveLabs sprints site.</p>
-                            <pre><code id="snippet-step-3-sprint-url">https://oracle-livelabs.github.io/sprints/&lt;category-folder&gt;/&lt;sprint-folder&gt;/</code></pre>
+                            <pre><code id="snippet-step-3-sprint-url">https://livelabs.oracle.com/cdn/sprints/&lt;category-folder&gt;/&lt;sprint-folder&gt;/</code></pre>
                           </div>
                         </article>
                       </div>
@@ -6419,7 +6405,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
                     <div class="d-flex flex-wrap gap-2">
                       <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-action="prev">Back</button>
                       <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-mode-target="explorer">Open Cheatsheet</button>
-                      <a class="btn btn-primary rounded-pill px-4" href="https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" target="_blank" rel="noreferrer">Open Full Guide</a>
+                      <a class="btn btn-primary rounded-pill px-4" href="https://livelabs.oracle.com/cdn/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" target="_blank" rel="noreferrer">Open Full Guide</a>
                     </div>
                   </div>
                 </div>
@@ -6523,28 +6509,13 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
         <div class="container">
           <div class="card mode-hero search-mode-hero">
             <div class="card-body">
-              <div class="row g-4 align-items-start">
-                <div class="col-xl-8">
-                  <div class="mode-overline">Search</div>
-                  <h2 class="mode-title" id="searchHeading">Search Quickstart, Cheatsheet, and Full Guide from one place.</h2>
-                  <p class="mode-copy" id="searchSummary">Enter keywords or a short question in the menu search. Results link back into the exact Quickstart step, Cheatsheet card, or full-guide section that best matches the query.</p>
-                  <div class="mode-chip-row">
-                    <span class="mode-chip" id="searchQueryChip">No query yet</span>
-                    <span class="mode-chip" id="searchCountChip">0 results</span>
-                    <span class="mode-chip">Quickstart + Cheatsheet + Full Guide</span>
-                  </div>
-                </div>
-
-                <div class="col-xl-4">
-                  <div class="compact-panel h-100">
-                    <div class="panel-kicker">Navigation</div>
-                    <p class="panel-copy mb-3">Open a result to jump back into the guide. If the result is not what you want, return here, refine the query, and search again.</p>
-                    <div class="d-flex flex-wrap gap-2">
-                      <button type="button" class="btn btn-outline-secondary rounded-pill px-4" id="searchBackButton">Back to Previous View</button>
-                      <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-mode-target="hub">Home</button>
-                    </div>
-                  </div>
-                </div>
+              <div class="mode-overline">Search</div>
+              <h2 class="mode-title" id="searchHeading">Search Quickstart, Cheatsheet, and Full Guide from one place.</h2>
+              <p class="mode-copy" id="searchSummary">Enter keywords or a short question in the menu search. Results link back into the exact Quickstart step, Cheatsheet card, or full-guide section that best matches the query.</p>
+              <div class="mode-chip-row">
+                <span class="mode-chip" id="searchQueryChip">No query yet</span>
+                <span class="mode-chip" id="searchCountChip">0 results</span>
+                <span class="mode-chip">Quickstart + Cheatsheet + Full Guide</span>
               </div>
             </div>
           </div>
@@ -6646,8 +6617,8 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
         </div>
       </div>
       <div class="visually-hidden-live" aria-live="polite" id="liveRegion"></div>
-      <footer class="app-footer" aria-label="Site footer">
-        <div class="container">Oracle © 2026</div>
+      <footer class="app-footer" aria-label="Site footer" data-shared-footer data-footer-variant="app">
+        <div class="container">Powered by Oracle LiveLabs Team &copy; 2026</div>
       </footer>
     </div>
   </div>
@@ -6655,6 +6626,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="./assets/js/guide-content.js"></script>
   <script src="./assets/js/redwood-video-player.js"></script>
-  <script src="./assets/js/author-guide-app.js"></script>
+  <script src="./assets/js/author-guide-app.js?v=20260516-followup"></script>
+  <script src="./assets/js/shared-footer.js?v=20260516-followup"></script>
 </body>
 </html>
