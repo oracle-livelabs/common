@@ -138,6 +138,7 @@ body.sample-demo [hidden] {
 }
 
 .sample-brand {
+  color: inherit;
   font-size: 1.15rem;
   font-weight: 900;
   text-decoration: none;
