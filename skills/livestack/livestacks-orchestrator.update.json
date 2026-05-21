@@ -1,12 +1,34 @@
 {
-  "archive_sha256": "931bca32b7764ccdfe79cbb1ceb9811c8ef26d10547dce5a95924fbaf0729526",
-  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/livestack/livestacks-orchestrator.zip",
-  "content_hash": "cb7a41eb895ad0459b2618e03d149e4062f1d8dfb63a84fdf94f5de6d134c89b",
-  "min_updater_version": "2",
   "name": "livestacks-orchestrator",
+  "owner": "Matt",
+  "authors": [
+    {
+      "name": "Matt",
+      "role": "author"
+    }
+  ],
+  "version": "0.1.0-preview.16",
   "published_at": "2026-05-13T00:00:00Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/livestack/livestacks-orchestrator.zip",
+  "archive_sha256": "931bca32b7764ccdfe79cbb1ceb9811c8ef26d10547dce5a95924fbaf0729526",
+  "content_hash": "417f294f16a7af76bce804dc8930005766153d27b3534e59304b3d6869e74309",
+  "min_updater_version": "2",
   "validation": [
     "python3 scripts/check_skill_package.py <skill_root>"
   ],
-  "version": "0.1.0-preview.16"
+  "version_history": [
+    {
+      "version": "0.1.0-preview.16",
+      "published_at": "2026-05-13T00:00:00Z",
+      "authors": [
+        "Matt"
+      ],
+      "changes": [
+        "Current zip-manifest update flow for LiveStacks orchestrator."
+      ],
+      "archive_sha256": "931bca32b7764ccdfe79cbb1ceb9811c8ef26d10547dce5a95924fbaf0729526",
+      "content_hash": "417f294f16a7af76bce804dc8930005766153d27b3534e59304b3d6869e74309",
+      "portal_status": "pending"
+    }
+  ]
 }

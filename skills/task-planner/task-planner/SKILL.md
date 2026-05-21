@@ -1,15 +1,17 @@
 ---
 name: task-planner
-description: "Planning-only skill for turning rough goals, vague requests, implementation work, troubleshooting, documentation tasks, research needs, cleanup work, or complex multi-step requests into a practical Codex execution plan. Use when the user asks for a plan, durable planning output, QA planning, or when the correct response is planning-only: clarify scope, define completion evidence, identify what to inspect, choose an approach, order the work, define validation, propose appropriate tests, and call out risks and stop points. Can optionally create a plan output folder with PLAN.md, PLAN_QA.md, and resources when requested. Do not execute the target task, create planner/executor handoff artifacts, or depend on a task-executor skill."
+description: "Create and manage durable Codex task plans, PlanOps project folders, plan iterations, execution briefs, validation matrices, QA plans, status/resume files, decision logs, and targeted review questions for complex implementation, architecture, troubleshooting, documentation, cleanup, and research work."
 ---
 
 # Task Planner
 
-Use this skill to produce a Codex-facing plan that helps Codex achieve the user's task better. The output is the plan itself, either inline or in a lightweight planning artifact folder. It is not a package for a separate executor.
+Use this skill to produce Codex-facing planning and execution-readiness artifacts that help Codex handle the user's task better. The output can be inline, a lightweight artifact folder, or a durable PlanOps project folder.
+
+Codex's built-in plan feature is for in-turn progress tracking. This skill goes beyond that when the task needs durable files, review cycles, resume state, execution briefing, validation evidence, or follow-up questions across versions.
 
 ## Operating Boundary
 
-Stay in planning mode when this skill is the requested response.
+Default to plan artifacts first. Move from planning into execution only when the user explicitly asks to proceed, or when the request clearly asks Codex to create/update the planning artifacts themselves.
 
 Do:
 
@@ -29,17 +31,15 @@ Allowed planning artifacts:
 
 - create a planning output folder only when the user asks for persistent output, files, a folder, reviewable artifacts, or a larger plan that should be saved
 - write `PLAN.md`, `PLAN_QA.md`, and optional generated planning resources
-- do not edit target project files while planning
+- create PlanOps project folders with status, versioned plan files, validation matrix, execution brief, questions, decisions, resources, and progress logs when the task needs durable planning
+- avoid editing target project files while the user is reviewing or approving the plan
 
-Do not:
+Keep Clear Boundaries:
 
-- implement the target task while planning
-- edit production files as part of planning
-- create production deliverables
-- create planner/executor task-flow folders
-- emit formal handoff blocks or machine contracts
-- route work to a separate executor skill
-- add process ceremony that does not help Codex act
+- Treat `EXECUTION_BRIEF.md` as restart guidance, not automatic approval.
+- Require explicit user direction before changing production files, creating cloud resources, publishing artifacts, or handling credentials.
+- Keep execution coordination inside this PlanOps workflow unless the user asks for a separate executor skill.
+- Keep process lightweight and tied to real execution risk, validation, or review value.
 
 ## Planning Depth
 
@@ -67,6 +67,14 @@ Use `Artifact Mode` when:
 - the plan needs separate QA/test proposals
 - the task is large enough that Codex should preserve the plan for later continuation
 
+Use `PlanOps Mode` when:
+
+- the task will likely need more than one review round
+- the user wants a root plans directory with individual project folders
+- execution may happen in a later Codex turn or after restart
+- reviewers need status, assumptions, decisions, validation evidence, and open questions
+- the plan should produce an execution-ready brief without requiring a separate executor skill
+
 Artifact root:
 
 ```text
@@ -81,11 +89,34 @@ Artifact files:
 - `PLAN_QA.md`: plan self-test, expected output checks, testing technique decider, and post-implementation test proposals
 - `resources\`: optional generated planning resources such as source request notes, command matrices, checklists, acceptance criteria, test data notes, or small reference extracts
 
+PlanOps root:
+
+```text
+<current-working-directory>\Tasks\plans\<YYYYMMDD-HHMMSS>-<project-slug>\
+```
+
+Set `CODEX_TASK_PLANS_DIR` or pass `--root` to keep the root project plans directory somewhere else.
+
+PlanOps files:
+
+- root: `project.yaml`, `status.yaml`, `DECISIONS.md`, `logs\progress.md`, `resources\`
+- per version: `versions\vN\PLAN.md`, `PLAN_QA.md`, `EXECUTION_BRIEF.md`, `VALIDATION_MATRIX.md`, `RISKS_AND_STOP_POINTS.md`, and `QUESTIONS.md`
+
+For PlanOps details, read `references/planops_mode.md`.
+
 When creating an artifact folder, use the helper script:
 
 ```powershell
 python "<task-planner-skill-root>\scripts\create_plan_output.py" --title "<task title>" --plan-mode "<Planning Mode>" --with-resources
 ```
+
+For PlanOps Mode, run:
+
+```powershell
+python "<task-planner-skill-root>\scripts\create_plan_output.py" --title "<task title>" --plan-mode "Deep Plan" --planops --with-resources --notes "<source prompt or short brief>"
+```
+
+To add another version to an existing PlanOps project, pass `--project-root "<existing project folder>" --reuse-project --planops`.
 
 Useful helper options:
 
@@ -94,6 +125,10 @@ Useful helper options:
 - `--notes "<text>"`: add short source-context notes to `resources\REQUEST.md`.
 - `--dry-run`: preview the output paths without creating files.
 - `--timestamp "<YYYYMMDD-HHMMSS>"`: use only for deterministic tests; omit during normal planning.
+- `--planops`: create the durable PlanOps project structure.
+- `--project-root "<path>"`: create or continue a specific PlanOps project.
+- `--reuse-project`: add the next version under an existing PlanOps project.
+- `--version "vN"`: use a specific PlanOps version label.
 
 After creating the folder, fill the generated Markdown files with the final plan and report the paths. If the helper script is unavailable, create the same structure manually.
 
@@ -102,7 +137,7 @@ After creating the folder, fill the generated Markdown files with the final plan
 1. Restate the task as a concrete outcome.
 2. Define success evidence: files changed, behavior observed, tests passed, report produced, or decision made.
 3. Classify the task type and select the planning depth.
-4. Select `Inline Mode` or `Artifact Mode`.
+4. Select `Inline Mode`, `Artifact Mode`, or `PlanOps Mode`.
 5. Identify the minimum context Codex should inspect before acting.
 6. Record confirmed facts and assumptions separately.
 7. Choose the practical approach that fits the existing project and constraints.
@@ -113,7 +148,22 @@ After creating the folder, fill the generated Markdown files with the final plan
 12. Choose appropriate testing techniques using the decider below.
 13. Add rollback, cleanup, or recovery steps only when they reduce real risk.
 14. Mark stop points where Codex should ask the user before continuing.
-15. End with the immediate next action Codex should take.
+15. In PlanOps Mode, write `QUESTIONS.md` with 3 to 5 targeted questions for the next version.
+16. End with the immediate next action Codex should take.
+
+## PlanOps Question Loop
+
+Do not front-load a broad questionnaire. Generate a first useful plan version using safe assumptions unless missing information affects destructive changes, credentials, publishing, billing, external systems, or product direction.
+
+After each saved version:
+
+- report the version folder and current status
+- summarize the assumptions that most need review
+- ask 3 to 5 concrete questions tied to this plan
+- propose what v2 should improve
+- wait for feedback before creating the next version when the user is expected to review
+
+Use the answers to update the existing PlanOps project with a new `versions\vN` folder. Do not create a separate unrelated project unless the objective changed.
 
 ## Context Inspection Rules
 
@@ -175,7 +225,7 @@ Always include a final QA section. It should test three things:
 - `Output QA`: what files, resources, behavior, reports, or user-visible outputs should exist after implementation, and how Codex should inspect them
 - `Post-Implementation Tests`: the specific tests or commands Codex should run after the user or Codex completes the implementation
 
-For Artifact Mode, write this QA content to `PLAN_QA.md` and summarize it in the final response.
+For Artifact Mode, write this QA content to `PLAN_QA.md` and summarize it in the final response. For PlanOps Mode, write it to `versions\vN\PLAN_QA.md` and connect the evidence to `VALIDATION_MATRIX.md`.
 
 ## Missing Information
 
@@ -221,7 +271,7 @@ Use this structure unless the user requests a different format.
 <Quick Plan | Standard Plan | Deep Plan | Recovery Plan | Review Plan>
 
 **Output Mode**
-<Inline Mode | Artifact Mode, with folder path if created>
+<Inline Mode | Artifact Mode | PlanOps Mode, with folder path if created>
 
 **Current Understanding**
 - <confirmed fact>
@@ -253,6 +303,15 @@ Use this structure unless the user requests a different format.
 <the first action Codex should take after this plan>
 ```
 
+For PlanOps Mode, also include:
+
+- `Project Folder`
+- `Current Version Folder`
+- `Status File`
+- `Execution Brief`
+- `Validation Matrix`
+- `Questions For Next Version`
+
 ## Optional Sections
 
 Add these only when they help the task:
@@ -271,9 +330,11 @@ Add these only when they help the task:
 Before returning the plan, verify:
 
 - the plan answers the user's actual request
-- the output is planning-only except for optional planning artifacts
+- the output matches the requested mode: inline plan, artifact folder, PlanOps project, or explicitly requested execution-ready update
 - no target implementation was performed
 - no downstream executor dependency remains
+- PlanOps Mode, when used, created one root project folder with versioned plan outputs instead of loose unrelated files
+- PlanOps questions are specific enough to drive the next version
 - assumptions and stop points are explicit
 - validation is concrete
 - test proposals match the task type and risk

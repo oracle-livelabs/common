@@ -1,0 +1,34 @@
+{
+  "name": "livestack-guide-builder",
+  "owner": "Matt",
+  "authors": [
+    {
+      "name": "Matt",
+      "role": "author"
+    }
+  ],
+  "version": "1.0",
+  "published_at": "2026-05-21T00:00:00Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/livestack/livestack-guide-builder/ready-to-deploy-archive/livestack-guide-builder.zip",
+  "archive_sha256": "f76e145b1c207bb5982a0a1a9310dd99d65a8927a2a65da92e1377f667373b44",
+  "content_hash": "18596c1814c4e1c330999da552dee7fce8ce4feccd2982ca2a4724bc2f818dc0",
+  "min_updater_version": "2",
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version_history": [
+    {
+      "version": "1.0",
+      "published_at": "2026-05-21T00:00:00Z",
+      "authors": [
+        "Matt"
+      ],
+      "changes": [
+        "Current repository package recorded from the published skill artifact."
+      ],
+      "archive_sha256": "f76e145b1c207bb5982a0a1a9310dd99d65a8927a2a65da92e1377f667373b44",
+      "content_hash": "18596c1814c4e1c330999da552dee7fce8ce4feccd2982ca2a4724bc2f818dc0",
+      "portal_status": "pending"
+    }
+  ]
+}
