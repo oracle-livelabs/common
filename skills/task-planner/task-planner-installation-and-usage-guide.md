@@ -5,14 +5,16 @@
 - turn rough or complex requests into practical Codex execution plans
 - help Codex plan a new project before implementation starts
 - create optional durable plan folders with `PLAN.md`, `PLAN_QA.md`, and resources
-- choose validation and QA techniques without executing the target task
+- create PlanOps project folders with status, versioned plan outputs, execution briefs, validation matrices, decisions, logs, and review questions
+- choose validation and QA techniques before execution begins
 
 ## Core Rules
 
-- planning only: do not implement the target task
+- plan artifacts first, then move into execution only when the user explicitly asks
 - define completion evidence and stop points
 - call out missing information and risks
 - use `CODEX_TASK_PLANS_DIR` when a portable output root is needed
+- use PlanOps Mode when the plan must survive review, restart, or later execution
 
 ## Installation Process
 
@@ -34,6 +36,7 @@ Start with `$task-planner` and give Codex the target path or content.
 - project idea, desired deliverables, milestones, and success criteria
 - known constraints and target files or systems
 - whether output should stay in chat or create artifacts
+- whether the task needs a PlanOps project with versions and review questions
 - validation expectations and review gates
 
 ## Recommended Prompt Patterns
@@ -56,12 +59,19 @@ $task-planner plan how to migrate this service to a new database without executi
 $task-planner create a durable plan folder for a security review task. Title: API auth cleanup. Include QA strategy and resources.
 ```
 
+### Create A PlanOps Project
+
+```text
+$task-planner create a PlanOps project for putting a fullstack application on Oracle architecture with Autonomous AI Database. Create v1 with PLAN.md, PLAN_QA.md, EXECUTION_BRIEF.md, VALIDATION_MATRIX.md, RISKS_AND_STOP_POINTS.md, status.yaml, decisions, logs, resources, and targeted questions for v2.
+```
+
 ## Common Pitfalls
 
-- expecting implementation from a planning-only skill
+- expecting execution to start before the plan, approval points, and validation evidence are clear
 - omitting constraints that affect sequencing
 - creating artifacts without a useful title or prompt
 - placing plan outputs inside the skill package
+- creating a new unrelated project folder when the user only wanted the next version in an existing PlanOps project
 
 ## Expected Output From Codex
 
@@ -72,15 +82,18 @@ $task-planner create a durable plan folder for a security review task. Title: AP
 - QA and validation approach
 - risks, assumptions, and stop points
 - artifact folder path when requested
+- PlanOps project path, current version path, status file, execution brief, validation matrix, and questions when PlanOps Mode is used
 
 ## Quick Checklist
 
 - embedded name is `task-planner`
-- request is planning-only
+- request has a clear plan, artifact, PlanOps, or execution-readiness scope
 - artifact output root is portable
 - project plan includes deliverables, milestones, validation, and risks
+- PlanOps projects keep all versions under one project folder
 
 ## Versioning History
 
+- version 1.2 - 05/22/26
 - version 1.1 - 05/11/26
 - version 1.0 - 05/11/26
