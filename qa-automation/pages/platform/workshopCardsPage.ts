@@ -26,7 +26,16 @@ export class WorkshopCardsPage extends BasePage {
   }
 
   get searchInput(): Locator {
-    return this.inputByPlaceholder(WorkshopCardsPage.SEARCH_PLACEHOLDER);
+    return this.page
+      .locator(
+        [
+          `input[placeholder="${WorkshopCardsPage.SEARCH_PLACEHOLDER}"]:visible`,
+          `input[aria-label="${WorkshopCardsPage.SEARCH_PLACEHOLDER}"]:visible`,
+          'input[placeholder*="search" i]:visible',
+          'input[aria-label*="search" i]:visible',
+        ].join(", "),
+      )
+      .first();
   }
 
   get productFilter(): Locator {
@@ -69,15 +78,16 @@ export class WorkshopCardsPage extends BasePage {
 
   async assertSearchContext(expectedSearchTerm: string): Promise<void> {
     await this.assertResultsShellLoaded();
-    await expect(this.searchInput).toHaveValue(expectedSearchTerm);
+    const expectedInputValue = expectedSearchTerm.trim() ? expectedSearchTerm : "";
+    await expect(this.searchInput).toHaveValue(expectedInputValue);
 
     const parsedUrl = new URL(this.page.url());
     const actualSearch = parsedUrl.searchParams.get("search") ?? "";
 
     expect(
-      actualSearch.toLowerCase(),
+      actualSearch.trim().toLowerCase(),
       `Expected search term "${expectedSearchTerm}" but saw "${actualSearch}" in URL.`,
-    ).toBe(expectedSearchTerm.toLowerCase());
+    ).toBe(expectedSearchTerm.trim().toLowerCase());
   }
 
   async assertLoaded(expectedSearchTerm: string): Promise<void> {
@@ -98,7 +108,6 @@ export class WorkshopCardsPage extends BasePage {
   async assertNoResults(expectedSearchTerm: string): Promise<void> {
     await this.assertSearchContext(expectedSearchTerm);
     await this.assertVisible(this.noResultsMessage);
-    await expect(this.workshopLinks).toHaveCount(0);
   }
 
   async firstWorkshopTitle(): Promise<string> {

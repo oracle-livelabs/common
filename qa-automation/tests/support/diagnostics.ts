@@ -11,7 +11,6 @@ export interface CheckpointOptions {
 
 export interface QAArtifacts {
   captureCheckpoint(name: string, options?: CheckpointOptions): Promise<void>;
-  addNote(title: string, content: string): void;
 }
 
 export interface QADiagnosticsOptions {
@@ -33,7 +32,6 @@ interface LogBuffers {
   pageErrors: string[];
   requestFailures: string[];
   responseErrors: string[];
-  notes: string[];
 }
 
 interface DiagnosticsSession {
@@ -198,7 +196,6 @@ export function createDiagnosticsSession(
     pageErrors: [],
     requestFailures: [],
     responseErrors: [],
-    notes: [],
   };
   const sessionStartedAt = timestamp();
 
@@ -255,10 +252,6 @@ export function createDiagnosticsSession(
       }
     },
 
-    addNote(title, content) {
-      const normalizedTitle = title.trim() || "note";
-      buffers.notes.push(`[${timestamp()}] ${normalizedTitle}\n${content.trim()}`.trim());
-    },
   };
 
   async function finalize(): Promise<void> {
@@ -313,7 +306,7 @@ export function createDiagnosticsSession(
       }
     }
 
-    const noteContent = [...buffers.notes, ...artifactErrors].join("\n\n");
+    const noteContent = artifactErrors.join("\n\n");
     if (!noteContent.trim()) {
       return;
     }

@@ -1,25 +1,49 @@
 # How To Debug A Failing Run
 
-Useful commands:
+Start with collection and runtime checks:
 
 ```powershell
-run doctor
-run tests\platform --collect-only
-run tests\platform\smoke --maxfail 1
-run tests\platform\smoke\public\homePage.spec.ts --headed
-run tests\platform\regression\public\searchEdgeCases.spec.ts --headed --maxfail 1
-run report
-run trace
+npm run doctor
+npm run typecheck
+npm run test:collect
 ```
 
-Tips:
+Run the smallest failing target:
 
-- use `--collect-only` to confirm path resolution before running
-- use `--headed` to watch the browser
-- use `--debug` for Playwright debug mode
-- use `run report` to open the latest HTML report
-- use `run trace` to open the latest trace
-- inspect `results.json` when you want machine-readable output for the run
-- inspect `qa-run-context`, `failure-page-state`, and `failure-dom-snapshot` in the report attachments when a test fails
-- inspect `qa-console.log`, `qa-page-errors.log`, `qa-request-failures.log`, and `qa-response-errors.log` when the failure might be environment- or browser-related
-- inspect the trace zip, `video.webm`, and `error-context.md` under `artifacts/.../test-results` when a test fails
+```powershell
+node ./scripts/qa.mjs tests/platform/smoke/public/homePage.spec.ts --headed --maxfail 1
+```
+
+Use debug mode when locator timing or page state is unclear:
+
+```powershell
+node ./scripts/qa.mjs tests/platform/smoke/public/homePage.spec.ts --debug
+```
+
+Open reports and traces:
+
+```powershell
+node ./scripts/qa.mjs report
+node ./scripts/qa.mjs trace
+```
+
+Check the HTML report first. It includes steps, screenshots, failure context, run metadata, console messages, page errors, failed requests, response errors, and DOM snapshots when available.
+
+Use these signals to narrow the problem:
+
+| Signal | What To Check |
+| --- | --- |
+| Test was not collected | Spec path, filename ending, imports, TypeScript errors |
+| Locator timed out | Page object selector, current DOM, responsive viewport, cookie banner |
+| Search did not navigate | Search input selector, submit path, LiveLabs response time |
+| HTTP health failed | Base URL, network access, service status |
+| Auth test skipped | `QA_STORAGE_STATE` and the target URL required by the auth spec |
+| Browser launch failed | Browser installation, `QA_BROWSER_CHANNEL`, local execution policy |
+
+After fixing a failure, run:
+
+```powershell
+npm run typecheck
+npm run test:collect
+node ./scripts/qa.mjs tests/platform/smoke
+```

@@ -5,15 +5,12 @@ import {
   defaultSearchTerm,
   parseBooleanFlag,
   parseIntegerFlag,
-  resolveApiBaseUrl,
   resolveBaseUrl,
   resolveEnvironmentConfig,
   runnerDefaults,
   type EnvironmentConfig,
 } from "../../config/projectConfig.js";
 import { HomePage } from "../../pages/platform/homePage.js";
-import { SignInPage } from "../../pages/platform/auth/signInPage.js";
-import { FooterRegion } from "../../pages/platform/components/footerRegion.js";
 import { HeaderRegion } from "../../pages/platform/components/headerRegion.js";
 import { EventCodeRequestPage } from "../../pages/platform/events/eventCodeRequestPage.js";
 import { WorkshopCardsPage } from "../../pages/platform/workshopCardsPage.js";
@@ -28,16 +25,13 @@ import { createDiagnosticsSession, type QAArtifacts } from "./diagnostics.js";
 type QAWorkerFixtures = {
   targetEnvironment: string;
   environmentConfig: EnvironmentConfig;
-  apiBaseUrl: string;
   authRuntime: AuthRuntimeConfig;
   livelabsSearchTerm: string;
 };
 
 type QATestFixtures = {
   homePage: HomePage;
-  signInPage: SignInPage;
   headerRegion: HeaderRegion;
-  footerRegion: FooterRegion;
   eventCodeRequestPage: EventCodeRequestPage;
   workshopCardsPage: WorkshopCardsPage;
   workshopLandingPage: WorkshopLandingPage;
@@ -72,13 +66,6 @@ export const test = base.extend<QATestFixtures, QAWorkerFixtures>({
     { scope: "worker" },
   ],
 
-  apiBaseUrl: [
-    async ({ targetEnvironment }, use) => {
-      await use(resolveApiBaseUrl(targetEnvironment, process.env.QA_API_BASE_URL));
-    },
-    { scope: "worker" },
-  ],
-
   authRuntime: [
     async ({}, use) => {
       await use(resolveAuthRuntimeConfig());
@@ -97,16 +84,8 @@ export const test = base.extend<QATestFixtures, QAWorkerFixtures>({
     await use(new HomePage(page));
   },
 
-  signInPage: async ({ page }, use) => {
-    await use(new SignInPage(page));
-  },
-
   headerRegion: async ({ page }, use) => {
     await use(new HeaderRegion(page));
-  },
-
-  footerRegion: async ({ page }, use) => {
-    await use(new FooterRegion(page));
   },
 
   eventCodeRequestPage: async ({ page }, use) => {
