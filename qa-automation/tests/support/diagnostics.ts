@@ -1,17 +1,7 @@
+import type { ConsoleMessage, Page, Request, Response, TestInfo } from "@playwright/test";
 import { writeFile } from "node:fs/promises";
 
-import type { ConsoleMessage, Page, Request, Response, TestInfo } from "@playwright/test";
-
 import type { EnvironmentConfig } from "../../config/projectConfig.js";
-
-export interface CheckpointOptions {
-  fullPage?: boolean;
-  attachPageState?: boolean;
-}
-
-export interface QAArtifacts {
-  captureCheckpoint(name: string, options?: CheckpointOptions): Promise<void>;
-}
 
 export interface QADiagnosticsOptions {
   environmentName: string;
@@ -35,7 +25,6 @@ interface LogBuffers {
 }
 
 interface DiagnosticsSession {
-  api: QAArtifacts;
   finalize(): Promise<void>;
 }
 
@@ -119,28 +108,6 @@ async function captureDomSnapshot(page: Page, testInfo: TestInfo, name: string):
   await testInfo.attach(name, {
     path: snapshotFile,
     contentType: "text/html",
-  });
-}
-
-async function captureScreenshot(
-  page: Page,
-  testInfo: TestInfo,
-  name: string,
-  fullPage: boolean,
-): Promise<void> {
-  if (page.isClosed()) {
-    return;
-  }
-
-  const screenshotFile = testInfo.outputPath(`${sanitizeAttachmentName(name)}.png`);
-  await page.screenshot({
-    path: screenshotFile,
-    fullPage,
-    timeout: 5_000,
-  });
-  await testInfo.attach(name, {
-    path: screenshotFile,
-    contentType: "image/png",
   });
 }
 
@@ -238,22 +205,6 @@ export function createDiagnosticsSession(
   page.on("requestfailed", onRequestFailed);
   page.on("response", onResponse);
 
-  const api: QAArtifacts = {
-    async captureCheckpoint(name, checkpointOptions) {
-      const fullPage = checkpointOptions?.fullPage ?? options.fullPageScreenshots;
-      const attachmentName = `checkpoint-${sanitizeAttachmentName(name)}`;
-
-      // Manual checkpoints are the intentional escape hatch for tests that want
-      // a named screenshot before the runner's automatic failure artifacts kick in.
-      await captureScreenshot(page, testInfo, attachmentName, fullPage);
-
-      if (checkpointOptions?.attachPageState ?? true) {
-        await capturePageState(page, testInfo, attachmentName);
-      }
-    },
-
-  };
-
   async function finalize(): Promise<void> {
     page.off("console", onConsole);
     page.off("pageerror", onPageError);
@@ -318,5 +269,5 @@ export function createDiagnosticsSession(
     }
   }
 
-  return { api, finalize };
+  return { finalize };
 }

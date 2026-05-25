@@ -36,7 +36,6 @@ Use these signals to narrow the problem:
 | Test was not collected | Spec path, filename ending, imports, TypeScript errors |
 | Locator timed out | Page object selector, current DOM, responsive viewport, cookie banner |
 | Search did not navigate | Search input selector, submit path, LiveLabs response time |
-| HTTP health failed | Base URL, network access, service status |
 | Auth test skipped | `QA_STORAGE_STATE` and the target URL required by the auth spec |
 | Browser launch failed | Browser installation, `QA_BROWSER_CHANNEL`, local execution policy |
 

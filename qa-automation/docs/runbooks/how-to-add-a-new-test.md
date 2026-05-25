@@ -4,7 +4,7 @@ Use this flow for new Playwright specs.
 
 ## 1. Pick The Lane
 
-- Use `tests/platform/smoke` for fast checks that should run in CI.
+- Use `tests/platform/smoke` for fast local confidence checks.
 - Use `tests/platform/regression` for focused edge cases or previously fragile behavior.
 - Use `tests/platform/auth` only when the test requires a storage-state file or authenticated target URL.
 

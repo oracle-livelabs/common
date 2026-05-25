@@ -2,7 +2,7 @@
 
 Playwright and TypeScript test automation for the public LiveLabs platform.
 
-The project focuses on high-signal browser checks for the learner experience: the home page, AI search entry point, workshop catalog, workshop landing pages, event-code entry point, responsive rendering, HTTP health, and selected regression behavior. Authenticated reservation checks are available as an opt-in lane when a Playwright storage-state file and target reservations URL are provided.
+The project focuses on high-signal browser checks for the learner experience: the home page, AI search entry point, workshop catalog, workshop landing pages, event-code entry point, responsive rendering, and selected regression behavior. Authenticated reservation checks are available as an opt-in lane when a Playwright storage-state file and target reservations URL are provided.
 
 The framework stays intentionally lean: current tests drive browser behavior through Playwright specs, active page objects, small JSON data files, and one shared fixture. Future-only API helpers, unused page objects, and placeholder auth flows do not belong here until a real test needs them.
 
@@ -173,7 +173,3 @@ $env:QA_TRACE="on"
 $env:QA_VIDEO="retain-on-failure"
 node ./scripts/qa.mjs tests/platform/smoke
 ```
-
-## CI
-
-The GitHub Actions workflow runs when `qa-automation` files change. It installs dependencies, installs Chromium, runs doctor, typecheck, test collection, and the public smoke lane, then uploads smoke artifacts.
