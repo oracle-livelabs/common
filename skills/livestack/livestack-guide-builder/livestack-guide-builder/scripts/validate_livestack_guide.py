@@ -10,12 +10,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-REQUIRED_VARIANTS = ("desktop", "sandbox", "tenancy")
-REQUIRED_LOCAL_REFS = {
-    "guide/introduction/introduction.md",
-    "guide/download-livestack/download-livestack.md",
-    "guide/conclusion/conclusion.md",
-}
+OPTIONAL_VARIANTS = ("desktop", "tenancy")
+ALL_VARIANTS = ("desktop", "sandbox", "tenancy")
 PLACEHOLDERS = (
     "Replace this",
     "Replace Me",
@@ -32,9 +28,44 @@ ACTION_HINTS = (
     "compare ",
     "select ",
     "verify ",
+    "confirm ",
+    "scroll ",
+    "toggle ",
+    "download ",
+    "upload ",
+)
+OUTCOME_HINTS = (
+    "business",
+    "signal",
+    "outcome",
+    "decision",
+    "governance",
+    "evidence",
+    "oracle",
+    "value",
+    "useful",
+    "story",
+)
+BYOD_PATTERN = re.compile(
+    r"\b(use|bring)\s+your\s+own\s+data\b|\bdataset\s+(tool|manager)\b|\btemplate\s+zip\b|\bcompleted\s+zip\b",
+    re.IGNORECASE,
+)
+BYOD_REQUIRED_TERMS = (
+    ("dataset tool", "use your own data", "bring your own"),
+    ("active dataset", "dataset label", "active dataset state"),
+    ("template",),
+    ("zip",),
+    ("validate", "validation", "preview"),
+    ("upload", "replace", "import"),
+    ("restore", "seeded"),
+    ("synthetic", "de-identified", "anonymized", "anonymised"),
 )
 FENCED_BLOCK_RE = re.compile(r"```[^\n]*\n(?P<body>.*?)(?:\n```|$)", re.DOTALL)
 COPY_MARKER_RE = re.compile(r"</?copy>")
+IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(([^)]+)\)")
+LINK_RE = re.compile(r"(?<!!)\[([^\]]+)\]\(([^)]+)\)")
+TASK_RE = re.compile(r"^## Task\s+(\d+)\s*:", re.MULTILINE)
+SCENE_RE = re.compile(r"^scene-(\d+)-(.+)$")
 
 
 @dataclass
@@ -68,10 +99,7 @@ class Validator:
             return str(path)
 
     def add(self, path: Path | str, message: str, line: int = 1) -> None:
-        if isinstance(path, Path):
-            path_text = self.rel(path)
-        else:
-            path_text = path
+        path_text = self.rel(path) if isinstance(path, Path) else path
         self.findings.append(Finding(path_text, line, message))
 
     def validate(self) -> list[Finding]:
@@ -88,16 +116,9 @@ class Validator:
     def validate_required_shape(self) -> None:
         required = [
             self.guide_root / "introduction" / "introduction.md",
-            self.guide_root / "download-livestack" / "download-livestack.md",
-            self.guide_root / "conclusion" / "conclusion.md",
+            self.guide_root / "workshops" / "sandbox" / "index.html",
+            self.guide_root / "workshops" / "sandbox" / "manifest.json",
         ]
-        for variant in REQUIRED_VARIANTS:
-            required.extend(
-                [
-                    self.guide_root / "workshops" / variant / "index.html",
-                    self.guide_root / "workshops" / variant / "manifest.json",
-                ]
-            )
         for path in required:
             if not path.exists():
                 self.add(path, "missing required LiveStack guide file")
@@ -105,84 +126,191 @@ class Validator:
         scene_labs = self.scene_labs()
         if not scene_labs:
             self.add(self.guide_root, "guide must include at least one scene lab under `scene-*/*.md`")
+        else:
+            self.validate_scene_paths(scene_labs)
 
-        for variant in REQUIRED_VARIANTS:
-            index_path = self.guide_root / "workshops" / variant / "index.html"
-            if index_path.exists():
-                self.validate_index(index_path)
+        for variant in ALL_VARIANTS:
+            variant_root = self.guide_root / "workshops" / variant
+            index_path = variant_root / "index.html"
+            manifest_path = variant_root / "manifest.json"
+            if variant == "sandbox" or index_path.exists() or manifest_path.exists():
+                if not index_path.exists():
+                    self.add(index_path, f"{variant} workshop variant is missing index.html")
+                if not manifest_path.exists():
+                    self.add(manifest_path, f"{variant} workshop variant is missing manifest.json")
+                if index_path.exists():
+                    self.validate_index(index_path)
 
     def scene_labs(self) -> list[Path]:
-        return sorted(self.guide_root.glob("scene-*/*.md"))
+        return sorted(self.guide_root.glob("scene-*/*.md"), key=self.scene_sort_key)
+
+    def scene_sort_key(self, path: Path) -> tuple[int, str]:
+        number = self.scene_number(path)
+        return (number if number is not None else 10_000, str(path))
+
+    def scene_number(self, path: Path) -> int | None:
+        match = SCENE_RE.match(path.parent.name)
+        if not match:
+            return None
+        return int(match.group(1))
+
+    def validate_scene_paths(self, scene_labs: list[Path]) -> None:
+        numbers: list[int] = []
+        for path in scene_labs:
+            folder = path.parent.name
+            match = SCENE_RE.match(folder)
+            if not match:
+                self.add(path, "scene lab folder must be named `scene-N-slug`")
+                continue
+            number = int(match.group(1))
+            numbers.append(number)
+            if path.stem != folder:
+                self.add(path, "scene markdown filename must match its `scene-N-slug` folder name")
+
+        if numbers:
+            expected = list(range(1, len(numbers) + 1))
+            if sorted(numbers) != expected:
+                self.add(self.guide_root, f"scene folders must be numbered continuously from 1; found {sorted(numbers)}")
 
     def validate_index(self, path: Path) -> None:
         text = path.read_text(encoding="utf-8", errors="ignore").replace("\r\n", "\n").strip()
         if self.canonical_index.exists():
             canonical = self.canonical_index.read_text(encoding="utf-8", errors="ignore").replace("\r\n", "\n").strip()
-            if text != canonical:
-                self.add(path, "workshop index.html differs from the canonical LiveLabs shell")
-            return
+            if text == canonical:
+                return
 
-        desktop = self.guide_root / "workshops" / "desktop" / "index.html"
-        if desktop.exists() and path != desktop:
-            desktop_text = desktop.read_text(encoding="utf-8", errors="ignore").replace("\r\n", "\n").strip()
-            if text != desktop_text:
-                self.add(path, "workshop index.html differs from the desktop shell")
+        shell_markers = ("Oracle LiveLabs", "common/redwood-hol", "<div id=\"root\"")
+        if not any(marker in text for marker in shell_markers[:1]) or not any(marker in text for marker in shell_markers[1:]):
+            self.add(path, "workshop index.html does not look like the LiveLabs shell")
 
     def validate_labs(self) -> None:
-        for path in [
+        lab_paths = [
             self.guide_root / "introduction" / "introduction.md",
-            self.guide_root / "download-livestack" / "download-livestack.md",
             *self.scene_labs(),
+        ]
+        for optional in (
+            self.guide_root / "download-livestack" / "download-livestack.md",
             self.guide_root / "conclusion" / "conclusion.md",
-        ]:
-            if not path.exists():
-                continue
-            self.validate_lab(path)
+        ):
+            if optional.exists():
+                lab_paths.append(optional)
+
+        for path in lab_paths:
+            if path.exists():
+                self.validate_lab(path)
+
+        self.validate_use_your_own_data()
 
     def validate_lab(self, path: Path) -> None:
         text = path.read_text(encoding="utf-8", errors="ignore")
-        lower = text.lower()
         lines = text.splitlines()
         first_nonempty = next((line.strip() for line in lines if line.strip()), "")
 
-        if not first_nonempty.startswith("# "):
+        if first_nonempty == "---":
+            self.validate_frontmatter(path, text)
+        elif not first_nonempty.startswith("# "):
             self.add(path, "first non-empty line must be a single H1")
+
         if "## Introduction" not in text:
             self.add(path, "lab is missing `## Introduction`")
-        if "Estimated Time:" not in text and "Estimated Demo Time:" not in text and "Estimated Workshop Time:" not in text:
-            self.add(path, "lab is missing an estimated time field")
-        if "### Objectives" not in text:
-            self.add(path, "lab is missing `### Objectives`")
         if "## Credits & Build Notes" not in text:
             self.add(path, "lab is missing `## Credits & Build Notes`")
         if "## Acknowledgements" in text:
             self.add(path, "LiveStack guides must use `## Credits & Build Notes`, not `## Acknowledgements`")
+
         for placeholder in PLACEHOLDERS:
             if placeholder in text:
                 self.add(path, f"lab still contains placeholder text `{placeholder}`", self.line_number(text, placeholder))
 
         self.validate_copy_markers(path, text)
         self.validate_images(path, text)
+        self.validate_internal_links(path, text)
 
-        is_scene = "/scene-" in self.rel(path)
-        is_download = self.rel(path).endswith("download-livestack/download-livestack.md")
-        if is_scene or is_download:
-            if "Expected result:" not in text:
-                self.add(path, "runbook lab must include `Expected result:`")
-            if "Why this matters" not in text:
-                self.add(path, "runbook lab must include a `Why this matters` task")
-            if not any(hint in lower for hint in ACTION_HINTS):
-                self.add(path, "runbook lab must tell the user what to interact with")
-        if is_scene:
-            if "![" not in text:
-                self.add(path, "scene lab should include a real screenshot or GIF from the app")
-            if "what is happening" in lower and any(p in text for p in PLACEHOLDERS):
-                self.add(path, "scene lab still describes the template instead of the real scene")
-        if is_download:
-            if "podman compose" not in lower:
-                self.add(path, "download lab must document `podman compose` startup")
-            if "http://localhost" not in text:
-                self.add(path, "download lab must reference the local application URL")
+        relative = self.rel(path)
+        if relative.endswith("introduction/introduction.md"):
+            self.validate_introduction(path, text)
+        elif "/scene-" in relative:
+            self.validate_scene_lab(path, text)
+        elif relative.endswith("download-livestack/download-livestack.md"):
+            self.validate_download_lab(path, text)
+
+    def validate_frontmatter(self, path: Path, text: str) -> None:
+        parts = text.split("---", 2)
+        if len(parts) < 3:
+            self.add(path, "frontmatter starts with `---` but does not close")
+            return
+        if not parts[2].lstrip().startswith("# "):
+            self.add(path, "first content after frontmatter must be a single H1")
+
+    def validate_introduction(self, path: Path, text: str) -> None:
+        for required in ("### Objectives", "### Prerequisites", "## Learn More"):
+            if required not in text:
+                self.add(path, f"introduction is missing `{required}`")
+        if "## Demo Flow" not in text and "## Workshop Flow" not in text:
+            self.add(path, "introduction is missing `## Demo Flow` or `## Workshop Flow`")
+        if "Estimated Demo Time:" not in text and "Estimated Workshop Time:" not in text:
+            self.add(path, "introduction is missing an estimated demo time field")
+        if "![" not in text:
+            self.add(path, "introduction should include a real screenshot from the app")
+
+    def validate_scene_lab(self, path: Path, text: str) -> None:
+        lower = text.lower()
+        if "### Objectives" not in text:
+            self.add(path, "scene lab is missing `### Objectives`")
+        self.validate_task_numbering(path, text)
+        if "![" not in text:
+            self.add(path, "scene lab must include at least one real screenshot or GIF from the app")
+        if not any(hint in lower for hint in ACTION_HINTS):
+            self.add(path, "scene lab must tell the user what to click, inspect, run, compare, or validate")
+        if not any(token in lower for token in OUTCOME_HINTS):
+            self.add(path, "scene lab must state the expected business outcome, signal, decision, or Oracle evidence")
+
+    def validate_download_lab(self, path: Path, text: str) -> None:
+        lower = text.lower()
+        self.validate_task_numbering(path, text)
+        for needle, message in (
+            ("podman compose", "download lab must document `podman compose` startup"),
+            ("http://localhost", "download lab must reference the local application URL"),
+            ("compose.yml", "download lab must tell users to confirm the compose file exists"),
+            ("podman compose down", "download lab must document clean shutdown"),
+            (".zip", "download lab must name the distributed archive"),
+        ):
+            if needle not in lower:
+                self.add(path, message)
+
+    def validate_task_numbering(self, path: Path, text: str) -> None:
+        numbers = [int(match.group(1)) for match in TASK_RE.finditer(text)]
+        if not numbers:
+            self.add(path, "runbook lab must include numbered `## Task N:` sections")
+            return
+        expected = list(range(1, len(numbers) + 1))
+        if numbers != expected:
+            self.add(path, f"task sections must be numbered continuously from 1; found {numbers}")
+
+    def validate_use_your_own_data(self) -> None:
+        scene_texts: list[tuple[Path, str]] = [
+            (path, path.read_text(encoding="utf-8", errors="ignore")) for path in self.scene_labs()
+        ]
+        byod_candidates = [(path, text) for path, text in scene_texts if BYOD_PATTERN.search(path.as_posix()) or BYOD_PATTERN.search(text)]
+        guide_declares_byod = any("use your own data" in text.lower() or "bring your own" in text.lower() for _path, text in scene_texts)
+        solution_expects_byod = self.input_is_solution_root and (self.input_root / "stack").exists()
+
+        if not byod_candidates:
+            if solution_expects_byod:
+                self.add(self.guide_root, "generated LiveStack guide must include a full Use Your Own Data or dataset workflow scene")
+            return
+
+        combined = "\n".join(text.lower() for _path, text in byod_candidates)
+        for alternatives in BYOD_REQUIRED_TERMS:
+            if not any(term in combined for term in alternatives):
+                self.add(
+                    byod_candidates[0][0],
+                    "Use Your Own Data scene must cover dataset tool, active dataset, template ZIP, validation, upload/replace, restore-demo, and data-safety expectations",
+                )
+                break
+
+        if guide_declares_byod and not any("scene-" in str(path) for path, _text in byod_candidates):
+            self.add(self.guide_root, "Use Your Own Data must be documented as a scene or operator workflow, not only mentioned in passing")
 
     def validate_copy_markers(self, path: Path, text: str) -> None:
         matches = list(FENCED_BLOCK_RE.finditer(text))
@@ -230,10 +358,10 @@ class Validator:
         return expect_open
 
     def validate_images(self, path: Path, text: str) -> None:
-        for match in re.finditer(r"!\[([^\]]*)\]\(([^)]+)\)", text):
+        for match in IMAGE_RE.finditer(text):
             alt = match.group(1).strip()
-            target = match.group(2).strip()
-            if not alt:
+            target = self.clean_markdown_target(match.group(2))
+            if not alt or len(alt) < 8:
                 self.add(path, "image is missing meaningful alt text", self.line_number(text, match.group(0)))
             if target.startswith(("http://", "https://")):
                 continue
@@ -241,13 +369,34 @@ class Validator:
             if not image_path.exists():
                 self.add(path, f"image target does not exist: `{target}`", self.line_number(text, match.group(0)))
 
+    def validate_internal_links(self, path: Path, text: str) -> None:
+        for match in LINK_RE.finditer(text):
+            target = self.clean_markdown_target(match.group(2))
+            if not target or target.startswith(("#", "http://", "https://", "mailto:")):
+                continue
+            link_path = Path(target.split("#", 1)[0])
+            if not link_path.as_posix():
+                continue
+            resolved = (path.parent / link_path).resolve()
+            try:
+                resolved.relative_to(self.solution_root.resolve())
+            except ValueError:
+                self.add(path, f"internal link points outside the guide bundle: `{target}`", self.line_number(text, match.group(0)))
+                continue
+            if not resolved.exists():
+                self.add(path, f"internal link target does not exist: `{target}`", self.line_number(text, match.group(0)))
+
+    def clean_markdown_target(self, raw_target: str) -> str:
+        target = raw_target.strip().split(None, 1)[0].strip("<>")
+        return target
+
     def validate_screenshot_inventory(self) -> None:
         screenshot_root = self.solution_root / "output" / "guide-screenshots"
         json_path = screenshot_root / "inventory.json"
         md_path = screenshot_root / "inventory.md"
 
         if not json_path.exists():
-            if self.input_is_solution_root or md_path.exists():
+            if (self.input_is_solution_root and (self.input_root / "stack").exists()) or md_path.exists():
                 self.add(json_path, "missing guide screenshot inventory JSON")
             return
 
@@ -329,7 +478,7 @@ class Validator:
             str(path.relative_to(self.guide_root)).replace("\\", "/")
             for path in self.scene_labs()
         }
-        for variant in REQUIRED_VARIANTS:
+        for variant in ALL_VARIANTS:
             path = self.guide_root / "workshops" / variant / "manifest.json"
             if not path.exists():
                 continue
@@ -373,19 +522,32 @@ class Validator:
                 continue
             resolved = (path.parent / filename).resolve()
             try:
-                relative_ref = str(resolved.relative_to(self.solution_root)).replace("\\", "/")
+                relative_to_solution = str(resolved.relative_to(self.solution_root.resolve())).replace("\\", "/")
             except ValueError:
                 self.add(path, f"manifest tutorial points outside the bundle: `{filename}`")
                 continue
-            local_refs.add(relative_ref)
+            try:
+                relative_to_guide = str(resolved.relative_to(self.guide_root.resolve())).replace("\\", "/")
+            except ValueError:
+                self.add(path, f"manifest tutorial points outside the guide: `{filename}`")
+                continue
+
+            local_refs.add(relative_to_guide)
             if not resolved.exists():
                 self.add(path, f"manifest tutorial target does not exist: `{filename}`")
-            if "/scene-" in relative_ref:
-                scene_refs.add(relative_ref.removeprefix("guide/"))
+            if relative_to_guide.startswith("scene-"):
+                scene_refs.add(relative_to_guide)
 
-        for required in sorted(REQUIRED_LOCAL_REFS):
-            if required not in local_refs:
-                self.add(path, f"manifest is missing required guide ref `{required}`")
+            if relative_to_solution.count("../"):
+                self.add(path, f"manifest tutorial has unexpected traversal: `{filename}`")
+
+        required_refs = {"introduction/introduction.md", *scene_refs}
+        for optional in ("download-livestack/download-livestack.md", "conclusion/conclusion.md"):
+            if (self.guide_root / optional).exists():
+                required_refs.add(optional)
+        for required in sorted(required_refs - local_refs):
+            self.add(path, f"manifest is missing required guide ref `{required}`")
+
         return scene_refs
 
     def line_number(self, text: str, needle: str) -> int:
