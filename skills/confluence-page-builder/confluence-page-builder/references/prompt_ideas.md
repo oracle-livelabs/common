@@ -30,11 +30,15 @@ Design a Confluence page architecture for the subject below.
 
 Requirements:
 - prioritize a summary-first reading path
-- use a landing band with mission, scope, and TOC when the page is complex
-- add an at-a-glance panel row when multiple audiences, outputs, or decision uses exist
+- use a three-column top band with mission, team/roles or links, and contents when the page is more than a short reference note
+- add exactly three Quick Glance cards when multiple audiences, outputs, statuses, or decision uses exist
+- use numbered `ui-steps` for the main process, lifecycle, or review path
 - create parent sections where multiple subsections answer different questions
 - create one tabbed framework section when the same subject needs multiple valid views
 - use tabs for alternate views of the same content
+- add a compact legend tab group when statuses, acronyms, package names, records, or process labels could confuse readers
+- group questions under tabs and put each answer inside an expand macro when the FAQ has more than three questions
+- avoid duplicated parent/child labels such as `FAQ` followed by `FAQ Questions`
 - use expandable sections for dense reference material
 - avoid duplicate explanation across sections
 
@@ -43,8 +47,8 @@ Return:
 2. purpose of each section
 3. what remains visible
 4. what is collapsed
- 5. where tabs, panel rows, and expandable sections add the most value
- 6. where follow-up customization is most likely
+5. where the top band, Quick Glance cards, steps, tabs, legends, FAQ groups, and expandable sections add the most value
+6. where follow-up customization is most likely
 ```
 
 ## 3. Storage-Format Generation Prompt
@@ -57,8 +61,12 @@ Generate Confluence storage-format markup for the approved page outline.
 Rules:
 - keep the top reading path concise
 - use balanced ac:structured-macro and ac:rich-text-body tags
+- prefer the visual starter pattern: mission/team/contents top band, three-card Quick Glance row, numbered steps, then tabs and expands
 - use panels for quick orientation
 - use ui-tabs only when the same material needs multiple views
+- use one `Legend And FAQ` parent section when the page needs both term definitions and FAQ-style answers
+- use child headings `Legend` and `Questions`, not `FAQ` and `FAQ Questions`
+- group questions by topic in tabs, with clear expand titles and short-answer-first wording
 - use ui-expand for heavy detail, not for the main narrative
 - preserve one logical home per concept
 
@@ -74,6 +82,7 @@ Review the generated page and identify:
 - which sections feel misplaced
 - which sections are too detailed for default view
 - which sections duplicate each other
+- which parent and child headings duplicate the same label
 - which section headings need clearer parent framing
 - whether the page scope is narrower or broader than intended
 
@@ -115,6 +124,9 @@ Check:
 - duplication
 - mismatch between stated scope and actual content
 - whether tabs and expands are used intentionally
+- whether legends explain repeated statuses, acronyms, and labels without cluttering the main path
+- whether FAQ questions are grouped by reader task and answer with the short answer first
+- whether the page avoids redundant labels such as `FAQ` plus `FAQ Questions`
 - whether the top of the page guides the reader correctly
 - storage-format balance
 
@@ -134,7 +146,9 @@ Create a strong first-pass Confluence page quickly.
 Optimize for:
 - clear top structure
 - summary-first readability
-- limited but useful use of panels and tabs
+- compact mission/team/contents top band
+- three useful Quick Glance cards
+- limited but useful use of steps, panels, tabs, and expands
 - easy later customization
 
 Do not over-model the subject. Build a flexible draft that can be refined after review.

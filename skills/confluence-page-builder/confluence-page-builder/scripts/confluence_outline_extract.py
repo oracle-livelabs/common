@@ -10,11 +10,15 @@ from pathlib import Path
 
 HEADING_RE = re.compile(r"<h([1-6])>(.*?)</h\1>", re.DOTALL)
 TAB_RE = re.compile(
-    r'<ac:structured-macro\b[^>]*ac:name="ui-tab"[^>]*>.*?<ac:parameter ac:name="title">(.*?)</ac:parameter>',
+    r'<ac:structured-macro\b[^>]*ac:name="(?:ui-)?tab"[^>]*>.*?<ac:parameter ac:name="title">(.*?)</ac:parameter>',
     re.DOTALL,
 )
 EXPAND_RE = re.compile(
-    r'<ac:structured-macro\b[^>]*ac:name="ui-expand"[^>]*>.*?<ac:parameter ac:name="title">(.*?)</ac:parameter>',
+    r'<ac:structured-macro\b[^>]*ac:name="(?:ui-)?expand"[^>]*>.*?<ac:parameter ac:name="title">(.*?)</ac:parameter>',
+    re.DOTALL,
+)
+STEP_RE = re.compile(
+    r'<ac:structured-macro\b[^>]*ac:name="ui-step"[^>]*>\s*<ac:rich-text-body>(.*?)</ac:rich-text-body>\s*</ac:structured-macro>',
     re.DOTALL,
 )
 
@@ -49,6 +53,13 @@ def main() -> None:
     print("Expand Sections")
     for title in EXPAND_RE.findall(text):
         print(f"  - {clean(title)}")
+
+    print()
+    print("Steps")
+    for body in STEP_RE.findall(text):
+        title = clean(body)
+        if title:
+            print(f"  - {title}")
 
 
 if __name__ == "__main__":

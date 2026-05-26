@@ -18,7 +18,6 @@ const ROOT_HELP = `Stable project runner for LiveLabs QA automation (JavaScript/
 
 Usage:
   node scripts/qa.mjs run [paths...] [options]
-  node scripts/qa.mjs install [--upgrade] [--skip-browsers]
   node scripts/qa.mjs playwright [args...]
   node scripts/qa.mjs report [lane|reportDir]
   node scripts/qa.mjs trace [trace.zip|test-results-dir]
@@ -46,7 +45,6 @@ const RUN_HELP = `Run options:
                               Save Playwright's automatic screenshots as full-page images.
   --environment <name>        Target environment from config/project_settings.json.
   --base-url <url>            Override the environment base URL.
-  --api-base-url <url>        Override the future API base URL for shared fixtures/helpers.
   --search-term <term>        Override the LiveLabs search term fixture.
   --storage-state <file>      Use a Playwright storage-state file for future authenticated runs.
   --output <dir>              Artifact output directory for Playwright test results.
@@ -129,25 +127,6 @@ function resolveBaseUrl(environmentName, explicitBaseUrl) {
   }
 
   return String(environments[resolvedEnvironment].base_url).replace(/\/+$/, "");
-}
-
-function resolveApiBaseUrl(environmentName, explicitApiBaseUrl) {
-  if (explicitApiBaseUrl?.trim()) {
-    return explicitApiBaseUrl.trim().replace(/\/+$/, "");
-  }
-
-  const resolvedEnvironment = environmentName || defaultEnvironmentName();
-  const environments = loadProjectSettings().environments;
-  if (!(resolvedEnvironment in environments)) {
-    throw new Error(
-      `Unknown environment "${resolvedEnvironment}". Available environments: ${Object.keys(environments).sort().join(", ")}.`,
-    );
-  }
-
-  return String(environments[resolvedEnvironment].api_base_url || environments[resolvedEnvironment].base_url).replace(
-    /\/+$/,
-    "",
-  );
 }
 
 function normalizeMultiValue(values) {
@@ -285,7 +264,7 @@ function readCommandStdout(command) {
 function ensureDependenciesInstalled() {
   if (!fs.existsSync(PLAYWRIGHT_CLI)) {
     throw new Error(
-      `Project dependencies are not installed. Expected Playwright CLI at ${PLAYWRIGHT_CLI}. Run "node scripts/qa.mjs install" first.`,
+      `Project dependencies are not installed. Expected Playwright CLI at ${PLAYWRIGHT_CLI}. Run "npm ci" first.`,
     );
   }
 
@@ -580,10 +559,6 @@ function buildRuntimeEnv(options, outputDir, junitFile, jsonFile) {
     QA_PROJECT_ROOT: PROJECT_ROOT,
     QA_ENVIRONMENT: options.environment || defaultEnvironmentName(),
     QA_BASE_URL: resolveBaseUrl(options.environment || defaultEnvironmentName(), options.baseUrl || process.env.QA_BASE_URL),
-    QA_API_BASE_URL: resolveApiBaseUrl(
-      options.environment || defaultEnvironmentName(),
-      options.apiBaseUrl || process.env.QA_API_BASE_URL,
-    ),
     QA_SEARCH_TERM: options.searchTerm || process.env.QA_SEARCH_TERM || String(defaults.livelabs_search_term),
     QA_STORAGE_STATE: options.storageState
       ? path.resolve(PROJECT_ROOT, options.storageState)
@@ -718,9 +693,7 @@ function commandRun(options, passthroughArgs) {
     if (jsonFile) {
       console.log(`JSON   : ${jsonFile}`);
     }
-    console.log(
-      `Env    : QA_ENVIRONMENT=${env.QA_ENVIRONMENT} QA_HEADED=${env.QA_HEADED} QA_API_BASE_URL=${env.QA_API_BASE_URL}`,
-    );
+    console.log(`Env    : QA_ENVIRONMENT=${env.QA_ENVIRONMENT} QA_HEADED=${env.QA_HEADED}`);
     if (env.QA_STORAGE_STATE) {
       console.log(`State  : ${env.QA_STORAGE_STATE}`);
     }
@@ -738,26 +711,6 @@ function commandRun(options, passthroughArgs) {
   fs.mkdirSync(env.QA_HTML_REPORT_DIR, { recursive: true });
 
   return runCommand(command, env);
-}
-
-function commandInstall(options) {
-  let result = runCommand(buildNpmCommand(["install"]), { ...process.env });
-  if (result !== 0) {
-    return result;
-  }
-
-  if (options.upgrade) {
-    result = runCommand(buildNpmCommand(["update"]), { ...process.env });
-    if (result !== 0) {
-      return result;
-    }
-  }
-
-  if (options.skipBrowsers) {
-    return 0;
-  }
-
-  return runCommand([process.execPath, PLAYWRIGHT_CLI, "install"], { ...process.env });
 }
 
 function commandPlaywright(args) {
@@ -800,7 +753,6 @@ function commandDoctor() {
   console.log(`Playwright CLI        : ${PLAYWRIGHT_CLI}`);
   console.log(`Default environment   : ${defaultEnvironmentName()}`);
   console.log(`Resolved base URL     : ${resolveBaseUrl(defaultEnvironmentName(), null)}`);
-  console.log(`Resolved API base URL : ${resolveApiBaseUrl(defaultEnvironmentName(), null)}`);
   console.log(`Default browsers      : ${defaults.browsers.join(", ")}`);
   console.log(`Default workers       : ${defaults.workers} (mapped to 1 worker for serial Playwright runs)`);
   console.log(`Default retries       : ${defaults.retries}`);
@@ -844,7 +796,6 @@ function parseRunArgs(argv) {
       "full-page-screenshot": { type: "string" },
       environment: { type: "string" },
       "base-url": { type: "string" },
-      "api-base-url": { type: "string" },
       "search-term": { type: "string" },
       "storage-state": { type: "string" },
       output: { type: "string" },
@@ -879,7 +830,6 @@ function parseRunArgs(argv) {
       fullPageScreenshot: values["full-page-screenshot"],
       environment: values.environment || defaultEnvironmentName(),
       baseUrl: values["base-url"],
-      apiBaseUrl: values["api-base-url"],
       searchTerm: values["search-term"],
       storageState: values["storage-state"],
       output: values.output,
@@ -896,25 +846,6 @@ function parseRunArgs(argv) {
       paths: positionals,
     },
     passthroughArgs,
-  };
-}
-
-function parseInstallArgs(argv) {
-  const { values } = parseArgs({
-    allowPositionals: true,
-    args: argv,
-    options: {
-      upgrade: { type: "boolean" },
-      "skip-browsers": { type: "boolean" },
-      help: { type: "boolean", short: "h" },
-    },
-    strict: false,
-  });
-
-  return {
-    upgrade: values.upgrade === true,
-    skipBrowsers: values["skip-browsers"] === true,
-    help: values.help === true,
   };
 }
 
@@ -981,7 +912,7 @@ function normalizeArgv(rawArgv) {
     return rawArgv;
   }
 
-  if (["run", "install", "playwright", "report", "trace", "codegen", "doctor"].includes(rawArgv[0])) {
+  if (["run", "playwright", "report", "trace", "codegen", "doctor"].includes(rawArgv[0])) {
     return rawArgv;
   }
 
@@ -1009,15 +940,6 @@ function main(rawArgv) {
         return 0;
       }
       return commandRun(options, passthroughArgs);
-    }
-
-    if (command === "install") {
-      const options = parseInstallArgs(argv.slice(1));
-      if (options.help) {
-        console.log("Install options:\n  --upgrade\n  --skip-browsers\n");
-        return 0;
-      }
-      return commandInstall(options);
     }
 
     if (command === "playwright") {
