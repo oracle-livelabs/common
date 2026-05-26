@@ -34,7 +34,15 @@ A LiveStack guide is the demo runbook for the application. Each scene lab must e
 - what changes on screen
 - what expected outcome or business signal the user should take away
 
-Use `/Users/mkowalik/Documents/GitHub/oracle-livelabs/demo-factory/aidatabaseindustrylivestack/healthcare` as the richest local production reference when it is available. Use sibling `finance` and `retail` guides as cross-checks so the generic standard does not copy healthcare-specific prose. If those paths are unavailable, follow this skill's bundled references.
+Use the public healthcare guide as the richest production reference:
+`https://github.com/oracle-livelabs/livestack/tree/main/aidatabaseindustrylivestack/healthcare`
+
+Use public sibling guides as cross-checks when needed:
+
+- `https://github.com/oracle-livelabs/livestack/tree/main/aidatabaseindustrylivestack/finance`
+- `https://github.com/oracle-livelabs/livestack/tree/main/aidatabaseindustrylivestack/retail`
+
+If matching local checkouts are available, use them as faster mirrors of the public references. Do not depend on user-specific local paths, and do not copy healthcare, finance, or retail domain prose into generic output.
 
 ## Workflow
 

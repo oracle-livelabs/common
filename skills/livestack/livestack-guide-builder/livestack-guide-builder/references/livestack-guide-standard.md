@@ -1,6 +1,14 @@
 # LiveStack Guide Standard
 
-Use the healthcare guide in `oracle-livelabs/demo-factory/aidatabaseindustrylivestack/healthcare` as the richest local production reference when it is available. Use the finance and retail guides beside it as cross-checks for tone and reusable structure. Do not copy industry-specific prose from any reference guide.
+Use the public healthcare guide as the richest production reference:
+`https://github.com/oracle-livelabs/livestack/tree/main/aidatabaseindustrylivestack/healthcare`
+
+Use the public finance and retail guides as cross-checks for tone and reusable structure:
+
+- `https://github.com/oracle-livelabs/livestack/tree/main/aidatabaseindustrylivestack/finance`
+- `https://github.com/oracle-livelabs/livestack/tree/main/aidatabaseindustrylivestack/retail`
+
+If the same trees exist locally, treat them as convenience mirrors only. Do not make generated skill behavior depend on user-specific local paths, and do not copy industry-specific prose from any reference guide.
 
 ## Intent
 

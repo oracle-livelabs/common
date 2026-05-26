@@ -12,7 +12,7 @@
 
 - create LiveStack guides only; do not use this as a generic LiveLabs workshop authoring skill
 - base each scene lab on what the user sees, clicks, runs, inspects, or compares in the app
-- use the healthcare guide as the richest production baseline and finance/retail as cross-checks, without copying their domain-specific prose
+- use the public healthcare guide as the richest production baseline, with public finance/retail guides as cross-checks; treat local checkouts only as optional mirrors
 - keep `workshops/*/index.html` files as LiveLabs shell files unless shell changes are explicitly requested
 - use real screenshots with callouts or highlighted controls when possible and record missing screenshots instead of fabricating them
 - validate the finished guide with the bundled validator script
@@ -88,5 +88,6 @@ $livestack-guide-builder update this existing guide so each scene lab matches th
 
 ## Versioning History
 
+- version 1.2 - 05/26/26
 - version 1.1 - 05/26/26
 - version 1.0 - 05/11/26
