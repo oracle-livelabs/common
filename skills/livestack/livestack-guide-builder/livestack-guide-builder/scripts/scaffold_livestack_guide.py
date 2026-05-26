@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Scaffold a LiveStack guide runbook with desktop, sandbox, and tenancy variants."""
+"""Scaffold a LiveStack guide runbook with scenes, BYOD workflow, and workshop variants."""
 
 from __future__ import annotations
 
@@ -53,7 +53,7 @@ def copy_block(command: str, lang: str = "bash") -> str:
     return f"""```{lang}
 <copy>
 {command}
-<copy>
+</copy>
 ```"""
 
 
@@ -96,13 +96,13 @@ def manifest_payload(variant: str, workshop_title: str, scenes: list[tuple[str, 
     }
 
 
-def introduction_template(workshop_title: str, scene_lines: list[str], credit_name: str, updated: str) -> str:
+def introduction_template(workshop_title: str, scene_lines: list[str], author: str, updated: str) -> str:
     flow = "\n".join(f"- {line}" for line in scene_lines)
     return f"""# {workshop_title}
 
 ## Introduction
 
-This workshop is the runbook for the LiveStack demo. Each lab follows one scene in the application, focusing on what is happening, what to interact with, what changes on screen, and what business outcome to notice.
+This guide is the runbook for the LiveStack demo. Each lab follows one scene in the application, focusing on what is happening, what to interact with, what changes on screen, what Oracle-backed evidence supports the scene, and what business outcome to notice.
 
 Estimated Demo Time: 1 hour
 
@@ -110,8 +110,9 @@ Estimated Demo Time: 1 hour
 
 In this workshop, you will:
 - Run each application scene using the visible scene navigation or primary action buttons.
-- Observe the expected result after every interaction.
+- Observe the visible result after each interaction.
 - Connect each scene to the business signal and Oracle-backed workflow behind it.
+- Review the Use Your Own Data workflow for template download, validation, upload, and restore-demo behavior.
 - Use the download lab to run the portable LiveStack with Podman Compose.
 
 ### Prerequisites
@@ -121,7 +122,7 @@ This workshop assumes you have:
 - A browser session open to the application.
 - Basic familiarity with the business workflow demonstrated by this LiveStack.
 
-## Workshop Flow
+## Demo Flow
 
 {flow}
 - Conclusion and business outcomes.
@@ -132,17 +133,17 @@ This workshop assumes you have:
 - Add the most relevant Oracle product documentation links for this LiveStack.
 
 ## Credits & Build Notes
-- **Author** - {credit_name}
-- **Last Updated By/Date** - {credit_name}, {updated}
+- **Author** - {author}
+- **Last Updated By/Date** - {author}, {updated}
 """
 
 
-def scene_template(number: int, title: str, credit_name: str, updated: str) -> str:
+def scene_template(number: int, title: str, author: str, updated: str) -> str:
     return f"""# Scene {number} {title}
 
 ## Introduction
 
-This scene demonstrates a key step in the LiveStack demo runbook. Replace this paragraph with what is happening in the scene and why the user is here.
+This scene demonstrates a key step in the LiveStack demo runbook. Adapt this opening to the real scene, the operator goal, and the Oracle-backed evidence shown in the application.
 
 Estimated Time: 10 minutes
 
@@ -151,7 +152,8 @@ Estimated Time: 10 minutes
 In this lab, you will:
 - Open Scene {number} in the running LiveStack.
 - Interact with the primary control for this scene.
-- Observe the expected state change and business signal.
+- Observe the visible state change, Oracle evidence, and business signal.
+- Use screenshots with callouts or highlighted controls to keep the runbook aligned to the application.
 
 ## Task 1: Open the Scene
 
@@ -159,7 +161,7 @@ In this lab, you will:
 2. Review the visible panels and identify the main operator decision or business signal.
 3. Confirm the scene title and state match this lab.
 
-Expected result:
+Outcome to notice:
 - The scene opens and presents the workflow step described in this lab.
 - The user can identify what decision, exception, or outcome this scene is meant to demonstrate.
 
@@ -169,22 +171,80 @@ Expected result:
 2. Review what changes on screen.
 3. Compare the resulting data, recommendation, status, or evidence against the expected business outcome.
 
-Expected result:
+Outcome to notice:
 - The application shows a visible state change after the interaction.
 - The result is specific to the LiveStack story and can be explained in business terms.
 - Any Oracle-backed evidence panel or route summary aligns with the visible scene.
 
-## Task 3: Why this matters?
+## Task 3: Explain the business signal
 
-Replace this paragraph with the business reason this scene matters. Explain the outcome signal the user should remember and how Oracle AI Database or ORDS-backed application behavior supports it.
+Connect the scene to the business reason it matters. Explain the outcome signal the user should remember and how Oracle AI Database, ORDS, or the app's Oracle Internals evidence supports it.
 
 ## Credits & Build Notes
-- **Author** - {credit_name}
-- **Last Updated By/Date** - {credit_name}, {updated}
+- **Author** - {author}
+- **Last Updated By/Date** - {author}, {updated}
 """
 
 
-def download_template(archive_name: str, extracted_dir: str, app_url: str, health_url: str, credit_name: str, updated: str) -> str:
+def use_your_own_data_template(number: int, title: str, author: str, updated: str) -> str:
+    return f"""# Scene {number} {title}
+
+## Introduction
+
+This operator workflow shows how a demo user can replace, validate, or restore the LiveStack dataset through the application. Keep this lab aligned to the actual top-right dataset control, supported template package, validation behavior, upload or replace route, job status, and restore-demo path.
+
+Estimated Time: 10 minutes
+
+### Objectives
+
+In this scene, you will:
+- Open the dataset tool from the application chrome.
+- Review the active dataset state.
+- Download the canonical dataset template.
+- Select a completed ZIP and validate it before import.
+- Upload or replace data only through the protected operator flow.
+- Preview or restore the seeded demo dataset.
+- Explain the safety expectation for synthetic, anonymized, or de-identified data.
+
+## Task 1: Open the dataset tool
+
+1. From any application scene, click **Use Your Own Data** in the top bar.
+2. Review the modal title, active dataset label, and any operator-admin boundary shown by the application.
+3. Confirm the workflow includes template download, completed ZIP selection, validation, upload or replace, restore-demo, and job/status feedback.
+
+Outcome to notice:
+- The dataset manager opens without leaving the current demo.
+- The user can see which dataset is active before making changes.
+
+## Task 2: Review the template and upload workflow
+
+1. Click **Download Template ZIP** or the equivalent template action.
+2. Review the completed ZIP selection control.
+3. Run the validate-only preview before any destructive import.
+4. Review validation results, warnings, row counts, or schema checks returned by the application.
+
+Outcome to notice:
+- The template defines the expected customer-data package.
+- Validation happens before replacement, so the operator can catch structure or data issues first.
+
+## Task 3: Preview or restore seeded demo data
+
+1. Open the restore-demo section.
+2. Run the restore preview when the application supports it.
+3. Restore the seeded demo dataset only after the preview enables the action.
+4. Confirm job status and active dataset state after restore.
+
+Outcome to notice:
+- The seeded demo can return to a known-good baseline.
+- The same workflow supports customer-data onboarding without making the guide depend on private data.
+
+## Credits & Build Notes
+- **Author** - {author}
+- **Last Updated By/Date** - {author}, {updated}
+"""
+
+
+def download_template(archive_name: str, extracted_dir: str, app_url: str, health_url: str, author: str, updated: str) -> str:
     return f"""# Download the LiveStack
 ## Introduction
 
@@ -205,7 +265,7 @@ In this lab, you will:
 1. Download the package named `{archive_name}` from the provided LiveStack distribution location.
 2. Save the file to your machine.
 
-Expected result:
+Outcome to notice:
 - You have `{archive_name}` available on your machine.
 
 ## Task 2: Move the package and prepare environment settings
@@ -234,7 +294,7 @@ Expected result:
 7. Create your runtime environment file:
     {copy_block("cp .env.example .env")}
 
-Expected result:
+Outcome to notice:
 - You are inside the `{extracted_dir}` directory.
 - The folder contains `compose.yml` or `compose.yaml`, `.env`, and the required app files.
 
@@ -252,7 +312,7 @@ Expected result:
 4. Open the demo in a browser:
     `{app_url}`
 
-Expected result:
+Outcome to notice:
 - Database, ORDS, Ollama, and app services start successfully.
 - The health check returns a healthy response.
 - The LiveStack UI loads locally.
@@ -262,20 +322,20 @@ Expected result:
 1. Stop and remove running containers:
     {copy_block("podman compose down")}
 
-Expected result:
+Outcome to notice:
 - The local LiveStack is stopped cleanly.
 
-## Task 5: Why this matters?
+## Task 5: Explain the portable runbook value
 
 A portable runbook is what turns a LiveStack demo into a repeatable field asset. Podman Compose startup, health checks, and clear folder layout instructions reduce setup drift and let users replay the same story in their own environment.
 
 ## Credits & Build Notes
-- **Author** - {credit_name}
-- **Last Updated By/Date** - {credit_name}, {updated}
+- **Author** - {author}
+- **Last Updated By/Date** - {author}, {updated}
 """
 
 
-def conclusion_template(credit_name: str, updated: str) -> str:
+def conclusion_template(author: str, updated: str) -> str:
     return f"""# Conclusion and Business Outcomes
 
 ## Introduction
@@ -297,7 +357,7 @@ In this lab, you will:
 2. Review the before-and-after panels, outcome cards, or final recommendation.
 3. Identify which scenes created the evidence for this final outcome.
 
-Expected result:
+Outcome to notice:
 - The user can summarize what changed during the demo.
 - The closing message connects application behavior to business value.
 
@@ -307,17 +367,17 @@ Expected result:
 2. Compare the starting problem with the resolved state.
 3. Identify where Oracle-backed data, APIs, or controls reduced manual effort or risk.
 
-Expected result:
+Outcome to notice:
 - You can describe concrete indicators of operational improvement.
 - You can explain how the LiveStack supports a repeatable customer walkthrough.
 
-## Task 3: Why this matters?
+## Task 3: Explain the value narrative
 
 The conclusion should leave the user with a clear value narrative: what business pressure existed, what the LiveStack changed, and why the Oracle-backed architecture makes the workflow repeatable.
 
 ## Credits & Build Notes
-- **Author** - {credit_name}
-- **Last Updated By/Date** - {credit_name}, {updated}
+- **Author** - {author}
+- **Last Updated By/Date** - {author}, {updated}
 """
 
 
@@ -364,6 +424,11 @@ def main() -> int:
     parser.add_argument("--health-url", default="http://localhost:8505/healthz")
     parser.add_argument("--author", default="LiveLabs Team")
     parser.add_argument("--updated", help="Updated date label for Credits & Build Notes. Defaults to today.")
+    parser.add_argument(
+        "--skip-use-your-own-data",
+        action="store_true",
+        help="Do not append the default Use Your Own Data scene. Use only when the app cannot replace demo data.",
+    )
     parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
 
@@ -377,7 +442,15 @@ def main() -> int:
             raise SystemExit(f"Destination exists: {guide_root}. Use --force to replace it.")
         shutil.rmtree(guide_root)
 
-    scenes_input = args.scene or ["Scene 1: Replace Me"]
+    scenes_input = args.scene or ["Scene 1: Demo Orientation"]
+    if not args.skip_use_your_own_data:
+        has_dataset_scene = any(
+            re.search(r"\b(use|bring)\s+your\s+own\s+data\b|\bdataset\b|\bupload\b|\brestore\b", label, re.IGNORECASE)
+            for label in scenes_input
+        )
+        if not has_dataset_scene:
+            next_number = max((scene_number(label, index) for index, label in enumerate(scenes_input, start=1)), default=0) + 1
+            scenes_input.append(f"Scene {next_number}: Use Your Own Data")
     scenes: list[tuple[str, str]] = []
     scene_flow: list[str] = []
     for index, label in enumerate(scenes_input, start=1):
@@ -387,7 +460,11 @@ def main() -> int:
         path = f"{folder}/{folder}.md"
         scenes.append((f"Scene {number}: {title}", path))
         scene_flow.append(f"Scene {number}: {title}.")
-        write_text(guide_root / path, scene_template(number, title, args.author, updated))
+        if re.search(r"\b(use|bring)\s+your\s+own\s+data\b|\bdataset\b|\bupload\b|\brestore\b", title, re.IGNORECASE):
+            text = use_your_own_data_template(number, title, args.author, updated)
+        else:
+            text = scene_template(number, title, args.author, updated)
+        write_text(guide_root / path, text)
 
     write_text(guide_root / "introduction" / "introduction.md", introduction_template(args.workshop_title, scene_flow, args.author, updated))
     write_text(guide_root / "download-livestack" / "download-livestack.md", download_template(args.archive_name, args.extracted_dir, args.app_url, args.health_url, args.author, updated))
