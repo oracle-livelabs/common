@@ -8,36 +8,90 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23C74634'/%3E%3C/svg%3E">
   <title>Psychiatry First Responder RAG | Sample Workshop Demo</title>
   <link rel="stylesheet" href="../../assets/css/redwood-video-player.css">
-  <link rel="stylesheet" href="../../assets/css/sample-workshop-demo.css?v=20260516-demo6">
+  <link rel="stylesheet" href="../../assets/css/sample-workshop-demo.css?v=20260529-shared-nav-v2">
   <script src="../../assets/js/redwood-video-player.js" defer></script>
-  <script src="../../assets/js/sample-workshop-demo.js?v=20260516-demo6" defer></script>
+  <script src="../../assets/js/shared-side-nav.js?v=20260529-shared-nav-v2" defer></script>
+  <script src="../../assets/js/sample-workshop-demo.js?v=20260529-shared-nav-v2" defer></script>
 </head>
 
 <body class="sample-demo">
+  <button class="sample-global-nav-toggle" type="button" id="sampleGlobalNavToggle" aria-expanded="true" aria-controls="sampleGlobalNav" aria-label="Close navigation">
+    <svg class="toggle-icon-open" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+      <path d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+    <svg class="toggle-icon-close" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+      <path d="M6 6l12 12M18 6 6 18"></path>
+    </svg>
+  </button>
+
+  <aside class="sample-global-nav" id="sampleGlobalNav" aria-label="Author guide navigation">
+    <a class="sample-global-brand" href="../../index.html#home" aria-label="Return to the author guide home">
+      <span class="sample-global-brand-mark" aria-hidden="true"></span>
+      <span class="sample-global-brand-copy">
+        <span>LiveLabs</span>
+        <small>Author guide</small>
+      </span>
+    </a>
+
+    <nav class="sample-global-nav-list" aria-label="Primary navigation">
+      <a class="sample-global-nav-item" href="../../index.html#home" aria-label="Open the author guide home">
+        <span class="sample-global-nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M3 10.8 12 3l9 7.8v9.7a.5.5 0 0 1-.5.5h-5.2v-6.1H8.7V21H3.5a.5.5 0 0 1-.5-.5v-9.7Z"/></svg>
+        </span>
+        <span>Home</span>
+      </a>
+      <a class="sample-global-nav-item" href="../../index.html#quickstart" aria-label="Open quickstart">
+        <span class="sample-global-nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M5 12h14"></path>
+            <path d="m13 6 6 6-6 6"></path>
+          </svg>
+        </span>
+        <span>Quickstart</span>
+      </a>
+      <a class="sample-global-nav-item" href="../../index.html#quick-reference" aria-label="Open cheatsheet">
+        <span class="sample-global-nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M8 4h8l1.5 2H20v14H4V6h2.5L8 4Zm0 7h8M8 15h6"/></svg>
+        </span>
+        <span>Cheatsheet</span>
+      </a>
+      <a class="sample-global-nav-item" href="../../workshops/livelabs/" target="_blank" rel="noreferrer" aria-label="Open full guide">
+        <span class="sample-global-nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path d="M6.5 4.5h9.2a1.8 1.8 0 0 1 1.8 1.8v13.2H8.3a1.8 1.8 0 0 1-1.8-1.8V4.5Z"></path>
+            <path d="M9.2 4.5v15M10.8 8h4M10.8 11h4M10.8 14h3"></path>
+            <path d="M4.5 6.5h2M4.5 9h2M4.5 11.5h2M4.5 14h2M4.5 16.5h2"></path>
+          </svg>
+        </span>
+        <span>Full Guide</span>
+      </a>
+      <a class="sample-global-nav-item is-active" href="./index.html" aria-current="page" aria-label="Open the sample workshop demo">
+        <span class="sample-global-nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M9 3h6M10 3v5l-5.6 9.8A2.1 2.1 0 0 0 6.2 21h11.6a2.1 2.1 0 0 0 1.8-3.2L14 8V3M8 15h8"/></svg>
+        </span>
+        <span>Sample Workshop</span>
+      </a>
+    </nav>
+  </aside>
+
   <header class="sample-topbar">
     <div class="sample-topbar-shell">
       <div class="sample-brand-block">
         <div class="sample-brand-row">
-          <span class="sample-kicker">Author guide refresh</span>
+          <span class="sample-kicker">Author Guide Refresh</span>
           <span class="sample-brand" aria-current="page">Psychiatry First Responder RAG sample workshop</span>
         </div>
         <div class="sample-brand-note">A sample workshop surface that teaches a build path, not a brochure.</div>
       </div>
-      <nav class="sample-nav-actions" aria-label="Top actions">
-        <a class="sample-nav-link" href="../../index.html">Homepage</a>
-        <a class="sample-nav-link" href="../../index.html#quickstart">Quickstart</a>
-        <a class="sample-nav-link" href="../../index.html#cheatsheet">Cheatsheet</a>
-        <a class="sample-nav-link" href="https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" target="_blank" rel="noreferrer">Guide</a>
-      </nav>
     </div>
   </header>
 
   <main class="sample-main">
-    <section class="sample-panel">
+    <section class="sample-panel sample-hero-panel">
       <div class="sample-panel-inner">
         <div class="sample-hero-grid">
           <div>
-            <span class="sample-kicker">Workshop surface demo</span>
+            <span class="sample-kicker">Workshop Surface Demo</span>
             <h1 class="sample-title">Build a psychiatry first responder RAG flow that prepares the clinician before the appointment.</h1>
             <p class="sample-lead">This sample shows how a workshop can teach a real build path: provision Oracle services, model intake data, ground responses, enforce safety routes, build patient and clinician pages, and export a clinician handoff PDF.</p>
             <div class="sample-chip-row">
@@ -49,10 +103,20 @@
               <span class="sample-chip">PDF handoff</span>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="sample-decoration-strip" aria-hidden="true"></div>
+    </section>
 
-          <aside class="sample-sidecard">
-            <h2>Demo workshop shape</h2>
+    <section class="sample-panel sample-shape-panel" aria-labelledby="sampleShapeTitle">
+      <div class="sample-panel-inner">
+        <div class="sample-shape-grid">
+          <div>
+            <div class="sample-kicker">Workshop Shape</div>
+            <h2 class="section-title" id="sampleShapeTitle">Demo Workshop Shape</h2>
             <p>Start with the product, then build it in five labs.</p>
+          </div>
+          <div>
             <ul class="sample-list">
               <li>Test Demo previews intake, assessment, and handoff.</li>
               <li>Lab 1 provisions the Oracle foundation.</li>
@@ -67,7 +131,7 @@
               <span class="info-type-pill is-warning">Warning</span>
               <span class="info-type-pill is-tip">Tip</span>
             </div>
-          </aside>
+          </div>
         </div>
       </div>
     </section>
@@ -232,6 +296,18 @@
             </form>
             <div class="workshop-search-results" id="workshopSearchResults">Type a keyword to find matching sections.</div>
           </div>
+          <div class="sample-rail-eyebrow">Demo</div>
+          <nav class="sample-rail-links">
+            <a class="sample-rail-link" href="#test-demo" data-section-link="test-demo"><small>Test demo</small><strong>Psychiatry first responder flow</strong></a>
+          </nav>
+          <div class="sample-rail-eyebrow">Core labs</div>
+          <nav class="sample-rail-links">
+            <a class="sample-rail-link" href="#lab-1" data-section-link="lab-1"><small>Lab 1</small><strong>Foundation and workspace</strong></a>
+            <a class="sample-rail-link" href="#lab-2" data-section-link="lab-2"><small>Lab 2</small><strong>Psychiatry data and vector layer</strong></a>
+            <a class="sample-rail-link" href="#lab-3" data-section-link="lab-3"><small>Lab 3</small><strong>Guardrails and service layer</strong></a>
+            <a class="sample-rail-link" href="#lab-4" data-section-link="lab-4"><small>Lab 4</small><strong>Patient and clinician experience</strong></a>
+            <a class="sample-rail-link" href="#lab-5" data-section-link="lab-5"><small>Lab 5</small><strong>Validation and launch</strong></a>
+          </nav>
           <div class="workshop-progress-card" aria-live="polite">
             <div class="workshop-progress-top">
               <span>Progress</span>
@@ -247,15 +323,6 @@
             </div>
             <p id="workshopAchievement">XP comes from completed sections and correct quiz answers.</p>
           </div>
-          <div class="sample-rail-eyebrow">Demo and labs</div>
-          <nav class="sample-rail-links">
-            <a class="sample-rail-link" href="#test-demo" data-section-link="test-demo"><small>Test demo</small><strong>Psychiatry first responder flow</strong></a>
-            <a class="sample-rail-link" href="#lab-1" data-section-link="lab-1"><small>Lab 1</small><strong>Foundation and workspace</strong></a>
-            <a class="sample-rail-link" href="#lab-2" data-section-link="lab-2"><small>Lab 2</small><strong>Psychiatry data and vector layer</strong></a>
-            <a class="sample-rail-link" href="#lab-3" data-section-link="lab-3"><small>Lab 3</small><strong>Guardrails and service layer</strong></a>
-            <a class="sample-rail-link" href="#lab-4" data-section-link="lab-4"><small>Lab 4</small><strong>Patient and clinician experience</strong></a>
-            <a class="sample-rail-link" href="#lab-5" data-section-link="lab-5"><small>Lab 5</small><strong>Validation and launch</strong></a>
-          </nav>
         </div>
       </aside>
 
@@ -1158,6 +1225,14 @@ must_not:
   </main>
 
   <footer class="sample-footer" data-shared-footer data-footer-variant="app"></footer>
+  <button type="button" class="sample-back-to-top" id="sampleBackToTop" aria-label="Back to top" title="Back to top">
+    <span aria-hidden="true">
+      <svg viewBox="0 0 16 16" focusable="false">
+        <path d="M8 3.25 3.75 7.5l.9.9L7.5 5.56V13h1V5.56l2.85 2.84.9-.9L8 3.25Z" fill="currentColor"></path>
+      </svg>
+    </span>
+    <span>Back to top</span>
+  </button>
   <script src="../../assets/js/shared-footer.js?v=20260516-followup"></script>
 </body>
 

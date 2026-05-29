@@ -1,0 +1,6 @@
+.codex-*.log
+.codex-*.err.log
+app/.codex-*.log
+app/.codex-*.err.log
+app/.chrome-*-profile/
+app/.chrome-smoke-profile/

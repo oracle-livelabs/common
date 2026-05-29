@@ -9,6 +9,15 @@ Visit [LiveLabs](https://livelabs.oracle.com) now to get started.  Workshops are
 
 [![](https://oracle-livelabs.github.io/common/images/livelabs-new-skin.png)](https://livelabs.oracle.com)
 
+## Review Prototypes
+
+The `livelabs-qa-hub` and `livelabs-qa-tms` folders are static review prototypes for LiveLabs QA workflow discussions.
+
+- `livelabs-qa-hub`: command-center prototype for QA operations, source freshness, GitHub intake, knowledge notes, reporting, and a launch point into the TMS.
+- `livelabs-qa-tms`: test management prototype for requirements, test suites, test cases, plans, executions, traceability, defect links, and local reports.
+
+Current status: both are demo-only static GitHub Pages payloads with seeded/browser-local data. They do not connect to Jira, WMS, GitHub APIs, production LiveLabs, or a backend database.
+
 
 
 ## Contributing

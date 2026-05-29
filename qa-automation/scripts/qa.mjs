@@ -47,6 +47,9 @@ const RUN_HELP = `Run options:
   --base-url <url>            Override the environment base URL.
   --search-term <term>        Override the LiveLabs search term fixture.
   --storage-state <file>      Use a Playwright storage-state file for future authenticated runs.
+  --auth-target-url <url>     Private authenticated page URL for the auth smoke lane.
+  --auth-ready-text <text>    Optional text that proves the private page loaded.
+  --auth-bootstrap-url <url>  Optional app-provided endpoint that sets an authenticated session cookie.
   --output <dir>              Artifact output directory for Playwright test results.
   --retries <n>               Retry count passed to Playwright config.
   --junit <on|off>            Enable or disable JUnit XML output.
@@ -563,6 +566,10 @@ function buildRuntimeEnv(options, outputDir, junitFile, jsonFile) {
     QA_STORAGE_STATE: options.storageState
       ? path.resolve(PROJECT_ROOT, options.storageState)
       : String(process.env.QA_STORAGE_STATE || ""),
+    QA_AUTH_TARGET_URL: options.authTargetUrl || process.env.QA_AUTH_TARGET_URL || "",
+    QA_AUTH_READY_TEXT: options.authReadyText || process.env.QA_AUTH_READY_TEXT || "",
+    QA_AUTH_BOOTSTRAP_URL: options.authBootstrapUrl || process.env.QA_AUTH_BOOTSTRAP_URL || "",
+    QA_AUTH_BOOTSTRAP_TOKEN: process.env.QA_AUTH_BOOTSTRAP_TOKEN || "",
     QA_HEADED: String(resolveHeaded(options)),
     QA_TRACE: options.trace || String(defaults.tracing),
     QA_VIDEO: options.video || String(defaults.video),
@@ -798,6 +805,9 @@ function parseRunArgs(argv) {
       "base-url": { type: "string" },
       "search-term": { type: "string" },
       "storage-state": { type: "string" },
+      "auth-target-url": { type: "string" },
+      "auth-ready-text": { type: "string" },
+      "auth-bootstrap-url": { type: "string" },
       output: { type: "string" },
       retries: { type: "string" },
       junit: { type: "string" },
@@ -832,6 +842,9 @@ function parseRunArgs(argv) {
       baseUrl: values["base-url"],
       searchTerm: values["search-term"],
       storageState: values["storage-state"],
+      authTargetUrl: values["auth-target-url"],
+      authReadyText: values["auth-ready-text"],
+      authBootstrapUrl: values["auth-bootstrap-url"],
       output: values.output,
       retries: values.retries,
       junit: values.junit,

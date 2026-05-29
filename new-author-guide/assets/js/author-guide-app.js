@@ -81,6 +81,23 @@
     guideSection: guideSections.length ? guideSections[0].id : "",
     guideFocusLab: ""
   };
+  var quickstartStepDetails = [
+    {
+      output: "approved request",
+      time: "5 to 10 minutes",
+      leads: "repository work"
+    },
+    {
+      output: "live preview",
+      time: "15 to 20 minutes",
+      leads: "content authoring"
+    },
+    {
+      output: "reviewed release",
+      time: "10 to 15 minutes",
+      leads: "production"
+    }
+  ];
   var previousView = {
     mode: "hub",
     currentStep: 0,
@@ -112,6 +129,12 @@
   var progressCaption = document.getElementById("progressCaption");
   var fastTrackToggle = document.getElementById("fastTrackToggle");
   var fastTrackStatus = document.getElementById("fastTrackStatus");
+  var quickstartProcessTitle = document.getElementById("quickstartProcessTitle");
+  var quickstartProcessIndex = document.getElementById("quickstartProcessIndex");
+  var quickstartProcessTotal = document.getElementById("quickstartProcessTotal");
+  var quickstartProcessOutput = document.getElementById("quickstartProcessOutput");
+  var quickstartProcessTime = document.getElementById("quickstartProcessTime");
+  var quickstartProcessLeads = document.getElementById("quickstartProcessLeads");
   var liveRegion = document.getElementById("liveRegion");
   var bubbleGrid = document.getElementById("bubbleGrid");
   var emptyState = document.getElementById("emptyState");
@@ -134,6 +157,11 @@
   var navSearchForm = document.getElementById("navSearchForm");
   var navSearchInput = document.getElementById("navSearchInput");
   var navSearchClear = document.getElementById("navSearchClear");
+  var homeSearchForm = document.getElementById("homeSearchForm");
+  var homeSearchInput = document.getElementById("homeSearchInput");
+  var searchPageForm = document.getElementById("searchPageForm");
+  var searchPageInput = document.getElementById("searchPageInput");
+  var searchPageClear = document.getElementById("searchPageClear");
   var bubbleModalElement = document.getElementById("bubbleModal");
   var bubbleModal = bootstrap.Modal.getOrCreateInstance(bubbleModalElement);
   var imageLightbox = document.getElementById("imageLightbox");
@@ -141,6 +169,8 @@
   var imageLightboxCaption = document.getElementById("imageLightboxCaption");
   var imageLightboxClose = document.getElementById("imageLightboxClose");
   var backToTopButton = document.getElementById("backToTopButton");
+  var authorGlobalNavToggle = document.getElementById("authorGlobalNavToggle");
+  var authorNavController = null;
   var lastExpandedFigure = null;
   var layoutSyncFrame = 0;
 
@@ -378,22 +408,28 @@
 
   function stickyOffset(target) {
     var offset = 16;
+    var navRect = modeNav ? modeNav.getBoundingClientRect() : null;
     var navHeight = (
       modeNav &&
       !modeNav.classList.contains("d-none") &&
-      isViewportAnchored(modeNav)
-    ) ? modeNav.getBoundingClientRect().height : 0;
+      isViewportAnchored(modeNav) &&
+      navRect &&
+      navRect.top <= 1 &&
+      navRect.width > window.innerWidth * 0.55 &&
+      navRect.height < window.innerHeight * 0.6
+    ) ? navRect.height : 0;
     var progressHeight = 0;
+    var beginnerHeader = beginnerMode ? beginnerMode.firstElementChild : null;
 
     if (
       state.mode === "beginner" &&
-      progressShell &&
-      window.innerWidth <= 1199 &&
+      beginnerHeader &&
+      isViewportAnchored(beginnerHeader) &&
       !beginnerMode.classList.contains("d-none") &&
       target &&
       target !== beginnerMode
     ) {
-      progressHeight = progressShell.getBoundingClientRect().height;
+      progressHeight = beginnerHeader.getBoundingClientRect().height;
     }
 
     return Math.ceil(navHeight + progressHeight + offset);
@@ -951,16 +987,23 @@
   }
 
   function updateNavSearch() {
-    if (!navSearchInput) {
-      return;
+    if (navSearchInput) {
+      navSearchInput.value = state.searchQuery;
     }
 
-    navSearchInput.value = state.searchQuery;
+    if (homeSearchInput) {
+      homeSearchInput.value = state.searchQuery;
+    }
+
+    if (searchPageInput) {
+      searchPageInput.value = state.searchQuery;
+    }
   }
 
   function updateNav() {
     modeNav.classList.remove("d-none");
     document.body.classList.toggle("home-no-scroll", state.mode === "hub");
+    syncAuthorNavToggle();
 
     document.querySelectorAll(".nav-control").forEach(function (button) {
       var targetMode = button.getAttribute("data-mode-target");
@@ -978,8 +1021,22 @@
     breadcrumbTrail.innerHTML = "";
   }
 
+  function setModeRegionVisibility(region, isVisible) {
+    if (!region) {
+      return;
+    }
+
+    region.classList.toggle("d-none", !isVisible);
+    region.setAttribute("aria-hidden", isVisible ? "false" : "true");
+  }
+
   function updateProgressCaption() {
     if (!progressCaption) {
+      return;
+    }
+
+    if (!stepMeta[state.currentStep]) {
+      progressCaption.textContent = "Step 1 of 3 is active.";
       return;
     }
 
@@ -998,6 +1055,32 @@
     fastTrackStatus.textContent = state.fastTrack === "minimal"
       ? "Fast Track hides the longer notes and common mistakes."
       : "Guided mode keeps notes, common mistakes, and extra context visible.";
+    var activeStepMeta = stepMeta[state.currentStep] || stepMeta[0] || {};
+    var activeStepDetails = quickstartStepDetails[state.currentStep] || quickstartStepDetails[0];
+
+    if (quickstartProcessTitle) {
+      quickstartProcessTitle.textContent = activeStepMeta.title || "Submit Workshop Request";
+    }
+
+    if (quickstartProcessIndex) {
+      quickstartProcessIndex.textContent = String(state.currentStep + 1);
+    }
+
+    if (quickstartProcessTotal) {
+      quickstartProcessTotal.textContent = String(stepSections.length || 3);
+    }
+
+    if (quickstartProcessOutput && activeStepDetails) {
+      quickstartProcessOutput.textContent = activeStepDetails.output;
+    }
+
+    if (quickstartProcessTime && activeStepDetails) {
+      quickstartProcessTime.textContent = activeStepDetails.time;
+    }
+
+    if (quickstartProcessLeads && activeStepDetails) {
+      quickstartProcessLeads.textContent = activeStepDetails.leads;
+    }
 
     progressButtons.forEach(function (button, index) {
       var isActive = index === state.currentStep;
@@ -1008,7 +1091,11 @@
       button.classList.toggle("is-complete", isComplete);
       button.classList.remove("is-locked");
       button.setAttribute("aria-current", isActive ? "step" : "false");
-      mark.innerHTML = isComplete ? "&#10003;" : String(index + 1);
+      button.setAttribute("aria-selected", isActive ? "true" : "false");
+      button.setAttribute("tabindex", isActive ? "0" : "-1");
+      if (mark) {
+        mark.innerHTML = isComplete ? "&#10003;" : String(index + 1);
+      }
     });
 
     stepSections.forEach(function (section, index) {
@@ -1069,8 +1156,8 @@
       '  <section class="route-map-entry">',
       '    <div>',
       '      <div class="panel-kicker">Start here</div>',
-      '      <h3>Pick a route and move.</h3>',
-      '      <p>Choose sequence, one answer, the full map, or the applied workshop demo.</p>',
+      '      <h3>What should I open?</h3>',
+      '      <p>Create a new workshop, fix a blocker, study the full process, or inspect the sample structure.</p>',
       "    </div>",
       '    <div class="route-map-entry-actions">',
       '      <button type="button" class="btn btn-primary rounded-pill px-4" data-mode-target="beginner">Open Quickstart</button>',
@@ -1087,7 +1174,7 @@
       "        </div>",
       '        <button type="button" class="btn btn-outline-primary rounded-pill px-3" data-mode-target="beginner">Open</button>',
       "      </div>",
-      '      <p>Use when you want the shortest start-to-publish path.</p>',
+      '      <p>Create a new workshop from WMS request through publishing.</p>',
       '      <ol class="route-map-list is-ordered">',
       stepMeta.map(function (step) {
         return "<li><strong>" + escapeHtml(step.title) + "</strong><span>" + escapeHtml(compactText(step.summary, 74)) + "</span></li>";
@@ -1103,7 +1190,7 @@
       "        </div>",
       '        <button type="button" class="btn btn-outline-primary rounded-pill px-3" data-mode-target="explorer">Open</button>',
       "      </div>",
-      '      <p>Use when you already know the blocker.</p>',
+      '      <p>Fix validation, pull request, WMS, media, or manifest blockers quickly.</p>',
       '      <ul class="route-map-list">',
       toolkitItems.map(function (item) {
         return "<li><strong>" + escapeHtml(item.title) + "</strong><span>" + escapeHtml(compactText(item.short || item.description || "", 72)) + "</span></li>";
@@ -1198,6 +1285,30 @@
         figure.insertBefore(pill, image);
       }
     });
+  }
+
+  function syncAuthorNavToggle() {
+    var canToggle = state.mode !== "hub";
+    var expanded;
+
+    if (!authorGlobalNavToggle) {
+      return;
+    }
+
+    if (authorNavController && typeof authorNavController.sync === "function") {
+      authorNavController.sync();
+      return;
+    }
+
+    if (!canToggle) {
+      document.body.classList.remove("author-nav-closed");
+    }
+
+    expanded = !document.body.classList.contains("author-nav-closed");
+    authorGlobalNavToggle.hidden = !canToggle;
+    authorGlobalNavToggle.setAttribute("aria-hidden", canToggle ? "false" : "true");
+    authorGlobalNavToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+    authorGlobalNavToggle.setAttribute("aria-label", expanded ? "Close navigation" : "Open navigation");
   }
 
   function openImageLightbox(figure) {
@@ -1777,52 +1888,7 @@
       searchEntryMap[entry.id] = entry;
     });
 
-    guideSections.forEach(function (section) {
-      var sectionEntry = createSearchEntry({
-        id: "guide-section-" + section.id,
-        typeLabel: "Full Guide",
-        title: section.title,
-        summary: section.summary || section.purpose || "",
-        path: "Full Guide / " + section.label + " / " + section.title,
-        body: [section.purpose || "", flattenList(section.highlights)].join(" "),
-        sourceHref: section.sectionHref,
-        sourceLabel: section.sectionLabel,
-        open: {
-          kind: "guide-section",
-          sectionId: section.id
-        }
-      });
-
-      searchIndex.push(sectionEntry);
-      searchEntryMap[sectionEntry.id] = sectionEntry;
-
-      (section.labs || []).forEach(function (lab) {
-        var labEntry = createSearchEntry({
-          id: "guide-lab-" + section.id + "-" + lab.id,
-          typeLabel: "Full Guide",
-          title: lab.title,
-          summary: lab.summary || "",
-          path: "Full Guide / " + section.label + " / " + (lab.label || "Lab") + " / " + lab.title,
-          steps: lab.steps,
-          checkpoints: lab.checkpoints,
-          watchFor: lab.watchFor,
-          snippet: lab.snippet,
-          exampleFields: lab.exampleFields,
-          resourceLinks: lab.resourceLinks,
-          milestones: lab.milestones,
-          sourceHref: lab.sourceHref,
-          sourceLabel: lab.sourceLabel,
-          open: {
-            kind: "guide-lab",
-            sectionId: section.id,
-            labId: lab.id
-          }
-        });
-
-        searchIndex.push(labEntry);
-        searchEntryMap[labEntry.id] = labEntry;
-      });
-    });
+    // Keep search scoped to visible redesigned surfaces. The original Full Guide remains available through explicit links only.
   }
 
   function scoreSearchEntry(entry, query) {
@@ -1915,10 +1981,10 @@
     }
 
     if (!query) {
-      searchSummary.textContent = "Enter keywords or a short question in the menu search. Results link back into the exact Quickstart step, Cheatsheet card, or full-guide section that best matches the query.";
+      searchSummary.textContent = "Enter keywords or a short question in the search field above. Results link back into the exact Quickstart step or Cheatsheet card that best matches the query.";
       searchCountChip.textContent = "0 results";
       searchResultsMount.innerHTML = "";
-      searchEmptyState.innerHTML = "Use the search field in the menu to search by keywords such as <strong>WMS</strong>, <strong>Self Quality Assurance</strong>, <strong>GitHub Pages</strong>, <strong>validator</strong>, or a short question such as <strong>how do I publish</strong>.";
+      searchEmptyState.innerHTML = "Use the search field above to search by keywords such as <strong>WMS</strong>, <strong>Self Quality Assurance</strong>, <strong>GitHub Pages</strong>, <strong>validator</strong>, or a short question such as <strong>how do I publish</strong>.";
       searchEmptyState.classList.remove("d-none");
       updateBreadcrumb();
       return;
@@ -1946,7 +2012,7 @@
     searchCountChip.textContent = results.length + " result" + (results.length === 1 ? "" : "s");
 
     if (results.length) {
-      searchSummary.textContent = "Results are ranked by title match, keyword overlap, path relevance, and deeper body matches across Quickstart, Cheatsheet, and Full Guide.";
+      searchSummary.textContent = "Results are ranked by title match, keyword overlap, path relevance, and deeper body matches across Quickstart and Cheatsheet.";
       searchEmptyState.classList.add("d-none");
     } else {
       searchSummary.textContent = "The guide did not find a strong match for that query yet.";
@@ -1974,8 +2040,8 @@
       '  <section class="route-map-entry">',
       '    <div>',
       '      <div class="panel-kicker">Start here</div>',
-      '      <h3>Pick the route that matches the job.</h3>',
-      '      <p>Choose sequence, one answer, the original full guide, or the applied workshop demo.</p>',
+      '      <h3>What should I open?</h3>',
+      '      <p>Create a new workshop, fix a blocker, study the full process, or inspect the sample structure.</p>',
       "    </div>",
       '    <div class="route-map-entry-actions">',
       '      <button type="button" class="btn btn-primary rounded-pill px-4" data-mode-target="beginner">Open Quickstart</button>',
@@ -1992,7 +2058,7 @@
       "        </div>",
       '        <button type="button" class="btn btn-outline-primary rounded-pill px-3" data-mode-target="beginner">Open</button>',
       "      </div>",
-      '      <p>Use when you want the shortest start-to-publish path.</p>',
+      '      <p>Create a new workshop from WMS request through publishing.</p>',
       '      <ol class="route-map-list is-ordered">',
       stepMeta.map(function (step) {
         return "<li><strong>" + escapeHtml(step.title) + "</strong><span>" + escapeHtml(compactText(step.summary, 74)) + "</span></li>";
@@ -2008,7 +2074,7 @@
       "        </div>",
       '        <button type="button" class="btn btn-outline-primary rounded-pill px-3" data-mode-target="explorer">Open</button>',
       "      </div>",
-      '      <p>Use when you already know the blocker.</p>',
+      '      <p>Fix validation, pull request, WMS, media, or manifest blockers quickly.</p>',
       '      <ul class="route-map-list">',
       toolkitItems.map(function (item) {
         return "<li><strong>" + escapeHtml(item.title) + "</strong><span>" + escapeHtml(compactText(item.short || item.description || "", 72)) + "</span></li>";
@@ -2967,52 +3033,7 @@
       searchEntryMap[entry.id] = entry;
     });
 
-    guideSections.forEach(function (section) {
-      var sectionEntry = createSearchEntry({
-        id: "guide-section-" + section.id,
-        typeLabel: "Full Guide",
-        title: section.title,
-        summary: section.summary || section.purpose || "",
-        path: "Full Guide / " + section.label + " / " + section.title,
-        body: [section.purpose || "", flattenList(section.highlights)].join(" "),
-        sourceHref: section.sectionHref,
-        sourceLabel: section.sectionLabel,
-        open: {
-          kind: "guide-section",
-          sectionId: section.id
-        }
-      });
-
-      searchIndex.push(sectionEntry);
-      searchEntryMap[sectionEntry.id] = sectionEntry;
-
-      (section.labs || []).forEach(function (lab) {
-        var labEntry = createSearchEntry({
-          id: "guide-lab-" + section.id + "-" + lab.id,
-          typeLabel: "Full Guide",
-          title: lab.title,
-          summary: lab.summary || "",
-          path: "Full Guide / " + section.label + " / " + (lab.label || "Lab") + " / " + lab.title,
-          steps: lab.steps,
-          checkpoints: lab.checkpoints,
-          watchFor: lab.watchFor,
-          snippet: lab.snippet,
-          exampleFields: lab.exampleFields,
-          resourceLinks: lab.resourceLinks,
-          milestones: lab.milestones,
-          sourceHref: lab.sourceHref,
-          sourceLabel: lab.sourceLabel,
-          open: {
-            kind: "guide-lab",
-            sectionId: section.id,
-            labId: lab.id
-          }
-        });
-
-        searchIndex.push(labEntry);
-        searchEntryMap[labEntry.id] = labEntry;
-      });
-    });
+    // Keep search scoped to visible redesigned surfaces. The original Full Guide remains available through explicit links only.
   }
 
   function runGlobalSearch(rawQuery) {
@@ -3073,17 +3094,6 @@
     }, options || {});
     var guideTarget;
 
-    if (mode === "guide") {
-      redirectToOriginalGuide(config.guideSection || state.guideSection);
-      return;
-    }
-
-    if (mode === "guide") {
-      persistCurrentHistoryScroll();
-      window.location.href = fullGuideHref;
-      return;
-    }
-
     if ((mode === "guide" || mode === "search") && !guideCatalogLoaded) {
       loadGuideCatalog().then(function () {
         switchMode(mode, options);
@@ -3110,11 +3120,11 @@
     }
 
     state.mode = mode;
-    hub.classList.toggle("d-none", mode !== "hub");
-    beginnerMode.classList.toggle("d-none", mode !== "beginner");
-    explorerMode.classList.toggle("d-none", mode !== "explorer");
-    guideMode.classList.toggle("d-none", mode !== "guide");
-    searchMode.classList.toggle("d-none", mode !== "search");
+    setModeRegionVisibility(hub, mode === "hub");
+    setModeRegionVisibility(beginnerMode, mode === "beginner");
+    setModeRegionVisibility(explorerMode, mode === "explorer");
+    setModeRegionVisibility(guideMode, mode === "guide");
+    setModeRegionVisibility(searchMode, mode === "search");
 
     if (mode !== "explorer") {
       bubbleModal.hide();
@@ -3332,18 +3342,18 @@
     }
 
     if (cleaned === "guided" || cleaned === "quickstart") {
-      switchMode("beginner", { scroll: false, hash: false, announce: false });
+      switchMode("beginner", { scroll: true, forceTop: true, hash: false, announce: false });
       updateBeginnerUI();
       return;
     }
 
     if (cleaned === "toolkit" || cleaned === "quick-reference" || cleaned === "cheatsheet" || cleaned === "explorer") {
-      switchMode("explorer", { scroll: false, hash: false, announce: false });
+      switchMode("explorer", { scroll: true, forceTop: true, hash: false, announce: false });
       return;
     }
 
     if (cleaned === "guide" || cleaned === "full-guide") {
-      redirectToOriginalGuide(guideSections.length ? guideSections[0].id : "");
+      window.location.href = fullGuideHref;
       return;
     }
 
@@ -3557,8 +3567,7 @@
     }
 
     if (guideButton) {
-      persistCurrentHistoryScroll();
-      window.location.href = fullGuideHref;
+      openFullGuide(fullGuideHref);
       return;
     }
 
@@ -3630,19 +3639,59 @@
     bubbleSearch.focus();
   });
 
-  navSearchForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-    runGlobalSearch(navSearchInput.value);
-  });
+  if (navSearchForm && navSearchInput) {
+    navSearchForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      runGlobalSearch(navSearchInput.value);
+    });
+  }
 
-  navSearchClear.addEventListener("click", function () {
-    state.searchQuery = "";
-    navSearchInput.value = "";
-    if (state.mode === "search") {
-      renderSearchResults();
-      updateHashFromState({ replace: true });
-    }
-  });
+  if (homeSearchForm && homeSearchInput) {
+    homeSearchForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      runGlobalSearch(homeSearchInput.value);
+    });
+  }
+
+  if (searchPageForm && searchPageInput) {
+    searchPageForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      runGlobalSearch(searchPageInput.value);
+    });
+  }
+
+  if (navSearchClear) {
+    navSearchClear.addEventListener("click", function () {
+      state.searchQuery = "";
+      if (navSearchInput) {
+        navSearchInput.value = "";
+      }
+      if (homeSearchInput) {
+        homeSearchInput.value = "";
+      }
+      if (searchPageInput) {
+        searchPageInput.value = "";
+      }
+      if (state.mode === "search") {
+        renderSearchResults();
+        updateHashFromState({ replace: true });
+      }
+    });
+  }
+
+  if (searchPageClear) {
+    searchPageClear.addEventListener("click", function () {
+      state.searchQuery = "";
+      updateNavSearch();
+      if (state.mode === "search") {
+        renderSearchResults();
+        updateHashFromState({ replace: true });
+      }
+      if (searchPageInput) {
+        searchPageInput.focus();
+      }
+    });
+  }
 
   window.addEventListener("hashchange", function () {
     if (isRestoringHistory) {
@@ -3661,6 +3710,26 @@
       window.scrollTo({ top: 0, behavior: smoothBehavior() });
       setLiveMessage("Returned to the top of the page.");
     });
+  }
+
+  if (authorGlobalNavToggle) {
+    if (window.LiveLabsSideNav && typeof window.LiveLabsSideNav.bindSideNavToggle === "function") {
+      authorNavController = window.LiveLabsSideNav.bindSideNavToggle({
+        button: authorGlobalNavToggle,
+        bodyClass: "author-nav-closed",
+        canToggle: function () {
+          return state.mode !== "hub";
+        },
+        hiddenWhenDisabled: true,
+        onToggle: scheduleLayoutSync
+      });
+    } else {
+      authorGlobalNavToggle.addEventListener("click", function () {
+        document.body.classList.toggle("author-nav-closed");
+        syncAuthorNavToggle();
+        scheduleLayoutSync();
+      });
+    }
   }
 
   window.addEventListener("scroll", scheduleLayoutSync, { passive: true });
