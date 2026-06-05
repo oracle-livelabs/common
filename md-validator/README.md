@@ -98,7 +98,7 @@ To block PRs that fail validation:
 | Single H1 | Only one H1 heading per file |
 | Acknowledgements | Must have `## Acknowledgements` section |
 | Image Alt Text | Images must have alt text: `![description](images/file.png)` . |
-| YouTube Format | YouTube embeds should use `[optional text](youtube:VIDEO_ID[:size])` |
+| YouTube Format | YouTube embeds should use `[optional text](youtube:VIDEO_ID[:small|:medium|:large])`; size is optional |
 | Task Format | Task headers should be `## Task Number and/or string: Description` |
 | Task Numbering | Task sections should include numbered steps (`1.`, `2.`, etc.), and supporting content under each step must be indented by one tab stop (4 spaces). |
 | Task Indentation | Code blocks and images must be indented within the numbered step (exceptions: raw HTML element lines are allowed, a top-level heading can terminate the list, and one trailing transition line at Task end may remain unindented) |
@@ -245,6 +245,8 @@ This lab assumes you have:
 ```markdown
 [](youtube:VIDEO_ID)
 [YouTube video scaled to small size](youtube:VIDEO_ID:small)
+[YouTube video scaled to medium size](youtube:VIDEO_ID:medium)
+[YouTube video scaled to large size](youtube:VIDEO_ID:large)
 ```
 
 #### Variables
