@@ -24,6 +24,19 @@ Desktop.ini
 *.bak
 *.tmp
 
+# Runtime secrets and database wallets
+.env
+.env.*
+!.env.example
+!server/.env.example
+Wallet*/
+Wallet_*/
+*.key
+*.pem
+*.p12
+*.sso
+*.jks
+
 # IDE/editor settings
 .vscode/
 .idea/

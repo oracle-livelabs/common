@@ -8,6 +8,7 @@
   var guideSectionMap = {};
   var guideManifestHref = "./workshops/author-guide/manifest.json";
   var fullGuideHref = "https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/";
+  var workshopExampleHref = window.authorGuideWorkshopExampleHref || "https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/";
   var guideHomeHref = fullGuideHref;
   var guideCatalogPromise = null;
   var guideCatalogLoaded = false;
@@ -78,8 +79,7 @@
     activeTag: "all",
     toolkitQuery: "",
     searchQuery: "",
-    guideSection: guideSections.length ? guideSections[0].id : "",
-    guideFocusLab: ""
+    guideSection: guideSections.length ? guideSections[0].id : ""
   };
   var quickstartStepDetails = [
     {
@@ -101,8 +101,7 @@
   var previousView = {
     mode: "hub",
     currentStep: 0,
-    guideSection: state.guideSection,
-    guideFocusLab: ""
+    guideSection: state.guideSection
   };
   var searchIndex = [];
   var searchEntryMap = {};
@@ -148,7 +147,6 @@
   var guideSectionNav = document.getElementById("guideSectionNav");
   var guideQuickNav = document.getElementById("guideQuickNav");
   var guideSectionMount = document.getElementById("guideSectionMount");
-  var homeRouteMap = document.getElementById("homeRouteMap");
   var searchResultsMount = document.getElementById("searchResults");
   var searchEmptyState = document.getElementById("searchEmptyState");
   var searchSummary = document.getElementById("searchSummary");
@@ -331,7 +329,6 @@
       toolkitQuery: state.toolkitQuery,
       searchQuery: state.searchQuery,
       guideSection: state.guideSection,
-      guideFocusLab: state.guideFocusLab,
       hash: hash,
       scrollY: Number.isFinite(scrollY) ? scrollY : window.pageYOffset
     };
@@ -912,7 +909,6 @@
       });
 
     return guideCatalogPromise.then(function (entries) {
-      renderHomeRouteMap();
       renderGuideNav();
       buildSearchIndex();
 
@@ -950,29 +946,6 @@
     window.open(target, "_blank", "noopener,noreferrer");
   }
 
-  function currentGuideLab() {
-    var section = currentGuideSection();
-
-    if (!section || !state.guideFocusLab) {
-      return null;
-    }
-
-    return (section.labs || []).find(function (lab) {
-      return lab.id === state.guideFocusLab;
-    }) || null;
-  }
-
-  function pickHomeToolkitMapItems() {
-    var preferredIds = ["wms-request", "github-setup", "markdown-structure", "qa-checklist"];
-    var preferredItems = preferredIds.map(function (id) {
-      return explorerItems.find(function (item) {
-        return item.id === id;
-      });
-    }).filter(Boolean);
-
-    return preferredItems.length === preferredIds.length ? preferredItems : explorerItems.slice(0, 4);
-  }
-
   function rememberViewForSearch() {
     if (state.mode === "search") {
       return;
@@ -981,8 +954,7 @@
     previousView = {
       mode: state.mode,
       currentStep: state.currentStep,
-      guideSection: state.guideSection,
-      guideFocusLab: state.guideFocusLab
+      guideSection: state.guideSection
     };
   }
 
@@ -1142,103 +1114,6 @@
 
     resultCount.textContent = "Showing " + visibleItems.length + " cheatsheet card" + (visibleItems.length === 1 ? "" : "s");
     emptyState.classList.toggle("d-none", visibleItems.length !== 0);
-  }
-
-  function renderHomeRouteMap() {
-    var toolkitItems = pickHomeToolkitMapItems();
-
-    if (!homeRouteMap) {
-      return;
-    }
-
-    homeRouteMap.innerHTML = [
-      '<div class="route-map-board">',
-      '  <section class="route-map-entry">',
-      '    <div>',
-      '      <div class="panel-kicker">Start here</div>',
-      '      <h3>What should I open?</h3>',
-      '      <p>Create a new workshop, fix a blocker, study the full process, or inspect the sample structure.</p>',
-      "    </div>",
-      '    <div class="route-map-entry-actions">',
-      '      <button type="button" class="btn btn-primary rounded-pill px-4" data-mode-target="beginner">Open Quickstart</button>',
-      '      <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-mode-target="explorer">Open Cheatsheet</button>',
-      '      <a class="btn btn-outline-secondary rounded-pill px-4" href="', fullGuideHref, '" target="_blank" rel="noreferrer">Open Full Guide</a>',
-      "    </div>",
-      "  </section>",
-      '  <div class="route-map-grid">',
-      '    <article class="route-map-branch" data-accent="red">',
-      '      <div class="route-map-branch-head">',
-      '        <div>',
-      '          <small>Ordered route</small>',
-      '          <h4>Quickstart</h4>',
-      "        </div>",
-      '        <button type="button" class="btn btn-outline-primary rounded-pill px-3" data-mode-target="beginner">Open</button>',
-      "      </div>",
-      '      <p>Create a new workshop from WMS request through publishing.</p>',
-      '      <ol class="route-map-list is-ordered">',
-      stepMeta.map(function (step) {
-        return "<li><strong>" + escapeHtml(step.title) + "</strong><span>" + escapeHtml(compactText(step.summary, 74)) + "</span></li>";
-      }).join(""),
-      "      </ol>",
-      '      <div class="route-map-branch-foot">Leads to the same sections in Full Guide.</div>',
-      "    </article>",
-      '    <article class="route-map-branch" data-accent="ocean">',
-      '      <div class="route-map-branch-head">',
-      '        <div>',
-      '          <small>Answer-first route</small>',
-      '          <h4>Cheatsheet</h4>',
-      "        </div>",
-      '        <button type="button" class="btn btn-outline-primary rounded-pill px-3" data-mode-target="explorer">Open</button>',
-      "      </div>",
-      '      <p>Fix validation, pull request, WMS, media, or manifest blockers quickly.</p>',
-      '      <ul class="route-map-list">',
-      toolkitItems.map(function (item) {
-        return "<li><strong>" + escapeHtml(item.title) + "</strong><span>" + escapeHtml(compactText(item.short || item.description || "", 72)) + "</span></li>";
-      }).join(""),
-      "      </ul>",
-      '      <div class="route-map-branch-foot">Leads to focused cards, snippets, and source links.</div>',
-      "    </article>",
-      '    <article class="route-map-branch" data-accent="pine">',
-      '      <div class="route-map-branch-head">',
-      '        <div>',
-      '          <small>Section map</small>',
-      '          <h4>Full Guide</h4>',
-      "        </div>",
-      '        <a class="btn btn-outline-primary rounded-pill px-3" href="', fullGuideHref, '" target="_blank" rel="noreferrer">Open</a>',
-      "      </div>",
-      '      <p>Use when you want the whole section map in one place.</p>',
-      '      <ul class="route-map-list">',
-      guideSections.map(function (section) {
-        var count = (section.labs || []).length;
-        return "<li><strong>" + escapeHtml(section.label + " - " + section.title) + "</strong><span>" + escapeHtml(count + " item" + (count === 1 ? "" : "s")) + "</span></li>";
-      }).join(""),
-      "      </ul>",
-      '      <div class="route-map-branch-foot">Leads to detailed section cards and source links.</div>',
-      "    </article>",
-      '    <article class="route-map-branch" data-accent="sienna">',
-      '      <div class="route-map-branch-head">',
-      '        <div>',
-      '          <small>Applied reference</small>',
-      '          <h4>Sample Workshop Demo</h4>',
-      "        </div>",
-      '        <a class="btn btn-outline-primary rounded-pill px-3" href="./sample-workshops/clinical-first-responder-rag/index.html">Open</a>',
-      "      </div>",
-      '      <p>Use when you want to inspect the design on a workshop surface.</p>',
-      '      <ul class="route-map-list">',
-      [
-        "Provision the platform foundation",
-        "Model grounded clinical knowledge",
-        "Build prompts, guardrails, and patient chat",
-        "Validate escalation and doctor handoff"
-      ].map(function (item) {
-        return "<li><strong>" + escapeHtml(item) + "</strong><span>Shows the pattern on a real workshop-style page.</span></li>";
-      }).join(""),
-      "      </ul>",
-      '      <div class="route-map-branch-foot">Leads to an applied workshop example.</div>',
-      "    </article>",
-      "  </div>",
-      "</div>"
-    ].join("");
   }
 
   function setActiveTag(tag) {
@@ -1592,99 +1467,6 @@
     setLiveMessage(item.title + " opened.");
   }
 
-  function renderGuideNav() {
-    if (!guideSectionNav) {
-      return;
-    }
-
-    guideSectionNav.innerHTML = guideSections.map(function (section) {
-      return [
-        '<button type="button" class="guide-nav-link',
-        section.id === state.guideSection ? " is-active" : "",
-        '" data-guide-section="', section.id, '" data-accent="', section.accent, '">',
-        '  <small>', escapeHtml(section.label), "</small>",
-        '  <strong>', escapeHtml(section.title), "</strong>",
-        '  <span class="guide-nav-meta">', escapeHtml(section.navState || "Loading sections"), "</span>",
-        "</button>"
-      ].join("");
-    }).join("");
-  }
-
-  function renderGuideQuickNav() {
-    if (!guideQuickNav) {
-      return;
-    }
-
-    guideQuickNav.innerHTML = guideSections.map(function (section) {
-      return [
-        '<button type="button" class="guide-quick-link',
-        section.id === state.guideSection ? " is-active" : "",
-        '" data-guide-section="', section.id, '">',
-        '  <span>', escapeHtml(section.label), "</span>",
-        '  <strong>', escapeHtml(section.title), "</strong>",
-        "</button>"
-      ].join("");
-    }).join("");
-  }
-
-  function buildGuideBreadcrumb(section, lab) {
-    return [
-      '<div class="guide-inline-breadcrumb" aria-label="Current guide section">',
-      "  <span>Full Guide</span>",
-      "  <span>/</span>",
-      "  <span>", escapeHtml(section.label), "</span>",
-      "  <span>/</span>",
-      "  <strong>", escapeHtml(section.title), "</strong>",
-      lab ? "  <span>/</span>" : "",
-      lab ? "  <strong>" + escapeHtml(lab.title) + "</strong>" : "",
-      "</div>"
-    ].join("");
-  }
-
-  function renderGuidePanel(title, items, options) {
-    var config = Object.assign({
-      ordered: false
-    }, options || {});
-    var listTag = config.ordered ? "ol" : "ul";
-    var listClass = config.ordered ? "guide-list is-ordered" : "guide-list";
-
-    if (!items || !items.length) {
-      return "";
-    }
-
-    return [
-      '<div class="guide-lab-panel">',
-      '  <h4>', escapeHtml(title), "</h4>",
-      "  <", listTag, ' class="', listClass, '">',
-      items.map(function (item) {
-        return "<li>" + escapeHtml(item) + "</li>";
-      }).join(""),
-      "  </", listTag, ">",
-      "</div>"
-    ].join("");
-  }
-
-  function renderGuideSnippetCard(id, snippet, title, meta) {
-    if (!snippet) {
-      return "";
-    }
-
-    return [
-      '<div class="card snippet-card mt-4">',
-      '  <div class="card-body">',
-      '    <div class="snippet-header">',
-      "      <div>",
-      '        <div class="snippet-meta">', escapeHtml(meta || "Copy-ready detail"), "</div>",
-      '        <h4 class="mb-0">', escapeHtml(title || "Snippet"), "</h4>",
-      "      </div>",
-      '      <button class="copy-snippet" type="button" data-copy-target="', id, '">Copy</button>',
-      "    </div>",
-      '    <pre><code id="', id, '">', escapeHtml(snippet), "</code></pre>",
-      "  </div>",
-      "</div>"
-    ].join("");
-  }
-
   function renderVideoPlaceholderCard(title, summary, featureLabels) {
     return renderVideoCardMount({
       title: title,
@@ -1709,91 +1491,6 @@
     }
 
     return uniqueList(features).slice(0, 3);
-  }
-
-  function renderGuideLab(section, lab) {
-    var snippetId = "guide-snippet-" + section.id + "-" + lab.id;
-    var targetedClass = state.guideFocusLab === lab.id ? " is-targeted" : "";
-    var stepsBlock = renderGuidePanel("What You Do", lab.steps || [], { ordered: true });
-    var mediaBlock = lab.image ? [
-      '<figure class="guide-figure">',
-      '  <figcaption>', escapeHtml(lab.image.caption || ""), "</figcaption>",
-      '  <img src="', escapeHtml(lab.image.src), '" alt="', escapeHtml(lab.image.alt || lab.title), '">',
-      "</figure>"
-    ].join("") : "";
-    var flowBlock = mediaBlock ? '<div class="guide-lab-flow">' + stepsBlock + mediaBlock + "</div>" : stepsBlock;
-    var supportBlocks = [
-      buildFieldCardsHtml(lab.exampleTitle || "Worked example", lab.exampleIntro || "", lab.exampleFields, "Worked example"),
-      buildMilestoneCardsHtml(lab.milestonesTitle || "Status flow", lab.milestonesIntro || "", lab.milestones, "Status flow"),
-      renderGuidePanel(lab.checkpointsTitle || "Before You Move On", lab.checkpoints || []),
-      buildResourceLinksHtml(lab.resourcesTitle || "Useful links", lab.resourcesIntro || "", lab.resourceLinks, "Resources"),
-      renderGuidePanel("Watch For", lab.watchFor || [])
-    ].filter(Boolean).join("");
-
-    return [
-      '<article class="guide-lab-card', targetedClass, '" id="guide-lab-', section.id, "-", lab.id, '">',
-      '  <div class="guide-lab-top">',
-      '    <div class="guide-lab-label">', escapeHtml(lab.label || "Lab"), "</div>",
-      '    <h3 class="guide-lab-title">', escapeHtml(lab.title), "</h3>",
-      '    <p class="guide-lab-summary">', escapeHtml(lab.summary), "</p>",
-      "  </div>",
-      flowBlock,
-      supportBlocks ? '<div class="guide-lab-panels">' + supportBlocks + "</div>" : "",
-      renderGuideSnippetCard(snippetId, lab.snippet, lab.snippetTitle || "Snippet", lab.snippetMeta || "Copy-ready detail"),
-      '  <div class="guide-lab-actions">',
-      lab.sourceHref ? '<a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(fullGuideHref) + '" target="_blank" rel="noreferrer">Open Full Guide</a>' : "",
-      "  </div>",
-      "</article>"
-    ].join("");
-  }
-
-  function renderGuideSection() {
-    var section = currentGuideSection();
-    var lab = currentGuideLab();
-
-    if (!section || !guideSectionMount) {
-      return;
-    }
-
-    guideSectionMount.innerHTML = [
-      '<article class="guide-section-card" data-accent="', section.accent, '">',
-      '  <div class="guide-section-hero">',
-      '    <div class="guide-section-copy">',
-      buildGuideBreadcrumb(section, lab),
-      '      <div class="panel-kicker">', escapeHtml(section.label), "</div>",
-      '      <h2 class="guide-section-title">', escapeHtml(section.title), "</h2>",
-      '      <p class="guide-section-summary">', escapeHtml(section.summary), "</p>",
-      '      <p class="guide-section-purpose">', escapeHtml(section.purpose), "</p>",
-      renderVideoPlaceholderCard(
-        section.title + " walkthrough",
-        section.summary || section.purpose || "Use the recorded walkthrough first, then move through the section cards underneath.",
-        guideSectionVideoFeatures(section)
-      ),
-      '      <div class="guide-highlight-row">',
-      section.highlights.map(function (item) {
-        return '<span class="guide-highlight-chip">' + escapeHtml(item) + "</span>";
-      }).join(""),
-      "      </div>",
-      '      <div class="guide-section-actions">',
-      '        <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-mode-target="explorer">Open Cheatsheet</button>',
-      section.sectionHref ? '<a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(fullGuideHref) + '" target="_blank" rel="noreferrer">Open Full Guide</a>' : "",
-      "      </div>",
-      "    </div>",
-      "  </div>",
-      '  <div class="guide-lab-grid">',
-      section.labs.map(function (lab) {
-        return renderGuideLab(section, lab);
-      }).join(""),
-      "  </div>",
-      "</article>"
-    ].join("");
-
-    renderGuideNav();
-    renderGuideQuickNav();
-    hydrateVideoCards(guideSectionMount);
-    decorateExpandableMedia(guideSectionMount);
-    scheduleLayoutSync();
-    updateBreadcrumb();
   }
 
   function createSearchEntry(config) {
@@ -1836,59 +1533,6 @@
       pathTokens: tokenSet(pathNorm),
       combinedTokens: tokenSet([titleNorm, summaryNorm, pathNorm, bodyNorm].join(" "))
     };
-  }
-
-  function buildSearchIndex() {
-    searchIndex = [];
-    searchEntryMap = {};
-
-    stepMeta.forEach(function (meta, index) {
-      var entry = createSearchEntry({
-        id: "guided-" + meta.id,
-        typeLabel: "Quickstart",
-        title: meta.title,
-        summary: meta.summary || "",
-        path: "Quickstart / Step " + (index + 1),
-        body: stepSections[index] ? stepSections[index].textContent : "",
-        keywords: meta.keywords || [],
-        open: {
-          kind: "guided",
-          step: index
-        }
-      });
-
-      searchIndex.push(entry);
-      searchEntryMap[entry.id] = entry;
-    });
-
-    explorerItems.forEach(function (item) {
-      var entry = createSearchEntry({
-        id: "toolkit-" + item.id,
-        typeLabel: "Cheatsheet",
-        title: item.title,
-        summary: item.description || item.short || "",
-        path: "Cheatsheet / " + item.title,
-        steps: item.steps,
-        checkpoints: item.checkpoints,
-        watchFor: item.watchFor,
-        snippet: item.snippet,
-        exampleFields: item.exampleFields,
-        resourceLinks: item.resourceLinks,
-        milestones: item.milestones,
-        tags: item.tags,
-        sourceHref: item.sourceHref,
-        sourceLabel: item.sourceLabel,
-        open: {
-          kind: "toolkit",
-          itemId: item.id
-        }
-      });
-
-      searchIndex.push(entry);
-      searchEntryMap[entry.id] = entry;
-    });
-
-    // Keep search scoped to visible redesigned surfaces. The original Full Guide remains available through explicit links only.
   }
 
   function scoreSearchEntry(entry, query) {
@@ -2021,107 +1665,6 @@
     }
 
     updateBreadcrumb();
-  }
-
-  function renderHomeRouteMap() {
-    var firstGuideId = guideSections.length ? guideSections[0].id : "introduction";
-    var guidePreviewItems = guideSections.slice(0, 4);
-    var guideSummary = guideSections.length
-      ? guideSections.length + " guide sections in the active manifest order"
-      : "Loading guide pages...";
-    var toolkitItems = pickHomeToolkitMapItems();
-
-    if (!homeRouteMap) {
-      return;
-    }
-
-    homeRouteMap.innerHTML = [
-      '<div class="route-map-board">',
-      '  <section class="route-map-entry">',
-      '    <div>',
-      '      <div class="panel-kicker">Start here</div>',
-      '      <h3>What should I open?</h3>',
-      '      <p>Create a new workshop, fix a blocker, study the full process, or inspect the sample structure.</p>',
-      "    </div>",
-      '    <div class="route-map-entry-actions">',
-      '      <button type="button" class="btn btn-primary rounded-pill px-4" data-mode-target="beginner">Open Quickstart</button>',
-      '      <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-mode-target="explorer">Open Cheatsheet</button>',
-      '      <a class="btn btn-outline-secondary rounded-pill px-4" href="', fullGuideHref, '" target="_blank" rel="noreferrer">Open Full Guide</a>',
-      "    </div>",
-      "  </section>",
-      '  <div class="route-map-grid">',
-      '    <article class="route-map-branch" data-accent="red">',
-      '      <div class="route-map-branch-head">',
-      '        <div>',
-      '          <small>Ordered route</small>',
-      '          <h4>Quickstart</h4>',
-      "        </div>",
-      '        <button type="button" class="btn btn-outline-primary rounded-pill px-3" data-mode-target="beginner">Open</button>',
-      "      </div>",
-      '      <p>Create a new workshop from WMS request through publishing.</p>',
-      '      <ol class="route-map-list is-ordered">',
-      stepMeta.map(function (step) {
-        return "<li><strong>" + escapeHtml(step.title) + "</strong><span>" + escapeHtml(compactText(step.summary, 74)) + "</span></li>";
-      }).join(""),
-      "      </ol>",
-      '      <div class="route-map-branch-foot">Leads into the same Full Guide pages when you need more detail.</div>',
-      "    </article>",
-      '    <article class="route-map-branch" data-accent="ocean">',
-      '      <div class="route-map-branch-head">',
-      '        <div>',
-      '          <small>Answer-first route</small>',
-      '          <h4>Cheatsheet</h4>',
-      "        </div>",
-      '        <button type="button" class="btn btn-outline-primary rounded-pill px-3" data-mode-target="explorer">Open</button>',
-      "      </div>",
-      '      <p>Fix validation, pull request, WMS, media, or manifest blockers quickly.</p>',
-      '      <ul class="route-map-list">',
-      toolkitItems.map(function (item) {
-        return "<li><strong>" + escapeHtml(item.title) + "</strong><span>" + escapeHtml(compactText(item.short || item.description || "", 72)) + "</span></li>";
-      }).join(""),
-      "      </ul>",
-      '      <div class="route-map-branch-foot">Leads to focused cards, snippets, and source links.</div>',
-      "    </article>",
-      '    <article class="route-map-branch" data-accent="pine">',
-      '      <div class="route-map-branch-head">',
-      '        <div>',
-      '          <small>Original guide</small>',
-      '          <h4>Full Guide</h4>',
-      "        </div>",
-      '        <a class="btn btn-outline-primary rounded-pill px-3" href="', fullGuideHref, '" target="_blank" rel="noreferrer">Open</a>',
-      "      </div>",
-      '      <p>Use when you want the original author guide outside this quick guide.</p>',
-      '      <ul class="route-map-list">',
-      guidePreviewItems.map(function (entry) {
-        return "<li><strong>" + escapeHtml(entry.title) + "</strong><span>" + escapeHtml(compactText(entry.summary || entry.navState, 72)) + "</span></li>";
-      }).join(""),
-      "      </ul>",
-      '      <div class="route-map-branch-foot">', escapeHtml(guideSummary), ".</div>",
-      "    </article>",
-      '    <article class="route-map-branch" data-accent="sienna">',
-      '      <div class="route-map-branch-head">',
-      '        <div>',
-      '          <small>Applied reference</small>',
-      '          <h4>Sample Workshop Demo</h4>',
-      "        </div>",
-      '        <a class="btn btn-outline-primary rounded-pill px-3" href="./sample-workshops/clinical-first-responder-rag/index.html">Open</a>',
-      "      </div>",
-      '      <p>Use when you want to inspect the design on a workshop surface.</p>',
-      '      <ul class="route-map-list">',
-      [
-        "Provision the platform foundation",
-        "Model grounded clinical knowledge",
-        "Build prompts, guardrails, and patient chat",
-        "Validate escalation and doctor handoff"
-      ].map(function (item) {
-        return "<li><strong>" + escapeHtml(item) + "</strong><span>Shows the pattern on a real workshop-style page.</span></li>";
-      }).join(""),
-      "      </ul>",
-      '      <div class="route-map-branch-foot">Leads to an applied workshop example.</div>',
-      "    </article>",
-      "  </div>",
-      "</div>"
-    ].join("");
   }
 
   function renderGuideNav() {
@@ -3067,9 +2610,6 @@
       return;
     }
 
-    if (entry.open.kind === "guide-lab") {
-      redirectToOriginalGuide(entry.open.sectionId);
-    }
   }
 
   function redirectToOriginalGuide(sectionId) {
@@ -3088,11 +2628,9 @@
       announce: true,
       openBubble: null,
       guideSection: state.guideSection,
-      guideFocusLab: null,
       resetStep: false,
       forceTop: false
     }, options || {});
-    var guideTarget;
 
     if ((mode === "guide" || mode === "search") && !guideCatalogLoaded) {
       loadGuideCatalog().then(function () {
@@ -3105,14 +2643,6 @@
 
     if (mode === "guide" || config.guideSection) {
       state.guideSection = resolveGuideTarget(config.guideSection || state.guideSection);
-    }
-
-    if (mode !== "guide") {
-      state.guideFocusLab = "";
-    }
-
-    if (config.guideFocusLab !== null) {
-      state.guideFocusLab = config.guideFocusLab || "";
     }
 
     if (mode === "beginner" && config.resetStep) {
@@ -3158,8 +2688,7 @@
         if (config.forceTop) {
           window.scrollTo({ top: 0, behavior: smoothBehavior() });
         } else {
-          guideTarget = state.guideFocusLab ? document.getElementById("guide-lab-" + state.guideSection + "-" + state.guideFocusLab) : null;
-          scrollToTarget(guideTarget || guideMode);
+          scrollToTarget(guideMode);
         }
       }
     } else if (mode === "search") {
@@ -3400,7 +2929,6 @@
     state.toolkitQuery = route.toolkitQuery || "";
     state.searchQuery = route.searchQuery || "";
     state.guideSection = route.guideSection || state.guideSection;
-    state.guideFocusLab = route.guideFocusLab || "";
 
     if (bubbleSearch) {
       bubbleSearch.value = state.toolkitQuery;
@@ -3418,8 +2946,7 @@
       scroll: false,
       hash: false,
       announce: false,
-      guideSection: state.guideSection,
-      guideFocusLab: state.guideFocusLab
+      guideSection: state.guideSection
     });
 
     window.setTimeout(function () {
@@ -3495,7 +3022,6 @@
       if (modeButton.getAttribute("data-mode-target") === "guide" && modeButton.getAttribute("data-guide-target")) {
         switchMode("guide", {
           guideSection: resolveGuideTarget(modeButton.getAttribute("data-guide-target")) || currentGuideTarget(),
-          guideFocusLab: "",
           forceTop: isPrimaryNav
         });
       } else if (modeButton.getAttribute("data-mode-target") === "beginner") {
@@ -3572,7 +3098,7 @@
     }
 
     if (guideSectionButton) {
-      switchMode("guide", { guideSection: guideSectionButton.getAttribute("data-guide-section"), guideFocusLab: "" });
+      switchMode("guide", { guideSection: guideSectionButton.getAttribute("data-guide-section") });
       return;
     }
 
@@ -3743,7 +3269,6 @@
   updateNavSearch();
   updateBeginnerUI();
   renderExplorer();
-  renderHomeRouteMap();
   renderGuideNav();
   loadGuideCatalog().finally(function () {
     applyHash(window.location.hash);

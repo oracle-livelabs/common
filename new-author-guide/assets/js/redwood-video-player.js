@@ -64,18 +64,6 @@
   }
 
   function defaultAssetConfig() {
-    var path = String(window.location.pathname || "").replace(/\\/g, "/");
-
-    if (
-      path.indexOf("/sample-workshops/clinical-first-responder-rag/") !== -1 ||
-      /\/sample-workshops\/clinical-first-responder-rag(?:\/index\.html)?$/.test(path)
-    ) {
-      return {
-        src: "./media/psychiatry-template.mp4",
-        captions: "./media/psychiatry-template.vtt"
-      };
-    }
-
     return {
       src: "./assets/media/guide/author-guide-template.mp4",
       captions: "./assets/media/guide/author-guide-template.vtt"
