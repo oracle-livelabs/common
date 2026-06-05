@@ -28,7 +28,6 @@ Desktop.ini
 .env
 .env.*
 !.env.example
-!server/.env.example
 Wallet*/
 Wallet_*/
 *.key
@@ -36,6 +35,11 @@ Wallet_*/
 *.p12
 *.sso
 *.jks
+backend.env
+
+# OCI/VM runtime artifacts belong in the VM deployment workspace, not GitHub Pages
+server/
+ops/
 
 # IDE/editor settings
 .vscode/

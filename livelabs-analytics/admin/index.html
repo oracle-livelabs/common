@@ -691,18 +691,15 @@
 <body class="auth-blocked">
   <section class="screen-lock">
     <div class="panel auth-panel">
-      <h1>Admin Login</h1>
-      <p class="note">Use the review credentials provided for the LiveLabs analytics dashboard.</p>
+      <h1>Admin Review Session</h1>
+      <p class="note">This static page stores review settings in this browser.</p>
       <form id="login-form">
         <label for="email">Email
-          <input id="email" name="email" type="email" autocomplete="username" required>
-        </label>
-        <label for="password">Password
-          <input id="password" name="password" type="password" autocomplete="current-password" required>
+          <input id="email" name="email" type="email" autocomplete="username" value="livelabs-admin@oracle.com" required>
         </label>
         <div class="login-message" id="login-message" role="status" aria-live="polite"></div>
         <div class="button-row">
-          <button type="submit">Sign In</button>
+          <button type="submit">Start Session</button>
           <a class="button-link secondary" href="../index.html">Back to Dashboard</a>
         </div>
       </form>
@@ -1019,8 +1016,7 @@
     const adminStateSchemaVersion = 2;
     const criteriaRuleAutomationPaused = true;
     const accounts = [
-      { email: "livelabs-admin@oracle.com", name: "Portfolio Admin", password: "Admin#2026", role: "admin" },
-      { email: "livelabs-reviewer@oracle.com", name: "Portfolio Reviewer", password: "Review#2026", role: "viewer" }
+      { email: "livelabs-admin@oracle.com", name: "Portfolio Admin", role: "admin" }
     ];
     const defaultQaExceptionRules = [
       {
@@ -1282,10 +1278,9 @@
       event.preventDefault();
       const message = document.querySelector("#login-message");
       const email = document.querySelector("#email").value.trim().toLowerCase();
-      const password = document.querySelector("#password").value;
-      const account = accounts.find((item) => item.email === email && item.password === password);
+      const account = accounts.find((item) => item.email === email);
       if (!account) {
-        message.textContent = "Invalid account.";
+        message.textContent = "Review account required.";
         return;
       }
       if (account.role !== "admin") {
