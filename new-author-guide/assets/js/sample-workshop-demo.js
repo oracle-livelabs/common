@@ -642,6 +642,70 @@
     }, 160);
   }
 
+  function setupGlobalNavToggle() {
+    var button = document.getElementById("sampleGlobalNavToggle");
+    var controller;
+
+    if (!button) {
+      return;
+    }
+
+    if (window.LiveLabsSideNav && typeof window.LiveLabsSideNav.bindSideNavToggle === "function") {
+      controller = window.LiveLabsSideNav.bindSideNavToggle({
+        button: button,
+        bodyClass: "sample-global-nav-closed"
+      });
+
+      if (controller) {
+        return;
+      }
+    }
+
+    function sync() {
+      var expanded = !document.body.classList.contains("sample-global-nav-closed");
+      button.setAttribute("aria-expanded", expanded ? "true" : "false");
+      button.setAttribute("aria-label", expanded ? "Close navigation" : "Open navigation");
+    }
+
+    button.addEventListener("click", function () {
+      document.body.classList.toggle("sample-global-nav-closed");
+      sync();
+    });
+    sync();
+  }
+
+  function setupBackToTop() {
+    var button = document.getElementById("sampleBackToTop");
+    var ticking = false;
+
+    function sync() {
+      var visible = window.pageYOffset > 320;
+      button.classList.toggle("is-visible", visible);
+      button.setAttribute("aria-hidden", visible ? "false" : "true");
+      button.tabIndex = visible ? 0 : -1;
+      ticking = false;
+    }
+
+    function requestSync() {
+      if (ticking) {
+        return;
+      }
+      ticking = true;
+      window.requestAnimationFrame(sync);
+    }
+
+    if (!button) {
+      return;
+    }
+
+    button.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    window.addEventListener("scroll", requestSync, { passive: true });
+    window.addEventListener("resize", requestSync);
+    sync();
+  }
+
   function explainSql(sql) {
     var upper = String(sql || "").toUpperCase();
     var notes = [];
@@ -1897,6 +1961,8 @@
   setupWorkshopSearch();
   setupWorkshopStateControls();
   setupCaptureScroll();
+  setupGlobalNavToggle();
+  setupBackToTop();
   setupSqlPlayground();
   setupQuiz();
   setupDemo();

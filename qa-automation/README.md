@@ -91,6 +91,17 @@ $env:QA_RESERVATIONS_URL="https://example-reservations-url"
 node ./scripts/qa.mjs tests/platform/auth --tag auth
 ```
 
+Private authenticated page mockup:
+
+```powershell
+$env:QA_STORAGE_STATE="playwright\.auth\livelabs-auth.json"
+$env:QA_AUTH_TARGET_URL="https://livelabs.oracle.com/ords/r/dbpm/<app-alias>/home"
+$env:QA_AUTH_READY_TEXT="<text visible only after auth>"
+node ./scripts/qa.mjs tests/platform/auth/privatePageAccess.spec.ts --tag auth
+```
+
+If the application team provides a test-only session bootstrap endpoint, set `QA_AUTH_BOOTSTRAP_URL` and keep the short-lived `QA_AUTH_BOOTSTRAP_TOKEN` in a local or CI secret. See `docs/runbooks/authenticated-page-access.md` for the access request checklist and the full variable contract.
+
 Do not commit storage-state files, credentials, screenshots with private data, or environment-specific secrets.
 
 ## Creating Tests
@@ -169,6 +180,7 @@ Common overrides:
 $env:QA_BASE_URL="https://example-base-url"
 $env:QA_BROWSER_CHANNEL="msedge"
 $env:QA_SEARCH_TERM="OCI"
+$env:QA_AUTH_TARGET_URL="https://example-private-page-url"
 $env:QA_TRACE="on"
 $env:QA_VIDEO="retain-on-failure"
 node ./scripts/qa.mjs tests/platform/smoke
