@@ -203,10 +203,10 @@ foreach ($file in $Files) {
     # Rule 6: Check YouTube format is correct
     $youtubeMatches = Get-NonCodeLineMatches -Lines $lines -Predicate {
         param($line)
-        $line -match 'youtube:' -and $line -notmatch '\[[^\]]*\]\(youtube:[^)]+\)'
+        $line -match 'youtube:' -and $line -notmatch '\[[^\]]*\]\(youtube:[A-Za-z0-9_-]+(:small|:medium|:large)?\)'
     }
     foreach ($match in $youtubeMatches) {
-        Log-Error "$file (line $($match.LineNumber)): YouTube embeds should use format: [optional text](youtube:VIDEO_ID[:size])"
+        Log-Error "$file (line $($match.LineNumber)): YouTube embeds should use format: [optional text](youtube:VIDEO_ID[:small|:medium|:large]); size is optional."
         $FileErrors++
     }
 

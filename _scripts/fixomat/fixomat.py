@@ -39,7 +39,7 @@ IMAGE_MAX_DIM = 1280
 IMAGE_JOBS = 4
 
 TASK_HEADER_VALID_RE = re.compile(r"^## Task [^:\s][^:]*:")
-YOUTUBE_VALID_RE = re.compile(r"\[[^\]]*\]\(youtube:[^)]+\)")
+YOUTUBE_VALID_RE = re.compile(r"\[[^\]]*\]\(youtube:[A-Za-z0-9_-]+(:small|:medium|:large)?\)")
 LEGACY_CDN_HOST_RE = re.compile(r"oracle-livelabs\.github\.io", re.IGNORECASE)
 
 
@@ -754,7 +754,8 @@ class FixomatApp:
             if "youtube:" in line and not YOUTUBE_VALID_RE.search(line):
                 manual.append(
                     "YouTube embed at line "
-                    f"{idx} is not in [optional text](youtube:VIDEO_ID[:size]) format - manually fix"
+                    f"{idx} is not in [optional text](youtube:VIDEO_ID[:small|:medium|:large]) format "
+                    "- size is optional; manually fix"
                 )
 
         return manual
