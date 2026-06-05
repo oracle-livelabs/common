@@ -173,13 +173,13 @@ for file in "${FILES[@]}"; do
     # Rule 6: Check YouTube format is correct
     # Accepts both:
     #   [](youtube:VIDEO_ID)
-    #   [Optional text](youtube:VIDEO_ID[:size])
+    #   [Optional text](youtube:VIDEO_ID[:small|:medium|:large])
     bad_youtube_lines=$(awk '
         /^[[:space:]]*```[^`]*$/ {
             in_code = !in_code
             next
         }
-        !in_code && /youtube:/ && $0 !~ /\[[^]]*\]\(youtube:[^)]+\)/ {
+        !in_code && /youtube:/ && $0 !~ /\[[^]]*\]\(youtube:[A-Za-z0-9_-]+(:small|:medium|:large)?\)/ {
             print NR ":" $0
         }
     ' "$file")
@@ -187,7 +187,7 @@ for file in "${FILES[@]}"; do
         while IFS= read -r yt_line; do
             [ -z "$yt_line" ] && continue
             yt_lineno=${yt_line%%:*}
-            log_error "$file (line $yt_lineno): YouTube embeds should use format: [optional text](youtube:VIDEO_ID[:size])"
+            log_error "$file (line $yt_lineno): YouTube embeds should use format: [optional text](youtube:VIDEO_ID[:small|:medium|:large]); size is optional."
             ((FILE_ERRORS++))
         done <<< "$bad_youtube_lines"
     fi

@@ -411,7 +411,7 @@ body.markdown-guide-shell .markdown-guide-intro h1 {
   margin: 0.95rem 0 0.75rem;
   font-size: clamp(2rem, 4vw, 3rem);
   line-height: 1.04;
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
 }
 
 body.markdown-guide-shell .markdown-guide-intro p {
@@ -637,7 +637,7 @@ body.markdown-guide-shell #module-content h2,
 body.markdown-guide-shell #module-content h3,
 body.markdown-guide-shell #module-content h4 {
   color: var(--md-ink);
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 body.markdown-guide-shell #module-content h1 {

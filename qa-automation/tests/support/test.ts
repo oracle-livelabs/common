@@ -5,15 +5,12 @@ import {
   defaultSearchTerm,
   parseBooleanFlag,
   parseIntegerFlag,
-  resolveApiBaseUrl,
   resolveBaseUrl,
   resolveEnvironmentConfig,
   runnerDefaults,
   type EnvironmentConfig,
 } from "../../config/projectConfig.js";
 import { HomePage } from "../../pages/platform/homePage.js";
-import { SignInPage } from "../../pages/platform/auth/signInPage.js";
-import { FooterRegion } from "../../pages/platform/components/footerRegion.js";
 import { HeaderRegion } from "../../pages/platform/components/headerRegion.js";
 import { EventCodeRequestPage } from "../../pages/platform/events/eventCodeRequestPage.js";
 import { WorkshopCardsPage } from "../../pages/platform/workshopCardsPage.js";
@@ -21,29 +18,26 @@ import { WorkshopLandingPage } from "../../pages/platform/workshopLandingPage.js
 import { WorkshopLaunchOptionsDialog } from "../../pages/platform/workshopLaunchOptionsDialog.js";
 import { ReservationsPage } from "../../pages/platform/reservations/reservationsPage.js";
 import { resolveAuthRuntimeConfig, type AuthRuntimeConfig } from "./authRuntime.js";
-import { createDiagnosticsSession, type QAArtifacts } from "./diagnostics.js";
+import { createDiagnosticsSession } from "./diagnostics.js";
 
 // Keep worker-scoped runtime values separate from per-test page objects so the
 // suite can reuse environment setup without recreating page models unnecessarily.
 type QAWorkerFixtures = {
   targetEnvironment: string;
   environmentConfig: EnvironmentConfig;
-  apiBaseUrl: string;
   authRuntime: AuthRuntimeConfig;
   livelabsSearchTerm: string;
 };
 
 type QATestFixtures = {
   homePage: HomePage;
-  signInPage: SignInPage;
   headerRegion: HeaderRegion;
-  footerRegion: FooterRegion;
   eventCodeRequestPage: EventCodeRequestPage;
   workshopCardsPage: WorkshopCardsPage;
   workshopLandingPage: WorkshopLandingPage;
   workshopLaunchOptionsDialog: WorkshopLaunchOptionsDialog;
   reservationsPage: ReservationsPage;
-  qaArtifacts: QAArtifacts;
+  diagnostics: void;
 };
 
 // This file exposes the suite's canonical `test` object. Any custom fixture or
@@ -72,13 +66,6 @@ export const test = base.extend<QATestFixtures, QAWorkerFixtures>({
     { scope: "worker" },
   ],
 
-  apiBaseUrl: [
-    async ({ targetEnvironment }, use) => {
-      await use(resolveApiBaseUrl(targetEnvironment, process.env.QA_API_BASE_URL));
-    },
-    { scope: "worker" },
-  ],
-
   authRuntime: [
     async ({}, use) => {
       await use(resolveAuthRuntimeConfig());
@@ -97,16 +84,8 @@ export const test = base.extend<QATestFixtures, QAWorkerFixtures>({
     await use(new HomePage(page));
   },
 
-  signInPage: async ({ page }, use) => {
-    await use(new SignInPage(page));
-  },
-
   headerRegion: async ({ page }, use) => {
     await use(new HeaderRegion(page));
-  },
-
-  footerRegion: async ({ page }, use) => {
-    await use(new FooterRegion(page));
   },
 
   eventCodeRequestPage: async ({ page }, use) => {
@@ -129,7 +108,7 @@ export const test = base.extend<QATestFixtures, QAWorkerFixtures>({
     await use(new ReservationsPage(page));
   },
 
-  qaArtifacts: [
+  diagnostics: [
     async ({ page, browserName, targetEnvironment, environmentConfig, livelabsSearchTerm }, use, testInfo) => {
       // The diagnostics fixture is automatic so every spec gets the same log,
       // screenshot, and page-state attachments without opting in test by test.
@@ -150,7 +129,7 @@ export const test = base.extend<QATestFixtures, QAWorkerFixtures>({
         fullPageScreenshots: parseBooleanFlag(process.env.QA_FULL_PAGE_SCREENSHOT, defaults.full_page_screenshot),
       });
 
-      await use(diagnostics.api);
+      await use(undefined);
       await diagnostics.finalize();
     },
     { auto: true },

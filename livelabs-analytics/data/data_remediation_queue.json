@@ -195,7 +195,7 @@
   },
   {
     "issue_type": "join_unmatched",
-    "title": "LiveLabs LiveStack \u2014 Augmented Banking Hub",
+    "title": "LiveLabs LiveStack — Augmented Banking Hub",
     "recommended_action": "Fix dashboard-to-WMS join or confirm workshop retirement/test status",
     "normalized_title": "livelabs livestack augmented banking hub",
     "window_presence": [
@@ -209,7 +209,7 @@
   },
   {
     "issue_type": "join_unmatched",
-    "title": "LiveLabs LiveStack \u2014 Social Commerce (Retail)",
+    "title": "LiveLabs LiveStack — Social Commerce (Retail)",
     "recommended_action": "Fix dashboard-to-WMS join or confirm workshop retirement/test status",
     "normalized_title": "livelabs livestack social commerce retail",
     "window_presence": [
@@ -475,7 +475,7 @@
     "issue_type": "missing_update_evidence",
     "wms_id": "12050",
     "livelabs_id": 4381,
-    "title": "LiveLabs LiveStack \u2014 Seer Sporting Goods with Oracle AI Vector Search",
+    "title": "LiveLabs LiveStack — Seer Sporting Goods with Oracle AI Vector Search",
     "recommended_action": "Map workshop path or provide workshop-level last updated data",
     "repo_slug": "livestack",
     "replacement_exists": null
@@ -556,7 +556,7 @@
     "issue_type": "missing_update_evidence",
     "wms_id": "1",
     "livelabs_id": 4191,
-    "title": "Pluggables, Clones and Containers: Oracle Multitenant Fundamentals \u2014 19c SSH Enabled",
+    "title": "Pluggables, Clones and Containers: Oracle Multitenant Fundamentals — 19c SSH Enabled",
     "recommended_action": "Map workshop path or provide workshop-level last updated data",
     "repo_slug": null,
     "replacement_exists": "unknown"
@@ -619,7 +619,7 @@
     "issue_type": "replacement_unknown",
     "wms_id": "11316",
     "livelabs_id": 4380,
-    "title": "Explore \u201cIF NOT EXISTS\u201d Clause in Oracle Database 26ai and Beyond",
+    "title": "Explore “IF NOT EXISTS” Clause in Oracle Database 26ai and Beyond",
     "recommended_action": "Run deeper replacement comparison or manual portfolio review",
     "repo_slug": "partner-solutions",
     "last_meaningful_workshop_update_date": "2026-03-12"
@@ -754,7 +754,7 @@
     "issue_type": "replacement_unknown",
     "wms_id": "1",
     "livelabs_id": 4191,
-    "title": "Pluggables, Clones and Containers: Oracle Multitenant Fundamentals \u2014 19c SSH Enabled",
+    "title": "Pluggables, Clones and Containers: Oracle Multitenant Fundamentals — 19c SSH Enabled",
     "recommended_action": "Run deeper replacement comparison or manual portfolio review",
     "repo_slug": null,
     "last_meaningful_workshop_update_date": null

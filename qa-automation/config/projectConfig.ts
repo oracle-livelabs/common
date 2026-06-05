@@ -6,7 +6,6 @@ import { fileURLToPath } from "node:url";
 // base URLs, and the JSON-backed defaults consumed by both the runner and tests.
 export interface EnvironmentConfig {
   base_url: string;
-  api_base_url?: string;
 }
 
 export type TraceMode =
@@ -142,15 +141,6 @@ export function resolveBaseUrl(environmentName?: string, explicitBaseUrl?: strin
   }
 
   return String(resolveEnvironmentConfig(environmentName).base_url).replace(/\/+$/, "");
-}
-
-export function resolveApiBaseUrl(environmentName?: string, explicitApiBaseUrl?: string): string {
-  if (explicitApiBaseUrl?.trim()) {
-    return explicitApiBaseUrl.trim().replace(/\/+$/, "");
-  }
-
-  const environmentConfig = resolveEnvironmentConfig(environmentName);
-  return String(environmentConfig.api_base_url ?? environmentConfig.base_url).replace(/\/+$/, "");
 }
 
 export function resolveChromiumChannel(explicitChannel?: string): ChromiumChannel | undefined {

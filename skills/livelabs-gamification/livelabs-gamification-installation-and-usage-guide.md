@@ -18,7 +18,7 @@
 Give Codex this prompt:
 
 ```text
-Install `livelabs-gamification.zip` skill into my local Codex skills directory. Inspect `SKILL.md`, use the embedded `name:` `livelabs-gamification` as the installed folder name, ignore `__MACOSX`, `__pycache__`, and `*.pyc`, and verify the installed copy after copying.
+Install `livelabs-gamification` skill into my local Codex skills directory. Inspect `SKILL.md`, use the embedded `name:` `livelabs-gamification` as the installed folder name, ignore `__MACOSX`, `__pycache__`, and `*.pyc`, and verify the installed copy after copying.
 ```
 
 After installation, ask Codex to verify that the installed folder exists and that `SKILL.md` contains the expected `name:` value.

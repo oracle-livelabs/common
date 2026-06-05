@@ -1,15 +1,66 @@
 # How To Add A New Test
 
-1. Create a spec under `tests/platform/<smoke|regression>/<area>/`.
-2. Reuse or extend the active page objects under `pages/platform/...`.
-3. Keep assertions close to the user behavior the spec validates.
-4. Move shared setup into `tests/support/...` only when more than one spec needs it.
-5. Import the canonical fixture from `tests/support/test.ts`.
-6. Use `test.step(...)` for the major user actions so the HTML report stays readable.
-7. Use `testInfo.annotations` for runtime details that help explain the scenario in reports.
-8. Use `qaArtifacts.captureCheckpoint(...)` only when a named screenshot is genuinely useful beyond the default failure artifacts.
+Use this flow for new Playwright specs.
 
-Rule:
+## 1. Pick The Lane
 
-- use `smoke` for high-signal coverage that should fail fast
-- use `regression` for specific edge cases or known-risk behavior
+- Use `tests/platform/smoke` for fast local confidence checks.
+- Use `tests/platform/regression` for focused edge cases or previously fragile behavior.
+- Use `tests/platform/auth` only when the test requires a storage-state file or authenticated target URL.
+
+## 2. Add The Spec
+
+Import the shared fixture:
+
+```ts
+import { expect, test } from "../../../support/test.js";
+```
+
+Use tags on `test.describe`:
+
+```ts
+const TAGS = ["@smoke", "@platform", "@search", "@ui"];
+
+test.describe("LiveLabs search", { tag: TAGS }, () => {
+  test("opens results for a known term", async ({ environmentConfig, homePage, workshopCardsPage }) => {
+    await test.step("Open the home page", async () => {
+      await homePage.goto(environmentConfig.base_url);
+    });
+
+    await test.step("Search", async () => {
+      await homePage.searchFor("OCI");
+    });
+
+    await test.step("Verify results", async () => {
+      await workshopCardsPage.assertLoaded("OCI");
+    });
+  });
+});
+```
+
+## 3. Keep Logic In The Right Place
+
+- Page selectors and navigation behavior belong in `pages/platform`.
+- Shared fixtures belong in `tests/support/test.ts`.
+- Shared data belongs in `tests/data`.
+- Reusable case parsing belongs in `tests/support`.
+- Spec files should stay behavior-focused.
+- Do not add future-only page objects, API helpers, fixtures, or interfaces.
+- Prefer editing an existing page object or support helper before creating a new one.
+
+## 4. Validate Locally
+
+Run these before committing:
+
+```powershell
+npm run typecheck
+npm run test:collect
+node ./scripts/qa.mjs tests/platform/smoke/public/yourSpec.spec.ts
+```
+
+Run the broader lane when the new test changes shared page objects or support code:
+
+```powershell
+node ./scripts/qa.mjs tests/platform/smoke
+node ./scripts/qa.mjs tests/platform/regression
+```

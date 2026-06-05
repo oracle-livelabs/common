@@ -67,7 +67,7 @@
   margin: 0;
   color: var(--player-ink);
   font-size: clamp(1.05rem, 1.8vw, 1.45rem);
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .media-player-header p {

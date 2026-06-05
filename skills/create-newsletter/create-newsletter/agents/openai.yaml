@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Newsletter"
+  short_description: "Draft and render Markdown newsletters"
+  default_prompt: "Use $create-newsletter to draft a newsletter and render both Markdown and HTML outputs."

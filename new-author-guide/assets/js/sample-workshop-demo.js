@@ -76,6 +76,255 @@
     ].join("\n")
   };
 
+  var storageKeys = {
+    quizScore: "sampleWorkshopQuizScore",
+    complete: "sampleWorkshopComplete",
+    completed: "sampleWorkshopCompletedSections"
+  };
+
+  var scoring = {
+    section: 60,
+    quizQuestion: 40
+  };
+
+  function readStored(key, fallback) {
+    try {
+      var value = window.localStorage.getItem(key);
+      return value === null ? fallback : value;
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function writeStored(key, value) {
+    try {
+      window.localStorage.setItem(key, value);
+    } catch (error) {
+      return false;
+    }
+    return true;
+  }
+
+  function removeStored(key) {
+    try {
+      window.localStorage.removeItem(key);
+    } catch (error) {
+      return false;
+    }
+    return true;
+  }
+
+  function boolStored(key) {
+    return readStored(key, "false") === "true";
+  }
+
+  function setText(id, text) {
+    var element = document.getElementById(id);
+    if (element) {
+      element.textContent = text;
+    }
+  }
+
+  function readCompletedSections() {
+    try {
+      var parsed = JSON.parse(readStored(storageKeys.completed, "[]"));
+      return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function writeCompletedSections(items) {
+    writeStored(storageKeys.completed, JSON.stringify(Array.from(new Set(items || []))));
+  }
+
+  function workshopSections() {
+    return Array.prototype.slice.call(document.querySelectorAll("[data-workshop-step]"));
+  }
+
+  function sectionLabelFromElement(section) {
+    var label = section.querySelector(".lab-label");
+    var title = section.querySelector(".lab-title");
+
+    if (label && label.textContent.trim()) {
+      return label.textContent.trim();
+    }
+
+    if (title && title.textContent.trim()) {
+      return title.textContent.trim();
+    }
+
+    return section.id || "Section";
+  }
+
+  function setupSectionCompletionControls() {
+    workshopSections().forEach(function (section) {
+      var inner = section.querySelector(".sample-panel-inner") || section;
+      var existing = section.querySelector("[data-completion-step]");
+      var completionPanel = inner.querySelector("#completionPanel");
+      var label = sectionLabelFromElement(section);
+      var panel;
+
+      if (!section.id || existing) {
+        return;
+      }
+
+      panel = document.createElement("div");
+      panel.className = "section-completion";
+      panel.setAttribute("data-section-completion-panel", section.id);
+      panel.innerHTML = [
+        "<p>Finished with ", escapeHtml(label), "?</p>",
+        '<button type="button" data-completion-step="', escapeHtml(section.id), '" data-completion-label="', escapeHtml(label), '">Mark section complete</button>'
+      ].join("");
+
+      if (completionPanel && completionPanel.parentElement) {
+        completionPanel.parentElement.insertBefore(panel, completionPanel);
+      } else {
+        inner.appendChild(panel);
+      }
+    });
+  }
+
+  function sectionControls() {
+    return Array.prototype.slice.call(document.querySelectorAll("[data-completion-step]"));
+  }
+
+  function sectionLabels() {
+    return sectionControls().map(function (button) {
+      return {
+        id: button.getAttribute("data-completion-step"),
+        label: button.getAttribute("data-completion-label") || button.textContent.replace(/^Completed:\s*/, "").replace(/^Mark\s+/, "").replace(/\s+complete$/, "").trim()
+      };
+    });
+  }
+
+  function quizQuestionCount() {
+    return document.querySelectorAll("#launchQuiz .quiz-question").length;
+  }
+
+  function quizMaxScore() {
+    return quizQuestionCount() * scoring.quizQuestion;
+  }
+
+  function readQuizScore() {
+    var score = Number(readStored(storageKeys.quizScore, "0"));
+    var max = quizMaxScore();
+
+    if (!Number.isFinite(score) || score < 0) {
+      return 0;
+    }
+
+    return max ? Math.min(score, max) : score;
+  }
+
+  function quizCorrectCount() {
+    return Math.round(readQuizScore() / scoring.quizQuestion);
+  }
+
+  function isQuizPassed() {
+    var questionCount = quizQuestionCount();
+    return questionCount > 0 && quizCorrectCount() === questionCount;
+  }
+
+  function renderGamification() {
+    var completed = readCompletedSections().length;
+    var sectionCount = sectionControls().length || workshopSections().length;
+    var sectionXp = completed * scoring.section;
+    var quizXp = readQuizScore();
+    var totalXp = (sectionCount * scoring.section) + quizMaxScore();
+    var xp = Math.min(totalXp, sectionXp + quizXp);
+    var message = "XP comes from completed sections and correct quiz answers.";
+
+    setText("workshopXp", xp + " / " + totalXp);
+
+    if (boolStored(storageKeys.complete)) {
+      message = "Complete. Max XP is saved locally.";
+    } else if (isQuizPassed()) {
+      message = "Quiz score is complete. Finish any open sections.";
+    } else if (completed === sectionCount && sectionCount) {
+      message = "Sections complete. Improve the quiz score to finish.";
+    } else if (completed) {
+      message = completed + " of " + sectionCount + " sections complete; quiz score " + quizXp + " / " + quizMaxScore() + ".";
+    }
+
+    setText("workshopAchievement", message);
+  }
+
+  function renderCompletionFeedback() {
+    var feedback = document.getElementById("completionFeedback");
+    var completed = readCompletedSections();
+    var labels = sectionLabels();
+    var quizPassed = isQuizPassed();
+    var missing = labels.filter(function (item) {
+      return completed.indexOf(item.id) === -1;
+    }).map(function (item) {
+      return item.label;
+    });
+
+    if (!feedback) {
+      return;
+    }
+
+    feedback.classList.toggle("is-success", boolStored(storageKeys.complete));
+    if (boolStored(storageKeys.complete)) {
+      feedback.textContent = "Workshop complete. Progress and XP are saved.";
+      return;
+    }
+
+    if (missing.length || !quizPassed) {
+      feedback.textContent = "Still needed: " + missing.concat(quizPassed ? [] : ["full quiz score"]).join(", ") + ".";
+      return;
+    }
+
+    feedback.textContent = "All checks are ready. Finish the workshop.";
+  }
+
+  function renderWorkshopProgress() {
+    var completed = readCompletedSections();
+    var sectionCount = sectionControls().length || 0;
+    var questionCount = quizQuestionCount();
+    var correctCount = quizCorrectCount();
+    var quizPassed = isQuizPassed();
+    var totalUnits = sectionCount + questionCount;
+    var completeUnits = completed.length + correctCount;
+    var percent = totalUnits ? Math.round((completeUnits / totalUnits) * 100) : 0;
+    var bar = document.getElementById("workshopProgressBar");
+    var allSectionsComplete = sectionCount > 0 && sectionLabels().every(function (item) {
+      return completed.indexOf(item.id) !== -1;
+    });
+
+    if (!allSectionsComplete || !quizPassed) {
+      removeStored(storageKeys.complete);
+    }
+
+    setText("workshopProgressPercent", percent + "% complete");
+    setText("workshopProgressLabel", "Step " + completeUnits + " of " + totalUnits + ": " + completed.length + " of " + sectionCount + " sections complete; quiz " + correctCount + " of " + questionCount + " correct.");
+    if (bar) {
+      bar.style.width = percent + "%";
+    }
+
+    sectionControls().forEach(function (button) {
+      var id = button.getAttribute("data-completion-step");
+      var label = button.getAttribute("data-completion-label") || "section";
+      var complete = completed.indexOf(id) !== -1;
+      var panel = button.closest(".section-completion");
+
+      button.classList.toggle("is-complete", complete);
+      button.setAttribute("aria-pressed", complete ? "true" : "false");
+      button.textContent = complete ? "Completed: " + label : "Mark section complete";
+      if (panel) {
+        panel.classList.toggle("is-complete", complete);
+      }
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll("[data-section-link]"), function (link) {
+      link.classList.toggle("is-complete", completed.indexOf(link.getAttribute("data-section-link")) !== -1);
+    });
+
+    renderGamification();
+    renderCompletionFeedback();
+  }
+
   var demoQuestions = [
     {
       key: "presentingConcern",
@@ -197,6 +446,183 @@
     requestUpdate();
   }
 
+  function setupWorkshopSearch() {
+    var form = document.getElementById("workshopSearchForm");
+    var input = document.getElementById("workshopSearchInput");
+    var results = document.getElementById("workshopSearchResults");
+    var sections = Array.prototype.slice.call(document.querySelectorAll("#architecture, [data-workshop-step]"));
+    var index;
+
+    function normalizeSearch(value) {
+      return String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
+    }
+
+    if (!form || !input || !results || !sections.length) {
+      return;
+    }
+
+    index = sections.map(function (section) {
+      var label = section.querySelector(".lab-label");
+      var title = section.querySelector(".lab-title");
+      var sectionTitle = section.querySelector(".section-title");
+      var kicker = section.querySelector(".sample-kicker");
+      var summary = section.querySelector(".section-summary");
+      var searchText = [
+        label ? label.textContent : "",
+        title ? title.textContent : "",
+        sectionTitle ? sectionTitle.textContent : "",
+        kicker ? kicker.textContent : "",
+        summary ? summary.textContent : "",
+        section.textContent || ""
+      ].join(" ").replace(/\s+/g, " ").trim();
+
+      return {
+        id: section.id,
+        label: label ? label.textContent.trim() : (kicker ? kicker.textContent.trim() : "Section"),
+        title: title ? title.textContent.trim() : (sectionTitle ? sectionTitle.textContent.trim() : section.id),
+        summary: summary ? summary.textContent.trim() : "",
+        searchText: normalizeSearch(searchText)
+      };
+    });
+
+    function render() {
+      var rawQuery = input.value.trim();
+      var query = normalizeSearch(rawQuery);
+      var terms = query.split(/\s+/).filter(Boolean);
+      var matches;
+
+      if (!query) {
+        results.textContent = "Type a keyword to find matching sections.";
+        return;
+      }
+
+      matches = index.map(function (entry) {
+        var exact = entry.searchText.indexOf(query) !== -1 ? 3 : 0;
+        var termScore = terms.reduce(function (score, term) {
+          return score + (entry.searchText.indexOf(term) !== -1 ? 1 : 0);
+        }, 0);
+        return {
+          entry: entry,
+          score: exact + termScore
+        };
+      }).filter(function (item) {
+        return item.score > 0;
+      }).sort(function (a, b) {
+        return b.score - a.score;
+      }).slice(0, 5).map(function (item) {
+        return item.entry;
+      });
+
+      if (!matches.length) {
+        results.textContent = "No workshop sections match \"" + rawQuery + "\".";
+        return;
+      }
+
+      results.innerHTML = ['<div class="workshop-search-count">', matches.length, " result", matches.length === 1 ? "" : "s", " found</div>"].concat(matches.map(function (entry) {
+        return [
+          '<a class="workshop-search-result" href="#', escapeHtml(entry.id), '">',
+          "  <small>", escapeHtml(entry.label), "</small>",
+          "  <strong>", escapeHtml(entry.title), "</strong>",
+          "  <span>", escapeHtml(entry.summary.slice(0, 112)), entry.summary.length > 112 ? "..." : "", "</span>",
+          "</a>"
+        ].join("");
+      })).join("");
+    }
+
+    input.addEventListener("input", render);
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      render();
+    });
+    input.addEventListener("search", render);
+    results.addEventListener("click", function (event) {
+      var link = event.target.closest(".workshop-search-result");
+      var id;
+      var target;
+
+      if (!link) {
+        return;
+      }
+
+      id = link.getAttribute("href").replace(/^#/, "");
+      target = document.getElementById(id);
+      if (!target) {
+        return;
+      }
+
+      event.preventDefault();
+      document.querySelectorAll(".is-search-target").forEach(function (section) {
+        section.classList.remove("is-search-target");
+      });
+      target.classList.add("is-search-target");
+      window.history.replaceState(null, "", "#" + id);
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+      window.setTimeout(function () {
+        target.classList.remove("is-search-target");
+      }, 2200);
+    });
+  }
+
+  function setupWorkshopStateControls() {
+    var completeButton = document.getElementById("completeWorkshop");
+    var resetButton = document.getElementById("resetWorkshopProgress");
+
+    sectionControls().forEach(function (button) {
+      button.addEventListener("click", function () {
+        var id = button.getAttribute("data-completion-step");
+        var completed = readCompletedSections();
+        var index = completed.indexOf(id);
+
+        if (index === -1) {
+          completed.push(id);
+        } else {
+          completed.splice(index, 1);
+          removeStored(storageKeys.complete);
+        }
+
+        writeCompletedSections(completed);
+        renderWorkshopProgress();
+      });
+    });
+
+    if (completeButton) {
+      completeButton.addEventListener("click", function () {
+        var completed = readCompletedSections();
+        var labels = sectionLabels();
+        var allSectionsComplete = labels.length > 0 && labels.every(function (item) {
+          return completed.indexOf(item.id) !== -1;
+        });
+
+        if (!allSectionsComplete || !isQuizPassed()) {
+          removeStored(storageKeys.complete);
+          renderCompletionFeedback();
+          renderGamification();
+          return;
+        }
+
+        writeStored(storageKeys.complete, "true");
+        renderWorkshopProgress();
+      });
+    }
+
+    if (resetButton) {
+      resetButton.addEventListener("click", function () {
+        removeStored(storageKeys.complete);
+        removeStored(storageKeys.quizScore);
+        removeStored(storageKeys.completed);
+        if (document.getElementById("launchQuiz")) {
+          document.getElementById("launchQuiz").reset();
+        }
+        setText("quizResult", "Answer the three questions to calculate the quiz score.");
+        renderWorkshopProgress();
+      });
+    }
+
+    renderWorkshopProgress();
+  }
+
   function setupCaptureScroll() {
     var params = new URLSearchParams(window.location.search);
     var captureId = params.get("capture");
@@ -214,6 +640,70 @@
 
       window.scrollTo(0, Math.max(0, target.offsetTop - 24));
     }, 160);
+  }
+
+  function setupGlobalNavToggle() {
+    var button = document.getElementById("sampleGlobalNavToggle");
+    var controller;
+
+    if (!button) {
+      return;
+    }
+
+    if (window.LiveLabsSideNav && typeof window.LiveLabsSideNav.bindSideNavToggle === "function") {
+      controller = window.LiveLabsSideNav.bindSideNavToggle({
+        button: button,
+        bodyClass: "sample-global-nav-closed"
+      });
+
+      if (controller) {
+        return;
+      }
+    }
+
+    function sync() {
+      var expanded = !document.body.classList.contains("sample-global-nav-closed");
+      button.setAttribute("aria-expanded", expanded ? "true" : "false");
+      button.setAttribute("aria-label", expanded ? "Close navigation" : "Open navigation");
+    }
+
+    button.addEventListener("click", function () {
+      document.body.classList.toggle("sample-global-nav-closed");
+      sync();
+    });
+    sync();
+  }
+
+  function setupBackToTop() {
+    var button = document.getElementById("sampleBackToTop");
+    var ticking = false;
+
+    function sync() {
+      var visible = window.pageYOffset > 320;
+      button.classList.toggle("is-visible", visible);
+      button.setAttribute("aria-hidden", visible ? "false" : "true");
+      button.tabIndex = visible ? 0 : -1;
+      ticking = false;
+    }
+
+    function requestSync() {
+      if (ticking) {
+        return;
+      }
+      ticking = true;
+      window.requestAnimationFrame(sync);
+    }
+
+    if (!button) {
+      return;
+    }
+
+    button.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    window.addEventListener("scroll", requestSync, { passive: true });
+    window.addEventListener("resize", requestSync);
+    sync();
   }
 
   function explainSql(sql) {
@@ -317,6 +807,8 @@
 
     form.addEventListener("submit", function (event) {
       var score = 0;
+      var questionCount = quizQuestionCount();
+      var earned;
       var q1 = form.querySelector('input[name="q1"]:checked');
       var q2 = form.querySelector('input[name="q2"]:checked');
       var q3 = form.querySelector('input[name="q3"]:checked');
@@ -333,22 +825,28 @@
         score += 1;
       }
 
+      earned = score * scoring.quizQuestion;
+      writeStored(storageKeys.quizScore, String(earned));
       result.className = "quiz-result";
 
-      if (score === 3) {
+      if (score === questionCount) {
+        renderWorkshopProgress();
         result.classList.add("is-success");
-        result.textContent = "3 of 3 correct. The learner is ready to launch the demo with the safety boundary, clinician handoff, and PDF flow intact.";
+        result.textContent = score + " of " + questionCount + " correct. " + earned + " XP earned.";
         return;
       }
 
-      if (score === 2) {
+      removeStored(storageKeys.complete);
+      renderWorkshopProgress();
+
+      if (score >= Math.max(1, questionCount - 1)) {
         result.classList.add("is-warning");
-        result.textContent = "2 of 3 correct. Revisit the guardrail, handoff, or assessment tasks before treating the workshop as launch-ready.";
+        result.textContent = score + " of " + questionCount + " correct. " + earned + " XP earned. Improve the score to finish.";
         return;
       }
 
       result.classList.add("is-danger");
-      result.textContent = "0 or 1 correct. The demo looks polished, but the build logic is not anchored yet. Review the task cards and retry.";
+      result.textContent = score + " of " + questionCount + " correct. " + earned + " XP earned. Review the task cards and retry.";
     });
   }
 
@@ -375,7 +873,281 @@
     };
   }
 
-  function buildRiskFlags(answers, assessment) {
+  function normalizeClinicalText(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function analyzePatientText(text) {
+    var value = normalizeClinicalText(text);
+    var signals = [];
+    var seen = {};
+
+    function add(id, label, tone, note, suggestions) {
+      if (seen[id]) {
+        return;
+      }
+
+      seen[id] = true;
+      signals.push({
+        id: id,
+        label: label,
+        tone: tone,
+        note: note,
+        suggestions: suggestions || []
+      });
+    }
+
+    if (!value) {
+      return {
+        text: text || "",
+        normalized: value,
+        signals: [],
+        tone: "neutral"
+      };
+    }
+
+    if (/(self harm|selfharm|suicid|kill myself|hurt myself|end my life|not safe alone|unsafe alone|cannot stay safe|can t stay safe|danger to myself|harm someone|hurt someone)/.test(value)) {
+      add("immediateSafety", "Immediate safety concern", "danger", "The patient describes self-harm, unsafe-alone, or harm risk language.", [
+        "I do not feel safe alone tonight",
+        "I have thoughts of self-harm and need urgent help"
+      ]);
+    }
+
+    if (/(hearing voices|hear voices|voices telling|command hallucination|hallucination|paranoid|paranoia)/.test(value)) {
+      add("psychosis", "Psychosis or perception signal", "danger", "The patient mentions voices, hallucinations, or paranoia.", [
+        "I hear voices and they are scaring me",
+        "I feel paranoid and need the clinician to know"
+      ]);
+    }
+
+    if (/(barely slept|no sleep|not slept|without sleep|three days|3 days|wired|racing thoughts|unusually energetic|manic|mania|too much energy)/.test(value)) {
+      add("sleepActivation", "Sleep or activation signal", "warning", "Reduced sleep, wired energy, or racing thoughts may need urgent review.", [
+        "I have barely slept for three days and feel wired",
+        "My thoughts are racing and sleep is almost impossible"
+      ]);
+    }
+
+    if (/(panic|anxiety|anxious|worry|keyed up|cannot settle|can t settle|heart racing|attack)/.test(value)) {
+      add("panicAnxiety", "Panic or anxiety signal", "warning", "Panic, worry, or unsettled body sensations are central to the intake.", [
+        "Panic is the main problem and it is affecting work",
+        "I feel keyed up all day and cannot settle"
+      ]);
+    }
+
+    if (/(low mood|depressed|depression|numb|withdrawn|nothing matters|stopped enjoying|no interest|hopeless|isolated)/.test(value)) {
+      add("lowMood", "Low mood or withdrawal signal", "warning", "The patient describes low mood, withdrawal, or loss of interest.", [
+        "My mood is low and I have stopped enjoying things",
+        "I feel isolated and withdrawn from people"
+      ]);
+    }
+
+    if (/(missing work|missed work|cannot work|can t work|cannot concentrate|can t concentrate|not leaving|school|job|stopped seeing friends)/.test(value)) {
+      add("functionImpact", "Functioning impact", "warning", "The symptoms are affecting work, school, concentration, or relationships.", [
+        "I am missing work and cannot concentrate",
+        "I stopped seeing friends and I am falling behind"
+      ]);
+    }
+
+    if (/(medication|sertraline|ssri|stopped my medication|missed dose|dose|prescribed|treatment|therapist|psychiatrist)/.test(value)) {
+      add("careMedication", "Care or medication context", "neutral", "The answer includes current care, medication, or treatment context.", [
+        "I stopped my medication last week",
+        "I have a therapist and take sertraline"
+      ]);
+    }
+
+    if (/(alcohol|drink|drinking|weed|cannabis|substance|pills|opioid|cocaine|shut my mind off)/.test(value)) {
+      add("substanceContext", "Substance context", "warning", "The patient mentions alcohol or substance use as part of the current picture.", [
+        "I am using alcohol to shut my mind off",
+        "Substance use has increased this week"
+      ]);
+    }
+
+    if (/(sister|brother|mother|father|partner|spouse|friend|roommate|family|supportive|with me|not alone|therapist)/.test(value)) {
+      add("supportAvailable", "Support available", "neutral", "The answer names a support person or existing support relationship.", [
+        "My sister is with me tonight",
+        "My partner can help me stay grounded"
+      ]);
+    }
+
+    return {
+      text: text || "",
+      normalized: value,
+      signals: signals,
+      tone: signals.some(function (signal) { return signal.tone === "danger"; })
+        ? "danger"
+        : signals.some(function (signal) { return signal.tone === "warning"; }) ? "warning" : "neutral"
+    };
+  }
+
+  function signalListFromState(state) {
+    var map = state && state.signals ? state.signals : {};
+    var order = {
+      danger: 0,
+      warning: 1,
+      neutral: 2
+    };
+
+    return Object.keys(map).map(function (id) {
+      return map[id];
+    }).sort(function (a, b) {
+      var aOrder = Object.prototype.hasOwnProperty.call(order, a.tone) ? order[a.tone] : 3;
+      var bOrder = Object.prototype.hasOwnProperty.call(order, b.tone) ? order[b.tone] : 3;
+
+      return aOrder - bOrder;
+    });
+  }
+
+  function hasSignal(signals, id) {
+    return signals.some(function (signal) {
+      return signal.id === id;
+    });
+  }
+
+  function mergePatientSignals(state, key, text, analysis) {
+    state.signals = state.signals || {};
+    state.answerInsights = state.answerInsights || {};
+    state.answerInsights[key] = {
+      text: text,
+      signals: analysis.signals.map(function (signal) {
+        return signal.id;
+      })
+    };
+
+    analysis.signals.forEach(function (signal) {
+      state.signals[signal.id] = {
+        id: signal.id,
+        label: signal.label,
+        tone: signal.tone,
+        note: signal.note,
+        source: key,
+        text: text
+      };
+    });
+  }
+
+  function uniqueItems(items) {
+    var seen = {};
+    return (items || []).filter(function (item) {
+      var key = normalizeClinicalText(item);
+
+      if (!key || seen[key]) {
+        return false;
+      }
+
+      seen[key] = true;
+      return true;
+    });
+  }
+
+  function buildSuggestedReplies(question, state, draft) {
+    var draftAnalysis = analyzePatientText(draft || "");
+    var signals = signalListFromState(state).concat(draftAnalysis.signals);
+    var items = [];
+
+    if (!question) {
+      return [];
+    }
+
+    if (question.key === "timeline" && hasSignal(signals, "panicAnxiety")) {
+      items.push("It started before work three weeks ago and is getting worse");
+    }
+    if (question.key === "timeline" && hasSignal(signals, "sleepActivation")) {
+      items.push("It got worse after several nights with almost no sleep");
+    }
+    if (question.key === "impact" && hasSignal(signals, "panicAnxiety")) {
+      items.push("Panic is disrupting work and sleep");
+    }
+    if (question.key === "impact" && hasSignal(signals, "lowMood")) {
+      items.push("I feel withdrawn and have stopped seeing friends");
+    }
+    if (question.key === "safety" && (hasSignal(signals, "immediateSafety") || hasSignal(signals, "psychosis"))) {
+      items.push("I do not feel safe alone tonight");
+      items.push("I hear voices and need the clinician to know");
+    }
+    if (question.key === "safety" && hasSignal(signals, "sleepActivation")) {
+      items.push("No self-harm thoughts, but I have barely slept for three days");
+    }
+    if (question.key === "careContext" && hasSignal(signals, "careMedication")) {
+      items.push("I stopped medication last week and have not told anyone");
+    }
+    if (question.key === "careContext" && hasSignal(signals, "substanceContext")) {
+      items.push("I am using alcohol to shut my mind off");
+    }
+    if (question.key === "support" && hasSignal(signals, "supportAvailable")) {
+      items.push("My support person is with me and can help tonight");
+    }
+    if (question.key === "support" && hasSignal(signals, "functionImpact")) {
+      items.push("I need the clinician to know how much work and daily life changed");
+    }
+
+    draftAnalysis.signals.forEach(function (signal) {
+      items = items.concat(signal.suggestions);
+    });
+
+    return uniqueItems(items.concat(question.replies)).slice(0, 4);
+  }
+
+  function buildAssistantResponse(question, analysis) {
+    var key = question ? question.key : "";
+
+    if (analysis.signals.some(function (signal) { return signal.id === "immediateSafety"; })) {
+      return "I will mark this as an immediate safety concern in the demo route so the clinician handoff starts with escalation.";
+    }
+
+    if (analysis.signals.some(function (signal) { return signal.id === "psychosis"; })) {
+      return "I will flag the voices or perception concern for urgent clinician review in the handoff.";
+    }
+
+    if (analysis.signals.some(function (signal) { return signal.id === "sleepActivation"; })) {
+      return "I captured the low sleep and wired-energy pattern because it can change the route from routine intake to urgent review.";
+    }
+
+    if (analysis.signals.some(function (signal) { return signal.id === "panicAnxiety"; })) {
+      return "I captured panic or anxiety as a main concern and will connect it to timing, function, and support in the handoff.";
+    }
+
+    if (analysis.signals.some(function (signal) { return signal.id === "lowMood"; })) {
+      return "I captured the low-mood or withdrawal pattern so the handoff can show how symptoms are affecting activity.";
+    }
+
+    if (analysis.signals.some(function (signal) { return signal.id === "substanceContext"; })) {
+      return "I will include the substance context as a clinician review item rather than treating it as a side note.";
+    }
+
+    if (analysis.signals.some(function (signal) { return signal.id === "careMedication"; })) {
+      return "I captured the care and medication context so the clinician can review treatment history quickly.";
+    }
+
+    if (key === "timeline") {
+      return "I captured the timing and recent change. Next I need to know how this affects daily life.";
+    }
+
+    if (key === "safety") {
+      return "I captured the safety answer and will keep it visible in the route decision.";
+    }
+
+    if (key === "support") {
+      return "I captured the support note and will use it in the clinician prep section.";
+    }
+
+    return "Captured. I will use that detail in the structured handoff and continue the intake.";
+  }
+
+  function signalSummaryItems(signals) {
+    if (!signals.length) {
+      return ["No custom risk signal was detected beyond the guided answers."];
+    }
+
+    return signals.map(function (signal) {
+      return signal.label + ": " + signal.note;
+    });
+  }
+
+  function buildRiskFlags(answers, assessment, signals) {
     var combined = [
       answers.impact || "",
       answers.safety || "",
@@ -385,16 +1157,19 @@
     ].join(" ").toLowerCase();
     var flags = [];
 
-    if (/self-harm|unsafe alone|not feel safe/.test(combined)) {
+    if (/self-harm|unsafe alone|not feel safe/.test(combined) || hasSignal(signals, "immediateSafety")) {
       flags.push("Immediate safety concern reported.");
     }
-    if (/barely slept|three days|unusually wired/.test(combined) || (assessment.values.sleep || 0) >= 2) {
+    if (hasSignal(signals, "psychosis")) {
+      flags.push("Psychosis or perception concern reported.");
+    }
+    if (/barely slept|three days|unusually wired/.test(combined) || hasSignal(signals, "sleepActivation") || (assessment.values.sleep || 0) >= 2) {
       flags.push("Reduced sleep or activation signal captured.");
     }
-    if (/missing work|cannot concentrate|withdrawn|stopped seeing friends|isolated/.test(combined)) {
+    if (/missing work|cannot concentrate|withdrawn|stopped seeing friends|isolated/.test(combined) || hasSignal(signals, "functionImpact")) {
       flags.push("Daily functioning is impaired.");
     }
-    if (/alcohol|stopped my medication|no current treatment/.test(combined)) {
+    if (/alcohol|stopped my medication|no current treatment/.test(combined) || hasSignal(signals, "careMedication") || hasSignal(signals, "substanceContext")) {
       flags.push("Care-context or substance risk needs clinician review.");
     }
     if (!flags.length) {
@@ -404,27 +1179,27 @@
     return flags;
   }
 
-  function buildCbtNote(answers) {
+  function buildCbtNote(answers, signals) {
     var combined = [
       answers.presentingConcern || "",
       answers.impact || "",
       answers.support || ""
     ].join(" ").toLowerCase();
 
-    if (/panic|anxious|keyed up|cannot settle|racing/.test(combined)) {
+    if (/panic|anxious|keyed up|cannot settle|racing/.test(combined) || hasSignal(signals, "panicAnxiety")) {
       return "Possible anxious thought loop and catastrophic anticipation are affecting behavior and sleep.";
     }
-    if (/withdrawn|stopped seeing friends|isolated|low mood|enjoying anything/.test(combined)) {
+    if (/withdrawn|stopped seeing friends|isolated|low mood|enjoying anything/.test(combined) || hasSignal(signals, "lowMood")) {
       return "Withdrawal and reduced activity are likely reinforcing the low-mood pattern.";
     }
-    if (/sleep/.test(combined)) {
+    if (/sleep/.test(combined) || hasSignal(signals, "sleepActivation")) {
       return "Sleep disruption appears to be amplifying symptom load and should be reviewed early.";
     }
 
     return "Capture the thought, behavior, and coping pattern directly in clinician follow-up.";
   }
 
-  function classifyRoute(answers, assessment) {
+  function classifyRoute(answers, assessment, signals) {
     var combined = [
       answers.presentingConcern || "",
       answers.timeline || "",
@@ -435,7 +1210,7 @@
       answers.followUp || ""
     ].join(" ").toLowerCase();
 
-    if (/self-harm|not feel safe alone|unsafe alone|command hallucination|hearing voices/.test(combined)) {
+    if (/self-harm|not feel safe alone|unsafe alone|command hallucination|hearing voices/.test(combined) || hasSignal(signals, "immediateSafety") || hasSignal(signals, "psychosis")) {
       return {
         code: "IMMEDIATE_SAFETY_ESCALATION",
         label: "Immediate safety escalation",
@@ -444,7 +1219,7 @@
       };
     }
 
-    if (/barely slept for three days|unusually wired|severe panic|using alcohol|stopped my medication|missing work|isolated/.test(combined) || assessment.total >= 6) {
+    if (/barely slept for three days|unusually wired|severe panic|using alcohol|stopped my medication|missing work|isolated/.test(combined) || hasSignal(signals, "sleepActivation") || hasSignal(signals, "substanceContext") || hasSignal(signals, "functionImpact") || assessment.total >= 6) {
       return {
         code: "URGENT_PSYCHIATRY_REVIEW",
         label: "Urgent psychiatry review",
@@ -461,7 +1236,7 @@
     };
   }
 
-  function collectCitations(answers) {
+  function collectCitations(answers, signals) {
     var combined = [
       answers.presentingConcern || "",
       answers.impact || "",
@@ -470,43 +1245,93 @@
     ].join(" ").toLowerCase();
     var citations = ["Psychiatry intake and clinician handoff template"];
 
-    if (/self-harm|unsafe|voice|sleep/.test(combined)) {
+    if (/self-harm|unsafe|voice|sleep/.test(combined) || hasSignal(signals, "immediateSafety") || hasSignal(signals, "psychosis") || hasSignal(signals, "sleepActivation")) {
       citations.push("Psychiatry safety escalation playbook");
     }
-    if (/panic|anxious|worry|sleep|withdrawn|low mood/.test(combined)) {
+    if (/panic|anxious|worry|sleep|withdrawn|low mood/.test(combined) || hasSignal(signals, "panicAnxiety") || hasSignal(signals, "lowMood")) {
       citations.push("CBT thought and behavior note template");
     }
-    if (/medication|sertraline|alcohol|treatment|therapist/.test(combined)) {
+    if (/medication|sertraline|alcohol|treatment|therapist/.test(combined) || hasSignal(signals, "careMedication") || hasSignal(signals, "substanceContext")) {
       citations.push("Medication and substance context checklist");
     }
 
     return citations;
   }
 
+  function detailRowsFromAnswers(answers) {
+    return [
+      { label: "Presenting concern", value: answers.presentingConcern || "Pending" },
+      { label: "Recent change", value: answers.timeline || "Pending" },
+      { label: "Mood, anxiety, sleep, or function", value: answers.impact || "Pending" },
+      { label: "Safety answer", value: answers.safety || "Pending" },
+      { label: "Care, medication, or substances", value: answers.careContext || "Pending" },
+      { label: "Support and clinician priority", value: answers.support || "Pending" },
+      { label: "Follow-up note", value: answers.followUp || "No follow-up note captured." }
+    ];
+  }
+
+  function buildCaseSummary(answers, route) {
+    return [
+      "Route: " + route.label + ".",
+      "Concern: " + (answers.presentingConcern || "pending") + ".",
+      "Change: " + (answers.timeline || "pending") + ".",
+      "Impact: " + (answers.impact || "pending") + ".",
+      "Safety: " + (answers.safety || "pending") + ".",
+      "Care context: " + (answers.careContext || "pending") + ".",
+      "Support: " + (answers.support || "pending") + "."
+    ].join(" ");
+  }
+
+  function buildClinicianPrepItems(route, signals, assessment) {
+    var items = [];
+
+    if (route.tone === "danger") {
+      items.push("Pause routine intake and follow immediate safety escalation workflow.");
+    } else if (route.tone === "warning") {
+      items.push("Review the case before routine scheduling and confirm the next safe contact point.");
+    } else {
+      items.push("Continue routine intake with the structured summary available before the appointment.");
+    }
+
+    if (hasSignal(signals, "sleepActivation")) {
+      items.push("Review sleep loss, activation, and recent behavior change early.");
+    }
+    if (hasSignal(signals, "careMedication") || hasSignal(signals, "substanceContext")) {
+      items.push("Confirm medication, treatment, and substance context before planning next steps.");
+    }
+    if (hasSignal(signals, "supportAvailable")) {
+      items.push("Confirm the support person and document whether the patient can stay connected to them.");
+    }
+    if (assessment.total >= 6) {
+      items.push("Assessment total is high enough to review mood, anxiety, and sleep together.");
+    }
+
+    items.push("Scan the transcript for exact patient wording before the clinician visit.");
+    return uniqueItems(items);
+  }
+
   function buildReportData(state) {
     var assessment = buildAssessmentSummary(state.assessments);
-    var route = classifyRoute(state.answers, assessment);
+    var signals = signalListFromState(state);
+    var route = classifyRoute(state.answers, assessment, signals);
+    var patientDetails = detailRowsFromAnswers(state.answers);
 
     return {
       route: route,
       assessment: assessment,
-      citations: collectCitations(state.answers),
-      riskFlags: buildRiskFlags(state.answers, assessment),
-      cbtNote: buildCbtNote(state.answers),
-      transcriptHighlights: [
-        "Presenting concern: " + (state.answers.presentingConcern || "Pending"),
-        "Recent change: " + (state.answers.timeline || "Pending"),
-        "Impact: " + (state.answers.impact || "Pending"),
-        "Safety: " + (state.answers.safety || "Pending")
-      ],
-      summary: [
-        "Presenting concern: " + (state.answers.presentingConcern || "Pending"),
-        "Recent change: " + (state.answers.timeline || "Pending"),
-        "Impact: " + (state.answers.impact || "Pending"),
-        "Care context: " + (state.answers.careContext || "Pending"),
-        "Support note: " + (state.answers.support || "Pending"),
-        state.answers.followUp ? "Follow-up note: " + state.answers.followUp : ""
-      ].filter(Boolean)
+      citations: collectCitations(state.answers, signals),
+      riskFlags: buildRiskFlags(state.answers, assessment, signals),
+      cbtNote: buildCbtNote(state.answers, signals),
+      patientDetails: patientDetails,
+      clinicalSignals: signalSummaryItems(signals),
+      clinicianPrep: buildClinicianPrepItems(route, signals, assessment),
+      caseSummary: buildCaseSummary(state.answers, route),
+      transcript: (state.messages || []).filter(function (message) {
+        return message && !/^Clinician handoff generated/.test(message.text || "");
+      }),
+      transcriptHighlights: patientDetails.slice(0, 6).map(function (row) {
+        return row.label + ": " + row.value;
+      })
     };
   }
 
@@ -516,14 +1341,40 @@
     }).join("");
   }
 
+  function renderReportFields(rows) {
+    return rows.map(function (row) {
+      return [
+        '<div class="report-field">',
+        "  <dt>", escapeHtml(row.label), "</dt>",
+        "  <dd>", escapeHtml(row.value), "</dd>",
+        "</div>"
+      ].join("");
+    }).join("");
+  }
+
+  function renderTranscript(messages) {
+    if (!messages.length) {
+      return "<li>No transcript captured yet.</li>";
+    }
+
+    return messages.map(function (message) {
+      return [
+        '<li class="report-transcript-item">',
+        "  <strong>", message.role === "assistant" ? "AI first responder" : "Patient", "</strong>",
+        "  <span>", escapeHtml(message.text), "</span>",
+        "</li>"
+      ].join("");
+    }).join("");
+  }
+
   function renderReportPreview(data, reportGenerated) {
     var routeClass = data.route.tone === "danger" ? " is-danger" : data.route.tone === "warning" ? " is-warning" : "";
     var statusText = reportGenerated
-      ? "PDF-ready handoff generated from the demo intake and rapid assessment."
+      ? "Scroll this preview to review the full handoff. Download PDF creates the same handoff as a file."
       : "Preview only. Generate the handoff after the chat and rapid assessment are complete.";
 
     return [
-      '<div class="report-sheet">',
+      '<article class="report-sheet handoff-paper" data-handoff-preview>',
       '  <div class="report-sheet-head">',
       "    <div>",
       '      <div class="report-sheet-kicker">Psychiatry first responder</div>',
@@ -534,97 +1385,257 @@
       '  <div class="report-metrics">',
       '    <div class="report-metric"><small>Assessment total</small><strong>', String(data.assessment.total), " / 9</strong></div>",
       '    <div class="report-metric"><small>Risk flags</small><strong>', String(data.riskFlags.length), "</strong></div>",
-      '    <div class="report-metric"><small>PDF status</small><strong>', reportGenerated ? "Generated" : "Preview", "</strong></div>",
+      '    <div class="report-metric"><small>Transcript lines</small><strong>', String(data.transcript.length), "</strong></div>",
       "  </div>",
-      '  <div class="report-grid">',
-      '    <div class="report-field"><dt>Presenting concern</dt><dd>', escapeHtml(data.summary[0].replace(/^Presenting concern:\s*/, "")), "</dd></div>",
-      '    <div class="report-field"><dt>Recent change</dt><dd>', escapeHtml(data.summary[1].replace(/^Recent change:\s*/, "")), "</dd></div>",
-      '    <div class="report-field"><dt>Impact</dt><dd>', escapeHtml(data.summary[2].replace(/^Impact:\s*/, "")), "</dd></div>",
-      '    <div class="report-field"><dt>Care context</dt><dd>', escapeHtml(data.summary[3].replace(/^Care context:\s*/, "")), "</dd></div>",
-      '    <div class="report-field"><dt>Support note</dt><dd>', escapeHtml(data.summary[4].replace(/^Support note:\s*/, "")), "</dd></div>",
-      '    <div class="report-field"><dt>Follow-up note</dt><dd>', escapeHtml((data.summary[5] || "No follow-up note captured.").replace(/^Follow-up note:\s*/, "")), "</dd></div>",
-      "  </div>",
+      '  <section class="report-summary-block">',
+      '    <h5>Case summary</h5>',
+      '    <p>', escapeHtml(data.caseSummary), "</p>",
+      "  </section>",
+      '  <section class="report-section">',
+      '    <h5>Patient details</h5>',
+      '    <div class="report-grid">',
+      renderReportFields(data.patientDetails),
+      "    </div>",
+      "  </section>",
       '  <div class="report-callout"><strong>CBT-style note:</strong> ', escapeHtml(data.cbtNote), "</div>",
       '  <div class="report-list-block"><h5>Risk flags</h5><ul>', renderList(data.riskFlags), "</ul></div>",
+      '  <div class="report-list-block"><h5>Detected intake signals</h5><ul>', renderList(data.clinicalSignals), "</ul></div>",
+      '  <div class="report-list-block"><h5>Clinician prep</h5><ul>', renderList(data.clinicianPrep), "</ul></div>",
       '  <div class="report-list-block"><h5>Approved guidance used</h5><ul>', renderList(data.citations), "</ul></div>",
       '  <div class="report-list-block"><h5>Transcript highlights</h5><ul>', renderList(data.transcriptHighlights), "</ul></div>",
+      '  <div class="report-list-block report-transcript-block"><h5>Conversation transcript</h5><ol class="report-transcript-list">', renderTranscript(data.transcript), "</ol></div>",
       '  <div class="report-sheet-foot">', escapeHtml(statusText), "</div>",
-      "</div>"
+      "</article>"
     ].join("");
   }
 
-  function downloadPdfReport(data) {
-    var jsPDF = window.jspdf && window.jspdf.jsPDF;
-    var doc;
-    var width;
-    var height;
-    var margin = 42;
-    var y = 54;
+  function sanitizePdfText(value) {
+    return String(value || "")
+      .replace(/\s+/g, " ")
+      .replace(/[^\x20-\x7E]/g, " ")
+      .trim();
+  }
 
-    function ensureSpace(required) {
-      if (y + required <= height - 48) {
+  function escapePdfText(value) {
+    return sanitizePdfText(value)
+      .replace(/\\/g, "\\\\")
+      .replace(/\(/g, "\\(")
+      .replace(/\)/g, "\\)");
+  }
+
+  function wrapPdfText(value, maxChars) {
+    var words = sanitizePdfText(value).split(" ");
+    var lines = [];
+    var current = "";
+
+    words.forEach(function (word) {
+      if (!word) {
         return;
       }
-      doc.addPage();
-      y = 54;
+
+      if (word.length > maxChars) {
+        if (current) {
+          lines.push(current);
+          current = "";
+        }
+        while (word.length > maxChars) {
+          lines.push(word.slice(0, maxChars));
+          word = word.slice(maxChars);
+        }
+      }
+
+      if (!current) {
+        current = word;
+      } else if ((current + " " + word).length <= maxChars) {
+        current += " " + word;
+      } else {
+        lines.push(current);
+        current = word;
+      }
+    });
+
+    if (current) {
+      lines.push(current);
     }
 
-    function textBlock(title, text) {
-      var lines;
+    return lines.length ? lines : [""];
+  }
 
-      ensureSpace(54);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(10);
-      doc.setTextColor(82, 72, 67);
-      doc.text(title.toUpperCase(), margin, y);
-      y += 14;
+  function appendPdfWrapped(lines, text, options) {
+    var settings = options || {};
+    var wrapped = wrapPdfText(text, settings.maxChars || 92);
 
-      lines = doc.splitTextToSize(text, width - (margin * 2));
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(11);
-      doc.setTextColor(31, 27, 24);
-      doc.text(lines, margin, y);
-      y += (lines.length * 14) + 10;
+    wrapped.forEach(function (line, index) {
+      lines.push({
+        text: index && settings.continuationPrefix ? settings.continuationPrefix + line : line,
+        size: settings.size || 10,
+        bold: Boolean(settings.bold),
+        gapBefore: index ? 0 : (settings.gapBefore || 0)
+      });
+    });
+  }
+
+  function appendPdfSection(lines, title, items) {
+    var cleanItems = (items || []).filter(Boolean);
+
+    lines.push({ text: title, size: 13, bold: true, gapBefore: 14 });
+    if (!cleanItems.length) {
+      appendPdfWrapped(lines, "None captured.", { maxChars: 94 });
+      return;
     }
 
-    if (!jsPDF) {
+    cleanItems.forEach(function (item) {
+      appendPdfWrapped(lines, "- " + item, { maxChars: 94 });
+    });
+  }
+
+  function buildPdfLines(data) {
+    var lines = [];
+
+    lines.push({ text: "Psychiatry First Responder Handoff", size: 20, bold: true });
+    lines.push({ text: "Generated from the sample workshop patient conversation demo.", size: 10 });
+    lines.push({ text: "Demonstration output only. This is not a clinical decision system.", size: 10 });
+    lines.push({ text: "Route: " + data.route.label + " (" + data.route.code + ")", size: 14, bold: true, gapBefore: 12 });
+    appendPdfWrapped(lines, "Route rationale: " + data.route.rationale, { maxChars: 92 });
+
+    appendPdfSection(lines, "Assessment Snapshot", [
+      "Interest: " + data.assessment.values.interest + " / 3",
+      "Anxiety: " + data.assessment.values.anxiety + " / 3",
+      "Sleep: " + data.assessment.values.sleep + " / 3",
+      "Total: " + data.assessment.total + " / 9"
+    ]);
+    appendPdfSection(lines, "Case Summary", [data.caseSummary]);
+    appendPdfSection(lines, "Patient Details", data.patientDetails.map(function (row) {
+      return row.label + ": " + row.value;
+    }));
+    appendPdfSection(lines, "Risk Flags", data.riskFlags);
+    appendPdfSection(lines, "Detected Intake Signals", data.clinicalSignals);
+    appendPdfSection(lines, "Clinician Prep", data.clinicianPrep);
+    appendPdfSection(lines, "CBT-Style Note", [data.cbtNote]);
+    appendPdfSection(lines, "Approved Guidance Used", data.citations);
+    appendPdfSection(lines, "Transcript Highlights", data.transcriptHighlights);
+    appendPdfSection(lines, "Full Conversation Transcript", data.transcript.map(function (message) {
+      return (message.role === "assistant" ? "AI first responder" : "Patient") + ": " + message.text;
+    }));
+
+    return lines;
+  }
+
+  function paginatePdfLines(lines) {
+    var pages = [];
+    var page = [];
+    var y = 790;
+
+    lines.forEach(function (line) {
+      var size = line.size || 10;
+      var lineHeight = Math.max(12, size + 4);
+      var required = lineHeight + (line.gapBefore || 0);
+
+      if (page.length && y - required < 52) {
+        pages.push(page);
+        page = [];
+        y = 790;
+      }
+
+      y -= (line.gapBefore || 0);
+      page.push({
+        text: line.text,
+        size: size,
+        bold: line.bold,
+        y: y
+      });
+      y -= lineHeight;
+    });
+
+    if (page.length) {
+      pages.push(page);
+    }
+
+    return pages;
+  }
+
+  function pdfStreamForPage(lines) {
+    var ops = ["BT"];
+
+    lines.forEach(function (line) {
+      ops.push("/" + (line.bold ? "F2" : "F1") + " " + String(line.size) + " Tf");
+      ops.push("1 0 0 1 48 " + String(Math.round(line.y)) + " Tm");
+      ops.push("(" + escapePdfText(line.text) + ") Tj");
+    });
+
+    ops.push("ET");
+    return ops.join("\n");
+  }
+
+  function buildPdfDocument(data) {
+    var pages = paginatePdfLines(buildPdfLines(data));
+    var objects = [];
+    var kids = [];
+    var pdf = "%PDF-1.4\n";
+    var offsets = [0];
+    var pageIndex;
+
+    objects[1] = "<< /Type /Catalog /Pages 2 0 R >>";
+    objects[2] = "";
+    objects[3] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>";
+    objects[4] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>";
+
+    pages.forEach(function (pageLines) {
+      var pageId = objects.length;
+      var contentId = pageId + 1;
+      var stream = pdfStreamForPage(pageLines);
+
+      kids.push(pageId + " 0 R");
+      objects[pageId] = "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents " + contentId + " 0 R >>";
+      objects[contentId] = "<< /Length " + stream.length + " >>\nstream\n" + stream + "\nendstream";
+    });
+
+    objects[2] = "<< /Type /Pages /Kids [" + kids.join(" ") + "] /Count " + String(pages.length) + " >>";
+
+    for (pageIndex = 1; pageIndex < objects.length; pageIndex += 1) {
+      offsets[pageIndex] = pdf.length;
+      pdf += String(pageIndex) + " 0 obj\n" + objects[pageIndex] + "\nendobj\n";
+    }
+
+    var xrefOffset = pdf.length;
+    pdf += "xref\n0 " + String(objects.length) + "\n";
+    pdf += "0000000000 65535 f \n";
+    for (pageIndex = 1; pageIndex < objects.length; pageIndex += 1) {
+      pdf += String(offsets[pageIndex]).padStart(10, "0") + " 00000 n \n";
+    }
+
+    pdf += "trailer\n<< /Size " + String(objects.length) + " /Root 1 0 R >>\n";
+    pdf += "startxref\n" + String(xrefOffset) + "\n%%EOF";
+
+    return pdf;
+  }
+
+  function downloadHandoffPdf(data) {
+    var blob;
+    var url;
+    var link;
+
+    if (!window.URL || !window.URL.createObjectURL || typeof Blob === "undefined") {
       return false;
     }
 
-    doc = new jsPDF({ unit: "pt", format: "a4" });
-    width = doc.internal.pageSize.getWidth();
-    height = doc.internal.pageSize.getHeight();
-
-    doc.setFillColor(246, 241, 236);
-    doc.roundedRect(margin, 36, width - (margin * 2), 92, 20, 20, "F");
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(20);
-    doc.setTextColor(31, 27, 24);
-    doc.text("Psychiatry First Responder Handoff", margin + 18, 68);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.setTextColor(97, 86, 80);
-    doc.text("Demonstration only. This PDF is generated from the sample chat and quick assessment flow.", margin + 18, 88);
-    doc.text("Route: " + data.route.label, margin + 18, 106);
-    y = 150;
-
-    textBlock("Summary", data.summary.join(" "));
-    textBlock("Risk flags", data.riskFlags.join(" "));
-    textBlock("Quick assessment", "Interest " + data.assessment.values.interest + ", anxiety " + data.assessment.values.anxiety + ", sleep " + data.assessment.values.sleep + ", total " + data.assessment.total + " out of 9.");
-    textBlock("CBT-style note", data.cbtNote);
-    textBlock("Approved guidance used", data.citations.join("; "));
-    textBlock("Transcript highlights", data.transcriptHighlights.join(" "));
-
-    doc.setFont("helvetica", "italic");
-    doc.setFontSize(9);
-    doc.setTextColor(110, 102, 98);
-    doc.text("Generated from the author-guide redesign demo.", margin, height - 32);
-    doc.save("psychiatry-first-responder-handoff.pdf");
+    blob = new Blob([buildPdfDocument(data)], { type: "application/pdf" });
+    url = window.URL.createObjectURL(blob);
+    link = document.createElement("a");
+    link.href = url;
+    link.download = "psychiatry-first-responder-handoff.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.setTimeout(function () {
+      window.URL.revokeObjectURL(url);
+    }, 1000);
     return true;
   }
   function setupDemo() {
     var transcript = document.getElementById("demoTranscript");
     var replies = document.getElementById("demoReplies");
+    var repliesLabel = document.querySelector(".quick-replies-label");
     var input = document.getElementById("demoInput");
     var form = document.getElementById("demoChatForm");
     var reportButton = document.getElementById("generateReport");
@@ -651,6 +1662,12 @@
       bubble.appendChild(title);
       bubble.appendChild(body);
       transcript.appendChild(bubble);
+      if (state && state.messages) {
+        state.messages.push({
+          role: role,
+          text: text
+        });
+      }
       transcript.scrollTop = transcript.scrollHeight;
     }
 
@@ -668,6 +1685,9 @@
 
     function renderReplies(items) {
       replies.innerHTML = "";
+      if (repliesLabel) {
+        repliesLabel.hidden = !(items && items.length);
+      }
       (items || []).forEach(function (item) {
         var button = document.createElement("button");
 
@@ -687,13 +1707,41 @@
       return state.index >= demoQuestions.length;
     }
 
+    function renderPreviewShell(message, tone) {
+      var routeClass = tone === "danger" ? " is-danger" : tone === "warning" ? " is-warning" : "";
+      var label = tone === "success" ? "Ready" : tone === "danger" ? "Escalation pending" : "Pending";
+
+      preview.innerHTML = [
+        '<div class="report-sheet is-empty">',
+        '  <div class="report-sheet-head">',
+        "    <div>",
+        '      <div class="report-sheet-kicker">Psychiatry first responder</div>',
+        '      <h4>Clinician handoff paper</h4>',
+        "    </div>",
+        '    <span class="route-badge', routeClass, '">', label, "</span>",
+        "  </div>",
+        "  <p>", escapeHtml(message), "</p>",
+        "</div>"
+      ].join("");
+    }
+
     function renderPreview() {
       if (!chatReady()) {
-        preview.innerHTML = '<div class="report-sheet is-empty"><div class="report-sheet-head"><div><div class="report-sheet-kicker">Psychiatry first responder</div><h4>Clinician handoff preview</h4></div><span class="route-badge is-warning">Pending</span></div><p>Complete the conversation and quick assessment to generate the structured clinician handoff and PDF export.</p></div>';
+        renderPreviewShell("Complete the conversation and quick assessment, then generate the clinician handoff here.", "warning");
         return;
       }
 
-      state.route = classifyRoute(state.answers, buildAssessmentSummary(state.assessments));
+      state.route = classifyRoute(state.answers, buildAssessmentSummary(state.assessments), signalListFromState(state));
+      if (!assessmentReady()) {
+        renderPreviewShell("The intake is complete. Add the three quick assessment ratings before generating the paper.", state.route.tone);
+        return;
+      }
+
+      if (!state.reportGenerated) {
+        renderPreviewShell("Ready to generate. A scrollable handoff preview will appear here, and Download PDF will create the file.", state.route.tone);
+        return;
+      }
+
       preview.innerHTML = renderReportPreview(buildReportData(state), state.reportGenerated);
     }
 
@@ -723,8 +1771,8 @@
     }
 
     function completeConversation() {
-      state.route = classifyRoute(state.answers, buildAssessmentSummary(state.assessments));
-      renderReplies(["Generate clinician handoff", "Start over"]);
+      state.route = classifyRoute(state.answers, buildAssessmentSummary(state.assessments), signalListFromState(state));
+      renderReplies([]);
       appendBubble("assistant", state.route.rationale + (assessmentReady() ? " I can now prepare the clinician handoff." : " Add the quick assessment to complete the clinician handoff."));
       reportButton.disabled = !assessmentReady();
       downloadButton.disabled = true;
@@ -746,7 +1794,7 @@
         return;
       }
 
-      renderReplies(question.replies);
+      renderReplies(buildSuggestedReplies(question, state, input.value));
       input.placeholder = question.placeholder;
       appendBubble("assistant", question.prompt);
       renderPreview();
@@ -754,6 +1802,7 @@
 
     function captureReply(text) {
       var question;
+      var analysis;
 
       if (!text) {
         return;
@@ -770,21 +1819,26 @@
           return;
         }
 
+        analysis = analyzePatientText(text);
+        mergePatientSignals(state, "followUp", text, analysis);
         state.answers.followUp = text;
+        state.reportGenerated = false;
+        downloadButton.disabled = true;
         appendBubble("user", text);
-        appendBubble("assistant", "Follow-up captured. The clinician handoff preview is refreshed with the extra note.");
+        appendBubble("assistant", "Follow-up captured. Regenerate the clinician handoff so the paper includes the extra note.");
         renderPreview();
         updateStatus("Follow-up captured. Regenerate the handoff if you want the refreshed note in the PDF.", state.route ? state.route.tone : "warning");
         return;
       }
 
       question = demoQuestions[state.index];
+      analysis = analyzePatientText(text);
+      mergePatientSignals(state, question.key, text, analysis);
       state.answers[question.key] = text;
+      state.reportGenerated = false;
+      downloadButton.disabled = true;
       appendBubble("user", text);
-
-      if (question.key === "safety" && /self-harm|not feel safe alone|barely slept for three days/.test(text.toLowerCase())) {
-        appendBubble("assistant", "I am flagging that as a safety signal in the demo route so the clinician handoff prioritizes it.");
-      }
+      appendBubble("assistant", buildAssistantResponse(question, analysis));
 
       state.index += 1;
       askCurrentQuestion();
@@ -799,6 +1853,9 @@
           anxiety: null,
           sleep: null
         },
+        messages: [],
+        signals: {},
+        answerInsights: {},
         route: null,
         reportGenerated: false
       };
@@ -806,7 +1863,7 @@
       transcript.innerHTML = "";
       reportButton.disabled = true;
       downloadButton.disabled = true;
-      appendBubble("assistant", "This demo simulates the AI RAG chat a patient uses before the appointment. It asks six guided questions, waits for a quick assessment, and drafts the clinician handoff.");
+      appendBubble("assistant", "This demo simulates the pre-visit RAG chat. It asks six questions, waits for a quick assessment, and drafts the clinician handoff.");
       updateStatus("Conversation not complete yet. Capture the guided intake questions first.", "warning");
       updateAssessmentUI();
       askCurrentQuestion();
@@ -824,6 +1881,17 @@
       input.value = "";
     });
 
+    input.addEventListener("input", function () {
+      var question;
+
+      if (chatReady()) {
+        return;
+      }
+
+      question = demoQuestions[state.index];
+      renderReplies(buildSuggestedReplies(question, state, input.value));
+    });
+
     replies.addEventListener("click", function (event) {
       var button = event.target.closest("[data-demo-reply]");
 
@@ -832,6 +1900,7 @@
       }
 
       captureReply(button.getAttribute("data-demo-reply"));
+      input.value = "";
     });
 
     Array.prototype.forEach.call(assessmentGrid.querySelectorAll("[data-assessment-value]"), function (button) {
@@ -858,9 +1927,10 @@
       }
 
       state.reportGenerated = true;
+      state.route = classifyRoute(state.answers, buildAssessmentSummary(state.assessments), signalListFromState(state));
       downloadButton.disabled = false;
       renderPreview();
-      appendBubble("assistant", "Clinician handoff generated. Route: " + state.route.label + ". The PDF export is ready.");
+      appendBubble("assistant", "Clinician handoff generated. Route: " + state.route.label + ". The PDF file is ready to download.");
       updateStatus("Clinician handoff generated successfully for the demo flow.", "success");
     });
 
@@ -870,10 +1940,10 @@
         return;
       }
 
-      if (downloadPdfReport(buildReportData(state))) {
-        updateStatus("PDF downloaded successfully for the demo flow.", "success");
+      if (downloadHandoffPdf(buildReportData(state))) {
+        updateStatus("PDF file downloaded with the demo data and chat transcript.", "success");
       } else {
-        updateStatus("PDF export library is unavailable in this browser session.", "warning");
+        updateStatus("PDF download is unavailable in this browser session.", "warning");
       }
     });
 
@@ -887,7 +1957,12 @@
 
   setupCopyButtons();
   setupScrollSpy();
+  setupSectionCompletionControls();
+  setupWorkshopSearch();
+  setupWorkshopStateControls();
   setupCaptureScroll();
+  setupGlobalNavToggle();
+  setupBackToTop();
   setupSqlPlayground();
   setupQuiz();
   setupDemo();

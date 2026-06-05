@@ -1,0 +1,4 @@
+interface:
+  display_name: "Task Planner"
+  short_description: "Create durable Codex plans with PlanOps folders, QA, validation, and review questions"
+  default_prompt: "Use $task-planner to create a PlanOps project for this task with PLAN.md, PLAN_QA.md, EXECUTION_BRIEF.md, VALIDATION_MATRIX.md, status.yaml, and targeted questions for the next version."

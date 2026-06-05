@@ -1,7 +1,7 @@
 import { test } from "../../../support/test.js";
 
 const WORKSHOP_LAUNCH_OPTIONS_TAGS = ["@regression", "@platform", "@workshop", "@launch", "@ui"];
-const WORKSHOP_SEARCH_TERM = "Database";
+const WORKSHOP_SEARCH_TERM = "Gen AI";
 
 test.describe("LiveLabs workshop launch options", { tag: WORKSHOP_LAUNCH_OPTIONS_TAGS }, () => {
   test("opens launch options from a workshop landing page", async ({
