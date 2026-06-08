@@ -129,7 +129,6 @@ try {
   await waitFor(client, 'document.readyState === "complete" && document.body.classList.contains("auth-blocked")', "blocked admin state");
   await evaluate(client, `(() => {
     document.querySelector("#email").value = "livelabs-admin@oracle.com";
-    document.querySelector("#password").value = "Admin#2026";
     document.querySelector("#login-form").requestSubmit();
     return true;
   })()`);

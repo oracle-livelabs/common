@@ -24,6 +24,23 @@ Desktop.ini
 *.bak
 *.tmp
 
+# Runtime secrets and database wallets
+.env
+.env.*
+!.env.example
+Wallet*/
+Wallet_*/
+*.key
+*.pem
+*.p12
+*.sso
+*.jks
+backend.env
+
+# OCI/VM runtime artifacts belong in the VM deployment workspace, not GitHub Pages
+server/
+ops/
+
 # IDE/editor settings
 .vscode/
 .idea/
