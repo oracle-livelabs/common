@@ -1,0 +1,4 @@
+interface:
+  display_name: "LiveLabs Workshop Author 26.5.2"
+  short_description: "Author core LiveLabs workshops with QA and FreeSQL support"
+  default_prompt: "Use this skill to create or update a LiveLabs workshop from source materials, choose the right authoring mode, build the markdown and manifests, add FreeSQL when useful, and validate the final workshop. Use separate skills for screenshots or industry conversion."

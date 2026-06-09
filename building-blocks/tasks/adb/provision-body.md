@@ -80,7 +80,7 @@
         > **Note:** The password must meet the following requirements:    
             - Must be between 12 and 30 characters long and must include at least one uppercase letter, one lowercase letter, and one numeric character.    
             - Cannot contain the username.    
-            - Cannot contain the double quote (") character.    
+            - Cannot contain the double quote (") or the single quote (') character.    
             - Must be different from the last 4 passwords used.    
             - Must not be the same password that you set less than 24 hours ago.
 
@@ -100,7 +100,7 @@
 
 9. Click **Create**.
 
-10.  The **Autonomous AI Database details** page is displayed. The status of your ADB instance is **`Provisioning`**.
+10. The **Autonomous AI Database details** page is displayed. The status of your ADB instance is **`Provisioning`**.
 
    ![Database Provisioning message.](./images/adb-create-provisioning-message-new.png =75%x*)
 

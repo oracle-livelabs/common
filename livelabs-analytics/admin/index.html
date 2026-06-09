@@ -1,0 +1,1902 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LiveLabs Analytics Admin</title>
+  <link rel="icon" href="../assets/images/oracle-logo-white.svg" type="image/svg+xml">
+  <style>
+    @font-face {
+      font-family: "Oracle Sans";
+      src: url("../assets/fonts/OracleSans_Rg.ttf") format("truetype");
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: "Oracle Sans";
+      src: url("../assets/fonts/OracleSans_SBd.ttf") format("truetype");
+      font-weight: 600;
+    }
+    @font-face {
+      font-family: "Oracle Sans";
+      src: url("../assets/fonts/OracleSans_Bd.ttf") format("truetype");
+      font-weight: 700;
+    }
+    :root {
+      --oracle-red: #C74634;
+      --oracle-bark: #312D2A;
+      --brand-neutral: #7A736E;
+      --ink: #161513;
+      --page: #FBF9F7;
+      --line: #D4CFCA;
+      --support: #4F7D7B;
+      --support-soft: #D0E5ED;
+      --warning: #9c6a00;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+      background: var(--page);
+      letter-spacing: 0;
+    }
+    a { color: inherit; }
+    .admin-layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+    }
+    .admin-rail {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 24px 18px;
+      overflow: auto;
+      color: #fff;
+      background: var(--oracle-bark);
+    }
+    .brand {
+      display: grid;
+      gap: 10px;
+      padding: 0 4px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, .18);
+    }
+    .brand img {
+      width: 132px;
+      height: auto;
+    }
+    .brand span {
+      color: rgba(255, 255, 255, .78);
+      font-size: 22px;
+      line-height: 1.2;
+    }
+    .admin-nav {
+      display: grid;
+      gap: 4px;
+    }
+    .rail-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, .14);
+    }
+    .admin-nav a,
+    .admin-nav button,
+    .rail-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 38px;
+      padding: 9px 11px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: rgba(255, 255, 255, .78);
+      font: inherit;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .admin-nav a:hover,
+    .admin-nav button:hover,
+    .admin-nav a:focus-visible,
+    .admin-nav button:focus-visible,
+    .rail-link:hover,
+    .rail-link:focus-visible {
+      background: rgba(255, 255, 255, .12);
+      color: #fff;
+      outline: none;
+    }
+    .rail-link {
+      width: 100%;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, .18);
+      background: rgba(255, 255, 255, .08);
+      text-align: center;
+    }
+    main {
+      min-width: 0;
+      padding: 32px clamp(20px, 4vw, 48px) 48px;
+    }
+    .page-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 22px;
+    }
+    .page-head h1 {
+      margin: 0;
+      color: var(--oracle-bark);
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    .page-head p,
+    .note {
+      max-width: 72ch;
+      color: var(--brand-neutral);
+      line-height: 1.45;
+    }
+    .session-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1px solid rgba(79, 125, 123, .28);
+      border-radius: 8px;
+      background: rgba(208, 229, 237, .44);
+      color: var(--oracle-bark);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .panel {
+      margin: 0 0 18px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .panel-head h2 {
+      margin: 0;
+      color: var(--oracle-bark);
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+    .panel-context {
+      display: grid;
+      gap: 8px;
+      margin: -2px 0 16px;
+      padding: 12px 14px;
+      border: 1px solid rgba(79, 125, 123, .24);
+      border-left: 4px solid var(--support);
+      border-radius: 8px;
+      background: rgba(208, 229, 237, .22);
+      color: var(--oracle-bark);
+      line-height: 1.45;
+    }
+    .panel-context strong {
+      font-size: 13px;
+    }
+    .panel-context p {
+      margin: 0;
+      color: var(--brand-neutral);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .status-card {
+      position: relative;
+      overflow: hidden;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+    .status-card::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 4px;
+      background: var(--support);
+    }
+    .status-card strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--oracle-bark);
+      font-size: 26px;
+      letter-spacing: 0;
+    }
+    .status-card span,
+    small {
+      color: var(--brand-neutral);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .control {
+      display: grid;
+      gap: 8px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+    .control-title {
+      display: block;
+      color: var(--oracle-bark);
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    .field-note {
+      display: block;
+      max-width: 62ch;
+      margin-top: 4px;
+      color: var(--brand-neutral);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+    .subsection-title {
+      margin: 18px 0 10px;
+      color: var(--oracle-bark);
+      font-size: 16px;
+      font-weight: 700;
+    }
+    label {
+      display: grid;
+      gap: 6px;
+      color: var(--oracle-bark);
+      font-weight: 700;
+    }
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 38px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      background: #fff;
+      font: inherit;
+    }
+    textarea {
+      min-height: 84px;
+      resize: vertical;
+    }
+    input[type="checkbox"] {
+      width: 22px;
+      min-height: 22px;
+      accent-color: var(--oracle-red);
+    }
+    .check-row {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 12px;
+      align-items: end;
+    }
+    .form-grid .wide {
+      grid-column: span 2;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .search-results {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+      max-width: 980px;
+    }
+    .search-results:empty { display: none; }
+    .result-button {
+      width: 100%;
+      justify-content: space-between;
+      gap: 16px;
+      border-color: var(--line);
+      background: #fff;
+      color: var(--ink);
+      text-align: left;
+    }
+    .result-button:hover,
+    .result-button:focus-visible {
+      border-color: rgba(199, 70, 52, .45);
+      background: rgba(246, 221, 208, .18);
+      outline: none;
+    }
+    .result-title {
+      display: block;
+      color: var(--oracle-bark);
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .result-meta,
+    .criteria-summary {
+      display: block;
+      color: var(--brand-neutral);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.35;
+    }
+    .row-editor-card {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+      padding: 18px;
+      border: 1px solid rgba(79, 125, 123, .24);
+      border-radius: 8px;
+      background: #fff;
+    }
+    .row-editor-card[hidden] {
+      display: none;
+    }
+    .selected-row-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+    .selected-row-head strong {
+      display: block;
+      color: var(--oracle-bark);
+      font-size: 18px;
+      line-height: 1.25;
+    }
+    .row-editor-section {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .82);
+    }
+    .row-editor-section.is-primary {
+      border-color: rgba(79, 125, 123, .28);
+      background: rgba(245, 244, 242, .72);
+    }
+    .row-editor-section h3 {
+      margin: 0;
+      color: var(--oracle-bark);
+      font-size: 16px;
+      line-height: 1.25;
+    }
+    .row-editor-section p {
+      margin: 3px 0 0;
+      color: var(--brand-neutral);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .editor-section-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: start;
+    }
+    .editor-form-grid {
+      display: grid;
+      grid-template-columns: minmax(150px, .65fr) minmax(230px, 1fr) minmax(190px, .75fr) minmax(170px, .65fr);
+      gap: 12px;
+      align-items: end;
+    }
+    .editor-form-grid label {
+      min-width: 0;
+    }
+    .editor-note-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: end;
+    }
+    .row-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 8px;
+    }
+    .row-summary-grid div {
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      font-size: 13px;
+    }
+    .row-summary-grid strong {
+      display: block;
+      color: var(--oracle-bark);
+      font-size: 12px;
+    }
+    .compact-check {
+      min-height: 38px;
+      padding: 9px 10px;
+      align-self: end;
+    }
+    .compact-check .control-title {
+      font-size: 13px;
+    }
+    .compact-check .field-note {
+      margin-top: 2px;
+      font-size: 12px;
+      line-height: 1.25;
+    }
+    .rule-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .rule-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      width: max-content;
+      max-width: 100%;
+      padding: 4px 7px;
+      border: 1px solid rgba(79, 125, 123, .24);
+      border-radius: 6px;
+      background: rgba(208, 229, 237, .26);
+      color: var(--oracle-bark);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .rule-chip input {
+      width: 64px;
+      min-width: 0;
+      min-height: 28px;
+      padding: 3px 5px;
+      border-radius: 5px;
+      font-size: 12px;
+    }
+    .rule-note {
+      min-height: 48px;
+      margin-top: 8px;
+    }
+    .rule-summary-cell {
+      display: grid;
+      gap: 8px;
+      min-width: 220px;
+    }
+    .rule-brief {
+      color: var(--oracle-bark);
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .rule-action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .text-preview {
+      display: block;
+      max-width: 220px;
+      color: var(--brand-neutral);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .field-editor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 4px 0 6px;
+    }
+    .field-editor-grid label {
+      font-size: 13px;
+    }
+    .dialog-panel {
+      width: min(720px, calc(100vw - 32px));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0;
+      color: var(--ink);
+      background: #fff;
+      box-shadow: 0 28px 70px rgba(32, 30, 28, .24);
+    }
+    .dialog-panel::backdrop {
+      background: rgba(22, 21, 19, .46);
+    }
+    .dialog-body {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+    }
+    .dialog-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: start;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(246, 242, 238, .82);
+    }
+    .dialog-head h3 {
+      margin: 0;
+      color: var(--oracle-bark);
+      font-size: 20px;
+      line-height: 1.2;
+    }
+    .dialog-head p {
+      margin: 4px 0 0;
+      color: var(--brand-neutral);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .subtle-inline {
+      display: block;
+      margin-top: 4px;
+      color: var(--brand-neutral);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+      background: #fff;
+    }
+    th,
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 13px;
+    }
+    th {
+      color: var(--oracle-bark);
+      background: rgba(246, 221, 208, .26);
+      font-weight: 700;
+    }
+    td input,
+    td select,
+    td textarea {
+      min-width: 120px;
+      font-size: 13px;
+    }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 14px;
+    }
+    button,
+    .button-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 8px 12px;
+      border: 1px solid var(--oracle-red);
+      border-radius: 8px;
+      background: var(--oracle-red);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .secondary {
+      border-color: var(--line);
+      background: #fff;
+      color: var(--oracle-bark);
+    }
+    .danger {
+      border-color: #8f2f22;
+      background: #8f2f22;
+    }
+    .toast {
+      min-height: 22px;
+      color: var(--support);
+      font-weight: 700;
+    }
+    .audit-list {
+      display: grid;
+      gap: 8px;
+      max-height: 280px;
+      overflow: auto;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .audit-list li {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(208, 229, 237, .22);
+    }
+    .screen-lock {
+      display: none;
+      min-height: 100vh;
+      place-items: center;
+      padding: 24px;
+    }
+    .auth-panel {
+      width: min(460px, 100%);
+    }
+    .auth-panel form {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .login-message {
+      min-height: 22px;
+      color: var(--oracle-red);
+      font-weight: 700;
+    }
+    body.auth-blocked .admin-layout {
+      display: none;
+    }
+    body.auth-blocked .screen-lock {
+      display: grid;
+    }
+    @media (max-width: 920px) {
+      .admin-layout {
+        display: block;
+      }
+      .admin-rail {
+        position: static;
+        height: auto;
+      }
+      .admin-nav {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      }
+      .rail-actions {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-grid .wide {
+        grid-column: auto;
+      }
+      .editor-form-grid,
+      .editor-note-grid {
+        grid-template-columns: 1fr;
+      }
+      .page-head {
+        display: grid;
+      }
+    }
+  </style>
+</head>
+<body class="auth-blocked">
+  <section class="screen-lock">
+    <div class="panel auth-panel">
+      <h1>Admin Review Session</h1>
+      <p class="note">This static page stores review settings in this browser.</p>
+      <form id="login-form">
+        <label for="email">Email
+          <input id="email" name="email" type="email" autocomplete="username" value="livelabs-admin@oracle.com" required>
+        </label>
+        <div class="login-message" id="login-message" role="status" aria-live="polite"></div>
+        <div class="button-row">
+          <button type="submit">Start Session</button>
+          <a class="button-link secondary" href="../index.html">Back to Dashboard</a>
+        </div>
+      </form>
+    </div>
+  </section>
+  <div class="admin-layout">
+    <aside class="admin-rail">
+      <div class="brand">
+        <img src="../assets/images/oracle-logo-white.svg" alt="Oracle">
+        <span>LiveLabs Analytics</span>
+      </div>
+      <nav class="admin-nav" aria-label="Admin sections">
+        <a href="#settings">Settings</a>
+        <a href="#row-editor">Row Editor</a>
+        <a href="#audit">Audit</a>
+      </nav>
+      <div class="rail-actions" aria-label="Admin session actions">
+        <a class="rail-link" href="../index.html" title="Return to the analytics dashboard with the current saved admin settings.">Back To Dashboard</a>
+        <button class="rail-link" type="button" id="logout-button" title="End this cached admin session.">Sign Out</button>
+      </div>
+    </aside>
+    <main>
+      <header class="page-head">
+        <div>
+          <h1>Admin Panel</h1>
+          <p>Role-scoped controls for dashboard governance settings.</p>
+        </div>
+        <span class="session-pill" id="session-pill">Admin</span>
+      </header>
+
+      <section class="panel" aria-label="Admin status">
+        <div class="panel-head">
+          <h2>Settings Summary</h2>
+          <span>Local browser settings</span>
+        </div>
+        <div class="status-grid" id="status-grid"></div>
+      </section>
+
+      <section class="panel" id="settings">
+        <div class="panel-head">
+          <h2>Dashboard Settings</h2>
+          <span class="toast" id="save-status" aria-live="polite"></span>
+        </div>
+        <div class="panel-context">
+          <strong>Controls affect the browser view only.</strong>
+          <p>Choose which dashboard sections are visible during review. Source workshop and sprint data is not edited or deleted here.</p>
+        </div>
+        <div class="control-grid">
+          <input id="qa-exclusion-enabled" type="checkbox" hidden disabled>
+          <input id="detail-expansion-enabled" type="checkbox" hidden checked>
+          <select id="content-mode" hidden aria-hidden="true">
+            <option value="analyst">Analyst</option>
+            <option value="executive">Executive</option>
+          </select>
+        </div>
+        <h3 class="subsection-title">Visible Sections</h3>
+        <div class="control-grid" id="section-controls"></div>
+        <div class="button-row">
+          <button type="button" id="save-settings">Save Settings</button>
+          <button class="secondary" type="button" id="open-dashboard">Save and Open Dashboard</button>
+          <button class="secondary" type="button" id="export-settings">Export Settings</button>
+        </div>
+      </section>
+
+      <section class="panel" id="rules" hidden aria-hidden="true" data-release-paused="criteria-rules">
+        <div class="panel-head">
+          <h2>Criteria Rules</h2>
+          <span id="rule-count"></span>
+        </div>
+        <div class="panel-context">
+          <strong>Quantitative criteria only</strong>
+          <p>Each active enabled rule is evaluated as an OR condition against workshop and sprint metrics. QA Candidate Exclusion controls whether matching candidate rows are hidden from review counts; row overrides win for specific items.</p>
+        </div>
+        <div class="form-grid">
+          <label>Content Type
+            <select id="new-rule-content-type">
+              <option value="any">Workshop and sprint</option>
+              <option value="workshop">Workshop</option>
+              <option value="sprint">Sprint</option>
+            </select>
+          </label>
+          <label>Min Age Months
+            <input id="new-rule-min-age" type="number" min="0" step="1" placeholder="24">
+          </label>
+          <label>Min Stale Months
+            <input id="new-rule-min-stale" type="number" min="0" step="1" placeholder="12">
+          </label>
+          <label>Min Views 12m
+            <input id="new-rule-min-views-12m" type="number" min="0" step="1" placeholder="1000">
+          </label>
+          <label>Min Views 90d
+            <input id="new-rule-min-views-90d" type="number" min="0" step="1" placeholder="100">
+          </label>
+          <label>Min Score
+            <input id="new-rule-min-score" type="number" min="0" max="100" step="0.01" placeholder="70">
+          </label>
+          <label>Rule Status
+            <select id="new-rule-status">
+              <option value="pending">Pending manager review</option>
+              <option value="active">Active</option>
+              <option value="disabled">Disabled</option>
+            </select>
+          </label>
+          <label>Rule Label
+            <input id="new-rule-label" type="text" placeholder="Stable process content">
+          </label>
+          <label class="wide">Review Note
+            <textarea id="new-rule-note" placeholder="Reason for this rule"></textarea>
+          </label>
+          <div>
+            <button type="button" id="add-rule">Add Rule</button>
+          </div>
+        </div>
+        <div class="table-wrap" style="margin-top:14px">
+          <table>
+            <thead>
+              <tr>
+                <th>Enabled</th>
+                <th>Rule Label</th>
+                <th>Criteria</th>
+                <th>Rule Status</th>
+                <th>Review Note</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="rules-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel" id="row-editor">
+        <div class="panel-head">
+          <h2>Row Search And Editor</h2>
+          <span id="override-count"></span>
+        </div>
+        <div class="panel-context">
+          <strong>Use row overrides for specific workshops or sprints.</strong>
+          <p>Search, select one result, adjust the fields that need review, and save. QA Excluded adds a badge only; it does not hide the row or change counts.</p>
+        </div>
+        <div class="form-grid">
+          <label class="wide">Search Workshop Or Sprint
+            <input id="row-search-query" type="search" placeholder="Search title, WMS ID, LiveLabs ID, category, or owner">
+          </label>
+          <div>
+            <button type="button" id="row-search-button">Search</button>
+          </div>
+          <small id="row-search-status">Loading dashboard rows...</small>
+        </div>
+        <div class="search-results" id="row-search-results"></div>
+        <div class="row-editor-card" id="selected-row-editor" hidden>
+          <div class="selected-row-head">
+            <div>
+              <strong id="selected-row-title">No row selected</strong>
+              <span class="result-meta" id="selected-row-meta"></span>
+            </div>
+            <button class="secondary" type="button" id="close-row-editor">Close Selection</button>
+          </div>
+          <div class="row-editor-section">
+            <div class="editor-section-head">
+              <div>
+                <h3>Current Dashboard Values</h3>
+                <p>Reference values from the dashboard before any saved override is applied.</p>
+              </div>
+            </div>
+            <div class="row-summary-grid" id="selected-row-summary"></div>
+          </div>
+          <div class="row-editor-section is-primary">
+            <div class="editor-section-head">
+              <div>
+                <h3>Override Controls</h3>
+                <p>Use an ID when available. Title is a fallback for rows without IDs.</p>
+              </div>
+            </div>
+            <div class="editor-form-grid">
+              <label>Save Against
+                <select id="edit-override-target">
+                  <option value="livelabs_id">LiveLabs ID</option>
+                  <option value="wms_id">WMS ID</option>
+                  <option value="title">Title</option>
+                </select>
+              </label>
+              <label>Match Value
+                <input id="edit-override-value" type="text" placeholder="Example: 582">
+              </label>
+              <label>Row Review Status
+                <select id="edit-override-status">
+                  <option value="manager_review">Manager review</option>
+                  <option value="keep_active">Keep active</option>
+                  <option value="retire_candidate">Retire candidate</option>
+                  <option value="refresh_candidate">Refresh candidate</option>
+                  <option value="archived">Archived</option>
+                </select>
+              </label>
+              <label class="control check-row compact-check">
+                <input id="edit-override-qa-excluded" type="checkbox">
+                <span><span class="control-title">QA Excluded</span><span class="field-note">Badge only</span></span>
+              </label>
+            </div>
+          </div>
+          <div class="row-editor-section">
+            <div class="editor-section-head">
+              <div>
+                <h3>Editable Fields</h3>
+                <p>Change only the values that need a review override.</p>
+              </div>
+            </div>
+            <div class="field-editor-grid" id="selected-row-field-editor"></div>
+          </div>
+          <div class="row-editor-section">
+            <div class="editor-note-grid">
+              <label>Review Note
+                <textarea id="edit-override-note" placeholder="Reason for this row decision"></textarea>
+              </label>
+              <button type="button" id="save-row-override">Save Row Override</button>
+            </div>
+          </div>
+        </div>
+        <h3 class="subsection-title">Saved Row Overrides</h3>
+        <div class="table-wrap" style="margin-top:14px">
+          <table>
+            <thead>
+              <tr>
+                <th>Enabled</th>
+                <th>Target</th>
+                <th>Value</th>
+                <th>Status</th>
+                <th>QA Excluded</th>
+                <th>Note</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="overrides-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel" id="audit">
+        <div class="panel-head">
+          <h2>Audit History</h2>
+          <button class="secondary" type="button" id="clear-audit">Clear Audit</button>
+        </div>
+        <div class="panel-context">
+          <strong>Local audit trail for this browser.</strong>
+          <p>The audit list records saved settings, rule changes, override changes, and exports so reviewers can understand what was changed during the session.</p>
+        </div>
+        <ul class="audit-list" id="audit-list"></ul>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="dialog-panel" id="rule-criteria-dialog">
+    <div class="dialog-head">
+      <div>
+        <h3>Edit Rule Criteria</h3>
+        <p id="rule-criteria-dialog-label">Quantitative thresholds</p>
+      </div>
+      <button class="secondary" type="button" data-close-dialog="rule-criteria-dialog">Close</button>
+    </div>
+    <div class="dialog-body">
+      <div class="form-grid">
+        <label>Content Type
+          <select id="dialog-rule-content-type">
+            <option value="any">Workshop and sprint</option>
+            <option value="workshop">Workshop</option>
+            <option value="sprint">Sprint</option>
+          </select>
+        </label>
+        <label>Min Age Months
+          <input id="dialog-rule-min-age" type="number" min="0" step="1" placeholder="24">
+        </label>
+        <label>Min Stale Months
+          <input id="dialog-rule-min-stale" type="number" min="0" step="1" placeholder="12">
+        </label>
+        <label>Min Views 12m
+          <input id="dialog-rule-min-views-12m" type="number" min="0" step="1" placeholder="1000">
+        </label>
+        <label>Min Views 90d
+          <input id="dialog-rule-min-views-90d" type="number" min="0" step="1" placeholder="100">
+        </label>
+        <label>Min Score
+          <input id="dialog-rule-min-score" type="number" min="0" max="100" step="0.01" placeholder="70">
+        </label>
+      </div>
+      <div class="button-row">
+        <button type="button" id="save-rule-criteria-dialog">Save Criteria</button>
+        <button class="secondary" type="button" data-close-dialog="rule-criteria-dialog">Exit</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="dialog-panel" id="rule-note-dialog">
+    <div class="dialog-head">
+      <div>
+        <h3>Edit Review Note</h3>
+        <p id="rule-note-dialog-label">Manager-facing rule note</p>
+      </div>
+      <button class="secondary" type="button" data-close-dialog="rule-note-dialog">Close</button>
+    </div>
+    <div class="dialog-body">
+      <label>Review Note
+        <textarea id="dialog-rule-note" placeholder="Why this rule exists and when it should be used"></textarea>
+      </label>
+      <div class="button-row">
+        <button type="button" id="save-rule-note-dialog">Save Note</button>
+        <button class="secondary" type="button" data-close-dialog="rule-note-dialog">Exit</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    const adminStorageKey = "livelabsAnalyticsAdminState";
+    const sessionKey = "livelabsAnalyticsSession";
+    const sessionDurationMs = 12 * 60 * 60 * 1000;
+    const adminStateSchemaVersion = 2;
+    const criteriaRuleAutomationPaused = true;
+    const accounts = [
+      { email: "livelabs-admin@oracle.com", name: "Portfolio Admin", role: "admin" }
+    ];
+    const defaultQaExceptionRules = [
+      {
+        criteria: {
+          contentTypes: ["workshop", "sprint"],
+          minAgeMonths: 24,
+          minScore: 70,
+          minStaleMonths: 12,
+          minViews12m: 1000,
+          minViews90d: 100
+        },
+        enabled: false,
+        id: "qa-high-demand-stale-older-content",
+        label: "High-demand stale older content",
+        note: "Quantitative review rule for older active content with stale update evidence and strong current demand. Keep pending until manager review.",
+        status: "pending",
+        type: "criteria",
+        value: ""
+      }
+    ];
+    const defaultSectionVisibility = {
+      topPerformers: true,
+      atRiskContent: true,
+      retireNowContent: true,
+      replacementSuggestions: true,
+      disabledContent: true,
+      portfolioStats: true
+    };
+    const sectionLabels = {
+      topPerformers: "Top Performers",
+      atRiskContent: "At-Risk Content",
+      retireNowContent: "Retire-Now Content",
+      replacementSuggestions: "Replacement Suggestions",
+      disabledContent: "Disabled Content",
+      portfolioStats: "Portfolio Stats"
+    };
+    const sectionHelp = {
+      topPerformers: "High-demand rows by workshop and sprint population.",
+      atRiskContent: "Review queue for active rows with refresh or retirement pressure.",
+      retireNowContent: "Rows with stronger retirement evidence that still require final confirmation.",
+      replacementSuggestions: "Best successor candidates for rows with replacement evidence.",
+      disabledContent: "Already disabled rows retained for audit and cleanup planning.",
+      portfolioStats: "Portfolio distribution summaries for governance context."
+    };
+    const defaultAdminState = {
+      auditTrail: [],
+      schemaVersion: adminStateSchemaVersion,
+      contentMode: "analyst",
+      detailExpansionEnabled: true,
+      qaExceptionExclusionEnabled: false,
+      qaExceptionRules: defaultQaExceptionRules,
+      qaExceptionTagEnabled: false,
+      rowOverrides: [],
+      sectionVisibility: defaultSectionVisibility
+    };
+    let state = readState();
+    let session = {};
+    let dashboardRecords = [];
+    let selectedRecord = null;
+    let activeRuleDialogId = "";
+    const rowEditableFields = [
+      { key: "title", label: "Title", recordKey: "title", placeholder: "Example: Load and Analyze Your Data" },
+      { key: "manager", label: "Owner / Manager", recordKey: "manager", placeholder: "Example: owner@oracle.com" },
+      { key: "wmsId", label: "WMS ID", recordKey: "wmsId", placeholder: "Example: 11048" },
+      { key: "livelabsId", label: "LiveLabs ID", recordKey: "livelabsId", placeholder: "Example: 582" },
+      { key: "category", label: "Category", recordKey: "category", placeholder: "Example: Database" },
+      { key: "contentKind", label: "Content Type", recordKey: "contentKind", placeholder: "Example: Workshop" },
+      { key: "views12m", label: "Views 12m", recordKey: "views12m", placeholder: "Example: 1200" },
+      { key: "views90d", label: "Views 90d", recordKey: "views90d", placeholder: "Example: 240" },
+      { key: "lastUpdate", label: "Last Update", recordKey: "lastUpdate", placeholder: "Example: 2025-10-22" },
+      { key: "publishDate", label: "Publish Date", recordKey: "publishDate", placeholder: "Example: 2023-05-15" },
+      { key: "monthsSinceUpdate", label: "Stale Months", recordKey: "monthsSinceUpdate", placeholder: "Example: 13" },
+      { key: "score", label: "Score", recordKey: "score", placeholder: "Example: 78.5" }
+    ];
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#x27;");
+    }
+    function escapeAttr(value) {
+      return escapeHtml(value);
+    }
+    function uid(prefix) {
+      return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
+    }
+    function normalizeText(value) {
+      return String(value || "")
+        .toLowerCase()
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim()
+        .replace(/\s+/g, " ");
+    }
+    function numberOrBlank(value) {
+      if (value === null || value === undefined || value === "") return "";
+      const parsed = Number(String(value).replace(/,/g, ""));
+      return Number.isFinite(parsed) ? parsed : "";
+    }
+    function sanitizeCriteria(rawCriteria = {}) {
+      const contentTypes = Array.isArray(rawCriteria.contentTypes)
+        ? rawCriteria.contentTypes.map((type) => normalizeText(type)).filter((type) => ["workshop", "sprint"].includes(type))
+        : [];
+      const criteria = { contentTypes: Array.from(new Set(contentTypes)) };
+      ["minAgeMonths", "minStaleMonths", "minViews12m", "minViews90d", "minScore"].forEach((key) => {
+        criteria[key] = numberOrBlank(rawCriteria[key]);
+      });
+      return criteria;
+    }
+    function criteriaHasValues(criteria = {}) {
+      return Boolean(
+        criteria.contentTypes?.length
+        || ["minAgeMonths", "minStaleMonths", "minViews12m", "minViews90d", "minScore"].some((key) => criteria[key] !== "" && criteria[key] !== null && criteria[key] !== undefined)
+      );
+    }
+    function isLegacyKeywordExceptionRule(rule) {
+      const id = String(rule?.id || "");
+      return id === "qa-stable-19c" || id === "qa-stable-23ai";
+    }
+    function readSession() {
+      try {
+        return JSON.parse(window.localStorage.getItem(sessionKey) || "{}");
+      } catch (error) {
+        return {};
+      }
+    }
+    function isAdminSessionActive(candidate) {
+      if (candidate?.role !== "admin") return false;
+      const expiresAt = Date.parse(candidate.expiresAt || "");
+      return !Number.isFinite(expiresAt) || expiresAt > Date.now();
+    }
+    function refreshAdminSession() {
+      const currentSession = readSession();
+      if (!isAdminSessionActive(currentSession)) {
+        if (currentSession?.role) window.localStorage.removeItem(sessionKey);
+        return {};
+      }
+      const refreshedSession = {
+        ...currentSession,
+        expiresAt: new Date(Date.now() + sessionDurationMs).toISOString(),
+        lastSeenAt: new Date().toISOString()
+      };
+      window.localStorage.setItem(sessionKey, JSON.stringify(refreshedSession));
+      return refreshedSession;
+    }
+    function writeSession(account) {
+      const now = new Date();
+      const newSession = {
+        email: account.email,
+        expiresAt: new Date(now.getTime() + sessionDurationMs).toISOString(),
+        loggedInAt: account.loggedInAt || now.toISOString(),
+        lastSeenAt: now.toISOString(),
+        name: account.name,
+        role: account.role
+      };
+      window.localStorage.setItem(sessionKey, JSON.stringify(newSession));
+      return newSession;
+    }
+    function sanitizeRule(rule, index) {
+      const fallback = defaultQaExceptionRules[index] || {};
+      const legacyKeywordRule = isLegacyKeywordExceptionRule(rule);
+      const type = rule?.type === "criteria" || rule?.criteria || fallback.type === "criteria" ? "criteria" : "target";
+      const criteria = sanitizeCriteria(rule?.criteria || fallback.criteria || {});
+      const value = String(rule?.value ?? fallback.value ?? "").trim();
+      return {
+        criteria,
+        enabled: legacyKeywordRule ? false : Boolean(rule?.enabled ?? fallback.enabled),
+        id: String(rule?.id || fallback.id || uid("qa-rule")),
+        label: String(rule?.label || fallback.label || value || "QA exception rule"),
+        note: String(rule?.note || fallback.note || ""),
+        status: legacyKeywordRule ? "disabled" : (["active", "pending", "disabled"].includes(rule?.status) ? rule.status : (fallback.status || "pending")),
+        target: ["keyword", "title", "wms_id", "livelabs_id"].includes(rule?.target) ? rule.target : (fallback.target || "keyword"),
+        type,
+        value
+      };
+    }
+    function sanitizeFieldEdits(fieldEdits = {}) {
+      const allowed = new Set(rowEditableFields.map((field) => field.key));
+      return Object.fromEntries(Object.entries(fieldEdits || {})
+        .filter(([key, value]) => allowed.has(key) && String(value ?? "").trim())
+        .map(([key, value]) => [key, String(value).trim()]));
+    }
+    function sanitizeOverride(override) {
+      const legacyQaStatus = override?.status === "qa_excluded";
+      const statusValues = ["pending", "approved", "archived", "manager_review", "keep_active", "retire_candidate", "refresh_candidate"];
+      const status = legacyQaStatus ? "manager_review" : (statusValues.includes(override?.status) ? override.status : "manager_review");
+      return {
+        enabled: override?.enabled !== false,
+        fieldEdits: sanitizeFieldEdits(override?.fieldEdits),
+        id: String(override?.id || uid("override")),
+        note: String(override?.note || ""),
+        qaExcluded: override?.qaExcluded === true || legacyQaStatus,
+        status,
+        target: ["title", "wms_id", "livelabs_id"].includes(override?.target) ? override.target : "wms_id",
+        value: String(override?.value || "").trim()
+      };
+    }
+    function sanitizeState(raw) {
+      const sectionVisibility = { ...defaultSectionVisibility, ...(raw?.sectionVisibility || {}) };
+      const rules = Array.isArray(raw?.qaExceptionRules) && raw.qaExceptionRules.length ? raw.qaExceptionRules : defaultQaExceptionRules;
+      const overrides = Array.isArray(raw?.rowOverrides) ? raw.rowOverrides : [];
+      const isCurrentSchema = Number(raw?.schemaVersion || 0) >= adminStateSchemaVersion;
+      return {
+        auditTrail: Array.isArray(raw?.auditTrail) ? raw.auditTrail.slice(0, 60) : [],
+        schemaVersion: adminStateSchemaVersion,
+        contentMode: "analyst",
+        detailExpansionEnabled: true,
+        qaExceptionExclusionEnabled: criteriaRuleAutomationPaused ? false : (isCurrentSchema ? raw?.qaExceptionExclusionEnabled === true : false),
+        qaExceptionRules: rules.map(sanitizeRule).filter((rule) => rule.type === "criteria" ? criteriaHasValues(rule.criteria) : rule.value),
+        qaExceptionTagEnabled: isCurrentSchema ? raw?.qaExceptionTagEnabled === true : false,
+        rowOverrides: overrides.map(sanitizeOverride).filter((override) => override.value),
+        sectionVisibility,
+        updatedAt: raw?.updatedAt || null,
+        updatedBy: raw?.updatedBy || null
+      };
+    }
+    function readState() {
+      try {
+        return sanitizeState(JSON.parse(window.localStorage.getItem(adminStorageKey) || "{}"));
+      } catch (error) {
+        return sanitizeState(defaultAdminState);
+      }
+    }
+    function audit(action) {
+      const entry = {
+        action,
+        at: new Date().toISOString(),
+        by: session?.email || "unknown"
+      };
+      state.auditTrail = [entry, ...(state.auditTrail || [])].slice(0, 60);
+    }
+    function writeState(action) {
+      if (action) audit(action);
+      state.schemaVersion = adminStateSchemaVersion;
+      state.updatedAt = new Date().toISOString();
+      state.updatedBy = session?.email || "unknown";
+      window.localStorage.setItem(adminStorageKey, JSON.stringify(state));
+      render();
+      const status = document.querySelector("#save-status");
+      if (status) {
+        status.textContent = "Saved";
+        window.setTimeout(() => { status.textContent = ""; }, 1800);
+      }
+    }
+    function requireAdmin() {
+      session = refreshAdminSession();
+      if (session?.role === "admin") {
+        document.body.classList.remove("auth-blocked");
+        return true;
+      }
+      document.body.classList.add("auth-blocked");
+      return false;
+    }
+    function handleLogin(event) {
+      event.preventDefault();
+      const message = document.querySelector("#login-message");
+      const email = document.querySelector("#email").value.trim().toLowerCase();
+      const account = accounts.find((item) => item.email === email);
+      if (!account) {
+        message.textContent = "Review account required.";
+        return;
+      }
+      if (account.role !== "admin") {
+        message.textContent = "Admin role required.";
+        return;
+      }
+      session = writeSession(account);
+      message.textContent = "";
+      document.body.classList.remove("auth-blocked");
+      render();
+    }
+    function syncStateFromControls() {
+      state.qaExceptionTagEnabled = false;
+      state.qaExceptionExclusionEnabled = criteriaRuleAutomationPaused ? false : document.querySelector("#qa-exclusion-enabled").checked;
+      state.detailExpansionEnabled = true;
+      state.contentMode = "analyst";
+      Object.keys(defaultSectionVisibility).forEach((key) => {
+        const control = document.querySelector(`[data-section-key="${key}"]`);
+        if (control) state.sectionVisibility[key] = control.checked;
+      });
+      state.qaExceptionRules = Array.from(document.querySelectorAll("[data-rule-id]")).map((row) => ({
+        criteria: {
+          contentTypes: row.querySelector("[data-rule-content-type]").value === "any" ? [] : [row.querySelector("[data-rule-content-type]").value],
+          minAgeMonths: numberOrBlank(row.querySelector("[data-rule-min-age]").value),
+          minScore: numberOrBlank(row.querySelector("[data-rule-min-score]").value),
+          minStaleMonths: numberOrBlank(row.querySelector("[data-rule-min-stale]").value),
+          minViews12m: numberOrBlank(row.querySelector("[data-rule-min-views-12m]").value),
+          minViews90d: numberOrBlank(row.querySelector("[data-rule-min-views-90d]").value)
+        },
+        enabled: row.querySelector("[data-rule-enabled]").checked,
+        id: row.dataset.ruleId,
+        label: row.querySelector("[data-rule-label]").value.trim(),
+        note: row.querySelector("[data-rule-note]").value.trim(),
+        status: row.querySelector("[data-rule-status]").value,
+        target: "criteria",
+        type: "criteria",
+        value: ""
+      })).filter((rule) => criteriaHasValues(rule.criteria));
+      state.rowOverrides = Array.from(document.querySelectorAll("[data-override-id]")).map((row) => {
+        const existing = state.rowOverrides.find((override) => override.id === row.dataset.overrideId) || {};
+        return {
+          enabled: row.querySelector("[data-override-enabled]").checked,
+          fieldEdits: sanitizeFieldEdits(existing.fieldEdits),
+          id: row.dataset.overrideId,
+          note: row.querySelector("[data-override-note]").value.trim(),
+          qaExcluded: row.querySelector("[data-override-qa-excluded]").checked,
+          status: row.querySelector("[data-override-status]").value,
+          target: row.querySelector("[data-override-target]").value,
+          value: row.querySelector("[data-override-value]").value.trim()
+        };
+      }).filter((override) => override.value);
+    }
+    function renderStatus() {
+      const hiddenSections = Object.values(state.sectionVisibility).filter((visible) => visible === false).length;
+      const activeOverrides = state.rowOverrides.filter((override) => override.enabled && override.status !== "archived").length;
+      const qaExcludedOverrides = state.rowOverrides.filter((override) => override.enabled && override.qaExcluded === true && override.status !== "archived").length;
+      document.querySelector("#status-grid").innerHTML = [
+        ["Active Overrides", activeOverrides],
+        ["QA Excluded Rows", qaExcludedOverrides],
+        ["Hidden Sections", hiddenSections]
+      ].map(([label, value]) => `<div class="status-card"><strong>${value}</strong><span>${label}</span></div>`).join("");
+    }
+    function renderSettings() {
+      document.querySelector("#qa-exclusion-enabled").checked = criteriaRuleAutomationPaused ? false : state.qaExceptionExclusionEnabled;
+      document.querySelector("#detail-expansion-enabled").checked = state.detailExpansionEnabled;
+      document.querySelector("#content-mode").value = state.contentMode;
+      document.querySelector("#section-controls").innerHTML = Object.entries(sectionLabels).map(([key, label]) => `
+        <label class="control check-row">
+          <input type="checkbox" data-section-key="${escapeAttr(key)}" ${state.sectionVisibility[key] !== false ? "checked" : ""}>
+          <span><span class="control-title">${escapeHtml(label)}</span><span class="field-note">${escapeHtml(sectionHelp[key] || "Show this dashboard section.")}</span></span>
+        </label>
+      `).join("");
+    }
+    function renderRules() {
+      document.querySelector("#rule-count").textContent = `${state.qaExceptionRules.length} rules`;
+      document.querySelector("#rules-body").innerHTML = state.qaExceptionRules.map((rule) => `
+        <tr data-rule-id="${escapeAttr(rule.id)}">
+          <td><input type="checkbox" data-rule-enabled ${rule.enabled ? "checked" : ""}></td>
+          <td><input data-rule-label type="text" value="${escapeAttr(rule.label)}"></td>
+          <td>
+            <div class="rule-summary-cell">
+              <span class="rule-brief">${escapeHtml(criteriaBrief(rule.criteria))}</span>
+              <span class="criteria-summary">${escapeHtml(criteriaSummary(rule.criteria))}</span>
+              <button class="secondary" type="button" data-edit-rule-criteria="${escapeAttr(rule.id)}">Edit Criteria</button>
+            </div>
+            <input type="hidden" data-rule-content-type value="${escapeAttr(rule.criteria?.contentTypes?.[0] || "any")}">
+            <input type="hidden" data-rule-min-age value="${escapeAttr(rule.criteria?.minAgeMonths ?? "")}">
+            <input type="hidden" data-rule-min-stale value="${escapeAttr(rule.criteria?.minStaleMonths ?? "")}">
+            <input type="hidden" data-rule-min-views-12m value="${escapeAttr(rule.criteria?.minViews12m ?? "")}">
+            <input type="hidden" data-rule-min-views-90d value="${escapeAttr(rule.criteria?.minViews90d ?? "")}">
+            <input type="hidden" data-rule-min-score value="${escapeAttr(rule.criteria?.minScore ?? "")}">
+          </td>
+          <td>${statusSelect("data-rule-status", rule.status, ["active", "pending", "disabled"])}</td>
+          <td>
+            <span class="text-preview">${escapeHtml(notePreview(rule.note))}</span>
+            <button class="secondary" type="button" data-edit-rule-note="${escapeAttr(rule.id)}">Edit Note</button>
+            <textarea class="rule-note" data-rule-note hidden>${escapeHtml(rule.note)}</textarea>
+          </td>
+          <td>
+            <div class="rule-action-row">
+              <button type="button" data-save-rule="${escapeAttr(rule.id)}">Save</button>
+              <button class="danger" type="button" data-delete-rule="${escapeAttr(rule.id)}">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+    function renderOverrides() {
+      document.querySelector("#override-count").textContent = `${state.rowOverrides.length} overrides`;
+      document.querySelector("#overrides-body").innerHTML = state.rowOverrides.map((override) => `
+        <tr data-override-id="${escapeAttr(override.id)}">
+          <td><input type="checkbox" data-override-enabled ${override.enabled ? "checked" : ""}></td>
+          <td>${targetSelect("data-override-target", override.target, ["wms_id", "livelabs_id", "title"])}</td>
+          <td><input data-override-value type="text" value="${escapeAttr(override.value)}"></td>
+          <td>${statusSelect("data-override-status", override.status, ["manager_review", "keep_active", "retire_candidate", "refresh_candidate", "archived"])}</td>
+          <td><input type="checkbox" data-override-qa-excluded ${override.qaExcluded ? "checked" : ""}></td>
+          <td><textarea data-override-note>${escapeHtml(override.note)}</textarea></td>
+          <td>
+            <div class="rule-action-row">
+              <button type="button" data-save-override="${escapeAttr(override.id)}">Save</button>
+              <button class="danger" type="button" data-delete-override="${escapeAttr(override.id)}">Delete</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+    }
+    function contentTypeSelect(attribute, selected) {
+      const values = ["any", "workshop", "sprint"];
+      return `<select ${attribute}>${values.map((value) => `<option value="${escapeAttr(value)}"${value === selected ? " selected" : ""}>${escapeHtml(value === "any" ? "Workshop and sprint" : formatOptionLabel(value))}</option>`).join("")}</select>`;
+    }
+    function criteriaChipInput(label, attribute, value, suffix) {
+      return `<label class="rule-chip">${escapeHtml(label)} >= <input ${attribute} type="number" min="0" step="1" value="${escapeAttr(value ?? "")}" aria-label="${escapeAttr(label)} minimum">${suffix ? `<span>${escapeHtml(suffix)}</span>` : ""}</label>`;
+    }
+    function criteriaBrief(criteria = {}) {
+      const content = criteria.contentTypes?.length
+        ? criteria.contentTypes.map(formatOptionLabel).join(" + ")
+        : "Workshop + sprint";
+      const thresholds = ["minAgeMonths", "minStaleMonths", "minViews12m", "minViews90d", "minScore"]
+        .filter((key) => criteria[key] !== "" && criteria[key] !== null && criteria[key] !== undefined).length;
+      return `${content}; ${thresholds || 0} threshold${thresholds === 1 ? "" : "s"}`;
+    }
+    function notePreview(note) {
+      const text = String(note || "").trim();
+      if (!text) return "No review note.";
+      return text.length > 86 ? `${text.slice(0, 83)}...` : text;
+    }
+    function criteriaSummary(criteria = {}) {
+      const parts = [];
+      if (criteria.contentTypes?.length) parts.push(`content: ${criteria.contentTypes.join(", ")}`);
+      if (criteria.minAgeMonths !== "") parts.push(`age >= ${criteria.minAgeMonths} months`);
+      if (criteria.minStaleMonths !== "") parts.push(`stale >= ${criteria.minStaleMonths} months`);
+      if (criteria.minViews12m !== "") parts.push(`views 12m >= ${criteria.minViews12m}`);
+      if (criteria.minViews90d !== "") parts.push(`views 90d >= ${criteria.minViews90d}`);
+      if (criteria.minScore !== "") parts.push(`score >= ${criteria.minScore}`);
+      return parts.length ? parts.join("; ") : "No numeric criteria set";
+    }
+    function formatOptionLabel(value) {
+      const label = String(value)
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (match) => match.toUpperCase());
+      return label
+        .replace(/\bQa\b/g, "QA")
+        .replace(/\bWms\b/g, "WMS")
+        .replace(/\bId\b/g, "ID");
+    }
+    function targetSelect(attribute, selected, values) {
+      return `<select ${attribute}>${values.map((value) => `<option value="${escapeAttr(value)}"${value === selected ? " selected" : ""}>${escapeHtml(formatOptionLabel(value))}</option>`).join("")}</select>`;
+    }
+    function statusSelect(attribute, selected, values) {
+      return `<select ${attribute}>${values.map((value) => `<option value="${escapeAttr(value)}"${value === selected ? " selected" : ""}>${escapeHtml(formatOptionLabel(value))}</option>`).join("")}</select>`;
+    }
+    function renderAudit() {
+      const items = state.auditTrail || [];
+      document.querySelector("#audit-list").innerHTML = items.length
+        ? items.map((entry) => `<li><strong>${escapeHtml(entry.action)}</strong><br><small>${escapeHtml(entry.at)} by ${escapeHtml(entry.by)}</small></li>`).join("")
+        : `<li>No audit events yet.</li>`;
+    }
+    function render() {
+      session = refreshAdminSession();
+      const sessionPill = document.querySelector("#session-pill");
+      sessionPill.textContent = `${session.name || "Admin"} | ${session.email || ""}`;
+      sessionPill.title = session.expiresAt
+        ? `Cached admin session active until ${new Date(session.expiresAt).toLocaleString()} unless you sign out.`
+        : "Cached admin session is active until sign out.";
+      renderStatus();
+      renderSettings();
+      renderRules();
+      renderOverrides();
+      renderSelectedRowEditor();
+      renderAudit();
+    }
+    function pickRecordValue(row, keys) {
+      for (const key of keys) {
+        const value = row?.[key];
+        if (value !== null && value !== undefined && value !== "") return value;
+      }
+      return "";
+    }
+    function recordKeyFor(record) {
+      return [record.wmsId, record.livelabsId, normalizeText(record.title)].join("|");
+    }
+    function formatRecordNumber(value) {
+      if (value === null || value === undefined || value === "") return "n/a";
+      const parsed = Number(value);
+      return Number.isFinite(parsed) ? parsed.toLocaleString() : String(value);
+    }
+    function recordFromDashboardRow(row, sourcePath) {
+      const title = String(pickRecordValue(row, ["title", "current_title", "workshop_title", "candidate_title"]) || "").trim();
+      if (!title) return null;
+      const record = {
+        category: pickRecordValue(row, ["category", "council"]),
+        contentKind: pickRecordValue(row, ["content_kind", "content_type", "type"]),
+        lastUpdate: pickRecordValue(row, ["last_meaningful_workshop_update_date", "latest_workshop_commit_date", "latest_markdown_commit_date", "latest_live_repo_commit_date"]),
+        livelabsId: String(pickRecordValue(row, ["livelabs_id", "current_livelabs_id", "candidate_livelabs_id"]) || "").trim(),
+        manager: pickRecordValue(row, ["manager_email", "owner_group", "stakeholder", "author_email"]),
+        monthsSinceUpdate: pickRecordValue(row, ["months_since_update", "months_since_last_update"]),
+        path: pickRecordValue(row, ["workshop_path", "manifest_path", "acknowledgement_source_file"]),
+        publishDate: pickRecordValue(row, ["publish_date_used", "first_workshop_file_commit_date"]),
+        raw: row,
+        score: pickRecordValue(row, ["best_performer_score", "retire_score", "score", "replacement_similarity_score"]),
+        sourcePath,
+        title,
+        views12m: pickRecordValue(row, ["recent_views_12m", "views_12m", "page_views_12m"]),
+        views90d: pickRecordValue(row, ["recent_views_90d", "views_90d", "page_views_90d"]),
+        wmsId: String(pickRecordValue(row, ["wms_id", "current_wms_id", "candidate_wms_id"]) || "").trim()
+      };
+      record.searchText = normalizeText(Object.values({
+        title: record.title,
+        category: record.category,
+        contentKind: record.contentKind,
+        livelabsId: record.livelabsId,
+        manager: record.manager,
+        path: record.path,
+        sourcePath: record.sourcePath,
+        wmsId: record.wmsId
+      }).join(" "));
+      return record;
+    }
+    function collectDashboardRecords(value, pathParts = [], output = []) {
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          if (item && typeof item === "object" && !Array.isArray(item)) {
+            const record = recordFromDashboardRow(item, pathParts.join("."));
+            if (record) output.push(record);
+          }
+        });
+        return output;
+      }
+      if (value && typeof value === "object") {
+        Object.entries(value).forEach(([key, child]) => collectDashboardRecords(child, [...pathParts, key], output));
+      }
+      return output;
+    }
+    async function loadDashboardRecords() {
+      const status = document.querySelector("#row-search-status");
+      try {
+        const response = await fetch("../dashboard_tables.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const payload = await response.json();
+        const found = collectDashboardRecords(payload);
+        const deduped = new Map();
+        found.forEach((record) => {
+          const key = recordKeyFor(record);
+          if (!deduped.has(key)) deduped.set(key, record);
+        });
+        dashboardRecords = Array.from(deduped.values()).sort((a, b) => a.title.localeCompare(b.title));
+        if (status) status.textContent = `${dashboardRecords.length.toLocaleString()} unique dashboard rows loaded.`;
+      } catch (error) {
+        dashboardRecords = [];
+        if (status) status.textContent = `Dashboard rows could not be loaded: ${error.message}`;
+      }
+    }
+    function recordMetaText(record) {
+      return [
+        record.contentKind || "Content",
+        record.wmsId ? `WMS ${record.wmsId}` : "",
+        record.livelabsId ? `LiveLabs ${record.livelabsId}` : "",
+        record.category || "",
+        record.views12m !== "" ? `12m ${formatRecordNumber(record.views12m)}` : "",
+        record.views90d !== "" ? `90d ${formatRecordNumber(record.views90d)}` : ""
+      ].filter(Boolean).join(" | ");
+    }
+    function renderSearchResults(records, message = "") {
+      const target = document.querySelector("#row-search-results");
+      if (!target) return;
+      if (message) {
+        target.innerHTML = `<small>${escapeHtml(message)}</small>`;
+        return;
+      }
+      target.innerHTML = records.map((record) => `
+        <button class="result-button" type="button" data-record-key="${escapeAttr(recordKeyFor(record))}">
+          <span><span class="result-title">${escapeHtml(record.title)}</span><span class="result-meta">${escapeHtml(recordMetaText(record))}</span></span>
+          <span class="result-meta">${escapeHtml(record.sourcePath || "dashboard")}</span>
+        </button>
+      `).join("");
+    }
+    function performRowSearch() {
+      const query = document.querySelector("#row-search-query").value.trim();
+      if (!query) {
+        renderSearchResults([], "Enter a title, WMS ID, LiveLabs ID, category, or owner.");
+        return;
+      }
+      const tokens = normalizeText(query).split(" ").filter(Boolean);
+      const matches = dashboardRecords
+        .filter((record) => tokens.every((token) => record.searchText.includes(token)))
+        .slice(0, 8);
+      renderSearchResults(matches, matches.length ? "" : "No matching dashboard rows found.");
+    }
+    function selectedValueForTarget(target, record = selectedRecord) {
+      if (!record) return "";
+      if (target === "livelabs_id") return record.livelabsId || "";
+      if (target === "wms_id") return record.wmsId || "";
+      return record.title || "";
+    }
+    function targetPlaceholder(target, selectedValue) {
+      if (selectedValue) return `Example: ${selectedValue}`;
+      const examples = {
+        livelabs_id: "Example: 582",
+        title: "Example: Load and Analyze Your Data",
+        wms_id: "Example: 11048"
+      };
+      return examples[target] || "Enter a value";
+    }
+    function overrideMatchesRecord(override, record = selectedRecord) {
+      if (!override || !record) return false;
+      return normalizeText(selectedValueForTarget(override.target, record)) === normalizeText(override.value);
+    }
+    function selectedRecordOverride() {
+      if (!selectedRecord) return null;
+      return state.rowOverrides.find((override) => overrideMatchesRecord(override, selectedRecord)) || null;
+    }
+    function fieldEditsFromEditor() {
+      return sanitizeFieldEdits(Object.fromEntries(Array.from(document.querySelectorAll("[data-row-field-edit]"))
+        .filter((input) => String(input.value ?? "").trim() !== String(input.dataset.rowFieldOriginal ?? "").trim())
+        .map((input) => [input.dataset.rowFieldEdit, input.value])));
+    }
+    function renderSelectedFieldEditor(existingOverride = selectedRecordOverride()) {
+      const mount = document.querySelector("#selected-row-field-editor");
+      if (!mount || !selectedRecord) return;
+      const fieldEdits = sanitizeFieldEdits(existingOverride?.fieldEdits);
+      mount.innerHTML = rowEditableFields.map((field) => {
+        const currentValue = selectedRecord[field.recordKey] ?? "";
+        const savedValue = fieldEdits[field.key] ?? currentValue;
+        return `
+          <label>${escapeHtml(field.label)}
+            <input data-row-field-edit="${escapeAttr(field.key)}" data-row-field-original="${escapeAttr(currentValue)}" type="text" value="${escapeAttr(savedValue)}" placeholder="${escapeAttr(field.placeholder)}">
+          </label>
+        `;
+      }).join("");
+    }
+    function syncSelectedMatchPlaceholder() {
+      const target = document.querySelector("#edit-override-target")?.value || "livelabs_id";
+      const input = document.querySelector("#edit-override-value");
+      const preview = document.querySelector("#edit-override-match-preview");
+      const selectedValue = selectedValueForTarget(target);
+      if (input) {
+        if (document.activeElement !== input) input.value = selectedValue;
+        input.dataset.defaultValue = selectedValue;
+        input.placeholder = targetPlaceholder(target, selectedValue);
+      }
+      if (preview) preview.textContent = selectedValue ? `Default ${formatOptionLabel(target)}: ${selectedValue}` : "No selected-row value available for this field.";
+    }
+    function selectDashboardRecord(key) {
+      selectedRecord = dashboardRecords.find((record) => recordKeyFor(record) === key) || null;
+      if (!selectedRecord) return;
+      const target = selectedRecord.livelabsId ? "livelabs_id" : selectedRecord.wmsId ? "wms_id" : "title";
+      document.querySelector("#edit-override-target").value = target;
+      document.querySelector("#edit-override-status").value = "manager_review";
+      document.querySelector("#edit-override-qa-excluded").checked = false;
+      document.querySelector("#edit-override-note").value = "";
+      document.querySelector("#row-search-results").innerHTML = "";
+      document.querySelector("#row-search-query").value = "";
+      renderSelectedRowEditor();
+      syncSelectedMatchPlaceholder();
+      const existing = selectedRecordOverride();
+      if (existing) {
+        document.querySelector("#edit-override-target").value = existing.target;
+        document.querySelector("#edit-override-value").value = existing.value;
+        document.querySelector("#edit-override-status").value = existing.status;
+        document.querySelector("#edit-override-qa-excluded").checked = existing.qaExcluded === true;
+        document.querySelector("#edit-override-note").value = existing.note || "";
+        renderSelectedFieldEditor(existing);
+        syncSelectedMatchPlaceholder();
+        document.querySelector("#edit-override-value").value = existing.value;
+      }
+      window.location.hash = "row-editor";
+    }
+    function renderSelectedRowEditor() {
+      const editor = document.querySelector("#selected-row-editor");
+      if (!editor) return;
+      editor.hidden = !selectedRecord;
+      if (!selectedRecord) return;
+      document.querySelector("#selected-row-title").textContent = selectedRecord.title;
+      document.querySelector("#selected-row-meta").textContent = recordMetaText(selectedRecord);
+      document.querySelector("#selected-row-summary").innerHTML = [
+        ["Content", selectedRecord.contentKind || "n/a"],
+        ["Category", selectedRecord.category || "n/a"],
+        ["Views 12m", formatRecordNumber(selectedRecord.views12m)],
+        ["Views 90d", formatRecordNumber(selectedRecord.views90d)],
+        ["Last Update", selectedRecord.lastUpdate || "n/a"],
+        ["Publish Date", selectedRecord.publishDate || "n/a"],
+        ["Stale Months", formatRecordNumber(selectedRecord.monthsSinceUpdate)],
+        ["Score", formatRecordNumber(selectedRecord.score)]
+      ].map(([label, value]) => `<div><strong>${escapeHtml(label)}</strong>${escapeHtml(value)}</div>`).join("");
+      renderSelectedFieldEditor();
+    }
+    function closeSelectedRowEditor() {
+      selectedRecord = null;
+      document.querySelector("#row-search-results").innerHTML = "";
+      document.querySelector("#row-search-query").value = "";
+      renderSelectedRowEditor();
+    }
+    function saveSelectedRowOverride() {
+      if (!selectedRecord) return;
+      syncStateFromControls();
+      const target = document.querySelector("#edit-override-target").value;
+      const valueInput = document.querySelector("#edit-override-value");
+      const value = valueInput.value.trim() || valueInput.dataset.defaultValue || selectedValueForTarget(target);
+      const status = document.querySelector("#edit-override-status").value;
+      if (!value) return;
+      const nextOverride = {
+        enabled: true,
+        fieldEdits: fieldEditsFromEditor(),
+        id: uid("override"),
+        note: document.querySelector("#edit-override-note").value.trim(),
+        qaExcluded: document.querySelector("#edit-override-qa-excluded").checked,
+        status,
+        target,
+        value
+      };
+      const existingIndex = state.rowOverrides.findIndex((override) => override.target === target && normalizeText(override.value) === normalizeText(value));
+      if (existingIndex >= 0) {
+        nextOverride.id = state.rowOverrides[existingIndex].id;
+        state.rowOverrides[existingIndex] = nextOverride;
+      } else {
+        state.rowOverrides.push(nextOverride);
+      }
+      writeState("Saved row editor override");
+    }
+    function addRule() {
+      syncStateFromControls();
+      const contentType = document.querySelector("#new-rule-content-type").value;
+      const criteria = {
+        contentTypes: contentType === "any" ? [] : [contentType],
+        minAgeMonths: numberOrBlank(document.querySelector("#new-rule-min-age").value),
+        minScore: numberOrBlank(document.querySelector("#new-rule-min-score").value),
+        minStaleMonths: numberOrBlank(document.querySelector("#new-rule-min-stale").value),
+        minViews12m: numberOrBlank(document.querySelector("#new-rule-min-views-12m").value),
+        minViews90d: numberOrBlank(document.querySelector("#new-rule-min-views-90d").value)
+      };
+      if (!criteriaHasValues(criteria)) return;
+      state.qaExceptionRules.push({
+        criteria,
+        enabled: false,
+        id: uid("qa-rule"),
+        label: document.querySelector("#new-rule-label").value.trim() || "Quantitative QA review rule",
+        note: document.querySelector("#new-rule-note").value.trim(),
+        status: document.querySelector("#new-rule-status").value,
+        target: "criteria",
+        type: "criteria",
+        value: ""
+      });
+      ["#new-rule-min-age", "#new-rule-min-stale", "#new-rule-min-views-12m", "#new-rule-min-views-90d", "#new-rule-min-score", "#new-rule-label", "#new-rule-note"].forEach((selector) => { document.querySelector(selector).value = ""; });
+      document.querySelector("#new-rule-content-type").value = "any";
+      document.querySelector("#new-rule-status").value = "pending";
+      writeState("Added quantitative QA rule");
+    }
+    function ruleById(id) {
+      return state.qaExceptionRules.find((rule) => rule.id === id) || null;
+    }
+    function openRuleCriteriaDialog(id) {
+      syncStateFromControls();
+      const rule = ruleById(id);
+      const dialog = document.querySelector("#rule-criteria-dialog");
+      if (!rule || !dialog) return;
+      activeRuleDialogId = id;
+      document.querySelector("#rule-criteria-dialog-label").textContent = rule.label || "Quantitative thresholds";
+      document.querySelector("#dialog-rule-content-type").value = rule.criteria?.contentTypes?.[0] || "any";
+      document.querySelector("#dialog-rule-min-age").value = rule.criteria?.minAgeMonths ?? "";
+      document.querySelector("#dialog-rule-min-stale").value = rule.criteria?.minStaleMonths ?? "";
+      document.querySelector("#dialog-rule-min-views-12m").value = rule.criteria?.minViews12m ?? "";
+      document.querySelector("#dialog-rule-min-views-90d").value = rule.criteria?.minViews90d ?? "";
+      document.querySelector("#dialog-rule-min-score").value = rule.criteria?.minScore ?? "";
+      dialog.showModal();
+    }
+    function saveRuleCriteriaDialog() {
+      if (!activeRuleDialogId) return;
+      syncStateFromControls();
+      const rule = ruleById(activeRuleDialogId);
+      if (!rule) return;
+      const contentType = document.querySelector("#dialog-rule-content-type").value;
+      rule.criteria = {
+        contentTypes: contentType === "any" ? [] : [contentType],
+        minAgeMonths: numberOrBlank(document.querySelector("#dialog-rule-min-age").value),
+        minScore: numberOrBlank(document.querySelector("#dialog-rule-min-score").value),
+        minStaleMonths: numberOrBlank(document.querySelector("#dialog-rule-min-stale").value),
+        minViews12m: numberOrBlank(document.querySelector("#dialog-rule-min-views-12m").value),
+        minViews90d: numberOrBlank(document.querySelector("#dialog-rule-min-views-90d").value)
+      };
+      document.querySelector("#rule-criteria-dialog")?.close();
+      writeState("Saved rule criteria");
+    }
+    function openRuleNoteDialog(id) {
+      syncStateFromControls();
+      const rule = ruleById(id);
+      const dialog = document.querySelector("#rule-note-dialog");
+      if (!rule || !dialog) return;
+      activeRuleDialogId = id;
+      document.querySelector("#rule-note-dialog-label").textContent = rule.label || "Review note";
+      document.querySelector("#dialog-rule-note").value = rule.note || "";
+      dialog.showModal();
+    }
+    function saveRuleNoteDialog() {
+      if (!activeRuleDialogId) return;
+      syncStateFromControls();
+      const rule = ruleById(activeRuleDialogId);
+      if (!rule) return;
+      rule.note = document.querySelector("#dialog-rule-note").value.trim();
+      document.querySelector("#rule-note-dialog")?.close();
+      writeState("Saved rule note");
+    }
+    function exportSettings() {
+      syncStateFromControls();
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "livelabs-analytics-admin-settings.json";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      writeState("Exported admin settings");
+    }
+    if (requireAdmin()) {
+      render();
+    }
+    document.querySelector("#save-settings").addEventListener("click", () => {
+      syncStateFromControls();
+      writeState("Saved dashboard settings");
+    });
+    document.querySelector("#open-dashboard").addEventListener("click", () => {
+      syncStateFromControls();
+      writeState("Saved settings and opened dashboard");
+      window.location.href = "../index.html";
+    });
+    document.querySelector("#export-settings").addEventListener("click", exportSettings);
+    document.querySelector("#add-rule").addEventListener("click", addRule);
+    document.querySelector("#row-search-button").addEventListener("click", performRowSearch);
+    document.querySelector("#row-search-query").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        performRowSearch();
+      }
+    });
+    document.querySelector("#row-search-results").addEventListener("click", (event) => {
+      const button = event.target?.closest?.("[data-record-key]");
+      if (!button) return;
+      selectDashboardRecord(button.dataset.recordKey);
+    });
+    document.querySelector("#edit-override-target").addEventListener("change", syncSelectedMatchPlaceholder);
+    document.querySelector("#close-row-editor").addEventListener("click", closeSelectedRowEditor);
+    document.querySelector("#save-row-override").addEventListener("click", saveSelectedRowOverride);
+    document.querySelector("#rules-body").addEventListener("click", (event) => {
+      const editCriteriaId = event.target?.dataset?.editRuleCriteria;
+      if (editCriteriaId) {
+        openRuleCriteriaDialog(editCriteriaId);
+        return;
+      }
+      const editNoteId = event.target?.dataset?.editRuleNote;
+      if (editNoteId) {
+        openRuleNoteDialog(editNoteId);
+        return;
+      }
+      const saveId = event.target?.dataset?.saveRule;
+      if (saveId) {
+        syncStateFromControls();
+        writeState("Saved QA exception rule");
+        return;
+      }
+      const id = event.target?.dataset?.deleteRule;
+      if (!id) return;
+      syncStateFromControls();
+      state.qaExceptionRules = state.qaExceptionRules.filter((rule) => rule.id !== id);
+      writeState("Deleted QA exception rule");
+    });
+    document.querySelector("#overrides-body").addEventListener("click", (event) => {
+      const saveId = event.target?.dataset?.saveOverride;
+      if (saveId) {
+        syncStateFromControls();
+        writeState("Saved row override");
+        return;
+      }
+      const id = event.target?.dataset?.deleteOverride;
+      if (!id) return;
+      syncStateFromControls();
+      state.rowOverrides = state.rowOverrides.filter((override) => override.id !== id);
+      writeState("Deleted row override");
+    });
+    document.querySelector("#save-rule-criteria-dialog").addEventListener("click", saveRuleCriteriaDialog);
+    document.querySelector("#save-rule-note-dialog").addEventListener("click", saveRuleNoteDialog);
+    document.querySelectorAll("[data-close-dialog]").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelector(`#${button.dataset.closeDialog}`)?.close();
+      });
+    });
+    document.querySelector("#clear-audit").addEventListener("click", () => {
+      state.auditTrail = [];
+      writeState("Cleared audit history");
+    });
+    document.querySelector("#logout-button").addEventListener("click", () => {
+      window.localStorage.removeItem(sessionKey);
+      window.location.href = "./";
+    });
+    document.querySelector("#login-form").addEventListener("submit", handleLogin);
+    loadDashboardRecords();
+  </script>
+</body>
+</html>

@@ -28,8 +28,13 @@ curl -fsSL -o "$ZIP_PATH" "$DOWNLOAD_URL"
 printf "Extracting package...\n"
 unzip -q -o "$ZIP_PATH" -d "$TEMP_DIR"
 
-# Locate app bundle in extracted payload
-APP_SOURCE=$(find "$TEMP_DIR" -maxdepth 4 -type d -name "$APP_BUNDLE" | head -n 1)
+# Locate the real app bundle in the extracted payload.
+# Exclude __MACOSX metadata stubs, which can masquerade as .app directories.
+APP_SOURCE=$(
+    find "$TEMP_DIR" \
+        -path '*/__MACOSX/*' -prune -o \
+        -type d -name "$APP_BUNDLE" -print | head -n 1
+)
 if [ -z "$APP_SOURCE" ]; then
     echo ""
     echo "ERROR: Could not find $APP_BUNDLE in downloaded archive."
@@ -38,13 +43,31 @@ if [ -z "$APP_SOURCE" ]; then
     exit 1
 fi
 
+APP_EXECUTABLE="$APP_SOURCE/Contents/MacOS/$APP_NAME"
+if [ ! -x "$APP_EXECUTABLE" ]; then
+    echo ""
+    echo "ERROR: Extracted app bundle is incomplete: $APP_SOURCE"
+    echo "Expected executable not found at: $APP_EXECUTABLE"
+    echo "The downloaded archive may be invalid or may contain metadata stubs instead of the real app."
+    echo ""
+    exit 1
+fi
+
 # Install to /Applications
 printf "Installing to %s...\n" "$INSTALL_DIR"
 rm -rf "$INSTALL_DIR/$APP_BUNDLE"
-cp -R "$APP_SOURCE" "$INSTALL_DIR/"
+ditto "$APP_SOURCE" "$INSTALL_DIR/$APP_BUNDLE"
 
 # Remove quarantine to reduce first-launch friction
 xattr -dr com.apple.quarantine "$INSTALL_DIR/$APP_BUNDLE" 2>/dev/null || true
+
+if ! codesign --verify --deep --strict "$INSTALL_DIR/$APP_BUNDLE" >/dev/null 2>&1; then
+    echo ""
+    echo "ERROR: Installed app failed code signature verification."
+    echo "The downloaded package may be corrupt."
+    echo ""
+    exit 1
+fi
 
 echo ""
 echo "$APP_NAME installed successfully to $INSTALL_DIR/$APP_BUNDLE"

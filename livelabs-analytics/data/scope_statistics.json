@@ -1,0 +1,12 @@
+{
+  "ranking_pool_counts": {
+    "workshop": 585,
+    "sprint": 300
+  },
+  "disabled_counts": {
+    "workshop": 392,
+    "sprint": 87
+  },
+  "event_count": 109,
+  "non_published_count": 40
+}

@@ -1,0 +1,27 @@
+﻿{
+    "workshoptitle":  "Publishing Compute Images to Oracle Marketplace",
+    "help":  "livelabs-help-license_us@oracle.com",
+    "tutorials":  [
+                      {
+                          "title":  "Lab 1: Create a Custom Compute Image for Marketplace",
+                          "description":  "This lab will show you how to create an OCI marketplace compute based artifact from your custom image, and use it to create a private listing on marketplace exclusively dedicated to your LiveLabs workshop.",
+                          "filename":  "./../../content/author-guide/7-labs-create-custom-image-for-marketplace/7-labs-create-custom-image-for-marketplace.md"
+                      },
+                      {
+                          "title":  "Lab 2: Publish Your Image to Oracle Marketplace",
+                          "description":  "This lab will show you how to publish your image to Oracle Marketplace.",
+                          "filename":  "./../../content/author-guide/8-labs-publish-custom-image-to-marketplace/8-labs-publish-custom-image-to-marketplace.md"
+                      },
+                      {
+                          "title":  "Lab 3: Update the Image on Your Sandbox Environment",
+                          "description":  "This lab will show you how to get your new Marketplace image added to your LiveLab.",
+                          "filename":  "./../../content/author-guide/12-add-custom-image-to-workshop/12-add-custom-image-to-workshop.md"
+                      },
+                      {
+                          "title":  "Need Help?",
+                          "description":  "Solutions to Common Problems and Directions for Receiving Live Help",
+                          "filename":  "https://oracle-livelabs.github.io/common/labs/need-help/need-help-freetier.md"
+                      }
+                  ]
+}
+

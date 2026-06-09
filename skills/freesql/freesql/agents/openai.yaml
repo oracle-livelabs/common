@@ -1,0 +1,4 @@
+interface:
+  display_name: "FreeSQL"
+  short_description: "Run and share code on FreeSQL"
+  default_prompt: "Use $freesql to work on freesql.com, run SQL or PL/SQL with screenshots, and extract share or embed code."

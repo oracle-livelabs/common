@@ -1,0 +1,7 @@
+interface:
+  display_name: "Outbound Content Rules"
+  short_description: "Team rules for concise outbound writing."
+  default_prompt: "Use $outbound-content-rules to draft, revise, or grade this content for concise, active, defensible messaging."
+
+policy:
+  allow_implicit_invocation: true
