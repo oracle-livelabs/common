@@ -1,0 +1,4 @@
+interface:
+  display_name: "Workshop Validator"
+  short_description: "Validate LiveLabs workshop structure, manifests, markdown, and prose"
+  default_prompt: "Use $workshop-validator to validate a LiveLabs workshop root and produce VALIDATION-RESULT.md with structure, manifest, markdown, and prose findings."

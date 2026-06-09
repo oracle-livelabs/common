@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LiveLabs Author Skill 26.5.2 Explainer</title>
+  <style>
+    :root {
+      --redwood-red: #c74634;
+      --redwood-red-dark: #8f2c22;
+      --redwood-brown: #312d2a;
+      --redwood-brown-2: #16120f;
+      --redwood-cream: #f7f3ef;
+      --redwood-cream-2: #fbf9f7;
+      --redwood-sand: #e8e1db;
+      --redwood-sand-2: #d6ccc3;
+      --redwood-ochre: #8a5a18;
+      --redwood-blue: #22586b;
+      --ink: #1f1b18;
+      --ink-2: #4e4741;
+      --muted: #756a61;
+      --white: #ffffff;
+      --dark-panel: #241f1b;
+      --dark-panel-2: #302a25;
+      --max: 1500px;
+    }
+
+    * { box-sizing: border-box; border-radius: 0 !important; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: "Oracle Sans", "Helvetica Neue", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(199, 70, 52, 0.04) 0 1px, transparent 1px 100%),
+        radial-gradient(circle at 8% 0%, rgba(199, 70, 52, 0.12), transparent 28%),
+        linear-gradient(180deg, #fbf7f3 0%, #eee7e0 72%, #e3dbd3 100%);
+      background-size: 34px 34px, auto, auto;
+      line-height: 1.42;
+    }
+    a { color: inherit; text-decoration: none; }
+    code, pre { font-family: "Oracle Mono", "SFMono-Regular", Consolas, monospace; }
+
+    .page-shell {
+      width: min(var(--max), calc(100vw - 32px));
+      margin: 22px auto 40px;
+      border-top: 2px solid var(--ink);
+    }
+
+    .oj-web-applayout-header {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      border-bottom: 1px solid var(--ink);
+      background: rgba(251, 248, 245, 0.86);
+      padding: 0 2px 0 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+    }
+    .bars { display: flex; gap: 3px; height: 12px; align-items: stretch; }
+    .bars span { display: block; width: 14px; background: var(--redwood-red); }
+    .bars span:nth-child(2) { background: var(--redwood-red-dark); }
+    .bars span:nth-child(3) { background: var(--ink); width: 18px; }
+    .tagline {
+      color: #746960;
+      font-size: 10px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .top-layout {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr) 430px;
+      gap: 18px;
+      padding-top: 18px;
+      align-items: stretch;
+    }
+    .sidebar {
+      background: rgba(255,255,255,.75);
+      border: 1px solid var(--redwood-sand-2);
+      padding: 18px;
+      height: 100%;
+      min-height: 360px;
+      box-shadow: 0 18px 36px rgba(31, 27, 24, .06);
+    }
+    .sidebar-title {
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: #5b524b;
+      margin-bottom: 12px;
+    }
+    .nav-item {
+      display: block;
+      background: #ebe6e1;
+      color: var(--ink);
+      padding: 10px 13px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      border-left: 0 solid transparent;
+    }
+    .nav-item.active, .nav-item:hover {
+      background: #ded7d0;
+      border-left: 4px solid var(--redwood-red);
+      padding-left: 9px;
+    }
+    .sidebar-note {
+      margin-top: 16px;
+      background: #fff7f4;
+      border-left: 4px solid var(--redwood-red);
+      padding: 12px 12px 13px;
+      font-size: 12px;
+      color: var(--ink-2);
+    }
+    .sidebar-note strong { display: block; color: var(--ink); margin-bottom: 5px; }
+
+    .hero {
+      background: rgba(255,255,255,.84);
+      border: 1px solid var(--redwood-sand-2);
+      border-top: 5px solid var(--redwood-red);
+      padding: 24px 28px;
+      box-shadow: 0 18px 36px rgba(31, 27, 24, .06);
+      min-height: 360px;
+    }
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: #746960;
+      margin-bottom: 12px;
+    }
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(42px, 4.4vw, 62px);
+      line-height: .91;
+      letter-spacing: -.064em;
+      max-width: 760px;
+    }
+    .lede {
+      max-width: 820px;
+      margin: 0;
+      color: #342f2a;
+      font-size: 15.5px;
+      line-height: 1.55;
+    }
+    .lede strong { font-weight: 900; }
+    .hero-cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .mini-card {
+      border: 1px solid var(--redwood-sand-2);
+      border-top: 3px solid var(--redwood-red);
+      background: #fbf9f7;
+      padding: 12px 12px 13px;
+      min-height: 122px;
+    }
+    .mini-card .label {
+      font-size: 9px;
+      color: #7c7067;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-bottom: 9px;
+    }
+    .mini-card h2 {
+      font-size: 21px;
+      line-height: .98;
+      letter-spacing: -.045em;
+      margin: 0 0 7px;
+    }
+    .mini-card p {
+      margin: 0;
+      font-size: 11.5px;
+      color: var(--ink-2);
+      line-height: 1.38;
+    }
+
+    .right-panel {
+      background: var(--redwood-brown-2);
+      color: #fff;
+      border-left: 6px solid var(--redwood-red);
+      padding: 24px;
+      box-shadow: 0 18px 36px rgba(31, 27, 24, .18);
+      min-height: 360px;
+    }
+    .insight {
+      border: 1px solid rgba(255,255,255,.18);
+      background: var(--dark-panel);
+      padding: 15px 16px;
+      margin-bottom: 14px;
+    }
+    .insight:last-child { margin-bottom: 0; }
+    .dark-label {
+      display: inline-block;
+      color: #ffc7bd;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-bottom: 9px;
+    }
+    .insight h2 { margin: 0 0 8px; font-size: 20px; letter-spacing: -.02em; }
+    .insight p, .insight li { font-size: 12.8px; line-height: 1.43; color: #efe7df; }
+    .insight p { margin: 0; }
+    .insight ul { margin: 0; padding-left: 18px; }
+    .insight li { margin: 5px 0; }
+
+    main.detail { margin-top: 18px; }
+    section { scroll-margin-top: 24px; }
+    .section {
+      background: rgba(255,255,255,.86);
+      border: 1px solid var(--redwood-sand-2);
+      box-shadow: 0 16px 32px rgba(31, 27, 24, .055);
+      margin-bottom: 18px;
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 22px;
+      padding: 24px 26px 18px;
+      border-bottom: 1px solid var(--redwood-sand-2);
+      background: rgba(247, 243, 239, .84);
+    }
+    .section-kicker {
+      color: var(--redwood-red);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: 10px;
+      font-weight: 900;
+      padding-top: 9px;
+      border-top: 3px solid var(--redwood-red);
+    }
+    h2.section-title {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+    .section-intro {
+      color: var(--ink-2);
+      font-size: 16px;
+      max-width: 930px;
+      margin: 0;
+      line-height: 1.5;
+    }
+    .section-body { padding: 22px 26px 26px; }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .card {
+      background: #fff;
+      border: 1px solid var(--redwood-sand-2);
+      border-top: 4px solid var(--redwood-brown);
+      padding: 18px;
+      min-height: 168px;
+    }
+    .card.red { border-top-color: var(--redwood-red); }
+    .card.blue { border-top-color: var(--redwood-blue); }
+    .card.ochre { border-top-color: var(--redwood-ochre); }
+    .card h3 { margin: 0 0 9px; font-size: 22px; letter-spacing: -.026em; line-height: 1.05; }
+    .card p, .card li { color: var(--ink-2); font-size: 13.5px; line-height: 1.43; }
+    .card p { margin: 0; }
+    .card ul { margin: 0; padding-left: 18px; }
+    .tag {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 900;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(118px, 1fr));
+      gap: 1px;
+      background: var(--redwood-sand-2);
+      border: 1px solid var(--redwood-sand-2);
+      overflow-x: auto;
+    }
+    .step {
+      background: #fff;
+      padding: 14px 13px 15px;
+      min-height: 155px;
+    }
+    .step b { display: block; color: var(--redwood-red); font-size: 23px; margin-bottom: 6px; letter-spacing: -.05em; }
+    .step strong { display: block; color: var(--ink); font-size: 15px; line-height: 1.1; margin-bottom: 7px; }
+    .step span { display: block; color: var(--ink-2); font-size: 12px; line-height: 1.34; }
+
+    .mode-table, .script-table, .contract-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid var(--redwood-sand-2);
+    }
+    .mode-table th, .mode-table td,
+    .script-table th, .script-table td,
+    .contract-table th, .contract-table td {
+      text-align: left;
+      vertical-align: top;
+      padding: 13px 14px;
+      border-right: 1px solid var(--redwood-sand-2);
+      border-bottom: 1px solid var(--redwood-sand-2);
+      font-size: 13.3px;
+      line-height: 1.42;
+    }
+    .mode-table th, .script-table th, .contract-table th {
+      background: var(--redwood-brown);
+      color: #fff;
+      font-size: 10.5px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+    .mode-table td:first-child, .script-table td:first-child, .contract-table td:first-child {
+      font-weight: 900;
+      color: var(--redwood-red);
+      white-space: nowrap;
+    }
+    .script-table code {
+      font-size: 12px;
+      color: #352f2a;
+      background: #f5f0eb;
+      padding: 2px 4px;
+    }
+
+    .callout {
+      display: grid;
+      grid-template-columns: 10px 1fr;
+      background: #fff;
+      border: 1px solid var(--redwood-sand-2);
+      margin-top: 14px;
+    }
+    .callout .bar { background: var(--redwood-red); }
+    .callout .copy { padding: 16px 18px; }
+    .callout h3 { margin: 0 0 7px; font-size: 21px; letter-spacing: -.02em; }
+    .callout p { margin: 0; color: var(--ink-2); font-size: 13.5px; line-height: 1.45; }
+
+    .qa-list { counter-reset: qa; display: grid; gap: 10px; }
+    .qa-item {
+      counter-increment: qa;
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      background: #fff;
+      border: 1px solid var(--redwood-sand-2);
+      min-height: 78px;
+    }
+    .qa-item::before {
+      content: counter(qa, decimal-leading-zero);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--redwood-brown);
+      color: #fff;
+      font-weight: 900;
+      font-size: 16px;
+    }
+    .qa-copy { padding: 13px 15px; }
+    .qa-copy strong { display: block; margin-bottom: 3px; }
+    .qa-copy span { color: var(--ink-2); font-size: 13px; line-height: 1.38; }
+
+    pre {
+      margin: 0;
+      padding: 18px;
+      background: var(--redwood-brown-2);
+      color: #f8f1ea;
+      border-left: 5px solid var(--redwood-red);
+      overflow-x: auto;
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+
+    .footer {
+      margin-top: 18px;
+      background: var(--redwood-brown);
+      color: #f4eee8;
+      border-top: 5px solid var(--redwood-red);
+      padding: 22px 26px;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+    .footer span { color: #cec4bb; }
+
+    @media (max-width: 1260px) {
+      .top-layout { grid-template-columns: 230px 1fr; }
+      .right-panel { grid-column: 1 / -1; min-height: 0; }
+      .hero-cards, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 860px) {
+      .page-shell { width: calc(100vw - 18px); margin: 12px auto 28px; }
+      .oj-web-applayout-header { align-items: flex-start; flex-direction: column; padding: 10px 0; }
+      .tagline { white-space: normal; }
+      .top-layout, .section-head, .grid-2, .grid-3, .grid-4, .hero-cards { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .hero, .right-panel, .section-body, .section-head { padding: 20px; }
+      h1 { font-size: 40px; }
+      .workflow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body class="oj-web-applayout-page oj-typography-body-md">
+  <div class="page-shell">
+    <header class="oj-web-applayout-header">
+      <div class="brand">
+        <div class="bars" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div>LiveLabs Author Skill 26.5.2</div>
+      </div>
+      <div class="tagline">Self-contained workshop authoring skill for Oracle LiveLabs</div>
+    </header>
+
+    <div class="top-layout">
+      <nav class="sidebar oj-navigationlist" aria-label="On this page">
+        <div class="sidebar-title">On this page</div>
+        <a class="nav-item active" href="#summary">Summary</a>
+        <a class="nav-item" href="#purpose">What it does</a>
+        <a class="nav-item" href="#workflow">How it works</a>
+        <a class="nav-item" href="#modes">Modes</a>
+        <a class="nav-item" href="#structure">Workshop structure</a>
+        <a class="nav-item" href="#markdown">Markdown rules</a>
+        <a class="nav-item" href="#freesql">FreeSQL handling</a>
+        <a class="nav-item" href="#scripts">References and scripts</a>
+        <a class="nav-item" href="#qa">Validation and repair</a>
+        <a class="nav-item" href="#delivery">Delivery output</a>
+        <div class="sidebar-note"><strong>Compact top, detailed body.</strong> This version keeps the header and hero tight while preserving the important operational details below.</div>
+      </nav>
+
+      <section class="hero" id="summary">
+        <div class="eyebrow">Skill review</div>
+        <h1>What the LiveLabs Author skill does, and how it works end to end.</h1>
+        <p class="lede">The <strong>livelabs-author</strong> skill turns rough ideas, source documents, blogs, product pages, diagrams, sample SQL, notebooks, slide decks, and provided screenshots into a structured Oracle LiveLabs workshop package. It does more than write markdown: it helps choose an authoring mode, scaffold the workshop, create lab stubs, decide how FreeSQL should appear, validate structure, tighten prose, and return a delivery summary with traceability and QA.</p>
+        <div class="hero-cards" aria-label="Top summary cards">
+          <article class="mini-card"><div class="label">Primary goal</div><h2>Author</h2><p>Build or update LiveLabs workshops from source material rather than from a fully formed prior workshop.</p></article>
+          <article class="mini-card"><div class="label">Operating style</div><h2>Self-contained</h2><p>Bundled references, templates, and helper scripts keep the skill usable even when downloaded alone.</p></article>
+          <article class="mini-card"><div class="label">Quality posture</div><h2>Validator-aware</h2><p>Targets LiveLabs markdown constraints, manifests, traceability, prose tightening, and QA delivery.</p></article>
+          <article class="mini-card"><div class="label">Best use</div><h2>Workshop production</h2><p>Use it when you need a real workshop path, not just brainstorming or generic summarization.</p></article>
+        </div>
+      </section>
+
+      <aside class="right-panel" aria-label="Key takeaways">
+        <section class="insight">
+          <span class="dark-label">In one sentence</span>
+          <p><strong>Input + structure + evidence + QA + delivery.</strong></p>
+          <p style="margin-top:9px;">The skill is a workshop authoring pipeline that converts source material into a LiveLabs-ready lab structure, markdown labs, manifests, reusable metadata, validation results, and a packaged delivery summary.</p>
+        </section>
+        <section class="insight">
+          <span class="dark-label">Why 26.5.2 matters</span>
+          <ul>
+            <li>Explicit authoring modes</li>
+            <li>Bundled neutral starter template</li>
+            <li>Helper scripts for repetitive tasks</li>
+            <li>Traceability and fidelity checks</li>
+            <li>Final QA and delivery contract</li>
+          </ul>
+        </section>
+        <section class="insight">
+          <span class="dark-label">Important boundary</span>
+          <p>Version 26.5.2 intentionally removes screenshot capture and industry conversion responsibilities from the author skill. Use dedicated skills for those tasks when needed.</p>
+        </section>
+      </aside>
+    </div>
+
+    <main class="detail">
+      <section class="section" id="purpose">
+        <div class="section-head">
+          <div class="section-kicker">Skill purpose</div>
+          <div>
+            <h2 class="section-title">A workshop production system, not just a markdown generator.</h2>
+            <p class="section-intro">The skill creates or updates Oracle LiveLabs workshops from source-only inputs. A writable destination folder and credible source material are enough; a GitHub repository, existing workshop repository, or external sample checkout is not required.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="grid-3">
+            <article class="card red"><span class="tag">Input sources</span><h3>Starts with real evidence</h3><p>Ideas, blogs, product docs, web pages, diagrams, commands, screenshots supplied by the user, notebooks, decks, PowerPoint files, and sample SQL can all be used as source material.</p></article>
+            <article class="card blue"><span class="tag">Workshop blueprint</span><h3>Turns source into a learner journey</h3><p>The planning pass identifies learner outcomes, audience assumptions, environment needs, target duration, lab count, short and long descriptions, outline, ordered labs, and FreeSQL opportunities.</p></article>
+            <article class="card ochre"><span class="tag">Publish posture</span><h3>Moves toward review-ready output</h3><p>The workflow builds structure, authors labs, validates markdown, tightens language, checks renderer-sensitive patterns, and packages the result with QA status and unresolved SME gaps.</p></article>
+          </div>
+          <div class="callout"><div class="bar"></div><div class="copy"><h3>Core idea</h3><p>LiveLabs authoring succeeds when content is not only written, but structured, traceable, renderer-compatible, and easy for a reviewer to validate. This skill makes those steps explicit.</p></div></div>
+        </div>
+      </section>
+
+      <section class="section" id="workflow">
+        <div class="section-head">
+          <div class="section-kicker">End-to-end flow</div>
+          <div>
+            <h2 class="section-title">The eight-step workflow.</h2>
+            <p class="section-intro">The authoring process is intentionally staged. Scope and evidence come first, then structure, content, FreeSQL choices, manifest coverage, prose cleanup, validation, and final handoff.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="workflow" aria-label="Eight-step workflow">
+            <div class="step"><b>01</b><strong>Translate source</strong><span>Confirm duration, lab count, Oracle validation needs, audience, outcomes, prerequisites, descriptions, outline, tasks, and FreeSQL opportunities.</span></div>
+            <div class="step"><b>02</b><strong>Create skeleton</strong><span>Use the scaffold helper to generate the LiveLabs root layout, variant folders, loader-based index files, and starter manifests.</span></div>
+            <div class="step"><b>03</b><strong>Add lab stubs</strong><span>Create lab folders, image folders, required sections, and metadata stubs before drafting detailed instructions.</span></div>
+            <div class="step"><b>04</b><strong>Author labs</strong><span>Write task-focused markdown with required headings, objectives, estimated time, meaningful alt text, and acknowledgements.</span></div>
+            <div class="step"><b>05</b><strong>Add FreeSQL</strong><span>Use runnable SQL, PL/SQL, Quick SQL, or JavaScript only when it materially improves the learner experience.</span></div>
+            <div class="step"><b>06</b><strong>Build manifests</strong><span>Render or refresh manifest.json so the variant tutorial order and lab titles match the final workshop plan.</span></div>
+            <div class="step"><b>07</b><strong>Tighten prose</strong><span>Apply concise, factual writing guidance and remove filler, vague claims, and inflated AI-generated language.</span></div>
+            <div class="step"><b>08</b><strong>Validate and deliver</strong><span>Run QA, repair failures in priority order, self-grade the changed files, and return the delivery contract.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="modes">
+        <div class="section-head">
+          <div class="section-kicker">Modes</div>
+          <div>
+            <h2 class="section-title">Choose the authoring depth before drafting.</h2>
+            <p class="section-intro">The mode controls how complete and polished the output should be. Choosing it early prevents a quick skeleton from being mistaken for publish-ready material.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <table class="mode-table" aria-label="Authoring modes">
+            <thead><tr><th>Mode</th><th>Best fit</th><th>Expected result</th></tr></thead>
+            <tbody>
+              <tr><td>draft</td><td>Fastest path from source to a working markdown skeleton.</td><td>Initial workshop structure, starter lab content, visible gaps, and lower polish.</td></tr>
+              <tr><td>publish-ready</td><td>Complete workshop production with validation and cleanup.</td><td>Complete markdown, manifest coverage, FreeSQL decisions when relevant, QA pass, repairs, and delivery summary.</td></tr>
+              <tr><td>how-to-guide</td><td>A procedural workshop that teaches authors or operators how to build or publish something.</td><td>Clear steps, checkpoints, operational guidance, and author-oriented explanations.</td></tr>
+              <tr><td>fastlab</td><td>Narrow scope, fewer labs, tight setup, and short runtime.</td><td>Compressed lab flow with minimal setup and focused hands-on tasks.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="structure">
+        <div class="section-head">
+          <div class="section-kicker">Workshop structure</div>
+          <div>
+            <h2 class="section-title">It scaffolds a real LiveLabs layout.</h2>
+            <p class="section-intro">The skill expects lower-case folder and file names, loader-based index files, manifest coverage, lab folders, image folders, and reusable metadata that can be pasted into LiveLabs workshop details.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="grid-4">
+            <article class="card red"><span class="tag">Root</span><h3>Workshop root</h3><p>Contains the overall workshop structure, support files, details stub, traceability stub, and variant folders.</p></article>
+            <article class="card"><span class="tag">Variant</span><h3>workshops/&lt;variant&gt;</h3><p>Includes the loader-based <code>index.html</code> and <code>manifest.json</code> for the intended tutorial order.</p></article>
+            <article class="card blue"><span class="tag">Labs</span><h3>Lab folders</h3><p>Each lab has markdown, an images folder, required sections, and task-oriented content.</p></article>
+            <article class="card ochre"><span class="tag">Metadata</span><h3>Details and traceability</h3><p>Short description, long description, outline, prerequisites, and source mapping are captured for review and reuse.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="markdown">
+        <div class="section-head">
+          <div class="section-kicker">Markdown rules</div>
+          <div>
+            <h2 class="section-title">The lab markdown has a strict section contract.</h2>
+            <p class="section-intro">The skill writes for the LiveLabs renderer, not generic GitHub markdown. It prioritizes predictable headers, valid task formatting, safe image handling, and clean learner instructions.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="grid-2">
+            <div class="qa-list">
+              <div class="qa-item"><div class="qa-copy"><strong>One H1 first</strong><span>Each lab starts with one H1 as the first non-empty line.</span></div></div>
+              <div class="qa-item"><div class="qa-copy"><strong>Required sections</strong><span>Every lab includes Introduction, Objectives, an estimated time field, and Acknowledgements.</span></div></div>
+              <div class="qa-item"><div class="qa-copy"><strong>Task headers</strong><span>Guided steps use <code>## Task ...: ...</code> headers so the flow is renderer-friendly.</span></div></div>
+              <div class="qa-item"><div class="qa-copy"><strong>Nested indentation</strong><span>Nested text, images, lists, and code blocks inside numbered steps are indented by four spaces.</span></div></div>
+            </div>
+            <div class="qa-list">
+              <div class="qa-item"><div class="qa-copy"><strong>Image alt text</strong><span>Every image receives meaningful alt text and a valid path.</span></div></div>
+              <div class="qa-item"><div class="qa-copy"><strong>No invalid anchors</strong><span>The workflow avoids HTML anchors and embed syntax that breaks LiveLabs rendering.</span></div></div>
+              <div class="qa-item"><div class="qa-copy"><strong>Factual introductions</strong><span>Introductions focus on the learner problem, environment, and outcome, not the prompt or source article.</span></div></div>
+              <div class="qa-item"><div class="qa-copy"><strong>Concise language</strong><span>The skill cuts filler early and rewrites weak or inflated generated prose before delivery.</span></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="freesql">
+        <div class="section-head">
+          <div class="section-kicker">FreeSQL decisions</div>
+          <div>
+            <h2 class="section-title">FreeSQL appears only when it helps the learner.</h2>
+            <p class="section-intro">The skill can add runnable FreeSQL content, but it still chooses the right pattern. A plain code block, share link, button, or embedded editor should match the workshop goal and renderer constraints.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="grid-3">
+            <article class="card red"><span class="tag">Use FreeSQL for</span><h3>Runnable SQL tasks</h3><p>SQL, PL/SQL, Quick SQL, or JavaScript examples that materially help the learner can use FreeSQL affordances.</p></article>
+            <article class="card blue"><span class="tag">Default when embedded</span><h3>Iframe pattern</h3><p>If the user asks for inline, embedded, or in-frame FreeSQL and raw HTML is allowed, use the canonical <code>freesql-embed</code> iframe pattern.</p></article>
+            <article class="card ochre"><span class="tag">Do not overpromise</span><h3>Embedding caveat</h3><p>If FreeSQL does not support a task, such as vector embedding generation, the skill should warn and avoid presenting FreeSQL as the runnable environment.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="scripts">
+        <div class="section-head">
+          <div class="section-kicker">References and scripts</div>
+          <div>
+            <h2 class="section-title">The skill ships with its own production helpers.</h2>
+            <p class="section-intro">The bundled references and scripts are why the skill stays portable. They encode the repeatable steps for scaffolding, lab stubbing, manifests, FreeSQL snippets, and QA.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <table class="script-table" aria-label="Bundled helpers">
+            <thead><tr><th>Helper</th><th>Command or reference</th><th>What it does</th></tr></thead>
+            <tbody>
+              <tr><td>Setup</td><td><code>scripts/setup_or_upgrade_skill.sh</code></td><td>Marks the release as 26.5.2, scans for older installs, and supports upgrade or sharing workflows.</td></tr>
+              <tr><td>Scaffold</td><td><code>scripts/scaffold_workshop.sh</code></td><td>Creates a clean workshop scaffold with loader-based index files and starter manifests.</td></tr>
+              <tr><td>Preview smoke test</td><td><code>scripts/smoke_test_preview.sh</code></td><td>Confirms a generated workshop variant opens with the LiveLabs loader and starter manifest.</td></tr>
+              <tr><td>Lab stubs</td><td><code>scripts/create_lab_stub.sh</code></td><td>Creates lab folders, markdown stubs, required sections, and images folders.</td></tr>
+              <tr><td>Traceability</td><td><code>scripts/create_traceability_stub.sh</code></td><td>Creates a starter traceability file for source-backed workshops.</td></tr>
+              <tr><td>Workshop details</td><td><code>scripts/create_workshop_details_stub.sh</code></td><td>Captures reusable short description, long description, outline, and prerequisites.</td></tr>
+              <tr><td>Manifest</td><td><code>scripts/render_manifest.py</code></td><td>Builds or refreshes a manifest from the intended lab sequence.</td></tr>
+              <tr><td>FreeSQL</td><td><code>scripts/render_freesql_block.py</code></td><td>Renders FreeSQL link, button, or iframe blocks from a known share URL.</td></tr>
+              <tr><td>QA wrapper</td><td><code>scripts/run_workshop_qa.sh</code></td><td>Runs local workshop QA and summarizes the report path.</td></tr>
+              <tr><td>Validator</td><td><code>scripts/validate_workshop.py</code></td><td>Bundled workshop validator used by the QA wrapper unless <code>WORKSHOP_VALIDATOR</code> overrides it.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" id="qa">
+        <div class="section-head">
+          <div class="section-kicker">Validation and repair</div>
+          <div>
+            <h2 class="section-title">QA is ordered so the biggest failures are fixed first.</h2>
+            <p class="section-intro">The skill does not treat validation as an afterthought. It runs the QA wrapper, optionally targets edited files for faster iteration, and repairs failures in a specific priority order.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="grid-2">
+            <div>
+              <pre><code># Full workshop QA
+bash scripts/run_workshop_qa.sh &lt;workshop-root&gt;
+
+# Faster iteration on edited markdown only
+bash scripts/run_workshop_qa.sh &lt;workshop-root&gt; --files introduction/introduction.md lab-a/lab-a.md</code></pre>
+            </div>
+            <div class="qa-list">
+              <div class="qa-item"><div class="qa-copy"><strong>1. Structure first</strong><span>Fix missing required sections, headers, task formats, and ordered-list indentation before polishing content.</span></div></div>
+              <div class="qa-item"><div class="qa-copy"><strong>2. Renderer-sensitive items</strong><span>Repair image paths, alt text, naming, copy block balance, FreeSQL embeds, time fields, and acknowledgements.</span></div></div>
+              <div class="qa-item"><div class="qa-copy"><strong>3. Content quality</strong><span>Remove wordy prose, unsupported claims, and vague AI-generated language.</span></div></div>
+              <div class="qa-item"><div class="qa-copy"><strong>4. Preview failures</strong><span>Resolve bad loader pages, missing local assets, and broken relative paths that cause local preview issues.</span></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="delivery">
+        <div class="section-head">
+          <div class="section-kicker">Delivery contract</div>
+          <div>
+            <h2 class="section-title">The final response is explicit and reviewable.</h2>
+            <p class="section-intro">The skill returns paths, files, selected mode, metadata, QA status, self-grade, and unresolved SME gaps so the next reviewer knows exactly what was produced and what still needs attention.</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <table class="contract-table" aria-label="Delivery output contract">
+            <thead><tr><th>Output item</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>Workshop root path</td><td>Shows exactly where the generated or updated workshop lives.</td></tr>
+              <tr><td>Generated and updated files</td><td>Makes the changed artifact set reviewable.</td></tr>
+              <tr><td>Chosen mode</td><td>Clarifies whether the output is draft, publish-ready, how-to-guide, or fastlab.</td></tr>
+              <tr><td>Short and long descriptions</td><td>Provides reusable LiveLabs metadata without requiring the user to reconstruct it.</td></tr>
+              <tr><td>Workshop outline</td><td>Maps the final lab plan to the learner journey.</td></tr>
+              <tr><td>QA summary</td><td>Reports validation status, checks performed, and relevant repair notes.</td></tr>
+              <tr><td>Unresolved SME gaps</td><td>Separates authoring completeness from technical or product questions that still require expert review.</td></tr>
+              <tr><td>Self-grade</td><td>Calls out changed files below 4/5 instead of silently shipping weak prose.</td></tr>
+            </tbody>
+          </table>
+          <div class="callout"><div class="bar"></div><div class="copy"><h3>Bottom line</h3><p>Use <strong>livelabs-author 26.5.2</strong> when the goal is to turn raw source material into a structured, validator-aware, reviewable LiveLabs workshop package with clear handoff notes.</p></div></div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div><strong>LiveLabs Author Skill 26.5.2 Explainer</strong><br><span>Generated from livelabs-author/SKILL.md</span></div>
+        <div><span>Oracle Redwood / JET-inspired static HTML · square-edge layout · compact hero plus detailed body</span></div>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

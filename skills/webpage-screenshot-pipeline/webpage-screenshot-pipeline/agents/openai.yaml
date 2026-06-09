@@ -1,0 +1,4 @@
+interface:
+  display_name: "Webpage Screenshot Pipeline"
+  short_description: "Capture deterministic webpage screenshots"
+  default_prompt: "Use $webpage-screenshot-pipeline to capture desktop and mobile screenshots for https://example.com into output/screenshots/."

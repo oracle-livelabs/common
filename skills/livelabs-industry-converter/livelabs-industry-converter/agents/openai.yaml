@@ -1,0 +1,4 @@
+interface:
+  display_name: "LiveLabs Industry Converter"
+  short_description: "Convert a LiveLabs workshop to a target industry"
+  default_prompt: "Use $livelabs-industry-converter to convert this workshop to a target industry. I will provide the source workshop path, optional output path, and optional company name."

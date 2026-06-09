@@ -61,13 +61,6 @@ jobs:
             echo "One or more images exceed ${MAX}px."
             echo "Please fix this locally in your fork."
             echo ""
-            echo "Note: this script requires 'ffmpeg' to be installed on your system."
-            echo "  macOS (Homebrew): brew install ffmpeg"
-            echo "  Ubuntu/Debian:    sudo apt-get install ffmpeg"
-            echo ""
-            echo "From the root directory of your workshop (not the repo root!), run:"
-            echo "  ../_imgscript/resize-image.sh"
-            echo ""
-            echo "The script will only resize images whose width or height is greater than ${MAX}px."
+            echo "Please check documentation for more information..."
             exit 1
           fi

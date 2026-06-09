@@ -10,3 +10,7 @@ building-blocks/how-to-author-with-blocks/all-blocks-tasks.md
 /_scripts/__pycache__
 /_scripts/optishot/build
 /_scripts/optishot/dist
+/_scripts/fixomat/__pycache__
+/_scripts/fixomat/build
+/_scripts/fixomat/__pycache__
+/_scripts/fixomat/dist
