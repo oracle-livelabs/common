@@ -78,4 +78,4 @@ You may now **proceed to the next lab**.
     * Lauran K. Serhal, Consulting User Assistance Developer
     * Kay Malcolm, Database Product Management
 * **Contributors** - Kevin Lazarz, Rene Fontcha
-* **Last Updated By/Date:** Lauran K. Serhal, November 2025
+* **Last Updated By/Date:** Nechita C. Teodor, June 2026
