@@ -88,7 +88,7 @@ A LiveStack supports the inclusion of assets related to your LiveStack content, 
 
     ![Search for a LiveStack asset](images/add-asset-2.png " ")
 
-> NOTE: Only assets created by or shared with you will be listed.
+    > NOTE: Only assets created by or shared with you will be listed.
 
 3. To manually order the assets, you can update the position value here or physically reorder them in the report view by clicking and dragging.
 
