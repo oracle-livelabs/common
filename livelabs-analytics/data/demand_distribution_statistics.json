@@ -1,0 +1,50 @@
+[
+  {
+    "population": "Recent Views 7d",
+    "scope": "active_enabled_portfolio",
+    "records": 841,
+    "mean": 114.34,
+    "median": 24,
+    "std_dev": 297.82,
+    "min": 1,
+    "q1": 6,
+    "q3": 81,
+    "upper_bound": 193.5
+  },
+  {
+    "population": "Recent Views 30d",
+    "scope": "active_enabled_portfolio",
+    "records": 856,
+    "mean": 469.81,
+    "median": 97.5,
+    "std_dev": 1154.75,
+    "min": 1,
+    "q1": 21,
+    "q3": 367.5,
+    "upper_bound": 887.25
+  },
+  {
+    "population": "Recent Views 90d",
+    "scope": "active_enabled_portfolio",
+    "records": 862,
+    "mean": 1113,
+    "median": 264.5,
+    "std_dev": 2687.98,
+    "min": 1,
+    "q1": 104,
+    "q3": 868,
+    "upper_bound": 2014
+  },
+  {
+    "population": "Recent Views 12m",
+    "scope": "active_enabled_portfolio",
+    "records": 885,
+    "mean": 3479.55,
+    "median": 952,
+    "std_dev": 7575.38,
+    "min": 1,
+    "q1": 178,
+    "q3": 3493,
+    "upper_bound": 8465.5
+  }
+]

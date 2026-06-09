@@ -1,0 +1,4 @@
+interface:
+  display_name: "Richard Lanham Rewriter"
+  short_description: "Revise text using Lanham rigor."
+  default_prompt: "Rewrite with Paramedic Method and Lard Factor."

@@ -3,7 +3,7 @@
         "name":"Provision Oracle Autonomous AI Database",
         "description":"provision-body.md common task. Uses the Redwood UI. Use the `variables.json` file to update provisioning parameters, including database name, ECPUs, storage and more.",
         "author":"Lauran K. Serhal",
-        "lastUpdated":"October 2025"
+        "lastUpdated":"March 2026"
     }
 -->
 1. On the **Autonomous AI Databases** page, select your desired **region** and **compartment**. Click **Create Autonomous AI Database** to start the instance creation process. The **Create Autonomous AI Database Serverless** page is displayed.
@@ -80,7 +80,7 @@
         > **Note:** The password must meet the following requirements:    
             - Must be between 12 and 30 characters long and must include at least one uppercase letter, one lowercase letter, and one numeric character.    
             - Cannot contain the username.    
-            - Cannot contain the double quote (") character.    
+            - Cannot contain the double quote (") or the single quote (') character.    
             - Must be different from the last 4 passwords used.    
             - Must not be the same password that you set less than 24 hours ago.
 
@@ -100,7 +100,7 @@
 
 9. Click **Create**.
 
-10.  The **Autonomous AI Database details** page is displayed. The status of your ADB instance is **`Provisioning`**.
+10. The **Autonomous AI Database details** page is displayed. The status of your ADB instance is **`Provisioning`**.
 
    ![Database Provisioning message.](./images/adb-create-provisioning-message-new.png =75%x*)
 

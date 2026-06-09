@@ -1,0 +1,47 @@
+[
+  {
+    "content_kind": "sprint",
+    "band": "Stale: 12-18 months",
+    "count": 2
+  },
+  {
+    "content_kind": "sprint",
+    "band": "Stale: 18-24 months",
+    "count": 223
+  },
+  {
+    "content_kind": "sprint",
+    "band": "Stale: 24+ months",
+    "count": 5
+  },
+  {
+    "content_kind": "sprint",
+    "band": "Updated in last 12 months",
+    "count": 70
+  },
+  {
+    "content_kind": "workshop",
+    "band": "Missing update evidence",
+    "count": 10
+  },
+  {
+    "content_kind": "workshop",
+    "band": "Stale: 12-18 months",
+    "count": 101
+  },
+  {
+    "content_kind": "workshop",
+    "band": "Stale: 18-24 months",
+    "count": 250
+  },
+  {
+    "content_kind": "workshop",
+    "band": "Stale: 24+ months",
+    "count": 9
+  },
+  {
+    "content_kind": "workshop",
+    "band": "Updated in last 12 months",
+    "count": 215
+  }
+]

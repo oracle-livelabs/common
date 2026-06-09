@@ -1,0 +1,3283 @@
+@font-face {
+  font-family: "Oracle Sans";
+  src: url("../fonts/OracleSans_Rg.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Oracle Sans";
+  src: url("../fonts/OracleSans_SBd.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Oracle Sans";
+  src: url("../fonts/OracleSans_Bd.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+#app .brand-token {
+  margin-top: 0 !important;
+  align-self: center;
+}
+
+#app .nav-main-grid {
+  flex-wrap: wrap;
+}
+
+#app .hub-screen,
+#app .mode-screen {
+  padding-top: 2.75rem;
+}
+
+#app .mode-hero {
+  margin-bottom: 2rem;
+}
+
+#app .hero-title,
+#app .mode-title,
+#app .step-title,
+#app .guide-section-title {
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  font-size: clamp(2rem, 3vw, 2.7rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+#app .step-block-header h3,
+#app .snippet-card h3,
+#app .modal-panel h3,
+#app .detail-block-header h3 {
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+#app strong {
+  font-weight: 700;
+}
+
+#app .detail-field-value strong,
+#app .action-list strong,
+#app .check-list strong,
+#app .mistake-list strong {
+  font-weight: 600;
+}
+
+#app .step-meta-list {
+  list-style: disc;
+  padding-left: 1.2rem;
+  margin: 0.9rem 0 0;
+  display: grid;
+  gap: 0.4rem;
+  color: var(--ink);
+  line-height: 1.55;
+  text-align: left;
+}
+
+#app .bubble-item {
+  align-items: stretch;
+}
+
+#app .bubble-button {
+  overflow: hidden;
+  min-height: 15.5rem;
+  transition: none;
+}
+
+#app .bubble-button:hover,
+#app .bubble-button:focus-visible {
+  transform: none;
+  min-height: 15.5rem;
+  padding: 1.15rem 1.15rem 1.2rem;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.86),
+    0 20px 42px rgba(32, 30, 28, 0.08);
+}
+
+#app .home-mini-step:hover,
+#app .home-mini-step:focus-visible,
+#app .detail-resource-card:hover,
+#app .detail-field-card:hover,
+#app .detail-milestone-card:hover {
+  transform: none;
+  box-shadow: 0 18px 34px rgba(32, 30, 28, 0.12);
+}
+
+#app .detail-resource-card {
+  display: grid;
+  gap: 0.9rem;
+  align-content: space-between;
+  text-decoration: none;
+}
+
+#app .detail-resource-main {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+#app .detail-resource-number {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(199, 70, 52, 0.1);
+  color: var(--rose);
+  font-weight: 900;
+}
+
+#app .detail-resource-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+#app .detail-inline-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 0.4rem;
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+#app .copy-link-button {
+  padding: 0.45rem 0.75rem;
+}
+
+#app .install-figure {
+  margin: 1rem 0 1.1rem;
+}
+
+#app .install-card {
+  position: relative;
+  cursor: pointer;
+  padding-right: 3.25rem;
+}
+
+#app .install-card .detail-resource-main {
+  min-width: 0;
+}
+
+#app .install-card .detail-resource-main > span:last-child {
+  min-width: 0;
+  padding-right: 0.35rem;
+}
+
+#app .install-card::after {
+  content: "";
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  border: 1px solid rgba(76, 130, 92, 0.4);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+#app .install-card.is-complete {
+  border-color: rgba(76, 130, 92, 0.5);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 249, 245, 0.98));
+}
+
+#app .install-card.is-complete::after {
+  content: "\2713";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #4c825c;
+  color: #fff;
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+#app .command-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1rem;
+}
+
+#app .command-card {
+  height: 100%;
+}
+
+#app .command-card .card-body {
+  display: grid;
+  gap: 0.85rem;
+  align-content: start;
+  min-width: 0;
+}
+
+#app .snippet-description {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.58;
+}
+
+#app .preview-url-section {
+  display: grid;
+  gap: 1rem;
+  overflow: visible;
+}
+
+#app .preview-url-section .step-block-header {
+  margin-bottom: 0;
+}
+
+#app .preview-url-card {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+
+#app .preview-url-card pre {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre;
+  word-break: normal;
+}
+
+#app .result-line {
+  display: grid;
+  gap: 0.25rem;
+}
+
+#app .result-helper {
+  display: block;
+}
+
+#app .step-figure figcaption,
+#app .guide-figure figcaption,
+#app .modal-media-figure figcaption,
+#app .evidence-figure figcaption {
+  order: 0;
+}
+
+#app .step-figure img,
+#app .guide-figure img,
+#app .modal-media-figure img,
+#app .evidence-figure img {
+  order: 1;
+}
+
+#app .app-footer {
+  padding: 1.6rem 0 2rem;
+  color: var(--ink-soft);
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (max-width: 767.98px) {
+  #app .command-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Redwood alignment pass: keep the author guide close to the LiveLabs Analytics theme. */
+#app {
+  --oracle-red: #C74634;
+  --oracle-bark: #312D2A;
+  --brand-neutral: #7A736E;
+  --paper: #FFFFFF;
+  --page: #FBF9F7;
+  --beige: #E9E1CA;
+  --line: #D4CFCA;
+  --line-soft: rgba(49, 45, 42, 0.12);
+  --ink: #161513;
+  --ink-soft: var(--brand-neutral);
+  --rose: var(--oracle-red);
+  --sky: #4F7D7B;
+  --mint: #4C825C;
+  --gold: #AA643B;
+  --shadow-soft: none;
+  --shadow-deep: none;
+  color: var(--ink);
+  background: var(--page);
+}
+
+#app,
+#app * {
+  letter-spacing: 0 !important;
+}
+
+#app .app-shell {
+  background: var(--page);
+}
+
+#app * {
+  box-shadow: none !important;
+}
+
+#app .mode-nav {
+  padding: 0;
+  background: var(--oracle-bark);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+#app .mode-nav .container {
+  max-width: 1540px;
+}
+
+#app .nav-shell {
+  padding: 0.85rem 0;
+  border: 0;
+  border-radius: 0;
+  background: var(--oracle-bark);
+  color: #fff;
+  backdrop-filter: none;
+}
+
+#app .mode-nav .nav-main-grid {
+  align-items: center;
+}
+
+#app .mode-nav .nav-search-group {
+  display: grid;
+  grid-template-columns: minmax(15rem, 1fr) auto auto;
+  gap: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+#app .brand-token,
+#app .brand-label,
+#app .brand-token small {
+  color: #fff;
+}
+
+#app .brand-mark path {
+  fill: #fff;
+}
+
+#app .nav-control,
+#app .nav-guide-link,
+#app .tag-pill,
+#app .shortcut-chip,
+#app .search-group,
+#app .nav-search-group,
+#app .search-group .input-group-text,
+#app .search-group .form-control,
+#app .search-group .btn,
+#app .btn,
+#app .copy-snippet,
+#app .back-to-top,
+#app .mode-chip,
+#app .meta-pill,
+#app .stat-chip,
+#app .bubble-badge,
+#app .progress-button,
+#app .guide-quick-nav,
+#app .guide-quick-link,
+#app .guide-map-pill,
+#app .guide-highlight-chip,
+#app .guide-source-outline-link,
+#app .guide-source-panel-toggle,
+#app .guide-source-panel-label,
+#app .guide-source-panel-meta,
+#app .guide-source-expand-all {
+  border-radius: 8px !important;
+}
+
+#app .nav-control,
+#app .nav-guide-link,
+#app .mode-nav .search-group .input-group-text,
+#app .mode-nav .search-group .form-control,
+#app .mode-nav .search-group .btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+#app .mode-nav .nav-search-group .form-control {
+  min-height: 2.6rem;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
+}
+
+#app .mode-nav .nav-search-group .btn[type="submit"] {
+  background: var(--oracle-red) !important;
+  border-color: var(--oracle-red) !important;
+  color: #fff !important;
+}
+
+#app .mode-nav #navSearchClear {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  color: #fff !important;
+}
+
+#app .mode-nav .search-group .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+#app .nav-control:hover,
+#app .nav-guide-link:hover,
+#app .mode-nav .search-group .btn:hover,
+#app .nav-control:focus-visible,
+#app .nav-guide-link:focus-visible {
+  background: rgba(240, 204, 113, 0.16);
+  border-color: rgba(240, 204, 113, 0.56);
+  color: #fff;
+  transform: none;
+}
+
+#app .mode-nav .nav-search-group .btn[type="submit"]:hover,
+#app .mode-nav .nav-search-group .btn[type="submit"]:focus-visible {
+  background: #A43C2F !important;
+  border-color: #A43C2F !important;
+}
+
+#app .nav-control.is-active,
+#app .progress-button.is-active {
+  background: var(--oracle-red);
+  border-color: var(--oracle-red);
+  color: #fff;
+}
+
+#app .hub-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 310px;
+  padding: 3rem;
+  border: 0;
+  border-radius: 0;
+  color: #fff;
+  background:
+    linear-gradient(90deg, rgba(49, 45, 42, 0.96), rgba(49, 45, 42, 0.76) 56%, rgba(49, 45, 42, 0.42)),
+    url("../images/ill-abst-000109-16x9.png") center top / cover no-repeat;
+}
+
+#app .hub-hero::before {
+  display: none !important;
+}
+
+#app .hub-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  display: block !important;
+  width: auto;
+  height: 12px;
+  border-radius: 0;
+  background: url("../images/color-strip.png") center / cover no-repeat;
+  opacity: 1;
+  pointer-events: none;
+}
+
+#app .hub-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+#app .hub-hero .hero-title,
+#app .hub-hero .hero-lockup-label,
+#app .hub-hero .panel-kicker,
+#app .hub-hero .home-mini-step strong {
+  color: #fff;
+}
+
+#app .hub-hero .hero-lockup-note,
+#app .hub-hero .panel-copy,
+#app .hub-hero .home-mini-step span span,
+#app .hub-hero .home-mini-step small {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+#app .hub-hero .compact-panel,
+#app .hub-hero .home-mini-step {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+#app .hub-hero .home-mini-step:hover,
+#app .hub-hero .home-mini-step:focus-visible {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.42);
+}
+
+#app .hub-hero .btn-primary {
+  background: #fff;
+  border-color: #fff;
+  color: var(--oracle-bark);
+}
+
+#app .hub-hero .btn-outline-primary,
+#app .hub-hero .btn-outline-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.32);
+  color: #fff;
+}
+
+#app .hub-hero .btn-primary:hover,
+#app .hub-hero .btn-primary:focus-visible {
+  background: var(--beige);
+  border-color: var(--beige);
+  color: var(--oracle-bark);
+}
+
+#app .hub-hero .btn-outline-primary:hover,
+#app .hub-hero .btn-outline-secondary:hover,
+#app .hub-hero .btn-outline-primary:focus-visible,
+#app .hub-hero .btn-outline-secondary:focus-visible {
+  background: rgba(240, 204, 113, 0.16);
+  border-color: rgba(240, 204, 113, 0.56);
+  color: #fff;
+}
+
+#app .hub-hero .home-mini-number,
+#app .detail-resource-number,
+#app .step-orb,
+#app .guide-source-panel-icon,
+#app .back-to-top-icon {
+  border-radius: 6px;
+  background: var(--oracle-red);
+  color: #fff;
+}
+
+#app .hub-hero .home-mini-number {
+  background: rgba(240, 204, 113, 0.18);
+  color: #fff;
+}
+
+#app .mode-hero,
+#app .toolbar-card,
+#app .progress-card,
+#app .step-shell,
+#app .compact-panel,
+#app .content-card,
+#app .side-card,
+#app .snippet-card,
+#app .guide-panel,
+#app .modal-content,
+#app .step-mini-map,
+#app .scene-well,
+#app .guide-map-shell,
+#app .guide-sidebar-card,
+#app .guide-nav-link,
+#app .guide-section-card,
+#app .guide-source-toolbar,
+#app .guide-source-panel-card,
+#app .guide-source-error,
+#app .search-result-card,
+#app .search-empty-state,
+#app .modal-panel,
+#app .modal-media-card,
+#app .evidence-card,
+#app .home-toolkit-card,
+#app .detail-field-card,
+#app .detail-milestone-card,
+#app .detail-resource-card {
+  border: 1px solid var(--line-soft);
+  border-radius: 8px !important;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+#app .mode-hero,
+#app .toolbar-card,
+#app .step-shell,
+#app .guide-map-shell,
+#app .guide-sidebar-card {
+  border-top: 6px solid var(--oracle-red);
+}
+
+#app .mode-hero::before,
+#app .mode-hero::after,
+#app .garden-shell::before,
+#app .garden-shell::after,
+#app .rabbit-step::after,
+#app .step-shell::before,
+#app .step-shell::after,
+#app .path-card::after,
+#app .compact-panel::after,
+#app .home-side-card::after,
+#app .guide-map-shell::before,
+#app .guide-map-shell::after,
+#app .scene-well::before,
+#app .bubble-button::after {
+  display: none !important;
+}
+
+#app .btn-primary,
+#app .copy-snippet,
+#app .media-player-control.is-primary {
+  background: var(--oracle-red);
+  border-color: var(--oracle-red);
+  color: #fff;
+}
+
+#app .btn-primary:hover,
+#app .btn-primary:focus-visible,
+#app .copy-snippet:hover,
+#app .copy-snippet:focus-visible {
+  background: #A43C2F;
+  border-color: #A43C2F;
+  color: #fff;
+  transform: none;
+}
+
+#app .btn-outline-primary,
+#app .tag-pill.is-active,
+#app .progress-button.is-complete {
+  background: rgba(199, 70, 52, 0.08);
+  border-color: rgba(199, 70, 52, 0.42);
+  color: var(--oracle-red);
+}
+
+#app .btn-outline-secondary,
+#app .tag-pill,
+#app .shortcut-chip,
+#app .search-group .input-group-text,
+#app .search-group .form-control,
+#app .search-group .btn,
+#app .copy-link-button,
+#app .guide-highlight-chip,
+#app .guide-source-outline-link,
+#app .guide-source-panel-toggle,
+#app .guide-quick-link,
+#app .guide-map-pill {
+  background: #fff;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+#app .btn-outline-primary:hover,
+#app .btn-outline-secondary:hover,
+#app .tag-pill:hover,
+#app .shortcut-chip:hover,
+#app .search-group .btn:hover,
+#app .guide-source-outline-link:hover,
+#app .guide-quick-link:hover,
+#app .copy-link-button:hover {
+  background: rgba(199, 70, 52, 0.06);
+  border-color: var(--oracle-red);
+  color: var(--oracle-red);
+  transform: none;
+}
+
+#app .home-mini-step,
+#app .detail-resource-card,
+#app .detail-field-card,
+#app .detail-milestone-card,
+#app .bubble-button,
+#app .guide-nav-link,
+#app .guide-quick-link,
+#app .guide-source-panel-toggle {
+  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+
+#app .home-mini-step:hover,
+#app .home-mini-step:focus-visible,
+#app .detail-resource-card:hover,
+#app .detail-field-card:hover,
+#app .detail-milestone-card:hover,
+#app .bubble-button:hover,
+#app .bubble-button:focus-visible,
+#app .guide-nav-link:hover,
+#app .guide-nav-link.is-active {
+  transform: none;
+  border-color: rgba(199, 70, 52, 0.42);
+}
+
+#app .bubble-button,
+#app .guide-nav-link,
+#app .guide-section-card,
+#app .guide-quick-link {
+  background: #fff;
+}
+
+#app .bubble-button::before,
+#app .guide-nav-link::before {
+  background: var(--accent-strong, var(--oracle-red));
+}
+
+#app .guide-nav-link.is-active,
+#app .guide-quick-link.is-active,
+#app .search-result-card::before {
+  border-color: rgba(199, 70, 52, 0.42);
+}
+
+#app .panel-kicker,
+#app .mode-overline,
+#app .modal-kicker,
+#app .step-kicker,
+#app .path-badge,
+#app .bubble-badge,
+#app .guide-source-panel-label,
+#app .guide-source-panel-meta {
+  border: 0;
+  background: transparent;
+  color: var(--oracle-red);
+  text-transform: uppercase;
+}
+
+#app pre,
+#app .guide-source-pre {
+  border-radius: 8px;
+  background: #201E1C;
+  color: #FBF9F7;
+}
+
+#app .media-player-card {
+  --player-panel: #fff;
+  --player-shadow: none;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #fff;
+}
+
+#app .media-player-card::before {
+  display: none;
+}
+
+#app .media-player-kicker,
+#app .media-player-rate,
+#app .media-player-transcript-panel,
+#app .media-player-chapter-list button {
+  border-radius: 8px;
+  background: #fff;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+#app .media-player-shell {
+  border-radius: 8px;
+  background: var(--oracle-bark);
+}
+
+#app .media-player-stage,
+#app .media-player-video {
+  border-radius: 8px;
+  background: #161513;
+}
+
+#app .media-player-stage {
+  background-image: none;
+}
+
+#app .media-player-stage::after {
+  display: none;
+}
+
+#app .media-player-control,
+#app .media-player-stage-toggle,
+#app .media-player-seek {
+  border-radius: 8px;
+}
+
+#app .media-player-seek {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+#app button:focus-visible,
+#app input:focus-visible,
+#app a:focus-visible,
+#app .nav-control:focus-visible,
+#app .progress-button:focus-visible,
+#app .bubble-button:focus-visible,
+#app .shortcut-chip:focus-visible {
+  outline: 3px solid rgba(199, 70, 52, 0.32);
+  outline-offset: 2px;
+}
+
+body.home-no-scroll {
+  overflow: hidden;
+}
+
+body.home-no-scroll #app,
+body.home-no-scroll #app .app-shell {
+  min-height: 100vh;
+}
+
+body.home-no-scroll #app .app-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+body.home-no-scroll #app .mode-nav,
+body.home-no-scroll #app .app-footer {
+  flex: 0 0 auto;
+}
+
+body.home-no-scroll #app #hub.hub-screen {
+  min-height: 0;
+  padding: clamp(0.55rem, 1.35vh, 1rem) clamp(0.8rem, 1.5vw, 1.45rem);
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+body.home-no-scroll #app #hub > .container {
+  width: 100%;
+  max-width: none;
+  min-height: 0;
+  padding: 0;
+  display: flex;
+}
+
+body.home-no-scroll #app .hub-hero {
+  width: 100%;
+  min-height: 0;
+  padding: clamp(1.25rem, 2.7vw, 2.35rem);
+  display: grid;
+  align-items: center;
+}
+
+body.home-no-scroll #app .hub-hero .row {
+  width: 100%;
+  min-height: 0;
+  align-items: center !important;
+}
+
+body.home-no-scroll #app #hub .hero-title {
+  max-width: 15ch;
+  font-size: clamp(2.35rem, 5.8vw, 5.2rem);
+}
+
+body.home-no-scroll #app .home-side-stack,
+body.home-no-scroll #app .home-side-card,
+body.home-no-scroll #app .home-mini-flow {
+  min-height: 0;
+}
+
+body.home-no-scroll #app .home-side-card {
+  padding: clamp(0.95rem, 1.7vw, 1.2rem);
+}
+
+body.home-no-scroll #app .home-mini-flow {
+  display: grid;
+  gap: clamp(0.45rem, 0.85vh, 0.62rem);
+}
+
+body.home-no-scroll #app .home-mini-step {
+  min-height: clamp(3.2rem, 7vh, 4.35rem);
+  padding: clamp(0.55rem, 1.1vh, 0.72rem) clamp(0.65rem, 1.1vw, 0.82rem);
+}
+
+body.home-no-scroll #app .app-footer {
+  padding: 0.58rem 1rem;
+  min-height: 2.5rem;
+}
+
+body.home-no-scroll #app .app-footer .container {
+  max-width: none;
+}
+
+@media (max-width: 991.98px), (max-height: 820px) {
+  body.home-no-scroll #app .mode-nav .nav-search-form {
+    display: none;
+  }
+
+  body.home-no-scroll #app .hub-hero {
+    padding: 0.9rem 1rem;
+  }
+
+  body.home-no-scroll #app #hub .hero-title {
+    font-size: clamp(2rem, 5vw, 3.35rem);
+  }
+
+  body.home-no-scroll #app .panel-copy {
+    display: none;
+  }
+
+  body.home-no-scroll #app .home-mini-step small {
+    display: none;
+  }
+
+  body.home-no-scroll #app .home-side-card {
+    gap: 0.55rem;
+    padding: 0.85rem;
+  }
+
+  body.home-no-scroll #app .home-mini-flow {
+    gap: 0.4rem;
+  }
+
+  body.home-no-scroll #app .home-mini-step {
+    min-height: 2.72rem;
+    padding: 0.42rem 0.58rem;
+  }
+
+  body.home-no-scroll #app .home-mini-number {
+    width: 1.65rem;
+    height: 1.65rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  #app .hub-hero {
+    padding: 2rem 1.25rem 2.4rem;
+  }
+
+  #app .mode-nav .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #app .mode-nav .nav-main-grid,
+  #app .mode-nav .nav-search-form {
+    width: 100%;
+  }
+
+  #app .mode-nav .nav-search-group {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+
+  #app .mode-nav .nav-search-group .form-control {
+    min-width: 0;
+  }
+
+  #app .nav-shell {
+    padding: 0.85rem 0;
+  }
+}
+
+/* Redwood Creator pass, 2026-05-25.
+   Uses the local redwood-creator package rules: Oracle Sans, Oracle Red/Bark,
+   neutral app surfaces, approved link color, and quiet JET-style controls. */
+#app[data-redwood-creator-pass="2026-05-25"] {
+  --oracle-red: #C74634;
+  --oracle-bark: #312D2A;
+  --brand-yellow: #F0CC71;
+  --brand-neutral: #7A736E;
+  --link-blue: #00688C;
+  --database-slate: #697778;
+  --finance-teal: #4F7D7B;
+  --oci-pine: #4C825C;
+  --scm-sienna: #AA643B;
+  --redwood-page: #FBF9F7;
+  --redwood-surface: #FFFFFF;
+  --redwood-border: rgba(49, 45, 42, 0.14);
+  --redwood-border-strong: rgba(49, 45, 42, 0.22);
+  --redwood-text: #161513;
+  --redwood-text-soft: #7A736E;
+  color: var(--redwood-text);
+  background: var(--redwood-page) !important;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] a:not(.btn):not(.nav-control):not(.home-mini-step):not(.guide-nav-link):not(.guide-quick-link):not(.detail-resource-card) {
+  color: var(--link-blue);
+  text-underline-offset: 0.16em;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
+  position: sticky;
+  top: 0;
+  z-index: 400;
+  background: var(--oracle-bark);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-shell {
+  background: var(--oracle-bark);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-control.is-active,
+#app[data-redwood-creator-pass="2026-05-25"] .progress-button.is-active,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-primary,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet,
+#app[data-redwood-creator-pass="2026-05-25"] .media-player-control.is-primary {
+  background: var(--oracle-red) !important;
+  border-color: var(--oracle-red) !important;
+  color: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-primary:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-primary:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-search-group .btn[type="submit"]:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-search-group .btn[type="submit"]:focus-visible {
+  background: var(--oracle-bark) !important;
+  border-color: var(--oracle-bark) !important;
+  color: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-search-group .btn[type="submit"]:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-search-group .btn[type="submit"]:focus-visible {
+  border-color: rgba(255, 255, 255, 0.56) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-hero,
+#app[data-redwood-creator-pass="2026-05-25"] .toolbar-card,
+#app[data-redwood-creator-pass="2026-05-25"] .progress-card,
+#app[data-redwood-creator-pass="2026-05-25"] .step-shell,
+#app[data-redwood-creator-pass="2026-05-25"] .compact-panel,
+#app[data-redwood-creator-pass="2026-05-25"] .content-card,
+#app[data-redwood-creator-pass="2026-05-25"] .side-card,
+#app[data-redwood-creator-pass="2026-05-25"] .snippet-card,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-panel,
+#app[data-redwood-creator-pass="2026-05-25"] .modal-content,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-map-shell,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-sidebar-card,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-section-card,
+#app[data-redwood-creator-pass="2026-05-25"] .search-result-card,
+#app[data-redwood-creator-pass="2026-05-25"] .search-empty-state,
+#app[data-redwood-creator-pass="2026-05-25"] .modal-panel,
+#app[data-redwood-creator-pass="2026-05-25"] .modal-media-card,
+#app[data-redwood-creator-pass="2026-05-25"] .evidence-card,
+#app[data-redwood-creator-pass="2026-05-25"] .detail-field-card,
+#app[data-redwood-creator-pass="2026-05-25"] .detail-milestone-card,
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-card {
+  border-color: var(--redwood-border);
+  background: var(--redwood-surface);
+  color: var(--redwood-text);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-hero,
+#app[data-redwood-creator-pass="2026-05-25"] .toolbar-card,
+#app[data-redwood-creator-pass="2026-05-25"] .step-shell,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-map-shell,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-sidebar-card {
+  border-top-color: var(--oracle-red);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .panel-kicker,
+#app[data-redwood-creator-pass="2026-05-25"] .modal-kicker,
+#app[data-redwood-creator-pass="2026-05-25"] .step-kicker,
+#app[data-redwood-creator-pass="2026-05-25"] .path-badge,
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-badge,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-panel-label,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-panel-meta {
+  color: var(--finance-teal);
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  font-size: 0.94rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: capitalize;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .panel-kicker::before,
+#app[data-redwood-creator-pass="2026-05-25"] .modal-kicker::before,
+#app[data-redwood-creator-pass="2026-05-25"] .step-kicker::before {
+  background: var(--finance-teal);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link[data-accent="ocean"] {
+  --accent-strong: var(--finance-teal);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link[data-accent="pine"] {
+  --accent-strong: var(--oci-pine);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link[data-accent="sienna"] {
+  --accent-strong: var(--scm-sienna);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link[data-accent="slate"] {
+  --accent-strong: var(--database-slate);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .hub-hero {
+  border: 0;
+  background:
+    linear-gradient(90deg, rgba(49, 45, 42, 0.96), rgba(49, 45, 42, 0.78) 56%, rgba(49, 45, 42, 0.44)),
+    url("../images/ill-abst-000109-16x9.png") center top / cover no-repeat;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .hub-hero::after {
+  height: 14px;
+  background: url("../images/color-strip.png") center / cover no-repeat;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .hero-title,
+#app[data-redwood-creator-pass="2026-05-25"] .mode-title,
+#app[data-redwood-creator-pass="2026-05-25"] .step-title,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-section-title {
+  letter-spacing: 0 !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .search-group .form-control,
+#app[data-redwood-creator-pass="2026-05-25"] .nav-search-group .form-control {
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #app[data-redwood-creator-pass="2026-05-25"] *,
+  #app[data-redwood-creator-pass="2026-05-25"] *::before,
+  #app[data-redwood-creator-pass="2026-05-25"] *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-search-group {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-search-group .btn {
+    width: 100%;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .nav-group-all {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* LiveLabs Analytics treatment replica.
+   Mirrors the local analytics dashboard: left bark sidebar, full-bleed LiveLabs
+   hero, approved color strip, white operational cards, and flat Redwood panels. */
+@media (min-width: 941px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
+    min-height: 100vh;
+    padding-left: 264px;
+    padding-bottom: 0;
+    background: var(--redwood-page);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 264px;
+    height: 100vh;
+    padding: 24px 18px;
+    overflow: auto;
+    border-bottom: 0;
+    background: var(--oracle-bark);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .container {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .nav-shell {
+    padding: 0;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .nav-shell .container-fluid {
+    display: grid !important;
+    gap: 18px !important;
+    align-items: stretch !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .brand-token {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    justify-items: start;
+    text-align: left;
+    width: 100%;
+    min-height: 108px;
+    padding: 0 4px 20px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18) !important;
+    align-items: flex-start;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .brand-mark {
+    width: 144px;
+    height: 32px;
+    margin-left: -15px;
+    border-radius: 0;
+    background: url("../images/oracle-logo-white.svg") left center / contain no-repeat !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .brand-mark svg,
+  #app[data-redwood-creator-pass="2026-05-25"] .brand-mark::after {
+    display: none !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .brand-token > span:last-child {
+    display: grid;
+    gap: 3px;
+    width: 100%;
+    justify-items: start;
+    text-align: left;
+  }
+
+#app[data-redwood-creator-pass="2026-05-25"] .brand-label {
+    display: block;
+    font-size: 18px;
+    line-height: 1.18;
+    font-weight: 600;
+    text-transform: none;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .brand-token small {
+    display: block;
+    font-size: 18px;
+    line-height: 1.18;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .nav-main-grid {
+    display: grid;
+    gap: 18px;
+    width: 100%;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .nav-search-form {
+    width: 100%;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-search-group {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-search-group .btn {
+    width: 100%;
+    min-height: 40px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .nav-group-all {
+    display: grid;
+    gap: 4px;
+    width: 100%;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .nav-control,
+  #app[data-redwood-creator-pass="2026-05-25"] .nav-guide-link {
+    justify-content: flex-start;
+    min-height: 40px;
+    width: 100%;
+    padding: 10px 12px;
+    border: 0;
+    background: transparent !important;
+    color: rgba(255, 255, 255, 0.78) !important;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.25;
+    font-weight: 400;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .nav-control:hover,
+  #app[data-redwood-creator-pass="2026-05-25"] .nav-control.is-active,
+  #app[data-redwood-creator-pass="2026-05-25"] .nav-guide-link:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #fff !important;
+    font-weight: 600;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-screen,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-screen {
+    padding: 0 30px 48px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-screen {
+    min-height: auto;
+    display: block;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-screen > .container,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-screen > .container,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav + .hub-screen > .container {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero {
+    min-height: 310px;
+    margin: 0 -30px;
+    padding: 46px 72px 54px;
+    display: block;
+    color: #fff;
+    background:
+      linear-gradient(90deg, rgba(49, 45, 42, 0.94) 0%, rgba(49, 45, 42, 0.74) 50%, rgba(49, 45, 42, 0.42) 100%),
+      url("../images/ill-abst-000109-16x9.png") center top / cover no-repeat;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero .row {
+    align-items: start !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #hub .hero-title {
+    max-width: 920px;
+    margin: 0;
+    color: #fff;
+    font-size: 38px;
+    line-height: 1.12;
+    font-weight: 600;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hero-lockup {
+    width: 120px;
+    height: 38px;
+    margin-bottom: 18px;
+    background: url("../images/livelabs-logo-white.svg") left center / contain no-repeat;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hero-lockup > span,
+  #app[data-redwood-creator-pass="2026-05-25"] .hero-lockup::before,
+  #app[data-redwood-creator-pass="2026-05-25"] .hero-lockup::after {
+    display: none !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero .home-side-card {
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero .panel-kicker,
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero .panel-copy {
+    display: none;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero .home-mini-flow {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 0 !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero .home-mini-step {
+    position: relative;
+    min-height: 154px;
+    align-items: start;
+    padding: 18px 18px 26px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px !important;
+    background: rgba(255, 255, 255, 0.96);
+    color: var(--redwood-text);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero .home-mini-step::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 6px;
+    background: var(--finance-teal);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero .home-mini-step:nth-child(3)::after,
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero .home-mini-step:nth-child(4)::after {
+    background: var(--oracle-red);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero .home-mini-step strong {
+    margin-top: 12px;
+    color: var(--redwood-text);
+    font-size: 21px;
+    line-height: 1.18;
+    font-weight: 600;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero .home-mini-step small {
+    margin-top: 10px;
+    color: var(--brand-neutral);
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero .home-mini-number {
+    width: auto;
+    height: auto;
+    background: transparent;
+    color: var(--brand-neutral);
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
+    display: block;
+  }
+
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub.hub-screen {
+    padding: 0 30px 48px;
+    display: block;
+    overflow: visible;
+  }
+
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub > .container {
+    display: block;
+  }
+
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .hub-hero {
+    width: auto;
+    min-height: 310px;
+    padding: 46px 72px 54px;
+  }
+
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hero-title {
+    max-width: 920px;
+    font-size: 38px;
+  }
+
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .home-mini-step {
+    min-height: 154px;
+  }
+
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .panel-copy,
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .home-mini-step small {
+    display: block;
+  }
+}
+
+@media (max-width: 940px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
+    position: static;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-screen,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-screen {
+    padding: 0 16px 36px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-screen {
+    display: block;
+    min-height: auto;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero {
+    margin: 0 -16px;
+    padding: 34px 24px 58px;
+    border-radius: 0 !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #hub .hero-title {
+    max-width: 920px;
+    font-size: 30px;
+    line-height: 1.12;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .hub-hero .home-mini-flow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Redwood welcome-page treatment for the home screen. */
+#app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero {
+  isolation: isolate;
+  min-height: clamp(300px, 44vh, 430px);
+  color: #fff;
+  background: #AA643B url("../images/journey-headers-abstract-final-1.png") right center / auto 100% no-repeat;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-group-all {
+  display: grid !important;
+  gap: 8px;
+  width: 100%;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  min-height: 48px;
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 6px !important;
+  background: rgba(255, 255, 255, 0.055) !important;
+  color: rgba(255, 255, 255, 0.82) !important;
+  text-align: left;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control-icon {
+  display: inline-flex;
+  flex: 0 0 30px;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: currentColor;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control-icon svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control-text {
+  min-width: 0;
+  color: currentColor;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control:focus-visible {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control.is-active {
+  border-color: rgba(199, 70, 52, 0.78);
+  background: var(--oracle-red) !important;
+  color: #fff !important;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control.is-active .nav-control-icon {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero::before {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero::after {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero .row {
+  min-height: inherit;
+  align-items: center !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero .row > .col-xl-8,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero .row > .col-xl-4 {
+  width: 100%;
+  max-width: none;
+  flex: 0 0 100%;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .hero-lockup {
+  width: auto;
+  height: auto;
+  margin-bottom: 14px;
+  background: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .hero-lockup > span {
+  display: inline-flex !important;
+  gap: 0.45rem;
+  align-items: baseline;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .hero-lockup-label {
+  color: #fff;
+  font-size: clamp(22px, 1.7vw, 30px);
+  line-height: 1.2;
+  font-weight: 700;
+  text-transform: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .hero-lockup-note {
+  color: rgba(255, 255, 255, 0.74);
+  font-size: clamp(20px, 1.5vw, 28px);
+  line-height: 1.2;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .hero-title {
+  max-width: min(720px, 54%);
+  margin: 0;
+  color: #fff;
+  font-size: clamp(34px, 4.7vw, 58px);
+  line-height: 1.08;
+  font-weight: 500;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel {
+  padding: 26px 0 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .panel-copy {
+  display: block;
+  max-width: 860px;
+  margin: 0 0 1rem;
+  color: var(--redwood-text);
+  font-size: clamp(20px, 1.7vw, 26px);
+  line-height: 1.42;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-form {
+  display: flex;
+  align-items: stretch;
+  width: min(100%, 640px);
+  min-height: 52px;
+  margin: 0 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(49, 45, 42, 0.08);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 52px;
+  padding: 0 16px;
+  border: 0;
+  color: var(--redwood-text);
+  font: 600 15px/1.2 "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  background: transparent;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-input::placeholder {
+  color: #6f6a66;
+  opacity: 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-input:focus {
+  outline: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-form:focus-within {
+  border-color: rgba(199, 70, 52, 0.62);
+  box-shadow:
+    0 0 0 3px rgba(199, 70, 52, 0.14),
+    0 12px 28px rgba(49, 45, 42, 0.08);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-button {
+  display: inline-flex;
+  flex: 0 0 56px;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  border: 0;
+  border-left: 1px solid var(--line);
+  color: #fff;
+  background: var(--oracle-red);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-button:hover,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-button:focus-visible {
+  background: var(--oracle-bark);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-button svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-flow {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-top: 0 !important;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step {
+  min-height: 48px;
+  width: auto;
+  padding: 13px 22px;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-radius: 0 !important;
+  background: transparent;
+  color: var(--redwood-text);
+  text-align: center;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:last-child {
+  border-right: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step::after {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child {
+  background: var(--oracle-red);
+  color: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:hover,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:focus-visible {
+  background: rgba(199, 70, 52, 0.08);
+  color: var(--oracle-red);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child:hover,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child:focus-visible {
+  background: var(--oracle-bark);
+  color: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-mini-number,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step small {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step strong {
+  margin: 0;
+  color: inherit;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+@media (min-width: 941px) {
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero {
+    min-height: clamp(300px, 44vh, 430px);
+    padding: 58px 72px 48px;
+  }
+
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hero-title {
+    max-width: min(720px, 54%);
+    font-size: clamp(34px, 4.7vw, 58px);
+  }
+
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-mini-step {
+    min-height: 46px;
+  }
+}
+
+@media (max-width: 940px) {
+  #app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero {
+    min-height: auto;
+    padding: 44px 24px 38px;
+    background-size: auto 100%;
+    background-position: right center;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #hub .hero-title {
+    max-width: 72%;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero::after {
+    display: none !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .panel-copy {
+    font-size: 18px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-form {
+    width: 100%;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-flow {
+    display: flex;
+    width: 100%;
+  }
+}
+
+@media (max-width: 575.98px) {
+  #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-flow {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step {
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:last-child {
+    border-bottom: 0;
+  }
+}
+
+/* Quickstart step-by-step header. */
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode > .container:first-child {
+  position: static;
+  top: auto;
+  z-index: auto;
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  margin-bottom: 18px;
+  background: #fff;
+  filter: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border: 0;
+  border-bottom: 1px solid var(--redwood-border);
+  border-radius: 0 !important;
+  background: #fff;
+  color: var(--redwood-text);
+  box-shadow: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .step-shell {
+  border-top-color: var(--finance-teal);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .step-block::before {
+  background: linear-gradient(90deg, var(--finance-teal), rgba(79, 125, 123, 0.16));
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .meta-pill::before {
+  background: var(--finance-teal);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .step-meta-list li::marker {
+  color: var(--finance-teal);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero::before {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero::after {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero .card-body {
+  padding: 32px 56px 56px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-decoration-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 8px;
+  background: url("../images/color-strip.png") center center / 100% 8px no-repeat;
+  pointer-events: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 28px;
+  align-items: start;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero .mode-overline {
+  margin: 0 0 12px;
+  color: var(--redwood-text);
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero .mode-overline::before {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero .mode-title {
+  max-width: none;
+  margin: 0;
+  color: var(--redwood-text);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 3.35vw, 56px);
+  line-height: 1.02;
+  font-weight: 500;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-count {
+  display: inline-grid;
+  grid-auto-flow: column;
+  gap: 12px;
+  align-items: baseline;
+  color: #00688c;
+  font-size: clamp(36px, 3.05vw, 52px);
+  line-height: 1;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-count span:nth-child(2) {
+  color: #7bb6c8;
+  font-size: 0.9em;
+  font-weight: 300;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-meta {
+  display: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs {
+  margin-top: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-summary {
+  display: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 34px;
+  align-items: baseline;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button {
+  position: relative;
+  display: inline-flex;
+  min-height: 0;
+  width: auto;
+  padding: 0;
+  gap: 6px;
+  border: 0;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--redwood-text);
+  text-align: left;
+  box-shadow: none;
+  outline-offset: 5px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  height: 3px;
+  border-radius: 999px;
+  background: transparent;
+  transition: background-color 160ms ease, transform 160ms ease;
+  transform: scaleX(0.42);
+  transform-origin: left center;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button.is-active::after {
+  background: transparent;
+  transform: scaleX(1);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button:hover,
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button:focus-visible {
+  transform: none;
+  color: var(--redwood-text);
+  background: transparent !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button.is-active {
+  background: transparent !important;
+  color: var(--finance-teal) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button.is-complete:not(.is-active) {
+  background: transparent !important;
+  color: var(--redwood-text);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-mark {
+  display: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button.is-active .progress-mark {
+  display: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-label {
+  display: inline-flex;
+  gap: 6px;
+  align-items: baseline;
+  min-width: 0;
+  padding-bottom: 6px;
+  border-bottom: 3px solid transparent;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button.is-active .progress-label {
+  border-bottom-color: var(--oracle-bark);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-label small {
+  display: inline;
+  color: currentColor;
+  font-size: 14.4px;
+  line-height: 1.25;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-label strong {
+  color: currentColor;
+  font-size: 14.4px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button.is-active .progress-label strong {
+  text-decoration: none;
+}
+
+@media (max-width: 940px) {
+  #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode > .container:first-child {
+    position: static;
+    top: auto;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero .card-body {
+    padding: 34px 22px 46px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-head {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-rail {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button {
+    border: 0;
+  }
+}
+
+/* Redwood panel cleanup: solid teal top stripe, consistent radius, no panel gradients. */
+#app[data-redwood-creator-pass="2026-05-25"] .mode-hero,
+#app[data-redwood-creator-pass="2026-05-25"] .toolbar-card,
+#app[data-redwood-creator-pass="2026-05-25"] .step-shell,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-map-shell,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-sidebar-card {
+  border-top: 6px solid var(--finance-teal) !important;
+  border-bottom: 1px solid var(--redwood-border) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-hero,
+#app[data-redwood-creator-pass="2026-05-25"] .toolbar-card,
+#app[data-redwood-creator-pass="2026-05-25"] .progress-card,
+#app[data-redwood-creator-pass="2026-05-25"] .step-shell,
+#app[data-redwood-creator-pass="2026-05-25"] .compact-panel,
+#app[data-redwood-creator-pass="2026-05-25"] .content-card,
+#app[data-redwood-creator-pass="2026-05-25"] .side-card,
+#app[data-redwood-creator-pass="2026-05-25"] .snippet-card,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-panel,
+#app[data-redwood-creator-pass="2026-05-25"] .modal-content,
+#app[data-redwood-creator-pass="2026-05-25"] .step-mini-map,
+#app[data-redwood-creator-pass="2026-05-25"] .scene-well,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-map-shell,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-sidebar-card,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-section-card,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-toolbar,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-panel-card,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-error,
+#app[data-redwood-creator-pass="2026-05-25"] .search-result-card,
+#app[data-redwood-creator-pass="2026-05-25"] .search-empty-state,
+#app[data-redwood-creator-pass="2026-05-25"] .modal-panel,
+#app[data-redwood-creator-pass="2026-05-25"] .modal-media-card,
+#app[data-redwood-creator-pass="2026-05-25"] .evidence-card,
+#app[data-redwood-creator-pass="2026-05-25"] .home-toolkit-card,
+#app[data-redwood-creator-pass="2026-05-25"] .detail-field-card,
+#app[data-redwood-creator-pass="2026-05-25"] .detail-milestone-card,
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-card,
+#app[data-redwood-creator-pass="2026-05-25"] .step-block,
+#app[data-redwood-creator-pass="2026-05-25"] .detail-support-block,
+#app[data-redwood-creator-pass="2026-05-25"] .video-placeholder-card,
+#app[data-redwood-creator-pass="2026-05-25"] .home-action-panel,
+#app[data-redwood-creator-pass="2026-05-25"] .home-mini-step {
+  border-radius: 8px !important;
+  background: var(--redwood-surface) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .home-toolkit-card::before,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-section-card::before,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-panel-card::before,
+#app[data-redwood-creator-pass="2026-05-25"] .step-block::before,
+#app[data-redwood-creator-pass="2026-05-25"] .detail-support-block::before,
+#app[data-redwood-creator-pass="2026-05-25"] .search-result-card::before,
+#app[data-redwood-creator-pass="2026-05-25"] .video-placeholder-card::before {
+  inset: 0 0 auto 0 !important;
+  top: 0 !important;
+  bottom: auto !important;
+  height: 6px !important;
+  background: var(--finance-teal) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-button::before,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link::before {
+  background: var(--finance-teal) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-decoration-strip {
+  top: 0 !important;
+  bottom: auto !important;
+  height: 12px !important;
+  background: url("../images/color-strip.png") center center / 100% 12px no-repeat !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero {
+  border-top: 0 !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .panel-kicker,
+#app[data-redwood-creator-pass="2026-05-25"] .mode-overline,
+#app[data-redwood-creator-pass="2026-05-25"] .modal-kicker,
+#app[data-redwood-creator-pass="2026-05-25"] .step-kicker,
+#app[data-redwood-creator-pass="2026-05-25"] .path-badge,
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-badge,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-panel-label,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-panel-meta,
+#app[data-redwood-creator-pass="2026-05-25"] .snippet-meta,
+#app[data-redwood-creator-pass="2026-05-25"] .progress-eyebrow,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-meta,
+#app[data-redwood-creator-pass="2026-05-25"] .search-result-kicker,
+#app[data-redwood-creator-pass="2026-05-25"] .filter-label,
+#app[data-redwood-creator-pass="2026-05-25"] .hero-overline {
+  text-transform: capitalize !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn,
+#app[data-redwood-creator-pass="2026-05-25"] .nav-control,
+#app[data-redwood-creator-pass="2026-05-25"] .nav-guide-link,
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill,
+#app[data-redwood-creator-pass="2026-05-25"] .shortcut-chip,
+#app[data-redwood-creator-pass="2026-05-25"] .search-group .input-group-text,
+#app[data-redwood-creator-pass="2026-05-25"] .search-group .form-control,
+#app[data-redwood-creator-pass="2026-05-25"] .search-group .btn,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-link-button,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-outline-link,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-panel-toggle,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-expand-all,
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-button,
+#app[data-redwood-creator-pass="2026-05-25"] .home-mini-step,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-quick-link,
+#app[data-redwood-creator-pass="2026-05-25"] .home-action-button {
+  border-radius: 8px !important;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .btn:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .nav-control:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .nav-control:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .nav-guide-link:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .nav-guide-link:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-link-button:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-link-button:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-outline-link:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-outline-link:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-panel-toggle:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-panel-toggle:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-expand-all:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-expand-all:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-button:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-button:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .home-mini-step:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .home-mini-step:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-quick-link:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-quick-link:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .home-action-button:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .home-action-button:focus-visible {
+  background-color: rgba(79, 125, 123, 0.1) !important;
+  border-color: rgba(79, 125, 123, 0.72) !important;
+  color: var(--oracle-bark) !important;
+  transform: translateY(-1px) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-primary:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-primary:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet:focus-visible {
+  background-color: #3F6664 !important;
+  border-color: #3F6664 !important;
+  color: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button:hover,
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button:focus-visible {
+  transform: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button:hover .progress-label,
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button:focus-visible .progress-label {
+  border-bottom-color: rgba(49, 45, 42, 0.42);
+}
+
+/* Redwood 26B button component states. */
+#app[data-redwood-creator-pass="2026-05-25"] .btn,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-link-button,
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill,
+#app[data-redwood-creator-pass="2026-05-25"] .shortcut-chip,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-outline-link,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-expand-all,
+#app[data-redwood-creator-pass="2026-05-25"] .home-action-button,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-quick-link {
+  min-height: 44px !important;
+  padding: 0 16px !important;
+  border-radius: 4px !important;
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif !important;
+  font-size: 13.75px !important;
+  line-height: 16px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn.px-3,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-sm,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-link-button,
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill,
+#app[data-redwood-creator-pass="2026-05-25"] .shortcut-chip,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-outline-link {
+  min-height: 36px !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-lg {
+  min-height: 52px !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-primary,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-cta {
+  background: var(--oracle-bark) !important;
+  border: 1px solid var(--oracle-bark) !important;
+  color: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-primary:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-primary:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-cta:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-cta:focus-visible {
+  background: #46413e !important;
+  border-color: #46413e !important;
+  color: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-primary:active,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-primary.active,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-cta:active,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-cta.active {
+  background: #5a5551 !important;
+  border-color: #5a5551 !important;
+  color: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-outline-primary,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-outline-secondary,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-link-button,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-outline-link,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-expand-all,
+#app[data-redwood-creator-pass="2026-05-25"] .home-action-button,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-quick-link {
+  background: transparent !important;
+  border: 1px solid rgba(22, 21, 19, 0.5) !important;
+  color: var(--redwood-text) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-outline-primary:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-outline-primary:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-outline-secondary:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-outline-secondary:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-link-button:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-link-button:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-outline-link:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-outline-link:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-expand-all:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-expand-all:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .home-action-button:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .home-action-button:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-quick-link:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-quick-link:focus-visible {
+  background: rgba(22, 21, 19, 0.08) !important;
+  border-color: rgba(22, 21, 19, 0.5) !important;
+  color: var(--redwood-text) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-outline-primary:active,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-outline-primary.active,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-outline-secondary:active,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-outline-secondary.active,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-link-button:active,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-outline-link:active,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-expand-all:active,
+#app[data-redwood-creator-pass="2026-05-25"] .home-action-button:active,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-quick-link:active,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-quick-link.is-active {
+  background: rgba(22, 21, 19, 0.16) !important;
+  border-color: rgba(22, 21, 19, 0.5) !important;
+  color: var(--redwood-text) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-secondary,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet,
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill,
+#app[data-redwood-creator-pass="2026-05-25"] .shortcut-chip {
+  background: rgba(22, 21, 19, 0.08) !important;
+  border: 1px solid transparent !important;
+  color: var(--redwood-text) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-secondary:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-secondary:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .shortcut-chip:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .shortcut-chip:focus-visible {
+  background: rgba(22, 21, 19, 0.12) !important;
+  border-color: transparent !important;
+  color: var(--redwood-text) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-secondary:active,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-secondary.active,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet:active,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet.is-copied,
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill:active,
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill.is-active,
+#app[data-redwood-creator-pass="2026-05-25"] .shortcut-chip:active {
+  background: rgba(22, 21, 19, 0.16) !important;
+  border-color: transparent !important;
+  color: var(--redwood-text) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-danger,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-destructive {
+  background: #b3311f !important;
+  border: 1px solid #b3311f !important;
+  color: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-danger:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-danger:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-destructive:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-destructive:focus-visible {
+  background: #92291b !important;
+  border-color: #92291b !important;
+  color: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-borderless {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--redwood-text) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn-borderless:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .btn-borderless:focus-visible {
+  background: rgba(22, 21, 19, 0.08) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-link-button:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .shortcut-chip:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-outline-link:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-source-expand-all:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .home-action-button:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-quick-link:focus-visible {
+  outline: 2px solid rgba(0, 104, 140, 0.42) !important;
+  outline-offset: 2px !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .btn:disabled,
+#app[data-redwood-creator-pass="2026-05-25"] .btn.disabled,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-snippet:disabled,
+#app[data-redwood-creator-pass="2026-05-25"] .copy-link-button:disabled,
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill:disabled,
+#app[data-redwood-creator-pass="2026-05-25"] [aria-disabled="true"].btn,
+#app[data-redwood-creator-pass="2026-05-25"] [aria-disabled="true"].copy-snippet {
+  pointer-events: none;
+  background: rgba(22, 21, 19, 0.04) !important;
+  border-color: rgba(22, 21, 19, 0.14) !important;
+  color: rgba(22, 21, 19, 0.35) !important;
+  opacity: 1 !important;
+}
+
+/* Redwood 26B resource card treatment for Quickstart setup cards. */
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
+  grid-template-columns: repeat(auto-fit, minmax(18.5rem, 1fr));
+  gap: 1rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .step-block:has(.install-card-grid) .panel-kicker {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card {
+  min-height: 240px;
+  padding: 0 !important;
+  display: grid;
+  grid-template-rows: minmax(172px, 1fr) auto;
+  gap: 0;
+  border: 1px solid rgba(22, 21, 19, 0.12) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .install-card:focus-within {
+  border-color: rgba(22, 21, 19, 0.24) !important;
+  background: #fff !important;
+  box-shadow: 0 2px 8px rgba(22, 21, 19, 0.08) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main {
+  display: block;
+  min-height: 172px;
+  padding: 32px 64px 28px 32px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-number {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main > span:last-child {
+  display: block;
+  padding: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main strong {
+  display: block;
+  margin: 0 0 14px;
+  color: #161513;
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  font-size: clamp(1.25rem, 1.5vw, 1.55rem);
+  line-height: 1.18;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main span span {
+  display: block;
+  color: rgba(22, 21, 19, 0.68);
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  font-size: clamp(1rem, 1.05vw, 1.12rem);
+  line-height: 1.48;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions {
+  min-height: 68px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #f5f4f2;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions .btn,
+#app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions .copy-link-button {
+  min-width: 100px;
+  min-height: 44px !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card::after {
+  top: 26px;
+  right: 28px;
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(67, 107, 29, 0.25);
+  background: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card.is-complete {
+  border-color: rgba(67, 107, 29, 0.36) !important;
+  background: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card.is-complete::after {
+  background: #436b1d;
+  border-color: #436b1d;
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main {
+    padding: 28px 60px 24px 24px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions {
+    padding: 16px 24px;
+  }
+}
+
+/* Redwood 26B top panel treatment for the Cheatsheet controls. */
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-card {
+  position: relative;
+  border: 1px solid rgba(22, 21, 19, 0.12) !important;
+  border-top: 0 !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-card:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-card:focus-within {
+  border-color: rgba(22, 21, 19, 0.24) !important;
+  box-shadow: 0 2px 8px rgba(22, 21, 19, 0.08) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-card .card-body {
+  padding: 0 !important;
+  display: grid;
+  gap: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-decoration-strip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 12px;
+  background: url("../images/color-strip.png") center center / 100% 12px no-repeat;
+  pointer-events: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-main {
+  min-height: 196px;
+  padding: 44px 56px 34px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 28px;
+  align-items: end;
+  background: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-title {
+  margin: 0 0 14px;
+  color: #161513;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 3.35vw, 56px);
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-copy {
+  margin: 0;
+  max-width: 42rem;
+  color: rgba(22, 21, 19, 0.72);
+  font-size: 24px;
+  line-height: 1.28;
+  font-weight: 400;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-card .result-line {
+  min-width: 16rem;
+  color: var(--finance-teal);
+  font-size: 18px;
+  line-height: 1.3;
+  text-align: right;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-card .result-line strong {
+  color: var(--finance-teal);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-card .result-helper {
+  color: rgba(79, 125, 123, 0.88);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls {
+  min-height: 68px;
+  padding: 24px 56px 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px 24px;
+  align-items: end;
+  background: #f5f4f2;
+  border-top: 1px solid rgba(22, 21, 19, 0.06);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-search-control,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-tag-control {
+  min-width: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-search-control {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-tag-control {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .search-group {
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border-radius: 4px !important;
+  padding: 0 !important;
+  gap: 8px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .search-group .input-group-text,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .search-group .form-control,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .search-group .btn,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .tag-pill {
+  min-height: 44px !important;
+  border-radius: 4px !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls > .btn {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 14rem;
+  min-height: 44px !important;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 1180px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-main,
+  #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls {
+    display: grid;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls > .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 940px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-main {
+    padding: 44px 22px 28px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls {
+    padding: 20px 22px 24px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-copy {
+    font-size: 18px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-card .result-line {
+    text-align: left;
+  }
+}
+
+/* Final shared side-navigation sizing. Keep this matched with sample-workshop-demo.css. */
+@media (min-width: 941px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
+    width: 264px !important;
+    padding: 24px 18px !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-group-all {
+    display: grid !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 9px 11px !important;
+    border: 1px solid rgba(255, 255, 255, 0.13) !important;
+    border-radius: 6px !important;
+    background: rgba(255, 255, 255, 0.055) !important;
+    color: rgba(255, 255, 255, 0.82) !important;
+    box-shadow: none !important;
+    text-align: left !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control-icon {
+    flex: 0 0 30px !important;
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 6px !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control-icon svg {
+    width: 17px !important;
+    height: 17px !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control-text {
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control:hover,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control:focus-visible {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #fff !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control.is-active {
+    border-color: rgba(199, 70, 52, 0.78) !important;
+    background: var(--oracle-red) !important;
+    color: #fff !important;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16) !important;
+  }
+}
+
+/* Quickstart top panel aligned to the Cheatsheet toolbar layout. */
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(22, 21, 19, 0.16) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero::before,
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero::after {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero .card-body {
+  display: grid;
+  gap: 0;
+  padding: 0 !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-head {
+  min-height: 196px;
+  padding: 44px 56px 34px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 28px;
+  align-items: end;
+  background: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero .mode-overline {
+  margin: 0 0 14px;
+  color: var(--finance-teal);
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: capitalize;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero .mode-title {
+  margin: 0;
+  color: #161513;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 3.35vw, 56px);
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-count {
+  min-width: 16rem;
+  color: var(--finance-teal);
+  font-size: 22px;
+  line-height: 1.3;
+  font-weight: 700;
+  text-align: right;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs {
+  min-height: 68px;
+  margin: 0;
+  padding: 24px 56px 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  border: 0;
+  border-top: 1px solid rgba(22, 21, 19, 0.06);
+  border-radius: 0 !important;
+  background: #f5f4f2 !important;
+  box-shadow: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-summary {
+  margin: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-rail {
+  width: 100%;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-decoration-strip,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-decoration-strip {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: 12px;
+  height: 10px;
+  border-radius: 999px;
+  background: url("../images/color-strip.png") center center / 100% 10px no-repeat;
+  pointer-events: none;
+}
+
+@media (max-width: 1180px) {
+  #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-head {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-count {
+    min-width: 0;
+    text-align: left;
+  }
+}
+
+@media (max-width: 940px) {
+  #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-head {
+    padding: 44px 22px 28px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs {
+    padding: 20px 22px 24px;
+  }
+}
+
+/* Decorative strip belongs to the panel top edge, clipped by the panel radius. */
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-card {
+  border: 1px solid rgba(22, 21, 19, 0.16) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  background: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-decoration-strip,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-decoration-strip {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  height: 20px !important;
+  border-radius: 8px 8px 0 0 !important;
+  background-image: url("../images/color-strip.png") !important;
+  background-position: center center !important;
+  background-size: 100% 20px !important;
+  background-repeat: no-repeat !important;
+  pointer-events: none;
+}
+
+/* Shared panel width: Quickstart, Cheatsheet, and all step panels align edge-to-edge. */
+#app[data-redwood-creator-pass="2026-05-25"] {
+  --author-guide-panel-width: 1500px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-screen > .container,
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode > .container,
+#app[data-redwood-creator-pass="2026-05-25"] #explorerMode > .container {
+  width: 100% !important;
+  max-width: var(--author-guide-panel-width) !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero,
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .journey-column,
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .rabbit-step,
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .step-shell,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-card,
+#app[data-redwood-creator-pass="2026-05-25"] .garden-shell {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .journey-column {
+  padding-left: 0 !important;
+}
+
+@media (max-width: 940px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-screen > .container,
+  #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode > .container,
+  #app[data-redwood-creator-pass="2026-05-25"] #explorerMode > .container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+/* Final flat surface pass: remove remaining bottom glows/gradients behind cards. */
+#app[data-redwood-creator-pass="2026-05-25"] .mode-screen,
+#app[data-redwood-creator-pass="2026-05-25"] .journey-column,
+#app[data-redwood-creator-pass="2026-05-25"] .garden-shell {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-hero,
+#app[data-redwood-creator-pass="2026-05-25"] .toolbar-card,
+#app[data-redwood-creator-pass="2026-05-25"] .step-shell,
+#app[data-redwood-creator-pass="2026-05-25"] .content-card,
+#app[data-redwood-creator-pass="2026-05-25"] .side-card,
+#app[data-redwood-creator-pass="2026-05-25"] .compact-panel,
+#app[data-redwood-creator-pass="2026-05-25"] .progress-card,
+#app[data-redwood-creator-pass="2026-05-25"] .guide-panel {
+  background-color: #fff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .rabbit-step::after,
+#app[data-redwood-creator-pass="2026-05-25"] .step-shell::before,
+#app[data-redwood-creator-pass="2026-05-25"] .step-shell::after,
+#app[data-redwood-creator-pass="2026-05-25"] .mode-hero::before,
+#app[data-redwood-creator-pass="2026-05-25"] .mode-hero::after,
+#app[data-redwood-creator-pass="2026-05-25"] .toolbar-card::before,
+#app[data-redwood-creator-pass="2026-05-25"] .toolbar-card::after {
+  display: none !important;
+  background: none !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* Cheatsheet first panel needs the same top breathing room as the other top panels. */
+#app[data-redwood-creator-pass="2026-05-25"] #explorerMode .cheatsheet-toolbar-card {
+  margin-top: 32px !important;
+}
+
+@media (max-width: 940px) {
+  #app[data-redwood-creator-pass="2026-05-25"] #explorerMode .cheatsheet-toolbar-card {
+    margin-top: 20px !important;
+  }
+}
+
+/* Quickstart hero no longer shows the step counter block. */
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-head {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-count {
+  display: none !important;
+}
+
+/* Keep icon navigation labels visible in every state. */
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control-text {
+  display: inline-block;
+  visibility: visible;
+  opacity: 1;
+  color: currentColor !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control {
+  overflow: visible;
+}
+
+/* Final shell controls: match the standalone sample workshop left-nav behavior. */
+#app[data-redwood-creator-pass="2026-05-25"] .author-global-nav-toggle {
+  position: fixed;
+  top: 18px;
+  left: 246px;
+  z-index: 1060;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(49, 45, 42, 0.22);
+  border-radius: 6px !important;
+  background: #fff;
+  color: var(--oracle-bark);
+  cursor: pointer;
+  transition: left 160ms ease, background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .author-global-nav-toggle[hidden] {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .author-global-nav-toggle:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .author-global-nav-toggle:focus-visible {
+  background: #f5f4f2 !important;
+  border-color: rgba(49, 45, 42, 0.42) !important;
+  color: var(--oracle-bark) !important;
+  transform: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .author-global-nav-toggle svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .author-global-nav-toggle .toggle-icon-open {
+  display: none;
+}
+
+body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
+  transform: translateX(-100%);
+}
+
+body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
+  padding-left: 0;
+}
+
+body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-global-nav-toggle {
+  left: 18px;
+  background: var(--oracle-bark);
+  border-color: var(--oracle-bark);
+  color: #fff;
+}
+
+body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-global-nav-toggle .toggle-icon-open {
+  display: block;
+}
+
+body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-global-nav-toggle .toggle-icon-close {
+  display: none;
+}
+
+@media (min-width: 941px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .app-shell,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
+    transition: padding-left 160ms ease, transform 160ms ease;
+  }
+}
+
+@media (max-width: 940px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .author-global-nav-toggle {
+    top: 12px;
+    left: auto;
+    right: 14px;
+  }
+
+  body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
+    display: none !important;
+  }
+
+  body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-global-nav-toggle {
+    left: auto;
+    right: 14px;
+  }
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child {
+  background: var(--oracle-red) !important;
+  color: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child strong {
+  background: transparent !important;
+  color: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child:hover strong,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child:focus-visible strong {
+  color: #fff !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #explorerMode {
+  padding-top: 24px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #explorerMode .cheatsheet-toolbar-card {
+  margin-top: 0 !important;
+}
+
+@media (max-width: 940px) {
+  #app[data-redwood-creator-pass="2026-05-25"] #explorerMode {
+    padding-top: 16px;
+  }
+}
+
+/* Final review fixes: keep the home menu neutral until hover and make the nav close state explicit. */
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child {
+  background: transparent !important;
+  color: var(--redwood-text) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child strong {
+  color: inherit !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:hover,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child:hover,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child:focus-visible {
+  background: rgba(79, 125, 123, 0.1) !important;
+  border-color: var(--line) !important;
+  color: var(--redwood-text) !important;
+  transform: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:hover strong,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:hover small,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:focus-visible strong,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:focus-visible small {
+  color: inherit !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child:hover strong,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child:hover small,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child:focus-visible strong,
+#app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step:first-child:focus-visible small {
+  color: inherit !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-form {
+  display: flex;
+  align-items: stretch;
+  width: min(100%, 760px);
+  min-height: 52px;
+  margin: 20px 0 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(49, 45, 42, 0.08);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 52px;
+  padding: 0 16px;
+  border: 0;
+  color: var(--redwood-text);
+  font: 600 15px/1.2 "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  background: transparent;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-input::placeholder {
+  color: #6f6a66;
+  opacity: 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-input:focus {
+  outline: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-form:focus-within {
+  border-color: rgba(199, 70, 52, 0.62);
+  box-shadow:
+    0 0 0 3px rgba(199, 70, 52, 0.14),
+    0 12px 28px rgba(49, 45, 42, 0.08);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-button,
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-clear {
+  display: inline-flex;
+  flex: 0 0 54px;
+  align-items: center;
+  justify-content: center;
+  min-width: 54px;
+  border: 0;
+  border-left: 1px solid var(--line);
+  background: #fff;
+  color: var(--redwood-text);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-button {
+  background: var(--oracle-red);
+  color: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-button:hover,
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-button:focus-visible {
+  background: var(--oracle-bark);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-clear:hover,
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-clear:focus-visible {
+  background: rgba(199, 70, 52, 0.08);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-button svg,
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-clear svg {
+  width: 21px;
+  height: 21px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 640px) {
+  #app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-form {
+    width: 100%;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-button,
+  #app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-clear {
+    flex-basis: 46px;
+    min-width: 46px;
+  }
+}
+
+body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
+  transform: translateX(-100%) !important;
+}
+
+body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
+  padding-left: 0 !important;
+}
+
+@media (max-width: 940px) {
+  body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
+    display: none !important;
+  }
+}

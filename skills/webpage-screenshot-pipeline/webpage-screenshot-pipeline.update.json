@@ -1,0 +1,27 @@
+{
+  "name": "webpage-screenshot-pipeline",
+  "owner": "Not listed",
+  "authors": [],
+  "version": "1.0",
+  "published_at": "2026-05-21T00:00:00Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/webpage-screenshot-pipeline/ready-to-deploy-archive/webpage-screenshot-pipeline.zip",
+  "archive_sha256": "9882f67b69caa648465f30a9b84cb401592f9f70ea12a4e736dc9dbe747a7c5f",
+  "content_hash": "7c40a50fc60cc2250ef69547aa74751595f3f5a0c64b9cabc3d77d5a69705275",
+  "min_updater_version": "2",
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version_history": [
+    {
+      "version": "1.0",
+      "published_at": "2026-05-21T00:00:00Z",
+      "authors": [],
+      "changes": [
+        "Current repository package recorded from the published skill artifact."
+      ],
+      "archive_sha256": "9882f67b69caa648465f30a9b84cb401592f9f70ea12a4e736dc9dbe747a7c5f",
+      "content_hash": "7c40a50fc60cc2250ef69547aa74751595f3f5a0c64b9cabc3d77d5a69705275",
+      "portal_status": "pending"
+    }
+  ]
+}

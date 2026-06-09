@@ -5,6 +5,7 @@
      "adb-connect-with-sql-worksheet-body.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-body.md",
      "adb-connect-with-sql-worksheet-non-admin.md":"/common/building-blocks/tasks/adb/connect-with-sql-worksheet-non-admin.md",
      "adb-create-genai-policy.md":"/common/building-blocks/tasks/adb/create-genai-policy.md",
+     "adb-create-graph-pgql.md":"/common/building-blocks/tasks/adb/create-graph-pgql.md",
      "adb-create-graph.md":"/common/building-blocks/tasks/adb/create-graph.md",
      "adb-create-load-json-collection.md":"/common/building-blocks/tasks/adb/create-load-json-collection.md",
      "adb-create-user.md":"/common/building-blocks/tasks/adb/create-user.md",

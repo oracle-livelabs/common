@@ -1,0 +1,39 @@
+{
+  "name": "livelabs-author",
+  "owner": "Pat/Linda",
+  "authors": [
+    {
+      "name": "Pat",
+      "role": "author"
+    },
+    {
+      "name": "Linda",
+      "role": "author"
+    }
+  ],
+  "version": "26.5.2",
+  "published_at": "2026-05-21T00:00:00Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/livelabs-workshop-author-26.5.2/ready-to-deploy-archive/livelabs-workshop-author-26.5.2.zip",
+  "archive_sha256": "fdaae2060f07178513096c6f8328d4b9fffc2b8e9c87c81950da5bb2cafbe924",
+  "content_hash": "67af5ec16eccf1c39918234d642246b152f4705806fa5b7aae63293987c1d40d",
+  "min_updater_version": "2",
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version_history": [
+    {
+      "version": "26.5.2",
+      "published_at": "2026-05-21T00:00:00Z",
+      "authors": [
+        "Pat",
+        "Linda"
+      ],
+      "changes": [
+        "Current repository package recorded from the published skill artifact."
+      ],
+      "archive_sha256": "fdaae2060f07178513096c6f8328d4b9fffc2b8e9c87c81950da5bb2cafbe924",
+      "content_hash": "67af5ec16eccf1c39918234d642246b152f4705806fa5b7aae63293987c1d40d",
+      "portal_status": "pending"
+    }
+  ]
+}

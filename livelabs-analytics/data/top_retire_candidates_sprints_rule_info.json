@@ -1,0 +1,43 @@
+{
+  "selected_version": "candidate_v3",
+  "selected_description": "moderate-risk content item: moderate score, low demand, replacement path, and stale content older than 12 months",
+  "attempts": [
+    {
+      "version": "candidate_v1",
+      "description": "high-risk content item: strong retirement score, low demand, replacement path, and content older than 18 months",
+      "matched_count": 0,
+      "new_count": 0,
+      "cumulative_count": 0
+    },
+    {
+      "version": "candidate_v2",
+      "description": "at-risk content item: strong score, low demand, replacement path, and stale content older than 12 months",
+      "matched_count": 4,
+      "new_count": 4,
+      "cumulative_count": 4
+    },
+    {
+      "version": "candidate_v3",
+      "description": "moderate-risk content item: moderate score, low demand, replacement path, and stale content older than 12 months",
+      "matched_count": 25,
+      "new_count": 21,
+      "cumulative_count": 25
+    },
+    {
+      "version": "candidate_v4",
+      "description": "watchlist content item: include stale low-demand content older than 12 months for human review even if replacement is not settled yet",
+      "matched_count": 150,
+      "new_count": 125,
+      "cumulative_count": 150
+    }
+  ],
+  "fallback_used": true,
+  "target_count": 100,
+  "visible_target_count": 10,
+  "expanded_selected_version": "candidate_v4",
+  "expanded_selected_description": "watchlist content item: include stale low-demand content older than 12 months for human review even if replacement is not settled yet",
+  "expanded_fallback_used": true,
+  "terminal_version": "candidate_v4",
+  "terminal_description": "watchlist content item: include stale low-demand content older than 12 months for human review even if replacement is not settled yet",
+  "terminal_fallback_used": true
+}

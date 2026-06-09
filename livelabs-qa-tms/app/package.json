@@ -1,0 +1,17 @@
+{
+  "name": "livelabs-tms-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local Redwood-styled LiveLabs test management solution prototype.",
+  "scripts": {
+    "start": "node scripts/serve.mjs --port 4193",
+    "build": "node scripts/build.mjs",
+    "validate": "node scripts/validate-project.mjs",
+    "smoke": "node scripts/browser-smoke.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

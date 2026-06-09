@@ -1,0 +1,352 @@
+<ac:structured-macro ac:macro-id="{{slug}}-top-band" ac:name="section" ac:schema-version="1">
+  <ac:rich-text-body>
+    <ac:structured-macro ac:macro-id="{{slug}}-mission-column" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">34%</ac:parameter>
+      <ac:rich-text-body>
+        <ac:structured-macro ac:macro-id="{{slug}}-mission" ac:name="info" ac:schema-version="1">
+          <ac:rich-text-body>
+            <h2><span style="color:#C74634;"><strong>Mission</strong></span></h2>
+            <p>{{mission}}</p>
+            <p><strong>Outcome:</strong> {{outcome}}</p>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="{{slug}}-team-column" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">33%</ac:parameter>
+      <ac:rich-text-body>
+        <h2>Team &amp; Roles</h2>
+        <ul>
+          <li><p><strong>{{role_one_name}}</strong> - {{role_one_responsibility}}</p></li>
+          <li><p><strong>{{role_two_name}}</strong> - {{role_two_responsibility}}</p></li>
+          <li><p><strong>{{role_three_name}}</strong> - {{role_three_responsibility}}</p></li>
+        </ul>
+        <h2>Key Links</h2>
+        <ul>
+          <li><p><a href="{{link_one_url}}">{{link_one_label}}</a></p></li>
+          <li><p><a href="{{link_two_url}}">{{link_two_label}}</a></p></li>
+          <li><p><a href="{{link_three_url}}">{{link_three_label}}</a></p></li>
+        </ul>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="{{slug}}-contents-column" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">33%</ac:parameter>
+      <ac:rich-text-body>
+        <h2>Contents</h2>
+        <ac:structured-macro ac:macro-id="{{slug}}-toc" ac:name="toc" ac:schema-version="1">
+          <ac:parameter ac:name="maxLevel">3</ac:parameter>
+        </ac:structured-macro>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+  </ac:rich-text-body>
+</ac:structured-macro>
+
+<h2>Quick Glance</h2>
+<ac:structured-macro ac:macro-id="{{slug}}-quick-glance" ac:name="section" ac:schema-version="1">
+  <ac:rich-text-body>
+    <ac:structured-macro ac:macro-id="{{slug}}-quick-card-one" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">33%</ac:parameter>
+      <ac:rich-text-body>
+        <ac:structured-macro ac:macro-id="{{slug}}-quick-panel-one" ac:name="panel" ac:schema-version="1">
+          <ac:rich-text-body>
+            <p><span style="color:#C74634;"><strong>{{quick_one_title}}</strong></span></p>
+            <p>{{quick_one_body}}</p>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="{{slug}}-quick-card-two" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">34%</ac:parameter>
+      <ac:rich-text-body>
+        <ac:structured-macro ac:macro-id="{{slug}}-quick-panel-two" ac:name="panel" ac:schema-version="1">
+          <ac:rich-text-body>
+            <p><span style="color:#4F7D7B;"><strong>{{quick_two_title}}</strong></span></p>
+            <p>{{quick_two_body}}</p>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="{{slug}}-quick-card-three" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">33%</ac:parameter>
+      <ac:rich-text-body>
+        <ac:structured-macro ac:macro-id="{{slug}}-quick-panel-three" ac:name="panel" ac:schema-version="1">
+          <ac:rich-text-body>
+            <p><span style="color:#5F7D4F;"><strong>{{quick_three_title}}</strong></span></p>
+            <p>{{quick_three_body}}</p>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+  </ac:rich-text-body>
+</ac:structured-macro>
+
+<h2>{{primary_flow_title}}</h2>
+<p>{{primary_flow_summary}}</p>
+<ac:structured-macro ac:macro-id="{{slug}}-primary-steps" ac:name="ui-steps" ac:schema-version="1">
+  <ac:rich-text-body>
+    <ac:structured-macro ac:macro-id="{{slug}}-step-one" ac:name="ui-step" ac:schema-version="1">
+      <ac:rich-text-body>
+        <p><strong>{{step_one_title}}</strong></p>
+        <p>{{step_one_body}}</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="{{slug}}-step-two" ac:name="ui-step" ac:schema-version="1">
+      <ac:rich-text-body>
+        <p><strong>{{step_two_title}}</strong></p>
+        <p>{{step_two_body}}</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="{{slug}}-step-three" ac:name="ui-step" ac:schema-version="1">
+      <ac:rich-text-body>
+        <p><strong>{{step_three_title}}</strong></p>
+        <p>{{step_three_body}}</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+  </ac:rich-text-body>
+</ac:structured-macro>
+
+<h2>{{framework_section}}</h2>
+<p>{{framework_summary}}</p>
+<ac:structured-macro ac:macro-id="{{slug}}-framework-tabs" ac:name="ui-tabs" ac:schema-version="1">
+  <ac:rich-text-body>
+    <ac:structured-macro ac:macro-id="{{slug}}-tab-overview" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">{{tab_one_title}}</ac:parameter>
+      <ac:rich-text-body>
+        <p>{{tab_one_body}}</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="{{slug}}-tab-owner" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">{{tab_two_title}}</ac:parameter>
+      <ac:rich-text-body>
+        <p>{{tab_two_body}}</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="{{slug}}-tab-detail" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">{{tab_three_title}}</ac:parameter>
+      <ac:rich-text-body>
+        <p>{{tab_three_body}}</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+  </ac:rich-text-body>
+</ac:structured-macro>
+
+<h2>{{source_table_section}}</h2>
+<table class="wrapped">
+  <tbody>
+    <tr>
+      <th>{{column_one}}</th>
+      <th>{{column_two}}</th>
+      <th>{{column_three}}</th>
+    </tr>
+    <tr>
+      <td>{{row_one_col_one}}</td>
+      <td>{{row_one_col_two}}</td>
+      <td>{{row_one_col_three}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>{{details_section}}</h2>
+<ac:structured-macro ac:macro-id="{{slug}}-details-expand" ac:name="expand" ac:schema-version="1">
+  <ac:parameter ac:name="title">{{details_expand_title}}</ac:parameter>
+  <ac:rich-text-body>
+    <p>{{details_expand_body}}</p>
+  </ac:rich-text-body>
+</ac:structured-macro>
+
+<h2>Legend And FAQ</h2>
+<h3><span style="color:#312D2A;">Legend</span></h3>
+<ac:structured-macro ac:macro-id="{{slug}}-legend-tabs" ac:name="ui-tabs" ac:schema-version="1">
+  <ac:rich-text-body>
+    <ac:structured-macro ac:macro-id="{{slug}}-legend-tab-process" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Process Terms</ac:parameter>
+      <ac:rich-text-body>
+        <table class="wrapped">
+          <tbody>
+            <tr>
+              <th>Term</th>
+              <th>Meaning</th>
+              <th>Where It Shows Up</th>
+            </tr>
+            <tr>
+              <td>{{legend_term_one}}</td>
+              <td>{{legend_term_one_meaning}}</td>
+              <td>{{legend_term_one_location}}</td>
+            </tr>
+            <tr>
+              <td>{{legend_term_two}}</td>
+              <td>{{legend_term_two_meaning}}</td>
+              <td>{{legend_term_two_location}}</td>
+            </tr>
+            <tr>
+              <td>{{legend_term_three}}</td>
+              <td>{{legend_term_three_meaning}}</td>
+              <td>{{legend_term_three_location}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="{{slug}}-legend-tab-status" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Status Labels</ac:parameter>
+      <ac:rich-text-body>
+        <table class="wrapped">
+          <tbody>
+            <tr>
+              <th>Status</th>
+              <th>Color</th>
+              <th>Meaning</th>
+              <th>Use When</th>
+            </tr>
+            <tr>
+              <td>
+                <ac:structured-macro ac:macro-id="{{slug}}-status-current" ac:name="status" ac:schema-version="1">
+                  <ac:parameter ac:name="colour">Green</ac:parameter>
+                  <ac:parameter ac:name="title">CURRENT</ac:parameter>
+                </ac:structured-macro>
+              </td>
+              <td><span style="color:#5F7D4F;"><strong>Green</strong></span></td>
+              <td>{{status_current_meaning}}</td>
+              <td>{{status_current_use}}</td>
+            </tr>
+            <tr>
+              <td>
+                <ac:structured-macro ac:macro-id="{{slug}}-status-pending" ac:name="status" ac:schema-version="1">
+                  <ac:parameter ac:name="colour">Yellow</ac:parameter>
+                  <ac:parameter ac:name="title">PENDING</ac:parameter>
+                </ac:structured-macro>
+              </td>
+              <td><span style="color:#AA643B;"><strong>Yellow</strong></span></td>
+              <td>{{status_pending_meaning}}</td>
+              <td>{{status_pending_use}}</td>
+            </tr>
+            <tr>
+              <td>
+                <ac:structured-macro ac:macro-id="{{slug}}-status-review" ac:name="status" ac:schema-version="1">
+                  <ac:parameter ac:name="colour">Grey</ac:parameter>
+                  <ac:parameter ac:name="title">REVIEW</ac:parameter>
+                </ac:structured-macro>
+              </td>
+              <td><span style="color:#697778;"><strong>Grey</strong></span></td>
+              <td>{{status_review_meaning}}</td>
+              <td>{{status_review_use}}</td>
+            </tr>
+            <tr>
+              <td>
+                <ac:structured-macro ac:macro-id="{{slug}}-status-qa" ac:name="status" ac:schema-version="1">
+                  <ac:parameter ac:name="colour">Blue</ac:parameter>
+                  <ac:parameter ac:name="title">QA</ac:parameter>
+                </ac:structured-macro>
+              </td>
+              <td><span style="color:#00688C;"><strong>Blue</strong></span></td>
+              <td>{{status_qa_meaning}}</td>
+              <td>{{status_qa_use}}</td>
+            </tr>
+            <tr>
+              <td>
+                <ac:structured-macro ac:macro-id="{{slug}}-status-flag" ac:name="status" ac:schema-version="1">
+                  <ac:parameter ac:name="colour">Red</ac:parameter>
+                  <ac:parameter ac:name="title">FLAG</ac:parameter>
+                </ac:structured-macro>
+              </td>
+              <td><span style="color:#C74634;"><strong>Red</strong></span></td>
+              <td>{{status_flag_meaning}}</td>
+              <td>{{status_flag_use}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="{{slug}}-legend-tab-records" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Records &amp; Artifacts</ac:parameter>
+      <ac:rich-text-body>
+        <table class="wrapped">
+          <tbody>
+            <tr>
+              <th>Record</th>
+              <th>What It Tracks</th>
+              <th>Owner Action</th>
+            </tr>
+            <tr>
+              <td>{{record_one_name}}</td>
+              <td>{{record_one_tracks}}</td>
+              <td>{{record_one_action}}</td>
+            </tr>
+            <tr>
+              <td>{{record_two_name}}</td>
+              <td>{{record_two_tracks}}</td>
+              <td>{{record_two_action}}</td>
+            </tr>
+            <tr>
+              <td>{{record_three_name}}</td>
+              <td>{{record_three_tracks}}</td>
+              <td>{{record_three_action}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<h3><span style="color:#312D2A;">Questions</span></h3>
+<ac:structured-macro ac:macro-id="{{slug}}-faq-tabs" ac:name="ui-tabs" ac:schema-version="1">
+  <ac:rich-text-body>
+    <ac:structured-macro ac:macro-id="{{slug}}-faq-tab-process" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Process</ac:parameter>
+      <ac:rich-text-body>
+        <ac:structured-macro ac:macro-id="{{slug}}-faq-process-one" ac:name="expand" ac:schema-version="1">
+          <ac:parameter ac:name="title">{{faq_process_question_one}}</ac:parameter>
+          <ac:rich-text-body>
+            <p><strong>Short answer:</strong> {{faq_process_answer_one_short}}</p>
+            <p>{{faq_process_answer_one_detail}}</p>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+        <ac:structured-macro ac:macro-id="{{slug}}-faq-process-two" ac:name="expand" ac:schema-version="1">
+          <ac:parameter ac:name="title">{{faq_process_question_two}}</ac:parameter>
+          <ac:rich-text-body>
+            <p><strong>Short answer:</strong> {{faq_process_answer_two_short}}</p>
+            <p>{{faq_process_answer_two_detail}}</p>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="{{slug}}-faq-tab-ownership" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Ownership</ac:parameter>
+      <ac:rich-text-body>
+        <ac:structured-macro ac:macro-id="{{slug}}-faq-owner-one" ac:name="expand" ac:schema-version="1">
+          <ac:parameter ac:name="title">{{faq_owner_question_one}}</ac:parameter>
+          <ac:rich-text-body>
+            <p><strong>Short answer:</strong> {{faq_owner_answer_one_short}}</p>
+            <p>{{faq_owner_answer_one_detail}}</p>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+        <ac:structured-macro ac:macro-id="{{slug}}-faq-owner-two" ac:name="expand" ac:schema-version="1">
+          <ac:parameter ac:name="title">{{faq_owner_question_two}}</ac:parameter>
+          <ac:rich-text-body>
+            <p><strong>Short answer:</strong> {{faq_owner_answer_two_short}}</p>
+            <p>{{faq_owner_answer_two_detail}}</p>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="{{slug}}-faq-tab-status-records" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Status &amp; Records</ac:parameter>
+      <ac:rich-text-body>
+        <ac:structured-macro ac:macro-id="{{slug}}-faq-status-one" ac:name="expand" ac:schema-version="1">
+          <ac:parameter ac:name="title">{{faq_status_question_one}}</ac:parameter>
+          <ac:rich-text-body>
+            <p><strong>Short answer:</strong> {{faq_status_answer_one_short}}</p>
+            <p>{{faq_status_answer_one_detail}}</p>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+        <ac:structured-macro ac:macro-id="{{slug}}-faq-status-two" ac:name="expand" ac:schema-version="1">
+          <ac:parameter ac:name="title">{{faq_status_question_two}}</ac:parameter>
+          <ac:rich-text-body>
+            <p><strong>Short answer:</strong> {{faq_status_answer_two_short}}</p>
+            <p>{{faq_status_answer_two_detail}}</p>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+  </ac:rich-text-body>
+</ac:structured-macro>

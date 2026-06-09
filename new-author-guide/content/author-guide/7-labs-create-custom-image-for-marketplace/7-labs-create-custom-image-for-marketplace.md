@@ -1,0 +1,106 @@
+# Create Custom OCI Compute Image for Marketplace Publishing
+
+## Introduction
+This lab shows you how to prepare a host for custom image capture and create the custom image that meets stringent OCI marketplace requirements.
+
+Estimated Time: x
+
+### Objectives
+- Perform cleanup tasks to get the image in the desired state for custom image capture
+- Create Custom Image
+
+### Prerequisites
+This lab assumes you have:
+- An Oracle Enterprise Linux (OEL) instance that meets marketplace publishing requirements
+
+## Task 1: Clean Up Instance for Image Capture
+
+1. **Outside of your remote desktop connection!** Connect to your instance via SSH as user *opc*.
+
+2. Copy and run the following to clean up the instance.
+
+    ```
+    <copy>
+    cd /tmp
+    wget -q https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/livelabs-image-cleanup.zip -O /tmp/livelabs-image-cleanup.zip
+    unzip -qo livelabs-image-cleanup.zip 
+    chmod +x livelabs-image-cleanup.sh
+    sudo /tmp/livelabs-image-cleanup.sh
+    </copy>
+    ```
+
+## Task 2: Create Custom Image
+
+Your instance is now ready for clean capture. Proceed to the OCI console to perform the next steps.
+
+1. Launch your browser to the OCI console, then navigate to *"Compute > Instances"*.
+
+    ![Navigate menu for instances](./images/select-instance-1.png " ")
+
+2. Select the instance on which you just performed the cleanup steps. Make sure to select the right compartment.
+
+    ![Select compartment and instance](./images/select-instance-2.png " ")
+
+3. Click on *"More Actions"* and select *"Create Custom Image"*.
+
+    ![Use More Actions for Create Custom Image](./images/create-image-1.png " ")
+
+4. Enter a name for the image and click *"Create Custom Image"*.
+
+    ![Name image](./images/create-image-2.png " ")
+
+5. Edit image details and select all shapes except *BM.Standard.A1.160* and *VM.Standard.A1.Flex*.
+
+    ![Edit image details](./images/create-image-3.png " ")
+
+## Task 3: Test Custom Image
+
+1. Download the sample ORM stack zip archive:
+
+    - [ll-orm-mkplc-freetier.zip](https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-freetier.zip)
+
+2. Unzip it locally on your computer to *ll-orm-mkplc-freetier*.
+3. Delete the downloaded file *ll-orm-mkplc-freetier.zip*.
+4. Copy the OCID of the new image.
+
+    ![OCID details](./images/get-image-ocid.png " ")
+
+5. Navigate to *ll-orm-mkplc-freetier* and open the file *variables.tf*.
+
+6. Update the default value for each of the 5 variables shown below:
+
+    - **`instance_image_id`** - Enter the new image OCID copied above *(Required)*
+    - **`novnc_delay_sec`** - Adjust the delay (in seconds by appending s to the number, e.g., 600s) to wait for all processes to start post-boot before the desktop URL is presented to the user *(optional)*
+    - **`desktop_guide_url`** - Enter the desktop guide URL for your workshop. It should end with `".../workshop/desktop"` *(Required)*
+    - **`desktop_app1_url`** - Enter your first desktop web app URL if applicable, unset by setting to `""`, or keep unchanged *(optional)*
+    - **`desktop_app2_url`** - Enter your second desktop web app URL if applicable, unset by setting to `""`, or keep unchanged *(optional)*
+
+    ![Update default variables](./images/update-image-ocid.png " ")
+
+7. Save *variables.tf*.
+8. Repackage the entire content of *ll-orm-mkplc-freetier* as *ll-orm-mkplc-freetier.zip*.
+
+    ![Repackage content](./images/zip-orm-stack.png " ")
+
+9. Using the new zip file, navigate to "*Developer Services > Stacks*" and create a test instance with Oracle Resources Manager (ORM).
+
+    *Note:* For details on provisioning with ORM, refer to the [setup-compute](https://oracle-livelabs.github.io/common/sample-livelabs-templates/sample-workshop-novnc/workshops/tenancy/?lab=setup-compute-novnc-ssh) lab guide.
+
+10. After successful instance creation, get the remote desktop URL and log on to validate.
+
+    ![Remote desktop URL](./images/get-remote-desktop-url.png " ")
+
+11. Launch a browser session and navigate to the copied URL to validate.
+
+    ![Remote desktop landing page](./images/remote-desktop-landing.png " ")
+
+    *Note:* If the setup was successful, you should see two sample Google Chrome browser windows preloaded.
+
+
+## Learn More
+* [Oracle Cloud Marketplace Partner Portal Documentation](https://docs.oracle.com/en/cloud/marketplace/partner-portal/index.html)
+* [Oracle Cloud Marketplace Partner Portal Videos](https://docs.oracle.com/en/cloud/marketplace/partner-portal/videos.html)
+
+
+## Acknowledgements
+* **Last Updated By/Date** - LiveLabs Team, January 2026

@@ -1,0 +1,34 @@
+{
+  "name": "redwood-creator",
+  "owner": "Sanda",
+  "authors": [
+    {
+      "name": "Sanda",
+      "role": "author"
+    }
+  ],
+  "version": "1.0",
+  "published_at": "2026-05-11T00:00:00Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/redwood-creator/ready-to-deploy-archive/redwood-creator.zip",
+  "archive_sha256": "f83355ab84be8133556dbbe24dafb3ea990eac311b7be6d1a634565a304d9103",
+  "content_hash": "7353a4a93daec55983932e0e36b7cd835a380c5cf262c686ee364177e9b8387d",
+  "min_updater_version": "2",
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version_history": [
+    {
+      "version": "1.0",
+      "published_at": "2026-05-11T00:00:00Z",
+      "authors": [
+        "Sanda"
+      ],
+      "changes": [
+        "Extracted the LiveStacks bundled slim app UI pack as a standalone common/skills package."
+      ],
+      "archive_sha256": "f83355ab84be8133556dbbe24dafb3ea990eac311b7be6d1a634565a304d9103",
+      "content_hash": "7353a4a93daec55983932e0e36b7cd835a380c5cf262c686ee364177e9b8387d",
+      "portal_status": "pending"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "selected_version": "weighted_v4",
+  "selected_description": "third retire-now fallback: broaden low-demand slightly, allow confirmed or review replacement, and require stale content older than 12 months",
+  "attempts": [
+    {
+      "version": "strict_v1",
+      "description": "retire-now content item: high retirement score, confirmed replacement, very low demand, updated more than 24 months ago, and published more than 30 months ago",
+      "matched_count": 0,
+      "new_count": 0,
+      "cumulative_count": 0
+    },
+    {
+      "version": "weighted_v2",
+      "description": "first retire-now fallback: lower the score bar slightly but still require confirmed replacement plus the strict stale and age gates",
+      "matched_count": 0,
+      "new_count": 0,
+      "cumulative_count": 0
+    },
+    {
+      "version": "weighted_v3",
+      "description": "second retire-now fallback: allow confirmed or review replacement, keep a high score, and relax stale age to 18 months",
+      "matched_count": 2,
+      "new_count": 2,
+      "cumulative_count": 2
+    },
+    {
+      "version": "weighted_v4",
+      "description": "third retire-now fallback: broaden low-demand slightly, allow confirmed or review replacement, and require stale content older than 12 months",
+      "matched_count": 15,
+      "new_count": 13,
+      "cumulative_count": 15
+    },
+    {
+      "version": "weighted_v5",
+      "description": "fourth retire-now fallback: keep retirement pressure visible with stale content older than 12 months, broader low-demand thresholds, and confirmed or review replacement",
+      "matched_count": 34,
+      "new_count": 19,
+      "cumulative_count": 34
+    },
+    {
+      "version": "weighted_v6",
+      "description": "final retire-now filler: include stale low-demand content older than 12 months even when replacement still needs human confirmation",
+      "matched_count": 142,
+      "new_count": 108,
+      "cumulative_count": 142
+    }
+  ],
+  "fallback_used": true,
+  "target_count": 100,
+  "visible_target_count": 10,
+  "expanded_selected_version": "weighted_v6",
+  "expanded_selected_description": "final retire-now filler: include stale low-demand content older than 12 months even when replacement still needs human confirmation",
+  "expanded_fallback_used": true,
+  "terminal_version": "weighted_v6",
+  "terminal_description": "final retire-now filler: include stale low-demand content older than 12 months even when replacement still needs human confirmation",
+  "terminal_fallback_used": true
+}

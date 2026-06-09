@@ -1,0 +1,3231 @@
+<ac:structured-macro ac:macro-id="v9-landing-section" ac:name="section" ac:schema-version="1">
+  <ac:rich-text-body>
+    <ac:structured-macro ac:macro-id="v9-landing-col-1" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">40%</ac:parameter>
+      <ac:rich-text-body>
+        <ac:structured-macro ac:macro-id="v9-mission-panel" ac:name="info" ac:schema-version="1">
+          <ac:rich-text-body>
+            <h2>
+              <span style="color:var(--ds-text-accent-magenta,#943d73);"> <strong>Workshop Governance Mission</strong> </span>
+            </h2>
+            <p>Govern the LiveLabs <strong>workshop</strong> portfolio as a repeatable portfolio-management process, not as a one-time retirement exercise.</p>
+            <p>This page is the source of truth for how LiveLabs identifies <strong>Top Performers</strong>, <strong>Top Retire Candidates</strong>, and <strong>Workshops To Retire</strong>, using demand, staleness, ownership, and replacement evidence.</p>
+            <p>This strategy applies to <strong>workshops only</strong>.</p>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v9-landing-col-2" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">30%</ac:parameter>
+      <ac:rich-text-body>
+        <h2>Scope</h2>
+        <p>This governance model balances two portfolio needs at the same time:</p>
+        <ul>
+          <li>protect and invest in strong workshops</li>
+          <li>identify aging, low-value, or superseded workshops for refresh or retirement</li>
+        </ul>
+        <p>
+          <strong>Non-goals:</strong> lifetime-view ranking, repo-level activity as a workshop proxy, and retirement based on a single weak signal.</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v9-landing-col-3" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">30%</ac:parameter>
+      <ac:rich-text-body>
+        <h2>TOC</h2>
+        <p>
+          <strong> <ac:structured-macro ac:macro-id="a5a73dd3-eca7-4d06-a229-88716dbfe347" ac:name="toc" ac:schema-version="1"/>
+          </strong>
+        </p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<ac:structured-macro ac:macro-id="v9-at-a-glance-section" ac:name="section" ac:schema-version="1">
+  <ac:rich-text-body>
+    <ac:structured-macro ac:macro-id="v9-glance-col-1" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">33%</ac:parameter>
+      <ac:rich-text-body>
+        <ac:structured-macro ac:macro-id="v9-panel-outputs" ac:name="panel" ac:schema-version="1">
+          <ac:parameter ac:name="borderColor">#2F6F94</ac:parameter>
+          <ac:parameter ac:name="bgColor">#EAF4FB</ac:parameter>
+          <ac:parameter ac:name="title">Outputs We Publish</ac:parameter>
+          <ac:rich-text-body>
+            <ul>
+              <li>
+                <strong>Top Performers</strong> for protection and investment</li>
+              <li>
+                <strong>Top Retire Candidates</strong> for broad review prioritization</li>
+              <li>
+                <strong>Workshops To Retire</strong> for strongest retirement actions</li>
+            </ul>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v9-glance-col-2" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">34%</ac:parameter>
+      <ac:rich-text-body>
+        <ac:structured-macro ac:macro-id="v9-panel-signals" ac:name="panel" ac:schema-version="1">
+          <ac:parameter ac:name="borderColor">#1D6A4C</ac:parameter>
+          <ac:parameter ac:name="bgColor">#EAF7F1</ac:parameter>
+          <ac:parameter ac:name="title">Signals We Measure</ac:parameter>
+          <ac:rich-text-body>
+            <ul>
+              <li>
+                <strong>Demand:</strong> recent_views_90d and recent_views_12m</li>
+              <li>
+                <strong>Age:</strong> age_months since publish</li>
+              <li>
+                <strong>Staleness:</strong> months_since_update from meaningful workshop updates</li>
+              <li>
+                <strong>Ownership:</strong> owner_present</li>
+              <li>
+                <strong>Replacement:</strong> replacement_exists and replacement_similarity_score</li>
+            </ul>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v9-glance-col-3" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">33%</ac:parameter>
+      <ac:rich-text-body>
+        <ac:structured-macro ac:macro-id="v9-panel-decisions" ac:name="panel" ac:schema-version="1">
+          <ac:parameter ac:name="borderColor">#C74634</ac:parameter>
+          <ac:parameter ac:name="bgColor">#FCEFEA</ac:parameter>
+          <ac:parameter ac:name="title">Lifecycle Decisions</ac:parameter>
+          <ac:rich-text-body>
+            <ul>
+              <li>
+                <strong>Keep</strong> when value is healthy and content is current enough</li>
+              <li>
+                <strong>Refresh</strong> when value is high but staleness is rising</li>
+              <li>
+                <strong>Retire Candidate</strong> when evidence supports retirement review</li>
+              <li>
+                <strong>Retired</strong> only after approval and execution</li>
+            </ul>
+          </ac:rich-text-body>
+        </ac:structured-macro>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<h2>How To Use This Page</h2>
+<hr/>
+<ac:structured-macro ac:macro-id="v9-read-guide" ac:name="ui-expand" ac:schema-version="1">
+  <ac:parameter ac:name="title">Open Reading Guide</ac:parameter>
+  <ac:rich-text-body>
+    <ol>
+      <li data-uuid="ccadf61a-91b3-4cc4-8402-1e6738d8b1e7">Start with <strong>Governance Framework</strong> to understand the outputs, decisions, and operating flow.</li>
+      <li data-uuid="547a54a5-b3a7-4838-b1fd-fa0e29e8c77e">Read <strong>Goals &amp; Success Criteria</strong> and <strong>Core Principles</strong> for the governing intent.</li>
+      <li data-uuid="bcb3b270-c369-4c69-8b46-c821b96a9cf7">Read <strong>Lifecycle Decision Criteria</strong> and <strong>Scoring Model</strong> to understand how workshop states are assigned and prioritized.</li>
+      <li data-uuid="0113397d-24f4-47b9-a5e0-1bd4a5102f3e">Use <strong>Demand Thresholds</strong>, <strong>Workshop Staleness</strong>, and <strong>Replacement Criteria</strong> as the evidence basis for governance.</li>
+      <li data-uuid="433fdc5c-58bb-4ef3-b52e-6a89340ba560">Use <strong>Governance Calculation Summary</strong> as the compact formula reference.</li>
+    </ol>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<h2>Overview</h2>
+<hr/>
+<p>Workshop governance is the portfolio process used to decide where LiveLabs should <strong>invest</strong>, where it should <strong>refresh</strong>, and where it should <strong>retire</strong>.</p>
+<p>The page is organized to answer three governance questions in order: <strong>what should be protected</strong>, <strong>what should be reviewed</strong>, and <strong>what is strong enough for retirement action</strong>.</p>
+<h2>Governance Framework</h2>
+<hr/>
+<ac:structured-macro ac:macro-id="v9-governance-tabs" ac:name="ui-tabs" ac:schema-version="1">
+  <ac:rich-text-body>
+    <ac:structured-macro ac:macro-id="v9-tab-outputs" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Portfolio Outputs</ac:parameter>
+      <ac:rich-text-body>
+        <table class="wrapped">
+          <tbody>
+            <tr>
+              <th>
+                <p>
+                  <strong>Output</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Main Question</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Primary Logic</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Primary Action</strong>
+                </p>
+              </th>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Top Performers</strong>
+                </p>
+              </td>
+              <td>
+                <p>Which workshops create the most current portfolio value?</p>
+              </td>
+              <td>
+                <p>
+                  <strong>best_performer_score</strong> = 0.60 x recent-demand percentile + 0.40 x yearly-demand percentile.</p>
+              </td>
+              <td>
+                <p>Protect, promote, and refresh high-value workshops before considering retirement.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Top Retire Candidates</strong>
+                </p>
+              </td>
+              <td>
+                <p>Which workshops deserve governance review first?</p>
+              </td>
+              <td>
+                <p>
+                  <strong>retire_score</strong> blends low demand, staleness, replacement evidence, and ownership risk.</p>
+              </td>
+              <td>
+                <p>Prioritize review conversations, cleanup planning, and replacement validation.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Workshops To Retire</strong>
+                </p>
+              </td>
+              <td>
+                <p>Which workshops have the strongest evidence for retirement action now?</p>
+              </td>
+              <td>
+                <p>Strict subset of retire candidates: mature age, strong staleness, low demand, and confirmed replacement support.</p>
+              </td>
+              <td>
+                <p>Move to approval, website removal, and repository archive steps.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          <strong>Detail:</strong> Each output can be published as a <strong>ranked</strong> top depending on the governance audience.</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v9-tab-decisions" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Decision Model</ac:parameter>
+      <ac:rich-text-body>
+        <table class="wrapped">
+          <tbody>
+            <tr>
+              <th>
+                <p>
+                  <strong>Decision State</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Meaning</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Portfolio Intent</strong>
+                </p>
+              </th>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Keep</strong>
+                </p>
+              </td>
+              <td>
+                <p>Workshop remains in the active portfolio without near-term intervention.</p>
+              </td>
+              <td>
+                <p>Protect valuable or sufficiently current content.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Refresh</strong>
+                </p>
+              </td>
+              <td>
+                <p>Workshop remains valuable but update pressure is rising.</p>
+              </td>
+              <td>
+                <p>Invest in content that still serves users but is drifting.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Retire Candidate</strong>
+                </p>
+              </td>
+              <td>
+                <p>Workshop enters structured governance review for possible retirement.</p>
+              </td>
+              <td>
+                <p>Focus review attention where value is weak or redundancy is rising.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Retired</strong>
+                </p>
+              </td>
+              <td>
+                <p>Workshop is removed from active LiveLabs delivery.</p>
+              </td>
+              <td>
+                <p>Complete portfolio cleanup only after approval and execution.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          <strong>Important:</strong> Top Performers is a <strong>ranking output</strong>, not a lifecycle state.</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v9-tab-flow" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Operating Flow</ac:parameter>
+      <ac:rich-text-body>
+        <ol>
+          <li>
+            <strong>Measure the portfolio</strong> using current demand, workshop age, meaningful update staleness, owner coverage, and replacement evidence.</li>
+          <li>
+            <strong>Rank Top Performers</strong> to identify workshops that should be protected and invested in.</li>
+          <li>
+            <strong>Rank Top Retire Candidates</strong> to identify workshops that deserve review attention first.</li>
+          <li>
+            <strong>Apply strict retirement gates</strong> to isolate the smaller set of Workshops To Retire.</li>
+          <li>
+            <strong>Move through owner review, approval, and execution</strong> before any workshop is actually retired.</li>
+        </ol>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v9-tab-evidence" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Evidence Rules</ac:parameter>
+      <ac:rich-text-body>
+        <ul>
+          <li>Use <strong>recent_views_90d</strong> and <strong>recent_views_12m</strong>, not lifetime views.</li>
+          <li>Normalize retirement-demand pressure within category using <strong>views_12m_percentile</strong>.</li>
+          <li>Use <strong>meaningful workshop-level update evidence</strong>, not broad repo maintenance activity.</li>
+          <li>Treat <strong>replacement_exists = true</strong> as the only replacement state that can support strict retirement.</li>
+          <li>Use scoring to prioritize review, but use lifecycle gates and approval to make final retirement decisions.</li>
+        </ul>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<h2>Goals &amp; Success Criteria</h2>
+<hr/>
+<table class="wrapped">
+  <tbody>
+    <tr>
+      <th>
+        <p>
+          <strong>Primary Goals</strong>
+        </p>
+      </th>
+      <th>
+        <p>
+          <strong>Success Criteria</strong>
+        </p>
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <ul>
+          <li>Protect and invest in the highest-value workshops in the portfolio</li>
+          <li>Refresh workshops that still matter but are becoming stale</li>
+          <li>Retire workshops that are low-value, aging, and credibly superseded</li>
+          <li>Make portfolio decisions explainable, repeatable, and auditable</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Top-performer outputs are published and used to guide protection and refresh investment</li>
+          <li>High-demand stale workshops move into Refresh with owners and target dates</li>
+          <li>Retire-candidate and to-retire outputs are reviewed on schedule with documented rationale</li>
+          <li>Yearly portfolio review completed on schedule</li>
+          <li>Retired workshops are removed from LiveLabs and GitHub archived with documented replacement or obsolescence rationale</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h2>Core Principles</h2>
+<hr/>
+<ul>
+  <li>
+    <strong>Portfolio lifecycle, not one-off cleanup:</strong> decisions repeat on a yearly portfolio review cycle today and should remain consistent as the process matures.</li>
+  <li>
+    <strong>Automation is a future improvement:</strong> workshop update checks may be automated later, but the current scope is the yearly portfolio governance review.</li>
+  <li>
+    <strong>Do not retire using lifetime views:</strong> use <strong>recent_views_90d</strong> and <strong>recent_views_12m</strong> so current relevance drives decisions.</li>
+  <li>
+    <strong>Normalize demand within category:</strong> use percentiles within category/repo/track so niche workshops are not penalized against broad intro workshops.</li>
+  <li>
+    <strong>Repo activity is not a workshop signal:</strong> large repos contain many workshop generations; evaluate at the workshop level when possible.</li>
+  <li>
+    <strong>Last updated must be meaningful:</strong> use the latest meaningful workshop-path content update, not broad maintenance-only touches such as Adobe Analytics cookie removals, global URL-fix sweeps, or template-only cleanup.</li>
+  <li>
+    <strong>Superseded does not mean unimportant:</strong> older workshops often have similar replacements; replace/redirect rather than leaving duplicates.</li>
+  <li>
+    <strong>Scope clarity:</strong> this policy is for <strong>workshops</strong>. Event content is not scored here.</li>
+</ul>
+<h2>Governance Operating Cycle</h2>
+<hr/>
+<ac:structured-macro ac:macro-id="v9-operating-cycle" ac:name="ui-steps" ac:schema-version="1">
+  <ac:rich-text-body>
+    <ac:structured-macro ac:macro-id="v9-cycle-step-1" ac:name="ui-step" ac:schema-version="1">
+      <ac:rich-text-body>
+        <h3>1. Measure The Portfolio</h3>
+        <p>Refresh the demand, staleness, ownership, age, and replacement signals used by governance.</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v9-cycle-step-2" ac:name="ui-step" ac:schema-version="1">
+      <ac:rich-text-body>
+        <h3>2. Publish Top Performers</h3>
+        <p>Rank the strongest workshops to guide protection, featuring, and refresh investment.</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v9-cycle-step-3" ac:name="ui-step" ac:schema-version="1">
+      <ac:rich-text-body>
+        <h3>3. Publish Review Queues</h3>
+        <p>Rank Top Retire Candidates, then apply strict retirement gates to isolate Workshops To Retire.</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v9-cycle-step-4" ac:name="ui-step" ac:schema-version="1">
+      <ac:rich-text-body>
+        <h3>4. Review With Owners</h3>
+        <p>Owners either commit to refresh with dates, validate retirement, or challenge weak evidence.</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v9-cycle-step-5" ac:name="ui-step" ac:schema-version="1">
+      <ac:rich-text-body>
+        <h3>5. Execute Portfolio Actions</h3>
+        <p>Refresh, keep, or retire workshops and document the final rationale for portfolio traceability.</p>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<h2>Governance Decision Framework</h2>
+<hr/>
+<p>This section explains how the <strong>refresh-side and retire-side signals translate into lifecycle outcomes</strong>.</p>
+<p>The visible <strong>summary table</strong> is the normal reading path. The detailed matrix and the gates are collapsed because they are reference logic.</p>
+<ac:structured-macro ac:macro-id="v10-decision-framework-section" ac:name="section" ac:schema-version="1">
+  <ac:rich-text-body>
+    <ac:structured-macro ac:macro-id="v10-decision-framework-col-1" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">44%</ac:parameter>
+      <ac:rich-text-body>
+        <h2>Lifecycle States (Definitions)</h2>
+        <table class="wrapped relative-table" style="width: 100.0%;">
+          <colgroup> <col style="width: 16.0%;"/> <col style="width: 42.0%;"/> <col style="width: 42.0%;"/> </colgroup>
+          <tbody>
+            <tr>
+              <th>
+                <p>
+                  <strong>State</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Meaning</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Operational Behavior</strong>
+                </p>
+              </th>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Keep</strong>
+                </p>
+              </td>
+              <td>
+                <p>Workshop remains active without near-term intervention.</p>
+              </td>
+              <td>
+                <p>Normal maintenance and continued portfolio use.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Refresh</strong>
+                </p>
+              </td>
+              <td>
+                <p>Workshop still creates value, but update pressure is high enough to justify work.</p>
+              </td>
+              <td>
+                <p>Assign or confirm owner, define scope, and set a due date.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Retire Candidate</strong>
+                </p>
+              </td>
+              <td>
+                <p>Workshop enters structured review for possible retirement.</p>
+              </td>
+              <td>
+                <p>Validate replacement or obsolescence, review with owner, and decide whether to retire or refresh.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Retired</strong>
+                </p>
+              </td>
+              <td>
+                <p>Workshop is removed from active LiveLabs delivery.</p>
+              </td>
+              <td>
+                <p>Remove from website, archive repository, and record the rationale.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v10-decision-framework-col-2" ac:name="column" ac:schema-version="1">
+      <ac:parameter ac:name="width">56%</ac:parameter>
+      <ac:rich-text-body>
+        <h2>Decision Outcome Summary</h2>
+        <p>This summary table groups the decision logic into the outcome families that matter most during portfolio review.</p>
+        <table class="wrapped">
+          <tbody>
+            <tr>
+              <th>
+                <p>
+                  <strong>Signal Pattern</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Primary Outcome</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Governance Intent</strong>
+                </p>
+              </th>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Healthy demand</strong> + <strong>Fresh or Aging</strong>
+                </p>
+              </td>
+              <td>
+                <p>
+                  <strong>Keep</strong>
+                </p>
+              </td>
+              <td>
+                <p>Do not push valuable workshops into retire-side logic too early.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Healthy demand</strong> + <strong>Stale or Critical</strong>
+                </p>
+              </td>
+              <td>
+                <p>
+                  <strong>Refresh</strong>
+                </p>
+              </td>
+              <td>
+                <p>High-value stale content should be updated rather than retired.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Low demand</strong> + <strong>Fresh</strong>
+                </p>
+              </td>
+              <td>
+                <p>
+                  <strong>Keep</strong>
+                </p>
+              </td>
+              <td>
+                <p>Low demand alone is not enough for retire-side action.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Low demand</strong> + <strong>Aging</strong> + <strong>No owner</strong> + <strong>replacement evidence</strong>
+                </p>
+              </td>
+              <td>
+                <p>
+                  <strong>Retire Candidate</strong>
+                </p>
+              </td>
+              <td>
+                <p>Early candidate entry is allowed when weak value combines with weak ownership and credible replacement evidence.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Low demand</strong> + <strong>Stale</strong> + <strong>replacement missing</strong>
+                </p>
+              </td>
+              <td>
+                <p>
+                  <strong>Refresh</strong> or <strong>Retire Candidate</strong>
+                </p>
+              </td>
+              <td>
+                <p>Replacement strength determines whether the workshop should be fixed first or moved into retirement review.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Low demand</strong> + <strong>Stale or Critical</strong> + <strong>replacement evidence present</strong>
+                </p>
+              </td>
+              <td>
+                <p>
+                  <strong>Retire Candidate</strong>
+                </p>
+              </td>
+              <td>
+                <p>This is the main entry path for retire-side filtering.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Retire Candidate</strong> + <strong>age_months &gt;= 30</strong> + <strong>months_since_update &gt;= 24</strong> + <strong>views_12m_percentile &lt;= 10</strong> + <strong>recent_views_90d &lt; 25</strong> + <strong>replacement_exists = true</strong>
+                </p>
+              </td>
+              <td>
+                <p>
+                  <strong>Workshops To Retire</strong> / <strong>Retired after approval</strong>
+                </p>
+              </td>
+              <td>
+                <p>This is the strict retirement subset, not the default retire-candidate outcome.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<ac:structured-macro ac:macro-id="v10-expand-decision-matrix" ac:name="ui-expand" ac:schema-version="1">
+  <ac:parameter ac:name="title">Open Detailed Decision Matrix</ac:parameter>
+  <ac:rich-text-body>
+    <p>This matrix shows all combinations of the triage criteria used in the decision framework. It drives the initial lifecycle recommendation before age, approval, and strict-retirement gates are applied.</p>
+    <table class="wrapped">
+      <colgroup> <col style="width: 12.0%;"/> <col style="width: 12.0%;"/> <col style="width: 12.0%;"/> <col style="width: 14.0%;"/> <col style="width: 20.0%;"/> <col style="width: 30.0%;"/> </colgroup>
+      <tbody>
+        <tr>
+          <th>
+            <p>
+              <strong>Demand</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Staleness</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Owner</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Replacement</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Primary Outcome</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Next Step</strong>
+            </p>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Fresh</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Maintain normally.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Fresh</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Maintain normally.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Fresh</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Maintain normally.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Fresh</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active and assign owner.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Fresh</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active and assign owner.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Fresh</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active and assign owner.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Aging</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active; monitor for drift.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Aging</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active; monitor for drift.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Aging</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active; monitor for drift.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Aging</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active and assign owner.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Aging</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active and assign owner.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Aging</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active and assign owner.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Stale</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>High value justifies refresh.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Stale</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>High value justifies refresh.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Stale</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>High value justifies refresh.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Stale</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>Assign owner and refresh.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Stale</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>Assign owner and refresh.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Stale</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>Assign owner and refresh.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Critical</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>Escalate refresh priority.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Critical</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>Escalate refresh priority.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Critical</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>Escalate refresh priority.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Critical</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>Assign owner and refresh urgently.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Critical</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>Assign owner and refresh urgently.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Healthy</p>
+          </td>
+          <td>
+            <p>Critical</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>Assign owner and refresh urgently.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Fresh</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active; watch for persistent weakness.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Fresh</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active; watch for persistent weakness.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Fresh</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active; watch for persistent weakness.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Fresh</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active, watchlist it, and assign owner.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Fresh</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active, watchlist it, and assign owner.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Fresh</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Keep active, watchlist it, and assign owner.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Aging</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Watchlist; review again if staleness worsens.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Aging</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Watchlist; review again if staleness worsens.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Aging</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Watchlist; review again if staleness worsens.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Aging</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Retire Candidate</strong>
+            </p>
+          </td>
+          <td>
+            <p>Weak ownership plus replacement evidence can move it into review.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Aging</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Retire Candidate</strong>
+            </p>
+          </td>
+          <td>
+            <p>Validate replacement and review for retirement.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Aging</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Watchlist and assign owner; not strong enough to retire yet.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Stale</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Retire Candidate</strong>
+            </p>
+          </td>
+          <td>
+            <p>Move into retire-side review.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Stale</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Retire Candidate</strong>
+            </p>
+          </td>
+          <td>
+            <p>Validate replacement while reviewing retirement.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Stale</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>Refresh if value may still be recoverable; no replacement proof yet.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Stale</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Retire Candidate</strong>
+            </p>
+          </td>
+          <td>
+            <p>Weak ownership plus replacement evidence supports retire review.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Stale</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Retire Candidate</strong>
+            </p>
+          </td>
+          <td>
+            <p>Validate replacement while reviewing retirement.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Stale</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Retire Candidate</strong>
+            </p>
+          </td>
+          <td>
+            <p>Owner gap and staleness justify retire-side review even without replacement proof.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Critical</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Retire Candidate</strong>
+            </p>
+          </td>
+          <td>
+            <p>High-confidence retirement review case.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Critical</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Retire Candidate</strong>
+            </p>
+          </td>
+          <td>
+            <p>Validate replacement while reviewing retirement.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Critical</p>
+          </td>
+          <td>
+            <p>Yes</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Retire Candidate</strong>
+            </p>
+          </td>
+          <td>
+            <p>Retire-side review is justified; replacement or obsolescence still must be validated.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Critical</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>true</p>
+          </td>
+          <td>
+            <p>
+              <strong>Retire Candidate</strong>
+            </p>
+          </td>
+          <td>
+            <p>High-confidence retirement review case.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Critical</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>review</p>
+          </td>
+          <td>
+            <p>
+              <strong>Retire Candidate</strong>
+            </p>
+          </td>
+          <td>
+            <p>Validate replacement while reviewing retirement.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Low</p>
+          </td>
+          <td>
+            <p>Critical</p>
+          </td>
+          <td>
+            <p>No</p>
+          </td>
+          <td>
+            <p>false</p>
+          </td>
+          <td>
+            <p>
+              <strong>Retire Candidate</strong>
+            </p>
+          </td>
+          <td>
+            <p>Retire-side review is justified; replacement or obsolescence still must be validated.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<ac:structured-macro ac:macro-id="v10-expand-decision-gates" ac:name="ui-expand" ac:schema-version="1">
+  <ac:parameter ac:name="title">Open Decision Modifiers And Gates</ac:parameter>
+  <ac:rich-text-body>
+    <p>These gates sit on top of the matrix and explain when a matrix outcome is allowed to move into stricter retire-side subsets.</p>
+    <ul>
+      <li>
+        <strong>Category normalization gate:</strong> final low-demand decisions must use <strong>views_12m_percentile</strong> within category, not global raw views.</li>
+      <li>
+        <strong>Healthy-demand override:</strong> workshops above the category median should default away from retire-side action and toward <strong>Keep</strong> or <strong>Refresh</strong>.</li>
+      <li>
+        <strong>Staleness gate:</strong> <strong>Fresh</strong> and most <strong>Aging</strong> workshops normally do not enter the retire-side path unless business obsolescence is documented.</li>
+      <li>
+        <strong>Age gate:</strong> <strong>age_months &lt; 24</strong> normally blocks retire-candidate status. <strong>age_months 24-29</strong> can support <strong>Retire Candidate</strong> but not the strict to-retire subset.</li>
+      <li>
+        <strong>Strict retirement subset gate:</strong> require <strong>age_months &gt;= 30</strong>, <strong>months_since_update &gt;= 24</strong>, <strong>recent_views_90d &lt; 25</strong>, <strong>views_12m_percentile &lt;= 10</strong>, and <strong>replacement_exists = true</strong>.</li>
+      <li>
+        <strong>Replacement gate:</strong> <strong>replacement_exists = true</strong> is the only replacement state that can support the strict to-retire subset. <strong>review</strong> requires validation. <strong>false</strong> requires documented obsolescence before retirement can complete.</li>
+      <li>
+        <strong>Owner gate:</strong> missing owner increases retire-side pressure, but high-demand stale workshops should still default to <strong>Refresh</strong> with owner assignment.</li>
+      <li>
+        <strong>Approval gate:</strong> no workshop moves to <strong>Retired</strong> automatically; retirement requires owner review and governance approval.</li>
+      <li>
+        <strong>Auto-flag rules:</strong> auto-flag anything with <strong>months_since_update &gt;= 18</strong>, <strong>views_12m_percentile &lt;= 10</strong>, or no owner plus stale content.</li>
+    </ul>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<h2>Governance Inputs And Derived Fields</h2>
+<hr/>
+<p>This section defines the raw fields and derived metrics used by the decision framework and the scoring model.</p>
+<p>It is a reference section, so the detailed field table is collapsed by default.</p>
+<ac:structured-macro ac:macro-id="v10-expand-inputs" ac:name="ui-expand" ac:schema-version="1">
+  <ac:parameter ac:name="title">Open Inputs And Field Definitions</ac:parameter>
+  <ac:rich-text-body>
+    <table class="wrapped">
+      <tbody>
+        <tr>
+          <th>
+            <p>
+              <strong>Field</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Definition</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Notes</strong>
+            </p>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>recent_views_90d</p>
+          </td>
+          <td>
+            <p>Views in the last 90 days</p>
+          </td>
+          <td>
+            <p>Best signal for current demand shifts.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>recent_views_12m</p>
+          </td>
+          <td>
+            <p>Views in the last 12 months</p>
+          </td>
+          <td>
+            <p>Used for yearly demand comparisons and category normalization.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>views_12m_percentile</p>
+          </td>
+          <td>
+            <p>Percentile rank of recent_views_12m inside the workshop's category</p>
+          </td>
+          <td>
+            <p>Primary low-demand signal for retire-side decisions.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>age_months</p>
+          </td>
+          <td>
+            <p>Months since the workshop was published</p>
+          </td>
+          <td>
+            <p>Used as a maturity gate, not as a stand-alone retirement signal.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>months_since_update</p>
+          </td>
+          <td>
+            <p>Months since the last meaningful workshop content update</p>
+          </td>
+          <td>
+            <p>Prefer workshop-level evidence; repo-level evidence is lower confidence.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>category</p>
+          </td>
+          <td>
+            <p>Benchmark group used for normalization</p>
+          </td>
+          <td>
+            <p>Usually repo, track, or product grouping.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>owner_present</p>
+          </td>
+          <td>
+            <p>Whether a named DRI exists for the workshop</p>
+          </td>
+          <td>
+            <p>Missing ownership increases retire-side pressure.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>replacement_similarity_score</p>
+          </td>
+          <td>
+            <p>Composite similarity score to the strongest replacement candidate</p>
+          </td>
+          <td>
+            <p>Feeds replacement_exists.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>replacement_exists</p>
+          </td>
+          <td>
+            <p>Replacement state derived from similarity scoring: true / review / false</p>
+          </td>
+          <td>
+            <p>Only <strong>true</strong> supports the strict to-retire subset.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>best_performer_score</p>
+          </td>
+          <td>
+            <p>Blended score for ranking top-performing workshops</p>
+          </td>
+          <td>
+            <p>Separate from retire-side logic.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>retire_score</p>
+          </td>
+          <td>
+            <p>Weighted retire-side prioritization score</p>
+          </td>
+          <td>
+            <p>Used to rank review priority, not to retire automatically.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<h2>Scoring And Prioritization Model</h2>
+<hr/>
+<p>This section explains how governance prioritizes review work after lifecycle outcomes are assigned.</p>
+<p>Scoring helps rank what should be reviewed first. It does <strong>not</strong> replace the decision framework, the gates, or approval.</p>
+<ac:structured-macro ac:macro-id="v10-scoring-tabs" ac:name="ui-tabs" ac:schema-version="1">
+  <ac:rich-text-body>
+    <ac:structured-macro ac:macro-id="v10-tab-retire-score" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Retire Score</ac:parameter>
+      <ac:rich-text-body>
+        <p>
+          <strong>retire_score</strong> (0-100) = 40 x low_demand_score + 30 x staleness_score + 20 x superseded_score + 10 x no_owner_score</p>
+        <table class="wrapped">
+          <colgroup> <col style="width: 24.0%;"/> <col style="width: 44.0%;"/> <col style="width: 14.0%;"/> <col style="width: 18.0%;"/> </colgroup>
+          <tbody>
+            <tr>
+              <th>
+                <p>
+                  <strong>Component</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>What it checks</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Weight</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Max Contribution</strong>
+                </p>
+              </th>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>low_demand_score</strong>
+                </p>
+              </td>
+              <td>
+                <p>How weak the workshop is inside its category.</p>
+              </td>
+              <td>
+                <p>40</p>
+              </td>
+              <td>
+                <p>40 points</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>staleness_score</strong>
+                </p>
+              </td>
+              <td>
+                <p>How old the last meaningful update is.</p>
+              </td>
+              <td>
+                <p>30</p>
+              </td>
+              <td>
+                <p>30 points</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>superseded_score</strong>
+                </p>
+              </td>
+              <td>
+                <p>Whether a valid replacement exists.</p>
+              </td>
+              <td>
+                <p>20</p>
+              </td>
+              <td>
+                <p>20 points</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>no_owner_score</strong>
+                </p>
+              </td>
+              <td>
+                <p>Whether the workshop has no owner.</p>
+              </td>
+              <td>
+                <p>10</p>
+              </td>
+              <td>
+                <p>10 points</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v10-tab-component-rules" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Component Rules</ac:parameter>
+      <ac:rich-text-body>
+        <table class="wrapped">
+          <colgroup> <col style="width: 20.0%;"/> <col style="width: 65.0%;"/> <col style="width: 15.0%;"/> </colgroup>
+          <tbody>
+            <tr>
+              <th>
+                <p>
+                  <strong>Component</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Rule</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Output</strong>
+                </p>
+              </th>
+            </tr>
+            <tr>
+              <td>
+                <p>low_demand_score</p>
+              </td>
+              <td>
+                <ul>
+                  <li>
+                    <p>1.0 if views_12m_percentile &lt;= 10</p>
+                  </li>
+                  <li>
+                    <p>0.7 if views_12m_percentile &lt;= 25</p>
+                  </li>
+                  <li>
+                    <p>0.3 if views_12m_percentile &lt;= 40</p>
+                  </li>
+                  <li>
+                    <p>0.0 otherwise</p>
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <p>0.0-1.0</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>staleness_score</p>
+              </td>
+              <td>
+                <ul>
+                  <li>
+                    <p>1.0 if months_since_update &gt;= 24</p>
+                  </li>
+                  <li>
+                    <p>0.7 if months_since_update &gt;= 18</p>
+                  </li>
+                  <li>
+                    <p>0.4 if months_since_update &gt;= 12</p>
+                  </li>
+                  <li>
+                    <p>0.0 otherwise</p>
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <p>0.0-1.0</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>superseded_score</p>
+              </td>
+              <td>
+                <p>1.0 if replacement_exists = true; otherwise 0.0. <strong>review</strong> and <strong>false</strong> do not receive superseded score until replacement is confirmed or obsolescence is documented.</p>
+              </td>
+              <td>
+                <p>0.0 or 1.0</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>no_owner_score</p>
+              </td>
+              <td>
+                <p>1.0 if owner_present = false; otherwise 0.0.</p>
+              </td>
+              <td>
+                <p>0.0 or 1.0</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v10-tab-worked-example" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Worked Example</ac:parameter>
+      <ac:rich-text-body>
+        <table class="wrapped">
+          <colgroup> <col style="width: 18.0%;"/> <col style="width: 18.0%;"/> <col style="width: 22.0%;"/> <col style="width: 42.0%;"/> </colgroup>
+          <tbody>
+            <tr>
+              <th>
+                <p>
+                  <strong>Component</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Assigned Score</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Weighted Result</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Reminder</strong>
+                </p>
+              </th>
+            </tr>
+            <tr>
+              <td>
+                <p>low_demand_score</p>
+              </td>
+              <td>
+                <p>0.7</p>
+              </td>
+              <td>
+                <p>0.7 x 40 = 28</p>
+              </td>
+              <td>
+                <p>Based on category percentile, not global raw views.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>staleness_score</p>
+              </td>
+              <td>
+                <p>0.4</p>
+              </td>
+              <td>
+                <p>0.4 x 30 = 12</p>
+              </td>
+              <td>
+                <p>Use months since last meaningful content update.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>superseded_score</p>
+              </td>
+              <td>
+                <p>1.0</p>
+              </td>
+              <td>
+                <p>1.0 x 20 = 20</p>
+              </td>
+              <td>
+                <p>Only use when a valid replacement exists.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>no_owner_score</p>
+              </td>
+              <td>
+                <p>1.0</p>
+              </td>
+              <td>
+                <p>1.0 x 10 = 10</p>
+              </td>
+              <td>
+                <p>No named owner increases retirement risk.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>Total</strong>
+                </p>
+              </td>
+              <td>
+                <p>-</p>
+              </td>
+              <td>
+                <p>
+                  <strong>28 + 12 + 20 + 10 = 70</strong>
+                </p>
+              </td>
+              <td>
+                <p>
+                  <strong>Example outcome: prioritized retire candidate for review</strong>
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v10-tab-interpretation" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Interpretation</ac:parameter>
+      <ac:rich-text-body>
+        <table class="wrapped">
+          <colgroup> <col style="width: 20.0%;"/> <col style="width: 80.0%;"/> </colgroup>
+          <tbody>
+            <tr>
+              <th>
+                <p>
+                  <strong>Score Range</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Meaning</strong>
+                </p>
+              </th>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>&gt;= 70</strong>
+                </p>
+              </td>
+              <td>
+                <p>
+                  <strong>Prioritized retire candidate</strong> - strong review signal, but still subject to gates and approval.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>50-69</strong>
+                </p>
+              </td>
+              <td>
+                <p>
+                  <strong>Retire candidate review queue</strong> - review is justified, but evidence still needs validation.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>
+                  <strong>&lt; 50</strong>
+                </p>
+              </td>
+              <td>
+                <p>
+                  <strong>Keep or Refresh path</strong> - use demand and staleness together to decide whether the workshop stays active or moves into refresh work.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <ul>
+          <li>
+            <strong>Always calculate views_12m_percentile within category</strong>; do not compare all workshops globally.</li>
+          <li>The score is used to <strong>prioritize review</strong>, not to automatically retire a workshop.</li>
+          <li>Final decisions must still respect <strong>replacement availability</strong>, <strong>owner review</strong>, and <strong>governance approval</strong>.</li>
+        </ul>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+    <ac:structured-macro ac:macro-id="v10-tab-formula-summary" ac:name="ui-tab" ac:schema-version="1">
+      <ac:parameter ac:name="title">Formula Summary</ac:parameter>
+      <ac:rich-text-body>
+        <table class="wrapped">
+          <colgroup> <col style="width: 26.0%;"/> <col style="width: 34.0%;"/> <col style="width: 40.0%;"/> </colgroup>
+          <tbody>
+            <tr>
+              <th>
+                <p>
+                  <strong>Metric</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Formula / Rule</strong>
+                </p>
+              </th>
+              <th>
+                <p>
+                  <strong>Why it matters</strong>
+                </p>
+              </th>
+            </tr>
+            <tr>
+              <td>
+                <p>best_performer_score</p>
+              </td>
+              <td>
+                <p>0.60 x percentile_rank(recent_views_90d_global) + 0.40 x percentile_rank(recent_views_12m_global), scaled to 0-100</p>
+              </td>
+              <td>
+                <p>Ranks the strongest workshops by balancing current and stable demand.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>retire_score</p>
+              </td>
+              <td>
+                <p>40 x low_demand_score + 30 x staleness_score + 20 x superseded_score + 10 x no_owner_score</p>
+              </td>
+              <td>
+                <p>Prioritizes retire-side review by weighting low demand and staleness most heavily.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>low_demand_score</p>
+              </td>
+              <td>
+                <p>1.0 when views_12m_percentile &lt;= 10; 0.7 when &lt;= 25; 0.3 when &lt;= 40; else 0.0</p>
+              </td>
+              <td>
+                <p>Preserves category-relative demand as the primary retire-side signal.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>staleness_score</p>
+              </td>
+              <td>
+                <p>1.0 when months_since_update &gt;= 24; 0.7 when &gt;= 18; 0.4 when &gt;= 12; else 0.0</p>
+              </td>
+              <td>
+                <p>Separates normal maintenance pressure from true retire-side staleness.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>superseded_score</p>
+              </td>
+              <td>
+                <p>1.0 only when replacement_exists = true; else 0.0</p>
+              </td>
+              <td>
+                <p>Keeps strict retirement anchored to strong replacement confidence.</p>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>no_owner_score</p>
+              </td>
+              <td>
+                <p>1.0 when owner_present = false; else 0.0</p>
+              </td>
+              <td>
+                <p>Adds retire-side pressure when no clear maintainer exists.</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ac:rich-text-body>
+    </ac:structured-macro>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<h2>Evidence And Threshold Reference</h2>
+<hr/>
+<p>These sections document the portfolio evidence used to justify demand, staleness, and replacement thresholds.</p>
+<p>They support governance decisions, but they do not replace the decision framework or the scoring model above.</p>
+<h3>Portfolio Distribution Statistics</h3>
+<hr/>
+<ac:structured-macro ac:macro-id="v8-expand-portfolio-distribution" ac:name="ui-expand" ac:schema-version="1">
+  <ac:parameter ac:name="title">Open Portfolio Distribution Detail</ac:parameter>
+  <ac:rich-text-body>
+    <p>Table is created based on data extracted on <strong>18.03.2026</strong> from <strong>LiveLabs Dashboard</strong>.</p>
+    <p>Scope is to <strong>guide selection criteria and thresholds</strong>.</p>
+    <p>
+      <strong>Table Legend:</strong>
+    </p>
+    <ul>
+      <li>
+        <strong>Mean:</strong> arithmetic average of all values. It is <strong>sensitive to very high or very low values</strong>, so in skewed datasets it can be pulled away from the typical workshop.</li>
+      <li>
+        <strong>Median:</strong> middle value when all workshops are ordered from lowest to highest. It is <strong>more robust than the mean</strong> in skewed data and is often a better indicator of a “typical” workshop.</li>
+      <li>
+        <strong>Std Dev (Standard Deviation):</strong> shows how widely values are spread around the mean. A higher value means workshop views vary more across the portfolio.</li>
+      <li>
+        <strong>Q1:</strong> first quartile, meaning 25% of workshops are at or below this value. It can be used as a <strong>sanity-check low-demand anchor</strong>.</li>
+      <li>
+        <strong>Q3:</strong> third quartile, meaning 75% of workshops are at or below this value. It helps identify the upper end of the normal demand range.</li>
+      <li>
+        <strong>Upper Bound:</strong> calculated as <strong>Q3 + 1.5 x IQR</strong>. Values above this level are considered unusually high-traffic outliers and may help identify stale workshops that should be prioritized for <strong>Refresh</strong> rather than retirement.</li>
+    </ul>
+    <table class="wrapped">
+      <colgroup> <col style="width: 26.0%;"/> <col style="width: 10.0%;"/> <col style="width: 12.0%;"/> <col style="width: 12.0%;"/> <col style="width: 12.0%;"/> <col style="width: 10.0%;"/> <col style="width: 10.0%;"/> <col style="width: 8.0%;"/> </colgroup>
+      <tbody>
+        <tr>
+          <th>
+            <p>
+              <strong>Window / File</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Records</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Mean</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Median</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Std Dev</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Q1</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Q3</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Upper Bound</strong>
+            </p>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>Last 180 Days</p>
+          </td>
+          <td>
+            <p>1,285</p>
+          </td>
+          <td>
+            <p>1,345.35</p>
+          </td>
+          <td>
+            <p>229.00</p>
+          </td>
+          <td>
+            <p>3,124.02</p>
+          </td>
+          <td>
+            <p>42.00</p>
+          </td>
+          <td>
+            <p>1,305.00</p>
+          </td>
+          <td>
+            <p>3,199.50</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Last 90 Days</p>
+          </td>
+          <td>
+            <p>1,191</p>
+          </td>
+          <td>
+            <p>695.58</p>
+          </td>
+          <td>
+            <p>134.00</p>
+          </td>
+          <td>
+            <p>1,776.11</p>
+          </td>
+          <td>
+            <p>31.00</p>
+          </td>
+          <td>
+            <p>566.50</p>
+          </td>
+          <td>
+            <p>1,369.75</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Last Month</p>
+          </td>
+          <td>
+            <p>1,077</p>
+          </td>
+          <td>
+            <p>293.28</p>
+          </td>
+          <td>
+            <p>42.00</p>
+          </td>
+          <td>
+            <p>784.48</p>
+          </td>
+          <td>
+            <p>15.00</p>
+          </td>
+          <td>
+            <p>245.00</p>
+          </td>
+          <td>
+            <p>590.00</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Last Two Weeks</p>
+          </td>
+          <td>
+            <p>1,008</p>
+          </td>
+          <td>
+            <p>183.77</p>
+          </td>
+          <td>
+            <p>24.50</p>
+          </td>
+          <td>
+            <p>509.45</p>
+          </td>
+          <td>
+            <p>10.00</p>
+          </td>
+          <td>
+            <p>151.25</p>
+          </td>
+          <td>
+            <p>363.12</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Last Week</p>
+          </td>
+          <td>
+            <p>1,075</p>
+          </td>
+          <td>
+            <p>293.79</p>
+          </td>
+          <td>
+            <p>43.00</p>
+          </td>
+          <td>
+            <p>785.08</p>
+          </td>
+          <td>
+            <p>16.00</p>
+          </td>
+          <td>
+            <p>244.50</p>
+          </td>
+          <td>
+            <p>587.25</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Last Year</p>
+          </td>
+          <td>
+            <p>1,392</p>
+          </td>
+          <td>
+            <p>2,731.09</p>
+          </td>
+          <td>
+            <p>764.00</p>
+          </td>
+          <td>
+            <p>6,192.12</p>
+          </td>
+          <td>
+            <p>140.75</p>
+          </td>
+          <td>
+            <p>2,730.25</p>
+          </td>
+          <td>
+            <p>6,614.50</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>All Data</p>
+          </td>
+          <td>
+            <p>7,028</p>
+          </td>
+          <td>
+            <p>1,021.03</p>
+          </td>
+          <td>
+            <p>126.00</p>
+          </td>
+          <td>
+            <p>3,318.45</p>
+          </td>
+          <td>
+            <p>19.00</p>
+          </td>
+          <td>
+            <p>639.00</p>
+          </td>
+          <td>
+            <p>1,569.00</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<h3>Workshop Demand Thresholds (Views)</h3>
+<hr/>
+<ac:structured-macro ac:macro-id="v8-expand-demand-thresholds" ac:name="ui-expand" ac:schema-version="1">
+  <ac:parameter ac:name="title">Open Demand Threshold Detail</ac:parameter>
+  <ac:rich-text-body>
+    <p>
+      <strong>Important:</strong> these are <strong>portfolio interpretation bands</strong>, not the primary retirement-governance rule. Final retirement decisions should still use <strong>views_12m_percentile within category</strong> so niche workshop categories are not penalized by global raw-volume differences.</p>
+    <p>This section defines <strong>Views Thresholds</strong> based on the<strong> Portfolio Distribution Statistics</strong>. </p>
+    <table class="wrapped">
+      <colgroup> <col style="width: 16.0%;"/> <col style="width: 16.0%;"/> <col style="width: 16.0%;"/> <col style="width: 24.0%;"/> <col style="width: 28.0%;"/> </colgroup>
+      <tbody>
+        <tr>
+          <th>
+            <p>
+              <strong>Demand Band</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>recent_views_90d</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>recent_views_12m</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Usage Description</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Why this threshold was chosen</strong>
+            </p>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>Critical Low</strong>
+            </p>
+          </td>
+          <td>
+            <p>&lt; 25</p>
+          </td>
+          <td>
+            <p>Bottom 10% in category<br/>Absolute anchor: around &lt; 141</p>
+          </td>
+          <td>
+            <p>Strong retirement review signal when combined with staleness, missing owner, or replacement availability.</p>
+          </td>
+          <td>
+            <p>
+              <strong>25 views in 90d</strong> is already aligned to the current <strong>Retired</strong> rule. <strong>141 views in 12m</strong> is close to the yearly <strong>Q1</strong> anchor and helps flag very weak annual demand.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>Low</strong>
+            </p>
+          </td>
+          <td>
+            <p>25-31</p>
+          </td>
+          <td>
+            <p>&lt;= 141</p>
+          </td>
+          <td>
+            <p>Use as yearly cleanup watchlist; usually not enough alone to retire, but supports Retire Candidate when the workshop is stale and superseded.</p>
+          </td>
+          <td>
+            <p>
+              <strong>31</strong> is the <strong>Q1</strong> anchor for the 90-day distribution. <strong>141</strong> is the <strong>Q1</strong> anchor for the yearly distribution.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>Typical</strong>
+            </p>
+          </td>
+          <td>
+            <p>32-134</p>
+          </td>
+          <td>
+            <p>142-764</p>
+          </td>
+          <td>
+            <p>Default middle band. Do not retire based on views alone; evaluate staleness and ownership before action.</p>
+          </td>
+          <td>
+            <p>This band spans from <strong>Q1 to median</strong>, which is a practical representation of normal portfolio demand.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>Healthy</strong>
+            </p>
+          </td>
+          <td>
+            <p>135-566</p>
+          </td>
+          <td>
+            <p>765-2,730</p>
+          </td>
+          <td>
+            <p>Usually <strong>Keep</strong>. If stale, prefer <strong>Refresh</strong> over retirement.</p>
+          </td>
+          <td>
+            <p>This range spans from <strong>median to Q3</strong>, meaning demand is at or above a typical workshop level.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>High</strong>
+            </p>
+          </td>
+          <td>
+            <p>567-1,369</p>
+          </td>
+          <td>
+            <p>2,731-6,614</p>
+          </td>
+          <td>
+            <p>High-value workshops. If stale, these should be prioritized for <strong>Refresh</strong>, not retirement.</p>
+          </td>
+          <td>
+            <p>This band starts at <strong>Q3</strong> and extends to the <strong>IQR Upper Bound</strong>, representing strong but not extreme demand.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>Exceptional / Outlier</strong>
+            </p>
+          </td>
+          <td>
+            <p>&gt; 1,369</p>
+          </td>
+          <td>
+            <p>&gt; 6,614</p>
+          </td>
+          <td>
+            <p>Do not retire without explicit exception review. These are strong candidates for maintenance or refresh investment.</p>
+          </td>
+          <td>
+            <p>These values are above the <strong>IQR Upper Bound</strong>, which identifies unusually high-traffic outliers in the portfolio.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<h3>Workshop Staleness (Last Updated) Metric</h3>
+<hr/>
+<ac:structured-macro ac:macro-id="v8-expand-staleness" ac:name="ui-expand" ac:schema-version="1">
+  <ac:parameter ac:name="title">Open Staleness Metric Detail</ac:parameter>
+  <ac:rich-text-body>
+    <p>This section defines <strong>workshop staleness</strong> thresholds.</p>
+    <p>
+      <strong>Implementation note:</strong> months_since_update should be calculated from the latest <strong>meaningful</strong> workshop-path content update. Ignore maintenance-only commits such as Adobe Analytics cookie removals, global URL-fix sweeps, and template-only cleanup when an older content-level update exists.</p>
+    <p>
+      <strong>Source basis:</strong> the statistical justification below uses the current WMS portfolio joined to meaningful workshop update evidence. Threshold selection is anchored on <strong>1,033 workshops with high-confidence meaningful update dates</strong>.</p>
+    <p>
+      <strong>Coverage note:</strong> workshops without usable meaningful-update evidence should not move into staleness-driven retirement action until the update signal is validated manually.</p>
+    <h3>Portfolio Staleness Distribution Statistics</h3>
+    <p>This table plays the same role for staleness that the portfolio distribution table plays for demand: it provides the statistical baseline used to define the governance bands.</p>
+    <table class="wrapped">
+      <colgroup> <col style="width: 30.0%;"/> <col style="width: 10.0%;"/> <col style="width: 10.0%;"/> <col style="width: 10.0%;"/> <col style="width: 12.0%;"/> <col style="width: 10.0%;"/> <col style="width: 10.0%;"/> <col style="width: 8.0%;"/> </colgroup>
+      <tbody>
+        <tr>
+          <th>
+            <p>
+              <strong>Population</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Records</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Mean</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Median</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Std Dev</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Q1</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Q3</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Upper Bound</strong>
+            </p>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>Meaningful updates - High confidence</strong>
+            </p>
+          </td>
+          <td>
+            <p>1,033</p>
+          </td>
+          <td>
+            <p>14.92</p>
+          </td>
+          <td>
+            <p>18.73</p>
+          </td>
+          <td>
+            <p>7.07</p>
+          </td>
+          <td>
+            <p>11.01</p>
+          </td>
+          <td>
+            <p>18.73</p>
+          </td>
+          <td>
+            <p>30.31</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>Meaningful updates - High + Low confidence</strong>
+            </p>
+          </td>
+          <td>
+            <p>1,039</p>
+          </td>
+          <td>
+            <p>14.84</p>
+          </td>
+          <td>
+            <p>18.73</p>
+          </td>
+          <td>
+            <p>7.14</p>
+          </td>
+          <td>
+            <p>10.87</p>
+          </td>
+          <td>
+            <p>18.73</p>
+          </td>
+          <td>
+            <p>30.52</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      <strong>Interpretation:</strong>
+    </p>
+    <p>the portfolio is not centered around recently updated workshops. </p>
+    <p>The median meaningful update age is <strong>18.73 months</strong>, which means staleness pressure is common across the portfolio.</p>
+    <p>At the same time, workshops above roughly <strong>30 months</strong> are statistically unusual and should be treated as extreme cases.</p>
+    <p>
+      <br/>
+    </p>
+    <p>
+      <strong> <span style="letter-spacing: -0.006em;">Staleness Thresholds</span> </strong>
+    </p>
+    <table class="wrapped">
+      <colgroup> <col style="width: 18.0%;"/> <col style="width: 18.0%;"/> <col style="width: 28.0%;"/> <col style="width: 18.0%;"/> <col style="width: 18.0%;"/> </colgroup>
+      <tbody>
+        <tr>
+          <th>
+            <p>
+              <strong>Staleness Band</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>months_since_update</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Interpretation</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Typical Action</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Why this threshold was chosen</strong>
+            </p>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>Fresh</strong>
+            </p>
+          </td>
+          <td>
+            <p>0-12</p>
+          </td>
+          <td>
+            <p>Workshop is reasonably current for yearly review purposes.</p>
+          </td>
+          <td>
+            <p>Usually <strong>Keep</strong>
+            </p>
+          </td>
+          <td>
+            <p>Aligned with the current <strong>Keep</strong> rule and closely matches the portfolio <strong>Q1</strong> anchor of <strong>11.01 months</strong>.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>Aging</strong>
+            </p>
+          </td>
+          <td>
+            <p>13-17</p>
+          </td>
+          <td>
+            <p>Workshop may still be usable, but content drift risk is increasing.</p>
+          </td>
+          <td>
+            <p>Monitor or plan refresh</p>
+          </td>
+          <td>
+            <p>Creates a practical buffer between the fresh band and the portfolio median, without turning common drift into automatic retirement pressure.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>Stale</strong>
+            </p>
+          </td>
+          <td>
+            <p>18-23</p>
+          </td>
+          <td>
+            <p>High chance that instructions, screenshots, or dependencies are out of date.</p>
+          </td>
+          <td>
+            <p>
+              <strong>Refresh</strong> if demand is healthy; <strong>Retire Candidate</strong> if demand is low and replacement exists.</p>
+          </td>
+          <td>
+            <p>Anchored around the portfolio <strong>median / Q3</strong> of <strong>18.73 months</strong> and aligned with the current governance rule that workshops at <strong>18 months or more</strong> should be flagged for review.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>Critical Staleness</strong>
+            </p>
+          </td>
+          <td>
+            <p>24-30</p>
+          </td>
+          <td>
+            <p>Strong indication of portfolio risk, even before entering the statistical outlier range.</p>
+          </td>
+          <td>
+            <p>Retire Candidate or Retired, unless there is strong demand and a committed refresh path.</p>
+          </td>
+          <td>
+            <p>Aligned with the highest staleness score band in the scoring model and the two-year governance anchor of <strong>24 months</strong> for strong retirement pressure.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>Severe / Outlier</strong>
+            </p>
+          </td>
+          <td>
+            <p>&gt; 30</p>
+          </td>
+          <td>
+            <p>Statistically unusual staleness and strong evidence that the workshop has fallen far outside normal portfolio maintenance.</p>
+          </td>
+          <td>
+            <p>Immediate refresh or retirement review.</p>
+          </td>
+          <td>
+            <p>Anchored to the portfolio <strong>IQR upper bound</strong> of roughly <strong>30.31 months</strong>, which is a cleaner justification for extreme staleness than using an arbitrary cutoff.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<h3>Workshop Replacement Criteria &amp; Governance</h3>
+<hr/>
+<ac:structured-macro ac:macro-id="v8-expand-replacement" ac:name="ui-expand" ac:schema-version="1">
+  <ac:parameter ac:name="title">Open Replacement Logic Detail</ac:parameter>
+  <ac:rich-text-body>
+    <p>This section defines how replacement evidence is calculated and how it is used in portfolio governance.</p>
+    <h3>Replacement Similarity Calculation</h3>
+    <p>
+      <strong>Formula:</strong> <strong>replacement_similarity_score</strong> = 0.35 x title_similarity + 0.35 x content_similarity + 0.15 x category_similarity + 0.15 x recency_similarity</p>
+    <table class="wrapped">
+      <colgroup> <col style="width: 18.0%;"/> <col style="width: 12.0%;"/> <col style="width: 44.0%;"/> <col style="width: 26.0%;"/> </colgroup>
+      <tbody>
+        <tr>
+          <th>
+            <p>
+              <strong>Signal</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Weight</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>How it is calculated</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Purpose</strong>
+            </p>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>title_similarity</p>
+          </td>
+          <td>
+            <p>35%</p>
+          </td>
+          <td>
+            <p>Weighted blend of sequence similarity and token overlap between normalized workshop titles.</p>
+          </td>
+          <td>
+            <p>Captures close naming or rebranding patterns.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>content_similarity</p>
+          </td>
+          <td>
+            <p>35%</p>
+          </td>
+          <td>
+            <p>Overlap across workshop metadata/content including description, summary, content text, URLs, category, and repo indicators.</p>
+          </td>
+          <td>
+            <p>Captures overlap in actual workshop subject matter and assets.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>category_similarity</p>
+          </td>
+          <td>
+            <p>15%</p>
+          </td>
+          <td>
+            <p>100 when source and candidate are in the same category, else 0.</p>
+          </td>
+          <td>
+            <p>Prevents cross-category false positives from dominating the score.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>recency_similarity</p>
+          </td>
+          <td>
+            <p>15%</p>
+          </td>
+          <td>
+            <p>Higher score when the potential replacement is newer and the publish-date gap is small.</p>
+          </td>
+          <td>
+            <p>Biases toward modern successors rather than parallel or legacy workshops.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Replacement Status Interpretation</h3>
+    <table class="wrapped">
+      <tbody>
+        <tr>
+          <th>
+            <p>
+              <strong>replacement_exists</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Score Band</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Meaning</strong>
+            </p>
+          </th>
+          <th>
+            <p>
+              <strong>Governance use</strong>
+            </p>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>true</strong>
+            </p>
+          </td>
+          <td>
+            <p>&gt;= 85</p>
+          </td>
+          <td>
+            <p>Strong replacement candidate exists</p>
+          </td>
+          <td>
+            <p>Eligible for strict retirement gating when other criteria also pass.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>review</strong>
+            </p>
+          </td>
+          <td>
+            <p>70-84</p>
+          </td>
+          <td>
+            <p>Plausible replacement</p>
+          </td>
+          <td>
+            <p>Use for replacement validation, not as final retirement proof by itself.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <strong>false</strong>
+            </p>
+          </td>
+          <td>
+            <p>&lt; 70</p>
+          </td>
+          <td>
+            <p>No strong replacement was found</p>
+          </td>
+          <td>
+            <p>Do not use as retirement proof without a separate documented obsolescence rationale.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      <strong>Governance rule:</strong> only <strong>replacement_exists = true</strong> should support strict retirement decisions. <strong>review</strong> requires human confirmation, and <strong>false</strong> requires either stronger evidence or an explicit obsolescence rationale.</p>
+  </ac:rich-text-body>
+</ac:structured-macro>

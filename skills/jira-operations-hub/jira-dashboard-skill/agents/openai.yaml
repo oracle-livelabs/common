@@ -1,0 +1,4 @@
+interface:
+  display_name: "Jira Dashboard"
+  short_description: "Launch the Outbound PM Jira hub"
+  default_prompt: "Use $jira-dashboard to open the Outbound PM Operations Hub."

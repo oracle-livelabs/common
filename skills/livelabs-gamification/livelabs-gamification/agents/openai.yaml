@@ -1,0 +1,4 @@
+interface:
+  display_name: "LiveLabs Gamification"
+  short_description: "Add quizzes and badges to LiveLabs."
+  default_prompt: "Use $livelabs-gamification to add quizzes or badges to this LiveLabs workshop."

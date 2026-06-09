@@ -1,0 +1,17 @@
+{
+  "name": "livelabs-qa-hub-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local Redwood-styled prototype for the LiveLabs QA Hub.",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "validate": "node scripts/validate-project.mjs",
+    "smoke": "node scripts/browser-smoke.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

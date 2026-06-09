@@ -1,0 +1,34 @@
+{
+  "name": "skill-cleaner",
+  "owner": "Lucian",
+  "authors": [
+    {
+      "name": "Lucian",
+      "role": "author"
+    }
+  ],
+  "version": "1.0",
+  "published_at": "2026-05-21T00:00:00Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/skill-cleaner/ready-to-deploy-archive/skill-cleaner.zip",
+  "archive_sha256": "07eab45eedfa056a0ff83e8b1ba6dd480846d8b7d9524701b9d8f629e8cee4ae",
+  "content_hash": "e7c704d5dbeb45649c92426eefcd799250a4e6e802c8677afdfe1dbd9373a84b",
+  "min_updater_version": "2",
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version_history": [
+    {
+      "version": "1.0",
+      "published_at": "2026-05-21T00:00:00Z",
+      "authors": [
+        "Lucian"
+      ],
+      "changes": [
+        "Current repository package recorded from the published skill artifact."
+      ],
+      "archive_sha256": "07eab45eedfa056a0ff83e8b1ba6dd480846d8b7d9524701b9d8f629e8cee4ae",
+      "content_hash": "e7c704d5dbeb45649c92426eefcd799250a4e6e802c8677afdfe1dbd9373a84b",
+      "portal_status": "pending"
+    }
+  ]
+}

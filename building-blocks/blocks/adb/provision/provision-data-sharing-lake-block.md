@@ -3,7 +3,7 @@
         "name":"Provision an ADB instance for the Data Sharing and Data Lake workshops",
         "description":"common block, provision-data-sharing-lake-block.md.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "lastUpdated":"Lauran K. Serhal, October 2025"
+        "lastUpdated":"Lauran K. Serhal, March 2026"
     }
 -->
 
@@ -13,7 +13,7 @@
 
 In just a few minutes, Autonomous AI Database lets you deploy a complete data warehousing platform that can scale to your requirements. And, you can use its Database Tools to easily populate that warehouse from the data lake.
 
-This lab walks you through the steps to get started using the Oracle Autonomous AI Database (Lakehouse and Autonomous Transaction Processing) on Oracle Cloud Interface. In this lab, you provision a new ADW instance.
+This lab walks you through the steps to get started using the Oracle Autonomous AI Database (Lakehouse and Autonomous Transaction Processing) on Oracle Cloud Interface. In this lab, you provision a new Lakehouse instance.
 
 This workshop is directed at administrator users because they have the required privileges.
 
@@ -46,8 +46,8 @@ You may now **proceed to the next lab**.
 
 ## Acknowledgements
 
-- **Author:** Lauran K. Serhal, Consulting User Assistance Developer
-- **Last Updated By/Date:** Lauran K. Serhal, October 2025
+- **Author:** Lauran K. Serhal, Consulting User Assistance Developer, Oracle Autonomous AI Database and Multicloud
+- **Last Updated By/Date:** Lauran K. Serhal, March 2026
 - **Developed with Building Blocks**
 
 Data about movies in this workshop were sourced from Wikipedia.
