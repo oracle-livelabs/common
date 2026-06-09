@@ -31,15 +31,15 @@ Estimated Time: 5 minutes
 
     ![Login information](./images/reservation-information-1.png " ")
 
-3.	Select **Open Link** to open the SQL Worksheet login page.
+3. Select **Open Link** to open the SQL Worksheet login page.
 
     ![Login information](./images/reservation-information-2.png " ")
 
-4.	Enter the credentials from the **Reservation Information** menu, and click **Sign In**.
+4. Enter the credentials from the **Reservation Information** menu, and click **Sign In**.
 
     ![Login information](./images/sql-worksheet-login.png " ")
 
-5.	In the SQL Development page, select the **Development** tab, then click **Open**.
+5. In the SQL Development page, select the **Development** tab, then click **Open**.
 
     ![Login information](./images/sql-worksheet-page.png " ")
 
@@ -66,7 +66,5 @@ You may now **proceed to the next lab**.
 ## Acknowledgements
 
 * **Authors:**
-    * Lauran K. Serhal, Consulting User Assistance Developer
-    * Kay Malcolm, Database Product Management
-* **Contributors** - Kevin Lazarz, Rene Fontcha
-* **Last Updated By/Date:** Lauran K. Serhal, November 2025
+    * LiveLabs Team
+* **Last Updated By/Date:** Teodor C. Nechita / June 2026
