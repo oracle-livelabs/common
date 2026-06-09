@@ -1,6 +1,22 @@
 # LiveStack
 
+## Introduction
+
+LiveLabs LiveStacks help teams move from initial solution exploration to hands-on learning and deployment planning. A LiveStack brings together demos, LiveLabs workshops, deployment assets, and supporting materials around a common industry challenge or business outcome.
+
+LiveStacks are available across Finance, Retail, Healthcare, Media & Entertainment, and Energy & Utilities, with additional industry solutions being published in the coming weeks. You can access LiveStacks directly from LiveLabs to explore content, subscribe for updates, and share solutions with customers and colleagues.
+
+A LiveStack supports the following journey:
+
+1. **Envision** - Showcase potential business outcomes through a LiveStack Demo built around real industry challenges.
+2. **Try** - Explore the solution and gain hands-on experience through a LiveLabs Workshop.
+3. **Embed** - Deploy and validate the solution in your environment using deployment-ready assets.
+4. **Scale** - Extend and adapt the solution from pilot to broader adoption.
+
+LiveStacks also support Oracle-internal content, including briefing materials, supporting assets, and engagement guidance. These internal assets help teams prepare for customer conversations while remaining hidden from external audiences.
+
 Estimated Time: 20 minutes
+
 
 ### Objectives
 
@@ -54,11 +70,12 @@ Estimated Time: 20 minutes
 
 4. Click 'Create' to add the LiveLab to your LiveStack.
 
-> NOTE: All changes made to published Livestacks reflect immediately in LiveLabs.
+> NOTE: All changes made to published LiveStacks reflect immediately in LiveLabs.
 
 ## Task 3: Add Assets to Your LiveStack
 
-A LiveStack supports the inclusion of assets related to your LiveStack Content, as seen in the example below. This labs explains how to do this.
+A LiveStack supports the inclusion of assets related to your LiveStack content, as seen in the example below. This lab explains how to do this.
+
 > NOTE: Assets are created and managed in WMS > Self Services > Assets.
 
 ![LiveStack landing page example](images/ls-landing-page-example.png " ")
@@ -77,24 +94,26 @@ A LiveStack supports the inclusion of assets related to your LiveStack Content, 
 
     ![Configure a LiveStack asset](images/add-asset-3.png " ")
 
-4. The asset can be set to external or internal using the visibility switch. **Internal** assets will only be visible to Oracle employees, where as **external** assets will be visible to anyone.
+4. The asset can be set to external or internal using the visibility switch. **Internal** assets will only be visible to Oracle employees, whereas **external** assets will be visible to anyone.
 
     ![Configure a LiveStack asset](images/add-asset-4.png " ")
 
 5. Click 'Create' to add the asset to your LiveStack.
 
-> NOTE: All changes made to published Livestacks reflect immediately in LiveLabs.
+> NOTE: All changes made to published LiveStacks reflect immediately in LiveLabs.
 
 
 ## Task 4: Publish Your LiveStack
 
 1. Once you've finalized your LiveStack, you can request publishing by changing it's status to 'Publish Requested' and clicking Save.
 
-![Request publishing.](images/request-publishing.png " ")
+    ![Request publishing.](images/request-publishing.png " ")
 
 2. The LiveStack council will provide a status update on your request in 2-3 business days. You will receive an email notification.
 
     **Pending review, you have a LiveStack! 🎉**
 
+## Acknowledgements
 
-
+* **Author** - Brianna Ambler, Database Product Manager
+* **Last Updated By/Date** - Brianna Ambler, Database Product Manager, June 2026
