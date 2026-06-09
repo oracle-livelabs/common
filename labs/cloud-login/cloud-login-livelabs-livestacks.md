@@ -31,7 +31,7 @@ Estimated Time: 5 minutes
 
     ![Login information](./images/reservation-information-3.png " ")
 
-3.	Select **Open Link** on the 1 - Launch Demo row to launch the Livestack Demo.
+3. Select **Open Link** on the 1 - Launch Demo row to launch the Livestack Demo.
 
     ![Login information](./images/reservation-information-4.png " ")
     ![Login information](./images/workshop-demo.png " ")
@@ -40,7 +40,7 @@ Estimated Time: 5 minutes
 
     ![Login information](./images/reservation-information-5.png " ")
 
-5.	Enter the credentials from the **Reservation Information** menu, and click **Sign In**.
+5. Enter the credentials from the **Reservation Information** menu, and click **Sign In**.
 
     ![Login information](./images/sql-worksheet-login-2.png " ")
 
@@ -48,7 +48,7 @@ Estimated Time: 5 minutes
 
     ![Login information](./images/sql-developer-web.png " ")
 
-5.	In the SQL Development page, select the **Development** tab, then click **Open**.
+5. In the SQL Development page, select the **Development** tab, then click **Open**.
 
     ![Login information](./images/sql-worksheet-page-livestacks.png " ")
 

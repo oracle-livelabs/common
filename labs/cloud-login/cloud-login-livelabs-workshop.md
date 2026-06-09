@@ -31,15 +31,15 @@ Estimated Time: 5 minutes
 
     ![Login information](./images/reservation-information-1.png " ")
 
-3.	Select **Open Link** to open the SQL Worksheet login page.
+3. Select **Open Link** to open the SQL Worksheet login page.
 
     ![Login information](./images/reservation-information-2.png " ")
 
-4.	Enter the credentials from the **Reservation Information** menu, and click **Sign In**.
+4. Enter the credentials from the **Reservation Information** menu, and click **Sign In**.
 
     ![Login information](./images/sql-worksheet-login.png " ")
 
-5.	In the SQL Development page, select the **Development** tab, then click **Open**.
+5. In the SQL Development page, select the **Development** tab, then click **Open**.
 
     ![Login information](./images/sql-worksheet-page.png " ")
 
