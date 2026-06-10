@@ -529,7 +529,7 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
     | Missing `<copy>` tag | Wrap your code with `<copy>...</copy>` inside the code block. |
     | Image not in images folder | Move images to an `images` subdirectory and update paths. |
     | Missing alt text | Add description in brackets: `![Description](image.png " ")` |
-    | HTML in Markdown | Replace `<a href="url">text</a>` with `[text](url)`. |
+    | HTML in Markdown | Replace `[text](url)` with `[text](url)`. |
     | Steps not numbered | Use `1.`, `2.`, etc. instead of `*` or `-` for steps. |
     {: title="Common fixes"}
 ## Task 15: Case Sensitivity
