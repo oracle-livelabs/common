@@ -47,15 +47,18 @@ Once you're approved, you can begin creating listings! See task 2 for further in
     ![Image](./images/click-create-artifact.png)
 
 3. Give your artifact a descriptive name, select a compartment, and set the artifact type to 'Compute Image'.
-    > **NOTE:** Your artifact must be created in the same compartment as your listing. 
+    > **NOTE:** Your artifact <u>must</u> be created in the same compartment as your listing. 
 
     ![Image](./images/create-artifact-1.png)
 
-4. Select your compute image and its compatible shapes.
-    ![Image](./images/select-compute-image.gif)
+4. Click 'Select Image'. Set the compartment field to the one your custom image is in and select the image to be used as your artifact.
+    ![Image](./images/select-compute-image-1.png)
 
-5. Check the agreement box and select 'Create'.
-![Image](./images/create-artifact-2.png)
+5. Select all shapes compatible with your image. Then, click 'Update'.
+    ![Image](./images/select-compute-image-2.png)
+
+6. Check the agreement box and click 'Create artifact'.
+    ![Image](./images/create-artifact-2.png)
 
 Your artifact will be available in a few hours, depending on the size of your image. If you want to add this artifact to an existing listing go to Task 4B, otherwise go to Task 4A.
 
@@ -66,14 +69,18 @@ Your artifact will be available in a few hours, depending on the size of your im
     ![Image](./images/go-to-listings.png)
 
 2. Create an OCI Application Listing.
-
     ![Image](./images/create-listing-1.png)
 
-3. Fill out the header details. 
-    > **NOTE:** Be sure to set the package type to 'Compute Image' and use the same compartment as your artifact.
+3. Select the listing type 'OCI Application Listing'.
     ![Image](./images/create-listing-2.png)
 
-4. Fill out the listing revision details.
+4. Fill out the header details. 
+    > **NOTE:** Be sure to set the package type to 'Compute Image' and use the same compartment as your artifact.
+
+    ![Image](./images/app-listing-details-1.png)
+
+5. Fill out the listing revision details.
+4. Fill out the app listing details details.
     Be sure to set the following:
     - **Price:** Free
     - **Listing Icon:** [LiveLabs Icon](https://cloudmarketplace.oracle.com/marketplace/content?contentId=95549453) 
