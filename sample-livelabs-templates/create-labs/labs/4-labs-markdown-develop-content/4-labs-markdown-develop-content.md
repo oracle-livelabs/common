@@ -293,45 +293,83 @@ You can also embed video files directly from a URL, such as videos hosted on OCI
 
     > **Note:** Ensure your video file is publicly accessible if you want users to view it without authentication.
 
-## Task 11: Scale a Video
+## Task 11: Scale a Video - Mine
 
-Without using video scaling, all the videos you embed will have small as the default size for your workshop. You can override the default video scaling by applying these manual controls below.
+If you do not specify a size when embedding a video, the video displays in small size by default. For most workshops, this default size is the recommended option unless you want to give the video more visual emphasis on the page.
 
+You can override the default by adding a size value to the end of the video embed code.
 
-### Resizing Videos
+### Video Embed Format
 
-1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need a particular scaling to drive emphasis on a subject.
+Use this pattern when embedding a video:
 
-    ```
-    [Oracle Video Hub video with no sizing](videohub:1_2ubr9fo8)
-    ```
+```
+[Video title](videohub:<video_id>)
+```
 
-    [Demo video with no sizing.](videohub:1_yido2qmq)
+To choose a specific size, use this pattern:
 
-2. To scale the video size to small which is also the default video size, use this format.
+```
+[Video title](videohub:<video_id>:<size>)
+```
 
-    ```
-    [Oracle Video Hub video scaled to small size, default video size](videohub:1_2ubr9fo8:small)
-    ```
+**Note:** Supported size values are:
+- Small
+- Medium
+- Large
 
-    [Video hosted on Oracle Video Hub](videohub:1_yido2qmq:small)
+### Default Size: Small
 
-3. Use this format to scale the video size to medium.
+If no size is specified, the video is shown in small size automatically.
 
-    ```
-    [Oracle Video Hub video scaled to medium size](videohub:1_yido2qmq:medium)
-    ```
+```
+(videohub:1_2ubr9fo8)
+```
 
-    [Video hosted on Oracle Video Hub](videohub:1_yido2qmq:medium)
+This is the recommended format when you do not need additional emphasis or a larger display area.
+You can also write the small size explicitly, although it is not required:
 
-4. To scale the video size to large in relation to the amount of lab page space available, use this format.
+```
+(videohub:1_2ubr9fo8:small)
+```
 
-    ```
-    [Oracle Video Hub video scaled to large size](videohub:1_yido2qmq:large)
-    ```
+### Other Size Options
 
-    [Video hosted on Oracle Video Hub](videohub:1_yido2qmq:large)
+Use medium when you want the video to stand out more on the page:
 
+```
+(videohub:1_yido2qmq:medium)
+```
+
+Use large when you want the video to take up more of the available lab page width:
+
+```
+(videohub:1_yido2qmq:large)
+```
+
+### Size Comparison Examples
+
+The screenshots below show how video sizing appears inside a workshop:
+
+![Small video](<./images/small-video.png>)
+
+ This screenshot shows a video displayed at **small** size.
+
+![Medium video](<./images/medium-video.png>)
+
+This screenshot shows a video displayed at **medium** size.
+
+**Note:** These examples illustrate the visual difference between the default presentation and a larger embedded video.
+
+### Guidance
+
+Use the default embed format whenever possible:
+
+```
+(videohub:<video_id>)
+```
+
+**Important:** Only specify medium or large when the video needs more prominence in the task or page layout.
 
 ## Task 12: Tables
 
