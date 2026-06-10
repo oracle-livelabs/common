@@ -498,11 +498,11 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
     | Rule | Severity | Description |
     | --- | --- | --- |
     | **Single Title** | Major | Only one H1 heading (#) is allowed per lab. Multiple H1 headings will be flagged. |
-    | **No Inline HTML** | Error | Avoid embedded `<a href=...>` tags; use [Markdown links](url) instead. |
+    | **No Inline HTML** | Error | Avoid embedded `[text](url)` tags; use [Markdown links](url) instead. |
     | **Task Sections** | Error | The second H2 heading (##) should start with "Task" (e.g., "Task 1: Create..."). |
     | **Images Folder** | Error | All images must be located in an `images` folder. |
     | **Image Alt Text** | Error | All images must have alternate (alt) text for accessibility. |
-    | **Copy Tags** | Error | Code blocks should include `<copy>` tags to enable the copy button. |
+    | **Copy Tags** | Error | Code blocks should include `<copy>...</copy>` tags to enable the copy button. |
     | **Code Block Format** | Error | Use exactly 3 backticks (\`\`\`) for code blocks, not 4. |
     | **Broken Links** | Major | URLs that return errors are flagged as potentially broken. |
     | **Broken Images** | Major | Image paths that cannot be found are flagged. |
