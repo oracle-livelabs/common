@@ -293,7 +293,7 @@ You can also embed video files directly from a URL, such as videos hosted on OCI
 
     > **Note:** Ensure your video file is publicly accessible if you want users to view it without authentication.
 
-## Task 11: Scale a Video - Mine
+## Task 11: Scale a Video
 
 If you do not specify a size when embedding a video, the video displays in small size by default. For most workshops, this default size is the recommended option unless you want to give the video more visual emphasis on the page.
 
