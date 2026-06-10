@@ -323,14 +323,14 @@ To choose a specific size, use this pattern:
 If no size is specified, the video is shown in small size automatically.
 
 ```
-(videohub:1_2ubr9fo8)
+[Oracle Video Hub video with default sizing](videohub:1_2ubr9fo8)
 ```
 
 This is the recommended format when you do not need additional emphasis or a larger display area.
 You can also write the small size explicitly, although it is not required:
 
 ```
-(videohub:1_2ubr9fo8:small)
+[Oracle Video Hub video scaled to small size](videohub:1_2ubr9fo8:small)
 ```
 
 ### Other Size Options
@@ -338,13 +338,13 @@ You can also write the small size explicitly, although it is not required:
 Use medium when you want the video to stand out more on the page:
 
 ```
-(videohub:1_yido2qmq:medium)
+[Oracle Video Hub video scaled to medium size](videohub:1_yido2qmq:medium)
 ```
 
 Use large when you want the video to take up more of the available lab page width:
 
 ```
-(videohub:1_yido2qmq:large)
+[Oracle Video Hub video scaled to large size](videohub:1_yido2qmq:large)
 ```
 
 ### Size Comparison Examples
@@ -366,7 +366,7 @@ This screenshot shows a video displayed at **medium** size.
 Use the default embed format whenever possible:
 
 ```
-(videohub:<video_id>)
+[Video title](videohub:<video_id>)
 ```
 
 **Important:** Only specify medium or large when the video needs more prominence in the task or page layout.
