@@ -498,7 +498,7 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
     | Rule | Severity | Description |
     | --- | --- | --- |
     | **Single Title** | Major | Only one H1 heading (#) is allowed per lab. Multiple H1 headings will be flagged. |
-    | **No Inline HTML** | Error | Avoid embedded `<a href=...>` tags; use Markdown links instead. |
+    | **No Inline HTML** | Error | Avoid embedded `<a href=...>` tags; use [Markdown links](url) instead. |
     | **Task Sections** | Error | The second H2 heading (##) should start with "Task" (e.g., "Task 1: Create..."). |
     | **Images Folder** | Error | All images must be located in an `images` folder. |
     | **Image Alt Text** | Error | All images must have alternate (alt) text for accessibility. |
@@ -624,14 +624,15 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
     ![Code Block Reveal](./images/code-block-reveal.png " ")
 
     <details>
-        <summary>*Reveal code block*</summary>
-        ```python
-        <copy>
-        def getPrice():
-        ...
-        return jsonify(product_price)</copy>
-        ```
-    </details>
+    <summary>*Reveal code block*</summary>
+    ```python
+    <copy>
+    def getPrice():
+    ...
+    return jsonify(product_price)
+    </copy>
+    ```
+</details>
 
     **Reminder** Download this handy [Cheatsheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
 
