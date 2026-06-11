@@ -1,4 +1,4 @@
-import { expect, test } from "../../../support/test.js";
+import { expect, test } from "../../../../support/test.js";
 
 const HOME_RESPONSIVE_TAGS = ["@smoke", "@platform", "@home", "@responsive", "@ui"];
 

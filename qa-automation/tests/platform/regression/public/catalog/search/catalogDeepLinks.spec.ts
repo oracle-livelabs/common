@@ -1,6 +1,6 @@
-import { test } from "../../../support/test.js";
-import { getHomeSearchTerms } from "../../../support/platformSmokeData.js";
-import { resolveSearchTerm } from "../../../support/searchHelpers.js";
+import { test } from "../../../../../support/test.js";
+import { getHomeSearchTerms } from "../../../../../support/platformSmokeData.js";
+import { resolveSearchTerm } from "../../../../../support/searchHelpers.js";
 
 const CATALOG_DEEP_LINK_TAGS = ["@regression", "@platform", "@catalog", "@search", "@navigation", "@ui"];
 const CATALOG_DEEP_LINK_MATRIX = getHomeSearchTerms();

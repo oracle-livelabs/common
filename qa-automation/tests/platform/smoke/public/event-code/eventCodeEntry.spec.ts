@@ -1,4 +1,4 @@
-import { test } from "../../../support/test.js";
+import { test } from "../../../../support/test.js";
 
 const EVENT_CODE_ENTRY_TAGS = ["@smoke", "@platform", "@event-code", "@navigation", "@ui"];
 

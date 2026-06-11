@@ -1,6 +1,6 @@
-import { test } from "../../../support/test.js";
-import { getWorkshopLandingSearchTerms } from "../../../support/platformSmokeData.js";
-import { resolveSearchTerm } from "../../../support/searchHelpers.js";
+import { test } from "../../../../support/test.js";
+import { getWorkshopLandingSearchTerms } from "../../../../support/platformSmokeData.js";
+import { resolveSearchTerm } from "../../../../support/searchHelpers.js";
 
 const HOME_SEARCH_LANDING_TAGS = ["@smoke", "@platform", "@search", "@catalog", "@ui"];
 const HOME_SEARCH_LANDING_MATRIX = getWorkshopLandingSearchTerms();

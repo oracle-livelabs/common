@@ -1,5 +1,8 @@
 node_modules/
 artifacts/
+.env
+.env.local
+.auth/
 .tmp_*.html
 .idea/
 .cache/
