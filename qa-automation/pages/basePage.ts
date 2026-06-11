@@ -73,7 +73,11 @@ export class BasePage {
     }
   }
 
-  protected async gotoUrl(targetUrl: string, expectedPathFragment: string): Promise<void> {
+  protected async gotoUrl(
+    targetUrl: string,
+    expectedPathFragment: string,
+    timeout = BasePage.NAVIGATION_TIMEOUT_MS,
+  ): Promise<void> {
     let lastError: unknown;
 
     for (let attempt = 0; attempt <= BasePage.NAVIGATION_RETRIES; attempt += 1) {
@@ -82,18 +86,15 @@ export class BasePage {
         // timing of slower assets on the public site. The page-object asserts
         // still own the business readiness checks immediately after this.
         await this.page.goto(targetUrl, {
-          timeout: BasePage.NAVIGATION_TIMEOUT_MS,
+          timeout,
           waitUntil: "commit",
         });
       } catch (error) {
         lastError = error;
-        if (!this.currentPathIncludes(expectedPathFragment) && attempt === BasePage.NAVIGATION_RETRIES) {
-          throw error;
-        }
       }
 
       try {
-        await this.waitForPath(expectedPathFragment, BasePage.NAVIGATION_TIMEOUT_MS);
+        await this.waitForPath(expectedPathFragment, timeout);
         return;
       } catch (error) {
         lastError = error;
