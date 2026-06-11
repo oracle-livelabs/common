@@ -63,8 +63,6 @@ The legacy section-based wrappers were removed from the LiveLabs payload. The ac
 
 ## Supporting Folders
 
-* `sample-workshops/`
-  Applied demo workshop surfaces.
 * Local-only workbench files, archived references, generated QA output, and validation artifacts are intentionally excluded by `.gitignore`.
 
 ## Editing Guidance

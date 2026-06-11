@@ -132,6 +132,11 @@
       "title": "Lab 12: Get Started with the LiveLabs AI Developer Hub",
       "description": "This lab points authors to the LiveLabs AI Developer Hub for deeper workflow guides instead of repeating that content here.",
       "filename": "./../../15-labs-livelabs-ai-developer-hub/15-labs-livelabs-ai-developer-hub.md"
+    },
+    {
+      "title": "Lab 13: How to Create a LiveStack",
+      "description": "This lab will show you how to create a LiveStack.",
+      "filename": "./../../15-livestack/create-a-livestack.md"
     }
   ]
 }

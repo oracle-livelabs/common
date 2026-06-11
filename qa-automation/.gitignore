@@ -6,5 +6,8 @@ artifacts/
 coverage/
 dist/
 playwright-report/
+playwright/.auth/
+.auth/
+storage-state*.json
 *.log
 *.tmp

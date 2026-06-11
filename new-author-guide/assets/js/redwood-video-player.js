@@ -64,18 +64,6 @@
   }
 
   function defaultAssetConfig() {
-    var path = String(window.location.pathname || "").replace(/\\/g, "/");
-
-    if (
-      path.indexOf("/sample-workshops/clinical-first-responder-rag/") !== -1 ||
-      /\/sample-workshops\/clinical-first-responder-rag(?:\/index\.html)?$/.test(path)
-    ) {
-      return {
-        src: "./media/psychiatry-template.mp4",
-        captions: "./media/psychiatry-template.vtt"
-      };
-    }
-
     return {
       src: "./assets/media/guide/author-guide-template.mp4",
       captions: "./assets/media/guide/author-guide-template.vtt"
@@ -92,6 +80,7 @@
       src: node.getAttribute("data-video-src") || fallback.src,
       captions: node.getAttribute("data-video-captions") || fallback.captions,
       features: toArray(node.getAttribute("data-video-features"), "|"),
+      hasAudio: node.getAttribute("data-video-has-audio") === "true",
       transcriptTitle: node.getAttribute("data-video-transcript-title") || "Transcript",
       transcriptIntro: node.getAttribute("data-video-transcript-intro") || "Use the transcript to review the demo clip and confirm the player behavior without relying on audio.",
       transcript: parseTranscript(node.getAttribute("data-video-transcript"), {
@@ -124,6 +113,7 @@
       options.kicker ? ' data-video-kicker="' + escapeAttribute(options.kicker) + '"' : "",
       options.src ? ' data-video-src="' + escapeAttribute(options.src) + '"' : "",
       options.captions ? ' data-video-captions="' + escapeAttribute(options.captions) + '"' : "",
+      options.hasAudio ? ' data-video-has-audio="true"' : "",
       features.length ? ' data-video-features="' + escapeAttribute(features.join("|")) + '"' : "",
       transcript ? ' data-video-transcript="' + escapeAttribute(transcript) + '"' : "",
       options.transcriptTitle ? ' data-video-transcript-title="' + escapeAttribute(options.transcriptTitle) + '"' : "",
@@ -151,7 +141,9 @@
       '      <div class="media-player-control-group">',
       '        <button class="media-player-control is-primary" type="button" data-player-toggle>Pause</button>',
       '        <button class="media-player-control" type="button" data-player-restart>Restart</button>',
-      '        <button class="media-player-control" type="button" data-player-mute>Muted</button>',
+      options.hasAudio
+        ? '        <button class="media-player-control" type="button" data-player-mute>Muted</button>'
+        : '        <button class="media-player-control" type="button" data-player-mute disabled aria-disabled="true">No audio</button>',
       "      </div>",
       '      <div class="media-player-progress">',
       '        <input class="media-player-seek" type="range" min="0" max="1000" value="0" step="1" data-player-seek aria-label="Seek video">',
@@ -167,6 +159,9 @@
       '        <button class="media-player-control" type="button" data-player-fullscreen>Full</button>',
       "      </div>",
       "    </div>",
+      options.hasAudio
+        ? ""
+        : '    <div class="media-player-footnote">Silent template clip. Use the onscreen steps until a final narrated recording is available.</div>',
       "  </div>",
       "</section>"
     ].join("");
@@ -200,7 +195,16 @@
       button.setAttribute("aria-label", state.video.paused ? "Play video" : "Pause video");
     });
 
-    state.muteButton.textContent = state.video.muted ? "Muted" : "Sound on";
+    if (state.options.hasAudio) {
+      state.muteButton.textContent = state.video.muted ? "Muted" : "Sound on";
+      state.muteButton.disabled = false;
+      state.muteButton.removeAttribute("aria-disabled");
+    } else {
+      state.video.muted = true;
+      state.muteButton.textContent = "No audio";
+      state.muteButton.disabled = true;
+      state.muteButton.setAttribute("aria-disabled", "true");
+    }
     if (state.captionsButton) {
       state.captionsButton.classList.toggle("is-active", state.captionsVisible);
     }
@@ -303,10 +307,12 @@
       playVideo(state, true);
     });
 
-    state.muteButton.addEventListener("click", function () {
-      state.video.muted = !state.video.muted;
-      updateButtons(state);
-    });
+    if (state.options.hasAudio) {
+      state.muteButton.addEventListener("click", function () {
+        state.video.muted = !state.video.muted;
+        updateButtons(state);
+      });
+    }
 
     if (state.captionsButton) {
       state.captionsButton.addEventListener("click", function () {

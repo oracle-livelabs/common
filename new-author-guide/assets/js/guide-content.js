@@ -75,25 +75,31 @@ window.authorGuideContent = (function () {
       {
         id: "wms-request",
         title: "WMS Request",
-        short: "VPN, request form, tags, and the approval statuses that gate authoring.",
+        short: "VPN, request form, tags, council review, status flow, social planning, and the WMS gates that control authoring.",
         accent: "red",
         tags: ["workflow", "beginner"],
-        description: "Use this card when you need the real WMS actions from the source guide: what to fill in, what status comes next, and what reviewers expect before GitHub work starts.",
+        description: "Use this card when you need the real WMS process from the source guide: how to submit, what metadata reviewers need, which status comes next, when GitHub work should start, and how the same WMS record carries the workshop through publishing and later Quarterly Quality Assurance.",
         steps: [
           "Connect to Corporate VPN, open Oracle Workshop Management System, and click Submit a New Workshop Request.",
-          "Fill Workshop Basic Information completely, including Stakeholder, Workshop Council, Workshop Owner Group, Workshop Abstract, Workshop Outline, and Workshop Prerequisites.",
-          "Open the Tags tab and set the required Level, Role, Focus Area, and Product tags before you create the record.",
-          "Track the request through Submitted, More Info Needed, Approved, In Development, Self Quality Assurance, and Self Quality Assurance Complete so your WMS record stays aligned with the real build status."
+          "Fill Workshop Basic Information completely, including Stakeholder, Workshop Council, Workshop Owner Group, Workshop Abstract, Workshop Outline, and Workshop Prerequisites. Use the field help when you are unsure what a reviewer expects.",
+          "Open the Tags tab and set the required Level, Role, Focus Area, and Product tags before you create the record. Tags are discovery and routing metadata, not late cleanup.",
+          "Wait for council review after submission. Council review normally takes 2 to 3 business days; if nothing changes after 3 business days, use Message the Team or find council contacts under People & Role Reports > Workshop Council Members.",
+          "After approval, move to In Development when real GitHub authoring starts, then Self Quality Assurance when the workshop is stable enough for end-to-end testing.",
+          "Complete and save the Self Quality Assurance Checklist before changing to Self Quality Assurance Complete. Stakeholders verify from that state and move the workshop to Completed when it is ready for publishing.",
+          "Use Go to Market - Social while the workshop is still early if blog, social, video script, or marketing image details will be needed for publishing.",
+          "Return to the same WMS record for Quarterly Quality Assurance after publication. Missed Quarterly Quality Assurance can disable the production entry."
         ],
         checkpoints: [
-          "The title says what the learner will build or achieve, not only the product name.",
-          "Owner, council, and contact fields are populated before review starts.",
-          "The request already calls out unusual build elements such as embedded HTML, special media, Marketplace images, or remote desktop."
+          "The title, abstract, outline, prerequisites, owner group, stakeholder, and council tell reviewers what the learner will build and who owns the handoff.",
+          "Required tags are complete before the record is created: Level, Role, Focus Area, and Product.",
+          "The request already calls out unusual build elements such as embedded HTML, special media, Marketplace images, secure desktop, or sandbox dependencies.",
+          "The WMS status matches the real work state, not just the next status the author wants."
         ],
         watchFor: [
-          "Starting repository work before the council record is aligned.",
+          "Starting heavy repository work before council review has approved the request.",
           "Leaving abstract, outline, or prerequisites too vague and forcing council follow-up.",
-          "Forgetting that later Self Quality Assurance and publishing steps depend on the same WMS record."
+          "Changing status before the checklist is saved.",
+          "Forgetting that Self Quality Assurance, stakeholder review, publishing, and Quarterly Quality Assurance all depend on this same WMS record."
         ],
         exampleTitle: "Example completion",
         exampleIntro: "These are the kinds of answers reviewers should see. The exact stakeholder or council name changes, but the level of detail should not.",
@@ -106,11 +112,12 @@ window.authorGuideContent = (function () {
           exampleField("Required Tags", "Use the actual WMS tags for the workshop.\nLevel = Beginner\nRole = Developer\nFocus Area = the main solution area\nProduct = the Oracle service being taught.", "Tags are required routing and discovery metadata.")
         ],
         milestonesTitle: "Status flow",
-        milestonesIntro: "The same WMS record stays with the workshop all the way through approval, Quality Assurance, publishing, and later maintenance.",
+        milestonesIntro: "Use this status flow as the process map. The same WMS record stays with the workshop from initial submission through development, Quality Assurance, publishing, and later maintenance.",
         milestones: [
           milestone("Submitted", "Council review starts here."),
-          milestone("More Info Needed or Approved", "Answer follow-up questions or wait for approval before heavy build work."),
-          milestone("In Development", "Move here when real GitHub authoring starts."),
+          milestone("More Info Needed", "Answer council questions in WMS and improve the request until the use case is clear."),
+          milestone("Approved", "Begin heavier GitHub work only after the initial review gate clears."),
+          milestone("In Development", "Move here when real GitHub authoring starts and the preview path exists."),
           milestone("Self Quality Assurance to Self Quality Assurance Complete", "Run the checklist, save it, and certify the handoff only after the workshop is stable."),
           milestone("Completed", "Stakeholders have verified the workshop and it is ready for publish handling."),
           milestone("Quarterly Quality Assurance", "Published workshops cycle back into Quality Assurance later, and missed Quality Assurance can disable the entry.")
@@ -717,7 +724,7 @@ window.authorGuideContent = (function () {
         description: "Use this card when GitHub Actions is blocking the pull request and you need the exact failure class instead of guessing from the red X.",
         steps: [
           "Open the Checks area on the pull request and name the exact failing workflow before you edit anything: LiveLabs Image Validation or LiveLabs Markdown Validation.",
-          "Resize any PNG, JPG, or JPEG that exceeds 1280px in width or height, then rerun the pull request checks instead of assuming the next push will be clean.",
+          "If the pull request fails LiveLabs Image Validation, use OptiShot to resize any PNG, JPG, or JPEG that exceeds 1280px in width or height, then rerun the pull request checks.",
           "Use the markdown error log to fix the exact file and rule: missing required sections, bad task header format, missing alt text, inline HTML, unbalanced copy tags, or uppercase filenames.",
           "Run the validator locally on the workshop root when you want faster repair loops than waiting for GitHub Actions after each commit.",
           "On Windows, use the PowerShell script if Bash is not your normal workflow, and temporarily bypass execution policy only for the current session when needed."
@@ -803,10 +810,10 @@ window.authorGuideContent = (function () {
           "https://<github-username>.github.io/<repository-name>/<path>/workshops/<variant>/index.html?qa=true",
           "",
           "Production URL",
-          "https://oracle-livelabs.github.io/<repository-name>/<path>/workshops/<variant>/",
+          "https://livelabs.oracle.com/cdn/<repository-name>/<path>/workshops/<variant>/",
           "",
           "Brown Button URL",
-          "https://oracle-livelabs.github.io/<repository-name>/<path>/workshops/tenancy/",
+          "https://livelabs.oracle.com/cdn/<repository-name>/<path>/workshops/tenancy/",
           "",
           "Sprint URL",
           "https://oracle-livelabs.github.io/sprints/<category-folder>/<sprint-folder>/"
@@ -819,77 +826,6 @@ window.authorGuideContent = (function () {
         sourceHref: labLink("6-labs-publish"),
         sourceLabel: "Open Full Guide",
         guideTarget: "validation-publish"
-      },
-      {
-        id: "need-help",
-        title: "Need Help?",
-        short: "Choose the right support channel and bring enough context that someone can actually unblock you.",
-        accent: "pine",
-        tags: ["workflow"],
-        description: "Use this card when the blocker is ownership, tooling, or workflow support and you need to route the question to the right place.",
-        steps: [
-          "Check the workflow lab or FAQ first so you do not escalate something the guide already answers clearly.",
-          "Use WMS Message the Team for workshop-specific approval, stakeholder, or publishing questions tied to one workshop record.",
-          "Use the shared mailbox or #workshop-authors-help Slack channel for tooling, documentation, or shared platform blockers.",
-          "Bring the WMS ID, preview URL, repository or pull request, exact blocker, and what you already tried."
-        ],
-        checkpoints: [
-          "The support request goes to the channel that actually owns the blocker.",
-          "The request includes enough context to reproduce or route the issue.",
-          "You are not sending the same vague request to multiple channels."
-        ],
-        watchFor: [
-          "Asking for help with no WMS ID, preview URL, or error context.",
-          "Direct messaging people to bypass the queue for normal review work.",
-          "Treating the support channel as the first stop instead of the guide or FAQ."
-        ],
-        snippetMeta: "Support context",
-        snippetTitle: "Bring this context when you ask for help",
-        snippet: [
-          "WMS ID:",
-          "Preview URL:",
-          "Repository / branch or pull request:",
-          "Current workflow status:",
-          "Exact blocker:",
-          "What you already tried:"
-        ].join("\n"),
-        sourceHref: labLink("need-help"),
-        sourceLabel: "Open Full Guide",
-        guideTarget: "help-faq"
-      },
-      {
-        id: "livelabs-faq",
-        title: "LiveLabs FAQ",
-        short: "Use the FAQ for repeat author questions such as VPN, preview versus production links, and Quarterly Quality Assurance.",
-        accent: "pine",
-        tags: ["workflow"],
-        description: "Use this card when the question is common and you need a fast answer before diving back into the deeper workflow lab.",
-        steps: [
-          "Use FAQ first for repeat questions such as VPN access, who can submit a workshop, and where the Self Quality Assurance checklist appears.",
-          "Use it again for maintenance questions such as which link to share during development, which link to share after publish, and how to handle minor or major updates.",
-          "Return to the workflow lab when you need execution detail instead of a short answer."
-        ],
-        checkpoints: [
-          "You know whether a short FAQ answer is enough or whether the full workflow lab is needed.",
-          "The FAQ answer resolves the immediate question without replacing the real step-by-step instructions.",
-          "You are using FAQ to reduce noise, not to skip the process."
-        ],
-        watchFor: [
-          "Using FAQ answers as a shortcut around the actual author flow.",
-          "Escalating a question that the FAQ already answers.",
-          "Treating FAQ as the main execution guide."
-        ],
-        snippetMeta: "Typical FAQ topics",
-        snippetTitle: "Use FAQ for these repeat questions",
-        snippet: [
-          "Need VPN for WMS?",
-          "Which link should I share in development?",
-          "Which link should I share after publish?",
-          "What happens if Quarterly Quality Assurance is missed?"
-        ].join("\n"),
-        sourceHref: labLink("livelabs-faq"),
-        sourceLabel: "Open Full Guide",
-        guideTarget: "help-faq"
       },
       {
         id: "review-sla",
