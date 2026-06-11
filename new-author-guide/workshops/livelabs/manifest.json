@@ -1,4 +1,4 @@
-﻿{
+{
     "workshoptitle":  "Oracle LiveLabs Author Guide",
     "help":  "livelabs-help-db_us@oracle.com",
     "variables":  [
@@ -52,7 +52,7 @@
                       },
                       {
                           "title":  "Lab 5a: Develop Markdown and content",
-                          "description":  "This labs give you tips and tricks for editing and how to develop your lab (markdown) content using LiveLabs standards and accessibility for your workshops.",
+                          "description":  "This lab gives you tips and tricks for editing and developing your lab (markdown) content using LiveLabs standards and accessibility for your workshops.",
                           "filename":  "./../../content/author-guide/4-labs-markdown-develop-content/4-labs-markdown-develop-content.md"
                       },
                       {
@@ -110,7 +110,7 @@
                       },
                       {
                           "title":  "Lab 11a: Secure Desktop Environments in LiveLabs",
-                          "description":  "This lab will wsho you how to get your new Marketplace image added to your LiveLab.",
+                          "description":  "This lab will show you how to get your new Marketplace image added to your LiveLab.",
                           "filename":  "./../../content/author-guide/14-secure-desktop/secure-desktop.md"
                       },
                       {
