@@ -1,4 +1,4 @@
-import { test } from "../../../support/test.js";
+import { test } from "../../../../../support/test.js";
 
 const CATALOG_SEARCH_CONTROL_TAGS = ["@regression", "@platform", "@catalog", "@search", "@ui"];
 const CLEAR_SEARCH_TERM = "Database";

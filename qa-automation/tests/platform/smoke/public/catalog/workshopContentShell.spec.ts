@@ -1,6 +1,6 @@
-import { getWorkshopLandingSearchTerms } from "../../../support/platformSmokeData.js";
-import { resolveSearchTerm } from "../../../support/searchHelpers.js";
-import { test } from "../../../support/test.js";
+import { getWorkshopLandingSearchTerms } from "../../../../support/platformSmokeData.js";
+import { resolveSearchTerm } from "../../../../support/searchHelpers.js";
+import { test } from "../../../../support/test.js";
 
 const WORKSHOP_CONTENT_SHELL_TAGS = ["@smoke", "@platform", "@workshop", "@content", "@ui"];
 

@@ -2,6 +2,13 @@ import { expect, type Locator, type Page } from "@playwright/test";
 
 import { BasePage } from "../basePage.js";
 
+export type CatalogResultKind = "workshop" | "livestack";
+
+export interface CatalogResultCard {
+  title: string;
+  href: string;
+}
+
 // WorkshopCardsPage represents the search and browse results screen that sits
 // between homepage intent and an individual workshop landing page.
 export class WorkshopCardsPage extends BasePage {
@@ -195,8 +202,60 @@ export class WorkshopCardsPage extends BasePage {
   }
 
   async firstWorkshopTitle(): Promise<string> {
-    await this.assertHasResults();
+    await this.assertHasWorkshopResults();
     return (await this.workshopLinks.first().innerText()).trim();
+  }
+
+  async resultCardRecords(kind: CatalogResultKind, maxCards?: number): Promise<CatalogResultCard[]> {
+    const links = kind === "livestack" ? this.liveStackLinks : this.workshopLinks;
+    await this.waitForVisible(links.first());
+
+    const cards = await links.evaluateAll((anchors) => {
+      const seen = new Set<string>();
+      const records: CatalogResultCard[] = [];
+
+      for (const anchor of anchors) {
+        const title = (anchor.textContent ?? "").replace(/\s+/g, " ").trim();
+        const href = anchor.getAttribute("href") ?? "";
+        const key = `${title}|${href}`;
+
+        if (!title || !href || seen.has(key)) {
+          continue;
+        }
+
+        seen.add(key);
+        records.push({ title, href });
+      }
+
+      return records;
+    });
+
+    return typeof maxCards === "number" && maxCards > 0 ? cards.slice(0, maxCards) : cards;
+  }
+
+  async findResultCardByTitle(kind: CatalogResultKind, titlePattern: string): Promise<CatalogResultCard> {
+    const cards = await this.resultCardRecords(kind);
+    const expression = new RegExp(titlePattern, "i");
+    const matchingCard = cards.find((card) => expression.test(card.title));
+
+    if (!matchingCard) {
+      throw new Error(
+        `No ${kind} result card matched "${titlePattern}". Available cards: ${cards
+          .map((card) => `"${card.title}"`)
+          .join(", ")}`,
+      );
+    }
+
+    return matchingCard;
+  }
+
+  async openResultCardByTitle(kind: CatalogResultKind, titlePattern: string): Promise<CatalogResultCard> {
+    const card = await this.findResultCardByTitle(kind, titlePattern);
+    const links = kind === "livestack" ? this.liveStackLinks : this.workshopLinks;
+    const cardLink = links.filter({ hasText: new RegExp(titlePattern, "i") }).first();
+
+    await this.clickWhenReady(cardLink, WorkshopCardsPage.CATALOG_NAVIGATION_TIMEOUT_MS);
+    return card;
   }
 
   async openFirstWorkshop(): Promise<string> {
