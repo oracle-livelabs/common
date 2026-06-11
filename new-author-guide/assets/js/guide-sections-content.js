@@ -136,7 +136,7 @@
           id: "guide-home",
           label: "Guide home",
           title: "Open the redesigned guide home first",
-          summary: "Choose the shortest route before you open the markdown fallback or the deeper section cards.",
+          summary: "Choose the shortest route before you open the live original guide or the deeper section cards.",
           steps: [
             "Open the author guide home and stay on that page long enough to choose the right route.",
             "Use Guided Path when you want the standard request, build, Quality Assurance, and publish sequence.",
@@ -145,7 +145,7 @@
           ],
           checkpoints: [
             "You can say why you are using Guided Path, Toolkit, or Full Guide before you continue.",
-            "You are not treating the markdown fallback as the default front door."
+            "You are not treating the full original guide as the default front door."
           ],
           watchFor: [
             "Dropping into a random canonical lab before deciding what kind of help is needed.",
@@ -157,7 +157,7 @@
             "Guided Path  -> ordered request, build, Quality Assurance, publish flow",
             "Toolkit      -> one blocker, one answer",
             "Full Guide   -> section-by-section reference map",
-            "Markdown     -> fallback, not the default front door"
+            "Original     -> full depth, not the default front door"
           ].join("\n"),
           sourceHref: "./index.html#home",
           sourceLabel: "Open Guide Home"

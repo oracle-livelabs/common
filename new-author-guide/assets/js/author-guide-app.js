@@ -9,7 +9,6 @@
   var guideManifestHref = "./workshops/author-guide/manifest.json";
   var fullGuideHref = "https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/";
   var workshopExampleHref = window.authorGuideWorkshopExampleHref || "https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/";
-  var guideHomeHref = fullGuideHref;
   var guideCatalogPromise = null;
   var guideCatalogLoaded = false;
   var guideSectionSurfaceCache = {};
@@ -71,6 +70,26 @@
     ["secure desktop", "secure desktops", "restricted laptop", "restricted corporate laptop", "novnc", "chrome", "popups"],
     ["ai", "ai developer hub", "agentic", "automation first", "skill bundle", "how to guide"]
   ];
+
+  function fullGuideLabHref(labId, extraParams) {
+    var target;
+
+    try {
+      target = new URL(fullGuideHref, window.location.href);
+      if (labId) {
+        target.searchParams.set("lab", labId);
+      }
+      Object.keys(extraParams || {}).forEach(function (key) {
+        target.searchParams.set(key, extraParams[key]);
+      });
+      return target.toString();
+    } catch (error) {
+      if (!labId) {
+        return fullGuideHref;
+      }
+      return fullGuideHref + "?lab=" + encodeURIComponent(labId);
+    }
+  }
 
   var state = {
     mode: "hub",
@@ -726,7 +745,7 @@
     }
 
     highlights.push("Original order");
-    highlights.push("Markdown fallback");
+    highlights.push("Live original guide");
     return uniqueList(highlights).slice(0, 3);
   }
 
@@ -852,9 +871,9 @@
       navState: "Loading sections",
       labs: [],
       sourcePath: resolveGuideSourcePath(filename),
-      sectionHref: fullGuideHref,
+      sectionHref: fullGuideLabHref(id),
       sectionLabel: "Open Full Guide",
-      embedHref: guideHomeHref + "?lab=" + encodeURIComponent(id) + "&embed=1"
+      embedHref: fullGuideLabHref(id, { embed: "1" })
     };
   }
 
@@ -1450,8 +1469,8 @@
 
     sourceLink = document.getElementById("bubbleModalSourceLink");
     if (item.sourceHref) {
-      sourceLink.setAttribute("href", fullGuideHref);
-      sourceLink.textContent = "Open Full Guide";
+      sourceLink.setAttribute("href", item.sourceHref);
+      sourceLink.textContent = item.sourceLabel || "Open Full Guide";
       sourceLink.classList.remove("d-none");
     } else {
       sourceLink.classList.add("d-none");
@@ -1487,7 +1506,7 @@
     ].concat(section.highlights || []);
 
     if (!features.length) {
-      return ["Redesigned controls", "Audio controls", "Markdown fallback"];
+      return ["Redesigned controls", "Audio controls", "Live original guide"];
     }
 
     return uniqueList(features).slice(0, 3);
@@ -2303,7 +2322,7 @@
       ),
       '      <div class="guide-section-actions">',
       '        <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-mode-target="explorer">Open Cheatsheet</button>',
-      section.sectionHref ? '<a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(fullGuideHref) + '" target="_blank" rel="noreferrer">Open Full Guide</a>' : "",
+      section.sectionHref ? '<a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(section.sectionHref) + '" target="_blank" rel="noreferrer">Open Full Guide</a>' : "",
       "      </div>",
       "    </div>",
       "  </div>",
@@ -2370,8 +2389,8 @@
       sourceShell.innerHTML = [
         '<div class="guide-source-error">',
         "  <strong>Source content could not be rendered in the redesigned guide right now.</strong>",
-        "  <p>Open the markdown version for this page while the redesigned surface is refreshed.</p>",
-        section.sectionHref ? '  <a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(fullGuideHref) + '" target="_blank" rel="noreferrer">Open Full Guide</a>' : "",
+        "  <p>Open this page in the live Full Guide while the redesigned surface is refreshed.</p>",
+        section.sectionHref ? '  <a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(section.sectionHref) + '" target="_blank" rel="noreferrer">Open Full Guide</a>' : "",
         "</div>"
       ].join("");
       scheduleLayoutSync();
