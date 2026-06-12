@@ -1,4 +1,4 @@
-import { test } from "../../../support/test.js";
+import { test } from "../../../../support/test.js";
 
 const HOME_PAGE_TAGS = ["@smoke", "@platform", "@home", "@navigation", "@ui"];
 

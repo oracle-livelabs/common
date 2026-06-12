@@ -1,6 +1,6 @@
-import { test } from "../../../support/test.js";
-import { getHomeSearchTerms } from "../../../support/platformSmokeData.js";
-import { resolveSearchTerm } from "../../../support/searchHelpers.js";
+import { test } from "../../../../support/test.js";
+import { getHomeSearchTerms } from "../../../../support/platformSmokeData.js";
+import { resolveSearchTerm } from "../../../../support/searchHelpers.js";
 
 const HOME_SEARCH_TAGS = ["@smoke", "@platform", "@search", "@catalog", "@ui"];
 const HOME_SEARCH_MATRIX = getHomeSearchTerms();

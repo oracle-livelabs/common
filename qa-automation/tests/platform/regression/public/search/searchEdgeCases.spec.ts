@@ -1,5 +1,5 @@
-import { test } from "../../../support/test.js";
-import { SEARCH_CASE_NAMES, getSearchCaseByName, type SearchCaseName } from "../../../support/searchCases.js";
+import { test } from "../../../../support/test.js";
+import { SEARCH_CASE_NAMES, getSearchCaseByName, type SearchCaseName } from "../../../../support/searchCases.js";
 
 const SEARCH_EDGE_CASE_TAGS = ["@regression", "@platform", "@search", "@catalog", "@ui"];
 const SEARCH_EDGE_CASE_MATRIX: SearchCaseName[] = [

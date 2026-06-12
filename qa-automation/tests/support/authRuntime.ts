@@ -13,6 +13,9 @@ export interface AuthRuntimeConfig {
   privateAccessBootstrapUrl?: string;
   privateAccessBootstrapToken?: string;
   hasPrivateAccessBootstrap: boolean;
+  username?: string;
+  password?: string;
+  hasCredentials: boolean;
 }
 
 function normalizeSecret(value: string | undefined): string | undefined {
@@ -34,6 +37,8 @@ export function resolveAuthRuntimeConfig(): AuthRuntimeConfig {
   const hasStorageState = Boolean(storageStatePath && existsSync(storageStatePath));
   const privateAccessBootstrapUrl = normalizeSecret(process.env.QA_AUTH_BOOTSTRAP_URL);
   const privateAccessBootstrapToken = normalizeSecret(process.env.QA_AUTH_BOOTSTRAP_TOKEN);
+  const username = normalizeSecret(process.env.QA_LIVELABS_USERNAME);
+  const password = normalizeSecret(process.env.QA_LIVELABS_PASSWORD);
 
   return {
     storageStatePath,
@@ -43,6 +48,9 @@ export function resolveAuthRuntimeConfig(): AuthRuntimeConfig {
     privateAccessBootstrapUrl,
     privateAccessBootstrapToken,
     hasPrivateAccessBootstrap: Boolean(privateAccessBootstrapUrl && privateAccessBootstrapToken),
+    username,
+    password,
+    hasCredentials: Boolean(username && password),
   };
 }
 
