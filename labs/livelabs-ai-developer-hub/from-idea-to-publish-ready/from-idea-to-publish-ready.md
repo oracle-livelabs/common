@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This lab shows authors how to use Codex and the `livelabs-workshop-author` skill to turn a source article into a draft LiveLabs workshop with a clear lab plan, solid structure, and validator-aligned markdown.
+This lab shows how to use Codex and the `livelabs-workshop-author` skill to turn a source article into a draft LiveLabs workshop with a clear lab plan, strong structure, and validator-aligned markdown.
 
 This lab uses the Oracle Database blog post `Getting Started with Private AI Services Container` as the source. 
 
@@ -10,15 +10,17 @@ This lab uses the Oracle Database blog post `Getting Started with Private AI Ser
 
 In this lab, you will:
 
-- use a simple prompt to create a workshop from a blog post
-- convert source narrative into a LiveLabs lab plan
-- shape a first lab that starts the hands-on flow
-- preserve exact commands while cutting extra prose
-- review the generated workshop for structure, teaching flow, and source fidelity
+- Use a simple prompt to create a workshop from a blog post
+- Convert source narrative into a LiveLabs lab plan
+- Shape a first lab that starts the hands-on flow
+- Preserve exact commands while cutting extra prose
+- Review the generated workshop for structure, teaching flow, and source fidelity
 
-Estimated Time: 15 minutes
+**Estimated Time:** 15 minutes
 
 ## Task 1: Start With A Simple Source-To-Workshop Prompt
+
+Perform the following set of steps to create a clean first prompt that turns source material into a draft workshop:
 
 1. Use `livelabs-workshop-author` when the source is a blog post, product doc, tutorial page, or similar reference rather than an existing workshop.
 
@@ -37,9 +39,11 @@ Estimated Time: 15 minutes
     Use only the source content and convert it into workshop tasks.
     ```
 
-4. Do not add validator rules, markdown contract text, or writing rules to the prompt. The skill already owns those internal steps.
+**Note:** Do not add validator rules, markdown contract text, or writing rules to the prompt. The skill already owns those internal steps.
 
 ## Task 2: Convert The Blog Into A Real Lab Plan
+
+Perform the following set of steps to convert the source blog into a practical lab sequence built around learner actions.
 
 1. Review the source and convert it into learner actions instead of copying the blog headings as-is.
 
@@ -52,18 +56,20 @@ Estimated Time: 15 minutes
 
 3. Use the blog workflow, commands, and outcomes as the source of truth for the lab sequence.
 
-4. Avoid mirroring the source article mechanically. A good workshop uses the article to build a learner journey, not a prose summary.
+**Note:** Do not mirror the source article mechanically. A good workshop uses the article to build a learner journey, not a prose summary.
 
 ## Task 3: Make Lab 1 Start The Hands-On Work
+
+Perform the following set of steps to make **Lab 1** start the hands-on workflow instead of staying in background setup:
 
 1. Keep `Lab 1` practical. Start the first real task there instead of spending the whole lab on background.
 
 2. In this example, `Lab 1` should start with environment preparation:
 
-    - confirm container runtime prerequisites
-    - pull the `privateai` image from Oracle Container Registry
-    - extract the setup scripts from the image
-    - prepare the host folders and values needed for startup
+    - Confirm container runtime prerequisites
+    - Pull the `privateai` image from Oracle Container Registry
+    - Extract the setup scripts from the image
+    - Prepare the host folders and values needed for startup
 
 3. Turn environment-specific assumptions into explicit TODO markers instead of pretending the values are known.
 
@@ -71,47 +77,53 @@ Estimated Time: 15 minutes
 
 ## Task 4: Preserve Commands And Cut Prose Bloat
 
+Perform the following set of steps to keep technical commands exact while tightening the surrounding instructional text:
+
 1. Keep technical commands exact.
 
-2. Rewrite the explanation around those commands so it is shorter, more direct, and easier to follow in workshop form.
+2. Rewrite the surrounding explanation so it is shorter, more direct, and easier to follow in workshop form.
 
 3. For this blog example, preserve commands and artifacts such as:
 
-    - pulling the `container-registry.oracle.com/database/privateai:latest` image
-    - extracting `/opt/setup-scripts` from the container
-    - the HTTP startup script
-    - the HTTP/SSL startup script
-    - the `/v1/models` and `/v1/embeddings` API checks
+    - Pulling the `container-registry.oracle.com/database/privateai:latest` image
+    - Extracting `/opt/setup-scripts` from the container
+    - The HTTP startup script
+    - The HTTP/SSL startup script
+    - The `/v1/models` and `/v1/embeddings` API checks
 
 4. Convert blog narration into task language:
 
-    - what the learner must do
-    - what command they must run
-    - what success state they should see
-    - what values still need replacement
+    - What the learner must do
+    - What command they must run
+    - What success state they should see
+    - What values still need replacement
 
 ## Task 5: Review The Generated Workshop Like An Editor
+
+Perform the following set of steps to review the generated workshop for structure, accuracy, and source fidelity:
 
 1. After generation, review the result against the source article.
 
 2. Check these items first:
 
-    - the workshop has an `Introduction` plus the intended lab sequence
+    - The workshop has an `Introduction` plus the intended lab sequence
     - `Lab 1` starts the hands-on flow
-    - every major command or API call in scope is preserved accurately
-    - source prose was converted into numbered learner steps
-    - unsupported claims were not invented
-    - environment-specific gaps are marked clearly as TODO items
+    - Every major command or API call in scope is preserved accurately
+    - Source prose was converted into numbered learner steps
+    - Unsupported claims were not invented
+    - Environment-specific gaps are marked clearly as TODO items
 
-3. Then check the LiveLabs authoring details:
+3. Then verify these LiveLabs authoring details:
 
-    - each file has the required sections
-    - task headers are in the right format
-    - estimated time labels are present
-    - acknowledgements are present
+    - Each file has the required sections
+    - Task headers are in the right format
+    - Estimated time labels are present
+    - Acknowledgements are present
     - `Learn More` links include the source article when useful
 
 ## Task 6: Use Follow-Up Prompts That Fix The Right Problem
+
+Perform the following set of steps to use targeted follow-up prompts that correct the specific weakness in the generated workshop:
 
 1. If the generated workshop reads too much like the source article, ask for a structure pass instead of a generic polish pass.
 
@@ -141,22 +153,24 @@ Estimated Time: 15 minutes
 
 ## Task 7: Expect A Useful Delivery Summary
 
+Perform the following set of steps to verify that Codex returns a useful delivery summary and that the output matches the intended workshop shape:
+
 1. Expect Codex to report:
 
-    - the generated workshop path
-    - files created or updated
-    - the source used
-    - the lab plan it chose
-    - validation status
-    - unresolved TODO items that still need SME input
+    - The generated workshop path
+    - Files created or updated
+    - The source used
+    - The lab plan it chose
+    - Validation status
+    - Unresolved TODO items that still need SME input
 
 2. Before you finish, confirm:
 
-    - the correct source URL was used
-    - the output path was correct
-    - the lab split matches the source workflow
-    - the commands stayed accurate
-    - the final markdown reads like a workshop, not a blog summary
+    - The correct source URL was used
+    - The output path was correct
+    - The lab split matches the source workflow
+    - The commands stayed accurate
+    - The final markdown reads like a workshop, not a blog summary
 
 ## Learn More
 
@@ -166,4 +180,4 @@ Estimated Time: 15 minutes
 ## Acknowledgements
 
 * **Author** - Linda Foinding, Principal Product Manager, Outbound Database Product Management
-* **Last Updated By/Date** - Linda Foinding, April 2026
+* **Last Updated By/Date** - Teodor C. Nechita, June 2026

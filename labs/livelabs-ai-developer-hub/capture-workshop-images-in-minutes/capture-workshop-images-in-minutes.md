@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This guide shows workshop authors how to use Codex to capture LiveLabs screenshots in a real browser.
+This guide shows how to use Codex to capture LiveLabs screenshots in a real browser. It also shows how to annotate key UI elements, blur sensitive information, and keep the final files aligned with workshop markdown.
 
 It also shows how to annotate key UI elements, blur sensitive information, and keep the final files aligned with workshop markdown.
 
@@ -16,9 +16,11 @@ In this lab, you will:
 - Request annotations such as red boxes, blur rules, and celebratory overlays
 - Handle non-deterministic browser behavior without losing the workflow
 
-Estimated Time: 15 minutes
+**Estimated Time:** 15 minutes
 
 ## Task 1: Pick The Right Skill For The Job
+
+Perform the following set of steps to choose the right Codex skill and setup pattern for workshop screenshot capture:
 
 1. Use `webpage-screenshot-pipeline` as the default skill for LiveLabs page captures, button highlights, before-and-after states, and annotated screenshots.
 
@@ -26,11 +28,13 @@ Estimated Time: 15 minutes
 
     - Download the skill to your local directory & unzip
     - Point codex to the path of the directory & ask it to upload it as a skill
-    - Disconnect from VPN to use the screen capture tool 
+    - Disconnect from VPN when the screen capture tool requires direct browser access
     - Use Chrome DevTools MCP tools & Playwright (codex should do it automatically)
     - Prefer PNG and stable file names
 
 ## Task 2: Add Placeholder Images Before Capture (optional)
+
+Perform the following set of steps to place placeholder images in the markdown before collecting final screenshots:
 
 1. Draft the workshop markdown with placeholder image references before you ask Codex to collect final screenshots.
 
@@ -43,6 +47,8 @@ Estimated Time: 15 minutes
     ```
 
 ## Task 3: Review Example Screenshots
+
+Perform the following set of steps to review sample screenshots and calibrate the style and quality of the images you want Codex to produce:
 
 1. Review these sample images from the LiveLabs flow captured for this guide.
 
@@ -61,6 +67,8 @@ Estimated Time: 15 minutes
     Quiz completion example with confetti added as a celebration overlay.
 
 ## Task 4: Prompt Codex To Walk The Lab
+
+Perform the following set of steps to prompt Codex to follow the learner path and capture the right screens in order:
 
 1. Give Codex the exact workshop URL, workshop markdown path, and lab or task range whenever you have them.
 
@@ -115,15 +123,17 @@ Estimated Time: 15 minutes
 
 ## Task 5: Ask For The Right Image Edits
 
+Perform the following set of steps to request the right image edits, annotations, and privacy protections in the same prompt:
+
 1. Tell Codex exactly what visual edits you want in the same prompt.
 
 2. Common requests include:
 
-    - add red boxes around important buttons
-    - add labels to the key controls
-    - blur IP addresses
-    - blur emails, usernames, tenancy names, and other PII
-    - add celebratory overlays such as confetti when the last image should feel like a success state
+    - Add red boxes around important buttons
+    - Add labels to the key controls
+    - Blur IP addresses
+    - Blur emails, usernames, tenancy names, and other PII
+    - Add celebratory overlays such as confetti when the last image should feel like a success state
 
 3. Use a concrete prompt instead of a vague one.
 
@@ -152,46 +162,50 @@ Estimated Time: 15 minutes
 
 ## Task 6: Handle Non-Deterministic Browser Flows
 
+Perform the following set of steps to handle browser flows that vary across runs without losing the intended capture workflow:
+
 1. Expect LiveLabs pages, OCI consoles, and sandbox launches to behave differently across runs.
 
 2. Treat that as normal, not as a failed workflow.
 
 3. Ask Codex to stay structured, but not rigid:
 
-    - follow the lab intent, not only exact button text
-    - adapt when the UI is slightly different
-    - re-snapshot after modals, drawers, sign-in screens, or redirects
-    - capture what actually happened if the expected page does not load
-    - record deviations in `manifest.md`
+    - Follow the lab intent, not only exact button text
+    - Adapt when the UI is slightly different
+    - Re-snapshot after modals, drawers, sign-in screens, or redirects
+    - Capture what actually happened if the expected page does not load
+    - Record deviations in `manifest.md`
 
-4. Remember this rule: step-by-step guidance matters, but creativity matters too.
+4. **Remember this rule:** step-by-step guidance matters, but judgment matters too.
 
 5. The best screenshot runs happen when Codex has:
 
-    - a clear goal
-    - permission to adapt
-    - stable file names
-    - explicit annotation and blur instructions
+    - A clear goal
+    - Permission to adapt
+    - Stable file names
+    - Explicit annotation and blur instructions
 
 ## Task 7: Finish With Workshop-Ready Assets
+
+Perform the following set of steps to finish with workshop-ready screenshot assets and confirm that the capture request included everything needed:
 
 1. After capture, switch to `livelabs-workshop-author` if you want Codex to place the images into workshop content.
 
 2. Before you finish, confirm this checklist:
 
-    - workshop path or lab path
-    - exact URL
-    - lab and task range
-    - exact dimensions
-    - exact states
-    - exact buttons to highlight
-    - blur rules for IPs and PII
-    - output folder name
-    - whether annotations are needed
-    - whether Codex should open the files after capture
+    - Workshop path or lab path
+    - Exact URL
+    - Lab and task range
+    - Exact dimensions
+    - Exact states
+    - Exact buttons to highlight
+    - Blur rules for IPs and PII
+    - Output folder name
+    - Whether annotations are needed
+    - Whether Codex should open the files after capture
 
 ## Acknowledgements
 
 * **Authors** - Linda Foinding, Principal Product Manager, Database Outbound Product Management
 * **Contributors** - Kevin Lazarz
-* **Last Updated By/Date** - Linda Foinding, April 2026
+* **Last Updated By/Date** - Teodor C. Nechita, June 2026
