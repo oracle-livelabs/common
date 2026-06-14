@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This lab shows authors how to use Codex and the `livelabs-industry-converter` skill to create an industry-specific version of an existing Oracle LiveLabs workshop without flattening the teaching flow.
+This lab shows how to use Codex and the `livelabs-industry-converter` skill to create an industry-specific version of an existing Oracle LiveLabs workshop without flattening the teaching flow.
 
 You will learn how to give the skill a simple prompt, what the skill handles automatically, and what to review after conversion so the result stays close to the source workshop.
 
@@ -17,18 +17,20 @@ In this lab, you will:
 - Review side-by-side live server comparisons of the source and converted workshops
 - Avoid common mistakes such as over-specifying the prompt or trusting validator output alone
 
-Estimated Time: 10 minutes
+**Estimated Time:** 10 minutes
 
 ## Task 1: Start With The Simplest Prompt
+
+Perform the following set of steps to start with the simplest supported industry-conversion prompt and the minimum required inputs:
 
 1. Use `livelabs-industry-converter` when you want Codex to inspect an existing workshop and produce a target-industry version with the same teaching flow.
 
 2. Provide these inputs:
 
-    - source workshop path
-    - target industry
-    - optional company name
-    - optional output path
+    - Source workshop path
+    - Target industry
+    - Optional company name
+    - Optional output path
 
 3. Use a prompt like this:
 
@@ -45,66 +47,74 @@ Estimated Time: 10 minutes
 
 ## Task 2: Let The Skill Handle The Internal Logic
 
-1. Do not pack the prompt with validator rules, grading instructions, prose rules, or conversion mechanics.
+Perform the following set of steps to keep the prompt simple and let the skill handle its built-in conversion workflow:
+
+1. Do not pack the prompt with validator rules, grading instructions, prose rules, or conversion mechanics. The skill already handles that internal workflow.
 
 2. The skill already handles the internal workflow:
 
-    - inspect the source workshop and treat it as canonical
-    - detect lab order, manifest structure, shared assets, and launch flow
-    - map source entities into the target industry
-    - rewrite labs, manifests, sample data, statuses, IDs, and output artifacts
-    - preserve screenshots and image coverage
-    - validate LiveLabs structure and launch flow
-    - check for leftover source vocabulary
-    - compare the converted workshop back to the source for fidelity
+    - Inspect the source workshop and treat it as canonical
+    - Detect lab order, manifest structure, shared assets, and launch flow
+    - mMap source entities into the target industry
+    - Rewrite labs, manifests, sample data, statuses, IDs, and output artifacts
+    - Preserve screenshots and image coverage
+    - Validate LiveLabs structure and launch flow
+    - Check for leftover source vocabulary
+    - Compare the converted workshop back to the source for fidelity
 
 ## Task 3: Know What The Skill Tries To Preserve
+
+Perform the following set of steps to understand what the converter should preserve and what it should rewrite:
 
 1. The converter is designed to preserve the source workshop before it rewrites anything.
 
 2. Expect it to preserve:
 
-    - lab order
-    - section order
-    - task count
-    - step count
-    - explanatory depth
-    - generic product setup wording
-    - screenshots and visual callouts
+    - Lab order
+    - Section order
+    - Task count
+    - Step count
+    - Explanatory depth
+    - Generic product setup wording
+    - Screenshots and visual callouts
 
 3. Expect it to rewrite only the parts that truly need industry conversion, such as:
 
-    - personas
-    - business objects
-    - table names
-    - statuses
-    - sample records
-    - report labels
-    - dashboard labels
-    - output examples
+    - Personas
+    - Business objects
+    - Table names
+    - Statuses
+    - Sample records
+    - Report labels
+    - Dashboard labels
+    - Output examples
 
 4. This means generic labs should remain close to the source, while domain-specific labs should feel native to the target industry.
 
 ## Task 4: Review The Output Like An Editor
 
+Perform the following set of steps to review the converted workshop for fidelity, completeness, and unnecessary rewriting:
+
 1. After the conversion, review the updated workshop side by side with the source.
 
 2. Check these items first:
 
-    - no missing labs
-    - no missing tasks
-    - no missing numbered steps
-    - no shortened introductions or conclusions
-    - no dropped screenshots or images
-    - no leftover source-domain nouns
+    - No missing labs
+    - No missing tasks
+    - No missing numbered steps
+    - No shortened introductions or conclusions
+    - No dropped screenshots or images
+    - No leftover source-domain nouns
 
-3. Then check for over-rewrite:
+3. Then check for unnecessary rewriting:
 
-    - generic setup wording should still look close to the source
-    - sentence structure should stay close where no domain change was needed
+    - Generic setup wording should still look close to the source
+    - Sentence structure should stay close where no domain change was needed
     - SQL and sample code should stay proportionate to the source instead of becoming larger or more custom than necessary
 
 ## Task 5: Review Live Server Comparison Screenshots
+
+Perform the following set of steps to use side-by-side screenshots to compare the converted workshop against the source:
 
 1. Use the live server screenshots below as a concrete example of what a source-fidelity review looks like.
 
@@ -130,16 +140,20 @@ Estimated Time: 10 minutes
 
 ## Task 6: Watch For The Common Failure Modes
 
-1. Watch for these specific failure modes:
+Perform the following set of steps to spot the most common conversion failure modes before approving the output:
 
-    - content was shortened between steps
-    - generic labs were paraphrased without a need
-    - screenshots were referenced but not preserved in the right place
-    - validator-driven edits appended new text instead of merging into the restored source section
+1. Watch for these failure modes:
 
-2. If you see drift, ask Codex to do a strict side-by-side pass on the affected labs instead of asking for a generic polish pass.
+    - Content was shortened between steps
+    - Generic labs were paraphrased without a need
+    - Screenshots were referenced but not preserved in the right place
+    - Validator-driven edits appended new text instead of merging into the restored source section
+
+2. If you see drift, ask Codex for a strict side-by-side pass on the affected labs instead of a generic polish pass.
 
 ## Task 7: Use Follow-Up Prompts That Fix The Right Thing
+
+Perform the following set of steps to choose follow-up prompts that repair the exact kind of drift or duplication you found:
 
 1. If the conversion is too loose, ask for a fidelity pass instead of a rewrite.
 
@@ -167,25 +181,27 @@ Estimated Time: 10 minutes
 
 ## Task 8: Expect A Useful Delivery Summary
 
+Perform the following set of steps to confirm that the converter returns a useful delivery summary and that the final workshop still launches correctly:
+
 1. Expect Codex to report:
 
-    - converted workshop path
-    - files created or updated
-    - domain mapping summary
-    - source-fidelity summary
+    - Converted workshop path
+    - Files created or updated
+    - Domain mapping summary
+    - Source-fidelity summary
     - QA summary
-    - unresolved SME gaps if any remain
+    - Unresolved SME gaps if any remain
 
 2. Before you finish, confirm:
 
-    - the source path was correct
-    - the target industry was correct
-    - the output path was correct
-    - the workshop still launches through the intended manifest
-    - the converted labs preserve the source flow
-    - no duplicate content was introduced during repair
+    - The source path was correct
+    - The target industry was correct
+    - The output path was correct
+    - The workshop still launches through the intended manifest
+    - The converted labs preserve the source flow
+    - No duplicate content was introduced during repair
 
 ## Acknowledgements
 
 * **Author** - Linda Foinding, Principal Product Manager, Database Outbound Product Management
-* **Last Updated By/Date** - Linda Foinding, April 2026
+* **Last Updated By/Date** - Teodor C. Nechita, June 2026

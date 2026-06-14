@@ -2,9 +2,9 @@
 
 ## Introduction
 
-The LiveLabs AI Developer Hub brings together agentic and automation-first workflows that help authors move faster without lowering quality. Instead of treating workshop development as a long chain of manual tasks, the hub shows how to use reusable tools to draft workshops from source material, capture screenshots, add knowledge checks, and adapt content for new audiences with far less repetition.
+The **LiveLabs AI Developer Hub** brings together agentic and automation-first workflows that help workshop authors move faster without sacrificing quality. Instead of treating workshop development as a long chain of manual tasks, this hub shows authors how to use reusable tools to plan, draft, revise, illustrate, and refine workshop content with more consistency.
 
-This matters because the real bottleneck in workshop delivery is rarely markdown alone. It is the surrounding work: planning, refactoring, image collection, QA cleanup, and keeping multiple versions aligned. The hub packages those workflows so authors can spend more time shaping outcomes and less time repeating setup steps.
+This matters because the biggest delays in workshop delivery usually come from the surrounding authoring work, not just writing markdown. Planning, refactoring, image collection, QA cleanup, and version alignment all take time, and the hub packages those workflows so authors can spend more effort on instructional quality and customer value.
 
 ### Objectives
 
@@ -12,25 +12,29 @@ In this lab, you will:
 
 - Find the LiveLabs AI Developer Hub
 - Understand why agentic author workflows reduce manual effort
-- Find the downloadable skill bundle in the repo
+- Find the downloadable skill bundle in the repository
 - Use the guided workshop as the best starting point for deeper how-to content
 
 **Estimated Time:** 5 minutes
 
 ## Task 1: Access the LiveLabs AI Developer Hub
 
+Perform the following set of steps to access the guided workshop entry point for the **LiveLabs AI Developer Hub**:
+
 1. Open the guided workshop entry point:
 
     [LiveLabs AI Developer How-To Guide](https://oracle-livelabs.github.io/common/labs/livelabs-ai-developer-hub/workshops/sandbox/)
 
-2. The guide has a structured path to enable authors to go from zero to hero in minutes:
+2. The guide provides a structured path that helps authors move from first use to practical workshop-building workflows quickly:
 
-   * Lab 1 shows how to create a workshop from source material
-   * Lab 2 shows how to capture workshop-ready screenshots
-   * Lab 3 shows how to add knowledge checks
-   * Lab 4 shows how to convert workshop content into customer outcomes for another industry
+   * **Lab 1** shows how to create a workshop from source material
+   * **Lab 2** shows how to capture workshop-ready screenshots
+   * **Lab 3** shows how to add knowledge checks
+   * **Lab 4** shows how to convert workshop content into customer outcomes for another industry
 
 ## Task 2: Access the LiveLabs AI Developer Hub Repository & Download Skills
+
+Perform the following set of steps to access the LiveLabs AI Developer Hub repository and locate the downloadable skill bundle:
 
 1. Open the LiveLabs AI Developer Hub repository:
 
@@ -50,6 +54,8 @@ In this lab, you will:
 
 ## Task 3: Use the Hub as Your Next Step
 
+Perform the following set of steps to use the hub as the next practical step after this chapter:
+
 1. Start with the guided how-to workshop when you want the quickest working path.
 
 2. Move to the repo `README.md` when you want the high-level view and the underlying structure.
@@ -66,4 +72,4 @@ In this lab, you will:
 ## Acknowledgements
 
 * **Author** - Linda Foinding, Principal Product Manager, Outbound Database Product Management
-* **Last Updated By/Date** - Linda Foinding, April 2026
+* **Last Updated By/Date** - Teodor C. Nechita, June 2026

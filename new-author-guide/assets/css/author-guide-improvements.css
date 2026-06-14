@@ -53,8 +53,7 @@
 #app .step-block-header h3,
 #app .snippet-card h3,
 #app .modal-panel h3,
-#app .detail-block-header h3,
-#app .route-map-branch h4 {
+#app .detail-block-header h3 {
   font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
   letter-spacing: 0;
 }
@@ -103,7 +102,6 @@
 
 #app .home-mini-step:hover,
 #app .home-mini-step:focus-visible,
-#app .route-map-branch:hover,
 #app .detail-resource-card:hover,
 #app .detail-field-card:hover,
 #app .detail-milestone-card:hover {
@@ -279,66 +277,9 @@
   text-align: center;
 }
 
-#app .route-map-card,
-#app .route-map-entry,
-#app .route-map-branch,
-#app .route-map-list li,
-#app .route-map-ribbon {
-  border-radius: 8px;
-  box-shadow: none;
-}
-
-#app .route-map-card {
-  border: 1px solid var(--line);
-  background: #fff;
-}
-
-#app .route-map-card .card-body {
-  gap: 1rem;
-}
-
-#app .route-map-entry,
-#app .route-map-ribbon {
-  background: #f8f6f4;
-}
-
-#app .route-map-branch {
-  background: #fff;
-}
-
-#app .route-map-branch::before {
-  height: 0.24rem;
-  background: var(--route-accent);
-}
-
-#app .route-map-list li {
-  background: #fbfaf9;
-}
-
-#app .route-map-list.is-ordered li::before {
-  border-radius: 6px;
-  background: var(--route-accent);
-  box-shadow: none;
-}
-
-#app .route-map-branch[data-accent="sienna"] .btn {
-  border-color: rgba(170, 100, 59, 0.36);
-  color: #8b4a2a;
-}
-
-#app .route-map-branch[data-accent="sienna"] .btn:hover,
-#app .route-map-branch[data-accent="sienna"] .btn:focus-visible {
-  background: rgba(170, 100, 59, 0.08);
-}
-
 @media (max-width: 767.98px) {
   #app .command-card-grid {
     grid-template-columns: 1fr;
-  }
-
-  #app .route-map-entry,
-  #app .route-map-ribbon {
-    align-items: stretch;
   }
 }
 
@@ -595,57 +536,9 @@
   color: #fff;
 }
 
-#app .hub-hero .route-map-card,
-#app .hub-hero .route-map-card .route-map-entry,
-#app .hub-hero .route-map-card .route-map-branch,
-#app .hub-hero .route-map-card .route-map-ribbon,
-#app .hub-hero .route-map-card .route-map-list li {
-  color: var(--ink);
-}
-
-#app .hub-hero .route-map-card .panel-kicker,
-#app .hub-hero .route-map-card .route-map-branch-head small {
-  color: var(--oracle-red);
-}
-
-#app .hub-hero .route-map-card p,
-#app .hub-hero .route-map-card span,
-#app .hub-hero .route-map-card .route-map-branch-foot {
-  color: var(--ink-soft);
-}
-
-#app .hub-hero .route-map-card h3,
-#app .hub-hero .route-map-card h4,
-#app .hub-hero .route-map-card strong {
-  color: var(--ink);
-}
-
-#app .hub-hero .route-map-card .btn-primary {
-  background: var(--oracle-red);
-  border-color: var(--oracle-red);
-  color: #fff;
-}
-
-#app .hub-hero .route-map-card .btn-outline-primary,
-#app .hub-hero .route-map-card .btn-outline-secondary {
-  background: #fff;
-  border-color: var(--line);
-  color: var(--ink);
-}
-
-#app .hub-hero .route-map-card .btn-outline-primary:hover,
-#app .hub-hero .route-map-card .btn-outline-secondary:hover,
-#app .hub-hero .route-map-card .btn-outline-primary:focus-visible,
-#app .hub-hero .route-map-card .btn-outline-secondary:focus-visible {
-  background: rgba(199, 70, 52, 0.06);
-  border-color: var(--oracle-red);
-  color: var(--oracle-red);
-}
-
 #app .hub-hero .home-mini-number,
 #app .detail-resource-number,
 #app .step-orb,
-#app .route-map-list.is-ordered li::before,
 #app .guide-source-panel-icon,
 #app .back-to-top-icon {
   border-radius: 6px;
@@ -670,17 +563,10 @@
 #app .modal-content,
 #app .step-mini-map,
 #app .scene-well,
-#app .route-map-card,
-#app .route-map-entry,
-#app .route-map-branch,
-#app .route-map-list li,
-#app .route-map-ribbon,
 #app .guide-map-shell,
 #app .guide-sidebar-card,
 #app .guide-nav-link,
 #app .guide-section-card,
-#app .guide-lab-card,
-#app .guide-lab-panel,
 #app .guide-source-toolbar,
 #app .guide-source-panel-card,
 #app .guide-source-error,
@@ -702,7 +588,6 @@
 #app .mode-hero,
 #app .toolbar-card,
 #app .step-shell,
-#app .route-map-card,
 #app .guide-map-shell,
 #app .guide-sidebar-card {
   border-top: 6px solid var(--oracle-red);
@@ -783,7 +668,6 @@
 }
 
 #app .home-mini-step,
-#app .route-map-branch,
 #app .detail-resource-card,
 #app .detail-field-card,
 #app .detail-milestone-card,
@@ -796,7 +680,6 @@
 
 #app .home-mini-step:hover,
 #app .home-mini-step:focus-visible,
-#app .route-map-branch:hover,
 #app .detail-resource-card:hover,
 #app .detail-field-card:hover,
 #app .detail-milestone-card:hover,
@@ -1138,13 +1021,10 @@ body.home-no-scroll #app .app-footer .container {
 #app[data-redwood-creator-pass="2026-05-25"] .snippet-card,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-panel,
 #app[data-redwood-creator-pass="2026-05-25"] .modal-content,
-#app[data-redwood-creator-pass="2026-05-25"] .route-map-card,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-map-shell,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-sidebar-card,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-section-card,
-#app[data-redwood-creator-pass="2026-05-25"] .guide-lab-card,
-#app[data-redwood-creator-pass="2026-05-25"] .guide-lab-panel,
 #app[data-redwood-creator-pass="2026-05-25"] .search-result-card,
 #app[data-redwood-creator-pass="2026-05-25"] .search-empty-state,
 #app[data-redwood-creator-pass="2026-05-25"] .modal-panel,
@@ -1161,7 +1041,6 @@ body.home-no-scroll #app .app-footer .container {
 #app[data-redwood-creator-pass="2026-05-25"] .mode-hero,
 #app[data-redwood-creator-pass="2026-05-25"] .toolbar-card,
 #app[data-redwood-creator-pass="2026-05-25"] .step-shell,
-#app[data-redwood-creator-pass="2026-05-25"] .route-map-card,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-map-shell,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-sidebar-card {
   border-top-color: var(--oracle-red);
@@ -1189,23 +1068,19 @@ body.home-no-scroll #app .app-footer .container {
   background: var(--finance-teal);
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link[data-accent="ocean"],
-#app[data-redwood-creator-pass="2026-05-25"] .route-map-branch[data-accent="ocean"] {
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link[data-accent="ocean"] {
   --accent-strong: var(--finance-teal);
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link[data-accent="pine"],
-#app[data-redwood-creator-pass="2026-05-25"] .route-map-branch[data-accent="pine"] {
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link[data-accent="pine"] {
   --accent-strong: var(--oci-pine);
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link[data-accent="sienna"],
-#app[data-redwood-creator-pass="2026-05-25"] .route-map-branch[data-accent="sienna"] {
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link[data-accent="sienna"] {
   --accent-strong: var(--scm-sienna);
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link[data-accent="slate"],
-#app[data-redwood-creator-pass="2026-05-25"] .route-map-branch[data-accent="slate"] {
+#app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link[data-accent="slate"] {
   --accent-strong: var(--database-slate);
 }
 
@@ -2190,7 +2065,6 @@ body.home-no-scroll #app .app-footer .container {
 #app[data-redwood-creator-pass="2026-05-25"] .mode-hero,
 #app[data-redwood-creator-pass="2026-05-25"] .toolbar-card,
 #app[data-redwood-creator-pass="2026-05-25"] .step-shell,
-#app[data-redwood-creator-pass="2026-05-25"] .route-map-card,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-map-shell,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-sidebar-card {
   border-top: 6px solid var(--finance-teal) !important;
@@ -2209,17 +2083,10 @@ body.home-no-scroll #app .app-footer .container {
 #app[data-redwood-creator-pass="2026-05-25"] .modal-content,
 #app[data-redwood-creator-pass="2026-05-25"] .step-mini-map,
 #app[data-redwood-creator-pass="2026-05-25"] .scene-well,
-#app[data-redwood-creator-pass="2026-05-25"] .route-map-card,
-#app[data-redwood-creator-pass="2026-05-25"] .route-map-entry,
-#app[data-redwood-creator-pass="2026-05-25"] .route-map-branch,
-#app[data-redwood-creator-pass="2026-05-25"] .route-map-list li,
-#app[data-redwood-creator-pass="2026-05-25"] .route-map-ribbon,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-map-shell,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-sidebar-card,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-nav-link,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-section-card,
-#app[data-redwood-creator-pass="2026-05-25"] .guide-lab-card,
-#app[data-redwood-creator-pass="2026-05-25"] .guide-lab-panel,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-source-toolbar,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-source-panel-card,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-source-error,
@@ -2247,7 +2114,6 @@ body.home-no-scroll #app .app-footer .container {
 #app[data-redwood-creator-pass="2026-05-25"] .step-block::before,
 #app[data-redwood-creator-pass="2026-05-25"] .detail-support-block::before,
 #app[data-redwood-creator-pass="2026-05-25"] .search-result-card::before,
-#app[data-redwood-creator-pass="2026-05-25"] .route-map-branch::before,
 #app[data-redwood-creator-pass="2026-05-25"] .video-placeholder-card::before {
   inset: 0 0 auto 0 !important;
   top: 0 !important;
@@ -2283,7 +2149,6 @@ body.home-no-scroll #app .app-footer .container {
 #app[data-redwood-creator-pass="2026-05-25"] .snippet-meta,
 #app[data-redwood-creator-pass="2026-05-25"] .progress-eyebrow,
 #app[data-redwood-creator-pass="2026-05-25"] .guide-nav-meta,
-#app[data-redwood-creator-pass="2026-05-25"] .guide-lab-label,
 #app[data-redwood-creator-pass="2026-05-25"] .search-result-kicker,
 #app[data-redwood-creator-pass="2026-05-25"] .filter-label,
 #app[data-redwood-creator-pass="2026-05-25"] .hero-overline {

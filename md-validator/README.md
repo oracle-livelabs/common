@@ -242,12 +242,21 @@ This lab assumes you have:
 ```
 
 #### YouTube Videos
+
+Size options control how large the embedded video appears on the page:
+
+- **No size specified:** Uses the default embedded video size.
+- **small:** Displays a smaller embedded player, useful when you want the video to take up less space in the lab flow.
+- **medium:** Displays a medium-sized embedded player, giving a balance between visibility and page space.
+- **large:** Displays a larger embedded player, making the video more prominent on the page.
+
 ```markdown
 [](youtube:VIDEO_ID)
 [YouTube video scaled to small size](youtube:VIDEO_ID:small)
 [YouTube video scaled to medium size](youtube:VIDEO_ID:medium)
 [YouTube video scaled to large size](youtube:VIDEO_ID:large)
 ```
+**Note:** Use small, medium, or large depending on how much emphasis you want to give the video in the final lab output.
 
 #### Variables
 ```markdown
