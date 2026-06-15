@@ -161,13 +161,13 @@ function parseCliArgs(argv) {
     targetUrl: new URL(targetUrl, `${baseUrl}/`).toString(),
     outputFile: path.resolve(PROJECT_ROOT, values.output || process.env.QA_STORAGE_STATE || DEFAULT_STORAGE_STATE_FILE),
     username: normalizeSecret(process.env.QA_LIVELABS_USERNAME, "QA_LIVELABS_USERNAME"),
-    password: normalizeSecret(process.env.QA_LIVELABS_PASSWORD, "QA_LIVELABS_PASSWORD"),
+    livelabsCredential: normalizeSecret(process.env.QA_LIVELABS_PASSWORD, "QA_LIVELABS_PASSWORD"),
     headed: values.headed === true || ["1", "true", "yes", "on"].includes(String(process.env.QA_HEADED ?? "").toLowerCase()),
     browserChannel: values["browser-channel"],
   };
 }
 
-async function signIn(page, username, password) {
+async function signIn(page, username, livelabsCredential) {
   await page.locator("body").waitFor({ state: "visible", timeout: SIGN_IN_TIMEOUT_MS });
 
   const usernameInput = page
@@ -182,13 +182,13 @@ async function signIn(page, username, password) {
       ].join(", "),
     )
     .first();
-  const passwordInput = page.locator('input[type="password"]:visible, input[name*="password" i]:visible').first();
+  const credentialInput = page.locator('input[type="password"]:visible, input[name*="password" i]:visible').first();
   const nextButton = page.getByRole("button", { name: /^Next$/i }).first();
   const submitButton = page.getByRole("button", { name: /sign in|verify|continue|next/i }).first();
 
   await usernameInput.fill(username, { timeout: SIGN_IN_TIMEOUT_MS });
   await nextButton.click({ timeout: SIGN_IN_TIMEOUT_MS });
-  await passwordInput.fill(password, { timeout: SIGN_IN_TIMEOUT_MS });
+  await credentialInput.fill(livelabsCredential, { timeout: SIGN_IN_TIMEOUT_MS });
   await submitButton.click({ timeout: SIGN_IN_TIMEOUT_MS });
   await page.waitForURL((url) => !isOracleSignInUrl(url.toString()), {
     timeout: SIGN_IN_TIMEOUT_MS,
@@ -212,7 +212,7 @@ async function main() {
     await page.goto(options.targetUrl, { waitUntil: "domcontentloaded", timeout: SIGN_IN_TIMEOUT_MS });
 
     if (isOracleSignInUrl(page.url())) {
-      await signIn(page, options.username, options.password);
+      await signIn(page, options.username, options.livelabsCredential);
     } else {
       console.warn("Warning: target did not route to Oracle Sign In. Saving the current browser state.");
     }
