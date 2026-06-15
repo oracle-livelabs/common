@@ -80,7 +80,7 @@ test.describe("LiveLabs LiveStack resources and assets", { tag: LIVESTACK_RESOUR
 
             const instructionsPage = new WorkshopInstructionsPage(previewPage);
             await instructionsPage.assertLoaded();
-            await assertContentQuality(previewPage, {
+            await instructionsPage.assertContentQuality({
               contextName: `LiveStack resource preview: ${resource.title}`,
             });
 

@@ -1,5 +1,4 @@
 import { WorkshopInstructionsPage } from "../../../../../pages/platform/workshopInstructionsPage.js";
-import { assertContentQuality } from "../../../../support/contentQuality.js";
 import { signInIfRequired } from "../../../../support/authenticatedNavigation.js";
 import { openCatalogSearch } from "../../../../support/overviewFlows.js";
 import { getPreviewInstructionTargets } from "../../../../support/overviewTargets.js";
@@ -46,7 +45,7 @@ test.describe("LiveLabs preview instructions", { tag: PREVIEW_INSTRUCTIONS_TAGS 
 
       const instructionsPage = new WorkshopInstructionsPage(previewPage);
       await instructionsPage.assertLoaded(target.expected_terms);
-      await assertContentQuality(previewPage, {
+      await instructionsPage.assertContentQuality({
         contextName: `Preview instructions: ${card.title}`,
         expectedTerms: target.expected_terms,
       });
