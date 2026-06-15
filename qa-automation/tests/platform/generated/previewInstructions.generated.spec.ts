@@ -1,5 +1,6 @@
 import { WorkshopInstructionsPage } from "../../../pages/platform/workshopInstructionsPage.js";
 import {
+  attachCatalogItem,
   catalogIndexItems,
   catalogItemTestTitle,
   expectedTermsForCatalogItem,
@@ -43,6 +44,7 @@ test.describe("LiveLabs generated preview instructions", { tag: GENERATED_PREVIE
           type: "catalog-item",
           description: `${item.id} -> ${item.normalized_href}`,
         });
+        await attachCatalogItem(testInfo, item);
 
         await openIndexedCatalogItem(
           page,

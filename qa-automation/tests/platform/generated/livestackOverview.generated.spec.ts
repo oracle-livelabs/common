@@ -1,4 +1,5 @@
 import {
+  attachCatalogItem,
   catalogIndexItems,
   catalogItemTestTitle,
   expectedTermsForCatalogItem,
@@ -41,6 +42,7 @@ test.describe("LiveLabs generated LiveStack overview pages", { tag: GENERATED_LI
           type: "catalog-item",
           description: `${item.id} -> ${item.normalized_href}`,
         });
+        await attachCatalogItem(testInfo, item);
 
         const navigation = await openIndexedCatalogItem(
           page,

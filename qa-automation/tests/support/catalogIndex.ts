@@ -1,6 +1,8 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
+import type { TestInfo } from "@playwright/test";
+
 import { PROJECT_ROOT, parseIntegerFlag } from "../../config/projectConfig.js";
 
 export type CatalogIndexItemType = "workshop" | "livestack";
@@ -27,6 +29,13 @@ export interface CatalogIndex {
   catalog_url: string;
   item_count: number;
   counts: Record<CatalogIndexItemType, number>;
+  crawl?: {
+    max_pages: number;
+    max_items: number;
+    retries: number;
+    retry_delay_ms: number;
+    warnings: string[];
+  };
   items: CatalogIndexItem[];
 }
 
@@ -116,19 +125,27 @@ export function catalogIndexItems(type?: CatalogIndexItemType): CatalogIndexItem
 
   const allowedIds = parseList(process.env.QA_CATALOG_INDEX_IDS);
   const configuredLimit = parseIntegerFlag(process.env.QA_CATALOG_INDEX_LIMIT, 0);
-  const filteredItems = loadResult.index.items.filter((item) => {
-    if (type && item.type !== type) {
-      return false;
-    }
-
+  const configuredShard = parseShard(process.env.QA_CATALOG_INDEX_SHARD);
+  const selectedItems = loadResult.index.items.filter((item) => {
     if (allowedIds.length === 0) {
       return true;
     }
 
     return allowedIds.includes(item.id) || allowedIds.includes(item.slug);
   });
+  const shardedItems = configuredShard
+    ? selectedItems.filter((_, index) => index % configuredShard.total === configuredShard.current - 1)
+    : selectedItems;
+  const filteredItems = type ? shardedItems.filter((item) => item.type === type) : shardedItems;
 
   return configuredLimit > 0 ? filteredItems.slice(0, configuredLimit) : filteredItems;
+}
+
+export async function attachCatalogItem(testInfo: TestInfo, item: CatalogIndexItem): Promise<void> {
+  await testInfo.attach("catalog-item.json", {
+    body: JSON.stringify(item, null, 2),
+    contentType: "application/json",
+  });
 }
 
 export function catalogItemTestTitle(item: CatalogIndexItem): string {
@@ -139,7 +156,11 @@ export function catalogItemTestTitle(item: CatalogIndexItem): string {
 }
 
 export function expectedTermsForCatalogItem(item: CatalogIndexItem, maxTerms = 3): string[] {
-  const words = item.title
+  return expectedTermsForText(item.title, maxTerms);
+}
+
+export function expectedTermsForText(value: string, maxTerms = 3): string[] {
+  const words = value
     .replace(/[^A-Za-z0-9+#. ]+/g, " ")
     .split(/\s+/)
     .map((word) => word.trim())
@@ -197,6 +218,27 @@ function parseList(value: string | undefined): string[] {
     .split(",")
     .map((part) => part.trim())
     .filter(Boolean);
+}
+
+function parseShard(value: string | undefined): { current: number; total: number } | undefined {
+  const normalized = value?.trim();
+  if (!normalized) {
+    return undefined;
+  }
+
+  const match = normalized.match(/^(\d+)\/(\d+)$/);
+  if (!match) {
+    throw new Error(`QA_CATALOG_INDEX_SHARD must use the format "current/total", for example "1/4". Received: ${value}`);
+  }
+
+  const current = Number.parseInt(match[1], 10);
+  const total = Number.parseInt(match[2], 10);
+
+  if (!Number.isFinite(current) || !Number.isFinite(total) || total < 1 || current < 1 || current > total) {
+    throw new Error(`QA_CATALOG_INDEX_SHARD is out of range. Received: ${value}`);
+  }
+
+  return { current, total };
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
