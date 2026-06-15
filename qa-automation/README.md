@@ -47,6 +47,8 @@ Common commands:
 npm run doctor
 npm run typecheck
 npm run test:collect
+npm run catalog:index
+npm run test:generated
 node ./scripts/qa.mjs tests/platform/smoke
 node ./scripts/qa.mjs tests/platform/regression
 node ./scripts/qa.mjs tests/platform --tag smoke
@@ -81,6 +83,47 @@ Public regression:
 
 ```powershell
 node ./scripts/qa.mjs tests/platform/regression
+```
+
+Generated catalog rollout:
+
+```powershell
+npm run catalog:index
+npm run test:generated
+```
+
+The generated rollout crawls the public catalog into
+`tests/data/generated/livelabs_catalog_index.json`, then creates isolated tests
+from that index. Each indexed workshop and LiveStack gets its own test case, so
+one broken item does not hide or block the rest of the catalog.
+
+What the generated rollout checks:
+
+| Area | Checks |
+| --- | --- |
+| Catalog index | Verifies the generated index exists, has catalog items, uses unique item IDs, and does not duplicate URLs per item type. |
+| Workshop overview | Opens each indexed workshop directly, signs in if Oracle Sign In appears, verifies the overview shell, and checks `Share`, `Start`, `About This Workshop`, `Outline`, and `Prerequisites`. |
+| LiveStack overview | Opens each indexed LiveStack directly, signs in if required, verifies the LiveStack overview shell, and checks demo links, workshop/lab links, and asset/download/source actions. |
+| Preview instructions | Opens each indexed workshop, clicks `Start`, opens `Preview sandbox instructions` when offered, then validates the rendered instructions page. |
+| Run on your tenancy instructions | Opens each indexed workshop, clicks `Start`, opens `Run on your environment` / `Run on your tenancy` when offered, then validates the rendered instructions page. This does not provision, reserve, or run anything in a tenancy. |
+| Content quality | Checks relevance to the indexed title, obvious placeholder text, common misspellings, visible broken images, broken embedded content, and broken visible content links. |
+
+The generated suite intentionally still does not execute Sandbox or tenancy
+provisioning flows. It only validates instruction pages that are opened from
+those options.
+
+For a quick local slice:
+
+```powershell
+$env:QA_CATALOG_INDEX_LIMIT="5"
+npm run test:generated
+```
+
+To target specific generated items, use their generated `id` or `slug`:
+
+```powershell
+$env:QA_CATALOG_INDEX_IDS="workshop-example-id,livestack-example-slug"
+npm run test:generated
 ```
 
 Authenticated checks:
@@ -180,6 +223,8 @@ Common overrides:
 $env:QA_BASE_URL="https://example-base-url"
 $env:QA_BROWSER_CHANNEL="msedge"
 $env:QA_SEARCH_TERM="OCI"
+$env:QA_CATALOG_INDEX_FILE="tests\data\generated\livelabs_catalog_index.json"
+$env:QA_CATALOG_INDEX_LIMIT="25"
 $env:QA_AUTH_TARGET_URL="https://example-private-page-url"
 $env:QA_TRACE="on"
 $env:QA_VIDEO="retain-on-failure"

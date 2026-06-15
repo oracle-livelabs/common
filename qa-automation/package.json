@@ -9,6 +9,8 @@
   "scripts": {
     "test": "node ./scripts/qa.mjs",
     "test:collect": "node ./scripts/qa.mjs tests --collect-only",
+    "test:generated": "node ./scripts/qa.mjs tests/platform/generated",
+    "catalog:index": "node ./scripts/catalog-index.mjs",
     "doctor": "node ./scripts/qa.mjs doctor",
     "install:browsers": "playwright install",
     "playwright": "playwright",
