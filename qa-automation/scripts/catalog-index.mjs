@@ -12,9 +12,18 @@ const __filename = fileURLToPath(import.meta.url);
 const PROJECT_ROOT = path.resolve(path.dirname(__filename), "..");
 const SETTINGS_FILE = path.join(PROJECT_ROOT, "config", "project_settings.json");
 const DEFAULT_OUTPUT_FILE = path.join(PROJECT_ROOT, "tests", "data", "generated", "livelabs_catalog_index.json");
+const DEFAULT_SUMMARY_OUTPUT_FILE = path.join(
+  PROJECT_ROOT,
+  "tests",
+  "data",
+  "generated",
+  "livelabs_catalog_index.summary.json",
+);
 const CATALOG_PATH = "/livelabs-workshop-cards";
 const DEFAULT_NAVIGATION_TIMEOUT_MS = 45_000;
 const DEFAULT_WAIT_TIMEOUT_MS = 20_000;
+const DEFAULT_RETRIES = 2;
+const DEFAULT_RETRY_DELAY_MS = 3_000;
 
 const HELP = `Generate a LiveLabs catalog index for data-driven QA tests.
 
@@ -27,6 +36,9 @@ Options:
   --output <file>            Output JSON file. Defaults to tests/data/generated/livelabs_catalog_index.json.
   --max-pages <n>            Maximum catalog result pages to crawl. Default: 250.
   --max-items <n>            Optional item cap for local debugging.
+  --retries <n>              Retry transient catalog navigation/loading failures. Default: 2.
+  --retry-delay-ms <n>       Delay between crawler retries. Default: 3000.
+  --summary-output <file>    Summary JSON file. Defaults to tests/data/generated/livelabs_catalog_index.summary.json.
   --headed                   Show the browser while crawling.
   --browser-channel <name>   Chromium channel, usually msedge or chrome.
   --help                     Show this help text.
@@ -62,6 +74,11 @@ function resolveBaseUrl(environmentName, explicitBaseUrl) {
 function parsePositiveInteger(value, fallback) {
   const parsed = Number.parseInt(String(value ?? ""), 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function parseNonNegativeInteger(value, fallback) {
+  const parsed = Number.parseInt(String(value ?? ""), 10);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
 }
 
 function resolveChromiumChannel(explicitChannel) {
@@ -148,7 +165,7 @@ function buildCatalogItem(baseUrl, rawItem) {
     title: rawItem.title,
     href: rawItem.href,
     normalized_href: normalizedHref,
-    absolute_url: normalizedHref,
+    absolute_url: absoluteUrl,
     catalog_page: rawItem.catalogPage,
     catalog_position: rawItem.catalogPosition,
     card_text: rawItem.cardText,
@@ -173,6 +190,58 @@ async function waitForCards(page) {
     'a.a-CardView-fullLink[href*="view-workshop"], a.a-CardView-fullLink[href*="livestack-landing-page"]',
     { timeout: DEFAULT_WAIT_TIMEOUT_MS },
   );
+}
+
+async function waitForCardsWithRetries(page, options, warnings, contextName) {
+  let lastError;
+
+  for (let attempt = 0; attempt <= options.retries; attempt += 1) {
+    try {
+      await waitForCards(page);
+      return;
+    } catch (error) {
+      lastError = error;
+
+      if (attempt >= options.retries) {
+        break;
+      }
+
+      warnings.push(`${contextName}: card list did not render on attempt ${attempt + 1}; retrying.`);
+      await page.waitForTimeout(options.retryDelayMs);
+      await page.reload({
+        waitUntil: "domcontentloaded",
+        timeout: DEFAULT_NAVIGATION_TIMEOUT_MS,
+      });
+      await dismissCookieBanner(page);
+    }
+  }
+
+  throw lastError;
+}
+
+async function gotoWithRetries(page, url, options, warnings) {
+  let lastError;
+
+  for (let attempt = 0; attempt <= options.retries; attempt += 1) {
+    try {
+      await page.goto(url, {
+        waitUntil: "domcontentloaded",
+        timeout: DEFAULT_NAVIGATION_TIMEOUT_MS,
+      });
+      return;
+    } catch (error) {
+      lastError = error;
+
+      if (attempt >= options.retries) {
+        break;
+      }
+
+      warnings.push(`Catalog navigation failed on attempt ${attempt + 1}; retrying.`);
+      await page.waitForTimeout(options.retryDelayMs);
+    }
+  }
+
+  throw lastError;
 }
 
 async function collectVisibleCards(page, catalogPage) {
@@ -265,14 +334,11 @@ async function crawlCatalog(options) {
   const warnings = [];
 
   try {
-    await page.goto(catalogUrl(options.baseUrl), {
-      waitUntil: "domcontentloaded",
-      timeout: DEFAULT_NAVIGATION_TIMEOUT_MS,
-    });
+    await gotoWithRetries(page, catalogUrl(options.baseUrl), options, warnings);
     await dismissCookieBanner(page);
 
     for (let pageNumber = 1; pageNumber <= options.maxPages; pageNumber += 1) {
-      await waitForCards(page);
+      await waitForCardsWithRetries(page, options, warnings, `Catalog page ${pageNumber}`);
       const rawItems = await collectVisibleCards(page, pageNumber);
 
       for (const rawItem of rawItems) {
@@ -284,7 +350,10 @@ async function crawlCatalog(options) {
         }
 
         if (options.maxItems && seen.size >= options.maxItems) {
-          return [...seen.values()];
+          return {
+            items: [...seen.values()].sort((left, right) => left.title.localeCompare(right.title)),
+            warnings,
+          };
         }
       }
 
@@ -314,7 +383,10 @@ async function crawlCatalog(options) {
       }
     }
 
-    return [...seen.values()].sort((left, right) => left.title.localeCompare(right.title));
+    return {
+      items: [...seen.values()].sort((left, right) => left.title.localeCompare(right.title)),
+      warnings,
+    };
   } finally {
     await browser.close();
 
@@ -326,7 +398,7 @@ async function crawlCatalog(options) {
   }
 }
 
-function buildIndex(options, items) {
+function buildIndex(options, items, warnings) {
   const counts = items.reduce(
     (accumulator, item) => {
       accumulator[item.type] += 1;
@@ -343,6 +415,13 @@ function buildIndex(options, items) {
     catalog_url: catalogUrl(options.baseUrl),
     item_count: items.length,
     counts,
+    crawl: {
+      max_pages: options.maxPages,
+      max_items: options.maxItems,
+      retries: options.retries,
+      retry_delay_ms: options.retryDelayMs,
+      warnings,
+    },
     items,
   };
 }
@@ -350,6 +429,34 @@ function buildIndex(options, items) {
 function writeIndex(outputFile, index) {
   fs.mkdirSync(path.dirname(outputFile), { recursive: true });
   fs.writeFileSync(outputFile, `${JSON.stringify(index, null, 2)}\n`, "utf-8");
+}
+
+function buildSummary(index, outputFile) {
+  const pages = new Map();
+
+  for (const item of index.items) {
+    const pageSummary = pages.get(item.catalog_page) ?? { page: item.catalog_page, workshop: 0, livestack: 0, total: 0 };
+    pageSummary[item.type] += 1;
+    pageSummary.total += 1;
+    pages.set(item.catalog_page, pageSummary);
+  }
+
+  return {
+    generated_at: index.generated_at,
+    base_url: index.base_url,
+    catalog_url: index.catalog_url,
+    output_file: outputFile,
+    item_count: index.item_count,
+    counts: index.counts,
+    pages: [...pages.values()].sort((left, right) => left.page - right.page),
+    warnings: index.crawl.warnings,
+    recommended_shards: [1, 2, 4, 8].filter((shardCount) => index.item_count >= shardCount),
+  };
+}
+
+function writeSummary(summaryOutputFile, summary) {
+  fs.mkdirSync(path.dirname(summaryOutputFile), { recursive: true });
+  fs.writeFileSync(summaryOutputFile, `${JSON.stringify(summary, null, 2)}\n`, "utf-8");
 }
 
 function parseCliArgs(argv) {
@@ -361,6 +468,9 @@ function parseCliArgs(argv) {
       output: { type: "string" },
       "max-pages": { type: "string" },
       "max-items": { type: "string" },
+      retries: { type: "string" },
+      "retry-delay-ms": { type: "string" },
+      "summary-output": { type: "string" },
       headed: { type: "boolean" },
       "browser-channel": { type: "string" },
       help: { type: "boolean" },
@@ -377,8 +487,17 @@ function parseCliArgs(argv) {
     environment: values.environment,
     baseUrl: resolveBaseUrl(values.environment, values["base-url"] || process.env.QA_BASE_URL),
     outputFile: path.resolve(PROJECT_ROOT, values.output || process.env.QA_CATALOG_INDEX_FILE || DEFAULT_OUTPUT_FILE),
+    summaryOutputFile: path.resolve(
+      PROJECT_ROOT,
+      values["summary-output"] || process.env.QA_CATALOG_INDEX_SUMMARY_FILE || DEFAULT_SUMMARY_OUTPUT_FILE,
+    ),
     maxPages: parsePositiveInteger(values["max-pages"] || process.env.QA_CATALOG_INDEX_MAX_PAGES, 250),
-    maxItems: values["max-items"] ? parsePositiveInteger(values["max-items"], 0) : 0,
+    maxItems: parseNonNegativeInteger(values["max-items"] || process.env.QA_CATALOG_INDEX_MAX_ITEMS, 0),
+    retries: parseNonNegativeInteger(values.retries || process.env.QA_CATALOG_INDEX_RETRIES, DEFAULT_RETRIES),
+    retryDelayMs: parseNonNegativeInteger(
+      values["retry-delay-ms"] || process.env.QA_CATALOG_INDEX_RETRY_DELAY_MS,
+      DEFAULT_RETRY_DELAY_MS,
+    ),
     headed: values.headed === true || ["1", "true", "yes", "on"].includes(String(process.env.QA_HEADED ?? "").toLowerCase()),
     browserChannel: values["browser-channel"],
   };
@@ -388,13 +507,17 @@ async function main() {
   const options = parseCliArgs(process.argv.slice(2));
   console.log(`Catalog : ${catalogUrl(options.baseUrl)}`);
   console.log(`Output  : ${options.outputFile}`);
+  console.log(`Summary : ${options.summaryOutputFile}`);
   console.log(`Pages   : up to ${options.maxPages}`);
+  console.log(`Retries : ${options.retries}`);
 
-  const items = await crawlCatalog(options);
-  const index = buildIndex(options, items);
+  const crawlResult = await crawlCatalog(options);
+  const index = buildIndex(options, crawlResult.items, crawlResult.warnings);
   writeIndex(options.outputFile, index);
+  writeSummary(options.summaryOutputFile, buildSummary(index, options.outputFile));
 
   console.log(`Indexed : ${index.item_count} cards (${index.counts.workshop} workshops, ${index.counts.livestack} LiveStacks)`);
+  console.log(`Warnings: ${index.crawl.warnings.length}`);
 }
 
 main().catch((error) => {

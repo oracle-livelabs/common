@@ -16,8 +16,8 @@ test.describe("LiveLabs generated catalog index", { tag: GENERATED_INDEX_TAGS },
       const ids = new Set(items.map((item) => item.id));
       const hrefs = new Set(items.map((item) => `${item.type}|${item.normalized_href}`));
 
-      const workshopCount = catalogIndexItems("workshop").length;
-      const liveStackCount = catalogIndexItems("livestack").length;
+      const workshopCount = items.filter((item) => item.type === "workshop").length;
+      const liveStackCount = items.filter((item) => item.type === "livestack").length;
 
       expect(items.length, "generated catalog index should contain catalog cards").toBeGreaterThan(0);
       expect(ids.size, "generated catalog item IDs should be unique").toBe(items.length);

@@ -214,12 +214,7 @@ async function assertNoBrokenLinks(page: Page, options: ContentQualityOptions): 
 
   for (const link of linksToCheck) {
     try {
-      const response = await page.request.head(link.url, {
-        failOnStatusCode: false,
-        maxRedirects: 5,
-        timeout: LINK_TIMEOUT_MS,
-      });
-      const status = response.status();
+      const status = await probeLinkStatus(page, link.url);
 
       if (isBrokenLinkStatus(status)) {
         brokenLinks.push({ ...link, status });
@@ -286,6 +281,26 @@ async function collectVisibleLinks(page: Page): Promise<LinkCandidate[]> {
   })) as LinkCandidate[];
 
   return links;
+}
+
+async function probeLinkStatus(page: Page, url: string): Promise<number> {
+  try {
+    const response = await page.request.head(url, {
+      failOnStatusCode: false,
+      maxRedirects: 5,
+      timeout: LINK_TIMEOUT_MS,
+    });
+
+    return response.status();
+  } catch {
+    const response = await page.request.get(url, {
+      failOnStatusCode: false,
+      maxRedirects: 5,
+      timeout: LINK_TIMEOUT_MS,
+    });
+
+    return response.status();
+  }
 }
 
 async function visibleContentLocator(page: Page, selector: string) {

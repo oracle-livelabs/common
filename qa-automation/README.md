@@ -48,6 +48,7 @@ npm run doctor
 npm run typecheck
 npm run test:collect
 npm run catalog:index
+npm run auth:storage -- --target-url "https://livelabs.oracle.com/..."
 npm run test:generated
 node ./scripts/qa.mjs tests/platform/smoke
 node ./scripts/qa.mjs tests/platform/regression
@@ -93,9 +94,10 @@ npm run test:generated
 ```
 
 The generated rollout crawls the public catalog into
-`tests/data/generated/livelabs_catalog_index.json`, then creates isolated tests
-from that index. Each indexed workshop and LiveStack gets its own test case, so
-one broken item does not hide or block the rest of the catalog.
+`tests/data/generated/livelabs_catalog_index.json` and writes a crawl summary to
+`tests/data/generated/livelabs_catalog_index.summary.json`, then creates isolated
+tests from that index. Each indexed workshop and LiveStack gets its own test
+case, so one broken item does not hide or block the rest of the catalog.
 
 What the generated rollout checks:
 
@@ -104,6 +106,7 @@ What the generated rollout checks:
 | Catalog index | Verifies the generated index exists, has catalog items, uses unique item IDs, and does not duplicate URLs per item type. |
 | Workshop overview | Opens each indexed workshop directly, signs in if Oracle Sign In appears, verifies the overview shell, and checks `Share`, `Start`, `About This Workshop`, `Outline`, and `Prerequisites`. |
 | LiveStack overview | Opens each indexed LiveStack directly, signs in if required, verifies the LiveStack overview shell, and checks demo links, workshop/lab links, and asset/download/source actions. |
+| LiveStack resources | For each indexed LiveStack, opens every listed demo/workshop resource, verifies the child workshop overview, validates preview instructions when offered, validates Run on your tenancy/environment instructions when offered, and clicks every asset/source/download action. |
 | Preview instructions | Opens each indexed workshop, clicks `Start`, opens `Preview sandbox instructions` when offered, then validates the rendered instructions page. |
 | Run on your tenancy instructions | Opens each indexed workshop, clicks `Start`, opens `Run on your environment` / `Run on your tenancy` when offered, then validates the rendered instructions page. This does not provision, reserve, or run anything in a tenancy. |
 | Content quality | Checks relevance to the indexed title, obvious placeholder text, common misspellings, visible broken images, broken embedded content, and broken visible content links. |
@@ -111,6 +114,12 @@ What the generated rollout checks:
 The generated suite intentionally still does not execute Sandbox or tenancy
 provisioning flows. It only validates instruction pages that are opened from
 those options.
+
+To see the generated test names without opening a browser:
+
+```powershell
+node ./scripts/qa.mjs tests/platform/generated --collect-only
+```
 
 For a quick local slice:
 
@@ -123,6 +132,44 @@ To target specific generated items, use their generated `id` or `slug`:
 
 ```powershell
 $env:QA_CATALOG_INDEX_IDS="workshop-example-id,livestack-example-slug"
+npm run test:generated
+```
+
+To split a full generated run across machines or CI jobs, shard the generated
+index. The format is `current/total`:
+
+```powershell
+$env:QA_CATALOG_INDEX_SHARD="1/4"
+npm run test:generated
+```
+
+The HTML report attaches `catalog-item.json` to each generated item test and
+`livestack-resources.json` to each generated LiveStack resource drilldown test,
+so a failure report shows the exact title, type, card URL, and resource/action
+list that produced it.
+
+The crawler retries transient navigation and card-rendering failures by default.
+For a deeper crawl or a slower network:
+
+```powershell
+npm run catalog:index -- --max-pages 250 --retries 4 --retry-delay-ms 5000
+```
+
+For authenticated/private catalog entries, keep credentials only in `.env` or CI
+secrets:
+
+```powershell
+# .env
+QA_LIVELABS_USERNAME=
+QA_LIVELABS_PASSWORD=
+QA_AUTH_TARGET_URL=https://livelabs.oracle.com/...
+QA_STORAGE_STATE=.auth/livelabs-storage-state.json
+```
+
+Create a reusable authenticated browser state, then run the generated suite:
+
+```powershell
+npm run auth:storage
 npm run test:generated
 ```
 
@@ -225,6 +272,7 @@ $env:QA_BROWSER_CHANNEL="msedge"
 $env:QA_SEARCH_TERM="OCI"
 $env:QA_CATALOG_INDEX_FILE="tests\data\generated\livelabs_catalog_index.json"
 $env:QA_CATALOG_INDEX_LIMIT="25"
+$env:QA_CATALOG_INDEX_SHARD="1/4"
 $env:QA_AUTH_TARGET_URL="https://example-private-page-url"
 $env:QA_TRACE="on"
 $env:QA_VIDEO="retain-on-failure"

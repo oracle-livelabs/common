@@ -1,5 +1,6 @@
 import { WorkshopInstructionsPage } from "../../../pages/platform/workshopInstructionsPage.js";
 import {
+  attachCatalogItem,
   catalogIndexItems,
   catalogItemTestTitle,
   expectedTermsForCatalogItem,
@@ -43,6 +44,7 @@ test.describe("LiveLabs generated tenancy instructions", { tag: GENERATED_TENANC
           type: "catalog-item",
           description: `${item.id} -> ${item.normalized_href}`,
         });
+        await attachCatalogItem(testInfo, item);
 
         await openIndexedCatalogItem(
           page,
