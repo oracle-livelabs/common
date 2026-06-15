@@ -20,3 +20,4 @@ Please confirm that the following is completed before submitting your PR
 - [ ] All filenames are lowercase and descriptive (including folders, images, files, etc.)
 - [ ] Image references in markdown contain an alternate text.
 - [ ] Ensure the PR does not contain binary or install files and files larger than 100 MB.
+- [ ] Any copied or adapted code snippets include source attribution and are allowed for reuse.
