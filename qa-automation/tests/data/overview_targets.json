@@ -1,0 +1,41 @@
+{
+  "workshop_overview_targets": [
+    {
+      "name": "LiveStack demo workshop",
+      "search_term": "LiveStack",
+      "title_pattern": "LiveStack Demo",
+      "expected_terms": ["LiveStack", "Demo"]
+    },
+    {
+      "name": "Generative AI workshop",
+      "search_term": "Gen AI",
+      "title_pattern": "Generative AI",
+      "expected_terms": ["Generative AI"]
+    }
+  ],
+  "livestack_overview_targets": [
+    {
+      "name": "LiveStack catalog overview cards",
+      "search_term": "LiveStack",
+      "max_cards": 5,
+      "minimum_cards": 1,
+      "expected_terms": ["LiveStack"]
+    }
+  ],
+  "livestack_resource_targets": [
+    {
+      "name": "LiveStack resource drilldown",
+      "search_term": "LiveStack",
+      "title_pattern": "Build .* Intelligence",
+      "expected_terms": ["LiveStack"]
+    }
+  ],
+  "preview_instruction_targets": [
+    {
+      "name": "LiveStack demo preview instructions",
+      "search_term": "LiveStack",
+      "title_pattern": "LiveStack Demo",
+      "expected_terms": ["LiveStack", "Demo"]
+    }
+  ]
+}

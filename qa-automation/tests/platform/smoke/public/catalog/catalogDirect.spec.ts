@@ -1,6 +1,6 @@
-import { getHomeSearchTerms } from "../../../support/platformSmokeData.js";
-import { resolveSearchTerm } from "../../../support/searchHelpers.js";
-import { test } from "../../../support/test.js";
+import { getHomeSearchTerms } from "../../../../support/platformSmokeData.js";
+import { resolveSearchTerm } from "../../../../support/searchHelpers.js";
+import { test } from "../../../../support/test.js";
 
 const CATALOG_DIRECT_TAGS = ["@smoke", "@platform", "@catalog", "@search", "@direct", "@ui"];
 

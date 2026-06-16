@@ -1,5 +1,9 @@
 node_modules/
 artifacts/
+.env
+.env.local
+.auth/
+tests/data/generated/*.json
 .tmp_*.html
 .idea/
 .cache/

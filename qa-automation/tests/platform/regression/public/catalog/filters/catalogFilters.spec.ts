@@ -4,8 +4,8 @@ import {
   getCatalogOverflowFacets,
   getCatalogSingleFacetTargets,
   type CatalogResultKind,
-} from "../../../support/catalogFilterTargets.js";
-import { test } from "../../../support/test.js";
+} from "../../../../../support/catalogFilterTargets.js";
+import { test } from "../../../../../support/test.js";
 
 const CATALOG_FILTER_TAGS = ["@regression", "@platform", "@catalog", "@filters", "@ui"];
 const BUTTON_SEARCH_TERM = "Database";

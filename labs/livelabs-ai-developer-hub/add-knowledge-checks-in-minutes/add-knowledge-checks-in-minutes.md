@@ -16,11 +16,13 @@ In this lab, you will:
 - Keep questions conceptual and in scope
 - Validate the changed files after quiz generation
 
-Estimated Time: 10 minutes
+**Estimated Time:** 10 minutes
 
 ## Task 1: Choose The Right Quiz Mode
 
-1. Use `Option 1` when you want Codex to add a new scored quiz lab at the end of a workshop and update a named manifest.
+Perform the following set of steps to choose the quiz mode that best matches the structure of the target workshop:
+
+1. Use `Option 1` when you want Codex to add a new scored quiz lab at the end of a workshop and update a specific manifest path.
 
     ![Option 1 example showing the rendered upgrade workshop quiz after completion with the badge visible](./images/option-1-upgrade-example-1440x1100.png)
 
@@ -42,13 +44,15 @@ Estimated Time: 10 minutes
 
 ## Task 2: Follow The Core Rules
 
+Perform the following set of steps to apply the core content, scoring, and placement rules before generating quiz material:
+
 1. Generate questions only from the workshop content in scope.
 
 2. Preserve all instructional content verbatim.
 
 3. Add quiz material only at valid boundaries after a lab or section is complete.
 
-4. Use these defaults unless the workshop needs another value:
+4. Use these defaults unless the workshop needs different values:
 
     - `passing: 75`
     - `badge: images/badge.png`
@@ -56,6 +60,8 @@ Estimated Time: 10 minutes
 5. Avoid certification language. Use completion language such as `Completion Badge` instead.
 
 ## Task 3: Prompt Codex With The Right Inputs
+
+Perform the following set of steps to give Codex the right workshop paths, mode, and question constraints before quiz generation:
 
 1. Start with the skill name and the target path.
 
@@ -68,6 +74,8 @@ Estimated Time: 10 minutes
 5. Ask for conceptual questions that test why, when, or consequence instead of memorization.
 
 ## Task 4: Use Prompt Patterns That Match The Goal
+
+Perform the following set of steps to choose a prompt pattern that matches the specific quiz outcome you want:
 
 1. Use a prompt like this for `Option 1`:
 
@@ -94,6 +102,8 @@ Estimated Time: 10 minutes
 
 ## Task 5: Add Useful Constraints Before Generation
 
+Perform the following set of steps to add constraints that keep the quiz in scope and aligned with the workshop content:
+
 1. Tell Codex to use only the workshop content.
 
 2. Tell Codex to keep the questions conceptual, not nitty-gritty.
@@ -106,25 +116,27 @@ Estimated Time: 10 minutes
 
 ## Task 6: Validate The Result And Review The Output
 
+Perform the following set of steps to validate the quiz output and confirm that the generated changes are accurate and usable.
+
 1. Expect Codex to report:
 
-    - files changed
-    - quiz mode used
-    - badge path
-    - validation status for the changed files
-    - the saved validation report path
+    - Files changed
+    - Quiz mode used
+    - Badge path
+    - Validation status for the changed files
+    - The saved validation report path
 
-2. Save the final validation report outside the repo in `/Users/<yourname>/Documents/validation-reports`.
+2. Save the final validation report outside the repo in a dedicated validation-reports folder, such as `/Users/<yourname>/Documents/validation-reports`.
 
 3. Before you finish, confirm:
 
-    - the mode is correct
-    - the manifest path is correct for `Option 1`
-    - the question count matches the workshop type
-    - the quiz renders in the target workshop viewer
-    - the report clearly separates new issues from pre-existing issues
+    - The mode is correct
+    - The manifest path is correct for `Option 1`
+    - The question count matches the workshop type
+    - The quiz renders in the target workshop viewer
+    - The report clearly separates new issues from pre-existing issues
 
 ## Acknowledgements
 
 * **Author** - Linda Foinding, Principal Product Manager, Outbound Database Product Management
-* **Last Updated By/Date** - Linda Foinding, April 2026
+* **Last Updated By/Date** - Teodor C. Nechita, June 2026
