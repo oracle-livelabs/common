@@ -39,6 +39,7 @@ Options:
   --retries <n>              Retry transient catalog navigation/loading failures. Default: 2.
   --retry-delay-ms <n>       Delay between crawler retries. Default: 3000.
   --summary-output <file>    Summary JSON file. Defaults to tests/data/generated/livelabs_catalog_index.summary.json.
+  --storage-state <file>     Optional Playwright storage state for authenticated catalog crawling.
   --headed                   Show the browser while crawling.
   --browser-channel <name>   Chromium channel, usually msedge or chrome.
   --help                     Show this help text.
@@ -98,6 +99,20 @@ function resolveChromiumChannel(explicitChannel) {
   ];
 
   return candidates.find((candidate) => fs.existsSync(candidate.executablePath))?.channel;
+}
+
+function resolveStorageStatePath(value) {
+  const configuredPath = value?.trim();
+  if (!configuredPath) {
+    return undefined;
+  }
+
+  const resolvedPath = path.resolve(PROJECT_ROOT, configuredPath);
+  if (!fs.existsSync(resolvedPath)) {
+    throw new Error(`Storage state file was not found: ${resolvedPath}`);
+  }
+
+  return resolvedPath;
 }
 
 function catalogUrl(baseUrl) {
@@ -328,7 +343,9 @@ async function crawlCatalog(options) {
     headless: !options.headed,
     ...(channel ? { channel } : {}),
   });
-  const context = await browser.newContext();
+  const context = await browser.newContext({
+    ...(options.storageStateFile ? { storageState: options.storageStateFile } : {}),
+  });
   const page = await context.newPage();
   const seen = new Map();
   const warnings = [];
@@ -471,6 +488,7 @@ function parseCliArgs(argv) {
       retries: { type: "string" },
       "retry-delay-ms": { type: "string" },
       "summary-output": { type: "string" },
+      "storage-state": { type: "string" },
       headed: { type: "boolean" },
       "browser-channel": { type: "string" },
       help: { type: "boolean" },
@@ -498,6 +516,7 @@ function parseCliArgs(argv) {
       values["retry-delay-ms"] || process.env.QA_CATALOG_INDEX_RETRY_DELAY_MS,
       DEFAULT_RETRY_DELAY_MS,
     ),
+    storageStateFile: resolveStorageStatePath(values["storage-state"] || process.env.QA_STORAGE_STATE),
     headed: values.headed === true || ["1", "true", "yes", "on"].includes(String(process.env.QA_HEADED ?? "").toLowerCase()),
     browserChannel: values["browser-channel"],
   };
@@ -510,6 +529,7 @@ async function main() {
   console.log(`Summary : ${options.summaryOutputFile}`);
   console.log(`Pages   : up to ${options.maxPages}`);
   console.log(`Retries : ${options.retries}`);
+  console.log(`Auth    : ${options.storageStateFile ? "storage state" : "anonymous"}`);
 
   const crawlResult = await crawlCatalog(options);
   const index = buildIndex(options, crawlResult.items, crawlResult.warnings);
