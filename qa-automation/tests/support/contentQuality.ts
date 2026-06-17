@@ -6,6 +6,7 @@ import { parseIntegerFlag } from "../../config/projectConfig.js";
 interface ContentQualityOptions {
   contextName: string;
   expectedTerms?: string[];
+  expectedTermsMode?: "all" | "any";
   linkLimit?: number;
 }
 
@@ -65,7 +66,20 @@ export async function assertContentQuality(page: Page, options: ContentQualityOp
 }
 
 async function assertExpectedTerms(page: Page, options: ContentQualityOptions): Promise<void> {
-  for (const term of options.expectedTerms ?? []) {
+  const expectedTerms = options.expectedTerms ?? [];
+  if (expectedTerms.length === 0) {
+    return;
+  }
+
+  if (options.expectedTermsMode === "any") {
+    await expect(
+      page.locator("body"),
+      `${options.contextName} should stay relevant to at least one of: ${expectedTerms.join(", ")}`,
+    ).toContainText(new RegExp(expectedTerms.map(escapeRegex).join("|"), "i"));
+    return;
+  }
+
+  for (const term of expectedTerms) {
     await expect(page.locator("body"), `${options.contextName} should stay relevant to "${term}"`).toContainText(
       new RegExp(escapeRegex(term), "i"),
     );

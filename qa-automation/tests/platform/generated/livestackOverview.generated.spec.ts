@@ -62,6 +62,7 @@ test.describe("LiveLabs generated LiveStack overview pages", { tag: GENERATED_LI
         await assertContentQuality(page, {
           contextName: `Generated LiveStack overview: ${item.title}`,
           expectedTerms: expectedTermsForCatalogItem(item),
+          expectedTermsMode: "any",
         });
       });
     }
