@@ -115,6 +115,17 @@ The generated suite intentionally still does not execute Sandbox or tenancy
 provisioning flows. It only validates instruction pages that are opened from
 those options.
 
+Jenkins generated catalog runs:
+
+```text
+Script Path: qa-automation/Jenkinsfile
+Runbook: docs/runbooks/jenkins-generated-catalog.md
+```
+
+Use Jenkins for the scheduled overnight catalog sweep. The Jenkins pipeline runs
+`tests/platform/generated`, not the homepage smoke lane, and supports a fast
+`pr-slice` profile plus a sharded `nightly-full` profile.
+
 To see the generated test names without opening a browser:
 
 ```powershell
@@ -172,6 +183,10 @@ Create a reusable authenticated browser state, then run the generated suite:
 npm run auth:storage
 npm run test:generated
 ```
+
+When `QA_STORAGE_STATE` points to an existing storage-state file, both
+`catalog:index` and `test:generated` reuse it. That lets scheduled runs crawl
+and test catalog entries visible after sign-in.
 
 Authenticated checks:
 
