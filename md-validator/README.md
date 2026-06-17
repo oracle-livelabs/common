@@ -31,6 +31,8 @@ This validator ensures that Markdown content submitted in PRs follows the establ
 - Provides detailed error messages
 - Generates GitHub Actions summary report
 
+> **Reminder:** If a code snippet, command, or script is copied or adapted from another author, repository, blog, documentation page, or sample project, cite the source near the code block and confirm the license allows reuse.
+
 ## Installation
 
 ### Step 1: Copy Files to Your Repository

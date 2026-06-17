@@ -16,6 +16,10 @@ Track these items while authoring:
 - scenario notes,
 - open questions that still need SME input.
 
+**Reminder**
+
+If a code snippet, command, or script is copied or adapted from another author, repository, blog, documentation page, or sample project, cite the source near the code block and confirm that the license permits reuse.
+
 ## Minimal Traceability Table
 
 Use a simple table while drafting:
