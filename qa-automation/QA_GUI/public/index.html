@@ -35,20 +35,19 @@
             </label>
             <div class="control-row">
               <label>
-                <span>Lab filter</span>
+                <span class="field-label">Lab filter <small>Optional</small></span>
                 <input id="labFilter" name="labFilter" type="text" placeholder="cloud-login, setup">
               </label>
               <label>
-                <span>Limit</span>
+                <span class="field-label">Limit <small>Optional</small></span>
                 <input id="maxLabs" name="maxLabs" type="number" min="1" inputmode="numeric" placeholder="All">
               </label>
               <label>
-                <span>Browser</span>
+                <span class="field-label">Browser <small>Optional</small></span>
                 <select id="browserChannel" name="browserChannel">
                   <option value="auto">Auto</option>
                   <option value="msedge">Edge</option>
                   <option value="chrome">Chrome</option>
-                  <option value="">Playwright</option>
                 </select>
               </label>
               <button class="primary-button" id="runButton" type="submit">

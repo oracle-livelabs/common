@@ -133,6 +133,9 @@ Open `http://127.0.0.1:8787`, paste a workshop URL, and run the check from the
 page. The History tab keeps the last 5 completed runs and the app restores the
 active run after browser back/reload.
 
+For a local Windows install, double-click `QA_GUI/Install Workshop QA.cmd`. It
+creates a Desktop shortcut that starts the local server and opens the app.
+
 Command line:
 
 ```powershell
