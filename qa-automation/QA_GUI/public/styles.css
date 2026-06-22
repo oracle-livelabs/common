@@ -154,6 +154,22 @@ label span {
   text-transform: uppercase;
 }
 
+label .field-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+label .field-label small {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  padding: 2px 6px;
+  font-size: 10px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
 input,
 select {
   width: 100%;
