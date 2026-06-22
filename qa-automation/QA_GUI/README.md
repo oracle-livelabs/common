@@ -10,9 +10,11 @@ From `qa-automation`:
 npm run workshop:qa:app
 ```
 
-Open `http://127.0.0.1:8787`, paste the published workshop URL, and click **Run check**.
+Open `http://127.0.0.1:8787`, paste the published workshop URL, and click **Run QA**.
 
 The app fetches the workshop manifest, opens every lab as `?qa=true&lab=<lab-id>`, waits for the QA report to settle, and shows pass/fail status, issue counts, logs, and report links.
+
+The History tab keeps the last 5 completed runs from `artifacts/runs`. The app also remembers the active run ID in the browser, so using the report or JSON links and then returning to the app restores the last result instead of forcing another run.
 
 ## Files
 

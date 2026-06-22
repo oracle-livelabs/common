@@ -1,7 +1,11 @@
+const LAST_URL_KEY = "workshopQa:lastUrl";
+const ACTIVE_RUN_KEY = "workshopQa:activeRunId";
+
 const form = document.querySelector("#runForm");
 const runButton = document.querySelector("#runButton");
 const cancelButton = document.querySelector("#cancelButton");
 const clearLogButton = document.querySelector("#clearLog");
+const refreshHistoryButton = document.querySelector("#refreshHistory");
 const runState = document.querySelector("#runState");
 const progressText = document.querySelector("#progressText");
 const resultsBody = document.querySelector("#resultsBody");
@@ -11,6 +15,10 @@ const runnerLog = document.querySelector("#runnerLog");
 const markdownReport = document.querySelector("#markdownReport");
 const jsonReport = document.querySelector("#jsonReport");
 const workshopUrlInput = document.querySelector("#workshopUrl");
+const historyBody = document.querySelector("#historyBody");
+const historyCount = document.querySelector("#historyCount");
+const viewTabs = [...document.querySelectorAll("[data-view-tab]")];
+const viewPanels = [...document.querySelectorAll("[data-view-panel]")];
 
 const counters = {
   pass: document.querySelector("#passCount"),
@@ -24,8 +32,10 @@ let eventSource = null;
 let liveRows = [];
 let reportResults = [];
 let selectedLabId = "";
+let currentLinks = null;
+let streamErrorLogged = false;
 
-const savedUrl = localStorage.getItem("workshopQa:lastUrl");
+const savedUrl = localStorage.getItem(LAST_URL_KEY);
 if (savedUrl) {
   workshopUrlInput.value = savedUrl;
 }
@@ -39,8 +49,9 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
-  localStorage.setItem("workshopQa:lastUrl", payload.url);
-  resetRunView();
+  localStorage.setItem(LAST_URL_KEY, payload.url);
+  resetRunView("Starting");
+  setActiveView("current");
   setBusy(true);
   setRunState("running", "Starting");
 
@@ -59,6 +70,7 @@ form.addEventListener("submit", async (event) => {
     }
 
     currentRun = data;
+    rememberActiveRun(data.id);
     connectEvents(data.id);
   } catch (error) {
     appendLog(error.message || String(error), "stderr");
@@ -79,10 +91,180 @@ clearLogButton.addEventListener("click", () => {
   runnerLog.textContent = "";
 });
 
-function connectEvents(runId) {
-  if (eventSource) {
-    eventSource.close();
+refreshHistoryButton.addEventListener("click", () => {
+  refreshHistory();
+});
+
+historyBody.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-open-run]");
+  if (!button) {
+    return;
   }
+
+  openHistoryRun(button.dataset.openRun);
+});
+
+for (const tab of viewTabs) {
+  tab.addEventListener("click", () => {
+    setActiveView(tab.dataset.viewTab);
+    if (tab.dataset.viewTab === "history") {
+      refreshHistory();
+    }
+  });
+}
+
+initialize();
+
+async function initialize() {
+  await refreshHistory();
+  await restoreActiveRun();
+}
+
+async function restoreActiveRun() {
+  const runId = localStorage.getItem(ACTIVE_RUN_KEY);
+  if (!runId) {
+    return;
+  }
+
+  try {
+    const run = await fetchRun(runId);
+    currentRun = run;
+
+    if (run.state === "running" || run.state === "queued") {
+      resetRunView("Restoring");
+      setRunState("running", "Running");
+      setBusy(true);
+      connectEvents(run.id);
+      return;
+    }
+
+    if (run.links?.json) {
+      resetRunView("Restoring");
+      await loadReportForRun(run, { announce: false });
+      appendLog(`Restored run ${shortRunId(run.id)}.`);
+      return;
+    }
+
+    if (run.error) {
+      setRunState("error", "Failed");
+      appendLog(run.error, "stderr");
+    }
+  } catch {
+    localStorage.removeItem(ACTIVE_RUN_KEY);
+  }
+}
+
+async function openHistoryRun(runId) {
+  try {
+    const run = await fetchRun(runId);
+    resetRunView("Loading saved run");
+    await loadReportForRun(run);
+    setActiveView("current");
+  } catch (error) {
+    appendLog(error.message || String(error), "stderr");
+    setRunState("error", "History error");
+  }
+}
+
+async function fetchRun(runId) {
+  const response = await fetch(`/api/runs/${encodeURIComponent(runId)}`);
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || `Could not load run ${runId}.`);
+  }
+
+  return data;
+}
+
+async function loadReportForRun(run, options = {}) {
+  currentRun = run;
+  rememberActiveRun(run.id);
+
+  const reportUrl = run.links?.json || `/api/runs/${encodeURIComponent(run.id)}/report.json`;
+  const response = await fetch(reportUrl);
+  const report = await response.json();
+  if (!response.ok) {
+    throw new Error(report.error || "Could not load saved report.");
+  }
+
+  currentLinks = run.links || {
+    markdown: `/api/runs/${run.id}/report.md`,
+    json: `/api/runs/${run.id}/report.json`,
+  };
+  applyReport(report, currentLinks);
+  finishRun({ ...run, summary: report.summary });
+  setBusy(false);
+
+  if (options.announce !== false) {
+    appendLog(`Loaded saved run ${shortRunId(run.id)}.`);
+  }
+}
+
+async function refreshHistory() {
+  try {
+    const response = await fetch("/api/history");
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || "Could not load history.");
+    }
+
+    renderHistory(data.items || []);
+  } catch (error) {
+    historyBody.innerHTML = `<p class="muted">${escapeHtml(error.message || String(error))}</p>`;
+    historyCount.textContent = "0";
+  }
+}
+
+function renderHistory(items) {
+  historyCount.textContent = String(items.length);
+
+  if (items.length === 0) {
+    historyBody.innerHTML = `<p class="muted">No completed runs yet.</p>`;
+    return;
+  }
+
+  historyBody.innerHTML = items.map((item) => {
+    const summary = item.summary || {};
+    const title = item.workshopTitle || readableUrlTail(item.workshopUrl) || "Workshop";
+    const generatedAt = formatDate(item.generatedAt || item.endedAt || item.createdAt);
+    const runId = escapeAttribute(item.id);
+    const markdownHref = escapeAttribute(item.links?.markdown || "#");
+    const jsonHref = escapeAttribute(item.links?.json || "#");
+
+    return `
+      <article class="history-item">
+        <div class="history-main">
+          <div class="history-title">
+            ${statusBadge(statusFromSummary(summary))}
+            <strong>${escapeHtml(title)}</strong>
+          </div>
+          <div class="history-meta">
+            <span>${escapeHtml(generatedAt)}</span>
+            <span>${escapeHtml(shortRunId(item.id))}</span>
+          </div>
+          <div class="history-summary">
+            <span>${Number(summary.totalLabs || 0)} labs</span>
+            <span>${Number(summary.passCount || 0)} pass</span>
+            <span>${Number(summary.failCount || 0)} fail</span>
+            <span>${Number(summary.errorCount || 0)} errors</span>
+            <span>${Number(summary.totalIssues || 0)} issues</span>
+          </div>
+          <div class="history-url">${escapeHtml(item.workshopUrl || "")}</div>
+        </div>
+        <div class="history-actions">
+          <button class="secondary-button" type="button" data-open-run="${runId}">Open</button>
+          <a class="report-link" href="${markdownHref}" target="_blank" rel="noreferrer">Report</a>
+          <a class="report-link" href="${jsonHref}" target="_blank" rel="noreferrer">JSON</a>
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+function connectEvents(runId) {
+  closeEventSource();
+  streamErrorLogged = false;
+  rememberActiveRun(runId);
 
   eventSource = new EventSource(`/api/runs/${runId}/events`);
   const eventTypes = [
@@ -105,6 +287,11 @@ function connectEvents(runId) {
   }
 
   eventSource.onerror = () => {
+    if (streamErrorLogged || currentRun?.state === "completed") {
+      return;
+    }
+
+    streamErrorLogged = true;
     appendLog("Event stream disconnected.", "stderr");
   };
 }
@@ -146,17 +333,23 @@ function handleEvent(type, payload) {
 
   if (type === "completed") {
     currentRun = payload;
+    rememberActiveRun(payload.id);
     finishRun(payload);
+    closeEventSource();
+    refreshHistory();
     return;
   }
 
   if (type === "failed" || type === "cancelled") {
     currentRun = payload;
+    rememberActiveRun(payload.id);
     setRunState(type === "cancelled" ? "fail" : "error", type === "cancelled" ? "Cancelled" : "Failed");
     if (payload.error) {
       appendLog(payload.error, "stderr");
     }
     setBusy(false);
+    closeEventSource();
+    refreshHistory();
   }
 }
 
@@ -199,6 +392,7 @@ function renderLiveRows() {
 function applyReport(report, links) {
   reportResults = report.results || [];
   liveRows = [];
+  currentLinks = links || currentLinks;
   selectedLabId = selectedLabId || reportResults[0]?.tutorial?.labId || "";
 
   counters.pass.textContent = report.summary?.passCount ?? 0;
@@ -207,12 +401,12 @@ function applyReport(report, links) {
   counters.issues.textContent = report.summary?.totalIssues ?? 0;
   progressText.textContent = `${report.summary?.totalLabs ?? reportResults.length} labs checked`;
 
-  if (links?.markdown) {
-    markdownReport.href = links.markdown;
+  if (currentLinks?.markdown) {
+    markdownReport.href = currentLinks.markdown;
     markdownReport.classList.remove("disabled");
   }
-  if (links?.json) {
-    jsonReport.href = links.json;
+  if (currentLinks?.json) {
+    jsonReport.href = currentLinks.json;
     jsonReport.classList.remove("disabled");
   }
 
@@ -299,15 +493,16 @@ function finishRun(run) {
   setBusy(false);
 }
 
-function resetRunView() {
+function resetRunView(progressLabel = "Starting") {
   liveRows = [];
   reportResults = [];
   selectedLabId = "";
+  currentLinks = null;
   runnerLog.textContent = "";
   resultsBody.innerHTML = `<tr class="empty-row"><td colspan="4">Run in progress.</td></tr>`;
   detailsBody.innerHTML = `<p class="muted">No lab selected.</p>`;
   selectedStatus.textContent = "Waiting";
-  progressText.textContent = "Starting";
+  progressText.textContent = progressLabel;
   counters.pass.textContent = "0";
   counters.fail.textContent = "0";
   counters.error.textContent = "0";
@@ -334,10 +529,35 @@ function setRunState(kind, label) {
   runState.innerHTML = `<span class="state-dot ${dotClass}"></span><span>${escapeHtml(label)}</span>`;
 }
 
+function setActiveView(viewName) {
+  for (const tab of viewTabs) {
+    const isActive = tab.dataset.viewTab === viewName;
+    tab.classList.toggle("active", isActive);
+    tab.setAttribute("aria-selected", String(isActive));
+  }
+
+  for (const panel of viewPanels) {
+    panel.hidden = panel.dataset.viewPanel !== viewName;
+  }
+}
+
 function appendLog(text, type = "stdout") {
   const prefix = type === "stderr" ? "! " : "";
   runnerLog.textContent += `${prefix}${text}\n`;
   runnerLog.scrollTop = runnerLog.scrollHeight;
+}
+
+function closeEventSource() {
+  if (eventSource) {
+    eventSource.close();
+    eventSource = null;
+  }
+}
+
+function rememberActiveRun(runId) {
+  if (runId) {
+    localStorage.setItem(ACTIVE_RUN_KEY, runId);
+  }
 }
 
 function statusBadge(status) {
@@ -350,9 +570,49 @@ function statusBadge(status) {
   return `<span class="status-badge status-${escapeAttribute(normalized)}">${label}</span>`;
 }
 
+function statusFromSummary(summary) {
+  if (Number(summary.errorCount || 0) > 0) {
+    return "error";
+  }
+
+  if (Number(summary.totalIssues || 0) > 0 || Number(summary.failCount || 0) > 0) {
+    return "fail";
+  }
+
+  return "pass";
+}
+
 function issueCountFromDetail(detail) {
   const match = String(detail || "").match(/(\d+)\s+issue/i);
   return match ? match[1] : "";
+}
+
+function shortRunId(runId) {
+  return String(runId || "").slice(0, 8);
+}
+
+function readableUrlTail(url) {
+  try {
+    const parsed = new URL(url);
+    const parts = parsed.pathname.split("/").filter(Boolean);
+    return parts.slice(-3).join(" / ");
+  } catch {
+    return "";
+  }
+}
+
+function formatDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "Unknown time";
+  }
+
+  return date.toLocaleString([], {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 function escapeHtml(value) {

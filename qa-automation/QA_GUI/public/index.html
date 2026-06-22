@@ -96,48 +96,68 @@
           </div>
         </section>
 
-        <section class="content-grid">
-          <div class="results-panel">
-            <div class="section-heading">
-              <h2>Lab results</h2>
-              <span id="progressText">No run yet</span>
-            </div>
-            <div class="results-table-wrap">
-              <table class="results-table">
-                <thead>
-                  <tr>
-                    <th>Status</th>
-                    <th>Lab</th>
-                    <th>Title</th>
-                    <th>Issues</th>
-                  </tr>
-                </thead>
-                <tbody id="resultsBody">
-                  <tr class="empty-row">
-                    <td colspan="4">No results yet.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <nav class="view-tabs" aria-label="QA views">
+          <button class="tab-button active" type="button" data-view-tab="current" aria-selected="true">Current run</button>
+          <button class="tab-button" type="button" data-view-tab="history" aria-selected="false">
+            History
+            <span id="historyCount">0</span>
+          </button>
+        </nav>
 
-          <aside class="details-panel" aria-label="Result details">
+        <section id="currentView" class="view-panel" data-view-panel="current">
+          <section class="content-grid">
+            <div class="results-panel">
+              <div class="section-heading">
+                <h2>Lab results</h2>
+                <span id="progressText">No run yet</span>
+              </div>
+              <div class="results-table-wrap">
+                <table class="results-table">
+                  <thead>
+                    <tr>
+                      <th>Status</th>
+                      <th>Lab</th>
+                      <th>Title</th>
+                      <th>Issues</th>
+                    </tr>
+                  </thead>
+                  <tbody id="resultsBody">
+                    <tr class="empty-row">
+                      <td colspan="4">No results yet.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <aside class="details-panel" aria-label="Result details">
+              <div class="section-heading">
+                <h2>Details</h2>
+                <span id="selectedStatus">Waiting</span>
+              </div>
+              <div id="detailsBody" class="details-body">
+                <p class="muted">No lab selected.</p>
+              </div>
+            </aside>
+          </section>
+
+          <section class="log-panel" aria-label="Runner log">
             <div class="section-heading">
-              <h2>Details</h2>
-              <span id="selectedStatus">Waiting</span>
+              <h2>Runner log</h2>
+              <button id="clearLog" class="ghost-button" type="button">Clear</button>
             </div>
-            <div id="detailsBody" class="details-body">
-              <p class="muted">No lab selected.</p>
-            </div>
-          </aside>
+            <pre id="runnerLog"></pre>
+          </section>
         </section>
 
-        <section class="log-panel" aria-label="Runner log">
+        <section id="historyView" class="view-panel history-panel" data-view-panel="history" hidden>
           <div class="section-heading">
-            <h2>Runner log</h2>
-            <button id="clearLog" class="ghost-button" type="button">Clear</button>
+            <h2>Last 5 runs</h2>
+            <button id="refreshHistory" class="ghost-button" type="button">Refresh</button>
           </div>
-          <pre id="runnerLog"></pre>
+          <div id="historyBody" class="history-list">
+            <p class="muted">No history yet.</p>
+          </div>
         </section>
       </main>
     </div>

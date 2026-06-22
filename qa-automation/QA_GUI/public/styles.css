@@ -123,7 +123,8 @@ h2 {
 .control-panel,
 .results-panel,
 .details-panel,
-.log-panel {
+.log-panel,
+.history-panel {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
@@ -280,6 +281,57 @@ svg {
   justify-content: flex-end;
   gap: 10px;
   padding: 12px;
+}
+
+.view-tabs {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 4px;
+}
+
+.tab-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 36px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  padding: 0 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.tab-button.active {
+  background: var(--surface-strong);
+  color: var(--text);
+}
+
+.tab-button span {
+  min-width: 22px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  padding: 2px 7px;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.view-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.view-panel[hidden] {
+  display: none;
 }
 
 .content-grid {
@@ -445,6 +497,69 @@ svg {
   white-space: pre-wrap;
 }
 
+.history-list {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.history-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  background: #fff;
+}
+
+.history-main {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.history-title {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.history-title strong {
+  overflow-wrap: anywhere;
+}
+
+.history-meta,
+.history-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.history-url {
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.history-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.history-actions .secondary-button,
+.history-actions .report-link {
+  min-height: 34px;
+  padding: 0 11px;
+  font-size: 12px;
+}
+
 @media (max-width: 980px) {
   .topbar,
   .workspace {
@@ -454,11 +569,16 @@ svg {
 
   .control-row,
   .summary-strip,
-  .content-grid {
+  .content-grid,
+  .history-item {
     grid-template-columns: 1fr;
   }
 
   .report-actions {
+    justify-content: flex-start;
+  }
+
+  .history-actions {
     justify-content: flex-start;
   }
 }
