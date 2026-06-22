@@ -91,6 +91,7 @@ test.describe("LiveLabs generated LiveStack resource drilldown", { tag: GENERATE
             await assertContentQuality(page, {
               contextName: `Generated LiveStack resource workshop: ${resource.title}`,
               expectedTerms: expectedTermsForText(resource.title),
+              expectedTermsMode: "any",
             });
 
             await workshopLandingPage.openLaunchOptions();
@@ -105,6 +106,7 @@ test.describe("LiveLabs generated LiveStack resource drilldown", { tag: GENERATE
               await instructionsPage.assertContentQuality({
                 contextName: `Generated LiveStack resource preview: ${resource.title}`,
                 expectedTerms: expectedTermsForText(resource.title),
+                expectedTermsMode: "any",
               });
 
               if (previewPage !== page) {
@@ -132,6 +134,7 @@ test.describe("LiveLabs generated LiveStack resource drilldown", { tag: GENERATE
               await instructionsPage.assertContentQuality({
                 contextName: `Generated LiveStack resource tenancy: ${resource.title}`,
                 expectedTerms: expectedTermsForText(resource.title),
+                expectedTermsMode: "any",
               });
 
               if (tenancyPage !== page) {

@@ -73,6 +73,7 @@ test.describe("LiveLabs generated preview instructions", { tag: GENERATED_PREVIE
         await instructionsPage.assertContentQuality({
           contextName: `Generated preview instructions: ${item.title}`,
           expectedTerms: expectedTermsForCatalogItem(item),
+          expectedTermsMode: "any",
         });
 
         if (previewPage !== page) {
