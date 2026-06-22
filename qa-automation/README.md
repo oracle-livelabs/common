@@ -130,7 +130,8 @@ npm run workshop:qa:app
 ```
 
 Open `http://127.0.0.1:8787`, paste a workshop URL, and run the check from the
-page.
+page. The History tab keeps the last 5 completed runs and the app restores the
+active run after browser back/reload.
 
 Command line:
 

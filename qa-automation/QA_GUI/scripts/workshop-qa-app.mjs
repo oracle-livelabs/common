@@ -14,9 +14,12 @@ const GUI_ROOT = path.resolve(path.dirname(__filename), "..");
 const APP_ROOT = path.join(GUI_ROOT, "public");
 const RUNNER = path.join(GUI_ROOT, "scripts", "published-workshop-qa.mjs");
 const RUNS_ROOT = path.join(GUI_ROOT, "artifacts", "runs");
+const LEGACY_RUNS_ROOT = path.resolve(GUI_ROOT, "..", "artifacts", "published-workshop-qa-app");
+const HISTORY_ROOTS = [RUNS_ROOT, LEGACY_RUNS_ROOT];
 const DEFAULT_PORT = 8787;
 const DEFAULT_HOST = "127.0.0.1";
 const MAX_BODY_BYTES = 128 * 1024;
+const HISTORY_LIMIT = 5;
 
 const HELP = `Start the local Published Workshop QA app.
 
@@ -91,6 +94,12 @@ async function routeRequest(request, response) {
       ok: true,
       runs: runs.size,
       defaultBrowserChannel: detectInstalledBrowserChannel(),
+    });
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/history") {
+    return sendJson(response, 200, {
+      items: listHistoryRuns(),
     });
   }
 
@@ -415,13 +424,14 @@ async function readJsonBody(request) {
 }
 
 function requireRun(id) {
-  const run = runs.get(id);
+  const run = runs.get(id) || loadRunFromDisk(id);
   if (!run) {
     const error = new Error(`Run not found: ${id}`);
     error.statusCode = 404;
     throw error;
   }
 
+  runs.set(id, run);
   return run;
 }
 
@@ -439,9 +449,104 @@ function serializeRun(run) {
     timeoutMs: run.timeoutMs,
     exitCode: run.exitCode,
     error: run.error,
+    generatedAt: run.report?.generatedAt || run.endedAt || "",
+    workshopTitle: run.report?.workshopTitle || "",
     summary: run.report?.summary || null,
     links: run.report ? reportLinks(run) : null,
   };
+}
+
+function listHistoryRuns() {
+  const byId = new Map();
+
+  for (const run of runs.values()) {
+    if (run.report) {
+      byId.set(run.id, run);
+    }
+  }
+
+  for (const historyRoot of HISTORY_ROOTS) {
+    if (fs.existsSync(historyRoot)) {
+      for (const entry of fs.readdirSync(historyRoot, { withFileTypes: true })) {
+        if (!entry.isDirectory() || byId.has(entry.name)) {
+          continue;
+        }
+
+        const run = loadRunFromRoot(entry.name, historyRoot);
+        if (run?.report) {
+          byId.set(run.id, run);
+        }
+      }
+    }
+  }
+
+  return [...byId.values()]
+    .sort((left, right) => runTimeValue(right) - runTimeValue(left))
+    .slice(0, HISTORY_LIMIT)
+    .map(serializeRun);
+}
+
+function loadRunFromDisk(id) {
+  for (const historyRoot of HISTORY_ROOTS) {
+    const run = loadRunFromRoot(id, historyRoot);
+    if (run) {
+      return run;
+    }
+  }
+
+  return null;
+}
+
+function loadRunFromRoot(id, runsRoot) {
+  if (!/^[a-f0-9-]{8,}$/i.test(id)) {
+    return null;
+  }
+
+  const root = path.resolve(runsRoot);
+  const outputDir = path.resolve(runsRoot, id);
+  if (!outputDir.startsWith(`${root}${path.sep}`)) {
+    return null;
+  }
+
+  const reportPath = path.join(outputDir, "report.json");
+  if (!fs.existsSync(reportPath) || !fs.statSync(reportPath).isFile()) {
+    return null;
+  }
+
+  try {
+    const report = JSON.parse(fs.readFileSync(reportPath, "utf-8"));
+    const stat = fs.statSync(reportPath);
+    const generatedAt = report.generatedAt || stat.mtime.toISOString();
+    return {
+      id,
+      state: "completed",
+      workshopUrl: report.workshopUrl || "",
+      createdAt: generatedAt,
+      startedAt: "",
+      endedAt: generatedAt,
+      browserChannel: "",
+      labFilter: "",
+      maxLabs: 0,
+      timeoutMs: 0,
+      outputDir,
+      exitCode: 0,
+      error: "",
+      events: [],
+      clients: new Set(),
+      child: null,
+      finalized: true,
+      reportWatcher: null,
+      report,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function runTimeValue(run) {
+  const value = run.report?.generatedAt || run.endedAt || run.createdAt || "";
+  const time = Date.parse(value);
+  return Number.isFinite(time) ? time : 0;
 }
 
 function reportLinks(run) {
