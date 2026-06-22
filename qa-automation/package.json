@@ -11,6 +11,8 @@
     "test:collect": "node ./scripts/qa.mjs tests --collect-only",
     "test:generated": "node ./scripts/qa.mjs tests/platform/generated",
     "catalog:index": "node ./scripts/catalog-index.mjs",
+    "workshop:qa": "node ./QA_GUI/scripts/published-workshop-qa.mjs",
+    "workshop:qa:app": "node ./QA_GUI/scripts/workshop-qa-app.mjs",
     "auth:storage": "node ./scripts/auth-storage-state.mjs",
     "doctor": "node ./scripts/qa.mjs doctor",
     "install:browsers": "playwright install",
