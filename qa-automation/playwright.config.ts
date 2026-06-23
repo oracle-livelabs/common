@@ -80,6 +80,7 @@ function resolveReporters(): ReporterDescription[] {
   const reporters: ReporterDescription[] = [
     ["list"],
     ["html", { open: "never", outputFolder: configuredHtmlReportDir }],
+    ["./scripts/reporters/root-summary-reporter.mjs"],
   ];
 
   if (configuredJunitFile) {
