@@ -136,6 +136,14 @@ active run after browser back/reload.
 For a local Windows install, double-click `QA_GUI/Install Workshop QA.cmd`. It
 creates a Desktop shortcut that starts the local server and opens the app.
 
+To produce a shareable Windows installer, run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\QA_GUI\package-windows-installer.ps1
+```
+
+The installer artifact is written to `artifacts/dist/Workshop-QA-Setup.exe`.
+
 Command line:
 
 ```powershell

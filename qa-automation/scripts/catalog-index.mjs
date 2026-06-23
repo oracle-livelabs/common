@@ -34,6 +34,8 @@ Options:
   --environment <name>       Environment from config/project_settings.json.
   --base-url <url>           Override the configured LiveLabs base URL.
   --output <file>            Output JSON file. Defaults to tests/data/generated/livelabs_catalog_index.json.
+  --search <term>            Crawl catalog results for a specific search term.
+  --catalog-url <url>        Crawl an exact catalog/search URL instead of the default catalog.
   --max-pages <n>            Maximum catalog result pages to crawl. Default: 250.
   --max-items <n>            Optional item cap for local debugging.
   --retries <n>              Retry transient catalog navigation/loading failures. Default: 2.
@@ -101,6 +103,26 @@ function resolveChromiumChannel(explicitChannel) {
   return candidates.find((candidate) => fs.existsSync(candidate.executablePath))?.channel;
 }
 
+function resolveProxySetting() {
+  const proxyServer =
+    process.env.QA_PROXY_SERVER?.trim() ||
+    process.env.HTTPS_PROXY?.trim() ||
+    process.env.https_proxy?.trim() ||
+    process.env.HTTP_PROXY?.trim() ||
+    process.env.http_proxy?.trim();
+
+  if (!proxyServer) {
+    return undefined;
+  }
+
+  const bypass = process.env.QA_PROXY_BYPASS?.trim() || process.env.NO_PROXY?.trim() || process.env.no_proxy?.trim();
+
+  return {
+    server: proxyServer,
+    ...(bypass ? { bypass } : {}),
+  };
+}
+
 function resolveStorageStatePath(value) {
   const configuredPath = value?.trim();
   if (!configuredPath) {
@@ -115,8 +137,19 @@ function resolveStorageStatePath(value) {
   return resolvedPath;
 }
 
-function catalogUrl(baseUrl) {
-  return `${baseUrl}${CATALOG_PATH}?clear=100`;
+function catalogUrl(options) {
+  if (options.catalogUrl?.trim()) {
+    return options.catalogUrl.trim();
+  }
+
+  const url = new URL(`${options.baseUrl}${CATALOG_PATH}`);
+  url.searchParams.set("clear", "100");
+
+  if (options.search?.trim()) {
+    url.searchParams.set("search", options.search.trim());
+  }
+
+  return url.toString();
 }
 
 function normalizeAbsoluteUrl(baseUrl, href) {
@@ -339,9 +372,11 @@ async function clickNextPage(page) {
 
 async function crawlCatalog(options) {
   const channel = resolveChromiumChannel(options.browserChannel || process.env.QA_BROWSER_CHANNEL);
+  const proxy = resolveProxySetting();
   const browser = await chromium.launch({
     headless: !options.headed,
     ...(channel ? { channel } : {}),
+    ...(proxy ? { proxy } : {}),
   });
   const context = await browser.newContext({
     ...(options.storageStateFile ? { storageState: options.storageStateFile } : {}),
@@ -351,7 +386,7 @@ async function crawlCatalog(options) {
   const warnings = [];
 
   try {
-    await gotoWithRetries(page, catalogUrl(options.baseUrl), options, warnings);
+    await gotoWithRetries(page, catalogUrl(options), options, warnings);
     await dismissCookieBanner(page);
 
     for (let pageNumber = 1; pageNumber <= options.maxPages; pageNumber += 1) {
@@ -429,7 +464,7 @@ function buildIndex(options, items, warnings) {
     generated_at: new Date().toISOString(),
     generator: "scripts/catalog-index.mjs",
     base_url: options.baseUrl,
-    catalog_url: catalogUrl(options.baseUrl),
+    catalog_url: catalogUrl(options),
     item_count: items.length,
     counts,
     crawl: {
@@ -483,6 +518,8 @@ function parseCliArgs(argv) {
       environment: { type: "string" },
       "base-url": { type: "string" },
       output: { type: "string" },
+      search: { type: "string" },
+      "catalog-url": { type: "string" },
       "max-pages": { type: "string" },
       "max-items": { type: "string" },
       retries: { type: "string" },
@@ -504,6 +541,8 @@ function parseCliArgs(argv) {
   return {
     environment: values.environment,
     baseUrl: resolveBaseUrl(values.environment, values["base-url"] || process.env.QA_BASE_URL),
+    search: values.search || process.env.QA_CATALOG_SEARCH,
+    catalogUrl: values["catalog-url"] || process.env.QA_CATALOG_URL,
     outputFile: path.resolve(PROJECT_ROOT, values.output || process.env.QA_CATALOG_INDEX_FILE || DEFAULT_OUTPUT_FILE),
     summaryOutputFile: path.resolve(
       PROJECT_ROOT,
@@ -524,7 +563,7 @@ function parseCliArgs(argv) {
 
 async function main() {
   const options = parseCliArgs(process.argv.slice(2));
-  console.log(`Catalog : ${catalogUrl(options.baseUrl)}`);
+  console.log(`Catalog : ${catalogUrl(options)}`);
   console.log(`Output  : ${options.outputFile}`);
   console.log(`Summary : ${options.summaryOutputFile}`);
   console.log(`Pages   : up to ${options.maxPages}`);

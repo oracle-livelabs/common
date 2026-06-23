@@ -24,6 +24,21 @@ The Desktop shortcut starts the local server if it is not already running and op
 
 If you do not want to install the Desktop shortcut, double-click `Launch Workshop QA.cmd` from this folder.
 
+## Windows Installer Package
+
+To build a shareable installer that assumes Node.js is already installed:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\QA_GUI\package-windows-installer.ps1
+```
+
+The script writes ignored artifacts under `artifacts/dist`:
+
+- `Workshop-QA-Setup.exe`
+- `Workshop-QA-Windows.zip`
+
+Send users the `.exe` when you want a one-click installer. It installs the app under `%LOCALAPPDATA%\Workshop QA`, runs `npm install` if Playwright is missing, creates the Desktop shortcut, and opens the app.
+
 ## Files
 
 - `public/` contains the browser UI.
@@ -31,6 +46,7 @@ If you do not want to install the Desktop shortcut, double-click `Launch Worksho
 - `scripts/published-workshop-qa.mjs` runs the Playwright lab checker.
 - `Install Workshop QA.cmd` creates the Desktop shortcut.
 - `Launch Workshop QA.cmd` starts the local app directly.
+- `package-windows-installer.ps1` builds the shareable Windows installer.
 - `artifacts/` is generated at runtime and ignored by Git.
 
 ## CLI
