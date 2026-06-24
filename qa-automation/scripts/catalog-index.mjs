@@ -294,6 +294,63 @@ async function gotoWithRetries(page, url, options, warnings) {
 
 async function collectVisibleCards(page, catalogPage) {
   return page.evaluate((pageNumber) => {
+    const cleanText = (value) => (value ?? "").replace(/\s+/g, " ").trim();
+    const isGenericActionText = (value) => /^(card action|view|open|details|learn more)$/i.test(cleanText(value));
+    const looksLikeTitle = (value) => {
+      const text = cleanText(value);
+
+      return (
+        text.length >= 6 &&
+        text.length <= 180 &&
+        /[A-Za-z0-9]/.test(text) &&
+        !isGenericActionText(text) &&
+        !/^\d+(\.\d+)?\s*(hr|hrs|hour|hours|min|mins|minutes|views?)$/i.test(text)
+      );
+    };
+    const firstVisibleTitle = (card, anchor) => {
+      const titleSelectors = [
+        ".a-CardView-title",
+        ".a-CardView-titleLink",
+        ".a-CardView-header",
+        ".a-CardView-mainContent h1",
+        ".a-CardView-mainContent h2",
+        ".a-CardView-mainContent h3",
+        ".a-CardView-mainContent h4",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "[class*='Title']",
+        "[class*='title']",
+      ];
+      const selectorTitle = titleSelectors
+        .flatMap((selector) => Array.from(card.querySelectorAll(selector)))
+        .map((element) => cleanText(element.textContent))
+        .find(looksLikeTitle);
+
+      if (selectorTitle) {
+        return selectorTitle;
+      }
+
+      const anchorTitle = cleanText(anchor.textContent);
+      if (looksLikeTitle(anchorTitle)) {
+        return anchorTitle;
+      }
+
+      const rawCardText = "innerText" in card ? card.innerText : card.textContent;
+      const lineTitle = String(rawCardText ?? "")
+        .split(/\n+/)
+        .map(cleanText)
+        .filter(Boolean)
+        .find(looksLikeTitle);
+
+      if (lineTitle) {
+        return lineTitle;
+      }
+
+      const idMatch = (anchor.getAttribute("href") ?? "").match(/[?&](?:wid|id|p\d+_workshop_id)=([^&]+)/i);
+      return idMatch ? `Workshop ${decodeURIComponent(idMatch[1])}` : "";
+    };
     const anchors = Array.from(
       document.querySelectorAll(
         'a.a-CardView-fullLink[href*="view-workshop"], a.a-CardView-fullLink[href*="livestack-landing-page"]',
@@ -309,12 +366,14 @@ async function collectVisibleCards(page, catalogPage) {
       })
       .map((anchor, index) => {
         const card =
-          anchor.closest(".a-CardView-item, .a-CardView, li, article, [class*='Card'], [class*='card']") ?? anchor;
-        const title = (anchor.textContent ?? "").replace(/\s+/g, " ").trim();
+          anchor.parentElement?.closest(".a-CardView, .a-CardView-item, li, article, [class*='Card'], [class*='card']") ??
+          anchor.parentElement ??
+          anchor;
+        const title = firstVisibleTitle(card, anchor);
         const href = anchor.getAttribute("href") ?? "";
-        const cardText = (card.textContent ?? "").replace(/\s+/g, " ").trim();
+        const cardText = cleanText(card.textContent);
         const labels = Array.from(card.querySelectorAll(".a-Badge, .a-Label, [class*='badge'], [class*='tag']"))
-          .map((element) => (element.textContent ?? "").replace(/\s+/g, " ").trim())
+          .map((element) => cleanText(element.textContent))
           .filter(Boolean);
 
         return {

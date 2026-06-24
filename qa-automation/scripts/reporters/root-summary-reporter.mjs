@@ -21,6 +21,11 @@ const ISSUE_TYPE_DEFINITIONS = [
     description: "An image visible to the user did not load correctly.",
   },
   {
+    code: "OVERVIEW_STRUCTURE",
+    label: "Overview structure",
+    description: "The workshop overview route opened, but expected page controls or sections were missing.",
+  },
+  {
     code: "BROKEN_VISIBLE_LINK",
     label: "Broken visible link",
     description: "A visible link appears broken, unreachable, or returns an error.",
@@ -81,6 +86,7 @@ export default class RootSummaryReporter {
     const annotations = Object.fromEntries(test.annotations.map((annotation) => [annotation.type, annotation.description || ""]));
     const attachments = result.attachments.map(normalizeAttachment);
     const catalogItem = readCatalogItem(attachments);
+    const issues = readQaIssues(attachments);
     const runContext = readRunContext(attachments);
     const failurePageState = readFailurePageState(attachments);
     const errors = result.errors.map((error) => error.message || String(error));
@@ -95,6 +101,7 @@ export default class RootSummaryReporter {
       finalUrl,
       titlePath,
       file,
+      issues,
     });
 
     this.results.push({
@@ -115,6 +122,7 @@ export default class RootSummaryReporter {
       finalTitle,
       steps,
       failedStep,
+      issues,
       classification,
       bugSummary: buildBugSummary({
         titlePath,
@@ -127,6 +135,7 @@ export default class RootSummaryReporter {
         catalogItem,
         steps,
         failedStep,
+        issues,
       }),
       errors,
       attachments,
@@ -164,13 +173,19 @@ export default class RootSummaryReporter {
     const sections = new Map();
     const failureCategories = new Map();
     const failures = [];
+    const catalogItems = new Map();
 
     for (const test of this.results) {
+      const unexpected = test.status !== test.expectedStatus && test.status !== "skipped";
+      const testIssues = unexpected ? issuesForTest(test) : [];
+
       counts[test.status] = (counts[test.status] || 0) + 1;
-      if (test.status !== test.expectedStatus && test.status !== "skipped") {
+      if (unexpected) {
         counts.unexpected += 1;
         failures.push(test);
-        failureCategories.set(test.classification.code, (failureCategories.get(test.classification.code) || 0) + 1);
+        for (const issue of testIssues) {
+          failureCategories.set(issue.code, (failureCategories.get(issue.code) || 0) + 1);
+        }
       }
       if (test.retry > 0 && test.status === "passed") {
         counts.flaky += 1;
@@ -190,11 +205,58 @@ export default class RootSummaryReporter {
 
       section.total += 1;
       section[test.status] = (section[test.status] || 0) + 1;
-      if (test.status !== test.expectedStatus && test.status !== "skipped") {
+      if (unexpected) {
         section.unexpected += 1;
       }
       section.tests.push(test);
       sections.set(test.section, section);
+
+      if (test.catalogItem) {
+        const catalogKey = catalogItemKey(test.catalogItem);
+        const catalogEntry = catalogItems.get(catalogKey) || {
+          key: catalogKey,
+          catalogItem: test.catalogItem,
+          sections: new Set(),
+          counts: {
+            total: 0,
+            passed: 0,
+            failed: 0,
+            skipped: 0,
+            unexpected: 0,
+          },
+          tests: [],
+          issues: [],
+        };
+
+        catalogEntry.sections.add(test.section);
+        catalogEntry.counts.total += 1;
+        catalogEntry.counts[test.status] = (catalogEntry.counts[test.status] || 0) + 1;
+        if (unexpected) {
+          catalogEntry.counts.unexpected += 1;
+          catalogEntry.issues.push(
+            ...testIssues.map((issue) => ({
+              ...issue,
+              section: test.section,
+              testTitle: test.title,
+              file: test.file,
+              line: test.line,
+            })),
+          );
+        }
+        catalogEntry.tests.push({
+          title: test.title,
+          section: test.section,
+          status: test.status,
+          expectedStatus: test.expectedStatus,
+          durationMs: test.durationMs,
+          finalUrl: test.finalUrl,
+          finalTitle: test.finalTitle,
+          classification: test.classification,
+          file: test.file,
+          line: test.line,
+        });
+        catalogItems.set(catalogKey, catalogEntry);
+      }
     }
 
     return {
@@ -209,9 +271,43 @@ export default class RootSummaryReporter {
         .map(([code, count]) => ({ code, count, label: classificationLabel(code) }))
         .sort((left, right) => right.count - left.count || left.code.localeCompare(right.code)),
       failures,
+      catalogItems: Array.from(catalogItems.values())
+        .map((item) => ({
+          ...item,
+          sections: Array.from(item.sections).sort(),
+          status: catalogEntryStatus(item),
+          issueCount: item.issues.length,
+        }))
+        .sort(
+          (left, right) =>
+            catalogStatusRank(left.status) - catalogStatusRank(right.status) ||
+            String(left.catalogItem.title || "").localeCompare(String(right.catalogItem.title || "")),
+        ),
       sections: Array.from(sections.values()).sort((left, right) => left.name.localeCompare(right.name)),
     };
   }
+}
+
+function catalogItemKey(item) {
+  return `${item.type || "item"}:${item.id || item.slug || item.normalized_href || item.title}`;
+}
+
+function catalogEntryStatus(item) {
+  if (item.counts.unexpected > 0) {
+    return "failed";
+  }
+
+  if (item.counts.skipped === item.counts.total) {
+    return "skipped";
+  }
+
+  return "passed";
+}
+
+function catalogStatusRank(status) {
+  if (status === "failed") return 0;
+  if (status === "skipped") return 1;
+  return 2;
 }
 
 function normalizeAttachment(attachment) {
@@ -236,6 +332,44 @@ function readCatalogItem(attachments) {
   } catch {
     return undefined;
   }
+}
+
+function readQaIssues(attachments) {
+  const attachment = attachments.find((item) => item.name === "qa-issues.json" && item.bodyText);
+  if (!attachment) {
+    return [];
+  }
+
+  try {
+    const parsed = JSON.parse(attachment.bodyText);
+    const issues = Array.isArray(parsed?.issues) ? parsed.issues : [];
+
+    return issues
+      .filter((issue) => issue && typeof issue === "object")
+      .map((issue) => normalizeQaIssue(issue))
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+function normalizeQaIssue(issue) {
+  const code = typeof issue.code === "string" && issue.code.trim() ? issue.code.trim() : "UNCLASSIFIED_FAILURE";
+  const definition = issueTypeDefinition(code);
+  const label = typeof issue.label === "string" && issue.label.trim() ? issue.label.trim() : definition.label;
+  const message =
+    typeof issue.message === "string" && issue.message.trim() ? issue.message.trim() : definition.description;
+  const severity =
+    typeof issue.severity === "string" && issue.severity.trim() ? issue.severity.trim() : issueSeverityFromCode(code);
+
+  return {
+    code,
+    label,
+    message,
+    severity,
+    count: Number.isFinite(issue.count) ? issue.count : undefined,
+    details: issue.details,
+  };
 }
 
 function readRunContext(attachments) {
@@ -312,13 +446,22 @@ function matchLineValue(value, label) {
   return match?.[1]?.trim() || "";
 }
 
-function classifyResult({ status, expectedStatus, errors, finalUrl, titlePath, file }) {
+function classifyResult({ status, expectedStatus, errors, finalUrl, titlePath, file, issues = [] }) {
   if (status === "skipped") {
     return { code: "SKIPPED", label: "Skipped", severity: "info" };
   }
 
   if (status === expectedStatus) {
     return { code: "PASSED", label: "Passed", severity: "pass" };
+  }
+
+  if (issues.length > 0) {
+    const primaryIssue = issues.find((issue) => issue.severity === "blocker") || issues[0];
+    return {
+      code: primaryIssue.code,
+      label: primaryIssue.label,
+      severity: primaryIssue.severity === "blocker" ? "fail" : "warn",
+    };
   }
 
   const text = `${errors.join("\n")}\n${finalUrl}\n${titlePath.join(" ")}\n${file}`;
@@ -331,6 +474,9 @@ function classifyResult({ status, expectedStatus, errors, finalUrl, titlePath, f
   }
   if (/should not show broken visible images/i.test(text)) {
     return { code: "BROKEN_VISIBLE_IMAGE", label: "Broken visible image", severity: "fail" };
+  }
+  if (/OVERVIEW_STRUCTURE|overview page was missing expected controls or sections/i.test(text)) {
+    return { code: "OVERVIEW_STRUCTURE", label: "Overview structure", severity: "fail" };
   }
   if (/should not expose broken visible links/i.test(text)) {
     return { code: "BROKEN_VISIBLE_LINK", label: "Broken visible link", severity: "fail" };
@@ -361,7 +507,19 @@ function classificationLabel(code) {
   return issueTypeDefinition(code).label || code;
 }
 
-function buildBugSummary({ titlePath, file, line, errors, finalUrl, finalTitle, classification, catalogItem, steps, failedStep }) {
+function buildBugSummary({
+  titlePath,
+  file,
+  line,
+  errors,
+  finalUrl,
+  finalTitle,
+  classification,
+  catalogItem,
+  steps,
+  failedStep,
+  issues = [],
+}) {
   if (classification.code === "PASSED" || classification.code === "SKIPPED") {
     return "";
   }
@@ -378,6 +536,8 @@ function buildBugSummary({ titlePath, file, line, errors, finalUrl, finalTitle, 
     finalUrl ? `Browser ended at: ${finalUrl}` : "",
     finalTitle ? `Reached page title: ${finalTitle}` : "",
     `Spec: ${file}:${line}`,
+    issues.length ? `Issues found: ${issues.length}` : "",
+    ...issues.map((issue, index) => `${index + 1}. ${issue.code}: ${issue.message}`),
     failedStep ? `Failed step: ${friendlyStepPath(failedStep.path?.join(" > ") || failedStep.title)}` : "",
     conciseSteps.length ? `Steps: ${conciseSteps.map((step) => friendlyStepTitle(step.title)).join(" > ")}` : "",
     errors[0] ? `Failure: ${singleLine(errors[0])}` : "",
@@ -499,6 +659,8 @@ function markdownSummary(summary) {
 function htmlSummary(summary, context = {}) {
   const failures = summary.failures.length > 0 ? failureReviewHtml(summary.failures, context) : emptyStateHtml(summary.status);
   const categories = summary.failureCategories.length > 0 ? failureCategoriesHtml(summary.failureCategories) : "";
+  const catalogItems =
+    summary.catalogItems && summary.catalogItems.length > 0 ? catalogOverviewHtml(summary.catalogItems) : "";
   const sectionCards = summary.sections.map((section) => sectionCard(section, context)).join("\n");
   const statusTone = runStatusTone(summary);
   const statusLabel = runStatusLabel(summary);
@@ -633,6 +795,7 @@ function htmlSummary(summary, context = {}) {
     .pill.fail { background: var(--fail-bg); border-color: #ffd0c7; }
     .pill.warn { background: var(--warn-bg); border-color: #f7d070; }
     .pill.info { background: var(--info-bg); border-color: #bae6fd; color: var(--info); }
+    .muted { color: var(--muted); }
     .filter-bar {
       align-items: center;
       display: flex;
@@ -686,6 +849,119 @@ function htmlSummary(summary, context = {}) {
     .issue-card strong { font-size: 15px; }
     .issue-card span { color: var(--muted); font-size: 13px; line-height: 1.4; }
     .issue-card code { width: fit-content; }
+    .issue-list {
+      display: grid;
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .issue-detail {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--fail);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .issue-detail.blocker {
+      background: var(--fail-bg);
+      border-color: #ffd0c7;
+      border-left-color: var(--fail);
+    }
+    .issue-detail.major {
+      border-left-color: var(--warn);
+    }
+    .issue-detail-header {
+      align-items: flex-start;
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .issue-detail-title {
+      display: grid;
+      gap: 5px;
+    }
+    .issue-detail h4 {
+      font-size: 17px;
+      margin: 0;
+    }
+    .issue-detail p {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .issue-detail details summary {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .catalog-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    .catalog-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--pass);
+      border-radius: 8px;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+      overflow: hidden;
+    }
+    .catalog-card.failed {
+      border-left-color: var(--fail);
+    }
+    .catalog-card.skipped {
+      border-left-color: var(--warn);
+    }
+    .catalog-card > summary {
+      cursor: pointer;
+      display: grid;
+      gap: 10px;
+      list-style: none;
+      padding: 14px;
+    }
+    .catalog-card > summary::-webkit-details-marker {
+      display: none;
+    }
+    .catalog-card-title {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+    }
+    .catalog-card-title h3 {
+      overflow-wrap: anywhere;
+    }
+    .catalog-card-meta {
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 13px;
+    }
+    .catalog-card-body {
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 14px;
+      padding: 14px;
+    }
+    .catalog-checks {
+      display: grid;
+      gap: 8px;
+    }
+    .catalog-check {
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      display: grid;
+      gap: 6px;
+      padding: 10px;
+    }
+    .catalog-check strong {
+      display: block;
+    }
+    .catalog-check span {
+      color: var(--muted);
+      font-size: 13px;
+    }
     .issue-guide summary {
       color: var(--muted);
       font-size: 13px;
@@ -711,6 +987,30 @@ function htmlSummary(summary, context = {}) {
       border-left: 5px solid var(--fail);
       border-radius: 8px;
       padding: 16px;
+    }
+    .failure-card.blocker {
+      border-left-color: var(--fail);
+      box-shadow: inset 0 0 0 1px #ffd0c7;
+    }
+    .failure-card > summary {
+      cursor: pointer;
+      list-style: none;
+    }
+    .failure-card > summary::-webkit-details-marker {
+      display: none;
+    }
+    .failure-card > summary::before {
+      color: var(--link);
+      content: "Open details";
+      font-size: 13px;
+      font-weight: 700;
+      margin-right: 8px;
+    }
+    .failure-card[open] > summary::before {
+      content: "Close details";
+    }
+    .failure-body {
+      margin-top: 12px;
     }
     .failure-card[hidden] { display: none; }
     .filter-status {
@@ -983,6 +1283,7 @@ function htmlSummary(summary, context = {}) {
       ${metric("Skipped", summary.counts.skipped)}
       ${metric("Flaky", summary.counts.flaky, "warn")}
     </div>
+    ${catalogItems}
     ${categories}
     ${failures}
     ${sectionCards}
@@ -997,7 +1298,8 @@ function htmlSummary(summary, context = {}) {
         for (const item of filterButtons) item.classList.toggle("active", item === button);
         let visibleCount = 0;
         for (const card of failureCards) {
-          const visible = category === "all" || card.getAttribute("data-category") === category;
+          const cardCategories = (card.getAttribute("data-category") || "").split(/\s+/);
+          const visible = category === "all" || cardCategories.includes(category);
           card.hidden = !visible;
           if (visible) visibleCount += 1;
         }
@@ -1162,41 +1464,179 @@ function failureReviewHtml(failures, context) {
 function failureCard(failure, index, context) {
   const bugId = `bug-summary-${index}`;
   const catalogUrl = failure.catalogItem?.normalized_href || failure.catalogItem?.absolute_url || "";
-  return `<article class="failure-card" data-category="${escapeAttribute(failure.classification.code)}">
-    <div class="failure-header">
+  const issues = issuesForTest(failure);
+  const issueCodes = Array.from(new Set(issues.map((issue) => issue.code)));
+  const isBlocker = issues.some((issue) => issue.severity === "blocker");
+  const issueCountLabel = `${issues.length} issue${issues.length === 1 ? "" : "s"} found`;
+
+  return `<details class="failure-card ${isBlocker ? "blocker" : ""}" data-category="${escapeAttribute(issueCodes.join(" "))}">
+    <summary class="failure-header">
       <div class="failure-title">
         <div class="chips">
-          <span class="pill fail">${escapeHtml(failure.classification.label)}</span>
-          <span class="pill info">${escapeHtml(failure.classification.code)}</span>
+          <span class="pill ${isBlocker ? "fail" : "warn"}">${escapeHtml(issueCountLabel)}</span>
+          ${issueCodes.map((code) => `<span class="pill info">${escapeHtml(code)}</span>`).join("\n")}
         </div>
         <h3>${escapeHtml(catalogItemLabel(failure) || failure.title)}</h3>
       </div>
       <button class="copy-button" type="button" data-copy="${escapeAttribute(bugId)}">Copy bug report</button>
+    </summary>
+    <div class="failure-body">
+      <p class="failure-explanation">${escapeHtml(failureExplanation(failure))}</p>
+      ${issueListHtml(issues)}
+      ${failure.failedStep ? failedStepSummaryHtml(failure.failedStep) : ""}
+      <div class="route-grid">
+        ${routeCardHtml("Test tried", catalogUrl, "Original card link from the generated catalog.", "Open tried URL")}
+        ${routeCardHtml("Browser ended at", failure.finalUrl, `Page title: ${failure.finalTitle || "Unknown"}`, "Open reached URL")}
+      </div>
+      <div class="meta-grid">
+        <div class="meta-item">
+          <strong>Test file</strong>
+          <span><code>${escapeHtml(`${failure.file}:${failure.line}`)}</code></span>
+        </div>
+      </div>
+      ${failureEvidenceHtml(failure.attachments, context, index)}
+      ${stepsDetailsHtml(failure.steps, `failure-steps-${index}`)}
+      <details>
+        <summary>Bug report details</summary>
+        <pre id="${escapeAttribute(bugId)}" class="bug">${escapeHtml(failure.bugSummary)}</pre>
+      </details>
     </div>
-    <p class="failure-explanation">${escapeHtml(failureExplanation(failure))}</p>
-    ${failure.failedStep ? failedStepSummaryHtml(failure.failedStep) : ""}
-    <div class="route-grid">
-      ${routeCardHtml("Test tried", catalogUrl, "Original card link from the generated catalog.", "Open tried URL")}
-      ${routeCardHtml("Browser ended at", failure.finalUrl, `Page title: ${failure.finalTitle || "Unknown"}`, "Open reached URL")}
-    </div>
-    <div class="meta-grid">
-      <div class="meta-item">
-        <strong>Test file</strong>
-        <span><code>${escapeHtml(`${failure.file}:${failure.line}`)}</code></span>
+  </details>`;
+}
+
+function issueListHtml(issues) {
+  if (issues.length === 0) {
+    return "";
+  }
+
+  return `<div class="issue-list">
+    ${issues.map((issue, index) => issueDetailHtml(issue, index)).join("\n")}
+  </div>`;
+}
+
+function issueDetailHtml(issue, index) {
+  const details = issueDetailsText(issue);
+  const severityLabel = issue.severity === "blocker" ? "Hard blocker" : issue.severity === "major" ? "Needs fix" : "Review";
+
+  return `<section class="issue-detail ${escapeAttribute(issue.severity || "major")}">
+    <div class="issue-detail-header">
+      <div class="issue-detail-title">
+        <div class="chips">
+          <span class="pill ${issue.severity === "blocker" ? "fail" : "warn"}">${escapeHtml(severityLabel)}</span>
+          <span class="pill info">${escapeHtml(issue.code)}</span>
+          ${issue.count ? `<span class="pill info">${escapeHtml(String(issue.count))} item${issue.count === 1 ? "" : "s"}</span>` : ""}
+        </div>
+        <h4>${escapeHtml(index + 1)}. ${escapeHtml(issue.label)}</h4>
       </div>
     </div>
-    ${failureEvidenceHtml(failure.attachments, context, index)}
-    ${stepsDetailsHtml(failure.steps, `failure-steps-${index}`)}
-    <details>
-      <summary>Bug report details</summary>
-      <pre id="${escapeAttribute(bugId)}" class="bug">${escapeHtml(failure.bugSummary)}</pre>
-    </details>
-  </article>`;
+    <p>${escapeHtml(issue.message)}</p>
+    ${
+      details
+        ? `<details>
+            <summary>Issue details</summary>
+            <pre>${escapeHtml(details)}</pre>
+          </details>`
+        : ""
+    }
+  </section>`;
+}
+
+function issueDetailsText(issue) {
+  if (issue.details === undefined || issue.details === null) {
+    return "";
+  }
+
+  if (typeof issue.details === "string") {
+    return issue.details;
+  }
+
+  return JSON.stringify(issue.details, null, 2);
 }
 
 function emptyStateHtml(status) {
   const message = status === "passed" ? "No failures were found in this run." : "No unexpected failures were captured.";
   return `<section class="empty-state">${escapeHtml(message)}</section>`;
+}
+
+function catalogOverviewHtml(items) {
+  const failed = items.filter((item) => item.status === "failed").length;
+  const passed = items.filter((item) => item.status === "passed").length;
+  const skipped = items.filter((item) => item.status === "skipped").length;
+
+  return `<section class="section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Catalog results</p>
+        <h2>Workshop Cards Tested</h2>
+      </div>
+      <div class="chips">
+        <span class="pill ${failed > 0 ? "fail" : "pass"}">${escapeHtml(String(failed))} need review</span>
+        <span class="pill pass">${escapeHtml(String(passed))} passed</span>
+        ${skipped > 0 ? `<span class="pill warn">${escapeHtml(String(skipped))} skipped</span>` : ""}
+      </div>
+    </div>
+    <div class="catalog-grid">
+      ${items.map(catalogOverviewCardHtml).join("\n")}
+    </div>
+  </section>`;
+}
+
+function catalogOverviewCardHtml(item) {
+  const statusLabel =
+    item.status === "failed" ? `${item.issueCount} issue${item.issueCount === 1 ? "" : "s"} found` : item.status;
+  const statusTone = item.status === "failed" ? "fail" : item.status === "skipped" ? "warn" : "pass";
+  const title = catalogItemDisplayTitle(item.catalogItem);
+  const itemId = item.catalogItem.id || item.catalogItem.slug || "";
+  const itemType = item.catalogItem.type || "catalog item";
+  const url = item.catalogItem.normalized_href || item.catalogItem.absolute_url || item.catalogItem.href || "";
+  const open = item.status === "failed" ? " open" : "";
+
+  return `<details class="catalog-card ${escapeAttribute(item.status)}"${open}>
+    <summary>
+      <div class="catalog-card-title">
+        <div class="chips">
+          <span class="pill ${statusTone}">${escapeHtml(statusLabel)}</span>
+          <span class="pill info">${escapeHtml(itemType)}</span>
+          ${itemId ? `<span class="pill info">${escapeHtml(itemId)}</span>` : ""}
+        </div>
+        <h3>${escapeHtml(title)}</h3>
+        <div class="catalog-card-meta">
+          <span>${escapeHtml(item.sections.join(", "))}</span>
+          <span>${escapeHtml(item.counts.total)} check${item.counts.total === 1 ? "" : "s"}</span>
+        </div>
+      </div>
+    </summary>
+    <div class="catalog-card-body">
+      ${
+        item.issues.length > 0
+          ? issueListHtml(item.issues)
+          : `<p class="muted">No issues were found for this workshop card in this run.</p>`
+      }
+      <div class="catalog-checks">
+        ${item.tests.map(catalogCheckHtml).join("\n")}
+      </div>
+      ${url ? `<a class="link-button" href="${escapeAttribute(url)}">Open workshop</a>` : ""}
+    </div>
+  </details>`;
+}
+
+function catalogCheckHtml(test) {
+  const statusTone = test.status === test.expectedStatus ? "pass" : "fail";
+  const statusLabel = test.status === test.expectedStatus ? "Passed" : "Failed";
+
+  return `<div class="catalog-check">
+    <strong>${escapeHtml(test.section)}</strong>
+    <span><span class="${statusTone}">${escapeHtml(statusLabel)}</span> in ${formatDuration(test.durationMs)}</span>
+    ${test.finalTitle ? `<span>Ended at: ${escapeHtml(test.finalTitle)}</span>` : ""}
+  </div>`;
+}
+
+function catalogItemDisplayTitle(item) {
+  if (!item) {
+    return "Catalog item";
+  }
+
+  return item.title || item.slug || item.id || "Catalog item";
 }
 
 function catalogItemLabel(test) {
@@ -1210,6 +1650,35 @@ function catalogItemLabel(test) {
   const title = item.title || "";
 
   return `${type}${title}${id ? ` (${id})` : ""}`.trim();
+}
+
+function issuesForTest(test) {
+  if (Array.isArray(test.issues) && test.issues.length > 0) {
+    return test.issues;
+  }
+
+  if (test.classification.code === "PASSED" || test.classification.code === "SKIPPED") {
+    return [];
+  }
+
+  const definition = issueTypeDefinition(test.classification.code);
+  return [
+    {
+      code: test.classification.code,
+      label: test.classification.label || definition.label,
+      severity: issueSeverityFromCode(test.classification.code),
+      message: failureExplanation(test),
+      details: test.errors?.[0] ? { error: singleLine(test.errors[0]) } : undefined,
+    },
+  ];
+}
+
+function issueSeverityFromCode(code) {
+  if (/^ROUTING_|TIMEOUT$/i.test(code)) {
+    return "blocker";
+  }
+
+  return "major";
 }
 
 function failedStepSummaryHtml(step) {
@@ -1374,6 +1843,11 @@ function navigationAttemptSentence(attempt) {
 function failureExplanation(failure) {
   const finalUrl = failure.finalUrl || "";
   const finalTitle = failure.finalTitle || "unknown page";
+  const structuredIssues = Array.isArray(failure.issues) ? failure.issues : [];
+
+  if (structuredIssues.length > 1) {
+    return `The workshop route opened, and the test found ${structuredIssues.length} separate issues on this page. Review each issue block below; they belong to the same workshop card.`;
+  }
 
   switch (failure.classification.code) {
     case "ROUTING_INVALID_WORKSHOP_ID":

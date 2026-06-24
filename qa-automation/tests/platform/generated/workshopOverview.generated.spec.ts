@@ -5,7 +5,13 @@ import {
   expectedTermsForCatalogItem,
   loadCatalogIndex,
 } from "../../support/catalogIndex.js";
-import { assertContentQuality } from "../../support/contentQuality.js";
+import {
+  assertNoContentQualityIssues,
+  attachContentQualityIssues,
+  collectContentQualityIssues,
+  contentQualityIssue,
+  type ContentQualityIssue,
+} from "../../support/contentQuality.js";
 import { openIndexedCatalogItem } from "../../support/indexedCatalogNavigation.js";
 import { test } from "../../support/test.js";
 
@@ -57,13 +63,46 @@ test.describe("LiveLabs generated workshop overview pages", { tag: GENERATED_WOR
           description: `${navigation.signedIn ? "signed-in" : "anonymous"} -> ${navigation.targetUrl}`,
         });
 
-        await workshopLandingPage.assertLoaded();
-        await assertContentQuality(page, {
-          contextName: `Generated workshop overview: ${item.title}`,
-          expectedTerms: expectedTermsForCatalogItem(item),
-          expectedTermsMode: "any",
+        const contextName = `Generated workshop overview: ${item.title}`;
+        const issues: ContentQualityIssue[] = [];
+
+        await test.step("Check workshop overview shell", async () => {
+          try {
+            await workshopLandingPage.assertLoaded();
+          } catch (error) {
+            issues.push(
+              contentQualityIssue(
+                "OVERVIEW_STRUCTURE",
+                "Overview structure",
+                "major",
+                "The workshop route opened, but the overview page was missing expected controls or sections.",
+                { error: errorMessage(error) },
+              ),
+            );
+          }
         });
+
+        issues.push(
+          ...(await test.step("Check workshop overview content", async () =>
+            collectContentQualityIssues(page, {
+              contextName,
+              expectedTerms: expectedTermsForCatalogItem(item),
+              expectedTermsMode: "any",
+            }),
+          )),
+        );
+
+        await attachContentQualityIssues(testInfo, issues, contextName);
+        assertNoContentQualityIssues(issues, contextName);
       });
     }
   }
 });
+
+function errorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return String(error);
+}
