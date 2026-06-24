@@ -38,7 +38,7 @@ const ISSUE_TYPE_DEFINITIONS = [
   {
     code: "BROKEN_EMBEDDED_CONTENT",
     label: "Broken embedded content",
-    description: "Embedded content such as iframe, video, or media did not render correctly.",
+    description: "Embedded content such as an iframe or media block did not render correctly.",
   },
   {
     code: "CONTENT_TEXT_DEFECT",
@@ -2861,7 +2861,7 @@ function failureExplanation(failure) {
       return "The page did not reach the expected state before the test timeout.";
     default:
       return finalUrl
-        ? `The test failed after the browser reached ${finalTitle}. Use the screenshot, video, and trace for the exact page state.`
+        ? `The test failed after the browser reached ${finalTitle}. Use the screenshot and trace for the exact page state.`
         : "The test failed before a final browser page could be captured.";
   }
 }
@@ -2921,7 +2921,7 @@ function stepLocationLabel(step) {
 function failureEvidenceHtml(attachments, context = {}, index = 0) {
   const primary = attachments
     .filter((attachment) => attachment.path)
-    .filter((attachment) => /screenshot|video|trace/i.test(attachment.name))
+    .filter((attachment) => /screenshot|trace/i.test(attachment.name))
     .map((attachment) => artifactLinkHtml(attachment, context));
   const advanced = attachments
     .filter((attachment) => attachment.path)
@@ -2942,7 +2942,7 @@ function failureEvidenceHtml(attachments, context = {}, index = 0) {
       advanced.length
         ? `<details class="advanced-evidence">
             <summary>Advanced evidence files</summary>
-            <p>DOM snapshot means the saved HTML of the page at the failure moment. It is mainly for developers when screenshot or video is not enough.</p>
+            <p>DOM snapshot means the saved HTML of the page at the failure moment. It is mainly for developers when screenshot or trace is not enough.</p>
             <div class="artifact-links">${advanced.join(" ")}</div>
           </details>`
         : ""
@@ -2953,7 +2953,7 @@ function failureEvidenceHtml(attachments, context = {}, index = 0) {
 function artifactLinksHtml(attachments, context = {}) {
   const links = attachments
     .filter((attachment) => attachment.path)
-    .filter((attachment) => /screenshot|trace|video|error-context|dom-snapshot|page-state|catalog-item/i.test(attachment.name))
+    .filter((attachment) => /screenshot|trace|error-context|dom-snapshot|page-state|catalog-item/i.test(attachment.name))
     .map((attachment) => artifactLinkHtml(attachment, context));
 
   return links.length > 0 ? `<div class="artifact-links">${links.join(" ")}</div>` : "";
@@ -2970,7 +2970,6 @@ function artifactLinkHtml(attachment, context = {}) {
 
 function artifactLabel(attachment) {
   if (/screenshot/i.test(attachment.name)) return "Screenshot";
-  if (/video/i.test(attachment.name)) return "Video";
   if (/trace/i.test(attachment.name)) return "Trace zip";
   if (/dom-snapshot/i.test(attachment.name)) return "DOM snapshot";
   if (/error-context/i.test(attachment.name)) return "Error context";

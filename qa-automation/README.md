@@ -347,6 +347,5 @@ $env:QA_CATALOG_INDEX_LIMIT="25"
 $env:QA_CATALOG_INDEX_SHARD="1/4"
 $env:QA_AUTH_TARGET_URL="https://example-private-page-url"
 $env:QA_TRACE="on"
-$env:QA_VIDEO="retain-on-failure"
 node ./scripts/qa.mjs tests/platform/smoke
 ```
