@@ -27,7 +27,7 @@ The agent needs:
 - Network access to the configured LiveLabs environment
 - A Playwright-supported browser
 - A Linux-like Jenkins shell step, or an agent/container where `sh` is available
-- Enough disk space for HTML reports, screenshots, traces, videos, and generated catalog JSON
+- Enough disk space for HTML reports, screenshots, traces, and generated catalog JSON
 
 If the agent does not already provide Playwright browsers, run with:
 
