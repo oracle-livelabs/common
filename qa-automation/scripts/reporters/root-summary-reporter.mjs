@@ -4,6 +4,11 @@ import { fileURLToPath } from "node:url";
 
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const DEFAULT_REPORTS_ROOT = path.join(PROJECT_ROOT, "reports");
+const REVIEW_STORAGE_KEY = "livelabs-qa-review-lists:v1";
+const FIX_LIST_INSTRUCTIONS =
+  "Fix the code errors related to these tests, then rerun only this selected test list using the normal test execution flow and produce a report.";
+const RETEST_LIST_INSTRUCTIONS =
+  "Rerun only the tests in the provided Retest List. Use the normal project test execution flow. Do not run the full suite unless required by the existing test runner. After execution, produce the standard test report and clearly show pass/fail status for each selected test.";
 const ISSUE_TYPE_DEFINITIONS = [
   {
     code: "ROUTING_INVALID_WORKSHOP_ID",
@@ -550,6 +555,8 @@ function writeSummaryFiles(outputDir, summary) {
   fs.writeFileSync(path.join(outputDir, "summary.json"), `${JSON.stringify(summary, null, 2)}\n`, "utf-8");
   fs.writeFileSync(path.join(outputDir, "summary.md"), markdownSummary(summary), "utf-8");
   fs.writeFileSync(path.join(outputDir, "summary.html"), htmlSummary(summary, { outputDir }), "utf-8");
+  fs.writeFileSync(path.join(outputDir, "retest-list.html"), reviewListPageHtml("retest", summary, { outputDir }), "utf-8");
+  fs.writeFileSync(path.join(outputDir, "fix-list.html"), reviewListPageHtml("fix", summary, { outputDir }), "utf-8");
 }
 
 function sectionFromFile(file) {
@@ -658,6 +665,7 @@ function markdownSummary(summary) {
 
 function htmlSummary(summary, context = {}) {
   const catalogItems = summary.catalogItems || [];
+  const reviewItems = buildReviewEntries(catalogItems, summary.runId);
   const itemCounts = {
     passed: catalogItems.filter((item) => item.status === "passed").length,
     failed: catalogItems.filter((item) => item.status === "failed").length,
@@ -665,9 +673,10 @@ function htmlSummary(summary, context = {}) {
   };
   const testedItems =
     catalogItems.length > 0
-      ? testedItemsHtml(catalogItems, summary.failureCategories)
+      ? testedItemsHtml(catalogItems, summary.failureCategories, summary.runId)
       : emptyStateHtml("No generated catalog items were attached to this run.");
-  const itemDetails = catalogItems.length > 0 ? itemDetailsHtml(catalogItems, summary.failures, context) : "";
+  const itemDetails =
+    catalogItems.length > 0 ? itemDetailsHtml(catalogItems, summary.failures, { ...context, summaryRunId: summary.runId }) : "";
   const statusTone = runStatusTone(summary);
   const statusLabel = runStatusLabel(summary);
 
@@ -811,6 +820,7 @@ function htmlSummary(summary, context = {}) {
     }
     .filter-button,
     .copy-button,
+    .review-button,
     .link-button {
       appearance: none;
       background: #ffffff;
@@ -829,9 +839,57 @@ function htmlSummary(summary, context = {}) {
     .filter-button.active,
     .filter-button:hover,
     .copy-button:hover,
+    .review-button:hover,
     .link-button:hover {
       border-color: var(--link);
       color: var(--link);
+    }
+    .review-button.selected {
+      background: var(--pass-bg);
+      border-color: #b7ebc6;
+      color: var(--pass);
+    }
+    .review-nav {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .review-nav a {
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      color: var(--text);
+      display: inline-flex;
+      font-size: 13px;
+      font-weight: 700;
+      gap: 7px;
+      line-height: 1;
+      padding: 8px 10px;
+      text-decoration: none;
+    }
+    .review-nav a:hover {
+      border-color: var(--link);
+      color: var(--link);
+    }
+    .review-count {
+      background: var(--info-bg);
+      border: 1px solid #bae6fd;
+      border-radius: 999px;
+      color: var(--info);
+      display: inline-flex;
+      min-width: 24px;
+      padding: 4px 7px;
+      justify-content: center;
+    }
+    .review-message {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      min-height: 20px;
+      margin: -6px 0 14px;
     }
     .filter-panel {
       background: var(--panel);
@@ -904,6 +962,23 @@ function htmlSummary(summary, context = {}) {
       font-size: 13px;
       line-height: 1.35;
       text-align: right;
+    }
+    .item-actions {
+      align-items: flex-end;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .item-details-link {
+      color: var(--link);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .item-details-link:hover {
+      text-decoration: underline;
     }
     .item-detail {
       display: none;
@@ -1375,6 +1450,7 @@ function htmlSummary(summary, context = {}) {
         <span>Duration ${formatDuration(summary.durationMs)}</span>
         <span>Started ${escapeHtml(summary.startedAt)}</span>
       </div>
+      ${reviewNavigationHtml()}
     </div>
   </header>
   <main>
@@ -1389,10 +1465,14 @@ function htmlSummary(summary, context = {}) {
       ${metric("Skipped", catalogItems.length > 0 ? itemCounts.skipped : summary.counts.skipped)}
       ${metric("Issues found", summary.failureCategories.reduce((total, category) => total + category.count, 0), "warn")}
     </div>
+    <p class="review-message" data-review-message></p>
     ${testedItems}
     ${itemDetails}
   </main>
+  <script id="qa-review-items" type="application/json">${escapeScriptJson(reviewItems)}</script>
   <script>
+    const REVIEW_STORAGE_KEY = "${REVIEW_STORAGE_KEY}";
+    const qaReviewItems = JSON.parse(document.getElementById("qa-review-items")?.textContent || "{}");
     const filterButtons = Array.from(document.querySelectorAll("[data-filter-value]"));
     const itemRows = Array.from(document.querySelectorAll("[data-item-row]"));
     const filterStatus = document.querySelector("[data-filter-status]");
@@ -1460,6 +1540,601 @@ function htmlSummary(summary, context = {}) {
         window.setTimeout(() => { button.innerText = original; }, 1400);
       });
     }
+    function readReviewState() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(REVIEW_STORAGE_KEY) || "{}");
+        return {
+          retest: parsed && parsed.retest && typeof parsed.retest === "object" ? parsed.retest : {},
+          fix: parsed && parsed.fix && typeof parsed.fix === "object" ? parsed.fix : {},
+        };
+      } catch {
+        return { retest: {}, fix: {} };
+      }
+    }
+    function writeReviewState(state) {
+      localStorage.setItem(REVIEW_STORAGE_KEY, JSON.stringify({
+        retest: state.retest || {},
+        fix: state.fix || {},
+      }));
+    }
+    function reviewListName(type) {
+      return type === "fix" ? "Fix List" : "Retest List";
+    }
+    function updateReviewCounts() {
+      const state = readReviewState();
+      for (const counter of document.querySelectorAll("[data-review-count]")) {
+        const type = counter.getAttribute("data-review-count") === "fix" ? "fix" : "retest";
+        counter.innerText = String(Object.keys(state[type] || {}).length);
+      }
+      for (const button of document.querySelectorAll("[data-review-action]")) {
+        const type = button.getAttribute("data-review-action") === "fix" ? "fix" : "retest";
+        const id = button.getAttribute("data-review-id") || "";
+        const selected = Boolean(state[type]?.[id]);
+        button.classList.toggle("selected", selected);
+        button.setAttribute("aria-pressed", selected ? "true" : "false");
+        button.innerText = selected
+          ? (type === "fix" ? "In Fix List" : "In Retest List")
+          : (type === "fix" ? "Add To Fix List" : "Add to Retest List");
+      }
+    }
+    function showReviewMessage(message) {
+      const target = document.querySelector("[data-review-message]");
+      if (!target) return;
+      target.innerText = message;
+      window.clearTimeout(showReviewMessage.timer);
+      showReviewMessage.timer = window.setTimeout(() => { target.innerText = ""; }, 3200);
+    }
+    for (const button of document.querySelectorAll("[data-review-action]")) {
+      button.addEventListener("click", () => {
+        const type = button.getAttribute("data-review-action") === "fix" ? "fix" : "retest";
+        const id = button.getAttribute("data-review-id") || "";
+        const entry = qaReviewItems[id];
+        if (!entry) {
+          showReviewMessage("This test has incomplete metadata and could not be added.");
+          return;
+        }
+        const state = readReviewState();
+        if (!state[type][id]) {
+          state[type][id] = entry;
+          writeReviewState(state);
+          showReviewMessage(entry.testName + " was added to the " + reviewListName(type) + ".");
+        } else {
+          showReviewMessage(entry.testName + " is already in the " + reviewListName(type) + ".");
+        }
+        updateReviewCounts();
+      });
+    }
+    window.addEventListener("storage", (event) => {
+      if (event.key === REVIEW_STORAGE_KEY) updateReviewCounts();
+    });
+    updateReviewCounts();
+  </script>
+</body>
+</html>`;
+}
+
+function buildReviewEntries(items, runId) {
+  return Object.fromEntries(items.map((item) => [reviewEntryId(item, runId), reviewEntryForItem(item, runId)]));
+}
+
+function reviewEntryId(item, runId) {
+  return `${runId}:${item.key || catalogItemDisplayTitle(item.catalogItem)}`;
+}
+
+function reviewEntryForItem(item, runId) {
+  const title = catalogItemDisplayTitle(item.catalogItem);
+  const itemId = item.catalogItem.id || item.catalogItem.slug || "";
+  const itemType = item.catalogItem.type || "catalog item";
+  const issueCodes = Array.from(new Set((item.issues || []).map((issue) => issue.code)));
+  const tests = item.tests || [];
+  const firstTest = tests[0] || {};
+  const catalogUrl = item.catalogItem.normalized_href || item.catalogItem.absolute_url || item.catalogItem.href || "";
+
+  return {
+    testId: reviewEntryId(item, runId),
+    testName: title,
+    testPath: firstTest.file || "",
+    suiteName: item.sections.join(", "),
+    latestStatus: item.status,
+    failureReason: issueSummaryForEntry(item.issues || []),
+    stackTrace: tests
+      .map((test) => (test.file ? `${test.file}${test.line ? `:${test.line}` : ""}` : ""))
+      .filter(Boolean)
+      .join("\n"),
+    executionId: runId,
+    rerunCommand: reviewActionCommand("retest"),
+    itemType,
+    itemId,
+    catalogUrl,
+    finalUrl: firstTest.finalUrl || "",
+    finalTitle: firstTest.finalTitle || "",
+    issueCodes,
+    issueCount: item.issueCount || 0,
+    checks: tests.map((test) => reviewCheckEntry(test, item, runId)),
+  };
+}
+
+function reviewCheckEntry(test, item, runId) {
+  const failed = test.status !== test.expectedStatus && test.status !== "skipped";
+  return {
+    testId: `${reviewEntryId(item, runId)}:${test.section}:${test.file}:${test.line || ""}`,
+    testName: test.title || test.section,
+    testPath: test.file || "",
+    suiteName: test.section || "",
+    lastStatus: test.status || "",
+    failureReason: failed ? issueSummaryForEntry(item.issues || []) || test.classification?.code || "" : "",
+    stackTrace: test.file ? `${test.file}${test.line ? `:${test.line}` : ""}` : "",
+    finalUrl: test.finalUrl || "",
+    finalTitle: test.finalTitle || "",
+  };
+}
+
+function issueSummaryForEntry(issues) {
+  return (issues || [])
+    .map((issue) => `${issue.label || issue.code}: ${issue.message || issue.code}`)
+    .filter(Boolean)
+    .join("\n");
+}
+
+function reviewActionCommand(type) {
+  return `node ./scripts/report-review-action.mjs ${type} --payload <payload.json>`;
+}
+
+function reviewNavigationHtml() {
+  return `<nav class="review-nav" aria-label="Review lists">
+    <a href="retest-list.html">Retest List <span class="review-count" data-review-count="retest">0</span></a>
+    <a href="fix-list.html">Fix List <span class="review-count" data-review-count="fix">0</span></a>
+  </nav>`;
+}
+
+function reviewListPageHtml(type, summary) {
+  const isFix = type === "fix";
+  const title = isFix ? "Fix List" : "Retest List";
+  const actionLabel = isFix ? "Fix Selected Tests" : "Run Retest List";
+  const instructions = isFix ? FIX_LIST_INSTRUCTIONS : RETEST_LIST_INSTRUCTIONS;
+  const command = reviewActionCommand(type);
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>${escapeHtml(title)} ${escapeHtml(summary.runId)}</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Arial, Helvetica, sans-serif;
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --panel-soft: #f9fbfd;
+      --line: #d9e2ec;
+      --line-strong: #bcccdc;
+      --text: #1f2933;
+      --muted: #52606d;
+      --pass: #0e6245;
+      --pass-bg: #e3fcec;
+      --fail: #b42318;
+      --fail-bg: #ffebe6;
+      --warn: #8a5a00;
+      --warn-bg: #fff4d6;
+      --info: #075985;
+      --info-bg: #e0f2fe;
+      --link: #005ea8;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); }
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+      padding: 28px 32px 22px;
+    }
+    main { max-width: 1160px; margin: 0 auto; padding: 24px 28px 48px; }
+    h1 { margin: 0 0 8px; font-size: 30px; line-height: 1.15; letter-spacing: 0; }
+    h2 { margin: 0; font-size: 20px; line-height: 1.25; letter-spacing: 0; }
+    h3 { margin: 0; font-size: 17px; line-height: 1.3; letter-spacing: 0; }
+    p { margin: 0; }
+    a { color: var(--link); }
+    code {
+      background: #eef2f7;
+      border: 1px solid #dbe4ee;
+      border-radius: 5px;
+      padding: 2px 5px;
+      word-break: break-word;
+    }
+    pre {
+      background: #0f172a;
+      border-radius: 8px;
+      color: #e5e7eb;
+      padding: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .page-title { max-width: 1160px; margin: 0 auto; }
+    .meta { color: var(--muted); display: flex; flex-wrap: wrap; gap: 10px; font-size: 14px; }
+    .nav-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-bottom: 18px;
+      padding: 18px;
+    }
+    .section-heading {
+      align-items: flex-start;
+      display: flex;
+      gap: 16px;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .eyebrow {
+      color: #829ab1;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .pill {
+      background: #eef2f7;
+      border: 1px solid #dbe4ee;
+      border-radius: 999px;
+      display: inline-flex;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+      padding: 7px 10px;
+      white-space: nowrap;
+    }
+    .pill.fail { background: var(--fail-bg); border-color: #ffd0c7; color: var(--fail); }
+    .pill.pass { background: var(--pass-bg); border-color: #b7ebc6; color: var(--pass); }
+    .pill.info { background: var(--info-bg); border-color: #bae6fd; color: var(--info); }
+    .button,
+    .link-button {
+      appearance: none;
+      background: #ffffff;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+      padding: 9px 11px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .button.primary {
+      background: var(--link);
+      border-color: var(--link);
+      color: #ffffff;
+    }
+    .button.danger {
+      color: var(--fail);
+    }
+    .button:hover,
+    .link-button:hover {
+      border-color: var(--link);
+      color: var(--link);
+    }
+    .button.primary:hover {
+      color: #ffffff;
+      filter: brightness(.95);
+    }
+    .toolbar {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .toolbar-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+    .review-item {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--info);
+      border-radius: 8px;
+      display: grid;
+      gap: 10px;
+      padding: 13px 14px;
+    }
+    .review-item.failed {
+      border-left-color: var(--fail);
+    }
+    .review-item.passed {
+      border-left-color: var(--pass);
+    }
+    .item-header {
+      align-items: flex-start;
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .item-title { display: grid; gap: 7px; min-width: 0; }
+    .item-meta {
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 13px;
+    }
+    .item-reason {
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      padding: 10px;
+      white-space: pre-wrap;
+    }
+    .empty-state {
+      border: 1px dashed var(--line-strong);
+      border-radius: 8px;
+      color: var(--muted);
+      padding: 22px;
+      text-align: center;
+    }
+    .message {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 10px;
+      min-height: 20px;
+    }
+    .message.error { color: var(--fail); }
+    @media (max-width: 720px) {
+      header { padding: 22px 18px; }
+      main { padding: 18px; }
+      .section-heading,
+      .item-header,
+      .toolbar {
+        display: grid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="page-title">
+      <h1>${escapeHtml(title)}</h1>
+      <div class="meta">
+        <span>Source run <code>${escapeHtml(summary.runId)}</code></span>
+        <span>${escapeHtml(summary.startedAt)}</span>
+      </div>
+      <div class="nav-actions">
+        <a class="link-button" href="summary.html">Back to execution report</a>
+        <a class="link-button" href="${isFix ? "retest-list.html" : "fix-list.html"}">${escapeHtml(isFix ? "Open Retest List" : "Open Fix List")}</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Selected tests</p>
+          <h2>${escapeHtml(title)}</h2>
+        </div>
+        <span class="pill info"><span data-list-count>0</span> selected</span>
+      </div>
+      <div class="toolbar">
+        <p class="message" data-message></p>
+        <div class="toolbar-actions">
+          <button class="button primary" type="button" data-run-list>${escapeHtml(actionLabel)}</button>
+          <button class="button" type="button" data-copy-payload>Copy Payload</button>
+          <button class="button danger" type="button" data-clear-list>Clear List</button>
+        </div>
+      </div>
+      <div class="list" data-list></div>
+    </section>
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Script handoff</p>
+          <h2>Run this list through the QA scripts</h2>
+        </div>
+      </div>
+      <p class="item-reason">${escapeHtml(instructions)}</p>
+      <pre data-command>${escapeHtml(command)}</pre>
+      <button class="button" type="button" data-copy-command>Copy Command</button>
+      <pre data-payload-preview hidden></pre>
+    </section>
+  </main>
+  <script>
+    const REVIEW_STORAGE_KEY = "${REVIEW_STORAGE_KEY}";
+    const LIST_TYPE = "${type}";
+    const LIST_TITLE = "${escapeScriptString(title)}";
+    const ACTION_COMMAND = "${escapeScriptString(command)}";
+    const INSTRUCTIONS = "${escapeScriptString(instructions)}";
+    const listContainer = document.querySelector("[data-list]");
+    const listCount = document.querySelector("[data-list-count]");
+    const message = document.querySelector("[data-message]");
+    const payloadPreview = document.querySelector("[data-payload-preview]");
+    const commandPreview = document.querySelector("[data-command]");
+    function escapeText(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+    function readState() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(REVIEW_STORAGE_KEY) || "{}");
+        return {
+          retest: parsed && parsed.retest && typeof parsed.retest === "object" ? parsed.retest : {},
+          fix: parsed && parsed.fix && typeof parsed.fix === "object" ? parsed.fix : {},
+        };
+      } catch {
+        return { retest: {}, fix: {} };
+      }
+    }
+    function writeState(state) {
+      localStorage.setItem(REVIEW_STORAGE_KEY, JSON.stringify({
+        retest: state.retest || {},
+        fix: state.fix || {},
+      }));
+    }
+    function selectedEntries() {
+      return Object.values(readState()[LIST_TYPE] || {});
+    }
+    function statusTone(status) {
+      if (status === "passed") return "pass";
+      if (status === "failed" || status === "timedOut" || status === "interrupted") return "fail";
+      return "info";
+    }
+    function showMessage(text, isError) {
+      message.innerText = text;
+      message.classList.toggle("error", Boolean(isError));
+    }
+    function payloadForEntry(entry) {
+      return {
+        testId: entry.testId || "",
+        testName: entry.testName || "",
+        testPath: entry.testPath || "",
+        suiteName: entry.suiteName || "",
+        lastStatus: entry.latestStatus || "",
+        failureReason: entry.failureReason || "",
+        stackTrace: entry.stackTrace || "",
+        executionId: entry.executionId || "",
+        rerunCommand: entry.rerunCommand || ACTION_COMMAND,
+        catalogUrl: entry.catalogUrl || "",
+        finalUrl: entry.finalUrl || "",
+        checks: Array.isArray(entry.checks) ? entry.checks : [],
+      };
+    }
+    function buildPayload() {
+      const entries = selectedEntries();
+      const sourceExecutionId = entries.find((entry) => entry.executionId)?.executionId || "";
+      const payload = {
+        type: LIST_TYPE,
+        sourceExecutionId,
+        createdAt: new Date().toISOString(),
+        tests: entries.map(payloadForEntry),
+      };
+      payload.instructions = INSTRUCTIONS;
+      return payload;
+    }
+    async function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          return true;
+        } catch {
+        }
+      }
+      const field = document.createElement("textarea");
+      field.value = text;
+      field.setAttribute("readonly", "");
+      field.style.position = "fixed";
+      field.style.left = "-9999px";
+      document.body.appendChild(field);
+      field.select();
+      const copied = document.execCommand("copy");
+      document.body.removeChild(field);
+      return copied;
+    }
+    function downloadPayload(payload) {
+      const source = payload.sourceExecutionId || "selected";
+      const blob = new Blob([JSON.stringify(payload, null, 2) + "\\n"], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = LIST_TYPE + "-list-" + source + ".json";
+      document.body.appendChild(link);
+      link.click();
+      URL.revokeObjectURL(link.href);
+      document.body.removeChild(link);
+    }
+    function render() {
+      const state = readState();
+      const entries = Object.values(state[LIST_TYPE] || {});
+      listCount.innerText = String(entries.length);
+      commandPreview.innerText = ACTION_COMMAND;
+      if (entries.length === 0) {
+        listContainer.innerHTML = '<div class="empty-state">No tests have been added to this list yet. Go back to the execution report and add the rows you want.</div>';
+        payloadPreview.hidden = true;
+        return;
+      }
+      listContainer.innerHTML = entries.map((entry) => {
+        const issues = Array.isArray(entry.issueCodes) ? entry.issueCodes : [];
+        const checkCount = Array.isArray(entry.checks) ? entry.checks.length : 0;
+        const tone = statusTone(entry.latestStatus);
+        return '<article class="review-item ' + escapeText(entry.latestStatus || "") + '">' +
+          '<div class="item-header">' +
+            '<div class="item-title">' +
+              '<div class="chips">' +
+                '<span class="pill ' + tone + '">' + escapeText(entry.latestStatus || "unknown") + '</span>' +
+                '<span class="pill info">' + escapeText(entry.itemType || "test") + '</span>' +
+                (entry.itemId ? '<span class="pill info">' + escapeText(entry.itemId) + '</span>' : '') +
+                issues.slice(0, 3).map((code) => '<span class="pill info">' + escapeText(code) + '</span>').join("") +
+              '</div>' +
+              '<h3>' + escapeText(entry.testName || "Unnamed test") + '</h3>' +
+              '<div class="item-meta">' +
+                '<span>' + escapeText(entry.suiteName || "Unknown suite") + '</span>' +
+                '<span>' + checkCount + ' check' + (checkCount === 1 ? '' : 's') + '</span>' +
+                '<span>Run ' + escapeText(entry.executionId || "unknown") + '</span>' +
+              '</div>' +
+            '</div>' +
+            '<button class="button danger" type="button" data-remove-id="' + escapeText(entry.testId || "") + '">Remove</button>' +
+          '</div>' +
+          (entry.failureReason ? '<div class="item-reason">' + escapeText(entry.failureReason) + '</div>' : '') +
+        '</article>';
+      }).join("");
+      payloadPreview.hidden = false;
+      payloadPreview.innerText = JSON.stringify(buildPayload(), null, 2);
+      for (const button of document.querySelectorAll("[data-remove-id]")) {
+        button.addEventListener("click", () => {
+          const id = button.getAttribute("data-remove-id") || "";
+          const current = readState();
+          delete current[LIST_TYPE][id];
+          writeState(current);
+          showMessage("Removed from " + LIST_TITLE + ".", false);
+          render();
+        });
+      }
+    }
+    document.querySelector("[data-clear-list]").addEventListener("click", () => {
+      const state = readState();
+      state[LIST_TYPE] = {};
+      writeState(state);
+      showMessage(LIST_TITLE + " cleared.", false);
+      render();
+    });
+    document.querySelector("[data-run-list]").addEventListener("click", () => {
+      const payload = buildPayload();
+      if (payload.tests.length === 0) {
+        showMessage("Add at least one test before running this list.", true);
+        return;
+      }
+      downloadPayload(payload);
+      payloadPreview.hidden = false;
+      payloadPreview.innerText = JSON.stringify(payload, null, 2);
+      showMessage("Payload downloaded. Run the command below with the downloaded payload path.", false);
+    });
+    document.querySelector("[data-copy-payload]").addEventListener("click", async () => {
+      const payload = buildPayload();
+      if (payload.tests.length === 0) {
+        showMessage("Add at least one test before copying a payload.", true);
+        return;
+      }
+      const copied = await copyText(JSON.stringify(payload, null, 2));
+      showMessage(copied ? "Payload copied." : "Payload copy failed.", !copied);
+    });
+    document.querySelector("[data-copy-command]").addEventListener("click", async () => {
+      const copied = await copyText(ACTION_COMMAND);
+      showMessage(copied ? "Command copied." : "Command copy failed.", !copied);
+    });
+    window.addEventListener("storage", (event) => {
+      if (event.key === REVIEW_STORAGE_KEY) render();
+    });
+    render();
   </script>
 </body>
 </html>`;
@@ -1678,7 +2353,7 @@ function emptyStateHtml(status) {
   return `<section class="empty-state">${escapeHtml(message)}</section>`;
 }
 
-function testedItemsHtml(items, categories) {
+function testedItemsHtml(items, categories, runId) {
   const statusCounts = {
     failed: items.filter((item) => item.status === "failed").length,
     passed: items.filter((item) => item.status === "passed").length,
@@ -1720,12 +2395,12 @@ function testedItemsHtml(items, categories) {
       <p class="filter-status" data-filter-status>Showing all tested items.</p>
     </div>
     <div class="item-list">
-      ${items.map(testedItemRowHtml).join("\n")}
+      ${items.map((item) => testedItemRowHtml(item, runId)).join("\n")}
     </div>
   </section>`;
 }
 
-function testedItemRowHtml(item) {
+function testedItemRowHtml(item, runId) {
   const itemId = item.catalogItem.id || item.catalogItem.slug || "";
   const itemType = item.catalogItem.type || "catalog item";
   const issues = item.issues || [];
@@ -1753,8 +2428,9 @@ function testedItemRowHtml(item) {
   ]
     .filter(Boolean)
     .join(" ");
+  const reviewId = reviewEntryId(item, runId);
 
-  return `<a class="item-row ${escapeAttribute(item.status)}" href="#${escapeAttribute(itemDetailId(item))}"
+  return `<article class="item-row ${escapeAttribute(item.status)}"
     data-item-row
     data-status="${escapeAttribute(item.status)}"
     data-type="${escapeAttribute(itemType)}"
@@ -1775,9 +2451,13 @@ function testedItemRowHtml(item) {
     </div>
     <div class="item-problem">
       <strong>${escapeHtml(issueLabel)}</strong>
-      <span>Open details</span>
+      <div class="item-actions">
+        <a class="item-details-link" href="#${escapeAttribute(itemDetailId(item))}">Open details</a>
+        <button class="review-button" type="button" data-review-action="retest" data-review-id="${escapeAttribute(reviewId)}">Add to Retest List</button>
+        <button class="review-button" type="button" data-review-action="fix" data-review-id="${escapeAttribute(reviewId)}">Add To Fix List</button>
+      </div>
     </div>
-  </a>`;
+  </article>`;
 }
 
 function itemDetailsHtml(items, failures, context) {
@@ -1794,6 +2474,7 @@ function itemDetailHtml(item, failures, context) {
   const itemType = item.catalogItem.type || "catalog item";
   const statusTone = item.status === "failed" ? "fail" : item.status === "skipped" ? "warn" : "pass";
   const url = item.catalogItem.normalized_href || item.catalogItem.absolute_url || item.catalogItem.href || "";
+  const reviewId = reviewEntryId(item, context.summaryRunId || "");
 
   return `<section class="section item-detail" id="${escapeAttribute(itemDetailId(item))}">
     <div class="detail-header">
@@ -1823,6 +2504,8 @@ function itemDetailHtml(item, failures, context) {
       <div class="artifact-links">
         <a class="link-button" href="#tested-items">Back to tested items</a>
         ${url ? `<a class="link-button" href="${escapeAttribute(url)}">Open item in LiveLabs</a>` : ""}
+        <button class="review-button" type="button" data-review-action="retest" data-review-id="${escapeAttribute(reviewId)}">Add to Retest List</button>
+        <button class="review-button" type="button" data-review-action="fix" data-review-id="${escapeAttribute(reviewId)}">Add To Fix List</button>
       </div>
       ${itemFailures.map((failure, index) => itemFailureDetailHtml(failure, index, context)).join("\n")}
     </div>
@@ -2471,6 +3154,28 @@ function escapeHtml(value) {
 
 function escapeAttribute(value) {
   return escapeHtml(value).replace(/'/g, "&#39;");
+}
+
+function escapeScriptJson(value) {
+  return JSON.stringify(value)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026")
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029");
+}
+
+function escapeScriptString(value) {
+  return String(value)
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(/\r/g, "\\r")
+    .replace(/\n/g, "\\n")
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026")
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029");
 }
 
 function escapeMarkdown(value) {
