@@ -7,6 +7,23 @@ def numericValue(value, fallback) {
   return normalized ==~ /^[0-9]+$/ ? normalized : fallback
 }
 
+def runProfile() {
+  return hasText(params.RUN_PROFILE) ? params.RUN_PROFILE.toString().trim() : "pr-slice"
+}
+
+def sourceCheckoutConfig() {
+  return [
+    $class: "GitSCM",
+    branches: scm.branches,
+    userRemoteConfigs: scm.userRemoteConfigs,
+    extensions: [
+      [$class: "CloneOption", depth: 1, noTags: true, shallow: true, timeout: 20],
+      [$class: "CheckoutOption", timeout: 20],
+      [$class: "SparseCheckoutPaths", sparseCheckoutPaths: [[path: "qa-automation"]]],
+    ],
+  ]
+}
+
 def hasLiveLabsSecrets() {
   return hasText(params.LIVELABS_USERNAME_CREDENTIAL_ID) && hasText(params.LIVELABS_SECRET_CREDENTIAL_ID)
 }
@@ -65,9 +82,10 @@ def withLiveLabsSecrets(Closure body) {
 }
 
 def catalogIndexCommand() {
-  def defaultMaxPages = params.RUN_PROFILE == "pr-slice" ? "1" : "250"
+  def profile = runProfile()
+  def defaultMaxPages = profile == "nightly-full" ? "250" : "1"
   def maxPages = numericValue(params.CATALOG_MAX_PAGES, defaultMaxPages)
-  def defaultMaxItems = params.RUN_PROFILE == "pr-slice" ? "5" : "0"
+  def defaultMaxItems = profile == "pr-slice" ? "5" : "0"
   def maxItems = numericValue(params.CATALOG_MAX_ITEMS, defaultMaxItems)
   def retries = numericValue(params.CATALOG_RETRIES, "3")
   def retryDelayMs = numericValue(params.CATALOG_RETRY_DELAY_MS, "5000")
@@ -105,6 +123,8 @@ pipeline {
   options {
     timestamps()
     timeout(time: 12, unit: "HOURS")
+    skipDefaultCheckout(true)
+    disableConcurrentBuilds(abortPrevious: true)
     buildDiscarder(logRotator(numToKeepStr: "30", artifactNumToKeepStr: "30"))
   }
 
@@ -131,6 +151,12 @@ pipeline {
   }
 
   stages {
+    stage("Checkout") {
+      steps {
+        checkout sourceCheckoutConfig()
+      }
+    }
+
     stage("Install") {
       steps {
         dir("qa-automation") {
@@ -204,7 +230,7 @@ pipeline {
     stage("Generated catalog tests") {
       steps {
         script {
-          if (params.RUN_PROFILE == "nightly-full") {
+          if (runProfile() == "nightly-full") {
             def shardTotal = numericValue(params.SHARD_TOTAL, "4").toInteger()
             def branches = [:]
 

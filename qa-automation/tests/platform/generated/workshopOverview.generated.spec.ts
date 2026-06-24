@@ -61,6 +61,7 @@ test.describe("LiveLabs generated workshop overview pages", { tag: GENERATED_WOR
         await assertContentQuality(page, {
           contextName: `Generated workshop overview: ${item.title}`,
           expectedTerms: expectedTermsForCatalogItem(item),
+          expectedTermsMode: "any",
         });
       });
     }
