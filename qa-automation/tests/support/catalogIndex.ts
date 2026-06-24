@@ -150,9 +150,11 @@ export async function attachCatalogItem(testInfo: TestInfo, item: CatalogIndexIt
 
 export function catalogItemTestTitle(item: CatalogIndexItem): string {
   const prefix = item.type === "livestack" ? "LiveStack" : "workshop";
+  const itemKey = item.id || item.slug || `${item.catalog_page}-${item.catalog_position}`;
+  const suffix = ` [${itemKey}]`;
   const title = `${prefix}: ${item.title}`;
 
-  return title.length <= 160 ? title : `${title.slice(0, 157)}...`;
+  return title.length + suffix.length <= 160 ? `${title}${suffix}` : `${title.slice(0, 157 - suffix.length)}...${suffix}`;
 }
 
 export function expectedTermsForCatalogItem(item: CatalogIndexItem, maxTerms = 3): string[] {
