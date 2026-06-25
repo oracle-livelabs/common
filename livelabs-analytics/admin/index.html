@@ -642,15 +642,37 @@
     .auth-panel {
       width: min(460px, 100%);
     }
+    .auth-panel h1 {
+      margin-top: 0;
+    }
     .auth-panel form {
       display: grid;
       gap: 12px;
       margin-top: 16px;
     }
+    .auth-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: max-content;
+      max-width: 100%;
+      color: var(--oracle-bark);
+      font-weight: 700;
+    }
+    .auth-option input {
+      flex: 0 0 auto;
+    }
     .login-message {
       min-height: 22px;
       color: var(--oracle-red);
       font-weight: 700;
+    }
+    .login-message.success {
+      color: #22543a;
+    }
+    .auth-panel input[aria-invalid="true"] {
+      border-color: var(--oracle-red);
+      box-shadow: 0 0 0 3px rgba(199, 70, 52, .14);
     }
     body.auth-blocked .admin-layout {
       display: none;
@@ -691,15 +713,21 @@
 <body class="auth-blocked">
   <section class="screen-lock">
     <div class="panel auth-panel">
-      <h1>Admin Review Session</h1>
-      <p class="note">This static page stores review settings in this browser.</p>
+      <h1>Admin Panel</h1>
       <form id="login-form">
-        <label for="email">Email
-          <input id="email" name="email" type="email" autocomplete="username" value="livelabs-admin@oracle.com" required>
+        <label for="email">Username
+          <input id="email" name="email" type="text" autocomplete="username" required>
+        </label>
+        <label for="password">Password
+          <input id="password" name="password" type="password" autocomplete="current-password" minlength="8" required>
+        </label>
+        <label class="auth-option" for="keep-logged-in">
+          <input id="keep-logged-in" name="keepLoggedIn" type="checkbox">
+          <span>Keep me logged in</span>
         </label>
         <div class="login-message" id="login-message" role="status" aria-live="polite"></div>
         <div class="button-row">
-          <button type="submit">Start Session</button>
+          <button type="submit" id="login-button">Login</button>
           <a class="button-link secondary" href="../index.html">Back to Dashboard</a>
         </div>
       </form>
@@ -1012,11 +1040,18 @@
   <script>
     const adminStorageKey = "livelabsAnalyticsAdminState";
     const sessionKey = "livelabsAnalyticsSession";
-    const sessionDurationMs = 12 * 60 * 60 * 1000;
+    const rememberedLoginKey = "livelabsAnalyticsRememberedLogin";
+    const transientSessionDurationMs = 12 * 60 * 60 * 1000;
+    const persistentSessionDurationMs = 30 * 24 * 60 * 60 * 1000;
     const adminStateSchemaVersion = 2;
+    const adminSessionSchemaVersion = 3;
     const criteriaRuleAutomationPaused = true;
+    const fixedAdminCredentials = {
+      password: "LiveLabsAdmin#2026!",
+      username: "livelabs-admin"
+    };
     const accounts = [
-      { email: "livelabs-admin@oracle.com", name: "Portfolio Admin", role: "admin" }
+      { email: "livelabs-admin@oracle.com", name: "Portfolio Admin", role: "admin", username: "livelabs-admin" }
     ];
     const defaultQaExceptionRules = [
       {
@@ -1140,44 +1175,109 @@
       const id = String(rule?.id || "");
       return id === "qa-stable-19c" || id === "qa-stable-23ai";
     }
-    function readSession() {
+    function normalizeLoginId(value) {
+      return String(value || "").trim().toLowerCase();
+    }
+    function findAccount(identifier) {
+      const normalized = normalizeLoginId(identifier);
+      return accounts.find((item) => item.username === normalized);
+    }
+    function readJsonFromStorage(store, key) {
       try {
-        return JSON.parse(window.localStorage.getItem(sessionKey) || "{}");
+        return JSON.parse(store.getItem(key) || "{}");
       } catch (error) {
         return {};
       }
     }
+    function writeJsonToStorage(store, key, value) {
+      store.setItem(key, JSON.stringify(value));
+    }
+    function removeSession() {
+      window.localStorage.removeItem(sessionKey);
+      window.sessionStorage.removeItem(sessionKey);
+    }
+    function readSession() {
+      const sessionCandidates = [
+        { store: window.sessionStorage, storageType: "session" },
+        { store: window.localStorage, storageType: "persistent" }
+      ];
+      for (const candidate of sessionCandidates) {
+        const value = readJsonFromStorage(candidate.store, sessionKey);
+        if (value?.role) return { ...value, storageType: candidate.storageType };
+      }
+      return {};
+    }
     function isAdminSessionActive(candidate) {
       if (candidate?.role !== "admin") return false;
+      if (Number(candidate.authVersion || 0) < adminSessionSchemaVersion) return false;
       const expiresAt = Date.parse(candidate.expiresAt || "");
       return !Number.isFinite(expiresAt) || expiresAt > Date.now();
     }
     function refreshAdminSession() {
       const currentSession = readSession();
       if (!isAdminSessionActive(currentSession)) {
-        if (currentSession?.role) window.localStorage.removeItem(sessionKey);
+        if (currentSession?.role) removeSession();
         return {};
       }
+      const persistent = currentSession.persistent === true || currentSession.storageType === "persistent";
+      const duration = persistent ? persistentSessionDurationMs : transientSessionDurationMs;
+      const store = persistent ? window.localStorage : window.sessionStorage;
       const refreshedSession = {
         ...currentSession,
-        expiresAt: new Date(Date.now() + sessionDurationMs).toISOString(),
+        expiresAt: new Date(Date.now() + duration).toISOString(),
         lastSeenAt: new Date().toISOString()
       };
-      window.localStorage.setItem(sessionKey, JSON.stringify(refreshedSession));
+      delete refreshedSession.storageType;
+      writeJsonToStorage(store, sessionKey, refreshedSession);
       return refreshedSession;
     }
-    function writeSession(account) {
+    function writeSession(account, persistent) {
       const now = new Date();
+      const duration = persistent ? persistentSessionDurationMs : transientSessionDurationMs;
       const newSession = {
+        authVersion: adminSessionSchemaVersion,
         email: account.email,
-        expiresAt: new Date(now.getTime() + sessionDurationMs).toISOString(),
+        expiresAt: new Date(now.getTime() + duration).toISOString(),
         loggedInAt: account.loggedInAt || now.toISOString(),
         lastSeenAt: now.toISOString(),
         name: account.name,
+        persistent,
         role: account.role
       };
-      window.localStorage.setItem(sessionKey, JSON.stringify(newSession));
+      const targetStore = persistent ? window.localStorage : window.sessionStorage;
+      const alternateStore = persistent ? window.sessionStorage : window.localStorage;
+      alternateStore.removeItem(sessionKey);
+      writeJsonToStorage(targetStore, sessionKey, newSession);
       return newSession;
+    }
+    function setLoginMessage(message, type = "error", field = null) {
+      const messageNode = document.querySelector("#login-message");
+      messageNode.textContent = message;
+      messageNode.classList.toggle("success", type === "success");
+      document.querySelectorAll("#email, #password").forEach((input) => input.removeAttribute("aria-invalid"));
+      if (field) document.querySelector(field)?.setAttribute("aria-invalid", "true");
+    }
+    function validateLoginInputs(loginId, password) {
+      if (!loginId) return { message: "Enter an admin username.", field: "#email" };
+      if (!findAccount(loginId)) return { message: "Use a recognized admin username.", field: "#email" };
+      if (!password) return { message: "Enter your password.", field: "#password" };
+      if (password.length < 8) return { message: "Password must be at least 8 characters.", field: "#password" };
+      if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
+        return { message: "Password must include at least one letter and one number.", field: "#password" };
+      }
+      if (password !== fixedAdminCredentials.password) {
+        return { message: "Use a valid admin password.", field: "#password" };
+      }
+      return null;
+    }
+    function syncRememberedLogin() {
+      const remembered = readJsonFromStorage(window.localStorage, rememberedLoginKey);
+      const loginId = document.querySelector("#email");
+      const keepLoggedIn = document.querySelector("#keep-logged-in");
+      if (remembered?.loginId && loginId) {
+        loginId.value = remembered.loginId;
+        keepLoggedIn.checked = true;
+      }
     }
     function sanitizeRule(rule, index) {
       const fallback = defaultQaExceptionRules[index] || {};
@@ -1274,21 +1374,39 @@
       document.body.classList.add("auth-blocked");
       return false;
     }
-    function handleLogin(event) {
+    async function handleLogin(event) {
       event.preventDefault();
-      const message = document.querySelector("#login-message");
-      const email = document.querySelector("#email").value.trim().toLowerCase();
-      const account = accounts.find((item) => item.email === email);
-      if (!account) {
-        message.textContent = "Review account required.";
+      const loginButton = document.querySelector("#login-button");
+      const loginId = document.querySelector("#email").value.trim();
+      const password = document.querySelector("#password").value;
+      const keepLoggedIn = document.querySelector("#keep-logged-in").checked;
+      const invalid = validateLoginInputs(loginId, password);
+      if (invalid) {
+        setLoginMessage(invalid.message, "error", invalid.field);
         return;
       }
+      const account = findAccount(loginId);
       if (account.role !== "admin") {
-        message.textContent = "Admin role required.";
+        setLoginMessage("Admin role required.", "error", "#email");
         return;
       }
-      session = writeSession(account);
-      message.textContent = "";
+      loginButton.disabled = true;
+      setLoginMessage("", "success");
+      try {
+        if (keepLoggedIn) {
+          writeJsonToStorage(window.localStorage, rememberedLoginKey, { loginId: account.username, rememberedAt: new Date().toISOString() });
+        } else {
+          window.localStorage.removeItem(rememberedLoginKey);
+        }
+        session = writeSession(account, keepLoggedIn);
+      } catch (error) {
+        setLoginMessage(error.message || "Login could not be completed.", "error");
+        return;
+      } finally {
+        loginButton.disabled = false;
+      }
+      document.querySelector("#password").value = "";
+      setLoginMessage("", "success");
       document.body.classList.remove("auth-blocked");
       render();
     }
@@ -1815,6 +1933,7 @@
       URL.revokeObjectURL(url);
       writeState("Exported admin settings");
     }
+    syncRememberedLogin();
     if (requireAdmin()) {
       render();
     }
@@ -1892,7 +2011,7 @@
       writeState("Cleared audit history");
     });
     document.querySelector("#logout-button").addEventListener("click", () => {
-      window.localStorage.removeItem(sessionKey);
+      removeSession();
       window.location.href = "./";
     });
     document.querySelector("#login-form").addEventListener("submit", handleLogin);
