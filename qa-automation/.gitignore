@@ -1,8 +1,12 @@
 node_modules/
 artifacts/
+reports/*
+!reports/.gitkeep
+!reports/README.md
 .env
 .env.local
 .auth/
+tests/data/generated/*.json
 .tmp_*.html
 .idea/
 .cache/

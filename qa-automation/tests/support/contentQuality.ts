@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, type Page, type TestInfo } from "@playwright/test";
 
 import { BasePage } from "../../pages/basePage.js";
 import { parseIntegerFlag } from "../../config/projectConfig.js";
@@ -6,7 +6,19 @@ import { parseIntegerFlag } from "../../config/projectConfig.js";
 interface ContentQualityOptions {
   contextName: string;
   expectedTerms?: string[];
+  expectedTermsMode?: "all" | "any";
   linkLimit?: number;
+}
+
+export type ContentQualityIssueSeverity = "blocker" | "major" | "minor";
+
+export interface ContentQualityIssue {
+  code: string;
+  label: string;
+  severity: ContentQualityIssueSeverity;
+  message: string;
+  count?: number;
+  details?: unknown;
 }
 
 interface LinkCandidate {
@@ -52,34 +64,142 @@ const TEXT_DEFECT_PATTERNS: Array<{ label: string; pattern: RegExp }> = [
 const AUTH_OR_RATE_LIMIT_STATUSES = new Set([401, 403, 429]);
 
 export async function assertContentQuality(page: Page, options: ContentQualityOptions): Promise<void> {
+  const issues = await collectContentQualityIssues(page, options);
+  assertNoContentQualityIssues(issues, options.contextName);
+}
+
+export async function collectContentQualityIssues(page: Page, options: ContentQualityOptions): Promise<ContentQualityIssue[]> {
+  const issues: ContentQualityIssue[] = [];
+
   await page.locator("body").waitFor({
     state: "visible",
     timeout: BasePage.PAGE_READY_TIMEOUT_MS,
   });
 
-  await assertExpectedTerms(page, options);
-  await assertNoObviousTextDefects(page, options.contextName);
-  await assertNoBrokenVisibleImages(page, options.contextName);
-  await assertNoBrokenEmbeddedContent(page, options.contextName);
-  await assertNoBrokenLinks(page, options);
+  issues.push(...(await collectExpectedTermIssues(page, options)));
+  issues.push(...(await collectObviousTextDefectIssues(page, options.contextName)));
+  issues.push(...(await collectBrokenVisibleImageIssues(page, options.contextName)));
+  issues.push(...(await collectBrokenEmbeddedContentIssues(page, options.contextName)));
+  issues.push(...(await collectBrokenLinkIssues(page, options)));
+
+  return issues;
 }
 
-async function assertExpectedTerms(page: Page, options: ContentQualityOptions): Promise<void> {
-  for (const term of options.expectedTerms ?? []) {
-    await expect(page.locator("body"), `${options.contextName} should stay relevant to "${term}"`).toContainText(
-      new RegExp(escapeRegex(term), "i"),
-    );
+export async function attachContentQualityIssues(
+  testInfo: TestInfo,
+  issues: ContentQualityIssue[],
+  contextName: string,
+): Promise<void> {
+  if (issues.length === 0) {
+    return;
   }
+
+  await testInfo.attach("qa-issues.json", {
+    body: JSON.stringify(
+      {
+        schema_version: 1,
+        context: contextName,
+        issue_count: issues.length,
+        issues,
+      },
+      null,
+      2,
+    ),
+    contentType: "application/json",
+  });
 }
 
-async function assertNoObviousTextDefects(page: Page, contextName: string): Promise<void> {
+export function assertNoContentQualityIssues(issues: ContentQualityIssue[], contextName: string): void {
+  if (issues.length === 0) {
+    return;
+  }
+
+  const issueSummary = issues
+    .map((issue, index) => `${index + 1}. ${issue.label}: ${issue.message}`)
+    .join("\n");
+
+  expect(issues, `${contextName} found ${issues.length} issue(s):\n${issueSummary}`).toEqual([]);
+}
+
+export function contentQualityIssue(
+  code: string,
+  label: string,
+  severity: ContentQualityIssueSeverity,
+  message: string,
+  details?: unknown,
+): ContentQualityIssue {
+  const count = Array.isArray(details) ? details.length : undefined;
+
+  return {
+    code,
+    label,
+    severity,
+    message,
+    ...(count ? { count } : {}),
+    ...(details === undefined ? {} : { details }),
+  };
+}
+
+async function collectExpectedTermIssues(page: Page, options: ContentQualityOptions): Promise<ContentQualityIssue[]> {
+  const expectedTerms = options.expectedTerms ?? [];
+  if (expectedTerms.length === 0) {
+    return [];
+  }
+
+  const bodyText = await page.locator("body").innerText({ timeout: BasePage.DEFAULT_TIMEOUT_MS });
+  const missingTerms = expectedTerms.filter((term) => !new RegExp(escapeRegex(term), "i").test(bodyText));
+
+  if (options.expectedTermsMode === "any") {
+    if (missingTerms.length < expectedTerms.length) {
+      return [];
+    }
+
+    return [
+      contentQualityIssue(
+        "CONTENT_RELEVANCE",
+        "Content relevance",
+        "major",
+        `The page did not contain any expected catalog terms: ${expectedTerms.join(", ")}.`,
+        { expectedTerms },
+      ),
+    ];
+  }
+
+  if (missingTerms.length === 0) {
+    return [];
+  }
+
+  return [
+    contentQualityIssue(
+      "CONTENT_RELEVANCE",
+      "Content relevance",
+      "major",
+      `The page missed expected catalog terms: ${missingTerms.join(", ")}.`,
+      { expectedTerms, missingTerms },
+    ),
+  ];
+}
+
+async function collectObviousTextDefectIssues(page: Page, contextName: string): Promise<ContentQualityIssue[]> {
   const bodyText = await page.locator("body").innerText({ timeout: BasePage.DEFAULT_TIMEOUT_MS });
   const defects = TEXT_DEFECT_PATTERNS.filter(({ pattern }) => pattern.test(bodyText)).map(({ label }) => label);
 
-  expect(defects, `${contextName} has obvious placeholder text or misspellings`).toEqual([]);
+  if (defects.length === 0) {
+    return [];
+  }
+
+  return [
+    contentQualityIssue(
+      "CONTENT_TEXT_DEFECT",
+      "Content text defect",
+      "major",
+      `${contextName} has obvious placeholder text or misspellings: ${defects.join(", ")}.`,
+      defects,
+    ),
+  ];
 }
 
-async function assertNoBrokenVisibleImages(page: Page, contextName: string): Promise<void> {
+async function collectBrokenVisibleImageIssues(page: Page, contextName: string): Promise<ContentQualityIssue[]> {
   const images = await visibleContentLocator(page, "img[src]");
   const imageCount = await images.count();
 
@@ -114,10 +234,22 @@ async function assertNoBrokenVisibleImages(page: Page, contextName: string): Pro
       .filter((image) => image.src && (!image.complete || image.naturalWidth === 0 || image.naturalHeight === 0)),
   )) as BrokenImageRecord[];
 
-  expect(brokenImages, `${contextName} should not show broken visible images`).toEqual([]);
+  if (brokenImages.length === 0) {
+    return [];
+  }
+
+  return [
+    contentQualityIssue(
+      "BROKEN_VISIBLE_IMAGE",
+      "Broken visible image",
+      "major",
+      `${contextName} shows ${brokenImages.length} broken visible image${brokenImages.length === 1 ? "" : "s"}.`,
+      brokenImages,
+    ),
+  ];
 }
 
-async function assertNoBrokenEmbeddedContent(page: Page, contextName: string): Promise<void> {
+async function collectBrokenEmbeddedContentIssues(page: Page, contextName: string): Promise<ContentQualityIssue[]> {
   const brokenEmbeds: Array<{ type: string; src: string; title?: string; error: string }> = [];
   const iframes = await visibleContentLocator(page, "iframe[src]");
   const iframeCount = await iframes.count();
@@ -203,10 +335,22 @@ async function assertNoBrokenEmbeddedContent(page: Page, contextName: string): P
     brokenEmbeds.push(media);
   }
 
-  expect(brokenEmbeds, `${contextName} should not show broken visible embedded content`).toEqual([]);
+  if (brokenEmbeds.length === 0) {
+    return [];
+  }
+
+  return [
+    contentQualityIssue(
+      "BROKEN_EMBEDDED_CONTENT",
+      "Broken embedded content",
+      "major",
+      `${contextName} shows ${brokenEmbeds.length} broken embedded content item${brokenEmbeds.length === 1 ? "" : "s"}.`,
+      brokenEmbeds,
+    ),
+  ];
 }
 
-async function assertNoBrokenLinks(page: Page, options: ContentQualityOptions): Promise<void> {
+async function collectBrokenLinkIssues(page: Page, options: ContentQualityOptions): Promise<ContentQualityIssue[]> {
   const candidates = await collectVisibleLinks(page);
   const limit = options.linkLimit ?? DEFAULT_LINK_LIMIT;
   const linksToCheck = limit === 0 ? candidates : candidates.slice(0, limit);
@@ -214,12 +358,7 @@ async function assertNoBrokenLinks(page: Page, options: ContentQualityOptions): 
 
   for (const link of linksToCheck) {
     try {
-      const response = await page.request.head(link.url, {
-        failOnStatusCode: false,
-        maxRedirects: 5,
-        timeout: LINK_TIMEOUT_MS,
-      });
-      const status = response.status();
+      const status = await probeLinkStatus(page, link.url);
 
       if (isBrokenLinkStatus(status)) {
         brokenLinks.push({ ...link, status });
@@ -232,10 +371,25 @@ async function assertNoBrokenLinks(page: Page, options: ContentQualityOptions): 
     }
   }
 
-  expect(
-    brokenLinks,
-    `${options.contextName} should not expose broken visible links. Set QA_CONTENT_LINK_LIMIT=0 to check every visible content link.`,
-  ).toEqual([]);
+  if (brokenLinks.length === 0) {
+    return [];
+  }
+
+  return [
+    contentQualityIssue(
+      "BROKEN_VISIBLE_LINK",
+      "Broken visible link",
+      "major",
+      `${options.contextName} exposes ${brokenLinks.length} broken visible link${brokenLinks.length === 1 ? "" : "s"}.`,
+      {
+        checked: linksToCheck.length,
+        totalCandidates: candidates.length,
+        linkLimit: limit,
+        hint: "Set QA_CONTENT_LINK_LIMIT=0 to check every visible content link.",
+        brokenLinks,
+      },
+    ),
+  ];
 }
 
 async function collectVisibleLinks(page: Page): Promise<LinkCandidate[]> {
@@ -286,6 +440,26 @@ async function collectVisibleLinks(page: Page): Promise<LinkCandidate[]> {
   })) as LinkCandidate[];
 
   return links;
+}
+
+async function probeLinkStatus(page: Page, url: string): Promise<number> {
+  try {
+    const response = await page.request.head(url, {
+      failOnStatusCode: false,
+      maxRedirects: 5,
+      timeout: LINK_TIMEOUT_MS,
+    });
+
+    return response.status();
+  } catch {
+    const response = await page.request.get(url, {
+      failOnStatusCode: false,
+      maxRedirects: 5,
+      timeout: LINK_TIMEOUT_MS,
+    });
+
+    return response.status();
+  }
 }
 
 async function visibleContentLocator(page: Page, selector: string) {

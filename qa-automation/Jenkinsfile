@@ -1,0 +1,267 @@
+def hasText(value) {
+  return value != null && value.toString().trim()
+}
+
+def numericValue(value, fallback) {
+  def normalized = value == null ? "" : value.toString().trim()
+  return normalized ==~ /^[0-9]+$/ ? normalized : fallback
+}
+
+def runProfile() {
+  return hasText(params.RUN_PROFILE) ? params.RUN_PROFILE.toString().trim() : "pr-slice"
+}
+
+def sourceCheckoutConfig() {
+  return [
+    $class: "GitSCM",
+    branches: scm.branches,
+    userRemoteConfigs: scm.userRemoteConfigs,
+    extensions: [
+      [$class: "CloneOption", depth: 1, noTags: true, shallow: true, timeout: 20],
+      [$class: "CheckoutOption", timeout: 20],
+      [$class: "SparseCheckoutPaths", sparseCheckoutPaths: [[path: "qa-automation"]]],
+    ],
+  ]
+}
+
+def hasLiveLabsSecrets() {
+  return hasText(params.LIVELABS_USERNAME_CREDENTIAL_ID) && hasText(params.LIVELABS_SECRET_CREDENTIAL_ID)
+}
+
+def shouldCreateAuthState() {
+  return hasLiveLabsSecrets() && hasText(params.AUTH_TARGET_URL)
+}
+
+def qaRuntimeEnv() {
+  def envValues = [
+    "CI=true",
+    "QA_HEADED=false",
+    "QA_TRACE=retain-on-failure",
+    "QA_VIDEO=retain-on-failure",
+    "QA_SCREENSHOT=only-on-failure",
+    "QA_FULL_PAGE_SCREENSHOT=true",
+    "QA_WORKERS=1",
+    "QA_RETRIES=${numericValue(params.TEST_RETRIES, '1')}",
+    "QA_CONTENT_LINK_LIMIT=${numericValue(params.CONTENT_LINK_LIMIT, '50')}",
+  ]
+
+  if (hasText(params.BASE_URL)) {
+    envValues.add("QA_BASE_URL=${params.BASE_URL.trim()}")
+  }
+
+  if (hasText(params.BROWSER_CHANNEL)) {
+    envValues.add("QA_BROWSER_CHANNEL=${params.BROWSER_CHANNEL.trim()}")
+  }
+
+  if (hasText(params.AUTH_TARGET_URL)) {
+    envValues.add("QA_AUTH_TARGET_URL=${params.AUTH_TARGET_URL.trim()}")
+  }
+
+  if (shouldCreateAuthState()) {
+    envValues.add("QA_STORAGE_STATE=.auth/livelabs-storage-state.json")
+  }
+
+  if (hasText(params.CATALOG_ITEM_IDS)) {
+    envValues.add("QA_CATALOG_INDEX_IDS=${params.CATALOG_ITEM_IDS.trim()}")
+  }
+
+  return envValues
+}
+
+def withLiveLabsSecrets(Closure body) {
+  if (hasLiveLabsSecrets()) {
+    withCredentials([
+      string(credentialsId: params.LIVELABS_USERNAME_CREDENTIAL_ID.trim(), variable: "QA_LIVELABS_USERNAME"),
+      string(credentialsId: params.LIVELABS_SECRET_CREDENTIAL_ID.trim(), variable: "QA_LIVELABS_PASSWORD"),
+    ]) {
+      body()
+    }
+  } else {
+    body()
+  }
+}
+
+def catalogIndexCommand() {
+  def profile = runProfile()
+  def defaultMaxPages = profile == "nightly-full" ? "250" : "1"
+  def maxPages = numericValue(params.CATALOG_MAX_PAGES, defaultMaxPages)
+  def defaultMaxItems = profile == "pr-slice" ? "5" : "0"
+  def maxItems = numericValue(params.CATALOG_MAX_ITEMS, defaultMaxItems)
+  def retries = numericValue(params.CATALOG_RETRIES, "3")
+  def retryDelayMs = numericValue(params.CATALOG_RETRY_DELAY_MS, "5000")
+  def command = "npm run catalog:index -- --max-pages ${maxPages} --retries ${retries} --retry-delay-ms ${retryDelayMs}"
+
+  if (maxItems != "0") {
+    command = "${command} --max-items ${maxItems}"
+  }
+
+  return command
+}
+
+def generatedRunCommand(runName) {
+  return [
+    "node ./scripts/qa.mjs tests/platform/generated",
+    "--output artifacts/jenkins/${runName}/test-results",
+    "--junit on",
+    "--junit-file artifacts/jenkins/${runName}/junit.xml",
+    "--json on",
+    "--json-file artifacts/jenkins/${runName}/results.json",
+  ].join(" ")
+}
+
+def runGeneratedSuite(runName, extraEnv) {
+  withLiveLabsSecrets {
+    withEnv(qaRuntimeEnv() + extraEnv) {
+      sh generatedRunCommand(runName)
+    }
+  }
+}
+
+pipeline {
+  agent any
+
+  options {
+    timestamps()
+    timeout(time: 12, unit: "HOURS")
+    skipDefaultCheckout(true)
+    disableConcurrentBuilds(abortPrevious: true)
+    buildDiscarder(logRotator(numToKeepStr: "30", artifactNumToKeepStr: "30"))
+  }
+
+  parameters {
+    choice(
+      name: "RUN_PROFILE",
+      choices: ["pr-slice", "nightly-full", "manual-items"],
+      description: "pr-slice runs a small generated catalog sample; nightly-full crawls and tests the full generated catalog in shards; manual-items targets CATALOG_ITEM_IDS."
+    )
+    string(name: "BASE_URL", defaultValue: "", description: "Optional LiveLabs base URL override. Leave blank for config/project_settings.json.")
+    string(name: "BROWSER_CHANNEL", defaultValue: "", description: "Optional browser channel such as chrome or msedge when the Jenkins agent provides one.")
+    booleanParam(name: "INSTALL_PLAYWRIGHT_BROWSERS", defaultValue: false, description: "Run npm run install:browsers before tests when the agent does not already provide Playwright browsers.")
+    string(name: "AUTH_TARGET_URL", defaultValue: "", description: "Optional private LiveLabs URL used to create .auth/livelabs-storage-state.json before crawling.")
+    string(name: "LIVELABS_USERNAME_CREDENTIAL_ID", defaultValue: "", description: "Optional Jenkins string credential ID for QA_LIVELABS_USERNAME.")
+    string(name: "LIVELABS_SECRET_CREDENTIAL_ID", defaultValue: "", description: "Optional Jenkins string credential ID for QA_LIVELABS_PASSWORD.")
+    string(name: "CATALOG_MAX_PAGES", defaultValue: "", description: "Override catalog crawl pages. Defaults: 1 for pr-slice/manual-items, 250 for nightly-full.")
+    string(name: "CATALOG_MAX_ITEMS", defaultValue: "", description: "Optional catalog item cap. Defaults to 5 for pr-slice and no cap for manual-items/nightly-full.")
+    string(name: "CATALOG_ITEM_IDS", defaultValue: "", description: "Optional comma-separated generated item IDs/slugs for manual targeted runs.")
+    string(name: "SHARD_TOTAL", defaultValue: "4", description: "Number of generated test shards for nightly-full.")
+    string(name: "TEST_RETRIES", defaultValue: "1", description: "Playwright test retry count.")
+    string(name: "CATALOG_RETRIES", defaultValue: "3", description: "Catalog crawler retry count.")
+    string(name: "CATALOG_RETRY_DELAY_MS", defaultValue: "5000", description: "Delay between catalog crawler retries.")
+    string(name: "CONTENT_LINK_LIMIT", defaultValue: "50", description: "Visible content links checked per generated page. Use 0 to check all links.")
+  }
+
+  stages {
+    stage("Checkout") {
+      steps {
+        checkout sourceCheckoutConfig()
+      }
+    }
+
+    stage("Install") {
+      steps {
+        dir("qa-automation") {
+          sh "npm ci"
+        }
+      }
+    }
+
+    stage("Install Playwright browsers") {
+      when {
+        expression { return params.INSTALL_PLAYWRIGHT_BROWSERS }
+      }
+      steps {
+        dir("qa-automation") {
+          sh "npm run install:browsers"
+        }
+      }
+    }
+
+    stage("Static QA") {
+      parallel {
+        stage("Typecheck") {
+          steps {
+            dir("qa-automation") {
+              sh "npm run typecheck"
+            }
+          }
+        }
+
+        stage("Collect tests") {
+          steps {
+            dir("qa-automation") {
+              sh "npm run test:collect"
+            }
+          }
+        }
+      }
+    }
+
+    stage("Create auth state") {
+      when {
+        expression { return shouldCreateAuthState() }
+      }
+      steps {
+        dir("qa-automation") {
+          script {
+            withLiveLabsSecrets {
+              withEnv(qaRuntimeEnv()) {
+                sh "npm run auth:storage"
+              }
+            }
+          }
+        }
+      }
+    }
+
+    stage("Index generated catalog") {
+      steps {
+        dir("qa-automation") {
+          script {
+            withLiveLabsSecrets {
+              withEnv(qaRuntimeEnv()) {
+                sh catalogIndexCommand()
+              }
+            }
+          }
+        }
+      }
+    }
+
+    stage("Generated catalog tests") {
+      steps {
+        script {
+          if (runProfile() == "nightly-full") {
+            def shardTotal = numericValue(params.SHARD_TOTAL, "4").toInteger()
+            def branches = [:]
+
+            for (int shard = 1; shard <= shardTotal; shard++) {
+              def shardNumber = shard
+              branches["Shard ${shardNumber}/${shardTotal}"] = {
+                dir("qa-automation") {
+                  runGeneratedSuite("generated-shard-${shardNumber}", ["QA_CATALOG_INDEX_SHARD=${shardNumber}/${shardTotal}"])
+                }
+              }
+            }
+
+            parallel branches
+          } else {
+            dir("qa-automation") {
+              runGeneratedSuite("generated-slice", [])
+            }
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      archiveArtifacts(
+        artifacts: "qa-automation/artifacts/jenkins/**/*,qa-automation/tests/data/generated/*.json",
+        allowEmptyArchive: true,
+        fingerprint: true
+      )
+      junit(testResults: "qa-automation/artifacts/jenkins/**/junit.xml", allowEmptyResults: true)
+    }
+  }
+}
