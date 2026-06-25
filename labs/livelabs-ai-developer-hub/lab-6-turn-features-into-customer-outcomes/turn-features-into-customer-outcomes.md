@@ -4,7 +4,7 @@
 
 This lab shows how to use Codex and the `livelabs-industry-converter` skill to create an industry-specific version of an existing Oracle LiveLabs workshop without flattening the teaching flow.
 
-You will learn how to give the skill a simple prompt, what the skill handles automatically, and what to review after conversion so the result stays close to the source workshop.
+You will learn how to give the skill a simple prompt, what it handles automatically, and what to review after conversion so the result stays close to the source workshop.
 
 ### Objectives
 
@@ -55,7 +55,7 @@ Perform the following set of steps to keep the prompt simple and let the skill h
 
     - Inspect the source workshop and treat it as canonical
     - Detect lab order, manifest structure, shared assets, and launch flow
-    - mMap source entities into the target industry
+    - Map source entities into the target industry
     - Rewrite labs, manifests, sample data, statuses, IDs, and output artifacts
     - Preserve screenshots and image coverage
     - Validate LiveLabs structure and launch flow

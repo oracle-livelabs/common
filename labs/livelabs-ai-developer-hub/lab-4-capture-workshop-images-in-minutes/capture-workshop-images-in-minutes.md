@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This guide shows how to use Codex to capture LiveLabs screenshots in a real browser. It also shows how to annotate key UI elements, blur sensitive information, and keep the final files aligned with workshop markdown.
+This lab shows how to use **Codex** to capture **LiveLabs screenshots** in a real browser. It also explains how to annotate key UI elements, blur sensitive information, and keep the final files aligned with workshop markdown.
 
 It also shows how to annotate key UI elements, blur sensitive information, and keep the final files aligned with workshop markdown.
 
@@ -29,7 +29,7 @@ Perform the following set of steps to choose the right Codex skill and setup pat
     - Download the skill to your local directory & unzip
     - Point codex to the path of the directory & ask it to upload it as a skill
     - Disconnect from VPN when the screen capture tool requires direct browser access
-    - Use Chrome DevTools MCP tools & Playwright (codex should do it automatically)
+    - Use Chrome DevTools MCP tools and Playwright. Codex should invoke them automatically when the skill requires them.
     - Prefer PNG and stable file names
 
 ## Task 2: Add Placeholder Images Before Capture (optional)
@@ -115,7 +115,7 @@ Perform the following set of steps to prompt Codex to follow the learner path an
     $webpage-screenshot-pipeline open <console-url> and follow the workshop task intent, not just the raw text.
     If the UI differs slightly from the lab, adapt and continue.
     Take screenshots for the important checkpoints.
-    Use 1280x.
+    Use a width of 1280 px.
     Add red squares around the key parts of each image.
     Blur any PII.
     Save files under output/screenshots/<run-name>/.

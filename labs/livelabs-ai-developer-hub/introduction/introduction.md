@@ -14,7 +14,7 @@ After the setup sequence, you will move through focused authoring examples that 
 
 The path is intentionally direct: Codex is the foundation, skills provide repeatable workflows, and the remaining labs show how those capabilities accelerate common authoring tasks. The LiveStack demo is optional and comes after setup so you can try a generated application before the authoring labs.
 
-**Note:** **Download the latest packaged skills** and view supporting READ ME documents from the [LiveLabs AI Developer Skills Repository](https://oracle-my.sharepoint.com/:f:/p/kay_malcolm/IgBlxiOi-InZRbQHn6htgExAAZVgHtxSIwjAyAxRkmXa4ag?e=OuPt5u).
+**Note:** Download the latest packaged skills and review the supporting README documents in the [LiveLabs AI Developer Skills Repository](http://skills.oraclecorp.com/).
 
 ### Objectives
 
@@ -45,7 +45,7 @@ In this workshop, you will:
 ## Prerequisites
 
 - A macOS or Windows computer where you can install apps.
-- **Optional:** access to an OCI tenancy where you can create a VCN, public subnet, security rules, and Oracle Linux Compute VM.
+- **Optional:** Access to an OCI tenancy where you can create a VCN, public subnet, security rules, and an Oracle Linux compute VM.
 - Oracle network access and Oracle SSO for internal resources.
 - Access to the LiveLabs AI Developer skill bundle in the shared Oracle folder.
 - Reserve about **35 GB** of free disk space for Podman Desktop, the Podman machine, and generated containers.
