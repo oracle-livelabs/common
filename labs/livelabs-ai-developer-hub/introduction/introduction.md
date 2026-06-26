@@ -36,7 +36,6 @@ In this workshop, you will:
 
 - **Lab 1: Install and Configure Codex** - Install Codex Desktop, choose a workspace, apply the training config, and restart Codex.
 - **Lab 2: Install and Test Codex Skills** - Download skill zips from the shared Oracle folder, copy them into the Codex skills directory, restart Codex, and confirm the skills load.
-- **Optional Lab: Generate and Run a LiveStack Demo** - Optional stretch lab: install or verify Podman Desktop, use LiveStacks Orchestrator to generate a demo, build the stack, open the running app, and optionally run a supplied zip on OCI Compute.
 - **Lab 3: From Idea to Publish-Ready in One Flow** - Turn a source article into a draft LiveLabs workshop with a clear lab plan, validator-aligned markdown, and source-faithful learner tasks.
 - **Lab 4: Capture Workshop Images in Minutes** - Capture workshop screenshots, annotate key UI states, blur sensitive information, and keep image assets aligned with placeholder references.
 - **Lab 5: Add Knowledge Checks in Minutes** - Add quiz-based knowledge checks without rewriting the teaching content and validate the result.
@@ -56,7 +55,7 @@ In this workshop, you will:
 
 ## Learn More
 
-- [LiveLabs AI Developer Asset Bundle](https://oracle-my.sharepoint.com/:f:/p/kay_malcolm/IgBlxiOi-InZRbQHn6htgExAAZVgHtxSIwjAyAxRkmXa4ag?e=OuPt5u)
+- [LiveLabs AI Developer Skills Repository](http://skills.oraclecorp.com/)
 - [Oracle LiveLabs How-To](https://livelabs.oracle.com/how-to)
 
 ## Acknowledgements
