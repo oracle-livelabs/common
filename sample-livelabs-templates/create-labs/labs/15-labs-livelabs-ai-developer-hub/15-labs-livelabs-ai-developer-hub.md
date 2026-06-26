@@ -10,10 +10,10 @@ This matters because the biggest delays in workshop delivery usually come from t
 
 In this lab, you will:
 
-- Find the LiveLabs AI Developer Hub
-- Understand why agentic author workflows reduce manual effort
-- Find the downloadable skill bundle in the repository
-- Use the guided workshop as the best starting point for deeper how-to content
+* Find the LiveLabs AI Developer Hub
+* Understand why agentic author workflows reduce manual effort
+* Find the downloadable skill bundle in the repository
+* Use the guided workshop as the best starting point for deeper how-to content
 
 **Estimated Time:** 5 minutes
 
@@ -27,10 +27,10 @@ Perform the following set of steps to access the guided workshop entry point for
 
 2. The guide provides a structured path that helps authors move from first use to practical workshop-building workflows quickly:
 
-   * **Lab 1** shows how to create a workshop from source material
-   * **Lab 2** shows how to capture workshop-ready screenshots
-   * **Lab 3** shows how to add knowledge checks
-   * **Lab 4** shows how to convert workshop content into customer outcomes for another industry
+    * **Lab 1** shows how to create a workshop from source material
+    * **Lab 2** shows how to capture workshop-ready screenshots
+    * **Lab 3** shows how to add knowledge checks
+    * **Lab 4** shows how to convert workshop content into customer outcomes for another industry
 
 ## Task 2: Access the LiveLabs AI Developer Hub Repository & Download Skills
 
@@ -62,8 +62,8 @@ Perform the following set of steps to use the hub as the next practical step aft
 
 ## Learn More
 
-- [LiveLabs AI Developer How-To Guide](https://oracle-livelabs.github.io/common/labs/livelabs-ai-developer-hub/workshops/sandbox/)
-- [LiveLabs AI Developer Skill Bundle](http://skills.oraclecorp.com/)
+* [LiveLabs AI Developer How-To Guide](https://oracle-livelabs.github.io/common/labs/livelabs-ai-developer-hub/workshops/sandbox/)
+* [LiveLabs AI Developer Skill Bundle](http://skills.oraclecorp.com/)
 
 ## Acknowledgements
 
