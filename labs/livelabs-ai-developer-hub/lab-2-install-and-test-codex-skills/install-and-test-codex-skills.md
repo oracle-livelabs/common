@@ -22,13 +22,13 @@ Perform the following set of steps to download the skill zip files you will inst
 
 1. Open the [LiveLabs AI Developer Skills Repository](http://skills.oraclecorp.com/) and download the skill zip files required for the training labs:
 
-   * [Livelabs Industry Converter SKill](https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill_name=livelabs-industry-converter)
+    * [Livelabs Industry Converter SKill](https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill_name=livelabs-industry-converter)
     * [Webpage Screenshot Pipeline Skill](https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill_name=webpage-screenshot-pipeline)
     * [Livelabs Gamification Skill](https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill_name=livelabs-gamification)
     * [FreeSQL Skill](https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill_name=freesql)
     * [Livelabs Author Skill](https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill_name=livelabs-author)
 
-![Install Codex Skills](./images/download-livelabs-skill.png)
+    ![Install Codex Skills](./images/download-livelabs-skill.png)
 2. Keep the downloaded files together in a local staging folder so you can unzip and review them before copying them into the Codex skills directory.
 3. If the shared folder includes README files, keep them with the downloads because they often explain installation details, dependencies, or intended usage.
 
