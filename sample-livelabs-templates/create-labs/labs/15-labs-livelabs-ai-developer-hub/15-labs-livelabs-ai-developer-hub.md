@@ -44,7 +44,7 @@ Perform the following set of steps to access the LiveLabs AI Developer Hub repos
     - [FreeSQL Skill](https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill_name=freesql)
     - [Livelabs Author Skill](https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill_name=livelabs-author)
 
-    ![Install Codex Skills](./images/download-livelabs-skill.png)
+        ![Install Codex Skills](./images/download-livelabs-skill.png)
 
 2. Use this repo as your home for author-facing automation workflows. Access downloadable skills and readme documents with ease.
 
