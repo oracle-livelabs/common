@@ -36,21 +36,17 @@ Perform the following set of steps to access the guided workshop entry point for
 
 Perform the following set of steps to access the LiveLabs AI Developer Hub repository and locate the downloadable skill bundle:
 
-1. Open the LiveLabs AI Developer Hub repository:
+1. Open the [LiveLabs AI Developer Skills Repository](http://skills.oraclecorp.com/) and download the skill zip files required for the training labs:
 
-    [LiveLabs AI Developer Hub](https://oracle-my.sharepoint.com/:f:/p/kay_malcolm/IgBlxiOi-InZRbQHn6htgExAAZVgHtxSIwjAyAxRkmXa4ag?e=7hxGPx)
+    - [Livelabs Industry Converter SKill](https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill_name=livelabs-industry-converter)
+    - [Webpage Screenshot Pipeline Skill](https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill_name=webpage-screenshot-pipeline)
+    - [Livelabs Gamification Skill](https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill_name=livelabs-gamification)
+    - [FreeSQL Skill](https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill_name=freesql)
+    - [Livelabs Author Skill](https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill_name=livelabs-author)
+
+    ![Install Codex Skills](./images/download-livelabs-skill.png)
 
 2. Use this repo as your home for author-facing automation workflows. Access downloadable skills and readme documents with ease.
-
-3. Open the `LiveLabs-AI-Developer/` folder in the repo. This is the packaged download area for the reusable skill bundle and author docs.
-
-4. Key files include but are not limited to:
-
-   - `livelabs-workshop-author-v2.zip` for the current workshop authoring skill
-   - `freesql.zip` for FreeSQL workflow support
-   - `livelabs-gamification.zip` for quiz workflows
-   - `livelabs-industry-converter.zip` for industry-conversion workflows
-   - `oracle-db-skills-main.zip` for library of 100+ guides for working with Oracle Database
 
 ## Task 3: Use the Hub as Your Next Step
 
@@ -67,7 +63,7 @@ Perform the following set of steps to use the hub as the next practical step aft
 ## Learn More
 
 - [LiveLabs AI Developer How-To Guide](https://oracle-livelabs.github.io/common/labs/livelabs-ai-developer-hub/workshops/sandbox/)
-- [LiveLabs AI Developer Skill Bundle](https://oracle-my.sharepoint.com/:f:/p/kay_malcolm/IgBlxiOi-InZRbQHn6htgExAAZVgHtxSIwjAyAxRkmXa4ag?e=7hxGPx)
+- [LiveLabs AI Developer Skill Bundle](http://skills.oraclecorp.com/)
 
 ## Acknowledgements
 
