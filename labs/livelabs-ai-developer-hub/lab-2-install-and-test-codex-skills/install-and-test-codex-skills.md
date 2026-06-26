@@ -51,7 +51,6 @@ Perform the following set of steps to confirm that Codex can find and use the in
 ## Learn More
 
 - [Oracle LiveLabs How-To](https://livelabs.oracle.com/how-to)
-- [LiveLabs AI Developer Skills Repository](http://skills.oraclecorp.com/)
 
 ## Acknowledgements
 
