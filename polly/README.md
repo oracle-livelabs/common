@@ -49,3 +49,5 @@ Codex reads the plugin manifest's `skills` path, discovers
 
 If Polly is unavailable, every hook fails open so Codex continues without injected context.
 The shared plugin contains no default Polly endpoint.
+
+Polly deliberately keeps its local configuration in the same per-user directory for both skills and hooks (`~/.config/polly-codex` by default on macOS and Linux, or `%LOCALAPPDATA%\polly-codex` on Windows). Codex's hook-only `PLUGIN_DATA` directory is not used because `$polly-setup` does not run in that hook environment.
