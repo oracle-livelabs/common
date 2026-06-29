@@ -13,6 +13,7 @@
       var lab = url.searchParams.get("lab");
       var fullGuideHref = "https://" + "oracle-livelabs" + ".github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/";
       var workshopExampleHref = "https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/";
+      var wmsHref = "https://apex.oraclecorp.com/pls/apex/f?p=LIVELABS";
       var markdownLabMap = {
         "start-here": "introduction",
         "core-workflow": "1-labs-wms",
@@ -27,12 +28,16 @@
 
       window.authorGuideFullGuideHref = fullGuideHref;
       window.authorGuideWorkshopExampleHref = workshopExampleHref;
+      window.authorGuideWmsHref = wmsHref;
       document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll("[data-full-guide-link]").forEach(function (link) {
           link.href = fullGuideHref;
         });
         document.querySelectorAll("[data-workshop-example-link]").forEach(function (link) {
           link.href = workshopExampleHref;
+        });
+        document.querySelectorAll("[data-wms-link]").forEach(function (link) {
+          link.href = wmsHref;
         });
       });
 
@@ -5422,19 +5427,19 @@
               <div class="quickstart-process-head">
                 <div>
                   <div class="mode-overline">Quickstart process</div>
-                  <h2 class="mode-title" id="beginnerHeading"><span id="quickstartProcessTitle">Submit Workshop Request</span></h2>
+                  <h2 class="mode-title" id="beginnerHeading"><span id="quickstartProcessTitle">WMS Platform</span></h2>
                 </div>
               </div>
               <div class="progress-card quickstart-step-tabs" aria-label="Quickstart step navigation">
                 <div class="progress-summary">
                   <div class="progress-eyebrow">Step-by-step</div>
-                  <p id="progressCaption">Step 1 of 3: Submit Workshop Request.</p>
+                  <p id="progressCaption">Step 1 of 3: WMS Platform.</p>
                 </div>
                 <div class="progress-rail" role="tablist" aria-label="Quickstart steps">
                   <button type="button" class="progress-button" data-step-target="0" role="tab">
                     <span class="progress-mark" aria-hidden="true">1</span>
                     <span class="progress-label">
-                      <small>Step 1</small>
+                      <small>WMS Platform</small>
                       <strong>Submit Workshop Request</strong>
                     </span>
                   </button>
@@ -5472,7 +5477,7 @@
               <article class="step-shell">
                 <div class="lockable">
                   <div class="step-heading">
-                    <div class="step-kicker">Step 1 / WMS gate</div>
+                    <div class="step-kicker">WMS Platform</div>
                     <h2 class="step-title">Submit Workshop Request</h2>
                     <p class="step-summary">Create the WMS record first, fill it like a reviewer will read it, and understand the status path before you spend real time building the workshop.</p>
                     <ul class="step-meta-list" aria-label="Step 1 summary">
@@ -5484,6 +5489,10 @@
 
                   <div class="guide-panel guided-only mb-4">
                     WMS is not just intake. The same record follows the workshop through council review, development, Self Quality Assurance, stakeholder verification, publishing, and Quarterly Quality Assurance.
+                  </div>
+                  <div class="wms-platform-actions mb-4">
+                    <a class="btn btn-primary rounded-pill px-4" href="https://apex.oraclecorp.com/pls/apex/f?p=LIVELABS" data-wms-link target="_blank" rel="noreferrer" aria-label="Open WMS Platform in a new tab">Open WMS</a>
+                    <span class="wms-platform-note">Requires Oracle VPN and WMS access.</span>
                   </div>
 
                   <div
@@ -5533,55 +5542,23 @@
                       <img src="./content/author-guide/1-labs-wms/images/submit_workshop.png" alt="Submit new workshop request form in WMS">
                     </figure>
 
-                    <section class="step-block">
+                    <section class="step-block example-generator-panel" aria-labelledby="wmsExampleGeneratorHeading">
                       <div class="step-block-header">
-                        <div class="panel-kicker">Example completion</div>
-                        <h3>Fill the request with concrete outcome-driven detail</h3>
-                        <p>Use examples like these as the quality bar. The exact stakeholder or council name changes by workshop, but the level of detail should not.</p>
+                        <div class="panel-kicker">Prompt examples <span class="experimental-badge">Experimental</span></div>
+                        <h3 id="wmsExampleGeneratorHeading">Generate WMS-ready field examples from your workshop idea</h3>
+                        <p>Enter a topic or rough workshop idea and the guide drafts reviewer-facing examples for the WMS fields that usually need the most detail.</p>
                       </div>
-                      <div class="detail-field-grid">
-                        <article class="detail-field-card">
-                          <span class="detail-field-label">Workshop Title</span>
-                          <p class="detail-field-value">Build and publish an Oracle LiveLabs workshop from WMS to GitHub Pages</p>
-                          <p class="detail-field-note">Lead with the learner outcome, not only the product name.</p>
-                        </article>
-                        <article class="detail-field-card">
-                          <span class="detail-field-label">Workshop Abstract</span>
-                          <p class="detail-field-value">Authors learn how to request a workshop in WMS, prepare GitHub Desktop and Visual Studio Code, build from the LiveLabs sample structure, complete Self Quality Assurance, and request publishing.</p>
-                          <p class="detail-field-note">A council reviewer should understand the end-to-end learner goal after reading two or three sentences.</p>
-                        </article>
-                        <article class="detail-field-card">
-                          <span class="detail-field-label">Workshop Outline</span>
-                          <ol class="detail-inline-list">
-                            <li>Submit and track the WMS request.</li>
-                            <li>Set up GitHub and preview tooling.</li>
-                            <li>Build the workshop structure and labs.</li>
-                            <li>Run Self Quality Assurance, fix pull request issues, and publish.</li>
-                          </ol>
-                          <p class="detail-field-note">Outline the build flow in the same order the learner or author will execute it.</p>
-                        </article>
-                        <article class="detail-field-card">
-                          <span class="detail-field-label">Workshop Prerequisites</span>
-                          <p class="detail-field-value">Oracle VPN access, GitHub account tied to @oracle.com, GitHub Desktop, Visual Studio Code, Live Server, and permission to work in the target oracle-livelabs repository.</p>
-                          <p class="detail-field-note">If a prerequisite blocks setup or review later, surface it now.</p>
-                        </article>
-                        <article class="detail-field-card">
-                          <span class="detail-field-label">Stakeholder / Council / Owner Group</span>
-                          <p class="detail-field-value">Choose the named stakeholder who will verify the workshop, the council aligned to the production repository, and the team that will own maintenance after publish.</p>
-                          <p class="detail-field-note">Do not leave these as defaults or temporary contributors.</p>
-                        </article>
-                        <article class="detail-field-card">
-                          <span class="detail-field-label">Required Tags</span>
-                          <p class="detail-field-value">Use the actual WMS tags for the workshop's level, audience role, focus area, and primary product.</p>
-                          <ul class="detail-inline-list">
-                            <li>Level = Beginner</li>
-                            <li>Role = Developer</li>
-                            <li>Focus Area = the main solution area</li>
-                            <li>Product = the service being taught</li>
-                          </ul>
-                          <p class="detail-field-note">Tags are mandatory search and routing metadata, not optional cleanup.</p>
-                        </article>
-                      </div>
+                      <form class="example-generator-form" id="wmsExampleForm">
+                        <label class="form-label filter-label" for="wmsExamplePrompt">Workshop topic or author prompt</label>
+                        <div class="example-generator-input-row">
+                          <textarea id="wmsExamplePrompt" class="form-control generator-textarea" rows="4" placeholder="Example: Build a LiveLabs workshop that teaches developers how to deploy an AI agent with Oracle Database 23ai"></textarea>
+                          <button class="btn btn-primary rounded-pill px-4" type="submit">Generate examples</button>
+                        </div>
+                      </form>
+                      <div class="generator-state generator-empty-state" id="wmsExampleEmpty">Generated WMS field examples will appear here.</div>
+                      <div class="generator-state generator-loading-state d-none" id="wmsExampleLoading">Generating example fields...</div>
+                      <div class="generator-state generator-error-state d-none" id="wmsExampleError" role="alert"></div>
+                      <div class="detail-field-grid generated-example-grid" id="wmsExampleResults" aria-live="polite"></div>
                     </section>
 
                     <section class="step-block guided-only">
@@ -6381,6 +6358,82 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
           </div>
         </div>
       </section>
+      <!-- Markdown Workshop Generator -->
+      <section class="mode-screen d-none" id="generatorMode" aria-labelledby="generatorHeading">
+        <div class="container">
+          <div class="card mode-hero generator-mode-hero">
+            <div class="card-body">
+              <div class="row g-4 align-items-start">
+                <div class="col-xl-8">
+                  <div class="mode-overline">Author tool <span class="experimental-badge">Experimental</span></div>
+                  <h2 class="mode-title" id="generatorHeading">Markdown Workshop Generator</h2>
+                  <p class="mode-copy">Generate common Markdown and LiveLabs workshop snippets: text, tables, code blocks, copy buttons, images, conditional sections, quizzes, FreeSQL placeholders, QA checks, and outline-only support.</p>
+                  <div class="mode-chip-row">
+                    <span class="mode-chip">Code blocks</span>
+                    <span class="mode-chip">Tables</span>
+                    <span class="mode-chip">Text</span>
+                    <span class="mode-chip">Quizzes</span>
+                    <span class="mode-chip">LiveLabs components</span>
+                  </div>
+                </div>
+                <div class="col-xl-4">
+                  <div class="compact-panel h-100">
+                    <div class="panel-kicker">Snippet source</div>
+                    <p class="panel-copy mb-0">Patterns are drawn from Markdown cheat sheets, code-block references, the LiveLabs author guide, the quiz guide, and the local LiveLabs author skill workflow.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="generator-layout">
+            <section class="generator-workbench" aria-labelledby="generatorWorkbenchHeading">
+              <div class="step-block-header">
+                <div class="panel-kicker">Snippet builder</div>
+                <h3 id="generatorWorkbenchHeading">Choose the workshop pattern you need</h3>
+                <p>Most snippets do not need a prompt. Use the prompt only for the outline-only support option or when you want placeholders tuned to a topic.</p>
+              </div>
+              <form class="workshop-generator-form" id="workshopMarkdownForm">
+                <label class="form-label filter-label" for="workshopMarkdownPrompt">Optional workshop topic</label>
+                <textarea id="workshopMarkdownPrompt" class="form-control generator-textarea" rows="4" placeholder="Optional: A beginner workshop for developers to build a RAG app with Oracle Database 23ai"></textarea>
+                <div class="generator-controls">
+                  <label class="form-label filter-label" for="workshopMarkdownType">Snippet</label>
+                  <select id="workshopMarkdownType" class="form-select generator-select">
+                    <option value="livelabs-lab-shell">LiveLabs lab shell</option>
+                    <option value="markdown-text">Text formatting</option>
+                    <option value="callouts">Notes and callouts</option>
+                    <option value="code-copy">Copy-ready code block</option>
+                    <option value="code-highlight">Highlighted code and diff</option>
+                    <option value="tables">Tables</option>
+                    <option value="images-media">Images and media</option>
+                    <option value="conditional-content">Conditional content</option>
+                    <option value="quiz-single">Quiz block</option>
+                    <option value="freesql">FreeSQL embed placeholder</option>
+                    <option value="qa-checklist">Author QA checklist</option>
+                    <option value="outline-support">Workshop outline only</option>
+                  </select>
+                  <button class="btn btn-primary rounded-pill px-4" type="submit">Generate snippet</button>
+                </div>
+              </form>
+              <div class="generator-snippet-summary" id="workshopMarkdownSummary">Select a snippet and generate it here.</div>
+            </section>
+
+            <section class="generator-output-panel" aria-labelledby="generatorOutputHeading">
+              <div class="snippet-header">
+                <div>
+                  <div class="snippet-meta" id="generatorOutputMeta">Snippet output</div>
+                  <h3 class="mb-0" id="generatorOutputHeading">Workshop snippet</h3>
+                </div>
+                <button class="copy-snippet" type="button" id="copyGeneratedMarkdown" disabled>Copy</button>
+              </div>
+              <div class="generator-state generator-empty-state" id="workshopMarkdownEmpty">Generated snippets will appear here.</div>
+              <div class="generator-state generator-loading-state d-none" id="workshopMarkdownLoading">Generating snippet...</div>
+              <div class="generator-state generator-error-state d-none" id="workshopMarkdownError" role="alert"></div>
+              <pre class="generator-markdown-pre d-none"><code id="workshopMarkdownOutput"></code></pre>
+            </section>
+          </div>
+        </div>
+      </section>
       <!-- Search -->
       <section class="mode-screen d-none" id="searchMode" aria-labelledby="searchHeading">
         <div class="container">
@@ -6522,6 +6575,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="./assets/js/guide-content.js"></script>
+  <script src="./assets/js/workshop-generator.js"></script>
   <script src="./assets/js/redwood-video-player.js"></script>
   <script src="./assets/js/shared-side-nav.js?v=20260529-shared-nav-v2"></script>
   <script src="./assets/js/author-guide-app.js?v=20260529-nav-search-v2"></script>
