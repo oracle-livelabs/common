@@ -59,8 +59,49 @@ export interface ProjectSettings {
 const __filename = fileURLToPath(import.meta.url);
 export const PROJECT_ROOT = path.resolve(path.dirname(__filename), "..");
 export const SETTINGS_FILE = path.join(PROJECT_ROOT, "config", "project_settings.json");
+export const ENV_FILE = path.join(PROJECT_ROOT, ".env");
 
 let cachedSettings: ProjectSettings | undefined;
+
+loadDotEnv();
+
+function loadDotEnv(): void {
+  if (!existsSync(ENV_FILE)) {
+    return;
+  }
+
+  const lines = readFileSync(ENV_FILE, "utf-8").split(/\r?\n/);
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    if (!trimmed || trimmed.startsWith("#")) {
+      continue;
+    }
+
+    const separatorIndex = trimmed.indexOf("=");
+    if (separatorIndex <= 0) {
+      continue;
+    }
+
+    const key = trimmed.slice(0, separatorIndex).trim();
+    const rawValue = trimmed.slice(separatorIndex + 1).trim();
+
+    if (!key || key in process.env) {
+      continue;
+    }
+
+    process.env[key] = stripQuotes(rawValue);
+  }
+}
+
+function stripQuotes(value: string): string {
+  if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+    return value.slice(1, -1);
+  }
+
+  return value;
+}
 
 export function loadProjectSettings(): ProjectSettings {
   // The settings file is tiny and effectively static during a test run, so a

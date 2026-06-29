@@ -29,7 +29,7 @@ filter_supported_files() {
         [ -z "$file" ] && continue
         basename_lower=$(basename "$file" | tr '[:upper:]' '[:lower:]')
         case "$basename_lower" in
-            readme.md)
+            readme.md|skill.md)
                 continue
                 ;;
             *.md|index.html|manifest.json)

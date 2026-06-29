@@ -39,31 +39,50 @@ class Cdp {
     this.nextId = 1;
     this.pending = new Map();
     this.ws = new WebSocket(wsUrl);
+    this.keepAlive = null;
   }
   async open() {
     await new Promise((resolveOpen, rejectOpen) => {
       this.ws.addEventListener("open", resolveOpen, { once: true });
       this.ws.addEventListener("error", rejectOpen, { once: true });
     });
-    this.ws.addEventListener("message", (event) => {
-      const payload = JSON.parse(event.data);
+    this.ws.addEventListener("message", async (event) => {
+      const payloadText = await messageDataToText(event.data);
+      const payload = JSON.parse(payloadText);
       if (!payload.id || !this.pending.has(payload.id)) return;
       const pending = this.pending.get(payload.id);
+      clearTimeout(pending.timer);
       this.pending.delete(payload.id);
       payload.error ? pending.rejectPending(new Error(payload.error.message)) : pending.resolvePending(payload.result);
     });
+    this.keepAlive = setInterval(() => {}, 1000);
   }
   send(method, params = {}) {
     const id = this.nextId;
     this.nextId += 1;
     this.ws.send(JSON.stringify({ id, method, params }));
     return new Promise((resolvePending, rejectPending) => {
-      this.pending.set(id, { resolvePending, rejectPending });
+      const timer = setTimeout(() => {
+        this.pending.delete(id);
+        rejectPending(new Error(`Timed out waiting for ${method}`));
+      }, 10000);
+      this.pending.set(id, { resolvePending, rejectPending, timer });
     });
   }
   close() {
+    if (this.keepAlive) clearInterval(this.keepAlive);
+    for (const pending of this.pending.values()) clearTimeout(pending.timer);
+    this.pending.clear();
     this.ws.close();
   }
+}
+
+async function messageDataToText(data) {
+  if (typeof data === "string") return data;
+  if (data instanceof ArrayBuffer) return new TextDecoder().decode(data);
+  if (ArrayBuffer.isView(data)) return new TextDecoder().decode(data);
+  if (typeof data?.text === "function") return data.text();
+  return String(data);
 }
 
 async function evaluate(client, expression) {
@@ -128,7 +147,9 @@ try {
   await client.send("Page.reload");
   await waitFor(client, 'document.readyState === "complete" && document.body.classList.contains("auth-blocked")', "blocked admin state");
   await evaluate(client, `(() => {
-    document.querySelector("#email").value = "livelabs-admin@oracle.com";
+    document.querySelector("#email").value = "livelabs-admin";
+    document.querySelector("#password").value = "LiveLabsAdmin#2026!";
+    document.querySelector("#keep-logged-in").checked = false;
     document.querySelector("#login-form").requestSubmit();
     return true;
   })()`);

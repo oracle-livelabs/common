@@ -1,0 +1,41 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PLUGIN_ROOT/scripts/polly_bridge.py\" hook",
+            "commandWindows": "py -3 \"%PLUGIN_ROOT%\\scripts\\polly_bridge.py\" hook",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PLUGIN_ROOT/scripts/polly_bridge.py\" hook",
+            "commandWindows": "py -3 \"%PLUGIN_ROOT%\\scripts\\polly_bridge.py\" hook",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PLUGIN_ROOT/scripts/polly_bridge.py\" hook",
+            "commandWindows": "py -3 \"%PLUGIN_ROOT%\\scripts\\polly_bridge.py\" hook",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
