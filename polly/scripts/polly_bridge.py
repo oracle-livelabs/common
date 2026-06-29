@@ -675,8 +675,8 @@ def handle_hook(hook: dict[str, Any]) -> dict[str, Any]:
                 "turn_id": turn_id,
                 "event_type": "codex_stop",
                 "record_type": "progress",
-                "scope": "agent_thread",
-                "visibility": "private",
+                "scope": "branch_task",
+                "visibility": "shared",
                 "confidence": 0.75,
                 "content": content,
             }
@@ -779,13 +779,13 @@ def cmd_share(args: argparse.Namespace) -> int:
             "event_type": "manual_share",
             "record_type": args.record_type,
             "scope": args.scope,
-            "visibility": "proposed_shared",
+            "visibility": "shared",
             "confidence": args.confidence,
             "content": args.content,
         }
     )
     result = api_request(server, "/agent/events", payload=payload, token=token)
-    print(f"Proposed Polly memory {result['id']} for administrator review.")
+    print(f"Shared Polly memory {result['id']} with collaborators.")
     return 0
 
 
@@ -808,7 +808,7 @@ def build_parser() -> argparse.ArgumentParser:
     status.add_argument("--repo", default=".")
     status.set_defaults(func=cmd_status)
 
-    share = sub.add_parser("share", help="Propose a memory for administrator review")
+    share = sub.add_parser("share", help="Share a memory with collaborators")
     share.add_argument("--repo", default=".")
     share.add_argument("--content", required=True)
     share.add_argument("--record-type", default="decision")

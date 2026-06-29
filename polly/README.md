@@ -1,6 +1,6 @@
 # Polly Codex Plugin
 
-Polly shares reviewed coding context across developers and forks while keeping each developer's private continuity isolated. The plugin retrieves bounded context on `SessionStart` and `UserPromptSubmit`, then updates one rolling private checkpoint per Codex session on `Stop`.
+Polly shares authenticated developer context across developers and forks while preserving explicitly private memory. The plugin retrieves bounded context on `SessionStart` and `UserPromptSubmit`, then updates one rolling shared checkpoint per Codex session on `Stop`.
 
 ## Prerequisites
 
@@ -9,6 +9,15 @@ Polly shares reviewed coding context across developers and forks while keeping e
 - macOS Keychain, Linux Secret Service with `secret-tool`, or Windows DPAPI.
 - A one-time enrollment code issued by the Polly administrator.
 
+## Install
+
+```bash
+codex plugin marketplace add oracle-livelabs/common --ref main
+codex plugin add polly@oracle-livelabs-common
+```
+
+Start a new Codex thread after installation. Codex reads the plugin manifest's `skills` path, discovers `skills/polly-setup/SKILL.md`, and exposes its declared name as `$polly-setup`.
+
 
 ## Workflow
 
@@ -16,7 +25,7 @@ Polly shares reviewed coding context across developers and forks while keeping e
 2. The developer runs `$polly-setup`. The permanent token is stored by the operating system and is never written to a plaintext file.
 3. In a fork clone, the developer runs `$polly-init` with the upstream project, for example `oracle-livelabs/livestack`.
 4. Codex hooks retrieve personal continuity plus accepted shared memory under that canonical repository.
-5. Stop hooks replace one private checkpoint for the current session. They do not end the session or publish every turn.
-6. `$polly-share` creates a proposed record. An administrator must accept it before other developers receive it as trusted shared context.
+5. Stop hooks replace one shared checkpoint for the current session. Collaborators receive the latest progress without accumulating one record per turn.
+6. `$polly-share` immediately publishes a deliberate decision, constraint, assumption, blocker, or progress note to collaborators. The administrator can revoke developers or moderate incorrect records, but no approval queue is required.
 
 If Polly is unavailable, every hook fails open so Codex continues without injected context.
