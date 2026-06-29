@@ -106,7 +106,11 @@ class CredentialStore:
 
 class MacOSKeychainStore(CredentialStore):
     @staticmethod
-    def service(server: str) -> str:
+    def service() -> str:
+        return "polly-agent"
+
+    @staticmethod
+    def legacy_service(server: str) -> str:
         return f"polly-agent:{server.rstrip('/')}"
 
     @property
@@ -123,7 +127,7 @@ class MacOSKeychainStore(CredentialStore):
                     "-a",
                     developer,
                     "-s",
-                    self.service(server),
+                    self.service(),
                     "-w",
                     token,
                 ],
@@ -135,7 +139,8 @@ class MacOSKeychainStore(CredentialStore):
         except (FileNotFoundError, subprocess.CalledProcessError) as exc:
             raise BridgeError("Could not store the Polly token in macOS Keychain") from exc
 
-    def load(self, server: str, developer: str) -> str | None:
+    @staticmethod
+    def _load_service(service: str, developer: str) -> str | None:
         try:
             result = subprocess.run(
                 [
@@ -144,7 +149,7 @@ class MacOSKeychainStore(CredentialStore):
                     "-a",
                     developer,
                     "-s",
-                    self.service(server),
+                    service,
                     "-w",
                 ],
                 check=True,
@@ -157,7 +162,8 @@ class MacOSKeychainStore(CredentialStore):
             return None
         return result.stdout.strip() or None
 
-    def delete(self, server: str, developer: str) -> None:
+    @staticmethod
+    def _delete_service(service: str, developer: str) -> None:
         subprocess.run(
             [
                 "security",
@@ -165,15 +171,32 @@ class MacOSKeychainStore(CredentialStore):
                 "-a",
                 developer,
                 "-s",
-                self.service(server),
+                service,
             ],
             check=False,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
 
+    def load(self, server: str, developer: str) -> str | None:
+        token = self._load_service(self.service(), developer)
+        if token:
+            return token
+        legacy_service = self.legacy_service(server)
+        token = self._load_service(legacy_service, developer)
+        if token:
+            self.store(server, developer, token)
+            self._delete_service(legacy_service, developer)
+        return token
+
+    def delete(self, server: str, developer: str) -> None:
+        self._delete_service(self.service(), developer)
+        self._delete_service(self.legacy_service(server), developer)
+
 
 class LinuxSecretServiceStore(CredentialStore):
+    APPLICATION = "polly-agent"
+
     @property
     def description(self) -> str:
         return "Linux Secret Service"
@@ -185,8 +208,8 @@ class LinuxSecretServiceStore(CredentialStore):
                     "secret-tool",
                     "store",
                     "--label=Polly Codex device token",
-                    "server",
-                    server.rstrip("/"),
+                    "application",
+                    self.APPLICATION,
                     "developer",
                     developer,
                 ],
@@ -205,17 +228,11 @@ class LinuxSecretServiceStore(CredentialStore):
                 "Could not store the Polly token; verify that a Secret Service is running"
             ) from exc
 
-    def load(self, server: str, developer: str) -> str | None:
+    @staticmethod
+    def _lookup(*attributes: str) -> str | None:
         try:
             result = subprocess.run(
-                [
-                    "secret-tool",
-                    "lookup",
-                    "server",
-                    server.rstrip("/"),
-                    "developer",
-                    developer,
-                ],
+                ["secret-tool", "lookup", *attributes],
                 check=False,
                 capture_output=True,
                 text=True,
@@ -226,20 +243,30 @@ class LinuxSecretServiceStore(CredentialStore):
             ) from exc
         return result.stdout.strip() if result.returncode == 0 and result.stdout.strip() else None
 
-    def delete(self, server: str, developer: str) -> None:
+    @staticmethod
+    def _clear(*attributes: str) -> None:
         subprocess.run(
-            [
-                "secret-tool",
-                "clear",
-                "server",
-                server.rstrip("/"),
-                "developer",
-                developer,
-            ],
+            ["secret-tool", "clear", *attributes],
             check=False,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
+
+    def load(self, server: str, developer: str) -> str | None:
+        current_attributes = ("application", self.APPLICATION, "developer", developer)
+        token = self._lookup(*current_attributes)
+        if token:
+            return token
+        legacy_attributes = ("server", server.rstrip("/"), "developer", developer)
+        token = self._lookup(*legacy_attributes)
+        if token:
+            self.store(server, developer, token)
+            self._clear(*legacy_attributes)
+        return token
+
+    def delete(self, server: str, developer: str) -> None:
+        self._clear("application", self.APPLICATION, "developer", developer)
+        self._clear("server", server.rstrip("/"), "developer", developer)
 
 
 class WindowsDPAPIStore(CredentialStore):
@@ -248,7 +275,12 @@ class WindowsDPAPIStore(CredentialStore):
         return "Windows DPAPI"
 
     @staticmethod
-    def path(server: str, developer: str) -> Path:
+    def path(_server: str, developer: str) -> Path:
+        key = hashlib.sha256(f"polly-agent\0{developer}".encode()).hexdigest()
+        return plugin_data_dir() / "credentials" / f"{key}.bin"
+
+    @staticmethod
+    def legacy_path(server: str, developer: str) -> Path:
         key = hashlib.sha256(f"{server.rstrip('/')}\0{developer}".encode()).hexdigest()
         return plugin_data_dir() / "credentials" / f"{key}.bin"
 
@@ -278,8 +310,7 @@ class WindowsDPAPIStore(CredentialStore):
         except (FileNotFoundError, subprocess.CalledProcessError) as exc:
             raise BridgeError("Could not store the Polly token with Windows DPAPI") from exc
 
-    def load(self, server: str, developer: str) -> str | None:
-        path = self.path(server, developer)
+    def _load_path(self, path: Path) -> str | None:
         if not path.exists():
             return None
         script = (
@@ -299,9 +330,21 @@ class WindowsDPAPIStore(CredentialStore):
             raise BridgeError("Could not load the Polly token with Windows DPAPI") from exc
         return result.stdout or None
 
+    def load(self, server: str, developer: str) -> str | None:
+        token = self._load_path(self.path(server, developer))
+        if token:
+            return token
+        legacy_path = self.legacy_path(server, developer)
+        token = self._load_path(legacy_path)
+        if token:
+            self.store(server, developer, token)
+            legacy_path.unlink(missing_ok=True)
+        return token
+
     def delete(self, server: str, developer: str) -> None:
         try:
             self.path(server, developer).unlink(missing_ok=True)
+            self.legacy_path(server, developer).unlink(missing_ok=True)
         except OSError as exc:
             raise BridgeError("Could not remove the Windows DPAPI token file") from exc
 

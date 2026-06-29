@@ -325,6 +325,33 @@ def test_no_unsupported_plaintext_credential_fallback() -> None:
         bridge.credential_store("FreeBSD")
 
 
+def test_credential_keys_do_not_persist_the_server_url(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    first_server = "https://polly-one.example.com"
+    second_server = "https://polly-two.example.com"
+    developer = "dev-a"
+    commands: list[list[str]] = []
+
+    def capture(command: list[str], **_kwargs: object) -> subprocess.CompletedProcess[str]:
+        commands.append(command)
+        return subprocess.CompletedProcess(command, 0, stdout="")
+
+    monkeypatch.setattr(bridge.subprocess, "run", capture)
+    bridge.MacOSKeychainStore().store(first_server, developer, "token")
+    bridge.LinuxSecretServiceStore().store(first_server, developer, "token")
+
+    assert bridge.MacOSKeychainStore.service() == "polly-agent"
+    assert first_server not in bridge.MacOSKeychainStore.service()
+    assert all(first_server not in argument for command in commands for argument in command)
+
+    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "plugin-data"))
+    first_path = bridge.WindowsDPAPIStore.path(first_server, developer)
+    second_path = bridge.WindowsDPAPIStore.path(second_server, developer)
+    assert first_path == second_path
+    assert first_server not in str(first_path)
+
+
 def test_plugin_contains_no_embedded_polly_endpoint() -> None:
     plugin_root = Path(__file__).parents[1]
     forbidden_host = ".".join(("150", "136", "151", "51"))
