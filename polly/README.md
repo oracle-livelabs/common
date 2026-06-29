@@ -44,8 +44,9 @@ Codex reads the plugin manifest's `skills` path, discovers
 4. Codex hooks retrieve personal continuity plus accepted shared memory under that canonical repository.
 5. Each prompt shows a Polly status message and confirms whether relevant memory was supplied. If retrieval fails, Codex says it continued without shared context.
 6. Stop hooks replace one shared checkpoint for the current session and confirm when it has been shared. Collaborators receive the latest progress without accumulating one record per turn.
-7. `$polly-quiet` pauses automatic checkpoints and `$polly-share` for the current clone while keeping context retrieval active. `$polly-quiet off` resumes sharing.
-8. `$polly-share` immediately publishes a deliberate decision, constraint, assumption, blocker, or progress note to collaborators. The administrator can revoke developers or moderate incorrect records, but no approval queue is required.
+7. `$polly-quiet` pauses automatic checkpoints, `$polly-share`, and `$polly-private` for the current clone while keeping context retrieval active. `$polly-quiet off` resumes memory writes.
+8. `$polly-private` saves a deliberate developer-only note under the canonical repository without tying it to the current Codex session. It is available as personal continuity in future sessions but is never returned to collaborators.
+9. `$polly-share` immediately publishes a deliberate decision, constraint, assumption, blocker, or progress note to collaborators. The administrator can revoke developers or moderate incorrect records, but no approval queue is required.
 
 If Polly is unavailable, every hook fails open so Codex continues without injected context.
 The shared plugin contains no default Polly endpoint.

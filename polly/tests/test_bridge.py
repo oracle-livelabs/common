@@ -393,14 +393,14 @@ def test_quiet_command_controls_repository_local_sharing(
 
     assert bridge.cmd_quiet(Namespace(repo=str(repo), mode="on")) == 0
     assert bridge.quiet_mode_enabled(repo)
-    assert "memory sharing are paused" in capsys.readouterr().out
+    assert "memory writes are paused" in capsys.readouterr().out
 
     assert bridge.cmd_quiet(Namespace(repo=str(repo), mode="status")) == 0
     assert "quiet mode is on" in capsys.readouterr().out
 
     assert bridge.cmd_quiet(Namespace(repo=str(repo), mode="off")) == 0
     assert not bridge.quiet_mode_enabled(repo)
-    assert "memory sharing resumed" in capsys.readouterr().out
+    assert "memory writes resumed" in capsys.readouterr().out
 
 
 def test_quiet_mode_blocks_manual_share(
@@ -424,6 +424,29 @@ def test_quiet_mode_blocks_manual_share(
                 scope="repo_shared",
                 confidence=0.9,
                 content="Do not publish this test decision.",
+            )
+        )
+
+
+def test_quiet_mode_blocks_private_memory(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = make_repo(tmp_path)
+    run_git(repo, "config", "--local", "polly.quiet", "true")
+    monkeypatch.setattr(
+        bridge,
+        "configured_identity",
+        lambda: pytest.fail("quiet private memory must not load credentials"),
+    )
+
+    with pytest.raises(bridge.BridgeError, match="quiet mode is active"):
+        bridge.cmd_private(
+            Namespace(
+                repo=str(repo),
+                event_id="private-event",
+                record_type="observation",
+                confidence=0.9,
+                content="Do not store this private test note.",
             )
         )
 
@@ -492,6 +515,51 @@ def test_manual_share_publishes_directly(
     assert isinstance(payload, dict)
     assert payload["visibility"] == "shared"
     assert "with collaborators" in capsys.readouterr().out
+
+
+def test_private_memory_is_session_independent(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    repo = make_repo(tmp_path)
+    run_git(
+        repo,
+        "config",
+        "--local",
+        "polly.canonicalRepo",
+        "oracle-livelabs/livestack",
+    )
+    captured: dict[str, object] = {}
+    monkeypatch.setenv("CODEX_SESSION_ID", "active-codex-session")
+    monkeypatch.setattr(
+        bridge, "configured_identity", lambda: ("http://polly", "dev-a", "token")
+    )
+
+    def capture_request(_server, path, *, payload=None, token=None):
+        captured.update(path=path, payload=payload, token=token)
+        return {"id": "mem-private"}
+
+    monkeypatch.setattr(bridge, "api_request", capture_request)
+    result = bridge.cmd_private(
+        Namespace(
+            repo=str(repo),
+            event_id="private-event",
+            record_type="observation",
+            confidence=0.9,
+            content="Remember my preferred local debugging workflow.",
+        )
+    )
+
+    assert result == 0
+    payload = captured["payload"]
+    assert isinstance(payload, dict)
+    assert payload["session_id"] is None
+    assert payload["branch"] is None
+    assert payload["scope"] == "developer_private"
+    assert payload["visibility"] == "private"
+    assert payload["event_type"] == "manual_private"
+    assert "future sessions" in capsys.readouterr().out
 
 
 def test_hook_fails_open_without_enrollment(tmp_path: Path) -> None:
