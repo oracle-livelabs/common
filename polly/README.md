@@ -13,11 +13,27 @@ Polly shares authenticated developer context across developers and forks while p
 ## Install
 
 ```bash
-codex plugin marketplace add oracle-livelabs/common --ref main
+codex plugin marketplace add oracle-livelabs/common --ref main \
+  --sparse .agents/plugins \
+  --sparse polly
 codex plugin add polly@oracle-livelabs-common
 ```
 
-Start a new Codex thread after installation. Codex reads the plugin manifest's `skills` path, discovers `skills/polly-setup/SKILL.md`, and exposes its declared name as `$polly-setup`.
+The sparse paths keep Codex from cloning the full `common` repository. Existing
+installations that were registered without sparse checkout can be migrated in
+place without re-enrolling:
+
+```bash
+codex plugin marketplace remove oracle-livelabs-common
+codex plugin marketplace add oracle-livelabs/common --ref main \
+  --sparse .agents/plugins \
+  --sparse polly
+codex plugin list --marketplace oracle-livelabs-common
+```
+
+Restart Codex and start a new thread after installing or refreshing the plugin.
+Codex reads the plugin manifest's `skills` path, discovers
+`skills/polly-setup/SKILL.md`, and exposes its declared name as `$polly-setup`.
 
 
 ## Workflow
