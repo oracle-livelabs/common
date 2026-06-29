@@ -1,5 +1,8 @@
 node_modules/
 artifacts/
+reports/*
+!reports/.gitkeep
+!reports/README.md
 .env
 .env.local
 .auth/

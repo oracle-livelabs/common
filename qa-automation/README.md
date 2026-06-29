@@ -54,6 +54,7 @@ node ./scripts/qa.mjs tests/platform/smoke
 node ./scripts/qa.mjs tests/platform/regression
 node ./scripts/qa.mjs tests/platform --tag smoke
 node ./scripts/qa.mjs tests/platform --tag search
+node ./QA_GUI/scripts/published-workshop-qa.mjs --url "https://oracle-livelabs.github.io/<repo>/<path>/workshops/tenancy/index.html"
 node ./scripts/qa.mjs tests/platform/smoke/public/homePage.spec.ts --headed
 ```
 
@@ -115,6 +116,73 @@ The generated suite intentionally still does not execute Sandbox or tenancy
 provisioning flows. It only validates instruction pages that are opened from
 those options.
 
+## Published Workshop QA Checker
+
+Use this lane when you already have a published workshop URL and want the same
+browser-side checker that appears after adding `qa=true` manually.
+
+The visual app and its runner live in `QA_GUI`.
+
+Visual app:
+
+```powershell
+npm run workshop:qa:app
+```
+
+Open `http://127.0.0.1:8787`, paste a workshop URL, and run the check from the
+page. The History tab keeps the last 5 completed runs and the app restores the
+active run after browser back/reload.
+
+For a local Windows install, double-click `QA_GUI/Install Workshop QA.cmd`. It
+creates a Desktop shortcut that starts the local server and opens the app.
+
+To produce a shareable Windows installer, run:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\QA_GUI\package-windows-installer.ps1
+```
+
+The installer artifact is written to `artifacts/dist/Workshop-QA-Setup.exe`.
+
+Command line:
+
+```powershell
+npm run workshop:qa -- "https://oracle-livelabs.github.io/oic/oic-gen3/cookbooks/erp-cloud/bulk-extract/workshops/tenancy/index.html"
+```
+
+The runner fetches the workshop `manifest.json`, opens each lab as
+`?qa=true&lab=<lab-id>`, waits for the top-right QA report to settle, then writes:
+
+- `QA_GUI/artifacts/runs/<run>/report.md` from the visual app
+- `QA_GUI/artifacts/runs/<run>/report.json` from the visual app
+- `QA_GUI/artifacts/published-workshop-qa/<run>/report.md` from the CLI
+- `QA_GUI/artifacts/published-workshop-qa/<run>/report.json` from the CLI
+
+Useful options:
+
+```powershell
+npm run workshop:qa -- "<workshop-url>" --lab cloud-login
+npm run workshop:qa -- "<workshop-url>" --max-labs 3
+npm run workshop:qa -- "<workshop-url>" --headed
+npm run workshop:qa -- "<workshop-url>" --browser-channel msedge
+npm run workshop:qa -- "<workshop-url>" --allow-issues
+```
+
+Quote URLs that contain `&` in PowerShell. By default, the command exits non-zero
+when the checker finds issues or when a lab cannot load. Use `--allow-issues`
+when you only want the report file and do not want findings to fail the command.
+
+Jenkins generated catalog runs:
+
+```text
+Script Path: qa-automation/Jenkinsfile
+Runbook: docs/runbooks/jenkins-generated-catalog.md
+```
+
+Use Jenkins for the scheduled overnight catalog sweep. The Jenkins pipeline runs
+`tests/platform/generated`, not the homepage smoke lane, and supports a fast
+`pr-slice` profile plus a sharded `nightly-full` profile.
+
 To see the generated test names without opening a browser:
 
 ```powershell
@@ -172,6 +240,10 @@ Create a reusable authenticated browser state, then run the generated suite:
 npm run auth:storage
 npm run test:generated
 ```
+
+When `QA_STORAGE_STATE` points to an existing storage-state file, both
+`catalog:index` and `test:generated` reuse it. That lets scheduled runs crawl
+and test catalog entries visible after sign-in.
 
 Authenticated checks:
 
@@ -275,6 +347,5 @@ $env:QA_CATALOG_INDEX_LIMIT="25"
 $env:QA_CATALOG_INDEX_SHARD="1/4"
 $env:QA_AUTH_TARGET_URL="https://example-private-page-url"
 $env:QA_TRACE="on"
-$env:QA_VIDEO="retain-on-failure"
 node ./scripts/qa.mjs tests/platform/smoke
 ```

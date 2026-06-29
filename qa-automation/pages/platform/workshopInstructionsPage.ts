@@ -5,6 +5,7 @@ import { BasePage } from "../basePage.js";
 interface InstructionContentQualityOptions {
   contextName: string;
   expectedTerms?: string[];
+  expectedTermsMode?: "all" | "any";
   linkLimit?: number;
 }
 
@@ -33,7 +34,7 @@ export class WorkshopInstructionsPage extends BasePage {
     return this.page.locator("body");
   }
 
-  async assertLoaded(expectedTerms: string[] = []): Promise<void> {
+  async assertLoaded(expectedTerms: string[] = [], expectedTermsMode: "all" | "any" = "all"): Promise<void> {
     await this.waitForPageReady(WorkshopInstructionsPage.INSTRUCTIONS_READY_TIMEOUT_MS);
     await this.dismissCookieBannerIfPresent();
     await this.assertNotMigrationNotice();
@@ -47,17 +48,24 @@ export class WorkshopInstructionsPage extends BasePage {
       timeout: WorkshopInstructionsPage.INSTRUCTIONS_READY_TIMEOUT_MS,
     });
 
-    for (const term of expectedTerms) {
-      await expect(contentBody).toContainText(new RegExp(escapeRegex(term), "i"), {
-        timeout: WorkshopInstructionsPage.INSTRUCTIONS_READY_TIMEOUT_MS,
-      });
-    }
+    await this.assertExpectedTerms(
+      contentBody,
+      expectedTerms,
+      "Workshop instructions",
+      expectedTermsMode,
+      WorkshopInstructionsPage.INSTRUCTIONS_READY_TIMEOUT_MS,
+    );
   }
 
   async assertContentQuality(options: InstructionContentQualityOptions): Promise<void> {
     const contentBody = await this.instructionContentBody();
 
-    await this.assertExpectedTerms(contentBody, options.expectedTerms ?? [], options.contextName);
+    await this.assertExpectedTerms(
+      contentBody,
+      options.expectedTerms ?? [],
+      options.contextName,
+      options.expectedTermsMode ?? "all",
+    );
     await this.assertNoObviousTextDefects(contentBody, options.contextName);
     await this.assertNoBrokenVisibleImages(contentBody, options.contextName);
     await this.assertNoBrokenEmbeddedContent(contentBody, options.contextName);
@@ -105,10 +113,29 @@ export class WorkshopInstructionsPage extends BasePage {
     }
   }
 
-  private async assertExpectedTerms(contentBody: Locator, expectedTerms: string[], contextName: string): Promise<void> {
+  private async assertExpectedTerms(
+    contentBody: Locator,
+    expectedTerms: string[],
+    contextName: string,
+    expectedTermsMode: "all" | "any",
+    timeout = BasePage.DEFAULT_TIMEOUT_MS,
+  ): Promise<void> {
+    if (expectedTerms.length === 0) {
+      return;
+    }
+
+    if (expectedTermsMode === "any") {
+      await expect(
+        contentBody,
+        `${contextName} should stay relevant to at least one of: ${expectedTerms.join(", ")}`,
+      ).toContainText(new RegExp(expectedTerms.map(escapeRegex).join("|"), "i"), { timeout });
+      return;
+    }
+
     for (const term of expectedTerms) {
       await expect(contentBody, `${contextName} should stay relevant to "${term}"`).toContainText(
         new RegExp(escapeRegex(term), "i"),
+        { timeout },
       );
     }
   }
