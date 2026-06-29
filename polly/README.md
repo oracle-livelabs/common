@@ -26,8 +26,9 @@ Start a new Codex thread after installation. Codex reads the plugin manifest's `
 2. The developer runs `$polly-setup` with the administrator-provided server URL. The URL is saved only in the developer's local Polly configuration; the permanent token is stored by the operating system and is never written to a plaintext file.
 3. In a fork clone, the developer runs `$polly-init` with the upstream project, for example `oracle-livelabs/livestack`.
 4. Codex hooks retrieve personal continuity plus accepted shared memory under that canonical repository.
-5. Stop hooks replace one shared checkpoint for the current session. Collaborators receive the latest progress without accumulating one record per turn.
-6. `$polly-share` immediately publishes a deliberate decision, constraint, assumption, blocker, or progress note to collaborators. The administrator can revoke developers or moderate incorrect records, but no approval queue is required.
+5. Each prompt shows a Polly status message and confirms whether relevant memory was supplied. If retrieval fails, Codex says it continued without shared context.
+6. Stop hooks replace one shared checkpoint for the current session and confirm when it has been shared. Collaborators receive the latest progress without accumulating one record per turn.
+7. `$polly-share` immediately publishes a deliberate decision, constraint, assumption, blocker, or progress note to collaborators. The administrator can revoke developers or moderate incorrect records, but no approval queue is required.
 
 If Polly is unavailable, every hook fails open so Codex continues without injected context.
 The shared plugin contains no default Polly endpoint.

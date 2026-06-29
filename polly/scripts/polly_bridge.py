@@ -608,14 +608,65 @@ def hook_event_id(hook: dict[str, Any], material: str) -> str:
     return f"{hook_session_id(hook)}:{hook_turn_id(hook, material)}:{event_name(hook)}"
 
 
-def hook_output(event: str, additional_context: str | None = None) -> dict[str, Any]:
+def hook_output(
+    event: str,
+    additional_context: str | None = None,
+    system_message: str | None = None,
+) -> dict[str, Any]:
     output: dict[str, Any] = {"continue": True}
     if additional_context:
         output["hookSpecificOutput"] = {
             "hookEventName": event,
             "additionalContext": additional_context,
         }
+    if system_message:
+        output["systemMessage"] = system_message
     return output
+
+
+def context_record_count(pack: dict[str, Any]) -> int:
+    identities: set[str] = set()
+
+    def add_record(record: Any) -> None:
+        if not isinstance(record, dict):
+            return
+        identity = str(record.get("id") or "").strip()
+        if not identity:
+            identity = json.dumps(
+                {
+                    "developer": record.get("developer_github"),
+                    "status": record.get("status"),
+                    "content": record.get("content"),
+                },
+                sort_keys=True,
+                default=str,
+            )
+        identities.add(identity)
+
+    for section in ("shared", "personal", "proposed"):
+        for record in pack.get(section) or []:
+            add_record(record)
+    for cluster in pack.get("conflicts") or []:
+        for record in cluster if isinstance(cluster, list) else []:
+            add_record(record)
+    return len(identities)
+
+
+def context_received_message(pack: dict[str, Any]) -> str:
+    repo = str(pack.get("repo_full_name") or "the current repository")
+    count = context_record_count(pack)
+    if count == 0:
+        return f"Polly checked {repo}; no relevant memory records were found."
+    noun = "record" if count == 1 else "records"
+    return f"Polly supplied {count} relevant memory {noun} for {repo}."
+
+
+def hook_failure_message(event: str) -> str:
+    if event in {"SessionStart", "UserPromptSubmit"}:
+        return "Polly context was unavailable; Codex continued without shared context."
+    if event == "Stop":
+        return "Polly could not share the latest checkpoint; Codex continued."
+    return "Polly was unavailable; Codex continued."
 
 
 def record_label(record: dict[str, Any]) -> str:
@@ -730,7 +781,11 @@ def handle_hook(hook: dict[str, Any]) -> dict[str, Any]:
         payload["query"] = prompt or "current work, decisions, constraints, and nearby changes"
         payload["task"] = prompt[:1000] or None
         pack = api_request(server, "/agent/context-pack", payload=payload, token=token)
-        return hook_output(event, format_context_pack(pack))
+        return hook_output(
+            event,
+            format_context_pack(pack),
+            context_received_message(pack),
+        )
 
     if event == "Stop":
         assistant = latest_assistant_message(hook)
@@ -756,16 +811,24 @@ def handle_hook(hook: dict[str, Any]) -> dict[str, Any]:
             }
         )
         api_request(server, "/agent/events", payload=payload, token=token)
+        canonical_repo = f"{payload['repo_owner']}/{payload['repo_name']}"
+        return hook_output(
+            event,
+            system_message=f"Polly shared the latest checkpoint for {canonical_repo}.",
+        )
     return hook_output(event)
 
 
 def cmd_hook() -> int:
+    event = ""
     try:
         hook = json.load(sys.stdin)
-        output = handle_hook(hook if isinstance(hook, dict) else {})
+        hook = hook if isinstance(hook, dict) else {}
+        event = event_name(hook)
+        output = handle_hook(hook)
     except Exception as exc:  # Hooks must always fail open.
         print(f"Polly hook unavailable: {exc}", file=sys.stderr)
-        output = {"continue": True}
+        output = hook_output(event, system_message=hook_failure_message(event))
     print(json.dumps(output, separators=(",", ":")))
     return 0
 

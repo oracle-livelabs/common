@@ -243,13 +243,95 @@ def test_stop_hook_publishes_one_rolling_shared_checkpoint(
         }
     )
 
-    assert result == {"continue": True}
+    assert result == {
+        "continue": True,
+        "systemMessage": (
+            "Polly shared the latest checkpoint for oracle-livelabs/livestack."
+        ),
+    }
     assert captured["path"] == "/agent/events"
     payload = captured["payload"]
     assert isinstance(payload, dict)
     assert payload["event_type"] == "codex_stop"
     assert payload["scope"] == "branch_task"
     assert payload["visibility"] == "shared"
+
+
+def test_prompt_hook_reports_received_context(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = make_repo(tmp_path)
+    monkeypatch.setattr(
+        bridge, "configured_identity", lambda: ("http://polly", "dev-a", "token")
+    )
+
+    def context_request(_server, path, *, payload=None, token=None):
+        assert path == "/agent/context-pack"
+        assert token == "token"
+        return {
+            "repo_full_name": "oracle-livelabs/livestack",
+            "shared": [
+                {
+                    "id": "shared-1",
+                    "content": "Use canonical repository memory.",
+                    "developer_github": "dev-b",
+                    "status": "accepted",
+                }
+            ],
+            "personal": [],
+            "proposed": [],
+            "conflicts": [],
+        }
+
+    monkeypatch.setattr(bridge, "api_request", context_request)
+    result = bridge.handle_hook(
+        {
+            "session_id": "session-1",
+            "hook_event_name": "UserPromptSubmit",
+            "cwd": str(repo),
+            "prompt": "How should I implement this?",
+        }
+    )
+
+    assert result["systemMessage"] == (
+        "Polly supplied 1 relevant memory record for oracle-livelabs/livestack."
+    )
+    assert "Use canonical repository memory." in (
+        result["hookSpecificOutput"]["additionalContext"]
+    )
+
+
+def test_prompt_hook_reports_empty_context(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = make_repo(tmp_path)
+    monkeypatch.setattr(
+        bridge, "configured_identity", lambda: ("http://polly", "dev-a", "token")
+    )
+    monkeypatch.setattr(
+        bridge,
+        "api_request",
+        lambda *_args, **_kwargs: {
+            "repo_full_name": "oracle-livelabs/livestack",
+            "shared": [],
+            "personal": [],
+            "proposed": [],
+            "conflicts": [],
+        },
+    )
+
+    result = bridge.handle_hook(
+        {
+            "session_id": "session-1",
+            "hook_event_name": "UserPromptSubmit",
+            "cwd": str(repo),
+            "prompt": "Start a new task.",
+        }
+    )
+
+    assert result["systemMessage"] == (
+        "Polly checked oracle-livelabs/livestack; no relevant memory records were found."
+    )
 
 
 def test_manual_share_publishes_directly(
@@ -304,7 +386,12 @@ def test_hook_fails_open_without_enrollment(tmp_path: Path) -> None:
         timeout=10,
         check=True,
     )
-    assert json.loads(result.stdout) == {"continue": True}
+    assert json.loads(result.stdout) == {
+        "continue": True,
+        "systemMessage": (
+            "Polly context was unavailable; Codex continued without shared context."
+        ),
+    }
     assert "unavailable" in result.stderr.lower()
 
 
@@ -313,11 +400,17 @@ def test_hook_manifest_has_cross_platform_ten_second_commands() -> None:
         (Path(__file__).parents[1] / "hooks" / "hooks.json").read_text()
     )
     assert set(manifest) == {"hooks"}
+    expected_status_messages = {
+        "SessionStart": "Loading shared context from Polly",
+        "UserPromptSubmit": "Checking Polly for relevant context",
+        "Stop": "Sharing the latest checkpoint with Polly",
+    }
     for event in ("SessionStart", "UserPromptSubmit", "Stop"):
         command = manifest["hooks"][event][0]["hooks"][0]
         assert command["timeout"] == 10
         assert "$PLUGIN_ROOT" in command["command"]
         assert "%PLUGIN_ROOT%" in command["commandWindows"]
+        assert command["statusMessage"] == expected_status_messages[event]
 
 
 def test_no_unsupported_plaintext_credential_fallback() -> None:
