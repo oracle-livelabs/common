@@ -257,6 +257,39 @@ def test_stop_hook_publishes_one_rolling_shared_checkpoint(
     assert payload["visibility"] == "shared"
 
 
+def test_quiet_mode_blocks_stop_checkpoint_without_contacting_polly(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = make_repo(tmp_path)
+    run_git(repo, "config", "--local", "polly.quiet", "true")
+    monkeypatch.setattr(
+        bridge,
+        "configured_identity",
+        lambda: pytest.fail("quiet Stop must not load credentials"),
+    )
+    monkeypatch.setattr(
+        bridge,
+        "api_request",
+        lambda *_args, **_kwargs: pytest.fail("quiet Stop must not call Polly"),
+    )
+
+    result = bridge.handle_hook(
+        {
+            "session_id": "session-quiet",
+            "hook_event_name": "Stop",
+            "cwd": str(repo),
+            "last_assistant_message": "This is an experimental checkpoint.",
+        }
+    )
+
+    assert result == {
+        "continue": True,
+        "systemMessage": (
+            "Polly quiet mode is active; this checkpoint was not shared."
+        ),
+    }
+
+
 def test_prompt_hook_reports_received_context(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -299,6 +332,82 @@ def test_prompt_hook_reports_received_context(
     assert "Use canonical repository memory." in (
         result["hookSpecificOutput"]["additionalContext"]
     )
+
+
+def test_prompt_hook_reports_that_quiet_mode_is_active(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = make_repo(tmp_path)
+    run_git(repo, "config", "--local", "polly.quiet", "true")
+    monkeypatch.setattr(
+        bridge, "configured_identity", lambda: ("http://polly", "dev-a", "token")
+    )
+    monkeypatch.setattr(
+        bridge,
+        "api_request",
+        lambda *_args, **_kwargs: {
+            "repo_full_name": "oracle-livelabs/livestack",
+            "shared": [],
+            "personal": [],
+            "proposed": [],
+            "conflicts": [],
+        },
+    )
+
+    result = bridge.handle_hook(
+        {
+            "session_id": "session-quiet",
+            "hook_event_name": "UserPromptSubmit",
+            "cwd": str(repo),
+            "prompt": "Run an experimental prompt.",
+        }
+    )
+
+    assert result["systemMessage"].endswith(
+        "Quiet mode is active; memory sharing is paused."
+    )
+
+
+def test_quiet_command_controls_repository_local_sharing(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    repo = make_repo(tmp_path)
+
+    assert bridge.cmd_quiet(Namespace(repo=str(repo), mode="on")) == 0
+    assert bridge.quiet_mode_enabled(repo)
+    assert "memory sharing are paused" in capsys.readouterr().out
+
+    assert bridge.cmd_quiet(Namespace(repo=str(repo), mode="status")) == 0
+    assert "quiet mode is on" in capsys.readouterr().out
+
+    assert bridge.cmd_quiet(Namespace(repo=str(repo), mode="off")) == 0
+    assert not bridge.quiet_mode_enabled(repo)
+    assert "memory sharing resumed" in capsys.readouterr().out
+
+
+def test_quiet_mode_blocks_manual_share(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = make_repo(tmp_path)
+    run_git(repo, "config", "--local", "polly.quiet", "true")
+    monkeypatch.setattr(
+        bridge,
+        "configured_identity",
+        lambda: pytest.fail("quiet share must not load credentials"),
+    )
+
+    with pytest.raises(bridge.BridgeError, match="quiet mode is active"):
+        bridge.cmd_share(
+            Namespace(
+                repo=str(repo),
+                session_id="manual-session",
+                event_id="manual-event",
+                record_type="decision",
+                scope="repo_shared",
+                confidence=0.9,
+                content="Do not publish this test decision.",
+            )
+        )
 
 
 def test_prompt_hook_reports_empty_context(

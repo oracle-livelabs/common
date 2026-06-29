@@ -11,4 +11,4 @@ Run from the repository being diagnosed:
 python3 "$PLUGIN_ROOT/scripts/polly_bridge.py" status
 ```
 
-Report the server health, enrolled handle, credential backend, working repository, canonical repository, and resolution source. Never inspect or print the stored device token.
+Report the server health, enrolled handle, credential backend, working repository, canonical repository, resolution source, and whether memory sharing is active or paused. Never inspect or print the stored device token.
