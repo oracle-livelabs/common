@@ -110,6 +110,9 @@ jobs:
             [ -z "$file" ] && continue
             filename=$(basename "$file")
             lowercase=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
+            if [ "$lowercase" = "readme.md" ]; then
+              continue
+            fi
             if [ "$filename" != "$lowercase" ]; then
               echo "ERROR: Filename must be lowercase: $file"
               INVALID=1
