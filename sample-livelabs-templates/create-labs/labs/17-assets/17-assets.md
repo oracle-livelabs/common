@@ -73,8 +73,6 @@ Files uploaded to Object Storage automatically return a ready-to-use, overwritea
 
     ![WMS asset row with generated PAR link icon](images/5-access-par-link.png " ")
 
-3. Use the PAR link where needed in your workshop, sandbox, tenancy flow, LiveStack, or supporting documentation.
-
 ## Task 2C: Overwrite a File Asset
 
 > NOTE: The PAR link remains the same when the file is overwritten. To obtain a new PAR link, create a new asset instead.
