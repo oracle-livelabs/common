@@ -42,6 +42,119 @@ def test_parse_github_remotes(remote: str, expected: str) -> None:
     assert bridge.parse_github_remote(remote) == expected
 
 
+@pytest.mark.parametrize(
+    ("server", "expected"),
+    [
+        ("https://polly.example.com/", "https://polly.example.com"),
+        ("http://127.0.0.1:8505", "http://127.0.0.1:8505"),
+        ("https://example.com/polly/", "https://example.com/polly"),
+    ],
+)
+def test_normalize_server_url(server: str, expected: str) -> None:
+    assert bridge.normalize_server_url(server) == expected
+
+
+@pytest.mark.parametrize(
+    "server",
+    [
+        "",
+        "polly.example.com",
+        "ftp://polly.example.com",
+        "https://user:password@polly.example.com",
+        "https://polly.example.com?mode=test",
+        "https://polly.example.com#fragment",
+        "https://polly.example.com:99999",
+    ],
+)
+def test_invalid_server_url_is_rejected(server: str) -> None:
+    with pytest.raises(bridge.BridgeError):
+        bridge.normalize_server_url(server)
+
+
+def test_setup_requires_administrator_server_url() -> None:
+    parser = bridge.build_parser()
+    with pytest.raises(SystemExit):
+        parser.parse_args(["setup"])
+
+
+def test_configured_identity_requires_saved_server_url(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "plugin-data"))
+    bridge.save_config({"developer": "dev-a"})
+
+    with pytest.raises(bridge.BridgeError, match="server URL is not configured"):
+        bridge.configured_identity()
+
+
+def test_status_without_server_does_not_use_a_fallback(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    class TestCredentialStore:
+        description = "test credential store"
+
+        def load(self, _server: str, _developer: str) -> str | None:
+            raise AssertionError("credential lookup must not run without a server")
+
+    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "plugin-data"))
+    monkeypatch.setattr(bridge, "credential_store", TestCredentialStore)
+    monkeypatch.setattr(
+        bridge,
+        "api_request",
+        lambda *_args, **_kwargs: pytest.fail(
+            "network request must not run without a configured server"
+        ),
+    )
+
+    assert bridge.cmd_status(Namespace(repo=str(tmp_path))) == 1
+    status = json.loads(capsys.readouterr().out)
+    assert status["server"] is None
+    assert status["server_health"] == "not_configured"
+    assert "administrator-provided server URL" in status["configuration_error"]
+
+
+def test_setup_saves_server_only_in_local_config(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    class TestCredentialStore:
+        description = "test credential store"
+        stored: tuple[str, str, str] | None = None
+
+        def store(self, server: str, developer: str, token: str) -> None:
+            self.stored = (server, developer, token)
+
+    store = TestCredentialStore()
+    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "plugin-data"))
+    monkeypatch.setattr(bridge, "credential_store", lambda: store)
+    monkeypatch.setattr(bridge.getpass, "getpass", lambda _prompt: "enrollment-code")
+    monkeypatch.setattr(
+        bridge,
+        "api_request",
+        lambda *_args, **_kwargs: {
+            "developer_github": "dev-a",
+            "token": "device-token",
+        },
+    )
+
+    assert (
+        bridge.cmd_setup(
+            Namespace(server="https://polly.example.com/", device_name="test-device")
+        )
+        == 0
+    )
+    assert bridge.load_config() == {
+        "developer": "dev-a",
+        "server": "https://polly.example.com",
+    }
+    assert store.stored == (
+        "https://polly.example.com",
+        "dev-a",
+        "device-token",
+    )
+
+
 def test_canonical_resolution_order(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     repo = make_repo(tmp_path)
     run_git(repo, "remote", "add", "upstream", "https://github.com/oracle-livelabs/livestack")
@@ -210,3 +323,17 @@ def test_hook_manifest_has_cross_platform_ten_second_commands() -> None:
 def test_no_unsupported_plaintext_credential_fallback() -> None:
     with pytest.raises(bridge.BridgeError):
         bridge.credential_store("FreeBSD")
+
+
+def test_plugin_contains_no_embedded_polly_endpoint() -> None:
+    plugin_root = Path(__file__).parents[1]
+    forbidden_host = ".".join(("150", "136", "151", "51"))
+    default_server_name = "DEFAULT" + "_SERVER"
+    files = [
+        path
+        for path in plugin_root.rglob("*")
+        if path.is_file() and path.suffix in {".json", ".md", ".py"}
+    ]
+    contents = "\n".join(path.read_text(encoding="utf-8") for path in files)
+    assert forbidden_host not in contents
+    assert default_server_name not in contents

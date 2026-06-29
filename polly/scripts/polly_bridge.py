@@ -15,15 +15,40 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Callable
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
-DEFAULT_SERVER = "http://150.136.151.51:8505"
 HTTP_TIMEOUT_SECONDS = 8.0
 MAX_CONTEXT_CHARACTERS = 12_000
 
 
 class BridgeError(RuntimeError):
     """A recoverable bridge error that must not block a Codex hook."""
+
+
+def normalize_server_url(value: str) -> str:
+    server = value.strip().rstrip("/")
+    try:
+        parsed = urlsplit(server)
+        port = parsed.port
+    except ValueError as exc:
+        raise BridgeError("The Polly server URL is invalid") from exc
+    if (
+        not server
+        or parsed.scheme.lower() not in {"http", "https"}
+        or not parsed.hostname
+        or parsed.username
+        or parsed.password
+        or parsed.query
+        or parsed.fragment
+        or any(character.isspace() for character in server)
+        or (port is not None and not 1 <= port <= 65535)
+    ):
+        raise BridgeError(
+            "The Polly server URL must be an absolute http:// or https:// URL "
+            "without credentials, query parameters, or fragments"
+        )
+    return server
 
 
 def plugin_data_dir() -> Path:
@@ -482,7 +507,13 @@ def api_request(
 
 def configured_identity() -> tuple[str, str, str]:
     config = load_config()
-    server = str(config.get("server") or DEFAULT_SERVER).rstrip("/")
+    configured_server = str(config.get("server") or "")
+    if not configured_server.strip():
+        raise BridgeError(
+            "Polly server URL is not configured; run $polly-setup with the "
+            "administrator-provided server URL"
+        )
+    server = normalize_server_url(configured_server)
     developer = str(config.get("developer") or "").lstrip("@")
     if not developer:
         raise BridgeError("Polly enrollment has not been completed on this device")
@@ -697,7 +728,7 @@ def cmd_hook() -> int:
 
 
 def cmd_setup(args: argparse.Namespace) -> int:
-    server = args.server.rstrip("/")
+    server = normalize_server_url(args.server)
     code = getpass.getpass("One-time Polly enrollment code: ")
     if not code:
         raise BridgeError("Enrollment code is required")
@@ -735,15 +766,27 @@ def cmd_init(args: argparse.Namespace) -> int:
 
 def cmd_status(args: argparse.Namespace) -> int:
     config = load_config()
-    server = str(config.get("server") or DEFAULT_SERVER).rstrip("/")
+    configured_server = str(config.get("server") or "")
+    configuration_error = None
+    try:
+        if not configured_server.strip():
+            raise BridgeError(
+                "Polly server URL is not configured; run $polly-setup with the "
+                "administrator-provided server URL"
+            )
+        server = normalize_server_url(configured_server)
+    except BridgeError as exc:
+        server = None
+        configuration_error = str(exc)
     developer = str(config.get("developer") or "")
     store = credential_store()
-    token_present = bool(developer and store.load(server, developer))
-    health = "unreachable"
-    try:
-        health = str(api_request(server, "/health").get("status", "unknown"))
-    except BridgeError:
-        pass
+    token_present = bool(server and developer and store.load(server, developer))
+    health = "not_configured" if server is None else "unreachable"
+    if server:
+        try:
+            health = str(api_request(server, "/health").get("status", "unknown"))
+        except BridgeError:
+            pass
     details = {
         "server": server,
         "server_health": health,
@@ -751,6 +794,8 @@ def cmd_status(args: argparse.Namespace) -> int:
         "credential_store": store.description,
         "device_token_present": token_present,
     }
+    if configuration_error:
+        details["configuration_error"] = configuration_error
     repo = Path(args.repo).resolve()
     if git(repo, "rev-parse", "--show-toplevel"):
         try:
@@ -794,7 +839,11 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command", required=True)
 
     setup = sub.add_parser("setup", help="Enroll this device with a one-time code")
-    setup.add_argument("--server", default=os.environ.get("POLLY_SERVER", DEFAULT_SERVER))
+    setup.add_argument(
+        "--server",
+        required=True,
+        help="Administrator-provided Polly server URL",
+    )
     setup.add_argument("--device-name", default=platform.node() or "Codex device")
     setup.set_defaults(func=cmd_setup)
 

@@ -1,6 +1,6 @@
 {
   "name": "polly",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Shared, canonical-repository memory for developer-owned Codex sessions.",
   "author": {
     "name": "Oracle LiveLabs"
