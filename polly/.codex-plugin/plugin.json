@@ -1,6 +1,6 @@
 {
   "name": "polly",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Shared, canonical-repository memory for developer-owned Codex sessions.",
   "author": {
     "name": "Oracle LiveLabs"
@@ -9,14 +9,15 @@
   "interface": {
     "displayName": "Polly",
     "shortDescription": "Share trusted coding context across forks.",
-    "longDescription": "Polly retrieves scoped project memory at session and prompt boundaries, then records authenticated rolling shared checkpoints without blocking Codex when Polly is unavailable.",
+    "longDescription": "Polly retrieves scoped project memory at session and prompt boundaries, records authenticated rolling shared checkpoints, and saves explicit private continuity notes without blocking Codex when Polly is unavailable.",
     "developerName": "Oracle LiveLabs",
     "category": "Productivity",
-    "capabilities": ["Hooks", "Secure credentials", "Shared memory"],
+    "capabilities": ["Hooks", "Secure credentials", "Shared memory", "Private memory"],
     "defaultPrompt": [
       "Set up Polly for this device.",
       "Initialize Polly for this repository.",
-      "Pause Polly memory sharing for this repository.",
+      "Pause Polly memory writes for this repository.",
+      "Remember this note privately across my future sessions.",
       "Share this decision with my collaborators."
     ]
   }

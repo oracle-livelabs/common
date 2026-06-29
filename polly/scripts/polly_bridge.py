@@ -573,7 +573,7 @@ def configured_identity() -> tuple[str, str, str]:
     return server, developer, token
 
 
-def common_payload(repo: Path, developer: str, session_id: str) -> dict[str, Any]:
+def common_payload(repo: Path, developer: str, session_id: str | None) -> dict[str, Any]:
     resolution = resolve_repo(repo)
     return {
         **git_context(repo),
@@ -954,11 +954,11 @@ def cmd_quiet(args: argparse.Namespace) -> int:
     if enabled:
         print(
             "Polly quiet mode enabled. Context retrieval remains active; "
-            "automatic and manual memory sharing are paused."
+            "automatic and manual memory writes are paused."
         )
     else:
         print(
-            "Polly quiet mode disabled. Automatic and manual memory sharing resumed."
+            "Polly quiet mode disabled. Automatic and manual memory writes resumed."
         )
     return 0
 
@@ -986,6 +986,32 @@ def cmd_share(args: argparse.Namespace) -> int:
     )
     result = api_request(server, "/agent/events", payload=payload, token=token)
     print(f"Shared Polly memory {result['id']} with collaborators.")
+    return 0
+
+
+def cmd_private(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    if quiet_mode_enabled(repo):
+        raise BridgeError(
+            "quiet mode is active for this repository; disable it with "
+            "$polly-quiet off before saving private memory"
+        )
+    server, developer, token = configured_identity()
+    payload = common_payload(repo, developer, None)
+    payload["branch"] = None
+    payload.update(
+        {
+            "event_id": args.event_id,
+            "event_type": "manual_private",
+            "record_type": args.record_type,
+            "scope": "developer_private",
+            "visibility": "private",
+            "confidence": args.confidence,
+            "content": args.content,
+        }
+    )
+    result = api_request(server, "/agent/events", payload=payload, token=token)
+    print(f"Saved private Polly memory {result['id']} for your future sessions.")
     return 0
 
 
@@ -1026,6 +1052,16 @@ def build_parser() -> argparse.ArgumentParser:
     share.add_argument("--session-id")
     share.add_argument("--event-id")
     share.set_defaults(func=cmd_share)
+
+    private = sub.add_parser(
+        "private", help="Save durable private memory for future sessions"
+    )
+    private.add_argument("--repo", default=".")
+    private.add_argument("--content", required=True)
+    private.add_argument("--record-type", default="observation")
+    private.add_argument("--confidence", type=float, default=0.8)
+    private.add_argument("--event-id")
+    private.set_defaults(func=cmd_private)
 
     sub.add_parser("hook", help=argparse.SUPPRESS).set_defaults(func=lambda _args: cmd_hook())
     return parser
