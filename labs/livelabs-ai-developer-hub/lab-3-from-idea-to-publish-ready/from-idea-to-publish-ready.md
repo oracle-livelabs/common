@@ -4,7 +4,7 @@
 
 This lab shows how to use Codex and the `livelabs-workshop-author` skill to turn a source article into a draft LiveLabs workshop with a clear lab plan, strong structure, and validator-aligned markdown.
 
-This lab uses the Oracle Database blog post `Getting Started with Private AI Services Container` as the source. 
+This lab uses the Oracle Database blog post `Getting Started with Private AI Services Container` as the source.
 
 ### Objectives
 

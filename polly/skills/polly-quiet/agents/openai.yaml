@@ -1,0 +1,4 @@
+interface:
+  display_name: "Polly Quiet"
+  short_description: "Pause Polly memory sharing for this repository"
+  default_prompt: "Pause Polly memory sharing in this repository."
