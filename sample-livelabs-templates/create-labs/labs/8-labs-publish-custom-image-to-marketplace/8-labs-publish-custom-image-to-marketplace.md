@@ -12,15 +12,15 @@ Welcome! This quick guide will help you publish your custom image to Oracle Mark
 
 ## Task 1: Get Publisher Access
 
-1. Follow these [instructions provided by OMP](https://cloudmarketplace.oracle.com/marketplace/en_US/partnerLandingPage). If you already have an Oracle tenancy, you only need to complete [steps 3 and 5](https://cloudmarketplace.oracle.com/marketplace/en_US/partnerLandingPage).
+1. Follow these [instructions provided by OMP](https://cloudmarketplace.oracle.com/marketplace/en_US/partnerLandingPage). If you already have an Oracle tenancy, you only need to complete steps 3 and 5.
 
-2. After registering for an OMP publisher account ([step 5](https://cloudmarketplace.oracle.com/marketplace/en_US/partnerLandingPage)), the OMP team will review your request. Once approved, you wil receive an email like the one shown below, indicating that you are now able to create listings on Oracle Marketplace.
+2. After registering for an OMP publisher account (step 5), you will receive an approval email shortly. This means you are now able to create listings on Oracle Marketplace!
 
     ![Image](./images/omp-approval-email.png)
 
-3. Add all [required IAM policies](https://docs.oracle.com/en-us/iaas/Content/Marketplace/publisher-iam-policy.htm) to your tenancy.
+3. Add all required IAM policies to your tenancy, as described [here](https://docs.oracle.com/en-us/iaas/Content/Marketplace/publisher-iam-policy.htm).
 
-Once you're approved, you can proceed to the next task.
+Once you're approved, you can begin creating listings! See task 2 for further instructions.
 
 ## Task 2: Add Terms of Use
 
@@ -83,7 +83,7 @@ Your artifact will be available in a few hours, depending on the size of your im
 4. Fill out the app listing details details.
     Be sure to set the following:
     - **Price:** Free
-    - **Listing Icon:** [LiveLabs Icon](https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/XAQk2BxQiEcsptJLV7VxZXyNTNYIsIvIbq_0XYg1gg7wxVDbk3YKroi6R63sX0dz/n/c4u02/b/hosted-files-internal/o/livelabs-icon.png) 
+    - **Listing Icon:** [LiveLabs Icon](https://cloudmarketplace.oracle.com/marketplace/content?contentId=95549453) 
     - **Descriptions:** Provide a complete description.
     - **Market Availability:** All markets.
 
