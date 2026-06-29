@@ -80,7 +80,7 @@ def test_setup_requires_administrator_server_url() -> None:
 def test_configured_identity_requires_saved_server_url(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "plugin-data"))
+    monkeypatch.setenv("POLLY_DATA_DIR", str(tmp_path / "plugin-data"))
     bridge.save_config({"developer": "dev-a"})
 
     with pytest.raises(bridge.BridgeError, match="server URL is not configured"):
@@ -98,7 +98,7 @@ def test_status_without_server_does_not_use_a_fallback(
         def load(self, _server: str, _developer: str) -> str | None:
             raise AssertionError("credential lookup must not run without a server")
 
-    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "plugin-data"))
+    monkeypatch.setenv("POLLY_DATA_DIR", str(tmp_path / "plugin-data"))
     monkeypatch.setattr(bridge, "credential_store", TestCredentialStore)
     monkeypatch.setattr(
         bridge,
@@ -126,7 +126,7 @@ def test_setup_saves_server_only_in_local_config(
             self.stored = (server, developer, token)
 
     store = TestCredentialStore()
-    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "plugin-data"))
+    monkeypatch.setenv("POLLY_DATA_DIR", str(tmp_path / "plugin-data"))
     monkeypatch.setattr(bridge, "credential_store", lambda: store)
     monkeypatch.setattr(bridge.getpass, "getpass", lambda _prompt: "enrollment-code")
     monkeypatch.setattr(
@@ -153,6 +153,17 @@ def test_setup_saves_server_only_in_local_config(
         "dev-a",
         "device-token",
     )
+
+
+def test_hook_plugin_data_does_not_redirect_polly_state(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("POLLY_DATA_DIR", raising=False)
+    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "hook-only-data"))
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "user-config"))
+    monkeypatch.setattr(bridge.platform, "system", lambda: "Darwin")
+
+    assert bridge.plugin_data_dir() == tmp_path / "user-config" / "polly-codex"
 
 
 def test_canonical_resolution_order(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -224,6 +235,13 @@ def test_stop_hook_publishes_one_rolling_shared_checkpoint(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     repo = make_repo(tmp_path)
+    run_git(
+        repo,
+        "config",
+        "--local",
+        "polly.canonicalRepo",
+        "oracle-livelabs/livestack",
+    )
     captured: dict[str, object] = {}
     monkeypatch.setattr(
         bridge, "configured_identity", lambda: ("http://polly", "dev-a", "token")
@@ -478,7 +496,7 @@ def test_manual_share_publishes_directly(
 
 def test_hook_fails_open_without_enrollment(tmp_path: Path) -> None:
     repo = make_repo(tmp_path)
-    env = {**os.environ, "PLUGIN_DATA": str(tmp_path / "plugin-data")}
+    env = {**os.environ, "POLLY_DATA_DIR": str(tmp_path / "plugin-data")}
     result = subprocess.run(
         [sys.executable, str(SCRIPT), "hook"],
         input=json.dumps(
@@ -547,7 +565,7 @@ def test_credential_keys_do_not_persist_the_server_url(
     assert first_server not in bridge.MacOSKeychainStore.service()
     assert all(first_server not in argument for command in commands for argument in command)
 
-    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "plugin-data"))
+    monkeypatch.setenv("POLLY_DATA_DIR", str(tmp_path / "plugin-data"))
     first_path = bridge.WindowsDPAPIStore.path(first_server, developer)
     second_path = bridge.WindowsDPAPIStore.path(second_server, developer)
     assert first_path == second_path

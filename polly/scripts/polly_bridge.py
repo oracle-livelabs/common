@@ -52,7 +52,9 @@ def normalize_server_url(value: str) -> str:
 
 
 def plugin_data_dir() -> Path:
-    configured = os.environ.get("PLUGIN_DATA")
+    # Codex injects PLUGIN_DATA into hook processes but not skill commands.
+    # Polly needs one stable location so setup and hooks see the same state.
+    configured = os.environ.get("POLLY_DATA_DIR")
     if configured:
         return Path(configured).expanduser()
     if platform.system() == "Windows":
