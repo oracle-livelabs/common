@@ -383,6 +383,11 @@ def git_set(repo: Path, key: str, value: str) -> None:
         raise BridgeError(f"Could not write local git config {key}") from exc
 
 
+def quiet_mode_enabled(repo: Path) -> bool:
+    value = git(repo, "config", "--local", "--get", "polly.quiet")
+    return str(value or "").strip().lower() in {"1", "true", "yes", "on"}
+
+
 def split_full_name(value: str) -> tuple[str, str]:
     cleaned = value.strip().removesuffix(".git")
     if cleaned.startswith("git@github.com:"):
@@ -608,14 +613,65 @@ def hook_event_id(hook: dict[str, Any], material: str) -> str:
     return f"{hook_session_id(hook)}:{hook_turn_id(hook, material)}:{event_name(hook)}"
 
 
-def hook_output(event: str, additional_context: str | None = None) -> dict[str, Any]:
+def hook_output(
+    event: str,
+    additional_context: str | None = None,
+    system_message: str | None = None,
+) -> dict[str, Any]:
     output: dict[str, Any] = {"continue": True}
     if additional_context:
         output["hookSpecificOutput"] = {
             "hookEventName": event,
             "additionalContext": additional_context,
         }
+    if system_message:
+        output["systemMessage"] = system_message
     return output
+
+
+def context_record_count(pack: dict[str, Any]) -> int:
+    identities: set[str] = set()
+
+    def add_record(record: Any) -> None:
+        if not isinstance(record, dict):
+            return
+        identity = str(record.get("id") or "").strip()
+        if not identity:
+            identity = json.dumps(
+                {
+                    "developer": record.get("developer_github"),
+                    "status": record.get("status"),
+                    "content": record.get("content"),
+                },
+                sort_keys=True,
+                default=str,
+            )
+        identities.add(identity)
+
+    for section in ("shared", "personal", "proposed"):
+        for record in pack.get(section) or []:
+            add_record(record)
+    for cluster in pack.get("conflicts") or []:
+        for record in cluster if isinstance(cluster, list) else []:
+            add_record(record)
+    return len(identities)
+
+
+def context_received_message(pack: dict[str, Any]) -> str:
+    repo = str(pack.get("repo_full_name") or "the current repository")
+    count = context_record_count(pack)
+    if count == 0:
+        return f"Polly checked {repo}; no relevant memory records were found."
+    noun = "record" if count == 1 else "records"
+    return f"Polly supplied {count} relevant memory {noun} for {repo}."
+
+
+def hook_failure_message(event: str) -> str:
+    if event in {"SessionStart", "UserPromptSubmit"}:
+        return "Polly context was unavailable; Codex continued without shared context."
+    if event == "Stop":
+        return "Polly could not share the latest checkpoint; Codex continued."
+    return "Polly was unavailable; Codex continued."
 
 
 def record_label(record: dict[str, Any]) -> str:
@@ -721,6 +777,14 @@ def handle_hook(hook: dict[str, Any]) -> dict[str, Any]:
     repo = Path(str(hook.get("cwd") or os.getcwd())).resolve()
     if not git(repo, "rev-parse", "--show-toplevel"):
         return hook_output(event)
+    quiet = quiet_mode_enabled(repo)
+    if event == "Stop" and quiet:
+        return hook_output(
+            event,
+            system_message=(
+                "Polly quiet mode is active; this checkpoint was not shared."
+            ),
+        )
     server, developer, token = configured_identity()
     session_id = hook_session_id(hook)
     payload = common_payload(repo, developer, session_id)
@@ -730,7 +794,14 @@ def handle_hook(hook: dict[str, Any]) -> dict[str, Any]:
         payload["query"] = prompt or "current work, decisions, constraints, and nearby changes"
         payload["task"] = prompt[:1000] or None
         pack = api_request(server, "/agent/context-pack", payload=payload, token=token)
-        return hook_output(event, format_context_pack(pack))
+        message = context_received_message(pack)
+        if quiet:
+            message += " Quiet mode is active; memory sharing is paused."
+        return hook_output(
+            event,
+            format_context_pack(pack),
+            message,
+        )
 
     if event == "Stop":
         assistant = latest_assistant_message(hook)
@@ -756,16 +827,24 @@ def handle_hook(hook: dict[str, Any]) -> dict[str, Any]:
             }
         )
         api_request(server, "/agent/events", payload=payload, token=token)
+        canonical_repo = f"{payload['repo_owner']}/{payload['repo_name']}"
+        return hook_output(
+            event,
+            system_message=f"Polly shared the latest checkpoint for {canonical_repo}.",
+        )
     return hook_output(event)
 
 
 def cmd_hook() -> int:
+    event = ""
     try:
         hook = json.load(sys.stdin)
-        output = handle_hook(hook if isinstance(hook, dict) else {})
+        hook = hook if isinstance(hook, dict) else {}
+        event = event_name(hook)
+        output = handle_hook(hook)
     except Exception as exc:  # Hooks must always fail open.
         print(f"Polly hook unavailable: {exc}", file=sys.stderr)
-        output = {"continue": True}
+        output = hook_output(event, system_message=hook_failure_message(event))
     print(json.dumps(output, separators=(",", ":")))
     return 0
 
@@ -841,6 +920,9 @@ def cmd_status(args: argparse.Namespace) -> int:
         details["configuration_error"] = configuration_error
     repo = Path(args.repo).resolve()
     if git(repo, "rev-parse", "--show-toplevel"):
+        details["memory_sharing"] = (
+            "paused" if quiet_mode_enabled(repo) else "active"
+        )
         try:
             resolution = resolve_repo(repo)
             details.update(
@@ -856,9 +938,37 @@ def cmd_status(args: argparse.Namespace) -> int:
     return 0 if token_present and health == "ok" else 1
 
 
-def cmd_share(args: argparse.Namespace) -> int:
-    server, developer, token = configured_identity()
+def cmd_quiet(args: argparse.Namespace) -> int:
     repo = Path(args.repo).resolve()
+    root = git(repo, "rev-parse", "--show-toplevel")
+    if not root:
+        raise BridgeError("Polly quiet mode requires a git repository")
+    if args.mode == "status":
+        state = "on" if quiet_mode_enabled(repo) else "off"
+        print(f"Polly quiet mode is {state} for {root}.")
+        return 0
+    enabled = args.mode == "on"
+    git_set(repo, "polly.quiet", "true" if enabled else "false")
+    if enabled:
+        print(
+            "Polly quiet mode enabled. Context retrieval remains active; "
+            "automatic and manual memory sharing are paused."
+        )
+    else:
+        print(
+            "Polly quiet mode disabled. Automatic and manual memory sharing resumed."
+        )
+    return 0
+
+
+def cmd_share(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    if quiet_mode_enabled(repo):
+        raise BridgeError(
+            "quiet mode is active for this repository; disable it with "
+            "$polly-quiet off before sharing memory"
+        )
+    server, developer, token = configured_identity()
     session_id = args.session_id or os.environ.get("CODEX_SESSION_ID") or "manual-share"
     payload = common_payload(repo, developer, session_id)
     payload.update(
@@ -899,6 +1009,11 @@ def build_parser() -> argparse.ArgumentParser:
     status = sub.add_parser("status", help="Check device, repository, and Polly status")
     status.add_argument("--repo", default=".")
     status.set_defaults(func=cmd_status)
+
+    quiet = sub.add_parser("quiet", help="Pause or resume memory sharing for this repository")
+    quiet.add_argument("mode", nargs="?", choices=("on", "off", "status"), default="on")
+    quiet.add_argument("--repo", default=".")
+    quiet.set_defaults(func=cmd_quiet)
 
     share = sub.add_parser("share", help="Share a memory with collaborators")
     share.add_argument("--repo", default=".")
