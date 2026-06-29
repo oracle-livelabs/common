@@ -22,19 +22,15 @@ In this lab, you will:
 
 2. Confirm that you have an OCI tenancy that Marketplace Publisher can use. Marketplace Publisher now runs in the OCI Console, so you must be able to sign in to that tenancy and work in the target compartment.
 
-3. Ask a tenancy administrator to add the required Marketplace Publisher IAM policies. At minimum, your publisher group needs access to manage Marketplace Publisher resources, and the Marketplace service must be able to read the image resources used by the listing.
+3. Ask a tenancy administrator to add the required Marketplace Publisher IAM policies. At minimum, your publisher group needs access to manage Marketplace Publisher resources, and the Marketplace service must be able to read the image resources used by the listing. See the current [Marketplace Publisher IAM policy documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/publisher-iam-policy.htm).
 
-    See the current [Marketplace Publisher IAM policy documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/publisher-iam-policy.htm).
-
-4. After approval, sign in to the OCI Console and open **Marketplace**. Under **Publisher**, confirm that you can access **Terms**, **Artifacts**, **Listings**, and **Listing revisions**.
+4. After receiving email approval, sign in to the OCI Console and open **Marketplace**. Under **Publisher**, confirm that you can access **Terms**, **Artifacts**, **Listings**, and **Listing revisions**.
 
     ![Marketplace Publisher approval email](images/omp-approval-email.png)
 
-After you have publisher access and the required policies, continue to Task 2.
-
 ## Task 2: Add Terms of Use
 
-> **Note:** Create the terms of use once per tenancy and compartment. Reuse the active terms when you create or update listing packages.
+> **Note:** You only need one Terms of Use per tenancy. Reuse the active terms when you create or update listing packages.
 
 1. Sign in to the OCI Console using a tenancy with Marketplace Publisher access. Open the navigation menu and select **Marketplace**. Under **Publisher**, select **Terms**.
 
@@ -46,7 +42,7 @@ After you have publisher access and the required policies, continue to Task 2.
 
 3. Select the compartment, enter a descriptive terms name, and create the terms resource.
 
-4. Open the terms resource and add a terms version. Upload the current [Oracle Standard Terms and Restrictions PDF](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/n9OHqZrPlUZh6UtSMnnI3yq7IJecJweZ5pDjiBFqiPbOLtIjuebugDo28-KJ6geD/n/c4u04/b/livelabsfiles/o/Oracle%20Standard%20Terms%20and%20Restrictions.pdf), or use the legal-approved replacement supplied by the LiveLabs team.
+4. Open the terms resource and add a terms version. Upload the current [Oracle Standard Terms and Restrictions PDF](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/n9OHqZrPlUZh6UtSMnnI3yq7IJecJweZ5pDjiBFqiPbOLtIjuebugDo28-KJ6geD/n/c4u04/b/livelabsfiles/o/Oracle%20Standard%20Terms%20and%20Restrictions.pdf).
 
     ![Create a terms version](images/create-terms-2.png)
 
@@ -66,19 +62,15 @@ For more information, see the [Marketplace Publisher terms documentation](https:
 
     ![Create Artifact action](images/click-create-artifact.png)
 
-3. Enter a descriptive artifact name, select the target compartment, and set **Artifact type** to **Compute Image**.
+3. Give your artifact a descriptive name, select a compartment, and set the artifact type to 'Compute Image'.
+    > **NOTE:** Your artifact <u>must</u> be created in the same compartment as your listing. 
+    ![Image](./images/create-artifact-1.png)
 
-    > **Note:** Create the artifact in the same compartment that you use for the listing.
+4. Click **Select Image**. Choose the compartment that contains the custom image, and then select the image that you want to publish.
+    ![Image](./images/select-compute-image-1.png)
 
-    ![Create a compute image artifact](images/create-artifact-1.png)
-
-4. Select **Select Image**. Choose the compartment that contains the custom image, and then select the image that you want to publish.
-
-    ![Select a custom compute image](images/select-compute-image-1.png)
-
-5. Select all shapes that are compatible with your image, and then select **Update**.
-
-    ![Select compatible compute shapes](images/select-compute-image-2.png)
+5. Select all shapes compatible with your image. Then, click 'Update'.
+    ![Image](./images/select-compute-image-2.png)
 
 6. Review the mandatory guidelines, select the agreement checkbox, and select **Create artifact**.
 
@@ -94,32 +86,23 @@ For more information, see the [Marketplace Publisher artifact documentation](htt
 
     ![Publisher Listings page in the OCI Console](images/go-to-listings.png)
 
-2. Select **Create Listing**.
+2. Click **Create Listing**.
+    ![Image](./images/create-listing-1.png)
 
-    ![Create Listing action](images/create-listing-1.png)
+3. Select **OCI Application Listing**.
+    ![Image](./images/create-listing-2.png)
 
-3. Select **OCI Application Listing** as the listing type.
+4. Fill out the header details. 
+    > **NOTE:** Be sure to set the package type to **Compute Image** and use the same compartment as your artifact.
 
-    ![OCI Application Listing type selection](images/create-listing-2.png)
+    ![Image](./images/app-listing-details-1.png)
 
-4. Complete **Header details**.
-
-    Use these values for a LiveLabs compute image listing:
-
-    * **Package type:** Compute Image
-    * **Compartment:** The same compartment that contains your artifact
-    * **Listing name:** A descriptive internal name for the listing
-
-    ![OCI application listing header details](images/app-listing-details-1.png)
-
-5. Complete **Listing revision details**.
-
-    Include the required Marketplace content:
+5. Include the required Marketplace content:
 
     * **Headline:** A short description of the image and its purpose
     * **Categories:** The relevant OCI category
     * **Price:** Free
-    * **Listing icon:** Use the approved [LiveLabs icon](https://cloudmarketplace.oracle.com/marketplace/content?contentId=95549453)
+    * **Listing icon:** Use the approved [LiveLabs icon](https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/XAQk2BxQiEcsptJLV7VxZXyNTNYIsIvIbq_0XYg1gg7wxVDbk3YKroi6R63sX0dz/n/c4u02/b/hosted-files-internal/o/livelabs-icon.png)
     * **Short description and detailed description:** Explain what the image contains and when to use it
     * **Market availability:** Select the markets where the listing should be available
     * **Version details:** Enter the image or workshop version and release date
