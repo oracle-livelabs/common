@@ -5,6 +5,7 @@ import json
 import os
 import subprocess
 import sys
+from argparse import Namespace
 from pathlib import Path
 
 import pytest
@@ -104,6 +105,71 @@ def test_hook_event_ids_are_stable() -> None:
     assert bridge.hook_event_id(hook, "same turn") != bridge.hook_event_id(
         hook, "different turn"
     )
+
+
+def test_stop_hook_publishes_one_rolling_shared_checkpoint(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = make_repo(tmp_path)
+    captured: dict[str, object] = {}
+    monkeypatch.setattr(
+        bridge, "configured_identity", lambda: ("http://polly", "dev-a", "token")
+    )
+
+    def capture_request(_server, path, *, payload=None, token=None):
+        captured.update(path=path, payload=payload, token=token)
+        return {"id": "mem-stop"}
+
+    monkeypatch.setattr(bridge, "api_request", capture_request)
+    result = bridge.handle_hook(
+        {
+            "session_id": "session-1",
+            "hook_event_name": "Stop",
+            "cwd": str(repo),
+            "last_assistant_message": "Implemented the repository resolver.",
+        }
+    )
+
+    assert result == {"continue": True}
+    assert captured["path"] == "/agent/events"
+    payload = captured["payload"]
+    assert isinstance(payload, dict)
+    assert payload["event_type"] == "codex_stop"
+    assert payload["scope"] == "branch_task"
+    assert payload["visibility"] == "shared"
+
+
+def test_manual_share_publishes_directly(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    repo = make_repo(tmp_path)
+    captured: dict[str, object] = {}
+    monkeypatch.setattr(
+        bridge, "configured_identity", lambda: ("http://polly", "dev-a", "token")
+    )
+
+    def capture_request(_server, path, *, payload=None, token=None):
+        captured.update(path=path, payload=payload, token=token)
+        return {"id": "mem-share"}
+
+    monkeypatch.setattr(bridge, "api_request", capture_request)
+    result = bridge.cmd_share(
+        Namespace(
+            repo=str(repo),
+            session_id="manual-session",
+            event_id="manual-event",
+            record_type="decision",
+            scope="repo_shared",
+            confidence=0.9,
+            content="Use canonical repository memory.",
+        )
+    )
+
+    assert result == 0
+    payload = captured["payload"]
+    assert isinstance(payload, dict)
+    assert payload["visibility"] == "shared"
+    assert "with collaborators" in capsys.readouterr().out
 
 
 def test_hook_fails_open_without_enrollment(tmp_path: Path) -> None:
