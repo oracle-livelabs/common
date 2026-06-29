@@ -9,7 +9,6 @@ Polly shares reviewed coding context across developers and forks while keeping e
 - macOS Keychain, Linux Secret Service with `secret-tool`, or Windows DPAPI.
 - A one-time enrollment code issued by the Polly administrator.
 
-The test server uses unencrypted HTTP at `http://150.136.151.51:8505`. Enrollment codes, device tokens, and memory content can be intercepted on the network during this phase.
 
 ## Workflow
 
