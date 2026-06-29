@@ -139,6 +139,7 @@
   var beginnerMode = document.getElementById("beginnerMode");
   var explorerMode = document.getElementById("explorerMode");
   var guideMode = document.getElementById("guideMode");
+  var generatorMode = document.getElementById("generatorMode");
   var searchMode = document.getElementById("searchMode");
   var rabbitFlow = document.getElementById("rabbitFlow");
   var stepSections = Array.from(document.querySelectorAll(".rabbit-step"));
@@ -179,6 +180,22 @@
   var searchPageForm = document.getElementById("searchPageForm");
   var searchPageInput = document.getElementById("searchPageInput");
   var searchPageClear = document.getElementById("searchPageClear");
+  var wmsExampleForm = document.getElementById("wmsExampleForm");
+  var wmsExamplePrompt = document.getElementById("wmsExamplePrompt");
+  var wmsExampleResults = document.getElementById("wmsExampleResults");
+  var wmsExampleEmpty = document.getElementById("wmsExampleEmpty");
+  var wmsExampleLoading = document.getElementById("wmsExampleLoading");
+  var wmsExampleError = document.getElementById("wmsExampleError");
+  var workshopMarkdownForm = document.getElementById("workshopMarkdownForm");
+  var workshopMarkdownPrompt = document.getElementById("workshopMarkdownPrompt");
+  var workshopMarkdownType = document.getElementById("workshopMarkdownType");
+  var workshopMarkdownOutput = document.getElementById("workshopMarkdownOutput");
+  var workshopMarkdownSummary = document.getElementById("workshopMarkdownSummary");
+  var generatorOutputMeta = document.getElementById("generatorOutputMeta");
+  var workshopMarkdownEmpty = document.getElementById("workshopMarkdownEmpty");
+  var workshopMarkdownLoading = document.getElementById("workshopMarkdownLoading");
+  var workshopMarkdownError = document.getElementById("workshopMarkdownError");
+  var copyGeneratedMarkdown = document.getElementById("copyGeneratedMarkdown");
   var bubbleModalElement = document.getElementById("bubbleModal");
   var bubbleModal = bootstrap.Modal.getOrCreateInstance(bubbleModalElement);
   var imageLightbox = document.getElementById("imageLightbox");
@@ -190,6 +207,7 @@
   var authorNavController = null;
   var lastExpandedFigure = null;
   var layoutSyncFrame = 0;
+  var generatedMarkdownText = "";
 
   bubbleModalElement.addEventListener("hidden.bs.modal", function () {
     closeImageLightbox({ announce: false, restoreFocus: false });
@@ -411,6 +429,11 @@
 
     if (state.mode === "guide") {
       setHash("#guide-" + state.guideSection, options);
+      return;
+    }
+
+    if (state.mode === "generator") {
+      setHash("#markdown-generator", options);
       return;
     }
 
@@ -1149,12 +1172,139 @@
     }).join("");
   }
 
+  function setGeneratorState(emptyNode, loadingNode, errorNode, isEmpty, isLoading, errorMessage) {
+    if (emptyNode) {
+      emptyNode.classList.toggle("d-none", !isEmpty);
+    }
+    if (loadingNode) {
+      loadingNode.classList.toggle("d-none", !isLoading);
+    }
+    if (errorNode) {
+      errorNode.textContent = errorMessage || "";
+      errorNode.classList.toggle("d-none", !errorMessage);
+    }
+  }
+
+  function renderGeneratedExampleFields(fields) {
+    if (!wmsExampleResults) {
+      return;
+    }
+
+    wmsExampleResults.innerHTML = (fields || []).map(function (field) {
+      return [
+        '<article class="detail-field-card generated-example-card">',
+        '  <span class="detail-field-label">', escapeHtml(field.label), "</span>",
+        renderFieldValueHtml(field.value),
+        field.note ? '  <p class="detail-field-note">' + escapeHtml(field.note) + "</p>" : "",
+        "</article>"
+      ].join("");
+    }).join("");
+  }
+
+  function runWmsExampleGeneration() {
+    var prompt = wmsExamplePrompt ? wmsExamplePrompt.value.trim() : "";
+    var service = window.AuthorGuideWorkshopGenerator;
+
+    if (!prompt) {
+      renderGeneratedExampleFields([]);
+      setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Enter a workshop topic before generating examples.");
+      return;
+    }
+
+    if (!service || typeof service.generateExamples !== "function") {
+      setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Example generation is unavailable right now.");
+      return;
+    }
+
+    setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, true, "");
+    window.setTimeout(function () {
+      try {
+        renderGeneratedExampleFields(service.generateExamples(prompt).fields);
+        setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "");
+        setLiveMessage("WMS field examples generated.");
+      } catch (error) {
+        renderGeneratedExampleFields([]);
+        setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Examples could not be generated. Try a shorter prompt.");
+      }
+    }, 180);
+  }
+
+  function setMarkdownOutput(value) {
+    generatedMarkdownText = String(value || "");
+    if (workshopMarkdownOutput) {
+      workshopMarkdownOutput.textContent = generatedMarkdownText;
+      if (workshopMarkdownOutput.parentElement) {
+        workshopMarkdownOutput.parentElement.classList.toggle("d-none", !generatedMarkdownText);
+      }
+    }
+    if (copyGeneratedMarkdown) {
+      copyGeneratedMarkdown.disabled = !generatedMarkdownText;
+    }
+  }
+
+  function runMarkdownGeneration() {
+    var prompt = workshopMarkdownPrompt ? workshopMarkdownPrompt.value.trim() : "";
+    var type = workshopMarkdownType ? workshopMarkdownType.value : "all";
+    var service = window.AuthorGuideWorkshopGenerator;
+    var snippet;
+
+    if (!service || typeof service.generateSnippet !== "function") {
+      setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "Markdown generation is unavailable right now.");
+      return;
+    }
+
+    setMarkdownOutput("");
+    setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, true, "");
+    window.setTimeout(function () {
+      try {
+        snippet = service.generateSnippet(type, prompt);
+        if (snippet.requiresPrompt && !prompt) {
+          setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "Enter a workshop topic before generating an outline.");
+          return;
+        }
+        setMarkdownOutput(snippet.body);
+        if (workshopMarkdownSummary) {
+          workshopMarkdownSummary.textContent = snippet.summary + " Source: " + snippet.source + ".";
+        }
+        if (generatorOutputMeta) {
+          generatorOutputMeta.textContent = snippet.group + " / " + snippet.source;
+        }
+        setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "");
+        setLiveMessage("Workshop snippet generated.");
+      } catch (error) {
+        setMarkdownOutput("");
+        setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "Snippet could not be generated. Try a different option.");
+      }
+    }, 180);
+  }
+
+  function syncMarkdownSnippetSummary() {
+    var service = window.AuthorGuideWorkshopGenerator;
+    var type = workshopMarkdownType ? workshopMarkdownType.value : "";
+    var item;
+
+    if (!workshopMarkdownSummary || !service || typeof service.getSnippetCatalog !== "function") {
+      return;
+    }
+
+    item = service.getSnippetCatalog().find(function (candidate) {
+      return candidate.id === type;
+    });
+
+    if (!item) {
+      workshopMarkdownSummary.textContent = "Select a snippet and generate it here.";
+      return;
+    }
+
+    workshopMarkdownSummary.textContent = item.summary + " Source: " + item.source + ".";
+  }
+
   function decorateExpandableMedia(root) {
     if (!root) {
       return;
     }
 
-    root.querySelectorAll(".step-figure, .guide-figure, .modal-media-figure, .evidence-figure, .guide-source-panel-prose figure, .guide-source-prose figure").forEach(function (figure) {
+    root.querySelectorAll(".step-figure, .guide-figure, .modal-media-figure, .evidence-figure, .inline-evidence-card, .guide-source-panel-prose figure, .guide-source-prose figure").forEach(function (figure) {
       var image = figure.querySelector("img");
       var caption = figure.querySelector("figcaption");
       var captionText;
@@ -2673,6 +2823,7 @@
     setModeRegionVisibility(beginnerMode, mode === "beginner");
     setModeRegionVisibility(explorerMode, mode === "explorer");
     setModeRegionVisibility(guideMode, mode === "guide");
+    setModeRegionVisibility(generatorMode, mode === "generator");
     setModeRegionVisibility(searchMode, mode === "search");
 
     if (mode !== "explorer") {
@@ -2708,6 +2859,15 @@
           window.scrollTo({ top: 0, behavior: smoothBehavior() });
         } else {
           scrollToTarget(guideMode);
+        }
+      }
+    } else if (mode === "generator") {
+      updateBreadcrumb();
+      if (config.scroll !== false) {
+        if (config.forceTop) {
+          window.scrollTo({ top: 0, behavior: smoothBehavior() });
+        } else {
+          scrollToTarget(generatorMode);
         }
       }
     } else if (mode === "search") {
@@ -2751,6 +2911,8 @@
         setLiveMessage("Cheatsheet opened.");
       } else if (mode === "guide") {
         setLiveMessage("Full Guide opened at " + (currentGuideSection() ? currentGuideSection().title : "Start Guide") + ".");
+      } else if (mode === "generator") {
+        setLiveMessage("Markdown Workshop Generator opened.");
       } else if (mode === "search") {
         setLiveMessage("Search results opened.");
       }
@@ -2897,6 +3059,11 @@
 
     if (cleaned === "toolkit" || cleaned === "quick-reference" || cleaned === "cheatsheet" || cleaned === "explorer") {
       switchMode("explorer", { scroll: true, forceTop: true, hash: false, announce: false });
+      return;
+    }
+
+    if (cleaned === "generator" || cleaned === "markdown-generator" || cleaned === "workshop-markdown-generator") {
+      switchMode("generator", { scroll: true, forceTop: true, hash: false, announce: false });
       return;
     }
 
@@ -3235,6 +3402,34 @@
       if (searchPageInput) {
         searchPageInput.focus();
       }
+    });
+  }
+
+  if (wmsExampleForm) {
+    wmsExampleForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      runWmsExampleGeneration();
+    });
+  }
+
+  if (workshopMarkdownForm) {
+    workshopMarkdownForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      runMarkdownGeneration();
+    });
+  }
+
+  if (workshopMarkdownType) {
+    workshopMarkdownType.addEventListener("change", syncMarkdownSnippetSummary);
+    syncMarkdownSnippetSummary();
+  }
+
+  if (copyGeneratedMarkdown) {
+    copyGeneratedMarkdown.addEventListener("click", function () {
+      if (!generatedMarkdownText) {
+        return;
+      }
+      copyText(generatedMarkdownText, copyGeneratedMarkdown);
     });
   }
 
