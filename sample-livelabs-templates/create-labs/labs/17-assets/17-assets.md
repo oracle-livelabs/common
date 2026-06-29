@@ -28,13 +28,13 @@ Estimated Time: 15 minutes
 
 1. Go to the [Workshop Management System](https://livelabs.oracle.com/wms).
 
-2. In the left window pane, expand 'Self Services'.
+2. In the left window pane, expand **Self Services**.
 
-3. Click 'Assets'.
+3. Click **Assets**.
 
     ![WMS Assets page with Self Services expanded and Assets selected](images/1-assets-page.png " ")
 
-4. On the Your Assets page, click 'New Asset'.
+4. On the Your Assets page, click **New Asset**.
 
     ![Asset Details dialog opened from the New Asset button](images/2-new-asset-dialog.png " ")
 
@@ -42,22 +42,22 @@ Estimated Time: 15 minutes
 
 ## Task 2A: Upload a File 
 
-1. Select 'Upload a File'.
+1. Select **Upload a File**.
 
-2. Click 'Choose File', and then select the file you want to upload.
+2. Click **Choose File**, and then select the file you want to upload.
 
-3. In 'Asset Name', enter a clear name for the asset.
+3. In **Asset Name**, enter a clear name for the asset.
 
-4. In 'Asset Type', select the type that best describes the asset. Available values include:
+4. In **Asset Type**, select the type that best describes the asset. Available values include:
     * **Demo**
     * **Link**
     * **Terraform Stack**
 
-5. Optionally, enter a 'Description' to help understand what the asset contains.
+5. Optionally, enter a **Description** to help understand what the asset contains.
 
-6. Optionally, enter one or more 'Additional Editors' as comma-separated email addresses to have these assets appear in their assets list.
+6. Optionally, enter one or more **Additional Editors** as comma-separated email addresses to have these assets appear in their assets list.
 
-7. Click 'Create'.
+7. Click **Create**.
 
     ![Asset Details dialog for uploading a file asset](images/3-upload-file-form.png " ")
 
@@ -65,7 +65,7 @@ Estimated Time: 15 minutes
 
 ## Task 2B: Access the File PAR Link
 
-Files uploaded to Object Storage automatically return a ready-to-use, overwriteable PAR link.
+Files uploaded to Object Storage automatically return a ready-to-use, overwriteable PAR link. Here's how to access it:
 
 1. Locate the desired file asset in your asset list.
 
@@ -81,29 +81,29 @@ Files uploaded to Object Storage automatically return a ready-to-use, overwritea
 
     ![WMS asset row with asset name selected for update](images/6-open-asset-for-update.png " ")
 
-2. Click 'Choose File', and then select your replacement file.
+2. Click **Choose File**, and then select your replacement file.
 
 3. Update the asset name, asset type, visibility, description, or additional editors as needed.
 
-4. Click 'Update'.
+4. Click **Update**.
 
     ![Asset Details dialog for updating a file asset](images/7-update-asset-dialog.png " ")
 
 ## Task 4: Upload a Link
 
-1. Select 'Upload a Link'.
+1. Select **Upload a Link**.
 
-2. In 'Link', enter the URL for the asset.
+2. In **Link**, enter the URL for the asset.
 
-3. In 'Asset Name', enter a clear name for the asset.
+3. In **Asset Name**, enter a clear name for the asset.
 
-4. In 'Asset Type', select the type that best describes the asset.
+4. In **Asset Type**, select the type that best describes the asset.
 
-5. Optionally, enter a 'Description' to help other users understand what the link contains.
+5. Optionally, enter a **Description** to help other users understand what the link contains.
 
-6. Optionally, enter one or more 'Additional Editors' as comma-separated email addresses.
+6. Optionally, enter one or more **Additional Editors** as comma-separated email addresses.
 
-7. Click 'Create'.
+7. Click **Create**.
 
     ![Asset Details dialog for adding a link asset](images/4-upload-link-form.png " ")
 
