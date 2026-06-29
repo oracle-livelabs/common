@@ -1,5 +1,4 @@
 {
-  "description": "Retrieve scoped Polly context and maintain rolling shared checkpoints.",
   "hooks": {
     "SessionStart": [
       {

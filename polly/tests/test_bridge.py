@@ -199,6 +199,7 @@ def test_hook_manifest_has_cross_platform_ten_second_commands() -> None:
     manifest = json.loads(
         (Path(__file__).parents[1] / "hooks" / "hooks.json").read_text()
     )
+    assert set(manifest) == {"hooks"}
     for event in ("SessionStart", "UserPromptSubmit", "Stop"):
         command = manifest["hooks"][event][0]["hooks"][0]
         assert command["timeout"] == 10
