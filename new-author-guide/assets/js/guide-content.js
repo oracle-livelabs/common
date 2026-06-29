@@ -50,7 +50,7 @@ window.authorGuideContent = (function () {
     stepMeta: [
       {
         id: "step-1",
-        title: "Submit Workshop Request",
+        title: "WMS Platform",
         guideTarget: "1-labs-wms",
         summary: "Start in WMS, fill the reviewer-facing request fields with real detail, and understand the approval to Quality Assurance status flow before development begins.",
         keywords: ["wms", "workshop request", "stakeholder", "council", "tags", "approved", "self Quality Assurance", "quarterly Quality Assurance"]
@@ -101,8 +101,8 @@ window.authorGuideContent = (function () {
           "Changing status before the checklist is saved.",
           "Forgetting that Self Quality Assurance, stakeholder review, publishing, and Quarterly Quality Assurance all depend on this same WMS record."
         ],
-        exampleTitle: "Example completion",
-        exampleIntro: "These are the kinds of answers reviewers should see. The exact stakeholder or council name changes, but the level of detail should not.",
+        exampleTitle: "Prompt-ready WMS examples",
+        exampleIntro: "Use these fields as a baseline, or generate prompt-driven examples from the Quickstart WMS Platform panel.",
         exampleFields: [
           exampleField("Workshop Title", "Build and publish an Oracle LiveLabs workshop from WMS to GitHub Pages", "Lead with the learner outcome, not only the product name."),
           exampleField("Workshop Abstract", "Authors learn how to request a workshop in WMS, prepare GitHub Desktop and Visual Studio Code, build from the LiveLabs sample structure, complete Self Quality Assurance, and request publishing.", "A reviewer should understand the end-to-end goal after two or three sentences."),
