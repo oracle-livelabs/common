@@ -15,15 +15,40 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Callable
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
-DEFAULT_SERVER = "http://150.136.151.51:8505"
 HTTP_TIMEOUT_SECONDS = 8.0
 MAX_CONTEXT_CHARACTERS = 12_000
 
 
 class BridgeError(RuntimeError):
     """A recoverable bridge error that must not block a Codex hook."""
+
+
+def normalize_server_url(value: str) -> str:
+    server = value.strip().rstrip("/")
+    try:
+        parsed = urlsplit(server)
+        port = parsed.port
+    except ValueError as exc:
+        raise BridgeError("The Polly server URL is invalid") from exc
+    if (
+        not server
+        or parsed.scheme.lower() not in {"http", "https"}
+        or not parsed.hostname
+        or parsed.username
+        or parsed.password
+        or parsed.query
+        or parsed.fragment
+        or any(character.isspace() for character in server)
+        or (port is not None and not 1 <= port <= 65535)
+    ):
+        raise BridgeError(
+            "The Polly server URL must be an absolute http:// or https:// URL "
+            "without credentials, query parameters, or fragments"
+        )
+    return server
 
 
 def plugin_data_dir() -> Path:
@@ -81,7 +106,11 @@ class CredentialStore:
 
 class MacOSKeychainStore(CredentialStore):
     @staticmethod
-    def service(server: str) -> str:
+    def service() -> str:
+        return "polly-agent"
+
+    @staticmethod
+    def legacy_service(server: str) -> str:
         return f"polly-agent:{server.rstrip('/')}"
 
     @property
@@ -98,7 +127,7 @@ class MacOSKeychainStore(CredentialStore):
                     "-a",
                     developer,
                     "-s",
-                    self.service(server),
+                    self.service(),
                     "-w",
                     token,
                 ],
@@ -110,7 +139,8 @@ class MacOSKeychainStore(CredentialStore):
         except (FileNotFoundError, subprocess.CalledProcessError) as exc:
             raise BridgeError("Could not store the Polly token in macOS Keychain") from exc
 
-    def load(self, server: str, developer: str) -> str | None:
+    @staticmethod
+    def _load_service(service: str, developer: str) -> str | None:
         try:
             result = subprocess.run(
                 [
@@ -119,7 +149,7 @@ class MacOSKeychainStore(CredentialStore):
                     "-a",
                     developer,
                     "-s",
-                    self.service(server),
+                    service,
                     "-w",
                 ],
                 check=True,
@@ -132,7 +162,8 @@ class MacOSKeychainStore(CredentialStore):
             return None
         return result.stdout.strip() or None
 
-    def delete(self, server: str, developer: str) -> None:
+    @staticmethod
+    def _delete_service(service: str, developer: str) -> None:
         subprocess.run(
             [
                 "security",
@@ -140,15 +171,32 @@ class MacOSKeychainStore(CredentialStore):
                 "-a",
                 developer,
                 "-s",
-                self.service(server),
+                service,
             ],
             check=False,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
 
+    def load(self, server: str, developer: str) -> str | None:
+        token = self._load_service(self.service(), developer)
+        if token:
+            return token
+        legacy_service = self.legacy_service(server)
+        token = self._load_service(legacy_service, developer)
+        if token:
+            self.store(server, developer, token)
+            self._delete_service(legacy_service, developer)
+        return token
+
+    def delete(self, server: str, developer: str) -> None:
+        self._delete_service(self.service(), developer)
+        self._delete_service(self.legacy_service(server), developer)
+
 
 class LinuxSecretServiceStore(CredentialStore):
+    APPLICATION = "polly-agent"
+
     @property
     def description(self) -> str:
         return "Linux Secret Service"
@@ -160,8 +208,8 @@ class LinuxSecretServiceStore(CredentialStore):
                     "secret-tool",
                     "store",
                     "--label=Polly Codex device token",
-                    "server",
-                    server.rstrip("/"),
+                    "application",
+                    self.APPLICATION,
                     "developer",
                     developer,
                 ],
@@ -180,17 +228,11 @@ class LinuxSecretServiceStore(CredentialStore):
                 "Could not store the Polly token; verify that a Secret Service is running"
             ) from exc
 
-    def load(self, server: str, developer: str) -> str | None:
+    @staticmethod
+    def _lookup(*attributes: str) -> str | None:
         try:
             result = subprocess.run(
-                [
-                    "secret-tool",
-                    "lookup",
-                    "server",
-                    server.rstrip("/"),
-                    "developer",
-                    developer,
-                ],
+                ["secret-tool", "lookup", *attributes],
                 check=False,
                 capture_output=True,
                 text=True,
@@ -201,20 +243,30 @@ class LinuxSecretServiceStore(CredentialStore):
             ) from exc
         return result.stdout.strip() if result.returncode == 0 and result.stdout.strip() else None
 
-    def delete(self, server: str, developer: str) -> None:
+    @staticmethod
+    def _clear(*attributes: str) -> None:
         subprocess.run(
-            [
-                "secret-tool",
-                "clear",
-                "server",
-                server.rstrip("/"),
-                "developer",
-                developer,
-            ],
+            ["secret-tool", "clear", *attributes],
             check=False,
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
+
+    def load(self, server: str, developer: str) -> str | None:
+        current_attributes = ("application", self.APPLICATION, "developer", developer)
+        token = self._lookup(*current_attributes)
+        if token:
+            return token
+        legacy_attributes = ("server", server.rstrip("/"), "developer", developer)
+        token = self._lookup(*legacy_attributes)
+        if token:
+            self.store(server, developer, token)
+            self._clear(*legacy_attributes)
+        return token
+
+    def delete(self, server: str, developer: str) -> None:
+        self._clear("application", self.APPLICATION, "developer", developer)
+        self._clear("server", server.rstrip("/"), "developer", developer)
 
 
 class WindowsDPAPIStore(CredentialStore):
@@ -223,7 +275,12 @@ class WindowsDPAPIStore(CredentialStore):
         return "Windows DPAPI"
 
     @staticmethod
-    def path(server: str, developer: str) -> Path:
+    def path(_server: str, developer: str) -> Path:
+        key = hashlib.sha256(f"polly-agent\0{developer}".encode()).hexdigest()
+        return plugin_data_dir() / "credentials" / f"{key}.bin"
+
+    @staticmethod
+    def legacy_path(server: str, developer: str) -> Path:
         key = hashlib.sha256(f"{server.rstrip('/')}\0{developer}".encode()).hexdigest()
         return plugin_data_dir() / "credentials" / f"{key}.bin"
 
@@ -253,8 +310,7 @@ class WindowsDPAPIStore(CredentialStore):
         except (FileNotFoundError, subprocess.CalledProcessError) as exc:
             raise BridgeError("Could not store the Polly token with Windows DPAPI") from exc
 
-    def load(self, server: str, developer: str) -> str | None:
-        path = self.path(server, developer)
+    def _load_path(self, path: Path) -> str | None:
         if not path.exists():
             return None
         script = (
@@ -274,9 +330,21 @@ class WindowsDPAPIStore(CredentialStore):
             raise BridgeError("Could not load the Polly token with Windows DPAPI") from exc
         return result.stdout or None
 
+    def load(self, server: str, developer: str) -> str | None:
+        token = self._load_path(self.path(server, developer))
+        if token:
+            return token
+        legacy_path = self.legacy_path(server, developer)
+        token = self._load_path(legacy_path)
+        if token:
+            self.store(server, developer, token)
+            legacy_path.unlink(missing_ok=True)
+        return token
+
     def delete(self, server: str, developer: str) -> None:
         try:
             self.path(server, developer).unlink(missing_ok=True)
+            self.legacy_path(server, developer).unlink(missing_ok=True)
         except OSError as exc:
             raise BridgeError("Could not remove the Windows DPAPI token file") from exc
 
@@ -482,7 +550,13 @@ def api_request(
 
 def configured_identity() -> tuple[str, str, str]:
     config = load_config()
-    server = str(config.get("server") or DEFAULT_SERVER).rstrip("/")
+    configured_server = str(config.get("server") or "")
+    if not configured_server.strip():
+        raise BridgeError(
+            "Polly server URL is not configured; run $polly-setup with the "
+            "administrator-provided server URL"
+        )
+    server = normalize_server_url(configured_server)
     developer = str(config.get("developer") or "").lstrip("@")
     if not developer:
         raise BridgeError("Polly enrollment has not been completed on this device")
@@ -697,7 +771,7 @@ def cmd_hook() -> int:
 
 
 def cmd_setup(args: argparse.Namespace) -> int:
-    server = args.server.rstrip("/")
+    server = normalize_server_url(args.server)
     code = getpass.getpass("One-time Polly enrollment code: ")
     if not code:
         raise BridgeError("Enrollment code is required")
@@ -735,15 +809,27 @@ def cmd_init(args: argparse.Namespace) -> int:
 
 def cmd_status(args: argparse.Namespace) -> int:
     config = load_config()
-    server = str(config.get("server") or DEFAULT_SERVER).rstrip("/")
+    configured_server = str(config.get("server") or "")
+    configuration_error = None
+    try:
+        if not configured_server.strip():
+            raise BridgeError(
+                "Polly server URL is not configured; run $polly-setup with the "
+                "administrator-provided server URL"
+            )
+        server = normalize_server_url(configured_server)
+    except BridgeError as exc:
+        server = None
+        configuration_error = str(exc)
     developer = str(config.get("developer") or "")
     store = credential_store()
-    token_present = bool(developer and store.load(server, developer))
-    health = "unreachable"
-    try:
-        health = str(api_request(server, "/health").get("status", "unknown"))
-    except BridgeError:
-        pass
+    token_present = bool(server and developer and store.load(server, developer))
+    health = "not_configured" if server is None else "unreachable"
+    if server:
+        try:
+            health = str(api_request(server, "/health").get("status", "unknown"))
+        except BridgeError:
+            pass
     details = {
         "server": server,
         "server_health": health,
@@ -751,6 +837,8 @@ def cmd_status(args: argparse.Namespace) -> int:
         "credential_store": store.description,
         "device_token_present": token_present,
     }
+    if configuration_error:
+        details["configuration_error"] = configuration_error
     repo = Path(args.repo).resolve()
     if git(repo, "rev-parse", "--show-toplevel"):
         try:
@@ -794,7 +882,11 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command", required=True)
 
     setup = sub.add_parser("setup", help="Enroll this device with a one-time code")
-    setup.add_argument("--server", default=os.environ.get("POLLY_SERVER", DEFAULT_SERVER))
+    setup.add_argument(
+        "--server",
+        required=True,
+        help="Administrator-provided Polly server URL",
+    )
     setup.add_argument("--device-name", default=platform.node() or "Codex device")
     setup.set_defaults(func=cmd_setup)
 
