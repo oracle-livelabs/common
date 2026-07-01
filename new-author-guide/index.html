@@ -5447,7 +5447,7 @@
                     <span class="progress-mark" aria-hidden="true">2</span>
                     <span class="progress-label">
                       <small>Step 2</small>
-                      <strong>Create Workshop + Add to GitHub</strong>
+                      <strong>Setup environment + Create Workshop</strong>
                     </span>
                   </button>
                   <button type="button" class="progress-button" data-step-target="2" role="tab">
@@ -5537,11 +5537,6 @@
                       </div>
                     </section>
 
-                    <figure class="step-figure evidence-figure">
-                      <figcaption>This is the first screen reviewers use to approve or send the request back for more information.</figcaption>
-                      <img src="./content/author-guide/1-labs-wms/images/submit_workshop.png" alt="Submit new workshop request form in WMS">
-                    </figure>
-
                     <section class="step-block example-generator-panel" aria-labelledby="wmsExampleGeneratorHeading">
                       <div class="step-block-header">
                         <div class="panel-kicker">Prompt examples <span class="experimental-badge">Experimental</span></div>
@@ -5567,42 +5562,33 @@
                         <h3>Understand the handoff path before you build</h3>
                         <p>The status flow below is the process map. Use these WMS states to understand when to wait for review, when to begin heavier GitHub work, when to complete Quality Assurance, and when the workshop is ready for publishing.</p>
                       </div>
-                      <div class="detail-milestone-grid">
-                        <article class="detail-milestone-card">
-                          <strong>Submitted</strong>
-                          <p>The council sees the request and starts its first review pass.</p>
-                        </article>
-                        <article class="detail-milestone-card">
-                          <strong>More Info Needed</strong>
-                          <p>Answer council questions in WMS and improve the request until the use case is clear.</p>
-                        </article>
-                        <article class="detail-milestone-card">
-                          <strong>Approved</strong>
-                          <p>Begin heavier GitHub work only after the initial WMS review gate clears.</p>
-                        </article>
-                        <article class="detail-milestone-card">
-                          <strong>In Development</strong>
-                          <p>Use this after real authoring starts in GitHub and the preview path exists.</p>
-                        </article>
-                        <article class="detail-milestone-card">
-                          <strong>Self Quality Assurance to Self Quality Assurance Complete</strong>
-                          <p>Run end-to-end testing, save the checklist, and certify the handoff only after the workshop is stable.</p>
-                        </article>
-                        <article class="detail-milestone-card">
-                          <strong>Completed</strong>
-                          <p>Stakeholders have verified the workshop and it is ready for final publish handling.</p>
-                        </article>
-                        <article class="detail-milestone-card">
-                          <strong>Quarterly Quality Assurance</strong>
-                          <p>Published workshops cycle back through Quality Assurance later. If Quality Assurance is missed, the production entry can be disabled.</p>
-                        </article>
+                      <div class="wms-status-flow" data-status-flow>
+                        <div class="wms-status-csv" aria-label="WMS status flow source data">
+                          <code>Status,Owner,Meaning</code>
+                          <code>Submitted,Council,The council receives the request and starts its first review pass.</code>
+                          <code>More Info Needed,Workshop team,Answer council questions in WMS and improve the request until the use case is clear.</code>
+                          <code>Approved,Workshop team,Begin heavier GitHub work only after the initial WMS review gate clears.</code>
+                          <code>In Development,Workshop team,Use this when real authoring starts in GitHub and the preview path exists.</code>
+                          <code>Self QA,Workshop team,Run end-to-end testing and complete the Self Quality Assurance checklist.</code>
+                          <code>Self QA Complete,Stakeholders,Stakeholders verify the saved checklist and workshop preview.</code>
+                          <code>Completed,LiveLabs publishing,The verified workshop is ready for final publishing handling.</code>
+                        </div>
+                        <div class="wms-status-buttons" role="tablist" aria-label="WMS status states">
+                          <button type="button" class="wms-status-button is-active" data-status-index="0" role="tab" aria-selected="true">Submitted</button>
+                          <button type="button" class="wms-status-button" data-status-index="1" role="tab" aria-selected="false">More Info Needed</button>
+                          <button type="button" class="wms-status-button" data-status-index="2" role="tab" aria-selected="false">Approved</button>
+                          <button type="button" class="wms-status-button" data-status-index="3" role="tab" aria-selected="false">In Development</button>
+                          <button type="button" class="wms-status-button" data-status-index="4" role="tab" aria-selected="false">Self QA</button>
+                          <button type="button" class="wms-status-button" data-status-index="5" role="tab" aria-selected="false">Self QA Complete</button>
+                          <button type="button" class="wms-status-button" data-status-index="6" role="tab" aria-selected="false">Completed</button>
+                        </div>
+                        <div class="wms-status-detail" role="tabpanel" aria-live="polite">
+                          <span class="detail-field-label" id="wmsStatusOwner">Council</span>
+                          <h4 id="wmsStatusTitle">Submitted</h4>
+                          <p id="wmsStatusDescription">The council receives the request and starts its first review pass.</p>
+                        </div>
                       </div>
                     </section>
-
-                    <figure class="step-figure evidence-figure">
-                      <figcaption>Use the workflow diagram when deciding whether the workshop is still in request review, ready for Self Quality Assurance, or ready for publish handling.</figcaption>
-                      <img src="./content/author-guide/introduction/images/livelabs-publishing-flow.png" alt="LiveLabs publishing workflow diagram">
-                    </figure>
 
                     <section class="step-block step-block-quiet">
                       <div class="step-block-header">
@@ -5642,23 +5628,19 @@
               </article>
             </section>
 
-            <section class="rabbit-step" id="step-2" data-step-index="1" data-step-name="Create Workshop + Add to GitHub" data-depth="2">
+            <section class="rabbit-step" id="step-2" data-step-index="1" data-step-name="Setup environment + Create Workshop" data-depth="2">
               <div class="step-orb" aria-hidden="true">2</div>
               <article class="step-shell">
                 <div class="lockable">
                   <div class="step-heading">
-                    <div class="step-kicker">Step 2 / GitHub build</div>
-                    <h2 class="step-title">Create Workshop + Add to GitHub</h2>
+                    <div class="step-kicker">Step 2 / Environment setup</div>
+                    <h2 class="step-title">Setup environment + Create Workshop</h2>
                     <p class="step-summary">Set up the workstation, fork and clone the right repositories, copy the sample structure, and make preview work early so the workshop is cheap to fix.</p>
                     <div class="step-meta-row">
                       <span class="meta-pill">Output: live preview</span>
                       <span class="meta-pill">Time: 15 to 20 minutes</span>
                       <span class="meta-pill">Leads to: content authoring</span>
                     </div>
-                  </div>
-
-                  <div class="guide-panel guided-only mb-4">
-                    Most new-author friction lives here. Get account setup, repository hygiene, folder structure, and preview working before you write long sections of content.
                   </div>
 
                   <div
@@ -5672,20 +5654,16 @@
                     <section class="step-block">
                       <div class="step-block-header">
                         <div class="panel-kicker">Setup</div>
-                        <h3>Install GitHub Desktop</h3>
-                        <p>Use the official downloads, sign in early, and make preview available before you start building labs.</p>
+                        <h3>Prepare the authoring environment in order</h3>
+                        <p>Complete the account and tool setup before you fork, clone, or copy the workshop template.</p>
                       </div>
-                      <figure class="step-figure evidence-figure install-figure">
-                        <figcaption>Finish GitHub Desktop sign-in before you clone, sync, or create a pull request.</figcaption>
-                        <img src="./content/author-guide/2-labs-github/images/git-hub-desktop-login-screen.png" alt="GitHub Desktop login screen">
-                      </figure>
                       <div class="detail-resource-grid install-card-grid">
                         <article class="detail-resource-link detail-resource-card install-card" data-install-card="github-account" aria-pressed="false">
                           <div class="detail-resource-main">
                             <span class="detail-resource-number">1</span>
                             <span>
                               <strong>GitHub account</strong>
-                              <span>Use your @oracle.com email, complete profile details, and enable two-factor authentication.</span>
+                              <span>Use your Oracle email. Finish profile name, username, photo, and two-factor authentication in GitHub Settings.</span>
                             </span>
                           </div>
                           <div class="detail-resource-actions">
@@ -5698,7 +5676,7 @@
                             <span class="detail-resource-number">2</span>
                             <span>
                               <strong>GitHub Desktop</strong>
-                              <span>This is the main fork, clone, commit, sync, and pull request handoff surface used in the guide.</span>
+                              <span>Install it, open File &gt; Options &gt; Sign in, and confirm it uses the same account that will fork and clone.</span>
                             </span>
                           </div>
                           <div class="detail-resource-actions">
@@ -5711,7 +5689,7 @@
                             <span class="detail-resource-number">3</span>
                             <span>
                               <strong>Visual Studio Code</strong>
-                              <span>Use Visual Studio Code for markdown editing, search, file moves, and manifest work.</span>
+                              <span>Install it before authoring. Set Markdown indentation to tabs size 4 before nested steps, images, or code blocks.</span>
                             </span>
                           </div>
                           <div class="detail-resource-actions">
@@ -5724,7 +5702,7 @@
                             <span class="detail-resource-number">4</span>
                             <span>
                               <strong>Live Server extension</strong>
-                              <span>Install it before you begin so local preview is always available while you edit.</span>
+                              <span>Add it in Visual Studio Code so local preview is available before long content edits begin.</span>
                             </span>
                           </div>
                           <div class="detail-resource-actions">
@@ -5737,7 +5715,7 @@
                             <span class="detail-resource-number">5</span>
                             <span>
                               <strong>Oracle LiveLabs repositories</strong>
-                              <span>Pick the product repository that will own the workshop in production.</span>
+                              <span>Pick the product repository that will own production, then fork it before cloning to your laptop.</span>
                             </span>
                           </div>
                           <div class="detail-resource-actions">
@@ -5750,7 +5728,7 @@
                             <span class="detail-resource-number">6</span>
                             <span>
                               <strong>Sample workshop template</strong>
-                              <span>Copy from the canonical sample instead of improvising a new folder layout.</span>
+                              <span>Copy the canonical sample structure after the fork and clone are ready.</span>
                             </span>
                           </div>
                           <div class="detail-resource-actions">
@@ -5759,11 +5737,6 @@
                           </div>
                         </article>
                       </div>
-                      <ol class="action-list mt-4">
-                        <li>Create or confirm the GitHub account that uses your Oracle email, then finish profile name, username, profile photo, and two-factor authentication in GitHub Settings.</li>
-                        <li>Install GitHub Desktop, open <strong>File &gt; Options &gt; Sign in</strong>, and confirm the client uses the same account that will fork and clone the repository.</li>
-                        <li>Install Visual Studio Code and <strong>Live Server</strong>, then set markdown indentation to tabs size 4 before you create nested steps, images, or code blocks.</li>
-                      </ol>
                     </section>
 
                     <section class="step-block">
@@ -5779,7 +5752,7 @@
                         <li>After the merge succeeds, click <strong>Push origin</strong> so your local clone and your fork stay aligned before you author anything new.</li>
                         <li>Copy the sample workshop structure from <strong>common/sample-livelabs-templates/sample-workshop</strong>, keep every file and folder lowercase, and point <code>manifest.json</code> at real markdown files instead of placeholders.</li>
                       </ol>
-                      <div class="inline-evidence-grid" aria-label="GitHub action screenshots">
+                      <div class="inline-evidence-grid github-progression-gallery is-numbered-gallery" aria-label="GitHub action screenshots">
                         <figure class="inline-evidence-card">
                           <img src="./content/author-guide/3-labs-sync-github/images/create-fork.png" alt="Create a fork in GitHub">
                           <figcaption>Fork creates your writable copy.</figcaption>
@@ -5796,31 +5769,41 @@
                           <img src="./content/author-guide/3-labs-sync-github/images/git-hub-merge-current-branch.png" alt="Merge upstream main in GitHub Desktop">
                           <figcaption>Merge upstream/main before authoring.</figcaption>
                         </figure>
+                        <figure class="inline-evidence-card">
+                          <img src="./content/author-guide/3-labs-sync-github/images/project-folder-displayed.png" alt="Workshop project folder displayed in Visual Studio Code">
+                          <figcaption>Open the cloned project in Visual Studio Code.</figcaption>
+                        </figure>
+                        <figure class="inline-evidence-card">
+                          <img src="./content/author-guide/3-labs-sync-github/images/sample-workshop-structure.png" alt="Sample workshop structure in Visual Studio Code">
+                          <figcaption>Copy the sample workshop structure.</figcaption>
+                        </figure>
+                        <figure class="inline-evidence-card">
+                          <img src="./content/author-guide/3-labs-sync-github/images/lab-folder-structure.png" alt="LiveLabs lab folder structure">
+                          <figcaption>Confirm lab folders, markdown, and images.</figcaption>
+                        </figure>
                       </div>
                     </section>
 
-                    <figure class="step-figure evidence-figure">
-                      <figcaption>Use the sample structure as the starting point. It is much easier to trim or rename the template than to repair an improvised workshop layout later.</figcaption>
-                      <img src="./content/author-guide/3-labs-sync-github/images/sample-workshop-structure.png" alt="Sample workshop structure in Visual Studio Code">
-                    </figure>
-
-                    <section class="step-block">
+                    <section class="step-block preview-checkpoint-section">
                       <div class="step-block-header">
-                        <div class="panel-kicker">Preview early</div>
-                        <h3>Enable GitHub Pages and verify the path before deep writing starts</h3>
-                        <p>Preview is not a late polish step. It is how you prove the workshop structure, manifest paths, and shared assets already render correctly.</p>
+                        <div class="panel-kicker">Preview checkpoint</div>
+                        <h3>Publish the preview checkpoint</h3>
+                        <p>Use GitHub Pages to prove the workshop path works before deep writing starts.</p>
                       </div>
-                      <ol class="action-list">
-                        <li>Open your fork on GitHub, go to <strong>Settings &gt; Pages</strong>, choose the <strong>main</strong> branch, and save the configuration.</li>
-                        <li>Wait for GitHub Pages to publish, then open the exact workshop variant path you plan to share.</li>
-                        <li>Use local preview while you author, but always confirm that the same workshop path also works on your personal <code>github.io</code> site.</li>
-                      </ol>
+                      <div class="preview-checkpoint-layout">
+                        <ol class="action-list">
+                          <li><strong>Open settings.</strong> In your fork, open <strong>Settings &gt; Pages</strong>.</li>
+                          <li><strong>Select source.</strong> Choose the <strong>main</strong> branch and save.</li>
+                          <li><strong>Wait for publish.</strong> Let GitHub Pages finish publishing before testing the link.</li>
+                          <li><strong>Open the exact variant.</strong> Test the workshop URL you plan to share, including <code>?qa=true</code>.</li>
+                          <li><strong>Keep checking both previews.</strong> Use local preview while editing, then confirm the same path works on your personal <code>github.io</code> site.</li>
+                        </ol>
+                        <figure class="inline-evidence-card preview-checkpoint-image">
+                          <img src="./content/author-guide/3-labs-sync-github/images/branch-main.png" alt="GitHub Pages branch selection screen">
+                          <figcaption>Use the personal GitHub Pages URL for review before production exists.</figcaption>
+                        </figure>
+                      </div>
                     </section>
-
-                    <figure class="step-figure evidence-figure">
-                      <figcaption>GitHub Pages on your fork is a required checkpoint. It is the review URL you will share before production exists.</figcaption>
-                      <img src="./content/author-guide/3-labs-sync-github/images/branch-main.png" alt="GitHub Pages branch selection screen">
-                    </figure>
 
                     <section class="step-block">
                       <div class="step-block-header">
