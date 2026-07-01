@@ -1,0 +1,4 @@
+interface:
+  display_name: "LiveStacks Orchestrator"
+  short_description: "Build Oracle-first LiveStacks bundles"
+  default_prompt: "Use $livestacks-orchestrator to turn this business pain point into a production-ready LiveStacks package. Start the orchestration workflow immediately, stabilize input/working-prd.md, then start the specialist team."
