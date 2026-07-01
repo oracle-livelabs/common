@@ -3195,6 +3195,48 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   object-fit: contain;
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] .is-numbered-gallery {
+  counter-reset: evidence-step;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .is-numbered-gallery .inline-evidence-card {
+  counter-increment: evidence-step;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .is-numbered-gallery .inline-evidence-card::before {
+  content: counter(evidence-step);
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 999px;
+  background: var(--rose);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(32, 30, 28, 0.16);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.95fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-layout .action-list {
+  margin-bottom: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-image {
+  margin: 0;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] figure[data-expandable="true"] {
   cursor: zoom-in;
 }
@@ -3216,6 +3258,89 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   font-size: 0.72rem;
   font-weight: 800;
   pointer-events: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-flow {
+  display: grid;
+  gap: 1rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-csv {
+  display: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-buttons {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-button {
+  min-height: 3.2rem;
+  padding: 0.55rem 0.55rem;
+  border: 1px solid rgba(104, 96, 91, 0.28);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-button:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-button:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-button.is-active {
+  border-color: rgba(199, 70, 52, 0.46);
+  background: #fff8f7;
+  color: var(--rose);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail {
+  padding: 1rem;
+  border: 1px solid rgba(212, 207, 202, 0.92);
+  border-radius: 8px;
+  background: #fbf9f8;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail h4 {
+  margin: 0.25rem 0 0.4rem;
+  font-size: 1.1rem;
+  font-weight: 850;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-card {
+  align-content: start;
+  gap: 0.85rem;
+  min-height: 13rem;
+  padding: 0.9rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-main {
+  align-items: flex-start;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-main strong {
+  font-size: 0.88rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-main span span {
+  font-size: 0.78rem;
+  line-height: 1.38;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-actions {
+  margin-top: auto;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .example-generator-panel,
@@ -3261,6 +3386,8 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generator-snippet-summary {
+  display: grid;
+  gap: 0.55rem;
   margin-top: 1rem;
   padding: 0.85rem 1rem;
   border-left: 4px solid var(--rose);
@@ -3270,6 +3397,24 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   font-size: 0.92rem;
   font-weight: 650;
   line-height: 1.55;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-summary-row {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-summary-row strong {
+  color: var(--ink);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-summary-row span {
+  min-width: 0;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generator-error-state {
@@ -3322,12 +3467,32 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   #app[data-redwood-creator-pass="2026-05-25"] .generator-controls {
     grid-template-columns: 1fr;
   }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-buttons,
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
   #app[data-redwood-creator-pass="2026-05-25"] .inline-evidence-grid {
     grid-template-columns: 1fr;
   }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .generator-summary-row {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-buttons,
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
+    grid-template-columns: 1fr;
+  }
+
 }
 
 /* Final review fixes: keep the home menu neutral until hover and make the nav close state explicit. */
