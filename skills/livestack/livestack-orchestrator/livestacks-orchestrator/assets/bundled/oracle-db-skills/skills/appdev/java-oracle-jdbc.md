@@ -184,7 +184,7 @@ spring:
   datasource:
     url: jdbc:oracle:thin:@localhost:1521/freepdb1
     username: hr
-    password: <db pwd>
+    password: password
     driver-class-name: oracle.jdbc.OracleDriver
     hikari:
       maximum-pool-size: 20

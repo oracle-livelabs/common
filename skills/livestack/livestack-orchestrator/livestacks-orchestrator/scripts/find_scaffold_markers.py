@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import os
+from collections.abc import Iterator
 from pathlib import Path
 
 
@@ -54,7 +55,6 @@ REQUIRED_PATHS = {
     "docs/runbook.md",
     "guide/introduction/introduction.md",
     "guide/download-livestack/download-livestack.md",
-    "guide/conclusion/conclusion.md",
     "guide/workshops/desktop/index.html",
     "guide/workshops/desktop/manifest.json",
     "guide/workshops/sandbox/index.html",
@@ -77,6 +77,7 @@ REQUIRED_PATHS = {
     "validation/acceptance-checklist.md",
     "validation/launch-checklist.md",
     "validation/data-onboarding-checklist.md",
+    "validation/test-evidence.md",
 }
 
 REQUIRED_HEADINGS = {
@@ -593,9 +594,44 @@ TEXT_SUFFIXES = {
     ".example",
 }
 
+EXCLUDED_SCAN_DIR_NAMES = {
+    ".cache",
+    ".git",
+    ".mypy_cache",
+    ".nox",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".tox",
+    ".venv",
+    "__pycache__",
+    "build",
+    "coverage",
+    "dist",
+    "node_modules",
+    "venv",
+}
+
 
 def is_text_file(path: Path) -> bool:
     return path.suffix.lower() in TEXT_SUFFIXES or path.name == ".env.example"
+
+
+def iter_scannable_text_files(root: Path) -> Iterator[Path]:
+    """Yield first-party text files without descending into generated or control trees."""
+    for current_dir, dir_names, file_names in os.walk(root):
+        dir_names[:] = sorted(
+            name for name in dir_names if name not in EXCLUDED_SCAN_DIR_NAMES
+        )
+        current_path = Path(current_dir)
+        for file_name in sorted(file_names):
+            file_path = current_path / file_name
+            if (
+                file_path.is_symlink()
+                or not file_path.is_file()
+                or not is_text_file(file_path)
+            ):
+                continue
+            yield file_path
 
 
 def canonical_sample_workshop() -> Path | None:
@@ -658,11 +694,9 @@ def scan(root: Path) -> list[tuple[str, int, str]]:
                     "index.html diverges from canonical LiveLabs shell",
                 )
             )
-    for file_path in sorted(root.rglob("*")):
-        if not file_path.is_file() or not is_text_file(file_path):
-            continue
+    for file_path in iter_scannable_text_files(root):
         text = file_path.read_text(encoding="utf-8", errors="ignore")
-        relative_path = str(file_path.relative_to(root))
+        relative_path = file_path.relative_to(root).as_posix()
         for heading in REQUIRED_HEADINGS.get(relative_path, []):
             if heading not in text:
                 findings.append((str(file_path), 1, f"missing required heading `{heading}`"))

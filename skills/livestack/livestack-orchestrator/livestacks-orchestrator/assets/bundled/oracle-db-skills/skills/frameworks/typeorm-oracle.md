@@ -34,7 +34,7 @@ export const AppDataSource = new DataSource({
   port:       1521,
   serviceName: "freepdb1",
   username:   "hr",
-  password:   "<db pwd>",
+  password:   "password",
   entities:   [Employee, Department],
   synchronize: false,        // never true in production
   logging:    ["query", "error"],
@@ -49,7 +49,7 @@ export const AppDataSource = new DataSource({
   type:           "oracle",
   connectString:  "mydb_high",   // TNS alias
   username:       "hr",
-  password:       "<db pwd>",
+  password:       "password",
   entities:       [Employee],
   synchronize:    false,
 });
@@ -309,7 +309,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
       port:        1521,
       serviceName: "freepdb1",
       username:    "hr",
-      password:    "<db pwd>",
+      password:    "password",
       entities:    [__dirname + "/**/*.entity{.ts,.js}"],
       synchronize: false,
     }),
@@ -369,7 +369,7 @@ export class EmployeesService {
       port:       1521,
       serviceName: "freepdb1",
       username:   "hr",
-      password:   "<db pwd>",  // EXPOSED IN VERSION CONTROL
+      password:   "hr_password",  // EXPOSED IN VERSION CONTROL
       // ... other params
   });
   ```
@@ -384,7 +384,7 @@ export class EmployeesService {
       port:       parseInt(process.env.DB_PORT || "1521"),
       serviceName: process.env.DB_SERVICE || "freepdb1",
       username:   process.env.DB_USER || "hr",
-      password:   "",  // Set from DB_PASSWORD at runtime.
+      password:   process.env.DB_PASSWORD || "",
       // ... other params
   });
   ```
@@ -405,7 +405,7 @@ export class EmployeesService {
       type:       "oracle",
       connectString: "myatp_high",   // TNS alias
       username:   "admin",
-      password:   "<db pwd>",  // Consider using wallet instead
+      password:   "password",  // Consider using wallet instead
       extra: {
           poolMin: 2,
           poolMax: 20,
@@ -423,7 +423,7 @@ export class EmployeesService {
       // Use TCPS with full descriptor or TNS alias configured for TCPS
       connectString:  "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCPS)(HOST=db-host)(PORT=2484))(CONNECT_DATA=(SERVICE_NAME=service_name)))",
       username:   "${DB_USER}",
-      password:   "<db pwd from env>",
+      password:   "${DB_PASSWORD}",
       // ... other params
   });
   ```
@@ -665,7 +665,7 @@ export class EmployeesService {
           // Get a connection from the pool to set client info
           const connection = await oracledb.getConnection({
               user: process.env.DB_USER,
-              password: "",
+              password: process.env.DB_PASSWORD,
               connectString: process.env.DB_CONNECT_STRING
           });
           

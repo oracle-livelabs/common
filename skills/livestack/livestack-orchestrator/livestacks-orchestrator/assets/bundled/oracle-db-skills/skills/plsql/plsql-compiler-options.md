@@ -248,10 +248,10 @@ BEGIN
   $IF $$env_prod $THEN
     RETURN 'https://api.production.com/' || p_service;
   $ELSIF $$env_dev $THEN
-    RETURN 'https://api.example.com/dev/' || p_service;
+    RETURN 'https://api.dev.internal/' || p_service;
   $ELSE
     -- Default to dev if no flag set
-    RETURN 'https://api.example.com/dev/' || p_service;
+    RETURN 'https://api.dev.internal/' || p_service;
   $END
 END get_service_url;
 /

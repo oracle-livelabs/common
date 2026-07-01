@@ -1,6 +1,6 @@
 # Oracle DB Skills Index
 
-**Repository:** bundled snapshot
+**Repository:** https://github.com/krisrice/oracle-db-skills
 **Version:** 1.0.0
 
 A tracking file for skills.md topics to create for working with Oracle DB.

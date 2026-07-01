@@ -20,7 +20,7 @@ Version: see [`VERSION`](./VERSION)
 - `SUPPORT.md`: public prerequisites, support matrix, and support boundaries
 - `update.json`: canonical public GitHub zip-manifest update source and validation command
 - `references/`: built-in fallback playbooks and guardrails
-- `scripts/`: scaffolding, install-helper, and validation utilities
+- `scripts/`: scaffolding, install-helper, validation, self-update, and deterministic release utilities
 - `tests/`: package-level regression tests for the grading gate and release behavior
 - `assets/bundled/oracle-db-skills/`: portable bundled Oracle database helper snapshot
 - `assets/bundled/livestack-guide-builder/`: portable bundled LiveStack guide runbook helper snapshot
@@ -53,11 +53,20 @@ Maintainers can refresh bundled helper snapshots from the currently installed li
 - `python3 scripts/check_skill_package.py`
 - `python3 -m unittest discover -s tests -p 'test_*.py'`
 
+The expanded directory is the reviewable source of truth. After source checks pass, rebuild or verify the checked-in release ZIP and public manifest from this directory with:
+
+```text
+python3 scripts/build_release.py --archive ../livestacks-orchestrator.zip --manifest ../livestacks-orchestrator.update.json --publish
+python3 scripts/build_release.py --archive ../livestacks-orchestrator.zip --manifest ../livestacks-orchestrator.update.json --check
+```
+
+Release builds use stable ordering, timestamps, and canonical archive modes. Publishing stages the ZIP and manifest beside their destinations and activates them as one recoverable pair, so a failed replacement restores the previous published pair instead of leaving mismatched artifacts.
+
 On each substantial invocation, run:
 
 - `python3 scripts/self_update.py --auto --json`
 
-The updater checks the small public GitHub manifest at `skills/livestack/livestacks-orchestrator.update.json`, compares its `content_hash` to the installed skill, and downloads `livestacks-orchestrator.zip` only when the manifest says the package changed. It validates the extracted archive and installs it automatically when the local content hash differs. It does not create backups; if the manifest, archive, or validation is unavailable, it skips the update and leaves the current skill in place.
+The updater checks the small public GitHub manifest at `skills/livestack/livestacks-orchestrator.update.json`, compares its `content_hash` to the installed skill, and downloads `livestacks-orchestrator.zip` only when the manifest says the package changed. It verifies the archive checksum, requires the extracted `VERSION` to match the manifest version, validates and prepares the extracted archive, then uses an ephemeral sibling rollback copy while swapping installations. Activation failures restore the prior installation; successful updates remove transaction artifacts, or report retained `recovery_backup` or `recovery_lock` paths as warnings when cleanup fails. If the manifest, archive, preparation, or validation is unavailable, the updater skips the update and leaves the current skill in place.
 
 ## Runtime Expectations
 
@@ -73,15 +82,15 @@ Required when generating or validating runnable LiveStacks bundles:
 - `podman`
 - `podman compose`
 
-## 0.1.0-preview.20 Beta Bar
+## 0.1.0-preview.21 Beta Bar
 
-This preview is intended for guided maintainer and beta use. The first generated application iteration is expected to be more than a scaffold:
+This preview is intended for guided internal beta use. The first generated application iteration is expected to be more than a scaffold:
 
 - default LiveStacks start from a capability-led operator application core, then apply Oracle 26ai capability strategy, feature usage pattern, industry, pain-point, dynamic scene architecture, Oracle capability, data-contract, and guide-runbook overlays
-- bundled overlay examples in `assets/template-overlays/industry-overlays.json` are treated as reusable vocabulary and scene-shaping patterns, not as raw templates to copy
+- the bundled `assets/template-overlays/industry-overlays.json` corpus supplies reusable vocabulary and scene-shaping examples, not raw templates to copy
 - generated bundles must record `input/template-provenance.json` and `docs/golden-core-overlays.md`
 - generated default LiveStacks must keep `stack/compose.yml` and `stack/.env.example` aligned to the capability-led runtime baseline; industry, story, and capability variation belongs in app, database, seed/config, docs, guide, and provenance artifacts
-- `$livestacks-orchestrator` runs must create a role ledger and specialist execution plan; subagents are used only when the user explicitly asks for delegation or parallel agent work, and local execution requires a ledger reason
+- `$livestacks-orchestrator` runs must use multi-agent specialist execution by default; any local fallback requires an explicit ledger reason
 - Oracle AI Database 26ai feature strategy is the first design decision; use `$oracle-db-skills` to choose the minimum credible Oracle-native capability set before shaping the UI
 - sparse briefs default to an `operator_workbench` story unless the working PRD justifies a broader showcase
 - generated app structure must include Command Center, Data Foundation, and a right-sized set of dynamic capability-backed workflow scenes rather than a fixed scene count
@@ -156,8 +165,8 @@ Before calling a generated LiveStacks bundle production-ready, the expected veri
 
 1. `python3 scripts/find_scaffold_markers.py <solution-root>`
 2. `podman compose config` from `<solution-root>/stack`
-3. `python3 scripts/validate_livestack_bundle.py <solution-root>`
-4. `python3 scripts/grade_livestack_bundle.py <solution-root>`
+3. `python3 scripts/validate_livestack_bundle.py <solution-root>` (defensively rechecks scaffold markers)
+4. `python3 scripts/grade_livestack_bundle.py <solution-root>` (inherits all validator findings)
 5. LiveLabs markdown validation for the generated `guide/`
 
 Before sharing or embedding the skill package itself, run:
@@ -165,6 +174,7 @@ Before sharing or embedding the skill package itself, run:
 ```text
 python3 scripts/check_skill_package.py
 python3 -m unittest discover -s tests -p 'test_*.py'
+python3 scripts/build_release.py --archive ../livestacks-orchestrator.zip --manifest ../livestacks-orchestrator.update.json --check
 ```
 
 Before substantial orchestration work, run:

@@ -1,6 +1,6 @@
 {
   "version": "2026-05-20",
-  "purpose": "Bundled overlay examples for vocabulary and scene shaping. These are examples, not separate golden templates.",
+  "purpose": "Bundled overlay examples for vocabulary and scene shaping, not separate golden templates.",
   "golden_core": {
     "baseline": "capability-led-operator-application-core",
     "runtime": ["db", "ords", "ollama", "app"],

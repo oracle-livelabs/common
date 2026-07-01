@@ -349,7 +349,7 @@ ALTER SESSION SET EDITION = v2;
 import oracledb
 conn = oracledb.connect(
     user="app_user",
-    password=<db pwd>,
+    password=password,
     dsn="host:1521/service",
     edition="V2"
 )

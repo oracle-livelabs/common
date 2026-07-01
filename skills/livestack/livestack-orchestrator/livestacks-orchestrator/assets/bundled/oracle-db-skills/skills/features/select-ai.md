@@ -48,7 +48,7 @@ BEGIN
   DBMS_CLOUD.CREATE_CREDENTIAL(
     credential_name => 'OPENAI_CRED',
     username        => 'OPENAI',
-    password        => '<api key from secure source>'   -- never hardcode a real API key
+    password        => 'sk-...'   -- your API key
   );
 END;
 /

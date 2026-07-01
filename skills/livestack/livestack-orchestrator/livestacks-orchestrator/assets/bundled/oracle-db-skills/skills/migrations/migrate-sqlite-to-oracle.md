@@ -368,7 +368,7 @@ src_conn.row_factory = sqlite3.Row
 src_cur = src_conn.cursor()
 
 # Connect to target (thin mode — no Oracle Client libs required)
-tgt_conn = oracledb.connect(user='user', password='<db pwd>', dsn='localhost:1521/ORCL')
+tgt_conn = oracledb.connect(user='user', password='pass', dsn='localhost:1521/ORCL')
 tgt_cur = tgt_conn.cursor()
 
 # Migrate products

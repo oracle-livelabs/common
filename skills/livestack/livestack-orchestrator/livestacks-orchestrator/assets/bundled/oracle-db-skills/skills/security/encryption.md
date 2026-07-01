@@ -477,7 +477,7 @@ Data Pump exports (`expdp`) decrypt data before export. The exported dump file i
 expdp system/password FULL=Y \
   DUMPFILE=full_backup.dmp \
   ENCRYPTION=ALL \
-  ENCRYPTION_PASSWORD='<enc pwd>' \
+  ENCRYPTION_PASSWORD=DumpFileP@ss! \
   ENCRYPTION_ALGORITHM=AES256
 ```
 

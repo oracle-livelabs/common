@@ -39,13 +39,13 @@ The `Use Your Own Data` overlay must also own an Oracle Internals state. When th
 - Accept three input modes: full `PRD`, partial `Merge`, or brief-only `Bootstrap`.
 - Require `industry` and `pain_point` for `Bootstrap` mode.
 - Accept workbook-style input, bullets, free-form notes, or full PRDs. Normalize them with `references/input-normalization.md`.
-- Use `references/golden-core-overlay-contract.md` before shaping the default app/runtime path. Treat the documented golden standard as a capability-led operator application pattern, with the bundled overlay examples in `assets/template-overlays/industry-overlays.json` as vocabulary and scene-shaping guidance rather than separate raw golden templates.
+- Use `references/golden-core-overlay-contract.md` before shaping the default app/runtime path. Treat the documented golden standard as a capability-led operator application pattern, with the bundled `assets/template-overlays/industry-overlays.json` corpus providing industry examples rather than separate raw golden templates.
 - Use `references/prd-build-contract.md` whenever you need to preserve a source PRD, merge partial PRD material, or synthesize a working PRD from a brief.
 - Persist the raw brief or notes in `input/business-input.md`.
 - Persist the source PRD in `input/product-requirements.md`; if no source PRD exists, record that explicitly.
 - Create `input/working-prd.md` before the role ledger or specialist wave begins. Mark every inferred item as `Assumption:` until the user or implementation confirms it.
-- Start a visible role ledger before detailed work. Use the template in `references/role-playbooks.md`, assigning each role to the main thread, a specialist skill, or a subagent only when the current Codex runtime policy and the user's explicit delegation request allow it.
-- If the user invokes or mentions `$livestacks-orchestrator`, treat that as an explicit request to begin orchestration and prepare the specialist role plan. Start delegated subagents only when the user explicitly asks for subagents, delegation, or parallel agent work, and record the delegation basis in the role ledger.
+- Start a visible role ledger before detailed work. Use the template in `references/role-playbooks.md`, with `subagent` as the default owner for independent specialist roles.
+- If the user invokes or mentions `$livestacks-orchestrator`, start the orchestration workflow immediately unless the user explicitly asks for no delegation. Stabilize `input/working-prd.md` first, then start the delegated specialist team; delegation is required after that pre-delegation gate rather than before it.
 - Run `python3 scripts/ensure_oracle_db_skill.py` before specialist discovery when Oracle database guidance may be needed. It installs the bundled `oracle-db-skills` snapshot into `$CODEX_HOME/skills/oracle-db-skills` when the sibling skill is missing.
 - Run `python3 scripts/ensure_livestack_guide_builder.py` before specialist discovery or guide authoring when the required `guide/` deliverable is in scope. It installs the bundled `livestack-guide-builder` snapshot into `$CODEX_HOME/skills/livestack-guide-builder` when the sibling skill is missing.
 - Run `python3 scripts/ensure_redwood_creator.py` before specialist discovery when app UI is in scope. It installs the bundled `redwood-creator` snapshot into `$CODEX_HOME/skills/redwood-creator` when the sibling skill is missing.
@@ -60,11 +60,11 @@ The `Use Your Own Data` overlay must also own an Oracle Internals state. When th
 - Plan for a required sibling `guide/` deliverable. Use `$livestack-guide-builder` when it is installed, including when it was installed earlier from the bundled snapshot.
 - When a canonical local LiveStack guide already exists, use it as the structure and cadence baseline for guide authoring, then apply only the solution-specific deltas.
 - Treat `$playwright` or `$webapp-testing` as optional screenshot helpers. Prefer them when already installed, but do not auto-install them by default because browser or Node runtime prerequisites vary by machine.
-- Run `python3 scripts/validate_livestack_bundle.py <solution-root>` before calling a bundle production-ready. Use it after scaffold markers are cleared to catch cross-file drift in compose, env, docs, guide manifests, screenshot inventory, Oracle-evidence wiring, mock-backed runtime fallbacks, missing automated database bootstrap, and ORDS routes that exist only on paper.
+- Run `python3 scripts/validate_livestack_bundle.py <solution-root>` before calling a bundle production-ready. Use the standalone marker scan first for focused diagnostics; semantic validation defensively rechecks those markers and then catches cross-file drift in compose, env, docs, guide manifests, screenshot inventory, Oracle-evidence wiring, mock-backed runtime fallbacks, missing automated database bootstrap, and ORDS routes that exist only on paper.
 - Run `python3 scripts/grade_livestack_bundle.py <solution-root>` after semantic validation. A bundle only passes when it receives `A+`, the report says `Pass: yes`, and `validation/test-evidence.md` records tests that failed before the change and passed after the change.
 - Run `python3 scripts/check_skill_package.py` before sharing, zipping, or embedding this skill. It catches stale version metadata, missing bundled helpers, Python syntax errors, and transient cache or macOS metadata files that should not ship.
 - If a skill is a strong match, invoke it explicitly.
-- Use subagents for independent specialist roles only when the runtime and current session policy allow it and the user explicitly asks for subagents, delegation, or parallel agent work. Otherwise, execute the role plan locally or through installed skills and record the reason in the role ledger.
+- Require subagents for independent specialist roles when the runtime and session policy allow it. Fall back to local role simulation only when subagents are unavailable, the work is too tightly coupled to split cleanly, or the user explicitly asks for no delegation. Record the exception reason in the role ledger.
 
 ## Non-Negotiable Guardrails
 
@@ -153,12 +153,12 @@ The `Use Your Own Data` overlay must also own an Oracle Internals state. When th
    - For the required `guide/` deliverable, always load `$livestack-guide-builder` if it is available. If it was missing at session start, the prior ensure step should have installed the bundled snapshot. Only if that install path is unavailable or fails should you use the local guide rules in this skill.
    - For each other role, invoke an installed skill only when it materially fits the role and scope. If the match is weak, use the orchestrator's dedicated fallback references from `references/role-playbooks.md` plus the role-specific fallback references rather than treating the role as absent.
    - For automated guide screenshots, prefer installed `$playwright` or `$webapp-testing` when available. Keep them optional rather than auto-installed defaults because local browser and Node prerequisites vary by machine.
-6. Role execution and optional delegation:
-   - Treat mention of `$livestacks-orchestrator` as permission to begin orchestration, not as automatic permission to spawn subagents.
+6. Required delegated execution:
+   - Treat mention of `$livestacks-orchestrator` as explicit delegation permission for this orchestration run.
    - Keep Project Manager and final convergence in the main thread unless there is a strong reason to delegate PM artifacts separately.
-   - When the user explicitly requests delegated or parallel agent work, spawn the opening role wave only after `input/working-prd.md` exists and the ledger plus skill-discovery pass are ready: Solution Engineer, Database Specialist, UI/UX Developer, Full Stack Developer, Security / Platform Engineer, and Technical Writer / Documentation Lead.
-   - Add Devil's Advocate as a sidecar when delegation is allowed and there is enough concrete direction to challenge, or earlier when the solution is security or portability heavy.
-   - Use local execution for tightly coupled slices, blocking decisions, unavailable subagents, missing delegation permission, or explicit user opt-out. Record every local-execution reason in the role ledger.
+   - Immediately spawn the opening role wave only after `input/working-prd.md` exists and the ledger plus skill-discovery pass are ready: Solution Engineer, Database Specialist, UI/UX Developer, Full Stack Developer, Security / Platform Engineer, and Technical Writer / Documentation Lead.
+   - Add Devil's Advocate as a sidecar once there is enough concrete direction to challenge, or earlier when the solution is security or portability heavy.
+   - Fall back to local execution only for tightly coupled slices, blocking decisions, unavailable subagents, or explicit user opt-out. Record every fallback reason in the role ledger.
 7. Drive role work in this order:
    - Project Manager
    - Solution Engineer
@@ -221,8 +221,8 @@ The `Use Your Own Data` overlay must also own an Oracle Internals state. When th
   - In local execution, note `Using $skill-name for <role>` and follow that skill for the relevant slice.
   - In delegated execution, include `Use $skill-name at <path> to own <role> for this LiveStacks solution.` in the subagent prompt.
 - Specialist skills are helpers, not stopping conditions. If a borrowed skill naturally ends at a plan, review, or narrow artifact, continue the orchestration until the full LiveStacks package is delivered.
-- Within this skill, the user's mention of `$livestacks-orchestrator` starts the orchestration workflow and role ledger. It does not count as permission for delegated parallel specialist work unless the user explicitly asks for subagents, delegation, or parallel agent work.
-- Spawn subagents for independent role tracks only when the runtime and session policy allow it and explicit delegation permission exists. If delegation is not permitted, the user opts out, or a role is too coupled to split safely, keep that slice in the main thread and record the reason in the role ledger.
+- Within this skill, the user's mention of `$livestacks-orchestrator` counts as the request for delegated parallel specialist work unless they explicitly opt out.
+- Spawn subagents for independent role tracks when the runtime and session policy allow it. If the user explicitly says not to delegate, or if a role is too coupled to split safely, keep that slice in the main thread and record the exception in the role ledger.
 - Never let a specialist skill drift the solution away from the Oracle-first and ORDS-first guardrails.
 
 ## Required Inputs
@@ -315,6 +315,8 @@ Use `references/package-contract.md` as the detailed checklist.
 - `scripts/init_livestack_bundle.py` to scaffold a canonical LiveStacks solution folder before filling it with real artifacts.
 - `scripts/scaffold_livestack_guide.py` to create the required `guide/` workshop by delegating to the sibling `$livestack-guide-builder` scaffold script when that skill is installed or after the bundled ensure step installs it.
 - `scripts/check_skill_package.py` to validate release metadata, required package paths, script syntax, and cache/metadata hygiene before distribution.
+- `scripts/build_release.py` to deterministically rebuild or verify the distributable ZIP and public update manifest from the expanded source tree.
+- `scripts/self_update.py` to validate and transactionally install a release ZIP while restoring the previous installation if activation fails.
 - `scripts/grade_livestack_bundle.py` to grade generated bundles and pass only on `A+` capability-led operator application evidence, golden-core runtime parity, clean semantic validation, guide/screenshot evidence, and red/green test evidence.
 - `scripts/sync_livestack_guide_builder_bundle.py` to refresh the bundled `livestack-guide-builder` snapshot from the installed live skill during maintainer updates.
 - `scripts/find_scaffold_markers.py` to catch leftover placeholder content that must be replaced before delivery.

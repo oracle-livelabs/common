@@ -62,7 +62,7 @@ df = pd.concat(chunks, ignore_index=True)
 import oracledb
 import pandas as pd
 
-conn = oracledb.connect(user="hr", password="<db pwd>",
+conn = oracledb.connect(user="hr", password="password",
                         dsn="localhost:1521/freepdb1")
 with conn.cursor() as cur:
     cur.execute("SELECT employee_id, last_name, salary FROM employees")
@@ -139,7 +139,7 @@ For maximum speed, bypass `to_sql` and use `python-oracledb` directly:
 ```python
 import oracledb
 
-conn = oracledb.connect(user="hr", password="<db pwd>",
+conn = oracledb.connect(user="hr", password="password",
                         dsn="localhost:1521/freepdb1")
 
 records = df[["employee_id", "last_name", "salary"]].to_dict("records")

@@ -302,8 +302,7 @@ SELECT COUNT(*)
 INTO   v_count
 FROM   users
 WHERE  username = p_user
-AND    password =
-       STANDARD_HASH(p_pass, 'SHA256');  -- also: don't store plaintext passwords
+AND    password = STANDARD_HASH(p_pass, 'SHA256');  -- also: don't store plaintext passwords
 ```
 
 ### Pattern 4: DBMS_SQL with dynamic bind variables (truly dynamic column count)

@@ -587,7 +587,7 @@ BEGIN
     DBMS_SCHEDULER.CREATE_CREDENTIAL(
         credential_name => 'ORACLE_OS_CRED',
         username        => 'oracle',
-        password        => '<OS credential password from secure source>'
+        password        => 'os_password_here'
     );
 END;
 /

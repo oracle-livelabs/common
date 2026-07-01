@@ -4,6 +4,15 @@ All notable changes to `livestacks-orchestrator` should be recorded in this file
 
 ## Unreleased
 
+## 0.1.0-preview.21 - 2026-07-01
+
+- Made scaffold-marker findings part of semantic validation so validator and A+ grading cannot accept unresolved first-party starter content while ignoring dependency and generated-output trees.
+- Aligned optional conclusion and required test-evidence contracts across marker scanning, semantic validation, and grading.
+- Made self-update activation transactional with rollback to the prior installation when filesystem activation fails, manifest-to-archive version checks, and truthful post-success cleanup warnings.
+- Added deterministic source-to-ZIP release generation and manifest verification for a tracked, reviewable source tree, including canonical archive modes and pair-level publication rollback.
+- Clarified that orchestration starts immediately but specialist delegation begins only after the working PRD is stable.
+- Replaced workstation-specific overlay references with the bundled portable overlay corpus.
+
 ## 0.1.0-preview.20 - 2026-05-27
 
 - Added the Scene Experience Contract beside the Oracle Internals contract: generated scenes must use scene-specific components or page modules, distinct interaction patterns, scene-local state, visible domain objects, real Oracle evidence per scene, workflow handoffs, and screenshot captions that prove visual and behavioral distinction.
@@ -83,7 +92,7 @@ All notable changes to `livestacks-orchestrator` should be recorded in this file
 
 ## 0.1.0-preview.10 - 2026-05-11
 
-- Added the neutral golden LiveStack core plus overlay contract in `references/golden-core-overlay-contract.md`, including the rule that bundled overlay examples are reusable vocabulary and scene-shaping guidance rather than raw template sources.
+- Added the neutral golden LiveStack core plus overlay contract, including the rule that the source template family is an overlay corpus rather than a raw template source.
 - Added compact overlay examples from `highered`, `lifesciences`, `media`, and `sled` in `assets/template-overlays/industry-overlays.json`.
 - Added a golden baseline manifest plus canonical `compose.yml` and `.env.example` files under `assets/templates/golden-livestack-baseline/`, and required generated bundles to carry `input/template-provenance.json` plus `docs/golden-core-overlays.md`.
 - Hardened the contract so generated default LiveStacks keep `stack/compose.yml` and `stack/.env.example` aligned to the neutral golden core instead of drifting per industry, customer, app image, schema, ORDS module, or story.
@@ -122,7 +131,7 @@ All notable changes to `livestacks-orchestrator` should be recorded in this file
 
 ## 0.1.0-preview.4 - 2026-04-28
 
-- Clarified the README and support matrix for the beta share, including first-iteration story/UI/data-upload expectations, zip-based macOS app distribution guidance, and known local runtime blockers.
+- Clarified the README and support matrix for the internal beta share, including first-iteration story/UI/data-upload expectations, zip-based macOS app distribution guidance, and known local runtime blockers.
 - Promoted first-iteration story quality into the orchestration contract: sparse briefs now default to an `operator_workbench` first screen unless the working PRD justifies a broader showcase.
 - Added working-PRD and UI-concept requirements for `primary_user_loop`, `first_scene_goal`, `first_interaction`, `first_decision_point`, `first_oracle_evidence`, `upload_your_own_data`, and `redwood_jet_ui_quality_bar`.
 - Made `Upload Your Own Data` a first-iteration acceptance requirement for replaceable-demo LiveStacks, including visible CTA, dataset manager workflow, validate-only preview, upload/replace, active Oracle-backed dataset state, job status, restore-demo, guide coverage, and screenshot coverage.

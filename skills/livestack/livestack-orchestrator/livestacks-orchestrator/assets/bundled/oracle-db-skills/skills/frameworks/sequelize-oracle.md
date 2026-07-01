@@ -22,7 +22,7 @@ const sequelize = new Sequelize({
   port:     1521,
   database: 'freepdb1',    // service name for Oracle
   username: 'hr',
-  password: '<db pwd>',
+  password: 'password',
   pool: {
     max:     10,
     min:     2,
@@ -42,7 +42,7 @@ const sequelize = new Sequelize({
 // const sequelize = new Sequelize({
 //   dialect: 'oracle',
 //   username: 'admin',
-//   password: '<db pwd>',
+//   password: 'password',
 //   dialectOptions: {
 //     connectString: 'myatp_high',
 //     configDir: '/path/to/wallet',

@@ -4,10 +4,24 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import re
 from dataclasses import asdict, dataclass
 from pathlib import Path
+
+
+def _load_scaffold_marker_contract():
+    module_path = Path(__file__).with_name("find_scaffold_markers.py")
+    spec = importlib.util.spec_from_file_location("_livestacks_find_scaffold_markers", module_path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Could not load scaffold marker scanner at {module_path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.scan, frozenset(module.REQUIRED_PATHS)
+
+
+scan_scaffold_markers, SCAFFOLD_REQUIRED_PATHS = _load_scaffold_marker_contract()
 
 
 CORE_FILES = {
@@ -930,10 +944,15 @@ class Finding:
 
 class Validator:
     def __init__(self, root: Path) -> None:
-        self.root = root.resolve()
+        self.root = root
         self.findings: list[Finding] = []
+        self._finding_keys: set[tuple[str, int, str]] = set()
 
     def add(self, relative_path: str, message: str, line: int = 1) -> None:
+        key = (relative_path, line, message)
+        if key in self._finding_keys:
+            return
+        self._finding_keys.add(key)
         self.findings.append(Finding(path=relative_path, message=message, line=line))
 
     def exists(self, relative_path: str) -> bool:
@@ -1113,7 +1132,7 @@ class Validator:
         for path in self.iter_solution_text_files():
             if findings >= 5:
                 break
-            relative_path = str(path.relative_to(self.root)).replace("\\", "/")
+            relative_path = path.relative_to(self.root).as_posix()
             text = path.read_text(encoding="utf-8", errors="ignore")
             lower = text.lower()
             for term in WRONG_LINEAGE_TERMS:
@@ -1172,6 +1191,7 @@ class Validator:
         return labels
 
     def validate(self) -> list[Finding]:
+        self.validate_scaffold_markers()
         self.validate_core_files()
         self.validate_template_provenance()
         self.validate_canonical_core_files()
@@ -1190,9 +1210,19 @@ class Validator:
         self.validate_oracle_evidence_surface()
         return self.findings
 
+    def validate_scaffold_markers(self) -> None:
+        resolved_root = self.root.resolve()
+        for file_path, line, message in scan_scaffold_markers(self.root):
+            candidate = Path(file_path)
+            try:
+                relative_path = candidate.relative_to(self.root).as_posix()
+            except ValueError:
+                relative_path = candidate.resolve().relative_to(resolved_root).as_posix()
+            self.add(relative_path, message, line)
+
     def validate_core_files(self) -> None:
         for relative_path in sorted(CORE_FILES):
-            if not self.exists(relative_path):
+            if not self.exists(relative_path) and relative_path not in SCAFFOLD_REQUIRED_PATHS:
                 self.add(relative_path, "missing core semantic-validation file")
 
         scene_files = sorted(self.root.glob("guide/scene-*/*.md"))
@@ -1421,7 +1451,7 @@ class Validator:
         auth_guard_found = False
         direct_db_runtime_paths: list[str] = []
         for path in self.iter_runtime_text_files():
-            relative_path = str(path.relative_to(self.root)).replace("\\", "/")
+            relative_path = path.relative_to(self.root).as_posix()
             text = path.read_text(encoding="utf-8", errors="ignore")
             lower = text.lower()
             lower_path = relative_path.lower()
@@ -1746,7 +1776,7 @@ class Validator:
         for path in doc_paths:
             if not path.exists():
                 continue
-            relative_path = str(path.relative_to(self.root))
+            relative_path = path.relative_to(self.root).as_posix()
             text = path.read_text(encoding="utf-8", errors="ignore")
             lower = text.lower()
             if any(phrase in lower for phrase in MOCK_RUNTIME_DOC_PHRASES):
@@ -1959,7 +1989,7 @@ class Validator:
             if not path.exists():
                 continue
             text = path.read_text(encoding="utf-8", errors="ignore")
-            relative_path = str(path.relative_to(self.root)).replace("\\", "/")
+            relative_path = path.relative_to(self.root).as_posix()
             if "## Credits & Build Notes" not in text:
                 self.add(relative_path, "guide lab is missing `## Credits & Build Notes`")
             if not self.has_valid_copy_markers(text):

@@ -27,11 +27,11 @@ dotnet add package Oracle.EntityFrameworkCore
 using Oracle.ManagedDataAccess.Client;
 
 // Easy Connect
-string connStr = "User Id=hr;Password=<db pwd>;Data Source=localhost:1521/freepdb1;";
+string connStr = "User Id=hr;Password=password;Data Source=localhost:1521/freepdb1;";
 
 // Alternatives:
-// connStr = "User Id=hr;Password=<db pwd>;Data Source=mydb_high;";
-// connStr = "User Id=hr;Password=<db pwd>;" +
+// connStr = "User Id=hr;Password=password;Data Source=mydb_high;";
+// connStr = "User Id=hr;Password=password;" +
 //     "Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))" +
 //     "(CONNECT_DATA=(SERVICE_NAME=freepdb1)));";
 
@@ -48,7 +48,7 @@ Console.WriteLine(result);
 
 ```csharp
 // Set TNS_ADMIN to wallet directory (contains tnsnames.ora, sqlnet.ora, cwallet.sso)
-string connStr = "User Id=admin;Password=<db pwd>;Data Source=myatp_high;" +
+string connStr = "User Id=admin;Password=password;Data Source=myatp_high;" +
     "Connection Timeout=30;";
 
 // Configure wallet location in code
@@ -148,7 +148,7 @@ conn.Commit();
 ODP.NET has built-in connection pooling enabled by default. Configure via the connection string:
 
 ```csharp
-string connStr = "User Id=hr;Password=<db pwd>;Data Source=localhost:1521/freepdb1;" +
+string connStr = "User Id=hr;Password=password;Data Source=localhost:1521/freepdb1;" +
     "Min Pool Size=2;Max Pool Size=20;Connection Lifetime=300;Pooling=true;";
 ```
 
@@ -157,7 +157,7 @@ string connStr = "User Id=hr;Password=<db pwd>;Data Source=localhost:1521/freepd
 ```json
 {
   "ConnectionStrings": {
-    "OracleDb": "User Id=hr;Password=<db pwd>;Data Source=localhost:1521/freepdb1;Min Pool Size=2;Max Pool Size=20;"
+    "OracleDb": "User Id=hr;Password=password;Data Source=localhost:1521/freepdb1;Min Pool Size=2;Max Pool Size=20;"
   }
 }
 ```
@@ -179,7 +179,7 @@ public class AppDbContext : DbContext
     public DbSet<Employee> Employees { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseOracle("User Id=hr;Password=<db pwd>;Data Source=localhost:1521/freepdb1;");
+        => options.UseOracle("User Id=hr;Password=password;Data Source=localhost:1521/freepdb1;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

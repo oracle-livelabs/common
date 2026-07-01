@@ -34,7 +34,7 @@ func main() {
     dsn := oracle.BuildUrl("localhost", "1521", "freepdb1", "hr", "password", options)
 
     // Alternative TNS alias or descriptor forms can be supplied directly in Config.DSN
-    // dsn := `user="hr" password="<db pwd>" connectString="mydb_high"`
+    // dsn := `user="hr" password="password" connectString="mydb_high"`
 
     dialector := oracle.New(oracle.Config{DSN: dsn})
     db, err := gorm.Open(dialector, &gorm.Config{
