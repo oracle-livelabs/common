@@ -52,7 +52,9 @@ def normalize_server_url(value: str) -> str:
 
 
 def plugin_data_dir() -> Path:
-    configured = os.environ.get("PLUGIN_DATA")
+    # Codex injects PLUGIN_DATA into hook processes but not skill commands.
+    # Polly needs one stable location so setup and hooks see the same state.
+    configured = os.environ.get("POLLY_DATA_DIR")
     if configured:
         return Path(configured).expanduser()
     if platform.system() == "Windows":
@@ -388,6 +390,22 @@ def quiet_mode_enabled(repo: Path) -> bool:
     return str(value or "").strip().lower() in {"1", "true", "yes", "on"}
 
 
+def repository_enabled(repo: Path) -> bool:
+    value = git(repo, "config", "--local", "--get", "polly.enabled")
+    return str(value or "").strip().lower() == "true"
+
+
+def require_enabled_repository(repo: Path) -> Path:
+    root = git(repo, "rev-parse", "--show-toplevel")
+    if not root:
+        raise BridgeError("Polly requires a git repository")
+    if not repository_enabled(repo):
+        raise BridgeError(
+            "Polly is not enabled for this repository; run $polly-init first"
+        )
+    return Path(root)
+
+
 def split_full_name(value: str) -> tuple[str, str]:
     cleaned = value.strip().removesuffix(".git")
     if cleaned.startswith("git@github.com:"):
@@ -571,7 +589,7 @@ def configured_identity() -> tuple[str, str, str]:
     return server, developer, token
 
 
-def common_payload(repo: Path, developer: str, session_id: str) -> dict[str, Any]:
+def common_payload(repo: Path, developer: str, session_id: str | None) -> dict[str, Any]:
     resolution = resolve_repo(repo)
     return {
         **git_context(repo),
@@ -777,6 +795,8 @@ def handle_hook(hook: dict[str, Any]) -> dict[str, Any]:
     repo = Path(str(hook.get("cwd") or os.getcwd())).resolve()
     if not git(repo, "rev-parse", "--show-toplevel"):
         return hook_output(event)
+    if not repository_enabled(repo):
+        return hook_output(event)
     quiet = quiet_mode_enabled(repo)
     if event == "Stop" and quiet:
         return hook_output(
@@ -870,18 +890,34 @@ def cmd_setup(args: argparse.Namespace) -> int:
 
 def cmd_init(args: argparse.Namespace) -> int:
     repo = Path(args.repo).resolve()
+    if not git(repo, "rev-parse", "--show-toplevel"):
+        raise BridgeError("Polly initialization requires a git repository")
     canonical_owner, canonical_name = split_full_name(args.canonical_repo)
     canonical = f"{canonical_owner}/{canonical_name}"
-    git_set(repo, "polly.canonicalRepo", canonical)
     config = load_config()
     if args.developer:
         configured = str(config.get("developer") or "")
         if configured and configured.lower() != args.developer.lstrip("@").lower():
             raise BridgeError("The requested developer conflicts with this device enrollment")
     resolution = resolve_repo(repo, canonical)
+    git_set(repo, "polly.canonicalRepo", canonical)
+    git_set(repo, "polly.enabled", "true")
     print(
-        f"Polly initialized: {resolution.working_full_name} -> "
+        f"Polly initialized and enabled: {resolution.working_full_name} -> "
         f"{resolution.canonical_full_name} ({resolution.source})."
+    )
+    return 0
+
+
+def cmd_disable(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    root = git(repo, "rev-parse", "--show-toplevel")
+    if not root:
+        raise BridgeError("Polly disable requires a git repository")
+    git_set(repo, "polly.enabled", "false")
+    print(
+        f"Polly disabled for {root}. Hooks and memory commands will not contact "
+        "Polly; canonical and quiet settings were preserved."
     )
     return 0
 
@@ -920,8 +956,14 @@ def cmd_status(args: argparse.Namespace) -> int:
         details["configuration_error"] = configuration_error
     repo = Path(args.repo).resolve()
     if git(repo, "rev-parse", "--show-toplevel"):
+        enabled = repository_enabled(repo)
+        details["repository_enabled"] = enabled
         details["memory_sharing"] = (
-            "paused" if quiet_mode_enabled(repo) else "active"
+            "disabled"
+            if not enabled
+            else "paused"
+            if quiet_mode_enabled(repo)
+            else "active"
         )
         try:
             resolution = resolve_repo(repo)
@@ -940,9 +982,7 @@ def cmd_status(args: argparse.Namespace) -> int:
 
 def cmd_quiet(args: argparse.Namespace) -> int:
     repo = Path(args.repo).resolve()
-    root = git(repo, "rev-parse", "--show-toplevel")
-    if not root:
-        raise BridgeError("Polly quiet mode requires a git repository")
+    root = require_enabled_repository(repo)
     if args.mode == "status":
         state = "on" if quiet_mode_enabled(repo) else "off"
         print(f"Polly quiet mode is {state} for {root}.")
@@ -952,17 +992,18 @@ def cmd_quiet(args: argparse.Namespace) -> int:
     if enabled:
         print(
             "Polly quiet mode enabled. Context retrieval remains active; "
-            "automatic and manual memory sharing are paused."
+            "automatic and manual memory writes are paused."
         )
     else:
         print(
-            "Polly quiet mode disabled. Automatic and manual memory sharing resumed."
+            "Polly quiet mode disabled. Automatic and manual memory writes resumed."
         )
     return 0
 
 
 def cmd_share(args: argparse.Namespace) -> int:
     repo = Path(args.repo).resolve()
+    require_enabled_repository(repo)
     if quiet_mode_enabled(repo):
         raise BridgeError(
             "quiet mode is active for this repository; disable it with "
@@ -987,6 +1028,33 @@ def cmd_share(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_private(args: argparse.Namespace) -> int:
+    repo = Path(args.repo).resolve()
+    require_enabled_repository(repo)
+    if quiet_mode_enabled(repo):
+        raise BridgeError(
+            "quiet mode is active for this repository; disable it with "
+            "$polly-quiet off before saving private memory"
+        )
+    server, developer, token = configured_identity()
+    payload = common_payload(repo, developer, None)
+    payload["branch"] = None
+    payload.update(
+        {
+            "event_id": args.event_id,
+            "event_type": "manual_private",
+            "record_type": args.record_type,
+            "scope": "developer_private",
+            "visibility": "private",
+            "confidence": args.confidence,
+            "content": args.content,
+        }
+    )
+    result = api_request(server, "/agent/events", payload=payload, token=token)
+    print(f"Saved private Polly memory {result['id']} for your future sessions.")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -1000,11 +1068,17 @@ def build_parser() -> argparse.ArgumentParser:
     setup.add_argument("--device-name", default=platform.node() or "Codex device")
     setup.set_defaults(func=cmd_setup)
 
-    init = sub.add_parser("init", help="Set the canonical repository in local git config")
+    init = sub.add_parser(
+        "init", help="Enable Polly and set the canonical repository in local git config"
+    )
     init.add_argument("--repo", default=".")
     init.add_argument("--developer")
     init.add_argument("--canonical-repo", required=True)
     init.set_defaults(func=cmd_init)
+
+    disable = sub.add_parser("disable", help="Disable Polly for this local clone")
+    disable.add_argument("--repo", default=".")
+    disable.set_defaults(func=cmd_disable)
 
     status = sub.add_parser("status", help="Check device, repository, and Polly status")
     status.add_argument("--repo", default=".")
@@ -1024,6 +1098,16 @@ def build_parser() -> argparse.ArgumentParser:
     share.add_argument("--session-id")
     share.add_argument("--event-id")
     share.set_defaults(func=cmd_share)
+
+    private = sub.add_parser(
+        "private", help="Save durable private memory for future sessions"
+    )
+    private.add_argument("--repo", default=".")
+    private.add_argument("--content", required=True)
+    private.add_argument("--record-type", default="observation")
+    private.add_argument("--confidence", type=float, default=0.8)
+    private.add_argument("--event-id")
+    private.set_defaults(func=cmd_private)
 
     sub.add_parser("hook", help=argparse.SUPPRESS).set_defaults(func=lambda _args: cmd_hook())
     return parser

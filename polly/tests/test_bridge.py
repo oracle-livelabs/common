@@ -30,6 +30,10 @@ def make_repo(tmp_path: Path) -> Path:
     return repo
 
 
+def enable_repo(repo: Path) -> None:
+    run_git(repo, "config", "--local", "polly.enabled", "true")
+
+
 @pytest.mark.parametrize(
     ("remote", "expected"),
     [
@@ -80,7 +84,7 @@ def test_setup_requires_administrator_server_url() -> None:
 def test_configured_identity_requires_saved_server_url(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "plugin-data"))
+    monkeypatch.setenv("POLLY_DATA_DIR", str(tmp_path / "plugin-data"))
     bridge.save_config({"developer": "dev-a"})
 
     with pytest.raises(bridge.BridgeError, match="server URL is not configured"):
@@ -98,7 +102,7 @@ def test_status_without_server_does_not_use_a_fallback(
         def load(self, _server: str, _developer: str) -> str | None:
             raise AssertionError("credential lookup must not run without a server")
 
-    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "plugin-data"))
+    monkeypatch.setenv("POLLY_DATA_DIR", str(tmp_path / "plugin-data"))
     monkeypatch.setattr(bridge, "credential_store", TestCredentialStore)
     monkeypatch.setattr(
         bridge,
@@ -126,7 +130,7 @@ def test_setup_saves_server_only_in_local_config(
             self.stored = (server, developer, token)
 
     store = TestCredentialStore()
-    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "plugin-data"))
+    monkeypatch.setenv("POLLY_DATA_DIR", str(tmp_path / "plugin-data"))
     monkeypatch.setattr(bridge, "credential_store", lambda: store)
     monkeypatch.setattr(bridge.getpass, "getpass", lambda _prompt: "enrollment-code")
     monkeypatch.setattr(
@@ -155,6 +159,17 @@ def test_setup_saves_server_only_in_local_config(
     )
 
 
+def test_hook_plugin_data_does_not_redirect_polly_state(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.delenv("POLLY_DATA_DIR", raising=False)
+    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "hook-only-data"))
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "user-config"))
+    monkeypatch.setattr(bridge.platform, "system", lambda: "Darwin")
+
+    assert bridge.plugin_data_dir() == tmp_path / "user-config" / "polly-codex"
+
+
 def test_canonical_resolution_order(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     repo = make_repo(tmp_path)
     run_git(repo, "remote", "add", "upstream", "https://github.com/oracle-livelabs/livestack")
@@ -180,6 +195,205 @@ def test_public_fork_lookup_and_origin_fallback(tmp_path: Path) -> None:
     fallback = bridge.resolve_repo(repo, fork_lookup=lambda _name: None)
     assert fallback.canonical_full_name == "klazarz/livestack"
     assert fallback.source == "origin"
+
+
+@pytest.mark.parametrize("value", (None, "false", "invalid", "1", "yes", "on"))
+def test_repository_is_disabled_without_local_true_setting(
+    tmp_path: Path, value: str | None
+) -> None:
+    repo = make_repo(tmp_path)
+    if value is not None:
+        run_git(repo, "config", "--local", "polly.enabled", value)
+
+    assert not bridge.repository_enabled(repo)
+
+
+def test_global_enabled_setting_is_ignored(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = make_repo(tmp_path)
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(tmp_path / "global.gitconfig"))
+    run_git(repo, "config", "--global", "polly.enabled", "true")
+
+    assert not bridge.repository_enabled(repo)
+
+
+def test_init_enables_repository_in_local_git_config(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    repo = make_repo(tmp_path)
+
+    assert (
+        bridge.cmd_init(
+            Namespace(
+                repo=str(repo),
+                developer=None,
+                canonical_repo="oracle-livelabs/livestack",
+            )
+        )
+        == 0
+    )
+
+    assert bridge.repository_enabled(repo)
+    assert (
+        bridge.git(repo, "config", "--local", "--get", "polly.canonicalRepo")
+        == "oracle-livelabs/livestack"
+    )
+    assert "initialized and enabled" in capsys.readouterr().out
+
+
+def test_failed_init_does_not_enable_repository(tmp_path: Path) -> None:
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    run_git(repo, "init")
+
+    with pytest.raises(bridge.BridgeError, match="origin remote"):
+        bridge.cmd_init(
+            Namespace(
+                repo=str(repo),
+                developer=None,
+                canonical_repo="oracle-livelabs/livestack",
+            )
+        )
+
+    assert not bridge.repository_enabled(repo)
+    assert bridge.git(
+        repo, "config", "--local", "--get", "polly.canonicalRepo"
+    ) is None
+
+
+@pytest.mark.parametrize("event", ("SessionStart", "UserPromptSubmit", "Stop"))
+def test_disabled_hooks_are_silent_and_do_not_load_identity_or_call_polly(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, event: str
+) -> None:
+    repo = make_repo(tmp_path)
+    run_git(
+        repo,
+        "config",
+        "--local",
+        "polly.canonicalRepo",
+        "oracle-livelabs/livestack",
+    )
+    monkeypatch.setattr(
+        bridge,
+        "configured_identity",
+        lambda: pytest.fail("disabled hooks must not load credentials"),
+    )
+    monkeypatch.setattr(
+        bridge,
+        "api_request",
+        lambda *_args, **_kwargs: pytest.fail("disabled hooks must not call Polly"),
+    )
+    monkeypatch.setattr(
+        bridge,
+        "resolve_repo",
+        lambda *_args, **_kwargs: pytest.fail("disabled hooks must not resolve repos"),
+    )
+
+    assert bridge.handle_hook(
+        {
+            "session_id": "disabled-session",
+            "hook_event_name": event,
+            "cwd": str(repo),
+            "prompt": "Do not retrieve context.",
+            "last_assistant_message": "Do not record this checkpoint.",
+        }
+    ) == {"continue": True}
+
+
+def test_disabled_repository_blocks_manual_memory_commands_before_identity(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = make_repo(tmp_path)
+    monkeypatch.setattr(
+        bridge,
+        "configured_identity",
+        lambda: pytest.fail("disabled commands must not load credentials"),
+    )
+    commands = (
+        lambda: bridge.cmd_quiet(Namespace(repo=str(repo), mode="on")),
+        lambda: bridge.cmd_share(
+            Namespace(
+                repo=str(repo),
+                session_id=None,
+                event_id=None,
+                record_type="decision",
+                scope="repo_shared",
+                confidence=0.8,
+                content="Do not share this.",
+            )
+        ),
+        lambda: bridge.cmd_private(
+            Namespace(
+                repo=str(repo),
+                event_id=None,
+                record_type="observation",
+                confidence=0.8,
+                content="Do not save this.",
+            )
+        ),
+    )
+
+    for command in commands:
+        with pytest.raises(bridge.BridgeError, match="not enabled"):
+            command()
+
+
+def test_disable_preserves_canonical_and_quiet_settings(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    repo = make_repo(tmp_path)
+    enable_repo(repo)
+    run_git(
+        repo,
+        "config",
+        "--local",
+        "polly.canonicalRepo",
+        "oracle-livelabs/livestack",
+    )
+    run_git(repo, "config", "--local", "polly.quiet", "true")
+
+    assert bridge.cmd_disable(Namespace(repo=str(repo))) == 0
+
+    assert not bridge.repository_enabled(repo)
+    assert (
+        bridge.git(repo, "config", "--local", "--get", "polly.canonicalRepo")
+        == "oracle-livelabs/livestack"
+    )
+    assert bridge.quiet_mode_enabled(repo)
+    assert "canonical and quiet settings were preserved" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize(
+    ("enabled", "quiet", "expected"),
+    ((False, False, "disabled"), (True, False, "active"), (True, True, "paused")),
+)
+def test_status_reports_repository_memory_state(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    enabled: bool,
+    quiet: bool,
+    expected: str,
+) -> None:
+    repo = make_repo(tmp_path)
+    run_git(
+        repo,
+        "config",
+        "--local",
+        "polly.canonicalRepo",
+        "oracle-livelabs/livestack",
+    )
+    if enabled:
+        enable_repo(repo)
+    if quiet:
+        run_git(repo, "config", "--local", "polly.quiet", "true")
+    monkeypatch.setattr(bridge, "load_config", lambda: {})
+
+    assert bridge.cmd_status(Namespace(repo=str(repo))) == 1
+    status = json.loads(capsys.readouterr().out)
+    assert status["repository_enabled"] is enabled
+    assert status["memory_sharing"] == expected
 
 
 def test_context_is_labeled_as_untrusted() -> None:
@@ -224,6 +438,14 @@ def test_stop_hook_publishes_one_rolling_shared_checkpoint(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     repo = make_repo(tmp_path)
+    enable_repo(repo)
+    run_git(
+        repo,
+        "config",
+        "--local",
+        "polly.canonicalRepo",
+        "oracle-livelabs/livestack",
+    )
     captured: dict[str, object] = {}
     monkeypatch.setattr(
         bridge, "configured_identity", lambda: ("http://polly", "dev-a", "token")
@@ -261,6 +483,7 @@ def test_quiet_mode_blocks_stop_checkpoint_without_contacting_polly(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     repo = make_repo(tmp_path)
+    enable_repo(repo)
     run_git(repo, "config", "--local", "polly.quiet", "true")
     monkeypatch.setattr(
         bridge,
@@ -294,6 +517,7 @@ def test_prompt_hook_reports_received_context(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     repo = make_repo(tmp_path)
+    enable_repo(repo)
     monkeypatch.setattr(
         bridge, "configured_identity", lambda: ("http://polly", "dev-a", "token")
     )
@@ -338,6 +562,7 @@ def test_prompt_hook_reports_that_quiet_mode_is_active(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     repo = make_repo(tmp_path)
+    enable_repo(repo)
     run_git(repo, "config", "--local", "polly.quiet", "true")
     monkeypatch.setattr(
         bridge, "configured_identity", lambda: ("http://polly", "dev-a", "token")
@@ -372,23 +597,25 @@ def test_quiet_command_controls_repository_local_sharing(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     repo = make_repo(tmp_path)
+    enable_repo(repo)
 
     assert bridge.cmd_quiet(Namespace(repo=str(repo), mode="on")) == 0
     assert bridge.quiet_mode_enabled(repo)
-    assert "memory sharing are paused" in capsys.readouterr().out
+    assert "memory writes are paused" in capsys.readouterr().out
 
     assert bridge.cmd_quiet(Namespace(repo=str(repo), mode="status")) == 0
     assert "quiet mode is on" in capsys.readouterr().out
 
     assert bridge.cmd_quiet(Namespace(repo=str(repo), mode="off")) == 0
     assert not bridge.quiet_mode_enabled(repo)
-    assert "memory sharing resumed" in capsys.readouterr().out
+    assert "memory writes resumed" in capsys.readouterr().out
 
 
 def test_quiet_mode_blocks_manual_share(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     repo = make_repo(tmp_path)
+    enable_repo(repo)
     run_git(repo, "config", "--local", "polly.quiet", "true")
     monkeypatch.setattr(
         bridge,
@@ -410,10 +637,35 @@ def test_quiet_mode_blocks_manual_share(
         )
 
 
+def test_quiet_mode_blocks_private_memory(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    repo = make_repo(tmp_path)
+    enable_repo(repo)
+    run_git(repo, "config", "--local", "polly.quiet", "true")
+    monkeypatch.setattr(
+        bridge,
+        "configured_identity",
+        lambda: pytest.fail("quiet private memory must not load credentials"),
+    )
+
+    with pytest.raises(bridge.BridgeError, match="quiet mode is active"):
+        bridge.cmd_private(
+            Namespace(
+                repo=str(repo),
+                event_id="private-event",
+                record_type="observation",
+                confidence=0.9,
+                content="Do not store this private test note.",
+            )
+        )
+
+
 def test_prompt_hook_reports_empty_context(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     repo = make_repo(tmp_path)
+    enable_repo(repo)
     monkeypatch.setattr(
         bridge, "configured_identity", lambda: ("http://polly", "dev-a", "token")
     )
@@ -447,6 +699,7 @@ def test_manual_share_publishes_directly(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
     repo = make_repo(tmp_path)
+    enable_repo(repo)
     captured: dict[str, object] = {}
     monkeypatch.setattr(
         bridge, "configured_identity", lambda: ("http://polly", "dev-a", "token")
@@ -476,9 +729,56 @@ def test_manual_share_publishes_directly(
     assert "with collaborators" in capsys.readouterr().out
 
 
+def test_private_memory_is_session_independent(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    repo = make_repo(tmp_path)
+    enable_repo(repo)
+    run_git(
+        repo,
+        "config",
+        "--local",
+        "polly.canonicalRepo",
+        "oracle-livelabs/livestack",
+    )
+    captured: dict[str, object] = {}
+    monkeypatch.setenv("CODEX_SESSION_ID", "active-codex-session")
+    monkeypatch.setattr(
+        bridge, "configured_identity", lambda: ("http://polly", "dev-a", "token")
+    )
+
+    def capture_request(_server, path, *, payload=None, token=None):
+        captured.update(path=path, payload=payload, token=token)
+        return {"id": "mem-private"}
+
+    monkeypatch.setattr(bridge, "api_request", capture_request)
+    result = bridge.cmd_private(
+        Namespace(
+            repo=str(repo),
+            event_id="private-event",
+            record_type="observation",
+            confidence=0.9,
+            content="Remember my preferred local debugging workflow.",
+        )
+    )
+
+    assert result == 0
+    payload = captured["payload"]
+    assert isinstance(payload, dict)
+    assert payload["session_id"] is None
+    assert payload["branch"] is None
+    assert payload["scope"] == "developer_private"
+    assert payload["visibility"] == "private"
+    assert payload["event_type"] == "manual_private"
+    assert "future sessions" in capsys.readouterr().out
+
+
 def test_hook_fails_open_without_enrollment(tmp_path: Path) -> None:
     repo = make_repo(tmp_path)
-    env = {**os.environ, "PLUGIN_DATA": str(tmp_path / "plugin-data")}
+    enable_repo(repo)
+    env = {**os.environ, "POLLY_DATA_DIR": str(tmp_path / "plugin-data")}
     result = subprocess.run(
         [sys.executable, str(SCRIPT), "hook"],
         input=json.dumps(
@@ -522,6 +822,16 @@ def test_hook_manifest_has_cross_platform_ten_second_commands() -> None:
         assert command["statusMessage"] == expected_status_messages[event]
 
 
+def test_plugin_package_exposes_repository_disable_skill() -> None:
+    plugin_root = Path(__file__).parents[1]
+    manifest = json.loads((plugin_root / ".codex-plugin" / "plugin.json").read_text())
+
+    assert manifest["version"] == "0.6.0"
+    assert (plugin_root / "skills" / "polly-disable" / "SKILL.md").is_file()
+    args = bridge.build_parser().parse_args(["disable", "--repo", "/tmp/repo"])
+    assert args.func is bridge.cmd_disable
+
+
 def test_no_unsupported_plaintext_credential_fallback() -> None:
     with pytest.raises(bridge.BridgeError):
         bridge.credential_store("FreeBSD")
@@ -547,7 +857,7 @@ def test_credential_keys_do_not_persist_the_server_url(
     assert first_server not in bridge.MacOSKeychainStore.service()
     assert all(first_server not in argument for command in commands for argument in command)
 
-    monkeypatch.setenv("PLUGIN_DATA", str(tmp_path / "plugin-data"))
+    monkeypatch.setenv("POLLY_DATA_DIR", str(tmp_path / "plugin-data"))
     first_path = bridge.WindowsDPAPIStore.path(first_server, developer)
     second_path = bridge.WindowsDPAPIStore.path(second_server, developer)
     assert first_path == second_path
