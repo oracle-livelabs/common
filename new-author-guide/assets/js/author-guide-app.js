@@ -1264,7 +1264,10 @@
         }
         setMarkdownOutput(snippet.body);
         if (workshopMarkdownSummary) {
-          workshopMarkdownSummary.textContent = snippet.summary + " Source: " + snippet.source + ".";
+          workshopMarkdownSummary.innerHTML = [
+            '<span class="generator-summary-row"><strong>Use case</strong><span>' + escapeHtml(snippet.summary) + "</span></span>",
+            '<span class="generator-summary-row"><strong>Source</strong><span>' + escapeHtml(snippet.source) + "</span></span>"
+          ].join("");
         }
         if (generatorOutputMeta) {
           generatorOutputMeta.textContent = snippet.group + " / " + snippet.source;
@@ -1276,6 +1279,39 @@
         setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "Snippet could not be generated. Try a different option.");
       }
     }, 180);
+  }
+
+  function activateWmsStatus(button) {
+    var flow = button ? button.closest("[data-status-flow]") : null;
+    var rows;
+    var index;
+    var row;
+
+    if (!flow) {
+      return;
+    }
+
+    rows = Array.from(flow.querySelectorAll(".wms-status-csv code")).slice(1).map(function (node) {
+      var parts = node.textContent.split(",");
+      return {
+        status: (parts[0] || "").trim(),
+        owner: (parts[1] || "").trim(),
+        description: parts.slice(2).join(",").trim()
+      };
+    });
+    index = Number(button.getAttribute("data-status-index") || "0");
+    row = rows[index] || rows[0];
+
+    flow.querySelectorAll(".wms-status-button").forEach(function (candidate) {
+      var isActive = candidate === button;
+      candidate.classList.toggle("is-active", isActive);
+      candidate.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+
+    flow.querySelector("#wmsStatusOwner").textContent = row.owner;
+    flow.querySelector("#wmsStatusTitle").textContent = row.status;
+    flow.querySelector("#wmsStatusDescription").textContent = row.description;
+    setLiveMessage(row.status + " status selected.");
   }
 
   function syncMarkdownSnippetSummary() {
@@ -1296,7 +1332,10 @@
       return;
     }
 
-    workshopMarkdownSummary.textContent = item.summary + " Source: " + item.source + ".";
+    workshopMarkdownSummary.innerHTML = [
+      '<span class="generator-summary-row"><strong>Use case</strong><span>' + escapeHtml(item.summary) + "</span></span>",
+      '<span class="generator-summary-row"><strong>Source</strong><span>' + escapeHtml(item.source) + "</span></span>"
+    ].join("");
   }
 
   function decorateExpandableMedia(root) {
@@ -3196,6 +3235,7 @@
     var copyTextButton = event.target.closest("[data-copy-text]");
     var tagButton = event.target.closest("[data-tag]");
     var searchOpenButton = event.target.closest("[data-search-open]");
+    var wmsStatusButton = event.target.closest(".wms-status-button");
     var installCard = event.target.closest("[data-install-card]");
     var isPrimaryNav = modeButton && !!modeButton.closest(".nav-group-all");
 
@@ -3316,6 +3356,11 @@
 
     if (searchOpenButton) {
       openSearchResult(searchOpenButton.getAttribute("data-search-open"));
+    }
+
+    if (wmsStatusButton) {
+      activateWmsStatus(wmsStatusButton);
+      return;
     }
   });
 

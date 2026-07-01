@@ -57,7 +57,7 @@ window.authorGuideContent = (function () {
       },
       {
         id: "step-2",
-        title: "Create Workshop + Add to GitHub",
+        title: "Setup environment + Create Workshop",
         guideTarget: "2-labs-github",
         summary: "Set up GitHub Desktop and Visual Studio Code, fork and clone the right repos, copy the sample workshop, and validate preview early.",
         keywords: ["github", "fork", "clone", "upstream", "git config", "github pages", "preview", "manifest"]
@@ -860,6 +860,159 @@ window.authorGuideContent = (function () {
         sourceHref: labLink("sla"),
         sourceLabel: "Open Full Guide",
         guideTarget: "validation-publish"
+      },
+      {
+        id: "graphical-remote-desktop",
+        title: "Graphical Remote Desktop",
+        short: "Configure static hostname, deploy noVNC, preload workshop URLs, and validate the desktop before image capture.",
+        accent: "sienna",
+        tags: ["advanced"],
+        description: "Use this card when a workshop needs a prepared noVNC graphical desktop image instead of ordinary browser or cloud-shell steps.",
+        steps: [
+          "Start from an Oracle Enterprise Linux 8 instance that meets Marketplace image requirements.",
+          "Configure and preserve a static hostname before installing products that hardcode hostnames, listeners, or domain names.",
+          "Run the noVNC setup scripts, accept or set the intended desktop OS user, and test the generated desktop URLs immediately.",
+          "Optimize browser settings and preload the workshop guide or application URLs only after noVNC launches correctly.",
+          "Create optional systemd services only for products that must already be running when learners open the desktop."
+        ],
+        checkpoints: [
+          "The noVNC URL launches successfully and auto-connects with the intended resize and quality settings.",
+          "The desktop opens the workshop guide and any required app URLs without manual learner setup.",
+          "Hostname, firstboot, browser, and service settings are validated before custom image capture."
+        ],
+        watchFor: [
+          "Capturing the image before hostname and firstboot behavior are stable.",
+          "Adding desktop apps or startup services without testing a fresh provisioned instance.",
+          "Using deprecated Oracle Linux versions for new marketplace-ready images."
+        ],
+        snippetMeta: "Desktop validation",
+        snippetTitle: "Minimum noVNC readiness checks",
+        snippet: [
+          "- Static hostname is preserved on first boot",
+          "- noVNC URL launches and reconnects",
+          "- Workshop guide URL opens inside the desktop",
+          "- Required apps or services start automatically",
+          "- Browser settings are optimized before image capture"
+        ].join("\n"),
+        sourceHref: labLink("6-labs-setup-graphical-remote-desktop"),
+        sourceLabel: "Open Full Guide",
+        guideTarget: "specialized-workflows"
+      },
+      {
+        id: "custom-image-capture",
+        title: "Custom Image Capture",
+        short: "Clean the instance, create the custom OCI image, test it with ORM, and verify desktop launch before Marketplace work.",
+        accent: "sienna",
+        tags: ["advanced"],
+        description: "Use this card when a workshop requires a reusable OCI compute image that will later be published or attached to a sandbox environment.",
+        steps: [
+          "SSH to the instance outside the remote desktop session and run the LiveLabs cleanup script before capture.",
+          "Create the custom image from the OCI Compute instance and set image compatibility details carefully.",
+          "Copy the new image OCID and update the sample ORM stack variables with image ID, desktop guide URL, and optional app URLs.",
+          "Provision a test instance from the new image and validate the remote desktop URL, browser preload behavior, and workshop guide launch.",
+          "Only move toward Marketplace or WMS image registration after the fresh test instance behaves correctly."
+        ],
+        checkpoints: [
+          "Cleanup ran successfully before image capture.",
+          "The new image OCID is recorded and used in a fresh test stack.",
+          "The test instance proves the image works after provisioning, not only on the source instance."
+        ],
+        watchFor: [
+          "Creating the image before cleanup or browser/noVNC validation.",
+          "Testing only the source instance and never testing an instance created from the captured image.",
+          "Forgetting to update desktop guide and app URL variables before packaging the ORM stack."
+        ],
+        snippetMeta: "Image handoff fields",
+        snippetTitle: "Record these before moving on",
+        snippet: [
+          "Image OCID",
+          "desktop_guide_url",
+          "desktop_app1_url",
+          "desktop_app2_url",
+          "novnc_delay_sec",
+          "Test stack result",
+          "Validated remote desktop URL"
+        ].join("\n"),
+        sourceHref: labLink("7-labs-create-custom-image-for-marketplace"),
+        sourceLabel: "Open Full Guide",
+        guideTarget: "specialized-workflows"
+      },
+      {
+        id: "marketplace-image-publish",
+        title: "Marketplace Image Publishing",
+        short: "Prepare Marketplace listing assets, publish the custom image, and keep LiveLabs support details visible.",
+        accent: "sienna",
+        tags: ["advanced", "workflow"],
+        description: "Use this card when the custom image has passed testing and needs to become a Marketplace-backed image for LiveLabs delivery.",
+        steps: [
+          "Confirm the custom image has been tested from a fresh provisioned instance before starting Marketplace publishing.",
+          "Prepare required Marketplace listing details, terms of use, support information, and artifact metadata.",
+          "Create or update the Marketplace listing with LiveLabs as a visible support link where required.",
+          "Publish the listing and wait for the Marketplace flow to complete before registering it in LiveLabs.",
+          "Keep listing name, listing OCID, app catalog OCID, image OCID, and version together for the WMS registration step."
+        ],
+        checkpoints: [
+          "The listing points to the correct image and support information.",
+          "Listing and app catalog identifiers are captured for the next WMS step.",
+          "The image version matches the image that was tested."
+        ],
+        watchFor: [
+          "Publishing an untested image because the source desktop looked correct.",
+          "Losing the listing OCID or app catalog OCID before WMS registration.",
+          "Treating Marketplace publishing and LiveLabs sandbox image update as the same step."
+        ],
+        snippetMeta: "Marketplace values",
+        snippetTitle: "Capture these values after publish",
+        snippet: [
+          "Listing Name",
+          "Listing OCID",
+          "App Catalog OCID",
+          "Image OCID",
+          "Version",
+          "Support contacts"
+        ].join("\n"),
+        sourceHref: labLink("8-labs-publish-custom-image-to-marketplace"),
+        sourceLabel: "Open Full Guide",
+        guideTarget: "specialized-workflows"
+      },
+      {
+        id: "wms-custom-image-update",
+        title: "WMS Custom Image Update",
+        short: "Register a Marketplace listing in WMS, add the image version, and update an existing sandbox environment.",
+        accent: "red",
+        tags: ["workflow", "advanced"],
+        description: "Use this card after a Marketplace image is published and you need to attach it to a pre-existing LiveLabs sandbox environment through WMS.",
+        steps: [
+          "Open WMS and register the Marketplace listing under Custom Images with listing name, listing OCID, and app catalog OCID.",
+          "Add support contacts so the right people can view or edit the image entry later.",
+          "Add the image to the registered listing with image OCID, version, database software version when relevant, and the noVNC flag when the image uses remote desktop.",
+          "Open the workshop Publishing tab, edit the LiveLab sandbox environment, and select the new image under the Sandbox Environment image list.",
+          "Save the update and test the LiveLab again. Self-service updates apply to pre-existing sandbox environments; new sandbox requests still use the publishing request flow."
+        ],
+        checkpoints: [
+          "Listing OCID, app catalog OCID, image OCID, version, and support contacts are all correct.",
+          "The noVNC checkbox matches the image behavior.",
+          "The updated sandbox launches and uses the intended image after save."
+        ],
+        watchFor: [
+          "Trying to use self-service update for a sandbox environment that does not already exist.",
+          "Selecting an image version you have not tested.",
+          "Forgetting to retest the LiveLab after saving the image update."
+        ],
+        snippetMeta: "WMS image update checklist",
+        snippetTitle: "Register then attach the image",
+        snippet: [
+          "1. Register Listing",
+          "2. Add support contacts",
+          "3. Add Image OCID and Version",
+          "4. Mark NoVNC if remote desktop is included",
+          "5. Edit Publishing > Sandbox Environment",
+          "6. Select the new image",
+          "7. Save and retest the LiveLab"
+        ].join("\n"),
+        sourceHref: labLink("12-add-custom-image-to-workshop"),
+        sourceLabel: "Open Full Guide",
+        guideTarget: "specialized-workflows"
       },
       {
         id: "secure-desktop-when",
