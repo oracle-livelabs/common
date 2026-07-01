@@ -96,6 +96,8 @@
     currentStep: 0,
     fastTrack: "guided",
     activeTag: "all",
+    activeTags: [],
+    toolkitSort: "alphabetical",
     toolkitQuery: "",
     searchQuery: "",
     guideSection: guideSections.length ? guideSections[0].id : ""
@@ -158,8 +160,11 @@
   var bubbleGrid = document.getElementById("bubbleGrid");
   var emptyState = document.getElementById("emptyState");
   var resultCount = document.getElementById("resultCount");
+  var filterSummary = document.getElementById("filterSummary");
   var bubbleSearch = document.getElementById("bubbleSearch");
   var clearSearch = document.getElementById("clearSearch");
+  var toolkitSort = document.getElementById("toolkitSort");
+  var tagPillsMount = document.getElementById("tagPills");
   var tagPills = Array.from(document.querySelectorAll(".tag-pill"));
   var guideLayout = document.querySelector(".guide-layout");
   var guideSidebar = document.querySelector(".guide-sidebar");
@@ -363,6 +368,8 @@
       currentStep: state.currentStep,
       fastTrack: state.fastTrack,
       activeTag: state.activeTag,
+      activeTags: state.activeTags,
+      toolkitSort: state.toolkitSort,
       toolkitQuery: state.toolkitQuery,
       searchQuery: state.searchQuery,
       guideSection: state.guideSection,
@@ -645,11 +652,27 @@
   }
 
   function titleCaseTag(tag) {
-    if (tag === "qa") {
-      return "Quality Assurance";
+    var normalized = normalizeTagValue(tag);
+    var labelMap = {
+      ai: "AI",
+      assets: "Assets",
+      beginner: "Beginner",
+      advanced: "Advanced",
+      interactivity: "Interactivity",
+      livestack: "LiveStack",
+      markdown: "Markdown",
+      marketplace: "Marketplace",
+      media: "Media",
+      qa: "Quality Assurance",
+      "quality-assurance": "Quality Assurance",
+      workflow: "Workflow"
+    };
+
+    if (labelMap[normalized]) {
+      return labelMap[normalized];
     }
 
-    return tag
+    return normalized
       .split("-")
       .map(function (part) {
         return part.charAt(0).toUpperCase() + part.slice(1);
@@ -668,6 +691,27 @@
   function uniqueList(items) {
     return Array.from(new Set((items || []).filter(Boolean)));
   }
+
+  function normalizeTagValue(tag) {
+    return normalizeText(tag).replace(/\s+/g, "-");
+  }
+
+  function getItemTags(item) {
+    return uniqueList((item.tags || []).map(normalizeTagValue).filter(Boolean));
+  }
+
+  function normalizeTagSelection(tags) {
+    var list = Array.isArray(tags) ? tags : [tags];
+
+    return uniqueList(list.map(normalizeTagValue).filter(function (tag) {
+      return tag && tag !== "all";
+    }));
+  }
+
+  explorerItems.forEach(function (item, index) {
+    item.__sourceOrder = index;
+    item.__tags = getItemTags(item);
+  });
 
   function resolveGuideTarget(target, sourceHref) {
     var requested = String(target || "").trim();
@@ -1122,47 +1166,218 @@
     updateBreadcrumb();
   }
 
-  function renderExplorer() {
-    var query = state.toolkitQuery.trim().toLowerCase();
-    var visibleItems = explorerItems.filter(function (item) {
-      var haystack = [
-        item.title,
-        item.short,
-        item.description,
-        flattenList(item.steps),
-        flattenList(item.checkpoints),
-        flattenList(item.watchFor),
-        item.snippet || "",
-        flattenFields(item.exampleFields),
-        flattenResources(item.resourceLinks),
-        flattenMilestones(item.milestones)
-      ].concat(item.tags).join(" ").toLowerCase();
-      var matchesQuery = !query || haystack.indexOf(query) !== -1;
-      var matchesTag = state.activeTag === "all" || item.tags.indexOf(state.activeTag) !== -1;
-      return matchesQuery && matchesTag;
+  function getTagFacets() {
+    var counts = {};
+
+    explorerItems.forEach(function (item) {
+      (item.__tags || getItemTags(item)).forEach(function (tag) {
+        counts[tag] = (counts[tag] || 0) + 1;
+      });
     });
 
-    bubbleGrid.innerHTML = visibleItems.map(function (item) {
+    return Object.keys(counts).sort(function (left, right) {
+      return titleCaseTag(left).localeCompare(titleCaseTag(right), undefined, { sensitivity: "base" });
+    }).map(function (tag) {
+      return {
+        tag: tag,
+        label: titleCaseTag(tag),
+        count: counts[tag]
+      };
+    });
+  }
+
+  function updateTagPillState() {
+    var activeTags = normalizeTagSelection(state.activeTags);
+
+    tagPills.forEach(function (pill) {
+      var tag = pill.getAttribute("data-tag");
+      var isAll = tag === "all";
+      var isActive = isAll ? activeTags.length === 0 : activeTags.indexOf(tag) !== -1;
+
+      pill.classList.toggle("is-active", isActive);
+      pill.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+  }
+
+  function renderTagPills() {
+    if (!tagPillsMount) {
+      return;
+    }
+
+    tagPillsMount.innerHTML = [
+      '<button type="button" class="tag-pill is-active" data-tag="all" aria-pressed="true">All <span class="tag-pill-count">', explorerItems.length, "</span></button>"
+    ].concat(getTagFacets().map(function (facet) {
+      return [
+        '<button type="button" class="tag-pill" data-tag="', escapeAttribute(facet.tag), '" aria-pressed="false">',
+        escapeHtml(facet.label),
+        ' <span class="tag-pill-count">',
+        facet.count,
+        "</span>",
+        "</button>"
+      ].join("");
+    })).join("");
+
+    tagPills = Array.from(tagPillsMount.querySelectorAll(".tag-pill"));
+    updateTagPillState();
+  }
+
+  function buildExplorerSearchEntry(item) {
+    return makeSearchEntry({
+      id: item.id,
+      typeLabel: "Cheatsheet",
+      title: item.title,
+      summary: item.short || item.description || "",
+      path: "Cheatsheet / " + item.title,
+      sourceHref: item.sourceHref || "",
+      steps: item.steps,
+      checkpoints: item.checkpoints,
+      watchFor: item.watchFor,
+      snippet: item.snippet,
+      exampleFields: item.exampleFields,
+      resourceLinks: item.resourceLinks,
+      milestones: item.milestones,
+      tags: item.tags,
+      keywords: item.keywords
+    });
+  }
+
+  function itemUpdatedTime(item) {
+    var time = Date.parse(item.updatedAt || "");
+    return Number.isFinite(time) ? time : 0;
+  }
+
+  function compareExplorerTitle(left, right) {
+    return String(left.item.title || "").localeCompare(String(right.item.title || ""), undefined, {
+      sensitivity: "base"
+    });
+  }
+
+  function sortExplorerEntries(entries, query) {
+    var mode = state.toolkitSort || "alphabetical";
+
+    return entries.slice().sort(function (left, right) {
+      if (mode === "relevance") {
+        if (right.score !== left.score) {
+          return right.score - left.score;
+        }
+        return compareExplorerTitle(left, right);
+      }
+
+      if (mode === "latest") {
+        if (right.updatedTime !== left.updatedTime) {
+          return right.updatedTime - left.updatedTime;
+        }
+        return compareExplorerTitle(left, right);
+      }
+
+      if (mode === "workflow") {
+        return left.item.__sourceOrder - right.item.__sourceOrder;
+      }
+
+      return compareExplorerTitle(left, right);
+    });
+  }
+
+  function renderExplorerMeta(entry) {
+    var bits = [];
+
+    if ((state.toolkitSort || "") === "relevance" && state.toolkitQuery.trim()) {
+      bits.push("Match " + entry.score);
+    }
+
+    if (!bits.length) {
+      return "";
+    }
+
+    return '<span class="bubble-meta">' + bits.map(function (bit) {
+      return '<span>' + escapeHtml(bit) + "</span>";
+    }).join("") + "</span>";
+  }
+
+  function currentSortLabel() {
+    var sortLabels = {
+      alphabetical: "Alphabetical",
+      latest: "Latest",
+      relevance: "Most relevant",
+      workflow: "Source workflow"
+    };
+
+    return sortLabels[state.toolkitSort] || sortLabels.alphabetical;
+  }
+
+  function updateExplorerSummary(count) {
+    var tagText;
+    var queryText = state.toolkitQuery.trim();
+    var activeTags = normalizeTagSelection(state.activeTags);
+
+    resultCount.textContent = "Showing " + count + " cheatsheet card" + (count === 1 ? "" : "s");
+
+    if (!filterSummary) {
+      return;
+    }
+
+    tagText = activeTags.length ? "Tags: " + activeTags.map(titleCaseTag).join(", ") : "All tags";
+    filterSummary.textContent = currentSortLabel() + " sort. " + tagText + (queryText ? '. Query: "' + queryText + '"' : ".");
+  }
+
+  function renderExplorer() {
+    var query = state.toolkitQuery.trim();
+    var selectedTags = normalizeTagSelection(state.activeTags);
+    var visibleEntries = explorerItems.map(function (item) {
+      var score = query ? scoreSearchEntry(buildExplorerSearchEntry(item), query) : 0;
+      var itemTags = item.__tags || getItemTags(item);
+      var matchesQuery = !query || score > 0;
+      var matchesTag = !selectedTags.length || selectedTags.some(function (tag) {
+        return itemTags.indexOf(tag) !== -1;
+      });
+
+      return {
+        item: item,
+        score: score,
+        updatedTime: itemUpdatedTime(item),
+        matchesQuery: matchesQuery,
+        matchesTag: matchesTag
+      };
+    }).filter(function (entry) {
+      return entry.matchesQuery && entry.matchesTag;
+    });
+
+    visibleEntries = sortExplorerEntries(visibleEntries, query);
+
+    bubbleGrid.innerHTML = visibleEntries.map(function (entry) {
+      var item = entry.item;
       return [
         '<div class="col bubble-item" data-bubble-id="', item.id, '">',
         '  <button type="button" class="bubble-button" data-open-bubble="', item.id, '" data-accent="red" aria-label="Open ', escapeHtml(item.title), ' details">',
-        '    <span class="bubble-badge">', escapeHtml(titleCaseTag(item.tags[0])), "</span>",
+        '    <span class="bubble-badge">', escapeHtml(titleCaseTag((item.__tags || item.tags || [])[0])), "</span>",
         '    <span class="bubble-title">', escapeHtml(item.title), "</span>",
         '    <span class="bubble-text">', escapeHtml(item.short), "</span>",
+        renderExplorerMeta(entry),
         "  </button>",
         "</div>"
       ].join("");
     }).join("");
 
-    resultCount.textContent = "Showing " + visibleItems.length + " cheatsheet card" + (visibleItems.length === 1 ? "" : "s");
-    emptyState.classList.toggle("d-none", visibleItems.length !== 0);
+    updateExplorerSummary(visibleEntries.length);
+    emptyState.classList.toggle("d-none", visibleEntries.length !== 0);
   }
 
   function setActiveTag(tag) {
-    state.activeTag = tag;
-    tagPills.forEach(function (pill) {
-      pill.classList.toggle("is-active", pill.getAttribute("data-tag") === tag);
-    });
+    var normalized = normalizeTagValue(tag);
+    var current = normalizeTagSelection(state.activeTags);
+
+    if (normalized === "all") {
+      state.activeTags = [];
+    } else if (current.indexOf(normalized) === -1) {
+      state.activeTags = current.concat(normalized);
+    } else {
+      state.activeTags = current.filter(function (item) {
+        return item !== normalized;
+      });
+    }
+
+    state.activeTag = state.activeTags[0] || "all";
+    updateTagPillState();
     renderExplorer();
   }
 
@@ -3150,7 +3365,9 @@
     isRestoringHistory = true;
     state.currentStep = Math.max(0, Math.min(Number(route.currentStep || 0), stepSections.length - 1));
     state.fastTrack = route.fastTrack || state.fastTrack;
-    state.activeTag = route.activeTag || "all";
+    state.activeTags = normalizeTagSelection(route.activeTags || route.activeTag || []);
+    state.activeTag = state.activeTags[0] || "all";
+    state.toolkitSort = route.toolkitSort || state.toolkitSort || "alphabetical";
     state.toolkitQuery = route.toolkitQuery || "";
     state.searchQuery = route.searchQuery || "";
     state.guideSection = route.guideSection || state.guideSection;
@@ -3163,9 +3380,11 @@
       navSearchInput.value = state.searchQuery;
     }
 
-    tagPills.forEach(function (pill) {
-      pill.classList.toggle("is-active", pill.getAttribute("data-tag") === state.activeTag);
-    });
+    if (toolkitSort) {
+      toolkitSort.value = state.toolkitSort;
+    }
+
+    updateTagPillState();
 
     switchMode(route.mode || "hub", {
       scroll: false,
@@ -3240,8 +3459,10 @@
     var isPrimaryNav = modeButton && !!modeButton.closest(".nav-group-all");
 
     if (installCard && !copyTextButton) {
-      installCard.classList.add("is-complete");
-      installCard.setAttribute("aria-pressed", "true");
+      var isComplete = !installCard.classList.contains("is-complete");
+
+      installCard.classList.toggle("is-complete", isComplete);
+      installCard.setAttribute("aria-pressed", isComplete ? "true" : "false");
     }
 
     if (modeButton) {
@@ -3396,6 +3617,14 @@
     bubbleSearch.focus();
   });
 
+  if (toolkitSort) {
+    toolkitSort.addEventListener("change", function (event) {
+      state.toolkitSort = event.target.value || "alphabetical";
+      renderExplorer();
+      setLiveMessage("Cheatsheet sorted by " + currentSortLabel() + ".");
+    });
+  }
+
   if (navSearchForm && navSearchInput) {
     navSearchForm.addEventListener("submit", function (event) {
       event.preventDefault();
@@ -3527,6 +3756,7 @@
   updateNav();
   updateNavSearch();
   updateBeginnerUI();
+  renderTagPills();
   renderExplorer();
   renderGuideNav();
   loadGuideCatalog().finally(function () {
