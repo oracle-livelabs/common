@@ -6259,7 +6259,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
                 </div>
                 <div class="result-line">
                   <strong id="resultCount">Showing cheatsheet cards</strong>
-                  <span class="result-helper">Open any card for focused detail.</span>
+                  <span class="result-helper" id="filterSummary">Alphabetical sort. All tags.</span>
                 </div>
               </div>
 
@@ -6273,16 +6273,20 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
                   </div>
                 </div>
 
+                <div class="cheatsheet-sort-control">
+                  <label for="toolkitSort" class="form-label filter-label">Sort cards</label>
+                  <select class="form-select form-select-lg" id="toolkitSort" aria-label="Sort cheatsheet cards">
+                    <option value="alphabetical" selected>Alphabetical</option>
+                    <option value="relevance">Most relevant</option>
+                    <option value="latest">Latest</option>
+                    <option value="workflow">Source workflow</option>
+                  </select>
+                </div>
+
                 <div class="cheatsheet-tag-control">
                   <div class="filter-label">Filter by tag</div>
                   <div class="tag-pills" id="tagPills" aria-label="Cheatsheet tag filters">
-                    <button type="button" class="tag-pill is-active" data-tag="all">All</button>
-                    <button type="button" class="tag-pill" data-tag="workflow">Workflow</button>
-                    <button type="button" class="tag-pill" data-tag="markdown">Markdown</button>
-                    <button type="button" class="tag-pill" data-tag="media">Media</button>
-                    <button type="button" class="tag-pill" data-tag="interactivity">Interactivity</button>
-                    <button type="button" class="tag-pill" data-tag="Quality Assurance">Quality Assurance / Publish</button>
-                    <button type="button" class="tag-pill" data-tag="advanced">Advanced</button>
+                    <button type="button" class="tag-pill is-active" data-tag="all" aria-pressed="true">All</button>
                   </div>
                 </div>
 
