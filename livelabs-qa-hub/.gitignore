@@ -1,3 +1,10 @@
+# Node dependencies and package-manager diagnostics
+app/node_modules/
+app/npm-debug.log*
+app/yarn-debug.log*
+app/yarn-error.log*
+app/pnpm-debug.log*
+
 .codex-*.log
 .codex-*.err.log
 app/.codex-*.log
