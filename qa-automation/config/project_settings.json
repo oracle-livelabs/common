@@ -21,7 +21,7 @@
     "cookie_timeout_ms": 2000,
     "navigation_retries": 1,
     "tracing": "retain-on-failure",
-    "video": "retain-on-failure",
+    "video": "off",
     "screenshot": "only-on-failure",
     "full_page_screenshot": true,
     "livelabs_search_term": "OCI",

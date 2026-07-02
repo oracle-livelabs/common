@@ -2,6 +2,10 @@
 
 LiveLabs Analytics is a static governance dashboard for reviewing the Oracle LiveLabs workshop portfolio. It helps portfolio owners identify high-performing content, workshops and sprints that need review, and content that may be ready for retirement after replacement validation.
 
+This checked-in GitHub Pages bundle is static only. Keep OCI VM runtime files such as API code, wallet files, Nginx configuration, systemd units, and protected environment files in the VM deployment workspace instead of this published directory.
+
+For the pre-Object Storage holding package, use `docs/reference/static-bundle-object-storage-handoff.md`.
+
 ## How To Read The Dashboard
 
 Start at the summary cards at the top of the page. They highlight the leading top performer, highest-risk item, and retire-now candidate across workshops and sprints.

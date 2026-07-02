@@ -136,7 +136,7 @@
           id: "guide-home",
           label: "Guide home",
           title: "Open the redesigned guide home first",
-          summary: "Choose the shortest route before you open the markdown fallback or the deeper section cards.",
+          summary: "Choose the shortest route before you open the live original guide or the deeper section cards.",
           steps: [
             "Open the author guide home and stay on that page long enough to choose the right route.",
             "Use Guided Path when you want the standard request, build, Quality Assurance, and publish sequence.",
@@ -145,7 +145,7 @@
           ],
           checkpoints: [
             "You can say why you are using Guided Path, Toolkit, or Full Guide before you continue.",
-            "You are not treating the markdown fallback as the default front door."
+            "You are not treating the full original guide as the default front door."
           ],
           watchFor: [
             "Dropping into a random canonical lab before deciding what kind of help is needed.",
@@ -157,7 +157,7 @@
             "Guided Path  -> ordered request, build, Quality Assurance, publish flow",
             "Toolkit      -> one blocker, one answer",
             "Full Guide   -> section-by-section reference map",
-            "Markdown     -> fallback, not the default front door"
+            "Original     -> full depth, not the default front door"
           ].join("\n"),
           sourceHref: "./index.html#home",
           sourceLabel: "Open Guide Home"
@@ -405,11 +405,12 @@
       label: "Section 6",
       title: "Specialized Workflows",
       accent: "ocean",
-      summary: "Keep specialized delivery models separate from the normal path so sprints, remote desktop, Marketplace images, and secure desktop do not complicate every workshop by default.",
+      summary: "Keep specialized delivery models separate from the normal path so sprints, remote desktop, Marketplace images, LiveStacks, assets, and secure desktop do not complicate every workshop by default.",
       purpose: "Use only the specialized cards that match the workshop delivery model you are actually building.",
       highlights: [
         "Finish the core path first unless the delivery model changes the structure from day one.",
         "Open only the specialized workflows that apply.",
+        "Use WMS assets and LiveStacks when reusable files, links, or customer-facing solution pages belong in the delivery model.",
         "Return to validation after the specialized setup is stable."
       ],
       sectionHref: guideLabLink("10-create-sprints-workflow"),
@@ -580,6 +581,8 @@
           },
           sourceHref: guideLabLink("12-add-custom-image-to-workshop")
         }),
+        labFromItem("livestack-create", "LiveStack"),
+        labFromItem("wms-assets", "Assets"),
         labFromItem("secure-desktop-when", "Secure Desktop"),
         labFromItem("secure-desktop-request", "Request")
       ]
@@ -587,25 +590,23 @@
     makeSection({
       id: "help-faq",
       label: "Section 7",
-      title: "Help and FAQ",
+      title: "AI-assisted Authoring",
       accent: "pine",
-      summary: "Use this section when the blocker is routing, ownership, support context, or a repeat workflow question that should already have a stable answer.",
-      purpose: "This section is intentionally short: first find the right owner, then bring enough context that someone can actually unblock the issue.",
+      summary: "Use this section when AI can accelerate drafting, restructuring, or automation work while the author still checks the output against the canonical guide.",
+      purpose: "This section stays separate from the core workflow so AI help does not replace WMS gates, GitHub review, preview checks, or validator rules.",
       highlights: [
-        "FAQ first for repeat questions.",
-        "Use the owner or channel that fits the blocker.",
-        "Bring WMS ID, preview URL, and repository or pull request context."
+        "Start from the published AI Developer Hub workflow.",
+        "Use AI for narrow authoring jobs, not as a replacement source of truth.",
+        "Preview and validate every AI-assisted output before commit."
       ],
-      sectionHref: guideLabLink("need-help"),
+      sectionHref: guideLabLink("15-labs-livelabs-ai-developer-hub"),
       sectionLabel: "Open Full Guide",
       image: {
-        src: "./content/author-guide/5-labs-qa-checks/images/message-team.png",
-        alt: "Message the Team option in WMS",
-        caption: "Good support routing is mostly about choosing the right owner and carrying enough context."
+        src: "./content/author-guide/5-labs-qa-checks/images/git-hub-pull-request-title-comment.png",
+        alt: "Pull request context in GitHub",
+        caption: "AI-assisted content still needs normal review context, preview checks, and validator evidence."
       },
       labs: [
-        labFromItem("need-help", "Support"),
-        labFromItem("livelabs-faq", "FAQ"),
         labFromItem("ai-developer-hub", "AI")
       ]
     })

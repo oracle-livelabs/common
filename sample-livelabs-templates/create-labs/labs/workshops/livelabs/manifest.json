@@ -120,7 +120,7 @@
     },
     {
       "title": "Lab 11a: Secure Desktop Environments in LiveLabs",
-      "description": "This lab will wsho you how to get your new Marketplace image added to your LiveLab.",
+      "description": "This lab will show you how to get your new Marketplace image added to your LiveLab.",
       "filename": "./../../14-secure-desktop/secure-desktop.md"
     },
     {
@@ -132,6 +132,16 @@
       "title": "Lab 12: Get Started with the LiveLabs AI Developer Hub",
       "description": "This lab points authors to the LiveLabs AI Developer Hub for deeper workflow guides instead of repeating that content here.",
       "filename": "./../../15-labs-livelabs-ai-developer-hub/15-labs-livelabs-ai-developer-hub.md"
+    },
+    {
+      "title": "Lab 13: Create a LiveStack",
+      "description": "This lab will show you how to create a LiveStack.",
+      "filename": "./../../15-livestack/create-a-livestack.md"
+    },
+    {
+      "title": "Lab 14: Create and Manage Assets",
+      "description": "This lab will show you how to create and manage assets using the WMS Self-Service Portal.",
+      "filename": "./../../17-assets/17-assets.md"
     }
   ]
 }

@@ -6,6 +6,7 @@ import { BasePage } from "../basePage.js";
 // actual workshop content or launch options.
 export class WorkshopLandingPage extends BasePage {
   static readonly PATH = "/view-workshop";
+  static readonly OVERVIEW_NAVIGATION_TIMEOUT_MS = Math.max(45_000, BasePage.NAVIGATION_TIMEOUT_MS);
 
   constructor(page: Page) {
     super(page);
@@ -17,6 +18,15 @@ export class WorkshopLandingPage extends BasePage {
 
   get startButton(): Locator {
     return this.page.getByRole("button", { name: "Start" });
+  }
+
+  get overviewHeading(): Locator {
+    return this.page.locator("h1:visible, h2:visible").first();
+  }
+
+  async goto(baseUrl: string, href: string): Promise<void> {
+    await this.gotoUrl(resolvePlatformHref(baseUrl, href), WorkshopLandingPage.PATH, WorkshopLandingPage.OVERVIEW_NAVIGATION_TIMEOUT_MS);
+    await this.dismissCookieBannerIfPresent();
   }
 
   async assertLoaded(expectedTitle?: string): Promise<void> {
@@ -37,4 +47,12 @@ export class WorkshopLandingPage extends BasePage {
   async openLaunchOptions(): Promise<void> {
     await this.clickWhenReady(this.startButton);
   }
+}
+
+function resolvePlatformHref(baseUrl: string, href: string): string {
+  if (/^https?:\/\//i.test(href)) {
+    return href;
+  }
+
+  return new URL(href, `${baseUrl}/`).toString();
 }

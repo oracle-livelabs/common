@@ -1,0 +1,20 @@
+LiveStacks Orchestrator
+Version: 0.1.0-preview.21
+
+This package includes:
+
+- the `livestacks-orchestrator` skill contract and helper scripts
+- bundled snapshots of:
+  - `oracle-db-skills`
+  - `livestack-guide-builder`
+  - `redwood-creator`
+
+This notice file is informational only. It does not grant license rights.
+
+Some bundled content includes Oracle-branded reference material and Oracle Sans fonts used to keep the skill portable and self-contained. Heavyweight guideline PDFs, component ZIP archives, and direct PNG references are not included in the default app UI pack. Redistribution of included assets must follow the approved license and notice terms for the final release package.
+
+If this package is prepared for external distribution, review and update:
+
+- `LICENSE`
+- this `NOTICE`
+- bundled upstream notices, if any are required by approved release terms

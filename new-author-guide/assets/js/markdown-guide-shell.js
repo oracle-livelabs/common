@@ -29,6 +29,7 @@
     var lastFocusedMedia = null;
     var workshopSearchPromise = null;
     var fullGuideHref = "https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/";
+    var workshopExampleHref = "https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/";
 
     function currentUrl() {
         return new URL(window.location.href);
@@ -76,7 +77,7 @@
                 summary: "This route keeps the focused compute-image workflow in the same polished markdown wrapper while still pointing at the shared canonical author-guide content tree.",
                 guideHomeHref: fullGuideHref,
                 redesignedHref: fullGuideHref,
-                sampleHref: new URL("../../../sample-workshops/clinical-first-responder-rag/index.html", window.location.href).toString()
+                exampleHref: workshopExampleHref
             };
         }
 
@@ -87,18 +88,18 @@
                 summary: "This route keeps the Marketplace publishing subset in the same markdown wrapper and uses the same canonical content tree as the main author guide.",
                 guideHomeHref: fullGuideHref,
                 redesignedHref: fullGuideHref,
-                sampleHref: new URL("../../../sample-workshops/clinical-first-responder-rag/index.html", window.location.href).toString()
+                exampleHref: workshopExampleHref
             };
         }
 
         if (path.indexOf("/workshops/author-guide/") !== -1 || path.indexOf("/workshops/livelabs/") !== -1) {
             return {
-                label: "Markdown Version",
-                title: "Read the full author guide in the markdown shell.",
-                summary: "This fallback route keeps the updated original guide structure intact while adding a cleaner shell, workshop-wide search, and media handling that match the redesigned experience more closely.",
+                label: "Live Original Guide",
+                title: "Open the full author guide in the live original route.",
+                summary: "This compatibility route preserves existing Author Guide URLs while sending full-guide readers to the live original guide.",
                 guideHomeHref: fullGuideHref,
                 redesignedHref: fullGuideHref,
-                sampleHref: new URL("../../sample-workshops/clinical-first-responder-rag/index.html", window.location.href).toString()
+                exampleHref: workshopExampleHref
             };
         }
 
@@ -108,7 +109,7 @@
             summary: "This page is being rendered inside the shared markdown wrapper used by the author-guide project.",
             guideHomeHref: fullGuideHref,
             redesignedHref: fullGuideHref,
-            sampleHref: new URL("../../sample-workshops/clinical-first-responder-rag/index.html", window.location.href).toString()
+            exampleHref: workshopExampleHref
         };
     }
 
@@ -261,7 +262,7 @@
             '    <a class="markdown-guide-topnav-link" href="' + escapeHtml(new URL("../../index.html#guided", window.location.href).toString()) + '">Guided Path</a>',
             '    <a class="markdown-guide-topnav-link" href="' + escapeHtml(new URL("../../index.html#toolkit", window.location.href).toString()) + '">Toolkit</a>',
             '    <a class="markdown-guide-topnav-link" href="' + escapeHtml(context.redesignedHref) + '">Full Guide</a>',
-            '    <a class="markdown-guide-topnav-link" href="' + escapeHtml(context.sampleHref) + '">Sample Workshop</a>',
+            '    <a class="markdown-guide-topnav-link" href="' + escapeHtml(context.exampleHref) + '" target="_blank" rel="noreferrer">Workshop Example</a>',
             "  </div>",
             "</nav>"
         ].join("");

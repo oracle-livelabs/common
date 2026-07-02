@@ -31,6 +31,8 @@ This validator ensures that Markdown content submitted in PRs follows the establ
 - Provides detailed error messages
 - Generates GitHub Actions summary report
 
+> **Reminder:** If a code snippet, command, or script is copied or adapted from another author, repository, blog, documentation page, or sample project, cite the source near the code block and confirm the license allows reuse.
+
 ## Installation
 
 ### Step 1: Copy Files to Your Repository
@@ -98,7 +100,7 @@ To block PRs that fail validation:
 | Single H1 | Only one H1 heading per file |
 | Acknowledgements | Must have `## Acknowledgements` section |
 | Image Alt Text | Images must have alt text: `![description](images/file.png)` . |
-| YouTube Format | YouTube embeds should use `[optional text](youtube:VIDEO_ID[:size])` |
+| YouTube Format | YouTube embeds should use `[optional text](youtube:VIDEO_ID[:small|:medium|:large])`; size is optional |
 | Task Format | Task headers should be `## Task Number and/or string: Description` |
 | Task Numbering | Task sections should include numbered steps (`1.`, `2.`, etc.), and supporting content under each step must be indented by one tab stop (4 spaces). |
 | Task Indentation | Code blocks and images must be indented within the numbered step (exceptions: raw HTML element lines are allowed, a top-level heading can terminate the list, and one trailing transition line at Task end may remain unindented) |
@@ -242,10 +244,21 @@ This lab assumes you have:
 ```
 
 #### YouTube Videos
+
+Size options control how large the embedded video appears on the page:
+
+- **No size specified:** Uses the default embedded video size.
+- **small:** Displays a smaller embedded player, useful when you want the video to take up less space in the lab flow.
+- **medium:** Displays a medium-sized embedded player, giving a balance between visibility and page space.
+- **large:** Displays a larger embedded player, making the video more prominent on the page.
+
 ```markdown
 [](youtube:VIDEO_ID)
 [YouTube video scaled to small size](youtube:VIDEO_ID:small)
+[YouTube video scaled to medium size](youtube:VIDEO_ID:medium)
+[YouTube video scaled to large size](youtube:VIDEO_ID:large)
 ```
+**Note:** Use small, medium, or large depending on how much emphasis you want to give the video in the final lab output.
 
 #### Variables
 ```markdown
