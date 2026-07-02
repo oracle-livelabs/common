@@ -396,6 +396,46 @@
       font-size: 13px;
       line-height: 1.4;
     }
+    .tag-picker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+    }
+    .tag-picker-grid .check-row {
+      min-height: 54px;
+    }
+    .tag-summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-width: 140px;
+    }
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      width: max-content;
+      max-width: 100%;
+      min-height: 24px;
+      padding: 4px 8px;
+      border: 1px solid rgba(79, 125, 123, .26);
+      border-radius: 6px;
+      background: rgba(208, 229, 237, .42);
+      color: var(--oracle-bark);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+    .tag-settings-grid {
+      display: grid;
+      grid-template-columns: minmax(180px, .75fr) minmax(240px, 1fr) auto;
+      gap: 12px;
+      align-items: end;
+      margin: 10px 0 14px;
+    }
+    .tag-settings-table input {
+      min-width: 0;
+    }
     .editor-section-head {
       display: flex;
       flex-wrap: wrap;
@@ -785,6 +825,31 @@
         </div>
         <h3 class="subsection-title">Visible Sections</h3>
         <div class="control-grid" id="section-controls"></div>
+        <h3 class="subsection-title">Tags Settings</h3>
+        <div class="tag-settings-grid">
+          <label>Tag Label
+            <input id="new-tag-label" type="text" placeholder="Example: Needs Owner Review">
+          </label>
+          <label>Tag Note
+            <input id="new-tag-note" type="text" placeholder="Short internal note">
+          </label>
+          <div>
+            <button type="button" id="add-tag">Add Tag</button>
+          </div>
+        </div>
+        <div class="table-wrap tag-settings-table" style="margin-top:14px">
+          <table>
+            <thead>
+              <tr>
+                <th>Label</th>
+                <th>Note</th>
+                <th>Preview</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="tags-body"></tbody>
+          </table>
+        </div>
         <div class="button-row">
           <button type="button" id="save-settings">Save Settings</button>
           <button class="secondary" type="button" id="open-dashboard">Save and Open Dashboard</button>
@@ -865,7 +930,7 @@
         </div>
         <div class="panel-context">
           <strong>Use row overrides for specific workshops or sprints.</strong>
-          <p>Search, select one result, adjust the fields that need review, and save. QA Excluded adds a badge only; it does not hide the row or change counts.</p>
+          <p>Search, select one result, adjust the fields that need review, choose any applicable tags, and save.</p>
         </div>
         <div class="form-grid">
           <label class="wide">Search Workshop Or Sprint
@@ -921,11 +986,16 @@
                   <option value="archived">Archived</option>
                 </select>
               </label>
-              <label class="control check-row compact-check">
-                <input id="edit-override-qa-excluded" type="checkbox">
-                <span><span class="control-title">QA Excluded</span><span class="field-note">Badge only</span></span>
-              </label>
             </div>
+          </div>
+          <div class="row-editor-section">
+            <div class="editor-section-head">
+              <div>
+                <h3>Tags</h3>
+                <p>Select any number of dashboard tags for this inventory row.</p>
+              </div>
+            </div>
+            <div class="tag-picker-grid" id="selected-row-tag-editor"></div>
           </div>
           <div class="row-editor-section">
             <div class="editor-section-head">
@@ -954,7 +1024,7 @@
                 <th>Target</th>
                 <th>Value</th>
                 <th>Status</th>
-                <th>QA Excluded</th>
+                <th>Tags</th>
                 <th>Note</th>
                 <th>Action</th>
               </tr>
@@ -1043,7 +1113,7 @@
     const rememberedLoginKey = "livelabsAnalyticsRememberedLogin";
     const transientSessionDurationMs = 12 * 60 * 60 * 1000;
     const persistentSessionDurationMs = 30 * 24 * 60 * 60 * 1000;
-    const adminStateSchemaVersion = 2;
+    const adminStateSchemaVersion = 3;
     const adminSessionSchemaVersion = 3;
     const criteriaRuleAutomationPaused = true;
     const fixedAdminCredentials = {
@@ -1096,6 +1166,17 @@
       disabledContent: "Already disabled rows retained for audit and cleanup planning.",
       portfolioStats: "Portfolio distribution summaries for governance context."
     };
+    const defaultTagDefinitions = [
+      { key: "no-author", label: "No Author", note: "No author or accepted fallback contact." },
+      { key: "stale-high-demand", label: "Stale, High Demand", note: "Stale content with demand protection." },
+      { key: "retirement-review", label: "Retirement Review", note: "Needs retirement-path review." },
+      { key: "refresh", label: "Refresh", note: "Refresh candidate or active refresh state." },
+      { key: "keep", label: "Keep", note: "Keep active." },
+      { key: "inactive", label: "Inactive/Event", note: "Disabled, inactive, or event row." },
+      { key: "missing", label: "Missing Data", note: "Missing governance data." },
+      { key: "manager-review", label: "Manager Review", note: "Needs manager confirmation." }
+    ];
+    const tagKeyBlocklist = new Set(["qa-excluded"]);
     const defaultAdminState = {
       auditTrail: [],
       schemaVersion: adminStateSchemaVersion,
@@ -1105,7 +1186,8 @@
       qaExceptionRules: defaultQaExceptionRules,
       qaExceptionTagEnabled: false,
       rowOverrides: [],
-      sectionVisibility: defaultSectionVisibility
+      sectionVisibility: defaultSectionVisibility,
+      tagDefinitions: defaultTagDefinitions
     };
     let state = readState();
     let session = {};
@@ -1303,17 +1385,69 @@
         .filter(([key, value]) => allowed.has(key) && String(value ?? "").trim())
         .map(([key, value]) => [key, String(value).trim()]));
     }
-    function sanitizeOverride(override) {
+    function tagKeyFor(value) {
+      return normalizeText(value).replace(/\s+/g, "-");
+    }
+    function uniqueTagKey(baseKey, existingKeys) {
+      const base = tagKeyBlocklist.has(baseKey) ? "tag" : (baseKey || "tag");
+      let key = base;
+      let index = 2;
+      while (existingKeys.has(key) || tagKeyBlocklist.has(key)) {
+        key = `${base}-${index}`;
+        index += 1;
+      }
+      return key;
+    }
+    function sanitizeTagDefinitions(tags = defaultTagDefinitions) {
+      const seen = new Set();
+      return (Array.isArray(tags) ? tags : [])
+        .map((tag) => {
+          const label = String(tag?.label || formatOptionLabel(tag?.key || "")).trim();
+          const requestedKey = tagKeyFor(tag?.key || label);
+          if (!label || !requestedKey || tagKeyBlocklist.has(requestedKey)) return null;
+          const key = uniqueTagKey(requestedKey, seen);
+          seen.add(key);
+          return {
+            key,
+            label,
+            note: String(tag?.note || ""),
+            className: String(tag?.className || "")
+          };
+        })
+        .filter(Boolean);
+    }
+    function tagDefinitionsForState(candidate) {
+      return Array.isArray(candidate?.tagDefinitions) ? candidate.tagDefinitions : defaultTagDefinitions;
+    }
+    function sanitizeAssignedTags(tags = [], definitions = defaultTagDefinitions) {
+      const allowed = new Set(tagDefinitionsForState({ tagDefinitions: definitions }).map((tag) => tag.key));
+      const source = Array.isArray(tags) ? tags : String(tags || "").split(",");
+      return Array.from(new Set(source
+        .map((tag) => normalizeText(tag).replace(/\s+/g, "-"))
+        .filter((tag) => allowed.has(tag))));
+    }
+    function tagLabelFor(key) {
+      return tagDefinitionsForState(state).find((tag) => tag.key === key)?.label || formatOptionLabel(key);
+    }
+    function tagSummaryHtml(tags = []) {
+      const cleaned = sanitizeAssignedTags(tags, tagDefinitionsForState(state));
+      return cleaned.length
+        ? `<span class="tag-summary">${cleaned.map((tag) => `<span class="tag-chip">${escapeHtml(tagLabelFor(tag))}</span>`).join("")}</span>`
+        : `<span class="field-note">No tags</span>`;
+    }
+    function sanitizeOverride(override, tagDefinitions = defaultTagDefinitions) {
       const legacyQaStatus = override?.status === "qa_excluded";
       const statusValues = ["pending", "approved", "archived", "manager_review", "keep_active", "retire_candidate", "refresh_candidate"];
       const status = legacyQaStatus ? "manager_review" : (statusValues.includes(override?.status) ? override.status : "manager_review");
+      const tags = sanitizeAssignedTags(override?.tags || [], tagDefinitions);
       return {
         enabled: override?.enabled !== false,
         fieldEdits: sanitizeFieldEdits(override?.fieldEdits),
         id: String(override?.id || uid("override")),
         note: String(override?.note || ""),
-        qaExcluded: override?.qaExcluded === true || legacyQaStatus,
+        qaExcluded: false,
         status,
+        tags,
         target: ["title", "wms_id", "livelabs_id"].includes(override?.target) ? override.target : "wms_id",
         value: String(override?.value || "").trim()
       };
@@ -1323,6 +1457,9 @@
       const rules = Array.isArray(raw?.qaExceptionRules) && raw.qaExceptionRules.length ? raw.qaExceptionRules : defaultQaExceptionRules;
       const overrides = Array.isArray(raw?.rowOverrides) ? raw.rowOverrides : [];
       const isCurrentSchema = Number(raw?.schemaVersion || 0) >= adminStateSchemaVersion;
+      const tagDefinitions = Array.isArray(raw?.tagDefinitions)
+        ? sanitizeTagDefinitions(raw.tagDefinitions)
+        : sanitizeTagDefinitions(defaultTagDefinitions);
       return {
         auditTrail: Array.isArray(raw?.auditTrail) ? raw.auditTrail.slice(0, 60) : [],
         schemaVersion: adminStateSchemaVersion,
@@ -1331,8 +1468,9 @@
         qaExceptionExclusionEnabled: criteriaRuleAutomationPaused ? false : (isCurrentSchema ? raw?.qaExceptionExclusionEnabled === true : false),
         qaExceptionRules: rules.map(sanitizeRule).filter((rule) => rule.type === "criteria" ? criteriaHasValues(rule.criteria) : rule.value),
         qaExceptionTagEnabled: isCurrentSchema ? raw?.qaExceptionTagEnabled === true : false,
-        rowOverrides: overrides.map(sanitizeOverride).filter((override) => override.value),
+        rowOverrides: overrides.map((override) => sanitizeOverride(override, tagDefinitions)).filter((override) => override.value),
         sectionVisibility,
+        tagDefinitions,
         updatedAt: raw?.updatedAt || null,
         updatedBy: raw?.updatedBy || null
       };
@@ -1410,7 +1548,20 @@
       document.body.classList.remove("auth-blocked");
       render();
     }
+    function collectTagDefinitionsFromControls() {
+      const body = document.querySelector("#tags-body");
+      if (!body) return sanitizeTagDefinitions(tagDefinitionsForState(state));
+      const rows = Array.from(body.querySelectorAll("[data-tag-key]"));
+      if (!rows.length) return [];
+      return sanitizeTagDefinitions(rows.map((row) => ({
+        className: row.dataset.tagClass || "",
+        key: row.dataset.tagKey,
+        label: row.querySelector("[data-tag-label]")?.value || "",
+        note: row.querySelector("[data-tag-note]")?.value || ""
+      })));
+    }
     function syncStateFromControls() {
+      state.tagDefinitions = collectTagDefinitionsFromControls();
       state.qaExceptionTagEnabled = false;
       state.qaExceptionExclusionEnabled = criteriaRuleAutomationPaused ? false : document.querySelector("#qa-exclusion-enabled").checked;
       state.detailExpansionEnabled = true;
@@ -1444,8 +1595,9 @@
           fieldEdits: sanitizeFieldEdits(existing.fieldEdits),
           id: row.dataset.overrideId,
           note: row.querySelector("[data-override-note]").value.trim(),
-          qaExcluded: row.querySelector("[data-override-qa-excluded]").checked,
+          qaExcluded: false,
           status: row.querySelector("[data-override-status]").value,
+          tags: sanitizeAssignedTags(String(row.querySelector("[data-override-tags]")?.value || "").split(","), tagDefinitionsForState(state)),
           target: row.querySelector("[data-override-target]").value,
           value: row.querySelector("[data-override-value]").value.trim()
         };
@@ -1454,10 +1606,10 @@
     function renderStatus() {
       const hiddenSections = Object.values(state.sectionVisibility).filter((visible) => visible === false).length;
       const activeOverrides = state.rowOverrides.filter((override) => override.enabled && override.status !== "archived").length;
-      const qaExcludedOverrides = state.rowOverrides.filter((override) => override.enabled && override.qaExcluded === true && override.status !== "archived").length;
+      const taggedOverrides = state.rowOverrides.filter((override) => override.enabled && override.status !== "archived" && sanitizeAssignedTags(override.tags, tagDefinitionsForState(state)).length).length;
       document.querySelector("#status-grid").innerHTML = [
         ["Active Overrides", activeOverrides],
-        ["QA Excluded Rows", qaExcludedOverrides],
+        ["Tagged Rows", taggedOverrides],
         ["Hidden Sections", hiddenSections]
       ].map(([label, value]) => `<div class="status-card"><strong>${value}</strong><span>${label}</span></div>`).join("");
     }
@@ -1470,6 +1622,24 @@
           <input type="checkbox" data-section-key="${escapeAttr(key)}" ${state.sectionVisibility[key] !== false ? "checked" : ""}>
           <span><span class="control-title">${escapeHtml(label)}</span><span class="field-note">${escapeHtml(sectionHelp[key] || "Show this dashboard section.")}</span></span>
         </label>
+      `).join("");
+      renderTagSettings();
+    }
+    function renderTagSettings() {
+      const body = document.querySelector("#tags-body");
+      if (!body) return;
+      body.innerHTML = tagDefinitionsForState(state).map((tag) => `
+        <tr data-tag-key="${escapeAttr(tag.key)}" data-tag-class="${escapeAttr(tag.className || "")}">
+          <td><input data-tag-label type="text" value="${escapeAttr(tag.label)}"></td>
+          <td><input data-tag-note type="text" value="${escapeAttr(tag.note || "")}"></td>
+          <td><span class="tag-summary"><span class="tag-chip">${escapeHtml(tag.label)}</span></span></td>
+          <td>
+            <div class="rule-action-row">
+              <button type="button" data-save-tag="${escapeAttr(tag.key)}">Save</button>
+              <button class="danger" type="button" data-delete-tag="${escapeAttr(tag.key)}">Delete</button>
+            </div>
+          </td>
+        </tr>
       `).join("");
     }
     function renderRules() {
@@ -1514,7 +1684,7 @@
           <td>${targetSelect("data-override-target", override.target, ["wms_id", "livelabs_id", "title"])}</td>
           <td><input data-override-value type="text" value="${escapeAttr(override.value)}"></td>
           <td>${statusSelect("data-override-status", override.status, ["manager_review", "keep_active", "retire_candidate", "refresh_candidate", "archived"])}</td>
-          <td><input type="checkbox" data-override-qa-excluded ${override.qaExcluded ? "checked" : ""}></td>
+          <td>${tagSummaryHtml(override.tags)}<input type="hidden" data-override-tags value="${escapeAttr(sanitizeAssignedTags(override.tags).join(","))}"></td>
           <td><textarea data-override-note>${escapeHtml(override.note)}</textarea></td>
           <td>
             <div class="rule-action-row">
@@ -1749,6 +1919,20 @@
         `;
       }).join("");
     }
+    function renderSelectedTagEditor(existingOverride = selectedRecordOverride()) {
+      const mount = document.querySelector("#selected-row-tag-editor");
+      if (!mount || !selectedRecord) return;
+      const selectedTags = new Set(sanitizeAssignedTags(existingOverride?.tags, tagDefinitionsForState(state)));
+      mount.innerHTML = tagDefinitionsForState(state).map((tag) => `
+        <label class="control check-row">
+          <input type="checkbox" data-row-tag="${escapeAttr(tag.key)}" ${selectedTags.has(tag.key) ? "checked" : ""}>
+          <span><span class="control-title">${escapeHtml(tag.label)}</span><span class="field-note">${escapeHtml(tag.note)}</span></span>
+        </label>
+      `).join("");
+    }
+    function selectedTagsFromEditor() {
+      return sanitizeAssignedTags(Array.from(document.querySelectorAll("[data-row-tag]:checked")).map((input) => input.dataset.rowTag), tagDefinitionsForState(state));
+    }
     function syncSelectedMatchPlaceholder() {
       const target = document.querySelector("#edit-override-target")?.value || "livelabs_id";
       const input = document.querySelector("#edit-override-value");
@@ -1767,7 +1951,6 @@
       const target = selectedRecord.livelabsId ? "livelabs_id" : selectedRecord.wmsId ? "wms_id" : "title";
       document.querySelector("#edit-override-target").value = target;
       document.querySelector("#edit-override-status").value = "manager_review";
-      document.querySelector("#edit-override-qa-excluded").checked = false;
       document.querySelector("#edit-override-note").value = "";
       document.querySelector("#row-search-results").innerHTML = "";
       document.querySelector("#row-search-query").value = "";
@@ -1778,9 +1961,9 @@
         document.querySelector("#edit-override-target").value = existing.target;
         document.querySelector("#edit-override-value").value = existing.value;
         document.querySelector("#edit-override-status").value = existing.status;
-        document.querySelector("#edit-override-qa-excluded").checked = existing.qaExcluded === true;
         document.querySelector("#edit-override-note").value = existing.note || "";
         renderSelectedFieldEditor(existing);
+        renderSelectedTagEditor(existing);
         syncSelectedMatchPlaceholder();
         document.querySelector("#edit-override-value").value = existing.value;
       }
@@ -1804,6 +1987,7 @@
         ["Score", formatRecordNumber(selectedRecord.score)]
       ].map(([label, value]) => `<div><strong>${escapeHtml(label)}</strong>${escapeHtml(value)}</div>`).join("");
       renderSelectedFieldEditor();
+      renderSelectedTagEditor();
     }
     function closeSelectedRowEditor() {
       selectedRecord = null;
@@ -1819,13 +2003,15 @@
       const value = valueInput.value.trim() || valueInput.dataset.defaultValue || selectedValueForTarget(target);
       const status = document.querySelector("#edit-override-status").value;
       if (!value) return;
+      const tags = selectedTagsFromEditor();
       const nextOverride = {
         enabled: true,
         fieldEdits: fieldEditsFromEditor(),
         id: uid("override"),
         note: document.querySelector("#edit-override-note").value.trim(),
-        qaExcluded: document.querySelector("#edit-override-qa-excluded").checked,
+        qaExcluded: false,
         status,
+        tags,
         target,
         value
       };
@@ -1920,6 +2106,25 @@
       document.querySelector("#rule-note-dialog")?.close();
       writeState("Saved rule note");
     }
+    function addTag() {
+      syncStateFromControls();
+      const labelInput = document.querySelector("#new-tag-label");
+      const noteInput = document.querySelector("#new-tag-note");
+      const label = labelInput.value.trim();
+      if (!label) return;
+      const existingKeys = new Set(tagDefinitionsForState(state).map((tag) => tag.key));
+      const key = uniqueTagKey(tagKeyFor(label), existingKeys);
+      state.tagDefinitions = tagDefinitionsForState(state).slice();
+      state.tagDefinitions.push({
+        key,
+        label,
+        note: noteInput.value.trim(),
+        className: ""
+      });
+      labelInput.value = "";
+      noteInput.value = "";
+      writeState("Added tag");
+    }
     function exportSettings() {
       syncStateFromControls();
       const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
@@ -1948,6 +2153,24 @@
     });
     document.querySelector("#export-settings").addEventListener("click", exportSettings);
     document.querySelector("#add-rule").addEventListener("click", addRule);
+    document.querySelector("#add-tag").addEventListener("click", addTag);
+    document.querySelector("#tags-body").addEventListener("click", (event) => {
+      const saveId = event.target?.dataset?.saveTag;
+      if (saveId) {
+        syncStateFromControls();
+        writeState("Saved tag");
+        return;
+      }
+      const deleteId = event.target?.dataset?.deleteTag;
+      if (!deleteId) return;
+      syncStateFromControls();
+      state.tagDefinitions = tagDefinitionsForState(state).filter((tag) => tag.key !== deleteId);
+      state.rowOverrides = state.rowOverrides.map((override) => ({
+        ...override,
+        tags: sanitizeAssignedTags(override.tags, tagDefinitionsForState(state))
+      }));
+      writeState("Deleted tag");
+    });
     document.querySelector("#row-search-button").addEventListener("click", performRowSearch);
     document.querySelector("#row-search-query").addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
