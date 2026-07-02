@@ -1,6 +1,6 @@
 {
   "archive_sha256": "a4b5194409c797f4d2046789c5050d9c9b8ab9daeff6af231b9c781640268d86",
-  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/livestack/livestack-orchestrator/ready-to-deploy-archive/livestacks-orchestrator.zip",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/livestack/livestacks-orchestrator.zip",
   "content_hash": "27ee119be839576478e7325fab5a1c0035cb227360efe5d9c5370e6a2a283b7f",
   "min_updater_version": "2",
   "name": "livestacks-orchestrator",
