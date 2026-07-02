@@ -23,7 +23,7 @@ from typing import Any
 
 DEFAULT_MANIFEST_URL = (
     "https://raw.githubusercontent.com/oracle-livelabs/common/main/"
-    "skills/livestack/livestacks-orchestrator.update.json"
+    "skills/livestack/livestack-orchestrator/livestacks-orchestrator.update.json"
 )
 UPDATER_VERSION = "2"
 

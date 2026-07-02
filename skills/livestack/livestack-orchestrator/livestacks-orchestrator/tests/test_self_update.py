@@ -110,6 +110,20 @@ def auto_update(local_skill: Path, manifest_path: Path) -> dict[str, object]:
 
 
 class SelfUpdateTests(unittest.TestCase):
+    def test_default_manifest_url_uses_canonical_nested_release_path(self) -> None:
+        expected_url = (
+            "https://raw.githubusercontent.com/oracle-livelabs/common/main/"
+            "skills/livestack/livestack-orchestrator/livestacks-orchestrator.update.json"
+        )
+        self.assertEqual(
+            self_update.DEFAULT_MANIFEST_URL,
+            expected_url,
+        )
+        self.assertEqual(
+            json.loads((SKILL_ROOT / "update.json").read_text(encoding="utf-8"))["manifest_url"],
+            expected_url,
+        )
+
     def test_current_manifest_does_not_download_archive(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
@@ -316,8 +330,7 @@ class SelfUpdateTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
             local_skill, manifest_path, remote_skill = prepare_valid_update(root)
-            (local_skill / "VERSION").write_text("0.1.0-preview.22\n", encoding="utf-8")
-            (remote_skill / "VERSION").write_text("0.1.0-preview.21\n", encoding="utf-8")
+            (local_skill / "VERSION").write_text("0.1.0-preview.21\n", encoding="utf-8")
 
             archive_path = root / "livestacks-orchestrator.zip"
             zip_skill(remote_skill, archive_path)
@@ -332,7 +345,7 @@ class SelfUpdateTests(unittest.TestCase):
 
             self.assertEqual(result["status"], "validation_failed")
             self.assertFalse(result["updated"])
-            self.assertEqual(result["archive_version"], "0.1.0-preview.21")
+            self.assertEqual(result["archive_version"], "0.1.0-preview.22")
             self.assertIn("did not match manifest version '9.9.9'", str(result["reason"]))
             self.assertEqual(tree_snapshot(local_skill), before)
             self.assertEqual(transaction_paths(local_skill.parent), [])

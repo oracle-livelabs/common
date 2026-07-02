@@ -22,9 +22,12 @@ REQUIRED_PATHS = (
     "scripts/validate_livestack_bundle.py",
     "scripts/grade_livestack_bundle.py",
     "scripts/find_scaffold_markers.py",
+    "scripts/package_livestack_bundle.py",
+    "scripts/ensure_clean_zip.py",
     "scripts/ensure_oracle_db_skill.py",
     "scripts/ensure_livestack_guide_builder.py",
     "scripts/ensure_redwood_creator.py",
+    "scripts/sync_clean_zip_bundle.py",
     "scripts/sync_oracle_db_bundle.py",
     "scripts/sync_livestack_guide_builder_bundle.py",
     "references/golden-core-overlay-contract.md",
@@ -36,12 +39,15 @@ REQUIRED_PATHS = (
     "references/architecture-guardrails.md",
     "assets/templates/golden-livestack-baseline/compose.yml",
     "assets/templates/golden-livestack-baseline/.env.example",
+    "assets/bundled/clean-zip/BUNDLED_SKILL.md",
+    "assets/bundled/clean-zip/scripts/create_clean_zip.py",
     "assets/bundled/oracle-db-skills/BUNDLED_SKILL.md",
     "assets/bundled/livestack-guide-builder/BUNDLED_SKILL.md",
     "assets/bundled/redwood-creator/BUNDLED_SKILL.md",
     "tests/test_grading_gate.py",
     "tests/test_self_update.py",
     "tests/test_release_package.py",
+    "tests/test_clean_packaging.py",
 )
 
 TRANSIENT_DIR_NAMES = {
@@ -165,6 +171,28 @@ def check_script_syntax(root: Path, findings: list[Finding]) -> None:
             findings.append(Finding(rel, f"Python syntax error at line {error.lineno}: {error.msg}"))
 
 
+def check_bundled_clean_zip(root: Path, findings: list[Finding]) -> None:
+    bundled_root = root / "assets" / "bundled" / "clean-zip"
+    bundled_skill = bundled_root / "BUNDLED_SKILL.md"
+    live_skill = bundled_root / "SKILL.md"
+    helper = bundled_root / "scripts" / "create_clean_zip.py"
+
+    if live_skill.exists():
+        findings.append(Finding(relative(live_skill, root), "bundled snapshot must use BUNDLED_SKILL.md"))
+    if bundled_skill.exists() and parse_frontmatter(read_text(bundled_skill)).get("name") != "clean-zip":
+        findings.append(Finding(relative(bundled_skill, root), "bundled snapshot must describe `clean-zip`"))
+    if helper.exists():
+        try:
+            compile(read_text(helper), str(helper), "exec")
+        except SyntaxError as error:
+            findings.append(
+                Finding(
+                    relative(helper, root),
+                    f"Python syntax error at line {error.lineno}: {error.msg}",
+                )
+            )
+
+
 def check_package(root: Path) -> list[Finding]:
     findings: list[Finding] = []
     check_required_paths(root, findings)
@@ -173,6 +201,7 @@ def check_package(root: Path) -> list[Finding]:
     check_openai_yaml(root, findings)
     check_transient_artifacts(root, findings)
     check_script_syntax(root, findings)
+    check_bundled_clean_zip(root, findings)
     return findings
 
 
