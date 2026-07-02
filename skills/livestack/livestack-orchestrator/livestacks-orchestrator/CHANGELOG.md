@@ -4,6 +4,14 @@ All notable changes to `livestacks-orchestrator` should be recorded in this file
 
 ## Unreleased
 
+## 0.1.0-preview.22 - 2026-07-02
+
+- Bundled an installable snapshot of `$clean-zip` and added maintainer sync/install helpers for portable archive creation.
+- Added `scripts/package_livestack_bundle.py` as the required post-A+ distribution step, with clean metadata filtering, local `.env*` exclusion, symlink fail-closed behavior, root-layout and ZIP-integrity verification, and SHA-256 reporting.
+- Made the transactional self-update check the first action on every orchestrator invocation and aligned its default manifest URL with the canonical nested release path.
+- Added chained post-update preflight checks plus an immutable preview.22 legacy manifest/ZIP bridge so installations using the original root update path migrate safely to the canonical nested channel.
+- Added packaging regression tests and package-hygiene requirements for the bundled helper and final clean archive contract.
+
 ## 0.1.0-preview.21 - 2026-07-01
 
 - Made scaffold-marker findings part of semantic validation so validator and A+ grading cannot accept unresolved first-party starter content while ignoring dependency and generated-output trees.

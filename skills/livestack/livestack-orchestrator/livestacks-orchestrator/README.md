@@ -13,6 +13,7 @@ Version: see [`VERSION`](./VERSION)
 - first-iteration top-right `Use Your Own Data` dataset-admin expectations when demo data is replaceable
 - LiveStack demo runbook guide scaffolding
 - bundle validation for cross-file contract drift
+- clean, integrity-checked LiveStack ZIP packaging
 
 ## What This Package Includes
 
@@ -25,6 +26,7 @@ Version: see [`VERSION`](./VERSION)
 - `assets/bundled/oracle-db-skills/`: portable bundled Oracle database helper snapshot
 - `assets/bundled/livestack-guide-builder/`: portable bundled LiveStack guide runbook helper snapshot
 - `assets/bundled/redwood-creator/`: portable bundled Oracle JET / Redwood UI helper snapshot
+- `assets/bundled/clean-zip/`: portable clean archive helper snapshot used by final packaging
 
 ## Installation
 
@@ -40,14 +42,16 @@ If `CODEX_HOME` is not set, the default skills root is:
 ~/.codex/skills/livestacks-orchestrator
 ```
 
-No separate setup step is required for the three bundled companion skills. When needed, the orchestrator can install them into the same skills root with:
+No separate setup step is required for the four bundled companion skills. When needed, the orchestrator can install them into the same skills root with:
 
+- `scripts/ensure_clean_zip.py`
 - `scripts/ensure_oracle_db_skill.py`
 - `scripts/ensure_livestack_guide_builder.py`
 - `scripts/ensure_redwood_creator.py`
 
 Maintainers can refresh bundled helper snapshots from the currently installed live skills with:
 
+- `python3 scripts/sync_clean_zip_bundle.py`
 - `python3 scripts/sync_oracle_db_bundle.py`
 - `python3 scripts/sync_livestack_guide_builder_bundle.py`
 - `python3 scripts/check_skill_package.py`
@@ -56,17 +60,21 @@ Maintainers can refresh bundled helper snapshots from the currently installed li
 The expanded directory is the reviewable source of truth. After source checks pass, rebuild or verify the checked-in release ZIP and public manifest from this directory with:
 
 ```text
-python3 scripts/build_release.py --archive ../livestacks-orchestrator.zip --manifest ../livestacks-orchestrator.update.json --publish
-python3 scripts/build_release.py --archive ../livestacks-orchestrator.zip --manifest ../livestacks-orchestrator.update.json --check
+python3 scripts/build_release.py --archive ../ready-to-deploy-archive/livestacks-orchestrator.zip --manifest ../livestacks-orchestrator.update.json --publish
+python3 scripts/build_release.py --archive ../ready-to-deploy-archive/livestacks-orchestrator.zip --manifest ../livestacks-orchestrator.update.json --check
 ```
 
 Release builds use stable ordering, timestamps, and canonical archive modes. Publishing stages the ZIP and manifest beside their destinations and activates them as one recoverable pair, so a failed replacement restores the previous published pair instead of leaving mismatched artifacts.
 
-On each substantial invocation, run:
+On every invocation, run this as the first action:
 
 - `python3 scripts/self_update.py --auto --json`
 
-The updater checks the small public GitHub manifest at `skills/livestack/livestacks-orchestrator.update.json`, compares its `content_hash` to the installed skill, and downloads `livestacks-orchestrator.zip` only when the manifest says the package changed. It verifies the archive checksum, requires the extracted `VERSION` to match the manifest version, validates and prepares the extracted archive, then uses an ephemeral sibling rollback copy while swapping installations. Activation failures restore the prior installation; successful updates remove transaction artifacts, or report retained `recovery_backup` or `recovery_lock` paths as warnings when cleanup fails. If the manifest, archive, preparation, or validation is unavailable, the updater skips the update and leaves the current skill in place.
+The updater checks the canonical public GitHub manifest at `skills/livestack/livestack-orchestrator/livestacks-orchestrator.update.json`, compares its `content_hash` to the installed skill, and automatically downloads the archive under `ready-to-deploy-archive/` only when the manifest says the package changed. It verifies the archive checksum, requires the extracted `VERSION` to match the manifest version, validates and prepares the extracted archive, then uses an ephemeral sibling rollback copy while swapping installations. Activation failures restore the prior installation; successful updates remove transaction artifacts, or report retained `recovery_backup` or `recovery_lock` paths as warnings when cleanup fails. If an update succeeds, re-read `SKILL.md` and run the updater again from the installed release, up to three successful hops, so older installations can migrate from the legacy root manifest to the canonical nested channel before work starts. If the manifest, archive, preparation, or validation is unavailable, the updater skips the update and leaves the current skill in place.
+
+### Legacy Update-Path Bridge
+
+Keep `skills/livestack/livestacks-orchestrator.update.json` and `skills/livestack/livestacks-orchestrator.zip` as an immutable preview.22 migration bridge for clients whose installed `update.json` still targets the original root path. The legacy manifest must point to the legacy ZIP. That ZIP must contain preview.22 with its internal `update.json` targeting the canonical nested manifest. Do not repoint the legacy manifest at the mutable latest ZIP: a later release would change the bytes and invalidate the legacy checksum. Retain the bridge until supported pre-preview.21 installations have had sufficient time to migrate.
 
 ## Runtime Expectations
 
@@ -82,7 +90,7 @@ Required when generating or validating runnable LiveStacks bundles:
 - `podman`
 - `podman compose`
 
-## 0.1.0-preview.21 Beta Bar
+## 0.1.0-preview.22 Beta Bar
 
 This preview is intended for guided internal beta use. The first generated application iteration is expected to be more than a scaffold:
 
@@ -112,6 +120,7 @@ This preview is intended for guided internal beta use. The first generated appli
 - `validate_livestack_bundle.py` checks the story, UI, dataset, and Oracle evidence contract before a bundle is called production-ready
 - generated bundles must record red/green test evidence in `validation/test-evidence.md`
 - `grade_livestack_bundle.py` is the final gate; only `A+` with `Pass: yes` is acceptable
+- after A+ passes, `package_livestack_bundle.py` is the required final archive path; it uses the bundled clean-zip helper, excludes local `.env*` files while retaining `.env.example`, rejects skipped symlinks, verifies the member layout, and reports SHA-256
 
 ## Quick Start
 
@@ -168,16 +177,17 @@ Before calling a generated LiveStacks bundle production-ready, the expected veri
 3. `python3 scripts/validate_livestack_bundle.py <solution-root>` (defensively rechecks scaffold markers)
 4. `python3 scripts/grade_livestack_bundle.py <solution-root>` (inherits all validator findings)
 5. LiveLabs markdown validation for the generated `guide/`
+6. `python3 scripts/package_livestack_bundle.py <solution-root> <output.zip>`
 
 Before sharing or embedding the skill package itself, run:
 
 ```text
 python3 scripts/check_skill_package.py
 python3 -m unittest discover -s tests -p 'test_*.py'
-python3 scripts/build_release.py --archive ../livestacks-orchestrator.zip --manifest ../livestacks-orchestrator.update.json --check
+python3 scripts/build_release.py --archive ../ready-to-deploy-archive/livestacks-orchestrator.zip --manifest ../livestacks-orchestrator.update.json --check
 ```
 
-Before substantial orchestration work, run:
+As the first action on every orchestrator invocation, run:
 
 ```text
 python3 scripts/self_update.py --auto --json

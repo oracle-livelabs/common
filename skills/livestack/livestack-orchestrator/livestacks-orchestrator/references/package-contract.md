@@ -37,6 +37,18 @@ Every production-ready run must also make the runtime truth explicit:
 - Oracle Internals must be a scene-owned technical exhibit with a `What's Happening` explanation, color-coded capability badges, real SQL or PL/SQL, diagram/data-flow boxes, scene-specific security or governance callouts, and live evidence or dynamic state
 - every generated bundle must record red/green test evidence: which tests failed before the final change, which same tests passed after the change, and the A+ grading report
 - `scripts/grade_livestack_bundle.py <solution-root>` must return `A+` and `Pass: yes` before the bundle is called production-ready
+- after A+ passes, `scripts/package_livestack_bundle.py <solution-root> <output.zip>` must create and verify the final distributable archive; raw `zip`, Finder compression, and platform-specific packaging shortcuts are not acceptable completion paths
+
+## Clean Archive Pattern
+
+Package the complete solution only after semantic validation, guide validation, red/green evidence, and A+ grading pass.
+
+- Use `scripts/package_livestack_bundle.py`; it calls the pinned helper under `assets/bundled/clean-zip/`.
+- Retain one intentional top-level solution directory by default. Use `--contents-only` only when the documented download flow explicitly requires a rootless archive.
+- Retain `.env.example`, but exclude local `.env*` files by default so workstation or deployment secrets cannot leak into the handoff.
+- Exclude metadata, VCS state, Python caches, dependency folders, ORDS runtime config, logs, and other paths covered by the packaging wrapper and bundled helper.
+- Fail when the source contains symlinks because the clean helper intentionally skips them; resolve or materialize those files instead of silently shipping an incomplete archive.
+- Verify ZIP integrity, inspect the entry list, confirm the root layout, and report the SHA-256 before delivery.
 
 ## Role-Owned Artifact Expectations
 
@@ -294,6 +306,7 @@ The default scaffold is only a starting point. It is not production-ready until 
 - `validation/launch-checklist.md`: environment, startup, health, and first-run verification checks
 - `validation/data-onboarding-checklist.md`: validate-only, upload, restore-demo, and derived-artifact rebuild checks for customer data flows
 - `validation/test-evidence.md`: red tests that failed before the final fix, green tests that passed after the fix, A+ grading output, and golden-core parity evidence
+- `<solution-slug>.zip` (outside the solution tree): final clean distribution archive created by `scripts/package_livestack_bundle.py` after all readiness gates pass
 
 ## Minimum Configuration Surface
 
@@ -363,4 +376,6 @@ Do not call the package production-ready unless all of the following are true:
 - Screenshot inventory exists under `output/guide-screenshots/`, failures are resolved or explained, and selected real app captures are integrated into the guide image folders.
 - `python3 scripts/find_scaffold_markers.py <solution-root>` returns no blockers, unless the user explicitly asked for a skeleton.
 - `python3 scripts/validate_livestack_bundle.py <solution-root>` returns no semantic errors, including compose or env drift, broken guide manifest refs, weak screenshot inventory structure, mock-backed runtime fallbacks, missing automated bootstrap, or missing ORDS runtime wiring.
+- `python3 scripts/grade_livestack_bundle.py <solution-root>` returns `A+` and `Pass: yes` before packaging begins.
+- `python3 scripts/package_livestack_bundle.py <solution-root> <output.zip>` succeeds, verifies the entry list and single-root layout, retains `.env.example`, excludes local `.env*` files and transient/generated state, and reports the archive SHA-256.
 - Remaining risks are surfaced clearly.

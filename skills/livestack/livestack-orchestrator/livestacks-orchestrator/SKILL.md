@@ -5,6 +5,10 @@ description: Orchestrate production-ready LiveStacks solutions from PRDs, workin
 
 # LiveStacks Orchestrator
 
+## Mandatory Invocation Preflight
+
+On every invocation, make `python3 scripts/self_update.py --auto --json` the first action from this skill directory, before interpreting inputs, loading other references, or starting orchestration work. Do not skip this check for narrow, read-only, or maintenance requests. The command checks the configured manifest and automatically installs a newer valid release. If it reports `"updated": true`, re-read this `SKILL.md` from disk and immediately run the command again from the newly installed skill so a legacy manifest path can hand off to the canonical channel. Continue until the result no longer reports an update, with a maximum of three successful update hops per invocation to prevent loops. If a check skips because the manifest, archive, or validation is unavailable, continue with the current skill and mention the warning only if it affects the run.
+
 Turn a PRD, partial PRD, or sparse business brief into one converged LiveStacks package. When the source input is only a brief, synthesize a compact working PRD before any specialist delegation begins. Prefer installed specialist skills first; if a specialist skill is missing or ambiguous, use the orchestrator's dedicated built-in fallback references and still deliver one production-ready recommendation.
 
 Every generated LiveStack must be a **capability-led operator application**. Start by selecting the best-fit Oracle AI Database 26ai feature usage patterns for the business pain point, then express those patterns through an operator workflow with a Command Center, Data Foundation, dynamic capability-backed scenes, left-side scene navigation, per-scene Oracle feature chips, top-right `Use Your Own Data`, and persistent clickable/collapsible scene-aware `Oracle Internals`.
@@ -35,7 +39,6 @@ The `Use Your Own Data` overlay must also own an Oracle Internals state. When th
 
 ## Quick Start
 
-- Run `python3 scripts/self_update.py --auto --json` from this skill directory before substantial orchestration work. If it reports `"updated": true`, re-read this `SKILL.md` from disk before continuing. If the check skips because the GitHub manifest, archive, or validation is unavailable, continue with the current skill and mention the warning only if it affects the run.
 - Accept three input modes: full `PRD`, partial `Merge`, or brief-only `Bootstrap`.
 - Require `industry` and `pain_point` for `Bootstrap` mode.
 - Accept workbook-style input, bullets, free-form notes, or full PRDs. Normalize them with `references/input-normalization.md`.
@@ -62,6 +65,7 @@ The `Use Your Own Data` overlay must also own an Oracle Internals state. When th
 - Treat `$playwright` or `$webapp-testing` as optional screenshot helpers. Prefer them when already installed, but do not auto-install them by default because browser or Node runtime prerequisites vary by machine.
 - Run `python3 scripts/validate_livestack_bundle.py <solution-root>` before calling a bundle production-ready. Use the standalone marker scan first for focused diagnostics; semantic validation defensively rechecks those markers and then catches cross-file drift in compose, env, docs, guide manifests, screenshot inventory, Oracle-evidence wiring, mock-backed runtime fallbacks, missing automated database bootstrap, and ORDS routes that exist only on paper.
 - Run `python3 scripts/grade_livestack_bundle.py <solution-root>` after semantic validation. A bundle only passes when it receives `A+`, the report says `Pass: yes`, and `validation/test-evidence.md` records tests that failed before the change and passed after the change.
+- After the A+ gate passes, run `python3 scripts/package_livestack_bundle.py <solution-root> <output.zip>` as the only default distribution path. It uses the bundled `$clean-zip` helper, verifies ZIP integrity and entry layout, excludes local `.env*` files while retaining `.env.example`, rejects symlinks that would be silently omitted, and prints the verified archive SHA-256.
 - Run `python3 scripts/check_skill_package.py` before sharing, zipping, or embedding this skill. It catches stale version metadata, missing bundled helpers, Python syntax errors, and transient cache or macOS metadata files that should not ship.
 - If a skill is a strong match, invoke it explicitly.
 - Require subagents for independent specialist roles when the runtime and session policy allow it. Fall back to local role simulation only when subagents are unavailable, the work is too tightly coupled to split cleanly, or the user explicitly asks for no delegation. Record the exception reason in the role ledger.
@@ -81,6 +85,7 @@ The `Use Your Own Data` overlay must also own an Oracle Internals state. When th
 - Bundle an installable snapshot of `$oracle-db-skills` inside this skill for portability. When the sibling skill is missing, prefer installing that bundled snapshot into the local skills directory before falling back to the compact Oracle reference.
 - Bundle an installable snapshot of `$livestack-guide-builder` inside this skill for portability. When the sibling skill is missing, prefer installing that bundled snapshot into the local skills directory before falling back to local guide rules.
 - Bundle an installable snapshot of `$redwood-creator` inside this skill for portability. When the sibling skill is missing, prefer installing that bundled snapshot into the local skills directory before falling back to the built-in UI/UX guidance.
+- Bundle an installable snapshot of `$clean-zip` inside this skill for portable, repeatable final packaging. Use the pinned bundled helper through `scripts/package_livestack_bundle.py`; do not replace the final packaging step with ad hoc `zip`, Finder compression, or platform-specific archive commands.
 - Keep AI close to the data. Prefer Oracle-native capabilities, PL/SQL package APIs, and ORDS modules before app-side reinvention.
 - Route application APIs through ORDS. Direct app-to-database access is acceptable only for bootstrap, migrations, or strictly justified admin paths.
 - Unless the user explicitly asks for a prototype or mock, do not ship mock-backed, in-memory, fake-data, or demo-state runtime fallbacks and then call the bundle production-ready.
@@ -198,7 +203,8 @@ The `Use Your Own Data` overlay must also own an Oracle Internals state. When th
    - Run `python3 scripts/validate_livestack_bundle.py <solution-root>` and fix guide, screenshot-inventory, and cross-file alignment issues before calling the bundle production-ready.
 11. Record red/green test evidence in `validation/test-evidence.md`: tests that failed before the final fix, the same tests passing after the fix, the A+ grading command, and the golden-parity result.
 12. Run the devil's-advocate pass and revise weak areas.
-13. Deliver the final package only when the grading report is `A+` / `Pass: yes`; otherwise report blockers and keep iterating.
+13. Package the completed solution with `python3 scripts/package_livestack_bundle.py <solution-root> <output.zip>` only after validation and A+ grading pass. Treat any helper, integrity, root-layout, local-env, or symlink failure as a delivery blocker. Keep the verified member count and SHA-256 in the handoff.
+14. Deliver the final package only when the grading report is `A+` / `Pass: yes` and the clean archive verification passes; otherwise report blockers and keep iterating.
 
 ## Specialist Skill Detection And Invocation
 
@@ -288,6 +294,7 @@ Also generate or specify:
 - launch validation checklist
 - data onboarding validation checklist
 - red/green test evidence and A+ grading report in `validation/test-evidence.md`
+- one verified clean distribution ZIP produced by `scripts/package_livestack_bundle.py`, with a single intentional root layout, no local `.env*` files other than `.env.example`, and a reported SHA-256
 - customer rebuild guidance for replacing demo data with customer data
 
 Use `references/package-contract.md` as the detailed checklist.
@@ -308,6 +315,7 @@ Use `references/package-contract.md` as the detailed checklist.
 
 ## Scripts
 
+- `scripts/ensure_clean_zip.py` to install the bundled `clean-zip` snapshot into the local skills root when the sibling skill is missing.
 - `scripts/ensure_oracle_db_skill.py` to install the bundled `oracle-db-skills` snapshot into the local skills root when the sibling skill is missing.
 - `scripts/ensure_livestack_guide_builder.py` to install the bundled `livestack-guide-builder` snapshot into the local skills root when the sibling skill is missing.
 - `scripts/ensure_redwood_creator.py` to install the bundled `redwood-creator` snapshot into the local skills root when the sibling skill is missing.
@@ -318,6 +326,8 @@ Use `references/package-contract.md` as the detailed checklist.
 - `scripts/build_release.py` to deterministically rebuild or verify the distributable ZIP and public update manifest from the expanded source tree.
 - `scripts/self_update.py` to validate and transactionally install a release ZIP while restoring the previous installation if activation fails.
 - `scripts/grade_livestack_bundle.py` to grade generated bundles and pass only on `A+` capability-led operator application evidence, golden-core runtime parity, clean semantic validation, guide/screenshot evidence, and red/green test evidence.
+- `scripts/package_livestack_bundle.py` to create and verify the final clean LiveStack ZIP with the pinned bundled `clean-zip` helper.
+- `scripts/sync_clean_zip_bundle.py` to refresh the bundled `clean-zip` snapshot from the installed live skill during maintainer updates.
 - `scripts/sync_livestack_guide_builder_bundle.py` to refresh the bundled `livestack-guide-builder` snapshot from the installed live skill during maintainer updates.
 - `scripts/find_scaffold_markers.py` to catch leftover placeholder content that must be replaced before delivery.
 - `scripts/validate_livestack_bundle.py` to catch semantic cross-file drift after placeholder cleanup, including compose and env contract mismatches, weak guide-manifest wiring, screenshot inventory problems, missing Oracle-evidence surfaces, incomplete dataset-admin API routes, unprotected destructive dataset routes, and undocumented direct app-to-database runtime access.

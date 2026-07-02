@@ -159,10 +159,11 @@ For a generated solution bundle, the expected verification path is:
 3. `python3 scripts/validate_livestack_bundle.py <solution-root>` (defensively rechecks scaffold markers)
 4. `python3 scripts/grade_livestack_bundle.py <solution-root>` (inherits all validator findings)
 5. local LiveLabs markdown validation for `<solution-root>/guide`
+6. `python3 scripts/package_livestack_bundle.py <solution-root> <output.zip>`
 
 For the skill package itself, run:
 
 1. `python3 scripts/check_skill_package.py`
 2. `python3 -m unittest discover -s tests -p 'test_*.py'`
-3. `python3 scripts/build_release.py --archive ../livestacks-orchestrator.zip --manifest ../livestacks-orchestrator.update.json --check`
+3. `python3 scripts/build_release.py --archive ../ready-to-deploy-archive/livestacks-orchestrator.zip --manifest ../livestacks-orchestrator.update.json --check`
 4. `python3 scripts/self_update.py --check-only --json`

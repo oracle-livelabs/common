@@ -42,6 +42,13 @@ def create_skill_fixture(root: Path) -> None:
         "---\n",
         encoding="utf-8",
     )
+    (root / "assets" / "bundled" / "clean-zip" / "BUNDLED_SKILL.md").write_text(
+        "---\n"
+        "name: clean-zip\n"
+        "description: Create clean distributable ZIP archives.\n"
+        "---\n",
+        encoding="utf-8",
+    )
     (root / "VERSION").write_text("1.2.3-preview.4\n", encoding="utf-8")
     (root / "agents" / "openai.yaml").write_text(
         "display_name: Test\nshort_description: Test\ndefault_prompt: Test\n",
