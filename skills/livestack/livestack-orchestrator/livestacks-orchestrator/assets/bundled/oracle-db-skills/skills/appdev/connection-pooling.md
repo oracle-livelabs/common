@@ -167,7 +167,7 @@ import oracledb
 # Thin mode (no Oracle Client needed) - python-oracledb native pool
 pool = oracledb.create_pool(
     user="app_user",
-    password="<db pwd>",
+    password="secret",
     dsn="db-host:1521/MYSERVICE",
     min=2,
     max=10,
@@ -191,7 +191,7 @@ def fetch_customer(customer_id: int) -> dict:
 # DRCP: just change the dsn
 pool_drcp = oracledb.create_pool(
     user="app_user",
-    password="<db pwd>",
+    password="secret",
     dsn="db-host:1521/MYSERVICE:POOLED",  # :POOLED suffix enables DRCP
     min=1,
     max=5,
@@ -207,7 +207,7 @@ const oracledb = require('oracledb');
 async function initPool() {
     await oracledb.createPool({
         user: 'app_user',
-        password: '<db pwd>',
+        password: 'secret',
         connectString: 'db-host:1521/MYSERVICE',
         poolMin: 4,
         poolMax: 20,

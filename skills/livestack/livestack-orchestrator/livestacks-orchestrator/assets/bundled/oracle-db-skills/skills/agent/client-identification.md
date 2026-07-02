@@ -71,7 +71,7 @@ Sets the `CLIENT_IDENTIFIER` — visible in V$SESSION and included in audit reco
 
 ```sql
 BEGIN
-  DBMS_SESSION.SET_IDENTIFIER('agent-user:demo-user|task:rag-ingest|session:s42');
+  DBMS_SESSION.SET_IDENTIFIER('agent-user:klrice|task:rag-ingest|session:s42');
 END;
 /
 
@@ -163,8 +163,8 @@ ORDER  BY event_timestamp DESC;
 ```
 MODULE:  '<agent-name>'                  e.g. 'claude-agent', 'my-chatbot'
 ACTION:  '<current-task>'                e.g. 'rag-ingest', 'report-gen', 'schema-fix'
-CLIENT_INFO: 'key:value|key:value'       e.g. 'user:demo-user|request-id:req-42'
-CLIENT_IDENTIFIER: '<agent>:<user>:<id>' e.g. 'db-agent:demo-user:session-42'
+CLIENT_INFO: 'key:value|key:value'       e.g. 'user:klrice|request-id:req-42'
+CLIENT_IDENTIFIER: '<agent>:<user>:<id>' e.g. 'claude-agent:klrice:session-42'
 ```
 
 Keep MODULE and ACTION consistent across sessions so AWR/ASH history is queryable by these values.
@@ -195,7 +195,7 @@ END;
 /
 
 -- Usage at session start
-EXEC init_agent_session('db-agent', 'rag-ingest', 'demo-user', 'req-1042');
+EXEC init_agent_session('claude-agent', 'rag-ingest', 'klrice', 'req-1042');
 ```
 
 ## CLIENT_IDENTIFIER Truncation and Encoding

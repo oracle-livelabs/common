@@ -17,7 +17,7 @@ dotnet add package Oracle.ManagedDataAccess.Core
 using Oracle.ManagedDataAccess.Client;
 using Dapper;
 
-string connStr = "User Id=hr;Password=<db pwd>;Data Source=localhost:1521/freepdb1;";
+string connStr = "User Id=hr;Password=password;Data Source=localhost:1521/freepdb1;";
 
 // Create and open connection
 using var conn = new OracleConnection(connStr);
@@ -284,7 +284,7 @@ builder.Services.AddScoped<IDbConnection>(_ =>
 // appsettings.json
 {
   "ConnectionStrings": {
-    "OracleDb": "User Id=hr;Password=<db pwd>;Data Source=localhost:1521/freepdb1;"
+    "OracleDb": "User Id=hr;Password=password;Data Source=localhost:1521/freepdb1;"
   }
 }
 

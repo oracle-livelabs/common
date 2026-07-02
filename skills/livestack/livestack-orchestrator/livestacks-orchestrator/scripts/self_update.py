@@ -15,6 +15,7 @@ import sys
 import tempfile
 import urllib.parse
 import urllib.request
+import uuid
 import zipfile
 from pathlib import Path
 from typing import Any
@@ -327,6 +328,8 @@ class UpdateLock:
         self.lock_dir = skill_root.parent / ".locks"
         self.lock_path = self.lock_dir / "livestacks-orchestrator-update.lock"
         self.fd: int | None = None
+        self.cleanup_warning: str | None = None
+        self.recovery_lock: str | None = None
 
     def __enter__(self) -> "UpdateLock":
         self.lock_dir.mkdir(parents=True, exist_ok=True)
@@ -340,27 +343,105 @@ class UpdateLock:
         return self
 
     def __exit__(self, _exc_type: object, _exc: object, _tb: object) -> None:
+        cleanup_errors: list[str] = []
         if self.fd is not None:
-            os.close(self.fd)
-            self.fd = None
+            try:
+                os.close(self.fd)
+            except OSError as error:
+                cleanup_errors.append(f"could not close lock descriptor: {error}")
+            finally:
+                self.fd = None
         try:
             self.lock_path.unlink()
         except FileNotFoundError:
             pass
+        except OSError as error:
+            cleanup_errors.append(f"could not remove stale lock at {self.lock_path}: {error}")
+            self.recovery_lock = str(self.lock_path)
+
+        if cleanup_errors:
+            self.cleanup_warning = "update lock cleanup failed; " + "; ".join(cleanup_errors)
 
 
-def replace_skill_root(skill_root: Path, stage_root: Path) -> None:
+def _transaction_path(parent: Path, purpose: str) -> Path:
+    return parent / f".livestacks-orchestrator.{purpose}-{os.getpid()}-{uuid.uuid4().hex}"
+
+
+def _remove_transaction_path(path: Path) -> None:
+    if path.exists():
+        shutil.rmtree(path)
+
+
+def replace_skill_root(skill_root: Path, stage_root: Path, state: dict[str, Any]) -> dict[str, str]:
     parent = skill_root.parent
     parent.mkdir(parents=True, exist_ok=True)
-    temp_target = parent / f".livestacks-orchestrator.updating-{os.getpid()}"
-    if temp_target.exists():
-        shutil.rmtree(temp_target)
-    shutil.copytree(stage_root, temp_target, ignore=copy_ignore)
+    prepared_root = _transaction_path(parent, "prepared")
+    rollback_root: Path | None = None
 
-    # The active directory is untouched until the staged copy is complete.
-    if skill_root.exists():
-        shutil.rmtree(skill_root)
-    temp_target.rename(skill_root)
+    try:
+        shutil.copytree(stage_root, prepared_root, ignore=copy_ignore)
+        write_state(prepared_root, state)
+    except (OSError, shutil.Error) as error:
+        cleanup_error: OSError | None = None
+        try:
+            _remove_transaction_path(prepared_root)
+        except OSError as caught:
+            cleanup_error = caught
+        reason = f"installation preparation failed; existing installation left unchanged: {error}"
+        if cleanup_error is not None:
+            reason += f"; prepared-copy cleanup also failed: {cleanup_error}"
+        raise UpdateError(reason) from error
+
+    active_moved = False
+    try:
+        if skill_root.exists():
+            rollback_root = _transaction_path(parent, "rollback")
+            skill_root.rename(rollback_root)
+            active_moved = True
+        prepared_root.rename(skill_root)
+    except OSError as activation_error:
+        if active_moved and rollback_root is not None:
+            try:
+                rollback_root.rename(skill_root)
+            except OSError as rollback_error:
+                raise UpdateError(
+                    "installation activation failed and rollback failed; "
+                    f"previous installation remains at {rollback_root}: "
+                    f"activation error: {activation_error}; rollback error: {rollback_error}"
+                ) from activation_error
+
+            cleanup_error: OSError | None = None
+            try:
+                _remove_transaction_path(prepared_root)
+            except OSError as caught:
+                cleanup_error = caught
+            reason = f"installation activation failed; previous installation restored: {activation_error}"
+            if cleanup_error is not None:
+                reason += f"; prepared-copy cleanup also failed: {cleanup_error}"
+            raise UpdateError(reason) from activation_error
+
+        cleanup_error = None
+        try:
+            _remove_transaction_path(prepared_root)
+        except OSError as caught:
+            cleanup_error = caught
+        reason = f"installation activation failed; existing installation left unchanged: {activation_error}"
+        if cleanup_error is not None:
+            reason += f"; prepared-copy cleanup also failed: {cleanup_error}"
+        raise UpdateError(reason) from activation_error
+
+    if rollback_root is not None:
+        try:
+            _remove_transaction_path(rollback_root)
+        except OSError as error:
+            return {
+                "warning": (
+                    "installation activated, but rollback-backup cleanup failed; "
+                    f"backup remains at {rollback_root}: {error}"
+                ),
+                "recovery_backup": str(rollback_root),
+            }
+    return {}
 
 
 def write_state(skill_root: Path, state: dict[str, Any]) -> None:
@@ -380,6 +461,8 @@ def emit(result: dict[str, Any], *, json_mode: bool) -> None:
         print("livestacks-orchestrator update is available.")
     elif status == "updated":
         print(f"livestacks-orchestrator updated to {result.get('remote_version') or 'remote version'}.")
+        if result.get("warning"):
+            print(f"Warning: {result['warning']}")
     elif status in {"skipped", "validation_failed"}:
         print(f"livestacks-orchestrator update skipped: {result.get('reason', 'unknown reason')}")
     else:
@@ -457,6 +540,15 @@ def update(args: argparse.Namespace) -> dict[str, Any]:
             base["reason"] = str(error)
             return base
 
+        archive_version = read_version(remote_root)
+        if archive_version != remote_version:
+            base["status"] = "validation_failed"
+            base["reason"] = (
+                f"archive VERSION {archive_version!r} did not match manifest version {remote_version!r}"
+            )
+            base["archive_version"] = archive_version
+            return base
+
         extracted_hash = content_hash(remote_root)
         if extracted_hash != remote_hash:
             base["status"] = "validation_failed"
@@ -464,9 +556,9 @@ def update(args: argparse.Namespace) -> dict[str, Any]:
             base["extracted_hash"] = extracted_hash
             return base
 
+        installation_metadata: dict[str, str] = {}
         try:
-            with UpdateLock(skill_root):
-                replace_skill_root(skill_root, remote_root)
+            with UpdateLock(skill_root) as update_lock:
                 state = {
                     "manifest_url": manifest_url,
                     "archive_url": archive_url,
@@ -478,15 +570,26 @@ def update(args: argparse.Namespace) -> dict[str, Any]:
                     "installed_at": utc_now(),
                     "updater_version": UPDATER_VERSION,
                 }
-                write_state(skill_root, state)
-        except UpdateError as error:
+                installation_metadata = replace_skill_root(skill_root, remote_root, state)
+            if update_lock.cleanup_warning is not None:
+                previous_warning = installation_metadata.get("warning")
+                installation_metadata["warning"] = (
+                    f"{previous_warning}; {update_lock.cleanup_warning}"
+                    if previous_warning
+                    else update_lock.cleanup_warning
+                )
+            if update_lock.recovery_lock is not None:
+                installation_metadata["recovery_lock"] = update_lock.recovery_lock
+        except (OSError, shutil.Error, UpdateError) as error:
             base["status"] = "skipped"
+            base["updated"] = False
             base["reason"] = str(error)
             return base
 
     base["status"] = "updated"
     base["updated"] = True
     base["installed_at"] = utc_now()
+    base.update(installation_metadata)
     return base
 
 

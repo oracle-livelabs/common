@@ -24,6 +24,7 @@ def load_module(name: str, path: Path):
 
 
 validator_module = load_module("validate_livestack_bundle", SCRIPTS_DIR / "validate_livestack_bundle.py")
+marker_module = load_module("find_scaffold_markers", SCRIPTS_DIR / "find_scaffold_markers.py")
 
 
 def write(path: Path, content: str) -> None:
@@ -116,7 +117,18 @@ def create_golden_bundle(root: Path) -> None:
     write(root / "input/business-input.md", "# Business Input\n\nGolden parity business brief for field operations.\n")
     write(root / "input/product-requirements.md", "# Product Requirements\n\nNo source PRD provided; working PRD is authoritative.\n")
     write(root / "input/assumptions.md", "# Assumptions\n\nAll assumptions are explicit and verified by the grading gate.\n")
-    write(root / "docs/architecture-decisions.md", "# Architecture Decisions\n\nThe chosen architecture keeps Oracle Database, ORDS, Redwood/JET, and the capability-led runtime core invariant.\n")
+    write(
+        root / "docs/architecture-decisions.md",
+        markdown_with_sections(
+            "Architecture Decisions",
+            [
+                "## Chosen Architecture",
+                "## Key Decisions",
+                "## Rejected Alternatives",
+                "## Chosen Implementation",
+            ],
+        ),
+    )
 
     write(
         root / "input/template-provenance.json",
@@ -151,7 +163,7 @@ def create_golden_bundle(root: Path) -> None:
     write(root / "stack/Containerfile", "FROM node:20-bookworm\nWORKDIR /workspace/app\nEXPOSE 3001\nCMD [\"npm\", \"start\"]\n")
     write(
         root / "stack/scripts/bootstrap_db.sh",
-        "#!/bin/sh\nset -eu\nsqlplus app_user/change-me@db:1521/FREEPDB1 @database/sql/030_ords.sql\n# apply sql database/sql 001-baseline.sql 020_api_packages.sql 030_ords.sql 040_security.sql 050_demo_seed.sql\n",
+        "#!/bin/sh\nset -eu\nsqlplus app_user/golden-secret@db:1521/FREEPDB1 @database/sql/030_ords.sql\n# apply sql database/sql 001-baseline.sql 020_api_packages.sql 030_ords.sql 040_security.sql 050_demo_seed.sql\n",
     )
     write(root / "stack/scripts/bootstrap_ollama_models.sh", "#!/bin/sh\nOLLAMA_HOST_URL=http://127.0.0.1:11434\ncurl \"$OLLAMA_HOST_URL/api/tags\"\ncurl \"$OLLAMA_HOST_URL/api/pull\"\ncurl \"$OLLAMA_HOST_URL/api/generate\"\n")
     write(root / "stack/scripts/bootstrap_ollama_models.ps1", "$env:OLLAMA_HOST_URL='http://127.0.0.1:11434'\nInvoke-RestMethod \"$env:OLLAMA_HOST_URL/api/tags\"\nInvoke-RestMethod \"$env:OLLAMA_HOST_URL/api/pull\"\nInvoke-RestMethod \"$env:OLLAMA_HOST_URL/api/generate\"\n")
@@ -447,8 +459,12 @@ export default function App() {
         + "\nThe dataset tool opens from the top-right Use Your Own Data control. It shows active dataset state, downloads a template ZIP, accepts a completed ZIP, validates the package before upload or replace, restores the seeded demo dataset, reports job status, and documents synthetic customer data expectations.\n",
     )
     write(root / "guide/conclusion/conclusion.md", scene_lab("Conclusion"))
+    canonical_index = (
+        SKILL_ROOT
+        / "assets/bundled/livestack-guide-builder/assets/templates/workshops/index.html"
+    ).read_text(encoding="utf-8")
     for profile in ("desktop", "sandbox", "tenancy"):
-        write(root / f"guide/workshops/{profile}/index.html", "<!doctype html><html></html>\n")
+        write(root / f"guide/workshops/{profile}/index.html", canonical_index)
         write(root / f"guide/workshops/{profile}/manifest.json", manifest())
 
     write(root / "output/guide-screenshots/command-center.png", "png bytes")
@@ -528,7 +544,140 @@ class GradingGateTests(unittest.TestCase):
 
             self.assertFalse(result.passed)
             self.assertNotEqual(result.grade, "A+")
-            self.assertTrue(any(finding.path == "validation/test-evidence.md" for finding in result.findings))
+            test_evidence_findings = [
+                finding
+                for finding in result.findings
+                if finding.path == "validation/test-evidence.md"
+            ]
+            self.assertEqual(len(test_evidence_findings), 1)
+            self.assertEqual(test_evidence_findings[0].message, "missing required file")
+            marker_findings = marker_module.scan(root)
+            self.assertEqual(
+                [
+                    (Path(path).relative_to(root).as_posix(), message)
+                    for path, _line, message in marker_findings
+                    if Path(path).relative_to(root).as_posix() == "validation/test-evidence.md"
+                ],
+                [("validation/test-evidence.md", "missing required file")],
+            )
+
+    def test_starter_contract_blocks_validator_and_grader(self) -> None:
+        grade_module = load_module("grade_livestack_bundle", SCRIPTS_DIR / "grade_livestack_bundle.py")
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir) / "starter-marker"
+            create_golden_bundle(root)
+            server_path = root / "stack/backend/server.js"
+            server_path.write_text(
+                server_path.read_text(encoding="utf-8") + "\n// starter_contract\n",
+                encoding="utf-8",
+            )
+
+            findings = validator_module.Validator(root).validate()
+            result = grade_module.grade_bundle(root)
+
+            marker_findings = [
+                finding
+                for finding in findings
+                if finding.path == "stack/backend/server.js"
+                and finding.message == "starter_contract"
+            ]
+            self.assertEqual(len(marker_findings), 1)
+            self.assertGreater(marker_findings[0].line, 1)
+            self.assertFalse(result.passed)
+            self.assertNotEqual(result.grade, "A+")
+            self.assertLess(result.score, 90)
+            self.assertTrue(
+                any(
+                    finding.path == "stack/backend/server.js"
+                    and finding.message == "starter_contract"
+                    for finding in result.findings
+                )
+            )
+
+    def test_markers_in_dependency_generated_and_control_dirs_are_ignored(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir) / "excluded-marker-dirs"
+            create_golden_bundle(root)
+            required_exclusions = {
+                "node_modules",
+                "dist",
+                "build",
+                ".git",
+                ".venv",
+                "venv",
+                "__pycache__",
+                ".pytest_cache",
+                ".mypy_cache",
+                ".ruff_cache",
+                ".cache",
+            }
+            self.assertTrue(required_exclusions.issubset(marker_module.EXCLUDED_SCAN_DIR_NAMES))
+            excluded_dirs = marker_module.EXCLUDED_SCAN_DIR_NAMES
+            for directory in excluded_dirs:
+                generated_path = root / "stack/frontend" / directory / "README.md"
+                generated_path.parent.mkdir(parents=True, exist_ok=True)
+                generated_path.write_text(
+                    "generated dependency contains starter_contract\n",
+                    encoding="utf-8",
+                )
+
+            marker_findings = marker_module.scan(root)
+            validator_findings = validator_module.Validator(root).validate()
+
+            self.assertFalse(
+                any(
+                    set(Path(path).relative_to(root).parts).intersection(excluded_dirs)
+                    for path, _line, _message in marker_findings
+                )
+            )
+            self.assertFalse(
+                any(
+                    set(Path(finding.path).parts).intersection(excluded_dirs)
+                    for finding in validator_findings
+                )
+            )
+
+    def test_optional_conclusion_is_not_required(self) -> None:
+        grade_module = load_module("grade_livestack_bundle", SCRIPTS_DIR / "grade_livestack_bundle.py")
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir) / "no-conclusion"
+            create_golden_bundle(root)
+            (root / "guide/conclusion/conclusion.md").unlink()
+            for profile in ("desktop", "sandbox", "tenancy"):
+                manifest_path = root / f"guide/workshops/{profile}/manifest.json"
+                payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+                payload["tutorials"] = [
+                    tutorial
+                    for tutorial in payload["tutorials"]
+                    if tutorial["title"] != "Conclusion"
+                ]
+                manifest_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+            marker_findings = marker_module.scan(root)
+            result = grade_module.grade_bundle(root)
+
+            self.assertFalse(
+                any("guide/conclusion/conclusion.md" in path for path, _line, _message in marker_findings)
+            )
+            self.assertTrue(result.passed)
+            self.assertEqual(result.grade, "A+")
+
+    def test_duplicate_findings_are_suppressed(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            validator = validator_module.Validator(Path(temp_dir))
+            validator.add("stack/backend/server.js", "starter_contract", 42)
+            validator.add("stack/backend/server.js", "starter_contract", 42)
+
+            self.assertEqual(
+                validator.findings,
+                [
+                    validator_module.Finding(
+                        path="stack/backend/server.js",
+                        message="starter_contract",
+                        line=42,
+                    )
+                ],
+            )
 
     def test_golden_core_drift_blocks_a_plus(self) -> None:
         grade_module = load_module("grade_livestack_bundle", SCRIPTS_DIR / "grade_livestack_bundle.py")

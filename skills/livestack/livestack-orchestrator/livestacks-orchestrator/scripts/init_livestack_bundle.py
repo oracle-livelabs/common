@@ -80,7 +80,7 @@ why_this_oracle_feature_fits: replace-with-business-and-technical-fit
 
 ## Feature Usage Pattern
 
-feature_usage_pattern: replace-with-semantic-matching-rag-safe-nl-to-sql-guided-agent-optimization-risk-assessment-or-other-justified-pattern
+feature_usage_pattern: replace-with-semantic-matching-rag-safe-nl-to-sql-guided-agent-optimization-risk-scoring-or-other-justified-pattern
 
 ## AI Capability Mode
 

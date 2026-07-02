@@ -30,7 +30,7 @@ async function run() {
   try {
     conn = await oracledb.getConnection({
       user:     'hr',
-      password: '<db pwd>',
+      password: 'password',
       connectString: 'localhost:1521/freepdb1'  // Easy Connect
     });
 
@@ -49,7 +49,7 @@ run();
 ```js
 const conn = await oracledb.getConnection({
   user:          'hr',
-  password:      '<db pwd>',
+  password:      'password',
   connectString: 'mydb_high'  // alias from tnsnames.ora
 });
 ```
@@ -59,7 +59,7 @@ const conn = await oracledb.getConnection({
 ```js
 const conn = await oracledb.getConnection({
   user:           'admin',
-  password:       '<db pwd>',
+  password:       'password',
   connectString:  'myatp_high',
   configDir:      '/path/to/wallet',
   walletLocation: '/path/to/wallet',
@@ -189,7 +189,7 @@ stream.on('error',    err  => console.error(err));
 // Create pool at startup
 await oracledb.createPool({
   user:          'hr',
-  password:      '<db pwd>',
+  password:      'password',
   connectString: 'localhost:1521/freepdb1',
   poolMin:       2,
   poolMax:       10,

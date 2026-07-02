@@ -32,7 +32,7 @@ BEGIN
   DBMS_CLOUD.CREATE_CREDENTIAL(
     credential_name => 'OPENAI_CRED',
     username        => 'OPENAI',
-    password        => '<api key from secure source>'  -- never hardcode a real API key
+    password        => 'sk-proj-...'  -- your OpenAI API key
   );
 END;
 /
@@ -42,7 +42,7 @@ BEGIN
   DBMS_CLOUD.CREATE_CREDENTIAL(
     credential_name => 'COHERE_CRED',
     username        => 'COHERE',
-    password        => '<api key from secure source>'  -- never hardcode a real API key
+    password        => 'co-...'  -- your Cohere API key
   );
 END;
 /
@@ -52,7 +52,7 @@ BEGIN
   DBMS_CLOUD.CREATE_CREDENTIAL(
     credential_name => 'AZURE_CRED',
     username        => 'AZURE_OPENAI',
-    password        => '<api key from secure source>'  -- never hardcode a real API key
+    password        => '...'  -- your Azure OpenAI key
   );
 END;
 /
@@ -62,7 +62,7 @@ BEGIN
   DBMS_CLOUD.CREATE_CREDENTIAL(
     credential_name => 'ANTHROPIC_CRED',
     username        => 'ANTHROPIC',
-    password        => '<api key from secure source>'  -- never hardcode a real API key
+    password        => 'sk-ant-...'  -- your Anthropic API key
   );
 END;
 /
@@ -221,7 +221,7 @@ BEGIN
     credential_name => 'OPENAI_VEC_CRED',
     params          => JSON_OBJECT(
                          'username' VALUE 'OPENAI',
-                         'password' VALUE '<api key from secure source>'
+                         'password' VALUE 'sk-proj-...'
                        )
   );
 END;

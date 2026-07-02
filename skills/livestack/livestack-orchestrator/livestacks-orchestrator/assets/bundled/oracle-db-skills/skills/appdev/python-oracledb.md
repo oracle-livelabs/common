@@ -23,19 +23,19 @@ import oracledb
 # Easy Connect string
 conn = oracledb.connect(
     user="hr",
-    password="<db pwd>",
+    password="password",
     dsn="localhost:1521/freepdb1"
 )
 
 # TNS alias (requires tnsnames.ora in TNS_ADMIN path)
 conn = oracledb.connect(
     user="hr",
-    password="<db pwd>",
+    password="password",
     dsn="mydb_high"
 )
 
 # Close explicitly or use context manager
-with oracledb.connect(user="hr", password="<db pwd>", dsn="localhost:1521/freepdb1") as conn:
+with oracledb.connect(user="hr", password="password", dsn="localhost:1521/freepdb1") as conn:
     with conn.cursor() as cur:
         cur.execute("SELECT sysdate FROM dual")
         print(cur.fetchone())
@@ -48,7 +48,7 @@ import oracledb
 
 conn = oracledb.connect(
     user="admin",
-    password="<db pwd>",
+    password="password",
     dsn="myatp_high",           # TNS alias from tnsnames.ora in wallet
     config_dir="/path/to/wallet",
     wallet_location="/path/to/wallet",
@@ -64,7 +64,7 @@ import oracledb
 # Call before any connection — sets the mode for the entire process
 oracledb.init_oracle_client(lib_dir="/opt/oracle/instantclient_21_9")
 
-conn = oracledb.connect(user="hr", password="<db pwd>", dsn="localhost:1521/freepdb1")
+conn = oracledb.connect(user="hr", password="password", dsn="localhost:1521/freepdb1")
 ```
 
 ---
@@ -186,7 +186,7 @@ import oracledb
 # Create pool at application startup
 pool = oracledb.create_pool(
     user="hr",
-    password="<db pwd>",
+    password="password",
     dsn="localhost:1521/freepdb1",
     min=2,       # minimum open connections
     max=10,      # maximum connections
@@ -297,7 +297,7 @@ import oracledb
 async def main():
     conn = await oracledb.connect_async(
         user="hr",
-        password="<db pwd>",
+        password="password",
         dsn="localhost:1521/freepdb1"
     )
     async with conn.cursor() as cur:
@@ -311,7 +311,7 @@ asyncio.run(main())
 # Async pool
 async def pooled():
     pool = oracledb.create_pool_async(
-        user="hr", password="<db pwd>", dsn="localhost:1521/freepdb1",
+        user="hr", password="password", dsn="localhost:1521/freepdb1",
         min=2, max=10, increment=1
     )
     async with pool.acquire() as conn:

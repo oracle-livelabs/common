@@ -28,7 +28,7 @@ spring:
   datasource:
     url: jdbc:oracle:thin:@localhost:1521/freepdb1
     username: hr
-    password: <db pwd>
+    password: password
     driver-class-name: oracle.jdbc.OracleDriver
     hikari:
       maximum-pool-size: 20
@@ -60,7 +60,7 @@ spring:
   datasource:
     url: jdbc:oracle:thin:@myatp_high?TNS_ADMIN=/path/to/wallet
     username: admin
-    password: <db pwd>
+    password: password
 ```
 
 ---
@@ -343,7 +343,7 @@ System.out.println("Page 1: " + page.getContent());
     datasource:
       url: jdbc:oracle:thin:@localhost:1521/freepdb1
       username: hr
-      password: <db pwd>  # EXPOSED IN VERSION CONTROL
+      password: hr_password  # EXPOSED IN VERSION CONTROL
   ```
   
 - **Use environment variables or property placeholders:**
@@ -352,7 +352,7 @@ System.out.println("Page 1: " + page.getContent());
     datasource:
       url: ${DB_URL}
       username: ${DB_USERNAME}
-      password: <db pwd from env>
+      password: ${DB_PASSWORD}
   ```
   
 - **Integrate with secret management systems:**

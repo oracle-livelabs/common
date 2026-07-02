@@ -1,6 +1,6 @@
 # Oracle DB Skills
 
-**Repository:** bundled snapshot
+**Repository:** https://github.com/krisrice/oracle-db-skills
 **Version:** 1.0.0
 
 Oracle DB Skills is a curated library of 100+ practical, documentation-backed guides for working with Oracle Database, organized by domain: SQL and PL/SQL development, performance tuning, security, administration, monitoring, architecture, DevOps, migrations, SQLcl, ORDS, and Oracle-specific features. Each guide includes actionable examples, best practices, common pitfalls, sources, and explicit Oracle version compatibility notes for 19c and 26ai.
@@ -14,9 +14,9 @@ Oracle DB Skills is a curated library of 100+ practical, documentation-backed gu
 ## GitHub Ruleset
 
 - Default-branch ruleset definition is stored in `.github/rulesets/main.json`.
-- Apply it only from the source repository with:
+- Apply it with:
   - `export GITHUB_TOKEN=<token-with-repo-admin-permission>`
-  - `./scripts/apply-github-ruleset.sh <owner> <repo>`
+  - `./scripts/apply-github-ruleset.sh krisrice oracle-db-skills`
 
 ---
 

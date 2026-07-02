@@ -19,7 +19,7 @@ Every generated LiveStack must be a **capability-led operator application**. Sta
 
 ## Source Model
 
-The bundled overlay examples are a template family, not unrelated golden templates.
+The bundled `assets/template-overlays/industry-overlays.json` data preserves examples from a shared template family rather than defining unrelated golden templates.
 
 - `highered`, `lifesciences`, `media`, and `sled` share one runtime and application scaffold.
 - The industry-specific work lives mostly in navigation labels, scene names, seeded vocabulary, semantic views, prompts, guide language, and dataset-template wording.
@@ -48,7 +48,7 @@ Every default LiveStack should preserve one runtime core:
 
 ## Invariant Core Files
 
-The overlay family keeps `.env.example` stable across industries and only varies `compose.yml` by the generated app image name. The new golden baseline is stricter:
+The source template family kept `.env.example` stable across industries and varied `compose.yml` only by generated app image name. The bundled golden baseline is stricter:
 
 - `stack/compose.yml` must match `assets/templates/golden-livestack-baseline/compose.yml`.
 - `stack/.env.example` must match `assets/templates/golden-livestack-baseline/.env.example`.

@@ -15,6 +15,7 @@ REQUIRED_PATHS = (
     "VERSION",
     "update.json",
     "agents/openai.yaml",
+    "scripts/build_release.py",
     "scripts/discover_specialist_skills.py",
     "scripts/self_update.py",
     "scripts/init_livestack_bundle.py",
@@ -39,6 +40,8 @@ REQUIRED_PATHS = (
     "assets/bundled/livestack-guide-builder/BUNDLED_SKILL.md",
     "assets/bundled/redwood-creator/BUNDLED_SKILL.md",
     "tests/test_grading_gate.py",
+    "tests/test_self_update.py",
+    "tests/test_release_package.py",
 )
 
 TRANSIENT_DIR_NAMES = {

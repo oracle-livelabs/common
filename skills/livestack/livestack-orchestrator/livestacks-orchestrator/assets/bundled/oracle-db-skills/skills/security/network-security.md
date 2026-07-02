@@ -68,7 +68,7 @@ lsnrctl
 LSNRCTL> change_password
 Old password: <enter blank>
 New password: <enter new password>
-Confirm password: repeat the new password
+Confirm password: <re-enter new password>
 LSNRCTL> save_config
 LSNRCTL> exit
 ```
@@ -109,14 +109,14 @@ orapki wallet create -wallet /opt/oracle/wallet/tls -pwd WalletP@ss!
 
 # Step 2: Generate a certificate signing request (CSR)
 orapki wallet add -wallet /opt/oracle/wallet/tls \
-  -dn "CN=db-server.example.com,OU=Database,O=Example,C=US" \
+  -dn "CN=db-server.corp.example.com,OU=Database,O=Example Corp,C=US" \
   -keysize 2048 \
   -sign_alg sha256 \
   -pwd WalletP@ss!
 
 # Step 3: Export the CSR for signing by your CA
 orapki wallet export -wallet /opt/oracle/wallet/tls \
-  -dn "CN=db-server.example.com,OU=Database,O=Example,C=US" \
+  -dn "CN=db-server.corp.example.com,OU=Database,O=Example Corp,C=US" \
   -request /tmp/db-server.csr \
   -pwd WalletP@ss!
 
@@ -167,7 +167,7 @@ ENCRYPTION_WALLET_LOCATION =
 LISTENER =
   (DESCRIPTION_LIST =
     (DESCRIPTION =
-      (ADDRESS = (PROTOCOL = TCPS)(HOST = db-server.example.com)(PORT = 2484))
+      (ADDRESS = (PROTOCOL = TCPS)(HOST = db-server.corp.example.com)(PORT = 2484))
     )
   )
 
@@ -223,14 +223,14 @@ SQLNET.CRYPTO_CHECKSUM_TYPES_CLIENT = (SHA256)
 
 ORCL_TLS =
   (DESCRIPTION =
-    (ADDRESS = (PROTOCOL = TCPS)(HOST = db-server.example.com)(PORT = 2484))
+    (ADDRESS = (PROTOCOL = TCPS)(HOST = db-server.corp.example.com)(PORT = 2484))
     (CONNECT_DATA =
       (SERVER = DEDICATED)
       (SERVICE_NAME = ORCL)
     )
     (SECURITY =
       (MY_WALLET_DIRECTORY = /opt/oracle/wallet/client)
-      (SSL_SERVER_CERT_DN = "CN=db-server.example.com,OU=Database,O=Example,C=US")
+      (SSL_SERVER_CERT_DN = "CN=db-server.corp.example.com,OU=Database,O=Example Corp,C=US")
       # SSL_SERVER_CERT_DN verifies the server's certificate DN — prevents MITM attacks
     )
   )
@@ -265,7 +265,7 @@ END;
 -- Grant TCP access for UTL_TCP/UTL_SMTP
 BEGIN
   DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
-    host    => 'smtp.example.com',
+    host    => 'smtp.corp.example.com',
     lower_port => 587,
     upper_port => 587,
     ace     => xs$ace_type(
@@ -295,7 +295,7 @@ END;
 -- Wildcard host (use with caution — limits to a subdomain)
 BEGIN
   DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE(
-    host    => '*.example.com',  -- Only approved example.com subdomains
+    host    => '*.corp.example.com',  -- Only corp.example.com subdomains
     lower_port => 443,
     upper_port => 443,
     ace     => xs$ace_type(
@@ -585,7 +585,7 @@ ORCL =
     (ADDRESS = (PROTOCOL = TCPS)(HOST = db-server)(PORT = 2484))
     (CONNECT_DATA = (SERVICE_NAME = ORCL))
     (SECURITY =
-      (SSL_SERVER_CERT_DN = "CN=db-server.example.com,OU=DB,O=Example,C=US")))
+      (SSL_SERVER_CERT_DN = "CN=db-server.corp.com,OU=DB,O=Corp,C=US")))
 ```
 
 ### Mistake 3: Granting Wildcard Host ACL Access

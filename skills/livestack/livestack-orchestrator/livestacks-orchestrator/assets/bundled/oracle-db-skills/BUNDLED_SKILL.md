@@ -2,7 +2,7 @@
 name: oracle-db-skills
 description: Oracle Database reference library covering SQL, PL/SQL, performance, security, ORDS, SQLcl, AI and vector features, containers, frameworks, and agent workflows. Load only the relevant guides on demand.
 version: 1.0.0
-repository: bundled snapshot
+repository: https://github.com/krisrice/oracle-db-skills
 ---
 
 # Oracle DB Skills

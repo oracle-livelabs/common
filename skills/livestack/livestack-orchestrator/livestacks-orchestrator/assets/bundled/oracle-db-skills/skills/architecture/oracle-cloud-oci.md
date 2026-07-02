@@ -36,7 +36,7 @@ ATP is Oracle's fully managed OLTP database service. Oracle manages the infrastr
 -- oci db autonomous-database generate-wallet --autonomous-database-id <ocid> --file wallet.zip --password WalletPass#1
 
 -- sqlplus connection using TNS_ADMIN pointing to wallet directory
--- export TNS_ADMIN=<wallet-directory>
+-- export TNS_ADMIN=/home/oracle/wallet
 -- sqlplus admin/YourPass#1@myatp_tp
 
 -- JDBC connection string for applications

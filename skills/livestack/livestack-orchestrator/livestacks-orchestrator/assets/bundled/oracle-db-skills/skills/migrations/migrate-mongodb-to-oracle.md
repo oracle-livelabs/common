@@ -468,7 +468,7 @@ mongo = MongoClient("mongodb://localhost:27017/")
 db = mongo["myapp"]
 
 # Target (thin mode — no Oracle Client libs required)
-ora = oracledb.connect(user="user", password="<db pwd>", dsn="localhost:1521/ORCL")
+ora = oracledb.connect(user="user", password="pass", dsn="localhost:1521/ORCL")
 ora_cur = ora.cursor()
 
 # Stage 1: Load raw documents into staging JSON table

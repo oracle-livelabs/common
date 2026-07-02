@@ -57,7 +57,7 @@ db/
 # liquibase.properties
 url=jdbc:oracle:thin:@//dbhost:1521/ORCLPDB1
 username=APP_OWNER
-password=<db pwd from env>
+password=${DB_PASSWORD}
 driver=oracle.jdbc.OracleDriver
 changeLogFile=db/changelog-root.xml
 logLevel=INFO
@@ -70,7 +70,7 @@ For Oracle Wallets (recommended for CI/CD):
 ```properties
 url=jdbc:oracle:thin:@mydb_high?TNS_ADMIN=/opt/wallet
 username=${DB_USER}
-password=<db pwd from env>
+password=${DB_PASSWORD}
 ```
 
 ### Changeset Anatomy
@@ -277,7 +277,7 @@ db/migration/
 [environments.default]
 url = "jdbc:oracle:thin:@//dbhost:1521/ORCLPDB1"
 user = "${DB_USER}"
-password = "<db pwd from env>"
+password = "${DB_PASSWORD}"
 schemas = ["APP_OWNER"]
 
 [flyway]
@@ -439,7 +439,7 @@ jobs:
           liquibase \
             --url="${{ secrets.DB_DEV_URL }}" \
             --username="${{ secrets.DB_USER }}" \
-            --password='<db pwd from secret store>' \
+            --password="${{ secrets.DB_PASSWORD }}" \
             validate
 
   deploy-dev:
@@ -454,7 +454,7 @@ jobs:
           liquibase \
             --url="${{ secrets.DB_DEV_URL }}" \
             --username="${{ secrets.DB_USER }}" \
-            --password='<db pwd from secret store>' \
+            --password="${{ secrets.DB_PASSWORD }}" \
             updateSQL > migration-dev.sql
 
       - uses: actions/upload-artifact@v4
@@ -467,7 +467,7 @@ jobs:
           liquibase \
             --url="${{ secrets.DB_DEV_URL }}" \
             --username="${{ secrets.DB_USER }}" \
-            --password='<db pwd from secret store>' \
+            --password="${{ secrets.DB_PASSWORD }}" \
             update
 
   deploy-prod:
@@ -482,7 +482,7 @@ jobs:
           liquibase \
             --url="${{ secrets.DB_PROD_URL }}" \
             --username="${{ secrets.DB_USER }}" \
-            --password='<db pwd from secret store>' \
+            --password="${{ secrets.DB_PASSWORD }}" \
             update
 ```
 
@@ -674,7 +674,7 @@ Migration tools often require database credentials, which must be protected in C
   <databaseChangeLog
       xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
       username="hardcoded_user"
-      password="<db pwd>">
+      password="hardcoded_password">
   ```
 
 - **Use environment variables or secret management systems:**
@@ -683,7 +683,7 @@ Migration tools often require database credentials, which must be protected in C
   liquibase \
     --url="${{ secrets.DB_PROD_URL }}" \
     --username="${{ secrets.DB_USER }}" \
-    --password='<db pwd from secret store>' \
+    --password="${{ secrets.DB_PASSWORD }}" \
     update
   ```
 
@@ -692,7 +692,7 @@ Migration tools often require database credentials, which must be protected in C
   [environments.default]
   url = "${DB_PROD_URL}"
   user = "${DB_USER}"
-  password = "<db pwd from env>"
+  password = "${DB_PASSWORD}"
   ```
 
 - **Integrate with enterprise secret stores:**
@@ -785,7 +785,7 @@ Migration-generated SQL files can contain sensitive information:
       liquibase \
         --url="${{ secrets.DB_PROD_URL }}" \
         --username="${{ secrets.DB_USER }}" \
-        --password='<db pwd from secret store>' \
+        --password="${{ secrets.DB_PASSWORD }}" \
         updateSQL > migration-prod.sql
   - name: Upload encrypted artifact
     run: |

@@ -651,7 +651,7 @@ jobs:
         run: |
           liquibase \
             --url="jdbc:oracle:thin:@//localhost:1521/FREEPDB1" \
-            --username=sys --password='<db pwd>' \
+            --username=sys --password=testpassword \
             --defaultSchemaName=APP_OWNER \
             update
 

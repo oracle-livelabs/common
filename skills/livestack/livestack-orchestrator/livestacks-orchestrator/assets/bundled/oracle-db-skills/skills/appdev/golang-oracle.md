@@ -38,7 +38,7 @@ import (
 
 func main() {
     // Easy Connect DSN
-    dsn := `user="hr" password="<db pwd>" connectString="localhost:1521/freepdb1"`
+    dsn := `user="hr" password="password" connectString="localhost:1521/freepdb1"`
 
     db, err := sql.Open("godror", dsn)
     if err != nil {
@@ -63,13 +63,13 @@ func main() {
 ### TNS Alias
 
 ```go
-dsn := `user="hr" password="<db pwd>" connectString="mydb_high" libDir="/opt/oracle/instantclient_21_9"`
+dsn := `user="hr" password="password" connectString="mydb_high" libDir="/opt/oracle/instantclient_21_9"`
 ```
 
 ### Wallet / mTLS (Autonomous Database)
 
 ```go
-dsn := `user="admin" password="<db pwd>" connectString="myatp_high" ` +
+dsn := `user="admin" password="password" connectString="myatp_high" ` +
     `walletLocation="/path/to/wallet" ` +
     `libDir="/opt/oracle/instantclient_21_9"`
 ```

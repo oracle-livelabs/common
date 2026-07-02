@@ -26,7 +26,8 @@ Those are related, but they are not the same thing.
 | Area | Status | Required | Optional | Notes |
 | --- | --- | --- | --- | --- |
 | Skill package install | Supported | Codex skill runtime, local filesystem access, `python3` | none | Install under `$CODEX_HOME/skills/livestacks-orchestrator` or `~/.codex/skills/livestacks-orchestrator`. |
-| Skill self-update | Supported, fail-soft | `python3`, network access to the public GitHub manifest and zip archive | none | Run `python3 scripts/self_update.py --auto --json`; if the manifest, archive, or validation is unavailable, the current local skill remains in place. |
+| Skill release packaging | Maintainer-supported | `python3`, tracked expanded source | none | `scripts/build_release.py` creates and verifies the deterministic ZIP plus public update manifest, and publishes the two artifacts as a recoverable pair. |
+| Skill self-update | Supported, fail-soft | `python3`, network access to the public GitHub manifest and zip archive | none | Run `python3 scripts/self_update.py --auto --json`; checksum, version, validation, or preparation failures leave the current skill in place, activation failures restore it, and post-success cleanup warnings include any retained recovery path. |
 | Skill package use without companion skills | Supported | same as above | none | The orchestrator can install bundled `oracle-db-skills`, `livestack-guide-builder`, and `redwood-creator` when they are missing. |
 | LiveStacks bundle authoring | Supported | `python3`, `podman`, `podman compose` | `bash`-compatible shell, PowerShell for Windows wrapper review | Authoring means generating and validating a real `stack/`, `database/`, and `guide/` bundle. |
 | Compose contract validation | Supported | `podman compose` | none | Production-ready bundles are expected to pass `podman compose config`. |
@@ -81,7 +82,8 @@ Helper installers:
 - `scripts/ensure_livestack_guide_builder.py`
 - `scripts/ensure_redwood_creator.py`
 - `scripts/check_skill_package.py` validates package metadata, required paths, Python script syntax, and cache or macOS metadata hygiene before sharing or bundling.
-- `scripts/self_update.py` checks the public GitHub zip manifest, downloads the zip only when the manifest `content_hash` differs from the installed skill, validates the extracted copy, and installs it automatically when content differs.
+- `scripts/build_release.py` deterministically rebuilds or verifies the checked-in ZIP and its public update manifest from the expanded source tree, using canonical archive modes and pair-level rollback during publication.
+- `scripts/self_update.py` checks the public GitHub zip manifest, downloads only when the manifest `content_hash` differs, verifies the archive checksum and `VERSION`, validates and prepares the extracted copy, and transactionally activates it with an ephemeral rollback copy.
 
 ## Generated Bundle Expectations
 
@@ -154,12 +156,13 @@ For a generated solution bundle, the expected verification path is:
 
 1. `python3 scripts/find_scaffold_markers.py <solution-root>`
 2. `podman compose config` from `<solution-root>/stack`
-3. `python3 scripts/validate_livestack_bundle.py <solution-root>`
-4. `python3 scripts/grade_livestack_bundle.py <solution-root>`
+3. `python3 scripts/validate_livestack_bundle.py <solution-root>` (defensively rechecks scaffold markers)
+4. `python3 scripts/grade_livestack_bundle.py <solution-root>` (inherits all validator findings)
 5. local LiveLabs markdown validation for `<solution-root>/guide`
 
 For the skill package itself, run:
 
 1. `python3 scripts/check_skill_package.py`
 2. `python3 -m unittest discover -s tests -p 'test_*.py'`
-3. `python3 scripts/self_update.py --check-only --json`
+3. `python3 scripts/build_release.py --archive ../livestacks-orchestrator.zip --manifest ../livestacks-orchestrator.update.json --check`
+4. `python3 scripts/self_update.py --check-only --json`

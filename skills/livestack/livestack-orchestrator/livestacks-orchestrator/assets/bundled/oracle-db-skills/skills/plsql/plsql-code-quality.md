@@ -341,7 +341,7 @@ sonar.sources=src/plsql
 sonar.language=plsql
 sonar.plsql.jdbc.url=jdbc:oracle:thin:@host:1521/service
 sonar.plsql.jdbc.username=sonar_user
-sonar.plsql.jdbc.password=<db pwd>
+sonar.plsql.jdbc.password=sonar_password
 ```
 
 ### SQL Developer Code Analysis

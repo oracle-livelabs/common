@@ -3,7 +3,7 @@ set -euo pipefail
 
 if [[ $# -lt 2 || $# -gt 3 ]]; then
   echo "Usage: $0 <owner> <repo> [ruleset-json]" >&2
-  echo "Example: $0 <owner> <repo> .github/rulesets/main.json" >&2
+  echo "Example: $0 krisrice oracle-db-skills .github/rulesets/main.json" >&2
   exit 1
 fi
 
