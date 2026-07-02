@@ -1132,7 +1132,7 @@ class Validator:
         for path in self.iter_solution_text_files():
             if findings >= 5:
                 break
-            relative_path = str(path.relative_to(self.root))
+            relative_path = path.relative_to(self.root).as_posix()
             text = path.read_text(encoding="utf-8", errors="ignore")
             lower = text.lower()
             for term in WRONG_LINEAGE_TERMS:
@@ -1451,7 +1451,7 @@ class Validator:
         auth_guard_found = False
         direct_db_runtime_paths: list[str] = []
         for path in self.iter_runtime_text_files():
-            relative_path = str(path.relative_to(self.root))
+            relative_path = path.relative_to(self.root).as_posix()
             text = path.read_text(encoding="utf-8", errors="ignore")
             lower = text.lower()
             lower_path = relative_path.lower()
@@ -1776,7 +1776,7 @@ class Validator:
         for path in doc_paths:
             if not path.exists():
                 continue
-            relative_path = str(path.relative_to(self.root))
+            relative_path = path.relative_to(self.root).as_posix()
             text = path.read_text(encoding="utf-8", errors="ignore")
             lower = text.lower()
             if any(phrase in lower for phrase in MOCK_RUNTIME_DOC_PHRASES):
@@ -1989,7 +1989,7 @@ class Validator:
             if not path.exists():
                 continue
             text = path.read_text(encoding="utf-8", errors="ignore")
-            relative_path = str(path.relative_to(self.root))
+            relative_path = path.relative_to(self.root).as_posix()
             if "## Credits & Build Notes" not in text:
                 self.add(relative_path, "guide lab is missing `## Credits & Build Notes`")
             if not self.has_valid_copy_markers(text):

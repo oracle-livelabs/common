@@ -177,7 +177,8 @@ class ReleasePackageTests(unittest.TestCase):
                     if source.is_file():
                         target = extracted / archive_name
                         self.assertEqual(target.read_bytes(), source.read_bytes())
-                        self.assertEqual(stat.S_IMODE(target.stat().st_mode), expected_mode)
+                        if os.name != "nt":
+                            self.assertEqual(stat.S_IMODE(target.stat().st_mode), expected_mode)
 
     def test_irrelevant_filesystem_modes_do_not_change_archive_bytes(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

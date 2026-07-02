@@ -1,0 +1,12 @@
+{
+  "archive_sha256": "40adcac5701ebcf97aa4f32b463fd1e4bb5276d84ea6aa00b3d05e6641ce0803",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/livestack/livestack-orchestrator/ready-to-deploy-archive/livestacks-orchestrator.zip",
+  "content_hash": "d85fdb7aa88289ca6ff8877d12d8748575e3d3bbbfdc20e59c71f59d2d5ee7e8",
+  "min_updater_version": "2",
+  "name": "livestacks-orchestrator",
+  "published_at": "2026-07-01T14:35:54Z",
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version": "0.1.0-preview.21"
+}

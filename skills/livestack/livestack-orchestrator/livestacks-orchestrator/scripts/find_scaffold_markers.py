@@ -696,7 +696,7 @@ def scan(root: Path) -> list[tuple[str, int, str]]:
             )
     for file_path in iter_scannable_text_files(root):
         text = file_path.read_text(encoding="utf-8", errors="ignore")
-        relative_path = str(file_path.relative_to(root))
+        relative_path = file_path.relative_to(root).as_posix()
         for heading in REQUIRED_HEADINGS.get(relative_path, []):
             if heading not in text:
                 findings.append((str(file_path), 1, f"missing required heading `{heading}`"))
