@@ -70,6 +70,64 @@
     ["secure desktop", "secure desktops", "restricted laptop", "restricted corporate laptop", "novnc", "chrome", "popups"],
     ["ai", "ai developer hub", "agentic", "automation first", "skill bundle", "how to guide"]
   ];
+  var allowedToolkitSorts = {
+    alphabetical: true,
+    relevance: true,
+    latest: true
+  };
+  var tagFacetOrder = [
+    "wms",
+    "github",
+    "markdown",
+    "validation",
+    "publishing",
+    "media",
+    "interactive",
+    "freesql",
+    "marketplace",
+    "livestack",
+    "assets",
+    "secure-desktop",
+    "support",
+    "tools",
+    "sprints",
+    "ai"
+  ];
+  var recommendedCheatsheetOrder = [
+    "wms-request",
+    "github-setup",
+    "sync-preview",
+    "markdown-structure",
+    "links-paths",
+    "image-references",
+    "copy-sql",
+    "Quality Assurance-checklist",
+    "pull request-checks",
+    "publish-request",
+    "review-sla",
+    "screenshots",
+    "optishot",
+    "fixomat",
+    "reuse-variables",
+    "quiz-blocks",
+    "freesql-embed",
+    "freesql-button-integration",
+    "freesql-tutorial-publishing",
+    "livelabs-sprints",
+    "graphical-remote-desktop",
+    "secure-desktop-when",
+    "secure-desktop-request",
+    "custom-image-capture",
+    "marketplace-image-publish",
+    "wms-custom-image-update",
+    "livestack-create",
+    "wms-assets",
+    "ai-developer-hub"
+  ];
+  var recommendedCheatsheetOrderMap = recommendedCheatsheetOrder.reduce(function (map, id, index) {
+    map[id] = index;
+    return map;
+  }, {});
 
   function fullGuideLabHref(labId, extraParams) {
     var target;
@@ -656,16 +714,22 @@
     var labelMap = {
       ai: "AI",
       assets: "Assets",
-      beginner: "Beginner",
-      advanced: "Advanced",
-      interactivity: "Interactivity",
+      freesql: "FreeSQL",
+      github: "GitHub",
+      interactive: "Interactive",
       livestack: "LiveStack",
       markdown: "Markdown",
       marketplace: "Marketplace",
       media: "Media",
+      publishing: "Publishing",
       qa: "Quality Assurance",
       "quality-assurance": "Quality Assurance",
-      workflow: "Workflow"
+      "secure-desktop": "Secure Desktop",
+      sprints: "Sprints",
+      support: "Support",
+      tools: "Tools",
+      validation: "Validation",
+      wms: "WMS"
     };
 
     if (labelMap[normalized]) {
@@ -694,6 +758,16 @@
 
   function normalizeTagValue(tag) {
     return normalizeText(tag).replace(/\s+/g, "-");
+  }
+
+  function normalizeToolkitSort(sort) {
+    var normalized = normalizeTagValue(sort || "");
+    return allowedToolkitSorts[normalized] ? normalized : "alphabetical";
+  }
+
+  function tagFacetWeight(tag) {
+    var index = tagFacetOrder.indexOf(tag);
+    return index === -1 ? tagFacetOrder.length : index;
   }
 
   function getItemTags(item) {
@@ -1176,6 +1250,9 @@
     });
 
     return Object.keys(counts).sort(function (left, right) {
+      if (tagFacetWeight(left) !== tagFacetWeight(right)) {
+        return tagFacetWeight(left) - tagFacetWeight(right);
+      }
       return titleCaseTag(left).localeCompare(titleCaseTag(right), undefined, { sensitivity: "base" });
     }).map(function (tag) {
       return {
@@ -1252,15 +1329,34 @@
     });
   }
 
+  function recommendedIndexForEntry(entry) {
+    var id = entry && entry.item ? entry.item.id : "";
+    return Object.prototype.hasOwnProperty.call(recommendedCheatsheetOrderMap, id)
+      ? recommendedCheatsheetOrderMap[id]
+      : Number.MAX_SAFE_INTEGER;
+  }
+
+  function compareExplorerRelevance(left, right) {
+    if (recommendedIndexForEntry(left) !== recommendedIndexForEntry(right)) {
+      return recommendedIndexForEntry(left) - recommendedIndexForEntry(right);
+    }
+
+    if (left.item.__sourceOrder !== right.item.__sourceOrder) {
+      return left.item.__sourceOrder - right.item.__sourceOrder;
+    }
+
+    return compareExplorerTitle(left, right);
+  }
+
   function sortExplorerEntries(entries, query) {
-    var mode = state.toolkitSort || "alphabetical";
+    var mode = normalizeToolkitSort(state.toolkitSort);
 
     return entries.slice().sort(function (left, right) {
       if (mode === "relevance") {
         if (right.score !== left.score) {
           return right.score - left.score;
         }
-        return compareExplorerTitle(left, right);
+        return compareExplorerRelevance(left, right);
       }
 
       if (mode === "latest") {
@@ -1268,10 +1364,6 @@
           return right.updatedTime - left.updatedTime;
         }
         return compareExplorerTitle(left, right);
-      }
-
-      if (mode === "workflow") {
-        return left.item.__sourceOrder - right.item.__sourceOrder;
       }
 
       return compareExplorerTitle(left, right);
@@ -1298,11 +1390,10 @@
     var sortLabels = {
       alphabetical: "Alphabetical",
       latest: "Latest",
-      relevance: "Most relevant",
-      workflow: "Source workflow"
+      relevance: "Most relevant"
     };
 
-    return sortLabels[state.toolkitSort] || sortLabels.alphabetical;
+    return sortLabels[normalizeToolkitSort(state.toolkitSort)] || sortLabels.alphabetical;
   }
 
   function updateExplorerSummary(count) {
@@ -3367,7 +3458,7 @@
     state.fastTrack = route.fastTrack || state.fastTrack;
     state.activeTags = normalizeTagSelection(route.activeTags || route.activeTag || []);
     state.activeTag = state.activeTags[0] || "all";
-    state.toolkitSort = route.toolkitSort || state.toolkitSort || "alphabetical";
+    state.toolkitSort = normalizeToolkitSort(route.toolkitSort || state.toolkitSort);
     state.toolkitQuery = route.toolkitQuery || "";
     state.searchQuery = route.searchQuery || "";
     state.guideSection = route.guideSection || state.guideSection;
@@ -3619,7 +3710,7 @@
 
   if (toolkitSort) {
     toolkitSort.addEventListener("change", function (event) {
-      state.toolkitSort = event.target.value || "alphabetical";
+      state.toolkitSort = normalizeToolkitSort(event.target.value);
       renderExplorer();
       setLiveMessage("Cheatsheet sorted by " + currentSortLabel() + ".");
     });
