@@ -1435,6 +1435,119 @@
         ? `<span class="tag-summary">${cleaned.map((tag) => `<span class="tag-chip">${escapeHtml(tagLabelFor(tag))}</span>`).join("")}</span>`
         : `<span class="field-note">No tags</span>`;
     }
+    function recordDetailValue(record, labels, fallback = "") {
+      const pairs = [
+        ...(Array.isArray(record?.raw?.details) ? record.raw.details : []),
+        ...(Array.isArray(record?.raw?.values) ? record.raw.values : [])
+      ];
+      for (const label of labels) {
+        const item = pairs.find(([key, value]) => key === label && value !== null && value !== undefined && value !== "");
+        if (item) return String(item[1]);
+      }
+      return fallback || "";
+    }
+    function recordNumberValue(record, keys, labels = []) {
+      for (const key of keys) {
+        const value = record?.[key];
+        if (value !== null && value !== undefined && value !== "") {
+          const parsed = Number(String(value).replace(/,/g, "").match(/-?\d+(?:\.\d+)?/)?.[0]);
+          if (Number.isFinite(parsed)) return parsed;
+        }
+      }
+      const detailValue = recordDetailValue(record, labels);
+      const parsed = Number(String(detailValue).replace(/,/g, "").match(/-?\d+(?:\.\d+)?/)?.[0]);
+      return Number.isFinite(parsed) ? parsed : null;
+    }
+    function monthsSinceRecordUpdate(record) {
+      const updateValue = recordDetailValue(record, ["Last Meaningful Update", "Latest Workshop Commit Date", "Latest Markdown Commit Date", "Latest Live Repo Commit Date"], record?.lastUpdate || "");
+      const explicitMonths = String(updateValue || "").match(/\((\d+)\s+months?\)/i);
+      if (explicitMonths) return Number(explicitMonths[1]);
+      const dateMatch = String(updateValue || "").match(/\d{4}-\d{2}-\d{2}/);
+      if (!dateMatch) return null;
+      const parsed = Date.parse(dateMatch[0]);
+      if (!Number.isFinite(parsed)) return null;
+      const monthMs = 1000 * 60 * 60 * 24 * 30.4375;
+      return Math.max(0, Math.floor((Date.now() - parsed) / monthMs));
+    }
+    function recordPublishStatus(record) {
+      return record?.publishStatus || recordDetailValue(record, ["Publish Status"], "");
+    }
+    function recordPublishType(record) {
+      return record?.publishType || recordDetailValue(record, ["Publish Type"], "");
+    }
+    function recordLifecycleState(record) {
+      return record?.lifecycleState || recordDetailValue(record, ["Lifecycle State"], "");
+    }
+    function recordContactCoverage(record) {
+      const coverage = record?.contactCoverage || {};
+      if (coverage.rank) return coverage;
+      const tier = normalizeText(recordDetailValue(record, ["Contact Coverage Tier"], ""));
+      const noAuthor = normalizeText(recordDetailValue(record, ["No Author"], "")).includes("no author");
+      if (tier.includes("owner stakeholder")) return { rank: "owner" };
+      if (tier.includes("missing") || noAuthor) return { rank: "missing" };
+      if (tier || record?.manager) return { rank: "covered" };
+      return { rank: "missing" };
+    }
+    function recordIsActiveGoverned(record) {
+      const publishStatus = normalizeText(recordPublishStatus(record));
+      const publishType = normalizeText(recordPublishType(record));
+      const contentKind = normalizeText(record?.contentKind || recordDetailValue(record, ["Content Type"], ""));
+      return publishStatus === "published" && (publishType === "public" || publishType === "private") && (contentKind === "workshop" || contentKind === "sprint");
+    }
+    function recordHasMissingData(record) {
+      const coverage = recordContactCoverage(record);
+      return Boolean(record?.raw?.titleMissing || record?.raw?.wmsIdMissing || record?.raw?.categoryMissing || record?.raw?.ownerMissing)
+        || !String(record?.title || "").trim()
+        || !String(record?.wmsId || "").trim()
+        || !String(record?.category || "").trim()
+        || coverage.rank === "missing";
+    }
+    function recordHasNoAuthor(record) {
+      const coverage = recordContactCoverage(record);
+      const noAuthor = normalizeText(recordDetailValue(record, ["No Author"], ""));
+      return coverage.rank === "owner" || coverage.rank === "missing" || noAuthor.includes("no author");
+    }
+    function recordIsStaleHighDemand(record) {
+      if (!recordIsActiveGoverned(record)) return false;
+      const months = monthsSinceRecordUpdate(record);
+      if (months === null || months <= 12) return false;
+      const lifecycle = normalizeText(recordLifecycleState(record));
+      const views12m = recordNumberValue(record, ["views12m"], ["Views 12m", "Recent Views 12m", "Page Views 12m"]);
+      const views90d = recordNumberValue(record, ["views90d"], ["Views 90d", "Recent Views 90d", "Page Views 90d"]);
+      return lifecycle === "refresh" || (views12m !== null && views12m >= 1000) || (views90d !== null && views90d >= 100);
+    }
+    function baselineTagsForRecord(record) {
+      const tags = [];
+      const active = recordIsActiveGoverned(record);
+      const lifecycle = normalizeText(recordLifecycleState(record));
+      const publishStatus = normalizeText(recordPublishStatus(record));
+      const publishType = normalizeText(recordPublishType(record));
+      const workflowStatus = normalizeText(record?.status || recordDetailValue(record, ["Workshop Status"], ""));
+      const coverage = recordContactCoverage(record);
+      const missingData = recordHasMissingData(record);
+      if (recordHasNoAuthor(record)) tags.push("no-author");
+      if (coverage.rank === "owner" || missingData || ["publish requested", "publish approved", "changes requested"].includes(publishStatus) || ["more info needed", "in development"].includes(workflowStatus)) tags.push("manager-review");
+      if (recordIsStaleHighDemand(record)) tags.push("stale-high-demand");
+      if ((active && lifecycle.includes("at risk")) || publishStatus === "delete requested") {
+        tags.push("retirement-review");
+      } else if (active && lifecycle === "refresh" && !tags.includes("stale-high-demand")) {
+        tags.push("refresh");
+      } else if (active && lifecycle === "keep") {
+        tags.push("keep");
+      }
+      if (!active && (publishType || publishStatus)) tags.push("inactive");
+      if (missingData) tags.push("missing");
+      if (active && !tags.some((tag) => ["stale-high-demand", "retirement-review", "refresh", "keep", "inactive", "missing"].includes(tag))) tags.push("keep");
+      if (!tags.length) tags.push("missing");
+      return sanitizeAssignedTags(tags, tagDefinitionsForState(state));
+    }
+    function baselineStatusForRecord(record) {
+      const tags = baselineTagsForRecord(record);
+      if (tags.includes("retirement-review")) return "retire_candidate";
+      if (tags.includes("stale-high-demand") || tags.includes("refresh")) return "refresh_candidate";
+      if (tags.includes("keep")) return "keep_active";
+      return "manager_review";
+    }
     function sanitizeOverride(override, tagDefinitions = defaultTagDefinitions) {
       const legacyQaStatus = override?.status === "qa_excluded";
       const statusValues = ["pending", "approved", "archived", "manager_review", "keep_active", "retire_candidate", "refresh_candidate"];
@@ -1780,15 +1893,20 @@
       if (!title) return null;
       const record = {
         category: pickRecordValue(row, ["category", "council"]),
+        contactCoverage: null,
         contentKind: pickRecordValue(row, ["content_kind", "content_type", "type"]),
         lastUpdate: pickRecordValue(row, ["last_meaningful_workshop_update_date", "latest_workshop_commit_date", "latest_markdown_commit_date", "latest_live_repo_commit_date"]),
         livelabsId: String(pickRecordValue(row, ["livelabs_id", "current_livelabs_id", "candidate_livelabs_id"]) || "").trim(),
+        lifecycleState: pickRecordValue(row, ["lifecycle_state"]),
         manager: pickRecordValue(row, ["manager_email", "owner_group", "stakeholder", "author_email"]),
         monthsSinceUpdate: pickRecordValue(row, ["months_since_update", "months_since_last_update"]),
         path: pickRecordValue(row, ["workshop_path", "manifest_path", "acknowledgement_source_file"]),
         publishDate: pickRecordValue(row, ["publish_date_used", "first_workshop_file_commit_date"]),
+        publishStatus: pickRecordValue(row, ["publish_status"]),
+        publishType: pickRecordValue(row, ["publish_type"]),
         raw: row,
         score: pickRecordValue(row, ["best_performer_score", "retire_score", "score", "replacement_similarity_score"]),
+        sourceFlags: {},
         sourcePath,
         title,
         views12m: pickRecordValue(row, ["recent_views_12m", "views_12m", "page_views_12m"]),
@@ -1805,6 +1923,46 @@
         sourcePath: record.sourcePath,
         wmsId: record.wmsId
       }).join(" "));
+      return record;
+    }
+    function recordFromPortfolioInventory(raw, index) {
+      const title = String(raw?.title || raw?.rawTitle || (raw?.livelabsId ? `Missing title - LiveLabs ${raw.livelabsId}` : "")).trim();
+      if (!title) return null;
+      const record = {
+        category: raw?.category || recordDetailValue({ raw }, ["Category", "Council"], ""),
+        contactCoverage: raw?.contactCoverage || null,
+        contentKind: raw?.type || recordDetailValue({ raw }, ["Content Type"], ""),
+        lastUpdate: raw?.update || recordDetailValue({ raw }, ["Last Meaningful Update", "Latest Workshop Commit Date", "Latest Markdown Commit Date", "Latest Live Repo Commit Date"], ""),
+        livelabsId: String(raw?.livelabsId || recordDetailValue({ raw }, ["LiveLabs ID"], "")).trim(),
+        lifecycleState: raw?.lifecycleState || recordDetailValue({ raw }, ["Lifecycle State"], ""),
+        manager: raw?.owner || recordDetailValue({ raw }, ["Owner", "Owner Email", "Owner Group", "Manager Email", "Workshop Team"], ""),
+        monthsSinceUpdate: monthsSinceRecordUpdate({ raw, lastUpdate: raw?.update || "" }) ?? "",
+        path: recordDetailValue({ raw }, ["Workshop Path", "Manifest Path", "Tenancy URL", "Sandbox URL", "Sprint URL"], ""),
+        publishDate: recordDetailValue({ raw }, ["Publish Date Used", "Publish Date"], ""),
+        publishStatus: raw?.publishStatus || recordDetailValue({ raw }, ["Publish Status"], ""),
+        publishType: raw?.publishType || recordDetailValue({ raw }, ["Publish Type"], ""),
+        raw,
+        score: recordDetailValue({ raw }, ["Best Performer Score", "Retire Score", "Score"], ""),
+        sourceFlags: raw?.sourceFlags || {},
+        sourcePath: `portfolio inventory row ${index + 1}`,
+        title,
+        views12m: recordDetailValue({ raw }, ["Views 12m", "Recent Views 12m", "Page Views 12m"], ""),
+        views90d: recordDetailValue({ raw }, ["Views 90d", "Recent Views 90d", "Page Views 90d"], ""),
+        wmsId: String(raw?.wmsId || recordDetailValue({ raw }, ["WMS ID"], "")).trim()
+      };
+      record.searchText = normalizeText([
+        record.title,
+        record.category,
+        record.contentKind,
+        record.livelabsId,
+        record.manager,
+        record.path,
+        record.publishStatus,
+        record.publishType,
+        record.sourcePath,
+        record.wmsId,
+        baselineTagsForRecord(record).map(tagLabelFor).join(" ")
+      ].join(" "));
       return record;
     }
     function collectDashboardRecords(value, pathParts = [], output = []) {
@@ -1824,6 +1982,21 @@
     }
     async function loadDashboardRecords() {
       const status = document.querySelector("#row-search-status");
+      let inventoryError = null;
+      try {
+        const response = await fetch("../data/portfolio_inventory.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const payload = await response.json();
+        dashboardRecords = Array.isArray(payload?.records)
+          ? payload.records.map(recordFromPortfolioInventory).filter(Boolean).sort((a, b) => a.title.localeCompare(b.title))
+          : [];
+        if (dashboardRecords.length) {
+          if (status) status.textContent = `${dashboardRecords.length.toLocaleString()} portfolio inventory rows loaded.`;
+          return;
+        }
+      } catch (error) {
+        inventoryError = error;
+      }
       try {
         const response = await fetch("../dashboard_tables.json", { cache: "no-store" });
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -1838,7 +2011,7 @@
         if (status) status.textContent = `${dashboardRecords.length.toLocaleString()} unique dashboard rows loaded.`;
       } catch (error) {
         dashboardRecords = [];
-        if (status) status.textContent = `Dashboard rows could not be loaded: ${error.message}`;
+        if (status) status.textContent = `Inventory rows could not be loaded: ${(inventoryError || error).message}`;
       }
     }
     function recordMetaText(record) {
@@ -1922,7 +2095,8 @@
     function renderSelectedTagEditor(existingOverride = selectedRecordOverride()) {
       const mount = document.querySelector("#selected-row-tag-editor");
       if (!mount || !selectedRecord) return;
-      const selectedTags = new Set(sanitizeAssignedTags(existingOverride?.tags, tagDefinitionsForState(state)));
+      const overrideTags = sanitizeAssignedTags(existingOverride?.tags, tagDefinitionsForState(state));
+      const selectedTags = new Set(overrideTags.length ? overrideTags : baselineTagsForRecord(selectedRecord));
       mount.innerHTML = tagDefinitionsForState(state).map((tag) => `
         <label class="control check-row">
           <input type="checkbox" data-row-tag="${escapeAttr(tag.key)}" ${selectedTags.has(tag.key) ? "checked" : ""}>
@@ -1950,7 +2124,7 @@
       if (!selectedRecord) return;
       const target = selectedRecord.livelabsId ? "livelabs_id" : selectedRecord.wmsId ? "wms_id" : "title";
       document.querySelector("#edit-override-target").value = target;
-      document.querySelector("#edit-override-status").value = "manager_review";
+      document.querySelector("#edit-override-status").value = baselineStatusForRecord(selectedRecord);
       document.querySelector("#edit-override-note").value = "";
       document.querySelector("#row-search-results").innerHTML = "";
       document.querySelector("#row-search-query").value = "";
