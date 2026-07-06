@@ -260,12 +260,12 @@ In the **Basic Information** tab, fill out the appropriate fields for the publis
 1. For **LiveLab Type**, select **Workshop**.
 2. For **Publish Status**, select the appropriate status for the publishing request.
 3. For **Publish Type**, choose the option that matches how the workshop should be available.
-  - **Public:**	Available to the public through search and links.
-  - **Event:**	Available only through events in LiveLabs.
-  - **Private:**	Available only through links.
-  - **Disabled:**	Unavailable to anyone except platform administrators.
+    - **Public:**	Available to the public through search and links.
+    - **Event:**	Available only through events in LiveLabs.
+    - **Private:**	Available only through links.
+    - **Disabled:**	Unavailable to anyone except platform administrators.
 
-**Note:** Fill out any additional required fields in the publishing entry before saving.
+    **Note:** Fill out any additional required fields in the publishing entry before saving.
 
 ### **Complete the Sandbox Environment Tab**
 
@@ -305,18 +305,18 @@ Perform the following set of steps to request a **Sandbox Lite Environment**:
 1. Within the **Sandbox Environment** tab, select the **Run on LiveLabs Sandbox** button
 2. Click **OK** in the context menu which provides more information about LiveLabs Sandboxes.
 
-  ![Regular Green Button](./images/livelabs-sandbox-more-info.png " ")
+    ![Regular Green Button](./images/livelabs-sandbox-more-info.png " ")
 
 3. Click on **Open JIRA Ticket** to create a ticket requesting a Sandbox Environment.
 
-  ![Regular Green Button](./images/open-jira-ticket-button.png " ")
+    ![Regular Green Button](./images/open-jira-ticket-button.png " ")
 
 2. In Jira, fill out the Summary using this format:*[Sandbox] WMS ID: (insert WMS ID) LL ID: (insert LiveLabs ID) (insert Title).*
 
 <details>
 <summary><strong> Click here to reveal JIRA ticket form</strong></summary>
 
-> ![Regular Green Button](./images/green-button-jira-ticket.png " ")
+    > ![Regular Green Button](./images/green-button-jira-ticket.png " ")
 
 </details>
 
