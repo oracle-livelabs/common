@@ -127,105 +127,114 @@ To create a Pull Request:
 
 5. When your workshop is in **Completed** status, and we have approved your publishing request, your workshop will be published automatically within 1 business day.
 
-## (Optional) Task 3: Request the Green Button
+## Task 3: Request the Green Button / Sandbox Environment
 
-This walks you through requesting a Green Button for your workshop to run in LiveLabs Sandbox:
-[Video walking Green Button - LiveLabs Sandbox Request](https://otube.oracle.com/media/LiveLabsA+Green+Button+Lite/1_85wokrec)
+This task walks you through requesting a LiveLabs Sandbox environment, also known as the green button. After the sandbox is enabled, users can run the workshop in a pre-provisioned LiveLabs environment instead of using their own **OCI Free Tier** tenancy.
 
-After you enable the green button for your workshop, users can run the workshop in pre-provisioned environments (a.k.a. sandbox), so they don't need to register OCI Free Tier accounts. Users must complete the workshop in a specified limited amount of time (they can extend their reservations up to 4 times). Any resources created by the user during their reservation time will be destroyed after the reservation expires.
+The green button is a good choice when you want users to try features unavailable in OCI Free Tier, avoid long setup steps, or start directly with the product and service tasks. Not all OCI services are available in a sandbox environment, so each request is reviewed by the LiveLabs team.
 
-The green button is a great choice if you want users to try features unavailable in OCI Free Tier for free or if the workshop setup is long and time-consuming and you want customers to skip the setup and dive directly into products and services. Note that not all services are available or can be provisioned in the green button environment.
+**Notes:**
 
-You can add the green button to your workshop even after it is in production.
+- You can request or update a LiveLabs Sandbox even after the workshop is **already in production**. If you are updating an existing sandbox, follow the same steps and explain what needs to change at the beginning of the Jira description.
+- Refer to [Video walking Green Button - LiveLabs Sandbox Request](https://otube.oracle.com/media/LiveLabsA+Green+Button+Lite/1_85wokrec) to develop your workshop.
 
-1. Create a green button version of your workshop since the setup, instructions, and screenshots will differ for green button users. Refer to [Video walking Green Button - LiveLabs Sandbox Request](https://otube.oracle.com/media/LiveLabsA+Green+Button+Lite/1_85wokrec) to develop your workshop. Update the *workshops/sandbox/index.html* (or *workshops/livelabs/index.html*) and the *workshops/sandbox/manifest.json* (or *workshops/livelabs/manifest.json*) and all necessary lab files before the green button is live in production.
+### **Before You Start**
+1. Create a sandbox version of the workshop if the setup, instructions, or screenshots differ for sandbox users.
+2. Update workshops/sandbox/index.html and workshops/sandbox/manifest.json, plus any lab files that need sandbox-specific instructions.
+3. Have your WMS ID, LiveLabs ID, workshop title, repository name, and sandbox URL ready.
 
-2. Go to WMS and find your workshop to request the green button. Click the **Publishing** tab, then click **Edit** for the LiveLabs publishing entry you wish to request green button (if available) or click **+ Publish to LiveLabs** (if you do not have a LiveLabs publishing entry already).
+### **Open the Publishing Entry**
 
-    ![Edit LiveLabs publishing entry](images/publishing-edit.png " ")
-    ![Request Publishing](images/publishing-tab.png " ")
+  ![Edit Publishing](./images/edit-publishing.png " ")
 
-3. Scroll down to the **Request a Green Button section** and populate your workshop's GitHub LiveLabs/Sandbox URL.
+4. Go to **WMS** and find your workshop.
+5. Click the **Publishing** tab.
+6. Click **Edit** for the LiveLabs publishing entry you want to use for the sandbox request, or click **+ Publish** to LiveLabs if you do not have a LiveLabs publishing entry yet.
 
-    ![Request green button setup](./images/request-a-green-button.png " " )
+### **Complete the Basic Information Tab**
 
-4. We offer two options to create a Green Button in LiveLabs.
+In the **Basic Information** tab, fill out the appropriate fields for the publishing entry.
 
-    - Green Button Lite: A Green Button Lite is a quick and easy way to set up a green button for your workshop. This option *DOES NOT* create any resources for the user but allows them to create them in an isolated environment in one of our LiveLabs tenancies. A Green Button Lite is created automatically and will be ready within 1 business day.
+  ![Edit Basic Information](./images/edit-basic-information.png " ")
 
-    The following resources are offered in a Green Button Lite:
-    - ATP
-    - AJD
-    - ADW
-    - Standard Flex E4 Compute Instance
-    - VCN
-    - Cloud Shell
+1. For **LiveLab Type**, select **Workshop**.
+2. For **Publish Status**, select the appropriate status for the publishing request.
+3. For **Publish Type**, choose the option that matches how the workshop should be available.
+    - **Public:**	Available to the public through search and links.
+    - **Event:**	Available only through events in LiveLabs.
+    - **Private:**	Available only through links.
+    - **Disabled:**	Unavailable to anyone except platform administrators.
 
-   	- Regular Green button: A regular Green Button can provision resources for the user but can take 1-3 weeks to develop, depending on the workshop's complexity.
+    **Note:** Fill out any additional required fields in the publishing entry before saving.
 
-5. To request a **Green Button Lite**,
+### **Complete the Sandbox Environment Tab**
 
-    1. click on  **Green Button Lite** button.
+Switch to the **Sandbox Environment** tab and fill out the required sandbox request information.
+The mandatory field is **Run on LiveLabs Sandbox URL**.
 
-        ![Click Green Button Lite](./images/click-gb-lite.png " ")
+  ![Edit Sandbox Environment](./images/edit-sandbox-environment.png " ")
 
-    2. Then click **OK** on the Green Button Lite popup.
+Use this URL structure:
+https://oracle-livelabs.github.io/[Repository]/[Your-workshop-folder]/workshops/sandbox/
 
-	    ![Click OK in the Green Button Lite popup](./images/gb-lite-ok.png " ")
+**Important:**
+- Replace [Repository] with the GitHub repository name.
+- Replace [Your-workshop-folder] with the path to your workshop folder.
+- Make sure the URL points to the sandbox workshop, not the tenancy workshop.
 
-    3. Fill out the Green Button Lite form with the options below. Specify if you would like the USER of your workshop to be able to spin up one of the noted resources. This *does not create* any resources on the user's behalf. This merely allows the user to create it themselves (except for the VCN option, that option -- if checked -- will automatically provision a VCN for the user).
+### **Choose Sandbox Type**
 
-        ![Fill the Green Button Lite form](./images/fill-gb-lite-form.png " ")
+Besides the LiveLabs Sandbox Environment type, WMS also offers the **Sandbox Lite type**. This is a quick and easy way to set up a Sandbox Environment button for your workshop. This option DOES NOT create any resources for the user but allows them to create them in an isolated environment in one of our LiveLabs tenancies. A Sandbox Lite is created automatically and will be ready within **1 business day**.
 
-    4. After filling out the form, scroll up to the top of the LiveLabs Publishing Information form and click **Save** to save the changes.
+Perform the following set of steps to request a **Sandbox Lite Environment**:
+    ![Sandbox Lite Button](./images/sandbox-lite-2.png " ")
 
-        ![Fill the Green Button Lite form](./images/save-gb-lite.png " ")
+1. Within the **Sandbox Environment** tab, select the **Sandbox Lite** button
+2. Click **OK** in the context menu which provides more information about Sandbox Lite.
+    ![Sandbox Lite Info](./images/sandbox-lite-more-info.png " ")
+3. Fill in the appropriate fields within the **LiveLabs Sandbox Lite Request** section.
 
-	5. The Green Button for your workshop will be created automatically and will be live in production within 1 business day. Email us at livelabs-help-db_us@oracle.com if you have any questions or issues with the green button.
+    ![Sandbox Lite Field](./images/sandbox-lite-3.png " ")
 
-        ![Sandbox](images/sandbox.png " ")
+4. Click **Save**
 
-	3. Test the workshop instructions against the green button setup and update them if necessary.
+### Livelabs Sandbox Environment
 
-If you would like to request a regular green button, proceed with the below steps.
+  ![Sandbox Lite Button](./images/livelabs-sandbox-button.png " ")
 
-6. To request a regular green button or update an existing Green Button,
+1. Within the **Sandbox Environment** tab, select the **Run on LiveLabs Sandbox** button
+2. Click **OK** in the context menu which provides more information about LiveLabs Sandboxes.
 
-	1. Click the **Green Button** button.
+    ![Regular Green Button](./images/livelabs-sandbox-more-info.png " ")
 
-        ![Regular Green Button](./images/request-regular-gb.png " ")
+3. Click on **Open JIRA Ticket** to create a ticket requesting a Sandbox Environment.
 
-	2. Click **OK** on the Green Button popup.
+    ![Regular Green Button](./images/open-jira-ticket-button.png " ")
 
-        ![Click OK Green Button](./images/click-ok-gb.png " ")
+2. In Jira, fill out the Summary using this format:*[Sandbox] WMS ID: (insert WMS ID) LL ID: (insert LiveLabs ID) (insert Title).*
 
-	3. Scroll down the Request a Green Button section to view the Green Button Request instructions. Click the **Open Jira Ticket** button to open a Jira Ticket in the LiveLabs Project. You will be directed to the Jira platform. Click **Log In** if needed to sign into Jira.
+<details>
+<summary><strong> Click here to reveal JIRA ticket form</strong></summary>
 
-        ![Click Open Jira ticket](./images/open-jira-ticket.png " ")
+    > ![Regular Green Button](./images/green-button-jira-ticket.png " ")
 
-	4. In the Jira tab, in the **Create Issue** form, fill out the **Summary** in this format: **[GB] WMS ID: (insert WMS ID) LL ID: (insert LiveLabs ID) (insert Title)** if you are requesting a new green button. If you would like to update an existing Green Button, at the beginning of your description, explain what needs to change about your current green button.
+</details>
 
-	5. Copy all the content in the sections: **Basic Questions, Policies, Image and Marketplace Questions, and Additional Information** from the WMS Green Button Information form and paste it into the **Description** field of the Jira ticket.
+3. Copy and paste everything below the Jira button in WMS into the **Description** field of the Jira ticket.
+4. Complete the Jira questionnaire using the additional information from the Sandbox Environment tab.
+5. Click **Create**.
 
-        ![Copy to Jira ticket ](./images/copy-to-jira-ticket.png " ")
+**Notes:**
+- Do not worry about other Jira fields unless the LiveLabs team has asked you to complete them.
+- The LiveLabs team will reach out through Jira with any other questions.
+- Be sure to fill out other relevant fields in WMS and keep the Jira ticket up to date.
+- After the LiveLabs team creates a demo environment, test the sandbox setup and update the workshop instructions as necessary.
 
-	6. Complete the questionnaire in the Jira ticket to your knowledge. Fill out all relevant details in the description. Ignore other fields in the Jira ticket and click **Create**.
+  ![Republish request process](./images/run-green-button.png " ")
 
-	7. In WMS, scroll up to the top of the LiveLabs Publishing Information form and click **Save** to save the changes.
+- Confirm through WMS messaging, Jira, or livelabs-help-db_us@oracle.com that you tested the sandbox setup and that it can move to production.
+- After confirmation, the LiveLabs team will move the sandbox to production, enable the green button in the WMS publishing entry, and populate the workshop URL. The team will keep you posted once the workshop is published.
 
-        ![Fill the Green Button Lite form](./images/save-gb-lite.png " ")
-
-	>**Note:** LiveLabs cannot handle all OCI resources for green buttons so each request will be evaluated on a case-by-case basis. Also, depending on the green button's complexity, on what services and products the workshop showcases, and if we have any existing similar green buttons, the completion time for a green button can range from 1-3 weeks. The LiveLabs team will reach out through Jira with any further questions. If you have any questions, reach out to *livelabs-help-db_us@oracle.com*.
-
-	8. After creating the green button setup for your workshop, the LiveLabs team will create a demo environment for you to test the green button setup and share the demo environment link with you. Test the green button setup and update the workshop instructions as necessary.
-
-	9. Confirm with the LiveLabs team through the WMS messaging system or by emailing *livelabs-help-db_us@oracle.com* that you have tested the green button setup and share your concerns if needed. If the green button setup is working as expected, let them know that the setup is working as expected, you have updated the workshop instructions accordingly, and the green button can be moved to production. Also, share the workshop livelabs/sandbox instructions link for the LiveLabs team to populate while moving the green button to production.
-
-	10. After receiving the confirmation email, the LiveLabs team will move the green button to production in 1-2 business days, turn on the green button in the WMS publishing entry, and populate the workshop URL. The LiveLabs team will keep you posted once the workshop is published.
-
-     ![Sandbox](images/sandbox.png " ")
-
-Congratulations on completing the Step by Step workshop to create your workshop in LiveLabs.
 
 ## (Optional) Task 4: Re-publish Your Workshop
 
