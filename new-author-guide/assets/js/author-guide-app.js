@@ -177,6 +177,182 @@
       leads: "production"
     }
   ];
+  var wmsStatusGraphViewBox = { x: 0, y: 0, width: 1320, height: 660 };
+  var wmsStatusNodeHalfWidth = 82;
+  var wmsStatusNodeHalfHeight = 31;
+  var wmsStatusGraphFitGutter = 24;
+  var wmsStatusGraphStatuses = [
+    {
+      id: "submitted",
+      label: "Submitted",
+      group: "Intake",
+      responsible: "Workshop author / submitter",
+      meaning: "The workshop has been submitted for initial review. The author has provided the first set of workshop details and is waiting for review.",
+      nextStep: "The reviewer validates whether the submitted information is sufficient. If it is complete, the workshop moves to Approved. If it is incomplete, it moves to More Info Needed.",
+      checks: [
+        "Workshop details are present.",
+        "Workshop purpose and audience are clear.",
+        "Required owner or contact information is available."
+      ],
+      x: 110,
+      y: 300,
+      color: "#f3f4f6"
+    },
+    {
+      id: "more-info",
+      label: "More Info Needed",
+      group: "Rework",
+      responsible: "Workshop author / submitter",
+      meaning: "The reviewer needs clarifications or missing details before the workshop can continue.",
+      nextStep: "The author updates the requested information and resubmits the workshop for review.",
+      checks: [
+        "Respond to reviewer comments.",
+        "Add missing metadata, scope, owner, or setup details.",
+        "Confirm the resubmitted information is complete."
+      ],
+      x: 300,
+      y: 155,
+      color: "#fff7ed"
+    },
+    {
+      id: "approved",
+      label: "Approved",
+      group: "Approval",
+      responsible: "LiveLabs reviewer / approver",
+      meaning: "The workshop request has enough information and is approved to move into the build or development stage.",
+      nextStep: "The author or workshop development owner starts the content build in In Development.",
+      checks: [
+        "Submission is understandable and actionable.",
+        "Workshop can proceed to content development.",
+        "Any approval notes are communicated to the author."
+      ],
+      x: 300,
+      y: 300,
+      color: "#ecfdf5"
+    },
+    {
+      id: "in-development",
+      label: "In Development",
+      group: "Build",
+      responsible: "Workshop author / development owner",
+      meaning: "The workshop content is being created or updated. This can include labs, Markdown content, images, manifests, setup steps, and validation work.",
+      nextStep: "When development is ready, the author moves the workshop to Self QA.",
+      checks: [
+        "Lab Markdown content is written or updated.",
+        "Images, manifests, and folder structure are in place.",
+        "Commands and code examples are ready to test.",
+        "Links and references are prepared for validation."
+      ],
+      x: 510,
+      y: 300,
+      color: "#eff6ff"
+    },
+    {
+      id: "self-qa",
+      label: "Self QA",
+      group: "QA",
+      responsible: "Workshop author / content owner",
+      meaning: "The author performs their own quality checks before marking the workshop as complete.",
+      nextStep: "If self-QA passes, move to Self QA Complete. If issues are found, return to In Development for fixes.",
+      checks: [
+        "Information in the workshop is adequate and updated.",
+        "Code is correct and working.",
+        "Links are correct.",
+        "Help email is included in manifest.json.",
+        "WMS URLs are updated as needed after approval.",
+        "Filenames are descriptive and lowercase.",
+        "Folder structure follows the sample workshop structure.",
+        "Images include useful alt text."
+      ],
+      x: 720,
+      y: 300,
+      color: "#f5f3ff"
+    },
+    {
+      id: "self-qa-complete",
+      label: "Self QA Complete",
+      group: "QA",
+      responsible: "Workshop author / content owner",
+      meaning: "The author has completed self-QA and confirmed that the workshop is ready to be marked complete or move forward in the publication workflow.",
+      nextStep: "Move the workshop to Completed.",
+      checks: [
+        "Self-QA checklist is complete.",
+        "No known blocking issues remain.",
+        "The workshop owner is ready to complete the workflow."
+      ],
+      x: 950,
+      y: 300,
+      color: "#eef2ff"
+    },
+    {
+      id: "completed",
+      label: "Completed",
+      group: "Done",
+      responsible: "LiveLabs owner / workshop owner",
+      meaning: "The workshop is complete and available for normal use, publication, or maintenance depending on your internal workflow.",
+      nextStep: "No immediate action is required. Later, the workshop may enter Quarterly QA or return to In Development if updates are required.",
+      checks: [
+        "Workshop is complete.",
+        "Ownership is clear for future maintenance.",
+        "Future QA or update cycle can be scheduled."
+      ],
+      x: 1180,
+      y: 300,
+      color: "#f0fdf4"
+    },
+    {
+      id: "quarterly-qa",
+      label: "Quarterly QA",
+      group: "Recurring QA",
+      responsible: "QA reviewer / workshop owner",
+      meaning: "The completed workshop is reviewed during a periodic QA cycle to make sure it is still accurate and working.",
+      nextStep: "If QA passes, move to Quarterly QA Complete. If problems are found, return to In Development for fixes.",
+      checks: [
+        "Workshop information is still accurate and updated.",
+        "Code and commands still work.",
+        "Links still resolve correctly.",
+        "Manifest and support contact details are still current.",
+        "Screenshots and instructions still match the product experience."
+      ],
+      x: 950,
+      y: 480,
+      color: "#fffbeb"
+    },
+    {
+      id: "quarterly-qa-complete",
+      label: "Quarterly QA Complete",
+      group: "Done",
+      responsible: "QA reviewer / LiveLabs owner",
+      meaning: "The scheduled QA review is complete and no blocking issues remain from that review cycle.",
+      nextStep: "Return the workshop to Completed until the next review cycle or update request.",
+      checks: [
+        "Quarterly QA review is complete.",
+        "Findings are resolved or documented.",
+        "Workshop can return to normal completed status."
+      ],
+      x: 1180,
+      y: 480,
+      color: "#f0fdf4"
+    }
+  ];
+  var wmsStatusGraphTransitions = [
+    { from: "submitted", to: "approved", type: "normal", label: "review passes", labelX: 205, labelY: 236 },
+    { from: "submitted", to: "more-info", type: "alt", label: "needs details", labelX: 188, labelY: 210 },
+    { from: "more-info", to: "submitted", type: "alt", label: "resubmit", labelX: 310, labelY: 220 },
+    { from: "approved", to: "in-development", type: "normal", label: "start build", labelX: 405, labelY: 236 },
+    { from: "in-development", to: "self-qa", type: "normal", label: "ready to test", labelX: 615, labelY: 236 },
+    { from: "self-qa", to: "in-development", type: "alt", label: "fix issues", labelX: 615, labelY: 374 },
+    { from: "self-qa", to: "self-qa-complete", type: "normal", label: "QA passes", labelX: 835, labelY: 236 },
+    { from: "self-qa-complete", to: "completed", type: "normal", label: "complete", labelX: 1065, labelY: 236 },
+    { from: "completed", to: "quarterly-qa", type: "normal", label: "scheduled review", labelX: 1088, labelY: 386 },
+    { from: "quarterly-qa", to: "in-development", type: "alt", label: "updates needed", labelX: 720, labelY: 414 },
+    { from: "quarterly-qa", to: "quarterly-qa-complete", type: "normal", label: "QA passes", labelX: 1065, labelY: 416 },
+    { from: "quarterly-qa-complete", to: "completed", type: "normal", label: "return", labelX: 1210, labelY: 386 }
+  ];
+  var wmsStatusGraphNodeMap = wmsStatusGraphStatuses.reduce(function (map, status) {
+    map[status.id] = status;
+    return map;
+  }, {});
   var previousView = {
     mode: "hub",
     currentStep: 0,
@@ -1587,37 +1763,338 @@
     }, 180);
   }
 
-  function activateWmsStatus(button) {
-    var flow = button ? button.closest("[data-status-flow]") : null;
-    var rows;
-    var index;
-    var row;
+  function createWmsStatusSvgElement(name, attrs) {
+    var element = document.createElementNS("http://www.w3.org/2000/svg", name);
 
-    if (!flow) {
+    Object.keys(attrs || {}).forEach(function (key) {
+      element.setAttribute(key, attrs[key]);
+    });
+
+    return element;
+  }
+
+  function wmsStatusBoundaryPoint(box, toward) {
+    var dx = toward.x - box.x;
+    var dy = toward.y - box.y;
+    var scale = Math.min(Math.abs(wmsStatusNodeHalfWidth / (dx || 0.0001)), Math.abs(wmsStatusNodeHalfHeight / (dy || 0.0001)));
+
+    return { x: box.x + dx * scale, y: box.y + dy * scale };
+  }
+
+  function wmsStatusEdgePath(from, to, type) {
+    var start = wmsStatusBoundaryPoint(from, to);
+    var end = wmsStatusBoundaryPoint(to, from);
+    var dx;
+    var dy;
+    var curve;
+    var mx;
+    var my;
+    var nx;
+    var ny;
+
+    if (type === "alt") {
+      dx = end.x - start.x;
+      dy = end.y - start.y;
+      curve = Math.max(80, Math.hypot(dx, dy) * 0.35);
+      mx = (start.x + end.x) / 2;
+      my = (start.y + end.y) / 2;
+      nx = -dy / Math.max(1, Math.hypot(dx, dy));
+      ny = dx / Math.max(1, Math.hypot(dx, dy));
+      return "M " + start.x + " " + start.y + " Q " + (mx + nx * curve) + " " + (my + ny * curve) + " " + end.x + " " + end.y;
+    }
+
+    return "M " + start.x + " " + start.y + " L " + end.x + " " + end.y;
+  }
+
+  function wmsStatusTransitionMidpoint(transition) {
+    var from = wmsStatusGraphNodeMap[transition.from];
+    var to = wmsStatusGraphNodeMap[transition.to];
+
+    if (Number.isFinite(transition.labelX) && Number.isFinite(transition.labelY)) {
+      return { x: transition.labelX, y: transition.labelY };
+    }
+
+    return {
+      x: (from.x + to.x) / 2,
+      y: (from.y + to.y) / 2 - (transition.type === "alt" ? 18 : 10)
+    };
+  }
+
+  function wmsStatusEdgeLabelWidth(label) {
+    return Math.max(54, Math.min(128, String(label || "").length * 7 + 18));
+  }
+
+  function setWmsStatusGraphViewBox(svg, box) {
+    var target = box || wmsStatusGraphViewBox;
+
+    svg.setAttribute("viewBox", target.x + " " + target.y + " " + target.width + " " + target.height);
+  }
+
+  function defineWmsStatusMarkers(svg, graphId) {
+    var defs = createWmsStatusSvgElement("defs");
+    var normalMarker = createWmsStatusSvgElement("marker", {
+      id: graphId + "-arrow-normal",
+      viewBox: "0 -5 10 10",
+      refX: "10",
+      refY: "0",
+      markerWidth: "7",
+      markerHeight: "7",
+      orient: "auto"
+    });
+    var altMarker = createWmsStatusSvgElement("marker", {
+      id: graphId + "-arrow-alt",
+      viewBox: "0 -5 10 10",
+      refX: "10",
+      refY: "0",
+      markerWidth: "7",
+      markerHeight: "7",
+      orient: "auto"
+    });
+
+    normalMarker.appendChild(createWmsStatusSvgElement("path", { d: "M0,-5L10,0L0,5", fill: "#7c8794" }));
+    altMarker.appendChild(createWmsStatusSvgElement("path", { d: "M0,-5L10,0L0,5", fill: "#a16207" }));
+    defs.appendChild(normalMarker);
+    defs.appendChild(altMarker);
+    svg.appendChild(defs);
+  }
+
+  function renderWmsStatusList(list, items) {
+    if (!list) {
       return;
     }
 
-    rows = Array.from(flow.querySelectorAll(".wms-status-csv code")).slice(1).map(function (node) {
-      var parts = node.textContent.split(",");
-      return {
-        status: (parts[0] || "").trim(),
-        owner: (parts[1] || "").trim(),
-        description: parts.slice(2).join(",").trim()
-      };
+    list.innerHTML = "";
+    items.forEach(function (item) {
+      var li = document.createElement("li");
+      li.textContent = item;
+      list.appendChild(li);
     });
-    index = Number(button.getAttribute("data-status-index") || "0");
-    row = rows[index] || rows[0];
+  }
 
-    flow.querySelectorAll(".wms-status-button").forEach(function (candidate) {
-      var isActive = candidate === button;
-      candidate.classList.toggle("is-active", isActive);
-      candidate.setAttribute("aria-selected", isActive ? "true" : "false");
+  function updateWmsStatusGraphDetails(graph, status) {
+    var outgoing = wmsStatusGraphTransitions.filter(function (transition) {
+      return transition.from === status.id;
+    });
+    var title = graph.querySelector("[data-wms-status-title]");
+    var group = graph.querySelector("[data-wms-status-group]");
+    var responsible = graph.querySelector("[data-wms-status-responsible]");
+    var meaning = graph.querySelector("[data-wms-status-meaning]");
+    var nextStep = graph.querySelector("[data-wms-status-next]");
+    var checklist = graph.querySelector("[data-wms-status-checklist]");
+    var transitionList = graph.querySelector("[data-wms-status-transitions]");
+
+    if (title) {
+      title.textContent = status.label;
+    }
+    if (group) {
+      group.textContent = status.group;
+    }
+    if (responsible) {
+      responsible.textContent = status.responsible;
+    }
+    if (meaning) {
+      meaning.textContent = status.meaning;
+    }
+    if (nextStep) {
+      nextStep.textContent = status.nextStep;
+    }
+
+    renderWmsStatusList(checklist, status.checks);
+    renderWmsStatusList(transitionList, outgoing.length ? outgoing.map(function (transition) {
+      return wmsStatusGraphNodeMap[transition.to].label + ": " + transition.label;
+    }) : ["No outgoing transition configured."]);
+  }
+
+  function applyWmsStatusGraphHighlights(graph) {
+    var selectedStatusId = graph.getAttribute("data-selected-status") || "";
+    var highlightedPath = (graph.getAttribute("data-highlighted-path") || "").split(",").filter(Boolean);
+    var connected = {};
+    var pathNodes = {};
+    var pathEdges = {};
+
+    if (selectedStatusId) {
+      connected[selectedStatusId] = true;
+      wmsStatusGraphTransitions.forEach(function (transition) {
+        if (transition.from === selectedStatusId || transition.to === selectedStatusId) {
+          connected[transition.from] = true;
+          connected[transition.to] = true;
+        }
+      });
+    }
+
+    highlightedPath.forEach(function (id, index) {
+      pathNodes[id] = true;
+      if (highlightedPath[index + 1]) {
+        pathEdges[id + "->" + highlightedPath[index + 1]] = true;
+      }
     });
 
-    flow.querySelector("#wmsStatusOwner").textContent = row.owner;
-    flow.querySelector("#wmsStatusTitle").textContent = row.status;
-    flow.querySelector("#wmsStatusDescription").textContent = row.description;
-    setLiveMessage(row.status + " status selected.");
+    graph.querySelectorAll(".wms-status-node").forEach(function (node) {
+      var id = node.getAttribute("data-status-id");
+      var isSelected = id === selectedStatusId || !!pathNodes[id];
+      var shouldDim = selectedStatusId ? !connected[id] : highlightedPath.length ? !pathNodes[id] : false;
+
+      node.classList.toggle("is-selected", isSelected);
+      node.classList.toggle("is-dimmed", shouldDim);
+    });
+
+    graph.querySelectorAll(".wms-status-edge").forEach(function (edge) {
+      var edgeKey = edge.getAttribute("data-from") + "->" + edge.getAttribute("data-to");
+      var selectedEdge = selectedStatusId && (edge.getAttribute("data-from") === selectedStatusId || edge.getAttribute("data-to") === selectedStatusId);
+      var pathEdge = !!pathEdges[edgeKey];
+      var shouldDim = selectedStatusId ? !selectedEdge : highlightedPath.length ? !pathEdge : false;
+
+      edge.classList.toggle("is-dimmed", shouldDim);
+      edge.classList.toggle("is-selected", selectedEdge || pathEdge);
+    });
+
+    graph.querySelectorAll(".wms-status-edge-label, .wms-status-edge-label-bg").forEach(function (label) {
+      var edgeKey = label.getAttribute("data-from") + "->" + label.getAttribute("data-to");
+      var selectedEdge = selectedStatusId && (label.getAttribute("data-from") === selectedStatusId || label.getAttribute("data-to") === selectedStatusId);
+      var pathEdge = !!pathEdges[edgeKey];
+      var shouldDim = selectedStatusId ? !selectedEdge : highlightedPath.length ? !pathEdge : false;
+
+      label.classList.toggle("is-dimmed", shouldDim);
+    });
+  }
+
+  function selectWmsStatusGraphNode(graph, id) {
+    var status = wmsStatusGraphNodeMap[id];
+
+    if (!graph || !status) {
+      return;
+    }
+
+    graph.setAttribute("data-selected-status", id);
+    graph.removeAttribute("data-highlighted-path");
+    updateWmsStatusGraphDetails(graph, status);
+    applyWmsStatusGraphHighlights(graph);
+    setLiveMessage(status.label + " status selected.");
+  }
+
+  function highlightWmsStatusGraphPath(graph, ids, label) {
+    graph.removeAttribute("data-selected-status");
+    graph.setAttribute("data-highlighted-path", ids.join(","));
+    updateWmsStatusGraphDetails(graph, wmsStatusGraphNodeMap[ids[0]] || wmsStatusGraphStatuses[0]);
+    applyWmsStatusGraphHighlights(graph);
+    setLiveMessage((label || "Status path") + " highlighted.");
+  }
+
+  function resetWmsStatusGraph(graph) {
+    graph.removeAttribute("data-highlighted-path");
+    selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted");
+  }
+
+  function fitWmsStatusGraph(graph) {
+    var svg = graph.querySelector("[data-wms-status-svg]");
+    var xs = wmsStatusGraphStatuses.map(function (status) { return status.x; });
+    var ys = wmsStatusGraphStatuses.map(function (status) { return status.y; });
+    var minX = Math.min.apply(Math, xs) - wmsStatusNodeHalfWidth - wmsStatusGraphFitGutter;
+    var maxX = Math.max.apply(Math, xs) + wmsStatusNodeHalfWidth + wmsStatusGraphFitGutter;
+    var minY = Math.min.apply(Math, ys) - wmsStatusNodeHalfHeight - wmsStatusGraphFitGutter;
+    var maxY = Math.max.apply(Math, ys) + wmsStatusNodeHalfHeight + wmsStatusGraphFitGutter;
+
+    if (svg) {
+      setWmsStatusGraphViewBox(svg, { x: minX, y: minY, width: maxX - minX, height: maxY - minY });
+    }
+
+    setLiveMessage("Status graph fitted to visible nodes.");
+  }
+
+  function renderWmsStatusGraph(graph, index) {
+    var svg = graph.querySelector("[data-wms-status-svg]");
+    var graphId = "wms-status-graph-" + index;
+    var edgeLayer = createWmsStatusSvgElement("g", { class: "wms-status-edges" });
+    var labelLayer = createWmsStatusSvgElement("g", { class: "wms-status-edge-labels" });
+    var nodeLayer = createWmsStatusSvgElement("g", { class: "wms-status-nodes" });
+
+    if (!svg) {
+      return;
+    }
+
+    svg.innerHTML = "";
+    setWmsStatusGraphViewBox(svg);
+    defineWmsStatusMarkers(svg, graphId);
+    svg.appendChild(createWmsStatusSvgElement("title", { id: graphId + "-title" })).textContent = "LiveLabs workshop status workflow graph";
+    svg.appendChild(createWmsStatusSvgElement("desc", { id: graphId + "-desc" })).textContent = "A clickable graph showing submitted, approval, development, self QA, completed, and quarterly QA statuses.";
+    svg.setAttribute("aria-labelledby", graphId + "-title " + graphId + "-desc");
+
+    wmsStatusGraphTransitions.forEach(function (transition) {
+      var from = wmsStatusGraphNodeMap[transition.from];
+      var to = wmsStatusGraphNodeMap[transition.to];
+      var path = createWmsStatusSvgElement("path", {
+        class: "wms-status-edge" + (transition.type === "alt" ? " is-return-path" : ""),
+        d: wmsStatusEdgePath(from, to, transition.type),
+        "data-from": transition.from,
+        "data-to": transition.to,
+        "marker-end": "url(#" + graphId + (transition.type === "alt" ? "-arrow-alt" : "-arrow-normal") + ")"
+      });
+      var midpoint = wmsStatusTransitionMidpoint(transition);
+      var labelWidth = wmsStatusEdgeLabelWidth(transition.label);
+      var labelBackground = createWmsStatusSvgElement("rect", {
+        class: "wms-status-edge-label-bg",
+        x: midpoint.x - labelWidth / 2,
+        y: midpoint.y - 12,
+        width: labelWidth,
+        height: 24,
+        rx: 8,
+        "data-from": transition.from,
+        "data-to": transition.to
+      });
+      var text = createWmsStatusSvgElement("text", {
+        class: "wms-status-edge-label",
+        x: midpoint.x,
+        y: midpoint.y,
+        "text-anchor": "middle",
+        "dominant-baseline": "middle",
+        "data-from": transition.from,
+        "data-to": transition.to
+      });
+
+      text.textContent = transition.label;
+      edgeLayer.appendChild(path);
+      labelLayer.appendChild(labelBackground);
+      labelLayer.appendChild(text);
+    });
+
+    wmsStatusGraphStatuses.forEach(function (status) {
+      var group = createWmsStatusSvgElement("g", {
+        class: "wms-status-node",
+        tabindex: "0",
+        role: "button",
+        "aria-label": status.label + " status",
+        transform: "translate(" + status.x + "," + status.y + ")",
+        "data-status-id": status.id
+      });
+      var rect = createWmsStatusSvgElement("rect", {
+        x: -wmsStatusNodeHalfWidth,
+        y: -wmsStatusNodeHalfHeight,
+        width: wmsStatusNodeHalfWidth * 2,
+        height: wmsStatusNodeHalfHeight * 2,
+        rx: "8",
+        fill: status.color
+      });
+      var label = createWmsStatusSvgElement("text", { x: "0", y: "-5", "text-anchor": "middle" });
+      var subtext = createWmsStatusSvgElement("text", { x: "0", y: "16", "text-anchor": "middle", class: "wms-status-node-subtext" });
+
+      label.textContent = status.label;
+      subtext.textContent = status.group;
+      group.appendChild(rect);
+      group.appendChild(label);
+      group.appendChild(subtext);
+      nodeLayer.appendChild(group);
+    });
+
+    svg.appendChild(edgeLayer);
+    svg.appendChild(labelLayer);
+    svg.appendChild(nodeLayer);
+    selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted");
+  }
+
+  function initWmsStatusGraphs() {
+    document.querySelectorAll("[data-wms-status-graph]").forEach(function (graph, index) {
+      renderWmsStatusGraph(graph, index + 1);
+    });
   }
 
   function syncMarkdownSnippetSummary() {
@@ -3545,7 +4022,8 @@
     var copyTextButton = event.target.closest("[data-copy-text]");
     var tagButton = event.target.closest("[data-tag]");
     var searchOpenButton = event.target.closest("[data-search-open]");
-    var wmsStatusButton = event.target.closest(".wms-status-button");
+    var wmsStatusNode = event.target.closest(".wms-status-node");
+    var wmsStatusAction = event.target.closest("[data-wms-status-action]");
     var installCard = event.target.closest("[data-install-card]");
     var isPrimaryNav = modeButton && !!modeButton.closest(".nav-group-all");
 
@@ -3670,8 +4148,24 @@
       openSearchResult(searchOpenButton.getAttribute("data-search-open"));
     }
 
-    if (wmsStatusButton) {
-      activateWmsStatus(wmsStatusButton);
+    if (wmsStatusNode) {
+      selectWmsStatusGraphNode(wmsStatusNode.closest("[data-wms-status-graph]"), wmsStatusNode.getAttribute("data-status-id"));
+      return;
+    }
+
+    if (wmsStatusAction) {
+      var graph = wmsStatusAction.closest("[data-wms-status-graph]");
+      var action = wmsStatusAction.getAttribute("data-wms-status-action");
+
+      if (action === "main-path") {
+        highlightWmsStatusGraphPath(graph, ["submitted", "approved", "in-development", "self-qa", "self-qa-complete", "completed"], "Main path");
+      } else if (action === "qa-cycle") {
+        highlightWmsStatusGraphPath(graph, ["completed", "quarterly-qa", "quarterly-qa-complete", "completed"], "QA cycle");
+      } else if (action === "fit") {
+        fitWmsStatusGraph(graph);
+      } else {
+        resetWmsStatusGraph(graph);
+      }
       return;
     }
   });
@@ -3687,6 +4181,12 @@
     if ((event.key === "Enter" || event.key === " ") && event.target && event.target.closest && event.target.closest("figure[data-expandable=\"true\"]")) {
       event.preventDefault();
       openImageLightbox(event.target.closest("figure[data-expandable=\"true\"]"));
+      return;
+    }
+
+    if ((event.key === "Enter" || event.key === " ") && event.target && event.target.closest && event.target.closest(".wms-status-node")) {
+      event.preventDefault();
+      selectWmsStatusGraphNode(event.target.closest("[data-wms-status-graph]"), event.target.closest(".wms-status-node").getAttribute("data-status-id"));
     }
   }, true);
 
@@ -3844,6 +4344,7 @@
 
   hydrateVideoCards(document);
   decorateExpandableMedia(document);
+  initWmsStatusGraphs();
   updateNav();
   updateNavSearch();
   updateBeginnerUI();
