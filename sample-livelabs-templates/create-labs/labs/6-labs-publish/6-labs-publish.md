@@ -227,6 +227,115 @@ If you would like to request a regular green button, proceed with the below step
 
 Congratulations on completing the Step by Step workshop to create your workshop in LiveLabs.
 
+## Task 3: Request the Green Button / Sandbox Environment
+
+This task walks you through requesting a LiveLabs Sandbox environment, also known as the green button. After the sandbox is enabled, users can run the workshop in a pre-provisioned LiveLabs environment instead of using their own **OCI Free Tier** tenancy.
+
+The green button is a good choice when you want users to try features unavailable in OCI Free Tier, avoid long setup steps, or start directly with the product and service tasks. Not all OCI services are available in a sandbox environment, so each request is reviewed by the LiveLabs team.
+
+**Notes:**
+
+- You can request or update a LiveLabs Sandbox even after the workshop is **already in production**. If you are updating an existing sandbox, follow the same steps and explain what needs to change at the beginning of the Jira description.
+- Refer to [Video walking Green Button - LiveLabs Sandbox Request](https://otube.oracle.com/media/LiveLabsA+Green+Button+Lite/1_85wokrec) to develop your workshop.
+
+### **Before You Start**
+1. Create a sandbox version of the workshop if the setup, instructions, or screenshots differ for sandbox users.
+2. Update workshops/sandbox/index.html and workshops/sandbox/manifest.json, plus any lab files that need sandbox-specific instructions.
+3. Have your WMS ID, LiveLabs ID, workshop title, repository name, and sandbox URL ready.
+
+### **Open the Publishing Entry**
+
+  ![Edit Publishing](./images/edit-publishing.png " ")
+
+4. Go to **WMS** and find your workshop.
+5. Click the **Publishing** tab.
+6. Click **Edit** for the LiveLabs publishing entry you want to use for the sandbox request, or click **+ Publish** to LiveLabs if you do not have a LiveLabs publishing entry yet.
+
+### **Complete the Basic Information Tab**
+
+In the **Basic Information** tab, fill out the appropriate fields for the publishing entry.
+
+  ![Edit Basic Information](./images/edit-basic-information.png " ")
+
+1. For **LiveLab Type**, select **Workshop**.
+2. For **Publish Status**, select the appropriate status for the publishing request.
+3. For **Publish Type**, choose the option that matches how the workshop should be available.
+  - **Public:**	Available to the public through search and links.
+  - **Event:**	Available only through events in LiveLabs.
+  - **Private:**	Available only through links.
+  - **Disabled:**	Unavailable to anyone except platform administrators.
+
+**Note:** Fill out any additional required fields in the publishing entry before saving.
+
+### **Complete the Sandbox Environment Tab**
+
+Switch to the **Sandbox Environment** tab and fill out the required sandbox request information.
+The mandatory field is **Run on LiveLabs Sandbox URL**.
+
+  ![Edit Sandbox Environment](./images/edit-sandbox-environment.png " ")
+
+Use this URL structure:
+https://oracle-livelabs.github.io/[Repository]/[Your-workshop-folder]/workshops/sandbox/
+
+**Important:**
+- Replace [Repository] with the GitHub repository name.
+- Replace [Your-workshop-folder] with the path to your workshop folder.
+- Make sure the URL points to the sandbox workshop, not the tenancy workshop.
+
+### **Choose Sandbox Type**
+
+Besides the LiveLabs Sandbox Environment type, WMS also offers the **Sandbox Lite type**. This is a quick and easy way to set up a Sandbox Environment button for your workshop. This option DOES NOT create any resources for the user but allows them to create them in an isolated environment in one of our LiveLabs tenancies. A Sandbox Lite is created automatically and will be ready within **1 business day**.
+
+Perform the following set of steps to request a **Sandbox Lite Environment**:
+    ![Sandbox Lite Button](./images/sandbox-lite-2.png " ")
+
+1. Within the **Sandbox Environment** tab, select the **Sandbox Lite** button
+2. Click **OK** in the context menu which provides more information about Sandbox Lite.
+    ![Sandbox Lite Info](./images/sandbox-lite-more-info.png " ")
+3. Fill in the appropriate fields within the **LiveLabs Sandbox Lite Request** section.
+
+    ![Sandbox Lite Field](./images/sandbox-lite-3.png " ")
+
+4. Click **Save**
+
+### Livelabs Sandbox Environment
+
+  ![Sandbox Lite Button](./images/livelabs-sandbox-button.png " ")
+
+1. Within the **Sandbox Environment** tab, select the **Run on LiveLabs Sandbox** button
+2. Click **OK** in the context menu which provides more information about LiveLabs Sandboxes.
+
+  ![Regular Green Button](./images/livelabs-sandbox-more-info.png " ")
+
+3. Click on **Open JIRA Ticket** to create a ticket requesting a Sandbox Environment.
+
+  ![Regular Green Button](./images/open-jira-ticket-button.png " ")
+
+2. In Jira, fill out the Summary using this format:*[Sandbox] WMS ID: (insert WMS ID) LL ID: (insert LiveLabs ID) (insert Title).*
+
+<details>
+<summary><strong> Click here to reveal JIRA ticket form</strong></summary>
+
+> ![Regular Green Button](./images/green-button-jira-ticket.png " ")
+
+</details>
+
+3. Copy and paste everything below the Jira button in WMS into the **Description** field of the Jira ticket.
+4. Complete the Jira questionnaire using the additional information from the Sandbox Environment tab.
+5. Click **Create**.
+
+**Notes:**
+- Do not worry about other Jira fields unless the LiveLabs team has asked you to complete them.
+- The LiveLabs team will reach out through Jira with any other questions.
+- Be sure to fill out other relevant fields in WMS and keep the Jira ticket up to date.
+- After the LiveLabs team creates a demo environment, test the sandbox setup and update the workshop instructions as necessary.
+
+  ![Republish request process](./images/run-green-button.png " ")
+
+- Confirm through WMS messaging, Jira, or livelabs-help-db_us@oracle.com that you tested the sandbox setup and that it can move to production.
+- After confirmation, the LiveLabs team will move the sandbox to production, enable the green button in the WMS publishing entry, and populate the workshop URL. The team will keep you posted once the workshop is published.
+
+
 ## (Optional) Task 4: Re-publish Your Workshop
 
 For workshops in Quarterly QA status with a last qa date of more than 105 days and wish to update workshop publishing entry with *Publish status - Published and Publish type - Private/Disabled* to *Publish Status - Published and Publish type - Public/Event*, follow these steps to request republishing of your workshop in production.
