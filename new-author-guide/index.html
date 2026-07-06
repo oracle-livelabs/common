@@ -5560,32 +5560,56 @@
                       <div class="step-block-header">
                         <div class="panel-kicker">Status flow</div>
                         <h3>Understand the handoff path before you build</h3>
-                        <p>The status flow below is the process map. Use these WMS states to understand when to wait for review, when to begin heavier GitHub work, when to complete Quality Assurance, and when the workshop is ready for publishing.</p>
+                        <p>The graph below is the process map. Use these WMS states to understand when to wait for review, when to begin heavier GitHub work, when to complete Quality Assurance, and when the workshop moves into publication and later maintenance.</p>
                       </div>
-                      <div class="wms-status-flow" data-status-flow>
-                        <div class="wms-status-csv" aria-label="WMS status flow source data">
-                          <code>Status,Owner,Meaning</code>
-                          <code>Submitted,Council,The council receives the request and starts its first review pass.</code>
-                          <code>More Info Needed,Workshop team,Answer council questions in WMS and improve the request until the use case is clear.</code>
-                          <code>Approved,Workshop team,Begin heavier GitHub work only after the initial WMS review gate clears.</code>
-                          <code>In Development,Workshop team,Use this when real authoring starts in GitHub and the preview path exists.</code>
-                          <code>Self QA,Workshop team,Run end-to-end testing and complete the Self Quality Assurance checklist.</code>
-                          <code>Self QA Complete,Stakeholders,Stakeholders verify the saved checklist and workshop preview.</code>
-                          <code>Completed,LiveLabs publishing,The verified workshop is ready for final publishing handling.</code>
+                      <div class="wms-status-graph" data-wms-status-graph data-default-status="submitted">
+                        <div class="wms-status-graph-toolbar" aria-label="Status graph controls">
+                          <div class="wms-status-legend" aria-label="Status graph legend">
+                            <span class="wms-status-legend-pill">Normal progression</span>
+                            <span class="wms-status-legend-pill is-return-path">Rework or return path</span>
+                            <span class="wms-status-legend-pill is-selected">Selected status</span>
+                          </div>
+                          <div class="wms-status-actions">
+                            <button type="button" class="wms-status-action" data-wms-status-action="reset">Reset</button>
+                            <button type="button" class="wms-status-action" data-wms-status-action="main-path">Main path</button>
+                            <button type="button" class="wms-status-action" data-wms-status-action="qa-cycle">QA cycle</button>
+                            <button type="button" class="wms-status-action" data-wms-status-action="fit">Fit graph</button>
+                          </div>
                         </div>
-                        <div class="wms-status-buttons" role="tablist" aria-label="WMS status states">
-                          <button type="button" class="wms-status-button is-active" data-status-index="0" role="tab" aria-selected="true">Submitted</button>
-                          <button type="button" class="wms-status-button" data-status-index="1" role="tab" aria-selected="false">More Info Needed</button>
-                          <button type="button" class="wms-status-button" data-status-index="2" role="tab" aria-selected="false">Approved</button>
-                          <button type="button" class="wms-status-button" data-status-index="3" role="tab" aria-selected="false">In Development</button>
-                          <button type="button" class="wms-status-button" data-status-index="4" role="tab" aria-selected="false">Self QA</button>
-                          <button type="button" class="wms-status-button" data-status-index="5" role="tab" aria-selected="false">Self QA Complete</button>
-                          <button type="button" class="wms-status-button" data-status-index="6" role="tab" aria-selected="false">Completed</button>
-                        </div>
-                        <div class="wms-status-detail" role="tabpanel" aria-live="polite">
-                          <span class="detail-field-label" id="wmsStatusOwner">Council</span>
-                          <h4 id="wmsStatusTitle">Submitted</h4>
-                          <p id="wmsStatusDescription">The council receives the request and starts its first review pass.</p>
+                        <div class="wms-status-graph-layout">
+                          <div class="wms-status-graph-stage">
+                            <svg class="wms-status-svg" data-wms-status-svg role="img"></svg>
+                          </div>
+                          <aside class="wms-status-detail" aria-live="polite">
+                            <div class="wms-status-detail-header">
+                              <span class="detail-field-label" data-wms-status-group>Intake</span>
+                              <h4 data-wms-status-title>Submitted</h4>
+                            </div>
+                            <div class="wms-status-detail-block">
+                              <strong>Meaning</strong>
+                              <p data-wms-status-meaning>The workshop has been submitted for initial review.</p>
+                            </div>
+                            <div class="wms-status-detail-block">
+                              <strong>Responsible</strong>
+                              <p data-wms-status-responsible>Workshop author / submitter</p>
+                            </div>
+                            <div class="wms-status-detail-block">
+                              <strong>Next step</strong>
+                              <p data-wms-status-next>The reviewer validates whether the submitted information is sufficient.</p>
+                            </div>
+                            <div class="wms-status-detail-block">
+                              <strong>QA / completion checks</strong>
+                              <ul data-wms-status-checklist>
+                                <li>Workshop details are present.</li>
+                              </ul>
+                            </div>
+                            <div class="wms-status-detail-block">
+                              <strong>Possible transitions</strong>
+                              <ul data-wms-status-transitions>
+                                <li>Approved: review passes</li>
+                              </ul>
+                            </div>
+                          </aside>
                         </div>
                       </div>
                     </section>
@@ -6560,11 +6584,11 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="./assets/js/guide-content.js?v=20260703-cheatsheet-refresh"></script>
+  <script src="./assets/js/guide-content.js"></script>
   <script src="./assets/js/workshop-generator.js"></script>
   <script src="./assets/js/redwood-video-player.js"></script>
   <script src="./assets/js/shared-side-nav.js?v=20260529-shared-nav-v2"></script>
-  <script src="./assets/js/author-guide-app.js?v=20260703-cheatsheet-refresh"></script>
+  <script src="./assets/js/author-guide-app.js?v=20260529-nav-search-v2"></script>
   <script src="./assets/js/shared-footer.js?v=20260516-followup"></script>
 </body>
 </html>
