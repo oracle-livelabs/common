@@ -13,6 +13,8 @@ In this lab, you will:
 - Use LiveLabs Help and author support paths.
 - Report broken workshop content with useful evidence.
 
+<!-- Estimated Time: intentionally not shown in this readiness guide. -->
+
 ![Issue triage flow](./images/lab-7-issue-triage-flow.svg " ")
 
 ## Task 1: Troubleshoot Access Issues

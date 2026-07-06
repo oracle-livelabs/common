@@ -14,6 +14,8 @@ In this lab, you will:
 - Set [green button](#legend) user counts and time values when needed.
 - Capture approval and handoff details for attendee messages.
 
+<!-- Estimated Time: intentionally not shown in this readiness guide. -->
+
 ![Event code request flow](./images/lab-2-event-code-flow.svg " ")
 
 ## Task 1: Review event request flow and collect inputs

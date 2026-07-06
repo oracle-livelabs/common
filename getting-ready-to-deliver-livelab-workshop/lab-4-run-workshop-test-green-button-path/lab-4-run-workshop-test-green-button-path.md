@@ -16,6 +16,8 @@ In this lab, you will:
 - Escalate workshop issues through the right owner.
 - Decide what to cover while [lab spaces](#legend) build.
 
+<!-- Estimated Time: intentionally not shown in this readiness guide. -->
+
 ![Dry run and launch test flow](./images/lab-4-dry-run-flow.svg " ")
 
 ## Task 1: Run the Workshop End to End

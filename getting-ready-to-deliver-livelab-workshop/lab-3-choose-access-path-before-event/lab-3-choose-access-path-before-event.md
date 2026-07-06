@@ -14,6 +14,8 @@ In this lab, you will:
 - Record the expected first screen for attendees.
 - Identify the support path for blocked attendees.
 
+<!-- Estimated Time: intentionally not shown in this readiness guide. -->
+
 ![Access path decision flow](./images/lab-3-access-path-flow.svg " ")
 
 ## Task 1: Select One Primary Access Path

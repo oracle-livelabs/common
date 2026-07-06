@@ -16,6 +16,8 @@ In this lab, you will:
 - Complete the final author checklist.
 - Name any open risk before the event starts.
 
+<!-- Estimated Time: intentionally not shown in this readiness guide. -->
+
 ![Live prep check flow](./images/lab-6-prep-check-flow.svg " ")
 
 ## Task 1: Run the Opening Prep Check

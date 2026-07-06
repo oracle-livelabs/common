@@ -15,6 +15,8 @@ In this lab, you will:
 - Add expected screens and support contacts.
 - Give authors a clear example of the preflight flow.
 
+<!-- Estimated Time: intentionally not shown in this readiness guide. -->
+
 ![Attendee preflight flow](./images/lab-5-attendee-preflight-flow.svg " ")
 
 ## Task 1: Build the Attendee Checklist

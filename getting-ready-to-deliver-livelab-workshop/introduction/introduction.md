@@ -22,6 +22,8 @@ In this workshop, you will:
 - Plan the first 5 to 10 minutes of live prep checks.
 - Troubleshoot common issues and complete the final readiness checklist.
 
+<!-- Estimated Workshop Time: intentionally not shown in this readiness guide. -->
+
 ## Acknowledgements
 
 - **Author:** Oracle LiveLabs Team, July 2026

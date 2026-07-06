@@ -16,6 +16,8 @@ In this lab, you will:
 - Route side issues to chat or a parking lot.
 - Prepare the first three instructions attendees will hear.
 
+<!-- Estimated Time: intentionally not shown in this readiness guide. -->
+
 ![Facilitation runbook flow](./images/lab-1-runbook-flow.svg " ")
 
 ## Task 1: Confirm Roles
