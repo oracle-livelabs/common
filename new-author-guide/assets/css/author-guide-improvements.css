@@ -3321,59 +3321,210 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   pointer-events: none;
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .wms-status-flow {
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph {
   display: grid;
-  gap: 1rem;
-}
-
-#app[data-redwood-creator-pass="2026-05-25"] .wms-status-csv {
-  display: none;
-}
-
-#app[data-redwood-creator-pass="2026-05-25"] .wms-status-buttons {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 0.5rem;
-}
-
-#app[data-redwood-creator-pass="2026-05-25"] .wms-status-button {
-  min-height: 3.2rem;
-  padding: 0.55rem 0.55rem;
-  border: 1px solid rgba(104, 96, 91, 0.28);
+  overflow: hidden;
+  border: 1px solid rgba(212, 207, 202, 0.92);
   border-radius: 8px;
   background: #fff;
-  color: var(--ink);
-  font-size: 0.78rem;
-  font-weight: 800;
-  line-height: 1.2;
-  text-align: center;
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .wms-status-button:hover,
-#app[data-redwood-creator-pass="2026-05-25"] .wms-status-button:focus-visible,
-#app[data-redwood-creator-pass="2026-05-25"] .wms-status-button.is-active {
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: 0.8rem;
+  border-bottom: 1px solid rgba(212, 207, 202, 0.82);
+  background: #fbf9f8;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  border: 1px solid rgba(104, 96, 91, 0.24);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill {
+  gap: 0.45rem;
+  padding: 0.35rem 0.65rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-action {
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-action:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-action:focus-visible {
   border-color: rgba(199, 70, 52, 0.46);
   background: #fff8f7;
   color: var(--rose);
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill::before {
+  content: "";
+  width: 1.6rem;
+  height: 0;
+  border-top: 3px solid #7c8794;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill.is-return-path::before {
+  border-top-style: dashed;
+  border-top-color: #a16207;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill.is-selected::before {
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 3px solid var(--ink);
+  border-radius: 4px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, 20rem);
+  min-height: 34rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
+  overflow: hidden;
+  border-right: 1px solid rgba(212, 207, 202, 0.82);
+  background:
+    linear-gradient(#eef2f7 1px, transparent 1px),
+    linear-gradient(90deg, #eef2f7 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-svg {
+  display: block;
+  width: 100%;
+  height: clamp(24rem, 43vw, 34rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node rect {
+  stroke: rgba(56, 52, 49, 0.72);
+  stroke-width: 1.2;
+  cursor: pointer;
+  filter: drop-shadow(0 7px 10px rgba(56, 52, 49, 0.12));
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node text {
+  fill: var(--ink);
+  font-size: 12.5px;
+  font-weight: 850;
+  pointer-events: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node .wms-status-node-subtext {
+  fill: var(--ink-soft);
+  font-size: 10.5px;
+  font-weight: 750;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node.is-selected rect {
+  stroke: var(--ink);
+  stroke-width: 4;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node:focus-visible rect {
+  stroke: var(--rose);
+  stroke-width: 4;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge {
+  fill: none;
+  stroke: #7c8794;
+  stroke-width: 2.5;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge.is-return-path {
+  stroke: #a16207;
+  stroke-dasharray: 8 6;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge.is-selected {
+  stroke-width: 3.5;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node.is-dimmed,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge.is-dimmed,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge-label-bg.is-dimmed,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge-label.is-dimmed {
+  opacity: 0.2;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge-label-bg {
+  fill: rgba(255, 255, 255, 0.96);
+  stroke: rgba(212, 207, 202, 0.9);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge-label {
+  fill: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 800;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-linejoin: round;
+  stroke-width: 2px;
+  pointer-events: none;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail {
+  display: grid;
+  align-content: start;
+  gap: 0.95rem;
   padding: 1rem;
-  border: 1px solid rgba(212, 207, 202, 0.92);
-  border-radius: 8px;
   background: #fbf9f8;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail h4 {
-  margin: 0.25rem 0 0.4rem;
-  font-size: 1.1rem;
+  margin: 0.25rem 0 0;
+  font-size: 1.14rem;
   font-weight: 850;
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail p {
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail-block {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(212, 207, 202, 0.78);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail-block strong {
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail p,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail li {
   margin: 0;
   color: var(--ink-soft);
-  line-height: 1.55;
+  font-size: 0.84rem;
+  line-height: 1.48;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail ul {
+  margin: 0;
+  padding-left: 1rem;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
@@ -3529,9 +3680,23 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
     grid-template-columns: 1fr;
   }
 
-  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-buttons,
   #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-toolbar,
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
+    border-right: 0;
+    border-bottom: 1px solid rgba(212, 207, 202, 0.82);
   }
 
   #app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-layout {
@@ -3549,9 +3714,20 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
     gap: 0.2rem;
   }
 
-  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-buttons,
   #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
     grid-template-columns: 1fr;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-actions,
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-action,
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill {
+    justify-content: center;
   }
 
 }
