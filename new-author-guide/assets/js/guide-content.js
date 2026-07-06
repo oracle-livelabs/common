@@ -14,6 +14,9 @@ window.authorGuideContent = (function () {
     secureDesktopAccess: "https://oracle-livelabs.github.io/common/labs/testing-access/workshops/desktop/index.html?lab=livelabs-sandbox",
     secureDesktopDocs: "https://oracle-livelabs.github.io/common/support/securedesktops/index.html#BeforeyougetStarted",
     liveLabsAuthorsSlack: "https://oracle.enterprise.slack.com/archives/CTUPZQ5HA",
+    freesql: "https://freesql.com/",
+    sprintsRepo: "https://github.com/oracle-livelabs/sprints",
+    sampleSprints: "https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-sprints",
     aiHubGuide: "https://lfoinding.github.io/livelabs-ai-playground/skills/how-to/workshops/sandbox/index.html",
     aiHubRepo: "https://github.com/lfoinding/livelabs-ai-playground",
     aiHubSkills: "https://github.com/lfoinding/livelabs-ai-playground/tree/main/LiveLabs-AI-Developer"
@@ -50,14 +53,14 @@ window.authorGuideContent = (function () {
     stepMeta: [
       {
         id: "step-1",
-        title: "Submit Workshop Request",
+        title: "WMS Platform",
         guideTarget: "1-labs-wms",
         summary: "Start in WMS, fill the reviewer-facing request fields with real detail, and understand the approval to Quality Assurance status flow before development begins.",
         keywords: ["wms", "workshop request", "stakeholder", "council", "tags", "approved", "self Quality Assurance", "quarterly Quality Assurance"]
       },
       {
         id: "step-2",
-        title: "Create Workshop + Add to GitHub",
+        title: "Setup environment + Create Workshop",
         guideTarget: "2-labs-github",
         summary: "Set up GitHub Desktop and Visual Studio Code, fork and clone the right repos, copy the sample workshop, and validate preview early.",
         keywords: ["github", "fork", "clone", "upstream", "git config", "github pages", "preview", "manifest"]
@@ -77,7 +80,7 @@ window.authorGuideContent = (function () {
         title: "WMS Request",
         short: "VPN, request form, tags, council review, status flow, social planning, and the WMS gates that control authoring.",
         accent: "red",
-        tags: ["workflow", "beginner"],
+        tags: ["wms"],
         description: "Use this card when you need the real WMS process from the source guide: how to submit, what metadata reviewers need, which status comes next, when GitHub work should start, and how the same WMS record carries the workshop through publishing and later Quarterly Quality Assurance.",
         steps: [
           "Connect to Corporate VPN, open Oracle Workshop Management System, and click Submit a New Workshop Request.",
@@ -101,8 +104,8 @@ window.authorGuideContent = (function () {
           "Changing status before the checklist is saved.",
           "Forgetting that Self Quality Assurance, stakeholder review, publishing, and Quarterly Quality Assurance all depend on this same WMS record."
         ],
-        exampleTitle: "Example completion",
-        exampleIntro: "These are the kinds of answers reviewers should see. The exact stakeholder or council name changes, but the level of detail should not.",
+        exampleTitle: "Prompt-ready WMS examples",
+        exampleIntro: "Use these fields as a baseline, or generate prompt-driven examples from the Quickstart WMS Platform panel.",
         exampleFields: [
           exampleField("Workshop Title", "Build and publish an Oracle LiveLabs workshop from WMS to GitHub Pages", "Lead with the learner outcome, not only the product name."),
           exampleField("Workshop Abstract", "Authors learn how to request a workshop in WMS, prepare GitHub Desktop and Visual Studio Code, build from the LiveLabs sample structure, complete Self Quality Assurance, and request publishing.", "A reviewer should understand the end-to-end goal after two or three sentences."),
@@ -136,7 +139,7 @@ window.authorGuideContent = (function () {
         title: "GitHub Setup",
         short: "Oracle email account, GitHub Desktop, Visual Studio Code, Live Server, and authoring-ready settings.",
         accent: "ocean",
-        tags: ["workflow", "beginner"],
+        tags: ["github"],
         description: "Use this card when the blocker is workstation setup. It focuses on the exact tools and UI steps the workshop uses for first-time authoring.",
         steps: [
           "Create or confirm one GitHub account tied to your Oracle email, then finish GitHub Settings with your real name, profile photo, and username before you request repository access.",
@@ -197,7 +200,7 @@ window.authorGuideContent = (function () {
         title: "Sync & Preview",
         short: "Fork, clone, merge upstream, sample structure, GitHub Pages, and preview URL patterns.",
         accent: "ocean",
-        tags: ["workflow", "advanced"],
+        tags: ["github"],
         description: "Use this when the question is really about repository hygiene: where to fork, how to stay synced, what the folder structure should look like, and how preview URLs are derived.",
         steps: [
           "After approval, fork the target oracle-livelabs repository and the common repository from the GitHub web UI so you have both the product repository and the shared sample assets.",
@@ -420,7 +423,7 @@ window.authorGuideContent = (function () {
         title: "Reuse & Variables",
         short: "Common labs, manifest variables, and conditional content without duplicating pages.",
         accent: "pine",
-        tags: ["advanced", "workflow"],
+        tags: ["markdown"],
         description: "Use this when a workshop needs shared content or variant-aware sections, and you need a real pattern instead of a vague reminder that reuse exists.",
         steps: [
           "Reference stable common labs through absolute manifest URLs instead of copying them into the workshop.",
@@ -464,7 +467,7 @@ window.authorGuideContent = (function () {
         title: "LiveLabs Quizzes",
         short: "Single-topic quizzes, scored quiz variants, and badge configuration that stay close to the step they reinforce.",
         accent: "sienna",
-        tags: ["interactivity"],
+        tags: ["interactive"],
         description: "Use this card when the learner should stop and verify understanding of the task that just happened, not when you only want decorative interactivity.",
         steps: [
           "Add a quiz block in the task where the learner should stop and verify understanding of the step that just finished.",
@@ -499,7 +502,7 @@ window.authorGuideContent = (function () {
           "```"
         ].join("\n"),
         image: {
-          src: "./04-workshop-components-reuse/sections/02-add-quizzes/images/quizconfig.png",
+          src: "./content/author-guide/quiz/images/quizconfig.png",
           alt: "Quiz configuration example",
           caption: "Use quiz-config only when scoring or badges are really part of the learning flow."
         },
@@ -512,7 +515,7 @@ window.authorGuideContent = (function () {
         title: "FreeSQL Embed",
         short: "Generate the FreeSQL embed, place it in the right task, and validate the rendered editor before review.",
         accent: "pine",
-        tags: ["interactivity", "advanced"],
+        tags: ["freesql", "interactive"],
         description: "Use this card when running SQL inline inside the lab materially improves the task flow for the learner.",
         steps: [
           "Prepare the SQL or PL/SQL the learner should run and generate the embed snippet from FreeSQL.",
@@ -539,6 +542,98 @@ window.authorGuideContent = (function () {
           "4. Preview the rendered lab before review"
         ].join("\n"),
         sourceHref: labLink("freesqlembed"),
+        sourceLabel: "Open Full Guide",
+        guideTarget: "reuse-enhancements"
+      },
+      {
+        id: "freesql-tutorial-publishing",
+        title: "FreeSQL Tutorial Publishing",
+        short: "Create a FreeSQL tutorial, map modules to lab tasks, share the tutorial link, and enable the orange Run on FreeSQL option in WMS.",
+        accent: "pine",
+        tags: ["freesql", "publishing"],
+        updatedAt: "2026-01-01",
+        description: "Use this card when SQL or PL/SQL learners should run content in FreeSQL instead of a sandbox or their own tenancy.",
+        steps: [
+          "Open FreeSQL, choose the right database experience, sign in, and create a tutorial or script from My Content.",
+          "Match the tutorial name, description, and tags to the WMS workshop details so the FreeSQL content and LiveLabs entry tell the same story.",
+          "Add one tutorial module for the introduction and one module for each task that learners must run or read.",
+          "Open the tutorial in the FreeSQL worksheet, review the instructions, edit modules, and reorder modules until the flow matches the workshop.",
+          "Use Share to copy the tutorial link, then paste it into WMS Publishing > Run on FreeSQL URL and enable Run on FreeSQL.",
+          "Remember that orange-button instructions live in FreeSQL. Brown and green button instructions still come from GitHub markdown."
+        ],
+        checkpoints: [
+          "The FreeSQL tutorial content matches the WMS title, description, and learner outcome.",
+          "Each task has a module, and the module order matches the learner flow.",
+          "The WMS Publishing tab has the FreeSQL URL and the Run on FreeSQL slider enabled."
+        ],
+        watchFor: [
+          "Updating GitHub markdown and expecting an orange-button FreeSQL tutorial to change.",
+          "Using a script when the content needs module navigation.",
+          "Publishing the LiveLabs entry before the tutorial share link opens and runs correctly."
+        ],
+        resourcesTitle: "FreeSQL entry point",
+        resourcesIntro: "Use the FreeSQL site for the tutorial and WMS for the public LiveLabs button.",
+        resourceLinks: [
+          resourceLink("Oracle FreeSQL", officialLinks.freesql, "Create and edit the tutorial or script."),
+          resourceLink("Oracle LiveLabs GitHub repositories", officialLinks.oracleRepos, "Use GitHub for brown and green button instructions.")
+        ],
+        snippetMeta: "Orange button handoff",
+        snippetTitle: "FreeSQL publishing checklist",
+        snippet: [
+          "1. Create tutorial or script in FreeSQL",
+          "2. Add modules for introduction and tasks",
+          "3. Test in the FreeSQL worksheet",
+          "4. Share and copy the tutorial link",
+          "5. Paste into WMS Run on FreeSQL URL",
+          "6. Enable Run on FreeSQL",
+          "7. Save and verify the orange button"
+        ].join("\n"),
+        image: {
+          src: "./content/author-guide/11-labs-create-freesql/images/add-livesql-url.png",
+          alt: "Run on FreeSQL URL field in WMS",
+          caption: "WMS turns the FreeSQL share link into the orange Run on FreeSQL entry."
+        },
+        sourceHref: labLink("11-create-freesql"),
+        sourceLabel: "Open Full Guide",
+        guideTarget: "reuse-enhancements"
+      },
+      {
+        id: "freesql-button-integration",
+        title: "FreeSQL Button Integration",
+        short: "Add the FreeSQL button tag, wrap SQL in FreeSQL blocks, test the button locally, and use a tutorial link when code exceeds URL limits.",
+        accent: "pine",
+        tags: ["freesql", "markdown"],
+        updatedAt: "2026-01-01",
+        description: "Use this card when the markdown itself should create a FreeSQL worksheet or tutorial launch button for SQL-heavy workshops or sprints.",
+        steps: [
+          "Place the <freesql-button> tag immediately after the lab title.",
+          "Wrap each runnable SQL block in <freesql> and </freesql> tags so FreeSQL can populate the worksheet.",
+          "Tell learners to sign in when the code modifies the database.",
+          "If the worksheet URL would exceed 2048 characters, create a FreeSQL tutorial and use <freesql-button src=\"{tutorial-url}\"> instead.",
+          "Open the workshop with Live Server, click Try It Now with FreeSQL, and run the worksheet or tutorial end to end."
+        ],
+        checkpoints: [
+          "The button appears immediately after the lab title.",
+          "Every runnable SQL block that belongs in the worksheet is inside FreeSQL tags.",
+          "The generated worksheet or tutorial opens in FreeSQL and contains the expected code."
+        ],
+        watchFor: [
+          "Trying to fit long setup scripts into a worksheet URL instead of creating a tutorial.",
+          "Forgetting to test the button after local preview renders.",
+          "Leaving database-changing code without a learner sign-in note."
+        ],
+        snippetMeta: "Markdown pattern",
+        snippetTitle: "Worksheet and tutorial button options",
+        snippet: [
+          "<freesql-button>",
+          "",
+          "<freesql>",
+          "select * from departments;",
+          "</freesql>",
+          "",
+          "<freesql-button src=\"{tutorial-url}\">"
+        ].join("\n"),
+        sourceHref: labLink("12-freesql-integration"),
         sourceLabel: "Open Full Guide",
         guideTarget: "reuse-enhancements"
       },
@@ -575,7 +670,7 @@ window.authorGuideContent = (function () {
           "- Keep only referenced files in the images folder"
         ].join("\n"),
         image: {
-          src: "./05-tools/sections/01-capture-screens-best-practices/images/screen-captures-general-guidelines.png",
+          src: "./content/author-guide/13-labs-capture-screens-best-practices/images/screen-captures-general-guidelines.png",
           alt: "General screenshot guidelines reference",
           caption: "The screenshot standards page is the authoritative checklist for capture quality and privacy."
         },
@@ -588,7 +683,7 @@ window.authorGuideContent = (function () {
         title: "OptiShot",
         short: "Install, pick the folder, keep max size at 1280, and read the summary before you rerun checks.",
         accent: "ocean",
-        tags: ["media", "Quality Assurance"],
+        tags: ["media", "tools"],
         description: "Use this card when the pull request is blocked on image size or when you want a fast cleanup pass across a screenshot-heavy workshop.",
         steps: [
           "Install OptiShot for your platform and launch it so the folder picker opens immediately.",
@@ -616,7 +711,7 @@ window.authorGuideContent = (function () {
           "-m 1280"
         ].join("\n"),
         image: {
-          src: "./05-tools/sections/02-optishot/images/summary.png",
+          src: "./content/author-guide/optishot/images/summary.png",
           alt: "OptiShot summary output",
           caption: "The summary tells you which images were resized, skipped, or optimized."
         },
@@ -629,7 +724,7 @@ window.authorGuideContent = (function () {
         title: "Fixomat",
         short: "Select the workshop root, choose the mode, and review FIXED versus MANUAL output carefully.",
         accent: "pine",
-        tags: ["advanced", "Quality Assurance"],
+        tags: ["tools", "validation"],
         description: "Use this card late in the workflow when the workshop already exists and you want help cleaning markdown or images before review.",
         steps: [
           "Launch LiveLabs Fixomat 2000 and select the workshop root directory, not an arbitrary nested lab folder.",
@@ -668,7 +763,7 @@ window.authorGuideContent = (function () {
         title: "Quality Assurance Checklist",
         short: "Share the preview, set status correctly, save the checklist, and certify Self Quality Assurance in WMS.",
         accent: "red",
-        tags: ["Quality Assurance", "workflow"],
+        tags: ["validation", "wms"],
         description: "Use this card when the workshop is ready for review and you need the exact order for Self Quality Assurance or Quarterly Quality Assurance without guessing.",
         steps: [
           "Open the personal GitHub Pages workshop URL and share that preview for review before you touch the Quality Assurance status in WMS.",
@@ -717,10 +812,10 @@ window.authorGuideContent = (function () {
       },
       {
         id: "pull request-checks",
-        title: "pull request Checks",
+        title: "Pull Request Checks",
         short: "Know the 1280px image limit, markdown validator rules, and how to run the scripts locally.",
         accent: "ocean",
-        tags: ["Quality Assurance", "advanced"],
+        tags: ["validation", "github"],
         description: "Use this card when GitHub Actions is blocking the pull request and you need the exact failure class instead of guessing from the red X.",
         steps: [
           "Open the Checks area on the pull request and name the exact failing workflow before you edit anything: LiveLabs Image Validation or LiveLabs Markdown Validation.",
@@ -772,7 +867,7 @@ window.authorGuideContent = (function () {
         title: "Publish Request",
         short: "Create the pull request with the WMS ID, fill the Publishing tab correctly, and supply the final URLs.",
         accent: "red",
-        tags: ["Quality Assurance", "workflow"],
+        tags: ["publishing", "wms"],
         description: "Use this card when the workshop and checklist are ready and you need the final production handoff sequence for the pull request and WMS publishing request.",
         steps: [
           "Create the pull request from GitHub Desktop after Quality Assurance fixes are pushed, and include the WMS ID in the pull request title because review will not start without it.",
@@ -832,7 +927,7 @@ window.authorGuideContent = (function () {
         title: "Review SLA",
         short: "Use the expected review and publishing windows before you escalate, and include the real deadline when timing matters.",
         accent: "pine",
-        tags: ["workflow", "Quality Assurance"],
+        tags: ["support", "publishing"],
         description: "Use this card when the blocker is timing rather than content quality and you need the normal review windows for PRs, council review, Quality Assurance, or publishing.",
         steps: [
           "Plan around 1 business day for pull request review, 2 to 3 business days for workshop submission review, 2 business days for stakeholder Quality Assurance verification, and 1 business day for publishing after approval.",
@@ -862,11 +957,324 @@ window.authorGuideContent = (function () {
         guideTarget: "validation-publish"
       },
       {
+        id: "livelabs-sprints",
+        title: "LiveLabs Sprints",
+        short: "Build a short sprint in the sprints repository, keep it under 10 to 15 minutes, open a pull request, and request sprint publishing in WMS.",
+        accent: "ocean",
+        tags: ["sprints", "github"],
+        updatedAt: "2026-01-01",
+        description: "Use this card when the deliverable is a quick answer to one technical question rather than a full workshop.",
+        steps: [
+          "Before creating a sprint, check WMS for an existing sprint with the same content.",
+          "Fork and clone oracle-livelabs/sprints, then copy the sample sprint structure into the correct domain folder.",
+          "Rename the sprint folder and markdown file together, update manifest.json, and keep the help address set to livelabs-help-sprints_us@oracle.com.",
+          "Write a focused sprint that answers one question and should take less than 10 to 15 minutes.",
+          "Preview with Live Server, commit, push, create the pull request, and set up GitHub Pages for review.",
+          "Submit the sprint publishing request in WMS, add the production URL pattern, and update the pull request with the WMS ID and LiveLabs ID."
+        ],
+        checkpoints: [
+          "The sprint belongs in the right domain folder, or the Sprints team has approved a new bucket.",
+          "The manifest title, description, filename, help address, and related sprint entries are correct.",
+          "The pull request and WMS request carry the same sprint identity and IDs."
+        ],
+        watchFor: [
+          "Turning a full workshop into a sprint instead of narrowing the sprint to one question.",
+          "Forgetting to merge upstream before work or before the pull request.",
+          "Publishing without the WMS ID and LiveLabs ID in the pull request."
+        ],
+        resourcesTitle: "Sprint source references",
+        resourcesIntro: "Use the sprint repository for production content and the sample sprint folder for structure.",
+        resourceLinks: [
+          resourceLink("oracle-livelabs/sprints", officialLinks.sprintsRepo, "Fork, clone, and open pull requests here."),
+          resourceLink("Sample sprint structure", officialLinks.sampleSprints, "Copy this structure before authoring a new sprint.")
+        ],
+        snippetMeta: "Sprint production URL",
+        snippetTitle: "Use this pattern in WMS",
+        snippet: [
+          "https://oracle-livelabs.github.io/sprints/<domain-folder>/<sprint-folder>/",
+          "",
+          "Required handoff",
+          "- WMS ID",
+          "- LiveLabs ID",
+          "- Pull request link",
+          "- Production URL"
+        ].join("\n"),
+        image: {
+          src: "./content/author-guide/10-labs-create-sprints-workflow/images/sprints-workflow.png",
+          alt: "LiveLabs sprint workflow diagram",
+          caption: "Sprints use a separate repository and publish request path from full workshops."
+        },
+        sourceHref: labLink("10-create-sprints-workflow"),
+        sourceLabel: "Open Full Guide",
+        guideTarget: "specialized-workflows"
+      },
+      {
+        id: "graphical-remote-desktop",
+        title: "Graphical Remote Desktop",
+        short: "Configure static hostname, deploy noVNC, preload workshop URLs, and validate the desktop before image capture.",
+        accent: "sienna",
+        tags: ["secure-desktop"],
+        description: "Use this card when a workshop needs a prepared noVNC graphical desktop image instead of ordinary browser or cloud-shell steps.",
+        steps: [
+          "Start from an Oracle Enterprise Linux 8 instance that meets Marketplace image requirements.",
+          "Configure and preserve a static hostname before installing products that hardcode hostnames, listeners, or domain names.",
+          "Run the noVNC setup scripts, accept or set the intended desktop OS user, and test the generated desktop URLs immediately.",
+          "Optimize browser settings and preload the workshop guide or application URLs only after noVNC launches correctly.",
+          "Create optional systemd services only for products that must already be running when learners open the desktop."
+        ],
+        checkpoints: [
+          "The noVNC URL launches successfully and auto-connects with the intended resize and quality settings.",
+          "The desktop opens the workshop guide and any required app URLs without manual learner setup.",
+          "Hostname, firstboot, browser, and service settings are validated before custom image capture."
+        ],
+        watchFor: [
+          "Capturing the image before hostname and firstboot behavior are stable.",
+          "Adding desktop apps or startup services without testing a fresh provisioned instance.",
+          "Using deprecated Oracle Linux versions for new marketplace-ready images."
+        ],
+        snippetMeta: "Desktop validation",
+        snippetTitle: "Minimum noVNC readiness checks",
+        snippet: [
+          "- Static hostname is preserved on first boot",
+          "- noVNC URL launches and reconnects",
+          "- Workshop guide URL opens inside the desktop",
+          "- Required apps or services start automatically",
+          "- Browser settings are optimized before image capture"
+        ].join("\n"),
+        sourceHref: labLink("6-labs-setup-graphical-remote-desktop"),
+        sourceLabel: "Open Full Guide",
+        guideTarget: "specialized-workflows"
+      },
+      {
+        id: "custom-image-capture",
+        title: "Custom Image Capture",
+        short: "Clean the instance, check the OL9 and NoVNC warning, create the custom OCI image, test it with ORM, and verify desktop launch before Marketplace work.",
+        accent: "sienna",
+        tags: ["marketplace", "media"],
+        updatedAt: "2026-01-01",
+        description: "Use this card when a workshop requires a reusable OCI compute image that will later be published or attached to a sandbox environment.",
+        steps: [
+          "If the image needs NoVNC access, check the source warning before you choose OL9. The current guide asks authors to avoid OL9 images for NoVNC while the LiveLabs team investigates compatibility issues.",
+          "SSH to the instance outside the remote desktop session and run the LiveLabs cleanup script before capture.",
+          "Create the custom image from the OCI Compute instance and set image compatibility details carefully.",
+          "Copy the new image OCID and update the sample ORM stack variables with image ID, desktop guide URL, and optional app URLs.",
+          "Provision a test instance from the new image and validate the remote desktop URL, browser preload behavior, and workshop guide launch.",
+          "Only move toward Marketplace or WMS image registration after the fresh test instance behaves correctly."
+        ],
+        checkpoints: [
+          "The operating system and NoVNC decision match the current LiveLabs guidance before capture starts.",
+          "Cleanup ran successfully before image capture.",
+          "The new image OCID is recorded and used in a fresh test stack.",
+          "The test instance proves the image works after provisioning, not only on the source instance."
+        ],
+        watchFor: [
+          "Using an OL9 image with NoVNC after the warning without LiveLabs team review.",
+          "Creating the image before cleanup or browser/noVNC validation.",
+          "Testing only the source instance and never testing an instance created from the captured image.",
+          "Forgetting to update desktop guide and app URL variables before packaging the ORM stack."
+        ],
+        snippetMeta: "Image handoff fields",
+        snippetTitle: "Record these before moving on",
+        snippet: [
+          "Image OCID",
+          "OEL version",
+          "NoVNC decision",
+          "desktop_guide_url",
+          "desktop_app1_url",
+          "desktop_app2_url",
+          "novnc_delay_sec",
+          "Test stack result",
+          "Validated remote desktop URL"
+        ].join("\n"),
+        sourceHref: labLink("7-labs-create-custom-image-for-marketplace"),
+        sourceLabel: "Open Full Guide",
+        guideTarget: "specialized-workflows"
+      },
+      {
+        id: "marketplace-image-publish",
+        title: "Marketplace Image Publishing",
+        short: "Prepare Marketplace listing assets, publish the custom image, and keep LiveLabs support details visible.",
+        accent: "sienna",
+        tags: ["marketplace", "publishing"],
+        updatedAt: "2026-01-01",
+        description: "Use this card when the custom image has passed testing and needs to become a Marketplace-backed image for LiveLabs delivery.",
+        steps: [
+          "Confirm the custom image has been tested from a fresh provisioned instance before starting Marketplace publishing.",
+          "Prepare required Marketplace listing details, terms of use, support information, and artifact metadata.",
+          "Create or update the Marketplace listing with LiveLabs as a visible support link where required.",
+          "Publish the listing and wait for the Marketplace flow to complete before registering it in LiveLabs.",
+          "Keep listing name, listing OCID, app catalog OCID, image OCID, and version together for the WMS registration step."
+        ],
+        checkpoints: [
+          "The listing points to the correct image and support information.",
+          "Listing and app catalog identifiers are captured for the next WMS step.",
+          "The image version matches the image that was tested."
+        ],
+        watchFor: [
+          "Publishing an untested image because the source desktop looked correct.",
+          "Losing the listing OCID or app catalog OCID before WMS registration.",
+          "Treating Marketplace publishing and LiveLabs sandbox image update as the same step."
+        ],
+        snippetMeta: "Marketplace values",
+        snippetTitle: "Capture these values after publish",
+        snippet: [
+          "Listing Name",
+          "Listing OCID",
+          "App Catalog OCID",
+          "Image OCID",
+          "Version",
+          "Support contacts"
+        ].join("\n"),
+        sourceHref: labLink("8-labs-publish-custom-image-to-marketplace"),
+        sourceLabel: "Open Full Guide",
+        guideTarget: "specialized-workflows"
+      },
+      {
+        id: "wms-custom-image-update",
+        title: "WMS Custom Image Update",
+        short: "Register a Marketplace listing in WMS, add the image version, and update an existing sandbox environment.",
+        accent: "red",
+        tags: ["marketplace", "wms"],
+        updatedAt: "2026-01-01",
+        description: "Use this card after a Marketplace image is published and you need to attach it to a pre-existing LiveLabs sandbox environment through WMS.",
+        steps: [
+          "Open WMS and register the Marketplace listing under Custom Images with listing name, listing OCID, and app catalog OCID.",
+          "Add support contacts so the right people can view or edit the image entry later.",
+          "Add the image to the registered listing with image OCID, version, database software version when relevant, and the noVNC flag when the image uses remote desktop.",
+          "Open the workshop Publishing tab, edit the LiveLab sandbox environment, and select the new image under the Sandbox Environment image list.",
+          "Save the update and test the LiveLab again. Self-service updates apply to pre-existing sandbox environments; new sandbox requests still use the publishing request flow."
+        ],
+        checkpoints: [
+          "Listing OCID, app catalog OCID, image OCID, version, and support contacts are all correct.",
+          "The noVNC checkbox matches the image behavior.",
+          "The updated sandbox launches and uses the intended image after save."
+        ],
+        watchFor: [
+          "Trying to use self-service update for a sandbox environment that does not already exist.",
+          "Selecting an image version you have not tested.",
+          "Forgetting to retest the LiveLab after saving the image update."
+        ],
+        snippetMeta: "WMS image update checklist",
+        snippetTitle: "Register then attach the image",
+        snippet: [
+          "1. Register Listing",
+          "2. Add support contacts",
+          "3. Add Image OCID and Version",
+          "4. Mark NoVNC if remote desktop is included",
+          "5. Edit Publishing > Sandbox Environment",
+          "6. Select the new image",
+          "7. Save and retest the LiveLab"
+        ].join("\n"),
+        sourceHref: labLink("12-add-custom-image-to-workshop"),
+        sourceLabel: "Open Full Guide",
+        guideTarget: "specialized-workflows"
+      },
+      {
+        id: "livestack-create",
+        title: "LiveStack Creation",
+        short: "Create a LiveStack in WMS, add LiveLab entries and assets, manage visibility, and request publishing.",
+        accent: "ocean",
+        tags: ["livestack", "assets"],
+        updatedAt: "2026-06-01",
+        description: "Use this card when a solution needs a LiveStack landing page that joins demos, LiveLabs, deployment assets, and supporting materials around one business outcome.",
+        steps: [
+          "Open WMS, choose Create a LiveStack, read the landing page, and create the initial LiveStack record.",
+          "Use the LiveStack details page as the working surface for entries, assets, ordering, visibility, and publishing status.",
+          "Add LiveLab entries by name or ID, then decide whether Run on Sandbox and Run on Your Tenancy should appear from the LiveStack.",
+          "Set each entry title and position deliberately. The source LiveLab title is only the default, not a requirement.",
+          "Add assets that you created or that someone shared with you, then set position and internal or external visibility.",
+          "When the LiveStack is ready, change status to Publish Requested and save. Council review usually returns a status update in 2 to 3 business days."
+        ],
+        checkpoints: [
+          "The LiveStack has a clear Envision, Try, Embed, and Scale story instead of a loose list of links.",
+          "Every LiveLab entry has the intended title, launch options, and order.",
+          "Every asset has the right visibility before the LiveStack is published.",
+          "The author knows that published LiveStack changes appear in LiveLabs immediately."
+        ],
+        watchFor: [
+          "Adding assets before WMS can list them for you. Only assets created by you or shared with you appear.",
+          "Leaving internal briefing material visible to external audiences.",
+          "Reordering or editing a published LiveStack without realizing the change is immediate."
+        ],
+        snippetMeta: "LiveStack build path",
+        snippetTitle: "Create, fill, and publish the LiveStack",
+        snippet: [
+          "1. WMS > Create a LiveStack",
+          "2. Complete the initialization form",
+          "3. Add LiveLab entries by name or ID",
+          "4. Choose launch options, title, and position",
+          "5. Add shared or owned assets",
+          "6. Set internal or external visibility",
+          "7. Change status to Publish Requested"
+        ].join("\n"),
+        image: {
+          src: "./content/author-guide/15-livestack/images/ls-details.png",
+          alt: "LiveStack details page in WMS",
+          caption: "The details page is where authors add LiveLabs, assets, order, visibility, and publish status."
+        },
+        sourceHref: labLink("create-a-livestack"),
+        sourceLabel: "Open Full Guide",
+        guideTarget: "specialized-workflows"
+      },
+      {
+        id: "wms-assets",
+        title: "WMS Asset Manager",
+        short: "Upload reusable files or links, share editor access, copy PAR links, and keep LiveStack or sandbox assets maintainable.",
+        accent: "pine",
+        tags: ["assets", "wms"],
+        updatedAt: "2026-06-01",
+        description: "Use this card when a workshop, sandbox, tenancy flow, or LiveStack needs reusable files or links managed through WMS Self Services instead of ad hoc support requests.",
+        steps: [
+          "Open WMS, expand Self Services, choose Assets, and click New Asset.",
+          "For files, choose Upload a File, pick the file, name it clearly, choose an asset type, and add a description when the name is not enough.",
+          "For links, choose Upload a Link, paste the URL, name the asset, choose its type, and describe what the link opens.",
+          "Add additional editors as comma-separated email addresses when teammates or stakeholders need the asset in their own asset list.",
+          "Use the link icon to open or copy the PAR link that WMS creates for uploaded files.",
+          "Overwrite a file asset when the same PAR link should keep working. Create a new asset when you need a new PAR link."
+        ],
+        checkpoints: [
+          "The asset name, type, description, and editor list tell future maintainers what the asset is and who owns it.",
+          "Uploaded files have a working PAR link before you use them in a workshop, sandbox, tenancy flow, or LiveStack.",
+          "The team knows whether it is overwriting an existing asset or creating a new asset with a new link."
+        ],
+        watchFor: [
+          "Uploading assets with vague names that become unsearchable later.",
+          "Creating a new asset when an overwriteable PAR link should stay stable.",
+          "Forgetting to add additional editors before handoff."
+        ],
+        snippetMeta: "Asset manager decisions",
+        snippetTitle: "Choose the right asset path",
+        snippet: [
+          "File asset",
+          "- Store in Object Storage",
+          "- Use the generated PAR link",
+          "- Overwrite to keep the same PAR link",
+          "",
+          "Link asset",
+          "- Store a reusable URL in WMS",
+          "- Use a clear name and type",
+          "- Add additional editors for handoff",
+          "",
+          "Common asset types",
+          "- Demo",
+          "- Link",
+          "- Terraform Stack"
+        ].join("\n"),
+        image: {
+          src: "./content/author-guide/17-assets/images/2-new-asset-dialog.png",
+          alt: "WMS Asset Details dialog for file or link assets",
+          caption: "WMS assets turn reusable files and links into shared, maintainable authoring objects."
+        },
+        sourceHref: labLink("17-assets"),
+        sourceLabel: "Open Full Guide",
+        guideTarget: "specialized-workflows"
+      },
+      {
         id: "secure-desktop-when",
         title: "Secure Desktop: When to Use It",
         short: "Test normal access first, use secure desktop only for real restrictions, and validate with sample users before the event.",
         accent: "sienna",
-        tags: ["workflow", "advanced"],
+        tags: ["secure-desktop"],
         description: "Use this card when the workshop audience may be on restricted corporate laptops and you need to decide whether OCI Secure Desktops are actually required.",
         steps: [
           "Assume standard access first, then test with one or two representative participants from the target organization before you request secure desktops.",
@@ -908,7 +1316,7 @@ window.authorGuideContent = (function () {
         title: "Secure Desktop: Request and Access",
         short: "Post the request with full event details, plan earlier for large events, and make participants use the supported browser flow.",
         accent: "sienna",
-        tags: ["workflow", "advanced"],
+        tags: ["secure-desktop", "support"],
         description: "Use this card when secure desktops are justified and you need the exact request details plus the participant-side launch prerequisites.",
         steps: [
           "Post the request in the LiveLabs Authors Slack channel and include event name, event date, workshop, participant count, and why standard access is blocked.",
@@ -956,7 +1364,7 @@ window.authorGuideContent = (function () {
         title: "AI Developer Hub",
         short: "Use the AI Developer Hub guide, repository, and skill bundles to speed up authoring work without replacing the canonical workflow.",
         accent: "pine",
-        tags: ["workflow", "advanced"],
+        tags: ["ai", "tools"],
         description: "Use this card when you want AI-assisted help for drafting, restructuring, or automating LiveLabs authoring tasks, but still need the output anchored to the canonical guide and validator rules.",
         steps: [
           "Open the LiveLabs AI Developer Hub how-to guide first so you understand the intended workflow and starting points.",
