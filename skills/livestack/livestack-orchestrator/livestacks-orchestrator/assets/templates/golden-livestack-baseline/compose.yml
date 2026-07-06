@@ -1,0 +1,110 @@
+services:
+  db:
+    hostname: db
+    image: container-registry.oracle.com/database/free:latest
+    environment:
+      ORACLE_PWD: ${ORACLE_PWD:-change-me}
+      DB_APP_USER: ${DB_APP_USER:-app_user}
+      DB_APP_PASSWORD: ${DB_APP_PASSWORD:-change-me}
+    ports:
+      - "1521:1521"
+    healthcheck:
+      test: ["CMD-SHELL", "[ -f /opt/oracle/oradata/.livestack_bootstrap_done ] && echo 'SELECT 1 FROM dual;' | sqlplus -L -s system/$${ORACLE_PWD:-change-me}@localhost:1521/FREEPDB1 >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 40
+      start_period: 180s
+    networks:
+      default:
+        aliases:
+          - db
+    volumes:
+      - db-data:/opt/oracle/oradata
+      - ./db:/workspace/app/db:ro,z
+      - ./scripts/bootstrap_db.sh:/opt/oracle/scripts/startup/20-bootstrap_db.sh:ro,z
+
+  ords:
+    hostname: ords
+    image: container-registry.oracle.com/database/ords:latest
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      CONN_STRING: db:1521/${DB_SERVICE:-FREEPDB1}
+      DBHOST: db
+      DBPORT: 1521
+      DBSERVICENAME: ${DB_SERVICE:-FREEPDB1}
+      ORDS_PUBLIC_URL: ${ORDS_PUBLIC_URL:-http://127.0.0.1:8181/ords/app}
+      DB_APP_USER: ${DB_APP_USER:-app_user}
+      DB_APP_PASSWORD: ${DB_APP_PASSWORD:-change-me}
+      ORACLE_PWD: ${ORACLE_PWD:-change-me}
+    ports:
+      - "8181:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/ords/ >/dev/null || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 120s
+    volumes:
+      - ./ords-config:/etc/ords/config:Z,U
+    networks:
+      default:
+        aliases:
+          - ords
+
+  ollama:
+    hostname: ollama
+    image: docker.io/ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    networks:
+      default:
+        aliases:
+          - ollama
+    volumes:
+      - ollama-data:/root/.ollama
+
+  app:
+    hostname: app
+    build:
+      context: .
+      dockerfile: Containerfile
+    depends_on:
+      db:
+        condition: service_healthy
+      ords:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-}
+      PORT: 3001
+      ORDS_BASE_URL: ${ORDS_BASE_URL:-http://ords:8080/ords/app}
+      DB_HOST: ${DB_HOST:-db}
+      DB_SERVICE: ${DB_SERVICE:-FREEPDB1}
+      DB_APP_USER: ${DB_APP_USER:-app_user}
+      DB_APP_PASSWORD: ${DB_APP_PASSWORD:-change-me}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.2}
+      OLLAMA_EXTRA_MODELS: ${OLLAMA_EXTRA_MODELS:-gemma:2b}
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://127.0.0.1:3001/healthz', (res) => process.exit(res.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))\""]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    ports:
+      - "8505:3001"
+    networks:
+      default:
+        aliases:
+          - app
+
+networks:
+  default:
+
+volumes:
+  db-data:
+  ollama-data:

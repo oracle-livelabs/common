@@ -1,0 +1,44 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PLUGIN_ROOT/scripts/polly_bridge.py\" hook",
+            "commandWindows": "py -3 \"%PLUGIN_ROOT%\\scripts\\polly_bridge.py\" hook",
+            "statusMessage": "Loading shared context from Polly",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PLUGIN_ROOT/scripts/polly_bridge.py\" hook",
+            "commandWindows": "py -3 \"%PLUGIN_ROOT%\\scripts\\polly_bridge.py\" hook",
+            "statusMessage": "Checking Polly for relevant context",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PLUGIN_ROOT/scripts/polly_bridge.py\" hook",
+            "commandWindows": "py -3 \"%PLUGIN_ROOT%\\scripts\\polly_bridge.py\" hook",
+            "statusMessage": "Sharing the latest checkpoint with Polly",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

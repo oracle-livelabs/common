@@ -70,6 +70,64 @@
     ["secure desktop", "secure desktops", "restricted laptop", "restricted corporate laptop", "novnc", "chrome", "popups"],
     ["ai", "ai developer hub", "agentic", "automation first", "skill bundle", "how to guide"]
   ];
+  var allowedToolkitSorts = {
+    alphabetical: true,
+    relevance: true,
+    latest: true
+  };
+  var tagFacetOrder = [
+    "wms",
+    "github",
+    "markdown",
+    "validation",
+    "publishing",
+    "media",
+    "interactive",
+    "freesql",
+    "marketplace",
+    "livestack",
+    "assets",
+    "secure-desktop",
+    "support",
+    "tools",
+    "sprints",
+    "ai"
+  ];
+  var recommendedCheatsheetOrder = [
+    "wms-request",
+    "github-setup",
+    "sync-preview",
+    "markdown-structure",
+    "links-paths",
+    "image-references",
+    "copy-sql",
+    "Quality Assurance-checklist",
+    "pull request-checks",
+    "publish-request",
+    "review-sla",
+    "screenshots",
+    "optishot",
+    "fixomat",
+    "reuse-variables",
+    "quiz-blocks",
+    "freesql-embed",
+    "freesql-button-integration",
+    "freesql-tutorial-publishing",
+    "livelabs-sprints",
+    "graphical-remote-desktop",
+    "secure-desktop-when",
+    "secure-desktop-request",
+    "custom-image-capture",
+    "marketplace-image-publish",
+    "wms-custom-image-update",
+    "livestack-create",
+    "wms-assets",
+    "ai-developer-hub"
+  ];
+  var recommendedCheatsheetOrderMap = recommendedCheatsheetOrder.reduce(function (map, id, index) {
+    map[id] = index;
+    return map;
+  }, {});
 
   function fullGuideLabHref(labId, extraParams) {
     var target;
@@ -96,6 +154,8 @@
     currentStep: 0,
     fastTrack: "guided",
     activeTag: "all",
+    activeTags: [],
+    toolkitSort: "alphabetical",
     toolkitQuery: "",
     searchQuery: "",
     guideSection: guideSections.length ? guideSections[0].id : ""
@@ -117,6 +177,182 @@
       leads: "production"
     }
   ];
+  var wmsStatusGraphViewBox = { x: 0, y: 0, width: 1320, height: 660 };
+  var wmsStatusNodeHalfWidth = 82;
+  var wmsStatusNodeHalfHeight = 31;
+  var wmsStatusGraphFitGutter = 24;
+  var wmsStatusGraphStatuses = [
+    {
+      id: "submitted",
+      label: "Submitted",
+      group: "Intake",
+      responsible: "Workshop author / submitter",
+      meaning: "The workshop has been submitted for initial review. The author has provided the first set of workshop details and is waiting for review.",
+      nextStep: "The reviewer validates whether the submitted information is sufficient. If it is complete, the workshop moves to Approved. If it is incomplete, it moves to More Info Needed.",
+      checks: [
+        "Workshop details are present.",
+        "Workshop purpose and audience are clear.",
+        "Required owner or contact information is available."
+      ],
+      x: 110,
+      y: 300,
+      color: "#f3f4f6"
+    },
+    {
+      id: "more-info",
+      label: "More Info Needed",
+      group: "Rework",
+      responsible: "Workshop author / submitter",
+      meaning: "The reviewer needs clarifications or missing details before the workshop can continue.",
+      nextStep: "The author updates the requested information and resubmits the workshop for review.",
+      checks: [
+        "Respond to reviewer comments.",
+        "Add missing metadata, scope, owner, or setup details.",
+        "Confirm the resubmitted information is complete."
+      ],
+      x: 300,
+      y: 155,
+      color: "#fff7ed"
+    },
+    {
+      id: "approved",
+      label: "Approved",
+      group: "Approval",
+      responsible: "LiveLabs reviewer / approver",
+      meaning: "The workshop request has enough information and is approved to move into the build or development stage.",
+      nextStep: "The author or workshop development owner starts the content build in In Development.",
+      checks: [
+        "Submission is understandable and actionable.",
+        "Workshop can proceed to content development.",
+        "Any approval notes are communicated to the author."
+      ],
+      x: 300,
+      y: 300,
+      color: "#ecfdf5"
+    },
+    {
+      id: "in-development",
+      label: "In Development",
+      group: "Build",
+      responsible: "Workshop author / development owner",
+      meaning: "The workshop content is being created or updated. This can include labs, Markdown content, images, manifests, setup steps, and validation work.",
+      nextStep: "When development is ready, the author moves the workshop to Self QA.",
+      checks: [
+        "Lab Markdown content is written or updated.",
+        "Images, manifests, and folder structure are in place.",
+        "Commands and code examples are ready to test.",
+        "Links and references are prepared for validation."
+      ],
+      x: 510,
+      y: 300,
+      color: "#eff6ff"
+    },
+    {
+      id: "self-qa",
+      label: "Self QA",
+      group: "QA",
+      responsible: "Workshop author / content owner",
+      meaning: "The author performs their own quality checks before marking the workshop as complete.",
+      nextStep: "If self-QA passes, move to Self QA Complete. If issues are found, return to In Development for fixes.",
+      checks: [
+        "Information in the workshop is adequate and updated.",
+        "Code is correct and working.",
+        "Links are correct.",
+        "Help email is included in manifest.json.",
+        "WMS URLs are updated as needed after approval.",
+        "Filenames are descriptive and lowercase.",
+        "Folder structure follows the sample workshop structure.",
+        "Images include useful alt text."
+      ],
+      x: 720,
+      y: 300,
+      color: "#f5f3ff"
+    },
+    {
+      id: "self-qa-complete",
+      label: "Self QA Complete",
+      group: "QA",
+      responsible: "Workshop author / content owner",
+      meaning: "The author has completed self-QA and confirmed that the workshop is ready to be marked complete or move forward in the publication workflow.",
+      nextStep: "Move the workshop to Completed.",
+      checks: [
+        "Self-QA checklist is complete.",
+        "No known blocking issues remain.",
+        "The workshop owner is ready to complete the workflow."
+      ],
+      x: 950,
+      y: 300,
+      color: "#eef2ff"
+    },
+    {
+      id: "completed",
+      label: "Completed",
+      group: "Done",
+      responsible: "LiveLabs owner / workshop owner",
+      meaning: "The workshop is complete and available for normal use, publication, or maintenance depending on your internal workflow.",
+      nextStep: "No immediate action is required. Later, the workshop may enter Quarterly QA or return to In Development if updates are required.",
+      checks: [
+        "Workshop is complete.",
+        "Ownership is clear for future maintenance.",
+        "Future QA or update cycle can be scheduled."
+      ],
+      x: 1180,
+      y: 300,
+      color: "#f0fdf4"
+    },
+    {
+      id: "quarterly-qa",
+      label: "Quarterly QA",
+      group: "Recurring QA",
+      responsible: "QA reviewer / workshop owner",
+      meaning: "The completed workshop is reviewed during a periodic QA cycle to make sure it is still accurate and working.",
+      nextStep: "If QA passes, move to Quarterly QA Complete. If problems are found, return to In Development for fixes.",
+      checks: [
+        "Workshop information is still accurate and updated.",
+        "Code and commands still work.",
+        "Links still resolve correctly.",
+        "Manifest and support contact details are still current.",
+        "Screenshots and instructions still match the product experience."
+      ],
+      x: 950,
+      y: 480,
+      color: "#fffbeb"
+    },
+    {
+      id: "quarterly-qa-complete",
+      label: "Quarterly QA Complete",
+      group: "Done",
+      responsible: "QA reviewer / LiveLabs owner",
+      meaning: "The scheduled QA review is complete and no blocking issues remain from that review cycle.",
+      nextStep: "Return the workshop to Completed until the next review cycle or update request.",
+      checks: [
+        "Quarterly QA review is complete.",
+        "Findings are resolved or documented.",
+        "Workshop can return to normal completed status."
+      ],
+      x: 1180,
+      y: 480,
+      color: "#f0fdf4"
+    }
+  ];
+  var wmsStatusGraphTransitions = [
+    { from: "submitted", to: "approved", type: "normal", label: "review passes", labelX: 205, labelY: 236 },
+    { from: "submitted", to: "more-info", type: "alt", label: "needs details", labelX: 188, labelY: 210 },
+    { from: "more-info", to: "submitted", type: "alt", label: "resubmit", labelX: 310, labelY: 220 },
+    { from: "approved", to: "in-development", type: "normal", label: "start build", labelX: 405, labelY: 236 },
+    { from: "in-development", to: "self-qa", type: "normal", label: "ready to test", labelX: 615, labelY: 236 },
+    { from: "self-qa", to: "in-development", type: "alt", label: "fix issues", labelX: 615, labelY: 374 },
+    { from: "self-qa", to: "self-qa-complete", type: "normal", label: "QA passes", labelX: 835, labelY: 236 },
+    { from: "self-qa-complete", to: "completed", type: "normal", label: "complete", labelX: 1065, labelY: 236 },
+    { from: "completed", to: "quarterly-qa", type: "normal", label: "scheduled review", labelX: 1088, labelY: 386 },
+    { from: "quarterly-qa", to: "in-development", type: "alt", label: "updates needed", labelX: 720, labelY: 414 },
+    { from: "quarterly-qa", to: "quarterly-qa-complete", type: "normal", label: "QA passes", labelX: 1065, labelY: 416 },
+    { from: "quarterly-qa-complete", to: "completed", type: "normal", label: "return", labelX: 1210, labelY: 386 }
+  ];
+  var wmsStatusGraphNodeMap = wmsStatusGraphStatuses.reduce(function (map, status) {
+    map[status.id] = status;
+    return map;
+  }, {});
   var previousView = {
     mode: "hub",
     currentStep: 0,
@@ -139,6 +375,7 @@
   var beginnerMode = document.getElementById("beginnerMode");
   var explorerMode = document.getElementById("explorerMode");
   var guideMode = document.getElementById("guideMode");
+  var generatorMode = document.getElementById("generatorMode");
   var searchMode = document.getElementById("searchMode");
   var rabbitFlow = document.getElementById("rabbitFlow");
   var stepSections = Array.from(document.querySelectorAll(".rabbit-step"));
@@ -157,8 +394,11 @@
   var bubbleGrid = document.getElementById("bubbleGrid");
   var emptyState = document.getElementById("emptyState");
   var resultCount = document.getElementById("resultCount");
+  var filterSummary = document.getElementById("filterSummary");
   var bubbleSearch = document.getElementById("bubbleSearch");
   var clearSearch = document.getElementById("clearSearch");
+  var toolkitSort = document.getElementById("toolkitSort");
+  var tagPillsMount = document.getElementById("tagPills");
   var tagPills = Array.from(document.querySelectorAll(".tag-pill"));
   var guideLayout = document.querySelector(".guide-layout");
   var guideSidebar = document.querySelector(".guide-sidebar");
@@ -179,6 +419,22 @@
   var searchPageForm = document.getElementById("searchPageForm");
   var searchPageInput = document.getElementById("searchPageInput");
   var searchPageClear = document.getElementById("searchPageClear");
+  var wmsExampleForm = document.getElementById("wmsExampleForm");
+  var wmsExamplePrompt = document.getElementById("wmsExamplePrompt");
+  var wmsExampleResults = document.getElementById("wmsExampleResults");
+  var wmsExampleEmpty = document.getElementById("wmsExampleEmpty");
+  var wmsExampleLoading = document.getElementById("wmsExampleLoading");
+  var wmsExampleError = document.getElementById("wmsExampleError");
+  var workshopMarkdownForm = document.getElementById("workshopMarkdownForm");
+  var workshopMarkdownPrompt = document.getElementById("workshopMarkdownPrompt");
+  var workshopMarkdownType = document.getElementById("workshopMarkdownType");
+  var workshopMarkdownOutput = document.getElementById("workshopMarkdownOutput");
+  var workshopMarkdownSummary = document.getElementById("workshopMarkdownSummary");
+  var generatorOutputMeta = document.getElementById("generatorOutputMeta");
+  var workshopMarkdownEmpty = document.getElementById("workshopMarkdownEmpty");
+  var workshopMarkdownLoading = document.getElementById("workshopMarkdownLoading");
+  var workshopMarkdownError = document.getElementById("workshopMarkdownError");
+  var copyGeneratedMarkdown = document.getElementById("copyGeneratedMarkdown");
   var bubbleModalElement = document.getElementById("bubbleModal");
   var bubbleModal = bootstrap.Modal.getOrCreateInstance(bubbleModalElement);
   var imageLightbox = document.getElementById("imageLightbox");
@@ -190,6 +446,7 @@
   var authorNavController = null;
   var lastExpandedFigure = null;
   var layoutSyncFrame = 0;
+  var generatedMarkdownText = "";
 
   bubbleModalElement.addEventListener("hidden.bs.modal", function () {
     closeImageLightbox({ announce: false, restoreFocus: false });
@@ -345,6 +602,8 @@
       currentStep: state.currentStep,
       fastTrack: state.fastTrack,
       activeTag: state.activeTag,
+      activeTags: state.activeTags,
+      toolkitSort: state.toolkitSort,
       toolkitQuery: state.toolkitQuery,
       searchQuery: state.searchQuery,
       guideSection: state.guideSection,
@@ -411,6 +670,11 @@
 
     if (state.mode === "guide") {
       setHash("#guide-" + state.guideSection, options);
+      return;
+    }
+
+    if (state.mode === "generator") {
+      setHash("#markdown-generator", options);
       return;
     }
 
@@ -622,11 +886,33 @@
   }
 
   function titleCaseTag(tag) {
-    if (tag === "qa") {
-      return "Quality Assurance";
+    var normalized = normalizeTagValue(tag);
+    var labelMap = {
+      ai: "AI",
+      assets: "Assets",
+      freesql: "FreeSQL",
+      github: "GitHub",
+      interactive: "Interactive",
+      livestack: "LiveStack",
+      markdown: "Markdown",
+      marketplace: "Marketplace",
+      media: "Media",
+      publishing: "Publishing",
+      qa: "Quality Assurance",
+      "quality-assurance": "Quality Assurance",
+      "secure-desktop": "Secure Desktop",
+      sprints: "Sprints",
+      support: "Support",
+      tools: "Tools",
+      validation: "Validation",
+      wms: "WMS"
+    };
+
+    if (labelMap[normalized]) {
+      return labelMap[normalized];
     }
 
-    return tag
+    return normalized
       .split("-")
       .map(function (part) {
         return part.charAt(0).toUpperCase() + part.slice(1);
@@ -645,6 +931,37 @@
   function uniqueList(items) {
     return Array.from(new Set((items || []).filter(Boolean)));
   }
+
+  function normalizeTagValue(tag) {
+    return normalizeText(tag).replace(/\s+/g, "-");
+  }
+
+  function normalizeToolkitSort(sort) {
+    var normalized = normalizeTagValue(sort || "");
+    return allowedToolkitSorts[normalized] ? normalized : "alphabetical";
+  }
+
+  function tagFacetWeight(tag) {
+    var index = tagFacetOrder.indexOf(tag);
+    return index === -1 ? tagFacetOrder.length : index;
+  }
+
+  function getItemTags(item) {
+    return uniqueList((item.tags || []).map(normalizeTagValue).filter(Boolean));
+  }
+
+  function normalizeTagSelection(tags) {
+    var list = Array.isArray(tags) ? tags : [tags];
+
+    return uniqueList(list.map(normalizeTagValue).filter(function (tag) {
+      return tag && tag !== "all";
+    }));
+  }
+
+  explorerItems.forEach(function (item, index) {
+    item.__sourceOrder = index;
+    item.__tags = getItemTags(item);
+  });
 
   function resolveGuideTarget(target, sourceHref) {
     var requested = String(target || "").trim();
@@ -1099,47 +1416,235 @@
     updateBreadcrumb();
   }
 
-  function renderExplorer() {
-    var query = state.toolkitQuery.trim().toLowerCase();
-    var visibleItems = explorerItems.filter(function (item) {
-      var haystack = [
-        item.title,
-        item.short,
-        item.description,
-        flattenList(item.steps),
-        flattenList(item.checkpoints),
-        flattenList(item.watchFor),
-        item.snippet || "",
-        flattenFields(item.exampleFields),
-        flattenResources(item.resourceLinks),
-        flattenMilestones(item.milestones)
-      ].concat(item.tags).join(" ").toLowerCase();
-      var matchesQuery = !query || haystack.indexOf(query) !== -1;
-      var matchesTag = state.activeTag === "all" || item.tags.indexOf(state.activeTag) !== -1;
-      return matchesQuery && matchesTag;
+  function getTagFacets() {
+    var counts = {};
+
+    explorerItems.forEach(function (item) {
+      (item.__tags || getItemTags(item)).forEach(function (tag) {
+        counts[tag] = (counts[tag] || 0) + 1;
+      });
     });
 
-    bubbleGrid.innerHTML = visibleItems.map(function (item) {
+    return Object.keys(counts).sort(function (left, right) {
+      if (tagFacetWeight(left) !== tagFacetWeight(right)) {
+        return tagFacetWeight(left) - tagFacetWeight(right);
+      }
+      return titleCaseTag(left).localeCompare(titleCaseTag(right), undefined, { sensitivity: "base" });
+    }).map(function (tag) {
+      return {
+        tag: tag,
+        label: titleCaseTag(tag),
+        count: counts[tag]
+      };
+    });
+  }
+
+  function updateTagPillState() {
+    var activeTags = normalizeTagSelection(state.activeTags);
+
+    tagPills.forEach(function (pill) {
+      var tag = pill.getAttribute("data-tag");
+      var isAll = tag === "all";
+      var isActive = isAll ? activeTags.length === 0 : activeTags.indexOf(tag) !== -1;
+
+      pill.classList.toggle("is-active", isActive);
+      pill.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+  }
+
+  function renderTagPills() {
+    if (!tagPillsMount) {
+      return;
+    }
+
+    tagPillsMount.innerHTML = [
+      '<button type="button" class="tag-pill is-active" data-tag="all" aria-pressed="true">All <span class="tag-pill-count">', explorerItems.length, "</span></button>"
+    ].concat(getTagFacets().map(function (facet) {
+      return [
+        '<button type="button" class="tag-pill" data-tag="', escapeAttribute(facet.tag), '" aria-pressed="false">',
+        escapeHtml(facet.label),
+        ' <span class="tag-pill-count">',
+        facet.count,
+        "</span>",
+        "</button>"
+      ].join("");
+    })).join("");
+
+    tagPills = Array.from(tagPillsMount.querySelectorAll(".tag-pill"));
+    updateTagPillState();
+  }
+
+  function buildExplorerSearchEntry(item) {
+    return makeSearchEntry({
+      id: item.id,
+      typeLabel: "Cheatsheet",
+      title: item.title,
+      summary: item.short || item.description || "",
+      path: "Cheatsheet / " + item.title,
+      sourceHref: item.sourceHref || "",
+      steps: item.steps,
+      checkpoints: item.checkpoints,
+      watchFor: item.watchFor,
+      snippet: item.snippet,
+      exampleFields: item.exampleFields,
+      resourceLinks: item.resourceLinks,
+      milestones: item.milestones,
+      tags: item.tags,
+      keywords: item.keywords
+    });
+  }
+
+  function itemUpdatedTime(item) {
+    var time = Date.parse(item.updatedAt || "");
+    return Number.isFinite(time) ? time : 0;
+  }
+
+  function compareExplorerTitle(left, right) {
+    return String(left.item.title || "").localeCompare(String(right.item.title || ""), undefined, {
+      sensitivity: "base"
+    });
+  }
+
+  function recommendedIndexForEntry(entry) {
+    var id = entry && entry.item ? entry.item.id : "";
+    return Object.prototype.hasOwnProperty.call(recommendedCheatsheetOrderMap, id)
+      ? recommendedCheatsheetOrderMap[id]
+      : Number.MAX_SAFE_INTEGER;
+  }
+
+  function compareExplorerRelevance(left, right) {
+    if (recommendedIndexForEntry(left) !== recommendedIndexForEntry(right)) {
+      return recommendedIndexForEntry(left) - recommendedIndexForEntry(right);
+    }
+
+    if (left.item.__sourceOrder !== right.item.__sourceOrder) {
+      return left.item.__sourceOrder - right.item.__sourceOrder;
+    }
+
+    return compareExplorerTitle(left, right);
+  }
+
+  function sortExplorerEntries(entries, query) {
+    var mode = normalizeToolkitSort(state.toolkitSort);
+
+    return entries.slice().sort(function (left, right) {
+      if (mode === "relevance") {
+        if (right.score !== left.score) {
+          return right.score - left.score;
+        }
+        return compareExplorerRelevance(left, right);
+      }
+
+      if (mode === "latest") {
+        if (right.updatedTime !== left.updatedTime) {
+          return right.updatedTime - left.updatedTime;
+        }
+        return compareExplorerTitle(left, right);
+      }
+
+      return compareExplorerTitle(left, right);
+    });
+  }
+
+  function renderExplorerMeta(entry) {
+    var bits = [];
+
+    if ((state.toolkitSort || "") === "relevance" && state.toolkitQuery.trim()) {
+      bits.push("Match " + entry.score);
+    }
+
+    if (!bits.length) {
+      return "";
+    }
+
+    return '<span class="bubble-meta">' + bits.map(function (bit) {
+      return '<span>' + escapeHtml(bit) + "</span>";
+    }).join("") + "</span>";
+  }
+
+  function currentSortLabel() {
+    var sortLabels = {
+      alphabetical: "Alphabetical",
+      latest: "Latest",
+      relevance: "Most relevant"
+    };
+
+    return sortLabels[normalizeToolkitSort(state.toolkitSort)] || sortLabels.alphabetical;
+  }
+
+  function updateExplorerSummary(count) {
+    var tagText;
+    var queryText = state.toolkitQuery.trim();
+    var activeTags = normalizeTagSelection(state.activeTags);
+
+    resultCount.textContent = "Showing " + count + " cheatsheet card" + (count === 1 ? "" : "s");
+
+    if (!filterSummary) {
+      return;
+    }
+
+    tagText = activeTags.length ? "Tags: " + activeTags.map(titleCaseTag).join(", ") : "All tags";
+    filterSummary.textContent = currentSortLabel() + " sort. " + tagText + (queryText ? '. Query: "' + queryText + '"' : ".");
+  }
+
+  function renderExplorer() {
+    var query = state.toolkitQuery.trim();
+    var selectedTags = normalizeTagSelection(state.activeTags);
+    var visibleEntries = explorerItems.map(function (item) {
+      var score = query ? scoreSearchEntry(buildExplorerSearchEntry(item), query) : 0;
+      var itemTags = item.__tags || getItemTags(item);
+      var matchesQuery = !query || score > 0;
+      var matchesTag = !selectedTags.length || selectedTags.some(function (tag) {
+        return itemTags.indexOf(tag) !== -1;
+      });
+
+      return {
+        item: item,
+        score: score,
+        updatedTime: itemUpdatedTime(item),
+        matchesQuery: matchesQuery,
+        matchesTag: matchesTag
+      };
+    }).filter(function (entry) {
+      return entry.matchesQuery && entry.matchesTag;
+    });
+
+    visibleEntries = sortExplorerEntries(visibleEntries, query);
+
+    bubbleGrid.innerHTML = visibleEntries.map(function (entry) {
+      var item = entry.item;
       return [
         '<div class="col bubble-item" data-bubble-id="', item.id, '">',
         '  <button type="button" class="bubble-button" data-open-bubble="', item.id, '" data-accent="red" aria-label="Open ', escapeHtml(item.title), ' details">',
-        '    <span class="bubble-badge">', escapeHtml(titleCaseTag(item.tags[0])), "</span>",
+        '    <span class="bubble-badge">', escapeHtml(titleCaseTag((item.__tags || item.tags || [])[0])), "</span>",
         '    <span class="bubble-title">', escapeHtml(item.title), "</span>",
         '    <span class="bubble-text">', escapeHtml(item.short), "</span>",
+        renderExplorerMeta(entry),
         "  </button>",
         "</div>"
       ].join("");
     }).join("");
 
-    resultCount.textContent = "Showing " + visibleItems.length + " cheatsheet card" + (visibleItems.length === 1 ? "" : "s");
-    emptyState.classList.toggle("d-none", visibleItems.length !== 0);
+    updateExplorerSummary(visibleEntries.length);
+    emptyState.classList.toggle("d-none", visibleEntries.length !== 0);
   }
 
   function setActiveTag(tag) {
-    state.activeTag = tag;
-    tagPills.forEach(function (pill) {
-      pill.classList.toggle("is-active", pill.getAttribute("data-tag") === tag);
-    });
+    var normalized = normalizeTagValue(tag);
+    var current = normalizeTagSelection(state.activeTags);
+
+    if (normalized === "all") {
+      state.activeTags = [];
+    } else if (current.indexOf(normalized) === -1) {
+      state.activeTags = current.concat(normalized);
+    } else {
+      state.activeTags = current.filter(function (item) {
+        return item !== normalized;
+      });
+    }
+
+    state.activeTag = state.activeTags[0] || "all";
+    updateTagPillState();
     renderExplorer();
   }
 
@@ -1149,12 +1654,479 @@
     }).join("");
   }
 
+  function setGeneratorState(emptyNode, loadingNode, errorNode, isEmpty, isLoading, errorMessage) {
+    if (emptyNode) {
+      emptyNode.classList.toggle("d-none", !isEmpty);
+    }
+    if (loadingNode) {
+      loadingNode.classList.toggle("d-none", !isLoading);
+    }
+    if (errorNode) {
+      errorNode.textContent = errorMessage || "";
+      errorNode.classList.toggle("d-none", !errorMessage);
+    }
+  }
+
+  function renderGeneratedExampleFields(fields) {
+    if (!wmsExampleResults) {
+      return;
+    }
+
+    wmsExampleResults.innerHTML = (fields || []).map(function (field) {
+      return [
+        '<article class="detail-field-card generated-example-card">',
+        '  <span class="detail-field-label">', escapeHtml(field.label), "</span>",
+        renderFieldValueHtml(field.value),
+        field.note ? '  <p class="detail-field-note">' + escapeHtml(field.note) + "</p>" : "",
+        "</article>"
+      ].join("");
+    }).join("");
+  }
+
+  function runWmsExampleGeneration() {
+    var prompt = wmsExamplePrompt ? wmsExamplePrompt.value.trim() : "";
+    var service = window.AuthorGuideWorkshopGenerator;
+
+    if (!prompt) {
+      renderGeneratedExampleFields([]);
+      setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Enter a workshop topic before generating examples.");
+      return;
+    }
+
+    if (!service || typeof service.generateExamples !== "function") {
+      setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Example generation is unavailable right now.");
+      return;
+    }
+
+    setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, true, "");
+    window.setTimeout(function () {
+      try {
+        renderGeneratedExampleFields(service.generateExamples(prompt).fields);
+        setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "");
+        setLiveMessage("WMS field examples generated.");
+      } catch (error) {
+        renderGeneratedExampleFields([]);
+        setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Examples could not be generated. Try a shorter prompt.");
+      }
+    }, 180);
+  }
+
+  function setMarkdownOutput(value) {
+    generatedMarkdownText = String(value || "");
+    if (workshopMarkdownOutput) {
+      workshopMarkdownOutput.textContent = generatedMarkdownText;
+      if (workshopMarkdownOutput.parentElement) {
+        workshopMarkdownOutput.parentElement.classList.toggle("d-none", !generatedMarkdownText);
+      }
+    }
+    if (copyGeneratedMarkdown) {
+      copyGeneratedMarkdown.disabled = !generatedMarkdownText;
+    }
+  }
+
+  function runMarkdownGeneration() {
+    var prompt = workshopMarkdownPrompt ? workshopMarkdownPrompt.value.trim() : "";
+    var type = workshopMarkdownType ? workshopMarkdownType.value : "all";
+    var service = window.AuthorGuideWorkshopGenerator;
+    var snippet;
+
+    if (!service || typeof service.generateSnippet !== "function") {
+      setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "Markdown generation is unavailable right now.");
+      return;
+    }
+
+    setMarkdownOutput("");
+    setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, true, "");
+    window.setTimeout(function () {
+      try {
+        snippet = service.generateSnippet(type, prompt);
+        if (snippet.requiresPrompt && !prompt) {
+          setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "Enter a workshop topic before generating an outline.");
+          return;
+        }
+        setMarkdownOutput(snippet.body);
+        if (workshopMarkdownSummary) {
+          workshopMarkdownSummary.innerHTML = [
+            '<span class="generator-summary-row"><strong>Use case</strong><span>' + escapeHtml(snippet.summary) + "</span></span>",
+            '<span class="generator-summary-row"><strong>Source</strong><span>' + escapeHtml(snippet.source) + "</span></span>"
+          ].join("");
+        }
+        if (generatorOutputMeta) {
+          generatorOutputMeta.textContent = snippet.group + " / " + snippet.source;
+        }
+        setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "");
+        setLiveMessage("Workshop snippet generated.");
+      } catch (error) {
+        setMarkdownOutput("");
+        setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "Snippet could not be generated. Try a different option.");
+      }
+    }, 180);
+  }
+
+  function createWmsStatusSvgElement(name, attrs) {
+    var element = document.createElementNS("http://www.w3.org/2000/svg", name);
+
+    Object.keys(attrs || {}).forEach(function (key) {
+      element.setAttribute(key, attrs[key]);
+    });
+
+    return element;
+  }
+
+  function wmsStatusBoundaryPoint(box, toward) {
+    var dx = toward.x - box.x;
+    var dy = toward.y - box.y;
+    var scale = Math.min(Math.abs(wmsStatusNodeHalfWidth / (dx || 0.0001)), Math.abs(wmsStatusNodeHalfHeight / (dy || 0.0001)));
+
+    return { x: box.x + dx * scale, y: box.y + dy * scale };
+  }
+
+  function wmsStatusEdgePath(from, to, type) {
+    var start = wmsStatusBoundaryPoint(from, to);
+    var end = wmsStatusBoundaryPoint(to, from);
+    var dx;
+    var dy;
+    var curve;
+    var mx;
+    var my;
+    var nx;
+    var ny;
+
+    if (type === "alt") {
+      dx = end.x - start.x;
+      dy = end.y - start.y;
+      curve = Math.max(80, Math.hypot(dx, dy) * 0.35);
+      mx = (start.x + end.x) / 2;
+      my = (start.y + end.y) / 2;
+      nx = -dy / Math.max(1, Math.hypot(dx, dy));
+      ny = dx / Math.max(1, Math.hypot(dx, dy));
+      return "M " + start.x + " " + start.y + " Q " + (mx + nx * curve) + " " + (my + ny * curve) + " " + end.x + " " + end.y;
+    }
+
+    return "M " + start.x + " " + start.y + " L " + end.x + " " + end.y;
+  }
+
+  function wmsStatusTransitionMidpoint(transition) {
+    var from = wmsStatusGraphNodeMap[transition.from];
+    var to = wmsStatusGraphNodeMap[transition.to];
+
+    if (Number.isFinite(transition.labelX) && Number.isFinite(transition.labelY)) {
+      return { x: transition.labelX, y: transition.labelY };
+    }
+
+    return {
+      x: (from.x + to.x) / 2,
+      y: (from.y + to.y) / 2 - (transition.type === "alt" ? 18 : 10)
+    };
+  }
+
+  function wmsStatusEdgeLabelWidth(label) {
+    return Math.max(54, Math.min(128, String(label || "").length * 7 + 18));
+  }
+
+  function setWmsStatusGraphViewBox(svg, box) {
+    var target = box || wmsStatusGraphViewBox;
+
+    svg.setAttribute("viewBox", target.x + " " + target.y + " " + target.width + " " + target.height);
+  }
+
+  function defineWmsStatusMarkers(svg, graphId) {
+    var defs = createWmsStatusSvgElement("defs");
+    var normalMarker = createWmsStatusSvgElement("marker", {
+      id: graphId + "-arrow-normal",
+      viewBox: "0 -5 10 10",
+      refX: "10",
+      refY: "0",
+      markerWidth: "7",
+      markerHeight: "7",
+      orient: "auto"
+    });
+    var altMarker = createWmsStatusSvgElement("marker", {
+      id: graphId + "-arrow-alt",
+      viewBox: "0 -5 10 10",
+      refX: "10",
+      refY: "0",
+      markerWidth: "7",
+      markerHeight: "7",
+      orient: "auto"
+    });
+
+    normalMarker.appendChild(createWmsStatusSvgElement("path", { d: "M0,-5L10,0L0,5", fill: "#7c8794" }));
+    altMarker.appendChild(createWmsStatusSvgElement("path", { d: "M0,-5L10,0L0,5", fill: "#a16207" }));
+    defs.appendChild(normalMarker);
+    defs.appendChild(altMarker);
+    svg.appendChild(defs);
+  }
+
+  function renderWmsStatusList(list, items) {
+    if (!list) {
+      return;
+    }
+
+    list.innerHTML = "";
+    items.forEach(function (item) {
+      var li = document.createElement("li");
+      li.textContent = item;
+      list.appendChild(li);
+    });
+  }
+
+  function updateWmsStatusGraphDetails(graph, status) {
+    var outgoing = wmsStatusGraphTransitions.filter(function (transition) {
+      return transition.from === status.id;
+    });
+    var title = graph.querySelector("[data-wms-status-title]");
+    var group = graph.querySelector("[data-wms-status-group]");
+    var responsible = graph.querySelector("[data-wms-status-responsible]");
+    var meaning = graph.querySelector("[data-wms-status-meaning]");
+    var nextStep = graph.querySelector("[data-wms-status-next]");
+    var checklist = graph.querySelector("[data-wms-status-checklist]");
+    var transitionList = graph.querySelector("[data-wms-status-transitions]");
+
+    if (title) {
+      title.textContent = status.label;
+    }
+    if (group) {
+      group.textContent = status.group;
+    }
+    if (responsible) {
+      responsible.textContent = status.responsible;
+    }
+    if (meaning) {
+      meaning.textContent = status.meaning;
+    }
+    if (nextStep) {
+      nextStep.textContent = status.nextStep;
+    }
+
+    renderWmsStatusList(checklist, status.checks);
+    renderWmsStatusList(transitionList, outgoing.length ? outgoing.map(function (transition) {
+      return wmsStatusGraphNodeMap[transition.to].label + ": " + transition.label;
+    }) : ["No outgoing transition configured."]);
+  }
+
+  function applyWmsStatusGraphHighlights(graph) {
+    var selectedStatusId = graph.getAttribute("data-selected-status") || "";
+    var highlightedPath = (graph.getAttribute("data-highlighted-path") || "").split(",").filter(Boolean);
+    var connected = {};
+    var pathNodes = {};
+    var pathEdges = {};
+
+    if (selectedStatusId) {
+      connected[selectedStatusId] = true;
+      wmsStatusGraphTransitions.forEach(function (transition) {
+        if (transition.from === selectedStatusId || transition.to === selectedStatusId) {
+          connected[transition.from] = true;
+          connected[transition.to] = true;
+        }
+      });
+    }
+
+    highlightedPath.forEach(function (id, index) {
+      pathNodes[id] = true;
+      if (highlightedPath[index + 1]) {
+        pathEdges[id + "->" + highlightedPath[index + 1]] = true;
+      }
+    });
+
+    graph.querySelectorAll(".wms-status-node").forEach(function (node) {
+      var id = node.getAttribute("data-status-id");
+      var isSelected = id === selectedStatusId || !!pathNodes[id];
+      var shouldDim = selectedStatusId ? !connected[id] : highlightedPath.length ? !pathNodes[id] : false;
+
+      node.classList.toggle("is-selected", isSelected);
+      node.classList.toggle("is-dimmed", shouldDim);
+    });
+
+    graph.querySelectorAll(".wms-status-edge").forEach(function (edge) {
+      var edgeKey = edge.getAttribute("data-from") + "->" + edge.getAttribute("data-to");
+      var selectedEdge = selectedStatusId && (edge.getAttribute("data-from") === selectedStatusId || edge.getAttribute("data-to") === selectedStatusId);
+      var pathEdge = !!pathEdges[edgeKey];
+      var shouldDim = selectedStatusId ? !selectedEdge : highlightedPath.length ? !pathEdge : false;
+
+      edge.classList.toggle("is-dimmed", shouldDim);
+      edge.classList.toggle("is-selected", selectedEdge || pathEdge);
+    });
+
+    graph.querySelectorAll(".wms-status-edge-label, .wms-status-edge-label-bg").forEach(function (label) {
+      var edgeKey = label.getAttribute("data-from") + "->" + label.getAttribute("data-to");
+      var selectedEdge = selectedStatusId && (label.getAttribute("data-from") === selectedStatusId || label.getAttribute("data-to") === selectedStatusId);
+      var pathEdge = !!pathEdges[edgeKey];
+      var shouldDim = selectedStatusId ? !selectedEdge : highlightedPath.length ? !pathEdge : false;
+
+      label.classList.toggle("is-dimmed", shouldDim);
+    });
+  }
+
+  function selectWmsStatusGraphNode(graph, id) {
+    var status = wmsStatusGraphNodeMap[id];
+
+    if (!graph || !status) {
+      return;
+    }
+
+    graph.setAttribute("data-selected-status", id);
+    graph.removeAttribute("data-highlighted-path");
+    updateWmsStatusGraphDetails(graph, status);
+    applyWmsStatusGraphHighlights(graph);
+    setLiveMessage(status.label + " status selected.");
+  }
+
+  function highlightWmsStatusGraphPath(graph, ids, label) {
+    graph.removeAttribute("data-selected-status");
+    graph.setAttribute("data-highlighted-path", ids.join(","));
+    updateWmsStatusGraphDetails(graph, wmsStatusGraphNodeMap[ids[0]] || wmsStatusGraphStatuses[0]);
+    applyWmsStatusGraphHighlights(graph);
+    setLiveMessage((label || "Status path") + " highlighted.");
+  }
+
+  function resetWmsStatusGraph(graph) {
+    graph.removeAttribute("data-highlighted-path");
+    selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted");
+  }
+
+  function fitWmsStatusGraph(graph) {
+    var svg = graph.querySelector("[data-wms-status-svg]");
+    var xs = wmsStatusGraphStatuses.map(function (status) { return status.x; });
+    var ys = wmsStatusGraphStatuses.map(function (status) { return status.y; });
+    var minX = Math.min.apply(Math, xs) - wmsStatusNodeHalfWidth - wmsStatusGraphFitGutter;
+    var maxX = Math.max.apply(Math, xs) + wmsStatusNodeHalfWidth + wmsStatusGraphFitGutter;
+    var minY = Math.min.apply(Math, ys) - wmsStatusNodeHalfHeight - wmsStatusGraphFitGutter;
+    var maxY = Math.max.apply(Math, ys) + wmsStatusNodeHalfHeight + wmsStatusGraphFitGutter;
+
+    if (svg) {
+      setWmsStatusGraphViewBox(svg, { x: minX, y: minY, width: maxX - minX, height: maxY - minY });
+    }
+
+    setLiveMessage("Status graph fitted to visible nodes.");
+  }
+
+  function renderWmsStatusGraph(graph, index) {
+    var svg = graph.querySelector("[data-wms-status-svg]");
+    var graphId = "wms-status-graph-" + index;
+    var edgeLayer = createWmsStatusSvgElement("g", { class: "wms-status-edges" });
+    var labelLayer = createWmsStatusSvgElement("g", { class: "wms-status-edge-labels" });
+    var nodeLayer = createWmsStatusSvgElement("g", { class: "wms-status-nodes" });
+
+    if (!svg) {
+      return;
+    }
+
+    svg.innerHTML = "";
+    setWmsStatusGraphViewBox(svg);
+    defineWmsStatusMarkers(svg, graphId);
+    svg.appendChild(createWmsStatusSvgElement("title", { id: graphId + "-title" })).textContent = "LiveLabs workshop status workflow graph";
+    svg.appendChild(createWmsStatusSvgElement("desc", { id: graphId + "-desc" })).textContent = "A clickable graph showing submitted, approval, development, self QA, completed, and quarterly QA statuses.";
+    svg.setAttribute("aria-labelledby", graphId + "-title " + graphId + "-desc");
+
+    wmsStatusGraphTransitions.forEach(function (transition) {
+      var from = wmsStatusGraphNodeMap[transition.from];
+      var to = wmsStatusGraphNodeMap[transition.to];
+      var path = createWmsStatusSvgElement("path", {
+        class: "wms-status-edge" + (transition.type === "alt" ? " is-return-path" : ""),
+        d: wmsStatusEdgePath(from, to, transition.type),
+        "data-from": transition.from,
+        "data-to": transition.to,
+        "marker-end": "url(#" + graphId + (transition.type === "alt" ? "-arrow-alt" : "-arrow-normal") + ")"
+      });
+      var midpoint = wmsStatusTransitionMidpoint(transition);
+      var labelWidth = wmsStatusEdgeLabelWidth(transition.label);
+      var labelBackground = createWmsStatusSvgElement("rect", {
+        class: "wms-status-edge-label-bg",
+        x: midpoint.x - labelWidth / 2,
+        y: midpoint.y - 12,
+        width: labelWidth,
+        height: 24,
+        rx: 8,
+        "data-from": transition.from,
+        "data-to": transition.to
+      });
+      var text = createWmsStatusSvgElement("text", {
+        class: "wms-status-edge-label",
+        x: midpoint.x,
+        y: midpoint.y,
+        "text-anchor": "middle",
+        "dominant-baseline": "middle",
+        "data-from": transition.from,
+        "data-to": transition.to
+      });
+
+      text.textContent = transition.label;
+      edgeLayer.appendChild(path);
+      labelLayer.appendChild(labelBackground);
+      labelLayer.appendChild(text);
+    });
+
+    wmsStatusGraphStatuses.forEach(function (status) {
+      var group = createWmsStatusSvgElement("g", {
+        class: "wms-status-node",
+        tabindex: "0",
+        role: "button",
+        "aria-label": status.label + " status",
+        transform: "translate(" + status.x + "," + status.y + ")",
+        "data-status-id": status.id
+      });
+      var rect = createWmsStatusSvgElement("rect", {
+        x: -wmsStatusNodeHalfWidth,
+        y: -wmsStatusNodeHalfHeight,
+        width: wmsStatusNodeHalfWidth * 2,
+        height: wmsStatusNodeHalfHeight * 2,
+        rx: "8",
+        fill: status.color
+      });
+      var label = createWmsStatusSvgElement("text", { x: "0", y: "-5", "text-anchor": "middle" });
+      var subtext = createWmsStatusSvgElement("text", { x: "0", y: "16", "text-anchor": "middle", class: "wms-status-node-subtext" });
+
+      label.textContent = status.label;
+      subtext.textContent = status.group;
+      group.appendChild(rect);
+      group.appendChild(label);
+      group.appendChild(subtext);
+      nodeLayer.appendChild(group);
+    });
+
+    svg.appendChild(edgeLayer);
+    svg.appendChild(labelLayer);
+    svg.appendChild(nodeLayer);
+    selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted");
+  }
+
+  function initWmsStatusGraphs() {
+    document.querySelectorAll("[data-wms-status-graph]").forEach(function (graph, index) {
+      renderWmsStatusGraph(graph, index + 1);
+    });
+  }
+
+  function syncMarkdownSnippetSummary() {
+    var service = window.AuthorGuideWorkshopGenerator;
+    var type = workshopMarkdownType ? workshopMarkdownType.value : "";
+    var item;
+
+    if (!workshopMarkdownSummary || !service || typeof service.getSnippetCatalog !== "function") {
+      return;
+    }
+
+    item = service.getSnippetCatalog().find(function (candidate) {
+      return candidate.id === type;
+    });
+
+    if (!item) {
+      workshopMarkdownSummary.textContent = "Select a snippet and generate it here.";
+      return;
+    }
+
+    workshopMarkdownSummary.innerHTML = [
+      '<span class="generator-summary-row"><strong>Use case</strong><span>' + escapeHtml(item.summary) + "</span></span>",
+      '<span class="generator-summary-row"><strong>Source</strong><span>' + escapeHtml(item.source) + "</span></span>"
+    ].join("");
+  }
+
   function decorateExpandableMedia(root) {
     if (!root) {
       return;
     }
 
-    root.querySelectorAll(".step-figure, .guide-figure, .modal-media-figure, .evidence-figure, .guide-source-panel-prose figure, .guide-source-prose figure").forEach(function (figure) {
+    root.querySelectorAll(".step-figure, .guide-figure, .modal-media-figure, .evidence-figure, .inline-evidence-card, .guide-source-panel-prose figure, .guide-source-prose figure").forEach(function (figure) {
       var image = figure.querySelector("img");
       var caption = figure.querySelector("figcaption");
       var captionText;
@@ -2673,6 +3645,7 @@
     setModeRegionVisibility(beginnerMode, mode === "beginner");
     setModeRegionVisibility(explorerMode, mode === "explorer");
     setModeRegionVisibility(guideMode, mode === "guide");
+    setModeRegionVisibility(generatorMode, mode === "generator");
     setModeRegionVisibility(searchMode, mode === "search");
 
     if (mode !== "explorer") {
@@ -2708,6 +3681,15 @@
           window.scrollTo({ top: 0, behavior: smoothBehavior() });
         } else {
           scrollToTarget(guideMode);
+        }
+      }
+    } else if (mode === "generator") {
+      updateBreadcrumb();
+      if (config.scroll !== false) {
+        if (config.forceTop) {
+          window.scrollTo({ top: 0, behavior: smoothBehavior() });
+        } else {
+          scrollToTarget(generatorMode);
         }
       }
     } else if (mode === "search") {
@@ -2751,6 +3733,8 @@
         setLiveMessage("Cheatsheet opened.");
       } else if (mode === "guide") {
         setLiveMessage("Full Guide opened at " + (currentGuideSection() ? currentGuideSection().title : "Start Guide") + ".");
+      } else if (mode === "generator") {
+        setLiveMessage("Markdown Workshop Generator opened.");
       } else if (mode === "search") {
         setLiveMessage("Search results opened.");
       }
@@ -2900,6 +3884,11 @@
       return;
     }
 
+    if (cleaned === "generator" || cleaned === "markdown-generator" || cleaned === "workshop-markdown-generator") {
+      switchMode("generator", { scroll: true, forceTop: true, hash: false, announce: false });
+      return;
+    }
+
     if (cleaned === "guide" || cleaned === "full-guide") {
       window.location.href = fullGuideHref;
       return;
@@ -2944,7 +3933,9 @@
     isRestoringHistory = true;
     state.currentStep = Math.max(0, Math.min(Number(route.currentStep || 0), stepSections.length - 1));
     state.fastTrack = route.fastTrack || state.fastTrack;
-    state.activeTag = route.activeTag || "all";
+    state.activeTags = normalizeTagSelection(route.activeTags || route.activeTag || []);
+    state.activeTag = state.activeTags[0] || "all";
+    state.toolkitSort = normalizeToolkitSort(route.toolkitSort || state.toolkitSort);
     state.toolkitQuery = route.toolkitQuery || "";
     state.searchQuery = route.searchQuery || "";
     state.guideSection = route.guideSection || state.guideSection;
@@ -2957,9 +3948,11 @@
       navSearchInput.value = state.searchQuery;
     }
 
-    tagPills.forEach(function (pill) {
-      pill.classList.toggle("is-active", pill.getAttribute("data-tag") === state.activeTag);
-    });
+    if (toolkitSort) {
+      toolkitSort.value = state.toolkitSort;
+    }
+
+    updateTagPillState();
 
     switchMode(route.mode || "hub", {
       scroll: false,
@@ -3029,12 +4022,16 @@
     var copyTextButton = event.target.closest("[data-copy-text]");
     var tagButton = event.target.closest("[data-tag]");
     var searchOpenButton = event.target.closest("[data-search-open]");
+    var wmsStatusNode = event.target.closest(".wms-status-node");
+    var wmsStatusAction = event.target.closest("[data-wms-status-action]");
     var installCard = event.target.closest("[data-install-card]");
     var isPrimaryNav = modeButton && !!modeButton.closest(".nav-group-all");
 
     if (installCard && !copyTextButton) {
-      installCard.classList.add("is-complete");
-      installCard.setAttribute("aria-pressed", "true");
+      var isComplete = !installCard.classList.contains("is-complete");
+
+      installCard.classList.toggle("is-complete", isComplete);
+      installCard.setAttribute("aria-pressed", isComplete ? "true" : "false");
     }
 
     if (modeButton) {
@@ -3150,6 +4147,27 @@
     if (searchOpenButton) {
       openSearchResult(searchOpenButton.getAttribute("data-search-open"));
     }
+
+    if (wmsStatusNode) {
+      selectWmsStatusGraphNode(wmsStatusNode.closest("[data-wms-status-graph]"), wmsStatusNode.getAttribute("data-status-id"));
+      return;
+    }
+
+    if (wmsStatusAction) {
+      var graph = wmsStatusAction.closest("[data-wms-status-graph]");
+      var action = wmsStatusAction.getAttribute("data-wms-status-action");
+
+      if (action === "main-path") {
+        highlightWmsStatusGraphPath(graph, ["submitted", "approved", "in-development", "self-qa", "self-qa-complete", "completed"], "Main path");
+      } else if (action === "qa-cycle") {
+        highlightWmsStatusGraphPath(graph, ["completed", "quarterly-qa", "quarterly-qa-complete", "completed"], "QA cycle");
+      } else if (action === "fit") {
+        fitWmsStatusGraph(graph);
+      } else {
+        resetWmsStatusGraph(graph);
+      }
+      return;
+    }
   });
 
   document.addEventListener("keydown", function (event) {
@@ -3163,6 +4181,12 @@
     if ((event.key === "Enter" || event.key === " ") && event.target && event.target.closest && event.target.closest("figure[data-expandable=\"true\"]")) {
       event.preventDefault();
       openImageLightbox(event.target.closest("figure[data-expandable=\"true\"]"));
+      return;
+    }
+
+    if ((event.key === "Enter" || event.key === " ") && event.target && event.target.closest && event.target.closest(".wms-status-node")) {
+      event.preventDefault();
+      selectWmsStatusGraphNode(event.target.closest("[data-wms-status-graph]"), event.target.closest(".wms-status-node").getAttribute("data-status-id"));
     }
   }, true);
 
@@ -3183,6 +4207,14 @@
     renderExplorer();
     bubbleSearch.focus();
   });
+
+  if (toolkitSort) {
+    toolkitSort.addEventListener("change", function (event) {
+      state.toolkitSort = normalizeToolkitSort(event.target.value);
+      renderExplorer();
+      setLiveMessage("Cheatsheet sorted by " + currentSortLabel() + ".");
+    });
+  }
 
   if (navSearchForm && navSearchInput) {
     navSearchForm.addEventListener("submit", function (event) {
@@ -3238,6 +4270,34 @@
     });
   }
 
+  if (wmsExampleForm) {
+    wmsExampleForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      runWmsExampleGeneration();
+    });
+  }
+
+  if (workshopMarkdownForm) {
+    workshopMarkdownForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      runMarkdownGeneration();
+    });
+  }
+
+  if (workshopMarkdownType) {
+    workshopMarkdownType.addEventListener("change", syncMarkdownSnippetSummary);
+    syncMarkdownSnippetSummary();
+  }
+
+  if (copyGeneratedMarkdown) {
+    copyGeneratedMarkdown.addEventListener("click", function () {
+      if (!generatedMarkdownText) {
+        return;
+      }
+      copyText(generatedMarkdownText, copyGeneratedMarkdown);
+    });
+  }
+
   window.addEventListener("hashchange", function () {
     if (isRestoringHistory) {
       return;
@@ -3284,9 +4344,11 @@
 
   hydrateVideoCards(document);
   decorateExpandableMedia(document);
+  initWmsStatusGraphs();
   updateNav();
   updateNavSearch();
   updateBeginnerUI();
+  renderTagPills();
   renderExplorer();
   renderGuideNav();
   loadGuideCatalog().finally(function () {

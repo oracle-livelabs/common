@@ -2630,7 +2630,7 @@ body.home-no-scroll #app .app-footer .container {
   min-height: 68px;
   padding: 24px 56px 28px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(14rem, 18rem) auto;
   gap: 18px 24px;
   align-items: end;
   background: #f5f4f2;
@@ -2638,12 +2638,18 @@ body.home-no-scroll #app .app-footer .container {
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-search-control,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-sort-control,
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-tag-control {
   min-width: 0;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-search-control {
   grid-column: 1;
+  grid-row: 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-sort-control {
+  grid-column: 2;
   grid-row: 1;
 }
 
@@ -2664,18 +2670,65 @@ body.home-no-scroll #app .app-footer .container {
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .search-group .input-group-text,
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .search-group .form-control,
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .search-group .btn,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .form-select,
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .tag-pill {
   min-height: 44px !important;
   border-radius: 4px !important;
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .form-select {
+  border-color: rgba(22, 21, 19, 0.18);
+  box-shadow: none;
+  color: #161513;
+  font-size: 16px;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls > .btn {
-  grid-column: 2;
+  grid-column: 3;
   grid-row: 1;
   min-width: 14rem;
   min-height: 44px !important;
   margin-bottom: 0;
   white-space: nowrap;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill-count {
+  display: inline-flex;
+  min-width: 1.45rem;
+  min-height: 1.45rem;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.35rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: rgba(22, 21, 19, 0.08);
+  color: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill.is-active .tag-pill-count {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+  color: rgba(22, 21, 19, 0.58);
+  font-size: 0.82rem;
+  line-height: 1.3;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-meta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.45rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(79, 125, 123, 0.1);
 }
 
 @media (max-width: 1180px) {
@@ -2690,7 +2743,15 @@ body.home-no-scroll #app .app-footer .container {
   }
 
   #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls > .btn {
+    grid-column: 1;
+    grid-row: auto;
     width: 100%;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-sort-control,
+  #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-tag-control {
+    grid-column: 1;
+    grid-row: auto;
   }
 }
 
@@ -3141,6 +3202,534 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   #app[data-redwood-creator-pass="2026-05-25"] #explorerMode {
     padding-top: 16px;
   }
+}
+
+/* WMS Platform and prompt-driven authoring tools. */
+#app[data-redwood-creator-pass="2026-05-25"] .wms-platform-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-platform-note {
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  font-weight: 650;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .experimental-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.35rem;
+  margin-left: 0.45rem;
+  padding: 0.16rem 0.5rem;
+  border: 1px solid rgba(67, 124, 148, 0.34);
+  border-radius: 999px;
+  background: #f4f8fb;
+  color: #245f76;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .inline-evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .inline-evidence-card,
+#app[data-redwood-creator-pass="2026-05-25"] .step-figure,
+#app[data-redwood-creator-pass="2026-05-25"] .modal-media-figure {
+  position: relative;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .inline-evidence-card img,
+#app[data-redwood-creator-pass="2026-05-25"] .step-figure img,
+#app[data-redwood-creator-pass="2026-05-25"] .modal-media-figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .is-numbered-gallery {
+  counter-reset: evidence-step;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .is-numbered-gallery .inline-evidence-card {
+  counter-increment: evidence-step;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .is-numbered-gallery .inline-evidence-card::before {
+  content: counter(evidence-step);
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 999px;
+  background: var(--rose);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(32, 30, 28, 0.16);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.95fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-layout .action-list {
+  margin-bottom: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-image {
+  margin: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] figure[data-expandable="true"] {
+  cursor: zoom-in;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] figure[data-expandable="true"]:focus-visible {
+  outline: 3px solid rgba(199, 70, 52, 0.28);
+  outline-offset: 4px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .figure-expand-pill {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  padding: 0.28rem 0.58rem;
+  border-radius: 999px;
+  background: rgba(32, 30, 28, 0.78);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  pointer-events: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid rgba(212, 207, 202, 0.92);
+  border-radius: 8px;
+  background: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: 0.8rem;
+  border-bottom: 1px solid rgba(212, 207, 202, 0.82);
+  background: #fbf9f8;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  border: 1px solid rgba(104, 96, 91, 0.24);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill {
+  gap: 0.45rem;
+  padding: 0.35rem 0.65rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-action {
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-action:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-action:focus-visible {
+  border-color: rgba(199, 70, 52, 0.46);
+  background: #fff8f7;
+  color: var(--rose);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill::before {
+  content: "";
+  width: 1.6rem;
+  height: 0;
+  border-top: 3px solid #7c8794;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill.is-return-path::before {
+  border-top-style: dashed;
+  border-top-color: #a16207;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill.is-selected::before {
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 3px solid var(--ink);
+  border-radius: 4px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, 20rem);
+  min-height: 34rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
+  overflow: hidden;
+  border-right: 1px solid rgba(212, 207, 202, 0.82);
+  background:
+    linear-gradient(#eef2f7 1px, transparent 1px),
+    linear-gradient(90deg, #eef2f7 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-svg {
+  display: block;
+  width: 100%;
+  height: clamp(24rem, 43vw, 34rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node rect {
+  stroke: rgba(56, 52, 49, 0.72);
+  stroke-width: 1.2;
+  cursor: pointer;
+  filter: drop-shadow(0 7px 10px rgba(56, 52, 49, 0.12));
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node text {
+  fill: var(--ink);
+  font-size: 12.5px;
+  font-weight: 850;
+  pointer-events: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node .wms-status-node-subtext {
+  fill: var(--ink-soft);
+  font-size: 10.5px;
+  font-weight: 750;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node.is-selected rect {
+  stroke: var(--ink);
+  stroke-width: 4;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node:focus-visible rect {
+  stroke: var(--rose);
+  stroke-width: 4;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge {
+  fill: none;
+  stroke: #7c8794;
+  stroke-width: 2.5;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge.is-return-path {
+  stroke: #a16207;
+  stroke-dasharray: 8 6;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge.is-selected {
+  stroke-width: 3.5;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node.is-dimmed,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge.is-dimmed,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge-label-bg.is-dimmed,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge-label.is-dimmed {
+  opacity: 0.2;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge-label-bg {
+  fill: rgba(255, 255, 255, 0.96);
+  stroke: rgba(212, 207, 202, 0.9);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge-label {
+  fill: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 800;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-linejoin: round;
+  stroke-width: 2px;
+  pointer-events: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail {
+  display: grid;
+  align-content: start;
+  gap: 0.95rem;
+  padding: 1rem;
+  background: #fbf9f8;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail h4 {
+  margin: 0.25rem 0 0;
+  font-size: 1.14rem;
+  font-weight: 850;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail-block {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(212, 207, 202, 0.78);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail-block strong {
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail p,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail li {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+  line-height: 1.48;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-card {
+  align-content: start;
+  gap: 0.85rem;
+  min-height: 13rem;
+  padding: 0.9rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-main {
+  align-items: flex-start;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-main strong {
+  font-size: 0.88rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-main span span {
+  font-size: 0.78rem;
+  line-height: 1.38;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-actions {
+  margin-top: auto;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .example-generator-panel,
+#app[data-redwood-creator-pass="2026-05-25"] .generator-workbench,
+#app[data-redwood-creator-pass="2026-05-25"] .generator-output-panel {
+  border: 1px solid rgba(212, 207, 202, 0.92);
+  border-radius: 8px;
+  background: #fff;
+  padding: 1.25rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .example-generator-form,
+#app[data-redwood-creator-pass="2026-05-25"] .workshop-generator-form {
+  display: grid;
+  gap: 0.8rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .example-generator-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  align-items: start;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-textarea,
+#app[data-redwood-creator-pass="2026-05-25"] .generator-select {
+  border-radius: 8px;
+  border-color: rgba(104, 96, 91, 0.28);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-grid {
+  margin-top: 1rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-state {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px dashed rgba(104, 96, 91, 0.28);
+  border-radius: 8px;
+  color: var(--ink-soft);
+  background: #fbf9f8;
+  font-weight: 650;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-snippet-summary {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border-left: 4px solid var(--rose);
+  border-radius: 8px;
+  background: #fbf9f8;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-summary-row {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-summary-row strong {
+  color: var(--ink);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-summary-row span {
+  min-width: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-error-state {
+  border-color: rgba(199, 70, 52, 0.45);
+  color: #8a2f24;
+  background: #fff8f7;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #generatorMode {
+  padding-top: 24px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-controls {
+  display: grid;
+  grid-template-columns: auto minmax(18rem, 1fr) auto;
+  gap: 0.8rem;
+  align-items: end;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-markdown-pre {
+  margin: 1rem 0 0;
+  max-height: 36rem;
+  overflow: auto;
+  border-radius: 8px;
+  background: #2b2927;
+  color: #f8f5f2;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-markdown-pre code {
+  white-space: pre-wrap;
+}
+
+@media (max-width: 1100px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .inline-evidence-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .generator-layout,
+  #app[data-redwood-creator-pass="2026-05-25"] .example-generator-input-row {
+    grid-template-columns: 1fr;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .generator-controls {
+    grid-template-columns: 1fr;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-toolbar,
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
+    border-right: 0;
+    border-bottom: 1px solid rgba(212, 207, 202, 0.82);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .inline-evidence-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .generator-summary-row {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-actions,
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-action,
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill {
+    justify-content: center;
+  }
+
 }
 
 /* Final review fixes: keep the home menu neutral until hover and make the nav close state explicit. */
