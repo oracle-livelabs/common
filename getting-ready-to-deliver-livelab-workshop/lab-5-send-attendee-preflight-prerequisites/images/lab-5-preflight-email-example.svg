@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+  <title id="title">Preflight email example</title>
+  <desc id="desc">A wide mock email showing the key fields authors should include in an attendee preflight message.</desc>
+  <rect width="1200" height="560" fill="#f7f7f5"/>
+  <g class="card" font-family="Arial, sans-serif" fill="#1f1f1f">
+    <rect x="120" y="56" width="960" height="430" rx="10" fill="#ffffff" stroke="#777777" stroke-width="3"/>
+    <text x="165" y="108" font-size="24" font-weight="700">Subject: Action Required Before the LiveLab</text>
+    <line x1="165" y1="132" x2="1035" y2="132" stroke="#d4d4d4" stroke-width="2"/>
+    <text x="165" y="176" font-size="20" font-weight="700">Before the session:</text>
+    <text x="200" y="216" font-size="18">1. Create or confirm your Oracle account.</text>
+    <text x="200" y="250" font-size="18">2. Verify your email address.</text>
+    <text x="200" y="284" font-size="18">3. Open the LiveLab URL and enter the event code.</text>
+    <text x="200" y="318" font-size="18">4. Confirm the expected first screen.</text>
+    <text x="200" y="352" font-size="18">5. Contact the support alias before the session if access fails.</text>
+    <rect x="165" y="388" width="870" height="56" rx="8" fill="#eef3f7" stroke="#7b90a7" stroke-width="2"/>
+    <text x="200" y="424" font-size="18" font-weight="700">Author reminder:</text>
+    <text x="360" y="424" font-size="18">replace every bracketed value before sending.</text>
+  </g>
+</svg>

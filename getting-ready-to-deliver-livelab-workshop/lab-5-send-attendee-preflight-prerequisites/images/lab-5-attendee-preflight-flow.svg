@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+  <title id="title">Attendee preflight flow</title>
+  <desc id="desc">Three large cards show how authors build the attendee checklist, draft the preflight email, and send it early enough for blockers.</desc>
+  <rect width="1200" height="560" fill="#f7f7f5"/>
+  <text x="70" y="56" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1f1f1f">Send attendee preflight</text>
+  <g font-family="Arial, sans-serif" fill="#1f1f1f">
+    <g class="card">
+      <rect x="70" y="110" width="330" height="190" rx="8" fill="#ffffff" stroke="#5c6f86" stroke-width="3"/>
+      <text x="100" y="150" font-size="22" font-weight="700">1. Checklist</text>
+      <text x="100" y="188" font-size="18">Include Oracle account setup,</text>
+      <text x="100" y="214" font-size="18">email verification, LiveLab URL,</text>
+      <text x="100" y="240" font-size="18">event code, network check,</text>
+      <text x="100" y="266" font-size="18">first screen, and support contact.</text>
+    </g>
+    <g class="card">
+      <rect x="435" y="110" width="330" height="190" rx="8" fill="#ffffff" stroke="#5c6f86" stroke-width="3"/>
+      <text x="465" y="150" font-size="22" font-weight="700">2. Email draft</text>
+      <text x="465" y="188" font-size="18">Replace every bracketed value.</text>
+      <text x="465" y="214" font-size="18">Remove unused provisioning notes.</text>
+      <text x="465" y="240" font-size="18">Keep the message short enough</text>
+      <text x="465" y="266" font-size="18">for attendees to act on quickly.</text>
+    </g>
+    <g class="card">
+      <rect x="800" y="110" width="330" height="190" rx="8" fill="#ffffff" stroke="#5c6f86" stroke-width="3"/>
+      <text x="830" y="150" font-size="22" font-weight="700">3. Send early</text>
+      <text x="830" y="188" font-size="18">Give attendees time to create</text>
+      <text x="830" y="214" font-size="18">accounts, verify email, test the</text>
+      <text x="830" y="240" font-size="18">event path, and report blockers</text>
+      <text x="830" y="266" font-size="18">before the live call.</text>
+    </g>
+    <g class="card">
+      <rect x="70" y="370" width="1060" height="110" rx="8" fill="#eef3f7" stroke="#7b90a7" stroke-width="3"/>
+      <text x="100" y="412" font-size="20" font-weight="700">Author check:</text>
+      <text x="100" y="444" font-size="20">The preflight email tells attendees exactly what to do before the call.</text>
+    </g>
+  </g>
+</svg>
