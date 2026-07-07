@@ -447,6 +447,7 @@
   var lastExpandedFigure = null;
   var layoutSyncFrame = 0;
   var generatedMarkdownText = "";
+  var defaultWmsExamplePrompt = "Build a secure, event-driven meeting summarizer on OCI using AI Speech, Generative AI, Functions, Object Storage, Events, and Notifications";
 
   bubbleModalElement.addEventListener("hidden.bs.modal", function () {
     closeImageLightbox({ announce: false, restoreFocus: false });
@@ -1672,13 +1673,25 @@
       return;
     }
 
-    wmsExampleResults.innerHTML = (fields || []).map(function (field) {
+    wmsExampleResults.innerHTML = (fields || []).map(function (field, index) {
+      var targetId = "wms-example-field-" + index;
+      var fieldMeta = field.optional ? "Optional field" : "WMS field";
       return [
-        '<article class="detail-field-card generated-example-card">',
-        '  <span class="detail-field-label">', escapeHtml(field.label), "</span>",
-        renderFieldValueHtml(field.value),
-        field.note ? '  <p class="detail-field-note">' + escapeHtml(field.note) + "</p>" : "",
-        "</article>"
+        '<details class="generated-example-card"', index === 0 ? " open" : "", ">",
+        '  <summary class="generated-example-summary">',
+        '    <span class="generated-example-summary-main">',
+        '      <span class="generated-example-title">', escapeHtml(field.label), "</span>",
+        '      <span class="generated-example-meta">', escapeHtml(fieldMeta), "</span>",
+        "    </span>",
+        "  </summary>",
+        '  <div class="generated-example-body">',
+        '    <div class="generated-example-toolbar">',
+        '      <span class="generated-example-language">text</span>',
+        '      <button class="copy-snippet generated-example-copy" type="button" data-copy-target="', targetId, '">Copy</button>',
+        "    </div>",
+        '    <pre class="generated-example-pre"><code id="', targetId, '">', escapeHtml(field.value), "</code></pre>",
+        "  </div>",
+        "</details>"
       ].join("");
     }).join("");
   }
@@ -1688,9 +1701,7 @@
     var service = window.AuthorGuideWorkshopGenerator;
 
     if (!prompt) {
-      renderGeneratedExampleFields([]);
-      setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Enter a workshop topic before generating examples.");
-      return;
+      prompt = defaultWmsExamplePrompt;
     }
 
     if (!service || typeof service.generateExamples !== "function") {
@@ -1709,6 +1720,21 @@
         setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Examples could not be generated. Try a shorter prompt.");
       }
     }, 180);
+  }
+
+  function renderDefaultWmsExamples() {
+    var service = window.AuthorGuideWorkshopGenerator;
+
+    if (!wmsExampleResults || !service || typeof service.generateExamples !== "function") {
+      return;
+    }
+
+    try {
+      renderGeneratedExampleFields(service.generateExamples(defaultWmsExamplePrompt).fields);
+      setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "");
+    } catch (error) {
+      renderGeneratedExampleFields([]);
+    }
   }
 
   function setMarkdownOutput(value) {
@@ -4275,6 +4301,7 @@
       event.preventDefault();
       runWmsExampleGeneration();
     });
+    renderDefaultWmsExamples();
   }
 
   if (workshopMarkdownForm) {

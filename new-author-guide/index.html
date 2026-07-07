@@ -5281,7 +5281,7 @@
     }
   </style>
   <link rel="stylesheet" href="./assets/css/redwood-video-player.css">
-  <link rel="stylesheet" href="./assets/css/author-guide-improvements.css?v=20260529-nav-search-v2">
+  <link rel="stylesheet" href="./assets/css/author-guide-improvements.css?v=20260707-wms-prompt-examples">
 </head>
 <body>
   <div id="app" data-redwood-creator-pass="2026-05-25">
@@ -5541,16 +5541,16 @@
                       <div class="step-block-header">
                         <div class="panel-kicker">Prompt examples <span class="experimental-badge">Experimental</span></div>
                         <h3 id="wmsExampleGeneratorHeading">Generate WMS-ready field examples from your workshop idea</h3>
-                        <p>Enter a topic or rough workshop idea and the guide drafts reviewer-facing examples for the WMS fields that usually need the most detail.</p>
+                        <p>Enter a topic or rough workshop idea and the guide drafts copy-ready examples for the WMS fields that usually need the most detail.</p>
                       </div>
                       <form class="example-generator-form" id="wmsExampleForm">
                         <label class="form-label filter-label" for="wmsExamplePrompt">Workshop topic or author prompt</label>
                         <div class="example-generator-input-row">
-                          <textarea id="wmsExamplePrompt" class="form-control generator-textarea" rows="4" placeholder="Example: Build a LiveLabs workshop that teaches developers how to deploy an AI agent with Oracle Database 23ai"></textarea>
+                          <textarea id="wmsExamplePrompt" class="form-control generator-textarea" rows="4" placeholder="Example: Build a secure, event-driven meeting summarizer on OCI using AI Speech, Generative AI, Functions, Object Storage, Events, and Notifications"></textarea>
                           <button class="btn btn-primary rounded-pill px-4" type="submit">Generate examples</button>
                         </div>
                       </form>
-                      <div class="generator-state generator-empty-state" id="wmsExampleEmpty">Generated WMS field examples will appear here.</div>
+                      <div class="generator-state generator-empty-state" id="wmsExampleEmpty">Copy-ready WMS field examples will appear here.</div>
                       <div class="generator-state generator-loading-state d-none" id="wmsExampleLoading">Generating example fields...</div>
                       <div class="generator-state generator-error-state d-none" id="wmsExampleError" role="alert"></div>
                       <div class="detail-field-grid generated-example-grid" id="wmsExampleResults" aria-live="polite"></div>
@@ -6585,10 +6585,10 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="./assets/js/guide-content.js"></script>
-  <script src="./assets/js/workshop-generator.js"></script>
+  <script src="./assets/js/workshop-generator.js?v=20260707-wms-prompt-examples"></script>
   <script src="./assets/js/redwood-video-player.js"></script>
   <script src="./assets/js/shared-side-nav.js?v=20260529-shared-nav-v2"></script>
-  <script src="./assets/js/author-guide-app.js?v=20260529-nav-search-v2"></script>
+  <script src="./assets/js/author-guide-app.js?v=20260707-wms-prompt-examples"></script>
   <script src="./assets/js/shared-footer.js?v=20260516-followup"></script>
 </body>
 </html>
