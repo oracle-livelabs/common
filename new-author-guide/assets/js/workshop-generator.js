@@ -353,41 +353,79 @@
 
   function exampleFields(prompt) {
     var data = profile(prompt);
+    var workshopTitle = "Build a Secure, Event-Driven Meeting Summarizer on OCI";
+    var shortDescription = "Build an OCI workflow that transcribes meeting recordings, summarizes outcomes with Generative AI, and notifies users through serverless services.";
+    var longDescription = "Participants provision storage, event routing, serverless functions, managed AI transcription, generative summarization, logging, notifications, and least-privilege IAM. The workshop walks through an end-to-end meeting notes automation pattern that keeps data governed in the participant's OCI tenancy.";
+    var isMeetingSummarizer = data.topic.toLowerCase().indexOf("meeting") !== -1 &&
+      data.topic.toLowerCase().indexOf("summar") !== -1;
+
+    if (data.topic && data.topic !== fallbackTopic && !isMeetingSummarizer) {
+      workshopTitle = sentenceCase(data.verb + " with " + data.product + ": " + data.topic);
+      shortDescription = "Create a focused OCI workshop that helps learners " + data.verb + " a working solution with " + data.product + ".";
+      longDescription = "Participants follow a complete build path for " + data.topic + ", configure the required Oracle Cloud services, validate the workflow, and prepare the result for review. The lab sequence keeps setup, implementation, validation, and governance details separate so the short description stays concise.";
+    }
+
     return [
       {
         label: "Workshop Title",
-        value: sentenceCase(data.verb + " with " + data.product + ": " + data.topic),
-        note: "Lead with the learner outcome and product context."
+        value: workshopTitle
+      },
+      {
+        label: "Short Description",
+        value: shortDescription
+      },
+      {
+        label: "Long Description",
+        value: longDescription
       },
       {
         label: "Workshop Abstract",
-        value: "In this workshop, " + data.audience + " learn how to " + data.verb + " a working solution using " + data.product + ". The flow introduces the use case, prepares the required environment, walks through the core implementation steps, and closes with validation checks authors can reuse before WMS review.",
-        note: "Keep this reviewer-facing and concrete."
+        value: [
+          "Workshop Elevator Pitch/Messaging: Build a secure, event-driven meeting summarizer on OCI using managed AI services. Transcribe with AI Speech, summarize with Generative AI, and deliver outcomes to users - showcasing model choice and enterprise-grade governance.",
+          "",
+          "Workshop Description: Participants provision Object Storage buckets, Events, and Functions; submit AI Speech transcription jobs; call Generative AI with an on-demand model OCID; store summaries in a results bucket; and notify users via OCI Notifications. The labs emphasize least-privilege IAM, consistent regional setup, and OCI's easy to use AI services.",
+          "",
+          "Why is this workshop needed? Many teams spend time manually converting meetings into notes and action items. This workshop shows how to automate that workflow end-to-end using OCI's packaged AI and serverless services, accelerating time-to-value while keeping data governed in your tenancy.",
+          "",
+          "What products/technologies are used? OCI Object Storage, Events, Functions, AI Speech, Generative AI (on-demand model OCID), Notifications, Logging, IAM.",
+          "",
+          "Is there a primary Oracle product/technology being showcased? If so, what is it? Yes - OCI AI Services (AI Speech, Generative AI) with event-driven integration via Functions and Object Storage."
+        ].join("\n")
       },
       {
         label: "Workshop Outline",
         value: [
-          "Confirm the scenario, WMS request details, and target learner.",
-          "Prepare the required tools, repository path, and environment.",
-          "Build the main " + data.product + " workflow in small validated steps.",
-          "Run preview, Self Quality Assurance, and publishing readiness checks."
-        ].join("\n"),
-        note: "Match the real order authors or learners will follow."
+          "Lab 1: Provision necessary resources (compartments, Object Storage buckets, networking, and IAM policies)",
+          "",
+          "Lab 2: Deploy the Transcribe and Summary Functions using OCI Functions",
+          "",
+          "Lab 3: Configure Events, function configuration, logging, and Notifications for end-to-end integration",
+          "",
+          "Lab 4: Run the workflow by uploading media, verifying transcription and summarization, and confirming notifications"
+        ].join("\n")
       },
       {
         label: "Workshop Prerequisites",
-        value: "Oracle VPN access for WMS, a GitHub account tied to @oracle.com, GitHub Desktop, Visual Studio Code, Live Server, and access to any " + data.product + " environment required by the workshop.",
-        note: "Surface anything that can block setup, review, or delivery."
+        value: [
+          "No prior AI/ML experience required",
+          "",
+          "Some understanding of cloud concepts and service terminology is helpful",
+          "",
+          "Familiarity with Oracle Cloud Infrastructure (OCI) Console is helpful",
+          "",
+          "Optional: Basic comfort with JSON and Python is helpful (for reading logs/config/function code)"
+        ].join("\n")
       },
       {
-        label: "Required Tags",
+        label: "Notes and Additional Info",
         value: [
-          "Level = Beginner or Intermediate based on the final lab depth.",
-          "Role = " + (data.audience === "developers" ? "Developer" : "Administrator / Developer as appropriate") + ".",
-          "Focus Area = the primary solution category.",
-          "Product = " + data.product + "."
+          "Use one OCI region across all labs and confirm AI Speech and Generative AI availability before delivery.",
+          "",
+          "Use non-sensitive sample meeting media for demos and screenshots.",
+          "",
+          "Replace any demo OCIDs, bucket names, notification topics, and function names with workshop-safe placeholders before publishing."
         ].join("\n"),
-        note: "Tags drive WMS routing and LiveLabs discovery."
+        optional: true
       }
     ];
   }

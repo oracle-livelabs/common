@@ -1672,13 +1672,25 @@
       return;
     }
 
-    wmsExampleResults.innerHTML = (fields || []).map(function (field) {
+    wmsExampleResults.innerHTML = (fields || []).map(function (field, index) {
+      var targetId = "wms-example-field-" + index;
+      var fieldMeta = field.optional ? "Optional field" : "WMS field";
       return [
-        '<article class="detail-field-card generated-example-card">',
-        '  <span class="detail-field-label">', escapeHtml(field.label), "</span>",
-        renderFieldValueHtml(field.value),
-        field.note ? '  <p class="detail-field-note">' + escapeHtml(field.note) + "</p>" : "",
-        "</article>"
+        '<details class="generated-example-card"', index === 0 ? " open" : "", ">",
+        '  <summary class="generated-example-summary">',
+        '    <span class="generated-example-summary-main">',
+        '      <span class="generated-example-title">', escapeHtml(field.label), "</span>",
+        '      <span class="generated-example-meta">', escapeHtml(fieldMeta), "</span>",
+        "    </span>",
+        "  </summary>",
+        '  <div class="generated-example-body">',
+        '    <div class="generated-example-toolbar">',
+        '      <span class="generated-example-language">text</span>',
+        '      <button class="copy-snippet generated-example-copy" type="button" data-copy-target="', targetId, '">Copy</button>',
+        "    </div>",
+        '    <pre class="generated-example-pre"><code id="', targetId, '">', escapeHtml(field.value), "</code></pre>",
+        "  </div>",
+        "</details>"
       ].join("");
     }).join("");
   }
