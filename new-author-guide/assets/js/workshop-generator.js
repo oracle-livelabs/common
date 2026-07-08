@@ -352,42 +352,65 @@
   }
 
   function exampleFields(prompt) {
-    var data = profile(prompt);
     return [
       {
         label: "Workshop Title",
-        value: sentenceCase(data.verb + " with " + data.product + ": " + data.topic),
-        note: "Lead with the learner outcome and product context."
+        value: "Build AI Agents with Persistent Memory Using Oracle Database"
+      },
+      {
+        label: "Short Description (max 400 characters)",
+        value: "Build AI agents with persistent memory, semantic search, and enterprise data access using Oracle Database, ADB, Select AI, and OCI GenAI."
+      },
+      {
+        label: "Long Description (max 4000 characters)",
+        value: "Participants build database-powered AI agents that retain useful context between conversations. The workshop shows how to store memory in Oracle Database, search it semantically, expose enterprise data safely, and use the Oracle Select AI Agent framework with hands-on SQL examples. Learners leave with a practical pattern for agents that remember clients, apply past decisions, and operate with governance controls."
       },
       {
         label: "Workshop Abstract",
-        value: "In this workshop, " + data.audience + " learn how to " + data.verb + " a working solution using " + data.product + ". The flow introduces the use case, prepares the required environment, walks through the core implementation steps, and closes with validation checks authors can reuse before WMS review.",
-        note: "Keep this reviewer-facing and concrete."
+        value: [
+          "Workshop Elevator Pitch/Messaging: AI agents are powerful, but they forget everything between conversations. This workshop teaches you to build agents with real memory using Oracle Database, so your AI can remember clients, learn from past decisions, and get smarter over time.",
+          "",
+          "Workshop Description: Build AI agents that remember. Learn to create database-powered agents with persistent memory, semantic search, and enterprise data access using Oracle Select AI Agent framework. Hands-on with SQL.",
+          "",
+          "Why is this workshop needed? Used for a workshop series.",
+          "",
+          "What products/technologies are used? ADB, SelectAI, OCI GenAI.",
+          "",
+          "Is there a primary Oracle product/technology being showcased? If so, what is it? Oracle Database.",
+          "",
+          "For OSPA Workshops Only:",
+          "What are the training objectives? Please fill in.",
+          "What module will this exist in? Please fill in."
+        ].join("\n")
       },
       {
         label: "Workshop Outline",
         value: [
-          "Confirm the scenario, WMS request details, and target learner.",
-          "Prepare the required tools, repository path, and environment.",
-          "Build the main " + data.product + " workflow in small validated steps.",
-          "Run preview, Self Quality Assurance, and publishing readiness checks."
-        ].join("\n"),
-        note: "Match the real order authors or learners will follow."
+          "What agents are and why they matter: Understand the difference between chatbots that explain and agents that act on your data.",
+          "",
+          "How agents plan and execute: Trace the agent loop from understanding requests to coordinating tools and completing work.",
+          "",
+          "The forgetting problem: Experience why stateless AI fails in production and why memory is essential.",
+          "",
+          "Building the memory core: Create persistent memory with four types (facts, decisions, context, policies) and semantic vector search.",
+          "",
+          "Safety and control: Implement role-based agents, automated rules, human oversight, and audit trails for compliance."
+        ].join("\n")
       },
       {
         label: "Workshop Prerequisites",
-        value: "Oracle VPN access for WMS, a GitHub account tied to @oracle.com, GitHub Desktop, Visual Studio Code, Live Server, and access to any " + data.product + " environment required by the workshop.",
-        note: "Surface anything that can block setup, review, or delivery."
+        value: [
+          "Familiarity with the Oracle Database and SQL is helpful but not required.",
+          "",
+          "An Oracle Login."
+        ].join("\n")
       },
       {
-        label: "Required Tags",
+        label: "Notes and Additional Info",
         value: [
-          "Level = Beginner or Intermediate based on the final lab depth.",
-          "Role = " + (data.audience === "developers" ? "Developer" : "Administrator / Developer as appropriate") + ".",
-          "Focus Area = the primary solution category.",
-          "Product = " + data.product + "."
+          "Optional: Add workshop-series context, audience notes, delivery schedule, owner guidance, or reviewer instructions here."
         ].join("\n"),
-        note: "Tags drive WMS routing and LiveLabs discovery."
+        optional: true
       }
     ];
   }
