@@ -447,7 +447,7 @@
   var lastExpandedFigure = null;
   var layoutSyncFrame = 0;
   var generatedMarkdownText = "";
-  var defaultWmsExamplePrompt = "Build a secure, event-driven meeting summarizer on OCI using AI Speech, Generative AI, Functions, Object Storage, Events, and Notifications";
+  var defaultWmsExamplePrompt = "Build AI agents with persistent memory using Oracle Database, ADB, Select AI, and OCI GenAI";
 
   bubbleModalElement.addEventListener("hidden.bs.modal", function () {
     closeImageLightbox({ announce: false, restoreFocus: false });
@@ -1675,18 +1675,15 @@
 
     wmsExampleResults.innerHTML = (fields || []).map(function (field, index) {
       var targetId = "wms-example-field-" + index;
-      var fieldMeta = field.optional ? "Optional field" : "WMS field";
       return [
-        '<details class="generated-example-card"', index === 0 ? " open" : "", ">",
+        '<details class="generated-example-card">',
         '  <summary class="generated-example-summary">',
         '    <span class="generated-example-summary-main">',
         '      <span class="generated-example-title">', escapeHtml(field.label), "</span>",
-        '      <span class="generated-example-meta">', escapeHtml(fieldMeta), "</span>",
         "    </span>",
         "  </summary>",
         '  <div class="generated-example-body">',
         '    <div class="generated-example-toolbar">',
-        '      <span class="generated-example-language">text</span>',
         '      <button class="copy-snippet generated-example-copy" type="button" data-copy-target="', targetId, '">Copy</button>',
         "    </div>",
         '    <pre class="generated-example-pre"><code id="', targetId, '">', escapeHtml(field.value), "</code></pre>",

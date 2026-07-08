@@ -352,78 +352,63 @@
   }
 
   function exampleFields(prompt) {
-    var data = profile(prompt);
-    var workshopTitle = "Build a Secure, Event-Driven Meeting Summarizer on OCI";
-    var shortDescription = "Build an OCI workflow that transcribes meeting recordings, summarizes outcomes with Generative AI, and notifies users through serverless services.";
-    var longDescription = "Participants provision storage, event routing, serverless functions, managed AI transcription, generative summarization, logging, notifications, and least-privilege IAM. The workshop walks through an end-to-end meeting notes automation pattern that keeps data governed in the participant's OCI tenancy.";
-    var isMeetingSummarizer = data.topic.toLowerCase().indexOf("meeting") !== -1 &&
-      data.topic.toLowerCase().indexOf("summar") !== -1;
-
-    if (data.topic && data.topic !== fallbackTopic && !isMeetingSummarizer) {
-      workshopTitle = sentenceCase(data.verb + " with " + data.product + ": " + data.topic);
-      shortDescription = "Create a focused OCI workshop that helps learners " + data.verb + " a working solution with " + data.product + ".";
-      longDescription = "Participants follow a complete build path for " + data.topic + ", configure the required Oracle Cloud services, validate the workflow, and prepare the result for review. The lab sequence keeps setup, implementation, validation, and governance details separate so the short description stays concise.";
-    }
-
     return [
       {
         label: "Workshop Title",
-        value: workshopTitle
+        value: "Build AI Agents with Persistent Memory Using Oracle Database"
       },
       {
-        label: "Short Description",
-        value: shortDescription
+        label: "Short Description (max 400 characters)",
+        value: "Build AI agents with persistent memory, semantic search, and enterprise data access using Oracle Database, ADB, Select AI, and OCI GenAI."
       },
       {
-        label: "Long Description",
-        value: longDescription
+        label: "Long Description (max 4000 characters)",
+        value: "Participants build database-powered AI agents that retain useful context between conversations. The workshop shows how to store memory in Oracle Database, search it semantically, expose enterprise data safely, and use the Oracle Select AI Agent framework with hands-on SQL examples. Learners leave with a practical pattern for agents that remember clients, apply past decisions, and operate with governance controls."
       },
       {
         label: "Workshop Abstract",
         value: [
-          "Workshop Elevator Pitch/Messaging: Build a secure, event-driven meeting summarizer on OCI using managed AI services. Transcribe with AI Speech, summarize with Generative AI, and deliver outcomes to users - showcasing model choice and enterprise-grade governance.",
+          "Workshop Elevator Pitch/Messaging: AI agents are powerful, but they forget everything between conversations. This workshop teaches you to build agents with real memory using Oracle Database, so your AI can remember clients, learn from past decisions, and get smarter over time.",
           "",
-          "Workshop Description: Participants provision Object Storage buckets, Events, and Functions; submit AI Speech transcription jobs; call Generative AI with an on-demand model OCID; store summaries in a results bucket; and notify users via OCI Notifications. The labs emphasize least-privilege IAM, consistent regional setup, and OCI's easy to use AI services.",
+          "Workshop Description: Build AI agents that remember. Learn to create database-powered agents with persistent memory, semantic search, and enterprise data access using Oracle Select AI Agent framework. Hands-on with SQL.",
           "",
-          "Why is this workshop needed? Many teams spend time manually converting meetings into notes and action items. This workshop shows how to automate that workflow end-to-end using OCI's packaged AI and serverless services, accelerating time-to-value while keeping data governed in your tenancy.",
+          "Why is this workshop needed? Used for a workshop series.",
           "",
-          "What products/technologies are used? OCI Object Storage, Events, Functions, AI Speech, Generative AI (on-demand model OCID), Notifications, Logging, IAM.",
+          "What products/technologies are used? ADB, SelectAI, OCI GenAI.",
           "",
-          "Is there a primary Oracle product/technology being showcased? If so, what is it? Yes - OCI AI Services (AI Speech, Generative AI) with event-driven integration via Functions and Object Storage."
+          "Is there a primary Oracle product/technology being showcased? If so, what is it? Oracle Database.",
+          "",
+          "For OSPA Workshops Only:",
+          "What are the training objectives? Please fill in.",
+          "What module will this exist in? Please fill in."
         ].join("\n")
       },
       {
         label: "Workshop Outline",
         value: [
-          "Lab 1: Provision necessary resources (compartments, Object Storage buckets, networking, and IAM policies)",
+          "What agents are and why they matter: Understand the difference between chatbots that explain and agents that act on your data.",
           "",
-          "Lab 2: Deploy the Transcribe and Summary Functions using OCI Functions",
+          "How agents plan and execute: Trace the agent loop from understanding requests to coordinating tools and completing work.",
           "",
-          "Lab 3: Configure Events, function configuration, logging, and Notifications for end-to-end integration",
+          "The forgetting problem: Experience why stateless AI fails in production and why memory is essential.",
           "",
-          "Lab 4: Run the workflow by uploading media, verifying transcription and summarization, and confirming notifications"
+          "Building the memory core: Create persistent memory with four types (facts, decisions, context, policies) and semantic vector search.",
+          "",
+          "Safety and control: Implement role-based agents, automated rules, human oversight, and audit trails for compliance."
         ].join("\n")
       },
       {
         label: "Workshop Prerequisites",
         value: [
-          "No prior AI/ML experience required",
+          "Familiarity with the Oracle Database and SQL is helpful but not required.",
           "",
-          "Some understanding of cloud concepts and service terminology is helpful",
-          "",
-          "Familiarity with Oracle Cloud Infrastructure (OCI) Console is helpful",
-          "",
-          "Optional: Basic comfort with JSON and Python is helpful (for reading logs/config/function code)"
+          "An Oracle Login."
         ].join("\n")
       },
       {
         label: "Notes and Additional Info",
         value: [
-          "Use one OCI region across all labs and confirm AI Speech and Generative AI availability before delivery.",
-          "",
-          "Use non-sensitive sample meeting media for demos and screenshots.",
-          "",
-          "Replace any demo OCIDs, bucket names, notification topics, and function names with workshop-safe placeholders before publishing."
+          "Optional: Add workshop-series context, audience notes, delivery schedule, owner guidance, or reviewer instructions here."
         ].join("\n"),
         optional: true
       }
