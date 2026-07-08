@@ -704,7 +704,16 @@ def record_label(record: dict[str, Any]) -> str:
         )
         if value
     )
-    suffix = f" [{source}; {pointer}]" if pointer else f" [{source}]"
+    governance = " / ".join(
+        value
+        for value in (
+            record.get("lifecycle_state"),
+            record.get("authority"),
+        )
+        if value
+    )
+    details = "; ".join(value for value in (source, pointer, governance) if value)
+    suffix = f" [{details}]"
     return f"- {record.get('content', '')[:900]}{suffix}"
 
 

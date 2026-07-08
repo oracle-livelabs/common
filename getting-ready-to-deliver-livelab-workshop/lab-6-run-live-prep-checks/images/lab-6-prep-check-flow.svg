@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Live prep check flow</title>
+  <desc id="desc">Four large cards show how authors run the opening check, confirm the prep package, complete the final checklist, and decide go or no-go.</desc>
+  <rect width="1200" height="620" fill="#f7f7f5"/>
+  <text x="70" y="56" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1f1f1f">Run live prep checks</text>
+  <g font-family="Arial, sans-serif" fill="#1f1f1f">
+    <g class="card">
+      <rect x="70" y="100" width="500" height="150" rx="8" fill="#ffffff" stroke="#63715f" stroke-width="3"/>
+      <text x="100" y="140" font-size="22" font-weight="700">1. Opening prep check</text>
+      <text x="100" y="176" font-size="18">Ask attendees to confirm the expected</text>
+      <text x="100" y="202" font-size="18">first screen. Capture blockers in chat</text>
+      <text x="100" y="228" font-size="18">before hands-on work starts.</text>
+    </g>
+    <g class="card">
+      <rect x="630" y="100" width="500" height="150" rx="8" fill="#ffffff" stroke="#63715f" stroke-width="3"/>
+      <text x="660" y="140" font-size="22" font-weight="700">2. Confirm the prep package</text>
+      <text x="660" y="176" font-size="18">Check event path, access path, first screen,</text>
+      <text x="660" y="202" font-size="18">credentials, attendee preflight, invite,</text>
+      <text x="660" y="228" font-size="18">roles, and runbook.</text>
+    </g>
+    <g class="card">
+      <rect x="70" y="300" width="500" height="150" rx="8" fill="#ffffff" stroke="#63715f" stroke-width="3"/>
+      <text x="100" y="340" font-size="22" font-weight="700">3. Complete final checklist</text>
+      <text x="100" y="376" font-size="18">Verify the dry run, launch path, event code,</text>
+      <text x="100" y="402" font-size="18">attendee prep, roles, connectivity,</text>
+      <text x="100" y="428" font-size="18">and open technical risks.</text>
+    </g>
+    <g class="card">
+      <rect x="630" y="300" width="500" height="150" rx="8" fill="#ffffff" stroke="#63715f" stroke-width="3"/>
+      <text x="660" y="340" font-size="22" font-weight="700">4. Decide go or no-go</text>
+      <text x="660" y="376" font-size="18">Start when required checks are green.</text>
+      <text x="660" y="402" font-size="18">Name any remaining risk. Pause launch</text>
+      <text x="660" y="428" font-size="18">when a required path or role is missing.</text>
+    </g>
+    <g class="card">
+      <rect x="70" y="500" width="1060" height="72" rx="8" fill="#eef4ec" stroke="#87986a" stroke-width="3"/>
+      <text x="100" y="545" font-size="20" font-weight="700">Result:</text>
+      <text x="170" y="545" font-size="20">the team knows whether to start, start with risk, or pause.</text>
+    </g>
+  </g>
+</svg>

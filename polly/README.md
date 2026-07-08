@@ -39,7 +39,7 @@ Codex reads the plugin manifest's `skills` path, discovers
 3. In a fork clone, the developer runs `$polly-init` with the upstream project, for example `oracle-livelabs/livestack`.
 4. Codex hooks retrieve personal continuity plus accepted shared memory under that canonical repository.
 5. Each prompt shows a Polly status message and confirms whether relevant memory was supplied. If retrieval fails, Codex says it continued without shared context.
-6. Stop hooks replace one shared checkpoint for the current session and confirm when it has been shared. Collaborators receive the latest progress without accumulating one record per turn.
+6. Stop hooks replace one shared working checkpoint for the current developer and workstream, even across Codex sessions, and confirm when it has been shared. Collaborators receive the latest progress without accumulating one record per turn.
 7. `$polly-quiet` pauses automatic checkpoints, `$polly-share`, and `$polly-private` for the current clone while keeping context retrieval active. `$polly-quiet off` resumes memory writes.
 8. `$polly-private` saves a deliberate developer-only note under the canonical repository without tying it to the current Codex session. It is available as personal continuity in future sessions but is never returned to collaborators.
 9. `$polly-share` immediately publishes a deliberate decision, constraint, assumption, blocker, or progress note to collaborators. The administrator can revoke developers or moderate incorrect records, but no approval queue is required.
@@ -48,10 +48,14 @@ Codex reads the plugin manifest's `skills` path, discovers
 If Polly is unavailable, every hook fails open so Codex continues without injected context.
 The shared plugin contains no default Polly endpoint.
 
-Polly `0.6.0` introduces strict repository opt-in. After upgrading from an older
+Polly `0.6.0` introduced strict repository opt-in. After upgrading from an older
 version, restart Codex and rerun `$polly-init` once in each clone that should use
 Polly. Enrollment and the securely stored device token remain valid; do not rerun
 `$polly-setup`. A previous `polly.canonicalRepo` setting alone does not enable a
 clone.
+
+Polly `0.7.0` displays the server-provided lifecycle state and authority on each
+context record. The bridge remains compatible with older Polly servers that do
+not return those fields.
 
 Polly deliberately keeps its local configuration in the same per-user directory for both skills and hooks (`~/.config/polly-codex` by default on macOS and Linux, or `%LOCALAPPDATA%\polly-codex` on Windows). Codex's hook-only `PLUGIN_DATA` directory is not used because `$polly-setup` does not run in that hook environment.

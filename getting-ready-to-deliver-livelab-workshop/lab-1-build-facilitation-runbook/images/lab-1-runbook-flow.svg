@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Facilitation runbook flow</title>
+  <desc id="desc">Four large cards show how authors assign roles, build the run of show, script handoffs, and prepare first attendee instructions.</desc>
+  <rect width="1200" height="620" fill="#f7f7f5"/>
+  <text x="70" y="56" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1f1f1f">Build the facilitation runbook</text>
+  <g font-family="Arial, sans-serif" fill="#1f1f1f">
+    <g class="card">
+      <rect x="70" y="100" width="500" height="150" rx="8" fill="#ffffff" stroke="#5f6f52" stroke-width="3"/>
+      <text x="100" y="140" font-size="22" font-weight="700">1. Assign delivery roles</text>
+      <text x="100" y="176" font-size="18">Name the lead facilitator, screen driver,</text>
+      <text x="100" y="202" font-size="18">chat/support owner, SME, and coordinator.</text>
+      <text x="100" y="228" font-size="18">Record names in event notes, not in the guide.</text>
+    </g>
+    <g class="card">
+      <rect x="630" y="100" width="500" height="150" rx="8" fill="#ffffff" stroke="#5f6f52" stroke-width="3"/>
+      <text x="660" y="140" font-size="22" font-weight="700">2. Build the run of show</text>
+      <text x="660" y="176" font-size="18">Map the welcome, access check, lab time,</text>
+      <text x="660" y="202" font-size="18">customer discussion, Q&amp;A, and wrap-up blocks.</text>
+      <text x="660" y="228" font-size="18">Add the support route before the session.</text>
+    </g>
+    <g class="card">
+      <rect x="70" y="300" width="500" height="150" rx="8" fill="#ffffff" stroke="#5f6f52" stroke-width="3"/>
+      <text x="100" y="340" font-size="22" font-weight="700">3. Script handoffs</text>
+      <text x="100" y="376" font-size="18">Prepare short lines for setup, hands-on work,</text>
+      <text x="100" y="402" font-size="18">technical explanation, customer context,</text>
+      <text x="100" y="428" font-size="18">side issues, and return-to-lab moments.</text>
+    </g>
+    <g class="card">
+      <rect x="630" y="300" width="500" height="150" rx="8" fill="#ffffff" stroke="#5f6f52" stroke-width="3"/>
+      <text x="660" y="340" font-size="22" font-weight="700">4. Prepare first words</text>
+      <text x="660" y="376" font-size="18">Write the first three instructions attendees</text>
+      <text x="660" y="402" font-size="18">will hear. Include the URL, access path,</text>
+      <text x="660" y="428" font-size="18">and expected first screen.</text>
+    </g>
+    <g class="card">
+      <rect x="70" y="500" width="1060" height="72" rx="8" fill="#f0f4ed" stroke="#87986a" stroke-width="3"/>
+      <text x="100" y="545" font-size="20" font-weight="700">Result:</text>
+      <text x="170" y="545" font-size="20">the team knows who drives, who supports, and what attendees hear first.</text>
+    </g>
+  </g>
+</svg>
