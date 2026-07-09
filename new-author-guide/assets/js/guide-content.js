@@ -1172,40 +1172,45 @@ window.authorGuideContent = (function () {
       {
         id: "livestack-create",
         title: "LiveStack Creation",
-        short: "Create a LiveStack in WMS, add LiveLab entries and assets, manage visibility, and request publishing.",
+        short: "Create an industry-focused LiveStack solution package, add LiveLabs and assets, manage visibility, and request publishing.",
         accent: "ocean",
         tags: ["livestack", "assets"],
-        updatedAt: "2026-06-01",
-        description: "Use this card when a solution needs a LiveStack landing page that joins demos, LiveLabs, deployment assets, and supporting materials around one business outcome.",
+        updatedAt: "2026-07-01",
+        description: "Use this card when a solution needs a LiveStack package that combines a LiveStack Demo, LiveLabs workshops, deployment-ready assets, and supporting materials around one industry challenge or business outcome.",
         steps: [
-          "Open WMS, choose Create a LiveStack, read the landing page, and create the initial LiveStack record.",
-          "Use the LiveStack details page as the working surface for entries, assets, ordering, visibility, and publishing status.",
-          "Add LiveLab entries by name or ID, then decide whether Run on Sandbox and Run on Your Tenancy should appear from the LiveStack.",
-          "Set each entry title and position deliberately. The source LiveLab title is only the default, not a requirement.",
-          "Add assets that you created or that someone shared with you, then set position and internal or external visibility.",
-          "When the LiveStack is ready, change status to Publish Requested and save. Council review usually returns a status update in 2 to 3 business days."
+          "Open WMS, choose Create a LiveStack, review the landing-page overview, and create the initial LiveStack record.",
+          "Use the LiveStack Details page as the working surface for LiveLab entries, assets, ordering, visibility, and publishing status.",
+          "Add LiveLab entries by name or ID, then configure Run on Sandbox, Run on Your Tenancy, title, and position when those override fields appear.",
+          "Add assets from WMS > Self Services > Assets. Only assets created by you or shared with you appear in the asset picker.",
+          "Set asset position and internal or external visibility. Internal assets are visible only to Oracle employees; external assets are visible to all audiences.",
+          "When the LiveStack is ready, change status to Publish Requested and save. The LiveStack council provides an update within 2 to 3 business days by email."
         ],
         checkpoints: [
-          "The LiveStack has a clear Envision, Try, Embed, and Scale story instead of a loose list of links.",
+          "The author understands that a LiveStack is the full solution package and a LiveStack Demo is one component inside it.",
+          "The LiveStack maps clearly to the Envision, Try, Embed, and Scale journey instead of acting as a loose list of links.",
           "Every LiveLab entry has the intended title, launch options, and order.",
-          "Every asset has the right visibility before the LiveStack is published.",
+          "Every asset is owned by or shared with the author and has the right internal or external visibility before publication.",
           "The author knows that published LiveStack changes appear in LiveLabs immediately."
         ],
         watchFor: [
-          "Adding assets before WMS can list them for you. Only assets created by you or shared with you appear.",
+          "Confusing a LiveStack Demo with the full LiveStack package.",
+          "Trying to add assets before they exist in WMS Self Services > Assets or before they have been shared with you.",
           "Leaving internal briefing material visible to external audiences.",
           "Reordering or editing a published LiveStack without realizing the change is immediate."
         ],
         snippetMeta: "LiveStack build path",
         snippetTitle: "Create, fill, and publish the LiveStack",
         snippet: [
+          "LiveStack = full solution package",
+          "LiveStack Demo = storytelling component inside the package",
+          "",
           "1. WMS > Create a LiveStack",
-          "2. Complete the initialization form",
+          "2. Review the overview and complete the initialization form",
           "3. Add LiveLab entries by name or ID",
-          "4. Choose launch options, title, and position",
-          "5. Add shared or owned assets",
-          "6. Set internal or external visibility",
-          "7. Change status to Publish Requested"
+          "4. Configure launch options, title, and position",
+          "5. Add owned or shared assets from Self Services > Assets",
+          "6. Set asset order and internal or external visibility",
+          "7. Change status to Publish Requested and wait for council email"
         ].join("\n"),
         image: {
           src: "./content/author-guide/15-livestack/images/ls-details.png",
