@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Oracle LiveLabs gives you access to Oracle products so you can run hands-on labs and workshops in a guided environment.">
+    <title>Oracle LiveLabs</title>
+
+    <script>
+        (function () {
+            var version = "20260706-diagram-spacing-fix";
+            var aliases = {
+                "lab-1-create-live-event": "lab-2-request-livelabs-event-code",
+                "lab-1-request-livelabs-event-code": "lab-2-request-livelabs-event-code",
+                "lab-2-choose-access-path": "lab-3-choose-access-path-before-event",
+                "lab-2-choose-access-path-before-event": "lab-3-choose-access-path-before-event",
+                "lab-3-run-green-button-dry-run": "lab-4-run-workshop-test-green-button-path",
+                "lab-3-run-workshop-test-green-button-path": "lab-4-run-workshop-test-green-button-path",
+                "lab-4-send-attendee-preflight": "lab-5-send-attendee-preflight-prerequisites",
+                "lab-4-send-attendee-preflight-prerequisites": "lab-5-send-attendee-preflight-prerequisites",
+                "lab-5-build-facilitation-runbook": "lab-1-build-facilitation-runbook",
+                "lab-6-run-live-readiness": "lab-6-run-live-prep-checks",
+                "need-help-freetier": "lab-7-how-to-troubleshoot-common-issues",
+                "lab-7-customer-context-follow-up": "lab-7-how-to-troubleshoot-common-issues"
+            };
+            var currentUrl = new URL(window.location.href);
+            var lab = currentUrl.searchParams.get("lab");
+            if (aliases[lab]) {
+                currentUrl.searchParams.set("lab", aliases[lab]);
+                window.history.replaceState(null, "", currentUrl.toString());
+            }
+            var open = window.XMLHttpRequest && window.XMLHttpRequest.prototype.open;
+            if (open) {
+                window.XMLHttpRequest.prototype.open = function (method, url) {
+                    var args = Array.prototype.slice.call(arguments, 2);
+                    try {
+                        var target = new URL(url, window.location.href);
+                        if (/manifest\.json$/.test(target.pathname) || /\.md$/.test(target.pathname)) {
+                            target.searchParams.set("v", version);
+                            url = target.toString();
+                        }
+                    } catch (e) {
+                        // Keep the LiveLabs loader request unchanged if URL parsing fails.
+                    }
+                    return open.apply(this, [method, url].concat(args));
+                };
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                var content = document.getElementById("module-content");
+                if (!content || !window.MutationObserver) {
+                    return;
+                }
+                var makeImagesEager = function () {
+                    var images = content.querySelectorAll("img[src]");
+                    Array.prototype.forEach.call(images, function (image) {
+                        var source = image.getAttribute("src");
+                        image.setAttribute("loading", "eager");
+                        if (source) {
+                            try {
+                                var target = new URL(source, window.location.href);
+                                if (target.searchParams.get("v") !== version) {
+                                    target.searchParams.set("v", version);
+                                    image.setAttribute("src", target.toString());
+                                }
+                            } catch (e) {
+                                if (!image.currentSrc) {
+                                    image.src = source;
+                                }
+                            }
+                        }
+                    });
+                };
+                var observer = new MutationObserver(makeImagesEager);
+                observer.observe(content, { childList: true, subtree: true });
+                makeImagesEager();
+            });
+        }());
+    </script>
+    <script src="https://livelabs.oracle.com/cdn/common/redwood-hol/js/jquery-1.11.0.min.js"></script>
+    <script src="https://livelabs.oracle.com/cdn/common/redwood-hol/js/jquery-ui-1.10.4.custom.js"></script>
+    <script src="https://livelabs.oracle.com/cdn/common/redwood-hol/js/main.min.js"></script>
+
+    <link rel="stylesheet" href="https://livelabs.oracle.com/cdn/common/redwood-hol/css/style.min.css">
+    <link rel="shortcut icon" href="https://livelabs.oracle.com/cdn/common/redwood-hol/img/favicon.ico">
+</head>
+<body>
+    <header class="hol-Header" role="banner">
+        <div class="hol-Header-wrap">
+            <div class="hol-Header-logo"><span>Oracle LiveLabs</span></div>
+            <a href="https://livelabs.oracle.com" target="_blank" id="livelabs" title="Oracle LiveLabs"></a>
+            <div class="hol-Header-actions">
+                <button id="openNav" class="hol-Header-button hol-Header-button--menu rightNav" aria-label="Open Menu" title="Open Menu">
+                    <span class="hol-Header-toggleIcon"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div id="container">
+        <div id="leftNav">
+            <div id="toc"></div>
+        </div>
+        <div id="contentBox">
+            <main class="hol-Content" id="module-content"></main>
+        </div>
+    </div>
+
+    <footer class="hol-Footer">
+        <a class="hol-Footer-topLink" href="#top">Return to Top</a>
+        <div id="footer-banner">
+            <div class="footer-row">
+                <div class="footer-content">
+                    <ul class="footer-links">
+                        <li><a href="https://docs.oracle.com/pls/topic/lookup?ctx=en/legal&id=cpyr" target="_blank">© Oracle</a></li>
+                        <li><a href="https://www.oracle.com/corporate/index.html" target="_blank">About Oracle</a></li>
+                        <li><a href="https://www.oracle.com/corporate/contact/" target="_blank">Contact Us</a></li>
+                        <li class="footer-links-break"></li>
+                        <li><a href="https://docs.oracle.com/en/browseall.html" target="_blank">Products A-Z</a></li>
+                        <li><a href="https://www.oracle.com/legal/privacy/" target="_blank">Terms of Use & Privacy</a></li>
+                        <li><a href="https://www.oracle.com/legal/privacy/privacy-policy.html#11" target="_blank">Cookie Preferences</a></li>
+                        <li><a href="https://www.oracle.com/legal/privacy/marketing-cloud-data-cloud-privacy-policy.html#adchoices" target="_blank">Ad Choices</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

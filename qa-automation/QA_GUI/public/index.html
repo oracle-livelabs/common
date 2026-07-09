@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Workshop QA</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyeline">LiveLabs</p>
+          <h1>Workshop QA</h1>
+        </div>
+        <div class="run-state" id="runState">
+          <span class="state-dot idle"></span>
+          <span>Idle</span>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="control-panel" aria-label="Run controls">
+          <form id="runForm" class="run-form">
+            <label class="url-field">
+              <span>Paste workshop URL</span>
+              <input
+                id="workshopUrl"
+                name="url"
+                type="url"
+                placeholder="https://oracle-livelabs.github.io/.../workshops/tenancy/index.html"
+                autocomplete="url"
+                required
+              >
+            </label>
+            <div class="control-row">
+              <label>
+                <span class="field-label">Lab filter <small>Optional</small></span>
+                <input id="labFilter" name="labFilter" type="text" placeholder="cloud-login, setup">
+              </label>
+              <label>
+                <span class="field-label">Limit <small>Optional</small></span>
+                <input id="maxLabs" name="maxLabs" type="number" min="1" inputmode="numeric" placeholder="All">
+              </label>
+              <label>
+                <span class="field-label">Browser <small>Optional</small></span>
+                <select id="browserChannel" name="browserChannel">
+                  <option value="auto">Auto</option>
+                  <option value="msedge">Edge</option>
+                  <option value="chrome">Chrome</option>
+                </select>
+              </label>
+              <button class="primary-button" id="runButton" type="submit">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8 5v14l11-7z"></path>
+                </svg>
+                <span>Run QA</span>
+              </button>
+              <button class="secondary-button" id="cancelButton" type="button" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 7h10v10H7z"></path>
+                </svg>
+                <span>Stop</span>
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section class="summary-strip" aria-label="Run summary">
+          <div class="metric">
+            <span class="metric-label">Pass</span>
+            <strong id="passCount">0</strong>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Fail</span>
+            <strong id="failCount">0</strong>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Errors</span>
+            <strong id="errorCount">0</strong>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Issues</span>
+            <strong id="issueCount">0</strong>
+          </div>
+          <div class="report-actions">
+            <a id="markdownReport" class="report-link disabled" href="#" target="_blank" rel="noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <path d="M14 2v6h6"></path>
+              </svg>
+              <span>Open report</span>
+            </a>
+            <a id="jsonReport" class="report-link disabled" href="#" target="_blank" rel="noreferrer">JSON</a>
+          </div>
+        </section>
+
+        <nav class="view-tabs" aria-label="QA views">
+          <button class="tab-button active" type="button" data-view-tab="current" aria-selected="true">Current run</button>
+          <button class="tab-button" type="button" data-view-tab="history" aria-selected="false">
+            History
+            <span id="historyCount">0</span>
+          </button>
+        </nav>
+
+        <section id="currentView" class="view-panel" data-view-panel="current">
+          <section class="content-grid">
+            <div class="results-panel">
+              <div class="section-heading">
+                <h2>Lab results</h2>
+                <span id="progressText">No run yet</span>
+              </div>
+              <div class="results-table-wrap">
+                <table class="results-table">
+                  <thead>
+                    <tr>
+                      <th>Status</th>
+                      <th>Lab</th>
+                      <th>Title</th>
+                      <th>Issues</th>
+                    </tr>
+                  </thead>
+                  <tbody id="resultsBody">
+                    <tr class="empty-row">
+                      <td colspan="4">No results yet.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <aside class="details-panel" aria-label="Result details">
+              <div class="section-heading">
+                <h2>Details</h2>
+                <span id="selectedStatus">Waiting</span>
+              </div>
+              <div id="detailsBody" class="details-body">
+                <p class="muted">No lab selected.</p>
+              </div>
+            </aside>
+          </section>
+
+          <section class="log-panel" aria-label="Runner log">
+            <div class="section-heading">
+              <h2>Runner log</h2>
+              <button id="clearLog" class="ghost-button" type="button">Clear</button>
+            </div>
+            <pre id="runnerLog"></pre>
+          </section>
+        </section>
+
+        <section id="historyView" class="view-panel history-panel" data-view-panel="history" hidden>
+          <div class="section-heading">
+            <h2>Last 5 runs</h2>
+            <button id="refreshHistory" class="ghost-button" type="button">Refresh</button>
+          </div>
+          <div id="historyBody" class="history-list">
+            <p class="muted">No history yet.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

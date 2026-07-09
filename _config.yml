@@ -1,0 +1,12 @@
+# Preserve GitHub Pages v232/Jekyll 3.10 exclusions and keep distributable skill
+# source containing literal Liquid-like examples out of the Pages build.
+exclude:
+  - CNAME
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - skills/

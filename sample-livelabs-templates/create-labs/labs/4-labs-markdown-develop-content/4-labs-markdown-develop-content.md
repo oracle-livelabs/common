@@ -295,43 +295,81 @@ You can also embed video files directly from a URL, such as videos hosted on OCI
 
 ## Task 11: Scale a Video
 
-Without using video scaling, all the videos you embed will have small as the default size for your workshop. You can override the default video scaling by applying these manual controls below.
+If you do not specify a size when embedding a video, the video displays in small size by default. For most workshops, this default size is the recommended option unless you want to give the video more visual emphasis on the page.
 
+You can override the default by adding a size value to the end of the video embed code.
 
-### Resizing Videos
+### Video Embed Format
 
-1. This is a video with no video sizing applied or the default video size. **This is the format we recommend for all your videos** if you don't need a particular scaling to drive emphasis on a subject.
+Use this pattern when embedding a video:
 
-    ```
-    [Oracle Video Hub video with no sizing](videohub:1_2ubr9fo8)
-    ```
+```
+[Video title](videohub:<video_id>)
+```
 
-    [Demo video with no sizing.](videohub:1_yido2qmq)
+To choose a specific size, use this pattern:
 
-2. To scale the video size to small which is also the default video size, use this format.
+```
+[Video title](videohub:<video_id>:<size>)
+```
 
-    ```
-    [Oracle Video Hub video scaled to small size, default video size](videohub:1_2ubr9fo8:small)
-    ```
+**Note:** Supported size values are:
+- Small
+- Medium
+- Large
 
-    [Video hosted on Oracle Video Hub](videohub:1_yido2qmq:small)
+### Default Size: Small
 
-3. Use this format to scale the video size to medium.
+If no size is specified, the video is shown in small size automatically.
 
-    ```
-    [Oracle Video Hub video scaled to medium size](videohub:1_yido2qmq:medium)
-    ```
+```
+[Oracle Video Hub video with default sizing](videohub:1_2ubr9fo8)
+```
 
-    [Video hosted on Oracle Video Hub](videohub:1_yido2qmq:medium)
+This is the recommended format when you do not need additional emphasis or a larger display area.
+You can also write the small size explicitly, although it is not required:
 
-4. To scale the video size to large in relation to the amount of lab page space available, use this format.
+```
+[Oracle Video Hub video scaled to small size](videohub:1_2ubr9fo8:small)
+```
 
-    ```
-    [Oracle Video Hub video scaled to large size](videohub:1_yido2qmq:large)
-    ```
+### Other Size Options
 
-    [Video hosted on Oracle Video Hub](videohub:1_yido2qmq:large)
+Use medium when you want the video to stand out more on the page:
 
+```
+[Oracle Video Hub video scaled to medium size](videohub:1_yido2qmq:medium)
+```
+
+Use large when you want the video to take up more of the available lab page width:
+
+```
+[Oracle Video Hub video scaled to large size](videohub:1_yido2qmq:large)
+```
+
+### Size Comparison Examples
+
+The screenshots below show how video sizing appears inside a workshop:
+
+![Small video](<./images/small-video.png>)
+
+ This screenshot shows a video displayed at **small** size.
+
+![Medium video](<./images/medium-video.png>)
+
+This screenshot shows a video displayed at **medium** size.
+
+**Note:** These examples illustrate the visual difference between the default presentation and a larger embedded video.
+
+### Guidance
+
+Use the default embed format whenever possible:
+
+```
+[Video title](videohub:<video_id>)
+```
+
+**Important:** Only specify medium or large when the video needs more prominence in the task or page layout.
 
 ## Task 12: Tables
 
@@ -460,11 +498,11 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
     | Rule | Severity | Description |
     | --- | --- | --- |
     | **Single Title** | Major | Only one H1 heading (#) is allowed per lab. Multiple H1 headings will be flagged. |
-    | **No Inline HTML** | Error | Avoid embedded `<a href=...>` tags; use Markdown links instead. |
+    | **No Inline HTML** | Error | Avoid embedded `[text](url)` tags; use [Markdown links](url) instead. |
     | **Task Sections** | Error | The second H2 heading (##) should start with "Task" (e.g., "Task 1: Create..."). |
     | **Images Folder** | Error | All images must be located in an `images` folder. |
     | **Image Alt Text** | Error | All images must have alternate (alt) text for accessibility. |
-    | **Copy Tags** | Error | Code blocks should include `<copy>` tags to enable the copy button. |
+    | **Copy Tags** | Error | Code blocks should include `<copy>...</copy>` tags to enable the copy button. |
     | **Code Block Format** | Error | Use exactly 3 backticks (\`\`\`) for code blocks, not 4. |
     | **Broken Links** | Major | URLs that return errors are flagged as potentially broken. |
     | **Broken Images** | Major | Image paths that cannot be found are flagged. |
@@ -491,7 +529,7 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
     | Missing `<copy>` tag | Wrap your code with `<copy>...</copy>` inside the code block. |
     | Image not in images folder | Move images to an `images` subdirectory and update paths. |
     | Missing alt text | Add description in brackets: `![Description](image.png " ")` |
-    | HTML in Markdown | Replace `<a href="url">text</a>` with `[text](url)`. |
+    | HTML in Markdown | Replace `[text](url)` with `[text](url)`. |
     | Steps not numbered | Use `1.`, `2.`, etc. instead of `*` or `-` for steps. |
     {: title="Common fixes"}
 ## Task 15: Case Sensitivity
@@ -586,16 +624,21 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
     ![Code Block Reveal](./images/code-block-reveal.png " ")
 
     <details>
-        <summary>*Reveal code block*</summary>
-        ```python
-        <copy>
-        def getPrice():
-        ...
-        return jsonify(product_price)</copy>
-        ```
-    </details>
+    <summary>*Reveal code block*</summary>
+    ```python
+    <copy>
+    def getPrice():
+    ...
+    return jsonify(product_price)
+    </copy>
+    ```
+</details>
 
-    **Reminder** Download this handy [Cheatsheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
+**Reminders:**
+
+- If a code snippet, command, or script is copied or adapted from another author, repository, blog, documentation page, or sample project, cite the source near the code block and confirm the license allows reuse.
+
+- Download this handy [Cheatsheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
 
 ## Task 17: Strikethrough
 
@@ -697,4 +740,4 @@ The framework can automatically calculate the estimated reading time for your la
 
 ## Acknowledgements
 
-* **Last Updated By/Date:** Kevin Lazarz, February 2026
+* **Last Updated By/Date:** Teodor C. Nechita, June 2026

@@ -14,6 +14,7 @@ import { HomePage } from "../../pages/platform/homePage.js";
 import { HeaderRegion } from "../../pages/platform/components/headerRegion.js";
 import { EventCodeRequestPage } from "../../pages/platform/events/eventCodeRequestPage.js";
 import { WorkshopCardsPage } from "../../pages/platform/workshopCardsPage.js";
+import { LiveStackLandingPage } from "../../pages/platform/liveStackLandingPage.js";
 import { WorkshopLandingPage } from "../../pages/platform/workshopLandingPage.js";
 import { WorkshopLaunchOptionsDialog } from "../../pages/platform/workshopLaunchOptionsDialog.js";
 import { ReservationsPage } from "../../pages/platform/reservations/reservationsPage.js";
@@ -34,6 +35,7 @@ type QATestFixtures = {
   headerRegion: HeaderRegion;
   eventCodeRequestPage: EventCodeRequestPage;
   workshopCardsPage: WorkshopCardsPage;
+  liveStackLandingPage: LiveStackLandingPage;
   workshopLandingPage: WorkshopLandingPage;
   workshopLaunchOptionsDialog: WorkshopLaunchOptionsDialog;
   reservationsPage: ReservationsPage;
@@ -94,6 +96,10 @@ export const test = base.extend<QATestFixtures, QAWorkerFixtures>({
 
   workshopCardsPage: async ({ page }, use) => {
     await use(new WorkshopCardsPage(page));
+  },
+
+  liveStackLandingPage: async ({ page }, use) => {
+    await use(new LiveStackLandingPage(page));
   },
 
   workshopLandingPage: async ({ page }, use) => {

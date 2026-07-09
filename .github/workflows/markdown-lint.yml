@@ -30,7 +30,7 @@ jobs:
           git fetch --no-tags --prune origin "$BASE_SHA:$BASE_SHA" || true
 
           # Get changed markdown files plus CDN-sensitive index.html / manifest.json files
-          VALIDATION_FILES=$(git diff --name-only --diff-filter=AM "$BASE_SHA" "$PR_SHA" | grep -E '\.md$|(^|/)(index\.html|manifest\.json)$' | grep -v '^\.github/' | grep -v '^node_modules/' || true)
+          VALIDATION_FILES=$(git diff --name-only --diff-filter=AM "$BASE_SHA" "$PR_SHA" | grep -E '\.md$|(^|/)(index\.html|manifest\.json)$' | grep -v '^\.github/' | grep -v '^node_modules/' | grep -v -E '(^|/)SKILL\.md$' || true)
           MARKDOWN_FILES=$(printf '%s\n' "$VALIDATION_FILES" | grep '\.md$' || true)
 
           if [ -z "$VALIDATION_FILES" ]; then
@@ -110,6 +110,9 @@ jobs:
             [ -z "$file" ] && continue
             filename=$(basename "$file")
             lowercase=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
+            if [ "$lowercase" = "readme.md" ]; then
+              continue
+            fi
             if [ "$filename" != "$lowercase" ]; then
               echo "ERROR: Filename must be lowercase: $file"
               INVALID=1

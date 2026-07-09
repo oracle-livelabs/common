@@ -11,16 +11,33 @@
       "role": "author"
     }
   ],
-  "version": "26.5.2",
-  "published_at": "2026-05-21T00:00:00Z",
-  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/livelabs-workshop-author-26.5.2/ready-to-deploy-archive/livelabs-workshop-author-26.5.2.zip",
-  "archive_sha256": "fdaae2060f07178513096c6f8328d4b9fffc2b8e9c87c81950da5bb2cafbe924",
-  "content_hash": "67af5ec16eccf1c39918234d642246b152f4705806fa5b7aae63293987c1d40d",
+  "version": "26.5.3",
+  "published_at": "2026-06-17T00:00:00Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/livelabs-author/ready-to-deploy-archive/livelabs-workshop-author.zip",
+  "archive_sha256": "4e80a2f0a02012c1245e3cd84fb0d5227f801d9a0d6edc43b53ccb019ad0d7fb",
+  "content_hash": "eeaa0eb29374445dedda0734c8454c4609caa0b2aa5842aa81480a549783f3d5",
   "min_updater_version": "2",
   "validation": [
     "python3 scripts/check_skill_package.py <skill_root>"
   ],
   "version_history": [
+    {
+      "version": "26.5.3",
+      "published_at": "2026-06-17T00:00:00Z",
+      "authors": [
+        "Pat",
+        "Linda"
+      ],
+      "changes": [
+        "Updated the current release package to the stable `livelabs-author` skill folder and ready-to-deploy archive layout.",
+        "Kept workshop authoring focused on core LiveLabs creation while leaving screenshot capture and industry conversion to dedicated skills.",
+        "Added a self-contained starter workshop template, visual explainer, bundled validator default, and setup/scaffold/preview helpers.",
+        "Strengthened source traceability for external, unclear, and embedded-asset material, including current-request permission confirmation before authoring."
+      ],
+      "archive_sha256": "4e80a2f0a02012c1245e3cd84fb0d5227f801d9a0d6edc43b53ccb019ad0d7fb",
+      "content_hash": "eeaa0eb29374445dedda0734c8454c4609caa0b2aa5842aa81480a549783f3d5",
+      "portal_status": "pending"
+    },
     {
       "version": "26.5.2",
       "published_at": "2026-05-21T00:00:00Z",

@@ -18,6 +18,7 @@ import {
 // then Playwright applies them consistently to every spec run.
 type BrowserName = "chromium" | "firefox" | "webkit";
 type ScreenshotSetting = ScreenshotMode | { mode: ScreenshotMode; fullPage?: boolean };
+type ProxySetting = NonNullable<PlaywrightTestOptions["proxy"]>;
 
 // The Playwright config is entirely environment-driven so the thin `run` wrapper
 // can preserve the simple command surface from the Python project.
@@ -54,6 +55,7 @@ const configuredChromiumChannel = resolveChromiumChannel(process.env.QA_BROWSER_
 const configuredHeaded = ["1", "true", "yes", "on"].includes(
   (process.env.QA_HEADED ?? String(defaults.headed)).trim().toLowerCase(),
 );
+const configuredProxy = resolveProxySetting();
 
 function resolveWorkers(): number | string | undefined {
   // The legacy runner used 0/1/off/none to mean "do not parallelize".
@@ -78,6 +80,7 @@ function resolveReporters(): ReporterDescription[] {
   const reporters: ReporterDescription[] = [
     ["list"],
     ["html", { open: "never", outputFolder: configuredHtmlReportDir }],
+    ["./scripts/reporters/root-summary-reporter.mjs"],
   ];
 
   if (configuredJunitFile) {
@@ -89,6 +92,26 @@ function resolveReporters(): ReporterDescription[] {
   }
 
   return reporters;
+}
+
+function resolveProxySetting(): ProxySetting | undefined {
+  const proxyServer =
+    process.env.QA_PROXY_SERVER?.trim() ||
+    process.env.HTTPS_PROXY?.trim() ||
+    process.env.https_proxy?.trim() ||
+    process.env.HTTP_PROXY?.trim() ||
+    process.env.http_proxy?.trim();
+
+  if (!proxyServer) {
+    return undefined;
+  }
+
+  const bypass = process.env.QA_PROXY_BYPASS?.trim() || process.env.NO_PROXY?.trim() || process.env.no_proxy?.trim();
+
+  return {
+    server: proxyServer,
+    ...(bypass ? { bypass } : {}),
+  };
 }
 
 // All three browser projects are always declared so the runner can select one or
@@ -140,6 +163,7 @@ export default defineConfig({
     storageState: configuredStorageState,
     actionTimeout: configuredActionTimeout,
     navigationTimeout: configuredNavigationTimeout,
+    ...(configuredProxy ? { proxy: configuredProxy } : {}),
   },
   projects: browserProjects,
 });

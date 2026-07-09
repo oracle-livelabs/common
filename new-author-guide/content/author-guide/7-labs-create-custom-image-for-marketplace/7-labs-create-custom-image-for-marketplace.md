@@ -13,6 +13,8 @@ Estimated Time: x
 This lab assumes you have:
 - An Oracle Enterprise Linux (OEL) instance that meets marketplace publishing requirements
 
+> *_WARNING (3/30): If you need NoVNC access to your image, we ask that you refrain from creating OL9 images while the LiveLabs team investigates a bug creating incompatibilities with our scripts and OL9. If this is not possible, please reach out to our [help channel](https://oracle.enterprise.slack.com/archives/CTUPZQ5HA) for additional support._*
+
 ## Task 1: Clean Up Instance for Image Capture
 
 1. **Outside of your remote desktop connection!** Connect to your instance via SSH as user *opc*.

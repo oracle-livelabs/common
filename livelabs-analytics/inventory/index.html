@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="../assets/images/oracle-logo-white.svg" type="image/svg+xml">
+  <title>LiveLabs Analytics Portfolio Inventory</title>
+</head>
+<body>
+  <p>Loading Portfolio Inventory...</p>
+  <script>
+    (async () => {
+      try {
+        const response = await fetch("../index.html", { cache: "no-cache" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const html = await response.text();
+        const routedHtml = html.replace(/<head(\s[^>]*)?>/i, (match) => `${match}<base href="../">`);
+        document.open();
+        document.write(routedHtml);
+        document.close();
+      } catch (error) {
+        document.body.innerHTML = '<p>Portfolio Inventory could not load. <a href="../index.html?view=inventory">Open it from the dashboard</a>.</p>';
+      }
+    })();
+  </script>
+</body>
+</html>

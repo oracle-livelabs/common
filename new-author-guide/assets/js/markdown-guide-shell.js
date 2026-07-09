@@ -94,9 +94,9 @@
 
         if (path.indexOf("/workshops/author-guide/") !== -1 || path.indexOf("/workshops/livelabs/") !== -1) {
             return {
-                label: "Markdown Version",
-                title: "Read the full author guide in the markdown shell.",
-                summary: "This fallback route keeps the updated original guide structure intact while adding a cleaner shell, workshop-wide search, and media handling that match the redesigned experience more closely.",
+                label: "Live Original Guide",
+                title: "Open the full author guide in the live original route.",
+                summary: "This compatibility route preserves existing Author Guide URLs while sending full-guide readers to the live original guide.",
                 guideHomeHref: fullGuideHref,
                 redesignedHref: fullGuideHref,
                 exampleHref: workshopExampleHref

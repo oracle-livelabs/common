@@ -1,0 +1,4 @@
+interface:
+  display_name: "Polly Quiet"
+  short_description: "Pause Polly memory writes for this repository"
+  default_prompt: "Use $polly-quiet to pause Polly memory writes in this repository."

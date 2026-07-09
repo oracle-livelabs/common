@@ -1,0 +1,54 @@
+{
+  "workshoptitle": "Getting Ready to Deliver a LiveLab",
+  "help": "livelabs-help-db_us@oracle.com",
+  "tutorials": [
+    {
+      "title": "Introduction",
+      "description": "Understand the readiness model for a customer-facing LiveLabs delivery.",
+      "type": "livelabs",
+      "filename": "../../introduction/introduction.md"
+    },
+    {
+      "title": "Lab 1: Build the Facilitation Runbook",
+      "description": "Confirm roles, create the run of show, and script transitions.",
+      "type": "livelabs",
+      "filename": "../../lab-1-build-facilitation-runbook/lab-1-build-facilitation-runbook.md"
+    },
+    {
+      "title": "Lab 2: Request a LiveLabs Event Code",
+      "description": "Request an event code in WMS and verify event details before approval.",
+      "type": "livelabs",
+      "filename": "../../lab-2-request-livelabs-event-code/lab-2-request-livelabs-event-code.md"
+    },
+    {
+      "title": "Lab 3: Choose the Access Path Before the Event",
+      "description": "Select one access model and map accounts, credentials, provisioning, and support.",
+      "type": "livelabs",
+      "filename": "../../lab-3-choose-access-path-before-event/lab-3-choose-access-path-before-event.md"
+    },
+    {
+      "title": "Lab 4: Run the Workshop and Test the Green-Button Path",
+      "description": "Run the lab as an attendee and test the environment launch path before the event.",
+      "type": "livelabs",
+      "filename": "../../lab-4-run-workshop-test-green-button-path/lab-4-run-workshop-test-green-button-path.md"
+    },
+    {
+      "title": "Lab 5: Send Attendee Preflight Prerequisites",
+      "description": "Prepare attendee prerequisites, preflight email, expected first screen, and support contact.",
+      "type": "livelabs",
+      "filename": "../../lab-5-send-attendee-preflight-prerequisites/lab-5-send-attendee-preflight-prerequisites.md"
+    },
+    {
+      "title": "Lab 6: Run Live Prep Checks",
+      "description": "Confirm the event path, attendee prep, roles, and final author checklist.",
+      "type": "livelabs",
+      "filename": "../../lab-6-run-live-prep-checks/lab-6-run-live-prep-checks.md"
+    },
+    {
+      "title": "Lab 7: How to troubleshoot common issues",
+      "description": "Troubleshoot access issues, use support paths, and report broken workshop content.",
+      "type": "livelabs",
+      "filename": "../../lab-7-how-to-troubleshoot-common-issues/lab-7-how-to-troubleshoot-common-issues.md"
+    }
+  ]
+}

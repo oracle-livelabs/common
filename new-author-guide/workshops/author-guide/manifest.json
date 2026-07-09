@@ -1,4 +1,4 @@
-﻿{
+{
     "workshoptitle":  "Oracle LiveLabs Author Guide",
     "help":  "livelabs-help-db_us@oracle.com",
     "variables":  [
@@ -52,12 +52,22 @@
                       },
                       {
                           "title":  "Lab 5a: Develop Markdown and content",
-                          "description":  "This labs give you tips and tricks for editing and how to develop your lab (markdown) content using LiveLabs standards and accessibility for your workshops.",
+                          "description":  "This lab gives you tips and tricks for editing and developing your lab (markdown) content using LiveLabs standards and accessibility for your workshops.",
                           "filename":  "./../../content/author-guide/4-labs-markdown-develop-content/4-labs-markdown-develop-content.md"
                       },
                       {
-                          "title":  "Lab 5b: Add LiveLabs Quizzes to your workshops",
+                          "title":  "Lab 5b: Embed SQL Developer using freesql.com",
+                          "description":  "This lab shows you how to embed SQL Developer in a LiveLabs workshop using FreeSQL.",
+                          "filename":  "./../../content/author-guide/freesqlembed/freesqlembed.md"
+                      },
+                      {
+                          "title":  "Lab 5c: Add LiveLabs Quizzes to your workshops",
                           "filename":  "./../../content/author-guide/quiz/quiz.md"
+                      },
+                      {
+                          "title":  "Lab 5d: Fixomat 2000",
+                          "description":  "This lab shows you how to use Fixomat for LiveLabs markdown repair and cleanup.",
+                          "filename":  "./../../content/author-guide/fixomat/fixomat.md"
                       },
                       {
                           "title":  "Lab 6a: Quality Assurance checks and steps",
@@ -110,7 +120,7 @@
                       },
                       {
                           "title":  "Lab 11a: Secure Desktop Environments in LiveLabs",
-                          "description":  "This lab will wsho you how to get your new Marketplace image added to your LiveLab.",
+                          "description":  "This lab will show you how to get your new Marketplace image added to your LiveLab.",
                           "filename":  "./../../content/author-guide/14-secure-desktop/secure-desktop.md"
                       },
                       {
@@ -122,6 +132,16 @@
                           "title":  "Lab 12: Get Started with the LiveLabs AI Developer Hub",
                           "description":  "This lab points authors to the LiveLabs AI Developer Hub for deeper workflow guides instead of repeating that content here.",
                           "filename":  "./../../content/author-guide/15-labs-livelabs-ai-developer-hub/15-labs-livelabs-ai-developer-hub.md"
+                      },
+                      {
+                          "title":  "Lab 13: Create a LiveStack",
+                          "description":  "This lab shows you how to create a LiveStack in WMS.",
+                          "filename":  "./../../content/author-guide/15-livestack/create-a-livestack.md"
+                      },
+                      {
+                          "title":  "Lab 14: Create and Manage Assets",
+                          "description":  "This lab shows you how to create and manage assets using the WMS Self-Service Portal.",
+                          "filename":  "./../../content/author-guide/17-assets/17-assets.md"
                       }
                   ]
 }
