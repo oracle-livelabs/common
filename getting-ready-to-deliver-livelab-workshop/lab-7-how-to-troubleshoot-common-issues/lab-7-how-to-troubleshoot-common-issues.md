@@ -37,6 +37,14 @@ In this lab, you will:
     | Workshop step is broken | Lab command, screenshot, or step no longer matches the product. | Report it in [#livelabs-authors-help](https://oracle.enterprise.slack.com/archives/CTUPZQ5HA) with proof. |
     | Presenter ownership is unclear | The team hesitates over who should answer or drive. | Return to the facilitation runbook and name the role. |
 
+3. Use these triage points for the failures that most often affect the group.
+
+    | Triage point | Check first | Route |
+    | --- | --- | --- |
+    | Attendee cannot find or enter the event code | Verified event-code URL, sign-in state, and exact code. | Resend the verified link; move account failures to support. |
+    | Green-button launch does not open the expected environment | Booking status, selected credentials, browser, and expected first screen. | Capture the error; check whether the issue is widespread before pausing the group. |
+    | Reservation, tenancy, or login path differs from the dry run | Attendee path against the documented green or brown button path. | Return the attendee to the chosen path; confirm tenancy and region for brown button. |
+    | Workshop content loads but images, links, or lab navigation fail | Exact lab/task URL, browser, and screenshot. | Keep the session moving and report the evidence to LiveLabs Authors Help. |
 3. Pause the group when most blocked attendees have the same issue.
 
 4. Continue the group when the issue affects only one or two attendees.

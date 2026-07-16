@@ -20,12 +20,7 @@
       "type": "livelabs",
       "filename": "../../lab-2-request-livelabs-event-code/lab-2-request-livelabs-event-code.md"
     },
-    {
-      "title": "Lab 3: Choose the Access Path Before the Event",
-      "description": "Select one access model and map accounts, credentials, provisioning, and support.",
-      "type": "livelabs",
-      "filename": "../../lab-3-choose-access-path-before-event/lab-3-choose-access-path-before-event.md"
-    },
+
     {
       "title": "Lab 4: Run the Workshop and Test the Green-Button Path",
       "description": "Run the lab as an attendee and test the environment launch path before the event.",

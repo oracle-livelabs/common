@@ -20,7 +20,21 @@ In this lab, you will:
 
 ![Live prep check flow](./images/lab-6-prep-check-flow.svg " ")
 
-## Task 1: Run the Opening Prep Check
+## Task 1: What It Takes to Run a Successful Workshop
+
+1. Confirm the event is technically ready before attendees begin.
+
+    | Check | Ready? |
+    | --- | --- |
+    | Speaker completed an end-to-end dry run | Yes / No |
+    | Event code, green-button, brown-button, and expected first screen tested as applicable | Yes / No |
+    | Oracle-account tutorial and prerequisites sent | Yes / No |
+    | Provisioning model, reservation buffer, and presentation talk track agreed | Yes / No |
+    | WiFi/network capacity, LiveLabs access, browser, and Secure Desktop requirements checked | Yes / No |
+    | Roles, support route, fallback, and workshop-content escalation owner named | Yes / No |
+
+2. Resolve every **No** before the event where possible. For an accepted risk, record the owner, fallback, and decision time in the runbook.
+## Task 2: Run the Opening Prep Check
 
 1. The lead facilitator states:
 
@@ -36,7 +50,7 @@ In this lab, you will:
 
 4. The lead facilitator confirms whether the group can begin.
 
-## Task 2: Confirm the Prep Package
+## Task 3: Confirm the Prep Package
 
 1. Check the prep package before the event starts.
 
@@ -54,7 +68,7 @@ In this lab, you will:
 
 3. Keep the verified LiveLab URL, event code, and first-screen note visible to the delivery team.
 
-## Task 3: Complete the Final Author Checklist
+## Task 4: Complete the Final Author Checklist
 
 1. Complete this checklist before saying the team is ready.
 
@@ -83,7 +97,7 @@ In this lab, you will:
 
 3. If a **No** must remain, name the risk and the person who will track it.
 
-## Task 4: Confirm Go or No-Go
+## Task 5: Confirm Go or No-Go
 
 1. Confirm the final event state.
 

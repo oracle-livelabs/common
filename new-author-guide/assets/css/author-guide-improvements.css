@@ -2433,7 +2433,7 @@ body.home-no-scroll #app .app-footer .container {
 
 /* Redwood 26B resource card treatment for Quickstart setup cards. */
 #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
-  grid-template-columns: repeat(auto-fit, minmax(18.5rem, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -2442,10 +2442,10 @@ body.home-no-scroll #app .app-footer .container {
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card {
-  min-height: 240px;
+  min-height: 0;
   padding: 0 !important;
   display: grid;
-  grid-template-rows: minmax(172px, 1fr) auto;
+  grid-template-rows: auto auto;
   gap: 0;
   border: 1px solid rgba(22, 21, 19, 0.12) !important;
   border-radius: 8px !important;
@@ -2463,8 +2463,8 @@ body.home-no-scroll #app .app-footer .container {
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main {
   display: block;
-  min-height: 172px;
-  padding: 32px 64px 28px 32px;
+  min-height: 0;
+  padding: clamp(1rem, 2vw, 1.25rem) clamp(2.5rem, 4vw, 3.25rem) clamp(0.9rem, 1.8vw, 1.15rem) clamp(1rem, 2vw, 1.25rem);
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-number {
@@ -2478,11 +2478,11 @@ body.home-no-scroll #app .app-footer .container {
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main strong {
   display: block;
-  margin: 0 0 14px;
+  margin: 0 0 0.45rem;
   color: #161513;
   font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
-  font-size: clamp(1.25rem, 1.5vw, 1.55rem);
-  line-height: 1.18;
+  font-size: clamp(0.95rem, 1.15vw, 1.08rem);
+  line-height: 1.25;
   font-weight: 700;
   letter-spacing: 0;
 }
@@ -2491,32 +2491,35 @@ body.home-no-scroll #app .app-footer .container {
   display: block;
   color: rgba(22, 21, 19, 0.68);
   font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
-  font-size: clamp(1rem, 1.05vw, 1.12rem);
-  line-height: 1.48;
+  font-size: clamp(0.78rem, 0.9vw, 0.88rem);
+  line-height: 1.45;
   font-weight: 400;
   letter-spacing: 0;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions {
-  min-height: 68px;
-  padding: 16px 24px;
+  min-height: 0;
+  padding: 0.7rem 1rem;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 0.5rem;
   background: #f5f4f2;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions .btn,
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions .copy-link-button {
-  min-width: 100px;
-  min-height: 44px !important;
+  min-width: 0;
+  min-height: 2.15rem !important;
+  padding: 0.38rem 0.68rem;
+  font-size: 0.76rem;
+  line-height: 1.2;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card::after {
-  top: 26px;
-  right: 28px;
-  width: 32px;
-  height: 32px;
+  top: 0.85rem;
+  right: 0.9rem;
+  width: 1.45rem;
+  height: 1.45rem;
   border: 2px solid rgba(67, 107, 29, 0.25);
   background: #fff;
 }
@@ -3528,13 +3531,13 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-card {
   align-content: start;
   gap: 0.85rem;
-  min-height: 13rem;
+  min-height: 0;
   padding: 0.9rem;
 }
 
@@ -3973,6 +3976,68 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
 
 body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
   padding-left: 0 !important;
+}
+
+/* Responsive density and overflow safeguards shared across every guide view. */
+#app[data-redwood-creator-pass="2026-05-25"] {
+  overflow-x: clip;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] :is(.guide-layout, .guide-stage, .guide-section-card, .step-block, .detail-resource-card, .detail-resource-main, .detail-resource-main > span, .generator-layout, .generator-workbench, .generator-output-panel, .preview-checkpoint-layout, .wms-status-graph-layout) {
+  min-width: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] :is(img, video, iframe, pre, table) {
+  max-width: 100%;
+}
+
+@media (max-width: 1100px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .guide-section-card,
+  #app[data-redwood-creator-pass="2026-05-25"] .step-block {
+    padding: clamp(1rem, 2.5vw, 1.3rem);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-svg {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 2 / 1;
+  }
+}
+
+@media (max-width: 850px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-gutter: stable both-edges;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-svg {
+    width: 64rem;
+    min-width: 64rem;
+    height: 32rem;
+    aspect-ratio: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .command-card-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .detail-field-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .detail-resource-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .detail-milestone-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-layout,
+  #app[data-redwood-creator-pass="2026-05-25"] .generator-layout,
+  #app[data-redwood-creator-pass="2026-05-25"] .example-generator-input-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main {
+    padding: 1rem 2.75rem 0.9rem 1rem;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions {
+    padding: 0.65rem 1rem;
+  }
 }
 
 @media (max-width: 940px) {
