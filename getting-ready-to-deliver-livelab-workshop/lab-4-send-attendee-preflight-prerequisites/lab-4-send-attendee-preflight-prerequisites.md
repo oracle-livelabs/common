@@ -1,4 +1,4 @@
-# Lab 5: Send Attendee Preflight Prerequisites
+# Lab 4: Send Attendee Preflight Prerequisites
 
 ## Introduction
 
@@ -17,7 +17,7 @@ In this lab, you will:
 
 <!-- Estimated Time: intentionally not shown in this readiness guide. -->
 
-![Attendee preflight flow](./images/lab-5-attendee-preflight-flow.svg " ")
+![Attendee preflight flow](./images/lab-4-attendee-preflight-flow.svg " ")
 
 ## Task 1: Build the Attendee Checklist
 
@@ -79,7 +79,7 @@ In this lab, you will:
 
 5. Use this example to check the message flow.
 
-    ![Preflight email example](./images/lab-5-preflight-email-example.svg " ")
+    ![Preflight email example](./images/lab-4-preflight-email-example.svg " ")
 
 ## Legend
 

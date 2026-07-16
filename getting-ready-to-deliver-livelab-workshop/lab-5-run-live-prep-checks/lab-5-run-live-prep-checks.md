@@ -1,4 +1,4 @@
-# Lab 6: Run Live Prep Checks
+# Lab 5: Run Live Prep Checks
 
 ## Introduction
 
@@ -18,7 +18,7 @@ In this lab, you will:
 
 <!-- Estimated Time: intentionally not shown in this readiness guide. -->
 
-![Live prep check flow](./images/lab-6-prep-check-flow.svg " ")
+![Live prep check flow](./images/lab-5-prep-check-flow.svg " ")
 
 ## Task 1: What It Takes to Run a Successful Workshop
 
