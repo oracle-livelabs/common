@@ -188,9 +188,7 @@ For more information, see the [listing revision editing documentation](https://d
 2. Open the row actions menu and choose the publishing option that matches the intended audience:
 
     * Select **Publish** for a public Marketplace listing.
-    * Select **Publish as Private** for a private listing, and enter the allowed tenancy OCID or comma-separated tenancy OCIDs that should be able to access the listing.
-
-    > **Important:** Do not leave the allowed tenancies field blank when publishing a private listing. Current Marketplace Publisher documentation requires tenancy OCIDs for private publishing.
+    * If you choose **Publish as Private**, leave the **Allowed tenancies** field blank.
 
     ![Publish an approved or unpublished listing revision](images/publish-listing-revision-options.png)
 
