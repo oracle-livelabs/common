@@ -1,4 +1,4 @@
-# Lab 7: How to troubleshoot common issues
+# Lab 6: How to troubleshoot common issues
 
 ## Introduction
 
@@ -15,7 +15,7 @@ In this lab, you will:
 
 <!-- Estimated Time: intentionally not shown in this readiness guide. -->
 
-![Issue triage flow](./images/lab-7-issue-triage-flow.svg " ")
+![Issue triage flow](./images/lab-6-issue-triage-flow.svg " ")
 
 ## Task 1: Troubleshoot Access Issues
 

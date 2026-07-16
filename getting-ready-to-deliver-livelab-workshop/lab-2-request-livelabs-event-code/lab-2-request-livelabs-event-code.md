@@ -214,7 +214,7 @@ In this lab, you will:
     - Event code accepted: Yes / No.
     - Correct workshop shown: Yes / No.
 
-4. Add the event code, event-code link, QR code, and first screen to the preflight email in Lab 5.
+4. Add the event code, event-code link, QR code, and first screen to the preflight email in Lab 4.
 
 5. Add the same event path to the attendee invite or follow-up message.
 
