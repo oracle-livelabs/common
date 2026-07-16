@@ -59,7 +59,7 @@ In this lab, you will:
 
 ## Task 3: Script Handoffs
 
-1. Write the [handoff](#legend) lines before the session.
+1. Write the [handoff](#legend) lines before the session. A handoff tells attendees what is changing, what they do next, and where individual blockers go.
 
     ```text
     We are leaving setup and starting the hands-on lab.

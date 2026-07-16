@@ -108,7 +108,43 @@ In this lab, you will:
 
     ![Set participant completion window](./images/estimated_time.png " ")
 
-## Task 3: Populate and Verify Workshop Details
+## Task 3: Choose the Attendee Access Path and Account Setup
+
+1. Choose one primary attendee path and put it in the invite. Do not ask attendees to choose between paths during the event.
+
+    | Path | Use It When | Facilitator Check |
+    | --- | --- | --- |
+    | Event code | Attendees need the event-specific LiveLabs page. | Test the verified event-code link in a clean browser. |
+    | Green button: LiveLabs Sandbox | Attendees need an Oracle-provided, managed lab environment. | Test reservation, launch, and the expected first screen. |
+    | Brown button: Run on your own tenancy | Attendees have an approved OCI tenancy and can create their own resources. | Confirm region, compartment, policies, quotas, and required OCI access. |
+
+2. Explain the buttons before anyone clicks them. The **green button** reserves a managed LiveLabs Sandbox. The attendee selects the supplied credentials, launches the OCI environment, then opens the application or APEX when the workshop directs them there. The **brown button** uses the attendee or customer OCI tenancy; it does not reserve a sandbox and needs tenancy preparation.
+
+3. Include this Oracle-account tutorial in the attendee preflight message:
+
+    1. Go to the verified event or workshop URL and select the required sign-in option.
+    2. Select **Create Account** if the attendee has no Oracle account. Use an email address the attendee can open during the session.
+    3. Complete the verification email and return to the same event link.
+    4. Sign in before the event and confirm the expected event page. Route account failures to support; do not share a facilitator's personal account.
+
+4. List only the credentials that the selected path needs. Remove **Database user** unless the workshop explicitly requires a database schema or user. Add an **application user** only when attendees must sign in to a demo application after the OCI or APEX environment starts; state the app URL, who provides the user, and the first screen it should open.
+
+## Task 4: Plan Capacity, Provisioning, and Presentation Time
+
+1. For an event of **50 or more attendees**, contact William and the LiveLabs team before submitting the event request. Confirm capacity and pre-provision the green-button lab spaces; do not rely on live reservations at that scale.
+
+2. Choose the provisioning model.
+
+    | Model | Use When | Presentation Plan |
+    | --- | --- | --- |
+    | Pre-provisioned | Capacity is approved, especially for 50+ attendees. | Verify access before the event; begin hands-on work after the opening. |
+    | Live reservation | The workshop is not pre-provisioned. | Reserve first, then use the wait time for product context. |
+    | Watch-only fallback | An attendee cannot reserve or access the path. | Keep the attendee with the presentation and follow up after the event. |
+
+3. Put a reservation buffer in the run of show. For example, at a 9:00 AM start, use the first 10 minutes to explain prerequisites and have attendees sign in, connect, and reserve the workshop. If the environment takes the stated number of minutes to provision, present the product or architecture while reservations finish. Start the hands-on presentation only after reservations have completed and the expected environment is available.
+
+4. Record the selected path, estimated reservation time, first presentation topic, network/WiFi readiness, Secure Desktop need, and watch-only fallback in the facilitation runbook.
+## Task 5: Populate and Verify Workshop Details
 
 1. Click **[Populate Workshop Fields](#legend)**.
 
@@ -138,7 +174,7 @@ In this lab, you will:
     - Links verified by.
     - Check date.
 
-## Task 4: Submit the Event Request
+## Task 6: Submit the Event Request
 
 1. Review the full request before submission.
 
@@ -159,7 +195,7 @@ In this lab, you will:
 
     When the LiveLabs team approves the request, WMS sends an email with the event-code details.
 
-## Task 5: Capture the Event Handoff
+## Task 7: Capture the Event Handoff
 
 1. Record the approved event code details.
 

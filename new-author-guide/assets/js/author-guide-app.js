@@ -1953,6 +1953,7 @@
 
       node.classList.toggle("is-selected", isSelected);
       node.classList.toggle("is-dimmed", shouldDim);
+      node.setAttribute("aria-pressed", isSelected ? "true" : "false");
     });
 
     graph.querySelectorAll(".wms-status-edge").forEach(function (edge) {
@@ -1998,6 +1999,12 @@
   }
 
   function resetWmsStatusGraph(graph) {
+    var svg = graph && graph.querySelector("[data-wms-status-svg]");
+
+    if (svg) {
+      setWmsStatusGraphViewBox(svg);
+    }
+
     graph.removeAttribute("data-highlighted-path");
     selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted");
   }
@@ -2034,6 +2041,7 @@
     defineWmsStatusMarkers(svg, graphId);
     svg.appendChild(createWmsStatusSvgElement("title", { id: graphId + "-title" })).textContent = "LiveLabs workshop status workflow graph";
     svg.appendChild(createWmsStatusSvgElement("desc", { id: graphId + "-desc" })).textContent = "A clickable graph showing submitted, approval, development, self QA, completed, and quarterly QA statuses.";
+    svg.setAttribute("role", "group");
     svg.setAttribute("aria-labelledby", graphId + "-title " + graphId + "-desc");
 
     wmsStatusGraphTransitions.forEach(function (transition) {
@@ -2079,6 +2087,7 @@
         class: "wms-status-node",
         tabindex: "0",
         role: "button",
+        "aria-pressed": "false",
         "aria-label": status.label + " status",
         transform: "translate(" + status.x + "," + status.y + ")",
         "data-status-id": status.id
