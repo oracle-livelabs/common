@@ -180,7 +180,7 @@
   var wmsStatusGraphViewBox = { x: 0, y: 0, width: 1320, height: 660 };
   var wmsStatusNodeHalfWidth = 82;
   var wmsStatusNodeHalfHeight = 31;
-  var wmsStatusGraphFitGutter = 24;
+  var wmsStatusGraphZoomLevels = [25, 50, 75, 100, 125, 150, 200];
   var wmsStatusGraphStatuses = [
     {
       id: "submitted",
@@ -1847,6 +1847,154 @@
     svg.setAttribute("viewBox", target.x + " " + target.y + " " + target.width + " " + target.height);
   }
 
+  function normalizeWmsStatusGraphZoom(value) {
+    var zoom = Number(value);
+
+    return wmsStatusGraphZoomLevels.indexOf(zoom) !== -1 ? zoom : null;
+  }
+
+  function getRenderedWmsStatusGraphZoom(graph) {
+    var svg = graph && graph.querySelector("[data-wms-status-svg]");
+    var renderedWidth = svg ? svg.getBoundingClientRect().width : 0;
+
+    return renderedWidth > 0 ? renderedWidth / wmsStatusGraphViewBox.width * 100 : 100;
+  }
+
+  function findDirectionalWmsStatusGraphZoom(current, direction) {
+    var tolerance = 0.05;
+    var index;
+
+    if (direction > 0) {
+      for (index = 0; index < wmsStatusGraphZoomLevels.length; index += 1) {
+        if (wmsStatusGraphZoomLevels[index] > current + tolerance) {
+          return wmsStatusGraphZoomLevels[index];
+        }
+      }
+    } else {
+      for (index = wmsStatusGraphZoomLevels.length - 1; index >= 0; index -= 1) {
+        if (wmsStatusGraphZoomLevels[index] < current - tolerance) {
+          return wmsStatusGraphZoomLevels[index];
+        }
+      }
+    }
+
+    return null;
+  }
+
+  function captureWmsStatusGraphViewport(stage) {
+    if (!stage || !stage.scrollWidth || !stage.scrollHeight) {
+      return null;
+    }
+
+    return {
+      x: (stage.scrollLeft + stage.clientWidth / 2) / stage.scrollWidth,
+      y: (stage.scrollTop + stage.clientHeight / 2) / stage.scrollHeight
+    };
+  }
+
+  function restoreWmsStatusGraphViewport(stage, viewport, resetScroll) {
+    var restore;
+
+    if (!stage) {
+      return;
+    }
+
+    restore = function () {
+      if (resetScroll) {
+        stage.scrollLeft = 0;
+        stage.scrollTop = 0;
+        return;
+      }
+
+      if (!viewport) {
+        return;
+      }
+
+      stage.scrollLeft = Math.max(0, viewport.x * stage.scrollWidth - stage.clientWidth / 2);
+      stage.scrollTop = Math.max(0, viewport.y * stage.scrollHeight - stage.clientHeight / 2);
+    };
+
+    if (typeof window.requestAnimationFrame === "function") {
+      window.requestAnimationFrame(restore);
+    } else {
+      restore();
+    }
+  }
+
+  function syncWmsStatusGraphZoomControls(graph) {
+    var value = graph.getAttribute("data-wms-status-zoom") || "100";
+    var isFit = value === "fit";
+    var zoom = normalizeWmsStatusGraphZoom(value);
+    var effectiveZoom;
+    var select = graph.querySelector("[data-wms-status-zoom-select]");
+    var zoomOut = graph.querySelector('[data-wms-status-action="zoom-out"]');
+    var zoomIn = graph.querySelector('[data-wms-status-action="zoom-in"]');
+
+    if (!isFit && zoom === null) {
+      zoom = 100;
+      value = "100";
+      graph.setAttribute("data-wms-status-zoom", value);
+    }
+
+    effectiveZoom = isFit ? getRenderedWmsStatusGraphZoom(graph) : zoom;
+
+    if (select) {
+      select.value = isFit ? "fit" : String(zoom);
+    }
+    if (zoomOut) {
+      zoomOut.disabled = findDirectionalWmsStatusGraphZoom(effectiveZoom, -1) === null;
+    }
+    if (zoomIn) {
+      zoomIn.disabled = findDirectionalWmsStatusGraphZoom(effectiveZoom, 1) === null;
+    }
+  }
+
+  function setWmsStatusGraphZoom(graph, value, options) {
+    var settings = options || {};
+    var isFit = String(value) === "fit";
+    var zoom = isFit ? null : normalizeWmsStatusGraphZoom(value);
+    var stage;
+    var svg;
+    var viewport;
+
+    if (!graph || (!isFit && zoom === null)) {
+      return false;
+    }
+
+    stage = graph.querySelector(".wms-status-graph-stage");
+    svg = graph.querySelector("[data-wms-status-svg]");
+    viewport = settings.preserveFocus === false ? null : captureWmsStatusGraphViewport(stage);
+
+    if (svg) {
+      setWmsStatusGraphViewBox(svg);
+    }
+
+    graph.setAttribute("data-wms-status-zoom", isFit ? "fit" : String(zoom));
+    syncWmsStatusGraphZoomControls(graph);
+    restoreWmsStatusGraphViewport(stage, viewport, settings.resetScroll === true);
+
+    if (settings.announce !== false) {
+      setLiveMessage(isFit ? "Status graph fitted to the viewport." : "Status graph zoom set to " + zoom + " percent.");
+    }
+
+    return true;
+  }
+
+  function stepWmsStatusGraphZoom(graph, direction) {
+    var value = graph.getAttribute("data-wms-status-zoom");
+    var current = value === "fit" ? getRenderedWmsStatusGraphZoom(graph) : normalizeWmsStatusGraphZoom(value);
+    var nextZoom;
+
+    if (current === null) {
+      return;
+    }
+
+    nextZoom = findDirectionalWmsStatusGraphZoom(current, direction);
+    if (nextZoom !== null) {
+      setWmsStatusGraphZoom(graph, nextZoom);
+    }
+  }
+
   function defineWmsStatusMarkers(svg, graphId) {
     var defs = createWmsStatusSvgElement("defs");
     var normalMarker = createWmsStatusSvgElement("marker", {
@@ -1976,7 +2124,8 @@
     });
   }
 
-  function selectWmsStatusGraphNode(graph, id) {
+  function selectWmsStatusGraphNode(graph, id, options) {
+    var settings = options || {};
     var status = wmsStatusGraphNodeMap[id];
 
     if (!graph || !status) {
@@ -1987,7 +2136,9 @@
     graph.removeAttribute("data-highlighted-path");
     updateWmsStatusGraphDetails(graph, status);
     applyWmsStatusGraphHighlights(graph);
-    setLiveMessage(status.label + " status selected.");
+    if (settings.announce !== false) {
+      setLiveMessage(status.label + " status selected.");
+    }
   }
 
   function highlightWmsStatusGraphPath(graph, ids, label) {
@@ -1999,30 +2150,24 @@
   }
 
   function resetWmsStatusGraph(graph) {
-    var svg = graph && graph.querySelector("[data-wms-status-svg]");
-
-    if (svg) {
-      setWmsStatusGraphViewBox(svg);
+    if (!graph) {
+      return;
     }
 
+    setWmsStatusGraphZoom(graph, 100, {
+      announce: false,
+      preserveFocus: false,
+      resetScroll: true
+    });
     graph.removeAttribute("data-highlighted-path");
-    selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted");
+    selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted", { announce: false });
+    setLiveMessage("Status graph reset to 100 percent.");
   }
 
   function fitWmsStatusGraph(graph) {
-    var svg = graph.querySelector("[data-wms-status-svg]");
-    var xs = wmsStatusGraphStatuses.map(function (status) { return status.x; });
-    var ys = wmsStatusGraphStatuses.map(function (status) { return status.y; });
-    var minX = Math.min.apply(Math, xs) - wmsStatusNodeHalfWidth - wmsStatusGraphFitGutter;
-    var maxX = Math.max.apply(Math, xs) + wmsStatusNodeHalfWidth + wmsStatusGraphFitGutter;
-    var minY = Math.min.apply(Math, ys) - wmsStatusNodeHalfHeight - wmsStatusGraphFitGutter;
-    var maxY = Math.max.apply(Math, ys) + wmsStatusNodeHalfHeight + wmsStatusGraphFitGutter;
-
-    if (svg) {
-      setWmsStatusGraphViewBox(svg, { x: minX, y: minY, width: maxX - minX, height: maxY - minY });
+    if (setWmsStatusGraphZoom(graph, "fit", { announce: false })) {
+      setLiveMessage("Status graph fitted to the viewport.");
     }
-
-    setLiveMessage("Status graph fitted to visible nodes.");
   }
 
   function renderWmsStatusGraph(graph, index) {
@@ -2114,12 +2259,26 @@
     svg.appendChild(edgeLayer);
     svg.appendChild(labelLayer);
     svg.appendChild(nodeLayer);
+    setWmsStatusGraphZoom(graph, graph.getAttribute("data-wms-status-zoom") || 100, { announce: false, preserveFocus: false });
     selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted");
   }
 
   function initWmsStatusGraphs() {
     document.querySelectorAll("[data-wms-status-graph]").forEach(function (graph, index) {
+      var zoomSelect;
+
       renderWmsStatusGraph(graph, index + 1);
+      zoomSelect = graph.querySelector("[data-wms-status-zoom-select]");
+
+      if (zoomSelect) {
+        zoomSelect.addEventListener("change", function (event) {
+          if (event.target.value === "fit") {
+            fitWmsStatusGraph(graph);
+          } else {
+            setWmsStatusGraphZoom(graph, event.target.value);
+          }
+        });
+      }
     });
   }
 
@@ -4189,10 +4348,30 @@
         highlightWmsStatusGraphPath(graph, ["completed", "quarterly-qa", "quarterly-qa-complete", "completed"], "QA cycle");
       } else if (action === "fit") {
         fitWmsStatusGraph(graph);
-      } else {
+      } else if (action === "zoom-out") {
+        stepWmsStatusGraphZoom(graph, -1);
+      } else if (action === "zoom-in") {
+        stepWmsStatusGraphZoom(graph, 1);
+      } else if (action === "reset") {
         resetWmsStatusGraph(graph);
       }
       return;
+    }
+  });
+
+  document.addEventListener("focusin", function (event) {
+    var node = event.target && event.target.closest ? event.target.closest(".wms-status-node") : null;
+    var stage;
+
+    if (!node) {
+      return;
+    }
+
+    stage = node.closest(".wms-status-graph-stage");
+    if (stage && typeof node.scrollIntoView === "function") {
+      window.requestAnimationFrame(function () {
+        node.scrollIntoView({ block: "nearest", inline: "nearest" });
+      });
     }
   });
 
@@ -4368,6 +4547,9 @@
   window.addEventListener("scroll", scheduleLayoutSync, { passive: true });
   window.addEventListener("resize", function () {
     scheduleLayoutSync();
+    document.querySelectorAll('[data-wms-status-graph][data-wms-status-zoom="fit"]').forEach(function (graph) {
+      syncWmsStatusGraphZoomControls(graph);
+    });
   });
 
   hydrateVideoCards(document);

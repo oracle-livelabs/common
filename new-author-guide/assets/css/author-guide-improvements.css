@@ -3349,6 +3349,11 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   gap: 0.45rem;
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-actions {
+  align-items: center;
+  justify-content: flex-end;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill,
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-action {
   display: inline-flex;
@@ -3380,6 +3385,71 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   color: var(--rose);
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.25rem;
+  box-sizing: border-box;
+  padding: 0.2rem;
+  border: 1px solid rgba(104, 96, 91, 0.24);
+  border-radius: 999px;
+  background: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control .wms-status-action {
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.35rem;
+  border-color: transparent;
+  background: transparent;
+  font-size: 1rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control .wms-status-action:disabled,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control .wms-status-action:disabled:hover {
+  border-color: transparent;
+  background: transparent;
+  color: var(--ink-soft);
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-field {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-select {
+  min-height: 2.25rem;
+  max-width: 6rem;
+  padding: 0.3rem 1.7rem 0.3rem 0.55rem;
+  border: 1px solid rgba(104, 96, 91, 0.3);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-select:hover {
+  border-color: rgba(199, 70, 52, 0.46);
+  background: #fff8f7;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-select:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage:focus-visible {
+  outline: 3px solid rgba(0, 112, 173, 0.38);
+  outline-offset: 2px;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill::before {
   content: "";
   width: 1.6rem;
@@ -3406,7 +3476,13 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
-  overflow: hidden;
+  position: relative;
+  min-width: 0;
+  max-height: min(72vh, 50rem);
+  overflow: auto;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+  scrollbar-gutter: stable both-edges;
   border-right: 1px solid rgba(212, 207, 202, 0.82);
   background:
     linear-gradient(#eef2f7 1px, transparent 1px),
@@ -3416,8 +3492,39 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-svg {
   display: block;
-  width: 100%;
-  height: clamp(24rem, 43vw, 34rem);
+  width: 1320px;
+  max-width: none;
+  height: auto;
+  margin-inline: auto;
+  aspect-ratio: 2 / 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="fit"] .wms-status-svg {
+  width: min(100%, 144vh, 100rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="25"] .wms-status-svg {
+  width: 330px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="50"] .wms-status-svg {
+  width: 660px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="75"] .wms-status-svg {
+  width: 990px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="125"] .wms-status-svg {
+  width: 1650px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="150"] .wms-status-svg {
+  width: 1980px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="200"] .wms-status-svg {
+  width: 2640px;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-node rect {
@@ -3843,6 +3950,21 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
     justify-content: center;
   }
 
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control {
+    grid-column: 1 / -1;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-field {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-select {
+    width: 6rem;
+  }
+
 }
 
 /* Final review fixes: keep the home menu neutral until hover and make the nav close state explicit. */
@@ -4006,16 +4128,13 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
 
 @media (max-width: 850px) {
   #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-gutter: stable both-edges;
+    max-height: min(72vh, 44rem);
   }
 
   #app[data-redwood-creator-pass="2026-05-25"] .wms-status-svg {
-    width: 64rem;
-    min-width: 64rem;
-    height: 32rem;
-    aspect-ratio: auto;
+    min-width: 0;
+    height: auto;
+    aspect-ratio: 2 / 1;
   }
 }
 

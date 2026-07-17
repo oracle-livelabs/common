@@ -24,6 +24,11 @@ In this workshop, you will:
 
 <!-- Estimated Workshop Time: intentionally not shown in this readiness guide. -->
 
+## TL;DR: Start Here
+
+Use the [TL;DR quick reference](../TLDR.md) before working through the guide. It gives authors the complete delivery path: assign roles, select and test one attendee access path, request and verify the event code, prepare Oracle accounts and prerequisites, plan capacity and reservation time, dry run, and complete the go/no-go check.
+
+For events with 50 or more attendees, confirm capacity and pre-provisioning with William and the LiveLabs team. If reservations happen during the session, start them first and use the buffer to present product context while environments build. Do not start hands-on work until attendees have the expected environment.
 ## Acknowledgements
 
 - **Author:** Oracle LiveLabs Team, July 2026

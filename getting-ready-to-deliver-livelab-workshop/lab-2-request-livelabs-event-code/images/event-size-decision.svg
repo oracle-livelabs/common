@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">LiveLabs event-size and provisioning decision</title>
+  <desc id="desc">A decision matrix compares events under 50 attendees with events of 50 or more, and shows when to use pre-provisioning or live reservations.</desc>
+  <rect width="1200" height="620" fill="#f7f7f5"/>
+  <g font-family="Arial, sans-serif" fill="#1f1f1f">
+    <text x="60" y="58" font-size="32" font-weight="700">Choose the event-size and provisioning path</text>
+    <text x="60" y="94" font-size="18">Confirm the path before the event-code request and dry run.</text>
+    <rect x="60" y="130" width="510" height="330" rx="10" fill="#ffffff" stroke="#2f6f62" stroke-width="4"/>
+    <text x="95" y="180" font-size="27" font-weight="700" fill="#2f6f62">Under 50 attendees</text>
+    <text x="95" y="225" font-size="20" font-weight="700">Pre-provisioned</text>
+    <text x="95" y="258" font-size="18">Verify capacity, ready time, and the first screen.</text>
+    <text x="95" y="310" font-size="20" font-weight="700">Live reservation</text>
+    <text x="95" y="343" font-size="18">Reserve at the start. Use the buffer for</text>
+    <text x="95" y="371" font-size="18">prerequisites and product context.</text>
+    <text x="95" y="423" font-size="18" font-weight="700">Dry run the exact choice before the event.</text>
+    <rect x="630" y="130" width="510" height="330" rx="10" fill="#fff8f3" stroke="#a33b20" stroke-width="4"/>
+    <text x="665" y="180" font-size="27" font-weight="700" fill="#a33b20">50 or more attendees</text>
+    <text x="665" y="225" font-size="20" font-weight="700">Pre-provisioning required</text>
+    <text x="665" y="258" font-size="18">Contact William and the LiveLabs team.</text>
+    <text x="665" y="288" font-size="18">Confirm capacity and environment timing.</text>
+    <text x="665" y="340" font-size="20" font-weight="700">Do not plan live reservations</text>
+    <text x="665" y="373" font-size="18">If capacity is not confirmed, stop and</text>
+    <text x="665" y="401" font-size="18">resolve it before attendee instructions go out.</text>
+    <rect x="60" y="505" width="1080" height="70" rx="8" fill="#f6eee8" stroke="#7f5f4a" stroke-width="3"/>
+    <text x="90" y="548" font-size="21" font-weight="700">Record: attendee count, provisioning path, owner, approval, expected ready time, and fallback.</text>
+  </g>
+</svg>
