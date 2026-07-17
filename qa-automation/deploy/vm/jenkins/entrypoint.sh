@@ -13,13 +13,15 @@ read_secret() {
 export JENKINS_BOOTSTRAP_SECRET="$(read_secret /run/secrets/jenkins_admin_secret)"
 export LIVELABS_USERNAME="$(read_secret /run/secrets/livelabs_username)"
 export LIVELABS_SECRET="$(read_secret /run/secrets/livelabs_secret)"
+export HOME=/var/jenkins_home
+export NPM_CONFIG_CACHE="${HOME}/.npm"
 
 if [[ -z "$JENKINS_BOOTSTRAP_SECRET" ]]; then
   echo "The Jenkins bootstrap secret cannot be empty." >&2
   exit 1
 fi
 
-mkdir -p /var/qa-reports/par /var/qa-reports/regression /var/jenkins_home/.cache/fontconfig
+mkdir -p /var/qa-reports/par /var/qa-reports/regression "${NPM_CONFIG_CACHE}" /var/jenkins_home/.cache/fontconfig
 for channel in par regression; do
   if [[ ! -f "/var/qa-reports/${channel}/index.html" ]]; then
     cat > "/var/qa-reports/${channel}/index.html" <<EOF
@@ -28,7 +30,8 @@ EOF
   fi
 done
 
-chown jenkins:jenkins /var/jenkins_home /var/jenkins_home/.cache /var/jenkins_home/.cache/fontconfig /var/qa-reports /var/qa-reports/par /var/qa-reports/regression
+chown -R jenkins:jenkins "${NPM_CONFIG_CACHE}" /var/jenkins_home/.cache
+chown jenkins:jenkins /var/jenkins_home /var/qa-reports /var/qa-reports/par /var/qa-reports/regression
 chown jenkins:jenkins /var/qa-reports/par/index.html /var/qa-reports/regression/index.html
 
 exec /usr/bin/tini -- runuser --user jenkins --preserve-environment -- /usr/local/bin/jenkins.sh "$@"
