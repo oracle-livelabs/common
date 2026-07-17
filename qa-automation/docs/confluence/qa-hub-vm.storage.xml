@@ -1,0 +1,170 @@
+<!-- Confluence storage-format draft. Canonical source: ../runbooks/qa-hub-vm.md -->
+<h1>LiveLabs QA Hub VM</h1>
+<ac:structured-macro ac:name="panel">
+  <ac:parameter ac:name="title">Purpose</ac:parameter>
+  <ac:rich-text-body>
+    <p>Set up and operate the private LiveLabs QA Hub VM. Approved users connect through Oracle VPN, open one private HTTPS endpoint, run either the weekly PAR audit or the nightly/targeted overall regression in Jenkins, and review the resulting reports.</p>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<ac:structured-macro ac:name="toc"/>
+
+<h2>At a glance</h2>
+<table>
+  <tbody>
+    <tr><th>Access</th><td>Oracle VPN to a private OCI VM; no public IP</td></tr>
+    <tr><th>Portal</th><td><code>https://&lt;INTERNAL_DNS_NAME&gt;:32443/</code></td></tr>
+    <tr><th>Private ports</th><td><code>32222</code> SSH, <code>32443</code> portal, <code>32080</code>/<code>32444</code> internal only</td></tr>
+    <tr><th>Endpoint protection</th><td>CrowdStrike Falcon configured and active before Jenkins starts</td></tr>
+    <tr><th>Jenkins</th><td><code>/jenkins/</code></td></tr>
+    <tr><th>PAR reports</th><td><code>/par/</code></td></tr>
+    <tr><th>Regression reports</th><td><code>/regression/</code></td></tr>
+    <tr><th>Scheduled jobs</th><td>Weekly PAR audit and nightly overall regression</td></tr>
+  </tbody>
+</table>
+<ac:structured-macro ac:name="note">
+  <ac:rich-text-body>
+    <p>The deployment builds custom Jenkins and report-portal <strong>container images</strong> from <code>common/qa-automation</code>. It does not need a custom OCI VM image.</p>
+  </ac:rich-text-body>
+</ac:structured-macro>
+
+<h2>First-time VM setup</h2>
+<h3>1. Prepare OCI access</h3>
+<p>The OCI or network administrator must provide an Oracle Linux 9 VM in a private subnet with no public IP, Oracle VPN routing, and OCI NSG ingress from the approved VPN CIDR only to TCP <code>32222</code> for SSH and <code>32443</code> for the QA portal. The VM also needs approved outbound HTTPS through an OCI NAT gateway or managed proxy for GitHub, container registries, package repositories, LiveLabs, CrowdStrike, and optional OCI services. The approved Falcon sensor RPM and CID must be available securely, or the base VM must already have a configured and active sensor. Add an internal DNS record and internal CA certificate before team use.</p>
+<ac:structured-macro ac:name="warning">
+  <ac:rich-text-body>
+    <p>Do not allow <code>0.0.0.0/0</code>, expose standard service ports, or point public DNS at this VM. Jenkins uses internal port <code>32080</code> and the portal uses internal port <code>32444</code>; neither is published directly.</p>
+  </ac:rich-text-body>
+</ac:structured-macro>
+
+<h3>2. Authenticate OCI CLI</h3>
+<p>Create a separate local security-token profile named <code>VM-QA-hub</code>. Do not send or commit API keys, security tokens, private keys, or passwords.</p>
+<ac:structured-macro ac:name="code">
+  <ac:parameter ac:name="language">powershell</ac:parameter>
+  <ac:plain-text-body><![CDATA[oci session authenticate --profile-name VM-QA-hub --region <OCI_REGION>]]></ac:plain-text-body>
+</ac:structured-macro>
+<p>OCI CLI can return the VM private IP. The internal DNS name and approved Oracle VPN CIDR must come from the network administrator. Provisioning also needs the compartment, subnet, NSG, image, shape, and SSH public-key inputs.</p>
+
+<h3>3. Clone and install</h3>
+<p>SSH to the VM as the non-root account that will own the checkout:</p>
+<ac:structured-macro ac:name="code">
+  <ac:parameter ac:name="language">bash</ac:parameter>
+  <ac:plain-text-body><![CDATA[git clone https://github.com/oracle-livelabs/common.git
+cd common/qa-automation/deploy/vm
+bash install.sh \
+  --private-address <VM_PRIVATE_IP> \
+  --host <INTERNAL_DNS_NAME> \
+  --vpn-cidr <APPROVED_ORACLE_VPN_CIDR> \
+  --crowdstrike-rpm /secure/falcon-sensor.rpm \
+  --crowdstrike-cid-file /secure/falcon-cid]]></ac:plain-text-body>
+</ac:structured-macro>
+<p>Run the script without <code>sudo</code>. It installs or verifies CrowdStrike first and refuses to start Jenkins unless Falcon has a valid CID and is active. It then installs the remaining dependencies, creates ignored local configuration and credentials, builds and starts the containers on non-standard ports, verifies the health endpoint, enables automatic startup after reboot, and prints all access URLs.</p>
+<p>The permanent setup assumes this package has reached <code>oracle-livelabs/common:main</code>. Jenkins defaults to the original repository and <code>*/main</code>; do not leave a personal fork configured on the shared VM.</p>
+<ac:structured-macro ac:name="expand">
+  <ac:parameter ac:name="title">Inspect the VM before opening a PR</ac:parameter>
+  <ac:rich-text-body>
+    <p>A ZIP of the local deployment folder can start the private portal and Jenkins interface before a PR is opened. Jenkins test jobs still clone their test code from Git. Push the topic branch to a fork and set <code>QA_GIT_URL</code> and <code>QA_GIT_BRANCH</code> in the ignored VM <code>.env</code> for a real pre-merge run. No PR or merge is required. Restore the original repository and <code>*/main</code> before shared use.</p>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<p>If internal DNS is not ready, omit <code>--host</code>. If the host firewall is managed centrally, omit <code>--vpn-cidr</code>.</p>
+
+<h3>4. Store credentials and replace TLS</h3>
+<p>The first run prints generated Jenkins and report credentials once. Store them in the approved secret manager. Replace the temporary 30-day self-signed certificate in <code>deploy/vm/secrets/tls.crt</code> and <code>deploy/vm/secrets/tls.key</code> with the internal CA certificate and key, then restart the portal.</p>
+<ac:structured-macro ac:name="code">
+  <ac:parameter ac:name="language">bash</ac:parameter>
+  <ac:plain-text-body><![CDATA[cd common/qa-automation/deploy/vm
+bash scripts/compose.sh restart portal
+bash scripts/healthcheck.sh]]></ac:plain-text-body>
+</ac:structured-macro>
+
+<h3>5. Optional private LiveLabs content</h3>
+<p>Public catalog checks do not need a LiveLabs account. For approved private content, retrieve the QA account from the secret manager and enter it without placing values in shell history:</p>
+<ac:structured-macro ac:name="code">
+  <ac:parameter ac:name="language">bash</ac:parameter>
+  <ac:plain-text-body><![CDATA[cd common/qa-automation/deploy/vm
+umask 077
+read -r -p "LiveLabs QA username: " livelabs_user
+read -r -s -p "LiveLabs QA sign-in secret: " livelabs_secret
+printf '\n'
+printf '%s' "$livelabs_user" > secrets/livelabs-username
+printf '%s' "$livelabs_secret" > secrets/livelabs-secret
+unset livelabs_user livelabs_secret
+bash scripts/compose.sh up -d --force-recreate jenkins portal]]></ac:plain-text-body>
+</ac:structured-macro>
+<p>Set <code>QA_AUTH_TARGET_URL</code> in the ignored <code>.env</code> file when scheduled jobs must establish a private session. Never place either sign-in value in <code>.env</code>, Git, a Jenkins parameter, or a command-line argument.</p>
+
+<h2>Use an existing QA Hub</h2>
+<ol>
+  <li>Connect to Oracle VPN.</li>
+  <li>Open <code>https://&lt;INTERNAL_DNS_NAME&gt;:32443/</code>.</li>
+  <li>Use the report account for the landing page and reports.</li>
+  <li>Open <code>/jenkins/</code> and use the Jenkins account to run tests.</li>
+</ol>
+<p>To print the non-secret URLs and usernames again:</p>
+<ac:structured-macro ac:name="code">
+  <ac:parameter ac:name="language">bash</ac:parameter>
+  <ac:plain-text-body><![CDATA[cd common/qa-automation/deploy/vm
+bash scripts/access-info.sh]]></ac:plain-text-body>
+</ac:structured-macro>
+
+<h2>Run tests</h2>
+<h3>Weekly PAR audit</h3>
+<ol>
+  <li>Open <strong>LiveLabs PAR audit</strong>.</li>
+  <li>Select <strong>Build with Parameters</strong>.</li>
+  <li>Keep <code>CATALOG_MAX_PAGES=250</code> and leave <code>CATALOG_MAX_ITEMS</code> blank to crawl the complete catalog.</li>
+  <li>Select <strong>Build</strong>, then open <code>/par/</code> after completion.</li>
+</ol>
+<p>Start with <code>par-catalog-not-working.csv</code>. Review unverified and incomplete-scan CSVs separately. The audit discovers PAR links from crawled workshops and LiveStacks; no manually maintained PAR link file is required.</p>
+
+<h3>Nightly or targeted overall regression</h3>
+<ol>
+  <li>Open <strong>LiveLabs overall regression</strong>.</li>
+  <li>Select <strong>Build with Parameters</strong>.</li>
+  <li>Leave <code>CATALOG_MAX_ITEMS</code> and <code>CATALOG_ITEM_IDS</code> blank for the complete catalog, or enter comma-separated generated item IDs for a targeted rerun.</li>
+  <li>Select <strong>Build</strong>, then open <code>/regression/</code> after completion.</li>
+</ol>
+<p>Use the HTML report for human triage and <code>results.csv</code> for automation or Codex analysis.</p>
+
+<h2>Maintenance</h2>
+<ac:structured-macro ac:name="expand">
+  <ac:parameter ac:name="title">Update the VM after changes reach main</ac:parameter>
+  <ac:rich-text-body>
+    <ac:structured-macro ac:name="code">
+      <ac:parameter ac:name="language">bash</ac:parameter>
+      <ac:plain-text-body><![CDATA[cd common
+git pull --ff-only
+cd qa-automation/deploy/vm
+bash install.sh \
+  --private-address <VM_PRIVATE_IP> \
+  --host <INTERNAL_DNS_NAME> \
+  --skip-packages]]></ac:plain-text-body>
+    </ac:structured-macro>
+    <p>The installer is safe to rerun and retains existing Jenkins history, reports, and secrets.</p>
+  </ac:rich-text-body>
+</ac:structured-macro>
+<ac:structured-macro ac:name="expand">
+  <ac:parameter ac:name="title">Health checks and troubleshooting</ac:parameter>
+  <ac:rich-text-body>
+    <ac:structured-macro ac:name="code">
+      <ac:parameter ac:name="language">bash</ac:parameter>
+      <ac:plain-text-body><![CDATA[cd common/qa-automation/deploy/vm
+bash scripts/healthcheck.sh
+bash scripts/compose.sh ps
+bash scripts/compose.sh logs --tail=200 jenkins
+bash scripts/compose.sh logs --tail=200 portal
+sudo systemctl status livelabs-qa.service]]></ac:plain-text-body>
+    </ac:structured-macro>
+    <p>If the page is unreachable, check Oracle VPN, internal DNS, the OCI NSG, the host firewall, the local health check, and then the container logs.</p>
+  </ac:rich-text-body>
+</ac:structured-macro>
+
+<h2>Security rules</h2>
+<ul>
+  <li>No public VM IP and no public DNS.</li>
+  <li>No <code>0.0.0.0</code> bind and no exposed standard ports. Use private <code>32222</code> for SSH and <code>32443</code> for the portal.</li>
+  <li>Keep Jenkins <code>32080</code> and portal <code>32444</code> internal to the container network.</li>
+  <li>Do not start Jenkins unless CrowdStrike Falcon is configured and active.</li>
+  <li>Never commit <code>.env</code>, <code>deploy/vm/secrets/</code>, credentials, TLS private keys, or raw PAR URLs.</li>
+  <li>Use an OCI instance principal for optional private Object Storage publishing.</li>
+  <li>Back up Jenkins and report volumes according to the VM backup policy.</li>
+</ul>

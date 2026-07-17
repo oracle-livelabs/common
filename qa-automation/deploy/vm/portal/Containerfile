@@ -1,0 +1,6 @@
+FROM docker.io/library/nginx:stable-alpine
+
+COPY deploy/vm/portal/nginx.conf /etc/nginx/nginx.conf
+COPY deploy/vm/portal/index.html /usr/share/nginx/html/index.html
+
+EXPOSE 32444

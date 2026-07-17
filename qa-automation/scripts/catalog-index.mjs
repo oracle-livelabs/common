@@ -152,10 +152,6 @@ function catalogUrl(options) {
   return url.toString();
 }
 
-function normalizeAbsoluteUrl(baseUrl, href) {
-  return new URL(href, `${baseUrl}/`).toString();
-}
-
 function normalizeHref(baseUrl, href) {
   const url = new URL(href, `${baseUrl}/`);
   const sessionParamNames = ["session", "cs", "p_instance", "x01"];
@@ -200,7 +196,7 @@ function explicitIdFromUrl(urlValue) {
 
 function buildCatalogItem(baseUrl, rawItem) {
   const normalizedHref = normalizeHref(baseUrl, rawItem.href);
-  const absoluteUrl = normalizeAbsoluteUrl(baseUrl, rawItem.href);
+  const normalizedUrl = new URL(normalizedHref);
   const type = itemTypeFromHref(normalizedHref);
   const slug = slugify(rawItem.title);
   const explicitId = explicitIdFromUrl(normalizedHref);
@@ -211,9 +207,9 @@ function buildCatalogItem(baseUrl, rawItem) {
     slug,
     type,
     title: rawItem.title,
-    href: rawItem.href,
+    href: normalizedUrl.pathname + normalizedUrl.search,
     normalized_href: normalizedHref,
-    absolute_url: absoluteUrl,
+    absolute_url: normalizedHref,
     catalog_page: rawItem.catalogPage,
     catalog_position: rawItem.catalogPosition,
     card_text: rawItem.cardText,

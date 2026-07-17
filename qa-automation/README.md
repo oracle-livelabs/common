@@ -172,6 +172,17 @@ Quote URLs that contain `&` in PowerShell. By default, the command exits non-zer
 when the checker finds issues or when a lab cannot load. Use `--allow-issues`
 when you only want the report file and do not want findings to fail the command.
 
+## PAR Link Audit
+
+The PAR audit discovers PAR links across the full generated workshop and LiveStack catalog. It needs no manually maintained link file, reports confirmed broken links separately from temporary or inconclusive checks, and masks every PAR token in reports and attachments.
+
+PAR scanning is a separate suite under `tests/platform/par`; normal generated regression runs do not execute it. The scanner reads workshop manifests and Markdown sources concurrently, using the browser only to discover each workshop or LiveStack instruction entry point.
+
+Run locally after generating the catalog:
+
+    npm run test:par
+
+Setup, Jenkins credentials, full-catalog behavior, and report files are documented in [PAR Link Audit](docs/runbooks/par-link-audit.md).
 Jenkins generated catalog runs:
 
 ```text
@@ -182,6 +193,18 @@ Runbook: docs/runbooks/jenkins-generated-catalog.md
 Use Jenkins for the scheduled overnight catalog sweep. The Jenkins pipeline runs
 `tests/platform/generated`, not the homepage smoke lane, and supports a fast
 `pr-slice` profile plus a sharded `nightly-full` profile.
+
+A self-contained permanent-VM package is available under
+[`deploy/vm`](deploy/vm/README.md). It provides one private HTTPS portal with
+separate `/par/` and `/regression/` report areas, a weekly PAR job, a nightly or
+targeted overall job, durable report volumes, CSV output, and optional private
+OCI Object Storage publishing. The Oracle Linux installer at
+[`deploy/vm/install.sh`](deploy/vm/install.sh) requires an active CrowdStrike
+Falcon sensor, rejects standard service ports, builds and starts the container
+stack, and prints the private access URLs. See the
+[LiveLabs QA Hub VM runbook](docs/runbooks/qa-hub-vm.md) for OCI prerequisites,
+setup, operation, updates, and troubleshooting. It does not require a custom
+Marketplace or OCI VM image.
 
 To see the generated test names without opening a browser:
 
@@ -309,7 +332,9 @@ node ./scripts/qa.mjs tests/platform/smoke/public/newSpec.spec.ts
 
 ## Reports And Debugging
 
-Artifacts are written under `artifacts` and are ignored by Git.
+Artifacts are written under `artifacts` and are ignored by Git. Every root report
+also writes a token-safe `results.csv`; one failed catalog item produces one row
+per distinct issue, while a passing item produces one row with blank issue fields.
 
 Open the latest HTML report:
 

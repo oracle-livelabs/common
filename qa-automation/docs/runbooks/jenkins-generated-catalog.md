@@ -8,6 +8,11 @@ The Jenkins job should use:
 Script Path: qa-automation/Jenkinsfile
 ```
 
+For a permanent private VM, use the prepared two-job appliance in
+[`deploy/vm`](../../deploy/vm/README.md). It creates separate operator jobs for
+the weekly PAR audit and nightly/targeted overall regression while reusing this
+same Jenkinsfile as the execution engine.
+
 ## Goal
 
 Use Jenkins for repeatable generated catalog runs:
@@ -116,21 +121,34 @@ The run still crawls the catalog broadly by default, but generated tests only
 execute matching indexed items. Override `CATALOG_MAX_PAGES` or
 `CATALOG_MAX_ITEMS` only when you intentionally want a smaller manual crawl.
 
+### par-audit
+
+Runs only full-catalog PAR discovery. Normal generated regression specs are skipped. It uses 250 catalog pages and no item cap by default, scans manifest-listed workshop sources concurrently, and reports exact Markdown locations for findings. No manually maintained PAR list is required.
+
+See [PAR Link Audit](par-link-audit.md) for scheduling, privacy, and report details.
+
 ## Key Parameters
 
 | Parameter | Use |
 | --- | --- |
-| `RUN_PROFILE` | `pr-slice`, `nightly-full`, or `manual-items`. |
+| RUN_PROFILE | pr-slice, nightly-full, manual-items, or par-audit. |
 | `BASE_URL` | Optional LiveLabs base URL override. |
 | `BROWSER_CHANNEL` | Optional local browser channel, such as `chrome` or `msedge`. |
 | `AUTH_TARGET_URL` | Private URL used to create storage state before crawling. |
 | `LIVELABS_USERNAME_CREDENTIAL_ID` | Jenkins string credential ID for the LiveLabs test username. |
 | `LIVELABS_SECRET_CREDENTIAL_ID` | Jenkins string credential ID for the LiveLabs test credential. |
-| `CATALOG_MAX_PAGES` | Catalog crawl page override. Defaults to `1` for `pr-slice` and `250` for `manual-items`/`nightly-full`. |
-| `CATALOG_MAX_ITEMS` | Small-run item cap. Defaults to `5` for `pr-slice` and no cap for `manual-items`/`nightly-full`. |
+| CATALOG_MAX_PAGES | Catalog crawl page override. Defaults to 1 for pr-slice/manual-items and 250 for nightly-full/par-audit. |
+| CATALOG_MAX_ITEMS | Small-run item cap. Defaults to 5 for pr-slice and no cap for the other profiles. |
 | `CATALOG_ITEM_IDS` | Comma-separated generated IDs/slugs for manual targeted runs. |
 | `SHARD_TOTAL` | Number of parallel generated shards for `nightly-full`. |
+| `TEST_WORKERS` | Playwright workers in each generated run. The VM package uses one shard and five workers so it produces one complete report. |
 | `CONTENT_LINK_LIMIT` | Visible links checked per generated content page; set `0` to check all. |
+| PAR_WORKERS | Parallel catalog items for par-audit. |
+| PAR_DISCOVERY_CONCURRENCY | Concurrent manifest-listed Markdown files fetched inside each PAR item. |
+| PAR_SOURCE_TIMEOUT_MS | Timeout for each workshop manifest or Markdown source request. |
+| PAR_RETRIES | Retry count for inconclusive PAR probes. |
+| PAR_TIMEOUT_MS | Timeout for each PAR probe request. |
+| PAR_CHECK_CONCURRENCY | Concurrent PAR HTTP probes inside each catalog item test. |
 
 ## Artifacts
 
@@ -139,6 +157,7 @@ Jenkins archives:
 ```text
 qa-automation/artifacts/jenkins/**
 qa-automation/tests/data/generated/*.json
+qa-automation/reports/**
 ```
 
 Important outputs:

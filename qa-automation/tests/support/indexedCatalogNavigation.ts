@@ -54,15 +54,13 @@ export async function openIndexedCatalogItem(
 }
 
 function resolveCatalogItemUrls(baseUrl: string, item: CatalogIndexItem): string[] {
-  const candidates = [new URL(item.href, `${baseUrl}/`).toString()];
-
-  if (/^https?:\/\//i.test(item.normalized_href)) {
-    candidates.push(item.normalized_href);
-  }
-
-  if (/^https?:\/\//i.test(item.absolute_url)) {
-    candidates.push(item.absolute_url);
-  }
+  const candidates = [item.normalized_href, item.absolute_url, item.href]
+    .filter(Boolean)
+    .map((value) => {
+      const url = new URL(value, `${baseUrl}/`);
+      for (const key of ["session", "cs", "p_instance", "x01"]) url.searchParams.delete(key);
+      return url.toString();
+    });
 
   return Array.from(new Set(candidates));
 }

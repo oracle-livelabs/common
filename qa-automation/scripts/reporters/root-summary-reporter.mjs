@@ -2,6 +2,14 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import {
+  buildParAuditSummary,
+  parLinksPageHtml,
+  readParAudits,
+  sanitizeSensitiveText,
+  writeParAuditDataFiles,
+} from "./par-link-report.mjs";
+
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const DEFAULT_REPORTS_ROOT = path.join(PROJECT_ROOT, "reports");
 const REVIEW_STORAGE_KEY = "livelabs-qa-review-lists:v1";
@@ -9,6 +17,22 @@ const FIX_LIST_INSTRUCTIONS =
   "Fix the code errors related to these tests, then rerun only this selected test list using the normal test execution flow and produce a report.";
 const RETEST_LIST_INSTRUCTIONS =
   "Rerun only the tests in the provided Retest List. Use the normal project test execution flow. Do not run the full suite unless required by the existing test runner. After execution, produce the standard test report and clearly show pass/fail status for each selected test.";
+function sanitizeReportText(value) {
+  let text = String(value || "");
+  const projectRootVariants = new Set([
+    PROJECT_ROOT,
+    PROJECT_ROOT.replace(/\\/g, "/"),
+    JSON.stringify(PROJECT_ROOT).slice(1, -1),
+  ]);
+
+  for (const root of projectRootVariants) {
+    if (root) {
+      text = text.split(root).join("<qa-automation>");
+    }
+  }
+
+  return sanitizeSensitiveText(text);
+}
 const ISSUE_TYPE_DEFINITIONS = [
   {
     code: "ROUTING_INVALID_WORKSHOP_ID",
@@ -61,6 +85,21 @@ const ISSUE_TYPE_DEFINITIONS = [
     description: "A LiveStack demo, asset, download, or resource action did not work as expected.",
   },
   {
+    code: "STALE_PAR_LINK",
+    label: "Stale PAR link",
+    description: "OCI Object Storage confirmed that a PAR link is no longer usable.",
+  },
+  {
+    code: "PAR_LINK_UNVERIFIED",
+    label: "PAR link unverified",
+    description: "The PAR check still timed out or received a temporary response after retries.",
+  },
+  {
+    code: "PAR_SCAN_INCOMPLETE",
+    label: "PAR scan incomplete",
+    description: "A workshop, LiveStack, resource, or instructions page could not be scanned for PAR links.",
+  },
+  {
     code: "TIMEOUT",
     label: "Timeout",
     description: "The page or expected state did not arrive before the configured test timeout.",
@@ -75,6 +114,7 @@ const ISSUE_TYPE_DEFINITIONS = [
 export default class RootSummaryReporter {
   constructor(options = {}) {
     this.reportsRoot = path.resolve(process.env.QA_ROOT_REPORTS_DIR || options.reportsRoot || DEFAULT_REPORTS_ROOT);
+    this.landingPage = reportLandingPage(process.env.QA_REPORT_LANDING_PAGE || options.landingPage);
     this.results = [];
     this.startedAt = new Date();
   }
@@ -91,10 +131,11 @@ export default class RootSummaryReporter {
     const annotations = Object.fromEntries(test.annotations.map((annotation) => [annotation.type, annotation.description || ""]));
     const attachments = result.attachments.map(normalizeAttachment);
     const catalogItem = readCatalogItem(attachments);
+    const parAudits = readParAudits(attachments);
     const issues = readQaIssues(attachments);
     const runContext = readRunContext(attachments);
     const failurePageState = readFailurePageState(attachments);
-    const errors = result.errors.map((error) => error.message || String(error));
+    const errors = result.errors.map((error) => sanitizeReportText(error.message || String(error)));
     const steps = normalizeSteps(result.steps || []);
     const failedStep = firstFailedStep(steps);
     const finalUrl = runContext.finalPageUrl || failurePageState.url || "";
@@ -121,6 +162,7 @@ export default class RootSummaryReporter {
       retry: result.retry,
       projectName: test.parent.project()?.name || "",
       catalogItem,
+      parAudits,
       catalogItemAnnotation: annotations["catalog-item"] || "",
       environment: annotations.environment || "",
       finalUrl,
@@ -155,12 +197,13 @@ export default class RootSummaryReporter {
     const summary = this.summary(result, endedAt, runId);
 
     fs.mkdirSync(runDir, { recursive: true });
-    fs.mkdirSync(latestDir, { recursive: true });
 
     writeSummaryFiles(runDir, summary);
     if (summary.counts.total > 0) {
+      fs.rmSync(latestDir, { recursive: true, force: true });
+      fs.mkdirSync(latestDir, { recursive: true });
       writeSummaryFiles(latestDir, summary);
-      fs.writeFileSync(path.join(this.reportsRoot, "index.html"), redirectHtml("latest/summary.html"), "utf-8");
+      fs.writeFileSync(path.join(this.reportsRoot, "index.html"), redirectHtml(`latest/${this.landingPage}`), "utf-8");
     }
   }
 
@@ -288,6 +331,7 @@ export default class RootSummaryReporter {
             catalogStatusRank(left.status) - catalogStatusRank(right.status) ||
             String(left.catalogItem.title || "").localeCompare(String(right.catalogItem.title || "")),
         ),
+      parAudit: buildParAuditSummary(this.results),
       sections: Array.from(sections.values()).sort((left, right) => left.name.localeCompare(right.name)),
     };
   }
@@ -316,7 +360,7 @@ function catalogStatusRank(status) {
 }
 
 function normalizeAttachment(attachment) {
-  const bodyText = attachment.body ? attachment.body.toString("utf-8") : "";
+  const bodyText = attachment.body ? sanitizeReportText(attachment.body.toString("utf-8")) : "";
 
   return {
     name: attachment.name,
@@ -406,11 +450,11 @@ function normalizeSteps(steps, depth = 0) {
   return steps.map((step) => {
     const childSteps = normalizeSteps(step.steps || [], depth + 1);
     const failedChild = firstFailedStep(childSteps);
-    const errorMessage = step.error?.message || "";
+    const errorMessage = sanitizeReportText(step.error?.message || "");
     const status = errorMessage || failedChild ? "failed" : "passed";
 
     return {
-      title: step.title || "Unnamed step",
+      title: sanitizeReportText(step.title || "Unnamed step"),
       category: step.category || "",
       durationMs: step.duration || 0,
       status,
@@ -553,14 +597,18 @@ function buildBugSummary({
 
 function writeSummaryFiles(outputDir, summary) {
   fs.writeFileSync(path.join(outputDir, "summary.json"), `${JSON.stringify(summary, null, 2)}\n`, "utf-8");
+  fs.writeFileSync(path.join(outputDir, "results.csv"), resultsCsv(summary), "utf-8");
   fs.writeFileSync(path.join(outputDir, "summary.md"), markdownSummary(summary), "utf-8");
   fs.writeFileSync(path.join(outputDir, "summary.html"), htmlSummary(summary, { outputDir }), "utf-8");
   fs.writeFileSync(path.join(outputDir, "retest-list.html"), reviewListPageHtml("retest", summary, { outputDir }), "utf-8");
   fs.writeFileSync(path.join(outputDir, "fix-list.html"), reviewListPageHtml("fix", summary, { outputDir }), "utf-8");
+  fs.writeFileSync(path.join(outputDir, "par-links.html"), parLinksPageHtml(summary), "utf-8");
+  writeParAuditDataFiles(outputDir, summary.parAudit);
 }
 
 function sectionFromFile(file) {
   if (file.includes("/generated/")) {
+    if (file.includes("parLinks")) return "Generated PAR Links";
     if (file.includes("catalogIndex")) return "Generated Catalog Index";
     if (file.includes("livestackResources")) return "Generated LiveStack Resources";
     if (file.includes("livestackOverview")) return "Generated LiveStack Overview";
@@ -570,6 +618,7 @@ function sectionFromFile(file) {
     return "Generated Catalog";
   }
 
+  if (file.includes("/par/")) return "Catalog PAR Links";
   if (file.includes("/homepage/")) return "Homepage";
   if (file.includes("/search/")) return "Search";
   if (file.includes("/catalog/filters/")) return "Catalog Filters";
@@ -585,6 +634,114 @@ function sectionFromFile(file) {
   return "Other";
 }
 
+export function resultsCsv(summary) {
+  const header = [
+    "run_id",
+    "started_at",
+    "item_type",
+    "item_id",
+    "item_title",
+    "item_status",
+    "issue_count",
+    "issue_code",
+    "issue_label",
+    "severity",
+    "issue_summary",
+    "catalog_url",
+    "final_url",
+    "test_section",
+    "test_file",
+    "test_line",
+  ];
+  const rows = [];
+
+  for (const item of summary.catalogItems || []) {
+    const catalogItem = item.catalogItem || {};
+    const issues = item.issues || [];
+    const base = [
+      summary.runId || "",
+      summary.startedAt || "",
+      catalogItem.type || "item",
+      catalogItem.id || catalogItem.slug || "",
+      catalogItem.title || catalogItem.slug || catalogItem.id || "",
+      item.status || "",
+      issues.length,
+    ];
+    const catalogUrl = sanitizeReportText(
+      catalogItem.absolute_url || catalogItem.normalized_href || catalogItem.href || "",
+    );
+
+    if (issues.length === 0) {
+      const test = item.tests?.[0] || {};
+      rows.push([
+        ...base,
+        "",
+        "",
+        "",
+        "",
+        catalogUrl,
+        sanitizeReportText(test.finalUrl || ""),
+        test.section || "",
+        test.file || "",
+        test.line || "",
+      ]);
+      continue;
+    }
+
+    for (const issue of issues) {
+      const test =
+        item.tests?.find((candidate) => candidate.file === issue.file && candidate.section === issue.section) ||
+        item.tests?.find((candidate) => candidate.section === issue.section) ||
+        item.tests?.[0] ||
+        {};
+      rows.push([
+        ...base,
+        issue.code || "",
+        issue.label || issue.code || "",
+        issue.severity || "",
+        sanitizeReportText(issue.message || issue.summary || ""),
+        catalogUrl,
+        sanitizeReportText(test.finalUrl || ""),
+        issue.section || test.section || "",
+        issue.file || test.file || "",
+        issue.line || test.line || "",
+      ]);
+    }
+  }
+
+  if (rows.length === 0) {
+    for (const section of summary.sections || []) {
+      for (const test of section.tests || []) {
+        const unexpected = test.status !== test.expectedStatus && test.status !== "skipped";
+        rows.push([
+          summary.runId || "",
+          summary.startedAt || "",
+          "test",
+          "",
+          test.title || "",
+          unexpected ? "failed" : test.status || "",
+          unexpected ? 1 : 0,
+          unexpected ? test.classification?.code || "UNCLASSIFIED_FAILURE" : "",
+          unexpected ? test.classification?.label || "Test failure" : "",
+          unexpected ? issueSeverityFromCode(test.classification?.code || "UNCLASSIFIED_FAILURE") : "",
+          unexpected ? sanitizeReportText(test.errors?.[0] || "") : "",
+          "",
+          sanitizeReportText(test.finalUrl || ""),
+          section.name || test.section || "",
+          test.file || "",
+          test.line || "",
+        ]);
+      }
+    }
+  }
+
+  return [header, ...rows].map((row) => row.map(summaryCsvCell).join(",")).join("\n") + "\n";
+}
+
+function summaryCsvCell(value) {
+  const text = sanitizeReportText(value == null ? "" : String(value));
+  return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+}
 function markdownSummary(summary) {
   const lines = [
     `# LiveLabs QA Run ${summary.runId}`,
@@ -1681,7 +1838,8 @@ function reviewActionCommand(type) {
 }
 
 function reviewNavigationHtml() {
-  return `<nav class="review-nav" aria-label="Review lists">
+  return `<nav class="review-nav" aria-label="Report views">
+    <a href="par-links.html">PAR Links</a>
     <a href="retest-list.html">Retest List <span class="review-count" data-review-count="retest">0</span></a>
     <a href="fix-list.html">Fix List <span class="review-count" data-review-count="fix">0</span></a>
   </nav>`;
@@ -2961,7 +3119,7 @@ function artifactLinksHtml(attachments, context = {}) {
 
 function artifactLinkHtml(attachment, context = {}) {
   return linkHtml(
-    relativeLinkFromReportOutput(attachment.path, context.outputDir),
+    reportArtifactLink(attachment.path, context.outputDir),
     artifactLabel(attachment),
     "link-button",
     artifactTitle(attachment),
@@ -2995,22 +3153,34 @@ function traceHelpHtml(attachments, index) {
   }
 
   const commandId = `trace-command-${index}`;
-  const command = traceViewerCommand(trace.path);
+  const command = 'node ./node_modules/playwright/cli.js show-trace "<downloaded-trace.zip>"';
 
   return `<details class="trace-help">
     <summary>Open trace in Playwright</summary>
-    <p class="error-preview">Run this from the qa-automation directory. It uses the Playwright installed in this project, so it should not try to download anything from npm:</p>
+    <p class="error-preview">Download the Trace zip, replace the placeholder below with that downloaded file, and run this from the qa-automation directory. It uses the installed Playwright package and does not contact npm.</p>
     <pre id="${escapeAttribute(commandId)}">${escapeHtml(command)}</pre>
     <button class="copy-button" type="button" data-copy="${escapeAttribute(commandId)}">Copy trace command</button>
   </details>`;
 }
 
-function traceViewerCommand(projectRelativeTracePath) {
-  if (process.platform === "win32") {
-    return `.\\node_modules\\.bin\\playwright.cmd show-trace "${escapePowerShell(projectRelativeTracePath.replace(/\//g, "\\"))}"`;
+function reportArtifactLink(projectRelativePath, outputDir) {
+  if (!outputDir) {
+    return relativeLinkFromReportOutput(projectRelativePath);
   }
 
-  return `./node_modules/.bin/playwright show-trace ${shellQuote(projectRelativeTracePath)}`;
+  const sourcePath = path.resolve(PROJECT_ROOT, projectRelativePath);
+  const projectPrefix = `${PROJECT_ROOT}${path.sep}`;
+  if ((!sourcePath.startsWith(projectPrefix) && sourcePath !== PROJECT_ROOT) || !fs.existsSync(sourcePath)) {
+    return relativeLinkFromReportOutput(projectRelativePath, outputDir);
+  }
+
+  const evidenceDir = path.join(outputDir, "evidence");
+  const safeName = path.basename(sourcePath).replace(/[^a-z0-9._-]+/gi, "-");
+  const targetName = `${stableId(projectRelativePath)}-${safeName}`;
+  const targetPath = path.join(evidenceDir, targetName);
+  fs.mkdirSync(evidenceDir, { recursive: true });
+  fs.copyFileSync(sourcePath, targetPath);
+  return `evidence/${targetName}`;
 }
 
 function relativeLinkFromReportOutput(projectRelativePath, outputDir = path.join(PROJECT_ROOT, "reports", "latest")) {
@@ -3098,6 +3268,10 @@ function runIdentifier(date) {
   return date.toISOString().replace(/[:.]/g, "-");
 }
 
+function reportLandingPage(value) {
+  return value === "par-links.html" ? "par-links.html" : "summary.html";
+}
+
 function redirectHtml(target) {
   return `<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=${target}"><a href="${target}">Open latest QA summary</a>`;
 }
@@ -3183,12 +3357,4 @@ function escapeMarkdown(value) {
 
 function escapeRegex(value) {
   return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function escapePowerShell(value) {
-  return String(value).replace(/`/g, "``").replace(/"/g, '`"');
-}
-
-function shellQuote(value) {
-  return `'${String(value).replace(/'/g, "'\\''")}'`;
 }
