@@ -20,6 +20,8 @@ In this lab, you will:
 
 ![Facilitation runbook flow](./images/lab-1-runbook-flow.svg " ")
 
+Use the [one-page facilitator run-of-show template](?lab=facilitator-run-of-show-template) to record blank owner, time, backup, and status fields for this event.
+
 ## Task 1: Confirm Roles
 
 1. Review the [role map](#legend).

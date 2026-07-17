@@ -15,6 +15,12 @@
       "filename": "../../lab-1-build-facilitation-runbook/lab-1-build-facilitation-runbook.md"
     },
     {
+      "title": "Facilitator Run-of-Show Template",
+      "description": "Record event timing, owners, backups, and status on one printable page.",
+      "type": "livelabs",
+      "filename": "../../facilitator-run-of-show-template.md"
+    },
+    {
       "title": "Lab 2: Request a LiveLabs Event Code",
       "description": "Request an event code in WMS and verify event details before approval.",
       "type": "livelabs",

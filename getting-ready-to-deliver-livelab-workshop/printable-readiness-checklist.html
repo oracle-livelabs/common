@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LiveLabs Event Readiness Checklist</title>
+  <style>
+    :root { color-scheme: light; font-family: Arial, sans-serif; color: #1f1f1f; }
+    body { max-width: 980px; margin: 24px auto; padding: 0 24px 32px; line-height: 1.35; }
+    h1 { margin-bottom: 4px; font-size: 28px; }
+    h2 { margin: 18px 0 8px; font-size: 19px; border-bottom: 2px solid #7f5f4a; padding-bottom: 4px; }
+    .subtitle { margin-top: 0; color: #555; }
+    .details { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; }
+    .field { border-bottom: 1px solid #777; min-height: 24px; }
+    .checks { columns: 2; column-gap: 30px; padding: 0; list-style: none; }
+    .checks li { break-inside: avoid; margin: 0 0 9px; }
+    input[type="checkbox"] { width: 17px; height: 17px; margin: 0 8px 0 0; vertical-align: -3px; }
+    .decision { display: flex; gap: 24px; flex-wrap: wrap; }
+    .actions { margin-top: 22px; }
+    button { background: #312d2a; color: white; border: 0; border-radius: 4px; padding: 11px 18px; font-weight: 700; cursor: pointer; }
+    @media print {
+      @page { size: A4 portrait; margin: 10mm; }
+      body { margin: 0; padding: 0; max-width: none; font-size: 10.5pt; }
+      h1 { font-size: 20pt; }
+      h2 { margin-top: 10px; font-size: 13pt; }
+      .checks li { margin-bottom: 5px; }
+      .actions { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <h1>LiveLabs Event Readiness Checklist</h1>
+  <p class="subtitle">Complete after Lab 4 attendee preparation and before the event go/no-go decision.</p>
+
+  <h2>Event Details</h2>
+  <div class="details">
+    <div>Event/workshop: <div class="field"></div></div>
+    <div>Date and time zone: <div class="field"></div></div>
+    <div>Event code/URL: <div class="field"></div></div>
+    <div>Selected access path: <div class="field"></div></div>
+    <div>Attendee count: <div class="field"></div></div>
+    <div>Decision owner: <div class="field"></div></div>
+  </div>
+
+  <h2>Readiness Checks</h2>
+  <ul class="checks">
+    <li><label><input type="checkbox">Speaker completed the workshop end to end.</label></li>
+    <li><label><input type="checkbox">Event code and verified LiveLab URL work.</label></li>
+    <li><label><input type="checkbox">Selected launch path opens the expected environment.</label></li>
+    <li><label><input type="checkbox">Expected first screen is recorded.</label></li>
+    <li><label><input type="checkbox">Provisioning model and buffer are agreed.</label></li>
+    <li><label><input type="checkbox">50+ capacity and pre-provisioning are confirmed.</label></li>
+    <li><label><input type="checkbox">WiFi/network and browser access are checked.</label></li>
+    <li><label><input type="checkbox">Secure Desktop need is confirmed.</label></li>
+    <li><label><input type="checkbox">Lab 4 attendee checklist and preflight are complete.</label></li>
+    <li><label><input type="checkbox">Facilitator and screen driver are assigned.</label></li>
+    <li><label><input type="checkbox">Chat/support owner and SME are assigned.</label></li>
+    <li><label><input type="checkbox">Support route and breakout path are ready.</label></li>
+    <li><label><input type="checkbox">Fallback and watch-only path are ready.</label></li>
+    <li><label><input type="checkbox">Workshop-content escalation owner is named.</label></li>
+    <li><label><input type="checkbox">Presentation for provisioning time is ready.</label></li>
+    <li><label><input type="checkbox">Follow-up owner is named.</label></li>
+  </ul>
+
+  <h2>Go or No-Go</h2>
+  <div class="decision">
+    <label><input type="checkbox">Ready</label>
+    <label><input type="checkbox">Ready with risk</label>
+    <label><input type="checkbox">Not ready</label>
+  </div>
+  <p>Risk, fallback, owner, and decision time: ________________________________________________</p>
+
+  <div class="actions">
+    <button type="button" onclick="window.print()">Print checklist</button>
+  </div>
+</body>
+</html>

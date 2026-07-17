@@ -5562,7 +5562,7 @@
                         <h3>Understand the handoff path before you build</h3>
                         <p>The graph below is the process map. Use these WMS states to understand when to wait for review, when to begin heavier GitHub work, when to complete Quality Assurance, and when the workshop moves into publication and later maintenance.</p>
                       </div>
-                      <div class="wms-status-graph" data-wms-status-graph data-default-status="submitted">
+                      <div class="wms-status-graph" data-wms-status-graph data-default-status="submitted" data-wms-status-zoom="100">
                         <div class="wms-status-graph-toolbar" aria-label="Status graph controls">
                           <div class="wms-status-legend" aria-label="Status graph legend">
                             <span class="wms-status-legend-pill">Normal progression</span>
@@ -5574,10 +5574,27 @@
                             <button type="button" class="wms-status-action" data-wms-status-action="main-path">Main path</button>
                             <button type="button" class="wms-status-action" data-wms-status-action="qa-cycle">QA cycle</button>
                             <button type="button" class="wms-status-action" data-wms-status-action="fit">Fit graph</button>
+                            <div class="wms-status-zoom-control" role="group" aria-label="Diagram zoom controls">
+                              <button type="button" class="wms-status-action wms-status-zoom-step" data-wms-status-action="zoom-out" aria-label="Zoom out" title="Zoom out">&minus;</button>
+                              <label class="wms-status-zoom-field">
+                                <span>Zoom</span>
+                                <select class="wms-status-zoom-select" data-wms-status-zoom-select>
+                                  <option value="fit">Fit</option>
+                                  <option value="25">25%</option>
+                                  <option value="50">50%</option>
+                                  <option value="75">75%</option>
+                                  <option value="100" selected>100%</option>
+                                  <option value="125">125%</option>
+                                  <option value="150">150%</option>
+                                  <option value="200">200%</option>
+                                </select>
+                              </label>
+                              <button type="button" class="wms-status-action wms-status-zoom-step" data-wms-status-action="zoom-in" aria-label="Zoom in" title="Zoom in">+</button>
+                            </div>
                           </div>
                         </div>
                         <div class="wms-status-graph-layout">
-                          <div class="wms-status-graph-stage">
+                          <div class="wms-status-graph-stage" tabindex="0" role="region" aria-label="Interactive workshop status path. Use the zoom controls to resize the diagram, then scroll to pan.">
                             <svg class="wms-status-svg" data-wms-status-svg role="group"></svg>
                           </div>
                           <aside class="wms-status-detail" aria-live="polite">

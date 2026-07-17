@@ -131,9 +131,13 @@ In this lab, you will:
 
 ## Task 4: Plan Capacity, Provisioning, and Presentation Time
 
-1. For an event of **50 or more attendees**, contact William and the LiveLabs team before submitting the event request. Confirm capacity and pre-provision the green-button lab spaces; do not rely on live reservations at that scale.
+1. Use this decision before you submit the event request.
 
-2. Choose the provisioning model.
+    ![Event-size and provisioning decision](./images/event-size-decision.svg " ")
+
+2. For an event of **50 or more attendees**, contact William and the LiveLabs team before submitting the event request. Confirm capacity and pre-provision the green-button lab spaces; do not rely on live reservations at that scale.
+
+3. Choose the provisioning model.
 
     | Model | Use When | Presentation Plan |
     | --- | --- | --- |
@@ -141,9 +145,9 @@ In this lab, you will:
     | Live reservation | The workshop is not pre-provisioned. | Reserve first, then use the wait time for product context. |
     | Watch-only fallback | An attendee cannot reserve or access the path. | Keep the attendee with the presentation and follow up after the event. |
 
-3. Put a reservation buffer in the run of show. For example, at a 9:00 AM start, use the first 10 minutes to explain prerequisites and have attendees sign in, connect, and reserve the workshop. If the environment takes the stated number of minutes to provision, present the product or architecture while reservations finish. Start the hands-on presentation only after reservations have completed and the expected environment is available.
+4. Put a reservation buffer in the run of show. For example, at a 9:00 AM start, use the first 10 minutes to explain prerequisites and have attendees sign in, connect, and reserve the workshop. If the environment takes the stated number of minutes to provision, present the product or architecture while reservations finish. Start the hands-on presentation only after reservations have completed and the expected environment is available.
 
-4. Record the selected path, estimated reservation time, first presentation topic, network/WiFi readiness, Secure Desktop need, and watch-only fallback in the facilitation runbook.
+5. Record the selected path, estimated reservation time, first presentation topic, network/WiFi readiness, Secure Desktop need, and watch-only fallback in the facilitation runbook.
 ## Task 5: Populate and Verify Workshop Details
 
 1. Click **[Populate Workshop Fields](#legend)**.
