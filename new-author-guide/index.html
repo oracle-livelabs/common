@@ -5281,7 +5281,7 @@
     }
   </style>
   <link rel="stylesheet" href="./assets/css/redwood-video-player.css">
-  <link rel="stylesheet" href="./assets/css/author-guide-improvements.css?v=20260708-skill-generator-livestack">
+  <link rel="stylesheet" href="./assets/css/author-guide-improvements.css?v=20260718-home-handoff-fit-v2">
 </head>
 <body>
   <div id="app" data-redwood-creator-pass="2026-05-25">
@@ -5562,7 +5562,7 @@
                         <h3>Understand the handoff path before you build</h3>
                         <p>The graph below is the process map. Use these WMS states to understand when to wait for review, when to begin heavier GitHub work, when to complete Quality Assurance, and when the workshop moves into publication and later maintenance.</p>
                       </div>
-                      <div class="wms-status-graph" data-wms-status-graph data-default-status="submitted" data-wms-status-zoom="100">
+                      <div class="wms-status-graph" data-wms-status-graph data-default-status="submitted" data-wms-status-default-zoom="fit" data-wms-status-zoom="fit">
                         <div class="wms-status-graph-toolbar" aria-label="Status graph controls">
                           <div class="wms-status-legend" aria-label="Status graph legend">
                             <span class="wms-status-legend-pill">Normal progression</span>
@@ -5579,11 +5579,11 @@
                               <label class="wms-status-zoom-field">
                                 <span>Zoom</span>
                                 <select class="wms-status-zoom-select" data-wms-status-zoom-select>
-                                  <option value="fit">Fit</option>
+                                  <option value="fit" selected>Fit</option>
                                   <option value="25">25%</option>
                                   <option value="50">50%</option>
                                   <option value="75">75%</option>
-                                  <option value="100" selected>100%</option>
+                                  <option value="100">100%</option>
                                   <option value="125">125%</option>
                                   <option value="150">150%</option>
                                   <option value="200">200%</option>
@@ -5597,7 +5597,7 @@
                           <div class="wms-status-graph-stage" tabindex="0" role="region" aria-label="Interactive workshop status path. Use the zoom controls to resize the diagram, then scroll to pan.">
                             <svg class="wms-status-svg" data-wms-status-svg role="group"></svg>
                           </div>
-                          <aside class="wms-status-detail" aria-live="polite">
+                          <aside class="wms-status-detail" tabindex="0" aria-label="Selected workshop status details" aria-live="polite">
                             <div class="wms-status-detail-header">
                               <span class="detail-field-label" data-wms-status-group>Intake</span>
                               <h4 data-wms-status-title>Submitted</h4>
@@ -5610,7 +5610,7 @@
                               <strong>Responsible</strong>
                               <p data-wms-status-responsible>Workshop author / submitter</p>
                             </div>
-                            <div class="wms-status-detail-block">
+                            <div class="wms-status-detail-block wms-status-detail-block-wide">
                               <strong>Next step</strong>
                               <p data-wms-status-next>The reviewer validates whether the submitted information is sufficient.</p>
                             </div>
@@ -6605,7 +6605,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
   <script src="./assets/js/workshop-generator.js?v=20260708-skill-generator-livestack"></script>
   <script src="./assets/js/redwood-video-player.js"></script>
   <script src="./assets/js/shared-side-nav.js?v=20260529-shared-nav-v2"></script>
-  <script src="./assets/js/author-guide-app.js?v=20260708-skill-generator-livestack"></script>
+  <script src="./assets/js/author-guide-app.js?v=20260718-home-handoff-fit-v2"></script>
   <script src="./assets/js/shared-footer.js?v=20260516-followup"></script>
 </body>
 </html>
