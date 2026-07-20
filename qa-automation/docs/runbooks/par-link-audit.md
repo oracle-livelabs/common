@@ -44,7 +44,9 @@ From `qa-automation`:
 
 ```powershell
 npm run catalog:index -- --max-pages 250
-$env:QA_WORKERS="4"
+$env:QA_WORKERS="2"
+$env:QA_PAR_DISCOVERY_CONCURRENCY="3"
+$env:QA_PAR_SOURCE_TIMEOUT_MS="45000"
 node .\scripts\qa.mjs tests\platform\par\catalogParLinks.spec.ts
 ```
 

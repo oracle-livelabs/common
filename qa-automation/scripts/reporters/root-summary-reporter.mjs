@@ -309,6 +309,7 @@ export default class RootSummaryReporter {
 
     return {
       runId,
+      reportChannel: reportChannelFromRoot(this.reportsRoot),
       status: result.status,
       startedAt: this.startedAt.toISOString(),
       endedAt: endedAt.toISOString(),
@@ -335,6 +336,11 @@ export default class RootSummaryReporter {
       sections: Array.from(sections.values()).sort((left, right) => left.name.localeCompare(right.name)),
     };
   }
+}
+
+function reportChannelFromRoot(reportsRoot) {
+  const channel = path.basename(reportsRoot).toLowerCase();
+  return channel === "par" || channel === "regression" ? channel : "local";
 }
 
 function catalogItemKey(item) {
@@ -2419,6 +2425,7 @@ function failureCard(failure, index, context) {
   const issues = issuesForTest(failure);
   const issueCodes = Array.from(new Set(issues.map((issue) => issue.code)));
   const isBlocker = issues.some((issue) => issue.severity === "blocker");
+  const isParFinding = hasParAuditIssues(issues);
   const issueCountLabel = `${issues.length} issue${issues.length === 1 ? "" : "s"} found`;
 
   return `<details class="failure-card ${isBlocker ? "blocker" : ""}" data-category="${escapeAttribute(issueCodes.join(" "))}">
@@ -2433,21 +2440,28 @@ function failureCard(failure, index, context) {
       <button class="copy-button" type="button" data-copy="${escapeAttribute(bugId)}">Copy bug report</button>
     </summary>
     <div class="failure-body">
-      <p class="failure-explanation">${escapeHtml(failureExplanation(failure))}</p>
+      <p class="failure-explanation">${escapeHtml(isParFinding ? parAuditExplanation() : failureExplanation(failure))}</p>
       ${issueListHtml(issues)}
-      ${failure.failedStep ? failedStepSummaryHtml(failure.failedStep) : ""}
-      <div class="route-grid">
-        ${routeCardHtml("Test tried", catalogUrl, "Original card link from the generated catalog.", "Open tried URL")}
-        ${routeCardHtml("Browser ended at", failure.finalUrl, `Page title: ${failure.finalTitle || "Unknown"}`, "Open reached URL")}
-      </div>
+      ${isParFinding || !failure.failedStep ? "" : failedStepSummaryHtml(failure.failedStep)}
+      ${
+        isParFinding
+          ? ""
+          : `<div class="route-grid">
+              ${routeCardHtml("Test tried", catalogUrl, "Original card link from the generated catalog.", "Open tried URL")}
+              ${routeCardHtml("Browser ended at", failure.finalUrl, `Page title: ${failure.finalTitle || "Unknown"}`, "Open reached URL")}
+            </div>`
+      }
       <div class="meta-grid">
         <div class="meta-item">
           <strong>Test file</strong>
           <span><code>${escapeHtml(`${failure.file}:${failure.line}`)}</code></span>
         </div>
       </div>
-      ${failureEvidenceHtml(failure.attachments, context, index)}
-      ${stepsDetailsHtml(failure.steps, `failure-steps-${index}`)}
+      ${
+        isParFinding
+          ? advancedParEvidenceHtml(failure, context, index, `failure-par-steps-${index}`)
+          : failureEvidenceHtml(failure.attachments, context, index) + stepsDetailsHtml(failure.steps, `failure-steps-${index}`)
+      }
       <details>
         <summary>Bug report details</summary>
         <pre id="${escapeAttribute(bugId)}" class="bug">${escapeHtml(failure.bugSummary)}</pre>
@@ -2455,7 +2469,6 @@ function failureCard(failure, index, context) {
     </div>
   </details>`;
 }
-
 function issueListHtml(issues) {
   if (issues.length === 0) {
     return "";
@@ -2466,8 +2479,9 @@ function issueListHtml(issues) {
   </div>`;
 }
 
-function issueDetailHtml(issue, index) {
+export function issueDetailHtml(issue, index) {
   const details = issueDetailsText(issue);
+  const structuredDetails = structuredIssueDetailsHtml(issue);
   const severityLabel = issue.severity === "blocker" ? "Hard blocker" : issue.severity === "major" ? "Needs fix" : "Review";
 
   return `<section class="issue-detail ${escapeAttribute(issue.severity || "major")}">
@@ -2483,12 +2497,13 @@ function issueDetailHtml(issue, index) {
     </div>
     <p>${escapeHtml(issue.message)}</p>
     ${
-      details
+      structuredDetails ||
+      (details
         ? `<details>
             <summary>Issue details</summary>
             <pre>${escapeHtml(details)}</pre>
           </details>`
-        : ""
+        : "")
     }
   </section>`;
 }
@@ -2505,6 +2520,64 @@ function issueDetailsText(issue) {
   return JSON.stringify(issue.details, null, 2);
 }
 
+function structuredIssueDetailsHtml(issue) {
+  if (issue.code !== "PAR_SCAN_INCOMPLETE" || !Array.isArray(issue.details)) {
+    return "";
+  }
+
+  return `<div class="route-grid">
+    ${issue.details
+      .map((detail, index) => {
+        const sourceUrl = detail.source_file_url || detail.sourceFileUrl || detail.page_url || detail.pageUrl || "";
+        const label = detail.label || `Source page ${index + 1}`;
+        const error = detail.error || "This source page could not be scanned.";
+        const explanation = parScanErrorExplanation(error);
+        return `<div class="route-card">
+          <strong>Source page not scanned</strong>
+          <p>${escapeHtml(label)}</p>
+          <p class="error-preview">${escapeHtml(explanation)}</p>
+          ${sourceUrl ? `<code>${escapeHtml(sourceUrl)}</code>${linkHtml(sourceUrl, "Open failing source", "link-button")}` : ""}
+          ${
+            explanation === error
+              ? ""
+              : `<details><summary>Technical details</summary><pre>${escapeHtml(error)}</pre></details>`
+          }
+        </div>`;
+      })
+      .join("\n")}
+  </div>`;
+}
+
+function parScanErrorExplanation(error) {
+  const value = String(error || "").trim();
+  const timeout = value.match(/Timeout\s+(\d+)ms\s+exceeded/i);
+  if (timeout) {
+    const seconds = Math.max(1, Math.round(Number(timeout[1]) / 1000));
+    return `The source did not respond within ${seconds} seconds. It remains unverified and is not counted as a broken PAR link.`;
+  }
+  if (/HTTP\s+404/i.test(value)) {
+    return "The workshop source returned HTTP 404, so this page could not be scanned for PAR links.";
+  }
+  return value || "This source page could not be scanned.";
+}
+
+function hasParAuditIssues(issues) {
+  return issues.some((issue) => ["STALE_PAR_LINK", "PAR_LINK_UNVERIFIED", "PAR_SCAN_INCOMPLETE"].includes(issue.code));
+}
+
+function parAuditExplanation() {
+  return "The PAR checker completed on every accessible workshop source. Missing source pages and PAR link findings are listed above; workshop navigation URLs are context only.";
+}
+
+function advancedParEvidenceHtml(failure, context, index, stepsId) {
+  return `<details class="workflow-summary">
+    <summary>Advanced automation evidence</summary>
+    <p class="step-note">Use this section only to debug the automation. The PAR findings above are the QA result.</p>
+    ${failure.failedStep ? failedStepSummaryHtml(failure.failedStep) : ""}
+    ${failureEvidenceHtml(failure.attachments, context, index)}
+    ${stepsDetailsHtml(failure.steps, stepsId)}
+  </details>`;
+}
 function emptyStateHtml(status) {
   const message =
     status === "passed" ? "No failures were found in this run." : status || "No unexpected failures were captured.";
@@ -2673,30 +2746,39 @@ function itemDetailHtml(item, failures, context) {
 function itemFailureDetailHtml(failure, index, context) {
   const bugId = `item-bug-${index}-${stableId(failure.titlePath.join("-"))}`;
   const catalogUrl = failure.catalogItem?.normalized_href || failure.catalogItem?.absolute_url || "";
+  const issues = issuesForTest(failure);
+  const isParFinding = hasParAuditIssues(issues);
 
   return `<section class="detail-test">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">Failure evidence</p>
+        <p class="eyebrow">${isParFinding ? "PAR audit result" : "Failure evidence"}</p>
         <h3>${escapeHtml(failure.section)}</h3>
       </div>
       <button class="copy-button" type="button" data-copy="${escapeAttribute(bugId)}">Copy bug report</button>
     </div>
-    <p class="failure-explanation">${escapeHtml(failureExplanation(failure))}</p>
-    ${failure.failedStep ? failedStepSummaryHtml(failure.failedStep) : ""}
-    <div class="route-grid">
-      ${routeCardHtml("Test tried", catalogUrl, "Original generated catalog URL.", "Open tried URL")}
-      ${routeCardHtml("Browser ended at", failure.finalUrl, `Page title: ${failure.finalTitle || "Unknown"}`, "Open reached URL")}
-    </div>
-    ${failureEvidenceHtml(failure.attachments, context, index)}
-    ${stepsDetailsHtml(failure.steps, `item-failure-steps-${index}-${stableId(failure.titlePath.join("-"))}`)}
+    <p class="failure-explanation">${escapeHtml(isParFinding ? parAuditExplanation() : failureExplanation(failure))}</p>
+    ${isParFinding || !failure.failedStep ? "" : failedStepSummaryHtml(failure.failedStep)}
+    ${
+      isParFinding
+        ? ""
+        : `<div class="route-grid">
+            ${routeCardHtml("Test tried", catalogUrl, "Original generated catalog URL.", "Open tried URL")}
+            ${routeCardHtml("Browser ended at", failure.finalUrl, `Page title: ${failure.finalTitle || "Unknown"}`, "Open reached URL")}
+          </div>`
+    }
+    ${
+      isParFinding
+        ? advancedParEvidenceHtml(failure, context, index, `item-par-steps-${index}-${stableId(failure.titlePath.join("-"))}`)
+        : failureEvidenceHtml(failure.attachments, context, index) +
+          stepsDetailsHtml(failure.steps, `item-failure-steps-${index}-${stableId(failure.titlePath.join("-"))}`)
+    }
     <details>
       <summary>Bug report details</summary>
       <pre id="${escapeAttribute(bugId)}" class="bug">${escapeHtml(failure.bugSummary)}</pre>
     </details>
   </section>`;
 }
-
 function itemDetailId(item) {
   return `item-${stableId(item.key || catalogItemDisplayTitle(item.catalogItem))}`;
 }

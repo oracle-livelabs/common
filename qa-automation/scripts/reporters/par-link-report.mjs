@@ -180,8 +180,9 @@ export function parLinksPageHtml(summary) {
     '    <a class="active" href="par-links.html">PAR Links</a>',
     "  </nav>",
     '  <main class="content">',
-    audit.has_data ? parOverviewHtml(audit) : parEmptyHtml(),
+    audit.has_data ? parOverviewHtml(audit) : parEmptyHtml(summary),
     "  </main>",
+    latestReportRefreshScript(summary.runId),
     "</body>",
     "</html>",
   ].join("\n");
@@ -361,13 +362,35 @@ function parWorkingLinksHtml(links) {
   ].join("\n");
 }
 
-function parEmptyHtml() {
+function parEmptyHtml(summary) {
+  const isRegressionReport = summary.reportChannel === "regression";
   return [
     '    <section class="empty-state">',
     "      <h2>No PAR audit data in this run</h2>",
-    "      <p>Run the PAR audit profile or the PAR test command.</p>",
+    isRegressionReport
+      ? "      <p>This is an overall regression report. PAR audits are published separately.</p>"
+      : "      <p>Run the PAR audit profile or the PAR test command.</p>",
+    isRegressionReport
+      ? '      <p><a class="report-link" href="/par/latest/par-links.html">Open the latest PAR audit</a></p>'
+      : "",
     "    </section>",
-  ].join("\n");
+  ].filter(Boolean).join("\n");
+}
+
+function latestReportRefreshScript(runId) {
+  return `<script>
+    (() => {
+      const loadedRunId = ${JSON.stringify(String(runId || ""))};
+      window.setInterval(async () => {
+        try {
+          const response = await fetch("summary.json", { cache: "no-store" });
+          if (!response.ok) return;
+          const latest = await response.json();
+          if (latest.runId && latest.runId !== loadedRunId) window.location.reload();
+        } catch {}
+      }, 15000);
+    })();
+  </script>`;
 }
 
 function metricHtml(label, value, description, tone = "") {
@@ -470,6 +493,7 @@ function parPageStyles() {
     ".working-row > strong { color: var(--pass); text-align: right; }",
     ".empty-state { margin-top: 18px; padding: 28px; background: #fff; border: 1px solid var(--line); text-align: center; }",
     ".empty-state h2 { margin-top: 0; }",
+    ".report-link { display: inline-block; padding: 9px 13px; border: 1px solid var(--blue); color: var(--blue); font-weight: 700; text-decoration: none; }",
     "@media (max-width: 820px) { .metrics, .fact-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); } .working-row { grid-template-columns: 1fr; } .working-row > strong { text-align: left; } }",
     "@media (max-width: 600px) { .topbar { padding: 20px 16px; align-items: flex-start; flex-direction: column; } .page-nav { padding-inline: 16px; } .content { padding: 16px 10px; } .metrics { grid-template-columns: 1fr 1fr; } .issue-section-heading, .source-block li { align-items: flex-start; flex-direction: column; } .fact-grid { grid-template-columns: 1fr; } .issue-header { flex-direction: column; } }",
   ].join("\n");

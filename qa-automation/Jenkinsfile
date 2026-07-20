@@ -38,7 +38,7 @@ def shouldCreateAuthState() {
 
 def qaRuntimeEnv() {
   def profile = runProfile()
-  def workerCount = profile == "par-audit" ? numericValue(params.PAR_WORKERS, "4") : numericValue(params.TEST_WORKERS, "1")
+  def workerCount = profile == "par-audit" ? numericValue(params.PAR_WORKERS, "2") : numericValue(params.TEST_WORKERS, "1")
   def envValues = [
     "CI=true",
     "QA_HEADED=false",
@@ -56,8 +56,8 @@ def qaRuntimeEnv() {
     envValues.add("QA_PAR_RETRY_DELAY_MS=" + numericValue(params.PAR_RETRY_DELAY_MS, "1500"))
     envValues.add("QA_PAR_TIMEOUT_MS=" + numericValue(params.PAR_TIMEOUT_MS, "20000"))
     envValues.add("QA_PAR_CHECK_CONCURRENCY=" + numericValue(params.PAR_CHECK_CONCURRENCY, "4"))
-    envValues.add("QA_PAR_DISCOVERY_CONCURRENCY=" + numericValue(params.PAR_DISCOVERY_CONCURRENCY, "8"))
-    envValues.add("QA_PAR_SOURCE_TIMEOUT_MS=" + numericValue(params.PAR_SOURCE_TIMEOUT_MS, "20000"))
+    envValues.add("QA_PAR_DISCOVERY_CONCURRENCY=" + numericValue(params.PAR_DISCOVERY_CONCURRENCY, "3"))
+    envValues.add("QA_PAR_SOURCE_TIMEOUT_MS=" + numericValue(params.PAR_SOURCE_TIMEOUT_MS, "45000"))
     envValues.add("QA_CAPTURE_CONSOLE=false")
     envValues.add("QA_CAPTURE_PAGE_ERRORS=false")
     envValues.add("QA_CAPTURE_REQUEST_FAILURES=false")
@@ -194,9 +194,9 @@ pipeline {
     string(name: "CATALOG_RETRIES", defaultValue: "3", description: "Catalog crawler retry count.")
     string(name: "CATALOG_RETRY_DELAY_MS", defaultValue: "5000", description: "Delay between catalog crawler retries.")
     string(name: "CONTENT_LINK_LIMIT", defaultValue: "50", description: "Visible content links checked per generated page. Use 0 to check all links.")
-    string(name: "PAR_WORKERS", defaultValue: "4", description: "Parallel catalog items for PAR audit.")
-    string(name: "PAR_DISCOVERY_CONCURRENCY", defaultValue: "8", description: "Workshop source files fetched concurrently inside each PAR catalog item.")
-    string(name: "PAR_SOURCE_TIMEOUT_MS", defaultValue: "20000", description: "Timeout for each workshop manifest or Markdown source request.")
+    string(name: "PAR_WORKERS", defaultValue: "2", description: "Parallel catalog items for PAR audit. Keep this conservative so the LiveLabs CDN is not overloaded.")
+    string(name: "PAR_DISCOVERY_CONCURRENCY", defaultValue: "3", description: "Workshop source files fetched concurrently inside each PAR catalog item.")
+    string(name: "PAR_SOURCE_TIMEOUT_MS", defaultValue: "45000", description: "Timeout for each workshop manifest or Markdown source request.")
     string(name: "PAR_RETRIES", defaultValue: "2", description: "Retries for temporary PAR probe results.")
     string(name: "PAR_RETRY_DELAY_MS", defaultValue: "1500", description: "Delay between PAR probe retries.")
     string(name: "PAR_TIMEOUT_MS", defaultValue: "20000", description: "Timeout for each PAR HEAD or range request.")

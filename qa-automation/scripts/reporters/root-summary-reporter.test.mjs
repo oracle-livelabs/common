@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import path from "node:path";
 import test from "node:test";
 
-import { resultsCsv } from "./root-summary-reporter.mjs";
+import { issueDetailHtml, resultsCsv } from "./root-summary-reporter.mjs";
 
 test("results CSV keeps one row per issue and masks sensitive URL values", () => {
   const parToken = "private-token-value";
@@ -68,4 +68,51 @@ test("results CSV keeps one row per issue and masks sensitive URL values", () =>
   assert.match(csv, /session=\*\*\*/);
   assert.doesNotMatch(csv, new RegExp(process.cwd().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   assert.match(csv, /<qa-automation>/);
+});
+test("renders PAR scan failures with the actual missing source", () => {
+  const html = issueDetailHtml(
+    {
+      code: "PAR_SCAN_INCOMPLETE",
+      label: "PAR scan incomplete",
+      severity: "major",
+      message: "One page could not be scanned.",
+      details: [
+        {
+          label: "Preview instructions: Getting Started",
+          page_url: "https://example.com/workshop/missing.md",
+          error: "Workshop source returned HTTP 404.",
+        },
+      ],
+    },
+    0,
+  );
+
+  assert.match(html, /Source page not scanned/);
+  assert.match(html, /Workshop source returned HTTP 404/);
+  assert.match(html, /https:\/\/example\.com\/workshop\/missing\.md/);
+  assert.match(html, /Open failing source/);
+  assert.doesNotMatch(html, /<summary>Issue details<\/summary>/);
+});
+test("explains PAR source timeouts without calling the PAR link broken", () => {
+  const html = issueDetailHtml(
+    {
+      code: "PAR_SCAN_INCOMPLETE",
+      label: "PAR scan incomplete",
+      severity: "major",
+      message: "One page could not be scanned.",
+      details: [
+        {
+          label: "Preview instructions: Lab 1",
+          page_url: "https://example.com/workshop/lab-1.md",
+          error: "apiRequestContext.get: Timeout 45000ms exceeded.",
+        },
+      ],
+    },
+    0,
+  );
+
+  assert.match(html, /did not respond within 45 seconds/);
+  assert.match(html, /not counted as a broken PAR link/);
+  assert.match(html, /<summary>Technical details<\/summary>/);
+  assert.match(html, /Timeout 45000ms exceeded/);
 });

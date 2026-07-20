@@ -237,11 +237,11 @@ async function mapWithConcurrency<T>(
 }
 
 function discoveryConcurrency(): number {
-  return Math.max(1, parseIntegerFlag(process.env.QA_PAR_DISCOVERY_CONCURRENCY, 8));
+  return Math.max(1, parseIntegerFlag(process.env.QA_PAR_DISCOVERY_CONCURRENCY, 3));
 }
 
 function sourceTimeoutMs(): number {
-  return Math.max(5_000, parseIntegerFlag(process.env.QA_PAR_SOURCE_TIMEOUT_MS, 20_000));
+  return Math.max(5_000, parseIntegerFlag(process.env.QA_PAR_SOURCE_TIMEOUT_MS, 45_000));
 }
 
 function nearestInstruction(lines: string[], lineIndex: number): string | undefined {

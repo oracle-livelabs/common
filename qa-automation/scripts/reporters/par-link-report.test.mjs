@@ -82,6 +82,19 @@ test("redacts PAR tokens, authentication headers, and APEX sessions from report 
   assert.match(safe, /cookie: \*\*\*/);
   assert.match(safe, /session=\*\*\*/);
 });
+test("links regression reports to PAR results and watches for a newer run", () => {
+  const html = parLinksPageHtml({
+    runId: "regression-run",
+    reportChannel: "regression",
+    startedAt: "2026-07-17T00:00:00.000Z",
+    parAudit: buildParAuditSummary([]),
+  });
+
+  assert.match(html, /overall regression report/);
+  assert.match(html, /\/par\/latest\/par-links\.html/);
+  assert.match(html, /fetch\("summary\.json"/);
+  assert.match(html, /latest\.runId !== loadedRunId/);
+});
 function auditAttachment(scope, sourceName, status, httpStatus) {
   return {
     schema_version: 1,

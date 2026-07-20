@@ -143,9 +143,9 @@ See [PAR Link Audit](par-link-audit.md) for scheduling, privacy, and report deta
 | `SHARD_TOTAL` | Number of parallel generated shards for `nightly-full`. |
 | `TEST_WORKERS` | Playwright workers in each generated run. The VM package uses one shard and five workers so it produces one complete report. |
 | `CONTENT_LINK_LIMIT` | Visible links checked per generated content page; set `0` to check all. |
-| PAR_WORKERS | Parallel catalog items for par-audit. |
-| PAR_DISCOVERY_CONCURRENCY | Concurrent manifest-listed Markdown files fetched inside each PAR item. |
-| PAR_SOURCE_TIMEOUT_MS | Timeout for each workshop manifest or Markdown source request. |
+| PAR_WORKERS | Parallel catalog items for par-audit. The reliable default is 2. |
+| PAR_DISCOVERY_CONCURRENCY | Concurrent manifest-listed Markdown files fetched inside each PAR item. The reliable default is 3. |
+| PAR_SOURCE_TIMEOUT_MS | Timeout for each workshop manifest or Markdown source request. The default is 45000 ms. |
 | PAR_RETRIES | Retry count for inconclusive PAR probes. |
 | PAR_TIMEOUT_MS | Timeout for each PAR probe request. |
 | PAR_CHECK_CONCURRENCY | Concurrent PAR HTTP probes inside each catalog item test. |

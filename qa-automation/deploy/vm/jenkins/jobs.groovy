@@ -27,9 +27,9 @@ pipelineJob("livelabs-qa-engine") {
     stringParam("CATALOG_RETRIES", "3", "Catalog crawler retries")
     stringParam("CATALOG_RETRY_DELAY_MS", "5000", "Catalog retry delay")
     stringParam("CONTENT_LINK_LIMIT", "50", "Visible links checked per page; 0 checks all")
-    stringParam("PAR_WORKERS", "4", "Parallel PAR catalog items")
-    stringParam("PAR_DISCOVERY_CONCURRENCY", "8", "Parallel source files per item")
-    stringParam("PAR_SOURCE_TIMEOUT_MS", "20000", "Source fetch timeout")
+    stringParam("PAR_WORKERS", "2", "Parallel PAR catalog items")
+    stringParam("PAR_DISCOVERY_CONCURRENCY", "3", "Parallel source files per item")
+    stringParam("PAR_SOURCE_TIMEOUT_MS", "45000", "Source fetch timeout")
     stringParam("PAR_RETRIES", "2", "PAR probe retries")
     stringParam("PAR_RETRY_DELAY_MS", "1500", "PAR retry delay")
     stringParam("PAR_TIMEOUT_MS", "20000", "PAR probe timeout")
@@ -125,9 +125,9 @@ pipelineJob("livelabs-par-audit") {
     stringParam("AUTH_TARGET_URL", authTargetUrl, "Optional private content sign-in target")
     stringParam("CATALOG_MAX_PAGES", "250", "Catalog pages to crawl")
     stringParam("CATALOG_MAX_ITEMS", "", "Leave blank for every catalog item")
-    stringParam("PAR_WORKERS", "4", "Catalog items checked in parallel")
-    stringParam("PAR_DISCOVERY_CONCURRENCY", "8", "Workshop files scanned in parallel per item")
-    stringParam("PAR_SOURCE_TIMEOUT_MS", "20000", "Source fetch timeout")
+    stringParam("PAR_WORKERS", "2", "Catalog items checked in parallel")
+    stringParam("PAR_DISCOVERY_CONCURRENCY", "3", "Workshop files scanned in parallel per item")
+    stringParam("PAR_SOURCE_TIMEOUT_MS", "45000", "Source fetch timeout")
     stringParam("PAR_RETRIES", "2", "Retries for temporary PAR responses")
     stringParam("PAR_RETRY_DELAY_MS", "1500", "Delay between PAR retries")
     stringParam("PAR_TIMEOUT_MS", "20000", "Timeout for each PAR probe")
@@ -179,9 +179,9 @@ pipeline {
               string(name: "CATALOG_RETRIES", value: "3"),
               string(name: "CATALOG_RETRY_DELAY_MS", value: "5000"),
               string(name: "CONTENT_LINK_LIMIT", value: params.CONTENT_LINK_LIMIT),
-              string(name: "PAR_WORKERS", value: "4"),
-              string(name: "PAR_DISCOVERY_CONCURRENCY", value: "8"),
-              string(name: "PAR_SOURCE_TIMEOUT_MS", value: "20000"),
+              string(name: "PAR_WORKERS", value: "2"),
+              string(name: "PAR_DISCOVERY_CONCURRENCY", value: "3"),
+              string(name: "PAR_SOURCE_TIMEOUT_MS", value: "45000"),
               string(name: "PAR_RETRIES", value: "2"),
               string(name: "PAR_RETRY_DELAY_MS", value: "1500"),
               string(name: "PAR_TIMEOUT_MS", value: "20000"),
