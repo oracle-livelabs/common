@@ -1922,7 +1922,7 @@
   }
 
   function syncWmsStatusGraphZoomControls(graph) {
-    var value = graph.getAttribute("data-wms-status-zoom") || "fit";
+    var value = graph.getAttribute("data-wms-status-zoom") || "100";
     var isFit = value === "fit";
     var zoom = normalizeWmsStatusGraphZoom(value);
     var effectiveZoom;
@@ -1931,8 +1931,8 @@
     var zoomIn = graph.querySelector('[data-wms-status-action="zoom-in"]');
 
     if (!isFit && zoom === null) {
-      isFit = true;
-      value = "fit";
+      zoom = 100;
+      value = "100";
       graph.setAttribute("data-wms-status-zoom", value);
     }
 
@@ -2037,7 +2037,6 @@
   }
 
   function updateWmsStatusGraphDetails(graph, status) {
-    var detail = graph.querySelector(".wms-status-detail");
     var outgoing = wmsStatusGraphTransitions.filter(function (transition) {
       return transition.from === status.id;
     });
@@ -2063,10 +2062,6 @@
     }
     if (nextStep) {
       nextStep.textContent = status.nextStep;
-    }
-
-    if (detail) {
-      detail.scrollTop = 0;
     }
 
     renderWmsStatusList(checklist, status.checks);
@@ -2155,25 +2150,18 @@
   }
 
   function resetWmsStatusGraph(graph) {
-    var defaultZoom;
-
     if (!graph) {
       return;
     }
 
-    defaultZoom = graph.getAttribute("data-wms-status-default-zoom") || "fit";
-    if (defaultZoom !== "fit" && normalizeWmsStatusGraphZoom(defaultZoom) === null) {
-      defaultZoom = "fit";
-    }
-
-    setWmsStatusGraphZoom(graph, defaultZoom, {
+    setWmsStatusGraphZoom(graph, 100, {
       announce: false,
       preserveFocus: false,
       resetScroll: true
     });
     graph.removeAttribute("data-highlighted-path");
     selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted", { announce: false });
-    setLiveMessage(defaultZoom === "fit" ? "Status graph reset and fitted to the viewport." : "Status graph reset to " + defaultZoom + " percent.");
+    setLiveMessage("Status graph reset to 100 percent.");
   }
 
   function fitWmsStatusGraph(graph) {
@@ -2271,7 +2259,7 @@
     svg.appendChild(edgeLayer);
     svg.appendChild(labelLayer);
     svg.appendChild(nodeLayer);
-    setWmsStatusGraphZoom(graph, graph.getAttribute("data-wms-status-zoom") || "fit", { announce: false, preserveFocus: false });
+    setWmsStatusGraphZoom(graph, graph.getAttribute("data-wms-status-zoom") || 100, { announce: false, preserveFocus: false });
     selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted");
   }
 
