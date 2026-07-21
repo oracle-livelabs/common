@@ -3325,8 +3325,6 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph {
-  --wms-status-detail-width: clamp(14rem, 18cqi, 17rem);
-  container-type: inline-size;
   display: grid;
   overflow: hidden;
   border: 1px solid rgba(212, 207, 202, 0.92);
@@ -3447,8 +3445,7 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-select:focus-visible,
-#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage:focus-visible,
-#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail:focus-visible {
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage:focus-visible {
   outline: 3px solid rgba(0, 112, 173, 0.38);
   outline-offset: 2px;
 }
@@ -3474,19 +3471,14 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(14rem, 17rem);
-  grid-template-columns: minmax(0, 1fr) var(--wms-status-detail-width);
-  min-height: 18rem;
-  height: clamp(22rem, 52vh, 34rem);
-  height: calc((100cqi - var(--wms-status-detail-width)) / 2);
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, 20rem);
+  min-height: 34rem;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
   position: relative;
   min-width: 0;
-  height: 100%;
-  min-height: 0;
-  max-height: none;
+  max-height: min(72vh, 50rem);
   overflow: auto;
   overscroll-behavior-x: contain;
   overscroll-behavior-y: auto;
@@ -3496,12 +3488,6 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
     linear-gradient(#eef2f7 1px, transparent 1px),
     linear-gradient(90deg, #eef2f7 1px, transparent 1px);
   background-size: 32px 32px;
-}
-
-#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="fit"] .wms-status-graph-stage {
-  display: grid;
-  place-items: center;
-  overflow: hidden;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-svg {
@@ -3514,10 +3500,7 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="fit"] .wms-status-svg {
-  width: 100%;
-  height: 100%;
-  margin-inline: 0;
-  aspect-ratio: auto;
+  width: min(100%, 144vh, 100rem);
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="25"] .wms-status-svg {
@@ -3617,21 +3600,8 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail {
   display: grid;
   align-content: start;
-  gap: 0.55rem;
-  height: 100%;
-  min-height: 0;
-  max-height: 100%;
-  padding: 0.75rem;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
-  background: #fbf9f8;
-}
-
-#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail-header {
-  position: sticky;
-  top: -0.75rem;
-  z-index: 1;
-  padding: 0.2rem 0 0.35rem;
+  gap: 0.95rem;
+  padding: 1rem;
   background: #fbf9f8;
 }
 
@@ -3643,16 +3613,14 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail-block {
   display: grid;
-  gap: 0.2rem;
-  padding: 0.52rem 0.58rem;
-  border: 1px solid rgba(212, 207, 202, 0.78);
-  border-radius: 6px;
-  background: #fff;
+  gap: 0.35rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(212, 207, 202, 0.78);
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail-block strong {
   color: var(--ink);
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 850;
 }
 
@@ -3660,13 +3628,13 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail li {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 0.78rem;
-  line-height: 1.36;
+  font-size: 0.84rem;
+  line-height: 1.48;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail ul {
   margin: 0;
-  padding-left: 0.9rem;
+  padding-left: 1rem;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
@@ -3936,13 +3904,19 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-toolbar {
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-toolbar,
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-layout {
     grid-template-columns: 1fr;
   }
 
   #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-toolbar {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
+    border-right: 0;
+    border-bottom: 1px solid rgba(212, 207, 202, 0.82);
   }
 
   #app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-layout {
@@ -3991,55 +3965,6 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
     width: 6rem;
   }
 
-}
-
-@media (max-width: 900px) {
-  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-layout {
-    grid-template-columns: 1fr;
-    height: auto;
-  }
-
-  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
-    height: auto;
-    max-height: min(72vh, 50rem);
-    border-right: 0;
-    border-bottom: 1px solid rgba(212, 207, 202, 0.82);
-  }
-
-  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="fit"] .wms-status-svg {
-    height: auto;
-    aspect-ratio: 2 / 1;
-  }
-
-  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    height: auto;
-    max-height: clamp(15rem, 42vh, 22rem);
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    scrollbar-gutter: stable;
-  }
-
-  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail-header {
-    position: static;
-    grid-column: 1 / -1;
-    padding-bottom: 0.2rem;
-  }
-
-  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail-block-wide {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (max-width: 640px) {
-  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail {
-    grid-template-columns: 1fr;
-  }
-
-  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail-header,
-  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail-block-wide {
-    grid-column: auto;
-  }
 }
 
 /* Final review fixes: keep the home menu neutral until hover and make the nav close state explicit. */
@@ -4237,297 +4162,5 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
 @media (max-width: 940px) {
   body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
     display: none !important;
-  }
-}
-
-/* Home viewport fit: keep the normal home view within one screen while preserving
-   vertical reachability for browser zoom, text enlargement, and extreme heights. */
-body.home-no-scroll {
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-body.home-no-scroll #app,
-body.home-no-scroll #app .app-shell {
-  min-height: 100vh;
-  min-height: 100dvh;
-}
-
-body.home-no-scroll #app .app-shell {
-  display: grid !important;
-  grid-template-rows: auto minmax(min-content, 1fr) auto;
-  padding-bottom: 0;
-  overflow: visible;
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub.hub-screen {
-  min-height: 0 !important;
-  padding: clamp(0.4rem, 1.2vh, 0.85rem) clamp(0.65rem, 1.3vw, 1.25rem);
-  display: block !important;
-  align-self: stretch;
-  overflow: visible;
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub > .container {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  align-content: center;
-  gap: clamp(0.45rem, 1.15vh, 0.9rem);
-  width: 100%;
-  max-width: none;
-  min-width: 0;
-  min-height: 100%;
-  padding: 0;
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero,
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel {
-  min-width: 0;
-  box-sizing: border-box;
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero {
-  width: 100%;
-  height: auto;
-  min-height: clamp(8rem, 36vh, 26rem) !important;
-  margin: 0 !important;
-  padding: clamp(0.8rem, 2.4vh, 2.5rem) clamp(1rem, 3vw, 4rem) !important;
-  display: grid !important;
-  align-items: center;
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero .row {
-  width: 100%;
-  min-height: 0;
-  margin: 0;
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hero-lockup {
-  margin-bottom: clamp(0.35rem, 0.8vh, 0.75rem);
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hero-lockup-label {
-  font-size: clamp(1rem, min(1.7vw, 4vh), 1.5rem);
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hero-lockup-note {
-  font-size: clamp(0.9rem, min(1.5vw, 3.6vh), 1.35rem);
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hero-title {
-  max-width: min(42rem, 76%) !important;
-  font-size: clamp(1.75rem, min(4.4vw, 6.2vh), 3.6rem) !important;
-  margin: 0 !important;
-  line-height: 1.06;
-  text-wrap: balance;
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(16rem, 1.15fr);
-  grid-template-areas:
-    "copy search"
-    "actions actions";
-  gap: clamp(0.4rem, 0.85vh, 0.65rem) clamp(0.7rem, 1.4vw, 1.15rem);
-  align-items: center;
-  padding: clamp(0.5rem, 1vh, 0.75rem) !important;
-  border: 1px solid var(--line);
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .panel-copy {
-  display: block !important;
-  grid-area: copy;
-  max-width: none;
-  margin: 0;
-  font-size: clamp(0.8rem, 1.15vw, 1rem);
-  line-height: 1.3;
-  text-wrap: balance;
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-form {
-  grid-area: search;
-  width: 100%;
-  min-height: 2.75rem;
-  margin: 0;
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-input {
-  height: 2.75rem;
-  padding-inline: 0.8rem;
-  font-size: 0.875rem;
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-button {
-  flex-basis: 3rem;
-  min-width: 3rem;
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-flow {
-  grid-area: actions;
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.35rem;
-  width: 100%;
-  border: 0;
-  overflow: visible;
-  background: transparent;
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step {
-  grid-template-columns: minmax(0, 1fr) !important;
-  gap: 0 !important;
-  align-items: center;
-  text-align: center;
-  width: 100% !important;
-  min-width: 0;
-  min-height: 2.5rem !important;
-  padding: 0.5rem 0.6rem !important;
-  border: 1px solid var(--line) !important;
-  border-radius: 6px !important;
-  overflow: visible;
-}
-
-body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step strong {
-  margin: 0;
-  font-size: clamp(0.72rem, 1vw, 0.875rem);
-  line-height: 1.15;
-  overflow-wrap: anywhere;
-}
-
-body.home-no-scroll #app .app-footer {
-  min-height: 2rem;
-  padding: 0.25rem 0.75rem;
-  display: grid;
-  place-items: center;
-  font-size: 0.75rem;
-  line-height: 1.2;
-}
-
-@media (min-width: 941px) {
-  body.home-no-scroll #app .app-shell {
-    grid-template-rows: minmax(min-content, 1fr) auto;
-  }
-}
-
-@media (max-width: 940px) {
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
-    position: relative;
-    top: auto;
-    padding: 0;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .container {
-    width: 100%;
-    max-width: none;
-    padding: 0;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .nav-shell {
-    padding: 0.3rem 0.4rem;
-    border-radius: 0;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .nav-shell .container-fluid {
-    display: block !important;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .brand-token {
-    display: none !important;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .nav-main-grid {
-    display: block !important;
-    width: 100%;
-    margin: 0;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .nav-group-all {
-    display: grid !important;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 0.25rem;
-    width: 100%;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .nav-group-all .nav-control {
-    justify-content: center;
-    gap: 0.3rem;
-    width: 100%;
-    min-width: 0;
-    min-height: 2.5rem;
-    padding: 0.3rem 0.25rem;
-    white-space: normal;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control-icon {
-    flex-basis: 1.75rem;
-    width: 1.75rem;
-    height: 1.75rem;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control-text {
-    min-width: 0;
-    font-size: clamp(0.68rem, 1.5vw, 0.8rem);
-    line-height: 1.1;
-  }
-}
-
-@media (max-width: 700px) {
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hero-title {
-    max-width: 100% !important;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "copy"
-      "search"
-      "actions";
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-flow {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 700px) {
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control-text {
-    display: none;
-  }
-}
-
-@media (max-height: 640px) {
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub > .container {
-    gap: 0.35rem;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero {
-    min-height: clamp(7rem, 30vh, 14rem) !important;
-    padding-block: 0.65rem !important;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hero-title {
-    font-size: clamp(1.55rem, min(4vw, 5.5vh), 2.6rem) !important;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel {
-    gap: 0.3rem 0.65rem;
-    padding: 0.4rem !important;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-form,
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-input {
-    min-height: 2.35rem;
-    height: 2.35rem;
-  }
-
-  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel .home-mini-step {
-    min-height: 2.25rem !important;
-    padding-block: 0.4rem !important;
-  }
-
-  body.home-no-scroll #app .app-footer {
-    min-height: 1.75rem;
-    padding-block: 0.18rem;
   }
 }
