@@ -1,4 +1,4 @@
-# Lab 4: Run the Workshop and Test the Green-Button Path
+# Lab 3: Run the Workshop and Test the Green-Button Path
 
 ## Introduction
 
@@ -18,7 +18,7 @@ In this lab, you will:
 
 <!-- Estimated Time: intentionally not shown in this readiness guide. -->
 
-![Dry run and launch test flow](./images/lab-4-dry-run-flow.svg " ")
+![Dry run and launch test flow](./images/lab-3-dry-run-flow.svg " ")
 
 ## Task 1: Run the Workshop End to End
 

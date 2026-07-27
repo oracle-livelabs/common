@@ -24,6 +24,22 @@ In this workshop, you will:
 
 <!-- Estimated Workshop Time: intentionally not shown in this readiness guide. -->
 
+## TL;DR: Author Quick Guide
+
+Use this section when you need the delivery plan without reading every lab.
+
+### 60-Second Ready Check
+
+- Assign the facilitator, driver, help owner, SME, and event owner.
+- Choose one attendee path: event code, green button, or brown button.
+- Verify the event URL, code, first screen, attendee count, dates, and help contact.
+- For 50+, contact William and LiveLabs. Confirm available space and pre-provision.
+- Dry run with the same account, link, network, browser, and launch path.
+- Send account, access, network, event-code, first-screen, and support instructions early.
+- Record provisioning time. Prepare product context for the wait.
+- Complete Lab 5. Choose **Ready**, **Ready with risk**, or **Not ready**.
+- Keep Lab 6 open during the event.
+
 ## Acknowledgements
 
 - **Author:** Oracle LiveLabs Team, July 2026

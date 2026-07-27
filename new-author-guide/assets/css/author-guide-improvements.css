@@ -2433,7 +2433,7 @@ body.home-no-scroll #app .app-footer .container {
 
 /* Redwood 26B resource card treatment for Quickstart setup cards. */
 #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
-  grid-template-columns: repeat(auto-fit, minmax(18.5rem, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -2442,10 +2442,10 @@ body.home-no-scroll #app .app-footer .container {
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card {
-  min-height: 240px;
+  min-height: 0;
   padding: 0 !important;
   display: grid;
-  grid-template-rows: minmax(172px, 1fr) auto;
+  grid-template-rows: auto auto;
   gap: 0;
   border: 1px solid rgba(22, 21, 19, 0.12) !important;
   border-radius: 8px !important;
@@ -2463,8 +2463,8 @@ body.home-no-scroll #app .app-footer .container {
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main {
   display: block;
-  min-height: 172px;
-  padding: 32px 64px 28px 32px;
+  min-height: 0;
+  padding: clamp(1rem, 2vw, 1.25rem) clamp(2.5rem, 4vw, 3.25rem) clamp(0.9rem, 1.8vw, 1.15rem) clamp(1rem, 2vw, 1.25rem);
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-number {
@@ -2478,11 +2478,11 @@ body.home-no-scroll #app .app-footer .container {
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main strong {
   display: block;
-  margin: 0 0 14px;
+  margin: 0 0 0.45rem;
   color: #161513;
   font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
-  font-size: clamp(1.25rem, 1.5vw, 1.55rem);
-  line-height: 1.18;
+  font-size: clamp(0.95rem, 1.15vw, 1.08rem);
+  line-height: 1.25;
   font-weight: 700;
   letter-spacing: 0;
 }
@@ -2491,32 +2491,35 @@ body.home-no-scroll #app .app-footer .container {
   display: block;
   color: rgba(22, 21, 19, 0.68);
   font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
-  font-size: clamp(1rem, 1.05vw, 1.12rem);
-  line-height: 1.48;
+  font-size: clamp(0.78rem, 0.9vw, 0.88rem);
+  line-height: 1.45;
   font-weight: 400;
   letter-spacing: 0;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions {
-  min-height: 68px;
-  padding: 16px 24px;
+  min-height: 0;
+  padding: 0.7rem 1rem;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 0.5rem;
   background: #f5f4f2;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions .btn,
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions .copy-link-button {
-  min-width: 100px;
-  min-height: 44px !important;
+  min-width: 0;
+  min-height: 2.15rem !important;
+  padding: 0.38rem 0.68rem;
+  font-size: 0.76rem;
+  line-height: 1.2;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card::after {
-  top: 26px;
-  right: 28px;
-  width: 32px;
-  height: 32px;
+  top: 0.85rem;
+  right: 0.9rem;
+  width: 1.45rem;
+  height: 1.45rem;
   border: 2px solid rgba(67, 107, 29, 0.25);
   background: #fff;
 }
@@ -3346,6 +3349,11 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   gap: 0.45rem;
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-actions {
+  align-items: center;
+  justify-content: flex-end;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill,
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-action {
   display: inline-flex;
@@ -3377,6 +3385,71 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   color: var(--rose);
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.25rem;
+  box-sizing: border-box;
+  padding: 0.2rem;
+  border: 1px solid rgba(104, 96, 91, 0.24);
+  border-radius: 999px;
+  background: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control .wms-status-action {
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.35rem;
+  border-color: transparent;
+  background: transparent;
+  font-size: 1rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control .wms-status-action:disabled,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control .wms-status-action:disabled:hover {
+  border-color: transparent;
+  background: transparent;
+  color: var(--ink-soft);
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-field {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-select {
+  min-height: 2.25rem;
+  max-width: 6rem;
+  padding: 0.3rem 1.7rem 0.3rem 0.55rem;
+  border: 1px solid rgba(104, 96, 91, 0.3);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-select:hover {
+  border-color: rgba(199, 70, 52, 0.46);
+  background: #fff8f7;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-select:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage:focus-visible {
+  outline: 3px solid rgba(0, 112, 173, 0.38);
+  outline-offset: 2px;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill::before {
   content: "";
   width: 1.6rem;
@@ -3403,7 +3476,13 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
-  overflow: hidden;
+  position: relative;
+  min-width: 0;
+  max-height: min(72vh, 50rem);
+  overflow: auto;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+  scrollbar-gutter: stable both-edges;
   border-right: 1px solid rgba(212, 207, 202, 0.82);
   background:
     linear-gradient(#eef2f7 1px, transparent 1px),
@@ -3413,8 +3492,39 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-svg {
   display: block;
-  width: 100%;
-  height: clamp(24rem, 43vw, 34rem);
+  width: 1320px;
+  max-width: none;
+  height: auto;
+  margin-inline: auto;
+  aspect-ratio: 2 / 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="fit"] .wms-status-svg {
+  width: min(100%, 144vh, 100rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="25"] .wms-status-svg {
+  width: 330px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="50"] .wms-status-svg {
+  width: 660px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="75"] .wms-status-svg {
+  width: 990px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="125"] .wms-status-svg {
+  width: 1650px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="150"] .wms-status-svg {
+  width: 1980px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="200"] .wms-status-svg {
+  width: 2640px;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-node rect {
@@ -3528,13 +3638,13 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-card {
   align-content: start;
   gap: 0.85rem;
-  min-height: 13rem;
+  min-height: 0;
   padding: 0.9rem;
 }
 
@@ -3585,10 +3695,10 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
   align-items: start;
-  gap: 0.75rem;
-  margin-top: 1rem;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-card {
@@ -3598,17 +3708,13 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   background: #fff;
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .generated-example-card[open] {
-  grid-column: 1 / -1;
-}
-
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  min-height: 3.25rem;
-  padding: 0.72rem 0.9rem;
+  gap: 0.55rem;
+  min-height: 2.25rem;
+  padding: 0.48rem 0.65rem;
   cursor: pointer;
   list-style: none;
   background: #fbf9f8;
@@ -3621,8 +3727,8 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-summary::after {
   content: "";
   flex: 0 0 auto;
-  width: 0.62rem;
-  height: 0.62rem;
+  width: 0.48rem;
+  height: 0.48rem;
   border-right: 2px solid var(--ink-soft);
   border-bottom: 2px solid var(--ink-soft);
   transform: rotate(45deg);
@@ -3640,7 +3746,7 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-summary-main {
   display: grid;
-  gap: 0.2rem;
+  gap: 0.1rem;
   min-width: 0;
 }
 
@@ -3648,9 +3754,9 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   display: -webkit-box;
   overflow: hidden;
   color: var(--ink);
-  font-size: 0.88rem;
+  font-size: 0.78rem;
   font-weight: 850;
-  line-height: 1.25;
+  line-height: 1.18;
   overflow-wrap: anywhere;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -3658,8 +3764,8 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-body {
   display: grid;
-  gap: 0.55rem;
-  padding: 0.75rem 0.9rem 0.9rem;
+  gap: 0.4rem;
+  padding: 0.5rem 0.6rem 0.65rem;
   border-top: 1px solid rgba(212, 207, 202, 0.78);
 }
 
@@ -3671,27 +3777,31 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-copy {
-  min-height: 2rem;
-  padding: 0.35rem 0.7rem;
+  min-height: 1.75rem !important;
+  padding: 0.26rem 0.58rem !important;
+  font-size: 0.78rem !important;
+  line-height: 1.15 !important;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-pre {
   width: 100%;
-  max-height: clamp(10rem, 28vh, 18rem);
+  max-height: 8.5rem;
   margin: 0;
+  padding: 0 !important;
   overflow: auto;
   border-radius: 8px;
   background: #2b2927;
   color: #f8f5f2;
-  font-size: 0.84rem;
-  line-height: 1.5;
+  font-size: 0.78rem;
+  line-height: 1.42;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-pre code {
   display: block;
   min-width: 0;
-  padding: 0.9rem;
+  padding: 0.62rem;
   color: inherit;
+  font-size: inherit !important;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   word-break: normal;
@@ -3840,6 +3950,21 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
     justify-content: center;
   }
 
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control {
+    grid-column: 1 / -1;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-field {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-select {
+    width: 6rem;
+  }
+
 }
 
 /* Final review fixes: keep the home menu neutral until hover and make the nav close state explicit. */
@@ -3973,6 +4098,65 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
 
 body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
   padding-left: 0 !important;
+}
+
+/* Responsive density and overflow safeguards shared across every guide view. */
+#app[data-redwood-creator-pass="2026-05-25"] {
+  overflow-x: clip;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] :is(.guide-layout, .guide-stage, .guide-section-card, .step-block, .detail-resource-card, .detail-resource-main, .detail-resource-main > span, .generator-layout, .generator-workbench, .generator-output-panel, .preview-checkpoint-layout, .wms-status-graph-layout) {
+  min-width: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] :is(img, video, iframe, pre, table) {
+  max-width: 100%;
+}
+
+@media (max-width: 1100px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .guide-section-card,
+  #app[data-redwood-creator-pass="2026-05-25"] .step-block {
+    padding: clamp(1rem, 2.5vw, 1.3rem);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-svg {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 2 / 1;
+  }
+}
+
+@media (max-width: 850px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
+    max-height: min(72vh, 44rem);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-svg {
+    min-width: 0;
+    height: auto;
+    aspect-ratio: 2 / 1;
+  }
+}
+
+@media (max-width: 700px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .command-card-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .detail-field-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .detail-resource-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .detail-milestone-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-layout,
+  #app[data-redwood-creator-pass="2026-05-25"] .generator-layout,
+  #app[data-redwood-creator-pass="2026-05-25"] .example-generator-input-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main {
+    padding: 1rem 2.75rem 0.9rem 1rem;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions {
+    padding: 0.65rem 1rem;
+  }
 }
 
 @media (max-width: 940px) {

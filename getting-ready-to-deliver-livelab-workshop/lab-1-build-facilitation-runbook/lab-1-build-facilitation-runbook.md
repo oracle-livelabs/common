@@ -20,6 +20,8 @@ In this lab, you will:
 
 ![Facilitation runbook flow](./images/lab-1-runbook-flow.svg " ")
 
+Use the [one-page facilitator run-of-show template](?lab=facilitator-run-of-show-template) to record blank owner, time, backup, and status fields for this event.
+
 ## Task 1: Confirm Roles
 
 1. Review the [role map](#legend).
@@ -59,7 +61,7 @@ In this lab, you will:
 
 ## Task 3: Script Handoffs
 
-1. Write the [handoff](#legend) lines before the session.
+1. Write the [handoff](#legend) lines before the session. A handoff tells attendees what is changing, what they do next, and where individual blockers go.
 
     ```text
     We are leaving setup and starting the hands-on lab.
