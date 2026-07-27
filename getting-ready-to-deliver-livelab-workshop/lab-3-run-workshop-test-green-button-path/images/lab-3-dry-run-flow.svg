@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">Dry run and launch test flow</title>
+  <desc id="desc">Four large cards show how authors run the workshop, test the launch path, record issues, and prepare content for provisioning time.</desc>
+  <rect width="1200" height="620" fill="#f7f7f5"/>
+  <text x="70" y="56" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1f1f1f">Run the workshop and test launch</text>
+  <g font-family="Arial, sans-serif" fill="#1f1f1f">
+    <g class="card">
+      <rect x="70" y="100" width="500" height="150" rx="8" fill="#ffffff" stroke="#6b5876" stroke-width="3"/>
+      <text x="100" y="140" font-size="22" font-weight="700">1. Run end to end</text>
+      <text x="100" y="176" font-size="18">Open the same URL attendees will use.</text>
+      <text x="100" y="202" font-size="18">Complete every required lab step.</text>
+      <text x="100" y="228" font-size="18">Record broken or confusing instructions.</text>
+    </g>
+    <g class="card">
+      <rect x="630" y="100" width="500" height="150" rx="8" fill="#ffffff" stroke="#6b5876" stroke-width="3"/>
+      <text x="660" y="140" font-size="22" font-weight="700">2. Test the launch path</text>
+      <text x="660" y="176" font-size="18">Use the green button, sandbox, secure desktop,</text>
+      <text x="660" y="202" font-size="18">booking flow, or customer-tenancy route</text>
+      <text x="660" y="228" font-size="18">selected in Lab 3.</text>
+    </g>
+    <g class="card">
+      <rect x="70" y="300" width="500" height="150" rx="8" fill="#ffffff" stroke="#6b5876" stroke-width="3"/>
+      <text x="100" y="340" font-size="22" font-weight="700">3. Route issues</text>
+      <text x="100" y="376" font-size="18">Separate attendee prep, access, platform,</text>
+      <text x="100" y="402" font-size="18">and workshop-content issues. Send each</text>
+      <text x="100" y="428" font-size="18">issue to the right owner.</text>
+    </g>
+    <g class="card">
+      <rect x="630" y="300" width="500" height="150" rx="8" fill="#ffffff" stroke="#6b5876" stroke-width="3"/>
+      <text x="660" y="340" font-size="22" font-weight="700">4. Prepare wait-time content</text>
+      <text x="660" y="376" font-size="18">If lab spaces start live, prepare overview,</text>
+      <text x="660" y="402" font-size="18">architecture, services, credentials, and</text>
+      <text x="660" y="428" font-size="18">customer context for provisioning time.</text>
+    </g>
+    <g class="card">
+      <rect x="70" y="500" width="1060" height="72" rx="8" fill="#f1edf3" stroke="#8d7898" stroke-width="3"/>
+      <text x="100" y="545" font-size="20" font-weight="700">Output:</text>
+      <text x="175" y="545" font-size="20">known launch steps, provisioning timing, and unresolved workshop issues.</text>
+    </g>
+  </g>
+</svg>

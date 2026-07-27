@@ -405,11 +405,12 @@
       label: "Section 6",
       title: "Specialized Workflows",
       accent: "ocean",
-      summary: "Keep specialized delivery models separate from the normal path so sprints, remote desktop, Marketplace images, and secure desktop do not complicate every workshop by default.",
+      summary: "Keep specialized delivery models separate from the normal path so sprints, remote desktop, Marketplace images, LiveStacks, assets, and secure desktop do not complicate every workshop by default.",
       purpose: "Use only the specialized cards that match the workshop delivery model you are actually building.",
       highlights: [
         "Finish the core path first unless the delivery model changes the structure from day one.",
         "Open only the specialized workflows that apply.",
+        "Use WMS assets and LiveStacks when reusable files, links, or customer-facing solution pages belong in the delivery model.",
         "Return to validation after the specialized setup is stable."
       ],
       sectionHref: guideLabLink("10-create-sprints-workflow"),
@@ -580,6 +581,8 @@
           },
           sourceHref: guideLabLink("12-add-custom-image-to-workshop")
         }),
+        labFromItem("livestack-create", "LiveStack"),
+        labFromItem("wms-assets", "Assets"),
         labFromItem("secure-desktop-when", "Secure Desktop"),
         labFromItem("secure-desktop-request", "Request")
       ]

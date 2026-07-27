@@ -7,25 +7,35 @@
       "description": "Overview of the LiveLabs AI Developer Hub, including setup, Codex skills, optional LiveStacks demo generation, and author workflow labs.",
       "filename": "./../../introduction/introduction.md"
     },
+        {
+      "title": "Lab 1: Install and Configure Codex",
+      "description": "Quick guide on how to install and configure Codex desktop.",
+      "filename": "./../../lab-1-install-and-configure-codex/install-and-configure-codex.md"
+    },
+        {
+      "title": "Lab 2: Install and Test Codex Skills",
+      "description": "Quick guide on how to install and configure Codex skills.",
+      "filename": "./../../lab-2-install-and-test-codex-skills/install-and-test-codex-skills.md"
+    },
     {
-      "title": "Lab 1: From Idea to Publish-Ready in One Flow",
+      "title": "Lab 3: From Idea to Publish-Ready in One Flow",
       "description": "Turn a source article into a draft LiveLabs workshop with a clear lab plan, validator-aligned markdown, and source-faithful learner tasks.",
-      "filename": "./../../from-idea-to-publish-ready/from-idea-to-publish-ready.md"
+      "filename": "./../../lab-3-from-idea-to-publish-ready/from-idea-to-publish-ready.md"
     },
     {
-      "title": "Lab 2: Capture Workshop Images in Minutes",
+      "title": "Lab 4: Capture Workshop Images in Minutes",
       "description": "Capture workshop screenshots, annotate key UI states, blur sensitive information, and keep image assets aligned with placeholder references.",
-      "filename": "./../../capture-workshop-images-in-minutes/capture-workshop-images-in-minutes.md"
+      "filename": "./../../lab-4-capture-workshop-images-in-minutes/capture-workshop-images-in-minutes.md"
     },
     {
-      "title": "Lab 3: Add Knowledge Checks in Minutes",
+      "title": "Lab 5: Add Knowledge Checks in Minutes",
       "description": "Add quiz-based knowledge checks without rewriting the teaching content and validate the result.",
-      "filename": "./../../add-knowledge-checks-in-minutes/add-knowledge-checks-in-minutes.md"
+      "filename": "./../../lab-5-add-knowledge-checks-in-minutes/add-knowledge-checks-in-minutes.md"
     },
     {
-      "title": "Lab 4: Turn Features into Customer Outcomes",
+      "title": "Lab 6: Turn Features into Customer Outcomes",
       "description": "Create an industry-specific workshop variant, preserve source fidelity, and review the output for drift or duplication.",
-      "filename": "./../../turn-features-into-customer-outcomes/turn-features-into-customer-outcomes.md"
+      "filename": "./../../lab-6-turn-features-into-customer-outcomes/turn-features-into-customer-outcomes.md"
     }
   ]
 }

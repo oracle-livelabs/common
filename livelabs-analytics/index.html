@@ -1419,6 +1419,18 @@
       gap: 6px;
       flex-wrap: wrap;
     }
+    .admin-tag-badges {
+      display: inline-flex;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .admin-tag-badges .governance-group-list {
+      display: inline-flex;
+    }
+    .inventory-tag-empty {
+      color: var(--muted);
+      font-size: 13px;
+    }
     .governance-group-no-author {
       border-color: rgba(164, 52, 38, .28);
       background: rgba(164, 52, 38, .1);
@@ -1479,9 +1491,7 @@
     .governance-tag-surface,
     .qa-exception-badge,
     .no-author-badge,
-    .demand-protected-badge,
-    .governance-group-list,
-    .governance-group-pill {
+    .demand-protected-badge {
       display: none !important;
     }
     tr.no-author-row > td:first-child,
@@ -54377,7 +54387,7 @@
     const adminStorageKey = "livelabsAnalyticsAdminState";
     const sessionKey = "livelabsAnalyticsSession";
     const adminSessionDurationMs = 12 * 60 * 60 * 1000;
-    const adminStateSchemaVersion = 2;
+    const adminStateSchemaVersion = 3;
     const criteriaRuleAutomationPaused = true;
     const authorFacingGovernanceTagsHidden = true;
     let fullSearchRecordsPromise = null;
@@ -54392,7 +54402,6 @@
     const allDataPageSizeSteps = [25, 50, 100, 250, 500, 1000, 1500, 2500, 5000, 10000];
     const allDataState = {
       coverage: "",
-      governanceGroup: "",
       page: 1,
       pageRange: "",
       pageSize: 100,
@@ -54401,6 +54410,7 @@
       query: "",
       sortDirection: "asc",
       sortKey: "",
+      tag: "",
       type: ""
     };
     const allDataSortFields = [
@@ -54412,8 +54422,7 @@
       { key: "livelabsId", label: "LiveLabs ID", type: "number" },
       { key: "category", label: "Category", type: "text" },
       { key: "contact", label: "Contact", type: "text" },
-      { key: "coverage", label: "Coverage", type: "text" },
-      { key: "governanceGroup", label: "Review Group", type: "text", governanceTagOnly: true }
+      { key: "tag", label: "Tags", type: "text" }
     ];
     const allDataReviewGroupOptions = [
       { key: "no-author", label: "No author/contact gap" },
@@ -54424,6 +54433,18 @@
       { key: "inactive", label: "Inactive, disabled, or event" },
       { key: "missing", label: "Missing governance data" }
     ];
+    const defaultTagDefinitions = [
+      { key: "no-author", label: "No Author", className: "governance-group-no-author" },
+      { key: "stale-high-demand", label: "Stale, High Demand", className: "governance-group-stale-high-demand" },
+      { key: "retirement-review", label: "Retirement Review", className: "governance-group-retire-review" },
+      { key: "refresh", label: "Refresh", className: "governance-group-stale-high-demand" },
+      { key: "keep", label: "Keep", className: "" },
+      { key: "inactive", label: "Inactive/Event", className: "governance-group-inactive" },
+      { key: "missing", label: "Missing Data", className: "governance-group-missing" },
+      { key: "manager-review", label: "Manager Review", className: "" }
+    ];
+    const defaultTagClassByKey = new Map(defaultTagDefinitions.map((tag) => [tag.key, tag.className || ""]));
+    const tagKeyBlocklist = new Set(["qa-excluded"]);
     function visibleAllDataSortFields() {
       return allDataSortFields.filter((field) => !authorFacingGovernanceTagsHidden || !field.governanceTagOnly);
     }
@@ -54462,7 +54483,8 @@
       qaExceptionRules: defaultQaExceptionRules,
       qaExceptionTagEnabled: false,
       rowOverrides: [],
-      sectionVisibility: defaultSectionVisibility
+      sectionVisibility: defaultSectionVisibility,
+      tagDefinitions: defaultTagDefinitions
     };
     const adminFieldMappings = {
       category: { details: ["Category", "Council"], headers: ["Category", "Council"] },
@@ -54532,16 +54554,73 @@
         .filter(([key, value]) => allowed.has(key) && String(value ?? "").trim())
         .map(([key, value]) => [key, String(value).trim()]));
     }
-    function sanitizeOverride(override) {
-      const statusValues = ["pending", "approved", "archived", "qa_excluded", "manager_review", "keep_active", "retire_candidate", "refresh_candidate"];
-      const status = statusValues.includes(override?.status) ? override.status : "pending";
+    function tagKeyFor(value) {
+      return normalizeFilterText(value).replace(/\s+/g, "-");
+    }
+    function uniqueTagKey(baseKey, existingKeys) {
+      const base = tagKeyBlocklist.has(baseKey) ? "tag" : (baseKey || "tag");
+      let key = base;
+      let index = 2;
+      while (existingKeys.has(key) || tagKeyBlocklist.has(key)) {
+        key = `${base}-${index}`;
+        index += 1;
+      }
+      return key;
+    }
+    function sanitizeTagDefinitions(tags = defaultTagDefinitions) {
+      const seen = new Set();
+      return (Array.isArray(tags) ? tags : [])
+        .map((tag) => {
+          const label = String(tag?.label || formatOverrideStatus(tag?.key || "")).trim();
+          const requestedKey = tagKeyFor(tag?.key || label);
+          if (!label || !requestedKey || tagKeyBlocklist.has(requestedKey)) return null;
+          const key = uniqueTagKey(requestedKey, seen);
+          seen.add(key);
+          return {
+            key,
+            label,
+            note: String(tag?.note || ""),
+            className: String(tag?.className || defaultTagClassByKey.get(key) || "")
+          };
+        })
+        .filter(Boolean);
+    }
+    function tagDefinitionsForState(candidate) {
+      return Array.isArray(candidate?.tagDefinitions) ? candidate.tagDefinitions : defaultTagDefinitions;
+    }
+    function sanitizeAssignedTags(tags = [], definitions = defaultTagDefinitions) {
+      const allowed = new Set(tagDefinitionsForState({ tagDefinitions: definitions }).map((tag) => tag.key));
+      const source = Array.isArray(tags) ? tags : String(tags || "").split(",");
+      return Array.from(new Set(source
+        .map((tag) => normalizeFilterText(tag).replace(/\s+/g, "-"))
+        .filter((tag) => allowed.has(tag))));
+    }
+    function tagDefinitionFor(key) {
+      return tagDefinitionsForState(dashboardAdminState).find((tag) => tag.key === key) || { key, label: formatOverrideStatus(key), className: "" };
+    }
+    function tagPillsHtml(tags = []) {
+      const cleaned = sanitizeAssignedTags(tags, tagDefinitionsForState(dashboardAdminState));
+      if (!cleaned.length) return "";
+      return `<span class="governance-group-list">${cleaned.map((tagKey) => {
+        const tag = tagDefinitionFor(tagKey);
+        return `<span class="governance-group-pill ${escapeHtml(tag.className || "")}" data-admin-tag="${escapeHtml(tag.key)}">${escapeHtml(tag.label)}</span>`;
+      }).join("")}</span>`;
+    }
+    function adminTagsForRecord(record) {
+      return sanitizeAssignedTags(adminOverrideForRecord(record)?.tags || [], tagDefinitionsForState(dashboardAdminState));
+    }
+    function sanitizeOverride(override, tagDefinitions = defaultTagDefinitions) {
+      const legacyQaStatus = override?.status === "qa_excluded";
+      const statusValues = ["pending", "approved", "archived", "manager_review", "keep_active", "retire_candidate", "refresh_candidate"];
+      const status = legacyQaStatus ? "manager_review" : (statusValues.includes(override?.status) ? override.status : "pending");
       return {
         enabled: override?.enabled !== false,
         fieldEdits: sanitizeFieldEdits(override?.fieldEdits),
         id: String(override?.id || `override-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`),
         note: String(override?.note || ""),
-        qaExcluded: override?.qaExcluded === true || status === "qa_excluded",
+        qaExcluded: false,
         status,
+        tags: sanitizeAssignedTags(override?.tags, tagDefinitions),
         target: ["title", "wms_id", "livelabs_id"].includes(override?.target) ? override.target : "wms_id",
         value: String(override?.value || "").trim()
       };
@@ -54550,6 +54629,9 @@
       const sectionVisibility = { ...defaultSectionVisibility, ...(state?.sectionVisibility || {}) };
       const rawRules = Array.isArray(state?.qaExceptionRules) && state.qaExceptionRules.length ? state.qaExceptionRules : defaultQaExceptionRules;
       const isCurrentSchema = Number(state?.schemaVersion || 0) >= adminStateSchemaVersion;
+      const tagDefinitions = Array.isArray(state?.tagDefinitions)
+        ? sanitizeTagDefinitions(state.tagDefinitions)
+        : sanitizeTagDefinitions(defaultTagDefinitions);
       return {
         schemaVersion: adminStateSchemaVersion,
         contentMode: "analyst",
@@ -54557,8 +54639,9 @@
         qaExceptionExclusionEnabled: criteriaRuleAutomationPaused ? false : (isCurrentSchema ? state?.qaExceptionExclusionEnabled === true : false),
         qaExceptionRules: rawRules.map(sanitizeRule).filter((rule) => rule.type === "criteria" ? criteriaHasValues(rule.criteria) : rule.value),
         qaExceptionTagEnabled: false,
-        rowOverrides: Array.isArray(state?.rowOverrides) ? state.rowOverrides.map(sanitizeOverride).filter((override) => override.value) : [],
-        sectionVisibility
+        rowOverrides: Array.isArray(state?.rowOverrides) ? state.rowOverrides.map((override) => sanitizeOverride(override, tagDefinitions)).filter((override) => override.value) : [],
+        sectionVisibility,
+        tagDefinitions
       };
     }
     function readDashboardAdminState() {
@@ -55067,6 +55150,16 @@
         return override?.enabled !== false && override?.value && override?.status !== "archived";
       });
     }
+    function adminTargetMatchesRecord(record, override) {
+      const needle = normalizeFilterText(override?.value || "");
+      if (!needle || !record) return false;
+      if (override.target === "livelabs_id") return normalizeFilterText(record.livelabsId || "") === needle;
+      if (override.target === "title") return normalizeFilterText(record.title || "").includes(needle);
+      return normalizeFilterText(record.wmsId || "") === needle;
+    }
+    function adminOverrideForRecord(record) {
+      return activeRowOverrides().find((override) => adminTargetMatchesRecord(record, override)) || null;
+    }
     function adminSortValueFor(value) {
       const text = String(value || "").trim();
       const number = adminNumberOrNull(text);
@@ -55118,39 +55211,67 @@
         if (detailTitle) detailTitle.textContent = `Details for ${edits.title}.`;
       }
     }
+    function removeAdminTagBadges(row) {
+      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      if (titleCell?.dataset.adminTagBaseFilterValue !== undefined) {
+        titleCell.dataset.filterValue = titleCell.dataset.adminTagBaseFilterValue;
+        delete titleCell.dataset.adminTagBaseFilterValue;
+      }
+      row.querySelectorAll(".admin-tag-badges").forEach((badgeGroup) => {
+        const previous = badgeGroup.previousSibling;
+        badgeGroup.remove();
+        if (previous && previous.nodeType === 3 && !previous.textContent.trim()) previous.remove();
+      });
+    }
+    function addAdminTagBadges(row, tags = []) {
+      const cleaned = sanitizeAssignedTags(tags, tagDefinitionsForState(dashboardAdminState));
+      if (!cleaned.length) return;
+      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      if (!titleCell || titleCell.querySelector(".admin-tag-badges")) return;
+      const labels = cleaned.map((tagKey) => tagDefinitionFor(tagKey).label);
+      const baseFilterValue = titleCell.dataset.filterValue || "";
+      titleCell.dataset.adminTagBaseFilterValue = baseFilterValue;
+      titleCell.dataset.filterValue = `${baseFilterValue} ${normalizeFilterText(labels.join(" "))}`.trim();
+      const wrapper = document.createElement("span");
+      wrapper.className = "admin-tag-badges";
+      wrapper.innerHTML = tagPillsHtml(cleaned);
+      titleCell.appendChild(document.createTextNode(" "));
+      titleCell.appendChild(wrapper);
+    }
     function applyAdminRowOverrides() {
-      if (authorFacingGovernanceTagsHidden) return;
       document.querySelectorAll("tr[data-filter-row='true'][data-detail-row-id]").forEach((row) => {
         delete row.dataset.adminOverride;
         delete row.dataset.adminStatus;
         delete row.dataset.adminQaExcluded;
+        removeAdminTagBadges(row);
         row.querySelectorAll(".admin-override-badge").forEach((badge) => {
           const previous = badge.previousSibling;
           badge.remove();
           if (previous && previous.nodeType === 3 && !previous.textContent.trim()) previous.remove();
         });
         detailRowFor(row)?.querySelectorAll("[data-admin-override-detail]").forEach((detail) => detail.remove());
+        detailRowFor(row)?.querySelectorAll("[data-admin-tags-detail]").forEach((detail) => detail.remove());
         const override = activeRowOverrides().find((item) => adminTargetMatches(row, item.target || "wms_id", item.value));
         if (!override) return;
         applyAdminFieldEdits(row, override);
         row.dataset.adminOverride = "true";
         row.dataset.adminStatus = override.status || "pending";
-        const qaExcluded = override.qaExcluded === true || override.status === "qa_excluded";
-        if (qaExcluded) {
-          row.dataset.adminQaExcluded = "true";
-          row.classList.add("qa-exception-row");
-          row.dataset.qaException = "true";
-          addQaExceptionBadge(row, "QA Excluded", "admin-override-badge");
-        }
+        const tags = sanitizeAssignedTags(override.tags, tagDefinitionsForState(dashboardAdminState));
+        addAdminTagBadges(row, tags);
         const detailBody = detailRowFor(row)?.querySelector(".detail-table tbody");
         if (!detailBody) return;
         const detail = document.createElement("tr");
         detail.dataset.adminOverrideDetail = "true";
         const status = override.status || "pending";
         const note = override.note || "No note provided.";
-        const qaText = qaExcluded ? "QA Excluded badge: Yes" : "QA Excluded badge: No";
-        detail.innerHTML = `<th>Admin Override</th><td>${escapeHtml(`${formatOverrideStatus(status)}. ${qaText}. ${note}`)}</td>`;
+        detail.innerHTML = `<th>Admin Override</th><td>${escapeHtml(`${formatOverrideStatus(status)}. ${note}`)}</td>`;
         detailBody.prepend(detail);
+        if (tags.length) {
+          const tagDetail = document.createElement("tr");
+          tagDetail.dataset.adminTagsDetail = "true";
+          tagDetail.innerHTML = `<th>Tags</th><td>${tagPillsHtml(tags)}</td>`;
+          detailBody.prepend(tagDetail);
+        }
       });
     }
     function formatOverrideStatus(value) {
@@ -55182,12 +55303,14 @@
     function reloadDashboardAdminState() {
       dashboardAdminState = readDashboardAdminState();
       tableSearchRecordsCache = null;
+      allDataFilterOptionsRecordCount = 0;
       applyQaExceptionPrototype();
       applyAdminRowOverrides();
       applyNoAuthorGovernanceFlags();
       applyDemandProtectedGovernanceFlags();
       applySectionVisibilitySettings();
       refreshInitializedTableStates({ resetPage: true });
+      if (loadedFullSearchRecords.length) renderAllDataTable();
       refreshDashboardSearch();
     }
     function buildTableSearchIndex() {
@@ -55235,23 +55358,33 @@
       const includeTableRecords = options.includeTableRecords ?? fullRecords.length === 0;
       return mergeSearchRecords(fullRecords, includeTableRecords ? cachedTableSearchRecords() : []);
     }
+    function recordAdminTagText(record) {
+      return adminTagsForRecord(record).map((tagKey) => tagDefinitionFor(tagKey).label).join(" ");
+    }
+    function recordSearchableText(record) {
+      return normalizeFilterText([record.searchable, recordAdminTagText(record)].filter(Boolean).join(" "));
+    }
     function recordMatchesSearch(record, normalizedQuery) {
       const tokens = normalizedQuery.split(" ").filter(Boolean);
-      return tokens.length > 0 && tokens.every((token) => record.searchable.includes(token));
+      const searchable = recordSearchableText(record);
+      return tokens.length > 0 && tokens.every((token) => searchable.includes(token));
     }
     function scoreSearchRecord(record, normalizedQuery) {
       const tokens = normalizedQuery.split(" ").filter(Boolean);
       const title = normalizeFilterText(record.title);
       const wmsId = normalizeFilterText(record.wmsId);
       const livelabsId = normalizeFilterText(record.livelabsId);
+      const tagText = normalizeFilterText(recordAdminTagText(record));
       let score = 0;
       if (livelabsId && livelabsId === normalizedQuery) score += 1000;
       if (wmsId && wmsId === normalizedQuery) score += 900;
       if (title === normalizedQuery) score += 500;
       if (title.includes(normalizedQuery)) score += 250;
+      if (tagText && tagText.includes(normalizedQuery)) score += 150;
       tokens.forEach((token) => {
         if (title.includes(token)) score += 35;
         if (livelabsId === token || wmsId === token) score += 120;
+        if (tagText.includes(token)) score += 20;
       });
       if (normalizeFilterText(record.source).includes("dashboard")) score += 5;
       return score;
@@ -55369,6 +55502,15 @@
           </div>
         </section>`;
     }
+    function adminTagsPanelHtml(record) {
+      const tags = adminTagsForRecord(record);
+      if (!tags.length) return "";
+      return `
+        <section class="search-detail-panel">
+          <h3>Tags</h3>
+          ${tagPillsHtml(tags)}
+        </section>`;
+    }
     function renderSearchDetail(record) {
       const view = ensureSearchView();
       const summaryItems = summaryItemsFor(record);
@@ -55396,6 +55538,7 @@
               }).join("")}
             </dl>
           </section>
+          ${adminTagsPanelHtml(record)}
           <section class="search-detail-panel">
             <h3>Dashboard Row</h3>
             <table class="search-detail-table"><tbody>${sourceRowsHtml(record)}</tbody></table>
@@ -55458,7 +55601,8 @@
         button.type = "button";
         button.className = "search-result-button";
         const familyNote = record.family?.total > 1 ? `Family ${record.family.total}` : "";
-        button.innerHTML = `<strong>${escapeHtml(record.title)}</strong><span>${escapeHtml([record.category, record.wmsId ? `WMS ${record.wmsId}` : "", record.livelabsId ? `LiveLabs ${record.livelabsId}` : "", record.owner || "", familyNote].filter(Boolean).join(" | "))}</span>`;
+        const tagNote = recordAdminTagText(record);
+        button.innerHTML = `<strong>${escapeHtml(record.title)}</strong><span>${escapeHtml([record.category, record.wmsId ? `WMS ${record.wmsId}` : "", record.livelabsId ? `LiveLabs ${record.livelabsId}` : "", record.owner || "", tagNote ? `Tags: ${tagNote}` : "", familyNote].filter(Boolean).join(" | "))}</span>`;
         button.addEventListener("click", () => renderSearchDetail(record));
         resultsNode.appendChild(button);
       });
@@ -55482,20 +55626,20 @@
     function ensureAllDataDashboardUi() {
       const navList = document.querySelector(".nav-list");
       if (navList) {
-        navList.querySelectorAll('[data-dashboard-view="inventory"], a[href="#all-data-browser"]').forEach((item) => item.remove());
+        navList.querySelectorAll('[data-dashboard-view="tops"]').forEach((item) => item.remove());
         const overviewLink = navList.querySelector('a[href="#overview"]');
         if (overviewLink) {
           overviewLink.dataset.dashboardView = "overview";
           const label = overviewLink.querySelector("span");
           if (label) label.textContent = "Dashboard Overview";
         }
-        if (!navList.querySelector('[data-dashboard-view="tops"]')) {
-          const topsItem = document.createElement("a");
-          topsItem.href = "#top-performers";
-          topsItem.dataset.dashboardView = "tops";
-          topsItem.innerHTML = `<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16"></path><path d="M6 15h3v4H6z"></path><path d="M11 10h3v9h-3z"></path><path d="M16 5h3v14h-3z"></path></svg><span>Tops Only</span>`;
+        if (!navList.querySelector('[data-dashboard-view="inventory"]')) {
+          const inventoryItem = document.createElement("a");
+          inventoryItem.href = "#all-data-browser";
+          inventoryItem.dataset.dashboardView = "inventory";
+          inventoryItem.innerHTML = `<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"></path><path d="M5 9h14"></path><path d="M5 14h14"></path><path d="M10 4v16"></path></svg><span>Portfolio Inventory</span>`;
           const topPerformers = navList.querySelector('a[href="#top-performers"]');
-          navList.insertBefore(topsItem, topPerformers || navList.firstChild);
+          navList.insertBefore(inventoryItem, topPerformers || navList.firstChild);
         }
       }
       const tocLinks = document.querySelector("#dashboard-toc .toc-links");
@@ -55513,7 +55657,7 @@
               <div class="section-links">
                 <a class="nav-link" href="#dashboard-toc" data-dashboard-view="overview">Contents</a>
                 <a class="nav-link" href="#dashboard-top" data-dashboard-view="overview">Top</a>
-                <a class="nav-link" href="#top-performers" data-dashboard-view="tops">Governance Queues</a>
+                <a class="nav-link" href="#top-performers" data-dashboard-view="overview">Governance Queues</a>
               </div>
             </div>
             <p>Complete portfolio inventory with status, identifiers, ownership, and review signals.</p>
@@ -55535,13 +55679,13 @@
                 <label class="filter-field" for="all-data-publish-status"><span>Publish Status</span><select id="all-data-publish-status" data-all-data-select="publishStatus"><option value="">All statuses</option></select></label>
                 <label class="filter-field" for="all-data-publish-type"><span>Publish Type</span><select id="all-data-publish-type" data-all-data-select="publishType"><option value="">All publish types</option></select></label>
                 <label class="filter-field" for="all-data-coverage"><span>Contact Coverage</span><select id="all-data-coverage"><option value="">All coverage</option><option value="author">Author</option><option value="fallback">Fallback contact</option><option value="author-missing">Author missing</option><option value="contact-gap">No author/fallback contact</option><option value="owner">Owner/stakeholder only</option><option value="missing">No contact evidence</option></select></label>
-                <label class="filter-field governance-tag-surface" for="all-data-group"><span>Review Group</span><select id="all-data-group"><option value="">All review groups</option></select></label>
+                <label class="filter-field" for="all-data-tag"><span>Tags</span><select id="all-data-tag"><option value="">All tags</option></select></label>
               </div>
               ${allDataControlsHtml("top")}
               <div class="table-wrap">
                 <table id="all-content-data-table" class="all-data-table">
-                  <thead><tr><th class="all-data-row-number">#</th><th>Title</th><th>Type</th><th>Publish Status</th><th>Publish Type</th><th>WMS ID</th><th>LiveLabs ID</th><th>Category</th><th>Contact</th><th>Coverage</th><th class="governance-tag-surface">Review Group</th></tr></thead>
-                  <tbody data-all-data-rows><tr><td colspan="11" class="empty">Open Portfolio Inventory to load records</td></tr></tbody>
+                  <thead><tr><th class="all-data-row-number">#</th><th>Title</th><th>Type</th><th>Publish Status</th><th>Publish Type</th><th>WMS ID</th><th>LiveLabs ID</th><th>Category</th><th>Contact</th><th>Tags</th></tr></thead>
+                  <tbody data-all-data-rows><tr><td colspan="10" class="empty">Open Portfolio Inventory to load records</td></tr></tbody>
                 </table>
               </div>
               ${allDataControlsHtml("bottom")}
@@ -55557,7 +55701,7 @@
         allDataState.pageRange = "";
         scheduleAllDataRender();
       });
-      [["all-data-type", "type"], ["all-data-publish-status", "publishStatus"], ["all-data-publish-type", "publishType"], ["all-data-coverage", "coverage"], ["all-data-group", "governanceGroup"]].forEach(([id, key]) => {
+      [["all-data-type", "type"], ["all-data-publish-status", "publishStatus"], ["all-data-publish-type", "publishType"], ["all-data-coverage", "coverage"], ["all-data-tag", "tag"]].forEach(([id, key]) => {
         const control = document.getElementById(id);
         if (!control) return;
         control.addEventListener("change", () => {
@@ -55718,26 +55862,49 @@
       const groups = [];
       const lifecycle = normalizeFilterText(allDataLifecycleState(record));
       const active = allDataIsActiveGovernedRecord(record);
+      const coverage = allDataContactCoverage(record);
+      const publishStatus = normalizeFilterText(allDataPublishStatus(record));
+      const publishType = normalizeFilterText(allDataPublishType(record));
+      const workflowStatus = normalizeFilterText(record.status || allDataValue(record, ["Workshop Status"], ""));
+      const missingData = Boolean(record.inventory?.titleMissing || record.inventory?.wmsIdMissing || record.inventory?.categoryMissing || record.inventory?.ownerMissing)
+        || !String(record.title || "").trim()
+        || !String(record.wmsId || "").trim()
+        || !String(record.category || "").trim()
+        || coverage.rank === "missing";
       if (allDataRecordHasNoAuthor(record)) {
         groups.push({ key: "no-author", label: "No Author", className: "governance-group-no-author" });
+      }
+      if (coverage.rank === "owner" || missingData || ["publish requested", "publish approved", "changes requested"].includes(publishStatus) || ["more info needed", "in development"].includes(workflowStatus)) {
+        groups.push({ key: "manager-review", label: "Manager Review", className: "" });
       }
       if (allDataRecordIsStaleHighDemand(record)) {
         groups.push({ key: "stale-high-demand", label: "Stale, High Demand", className: "governance-group-stale-high-demand" });
       }
-      if (active && lifecycle.includes("at risk")) {
+      if ((active && lifecycle.includes("at risk")) || publishStatus === "delete requested") {
         groups.push({ key: "retirement-review", label: "Retirement Review", className: "governance-group-retire-review" });
       } else if (active && lifecycle === "refresh" && !groups.some((group) => group.key === "stale-high-demand")) {
         groups.push({ key: "refresh", label: "Refresh", className: "governance-group-stale-high-demand" });
       } else if (active && lifecycle === "keep") {
         groups.push({ key: "keep", label: "Keep", className: "" });
       }
-      if (!active && (allDataPublishType(record) || allDataPublishStatus(record))) {
+      if (!active && (publishType || publishStatus)) {
         groups.push({ key: "inactive", label: "Inactive/Event", className: "governance-group-inactive" });
+      }
+      if (missingData) {
+        groups.push({ key: "missing", label: "Missing Data", className: "governance-group-missing" });
+      }
+      if (active && !groups.some((group) => ["stale-high-demand", "retirement-review", "refresh", "keep", "inactive", "missing"].includes(group.key))) {
+        groups.push({ key: "keep", label: "Keep", className: "" });
       }
       if (!groups.length) {
         groups.push({ key: "missing", label: "Missing Data", className: "governance-group-missing" });
       }
-      return groups;
+      const seen = new Set();
+      return groups.filter((group) => {
+        if (seen.has(group.key)) return false;
+        seen.add(group.key);
+        return true;
+      });
     }
     function allDataRecordMatchesReviewGroup(record, filterValue) {
       if (authorFacingGovernanceTagsHidden) return true;
@@ -55749,6 +55916,20 @@
       return `<span class="governance-group-list">${allDataReviewGroups(record)
         .map((group) => `<span class="governance-group-pill ${escapeHtml(group.className || "")}" data-review-group="${escapeHtml(group.key)}">${escapeHtml(group.label)}</span>`)
         .join("")}</span>`;
+    }
+    function allDataAssignedTags(record) {
+      const adminTags = adminTagsForRecord(record);
+      const baselineTags = allDataReviewGroups(record).map((group) => group.key);
+      return sanitizeAssignedTags(adminTags.length ? adminTags : baselineTags, tagDefinitionsForState(dashboardAdminState));
+    }
+    function allDataRecordMatchesTag(record, filterValue) {
+      if (!filterValue) return true;
+      return allDataAssignedTags(record).includes(filterValue);
+    }
+    function allDataTagHtml(record) {
+      const tags = allDataAssignedTags(record);
+      if (!tags.length) return `<span class="inventory-tag-empty">No tags</span>`;
+      return tagPillsHtml(tags);
     }
     function allDataPageSizeValue(totalRows) {
       if ((Number(totalRows) || 0) <= 0) return String(allDataState.pageSize || 100);
@@ -55779,8 +55960,7 @@
       const values = {
         category: record.category,
         contact: coverage.detail || record.owner,
-        coverage: coverage.label,
-        governanceGroup: allDataReviewGroups(record).map((group) => group.label).join(" "),
+        tag: allDataAssignedTags(record).map((tag) => tagDefinitionFor(tag).label).join(" "),
         livelabsId: record.livelabsId,
         publishStatus: allDataPublishStatus(record),
         publishType: allDataPublishType(record),
@@ -55860,7 +56040,6 @@
     }
     function resetAllDataFilters() {
       allDataState.coverage = "";
-      allDataState.governanceGroup = "";
       allDataState.page = 1;
       allDataState.pageRange = "";
       allDataState.publishStatus = "";
@@ -55868,8 +56047,9 @@
       allDataState.query = "";
       allDataState.sortDirection = "asc";
       allDataState.sortKey = "";
+      allDataState.tag = "";
       allDataState.type = "";
-      ["all-data-search", "all-data-type", "all-data-publish-status", "all-data-publish-type", "all-data-coverage", "all-data-group"].forEach((id) => {
+      ["all-data-search", "all-data-type", "all-data-publish-status", "all-data-publish-type", "all-data-coverage", "all-data-tag"].forEach((id) => {
         const control = document.getElementById(id);
         if (control) control.value = "";
       });
@@ -55877,7 +56057,7 @@
     function setInventoryLoadingState(message = "Loading inventory") {
       document.querySelectorAll("[data-all-data-count]").forEach((node) => { node.textContent = message; });
       const rowsNode = document.querySelector("[data-all-data-rows]");
-      if (rowsNode) rowsNode.innerHTML = `<tr><td colspan="11" class="empty">${escapeHtml(message)}</td></tr>`;
+      if (rowsNode) rowsNode.innerHTML = `<tr><td colspan="10" class="empty">${escapeHtml(message)}</td></tr>`;
       const totalNode = document.querySelector("[data-all-data-total]");
       if (totalNode) totalNode.textContent = message;
     }
@@ -55922,7 +56102,7 @@
         record.owner,
         allDataPublishStatus(record),
         allDataPublishType(record),
-        authorFacingGovernanceTagsHidden ? "" : allDataReviewGroups(record).map((group) => group.label).join(" "),
+        allDataAssignedTags(record).map((tag) => tagDefinitionFor(tag).label).join(" "),
         Array.from(record.values?.values?.() || []).join(" "),
         Array.from(record.details?.values?.() || []).join(" ")
       ].filter(Boolean).join(" "));
@@ -55940,15 +56120,14 @@
       syncAllDataSelect(document.getElementById("all-data-type"), uniqueValues(allDataType), "All types");
       syncAllDataSelect(document.getElementById("all-data-publish-status"), uniqueValues(allDataPublishStatus), "All statuses");
       syncAllDataSelect(document.getElementById("all-data-publish-type"), uniqueValues(allDataPublishType), "All publish types");
-      if (authorFacingGovernanceTagsHidden) return;
-      const groupSelect = document.getElementById("all-data-group");
-      if (groupSelect) {
-        const availableGroups = new Set(records.flatMap((record) => allDataReviewGroups(record).map((group) => group.key)));
+      const tagSelect = document.getElementById("all-data-tag");
+      if (tagSelect) {
+        const availableTags = new Set(records.flatMap((record) => allDataAssignedTags(record)));
         setSelectOptions(
-          groupSelect,
-          allDataReviewGroupOptions.filter((option) => availableGroups.has(option.key)).map((option) => ({ label: option.label, value: option.key })),
-          allDataState.governanceGroup,
-          { label: "All review groups", value: "" }
+          tagSelect,
+          tagDefinitionsForState(dashboardAdminState).filter((tag) => availableTags.has(tag.key)).map((tag) => ({ label: tag.label, value: tag.key })),
+          allDataState.tag,
+          { label: "All tags", value: "" }
         );
       }
     }
@@ -55966,7 +56145,7 @@
         if (allDataState.publishType && allDataPublishType(record) !== allDataState.publishType) return false;
         const coverage = allDataContactCoverage(record);
         if (!allDataRecordMatchesCoverage(coverage, allDataState.coverage)) return false;
-        if (!allDataRecordMatchesReviewGroup(record, allDataState.governanceGroup)) return false;
+        if (!allDataRecordMatchesTag(record, allDataState.tag)) return false;
         if (normalizedQuery && !allDataSearchText(record).includes(normalizedQuery)) return false;
         return true;
       });
@@ -55984,8 +56163,7 @@
         <td>${escapeHtml(record.livelabsId || "Not available")}</td>
         <td>${escapeHtml(record.category || "Not available")}</td>
         <td>${escapeHtml(contact)}</td>
-        <td><span class="coverage-pill coverage-${escapeHtml(coverage.rank)}">${escapeHtml(coverage.label)}</span></td>
-        <td class="governance-tag-surface">${allDataReviewGroupHtml(record)}</td>
+        <td>${allDataTagHtml(record)}</td>
       </tr>`;
     }
     function openAllDataRecordDetail(row) {
@@ -56020,15 +56198,8 @@
           .join("");
       }
       if (warningNode) {
-        const canonicalRows = inventoryCountValue(["source_metadata", "current_canonical_rows"]);
-        const top1000Rows = inventoryCountValue(["source_metadata", "top_1000_rows"]);
-        if (canonicalRows && totalRecords && canonicalRows !== totalRecords) {
-          warningNode.hidden = false;
-          warningNode.textContent = `Inventory has ${totalRecords.toLocaleString()} records. Governance queues are still based on ${Number(canonicalRows).toLocaleString()} canonical rows and ${Number(top1000Rows || 0).toLocaleString()} scored active rows, so queue placement needs staged regeneration before live data replacement.`;
-        } else {
-          warningNode.hidden = true;
-          warningNode.textContent = "";
-        }
+        warningNode.hidden = true;
+        warningNode.textContent = "";
       }
     }
     function renderAllDataTable() {
@@ -56039,7 +56210,7 @@
       const totalRecords = loadedFullSearchRecords.length;
       if (totalNode) totalNode.textContent = totalRecords ? `${totalRecords.toLocaleString()} inventory records` : "Loading inventory";
       if (!totalRecords) {
-        rowsNode.innerHTML = `<tr><td colspan="11" class="empty">Open Portfolio Inventory to load records</td></tr>`;
+        rowsNode.innerHTML = `<tr><td colspan="10" class="empty">Open Portfolio Inventory to load records</td></tr>`;
         syncAllDataControls(0, 1, 0, 0, null);
         return;
       }
@@ -56061,7 +56232,7 @@
       const last = records.length ? (selectedRange ? Math.min(selectedRange.end, records.length) : start + pageRecords.length) : 0;
       rowsNode.innerHTML = pageRecords.length
         ? pageRecords.map((record, index) => allDataRowHtml(record, first + index)).join("")
-        : `<tr><td colspan="11" class="empty">No matching rows</td></tr>`;
+        : `<tr><td colspan="10" class="empty">No matching rows</td></tr>`;
       if (panel) panel.dataset.totalPages = String(totalPages);
       syncAllDataControls(records.length, totalPages, first, last, selectedRange);
     }
