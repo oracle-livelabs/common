@@ -1,25 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-read_secret() {
+read_required_secret() {
   local file="$1"
-  if [[ ! -f "$file" ]]; then
-    echo "Required secret file is missing: $file" >&2
+  if [[ ! -s "$file" ]]; then
+    echo "Required secret file is missing or empty: $file" >&2
     exit 1
   fi
   tr -d '\r\n' < "$file"
 }
 
-export JENKINS_BOOTSTRAP_SECRET="$(read_secret /run/secrets/jenkins_admin_secret)"
-export LIVELABS_USERNAME="$(read_secret /run/secrets/livelabs_username)"
-export LIVELABS_SECRET="$(read_secret /run/secrets/livelabs_secret)"
+read_optional_secret() {
+  local file="$1"
+  [[ -f "$file" ]] || return 0
+  tr -d '\r\n' < "$file"
+}
+
+export JENKINS_BOOTSTRAP_SECRET="$(read_required_secret /run/secrets/jenkins_admin_secret)"
+export LIVELABS_USERNAME="$(read_optional_secret /run/secrets/livelabs_username)"
+export LIVELABS_SECRET="$(read_optional_secret /run/secrets/livelabs_secret)"
 export HOME=/var/jenkins_home
 export NPM_CONFIG_CACHE="${HOME}/.npm"
-
-if [[ -z "$JENKINS_BOOTSTRAP_SECRET" ]]; then
-  echo "The Jenkins bootstrap secret cannot be empty." >&2
-  exit 1
-fi
 
 mkdir -p /var/qa-reports/par /var/qa-reports/regression "${NPM_CONFIG_CACHE}" /var/jenkins_home/.cache/fontconfig
 for channel in par regression; do

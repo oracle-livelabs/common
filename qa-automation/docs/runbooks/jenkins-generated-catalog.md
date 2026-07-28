@@ -40,35 +40,13 @@ If the agent does not already provide Playwright browsers, run with:
 INSTALL_PLAYWRIGHT_BROWSERS=true
 ```
 
-## Credentials
+## Private-content access
 
-For public-only runs, credentials are optional.
+Public catalog runs require no LiveLabs credential.
 
-For authenticated/private items, create Jenkins string credentials and pass their credential IDs through these parameters:
+For approved private-content checks, the permanent QA service loads the test identity from OCI Vault through its instance principal and maps it into Jenkins without exposing the value to operators. Build users must never paste usernames, passwords, tokens, or secret OCIDs into Jenkins parameters or console output.
 
-```text
-LIVELABS_USERNAME_CREDENTIAL_ID
-LIVELABS_SECRET_CREDENTIAL_ID
-AUTH_TARGET_URL
-```
-
-Jenkins maps those credentials to:
-
-```text
-QA_LIVELABS_USERNAME
-QA_LIVELABS_PASSWORD
-```
-
-When `AUTH_TARGET_URL` and both credential IDs are present, Jenkins creates:
-
-```text
-qa-automation/.auth/livelabs-storage-state.json
-```
-
-The catalog indexer and generated Playwright tests then reuse that storage state. This lets the overnight crawler index catalog cards visible after sign-in, not only anonymous public cards.
-
-Never commit `.env`, `.auth`, or storage-state files.
-
+The resulting Playwright storage state stays inside the ignored automation workspace and is never published with reports.
 ## Profiles
 
 ### pr-slice

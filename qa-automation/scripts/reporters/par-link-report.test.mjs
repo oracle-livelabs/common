@@ -34,7 +34,20 @@ test("builds token-safe catalog PAR outputs", () => {
 
     assert.equal(catalog.links.length, 1);
     assert.match(html, /Workshop with stale asset/);
-    assert.match(html, /Needs attention/);
+    assert.doesNotMatch(html, /Needs attention/);
+    assert.match(html, /PAR audit results/);
+    assert.match(html, /Download CSV/);
+    assert.match(html, /All PAR links/);
+    assert.match(html, /Working/);
+    assert.match(html, /Broken.*OCI confirmed the file cannot be downloaded/s);
+    assert.match(html, /Recheck.*Rerun before changing content/s);
+    assert.match(html, /Search results/);
+    assert.match(html, /Rows per page/);
+    assert.match(html, /File cannot be downloaded \(404\)/);
+    assert.match(html, /Problem/);
+    assert.match(html, /Fix/);
+    assert.doesNotMatch(html, /Why it matters/);
+    assert.match(html, /replace the PAR URL/);
     assert.match(html, /Bucket/);
     assert.match(html, /eu-frankfurt-1/);
     assert.match(html, /assets\/demo\.zip/);
@@ -42,8 +55,12 @@ test("builds token-safe catalog PAR outputs", () => {
     assert.match(html, /Step: 1. Get sample file/);
     assert.match(html, /Markdown line 273/);
     assert.match(html, /Search for &quot;assets\/demo\.zip&quot;/);
+    assert.match(html, /Open exact lab/);
+    assert.doesNotMatch(html, /Open source file/);
     assert.doesNotMatch(html, /Retest List|Fix List|All safe JSON|<summary>Show<\/summary>/i);
     assert.doesNotMatch(html, /private-token-value/);
+    assert.ok(fs.existsSync(path.join(outputDir, "par-all-results.csv")));
+    assert.ok(fs.existsSync(path.join(outputDir, "par-working.csv")));
 
     for (const file of fs.readdirSync(outputDir)) {
       assert.doesNotMatch(fs.readFileSync(path.join(outputDir, file), "utf-8"), /private-token-value/);
@@ -92,9 +109,104 @@ test("links regression reports to PAR results and watches for a newer run", () =
 
   assert.match(html, /overall regression report/);
   assert.match(html, /\/par\/latest\/par-links\.html/);
+  assert.match(html, /Tested items/);
   assert.match(html, /fetch\("summary\.json"/);
   assert.match(html, /latest\.runId !== loadedRunId/);
 });
+
+test("shows a complete PAR scan failure explanation on the PAR page", () => {
+  const audit = {
+    schema_version: 1,
+    scope: "catalog",
+    source_name: "Build a Starter Online Shopping App using Oracle APEX!",
+    generated_at: "2026-07-27T08:20:53.917Z",
+    pages_scanned: 4,
+    counts: { total: 0, working: 0, broken: 0, unverified: 0 },
+    links: [],
+    scan_errors: [
+      {
+        page_type: "preview-instructions",
+        label: "Preview instructions: Getting Started",
+        page_url: "https://example.com/workshops/apex/getting-started.md",
+        error: "Workshop source returned HTTP 404.",
+      },
+    ],
+  };
+  const parAudit = buildParAuditSummary([
+    {
+      title: "PAR audit",
+      section: "Catalog PAR Links",
+      file: "tests/platform/par/catalogParLinks.spec.ts",
+      line: 1,
+      status: "failed",
+      catalogItem: {
+        type: "workshop",
+        id: "848",
+        title: "Build a Starter Online Shopping App using Oracle APEX!",
+      },
+      parAudits: [audit],
+    },
+  ]);
+  const html = parLinksPageHtml(
+    {
+      runId: "scan-failure",
+      startedAt: "2026-07-27T08:20:53.917Z",
+      parAudit,
+    },
+    {
+      historyHref: "../index.html",
+      olderReportHref: "../older/par-links.html",
+      newerReportHref: "../newer/par-links.html",
+      reportType: "par",
+    },
+  );
+
+  assert.match(html, /QA Hub home/);
+  assert.match(html, /All runs/);
+  assert.doesNotMatch(html, /Tested items/);
+  assert.match(html, /Previous report/);
+  assert.match(html, /Next report/);
+  assert.match(html, /Source page could not be scanned/);
+  assert.match(html, /Not checked/);
+  assert.match(html, /Fix/);
+  assert.match(html, /HTTP 404 \(not found\)/);
+  assert.match(html, /PAR links inside this source page were not marked working or broken/);
+  assert.match(html, /correct the path for &quot;Preview instructions: Getting Started&quot;/);
+  assert.match(html, /WMS 848/);
+  assert.match(html, /Open failing source/);
+  assert.match(html, /Technical details/);
+  assert.match(html, /Workshop source returned HTTP 404/);
+});
+
+test("renders 500 PAR results as a searchable and paginated table", () => {
+  const results = Array.from({ length: 500 }, (_, index) => {
+    const status = index % 10 === 0 ? "broken" : "working";
+    const audit = auditAttachment("catalog", "Workshop " + index, status, status === "broken" ? 404 : 200);
+    audit.links[0].object_name = "asset-" + index + ".zip";
+    return testResult(audit, {
+      type: index % 2 === 0 ? "workshop" : "livestack",
+      id: String(4000 + index),
+      title: "Catalog item " + index,
+    });
+  });
+  const summary = buildParAuditSummary(results);
+  const html = parLinksPageHtml({
+    runId: "large-run",
+    startedAt: "2026-07-27T08:20:53.917Z",
+    parAudit: summary,
+  });
+
+  assert.equal(summary.counts.total, 500);
+  assert.doesNotMatch(html, /data-par-filter="attention"/);
+  assert.match(html, /data-par-filter="broken"/);
+  assert.match(html, /data-par-filter="working"/);
+  assert.match(html, /id="par-result-search"/);
+  assert.match(html, /id="par-page-size"/);
+  assert.match(html, /option value="100"/);
+  assert.match(html, /Showing " \+ \(start \+ 1\)/);
+  assert.match(html, /Catalog item 499/);
+});
+
 function auditAttachment(scope, sourceName, status, httpStatus) {
   return {
     schema_version: 1,
@@ -137,6 +249,8 @@ function auditAttachment(scope, sourceName, status, httpStatus) {
             section: "Task 8: Install sample data",
             instruction: "1. Get sample file",
             searchText: "assets/demo.zip",
+            sourceExcerpt:
+              "wget https://objectstorage.eu-frankfurt-1.oraclecloud.com/p/***/n/example/b/qa/o/assets/demo.zip",
           },
         ],
       },

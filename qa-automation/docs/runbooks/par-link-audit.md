@@ -60,27 +60,38 @@ The VM publishes the PAR report under:
 /par/
 ```
 
-Local runs write:
+Open `/par/` to choose any saved run. Inside a report:
+
+- **Previous report** and **Next report** move through runs in date order.
+- **All runs** returns to the dated history.
+- **Download CSV** opens one compact export menu.
+
+The report separates four outcomes:
+
+- **Broken** is a confirmed unusable link.
+- **Recheck** is a timeout or temporary response and is not called broken.
+- **Working** is a confirmed successful response.
+- **Pages missed** means a workshop source could not be scanned, so its PAR status is unknown.
+
+Local runs use the configured report channel, for example:
 
 ```text
-reports/latest/par-links.html
-reports/latest/par-catalog-not-working.csv
-reports/latest/par-unverified.csv
-reports/latest/par-scan-incomplete.csv
-reports/latest/par-links-safe.json
-reports/latest/results.csv
+reports/par/latest/par-links.html
+reports/par/runs/<run-id>/
 ```
 
-Historical runs remain under:
+The CSV menu provides:
 
-```text
-reports/runs/<run-id>/
-```
-
-Start with `par-catalog-not-working.csv`. It contains the confirmed broken links and the source locations that need repair.
+| File | Contents |
+| --- | --- |
+| `par-all-results.csv` | Every discovered PAR link, including working links. |
+| `par-catalog-not-working.csv` | Only confirmed broken links. Start here for repair work. |
+| `par-unverified.csv` | Temporary or inconclusive checks to rerun. |
+| `par-working.csv` | Confirmed working links. |
+| `par-scan-incomplete.csv` | Workshop pages that could not be scanned. |
 
 ## Privacy
 
 The PAR token is the credential. Reports mask the token, authorization headers, cookies, and APEX session values. They retain only the storage location and source information needed to fix the workshop.
 
-Do not copy raw PAR URLs into Git, Jenkins descriptions, tickets, or chat. The audit discovers them during the run and writes only masked results.
+Do not copy raw PAR URLs into Git, Jenkins descriptions, tickets, chat, HTML, or CSV. The audit uses each complete URL only in memory and writes only masked results. Use **Open exact lab** to reproduce the learner step without publishing the storage credential.

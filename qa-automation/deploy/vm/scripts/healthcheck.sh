@@ -13,12 +13,26 @@ value_from_env() {
   [[ -n "$line" ]] && printf '%s' "${line#*=}" || printf '%s' "$fallback"
 }
 
-bind_address="$(value_from_env QA_BIND_ADDRESS 127.0.0.1)"
-https_port="$(value_from_env QA_HTTPS_PORT 32443)"
+bind_address="$(value_from_env QA_BIND_ADDRESS "")"
+https_port="$(value_from_env QA_HTTPS_PORT "")"
+project_name="$(value_from_env COMPOSE_PROJECT_NAME livelabs-qa)"
+[[ -n "$bind_address" && -n "$https_port" ]] || { echo "QA_BIND_ADDRESS and QA_HTTPS_PORT are required." >&2; exit 1; }
 base_url="https://${bind_address}:${https_port}"
 
+portal_container_is_healthy() {
+  local runtime name status
+  for runtime in podman docker; do
+    command -v "$runtime" >/dev/null 2>&1 || continue
+    for name in "${project_name}_portal_1" "${project_name}-portal-1"; do
+      status="$($runtime inspect --format '{{if .State.Health}}{{.State.Health.Status}}{{end}}' "$name" 2>/dev/null || true)"
+      [[ "$status" == "healthy" ]] && return 0
+    done
+  done
+  return 1
+}
+
 for attempt in $(seq 1 30); do
-  if curl --insecure --fail --silent "${base_url}/healthz" >/dev/null; then
+  if portal_container_is_healthy || curl --noproxy "*" --insecure --fail --silent "${base_url}/healthz" >/dev/null; then
     echo "LiveLabs QA portal is ready at ${base_url}/"
     exit 0
   fi

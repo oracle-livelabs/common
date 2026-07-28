@@ -182,7 +182,7 @@ Run locally after generating the catalog:
 
     npm run test:par
 
-Setup, Jenkins credentials, full-catalog behavior, and report files are documented in [PAR Link Audit](docs/runbooks/par-link-audit.md).
+Setup, full-catalog behavior, and report files are documented in [PAR Link Audit](docs/runbooks/par-link-audit.md).
 Jenkins generated catalog runs:
 
 ```text
@@ -194,17 +194,12 @@ Use Jenkins for the scheduled overnight catalog sweep. The Jenkins pipeline runs
 `tests/platform/generated`, not the homepage smoke lane, and supports a fast
 `pr-slice` profile plus a sharded `nightly-full` profile.
 
-A self-contained permanent-VM package is available under
-[`deploy/vm`](deploy/vm/README.md). It provides one private HTTPS portal with
-separate `/par/` and `/regression/` report areas, a weekly PAR job, a nightly or
-targeted overall job, durable report volumes, CSV output, and optional private
-OCI Object Storage publishing. The Oracle Linux installer at
-[`deploy/vm/install.sh`](deploy/vm/install.sh) requires an active CrowdStrike
-Falcon sensor, rejects standard service ports, builds and starts the container
-stack, and prints the private access URLs. See the
-[LiveLabs QA Hub VM runbook](docs/runbooks/qa-hub-vm.md) for OCI prerequisites,
-setup, operation, updates, and troubleshooting. It does not require a custom
-Marketplace or OCI VM image.
+A generic private-VM package is available under [`deploy/vm`](deploy/vm/README.md).
+It requires corporate OIDC, named group-based roles, OCI Vault-backed secrets,
+internal TLS, an active CrowdStrike sensor, and approved private infrastructure.
+No environment-specific address, assigned port, identity-provider value,
+credential, private key, or secret OCID is committed to this public repository.
+The internal provisioning record supplies those values at deployment time.
 
 To see the generated test names without opening a browser:
 
@@ -246,16 +241,7 @@ For a deeper crawl or a slower network:
 npm run catalog:index -- --max-pages 250 --retries 4 --retry-delay-ms 5000
 ```
 
-For authenticated/private catalog entries, keep credentials only in `.env` or CI
-secrets:
-
-```powershell
-# .env
-QA_LIVELABS_USERNAME=
-QA_LIVELABS_PASSWORD=
-QA_AUTH_TARGET_URL=https://livelabs.oracle.com/...
-QA_STORAGE_STATE=.auth/livelabs-storage-state.json
-```
+For authenticated/private catalog entries, local developer runs may use the ignored `.env` and browser-state paths with an approved test identity. The permanent QA service retrieves its approved test identity from OCI Vault through the VM instance principal. Never place credential values in documentation, source control, Jenkins parameters, or command history.
 
 Create a reusable authenticated browser state, then run the generated suite:
 
@@ -285,7 +271,7 @@ $env:QA_AUTH_READY_TEXT="<text visible only after auth>"
 node ./scripts/qa.mjs tests/platform/auth/privatePageAccess.spec.ts --tag auth
 ```
 
-If the application team provides a test-only session bootstrap endpoint, set `QA_AUTH_BOOTSTRAP_URL` and keep the short-lived `QA_AUTH_BOOTSTRAP_TOKEN` in a local or CI secret. See `docs/runbooks/authenticated-page-access.md` for the access request checklist and the full variable contract.
+Private-content authentication must use an access method approved by the application and security owners. Keep its contract and secret-handling procedure in the internal runbook, not this public repository.
 
 Do not commit storage-state files, credentials, screenshots with private data, or environment-specific secrets.
 

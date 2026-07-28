@@ -1,9 +1,9 @@
 def gitUrl = System.getenv("QA_GIT_URL") ?: "https://github.com/oracle-livelabs/common.git"
 def gitBranch = System.getenv("QA_GIT_BRANCH") ?: "*/main"
 def gitCredentialId = System.getenv("QA_GIT_CREDENTIAL_ID") ?: ""
-def publicUrl = (System.getenv("QA_PUBLIC_URL") ?: "https://localhost:32443").replaceAll('/+$', '')
-def nightlyCron = System.getenv("QA_NIGHTLY_CRON") ?: "H H(1-4) * * *"
-def parCron = System.getenv("QA_PAR_CRON") ?: "H H(1-4) * * 0"
+def publicUrl = System.getenv("QA_PUBLIC_URL").replaceAll('/+$', '')
+def nightlyCron = System.getenv("QA_NIGHTLY_CRON")
+def parCron = System.getenv("QA_PAR_CRON")
 def authTargetUrl = System.getenv("QA_AUTH_TARGET_URL") ?: ""
 def baseUrl = System.getenv("QA_BASE_URL") ?: ""
 

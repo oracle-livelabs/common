@@ -4,6 +4,8 @@ import { fileURLToPath } from "node:url";
 
 import {
   buildParAuditSummary,
+  parLinkGuidance,
+  parScanErrorExplanation,
   parLinksPageHtml,
   readParAudits,
   sanitizeSensitiveText,
@@ -198,12 +200,12 @@ export default class RootSummaryReporter {
 
     fs.mkdirSync(runDir, { recursive: true });
 
-    writeSummaryFiles(runDir, summary);
+    writeSummaryFiles(runDir, summary, this.reportsRoot);
     if (summary.counts.total > 0) {
       fs.rmSync(latestDir, { recursive: true, force: true });
       fs.mkdirSync(latestDir, { recursive: true });
-      writeSummaryFiles(latestDir, summary);
-      fs.writeFileSync(path.join(this.reportsRoot, "index.html"), redirectHtml(`latest/${this.landingPage}`), "utf-8");
+      writeSummaryFiles(latestDir, summary, this.reportsRoot);
+      writeReportHistory(this.reportsRoot, this.landingPage);
     }
   }
 
@@ -310,6 +312,7 @@ export default class RootSummaryReporter {
     return {
       runId,
       reportChannel: reportChannelFromRoot(this.reportsRoot),
+      runType: this.landingPage === "par-links.html" ? "par" : "regression",
       status: result.status,
       startedAt: this.startedAt.toISOString(),
       endedAt: endedAt.toISOString(),
@@ -601,14 +604,17 @@ function buildBugSummary({
   return lines.filter(Boolean).join("\n");
 }
 
-function writeSummaryFiles(outputDir, summary) {
+export function writeSummaryFiles(outputDir, summary, reportsRoot) {
+  const historyHref = relativeReportHref(outputDir, path.join(reportsRoot, "index.html"));
+  const pageContext = { outputDir, historyHref };
+
   fs.writeFileSync(path.join(outputDir, "summary.json"), `${JSON.stringify(summary, null, 2)}\n`, "utf-8");
   fs.writeFileSync(path.join(outputDir, "results.csv"), resultsCsv(summary), "utf-8");
   fs.writeFileSync(path.join(outputDir, "summary.md"), markdownSummary(summary), "utf-8");
-  fs.writeFileSync(path.join(outputDir, "summary.html"), htmlSummary(summary, { outputDir }), "utf-8");
-  fs.writeFileSync(path.join(outputDir, "retest-list.html"), reviewListPageHtml("retest", summary, { outputDir }), "utf-8");
-  fs.writeFileSync(path.join(outputDir, "fix-list.html"), reviewListPageHtml("fix", summary, { outputDir }), "utf-8");
-  fs.writeFileSync(path.join(outputDir, "par-links.html"), parLinksPageHtml(summary), "utf-8");
+  fs.writeFileSync(path.join(outputDir, "summary.html"), htmlSummary(summary, pageContext), "utf-8");
+  fs.writeFileSync(path.join(outputDir, "retest-list.html"), reviewListPageHtml("retest", summary, pageContext), "utf-8");
+  fs.writeFileSync(path.join(outputDir, "fix-list.html"), reviewListPageHtml("fix", summary, pageContext), "utf-8");
+  fs.writeFileSync(path.join(outputDir, "par-links.html"), parLinksPageHtml(summary, pageContext), "utf-8");
   writeParAuditDataFiles(outputDir, summary.parAudit);
 }
 
@@ -1233,6 +1239,57 @@ function htmlSummary(summary, context = {}) {
       color: var(--muted);
       font-size: 13px;
     }
+    .par-finding-list {
+      display: grid;
+      gap: 8px;
+      list-style: none;
+      margin: 12px 0 0;
+      padding: 0;
+    }
+    .par-finding-row {
+      align-items: center;
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--fail);
+      border-radius: 6px;
+      display: grid;
+      gap: 12px;
+      grid-template-columns: minmax(0, 1fr) auto;
+      padding: 12px;
+    }
+    .par-finding-copy {
+      display: grid;
+      gap: 5px;
+      min-width: 0;
+    }
+    .par-finding-heading {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .par-finding-heading strong {
+      color: var(--text);
+      font-size: 15px;
+      text-transform: none;
+    }
+    .par-finding-copy span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+    .par-finding-copy .par-location {
+      color: var(--text);
+      font-weight: 700;
+    }
+    .par-finding-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .par-finding-row > details {
+      grid-column: 1 / -1;
+    }
     .catalog-grid {
       display: grid;
       gap: 12px;
@@ -1596,10 +1653,13 @@ function htmlSummary(summary, context = {}) {
       main { padding: 18px; }
       .section-heading,
       .failure-header,
-      .test-card {
+      .test-card,
+      .par-finding-row {
         display: grid;
+        grid-template-columns: 1fr;
       }
       .test-actions { justify-content: flex-start; }
+      .par-finding-actions { justify-content: flex-start; }
     }
   </style>
 </head>
@@ -1613,7 +1673,7 @@ function htmlSummary(summary, context = {}) {
         <span>Duration ${formatDuration(summary.durationMs)}</span>
         <span>Started ${escapeHtml(summary.startedAt)}</span>
       </div>
-      ${reviewNavigationHtml()}
+      ${reviewNavigationHtml(context.historyHref)}
     </div>
   </header>
   <main>
@@ -1843,15 +1903,17 @@ function reviewActionCommand(type) {
   return `node ./scripts/report-review-action.mjs ${type} --payload <payload.json>`;
 }
 
-function reviewNavigationHtml() {
+function reviewNavigationHtml(historyHref = "") {
   return `<nav class="review-nav" aria-label="Report views">
+    <a href="/">QA Hub home</a>
+    ${historyHref ? `<a href="${escapeHtml(historyHref)}">All runs</a>` : ""}
     <a href="par-links.html">PAR Links</a>
     <a href="retest-list.html">Retest List <span class="review-count" data-review-count="retest">0</span></a>
     <a href="fix-list.html">Fix List <span class="review-count" data-review-count="fix">0</span></a>
   </nav>`;
 }
 
-function reviewListPageHtml(type, summary) {
+function reviewListPageHtml(type, summary, context = {}) {
   const isFix = type === "fix";
   const title = isFix ? "Fix List" : "Retest List";
   const actionLabel = isFix ? "Fix Selected Tests" : "Run Retest List";
@@ -2074,6 +2136,7 @@ function reviewListPageHtml(type, summary) {
         <span>${escapeHtml(summary.startedAt)}</span>
       </div>
       <div class="nav-actions">
+        ${context.historyHref ? `<a class="link-button" href="${escapeHtml(context.historyHref)}">All runs</a>` : ""}
         <a class="link-button" href="summary.html">Back to execution report</a>
         <a class="link-button" href="${isFix ? "retest-list.html" : "fix-list.html"}">${escapeHtml(isFix ? "Open Retest List" : "Open Fix List")}</a>
       </div>
@@ -2521,7 +2584,45 @@ function issueDetailsText(issue) {
 }
 
 function structuredIssueDetailsHtml(issue) {
-  if (issue.code !== "PAR_SCAN_INCOMPLETE" || !Array.isArray(issue.details)) {
+  if (!Array.isArray(issue.details)) {
+    return "";
+  }
+
+  if (issue.code === "STALE_PAR_LINK" || issue.code === "PAR_LINK_UNVERIFIED") {
+    return `<ol class="par-finding-list">
+      ${issue.details
+        .map((detail, index) => {
+          const guidance = parLinkGuidance(detail);
+          const source = Array.isArray(detail.sources) ? detail.sources[0] : undefined;
+          const affectedLabUrl = source?.pageUrl || "";
+          const location = [
+            source?.label || `PAR source ${index + 1}`,
+            source?.section,
+            source?.sourceLine ? `Markdown line ${source.sourceLine}` : source?.location,
+          ].filter(Boolean).join(" / ");
+          const target = detail.object_name || detail.bucket || detail.label || `PAR link ${index + 1}`;
+          const response = detail.http_status ? `HTTP ${detail.http_status}` : guidance.shortFinding;
+          return `<li class="par-finding-row">
+            <div class="par-finding-copy">
+              <div class="par-finding-heading">
+                <strong>${escapeHtml(index + 1)}. ${escapeHtml(target)}</strong>
+                <span class="pill fail">${escapeHtml(response)}</span>
+              </div>
+              <span>${escapeHtml(guidance.finding)}</span>
+              <span class="par-location">Where: ${escapeHtml(location || "Source location not recorded")}</span>
+              <span>Fix: Replace this PAR, or remove the instruction if the file is no longer required. Republish, then rerun the PAR audit.</span>
+            </div>
+            <div class="par-finding-actions">
+              ${affectedLabUrl ? linkHtml(affectedLabUrl, "Open affected lab", "link-button") : ""}
+            </div>
+            <details><summary>Technical details</summary><pre>${escapeHtml(JSON.stringify(detail, null, 2))}</pre></details>
+          </li>`;
+        })
+        .join("\n")}
+    </ol>`;
+  }
+
+  if (issue.code !== "PAR_SCAN_INCOMPLETE") {
     return "";
   }
 
@@ -2532,10 +2633,15 @@ function structuredIssueDetailsHtml(issue) {
         const label = detail.label || `Source page ${index + 1}`;
         const error = detail.error || "This source page could not be scanned.";
         const explanation = parScanErrorExplanation(error);
+        const action = /HTTP\s+404/i.test(error)
+          ? `Correct the missing source path for "${label}" in the workshop manifest. If the page was intentionally removed, remove its manifest entry. Republish, then rerun the PAR audit.`
+          : "Open the source below, correct its availability or access problem, then rerun the PAR audit.";
         return `<div class="route-card">
           <strong>Source page not scanned</strong>
-          <p>${escapeHtml(label)}</p>
-          <p class="error-preview">${escapeHtml(explanation)}</p>
+          <p><strong>What failed:</strong> ${escapeHtml(explanation)}</p>
+          <p><strong>What remained untested:</strong> PAR links inside this source page were not marked working or broken.</p>
+          <p><strong>What to do:</strong> ${escapeHtml(action)}</p>
+          <p><strong>Exact source:</strong> ${escapeHtml(label)}</p>
           ${sourceUrl ? `<code>${escapeHtml(sourceUrl)}</code>${linkHtml(sourceUrl, "Open failing source", "link-button")}` : ""}
           ${
             explanation === error
@@ -2546,19 +2652,6 @@ function structuredIssueDetailsHtml(issue) {
       })
       .join("\n")}
   </div>`;
-}
-
-function parScanErrorExplanation(error) {
-  const value = String(error || "").trim();
-  const timeout = value.match(/Timeout\s+(\d+)ms\s+exceeded/i);
-  if (timeout) {
-    const seconds = Math.max(1, Math.round(Number(timeout[1]) / 1000));
-    return `The source did not respond within ${seconds} seconds. It remains unverified and is not counted as a broken PAR link.`;
-  }
-  if (/HTTP\s+404/i.test(value)) {
-    return "The workshop source returned HTTP 404, so this page could not be scanned for PAR links.";
-  }
-  return value || "This source page could not be scanned.";
 }
 
 function hasParAuditIssues(issues) {
@@ -3354,8 +3447,313 @@ function reportLandingPage(value) {
   return value === "par-links.html" ? "par-links.html" : "summary.html";
 }
 
-function redirectHtml(target) {
-  return `<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=${target}"><a href="${target}">Open latest QA summary</a>`;
+function relativeReportHref(fromDir, targetFile) {
+  return path.relative(fromDir, targetFile).replace(/\\/g, "/") || path.basename(targetFile);
+}
+
+export function writeReportHistory(reportsRoot, landingPage) {
+  const runs = readReportHistory(reportsRoot, landingPage);
+  const reportChannel = runs[0]?.reportChannel || reportChannelFromRoot(reportsRoot);
+  const history = {
+    schema_version: 1,
+    report_channel: reportChannel,
+    landing_page: landingPage,
+    generated_at: new Date().toISOString(),
+    runs,
+  };
+
+  fs.mkdirSync(reportsRoot, { recursive: true });
+  fs.writeFileSync(path.join(reportsRoot, "history.json"), `${JSON.stringify(history, null, 2)}\n`, "utf-8");
+  fs.writeFileSync(path.join(reportsRoot, "index.html"), reportHistoryPageHtml(history), "utf-8");
+  writeParReportTimeline(reportsRoot, landingPage, runs);
+}
+
+function writeParReportTimeline(reportsRoot, landingPage, runs) {
+  if (landingPage !== "par-links.html" || !Array.isArray(runs) || runs.length === 0) {
+    return;
+  }
+
+  for (const [index, run] of runs.entries()) {
+    const outputDir = path.join(reportsRoot, "runs", run.runId);
+    rewriteParReportWithTimeline(outputDir, reportsRoot, {
+      olderReportHref:
+        index + 1 < runs.length
+          ? relativeReportHref(outputDir, path.join(reportsRoot, "runs", runs[index + 1].runId, landingPage))
+          : "",
+      newerReportHref:
+        index > 0
+          ? relativeReportHref(outputDir, path.join(reportsRoot, "runs", runs[index - 1].runId, landingPage))
+          : "",
+    });
+  }
+
+  const latestDir = path.join(reportsRoot, "latest");
+  rewriteParReportWithTimeline(latestDir, reportsRoot, {
+    olderReportHref:
+      runs.length > 1
+        ? relativeReportHref(latestDir, path.join(reportsRoot, "runs", runs[1].runId, landingPage))
+        : "",
+    newerReportHref: "",
+  });
+}
+
+function rewriteParReportWithTimeline(outputDir, reportsRoot, timeline) {
+  const summaryFile = path.join(outputDir, "summary.json");
+  if (!fs.existsSync(summaryFile)) return;
+
+  try {
+      const summary = JSON.parse(fs.readFileSync(summaryFile, "utf-8"));
+    const pageContext = {
+      outputDir,
+      historyHref: relativeReportHref(outputDir, path.join(reportsRoot, "index.html")),
+      reportType: "par",
+      ...timeline,
+    };
+    fs.writeFileSync(path.join(outputDir, "par-links.html"), parLinksPageHtml(summary, pageContext), "utf-8");
+  } catch {
+    // A damaged historical summary must not block publishing the current report.
+  }
+}
+
+function readReportHistory(reportsRoot, landingPage) {
+  const runsRoot = path.join(reportsRoot, "runs");
+  if (!fs.existsSync(runsRoot)) {
+    return [];
+  }
+
+  return fs
+    .readdirSync(runsRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => {
+      try {
+        const summary = JSON.parse(fs.readFileSync(path.join(runsRoot, entry.name, "summary.json"), "utf-8"));
+        const runId = String(summary.runId || entry.name);
+        const total = Number(summary.counts?.total || 0);
+        if (total < 1 || !/^[A-Za-z0-9._-]+$/.test(runId)) {
+          return null;
+        }
+
+        return {
+          runId,
+          reportChannel: summary.reportChannel || reportChannelFromRoot(reportsRoot),
+          runType:
+            summary.runType ||
+            (landingPage === "par-links.html" || summary.reportChannel === "par" ? "par" : "regression"),
+          status: summary.status || "",
+          startedAt: summary.startedAt || "",
+          endedAt: summary.endedAt || "",
+          durationMs: Number(summary.durationMs || 0),
+          itemsTested: Array.isArray(summary.catalogItems) && summary.catalogItems.length
+            ? summary.catalogItems.length
+            : total,
+          issuesFound: (summary.failureCategories || []).reduce(
+            (count, category) => count + Number(category.count || 0),
+            0,
+          ),
+          unexpected: Number(summary.counts?.unexpected || 0),
+          pagesScanned: Number(summary.parAudit?.pages_scanned || 0),
+          parBroken: Number(summary.parAudit?.counts?.broken || 0),
+          parUnverified: Number(summary.parAudit?.counts?.unverified || 0),
+          scanProblems: Array.isArray(summary.parAudit?.scan_errors) ? summary.parAudit.scan_errors.length : 0,
+          href: `runs/${encodeURIComponent(runId)}/${landingPage}`,
+        };
+      } catch {
+        return null;
+      }
+    })
+    .filter(Boolean)
+    .sort((left, right) => {
+      const leftTime = Date.parse(left.startedAt) || 0;
+      const rightTime = Date.parse(right.startedAt) || 0;
+      return rightTime - leftTime || right.runId.localeCompare(left.runId);
+    });
+}
+
+export function reportHistoryPageHtml(history) {
+  const runs = Array.isArray(history?.runs) ? history.runs : [];
+  const channel = history?.report_channel || runs[0]?.reportChannel || "local";
+  const landingPage = reportLandingPage(history?.landing_page);
+  const channelTitle = channel === "par" ? "PAR audit" : channel === "regression" ? "Overall regression" : "QA";
+  const latestHref = `latest/${landingPage}`;
+  const options = runs
+    .map((run) => {
+      const state = historyRunState(run, landingPage);
+      const runType = historyRunType(run, landingPage);
+      const detail = runType.code === "par"
+        ? `${run.pagesScanned || 0} pages scanned`
+        : `${run.itemsTested || 0} items tested`;
+      return `<option value="${escapeHtml(run.href)}">${escapeHtml(
+        `${formatHistoryDate(run.startedAt)} - ${runType.label} - ${state.label} - ${detail}`,
+      )}</option>`;
+    })
+    .join("\n");
+  const runRows = runs
+    .map((run, index) => {
+      const state = historyRunState(run, landingPage);
+      const runType = historyRunType(run, landingPage);
+      const facts = runType.code === "par"
+        ? [
+            `${run.pagesScanned || 0} pages`,
+            `${run.parBroken || 0} broken`,
+            `${run.parUnverified || 0} to recheck`,
+            `${run.scanProblems || 0} pages missed`,
+          ]
+        : [
+            `${run.itemsTested || 0} items`,
+            `${run.issuesFound || 0} issues`,
+          ];
+      return `<a class="run-row" href="${escapeHtml(run.href)}">
+        <span class="run-copy">
+          <span class="run-heading">
+            <strong>${escapeHtml(formatHistoryDate(run.startedAt))}${index === 0 ? ' <span class="latest-label">Latest</span>' : ""}</strong>
+            <span class="run-type">${escapeHtml(runType.label)}</span>
+            <span class="run-state ${state.tone}">${escapeHtml(state.label)}</span>
+          </span>
+          <small>${escapeHtml(facts.join(" / "))} / ${escapeHtml(formatDuration(run.durationMs || 0))}</small>
+        </span>
+        <span class="open-label">Open report</span>
+      </a>`;
+    })
+    .join("\n");
+
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LiveLabs ${escapeHtml(channelTitle)} runs</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Arial, Helvetica, sans-serif;
+      --bg: #f5f7f9;
+      --panel: #ffffff;
+      --line: #d7dfe6;
+      --text: #17212b;
+      --muted: #52606d;
+      --pass: #087443;
+      --pass-bg: #e8f7ef;
+      --fail: #b42318;
+      --fail-bg: #fff0ee;
+      --warn: #8a5a00;
+      --warn-bg: #fff5d8;
+      --link: #005ea8;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); }
+    header { background: #fff; border-bottom: 1px solid var(--line); padding: 28px 24px; }
+    .header-inner, main { max-width: 1040px; margin: 0 auto; }
+    .eyebrow { margin: 0 0 5px; color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; }
+    h1 { margin: 0; font-size: 30px; letter-spacing: 0; }
+    header p:not(.eyebrow) { margin: 8px 0 0; color: var(--muted); }
+    .hub-link { display: inline-block; margin-top: 12px; color: var(--link); font-weight: 700; }
+    main { padding: 24px; }
+    .run-picker { padding: 18px; border: 1px solid var(--line); background: var(--panel); }
+    .run-picker label { display: block; margin-bottom: 8px; font-weight: 700; }
+    .picker-controls { display: grid; grid-template-columns: minmax(260px, 1fr) auto auto; gap: 9px; }
+    select, button, .latest-button {
+      min-height: 42px;
+      border: 1px solid #9fb3c8;
+      border-radius: 6px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+    }
+    select { width: 100%; padding: 8px 10px; }
+    button, .latest-button { display: inline-flex; align-items: center; justify-content: center; padding: 9px 13px; cursor: pointer; font-weight: 700; text-decoration: none; white-space: nowrap; }
+    button { border-color: var(--link); background: var(--link); color: #fff; }
+    button:disabled { border-color: var(--line); background: #e7edf3; color: var(--muted); cursor: default; }
+    .latest-button { color: var(--link); }
+    h2 { margin: 28px 0 10px; font-size: 20px; letter-spacing: 0; }
+    .run-list { display: grid; gap: 8px; }
+    .run-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 14px; border: 1px solid var(--line); border-left: 5px solid #829ab1; background: var(--panel); color: var(--text); text-decoration: none; }
+    .run-row:hover { border-color: #9fb3c8; }
+    .run-heading { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; }
+    .run-state, .run-type { display: inline-flex; justify-content: center; padding: 4px 7px; border-radius: 999px; font-size: 11px; font-weight: 800; background: #e8edf2; }
+    .run-type { color: #075985; background: #e0f2fe; border: 1px solid #bae6fd; }
+    .run-state.pass { color: var(--pass); background: var(--pass-bg); }
+    .run-state.fail { color: var(--fail); background: var(--fail-bg); }
+    .run-state.warn { color: var(--warn); background: var(--warn-bg); }
+    .run-copy { min-width: 0; }
+    .run-copy strong, .run-copy small { display: block; }
+    .run-copy small { margin-top: 5px; color: var(--muted); }
+    .latest-label { margin-left: 6px; color: var(--link); font-size: 11px; text-transform: uppercase; }
+    .open-label { color: var(--link); font-size: 13px; font-weight: 700; }
+    .empty { padding: 28px; border: 1px dashed #9fb3c8; background: #fff; color: var(--muted); text-align: center; }
+    @media (max-width: 720px) {
+      .picker-controls, .run-row { grid-template-columns: 1fr; }
+      .open-label { justify-self: start; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <p class="eyebrow">LiveLabs QA</p>
+      <h1>${escapeHtml(channelTitle)} runs</h1>
+      <p>Open the latest result or review any earlier saved run.</p>
+      <a class="hub-link" href="/">QA Hub home</a>
+    </div>
+  </header>
+  <main>
+    <section class="run-picker" aria-labelledby="run-picker-label">
+      <label id="run-picker-label" for="run-select">Choose a saved run</label>
+      <div class="picker-controls">
+        <select id="run-select" ${runs.length ? "" : "disabled"}>${options || '<option value="">No saved runs</option>'}</select>
+        <button id="open-run" type="button" ${runs.length ? "" : "disabled"}>Open selected run</button>
+        <a class="latest-button" href="${escapeHtml(latestHref)}">Open latest</a>
+      </div>
+    </section>
+    <h2>Previous runs</h2>
+    ${runs.length ? `<div class="run-list">${runRows}</div>` : '<div class="empty">No completed reports have been saved yet.</div>'}
+  </main>
+  <script>
+    (() => {
+      const select = document.getElementById("run-select");
+      const button = document.getElementById("open-run");
+      if (!select || !button) return;
+      button.addEventListener("click", () => {
+        if (select.value) window.location.href = select.value;
+      });
+    })();
+  </script>
+</body>
+</html>`;
+}
+
+function historyRunState(run, landingPage = "") {
+  const runType = historyRunType(run, landingPage);
+  if (runType.code === "par" && Number(run.parBroken || 0) > 0) {
+    return { label: "Broken links found", tone: "fail" };
+  }
+  if (runType.code === "par" && Number(run.scanProblems || 0) > 0) {
+    return { label: "Pages missed", tone: "fail" };
+  }
+  if (runType.code === "par" && Number(run.parUnverified || 0) > 0) {
+    return { label: "Recheck", tone: "warn" };
+  }
+  if (Number(run.unexpected || 0) > 0 || (run.status && run.status !== "passed")) {
+    return { label: runType.code === "par" ? "Run failed" : "Test failures", tone: "fail" };
+  }
+  return { label: "Passed", tone: "pass" };
+}
+
+function historyRunType(run, landingPage = "") {
+  const code =
+    run?.runType === "par" ||
+    run?.reportChannel === "par" ||
+    (!run?.runType && landingPage === "par-links.html")
+      ? "par"
+      : "regression";
+  return { code, label: code === "par" ? "PAR audit" : "Overall regression" };
+}
+
+function formatHistoryDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return String(value || "Unknown date");
+  }
+  return date.toISOString().replace("T", " ").slice(0, 16) + " UTC";
 }
 
 function formatDuration(ms) {

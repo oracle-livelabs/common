@@ -7,45 +7,48 @@ example_env="${script_dir}/.env.example"
 
 private_address=""
 public_host=""
-https_port="32443"
+https_port=""
+jenkins_internal_port=""
+portal_internal_port=""
 vpn_cidr=""
 skip_packages=false
 skip_systemd=false
 crowdstrike_rpm=""
 crowdstrike_cid_file=""
+qid_installer=""
+falcon_installer=""
 
 usage() {
   cat <<'EOF'
-Install and start the LiveLabs QA Jenkins stack on an Oracle Linux VM.
+Install and start the LiveLabs QA service on an approved private Oracle Linux VM.
 
-Run this script as the non-root account that owns the repository checkout.
-It uses sudo only for package, firewall, and systemd configuration.
+The public repository intentionally contains no environment-specific addresses,
+ports, identity-provider values, group names, secret values, or secret OCIDs.
+Supply those values from the approved internal provisioning record.
 
 Usage:
   bash install.sh [options]
 
-Options:
-  --private-address <IPv4>  VM private IPv4 address used by the HTTPS portal.
-                            If omitted, one unambiguous RFC1918 address is detected.
-  --host <name-or-IPv4>     Internal DNS name shown to users. Defaults to the
-                            private address.
-  --https-port <port>       Private HTTPS port. Defaults to 32443.
-  --vpn-cidr <CIDR>         Enable firewalld and allow this VPN CIDR to the portal.
-                            OCI NSG and route configuration remains external.
-  --crowdstrike-rpm <path> Approved pre-staged Falcon sensor RPM.
-  --crowdstrike-cid-file <path>
-                            File containing the Falcon CID; never a CLI value.
-  --skip-packages           Do not install Oracle Linux packages.
-  --skip-systemd            Do not register automatic startup after reboot.
-  -h, --help                Show this help.
+Required options:
+  --https-port <port>          Approved private portal port.
+  --jenkins-port <port>        Approved container-only Jenkins port.
+  --portal-port <port>         Approved container-only portal port.
 
-Example:
-  bash install.sh \
-    --private-address 10.0.1.25 \
-    --host qa-hub.internal.example \
-    --vpn-cidr 10.20.0.0/16 \
-    --crowdstrike-rpm /secure/falcon-sensor.rpm \
-    --crowdstrike-cid-file /secure/falcon-cid
+Optional options:
+  --private-address <IPv4>     VM private IPv4 address. Auto-detected when safe.
+  --host <name-or-IPv4>        Approved internal DNS name. Defaults to private IP.
+  --vpn-cidr <CIDR>            Approved VPN CIDR for the host firewall.
+  --crowdstrike-rpm <path>     Approved pre-staged Falcon sensor RPM.
+  --crowdstrike-cid-file <path>
+                               Secure Falcon CID file; never a CLI value.
+  --qid-installer <path>       Approved Oracle QID mitigator script.
+  --falcon-installer <path>    Approved Oracle Falcon sensor script.
+  --skip-packages              Do not install Oracle Linux packages.
+  --skip-systemd               Do not register automatic startup after reboot.
+  -h, --help                   Show this help.
+
+The ignored deploy/vm/.env contains environment-specific addresses, schedules,
+and optional publishing settings. Generated credentials stay under secrets/.
 EOF
 }
 
@@ -71,6 +74,16 @@ while [[ $# -gt 0 ]]; do
       https_port="$2"
       shift 2
       ;;
+    --jenkins-port)
+      [[ $# -ge 2 ]] || fail "--jenkins-port needs a value."
+      jenkins_internal_port="$2"
+      shift 2
+      ;;
+    --portal-port)
+      [[ $# -ge 2 ]] || fail "--portal-port needs a value."
+      portal_internal_port="$2"
+      shift 2
+      ;;
     --vpn-cidr)
       [[ $# -ge 2 ]] || fail "--vpn-cidr needs a value."
       vpn_cidr="$2"
@@ -84,6 +97,16 @@ while [[ $# -gt 0 ]]; do
     --crowdstrike-cid-file)
       [[ $# -ge 2 ]] || fail "--crowdstrike-cid-file needs a path."
       crowdstrike_cid_file="$2"
+      shift 2
+      ;;
+    --qid-installer)
+      [[ $# -ge 2 ]] || fail "--qid-installer needs a path."
+      qid_installer="$2"
+      shift 2
+      ;;
+    --falcon-installer)
+      [[ $# -ge 2 ]] || fail "--falcon-installer needs a path."
+      falcon_installer="$2"
       shift 2
       ;;
     --skip-packages)
@@ -157,17 +180,33 @@ if [[ -z "$public_host" ]]; then
   public_host="$private_address"
 fi
 [[ "$public_host" =~ ^[A-Za-z0-9.-]+$ ]] || fail "--host must be an internal DNS name or IPv4 address, not a URL."
-[[ "$https_port" =~ ^[0-9]+$ ]] || fail "--https-port must be numeric."
-(( https_port >= 1024 && https_port <= 65535 )) || fail "--https-port must be between 1024 and 65535."
-for forbidden_port in 22 80 443 3000 5000 8000 8080 8443; do
-  [[ "$https_port" != "$forbidden_port" ]] || fail "Port ${https_port} is a standard or commonly exposed service port. Use the approved non-standard QA port 32443."
-done
+validate_private_port() {
+  local label="$1"
+  local value="$2"
+  [[ "$value" =~ ^[0-9]+$ ]] || fail "${label} must be numeric."
+  (( value >= 1024 && value <= 65535 )) || fail "${label} must be between 1024 and 65535."
+  for forbidden_port in 22 80 443 3000 5000 8000 8080 8443; do
+    [[ "$value" != "$forbidden_port" ]] || fail "${label} must use an approved non-standard value."
+  done
+}
+
+validate_private_port --https-port "$https_port"
+validate_private_port --jenkins-port "$jenkins_internal_port"
+validate_private_port --portal-port "$portal_internal_port"
+[[ "$(printf '%s\n' "$https_port" "$jenkins_internal_port" "$portal_internal_port" | sort -u | wc -l)" == "3" ]] || fail "All QA service ports must be distinct."
+
 crowdstrike_args=()
 if [[ -n "$crowdstrike_rpm" ]]; then
   crowdstrike_args+=(--rpm "$crowdstrike_rpm")
 fi
 if [[ -n "$crowdstrike_cid_file" ]]; then
   crowdstrike_args+=(--cid-file "$crowdstrike_cid_file")
+fi
+if [[ -n "$qid_installer" ]]; then
+  crowdstrike_args+=(--qid-installer "$qid_installer")
+fi
+if [[ -n "$falcon_installer" ]]; then
+  crowdstrike_args+=(--falcon-installer "$falcon_installer")
 fi
 bash "${script_dir}/scripts/ensure-crowdstrike.sh" "${crowdstrike_args[@]}"
 
@@ -178,14 +217,17 @@ if [[ "$skip_packages" == false ]]; then
   version_id="${VERSION_ID:-}"
   [[ "${ID:-}" == "ol" && "${version_id%%.*}" == "9" ]] || fail "Automatic package setup supports Oracle Linux 9. Install the prerequisites manually and use --skip-packages on another distribution."
   command -v dnf >/dev/null 2>&1 || fail "dnf is required for automatic package setup."
-  sudo dnf install -y git openssl curl httpd-tools podman firewalld
+  sudo dnf install -y git openssl curl podman firewalld httpd-tools
   if ! podman compose version >/dev/null 2>&1 && ! command -v podman-compose >/dev/null 2>&1; then
     sudo dnf install -y oracle-epel-release-el9
-    sudo dnf install -y podman-compose
+    if ! sudo dnf install -y podman-compose; then
+      sudo dnf install -y python3-pip
+      sudo python3 -m pip install --no-cache-dir podman-compose==1.6.0
+    fi
   fi
 fi
 
-for command_name in git openssl curl htpasswd podman awk grep tr; do
+for command_name in git openssl curl podman awk grep tr sort wc base64 oci; do
   command -v "$command_name" >/dev/null 2>&1 || fail "Required command is missing: ${command_name}"
 done
 if ! podman compose version >/dev/null 2>&1 && ! command -v podman-compose >/dev/null 2>&1; then
@@ -223,6 +265,8 @@ set_env_value() {
 
 set_env_value QA_BIND_ADDRESS "$private_address"
 set_env_value QA_HTTPS_PORT "$https_port"
+set_env_value QA_JENKINS_INTERNAL_PORT "$jenkins_internal_port"
+set_env_value QA_PORTAL_INTERNAL_PORT "$portal_internal_port"
 set_env_value QA_PUBLIC_HOST "$public_host"
 set_env_value QA_PUBLIC_URL "https://${public_host}:${https_port}"
 

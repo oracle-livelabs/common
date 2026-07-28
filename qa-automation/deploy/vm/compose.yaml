@@ -8,14 +8,15 @@ services:
     environment:
       CASC_JENKINS_CONFIG: /usr/share/jenkins/ref/casc.yaml
       JAVA_OPTS: -Djenkins.install.runSetupWizard=false
-      JENKINS_OPTS: --httpPort=32080 --prefix=/jenkins
+      JENKINS_OPTS: --httpPort=${QA_JENKINS_INTERNAL_PORT} --prefix=/jenkins --sessionTimeout=60
+      QA_JENKINS_INTERNAL_PORT: ${QA_JENKINS_INTERNAL_PORT}
       JENKINS_ADMIN_USER: ${JENKINS_ADMIN_USER:-qa-admin}
-      QA_PUBLIC_URL: ${QA_PUBLIC_URL:-https://localhost:32443}
+      QA_PUBLIC_URL: ${QA_PUBLIC_URL}
       QA_GIT_URL: ${QA_GIT_URL:-https://github.com/oracle-livelabs/common.git}
       QA_GIT_BRANCH: ${QA_GIT_BRANCH:-*/main}
       QA_GIT_CREDENTIAL_ID: ${QA_GIT_CREDENTIAL_ID:-}
-      QA_NIGHTLY_CRON: ${QA_NIGHTLY_CRON:-H H(1-4) * * *}
-      QA_PAR_CRON: ${QA_PAR_CRON:-H H(1-4) * * 0}
+      QA_NIGHTLY_CRON: ${QA_NIGHTLY_CRON}
+      QA_PAR_CRON: ${QA_PAR_CRON}
       QA_AUTH_TARGET_URL: ${QA_AUTH_TARGET_URL:-}
       QA_BASE_URL: ${QA_BASE_URL:-}
       QA_ROOT_REPORTS_BASE: /var/qa-reports
@@ -32,8 +33,10 @@ services:
       - jenkins_home:/var/jenkins_home
       - qa_reports:/var/qa-reports
     shm_size: 2gb
+    security_opt:
+      - no-new-privileges:true
     healthcheck:
-      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:32080/jenkins/login"]
+      test: ["CMD-SHELL", "curl --fail --silent http://127.0.0.1:$${QA_JENKINS_INTERNAL_PORT}/jenkins/login >/dev/null"]
       interval: 30s
       timeout: 10s
       retries: 10
@@ -50,8 +53,12 @@ services:
     depends_on:
       jenkins:
         condition: service_healthy
+    environment:
+      QA_JENKINS_INTERNAL_PORT: ${QA_JENKINS_INTERNAL_PORT}
+      QA_PORTAL_INTERNAL_PORT: ${QA_PORTAL_INTERNAL_PORT}
+      NGINX_ENVSUBST_FILTER: ^QA_
     ports:
-      - "${QA_BIND_ADDRESS:-127.0.0.1}:${QA_HTTPS_PORT:-32443}:32444"
+      - "${QA_BIND_ADDRESS}:${QA_HTTPS_PORT}:${QA_PORTAL_INTERNAL_PORT}"
     secrets:
       - reports_htpasswd
       - portal_tls_certificate
@@ -66,7 +73,7 @@ services:
     security_opt:
       - no-new-privileges:true
     healthcheck:
-      test: ["CMD", "wget", "--no-check-certificate", "--quiet", "--spider", "https://127.0.0.1:32444/healthz"]
+      test: ["CMD-SHELL", "wget --no-check-certificate --quiet --spider https://127.0.0.1:$${QA_PORTAL_INTERNAL_PORT}/healthz"]
       interval: 30s
       timeout: 10s
       retries: 5

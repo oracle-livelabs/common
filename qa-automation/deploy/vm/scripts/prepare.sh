@@ -7,11 +7,11 @@ secrets_dir="${deploy_dir}/secrets"
 env_file="${deploy_dir}/.env"
 example_env="${deploy_dir}/.env.example"
 
-for command_name in openssl htpasswd grep cut tr; do
-  if ! command -v "$command_name" >/dev/null 2>&1; then
+for command_name in openssl htpasswd grep tail; do
+  command -v "$command_name" >/dev/null 2>&1 || {
     echo "Required command is missing: ${command_name}" >&2
     exit 1
-  fi
+  }
 done
 
 umask 077
@@ -22,7 +22,7 @@ fi
 
 env_value() {
   local key="$1"
-  local fallback="$2"
+  local fallback="${2:-}"
   local line
   line="$(grep -E "^${key}=" "$env_file" | tail -n 1 || true)"
   if [[ -z "$line" ]]; then
@@ -35,22 +35,25 @@ env_value() {
   printf '%s' "$value"
 }
 
-public_host="${1:-$(env_value QA_PUBLIC_HOST qa-vm.internal.example)}"
+public_host="${1:-$(env_value QA_PUBLIC_HOST)}"
 admin_user="$(env_value JENKINS_ADMIN_USER qa-admin)"
 report_user="$(env_value QA_REPORT_USER qa-reviewer)"
-new_admin=false
-new_report=false
+
+[[ -n "$public_host" ]] || {
+  echo "QA_PUBLIC_HOST is required before credentials and TLS can be prepared." >&2
+  exit 1
+}
 
 if [[ ! -s "${secrets_dir}/jenkins-admin-secret" ]]; then
   openssl rand -hex 24 > "${secrets_dir}/jenkins-admin-secret"
-  new_admin=true
 fi
 
-if [[ ! -s "${secrets_dir}/reports.htpasswd" ]]; then
-  report_secret="$(openssl rand -hex 18)"
-  htpasswd -Bbn "$report_user" "$report_secret" > "${secrets_dir}/reports.htpasswd"
-  new_report=true
+if [[ ! -s "${secrets_dir}/report-secret" ]]; then
+  openssl rand -hex 18 > "${secrets_dir}/report-secret"
 fi
+
+htpasswd -Bbn "$report_user" "$(tr -d '\r\n' < "${secrets_dir}/report-secret")" \
+  > "${secrets_dir}/reports.htpasswd"
 
 if [[ ! -f "${secrets_dir}/livelabs-username" ]]; then
   : > "${secrets_dir}/livelabs-username"
@@ -65,30 +68,19 @@ if [[ ! -s "${secrets_dir}/tls.key" || ! -s "${secrets_dir}/tls.crt" ]]; then
   else
     subject_alt_name="DNS:${public_host}"
   fi
-  openssl req -x509 -newkey rsa:3072 -sha256 -nodes -days 30 \
+  openssl req -x509 -newkey rsa:3072 -sha256 -nodes -days 365 \
     -keyout "${secrets_dir}/tls.key" \
     -out "${secrets_dir}/tls.crt" \
     -subj "/CN=${public_host}" \
     -addext "subjectAltName=${subject_alt_name}"
 fi
 
-chmod 600 "${secrets_dir}"/*
-
-cat <<EOF
-VM files are prepared in ${deploy_dir}.
-
-Security follow-up:
-  1. Keep QA_BIND_ADDRESS limited to the VM private VPN address.
-  2. Replace the temporary TLS certificate with an internal CA certificate for team use.
-  3. Put optional LiveLabs sign-in values in livelabs-username and livelabs-secret.
+cat > "${secrets_dir}/bootstrap-credentials" <<EOF
+Jenkins user: ${admin_user}
+Jenkins password: $(tr -d '\r\n' < "${secrets_dir}/jenkins-admin-secret")
+Report user: ${report_user}
+Report password: $(tr -d '\r\n' < "${secrets_dir}/report-secret")
 EOF
 
-if [[ "$new_admin" == true ]]; then
-  printf '\nJenkins user: %s\nJenkins initial secret: %s\n' "$admin_user" "$(cat "${secrets_dir}/jenkins-admin-secret")"
-fi
-if [[ "$new_report" == true ]]; then
-  printf '\nReport user: %s\nReport initial secret: %s\n' "$report_user" "$report_secret"
-fi
-if [[ "$new_admin" == true || "$new_report" == true ]]; then
-  echo "Store these generated values in the approved secret manager; they are shown only on this first preparation run."
-fi
+chmod 600 "${secrets_dir}"/*
+echo "VM credentials and TLS files are prepared. No secret values were printed."

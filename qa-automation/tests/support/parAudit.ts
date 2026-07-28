@@ -16,6 +16,7 @@ export interface ParSource {
   location?: string;
   sourceFileUrl?: string;
   sourceLine?: number;
+  sourceExcerpt?: string;
   section?: string;
   searchText?: string;
   instruction?: string;
@@ -88,6 +89,8 @@ interface ProbeResult {
 const PAR_PROBE_WORKER_FILE = path.join(PROJECT_ROOT, "scripts", "par-probe-worker.mjs");
 const TRANSIENT_STATUSES = new Set([408, 416, 425, 429]);
 const URL_PATTERN = /https?:\/\/[^\s"'<>\\]+/gi;
+const EXPLICIT_PLACEHOLDER_PATTERN =
+  /\b(?:your|replace|enter|insert|paste|placeholder|change\s+me|fill\s+in|path\s+to|par[\s_-]*(?:url|token)|pre[\s_-]*authenticated[\s_-]*request)\b/i;
 
 export function parseParUrl(rawValue: string): {
   url: URL;
@@ -120,7 +123,13 @@ export function parseParUrl(rawValue: string): {
 }
 
 export function isParUrl(value: string): boolean {
-  return Boolean(parseParUrl(value));
+  return Boolean(parseParUrl(value)) && !isObviousParPlaceholder(value);
+}
+
+export function isObviousParPlaceholder(value: string): boolean {
+  const decoded = decodePlaceholderText(value);
+  const angleBracketValues = decoded.match(/<[^<>\r\n]{1,200}>/g) || [];
+  return angleBracketValues.some((placeholder) => EXPLICIT_PLACEHOLDER_PATTERN.test(placeholder));
 }
 
 export function maskParUrl(value: string): string {
@@ -143,7 +152,9 @@ export function extractParUrlsFromText(value: string): string[] {
   const urls = new Set<string>();
 
   for (const match of matches) {
-    const parsed = parseParUrl(trimUrlPunctuation(match));
+    const candidate = trimUrlPunctuation(match);
+    if (isObviousParPlaceholder(candidate)) continue;
+    const parsed = parseParUrl(candidate);
     if (parsed) urls.add(parsed.url.toString());
   }
 
@@ -154,6 +165,7 @@ export function mergeParCandidates(candidates: ParCandidate[]): ParCandidate[] {
   const merged = new Map<string, ParCandidate>();
 
   for (const candidate of candidates) {
+    if (isObviousParPlaceholder(candidate.url)) continue;
     const parsed = parseParUrl(candidate.url);
     if (!parsed) continue;
 
@@ -585,6 +597,7 @@ function uniqueSources(sources: ParSource[]): ParSource[] {
       safeSource.pageUrl,
       safeSource.sourceFileUrl || "",
       safeSource.sourceLine || "",
+      safeSource.sourceExcerpt || "",
       safeSource.label,
       safeSource.location || "",
       safeSource.section || "",
@@ -626,10 +639,28 @@ function trimUrlPunctuation(value: string): string {
 function decodeHtmlEntities(value: string): string {
   return value
     .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
     .replace(/&#x2f;/gi, "/")
     .replace(/&#47;/gi, "/")
     .replace(/&quot;/gi, '"')
     .replace(/&#39;/gi, "'");
+}
+
+function decodePlaceholderText(value: string): string {
+  let result = decodeHtmlEntities(value);
+
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const decoded = decodeURIComponent(result);
+      if (decoded === result) break;
+      result = decodeHtmlEntities(decoded);
+    } catch {
+      break;
+    }
+  }
+
+  return result;
 }
 
 function decodeUrlComponent(value: string): string {

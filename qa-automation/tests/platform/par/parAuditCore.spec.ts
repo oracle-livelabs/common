@@ -6,6 +6,7 @@ import {
   auditParCandidates,
   buildParAuditAttachment,
   extractParUrlsFromText,
+  isObviousParPlaceholder,
   isParUrl,
   maskParUrl,
   sanitizeDiagnosticMessage,
@@ -14,11 +15,30 @@ import {
   parseParUrl,
 } from "../../support/parAudit.js";
 import { sourceTextCandidates } from "../../support/parSourceDiscovery.js";
+import { catalogRouteFailure } from "../../support/indexedCatalogNavigation.js";
 
 const PAR_URL =
   "https://objectstorage.eu-frankfurt-1.oraclecloud.com/p/fake-token-value/n/example/b/qa/o/assets/demo.zip";
 
 test.describe("PAR audit core", { tag: ["@par", "@unit"] }, () => {
+  test("recognizes confirmed invalid catalog redirects without waiting for a timeout", () => {
+    expect(
+      catalogRouteFailure(
+        "https://livelabs.oracle.com/ords/r/dbpm/livelabs/home?p1_invalid_workshop_id=3794&session=123",
+      ),
+    ).toContain("p1_invalid_workshop_id=3794");
+    expect(
+      catalogRouteFailure(
+        "https://livelabs.oracle.com/ords/r/dbpm/livelabs/home?p1_invalid_livestack_id=42",
+      ),
+    ).toContain("p1_invalid_livestack_id=42");
+    expect(
+      catalogRouteFailure(
+        "https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=3794",
+      ),
+    ).toBeUndefined();
+  });
+
   test("recognizes and masks OCI PAR URLs", () => {
     expect(isParUrl(PAR_URL)).toBe(true);
     expect(isParUrl("https://objectstorage.eu-frankfurt-1.oraclecloud.com/n/example/b/qa/o/demo.zip")).toBe(false);
@@ -51,6 +71,24 @@ test.describe("PAR audit core", { tag: ["@par", "@unit"] }, () => {
     expect(found.every((url) => !url.endsWith(")**"))).toBe(true);
   });
 
+  test("ignores explicit angle-bracket PAR placeholders without hiding real links", () => {
+    const placeholderUrl =
+      "https://objectstorage.eu-frankfurt-1.oraclecloud.com/p/%3Cyour-par-token%3E/n/example/b/qa/o/oci-files.zip";
+    const replacementUrl =
+      "https://objectstorage.eu-frankfurt-1.oraclecloud.com/p/%3Creplace-with-par-url%3E/n/example/b/qa/o/oci-files.zip";
+    const markdown = [
+      "Placeholder: " + placeholderUrl,
+      "Replacement: " + replacementUrl,
+      "Real autolink: <" + PAR_URL + ">",
+      "Download this real link to your computer: " + PAR_URL,
+    ].join("\n");
+
+    expect(isObviousParPlaceholder(placeholderUrl)).toBe(true);
+    expect(isObviousParPlaceholder(replacementUrl)).toBe(true);
+    expect(isParUrl(placeholderUrl)).toBe(false);
+    expect(extractParUrlsFromText(markdown)).toEqual([PAR_URL]);
+  });
+
   test("records the exact Markdown section and line for a PAR", () => {
     const markdown = [
       "# Workshop",
@@ -75,7 +113,10 @@ test.describe("PAR audit core", { tag: ["@par", "@unit"] }, () => {
       instruction: "1. Get sample file",
       searchText: "assets/demo.zip",
       location: "Markdown line 7",
+      sourceExcerpt:
+        "wget https://objectstorage.eu-frankfurt-1.oraclecloud.com/p/***/n/example/b/qa/o/assets/demo.zip",
     });
+    expect(candidates[0].sources[0].sourceExcerpt).not.toContain("fake-token-value");
   });
   test("uses GET range to confirm a broken PAR after HEAD", async () => {
     const request = mockRequest(405, 404);

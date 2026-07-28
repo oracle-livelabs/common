@@ -3,6 +3,8 @@ set -euo pipefail
 
 sensor_rpm=""
 cid_file=""
+qid_installer=""
+falcon_installer=""
 falconctl="/opt/CrowdStrike/falconctl"
 service_name="falcon-sensor"
 
@@ -16,9 +18,15 @@ Usage:
 Options:
   --rpm <path>       Pre-staged corporate Falcon sensor RPM.
   --cid-file <path>  Root-readable or user-readable file containing only the CID.
+  --qid-installer <path>
+                     Approved Oracle QID mitigator script.
+  --falcon-installer <path>
+                     Approved Oracle Falcon sensor script.
   -h, --help         Show this help.
 
 When the sensor is already configured and active, no options are required.
+The two Oracle installer scripts must be supplied together. Their download
+locations belong in the internal provisioning process, not this repository.
 Never pass the CID directly on the command line or store it in this repository.
 EOF
 }
@@ -40,6 +48,16 @@ while [[ $# -gt 0 ]]; do
       cid_file="$2"
       shift 2
       ;;
+    --qid-installer)
+      [[ $# -ge 2 ]] || fail "--qid-installer needs a path."
+      qid_installer="$2"
+      shift 2
+      ;;
+    --falcon-installer)
+      [[ $# -ge 2 ]] || fail "--falcon-installer needs a path."
+      falcon_installer="$2"
+      shift 2
+      ;;
     -h|--help)
       usage
       exit 0
@@ -55,9 +73,9 @@ command -v systemctl >/dev/null 2>&1 || fail "systemd is required."
 
 sensor_configured() {
   local output
-  [[ -x "$falconctl" ]] || return 1
+  sudo test -x "$falconctl" || return 1
   output="$(sudo "$falconctl" -g --cid 2>/dev/null || true)"
-  [[ "$output" =~ [0-9A-Fa-f]{32}-[0-9A-Fa-f]{2} ]]
+  [[ "$output" =~ [0-9A-Fa-f]{32}(-[0-9A-Fa-f]{2})? ]]
 }
 
 sensor_active() {
@@ -69,19 +87,30 @@ if sensor_configured && sensor_active; then
   exit 0
 fi
 
+if [[ -n "$qid_installer" || -n "$falcon_installer" ]]; then
+  [[ -n "$qid_installer" && -n "$falcon_installer" ]] || {
+    fail "Supply both --qid-installer and --falcon-installer."
+  }
+  [[ -f "$qid_installer" ]] || fail "QID mitigator script not found: ${qid_installer}"
+  [[ -f "$falcon_installer" ]] || fail "Falcon sensor script not found: ${falcon_installer}"
+
+  sudo bash "$falcon_installer" --apply
+  sudo bash "$qid_installer" --apply
+fi
+
 if [[ -n "$sensor_rpm" ]]; then
   [[ -f "$sensor_rpm" ]] || fail "CrowdStrike RPM not found: ${sensor_rpm}"
   sudo dnf install -y "$sensor_rpm"
 elif ! sudo rpm -q "$service_name" >/dev/null 2>&1; then
-  fail "CrowdStrike is not installed. Provide the approved sensor RPM with --rpm and its CID through --cid-file."
+  fail "CrowdStrike is not installed. Provide the approved Oracle installers or the approved sensor RPM and CID file."
 fi
 
-[[ -x "$falconctl" ]] || fail "CrowdStrike falconctl was not installed at ${falconctl}."
+sudo test -x "$falconctl" || fail "CrowdStrike falconctl was not installed at ${falconctl}."
 
 if [[ -n "$cid_file" ]]; then
   [[ -f "$cid_file" ]] || fail "CrowdStrike CID file not found: ${cid_file}"
   cid="$(tr -d '\r\n' < "$cid_file")"
-  [[ "$cid" =~ ^[0-9A-Fa-f]{32}-[0-9A-Fa-f]{2}$ ]] || fail "The CrowdStrike CID file does not contain a valid CID."
+  [[ "$cid" =~ ^[0-9A-Fa-f]{32}(-[0-9A-Fa-f]{2})?$ ]] || fail "The CrowdStrike CID file does not contain a valid CID."
   sudo "$falconctl" -s --cid="$cid" >/dev/null
   unset cid
 elif ! sensor_configured; then

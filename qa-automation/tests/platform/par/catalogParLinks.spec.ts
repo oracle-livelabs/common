@@ -68,12 +68,26 @@ test.describe("Generated catalog PAR link audit", { tag: PAR_CATALOG_TAGS }, () 
           pagesScanned += 1;
         };
 
-        const openCatalogItem = async (contextName: string) => {
-          await openIndexedCatalogItem(page, authRuntime, environmentConfig.base_url, item, contextName);
+        const openCatalogItem = async (
+          contextName: string,
+          targetPage: Page = page,
+        ) => {
+          await openIndexedCatalogItem(
+            targetPage,
+            authRuntime,
+            environmentConfig.base_url,
+            item,
+            contextName,
+            item.type === "workshop"
+              ? { expectedPaths: ["/view-workshop", "/run-workshop"] }
+              : undefined,
+          );
           if (item.type === "workshop") {
-            await new WorkshopLandingPage(page).startButton.waitFor({ state: "visible", timeout: 20_000 });
+            if (!isDirectWorkshopInstructions(targetPage)) {
+              await new WorkshopLandingPage(targetPage).startButton.waitFor({ state: "visible", timeout: 20_000 });
+            }
           } else {
-            await new LiveStackLandingPage(page).assertLoaded(item.title);
+            await new LiveStackLandingPage(targetPage).assertLoaded(item.title);
           }
         };
 
@@ -86,20 +100,41 @@ test.describe("Generated catalog PAR link audit", { tag: PAR_CATALOG_TAGS }, () 
         );
 
         if (opened) {
-          await runScanStage(scanErrors, item.type + "-overview", item.title, page, async () => {
-            await scanCurrentPage(page, {
-              pageType: item.type + "-overview",
-              pageUrl: sanitizeSourceUrl(page.url()),
-              label: item.title,
+          if (item.type === "workshop" && isDirectWorkshopInstructions(page)) {
+            await runScanStage(scanErrors, "direct-instructions", item.title, page, async () => {
+              const discovery = await collectWorkshopInstructionParCandidates(
+                page,
+                authRuntime,
+                {
+                  pageType: "direct-instructions",
+                  pageUrl: sanitizeSourceUrl(page.url()),
+                  label: item.title,
+                },
+                seenSourceFiles,
+              );
+              candidates.push(...discovery.candidates);
+              scanErrors.push(...discovery.scanErrors);
+              pagesScanned += discovery.pagesScanned;
             });
-          });
+          } else {
+            await runScanStage(scanErrors, item.type + "-overview", item.title, page, async () => {
+              await scanCurrentPage(page, {
+                pageType: item.type + "-overview",
+                pageUrl: sanitizeSourceUrl(page.url()),
+                label: item.title,
+              });
+            });
+          }
 
-          if (item.type === "workshop") {
+          if (item.type === "workshop" && !isDirectWorkshopInstructions(page)) {
             await scanWorkshopLaunchSurfaces({
               page,
               authRuntime,
               label: item.title,
               openWorkshop: () => openCatalogItem("PAR audit workshop reset: " + item.title),
+              openWorkshopOnPage: (targetPage) =>
+                openCatalogItem("PAR audit workshop reset: " + item.title, targetPage),
+              reuseCurrentPageForFirstOption: true,
               candidates,
               scanErrors,
               seenSourceFiles,
@@ -107,7 +142,7 @@ test.describe("Generated catalog PAR link audit", { tag: PAR_CATALOG_TAGS }, () 
                 pagesScanned += count;
               },
             });
-          } else {
+          } else if (item.type === "livestack") {
             await scanLiveStackSurfaces({
               page,
               authRuntime,
@@ -141,6 +176,8 @@ interface WorkshopSurfaceOptions {
   authRuntime: AuthRuntimeConfig;
   label: string;
   openWorkshop: () => Promise<void>;
+  openWorkshopOnPage?: (page: Page) => Promise<void>;
+  reuseCurrentPageForFirstOption?: boolean;
   candidates: ParCandidate[];
   scanErrors: ParScanError[];
   seenSourceFiles: Set<string>;
@@ -148,24 +185,102 @@ interface WorkshopSurfaceOptions {
 }
 
 async function scanWorkshopLaunchSurfaces(options: WorkshopSurfaceOptions): Promise<void> {
-  await scanInstructionOption(options, "preview");
-  await scanInstructionOption(options, "tenancy");
+  const tenancyPagePromise = options.openWorkshopOnPage
+    ? preloadWorkshopOverview(options.page, options.openWorkshopOnPage)
+    : Promise.resolve(undefined);
+
+  await scanInstructionOption(options, "preview", !options.reuseCurrentPageForFirstOption);
+  const tenancyPage = await tenancyPagePromise;
+  if (tenancyPage) {
+    try {
+      await scanInstructionOption(
+        {
+          ...options,
+          page: tenancyPage,
+          openWorkshop: async () => {},
+          openWorkshopOnPage: undefined,
+        },
+        "tenancy",
+        false,
+      );
+    } finally {
+      if (!tenancyPage.isClosed()) await tenancyPage.close();
+    }
+    return;
+  }
+
+  if (!isWorkshopOverviewPage(options.page)) {
+    await restoreWorkshopOverviewFromHistory(options.page);
+  }
+  const resetNeeded = !isWorkshopOverviewPage(options.page);
+  if (!resetNeeded || !options.openWorkshopOnPage) {
+    await scanInstructionOption(options, "tenancy", resetNeeded);
+    return;
+  }
+
+  const freshPage = await options.page.context().newPage();
+  try {
+    await scanInstructionOption(
+      {
+        ...options,
+        page: freshPage,
+        openWorkshop: () => options.openWorkshopOnPage!(freshPage),
+        openWorkshopOnPage: undefined,
+      },
+      "tenancy",
+      true,
+    );
+  } finally {
+    if (!freshPage.isClosed()) await freshPage.close();
+  }
+}
+
+async function preloadWorkshopOverview(
+  sourcePage: Page,
+  openWorkshopOnPage: (page: Page) => Promise<void>,
+): Promise<Page | undefined> {
+  const candidatePage = await sourcePage.context().newPage();
+  try {
+    await openWorkshopOnPage(candidatePage);
+    return candidatePage;
+  } catch {
+    await candidatePage.close();
+    return undefined;
+  }
+}
+
+async function restoreWorkshopOverviewFromHistory(page: Page): Promise<boolean> {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      const response = await page.goBack({
+        waitUntil: "domcontentloaded",
+        timeout: 45_000,
+      });
+      if (!response) return false;
+      if (isWorkshopOverviewPage(page)) return true;
+    } catch {
+      return false;
+    }
+  }
+  return false;
 }
 
 async function scanInstructionOption(
   options: WorkshopSurfaceOptions,
   option: "preview" | "tenancy",
+  openWorkshopFirst = true,
 ): Promise<void> {
   const pageType = option === "preview" ? "preview-instructions" : "tenancy-instructions";
   const optionLabel = option === "preview" ? "Preview instructions" : "Run on your tenancy instructions";
 
   await runScanStage(options.scanErrors, pageType, options.label + ": " + optionLabel, options.page, async () => {
-    await options.openWorkshop();
+    if (openWorkshopFirst) await options.openWorkshop();
 
     const landingPage = new WorkshopLandingPage(options.page);
-    await landingPage.openLaunchOptions();
-
     const dialog = new WorkshopLaunchOptionsDialog(options.page);
+    if (!(await dialog.dialog.isVisible().catch(() => false))) {
+      await landingPage.openLaunchOptions();
+    }
     await dialog.assertOpened();
 
     const isAvailable =
@@ -262,6 +377,7 @@ async function scanLiveStackSurfaces(options: LiveStackSurfaceOptions): Promise<
         authRuntime: options.authRuntime,
         label: options.item.title + ": " + resource.title,
         openWorkshop: openResource,
+        reuseCurrentPageForFirstOption: true,
         candidates: options.candidates,
         scanErrors: options.scanErrors,
         seenSourceFiles: options.seenSourceFiles,
@@ -341,6 +457,22 @@ function resolveHref(page: Page, href: string): string {
     return new URL(href, page.url()).toString();
   } catch {
     return href;
+  }
+}
+
+function isDirectWorkshopInstructions(page: Page): boolean {
+  try {
+    return new URL(page.url()).pathname.includes("/run-workshop");
+  } catch {
+    return page.url().includes("/run-workshop");
+  }
+}
+
+function isWorkshopOverviewPage(page: Page): boolean {
+  try {
+    return new URL(page.url()).pathname.includes("/view-workshop");
+  } catch {
+    return page.url().includes("/view-workshop");
   }
 }
 

@@ -1,4 +1,4 @@
-import type { Page } from "@playwright/test";
+import type { Frame, Page } from "@playwright/test";
 
 import { parseIntegerFlag } from "../../config/projectConfig.js";
 import {
@@ -33,6 +33,11 @@ interface TutorialSource {
 
 interface WorkshopManifest {
   tutorials?: Array<{ filename?: unknown; title?: unknown }>;
+}
+
+interface SourceResponse {
+  status: number;
+  body: string;
 }
 
 const sourceTextCache = new Map<string, Promise<string>>();
@@ -138,6 +143,10 @@ export function sourceTextCandidates(text: string, source: ParSource): ParCandid
     const lineIndex = objectLine >= 0 ? objectLine : undefined;
     const section = lineIndex === undefined ? undefined : nearestHeading(lines, lineIndex);
     const instruction = lineIndex === undefined ? undefined : nearestInstruction(lines, lineIndex);
+    const sourceExcerpt =
+      lineIndex === undefined
+        ? undefined
+        : sanitizeDiagnosticMessage(lines[lineIndex].replace(/<\/?(?:copy|code)>/gi, "").trim());
 
     return {
       url,
@@ -146,6 +155,7 @@ export function sourceTextCandidates(text: string, source: ParSource): ParCandid
           ...source,
           location: lineIndex === undefined ? "Workshop source" : "Markdown line " + (lineIndex + 1),
           sourceLine: lineIndex === undefined ? undefined : lineIndex + 1,
+          sourceExcerpt,
           section,
           searchText: parsed?.objectName,
           instruction,
@@ -190,28 +200,21 @@ async function fetchWithRetries(page: Page, url: string, retries: number): Promi
 
   for (let attempt = 1; attempt <= retries + 1; attempt += 1) {
     try {
-      const response = await page.request.get(url, {
-        failOnStatusCode: false,
-        timeout: sourceTimeoutMs(),
-      });
-      const status = response.status();
+      const response = await fetchSourceResponse(page, url);
+      const status = response.status;
 
       if (status === 404) {
-        await response.dispose();
         return undefined;
       }
 
       if (status >= 400) {
-        await response.dispose();
         if (status === 408 || status === 425 || status === 429 || status >= 500) {
           throw new Error("Temporary source response: HTTP " + status);
         }
         throw new Error("Workshop source could not be opened: HTTP " + status);
       }
 
-      const body = await response.text();
-      await response.dispose();
-      return body;
+      return response.body;
     } catch (error) {
       lastError = error;
       if (attempt <= retries) await delay(500 * attempt);
@@ -219,6 +222,94 @@ async function fetchWithRetries(page: Page, url: string, retries: number): Promi
   }
 
   throw lastError;
+}
+
+async function fetchSourceResponse(page: Page, url: string): Promise<SourceResponse> {
+  const matchingFrame = frameForOrigin(page, url);
+  if (matchingFrame) {
+    try {
+      return await fetchThroughBrowser(matchingFrame, url);
+    } catch {
+      // Retry through Playwright's separate request context below.
+    }
+  }
+
+  try {
+    const response = await page.request.get(url, {
+      failOnStatusCode: false,
+      timeout: sourceTimeoutMs(),
+    });
+    const result = {
+      status: response.status(),
+      body: await response.text(),
+    };
+    await response.dispose();
+    return result;
+  } catch (directError) {
+    if (matchingFrame) {
+      throw directError;
+    }
+
+    try {
+      return await fetchThroughBrowser(page, url);
+    } catch {
+      throw directError;
+    }
+  }
+}
+
+function frameForOrigin(page: Page, rawUrl: string): Frame | Page | undefined {
+  let targetOrigin: string;
+  try {
+    targetOrigin = new URL(rawUrl).origin;
+  } catch {
+    return undefined;
+  }
+
+  if (safeUrl(page.url())?.origin === targetOrigin) return page;
+  return page.frames().find((frame) => safeUrl(frame.url())?.origin === targetOrigin);
+}
+
+async function fetchThroughBrowser(context: Frame | Page, url: string): Promise<SourceResponse> {
+  const result = await context.evaluate(
+    async ({ targetUrl, timeoutMs }) => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+      try {
+        const response = await fetch(targetUrl, {
+          credentials: "include",
+          signal: controller.signal,
+        });
+        return {
+          status: response.status,
+          body: await response.text(),
+          error: "",
+        };
+      } catch (error) {
+        return {
+          status: 0,
+          body: "",
+          error: error instanceof Error ? error.message : String(error),
+        };
+      } finally {
+        clearTimeout(timer);
+      }
+    },
+    {
+      targetUrl: url,
+      timeoutMs: sourceTimeoutMs(),
+    },
+  );
+
+  if (result.error) {
+    throw new Error("Browser source request failed: " + result.error);
+  }
+
+  return {
+    status: result.status,
+    body: result.body,
+  };
 }
 
 async function mapWithConcurrency<T>(

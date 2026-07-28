@@ -1,5 +1,5 @@
 jenkins:
-  systemMessage: "LiveLabs QA appliance. Use the PAR audit or overall regression jobs; the engine job is managed by those two entry points."
+  systemMessage: "LiveLabs QA service. Use the PAR audit or overall regression jobs."
   numExecutors: 2
   mode: NORMAL
   scmCheckoutRetryCount: 2
@@ -42,12 +42,12 @@ credentials:
           - string:
               scope: GLOBAL
               id: "livelabs-username"
-              description: "LiveLabs QA sign-in username from the VM secret store"
+              description: "LiveLabs QA sign-in username loaded from OCI Vault"
               secret: "${LIVELABS_USERNAME}"
           - string:
               scope: GLOBAL
               id: "livelabs-secret"
-              description: "LiveLabs QA sign-in secret from the VM secret store"
+              description: "LiveLabs QA sign-in secret loaded from OCI Vault"
               secret: "${LIVELABS_SECRET}"
 
 security:

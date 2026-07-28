@@ -70,8 +70,23 @@ upload_dir() {
     "${auth_args[@]}"
 }
 
+upload_file() {
+  local source_file="$1"
+  local object_name="$2"
+  [[ -f "$source_file" ]] || return 0
+  oci os object put \
+    --namespace-name "$namespace" \
+    --bucket-name "$bucket" \
+    --file "$source_file" \
+    --name "$object_name" \
+    --force \
+    "${auth_args[@]}"
+}
+
 # Publish the immutable run first. The latest pointer is replaced only after the
 # complete run is available, so report readers never see a half-uploaded run.
 upload_dir "$run_dir" "${prefix}/${channel}/runs/${run_id}/"
 upload_dir "$latest_dir" "${prefix}/${channel}/latest/"
+upload_file "${channel_root}/history.json" "${prefix}/${channel}/history.json"
+upload_file "${channel_root}/index.html" "${prefix}/${channel}/index.html"
 echo "Published sanitized ${channel} report ${run_id} to ${bucket}/${prefix}/${channel}."
