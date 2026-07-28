@@ -67,6 +67,7 @@ services:
       - qa_reports:/srv/reports:ro
     read_only: true
     tmpfs:
+      - /etc/nginx/conf.d
       - /var/cache/nginx
       - /var/run
       - /tmp
