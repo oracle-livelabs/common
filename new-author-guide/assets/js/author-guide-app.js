@@ -1673,6 +1673,13 @@
       return;
     }
 
+    if (!fields || !fields.length) {
+      wmsExampleResults.innerHTML = "";
+      wmsExampleResults.classList.add("d-none");
+      return;
+    }
+
+    wmsExampleResults.classList.remove("d-none");
     wmsExampleResults.innerHTML = (fields || []).map(function (field, index) {
       var targetId = "wms-example-field-" + index;
       return [
@@ -1698,7 +1705,9 @@
     var service = window.AuthorGuideWorkshopGenerator;
 
     if (!prompt) {
-      prompt = defaultWmsExamplePrompt;
+      renderGeneratedExampleFields([]);
+      setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Enter a workshop topic before generating examples.");
+      return;
     }
 
     if (!service || typeof service.generateExamples !== "function") {
@@ -1717,21 +1726,6 @@
         setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Examples could not be generated. Try a shorter prompt.");
       }
     }, 180);
-  }
-
-  function renderDefaultWmsExamples() {
-    var service = window.AuthorGuideWorkshopGenerator;
-
-    if (!wmsExampleResults || !service || typeof service.generateExamples !== "function") {
-      return;
-    }
-
-    try {
-      renderGeneratedExampleFields(service.generateExamples(defaultWmsExamplePrompt).fields);
-      setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "");
-    } catch (error) {
-      renderGeneratedExampleFields([]);
-    }
   }
 
   function setMarkdownOutput(value) {
@@ -4298,7 +4292,8 @@
       event.preventDefault();
       runWmsExampleGeneration();
     });
-    renderDefaultWmsExamples();
+    renderGeneratedExampleFields([]);
+    setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, true, false, "");
   }
 
   if (workshopMarkdownForm) {

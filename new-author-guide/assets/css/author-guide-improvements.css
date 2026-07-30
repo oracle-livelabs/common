@@ -3585,10 +3585,10 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
   align-items: start;
-  gap: 0.75rem;
-  margin-top: 1rem;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-card {
@@ -3598,17 +3598,13 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   background: #fff;
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .generated-example-card[open] {
-  grid-column: 1 / -1;
-}
-
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-summary {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  min-height: 3.25rem;
-  padding: 0.72rem 0.9rem;
+  gap: 0.55rem;
+  min-height: 2.25rem;
+  padding: 0.48rem 0.65rem;
   cursor: pointer;
   list-style: none;
   background: #fbf9f8;
@@ -3621,8 +3617,8 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-summary::after {
   content: "";
   flex: 0 0 auto;
-  width: 0.62rem;
-  height: 0.62rem;
+  width: 0.48rem;
+  height: 0.48rem;
   border-right: 2px solid var(--ink-soft);
   border-bottom: 2px solid var(--ink-soft);
   transform: rotate(45deg);
@@ -3640,7 +3636,7 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-summary-main {
   display: grid;
-  gap: 0.2rem;
+  gap: 0.1rem;
   min-width: 0;
 }
 
@@ -3648,9 +3644,9 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   display: -webkit-box;
   overflow: hidden;
   color: var(--ink);
-  font-size: 0.88rem;
+  font-size: 0.78rem;
   font-weight: 850;
-  line-height: 1.25;
+  line-height: 1.18;
   overflow-wrap: anywhere;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -3658,8 +3654,8 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-body {
   display: grid;
-  gap: 0.55rem;
-  padding: 0.75rem 0.9rem 0.9rem;
+  gap: 0.4rem;
+  padding: 0.5rem 0.6rem 0.65rem;
   border-top: 1px solid rgba(212, 207, 202, 0.78);
 }
 
@@ -3671,27 +3667,31 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-copy {
-  min-height: 2rem;
-  padding: 0.35rem 0.7rem;
+  min-height: 1.75rem !important;
+  padding: 0.26rem 0.58rem !important;
+  font-size: 0.78rem !important;
+  line-height: 1.15 !important;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-pre {
   width: 100%;
-  max-height: clamp(10rem, 28vh, 18rem);
+  max-height: 8.5rem;
   margin: 0;
+  padding: 0 !important;
   overflow: auto;
   border-radius: 8px;
   background: #2b2927;
   color: #f8f5f2;
-  font-size: 0.84rem;
-  line-height: 1.5;
+  font-size: 0.78rem;
+  line-height: 1.42;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-pre code {
   display: block;
   min-width: 0;
-  padding: 0.9rem;
+  padding: 0.62rem;
   color: inherit;
+  font-size: inherit !important;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   word-break: normal;

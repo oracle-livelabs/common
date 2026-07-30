@@ -1,17 +1,60 @@
 // Local workshop-generation abstraction for WMS examples, LiveLabs snippets, and outline support.
 (function () {
   var fallbackTopic = "Oracle LiveLabs workshop";
-  var productHints = [
-    "Oracle Database",
-    "Oracle Database 23ai",
-    "OCI",
-    "Oracle Cloud Infrastructure",
-    "APEX",
-    "FreeSQL",
-    "AI",
-    "Kubernetes",
-    "Analytics"
+  var productCatalog = [
+    { label: "Oracle Database", module: "Oracle Database", patterns: ["oracle database", "database", "adb", "autonomous database", "23ai", "select ai", "selectai"] },
+    { label: "Autonomous Database", module: "Oracle Database", patterns: ["autonomous database", "adb"] },
+    { label: "Select AI", module: "Oracle Database", patterns: ["select ai", "selectai"] },
+    { label: "OCI Generative AI", module: "OCI AI Services", patterns: ["oci genai", "oci generative ai", "generative ai", "genai"] },
+    { label: "OCI AI Services", module: "OCI AI Services", patterns: ["ai speech", "ai services", "oci ai"] },
+    { label: "OCI Object Storage", module: "Oracle Cloud Infrastructure", patterns: ["object storage", "bucket"] },
+    { label: "OCI Functions", module: "Oracle Cloud Infrastructure", patterns: ["functions", "serverless"] },
+    { label: "OCI Events", module: "Oracle Cloud Infrastructure", patterns: ["events", "event-driven"] },
+    { label: "OCI Notifications", module: "Oracle Cloud Infrastructure", patterns: ["notifications"] },
+    { label: "Oracle Cloud Infrastructure", module: "Oracle Cloud Infrastructure", patterns: ["oci", "oracle cloud infrastructure"] },
+    { label: "APEX", module: "Application Development", patterns: ["apex", "application express"] },
+    { label: "FreeSQL", module: "Oracle Database", patterns: ["freesql"] },
+    { label: "Kubernetes", module: "Cloud Native", patterns: ["kubernetes", "oke"] },
+    { label: "Analytics", module: "Analytics", patterns: ["analytics", "dashboard", "visualization"] },
+    { label: "IAM", module: "Security", patterns: ["iam", "identity", "policy", "policies"] },
+    { label: "Logging", module: "Observability", patterns: ["logging", "logs", "observability"] }
   ];
+
+  var acronymMap = {
+    ai: "AI",
+    adb: "ADB",
+    api: "API",
+    apex: "APEX",
+    css: "CSS",
+    genai: "GenAI",
+    html: "HTML",
+    iam: "IAM",
+    json: "JSON",
+    llm: "LLM",
+    oci: "OCI",
+    oke: "OKE",
+    ospa: "OSPA",
+    par: "PAR",
+    plsql: "PL/SQL",
+    rag: "RAG",
+    sql: "SQL",
+    ui: "UI",
+    wms: "WMS"
+  };
+
+  var titleSmallWords = {
+    and: true,
+    as: true,
+    for: true,
+    from: true,
+    in: true,
+    of: true,
+    on: true,
+    the: true,
+    to: true,
+    using: true,
+    with: true
+  };
 
   var snippetCatalog = [
     {
@@ -295,12 +338,108 @@
     return text.charAt(0).toUpperCase() + text.slice(1);
   }
 
-  function detectProduct(prompt) {
-    var lower = prompt.toLowerCase();
-    var match = productHints.find(function (hint) {
-      return lower.indexOf(hint.toLowerCase()) !== -1;
+  function titleCase(value) {
+    return normalizeWhitespace(value).split(" ").map(function (word, index) {
+      var clean = word.replace(/[^a-z0-9]/gi, "").toLowerCase();
+      var mapped = acronymMap[clean];
+
+      if (mapped) {
+        return word.replace(new RegExp(clean, "i"), mapped);
+      }
+
+      if (index > 0 && titleSmallWords[clean]) {
+        return word.toLowerCase();
+      }
+
+      if (word.length <= 2) {
+        return word.toLowerCase();
+      }
+
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    }).join(" ");
+  }
+
+  function uniqueValues(values) {
+    var seen = {};
+    return values.filter(function (value) {
+      var key = String(value || "").toLowerCase();
+      if (!key || seen[key]) {
+        return false;
+      }
+      seen[key] = true;
+      return true;
     });
-    return match || "Oracle services";
+  }
+
+  function detectProducts(prompt) {
+    var lower = prompt.toLowerCase();
+    var matches = [];
+
+    productCatalog.forEach(function (product) {
+      var found = product.patterns.some(function (pattern) {
+        return lower.indexOf(pattern) !== -1;
+      });
+      if (found) {
+        matches.push(product.label);
+      }
+    });
+
+    if (lower.indexOf("rag") !== -1 || lower.indexOf("agent") !== -1 || lower.indexOf("vector") !== -1 || lower.indexOf("memory") !== -1) {
+      matches.push("Oracle Database");
+      matches.push("OCI Generative AI");
+    }
+
+    if (lower.indexOf("ai") !== -1 && lower.indexOf("chat") !== -1) {
+      matches.push("OCI Generative AI");
+    }
+
+    return uniqueValues(matches).slice(0, 6);
+  }
+
+  function listText(values, fallback) {
+    var items = uniqueValues(values || []);
+    if (!items.length) {
+      return fallback || "Oracle services";
+    }
+    if (items.length === 1) {
+      return items[0];
+    }
+    if (items.length === 2) {
+      return items[0] + " and " + items[1];
+    }
+    return items.slice(0, -1).join(", ") + ", and " + items[items.length - 1];
+  }
+
+  function primaryProduct(products) {
+    var priority = [
+      "Oracle Database",
+      "Autonomous Database",
+      "Select AI",
+      "OCI Generative AI",
+      "OCI AI Services",
+      "APEX",
+      "Oracle Cloud Infrastructure"
+    ];
+    var match = priority.find(function (item) {
+      return products.indexOf(item) !== -1;
+    });
+    return match || products[0] || "Oracle services";
+  }
+
+  function moduleSuggestion(products, prompt) {
+    var primary = primaryProduct(products);
+    var found = productCatalog.find(function (item) {
+      return item.label === primary;
+    });
+    var lower = prompt.toLowerCase();
+
+    if (lower.indexOf("agent") !== -1 || lower.indexOf("rag") !== -1 || lower.indexOf("genai") !== -1) {
+      return primary === "Oracle Database" || products.indexOf("Oracle Database") !== -1
+        ? "Oracle Database and AI"
+        : "OCI AI Services";
+    }
+
+    return found ? found.module : "LiveLabs workshop module aligned to " + primary;
   }
 
   function detectAudience(prompt) {
@@ -322,6 +461,9 @@
 
   function actionVerb(prompt) {
     var lower = prompt.toLowerCase();
+    if (lower.indexOf("agent") !== -1 || lower.indexOf("chat") !== -1 || lower.indexOf("app") !== -1) {
+      return "build";
+    }
     if (lower.indexOf("deploy") !== -1) {
       return "deploy";
     }
@@ -337,78 +479,167 @@
     return "build";
   }
 
+  function compactTopic(prompt) {
+    var text = compactPrompt(prompt)
+      .replace(/\b(workshop|tutorial|lab|livelabs|live labs|topic|about|for)\b/gi, " ")
+      .replace(/\b(create|build|deploy|learn|show|teach|using|with|on|secure|analyze|analyse|migrate|implement|configure)\b/gi, " ")
+      .replace(/\b(administrator|administrators|architect|architects|analyst|analysts|developer|developers|learner|learners|user|users)\b/gi, " ")
+      .replace(/\b(oracle cloud infrastructure|oracle database|autonomous database|oci|adb|selectai|select ai)\b/gi, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    if (!text) {
+      text = compactPrompt(prompt);
+    }
+
+    return compactText(text, 92);
+  }
+
+  function productAlreadyInTopic(topic, product) {
+    var lower = topic.toLowerCase();
+    var entry = productCatalog.find(function (item) {
+      return item.label === product;
+    });
+
+    if (lower.indexOf(product.toLowerCase()) !== -1) {
+      return true;
+    }
+
+    return entry ? entry.patterns.some(function (pattern) {
+      return lower.indexOf(pattern) !== -1;
+    }) : false;
+  }
+
+  function compactText(value, maxLength) {
+    var text = normalizeWhitespace(value);
+    var bounded = Math.max(40, maxLength || 120);
+
+    if (!text || text.length <= bounded) {
+      return text;
+    }
+
+    return text.slice(0, bounded).replace(/\s+\S*$/, "").trim();
+  }
+
+  function ensurePeriod(value) {
+    var text = normalizeWhitespace(value);
+    if (!text) {
+      return "";
+    }
+    return /[.!?]$/.test(text) ? text : text + ".";
+  }
+
+  function boundSentence(value, maxLength) {
+    var text = ensurePeriod(value);
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return ensurePeriod(text.slice(0, maxLength - 1).replace(/\s+\S*$/, "").trim());
+  }
+
   function profile(prompt) {
     var topic = compactPrompt(prompt);
-    var product = detectProduct(topic);
+    var products = detectProducts(topic);
+    var product = primaryProduct(products);
     var audience = detectAudience(topic);
     var verb = actionVerb(topic);
+    var topicShort = compactTopic(topic);
     return {
       topic: topic,
+      topicShort: topicShort,
       titleTopic: sentenceCase(topic),
       product: product,
+      products: products,
+      productsText: listText(products, "Oracle services"),
       audience: audience,
-      verb: verb
+      verb: verb,
+      module: moduleSuggestion(products, topic)
     };
   }
 
   function exampleFields(prompt) {
+    var data = profile(prompt);
+    var topicTitle = titleCase(data.topicShort);
+    var title = compactText(titleCase(data.verb + " " + data.topicShort + (productAlreadyInTopic(data.topicShort, data.product) ? "" : " with " + data.product)), 96);
+    var shortDescription = boundSentence(
+      titleCase(data.verb) + " " + topicTitle + " with " + data.productsText + " through a guided LiveLabs workflow that covers setup, implementation, validation, and handoff.",
+      400
+    );
+    var longDescription = boundSentence(
+      "Participants complete a guided implementation for " + topicTitle + " using " + data.productsText + ". The workshop prepares the required environment, walks through the core implementation tasks, validates the result, and captures the WMS-ready details reviewers need. It follows the LiveLabs authoring flow with clear prerequisites, copy-ready steps, concise checks, and a practical completion path.",
+      4000
+    );
+    var trainingObjectives = [
+      "Explain the learner problem and the Oracle services used in the solution.",
+      titleCase(data.verb) + " the core " + topicTitle + " workflow with guided hands-on steps.",
+      "Validate the result and identify the operational checks needed before publishing."
+    ].join(" ");
+
     return [
       {
         label: "Workshop Title",
-        value: "Build AI Agents with Persistent Memory Using Oracle Database"
+        value: title
       },
       {
         label: "Short Description (max 400 characters)",
-        value: "Build AI agents with persistent memory, semantic search, and enterprise data access using Oracle Database, ADB, Select AI, and OCI GenAI."
+        value: shortDescription
       },
       {
         label: "Long Description (max 4000 characters)",
-        value: "Participants build database-powered AI agents that retain useful context between conversations. The workshop shows how to store memory in Oracle Database, search it semantically, expose enterprise data safely, and use the Oracle Select AI Agent framework with hands-on SQL examples. Learners leave with a practical pattern for agents that remember clients, apply past decisions, and operate with governance controls."
+        value: longDescription
       },
       {
         label: "Workshop Abstract",
         value: [
-          "Workshop Elevator Pitch/Messaging: AI agents are powerful, but they forget everything between conversations. This workshop teaches you to build agents with real memory using Oracle Database, so your AI can remember clients, learn from past decisions, and get smarter over time.",
+          "Workshop Elevator Pitch/Messaging: " + topicTitle + " gives " + data.audience + " a practical way to " + data.verb + " a working solution with " + data.product + " instead of stopping at concepts or slides.",
           "",
-          "Workshop Description: Build AI agents that remember. Learn to create database-powered agents with persistent memory, semantic search, and enterprise data access using Oracle Select AI Agent framework. Hands-on with SQL.",
+          "Workshop Description: " + longDescription,
           "",
-          "Why is this workshop needed? Used for a workshop series.",
+          "Why is this workshop needed? Teams need a repeatable hands-on path for " + topicTitle + " that connects the business outcome, Oracle service setup, implementation work, and validation checks in one reviewer-ready flow.",
           "",
-          "What products/technologies are used? ADB, SelectAI, OCI GenAI.",
+          "What products/technologies are used? " + data.productsText + ".",
           "",
-          "Is there a primary Oracle product/technology being showcased? If so, what is it? Oracle Database.",
+          "Is there a primary Oracle product/technology being showcased? If so, what is it? " + data.product + ".",
           "",
           "For OSPA Workshops Only:",
-          "What are the training objectives? Please fill in.",
-          "What module will this exist in? Please fill in."
+          "What are the training objectives? " + trainingObjectives,
+          "What module will this exist in? " + data.module + "."
         ].join("\n")
       },
       {
         label: "Workshop Outline",
         value: [
-          "What agents are and why they matter: Understand the difference between chatbots that explain and agents that act on your data.",
+          "Define the scenario and learner outcome: Understand the problem, the target audience, and where " + data.product + " fits.",
           "",
-          "How agents plan and execute: Trace the agent loop from understanding requests to coordinating tools and completing work.",
+          "Prepare the environment: Confirm required accounts, access, sample data, repositories, and service configuration.",
           "",
-          "The forgetting problem: Experience why stateless AI fails in production and why memory is essential.",
+          titleCase(data.verb) + " the core workflow: Complete the main " + topicTitle + " implementation with guided, copy-ready steps.",
           "",
-          "Building the memory core: Create persistent memory with four types (facts, decisions, context, policies) and semantic vector search.",
+          "Validate and troubleshoot: Run checks that prove the solution works and capture common fixes.",
           "",
-          "Safety and control: Implement role-based agents, automated rules, human oversight, and audit trails for compliance."
+          "Prepare for WMS review: Record prerequisites, tags, expected results, QA notes, and publishing handoff details."
         ].join("\n")
       },
       {
         label: "Workshop Prerequisites",
         value: [
-          "Familiarity with the Oracle Database and SQL is helpful but not required.",
+          "Access to the Oracle environment required for " + data.productsText + ".",
           "",
-          "An Oracle Login."
+          "An Oracle Login.",
+          "",
+          "Basic familiarity with cloud service terminology is helpful.",
+          "",
+          "Basic command-line, SQL, JSON, or application-development experience may help depending on the final lab steps."
         ].join("\n")
       },
       {
         label: "Notes and Additional Info",
         value: [
-          "Optional: Add workshop-series context, audience notes, delivery schedule, owner guidance, or reviewer instructions here."
+          "Estimated duration: 60 to 90 minutes unless the final lab plan requires more setup time.",
+          "",
+          "Recommended level: Beginner to intermediate, adjusted after the lab tasks are finalized.",
+          "",
+          "Reviewer note: Confirm access, product tags, owner group, and screenshots after the workshop markdown is drafted."
         ].join("\n"),
         optional: true
       }
