@@ -27,7 +27,18 @@ Estimated Time: 10 minutes
     - expected provisioning time
     - a [pre-event support contact](#legend)
 
-2. Require each attendee to use their own verified Oracle account. Never share a personal Oracle account or credentials.
+2. Require each attendee to use their own verified Oracle account. Never share a personal Oracle account or credentials. You can share the instruction below with the customer in the preflight email.
+
+ - How to create an Oracle Account? 
+
+    Creating an Oracle account can be summarized in the following two simple steps.
+    1.	Navigate to [oracle.com](https://www.oracle.com), click the Account icon, and select Create an Account
+
+    ![Oracle.com Page](./images/oracle-page.png " ")
+
+    2.	Fill out the form and click Create Account
+
+    ![Create an account form](./images/create-account.png " ")
 
 3. Tell attendees not to wait until the workshop to create or verify their account.
 
@@ -52,7 +63,7 @@ Estimated Time: 10 minutes
     Lab spaces should be ready in [measured time]. [Explain whether they
     start before or during the event and what happens while attendees wait.]
 
-    Do not wait until the workshop to create or verify your Oracle account.
+    Do not wait until the workshop to create or verify your Oracle account. [Add the instruction on how to create an Oracle account]
     If a check fails, contact [pre-event support contact] before the session.
     ```
 
