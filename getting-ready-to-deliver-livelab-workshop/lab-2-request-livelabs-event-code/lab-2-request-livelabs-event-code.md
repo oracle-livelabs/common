@@ -46,7 +46,7 @@ Estimated Time: 20 minutes
 
 ## Task 2: Complete the Event Request in WMS
 
-1. In the [Workshop Management System (WMS)](#legend), open **Events** and select **Request an Event Code**.
+1. In the [Workshop Management System (WMS)](#legend), open **Events** and select **Request an Event Code**. Click [here](https://livelabs.oracle.com/wms) to go to the WMS Platform.
 
     ![Request an Event Code in WMS](./images/request_event_code.png " ")
 
