@@ -28,8 +28,7 @@ Estimated Time: 10 minutes
     - a [pre-event support contact](#legend)
 
 2. Require each attendee to use their own verified Oracle account. Never share a personal Oracle account or credentials. You can share the instruction below with the customer in the preflight email.
-
- - How to create an Oracle Account? 
+    - How to create an Oracle Account?
 
     Creating an Oracle account can be summarized in the following two simple steps.
     1.	Navigate to [oracle.com](https://www.oracle.com), click the Account icon, and select Create an Account
