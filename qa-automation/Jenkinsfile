@@ -11,6 +11,10 @@ def runProfile() {
   return hasText(params.RUN_PROFILE) ? params.RUN_PROFILE.toString().trim() : "pr-slice"
 }
 
+def reportChannel() {
+  return runProfile() == "par-audit" ? "par" : "regression"
+}
+
 def sourceCheckoutConfig() {
   return [
     $class: "GitSCM",
@@ -33,17 +37,39 @@ def shouldCreateAuthState() {
 }
 
 def qaRuntimeEnv() {
+  def profile = runProfile()
+  def workerCount = profile == "par-audit" ? numericValue(params.PAR_WORKERS, "2") : numericValue(params.TEST_WORKERS, "1")
   def envValues = [
     "CI=true",
     "QA_HEADED=false",
-    "QA_TRACE=retain-on-failure",
-    "QA_VIDEO=retain-on-failure",
-    "QA_SCREENSHOT=only-on-failure",
-    "QA_FULL_PAGE_SCREENSHOT=true",
-    "QA_WORKERS=1",
+    "QA_TRACE=" + (profile == "par-audit" ? "off" : "retain-on-failure"),
+    "QA_VIDEO=off",
+    "QA_SCREENSHOT=" + (profile == "par-audit" ? "off" : "only-on-failure"),
+    "QA_FULL_PAGE_SCREENSHOT=" + (profile == "par-audit" ? "false" : "true"),
+    "QA_WORKERS=${workerCount}",
     "QA_RETRIES=${numericValue(params.TEST_RETRIES, '1')}",
     "QA_CONTENT_LINK_LIMIT=${numericValue(params.CONTENT_LINK_LIMIT, '50')}",
   ]
+
+  if (profile == "par-audit") {
+    envValues.add("QA_PAR_RETRIES=" + numericValue(params.PAR_RETRIES, "2"))
+    envValues.add("QA_PAR_RETRY_DELAY_MS=" + numericValue(params.PAR_RETRY_DELAY_MS, "1500"))
+    envValues.add("QA_PAR_TIMEOUT_MS=" + numericValue(params.PAR_TIMEOUT_MS, "20000"))
+    envValues.add("QA_PAR_CHECK_CONCURRENCY=" + numericValue(params.PAR_CHECK_CONCURRENCY, "4"))
+    envValues.add("QA_PAR_DISCOVERY_CONCURRENCY=" + numericValue(params.PAR_DISCOVERY_CONCURRENCY, "3"))
+    envValues.add("QA_PAR_SOURCE_TIMEOUT_MS=" + numericValue(params.PAR_SOURCE_TIMEOUT_MS, "45000"))
+    envValues.add("QA_CAPTURE_CONSOLE=false")
+    envValues.add("QA_CAPTURE_PAGE_ERRORS=false")
+    envValues.add("QA_CAPTURE_REQUEST_FAILURES=false")
+    envValues.add("QA_CAPTURE_RESPONSE_ERRORS=false")
+    envValues.add("QA_ATTACH_DOM_SNAPSHOT_ON_FAILURE=false")
+  }
+
+  if (hasText(env.QA_ROOT_REPORTS_BASE)) {
+    def reportsBase = env.QA_ROOT_REPORTS_BASE.toString().trim().replaceAll('/+$', '')
+    envValues.add("QA_ROOT_REPORTS_DIR=${reportsBase}/${reportChannel()}")
+    envValues.add("QA_REPORT_LANDING_PAGE=" + (profile == "par-audit" ? "par-links.html" : "summary.html"))
+  }
 
   if (hasText(params.BASE_URL)) {
     envValues.add("QA_BASE_URL=${params.BASE_URL.trim()}")
@@ -83,7 +109,7 @@ def withLiveLabsSecrets(Closure body) {
 
 def catalogIndexCommand() {
   def profile = runProfile()
-  def defaultMaxPages = profile == "nightly-full" ? "250" : "1"
+  def defaultMaxPages = profile in ["nightly-full", "par-audit"] ? "250" : "1"
   def maxPages = numericValue(params.CATALOG_MAX_PAGES, defaultMaxPages)
   def defaultMaxItems = profile == "pr-slice" ? "5" : "0"
   def maxItems = numericValue(params.CATALOG_MAX_ITEMS, defaultMaxItems)
@@ -109,10 +135,29 @@ def generatedRunCommand(runName) {
   ].join(" ")
 }
 
+def parAuditRunCommand() {
+  return [
+    "node ./scripts/qa.mjs tests/platform/par/catalogParLinks.spec.ts",
+    "--output artifacts/jenkins/par-audit/test-results",
+    "--junit on",
+    "--junit-file artifacts/jenkins/par-audit/junit.xml",
+    "--json on",
+    "--json-file artifacts/jenkins/par-audit/results.json",
+  ].join(" ")
+}
+
 def runGeneratedSuite(runName, extraEnv) {
   withLiveLabsSecrets {
     withEnv(qaRuntimeEnv() + extraEnv) {
       sh generatedRunCommand(runName)
+    }
+  }
+}
+
+def runParAuditSuite() {
+  withLiveLabsSecrets {
+    withEnv(qaRuntimeEnv()) {
+      sh parAuditRunCommand()
     }
   }
 }
@@ -131,8 +176,8 @@ pipeline {
   parameters {
     choice(
       name: "RUN_PROFILE",
-      choices: ["pr-slice", "nightly-full", "manual-items"],
-      description: "pr-slice runs a small generated catalog sample; nightly-full crawls and tests the full generated catalog in shards; manual-items targets CATALOG_ITEM_IDS."
+      choices: ["pr-slice", "nightly-full", "manual-items", "par-audit"],
+      description: "pr-slice runs a small sample; nightly-full runs generated QA in shards; manual-items targets IDs; par-audit discovers and checks PAR links across the full catalog."
     )
     string(name: "BASE_URL", defaultValue: "", description: "Optional LiveLabs base URL override. Leave blank for config/project_settings.json.")
     string(name: "BROWSER_CHANNEL", defaultValue: "", description: "Optional browser channel such as chrome or msedge when the Jenkins agent provides one.")
@@ -140,14 +185,22 @@ pipeline {
     string(name: "AUTH_TARGET_URL", defaultValue: "", description: "Optional private LiveLabs URL used to create .auth/livelabs-storage-state.json before crawling.")
     string(name: "LIVELABS_USERNAME_CREDENTIAL_ID", defaultValue: "", description: "Optional Jenkins string credential ID for QA_LIVELABS_USERNAME.")
     string(name: "LIVELABS_SECRET_CREDENTIAL_ID", defaultValue: "", description: "Optional Jenkins string credential ID for QA_LIVELABS_PASSWORD.")
-    string(name: "CATALOG_MAX_PAGES", defaultValue: "", description: "Override catalog crawl pages. Defaults: 1 for pr-slice/manual-items, 250 for nightly-full.")
-    string(name: "CATALOG_MAX_ITEMS", defaultValue: "", description: "Optional catalog item cap. Defaults to 5 for pr-slice and no cap for manual-items/nightly-full.")
+    string(name: "CATALOG_MAX_PAGES", defaultValue: "", description: "Override catalog crawl pages. Defaults: 1 for pr-slice/manual-items, 250 for nightly-full/par-audit.")
+    string(name: "CATALOG_MAX_ITEMS", defaultValue: "", description: "Optional catalog item cap. Defaults to 5 for pr-slice and no cap for manual-items/nightly-full/par-audit.")
     string(name: "CATALOG_ITEM_IDS", defaultValue: "", description: "Optional comma-separated generated item IDs/slugs for manual targeted runs.")
     string(name: "SHARD_TOTAL", defaultValue: "4", description: "Number of generated test shards for nightly-full.")
+    string(name: "TEST_WORKERS", defaultValue: "1", description: "Playwright workers per generated run. The VM package uses one shard with five workers to keep one complete report.")
     string(name: "TEST_RETRIES", defaultValue: "1", description: "Playwright test retry count.")
     string(name: "CATALOG_RETRIES", defaultValue: "3", description: "Catalog crawler retry count.")
     string(name: "CATALOG_RETRY_DELAY_MS", defaultValue: "5000", description: "Delay between catalog crawler retries.")
     string(name: "CONTENT_LINK_LIMIT", defaultValue: "50", description: "Visible content links checked per generated page. Use 0 to check all links.")
+    string(name: "PAR_WORKERS", defaultValue: "2", description: "Parallel catalog items for PAR audit. Keep this conservative so the LiveLabs CDN is not overloaded.")
+    string(name: "PAR_DISCOVERY_CONCURRENCY", defaultValue: "3", description: "Workshop source files fetched concurrently inside each PAR catalog item.")
+    string(name: "PAR_SOURCE_TIMEOUT_MS", defaultValue: "45000", description: "Timeout for each workshop manifest or Markdown source request.")
+    string(name: "PAR_RETRIES", defaultValue: "2", description: "Retries for temporary PAR probe results.")
+    string(name: "PAR_RETRY_DELAY_MS", defaultValue: "1500", description: "Delay between PAR probe retries.")
+    string(name: "PAR_TIMEOUT_MS", defaultValue: "20000", description: "Timeout for each PAR HEAD or range request.")
+    string(name: "PAR_CHECK_CONCURRENCY", defaultValue: "4", description: "PAR HTTP probes running concurrently inside each catalog test.")
   }
 
   stages {
@@ -228,6 +281,9 @@ pipeline {
     }
 
     stage("Generated catalog tests") {
+      when {
+        expression { return runProfile() != "par-audit" }
+      }
       steps {
         script {
           if (runProfile() == "nightly-full") {
@@ -252,12 +308,32 @@ pipeline {
         }
       }
     }
+
+    stage("PAR audit") {
+      when {
+        expression { return runProfile() == "par-audit" }
+      }
+      steps {
+        dir("qa-automation") {
+          runParAuditSuite()
+        }
+      }
+    }
   }
 
   post {
     always {
+      script {
+        if (hasText(env.QA_ROOT_REPORTS_BASE) && fileExists("qa-automation/deploy/vm/scripts/publish-reports.sh")) {
+          catchError(buildResult: "UNSTABLE", stageResult: "FAILURE") {
+            dir("qa-automation") {
+              sh "bash ./deploy/vm/scripts/publish-reports.sh ${reportChannel()}"
+            }
+          }
+        }
+      }
       archiveArtifacts(
-        artifacts: "qa-automation/artifacts/jenkins/**/*,qa-automation/tests/data/generated/*.json",
+        artifacts: "qa-automation/artifacts/jenkins/**/*,qa-automation/tests/data/generated/*.json,qa-automation/reports/**/*",
         allowEmptyArchive: true,
         fingerprint: true
       )

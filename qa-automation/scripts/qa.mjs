@@ -403,7 +403,9 @@ function resolveBrowsers(options) {
 
 function resolveWorkerCount(options) {
   const defaults = runnerDefaults();
-  const rawValue = String(options.workers || defaults.workers).trim().toLowerCase();
+  const rawValue = String(options.workers || process.env.QA_WORKERS || defaults.workers)
+    .trim()
+    .toLowerCase();
 
   // Playwright's serial mode is 1 worker. The old runner used 0/1/off/none
   // for the same intent, so the wrapper keeps that old command vocabulary.

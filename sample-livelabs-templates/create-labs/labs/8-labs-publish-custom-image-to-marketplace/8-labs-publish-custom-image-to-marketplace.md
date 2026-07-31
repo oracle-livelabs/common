@@ -185,16 +185,17 @@ For more information, see the [listing revision editing documentation](https://d
 
 1. On the **Listing revisions** page, locate the revision that Oracle approved for publication. A revision that is ready to publish can show **Approved** or **Unpublished**, depending on its publication history.
 
-2. Open the row actions menu and choose the publishing option that matches the intended audience:
-
-    * Select **Publish** for a public Marketplace listing.
-    * Select **Publish as Private** for a private listing, and enter the allowed tenancy OCID or comma-separated tenancy OCIDs that should be able to access the listing.
-
-    > **Important:** Do not leave the allowed tenancies field blank when publishing a private listing. Current Marketplace Publisher documentation requires tenancy OCIDs for private publishing.
+2. Open the row actions menu and select **Publish as Private**.
 
     ![Publish an approved or unpublished listing revision](images/publish-listing-revision-options.png)
 
-3. Select the final publish action and monitor the listing revision until its status changes to **Published** or **Published as Private**.
+3. The **Publish as a private listing revision** confirmation dialog opens.
+
+4. Leave the **Allowed tenancies** field blank, then select **Publish as Private**.
+
+    ![Leave allowed tenancies blank before publishing a private listing](images/publish-private-listing-revision.png)
+
+5. Monitor the listing revision until its status changes to **Published as Private**.
 
 Publishing can take 1 to 3 business days. If publishing takes longer or you have Oracle Marketplace questions, post in the [Marketplace Slack channel](https://oracle.enterprise.slack.com/archives/CEKCPA98B).
 

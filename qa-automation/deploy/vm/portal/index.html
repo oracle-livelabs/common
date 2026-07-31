@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LiveLabs QA</title>
+  <style>
+    :root { color-scheme: light; font-family: Arial, sans-serif; color: #1f2933; background: #f4f6f8; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header { background: #fff; border-bottom: 1px solid #d8dee4; padding: 24px 32px; }
+    h1 { margin: 0; font-size: 28px; letter-spacing: 0; }
+    header p { margin: 8px 0 0; color: #52606d; }
+    main { width: min(1040px, calc(100% - 32px)); margin: 28px auto; }
+    .status { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #cbd5df; background: #fff; }
+    .entry { padding: 22px; border-right: 1px solid #d8dee4; min-width: 0; }
+    .entry:last-child { border-right: 0; }
+    .entry h2 { margin: 0 0 8px; font-size: 18px; letter-spacing: 0; }
+    .entry p { min-height: 44px; margin: 0 0 18px; color: #52606d; line-height: 1.45; }
+    a { color: #005ea8; font-weight: 700; }
+    .note { margin-top: 20px; padding: 16px 18px; border-left: 4px solid #4c6f8c; background: #fff; color: #364152; }
+    @media (max-width: 720px) {
+      header { padding: 20px; }
+      .status { grid-template-columns: 1fr; }
+      .entry { border-right: 0; border-bottom: 1px solid #d8dee4; }
+      .entry:last-child { border-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>LiveLabs QA</h1>
+    <p>Private execution and report access</p>
+  </header>
+  <main>
+    <section class="status" aria-label="QA areas">
+      <div class="entry">
+        <h2>PAR link audit</h2>
+        <p>Weekly stale-link results, cleanup CSVs, and pages that could not be scanned.</p>
+        <a href="/par/">Open PAR reports</a>
+      </div>
+      <div class="entry">
+        <h2>Overall regression</h2>
+        <p>Nightly or targeted catalog-card, content, image, link, asset, and routing results.</p>
+        <a href="/regression/">Open regression reports</a>
+      </div>
+      <div class="entry">
+        <h2>Jenkins</h2>
+        <p>Operator-only schedules, manual runs, targeted item reruns, logs, and JUnit results.</p>
+        <a href="/jenkins/">Open Jenkins</a>
+      </div>
+    </section>
+    <p class="note">Reports are read-only. Fix assignment and author contact remain in the team workflow; operators use Jenkins only to start or rerun tests.</p>
+  </main>
+</body>
+</html>

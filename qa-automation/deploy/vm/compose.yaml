@@ -1,0 +1,104 @@
+services:
+  jenkins:
+    build:
+      context: ../..
+      dockerfile: deploy/vm/jenkins/Containerfile
+    image: livelabs-qa-jenkins:local
+    restart: unless-stopped
+    environment:
+      CASC_JENKINS_CONFIG: /usr/share/jenkins/ref/casc.yaml
+      JAVA_OPTS: -Djenkins.install.runSetupWizard=false
+      JENKINS_OPTS: --httpPort=${QA_JENKINS_INTERNAL_PORT} --prefix=/jenkins --sessionTimeout=60
+      QA_JENKINS_INTERNAL_PORT: ${QA_JENKINS_INTERNAL_PORT}
+      JENKINS_ADMIN_USER: ${JENKINS_ADMIN_USER:-qa-admin}
+      QA_PUBLIC_URL: ${QA_PUBLIC_URL}
+      QA_GIT_URL: ${QA_GIT_URL:-https://github.com/oracle-livelabs/common.git}
+      QA_GIT_BRANCH: ${QA_GIT_BRANCH:-*/main}
+      QA_GIT_CREDENTIAL_ID: ${QA_GIT_CREDENTIAL_ID:-}
+      QA_NIGHTLY_CRON: ${QA_NIGHTLY_CRON}
+      QA_PAR_CRON: ${QA_PAR_CRON}
+      QA_AUTH_TARGET_URL: ${QA_AUTH_TARGET_URL:-}
+      QA_BASE_URL: ${QA_BASE_URL:-}
+      QA_ROOT_REPORTS_BASE: /var/qa-reports
+      QA_OBJECT_STORAGE_NAMESPACE: ${QA_OBJECT_STORAGE_NAMESPACE:-}
+      QA_OBJECT_STORAGE_BUCKET: ${QA_OBJECT_STORAGE_BUCKET:-}
+      QA_OBJECT_STORAGE_PREFIX: ${QA_OBJECT_STORAGE_PREFIX:-livelabs-qa}
+      QA_OCI_AUTH_MODE: ${QA_OCI_AUTH_MODE:-instance_principal}
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+    secrets:
+      - jenkins_admin_secret
+      - livelabs_username
+      - livelabs_secret
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - qa_reports:/var/qa-reports
+    shm_size: 2gb
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail --silent http://127.0.0.1:$${QA_JENKINS_INTERNAL_PORT}/jenkins/login >/dev/null"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 90s
+    networks:
+      - qa_internal
+
+  portal:
+    build:
+      context: ../..
+      dockerfile: deploy/vm/portal/Containerfile
+    image: livelabs-qa-portal:local
+    restart: unless-stopped
+    depends_on:
+      jenkins:
+        condition: service_healthy
+    environment:
+      QA_JENKINS_INTERNAL_PORT: ${QA_JENKINS_INTERNAL_PORT}
+      QA_PORTAL_INTERNAL_PORT: ${QA_PORTAL_INTERNAL_PORT}
+      NGINX_ENVSUBST_FILTER: ^QA_
+    ports:
+      - "${QA_BIND_ADDRESS}:${QA_HTTPS_PORT}:${QA_PORTAL_INTERNAL_PORT}"
+    secrets:
+      - reports_htpasswd
+      - portal_tls_certificate
+      - portal_tls_key
+    volumes:
+      - qa_reports:/srv/reports:ro
+    read_only: true
+    tmpfs:
+      - /etc/nginx/conf.d
+      - /var/cache/nginx
+      - /var/run
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-check-certificate --quiet --spider https://127.0.0.1:$${QA_PORTAL_INTERNAL_PORT}/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - qa_internal
+
+secrets:
+  jenkins_admin_secret:
+    file: ./secrets/jenkins-admin-secret
+  livelabs_username:
+    file: ./secrets/livelabs-username
+  livelabs_secret:
+    file: ./secrets/livelabs-secret
+  reports_htpasswd:
+    file: ./secrets/reports.htpasswd
+  portal_tls_certificate:
+    file: ./secrets/tls.crt
+  portal_tls_key:
+    file: ./secrets/tls.key
+
+volumes:
+  jenkins_home:
+  qa_reports:
+
+networks:
+  qa_internal:
+    driver: bridge

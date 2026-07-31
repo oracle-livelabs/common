@@ -1,41 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
-  <title id="title">Event code request flow</title>
-  <desc id="desc">Four large cards show the flow from collecting workshop identifiers to requesting, reviewing, approving, and handing off a LiveLabs event code.</desc>
+  <title id="title">LiveLabs event, access, and capacity flow</title>
+  <desc id="desc">Five cards show collecting event details, choosing one access path, planning capacity, requesting the event code, and verifying the attendee handoff.</desc>
   <rect width="1200" height="620" fill="#f7f7f5"/>
-  <text x="70" y="56" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1f1f1f">Request a LiveLabs event code</text>
   <g font-family="Arial, sans-serif" fill="#1f1f1f">
-    <g class="card">
-      <rect x="70" y="100" width="500" height="150" rx="8" fill="#ffffff" stroke="#7f5f4a" stroke-width="3"/>
-      <text x="100" y="140" font-size="22" font-weight="700">1. Collect workshop identifiers</text>
-      <text x="100" y="176" font-size="18">Capture the title, WMS ID, LiveLabs ID,</text>
-      <text x="100" y="202" font-size="18">publish type, event date, start date,</text>
-      <text x="100" y="228" font-size="18">end date, time zone, and request owner.</text>
-    </g>
-    <g class="card">
-      <rect x="630" y="100" width="500" height="150" rx="8" fill="#ffffff" stroke="#7f5f4a" stroke-width="3"/>
-      <text x="660" y="140" font-size="22" font-weight="700">2. Request the code in WMS</text>
-      <text x="660" y="176" font-size="18">Open Events, choose Request an Event Code,</text>
-      <text x="660" y="202" font-size="18">search for the workshop, and confirm that</text>
-      <text x="660" y="228" font-size="18">the selected record matches the event.</text>
-    </g>
-    <g class="card">
-      <rect x="70" y="300" width="500" height="150" rx="8" fill="#ffffff" stroke="#7f5f4a" stroke-width="3"/>
-      <text x="100" y="340" font-size="22" font-weight="700">3. Review fields and links</text>
-      <text x="100" y="376" font-size="18">Populate workshop fields, check dates,</text>
-      <text x="100" y="402" font-size="18">user counts, launch links, green-button path,</text>
-      <text x="100" y="428" font-size="18">and any sandbox or tenancy choices.</text>
-    </g>
-    <g class="card">
-      <rect x="630" y="300" width="500" height="150" rx="8" fill="#ffffff" stroke="#7f5f4a" stroke-width="3"/>
-      <text x="660" y="340" font-size="22" font-weight="700">4. Verify the handoff package</text>
-      <text x="660" y="376" font-size="18">After approval, test the event-code link</text>
-      <text x="660" y="402" font-size="18">in a clean browser. Record the URL, QR code,</text>
-      <text x="660" y="428" font-size="18">and expected first attendee screen.</text>
-    </g>
-    <g class="card">
-      <rect x="70" y="490" width="1060" height="96" rx="8" fill="#f6eee8" stroke="#b48a6b" stroke-width="3"/>
-      <text x="100" y="530" font-size="20" font-weight="700">Check:</text>
-      <text x="100" y="562" font-size="20">The event page opens the expected workshop before attendees receive the link.</text>
-    </g>
+    <text x="60" y="55" font-size="32" font-weight="700">Plan the event code, access path, and capacity</text>
+    <g><rect x="60" y="90" width="340" height="170" rx="8" fill="#fff" stroke="#7f5f4a" stroke-width="3"/><text x="85" y="130" font-size="21" font-weight="700">1. Collect event details</text><text x="85" y="166" font-size="17">Workshop ID, dates, time zone,</text><text x="85" y="192" font-size="17">request owner, and expected size.</text></g>
+    <g><rect x="430" y="90" width="340" height="170" rx="8" fill="#fff" stroke="#7f5f4a" stroke-width="3"/><text x="455" y="130" font-size="21" font-weight="700">2. Choose one path</text><text x="455" y="166" font-size="17">Event code, green-button sandbox,</text><text x="455" y="192" font-size="17">or brown-button own tenancy.</text></g>
+    <g><rect x="800" y="90" width="340" height="170" rx="8" fill="#fff" stroke="#7f5f4a" stroke-width="3"/><text x="825" y="130" font-size="21" font-weight="700">3. Plan capacity</text><text x="825" y="166" font-size="17">For 50+, confirm capacity and</text><text x="825" y="192" font-size="17">pre-provision with LiveLabs.</text></g>
+    <g><rect x="245" y="320" width="340" height="170" rx="8" fill="#fff" stroke="#7f5f4a" stroke-width="3"/><text x="270" y="360" font-size="21" font-weight="700">4. Request and review</text><text x="270" y="396" font-size="17">Populate fields, user counts,</text><text x="270" y="422" font-size="17">links, and reservation timing.</text></g>
+    <g><rect x="615" y="320" width="340" height="170" rx="8" fill="#fff" stroke="#7f5f4a" stroke-width="3"/><text x="640" y="360" font-size="21" font-weight="700">5. Verify the handoff</text><text x="640" y="396" font-size="17">Test the event link and first screen;</text><text x="640" y="422" font-size="17">send account and support guidance.</text></g>
+    <rect x="60" y="540" width="1080" height="48" rx="8" fill="#f6eee8" stroke="#b48a6b" stroke-width="3"/><text x="85" y="571" font-size="18" font-weight="700">If reservations are live, use the opening buffer for prerequisites and product context before hands-on work begins.</text>
   </g>
 </svg>

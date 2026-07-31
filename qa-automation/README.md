@@ -172,6 +172,17 @@ Quote URLs that contain `&` in PowerShell. By default, the command exits non-zer
 when the checker finds issues or when a lab cannot load. Use `--allow-issues`
 when you only want the report file and do not want findings to fail the command.
 
+## PAR Link Audit
+
+The PAR audit discovers PAR links across the full generated workshop and LiveStack catalog. It needs no manually maintained link file, reports confirmed broken links separately from temporary or inconclusive checks, and masks every PAR token in reports and attachments.
+
+PAR scanning is a separate suite under `tests/platform/par`; normal generated regression runs do not execute it. The scanner reads workshop manifests and Markdown sources concurrently, using the browser only to discover each workshop or LiveStack instruction entry point.
+
+Run locally after generating the catalog:
+
+    npm run test:par
+
+Setup, full-catalog behavior, and report files are documented in [PAR Link Audit](docs/runbooks/par-link-audit.md).
 Jenkins generated catalog runs:
 
 ```text
@@ -182,6 +193,13 @@ Runbook: docs/runbooks/jenkins-generated-catalog.md
 Use Jenkins for the scheduled overnight catalog sweep. The Jenkins pipeline runs
 `tests/platform/generated`, not the homepage smoke lane, and supports a fast
 `pr-slice` profile plus a sharded `nightly-full` profile.
+
+A generic private-VM package is available under [`deploy/vm`](deploy/vm/README.md).
+It requires corporate OIDC, named group-based roles, OCI Vault-backed secrets,
+internal TLS, an active CrowdStrike sensor, and approved private infrastructure.
+No environment-specific address, assigned port, identity-provider value,
+credential, private key, or secret OCID is committed to this public repository.
+The internal provisioning record supplies those values at deployment time.
 
 To see the generated test names without opening a browser:
 
@@ -223,16 +241,7 @@ For a deeper crawl or a slower network:
 npm run catalog:index -- --max-pages 250 --retries 4 --retry-delay-ms 5000
 ```
 
-For authenticated/private catalog entries, keep credentials only in `.env` or CI
-secrets:
-
-```powershell
-# .env
-QA_LIVELABS_USERNAME=
-QA_LIVELABS_PASSWORD=
-QA_AUTH_TARGET_URL=https://livelabs.oracle.com/...
-QA_STORAGE_STATE=.auth/livelabs-storage-state.json
-```
+For authenticated/private catalog entries, local developer runs may use the ignored `.env` and browser-state paths with an approved test identity. The permanent QA service retrieves its approved test identity from OCI Vault through the VM instance principal. Never place credential values in documentation, source control, Jenkins parameters, or command history.
 
 Create a reusable authenticated browser state, then run the generated suite:
 
@@ -262,7 +271,7 @@ $env:QA_AUTH_READY_TEXT="<text visible only after auth>"
 node ./scripts/qa.mjs tests/platform/auth/privatePageAccess.spec.ts --tag auth
 ```
 
-If the application team provides a test-only session bootstrap endpoint, set `QA_AUTH_BOOTSTRAP_URL` and keep the short-lived `QA_AUTH_BOOTSTRAP_TOKEN` in a local or CI secret. See `docs/runbooks/authenticated-page-access.md` for the access request checklist and the full variable contract.
+Private-content authentication must use an access method approved by the application and security owners. Keep its contract and secret-handling procedure in the internal runbook, not this public repository.
 
 Do not commit storage-state files, credentials, screenshots with private data, or environment-specific secrets.
 
@@ -309,7 +318,9 @@ node ./scripts/qa.mjs tests/platform/smoke/public/newSpec.spec.ts
 
 ## Reports And Debugging
 
-Artifacts are written under `artifacts` and are ignored by Git.
+Artifacts are written under `artifacts` and are ignored by Git. Every root report
+also writes a token-safe `results.csv`; one failed catalog item produces one row
+per distinct issue, while a passing item produces one row with blank issue fields.
 
 Open the latest HTML report:
 

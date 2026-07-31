@@ -1114,12 +1114,9 @@
     const transientSessionDurationMs = 12 * 60 * 60 * 1000;
     const persistentSessionDurationMs = 30 * 24 * 60 * 60 * 1000;
     const adminStateSchemaVersion = 3;
-    const adminSessionSchemaVersion = 3;
+    const adminSessionSchemaVersion = 4;
     const criteriaRuleAutomationPaused = true;
-    const fixedAdminCredentials = {
-      password: "LiveLabsAdmin#2026!",
-      username: "livelabs-admin"
-    };
+    const staticAdminAuthDisabled = true;
     const accounts = [
       { email: "livelabs-admin@oracle.com", name: "Portfolio Admin", role: "admin", username: "livelabs-admin" }
     ];
@@ -1340,15 +1337,18 @@
       if (field) document.querySelector(field)?.setAttribute("aria-invalid", "true");
     }
     function validateLoginInputs(loginId, password) {
+      if (staticAdminAuthDisabled) {
+        return {
+          message: "Static admin is disabled for Object Storage review. Use the approved ADB or ORDS admin channel.",
+          field: null
+        };
+      }
       if (!loginId) return { message: "Enter an admin username.", field: "#email" };
       if (!findAccount(loginId)) return { message: "Use a recognized admin username.", field: "#email" };
       if (!password) return { message: "Enter your password.", field: "#password" };
       if (password.length < 8) return { message: "Password must be at least 8 characters.", field: "#password" };
       if (!/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
         return { message: "Password must include at least one letter and one number.", field: "#password" };
-      }
-      if (password !== fixedAdminCredentials.password) {
-        return { message: "Use a valid admin password.", field: "#password" };
       }
       return null;
     }
@@ -1617,6 +1617,12 @@
       }
     }
     function requireAdmin() {
+      if (staticAdminAuthDisabled) {
+        removeSession();
+        document.body.classList.add("auth-blocked");
+        setLoginMessage("Static admin is disabled for Object Storage review. Use the approved ADB or ORDS admin channel.", "error");
+        return false;
+      }
       session = refreshAdminSession();
       if (session?.role === "admin") {
         document.body.classList.remove("auth-blocked");

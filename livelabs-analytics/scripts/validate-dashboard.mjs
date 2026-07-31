@@ -114,7 +114,9 @@ function checkAdminQaConfiguration() {
     ["criteria rule model", combined.includes('type: "criteria"') && combined.includes("minAgeMonths") && combined.includes("minStaleMonths")],
     ["legacy keyword migration guard", combined.includes("isLegacyKeywordExceptionRule")],
     ["row search editor", adminHtml.includes('id="row-search-query"') && adminHtml.includes('id="save-row-override"')],
-    ["row QA excluded override", combined.includes("qaExcluded") && combined.includes("data-admin-override-detail")]
+    ["row QA excluded override", combined.includes("qaExcluded") && combined.includes("data-admin-override-detail")],
+    ["static admin auth disabled", adminHtml.includes("staticAdminAuthDisabled = true")],
+    ["admin session version bumped", adminHtml.includes("adminSessionSchemaVersion = 4")]
   ];
 
   for (const [name, ok] of requiredSnippets) {
@@ -125,6 +127,12 @@ function checkAdminQaConfiguration() {
     fail("keyword default QA rules removed", "19c/23ai still appear as default rule objects");
   } else {
     pass("keyword default QA rules removed", "only migration references may remain");
+  }
+
+  if (/LiveLabsAdmin#[0-9]+!?|fixedAdminCredentials/.test(adminHtml)) {
+    fail("static admin credential removed", "browser-visible static credential still present");
+  } else {
+    pass("static admin credential removed", "no browser-visible static admin credential");
   }
 }
 
