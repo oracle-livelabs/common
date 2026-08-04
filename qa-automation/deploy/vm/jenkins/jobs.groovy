@@ -88,7 +88,7 @@ pipeline {
               string(name: "LIVELABS_SECRET_CREDENTIAL_ID", value: "livelabs-secret"),
               string(name: "CATALOG_MAX_PAGES", value: params.CATALOG_MAX_PAGES),
               string(name: "CATALOG_MAX_ITEMS", value: params.CATALOG_MAX_ITEMS),
-              string(name: "CATALOG_ITEM_IDS", value: ""),
+              string(name: "CATALOG_ITEM_IDS", value: params.CATALOG_ITEM_IDS?.trim() ?: ""),
               string(name: "SHARD_TOTAL", value: "1"),
               string(name: "TEST_WORKERS", value: "1"),
               string(name: "TEST_RETRIES", value: "1"),
@@ -125,6 +125,7 @@ pipelineJob("livelabs-par-audit") {
     stringParam("AUTH_TARGET_URL", authTargetUrl, "Optional private content sign-in target")
     stringParam("CATALOG_MAX_PAGES", "250", "Catalog pages to crawl")
     stringParam("CATALOG_MAX_ITEMS", "", "Leave blank for every catalog item")
+    stringParam("CATALOG_ITEM_IDS", "", "Optional comma-separated WMS IDs for a targeted PAR retest")
     stringParam("PAR_WORKERS", "2", "Catalog items checked in parallel")
     stringParam("PAR_DISCOVERY_CONCURRENCY", "3", "Workshop files scanned in parallel per item")
     stringParam("PAR_SOURCE_TIMEOUT_MS", "45000", "Source fetch timeout")

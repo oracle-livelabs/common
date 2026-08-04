@@ -7,6 +7,7 @@ import {
   parLinkGuidance,
   parScanErrorExplanation,
   parLinksPageHtml,
+  parRetestListPageHtml,
   readParAudits,
   sanitizeSensitiveText,
   writeParAuditDataFiles,
@@ -14,6 +15,7 @@ import {
 
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const DEFAULT_REPORTS_ROOT = path.join(PROJECT_ROOT, "reports");
+export const REGRESSION_REPORT_RENDERER_VERSION = "regression-table-v3";
 const REVIEW_STORAGE_KEY = "livelabs-qa-review-lists:v1";
 const FIX_LIST_INSTRUCTIONS =
   "Fix the code errors related to these tests, then rerun only this selected test list using the normal test execution flow and produce a report.";
@@ -606,7 +608,11 @@ function buildBugSummary({
 
 export function writeSummaryFiles(outputDir, summary, reportsRoot) {
   const historyHref = relativeReportHref(outputDir, path.join(reportsRoot, "index.html"));
-  const pageContext = { outputDir, historyHref };
+  const pageContext = {
+    outputDir,
+    historyHref,
+    isLatest: path.basename(outputDir).toLowerCase() === "latest",
+  };
 
   fs.writeFileSync(path.join(outputDir, "summary.json"), `${JSON.stringify(summary, null, 2)}\n`, "utf-8");
   fs.writeFileSync(path.join(outputDir, "results.csv"), resultsCsv(summary), "utf-8");
@@ -615,6 +621,11 @@ export function writeSummaryFiles(outputDir, summary, reportsRoot) {
   fs.writeFileSync(path.join(outputDir, "retest-list.html"), reviewListPageHtml("retest", summary, pageContext), "utf-8");
   fs.writeFileSync(path.join(outputDir, "fix-list.html"), reviewListPageHtml("fix", summary, pageContext), "utf-8");
   fs.writeFileSync(path.join(outputDir, "par-links.html"), parLinksPageHtml(summary, pageContext), "utf-8");
+  fs.writeFileSync(
+    path.join(outputDir, "par-retest-list.html"),
+    parRetestListPageHtml(summary, pageContext),
+    "utf-8",
+  );
   writeParAuditDataFiles(outputDir, summary.parAudit);
 }
 
@@ -842,10 +853,8 @@ function htmlSummary(summary, context = {}) {
   };
   const testedItems =
     catalogItems.length > 0
-      ? testedItemsHtml(catalogItems, summary.failureCategories, summary.runId)
+      ? testedItemsHtml(catalogItems, summary.failureCategories, summary.runId, summary.failures, context)
       : emptyStateHtml("No generated catalog items were attached to this run.");
-  const itemDetails =
-    catalogItems.length > 0 ? itemDetailsHtml(catalogItems, summary.failures, { ...context, summaryRunId: summary.runId }) : "";
   const statusTone = runStatusTone(summary);
   const statusLabel = runStatusLabel(summary);
 
@@ -854,6 +863,7 @@ function htmlSummary(summary, context = {}) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="livelabs-qa-renderer" content="${REGRESSION_REPORT_RENDERER_VERSION}" />
   <title>LiveLabs QA Summary ${escapeHtml(summary.runId)}</title>
   <style>
     :root {
@@ -1060,64 +1070,349 @@ function htmlSummary(summary, context = {}) {
       min-height: 20px;
       margin: -6px 0 14px;
     }
-    .filter-panel {
+    .results-panel {
       background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 8px;
-      display: grid;
-      gap: 12px;
       margin-bottom: 18px;
-      padding: 16px;
+      overflow: visible;
     }
-    .filter-row {
+    .results-heading {
+      align-items: flex-start;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      gap: 18px;
+      justify-content: space-between;
+      padding: 18px;
+    }
+    .results-heading p {
+      color: var(--muted);
+      margin-top: 5px;
+    }
+    .download-menu {
+      flex: 0 0 auto;
+      margin: 0;
+      position: relative;
+    }
+    .download-menu > summary {
+      background: #ffffff;
+      border: 1px solid var(--line-strong);
+      color: var(--link);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      list-style: none;
+      min-height: 38px;
+      padding: 9px 12px;
+    }
+    .download-menu > summary::-webkit-details-marker { display: none; }
+    .download-menu > summary::after { content: " v"; }
+    .download-menu[open] > summary::after { content: " ^"; }
+    .download-menu > div {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 24px rgba(23, 33, 43, .14);
+      margin-top: 5px;
+      padding: 8px;
+      position: absolute;
+      right: 0;
+      width: 270px;
+      z-index: 5;
+    }
+    .download-menu p {
+      color: var(--muted);
+      font-size: 12px;
+      margin: 2px 5px 7px;
+    }
+    .download-menu a {
+      color: var(--text);
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      padding: 8px;
+      text-decoration: none;
+    }
+    .download-menu a:hover { background: #eef5fa; }
+    .download-menu a span {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .result-tools {
+      align-items: end;
+      background: #f8fafb;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      gap: 14px;
+      grid-template-columns: minmax(240px, 1fr) minmax(0, 2fr) auto;
+      padding: 14px 18px;
+    }
+    .result-search,
+    .page-size {
+      color: var(--muted);
+      display: grid;
+      font-size: 12px;
+      font-weight: 700;
+      gap: 5px;
+    }
+    .result-search input,
+    .page-size select {
+      background: #ffffff;
+      border: 1px solid var(--line-strong);
+      color: var(--text);
+      font: inherit;
+      min-height: 38px;
+      padding: 8px 10px;
+    }
+    .filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .filter-buttons button,
+    .pagination button {
+      background: #ffffff;
+      border: 1px solid var(--line-strong);
+      color: var(--text);
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      min-height: 38px;
+      padding: 7px 10px;
+    }
+    .filter-buttons button span {
+      color: var(--muted);
+      font-size: 12px;
+      margin-left: 4px;
+    }
+    .filter-buttons button.active {
+      background: #eaf4fb;
+      border-color: var(--link);
+      color: var(--link);
+    }
+    .result-table { overflow-x: auto; }
+    .result-table-head,
+    .result-summary {
+      align-items: center;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 110px minmax(250px, 1.4fr) minmax(210px, 1fr) minmax(230px, 1.15fr);
+      min-width: 930px;
+    }
+    .result-table-head {
+      background: #eef2f5;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 10px 16px;
+      text-transform: uppercase;
+    }
+    .result-row {
+      background: #ffffff;
+      border-top: 1px solid var(--line);
+      margin: 0;
+    }
+    .result-row:first-child { border-top: 0; }
+    .result-row[hidden] { display: none; }
+    .result-row > summary {
+      color: var(--text);
+      cursor: pointer;
+      list-style: none;
+    }
+    .result-row > summary::-webkit-details-marker { display: none; }
+    .result-summary {
+      padding: 13px 38px 13px 16px;
+      position: relative;
+    }
+    .result-summary::after {
+      color: var(--muted);
+      content: "+";
+      font-size: 20px;
+      font-weight: 700;
+      position: absolute;
+      right: 16px;
+    }
+    .result-row[open] > .result-summary::after { content: "-"; }
+    .result-row[open] { box-shadow: inset 5px 0 0 var(--link); }
+    .result-row[open] > .result-summary {
+      background: #eaf4fb;
+      color: #063b66;
+    }
+    .result-summary:hover { background: #f8fbfd; }
+    .result-row[open] > .result-summary:hover { background: #eaf4fb; }
+    .result-item,
+    .result-checks,
+    .result-finding {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+    .result-item strong,
+    .result-checks strong,
+    .result-finding strong {
+      overflow-wrap: anywhere;
+    }
+    .result-item small,
+    .result-checks small,
+    .result-finding small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+    .result-details {
+      background: #fbfcfd;
+      border-top: 1px solid var(--line);
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+    }
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .item-detail-heading {
+      align-items: flex-start;
+      display: flex;
+      gap: 18px;
+      justify-content: space-between;
+    }
+    .item-detail-heading h3 {
+      font-size: 18px;
+      margin: 0;
+    }
+    .item-detail-heading p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      margin: 4px 0 0;
+    }
+    .operator-issue-list {
+      display: grid;
+      gap: 10px;
+    }
+    .operator-issue {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--warn);
+      border-radius: 6px;
+      display: grid;
+      gap: 8px;
+      padding: 14px;
+    }
+    .operator-issue.blocker {
+      background: var(--fail-bg);
+      border-color: #ffd0c7;
+      border-left-color: var(--fail);
+    }
+    .operator-issue-heading {
       align-items: center;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
     }
-    .search-input {
-      border: 1px solid var(--line-strong);
-      border-radius: 6px;
-      color: var(--text);
-      font: inherit;
-      min-width: min(100%, 320px);
-      padding: 9px 10px;
+    .operator-issue h4 {
+      font-size: 17px;
+      margin: 0;
     }
-    .item-list {
-      display: grid;
-      gap: 10px;
+    .operator-issue p {
+      font-size: 14px;
+      line-height: 1.45;
+      margin: 0;
     }
-    .item-row {
-      align-items: center;
-      background: var(--panel);
+    .affected-items {
+      background: var(--panel-soft);
       border: 1px solid var(--line);
+      border-radius: 5px;
+      font-size: 13px;
+      padding: 9px 11px;
+    }
+    .affected-items ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 18px;
+      margin: 6px 0 0;
+      padding-left: 20px;
+    }
+    .operator-pass {
+      align-items: center;
+      background: var(--pass-bg);
+      border: 1px solid #b7e4d2;
       border-left: 5px solid var(--pass);
-      border-radius: 8px;
-      color: var(--text);
+      border-radius: 6px;
+      display: flex;
+      gap: 10px;
+      padding: 13px;
+    }
+    .operator-pass strong { color: var(--pass); }
+    .item-developer-details {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      margin: 0;
+      padding: 12px;
+    }
+    .item-developer-details > summary {
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .item-developer-body {
       display: grid;
       gap: 12px;
-      grid-template-columns: minmax(0, 1fr) auto;
-      padding: 13px 14px;
-      text-decoration: none;
+      margin-top: 12px;
     }
-    .item-row.failed {
-      border-left-color: var(--fail);
+    .developer-section,
+    .developer-test {
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px;
     }
-    .item-row.skipped {
-      border-left-color: var(--warn);
+    .developer-section h4 { margin: 0 0 10px; }
+    .developer-test .section-heading { margin-bottom: 10px; }
+    .developer-error span {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12px;
+      line-height: 1.45;
     }
-    .item-row:hover {
-      border-color: var(--link);
-      box-shadow: 0 1px 4px rgba(0, 94, 168, 0.16);
+    .copy-source { display: none; }
+    .checks-details {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      margin: 0;
+      padding: 12px;
     }
-    .item-row[hidden] { display: none; }
-    .item-title {
-      display: grid;
-      gap: 6px;
-      min-width: 0;
+    .checks-details > summary {
+      color: var(--link);
+      font-size: 13px;
+      font-weight: 700;
     }
-    .item-title h3 {
-      overflow-wrap: anywhere;
+    .checks-details .catalog-checks { margin-top: 10px; }
+    .pagination {
+      align-items: center;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      display: flex;
+      font-size: 13px;
+      gap: 14px;
+      justify-content: space-between;
+      padding: 12px 18px;
+    }
+    .pagination div {
+      display: flex;
+      gap: 7px;
+    }
+    .pagination button:disabled {
+      cursor: default;
+      opacity: .45;
+    }
+    .no-results {
+      color: var(--muted);
+      padding: 28px;
+      text-align: center;
     }
     .item-meta {
       color: var(--muted);
@@ -1125,36 +1420,6 @@ function htmlSummary(summary, context = {}) {
       flex-wrap: wrap;
       gap: 8px;
       font-size: 13px;
-    }
-    .item-problem {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.35;
-      text-align: right;
-    }
-    .item-actions {
-      align-items: flex-end;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      justify-content: flex-end;
-    }
-    .item-details-link {
-      color: var(--link);
-      font-size: 13px;
-      font-weight: 700;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .item-details-link:hover {
-      text-decoration: underline;
-    }
-    .item-detail {
-      display: none;
-      scroll-margin-top: 18px;
-    }
-    .item-detail:target {
-      display: block;
     }
     .detail-header {
       align-items: flex-start;
@@ -1660,6 +1925,25 @@ function htmlSummary(summary, context = {}) {
       }
       .test-actions { justify-content: flex-start; }
       .par-finding-actions { justify-content: flex-start; }
+      .results-heading,
+      .result-tools {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+      .item-detail-heading {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+      .result-actions {
+        align-items: stretch;
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+      .result-actions > * { text-align: center; }
+      .download-menu > div {
+        left: 0;
+        right: auto;
+      }
     }
   </style>
 </head>
@@ -1690,47 +1974,84 @@ function htmlSummary(summary, context = {}) {
     </div>
     <p class="review-message" data-review-message></p>
     ${testedItems}
-    ${itemDetails}
   </main>
   <script id="qa-review-items" type="application/json">${escapeScriptJson(reviewItems)}</script>
   <script>
     const REVIEW_STORAGE_KEY = "${REVIEW_STORAGE_KEY}";
     const qaReviewItems = JSON.parse(document.getElementById("qa-review-items")?.textContent || "{}");
-    const filterButtons = Array.from(document.querySelectorAll("[data-filter-value]"));
+    const filterButtons = Array.from(document.querySelectorAll("[data-item-filter]"));
     const itemRows = Array.from(document.querySelectorAll("[data-item-row]"));
     const filterStatus = document.querySelector("[data-filter-status]");
     const itemSearch = document.querySelector("[data-item-search]");
+    const pageSize = document.querySelector("[data-item-page-size]");
+    const previousPage = document.querySelector("[data-item-previous]");
+    const nextPage = document.querySelector("[data-item-next]");
+    const noResults = document.querySelector("[data-item-no-results]");
     let activeFilter = "all";
+    let currentPage = 1;
+    function itemMatchesFilter(row) {
+      if (activeFilter === "all") return true;
+      const issueCodes = (row.getAttribute("data-issues") || "").split(/\\s+/).filter(Boolean);
+      return (
+        row.getAttribute("data-status") === activeFilter ||
+        row.getAttribute("data-type") === activeFilter ||
+        issueCodes.includes(activeFilter)
+      );
+    }
     function applyItemFilters() {
       const query = (itemSearch?.value || "").trim().toLowerCase();
-      let visibleCount = 0;
-      for (const row of itemRows) {
+      const matched = itemRows.filter((row) => {
         const haystack = (row.getAttribute("data-search") || "").toLowerCase();
-        const issueCodes = (row.getAttribute("data-issues") || "").split(/\\s+/).filter(Boolean);
-        const status = row.getAttribute("data-status") || "";
-        const type = row.getAttribute("data-type") || "";
-        const filterMatch =
-          activeFilter === "all" ||
-          activeFilter === status ||
-          activeFilter === type ||
-          issueCodes.includes(activeFilter);
-        const searchMatch = !query || haystack.includes(query);
-        const visible = filterMatch && searchMatch;
-        row.hidden = !visible;
-        if (visible) visibleCount += 1;
+        return itemMatchesFilter(row) && (!query || haystack.includes(query));
+      });
+      const size = Math.max(1, Number(pageSize?.value || 25));
+      const pages = Math.max(1, Math.ceil(matched.length / size));
+      currentPage = Math.min(currentPage, pages);
+      const start = (currentPage - 1) * size;
+      const visibleRows = new Set(matched.slice(start, start + size));
+      for (const row of itemRows) {
+        row.hidden = !visibleRows.has(row);
+        if (row.hidden) row.open = false;
+      }
+      for (const button of filterButtons) {
+        const selected = button.getAttribute("data-item-filter") === activeFilter;
+        button.classList.toggle("active", selected);
+        button.setAttribute("aria-pressed", String(selected));
       }
       if (filterStatus) {
-        filterStatus.innerText = "Showing " + visibleCount + " of " + itemRows.length + " tested item(s).";
+        filterStatus.innerText = matched.length
+          ? "Showing " + (start + 1) + "-" + Math.min(start + size, matched.length) + " of " + matched.length
+          : "Showing 0 results";
       }
+      if (noResults) noResults.hidden = matched.length !== 0;
+      if (previousPage) previousPage.disabled = currentPage <= 1 || matched.length === 0;
+      if (nextPage) nextPage.disabled = currentPage >= pages || matched.length === 0;
     }
     for (const button of filterButtons) {
       button.addEventListener("click", () => {
-        activeFilter = button.getAttribute("data-filter-value") || "all";
-        for (const item of filterButtons) item.classList.toggle("active", item === button);
+        activeFilter = button.getAttribute("data-item-filter") || "all";
+        currentPage = 1;
         applyItemFilters();
       });
     }
-    if (itemSearch) itemSearch.addEventListener("input", applyItemFilters);
+    if (itemSearch) itemSearch.addEventListener("input", () => {
+      currentPage = 1;
+      applyItemFilters();
+    });
+    if (pageSize) pageSize.addEventListener("change", () => {
+      currentPage = 1;
+      applyItemFilters();
+    });
+    if (previousPage) previousPage.addEventListener("click", () => {
+      currentPage -= 1;
+      applyItemFilters();
+      document.getElementById("tested-items")?.scrollIntoView({ block: "start", behavior: "smooth" });
+    });
+    if (nextPage) nextPage.addEventListener("click", () => {
+      currentPage += 1;
+      applyItemFilters();
+      document.getElementById("tested-items")?.scrollIntoView({ block: "start", behavior: "smooth" });
+    });
     applyItemFilters();
     async function copyText(text) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1832,8 +2153,25 @@ function htmlSummary(summary, context = {}) {
     });
     updateReviewCounts();
   </script>
+  ${context.isLatest ? latestSummaryRefreshScript(summary.runId) : ""}
 </body>
 </html>`;
+}
+
+function latestSummaryRefreshScript(runId) {
+  return `<script>
+    (() => {
+      const loadedRunId = ${JSON.stringify(String(runId || ""))};
+      window.setInterval(async () => {
+        try {
+          const response = await fetch("summary.json", { cache: "no-store" });
+          if (!response.ok) return;
+          const latest = await response.json();
+          if (latest.runId && latest.runId !== loadedRunId) window.location.reload();
+        } catch {}
+      }, 15000);
+    })();
+  </script>`;
 }
 
 function buildReviewEntries(items, runId) {
@@ -2677,7 +3015,7 @@ function emptyStateHtml(status) {
   return `<section class="empty-state">${escapeHtml(message)}</section>`;
 }
 
-function testedItemsHtml(items, categories, runId) {
+function testedItemsHtml(items, categories = [], runId, failures = [], context = {}) {
   const statusCounts = {
     failed: items.filter((item) => item.status === "failed").length,
     passed: items.filter((item) => item.status === "passed").length,
@@ -2685,191 +3023,317 @@ function testedItemsHtml(items, categories, runId) {
   };
   const types = Array.from(new Set(items.map((item) => item.catalogItem?.type || "catalog item"))).sort();
 
-  return `<section class="section" id="tested-items">
-    <div class="section-heading">
+  return `<section class="results-panel" id="tested-items">
+    <div class="results-heading">
       <div>
-        <p class="eyebrow">Tested items</p>
-        <h2>Workshops, LiveStacks, and Sprints</h2>
+        <h2>Overall regression results</h2>
+        <p>Search or filter the tested catalog, then open one row to see its issues and checks.</p>
       </div>
-      <div class="chips">
-        <span class="pill ${statusCounts.failed > 0 ? "fail" : "pass"}">${escapeHtml(String(statusCounts.failed))} need review</span>
-        <span class="pill pass">${escapeHtml(String(statusCounts.passed))} passed</span>
-        ${statusCounts.skipped > 0 ? `<span class="pill warn">${escapeHtml(String(statusCounts.skipped))} skipped</span>` : ""}
-      </div>
+      <details class="download-menu">
+        <summary>Download CSV</summary>
+        <div>
+          <p>Use this file for bulk review, spreadsheets, or Codex.</p>
+          <a href="results.csv"><strong>All test results</strong><span>${escapeHtml(String(items.length))} items</span></a>
+        </div>
+      </details>
     </div>
-    <div class="filter-panel">
-      <div class="filter-row">
-        <input class="search-input" type="search" data-item-search placeholder="Filter by name, type, ID, or issue" />
-      </div>
-      <div class="filter-row" aria-label="Tested item filters">
-        <button class="filter-button active" type="button" data-filter-value="all">All</button>
-        <button class="filter-button" type="button" data-filter-value="failed">Need review</button>
-        <button class="filter-button" type="button" data-filter-value="passed">Passed</button>
-        ${statusCounts.skipped > 0 ? `<button class="filter-button" type="button" data-filter-value="skipped">Skipped</button>` : ""}
+    <div class="result-tools">
+      <label class="result-search">
+        <span>Search results</span>
+        <input type="search" data-item-search placeholder="Name, type, WMS ID, check, or issue" />
+      </label>
+      <div class="filter-buttons" role="group" aria-label="Filter overall regression results">
+        ${testedItemFilterButtonHtml("all", "All", items.length, true)}
+        ${testedItemFilterButtonHtml("failed", "Need review", statusCounts.failed)}
+        ${testedItemFilterButtonHtml("passed", "Passed", statusCounts.passed)}
+        ${statusCounts.skipped > 0 ? testedItemFilterButtonHtml("skipped", "Skipped", statusCounts.skipped) : ""}
         ${types
-          .map((type) => `<button class="filter-button" type="button" data-filter-value="${escapeAttribute(type)}">${escapeHtml(type)}</button>`)
+          .map(
+            (type) =>
+              testedItemFilterButtonHtml(
+                type,
+                type,
+                items.filter((item) => (item.catalogItem?.type || "catalog item") === type).length,
+              ),
+          )
           .join("\n")}
         ${categories
           .map(
             (category) =>
-              `<button class="filter-button" type="button" data-filter-value="${escapeAttribute(category.code)}">${escapeHtml(category.label)} (${category.count})</button>`,
+              testedItemFilterButtonHtml(category.code, category.label, category.count),
           )
           .join("\n")}
       </div>
-      <p class="filter-status" data-filter-status>Showing all tested items.</p>
+      <label class="page-size">
+        <span>Rows per page</span>
+        <select data-item-page-size>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </label>
     </div>
-    <div class="item-list">
-      ${items.map((item) => testedItemRowHtml(item, runId)).join("\n")}
+    <div class="result-table" role="table" aria-label="Overall regression results">
+      <div class="result-table-head" role="row">
+        <span>Status</span>
+        <span>Workshop or LiveStack</span>
+        <span>Checks run</span>
+        <span>Result</span>
+      </div>
+      <div>
+        ${items
+          .map((item) => testedItemRowHtml(item, runId, failures, { ...context, summaryRunId: runId }))
+          .join("\n")}
+      </div>
+      <div class="no-results" data-item-no-results hidden>No results match this search and filter.</div>
+    </div>
+    <div class="pagination">
+      <span class="filter-status" data-filter-status>Showing tested items.</span>
+      <div>
+        <button type="button" data-item-previous>Previous</button>
+        <button type="button" data-item-next>Next</button>
+      </div>
     </div>
   </section>`;
 }
 
-function testedItemRowHtml(item, runId) {
-  const itemId = item.catalogItem.id || item.catalogItem.slug || "";
-  const itemType = item.catalogItem.type || "catalog item";
+function testedItemFilterButtonHtml(filter, label, count, active = false) {
+  return `<button class="${active ? "active" : ""}" type="button" data-item-filter="${escapeAttribute(filter)}" aria-pressed="${active ? "true" : "false"}">${escapeHtml(label)} <span>${escapeHtml(String(count || 0))}</span></button>`;
+}
+
+function testedItemRowHtml(item, runId, failures, context) {
+  const itemId = item.catalogItem?.id || item.catalogItem?.slug || "";
+  const itemType = item.catalogItem?.type || "catalog item";
   const issues = item.issues || [];
+  const tests = item.tests || [];
+  const sections = item.sections || [];
   const issueCodes = Array.from(new Set(issues.map((issue) => issue.code)));
   const blockerCount = issues.filter((issue) => issue.severity === "blocker").length;
+  const issueCount = Number(item.issueCount ?? issues.length);
+  const checkCount = Number(item.counts?.total ?? tests.length);
   const issueLabel =
     item.status === "failed"
       ? blockerCount > 0
         ? `${blockerCount} hard blocker${blockerCount === 1 ? "" : "s"}`
-        : item.issueCount === 1
+        : issueCount === 1
           ? `${issueDisplayLabel(issues[0])}`
-          : `${item.issueCount} separate issues`
+          : `${issueCount} separate issues`
       : item.status === "passed"
         ? "No issues found"
         : "Skipped";
   const statusTone = item.status === "failed" ? "fail" : item.status === "skipped" ? "warn" : "pass";
+  const statusLabel = item.status === "failed" ? "Need review" : item.status === "passed" ? "Passed" : "Skipped";
   const searchText = [
     catalogItemDisplayTitle(item.catalogItem),
     itemId,
-    item.catalogItem.slug,
+    item.catalogItem?.slug,
     itemType,
     item.status,
+    ...sections,
     ...issueCodes,
     ...issues.map((issue) => `${issue.label} ${issue.message}`),
   ]
     .filter(Boolean)
     .join(" ");
-  const reviewId = reviewEntryId(item, runId);
 
-  return `<article class="item-row ${escapeAttribute(item.status)}"
+  return `<details class="result-row ${escapeAttribute(item.status)}"
+    id="${escapeAttribute(itemDetailId(item))}"
     data-item-row
     data-status="${escapeAttribute(item.status)}"
     data-type="${escapeAttribute(itemType)}"
     data-issues="${escapeAttribute(issueCodes.join(" "))}"
     data-search="${escapeAttribute(searchText)}">
-    <div class="item-title">
-      <div class="chips">
-        <span class="pill ${statusTone}">${escapeHtml(item.status === "failed" ? "Need review" : item.status)}</span>
-        <span class="pill info">${escapeHtml(itemType)}</span>
-        ${itemId ? `<span class="pill info">${escapeHtml(itemId)}</span>` : ""}
-        ${issueCodes.slice(0, 3).map((code) => `<span class="pill info">${escapeHtml(code)}</span>`).join("\n")}
-      </div>
-      <h3>${escapeHtml(catalogItemDisplayTitle(item.catalogItem))}</h3>
-      <div class="item-meta">
-        <span>${escapeHtml(item.counts.total)} check${item.counts.total === 1 ? "" : "s"} run</span>
-        <span>${escapeHtml(item.sections.join(", "))}</span>
-      </div>
-    </div>
-    <div class="item-problem">
-      <strong>${escapeHtml(issueLabel)}</strong>
-      <div class="item-actions">
-        <a class="item-details-link" href="#${escapeAttribute(itemDetailId(item))}">Open details</a>
-        <button class="review-button" type="button" data-review-action="retest" data-review-id="${escapeAttribute(reviewId)}">Add to Retest List</button>
-        <button class="review-button" type="button" data-review-action="fix" data-review-id="${escapeAttribute(reviewId)}">Add To Fix List</button>
-      </div>
-    </div>
-  </article>`;
-}
-
-function itemDetailsHtml(items, failures, context) {
-  return items.map((item) => itemDetailHtml(item, failures, context)).join("\n");
+    <summary class="result-summary">
+      <span><span class="pill ${statusTone}">${escapeHtml(statusLabel)}</span></span>
+      <span class="result-item">
+        <strong>${escapeHtml(catalogItemDisplayTitle(item.catalogItem))}</strong>
+        <small>${escapeHtml([itemType, itemId ? `WMS ${itemId}` : ""].filter(Boolean).join(" / "))}</small>
+      </span>
+      <span class="result-checks">
+        <strong>${escapeHtml(String(checkCount))} check${checkCount === 1 ? "" : "s"}</strong>
+        <small>${escapeHtml(sections.join(", ") || "No section metadata")}</small>
+      </span>
+      <span class="result-finding">
+        <strong>${escapeHtml(issueLabel)}</strong>
+        <small>${escapeHtml(issues.map(issueDisplayLabel).join(", ") || "All completed checks passed")}</small>
+      </span>
+    </summary>
+    ${itemDetailHtml(item, failures, context)}
+  </details>`;
 }
 
 function itemDetailHtml(item, failures, context) {
-  const itemFailures = failures.filter(
+  const itemFailures = (failures || []).filter(
     (failure) => failure.catalogItem && catalogItemKey(failure.catalogItem) === item.key,
   );
   const issues = item.issues || [];
-  const issueCodes = Array.from(new Set(issues.map((issue) => issue.code)));
-  const itemId = item.catalogItem.id || item.catalogItem.slug || "";
-  const itemType = item.catalogItem.type || "catalog item";
-  const statusTone = item.status === "failed" ? "fail" : item.status === "skipped" ? "warn" : "pass";
+  const tests = item.tests || [];
   const url = item.catalogItem.normalized_href || item.catalogItem.absolute_url || item.catalogItem.href || "";
   const reviewId = reviewEntryId(item, context.summaryRunId || "");
+  const issueHeading =
+    issues.length === 0
+      ? "No issues found"
+      : `${issues.length} issue${issues.length === 1 ? "" : "s"} found`;
 
-  return `<section class="section item-detail" id="${escapeAttribute(itemDetailId(item))}">
-    <div class="detail-header">
+  return `<div class="result-details">
+    <div class="item-detail-heading">
       <div>
-        <p class="eyebrow">Item details</p>
-        <h2>${escapeHtml(catalogItemDisplayTitle(item.catalogItem))}</h2>
-        <div class="item-meta">
-          <span>${escapeHtml(itemType)}</span>
-          ${itemId ? `<span>ID ${escapeHtml(itemId)}</span>` : ""}
-          <span>${escapeHtml(item.sections.join(", "))}</span>
-        </div>
+        <h3>${escapeHtml(issueHeading)}</h3>
+        <p>${escapeHtml(
+          issues.length === 0
+            ? "Every completed check passed for this item."
+            : "Review each problem below, make the change, then add the item to the retest list.",
+        )}</p>
       </div>
-      <div class="chips">
-        <span class="pill ${statusTone}">${escapeHtml(item.status === "failed" ? `${item.issueCount} issue${item.issueCount === 1 ? "" : "s"} found` : item.status)}</span>
-        ${issueCodes.map((code) => `<span class="pill info">${escapeHtml(code)}</span>`).join("\n")}
-      </div>
-    </div>
-    <div class="detail-grid">
-      ${
-        issues.length > 0
-          ? issueListHtml(issues)
-          : `<section class="issue-detail"><h4>No issues found</h4><p>This item passed the checks that ran in this report.</p></section>`
-      }
-      <div class="catalog-checks">
-        ${item.tests.map(catalogCheckHtml).join("\n")}
-      </div>
-      <div class="artifact-links">
-        <a class="link-button" href="#tested-items">Back to tested items</a>
-        ${url ? `<a class="link-button" href="${escapeAttribute(url)}">Open item in LiveLabs</a>` : ""}
+      <div class="result-actions">
+        ${url ? `<a class="link-button" href="${escapeAttribute(url)}" target="_blank" rel="noreferrer">Open item in LiveLabs</a>` : ""}
         <button class="review-button" type="button" data-review-action="retest" data-review-id="${escapeAttribute(reviewId)}">Add to Retest List</button>
-        <button class="review-button" type="button" data-review-action="fix" data-review-id="${escapeAttribute(reviewId)}">Add To Fix List</button>
+        ${issues.length > 0 ? `<button class="review-button" type="button" data-review-action="fix" data-review-id="${escapeAttribute(reviewId)}">Add To Fix List</button>` : ""}
       </div>
-      ${itemFailures.map((failure, index) => itemFailureDetailHtml(failure, index, context)).join("\n")}
     </div>
+    ${
+      issues.length > 0
+        ? operatorIssueListHtml(issues)
+        : `<section class="operator-pass"><strong>Passed</strong><span>No user-facing problem was found.</span></section>`
+    }
+    <details class="item-developer-details">
+      <summary>Technical details for developers</summary>
+      <div class="item-developer-body">
+        <section class="developer-section">
+          <h4>Checks run (${escapeHtml(String(tests.length))})</h4>
+          <div class="catalog-checks">${tests.map(catalogCheckHtml).join("\n")}</div>
+        </section>
+        ${itemFailures.map((failure, index) => itemFailureDeveloperHtml(failure, index, context)).join("\n")}
+      </div>
+    </details>
+  </div>`;
+}
+
+function operatorIssueListHtml(issues) {
+  return `<div class="operator-issue-list">
+    ${issues.map((issue, index) => operatorIssueHtml(issue, index)).join("\n")}
+  </div>`;
+}
+
+function operatorIssueHtml(issue, index) {
+  const severityLabel = issue.severity === "blocker" ? "Blocking issue" : "Needs fix";
+  const affected = operatorIssueAffectedItemsHtml(issue);
+
+  return `<section class="operator-issue ${escapeAttribute(issue.severity || "major")}">
+    <div class="operator-issue-heading">
+      <span class="pill ${issue.severity === "blocker" ? "fail" : "warn"}">${escapeHtml(severityLabel)}</span>
+      <h4>${escapeHtml(index + 1)}. ${escapeHtml(issueDisplayLabel(issue))}</h4>
+    </div>
+    <p><strong>Problem:</strong> ${escapeHtml(issue.message || issueDisplayLabel(issue))}</p>
+    ${affected}
+    <p><strong>Next action:</strong> ${escapeHtml(operatorIssueAction(issue))}</p>
   </section>`;
 }
 
-function itemFailureDetailHtml(failure, index, context) {
+function operatorIssueAffectedItemsHtml(issue) {
+  if (!Array.isArray(issue.details) || issue.details.length === 0) {
+    return "";
+  }
+
+  const labels = issue.details
+    .map((detail, index) => operatorIssueDetailLabel(detail, index))
+    .filter(Boolean)
+    .slice(0, 8);
+
+  if (labels.length === 0) {
+    return "";
+  }
+
+  return `<div class="affected-items">
+    <strong>Affected:</strong>
+    <ul>${labels.map((label) => `<li>${escapeHtml(label)}</li>`).join("")}</ul>
+  </div>`;
+}
+
+function operatorIssueDetailLabel(detail, index) {
+  if (typeof detail === "string") {
+    return shortFailure(detail);
+  }
+  if (!detail || typeof detail !== "object") {
+    return "";
+  }
+
+  if (detail.alt) return `Image: ${detail.alt}`;
+  if (detail.text) return `Link: ${detail.text}`;
+  if (detail.label) return String(detail.label);
+  if (detail.object_name) return `File: ${detail.object_name}`;
+
+  const url = detail.src || detail.href || detail.url || "";
+  if (url) {
+    try {
+      const parsed = new URL(String(url));
+      const file = decodeURIComponent(parsed.pathname.split("/").filter(Boolean).pop() || "");
+      return file ? `Resource: ${file}` : `Resource on ${parsed.hostname}`;
+    } catch {
+      return `Affected item ${index + 1}`;
+    }
+  }
+
+  return "";
+}
+
+function operatorIssueAction(issue) {
+  switch (issue.code) {
+    case "ROUTING_INVALID_WORKSHOP_ID":
+    case "ROUTING_FAILED":
+      return "Open the item in LiveLabs and correct its catalog route or restore the missing page. Then rerun this item.";
+    case "BROKEN_VISIBLE_IMAGE":
+      return "Open the item in LiveLabs and replace or remove each image listed above. Then republish and rerun this item.";
+    case "BROKEN_VISIBLE_LINK":
+      return "Open the item in LiveLabs and replace or remove each broken link. Then republish and rerun this item.";
+    case "BROKEN_EMBEDDED_CONTENT":
+      return "Open the item in LiveLabs and repair or remove the embedded content. Then republish and rerun this item.";
+    case "CONTENT_TEXT_DEFECT":
+      return "Correct the unfinished or incorrect text, republish the item, and rerun this check.";
+    case "CONTENT_RELEVANCE":
+      return "Update the visible content or catalog metadata so they describe the same item, then rerun this check.";
+    case "INSTRUCTIONS_FLOW":
+      return "Correct the instructions route or content that did not open, republish, and rerun this item.";
+    case "ASSET_ACTION_FAILED":
+      return "Repair the affected asset action or remove it if it is no longer required, then rerun this item.";
+    case "STALE_PAR_LINK":
+      return "Replace the broken PAR link at every recorded source location, republish, and rerun the PAR audit.";
+    case "PAR_LINK_UNVERIFIED":
+      return "Run the PAR audit for this WMS item again before changing its content.";
+    case "PAR_SCAN_INCOMPLETE":
+      return "Restore or correct every source page that could not be scanned, then rerun the PAR audit.";
+    default:
+      return "Open the item, correct the reported problem, and rerun this item.";
+  }
+}
+
+function itemFailureDeveloperHtml(failure, index, context) {
   const bugId = `item-bug-${index}-${stableId(failure.titlePath.join("-"))}`;
   const catalogUrl = failure.catalogItem?.normalized_href || failure.catalogItem?.absolute_url || "";
   const issues = issuesForTest(failure);
-  const isParFinding = hasParAuditIssues(issues);
+  const primaryIssue = issues[0];
+  const error = failure.errors?.[0] ? displayFailure(failure.errors[0]) : "";
 
-  return `<section class="detail-test">
+  return `<section class="developer-test">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">${isParFinding ? "PAR audit result" : "Failure evidence"}</p>
+        <p class="eyebrow">Failed check</p>
         <h3>${escapeHtml(failure.section)}</h3>
+        ${primaryIssue ? `<span class="pill info">${escapeHtml(primaryIssue.code)}</span>` : ""}
       </div>
       <button class="copy-button" type="button" data-copy="${escapeAttribute(bugId)}">Copy bug report</button>
     </div>
-    <p class="failure-explanation">${escapeHtml(isParFinding ? parAuditExplanation() : failureExplanation(failure))}</p>
-    ${isParFinding || !failure.failedStep ? "" : failedStepSummaryHtml(failure.failedStep)}
-    ${
-      isParFinding
-        ? ""
-        : `<div class="route-grid">
-            ${routeCardHtml("Test tried", catalogUrl, "Original generated catalog URL.", "Open tried URL")}
-            ${routeCardHtml("Browser ended at", failure.finalUrl, `Page title: ${failure.finalTitle || "Unknown"}`, "Open reached URL")}
-          </div>`
-    }
-    ${
-      isParFinding
-        ? advancedParEvidenceHtml(failure, context, index, `item-par-steps-${index}-${stableId(failure.titlePath.join("-"))}`)
-        : failureEvidenceHtml(failure.attachments, context, index) +
-          stepsDetailsHtml(failure.steps, `item-failure-steps-${index}-${stableId(failure.titlePath.join("-"))}`)
-    }
-    <details>
-      <summary>Bug report details</summary>
-      <pre id="${escapeAttribute(bugId)}" class="bug">${escapeHtml(failure.bugSummary)}</pre>
-    </details>
+    ${failure.failedStep ? failedStepSummaryHtml(failure.failedStep) : ""}
+    <div class="route-grid">
+      ${routeCardHtml("Test tried", catalogUrl, "Original generated catalog URL.", "Open tried URL")}
+      ${routeCardHtml("Browser ended at", failure.finalUrl, `Page title: ${failure.finalTitle || "Unknown"}`, "Open reached URL")}
+    </div>
+    ${artifactLinksHtml(failure.attachments, context)}
+    <div class="meta-grid">
+      <div class="meta-item"><strong>Test file</strong><span><code>${escapeHtml(`${failure.file}:${failure.line}`)}</code></span></div>
+      ${error ? `<div class="meta-item developer-error"><strong>Error</strong><span>${escapeHtml(error)}</span></div>` : ""}
+    </div>
+    <pre id="${escapeAttribute(bugId)}" class="bug copy-source">${escapeHtml(failure.bugSummary)}</pre>
   </section>`;
 }
 function itemDetailId(item) {
@@ -3344,15 +3808,19 @@ function reportArtifactLink(projectRelativePath, outputDir) {
   }
 
   const sourcePath = path.resolve(PROJECT_ROOT, projectRelativePath);
+  const evidenceDir = path.join(outputDir, "evidence");
+  const safeName = path.basename(sourcePath).replace(/[^a-z0-9._-]+/gi, "-");
+  const targetName = `${stableId(projectRelativePath)}-${safeName}`;
+  const targetPath = path.join(evidenceDir, targetName);
+  if (fs.existsSync(targetPath)) {
+    return `evidence/${targetName}`;
+  }
+
   const projectPrefix = `${PROJECT_ROOT}${path.sep}`;
   if ((!sourcePath.startsWith(projectPrefix) && sourcePath !== PROJECT_ROOT) || !fs.existsSync(sourcePath)) {
     return relativeLinkFromReportOutput(projectRelativePath, outputDir);
   }
 
-  const evidenceDir = path.join(outputDir, "evidence");
-  const safeName = path.basename(sourcePath).replace(/[^a-z0-9._-]+/gi, "-");
-  const targetName = `${stableId(projectRelativePath)}-${safeName}`;
-  const targetPath = path.join(evidenceDir, targetName);
   fs.mkdirSync(evidenceDir, { recursive: true });
   fs.copyFileSync(sourcePath, targetPath);
   return `evidence/${targetName}`;
@@ -3727,7 +4195,7 @@ function historyRunState(run, landingPage = "") {
     return { label: "Broken links found", tone: "fail" };
   }
   if (runType.code === "par" && Number(run.scanProblems || 0) > 0) {
-    return { label: "Pages missed", tone: "fail" };
+    return { label: "Pages not scanned", tone: "fail" };
   }
   if (runType.code === "par" && Number(run.parUnverified || 0) > 0) {
     return { label: "Recheck", tone: "warn" };

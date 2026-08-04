@@ -7,6 +7,7 @@ import test from "node:test";
 import {
   buildParAuditSummary,
   parLinksPageHtml,
+  parRetestListPageHtml,
   readParAudits,
   sanitizeSensitiveText,
   writeParAuditDataFiles,
@@ -39,26 +40,53 @@ test("builds token-safe catalog PAR outputs", () => {
     assert.match(html, /Download CSV/);
     assert.match(html, /All PAR links/);
     assert.match(html, /Working/);
-    assert.match(html, /Broken.*OCI confirmed the file cannot be downloaded/s);
-    assert.match(html, /Recheck.*Rerun before changing content/s);
+    assert.match(html, /Broken.*The file cannot be downloaded and needs a replacement link/s);
+    assert.match(html, /Not verified.*exact cause/s);
     assert.match(html, /Search results/);
     assert.match(html, /Rows per page/);
     assert.match(html, /File cannot be downloaded \(404\)/);
     assert.match(html, /Problem/);
-    assert.match(html, /Fix/);
+    assert.match(html, /Next action/);
     assert.doesNotMatch(html, /Why it matters/);
-    assert.match(html, /replace the PAR URL/);
+    assert.match(html, /Replace this PAR/);
     assert.match(html, /Bucket/);
     assert.match(html, /eu-frankfurt-1/);
     assert.match(html, /assets\/demo\.zip/);
+    assert.match(html, /Lab 1<\/span><strong>/);
     assert.match(html, /Task 8: Install sample data/);
-    assert.match(html, /Step: 1. Get sample file/);
+    assert.match(html, /Step<\/span><strong>1\. Get sample file/);
     assert.match(html, /Markdown line 273/);
-    assert.match(html, /Search for &quot;assets\/demo\.zip&quot;/);
     assert.match(html, /Open exact lab/);
     assert.doesNotMatch(html, /Open source file/);
-    assert.doesNotMatch(html, /Retest List|Fix List|All safe JSON|<summary>Show<\/summary>/i);
+    assert.match(html, /name="livelabs-qa-par-renderer" content="par-table-v5"/);
+    assert.match(html, /PAR Retest List/);
+    assert.match(html, /Add to PAR Retest/);
+    assert.match(html, /Remove from PAR Retest/);
+    assert.match(html, /Copy full link/);
+    assert.match(html, /Show full link/);
+    assert.match(html, /Hide full link/);
+    assert.ok(
+      html.indexOf("<summary>Technical details for developers</summary>") <
+        html.indexOf("PAR link (masked by default)"),
+    );
+    assert.match(html, /\/api\/par-link\/resolve/);
+    assert.match(
+      html,
+      /data-source-url="https:\/\/livelabs\.oracle\.com\/cdn\/example\/lab-1\.md"/,
+    );
+    assert.match(html, /\.result-row\[open\] > \.result-summary \{ background: #eaf4fb/);
+    assert.ok(html.indexOf('id="par-retest-items"') < html.indexOf("const retestItems"));
+    assert.doesNotMatch(html, /Fix List|All safe JSON|<summary>Show<\/summary>/i);
     assert.doesNotMatch(html, /private-token-value/);
+    const retestHtml = parRetestListPageHtml({
+      runId: "test-run",
+      startedAt: "2026-07-13T00:00:00.000Z",
+      parAudit: summary,
+    });
+    assert.match(retestHtml, /Links ready to verify again/);
+    assert.match(retestHtml, /CATALOG_ITEM_IDS/);
+    assert.match(retestHtml, /Open Jenkins PAR audit/);
+    assert.doesNotMatch(retestHtml, /private-token-value/);
     assert.ok(fs.existsSync(path.join(outputDir, "par-all-results.csv")));
     assert.ok(fs.existsSync(path.join(outputDir, "par-working.csv")));
 
@@ -166,16 +194,160 @@ test("shows a complete PAR scan failure explanation on the PAR page", () => {
   assert.doesNotMatch(html, /Tested items/);
   assert.match(html, /Previous report/);
   assert.match(html, /Next report/);
-  assert.match(html, /Source page could not be scanned/);
-  assert.match(html, /Not checked/);
-  assert.match(html, /Fix/);
-  assert.match(html, /HTTP 404 \(not found\)/);
-  assert.match(html, /PAR links inside this source page were not marked working or broken/);
-  assert.match(html, /correct the path for &quot;Preview instructions: Getting Started&quot;/);
+  assert.match(html, /Source page does not exist at this address/);
+  assert.match(html, /Page not found/);
+  assert.match(html, /What was not tested/);
+  assert.match(html, /Next action/);
+  assert.match(html, /returned HTTP 404/);
+  assert.match(html, /PAR links on &quot;Preview instructions: Getting Started&quot; were not checked/);
+  assert.match(html, /Correct the path for &quot;Preview instructions: Getting Started&quot;/);
   assert.match(html, /WMS 848/);
-  assert.match(html, /Open failing source/);
+  assert.match(html, /Open page/);
   assert.match(html, /Technical details/);
   assert.match(html, /Workshop source returned HTTP 404/);
+});
+
+test("collapses duplicate rendered detections into one actionable source location", () => {
+  const audit = auditAttachment("catalog", "Workshop with duplicate detections", "broken", 401);
+  audit.links[0].sources = [
+    {
+      pageType: "direct-instructions",
+      pageUrl: "https://oracle-livelabs.github.io/example/index.html?lab=lab-2",
+      label: "Workshop with duplicate detections",
+      location: "a[href]: here",
+    },
+    {
+      pageType: "direct-instructions",
+      pageUrl: "https://oracle-livelabs.github.io/example/index.html?lab=lab-2",
+      label: "Workshop with duplicate detections",
+      location: "Rendered page content",
+    },
+    {
+      pageType: "direct-instructions-lab",
+      pageUrl: "https://oracle-livelabs.github.io/example/index.html?lab=lab-2",
+      sourceFileUrl: "https://oracle-livelabs.github.io/example/lab-2.md",
+      label: "Workshop with duplicate detections: Download the sample",
+      labNumber: 2,
+      sourceLine: 42,
+      section: "Task 2: Download the sample",
+      instruction: "2. Select the download link.",
+      searchText: "assets/demo.zip",
+      sourceExcerpt: "Download [the sample](https://objectstorage.example.com/p/***/n/ns/b/bucket/o/demo.zip)",
+    },
+  ];
+  const summary = buildParAuditSummary([
+    testResult(audit, {
+      type: "workshop",
+      id: "4242",
+      title: "Workshop with duplicate detections",
+    }),
+  ]);
+  const html = parLinksPageHtml({
+    runId: "duplicate-source-run",
+    startedAt: "2026-07-27T08:20:53.917Z",
+    parAudit: summary,
+  });
+
+  assert.equal((html.match(/class="source-copy"/g) || []).length, 1);
+  assert.match(html, /Lab 2<\/span><strong>Download the sample/);
+  assert.match(html, /Task or section<\/span><strong>Task 2: Download the sample/);
+  assert.match(html, /Step<\/span><strong>2\. Select the download link/);
+  assert.match(html, /WMS 4242 \/ Lab 2: Download the sample \/ Task: Task 2: Download the sample \/ Step 2/);
+});
+
+test("labels overview-only recheck sources honestly and removes duplicate locations", () => {
+  const audit = auditAttachment("catalog", "Workshop with temporary asset result", "unverified", 503);
+  audit.links[0].sources = [
+    {
+      pageType: "overview",
+      pageUrl: "https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=3811&clear=RR%2C180",
+      label: "Source page",
+      location: "img[src]",
+    },
+    {
+      pageType: "tenancy-instructions",
+      pageUrl: "https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=3811&clear=RR%2C180",
+      label: "Run on your tenancy instructions",
+      location: "Rendered page content",
+    },
+  ];
+  audit.links[0].http_status = undefined;
+  audit.links[0].attempts = 0;
+  audit.links[0].error = "The isolated PAR probe returned an unreadable result.";
+  const summary = buildParAuditSummary([
+    testResult(audit, {
+      type: "workshop",
+      id: "3811",
+      title: "Workshop with temporary asset result",
+    }),
+  ]);
+  const html = parLinksPageHtml({
+    runId: "overview-recheck-run",
+    startedAt: "2026-07-27T08:20:53.917Z",
+    parAudit: summary,
+  });
+
+  assert.equal((html.match(/class="source-copy"/g) || []).length, 1);
+  assert.match(html, /Page<\/span><strong>Workshop overview/);
+  assert.match(html, /Open workshop overview/);
+  assert.doesNotMatch(html, /Open exact lab/);
+  assert.match(html, /QA checker error/);
+  assert.match(html, /Link was not tested/);
+  assert.match(html, /QA system error, not evidence that the workshop link is broken/);
+  assert.match(html, /report it to the QA Hub maintainer/);
+});
+
+test("explains temporary page connection failures without calling the page deleted", () => {
+  const audit = {
+    schema_version: 1,
+    scope: "catalog",
+    source_name: "Workshop with temporary route problem",
+    generated_at: "2026-07-27T08:20:53.917Z",
+    pages_scanned: 0,
+    counts: { total: 0, working: 0, broken: 0, unverified: 0 },
+    links: [],
+    scan_errors: [
+      {
+        page_type: "tenancy-instructions",
+        label: "Run on your tenancy instructions",
+        page_url: "chrome-error://chromewebdata/",
+        error:
+          "Could not open indexed catalog item after trying https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=3925&clear=RR%2C180. Last error: page.goto: net::ERR_HTTP2_PROTOCOL_ERROR",
+      },
+    ],
+  };
+  const parAudit = buildParAuditSummary([
+    {
+      title: "PAR audit",
+      section: "Catalog PAR Links",
+      file: "tests/platform/par/catalogParLinks.spec.ts",
+      line: 1,
+      status: "failed",
+      catalogItem: {
+        type: "workshop",
+        id: "3925",
+        title: "Workshop with temporary route problem",
+        normalized_href:
+          "https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=3925&clear=RR%2C180",
+      },
+      parAudits: [audit],
+    },
+  ]);
+  const html = parLinksPageHtml({
+    runId: "temporary-route",
+    startedAt: "2026-07-27T08:20:53.917Z",
+    parAudit,
+  });
+
+  assert.match(html, /Connection closed/);
+  assert.match(html, /Attempted page<\/span><strong>Workshop overview/);
+  assert.match(html, /Intended check<\/span><strong>Run on your tenancy instructions was never reached/);
+  assert.match(html, /Open workshop overview/);
+  assert.match(html, /LiveLabs closed the HTTP\/2 connection/);
+  assert.match(html, /What was not tested/);
+  assert.match(html, /&quot;Run on your tenancy instructions&quot; was never reached, so its PAR links were not checked/);
+  assert.doesNotMatch(html, /Temporarily unreachable/);
+  assert.doesNotMatch(html, /chrome-error|<code>\/<\/code>/);
 });
 
 test("renders 500 PAR results as a searchable and paginated table", () => {
@@ -244,7 +416,8 @@ function auditAttachment(scope, sourceName, status, httpStatus) {
             pageType: "preview-instructions",
             pageUrl: "https://example.com/workshop?lab=1",
             label: "Workshop: Lab 1",
-            sourceFileUrl: "https://example.com/lab-1.md",
+            labNumber: 1,
+            sourceFileUrl: "https://livelabs.oracle.com/cdn/example/lab-1.md",
             sourceLine: 273,
             section: "Task 8: Install sample data",
             instruction: "1. Get sample file",
