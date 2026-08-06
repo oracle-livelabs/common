@@ -2,22 +2,22 @@
 
 ## Introduction
 
-Use this lab to make the access, capacity, and [Workshop Management System (WMS)](#legend) event-request decisions once. The approved [event code](#legend) values become the source for later testing, attendee communication, and the facilitator record.
+Choose access, scale, and [WMS](#legend) values once. The approved [event code](#legend) values feed the path test, attendee message, and event notes.
 
 ### Objectives
 
 In this lab, you will:
 
-- Confirm that the workshop can be used for an event.
-- Choose one attendee access and capacity plan.
+- Confirm that the workshop supports an event.
+- Choose one attendee access and scale plan.
 - Request and verify a LiveLabs event code in WMS.
 - Hand the approved values to the next preparation steps.
 
-<!-- Estimated Time: intentionally not shown in this readiness guide. -->
+Estimated Time: 20 minutes
 
 ![Event code request flow](./images/lab-2-event-code-flow.svg " ")
 
-## Task 1: Confirm Readiness, Access, and Capacity
+## Task 1: Confirm Status, Access, and Scale
 
 1. Confirm the workshop is ready.
 
@@ -34,9 +34,9 @@ In this lab, you will:
 
     Put only the selected path in the attendee instructions. Do not ask attendees to choose during the event.
 
-3. Decide how environments will be available.
+3. Decide how lab spaces will be ready.
 
-    For **50 or more attendees**, contact the **Oracle LiveLabs Team** before submitting the request. Confirm capacity and pre-provision the green-button lab spaces. Do not rely on live reservations at this scale.
+    For **50 or more attendees**, contact the **Oracle LiveLabs Team** before submitting the request. Confirm scale and pre-provision the green-button lab spaces. Do not rely on live reservations at this scale.
 
     For a smaller event that uses live reservations, allow time at the start for sign-in and provisioning. Plan a watch-only fallback for anyone who cannot obtain access.
 
@@ -44,9 +44,17 @@ In this lab, you will:
 
     Attendees must use an account they can verify and access during the event. Never share a personal Oracle account that belongs to a facilitator. List only the credentials required by the selected workshop path.
 
+5. Coordinate capacity with the platform team.
+
+    Ask the platform team to review the event even when the event is small. Confirm that another event is not consuming the shared capacity needed for this event, and record the reviewer, date, attendee count, selected access path, and outcome in the event notes.
+
+6. Determine whether Secure Desktops are required.
+
+    Record whether the selected workshop path needs Secure Desktops. If it does, confirm capacity, access instructions, network requirements, and a tested fallback before you submit the event request or send attendee instructions.
+
 ## Task 2: Complete the Event Request in WMS
 
-1. In the [Workshop Management System (WMS)](#legend), open **Events** and select **Request an Event Code**.
+1. In the [Workshop Management System (WMS)](#legend), open **Events** and select **Request an Event Code**. Click [here](https://livelabs.oracle.com/wms) to go to the WMS Platform.
 
     ![Request an Event Code in WMS](./images/request_event_code.png " ")
 
@@ -54,21 +62,21 @@ In this lab, you will:
 
 3. Complete the request from this single set of values.
 
-    | Field or Decision | Rule |
+    | Field or Value | Rule |
     | --- | --- |
-    | Workshop | Use the confirmed title, [WMS ID](#legend), or [LiveLabs ID](#legend). The selected workshop must be **Completed** and use the **Public** or **Event** [publish type](#legend). |
+    | Workshop | Use the confirmed title, [WMS ID](#legend), or [LiveLabs ID](#legend). The workshop must have **Completed** status and **Public** or **Event** [publish type](#legend). |
     | Event requestor | Use the Oracle name and email address of the person responsible for the request. |
     | Other people to notify | Add the Oracle people or team aliases that need approval updates. Separate addresses with commas. |
     | Event title | Use the title attendees and coordinators will recognize. |
-    | [Event date](#legend) | Enter the actual date on which the event starts. |
+    | [Event date](#legend) | Enter the actual start day. |
     | [Start date](#legend) | Set it **one day before** the event date so the team can verify the event code. |
     | [End date](#legend) | Set it **one day after** the actual event ends so the event does not close early. |
     | Time zone | Use the confirmed event time zone. |
     | [Tenancy](#legend) | Leave this blank unless the **Oracle LiveLabs Team** confirms a tenancy. [LiveLabs Sandbox](#legend) selects tenancy automatically; a wrong tenancy can break the workshop. |
     | Primary attendee path | Record the event-code, green-button, or brown-button path selected in Task 1. |
-    | [Maximum users](#legend) and [concurrent users](#legend) | Enter these values when the event uses the green-button flow. Use the confirmed capacity plan. |
+    | [Maximum users](#legend) and [concurrent users](#legend) | Enter these values when the event uses the green-button flow. Use the confirmed scale plan. |
     | Participant completion window | Enter the time needed to finish the workshop. The maximum is **8 hours**. |
-    | Remarks to the LiveLabs team | Explain any completion-window exception and record capacity or pre-provisioning details that affect approval. |
+    | Remarks to the LiveLabs team | Explain any time-window override and record scale or pre-provisioning details. |
 
     ![Event request fields in WMS](./images/complete_details.png " ")
 
@@ -93,7 +101,7 @@ In this lab, you will:
     - [Green-button URL](#legend).
     - [Brown-button](#legend) path.
 
-    This is a WMS configuration check. Complete the clean-browser, end-to-end path test in [Lab 3: Run the Workshop and Test the Green-Button Path](?lab=lab-3-run-workshop-test-green-button-path).
+    This is a WMS setup check. Complete the clean-browser, end-to-end path test in [Lab 3: Run the Workshop and Test the Green-Button Path](?lab=lab-3-run-workshop-test-green-button-path).
 
 ## Task 4: Submit and Hand Off the Approved Values
 
@@ -103,14 +111,14 @@ In this lab, you will:
 
 3. When approval arrives, confirm the event code, [event-code link](#legend), QR-code availability, and expected first attendee screen.
 
-4. Keep those approved values for the Lab 3 test and the Lab 4 attendee preflight message. After Labs 1 through 6, enter them once in [Lab 7: Complete and Accept the Facilitator Run of Show](?lab=facilitator-run-of-show-template).
+4. Keep those approved values for the Lab 3 test, the Lab 4 attendee preflight message, and the final event notes.
 
 ## Legend
 
 | Term | Meaning |
 | --- | --- |
 | Brown button | Launch choice for an attendee-owned tenancy. |
-| Concurrent users | Attendees expected to run the workshop at the same time. |
+| Concurrent users | Attendees who run the workshop at the same time. |
 | Cron job | Scheduled background process that creates, activates, or ends the event code. |
 | Edit Workshop Links | WMS step for attendee URLs. |
 | End date | Date when the event-code cron job ends the event. |

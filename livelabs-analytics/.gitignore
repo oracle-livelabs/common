@@ -37,6 +37,9 @@ Wallet_*/
 *.jks
 backend.env
 
+# Private database model, migrations, wallets, and VM/ADB setup material
+/database/
+
 # OCI/VM runtime artifacts belong in the VM deployment workspace, not GitHub Pages
 server/
 ops/

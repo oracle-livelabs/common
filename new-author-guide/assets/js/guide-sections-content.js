@@ -69,7 +69,7 @@
       resourceLinks: cloneObjectArray(item.resourceLinks),
       image: cloneImage(item.image),
       sourceHref: item.sourceHref || "",
-      sourceLabel: item.sourceLabel || "Open Full Guide"
+      sourceLabel: item.sourceLabel || "Open Step by Step Guide"
     }, overrides || {});
   }
 
@@ -91,7 +91,7 @@
       resourcesTitle: "",
       resourcesIntro: "",
       resourceLinks: [],
-      sourceLabel: "Open Full Guide"
+      sourceLabel: "Open Step by Step Guide"
     }, config || {});
   }
 
@@ -125,7 +125,7 @@
         "Keep the GitHub ownership model clear before you build."
       ],
       sectionHref: guideLabLink("introduction"),
-      sectionLabel: "Open Full Guide",
+      sectionLabel: "Open Step by Step Guide",
       image: {
         src: "./content/author-guide/introduction/images/livelabs-publishing-flow.png",
         alt: "LiveLabs publishing workflow diagram",
@@ -141,10 +141,10 @@
             "Open the author guide home and stay on that page long enough to choose the right route.",
             "Use Guided Path when you want the standard request, build, Quality Assurance, and publish sequence.",
             "Use Toolkit when you already know the blocker and need one focused answer.",
-            "Use Full Guide when you want the section-by-section map in the redesigned shell."
+            "Use Step by Step Guide when you want the section-by-section map in the redesigned shell."
           ],
           checkpoints: [
-            "You can say why you are using Guided Path, Toolkit, or Full Guide before you continue.",
+            "You can say why you are using Guided Path, Toolkit, or Step by Step Guide before you continue.",
             "You are not treating the full original guide as the default front door."
           ],
           watchFor: [
@@ -156,7 +156,7 @@
           snippet: [
             "Guided Path  -> ordered request, build, Quality Assurance, publish flow",
             "Toolkit      -> one blocker, one answer",
-            "Full Guide   -> section-by-section reference map",
+            "Step by Step Guide   -> section-by-section reference map",
             "Original     -> full depth, not the default front door"
           ].join("\n"),
           sourceHref: "./index.html#home",
@@ -237,7 +237,7 @@
         "Keep structure, paths, and copy patterns clean from day one."
       ],
       sectionHref: guideLabLink("1-labs-wms"),
-      sectionLabel: "Open Full Guide",
+      sectionLabel: "Open Step by Step Guide",
       image: {
         src: "./content/author-guide/3-labs-sync-github/images/sample-workshop-structure.png",
         alt: "Sample workshop structure in Visual Studio Code",
@@ -266,7 +266,7 @@
         "Publish only with production URLs and metadata."
       ],
       sectionHref: guideLabLink("5-labs-qa-checks"),
-      sectionLabel: "Open Full Guide",
+      sectionLabel: "Open Step by Step Guide",
       image: {
         src: "./content/author-guide/5-labs-qa-checks/images/self-qa-checklist-1.png",
         alt: "Self Quality Assurance checklist in WMS",
@@ -292,7 +292,7 @@
         "Preview every enhanced pattern before review."
       ],
       sectionHref: guideLabLink("12-freesql-integration"),
-      sectionLabel: "Open Full Guide",
+      sectionLabel: "Open Step by Step Guide",
       image: {
         src: "./content/author-guide/quiz/images/quizconfig.png",
         alt: "Quiz configuration example",
@@ -388,7 +388,7 @@
         "Use Fixomat late and still review the output."
       ],
       sectionHref: guideLabLink("13-labs-capture-screens-best-practices"),
-      sectionLabel: "Open Full Guide",
+      sectionLabel: "Open Step by Step Guide",
       image: {
         src: "./content/author-guide/13-labs-capture-screens-best-practices/images/screen-captures-general-guidelines.png",
         alt: "General screenshot guidelines reference",
@@ -414,7 +414,7 @@
         "Return to validation after the specialized setup is stable."
       ],
       sectionHref: guideLabLink("10-create-sprints-workflow"),
-      sectionLabel: "Open Full Guide",
+      sectionLabel: "Open Step by Step Guide",
       image: {
         src: "./content/author-guide/10-labs-create-sprints-workflow/images/sprints-workflow.png",
         alt: "LiveLabs sprint workflow diagram",
@@ -600,7 +600,7 @@
         "Preview and validate every AI-assisted output before commit."
       ],
       sectionHref: guideLabLink("15-labs-livelabs-ai-developer-hub"),
-      sectionLabel: "Open Full Guide",
+      sectionLabel: "Open Step by Step Guide",
       image: {
         src: "./content/author-guide/5-labs-qa-checks/images/git-hub-pull-request-title-comment.png",
         alt: "Pull request context in GitHub",

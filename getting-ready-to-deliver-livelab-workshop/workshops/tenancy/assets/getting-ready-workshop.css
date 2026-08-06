@@ -28,29 +28,6 @@
     width: 1%;
 }
 
-/* Local placeholder video frame; replace the source in introduction.md when the final recording is ready. */
-#module-content .getting-ready-video-player {
-    background: #fff;
-    border: 1px solid var(--getting-ready-border);
-    border-radius: 0.25rem;
-    box-sizing: border-box;
-    margin: 1rem 0 1.5rem;
-    max-width: 56rem;
-    overflow: hidden;
-    width: 100%;
-}
-
-#module-content .getting-ready-video-element {
-    aspect-ratio: 16 / 9;
-    background: #161513;
-    display: block;
-    height: auto !important;
-    max-width: 100% !important;
-    min-width: 100% !important;
-    object-fit: contain;
-    width: 100% !important;
-}
-
 @media (max-width: 52rem) {
     #module-content .getting-ready-tldr-table,
     #module-content h2[id*="deliverypathsummary"] + p + table,
@@ -59,14 +36,4 @@
         min-width: 42rem;
     }
 
-    #module-content .getting-ready-video-player {
-        max-width: 100%;
-    }
-}
-
-/* Do not print the test video frame or future media player. */
-@media print {
-    #module-content .getting-ready-video-player {
-        display: none;
-    }
 }

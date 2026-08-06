@@ -261,7 +261,7 @@
             '    <a class="markdown-guide-topnav-link" href="' + escapeHtml(new URL("../../index.html#home", window.location.href).toString()) + '">Guide Home</a>',
             '    <a class="markdown-guide-topnav-link" href="' + escapeHtml(new URL("../../index.html#guided", window.location.href).toString()) + '">Guided Path</a>',
             '    <a class="markdown-guide-topnav-link" href="' + escapeHtml(new URL("../../index.html#toolkit", window.location.href).toString()) + '">Toolkit</a>',
-            '    <a class="markdown-guide-topnav-link" href="' + escapeHtml(context.redesignedHref) + '">Full Guide</a>',
+            '    <a class="markdown-guide-topnav-link" href="' + escapeHtml(context.redesignedHref) + '">Step by Step Guide</a>',
             '    <a class="markdown-guide-topnav-link" href="' + escapeHtml(context.exampleHref) + '" target="_blank" rel="noreferrer">Workshop Example</a>',
             "  </div>",
             "</nav>"

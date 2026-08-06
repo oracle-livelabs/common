@@ -11,7 +11,7 @@
         (function () {
             // Object Storage and browsers can cache static files aggressively.
             // Bump this value whenever markdown, images, videos, CSS, or JS change.
-            var version = "20260727-object-storage-ready-v1";
+            var version = "20260804-event-delivery-v3";
 
             // Keep old shared links usable after the lab order changed.
             var aliases = {
@@ -26,8 +26,7 @@
                 "lab-4-send-attendee-preflight-prerequisites": "lab-4-send-attendee-preflight-prerequisites",
                 "lab-5-build-facilitation-runbook": "lab-1-build-facilitation-runbook",
                 "lab-6-run-live-readiness": "lab-5-run-live-prep-checks",
-                "need-help-freetier": "lab-6-how-to-troubleshoot-common-issues",
-                "lab-7-customer-context-follow-up": "lab-6-how-to-troubleshoot-common-issues"
+                "need-help-freetier": "lab-6-how-to-troubleshoot-common-issues"
             };
             var currentUrl = new URL(window.location.href);
             var lab = currentUrl.searchParams.get("lab");
@@ -102,12 +101,9 @@
     <script src="https://livelabs.oracle.com/cdn/common/redwood-hol/js/jquery-1.11.0.min.js"></script>
     <script src="https://livelabs.oracle.com/cdn/common/redwood-hol/js/jquery-ui-1.10.4.custom.js"></script>
     <script src="https://livelabs.oracle.com/cdn/common/redwood-hol/js/main.min.js"></script>
-    <!-- Keep these ?v values aligned with the version variable above after any Object Storage replacement. -->
-    <script src="./assets/lab-7-form.js?v=20260727-object-storage-ready-v1" defer></script>
-
     <link rel="stylesheet" href="https://livelabs.oracle.com/cdn/common/redwood-hol/css/style.min.css">
-    <link rel="stylesheet" href="./assets/getting-ready-workshop.css?v=20260727-object-storage-ready-v1">
-    <link rel="stylesheet" href="./assets/lab-7-form.css?v=20260727-object-storage-ready-v1">
+    <!-- Keep this ?v value aligned with the version variable above after any Object Storage replacement. -->
+    <link rel="stylesheet" href="./assets/getting-ready-workshop.css?v=20260728-event-delivery-v1">
     <link rel="shortcut icon" href="https://livelabs.oracle.com/cdn/common/redwood-hol/img/favicon.ico">
 </head>
 <body>

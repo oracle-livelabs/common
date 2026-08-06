@@ -1,10 +1,10 @@
 {
-  "workshoptitle": "Getting Ready to Deliver a LiveLab",
+  "workshoptitle": "Request and Deliver a LiveLabs Event",
   "help": "livelabs-help-db_us@oracle.com",
   "tutorials": [
     {
       "title": "Introduction",
-      "description": "Understand the readiness model for a customer-facing LiveLabs delivery.",
+      "description": "Understand the event delivery model for a customer-facing LiveLabs event.",
       "type": "livelabs",
       "filename": "../../introduction/introduction.md"
     },
@@ -43,12 +43,6 @@
       "description": "Troubleshoot access issues, use support paths, and report broken workshop content.",
       "type": "livelabs",
       "filename": "../../lab-6-how-to-troubleshoot-common-issues/lab-6-how-to-troubleshoot-common-issues.md"
-    },
-    {
-      "title": "Lab 7: Complete and Accept the Facilitator Run of Show",
-      "description": "Complete, accept, and print the facilitator run of show for the event record.",
-      "type": "livelabs",
-      "filename": "../../facilitator-run-of-show-template.md"
     }
   ]
 }

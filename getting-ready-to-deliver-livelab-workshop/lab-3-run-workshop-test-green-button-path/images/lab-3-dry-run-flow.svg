@@ -7,16 +7,16 @@
     <g class="card">
       <rect x="70" y="100" width="500" height="150" rx="8" fill="#ffffff" stroke="#6b5876" stroke-width="3"/>
       <text x="100" y="140" font-size="22" font-weight="700">1. Run end to end</text>
-      <text x="100" y="176" font-size="18">Open the same URL attendees will use.</text>
-      <text x="100" y="202" font-size="18">Complete every required lab step.</text>
-      <text x="100" y="228" font-size="18">Record broken or confusing instructions.</text>
+<text x="100" y="176" font-size="18">Open the same URL attendees will use.</text>
+<text x="100" y="202" font-size="18">Test the venue network and internet path.</text>
+<text x="100" y="228" font-size="18">Complete every required lab step.</text>
     </g>
     <g class="card">
       <rect x="630" y="100" width="500" height="150" rx="8" fill="#ffffff" stroke="#6b5876" stroke-width="3"/>
       <text x="660" y="140" font-size="22" font-weight="700">2. Test the launch path</text>
-      <text x="660" y="176" font-size="18">Use the green button, sandbox, secure desktop,</text>
-      <text x="660" y="202" font-size="18">booking flow, or customer-tenancy route</text>
-      <text x="660" y="228" font-size="18">selected in Lab 2.</text>
+<text x="660" y="176" font-size="18">Use the green button, sandbox, Secure Desktop,</text>
+<text x="660" y="202" font-size="18">booking flow, or customer-tenancy route</text>
+<text x="660" y="228" font-size="18">selected in Lab 2; record the fallback.</text>
     </g>
     <g class="card">
       <rect x="70" y="300" width="500" height="150" rx="8" fill="#ffffff" stroke="#6b5876" stroke-width="3"/>

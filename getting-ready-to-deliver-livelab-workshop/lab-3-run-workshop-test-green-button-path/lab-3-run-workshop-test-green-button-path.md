@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Test the exact attendee experience selected in [Lab 2](?lab=lab-2-request-livelabs-event-code). Do not choose a new URL, access path, or [launch model](#legend) here. Prove the selected path, record what attendees will see, and capture evidence for anything that fails.
+Test the exact attendee path selected in [Lab 2](?lab=lab-2-request-livelabs-event-code). Do not choose a new URL, access path, or [launch model](#legend) here. Prove the selected path, record what attendees will see, and capture proof for anything that fails.
 
 ### Objectives
 
@@ -10,9 +10,9 @@ In this lab, you will:
 
 - Complete the workshop through the attendee URL and access path.
 - Record every attendee step, the first ready screen, actual provisioning time, and [lab space](#legend) behavior.
-- Capture reproducible defect evidence for each [workshop-content issue](#legend).
+- Capture repeatable defect proof for each [workshop-content issue](#legend).
 
-<!-- Estimated Time: intentionally not shown in this readiness guide. -->
+Estimated Time: 20 minutes
 
 ![Dry run and launch test flow](./images/lab-3-dry-run-flow.svg " ")
 
@@ -22,7 +22,7 @@ In this lab, you will:
 
 2. Start with a fresh attendee browser session. Follow every prompt, including account sign-in, event code, [booking](#legend), [consent checkbox](#legend), tenancy, region, compartment, credentials, or [SSH-key](#legend) steps that apply.
 
-3. Complete every required workshop step. Record the exact attendee sequence and the first screen that confirms the lab space is ready.
+3. Complete every required workshop step. Record the exact attendee path and the first screen that confirms the lab space is ready.
 
 4. Never use or share an Oracle account or credentials that belong to another person during the test.
 
@@ -40,9 +40,9 @@ In this lab, you will:
     Every attendee step:
     ```
 
-2. Compare the measured time with the event agenda. If spaces start during the event, prepare a short opening block that covers the workshop goal, architecture, customer context, expected wait, and the next attendee action.
+2. Compare the measured time with the event agenda. If spaces start during the event, prepare a short opening block that covers the workshop goal, architecture, customer context, expected wait, and next attendee step.
 
-## Task 3: Capture Defect Evidence
+## Task 3: Capture Defect Proof
 
 1. For each failure, record:
 
@@ -54,14 +54,14 @@ In this lab, you will:
     Timestamp:
     Impact:
     Screenshot or error text:
-    Reproduction steps:
+    Repeat steps:
     ```
 
-2. Redact passwords, tokens, tenancy details, and personal information. If the workshop has an **[Acknowledgements section](#legend)**, note the owning team or contact with the evidence.
+2. Redact passwords, tokens, tenancy details, and personal data. If the workshop has an **[Acknowledgements section](#legend)**, note the owning team or contact with the proof.
 
-3. Follow [Lab 6: How to Troubleshoot Common Issues](?lab=lab-6-how-to-troubleshoot-common-issues) for the canonical diagnosis and escalation path. Do not duplicate those instructions here.
+3. Follow [Lab 6: How to Troubleshoot Common Issues](?lab=lab-6-how-to-troubleshoot-common-issues) for the standard diagnosis and support path. Do not duplicate those steps here.
 
-4. Keep the verified URL, access path, first ready screen, measured time, and unresolved risks with the event notes. After Labs 1 through 6, enter them in the [Lab 7 facilitator record](?lab=facilitator-run-of-show-template).
+4. Keep the verified URL, access path, first ready screen, measured time, and unresolved risks with the event notes.
 
 ## Legend
 

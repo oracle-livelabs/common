@@ -1,5 +1,5 @@
 // Structured source content for the redesigned guide.
-// Keep Guided Path and Toolkit content here; the Full Guide now comes from the flat author-guide manifest.
+// Keep Guided Path and Toolkit content here; the Step by Step Guide now comes from the flat author-guide manifest.
 window.authorGuideContent = (function () {
   var canonicalRoot = "https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/?lab=";
   var officialLinks = {
@@ -60,10 +60,10 @@ window.authorGuideContent = (function () {
       },
       {
         id: "step-2",
-        title: "Setup environment + Create Workshop",
+        title: "Create Workshop",
         guideTarget: "2-labs-github",
-        summary: "Set up GitHub Desktop and Visual Studio Code, fork and clone the right repos, copy the sample workshop, and validate preview early.",
-        keywords: ["github", "fork", "clone", "upstream", "git config", "github pages", "preview", "manifest"]
+        summary: "Choose NoDoc as the recommended default authoring path or use the existing GitHub process when direct source control is needed.",
+        keywords: ["nodoc", "no doc", "authoring path", "source workflow", "github process", "preview", "manifest"]
       },
       {
         id: "step-3",
@@ -131,7 +131,7 @@ window.authorGuideContent = (function () {
           caption: "The reviewer-facing request page is where the workshop scope and ownership are established."
         },
         sourceHref: labLink("1-labs-wms"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "start-here"
       },
       {
@@ -192,7 +192,7 @@ window.authorGuideContent = (function () {
           caption: "GitHub Desktop is the main fork, clone, commit, and pull request surface used throughout the guide."
         },
         sourceHref: labLink("2-labs-github"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
       },
       {
@@ -246,7 +246,7 @@ window.authorGuideContent = (function () {
           caption: "The sample structure is the cleanest baseline for new authoring work."
         },
         sourceHref: labLink("3-labs-sync-github"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
       },
       {
@@ -302,7 +302,7 @@ window.authorGuideContent = (function () {
           caption: "Add ?qa=true while previewing so structural issues surface before pull request review."
         },
         sourceHref: labLink("4-labs-markdown-develop-content"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
       },
       {
@@ -343,7 +343,7 @@ window.authorGuideContent = (function () {
           caption: "GitHub Pages is case-sensitive even when a local machine is not."
         },
         sourceHref: labLink("4-labs-markdown-develop-content"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
       },
       {
@@ -378,7 +378,7 @@ window.authorGuideContent = (function () {
           "Use alt text that tells the learner what the image proves or what UI they should recognize."
         ].join("\n"),
         sourceHref: labLink("4-labs-markdown-develop-content"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
       },
       {
@@ -415,7 +415,7 @@ window.authorGuideContent = (function () {
           "```"
         ].join("\n"),
         sourceHref: labLink("4-labs-markdown-develop-content"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
       },
       {
@@ -459,7 +459,7 @@ window.authorGuideContent = (function () {
           caption: "Conditional content should stay obvious enough that another author can follow it."
         },
         sourceHref: labLink("4-labs-markdown-develop-content"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
       },
       {
@@ -507,7 +507,7 @@ window.authorGuideContent = (function () {
           caption: "Use quiz-config only when scoring or badges are really part of the learning flow."
         },
         sourceHref: labLink("quiz"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
       },
       {
@@ -542,7 +542,7 @@ window.authorGuideContent = (function () {
           "4. Preview the rendered lab before review"
         ].join("\n"),
         sourceHref: labLink("freesqlembed"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
       },
       {
@@ -594,7 +594,7 @@ window.authorGuideContent = (function () {
           caption: "WMS turns the FreeSQL share link into the orange Run on FreeSQL entry."
         },
         sourceHref: labLink("11-create-freesql"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
       },
       {
@@ -634,7 +634,7 @@ window.authorGuideContent = (function () {
           "<freesql-button src=\"{tutorial-url}\">"
         ].join("\n"),
         sourceHref: labLink("12-freesql-integration"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
       },
       {
@@ -675,7 +675,7 @@ window.authorGuideContent = (function () {
           caption: "The screenshot standards page is the authoritative checklist for capture quality and privacy."
         },
         sourceHref: labLink("13-labs-capture-screens-best-practices"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "tools-productivity"
       },
       {
@@ -716,7 +716,7 @@ window.authorGuideContent = (function () {
           caption: "The summary tells you which images were resized, skipped, or optimized."
         },
         sourceHref: labLink("optishot"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "tools-productivity"
       },
       {
@@ -755,7 +755,7 @@ window.authorGuideContent = (function () {
           "4. Re-open pull request checks"
         ].join("\n"),
         sourceHref: labLink("fixomat"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "tools-productivity"
       },
       {
@@ -807,7 +807,7 @@ window.authorGuideContent = (function () {
           caption: "The checklist must be fully saved before Self Quality Assurance Complete can succeed."
         },
         sourceHref: labLink("5-labs-qa-checks"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "validation-publish"
       },
       {
@@ -859,7 +859,7 @@ window.authorGuideContent = (function () {
           caption: "Start with the failing workflow name so you fix the real blocker."
         },
         sourceHref: labLink("prcheck"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "validation-publish"
       },
       {
@@ -919,7 +919,7 @@ window.authorGuideContent = (function () {
           caption: "The Publishing tab is where the final production metadata is created and approved."
         },
         sourceHref: labLink("6-labs-publish"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "validation-publish"
       },
       {
@@ -953,7 +953,7 @@ window.authorGuideContent = (function () {
           "Workshop publishing        -> 1 business day"
         ].join("\n"),
         sourceHref: labLink("sla"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "validation-publish"
       },
       {
@@ -1005,7 +1005,7 @@ window.authorGuideContent = (function () {
           caption: "Sprints use a separate repository and publish request path from full workshops."
         },
         sourceHref: labLink("10-create-sprints-workflow"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1042,7 +1042,7 @@ window.authorGuideContent = (function () {
           "- Browser settings are optimized before image capture"
         ].join("\n"),
         sourceHref: labLink("6-labs-setup-graphical-remote-desktop"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1087,7 +1087,7 @@ window.authorGuideContent = (function () {
           "Validated remote desktop URL"
         ].join("\n"),
         sourceHref: labLink("7-labs-create-custom-image-for-marketplace"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1126,7 +1126,7 @@ window.authorGuideContent = (function () {
           "Support contacts"
         ].join("\n"),
         sourceHref: labLink("8-labs-publish-custom-image-to-marketplace"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1166,7 +1166,7 @@ window.authorGuideContent = (function () {
           "7. Save and retest the LiveLab"
         ].join("\n"),
         sourceHref: labLink("12-add-custom-image-to-workshop"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1218,7 +1218,7 @@ window.authorGuideContent = (function () {
           caption: "The details page is where authors add LiveLabs, assets, order, visibility, and publish status."
         },
         sourceHref: labLink("create-a-livestack"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1271,7 +1271,7 @@ window.authorGuideContent = (function () {
           caption: "WMS assets turn reusable files and links into shared, maintainable authoring objects."
         },
         sourceHref: labLink("17-assets"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1313,7 +1313,7 @@ window.authorGuideContent = (function () {
           "5. For 100+ users, start planning earlier and test more than once"
         ].join("\n"),
         sourceHref: labLink("secure-desktop"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1361,7 +1361,7 @@ window.authorGuideContent = (function () {
           "- Logged out of OCI tenants"
         ].join("\n"),
         sourceHref: labLink("secure-desktop-how-to-request"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1406,7 +1406,7 @@ window.authorGuideContent = (function () {
           "https://github.com/lfoinding/livelabs-ai-playground/tree/main/LiveLabs-AI-Developer"
         ].join("\n"),
         sourceHref: labLink("15-labs-livelabs-ai-developer-hub"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "help-faq"
       }
     ]

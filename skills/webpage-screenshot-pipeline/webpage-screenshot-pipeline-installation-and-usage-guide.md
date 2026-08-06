@@ -1,76 +1,30 @@
 # Webpage Screenshot Pipeline Installation And Use Guide
 
-## What The Skill Can Do
+## Version 1.1.0 change
 
-- capture reproducible screenshots of web pages for documentation, QA, bug reports, and baselines
-- choose Playwright, Chrome DevTools MCP, or OS-level fallback based on target and constraints
-- produce desktop, mobile, full-page, or element screenshots with repeatable settings
+This version includes a package-local Playwright runtime contract under `webpage-screenshot-pipeline/tools/webpage-screenshot-pipeline`. The setup command installs the pinned Playwright package and Chromium before capture. This resolves the Nodoc error that reported Playwright missing under the tool path.
 
-## Core Rules
+## Install and verify
 
-- prefer browser-rendered capture for web targets
-- record viewport, URL, timing, and authentication assumptions
-- verify screenshots are nonblank and framed correctly
-- use OS fallback only when browser tools cannot capture the target
+Install the skill into the local Codex skills directory using the package root folder named `webpage-screenshot-pipeline`. After installation, verify that `SKILL.md`, `tools/webpage-screenshot-pipeline/package.json`, and the setup/capture scripts exist.
 
-## Installation Process
+From the installed skill root, run:
 
-Give Codex this prompt:
-
-```text
-Install `webpage-screenshot-pipeline` skill into my local Codex skills directory. Inspect `SKILL.md`, use the embedded `name:` `webpage-screenshot-pipeline` as the installed folder name, ignore `__MACOSX`, `__pycache__`, and `*.pyc`, and verify the installed copy after copying.
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\webpage-screenshot-pipeline\setup.ps1
 ```
 
-After installation, ask Codex to verify that the installed folder exists and that `SKILL.md` contains the expected `name:` value.
+Then capture a test page:
 
-## How To Prompt It
-
-Start with `$webpage-screenshot-pipeline` and give Codex the target path or content.
-
-## What To Include In Your Request
-
-- target URL or local file path
-- viewport sizes and full-page versus element capture
-- authentication or setup steps
-- output folder and naming expectations
-- wait conditions such as network idle or visible selector
-
-## Recommended Prompt Patterns
-
-### Capture Desktop And Mobile
-
-```text
-$webpage-screenshot-pipeline capture desktop and mobile full-page screenshots of <target-url> into <screenshot-output-folder>
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\webpage-screenshot-pipeline\capture.ps1 -Url "https://example.com" -OutputPath "output/screenshots/smoke/example.png" -ViewportWidth 1440 -ViewportHeight 900 -FullPage
 ```
 
-### Capture An Element
+## Use
 
-```text
-$webpage-screenshot-pipeline capture the chart element on this page after the data loads: <target-url>
-```
+Start prompts with `$webpage-screenshot-pipeline`, provide the target URL, viewport, capture mode, output folder, and wait conditions. Keep a manifest with the capture evidence. Do not commit `node_modules`, browser binaries, credentials, cookies, or screenshot data containing private information.
 
-## Common Pitfalls
+## Version history
 
-- capturing before data finishes loading
-- not specifying mobile or desktop viewports
-- forgetting authentication state
-- accepting blank or badly framed screenshots without verification
-
-## Expected Output From Codex
-
-- screenshot file paths
-- viewport and capture settings
-- validation result
-- fallback tool used if any
-- issues such as blank canvas, overlap, or auth failure
-
-## Quick Checklist
-
-- embedded name is `webpage-screenshot-pipeline`
-- URL and viewport are explicit
-- output path is provided
-- screenshots are visually verified
-
-## Versioning History
-
-- version 1.0 - 05/11/26
+- version 1.1.0 - 2026-08-05 - Added package-local Playwright setup and capture wrappers for Nodoc runtime discovery.
+- version 1.0 - 2026-05-11 - Initial browser-rendered screenshot workflow.

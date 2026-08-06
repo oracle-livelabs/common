@@ -7,18 +7,18 @@
     <g class="card">
       <rect x="70" y="110" width="330" height="190" rx="8" fill="#ffffff" stroke="#5c6f86" stroke-width="3"/>
       <text x="100" y="150" font-size="22" font-weight="700">1. Checklist</text>
-      <text x="100" y="188" font-size="18">Include Oracle account setup,</text>
-      <text x="100" y="214" font-size="18">email verification, LiveLab URL,</text>
-      <text x="100" y="240" font-size="18">event code, network check,</text>
-      <text x="100" y="266" font-size="18">first screen, and support contact.</text>
+<text x="100" y="188" font-size="18">Check URL, event code, access path,</text>
+<text x="100" y="214" font-size="18">account steps, prerequisites, network</text>
+<text x="100" y="240" font-size="18">check, ready screen, provisioning time,</text>
+<text x="100" y="266" font-size="18">and pre-event support contact.</text>
     </g>
     <g class="card">
       <rect x="435" y="110" width="330" height="190" rx="8" fill="#ffffff" stroke="#5c6f86" stroke-width="3"/>
       <text x="465" y="150" font-size="22" font-weight="700">2. Email draft</text>
-      <text x="465" y="188" font-size="18">Replace every bracketed value.</text>
-      <text x="465" y="214" font-size="18">Remove unused provisioning notes.</text>
-      <text x="465" y="240" font-size="18">Keep the message short enough</text>
-      <text x="465" y="266" font-size="18">for attendees to act on quickly.</text>
+<text x="465" y="188" font-size="18">Replace every bracketed value.</text>
+<text x="465" y="214" font-size="18">Reflect every checklist item in</text>
+<text x="465" y="240" font-size="18">the message, including conditional</text>
+<text x="465" y="266" font-size="18">venue and Secure Desktop guidance.</text>
     </g>
     <g class="card">
       <rect x="800" y="110" width="330" height="190" rx="8" fill="#ffffff" stroke="#5c6f86" stroke-width="3"/>
@@ -31,7 +31,7 @@
     <g class="card">
       <rect x="70" y="370" width="1060" height="110" rx="8" fill="#eef3f7" stroke="#7b90a7" stroke-width="3"/>
       <text x="100" y="412" font-size="20" font-weight="700">Author check:</text>
-      <text x="100" y="444" font-size="20">The preflight email tells attendees exactly what to do before the call.</text>
+<text x="100" y="444" font-size="20">The preflight email tells attendees exactly what to do before the call.</text>
     </g>
   </g>
 </svg>

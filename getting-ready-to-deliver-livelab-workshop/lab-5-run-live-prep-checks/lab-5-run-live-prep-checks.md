@@ -12,9 +12,9 @@ In this lab, you will:
 
 - Confirm that the verified event details have not changed.
 - Run one [opening prep check](#legend) for access and roles.
-- Record the final state and decision in Lab 7.
+- Record the final state and decision in the event notes.
 
-<!-- Estimated Time: intentionally not shown in this readiness guide. -->
+Estimated Time: 15 minutes
 
 ![Live prep check flow](./images/lab-5-prep-check-flow.svg " ")
 
@@ -46,7 +46,7 @@ In this lab, you will:
 
 ## Task 3: Record the Decision
 
-1. In [Lab 7: Complete and Accept the Facilitator Run of Show](?lab=facilitator-run-of-show-template), record the final state, decision time, decision owner, remaining risk, and fallback.
+1. Record the final state, decision time, decision owner, remaining risk, and fallback in the event notes.
 
 2. Tell the delivery team the decision and any active fallback.
 
