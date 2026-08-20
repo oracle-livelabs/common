@@ -24,7 +24,9 @@
     "trace": "node ./scripts/qa.mjs trace",
     "codegen": "node ./scripts/qa.mjs codegen",
     "ui": "node ./scripts/qa.mjs tests --ui",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test:par": "node ./scripts/qa.mjs tests/platform/par/catalogParLinks.spec.ts",
+    "test:reporters": "node --test ./scripts/reporters/*.test.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.0",

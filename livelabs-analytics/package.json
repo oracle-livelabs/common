@@ -1,0 +1,16 @@
+{
+  "name": "livelabs-analytics-static",
+  "private": true,
+  "version": "2026.8.16",
+  "scripts": {
+    "validate": "node scripts/validate-dashboard.mjs",
+    "test:browser": "playwright test",
+    "build:release:ci": "node scripts/build-static-release.mjs --output .ci-release",
+    "preflight:ci": "node scripts/preflight-object-storage.mjs --release .ci-release --report .ci-preflight.json"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "http-server": "14.1.1",
+    "wait-on": "8.0.5"
+  }
+}

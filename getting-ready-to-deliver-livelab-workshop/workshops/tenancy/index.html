@@ -9,7 +9,11 @@
 
     <script>
         (function () {
-            var version = "20260706-diagram-spacing-fix";
+            // Object Storage and browsers can cache static files aggressively.
+            // Bump this value whenever markdown, images, videos, CSS, or JS change.
+            var version = "20260804-event-delivery-v3";
+
+            // Keep old shared links usable after the lab order changed.
             var aliases = {
                 "lab-1-create-live-event": "lab-2-request-livelabs-event-code",
                 "lab-1-request-livelabs-event-code": "lab-2-request-livelabs-event-code",
@@ -22,8 +26,7 @@
                 "lab-4-send-attendee-preflight-prerequisites": "lab-4-send-attendee-preflight-prerequisites",
                 "lab-5-build-facilitation-runbook": "lab-1-build-facilitation-runbook",
                 "lab-6-run-live-readiness": "lab-5-run-live-prep-checks",
-                "need-help-freetier": "lab-6-how-to-troubleshoot-common-issues",
-                "lab-7-customer-context-follow-up": "lab-6-how-to-troubleshoot-common-issues"
+                "need-help-freetier": "lab-6-how-to-troubleshoot-common-issues"
             };
             var currentUrl = new URL(window.location.href);
             var lab = currentUrl.searchParams.get("lab");
@@ -31,6 +34,9 @@
                 currentUrl.searchParams.set("lab", aliases[lab]);
                 window.history.replaceState(null, "", currentUrl.toString());
             }
+
+            // The LiveLabs loader fetches the manifest and markdown with XHR.
+            // Add a version query so replacements in Object Storage are picked up.
             var open = window.XMLHttpRequest && window.XMLHttpRequest.prototype.open;
             if (open) {
                 window.XMLHttpRequest.prototype.open = function (method, url) {
@@ -53,11 +59,14 @@
                 if (!content || !window.MutationObserver) {
                     return;
                 }
-                var makeImagesEager = function () {
-                    var images = content.querySelectorAll("img[src]");
+                var imageSyncQueued = false;
+                var optimizeImages = function () {
+                    var images = content.querySelectorAll("img[src]:not([data-getting-ready-image-ready])");
                     Array.prototype.forEach.call(images, function (image) {
                         var source = image.getAttribute("src");
-                        image.setAttribute("loading", "eager");
+                        image.setAttribute("data-getting-ready-image-ready", "true");
+                        image.setAttribute("loading", "lazy");
+                        image.setAttribute("decoding", "async");
                         if (source) {
                             try {
                                 var target = new URL(source, window.location.href);
@@ -73,17 +82,28 @@
                         }
                     });
                 };
-                var observer = new MutationObserver(makeImagesEager);
+                var queueImageSync = function () {
+                    if (imageSyncQueued) {
+                        return;
+                    }
+                    imageSyncQueued = true;
+                    window.requestAnimationFrame(function () {
+                        imageSyncQueued = false;
+                        optimizeImages();
+                    });
+                };
+                var observer = new MutationObserver(queueImageSync);
                 observer.observe(content, { childList: true, subtree: true });
-                makeImagesEager();
+                optimizeImages();
             });
         }());
     </script>
     <script src="https://livelabs.oracle.com/cdn/common/redwood-hol/js/jquery-1.11.0.min.js"></script>
     <script src="https://livelabs.oracle.com/cdn/common/redwood-hol/js/jquery-ui-1.10.4.custom.js"></script>
     <script src="https://livelabs.oracle.com/cdn/common/redwood-hol/js/main.min.js"></script>
-
     <link rel="stylesheet" href="https://livelabs.oracle.com/cdn/common/redwood-hol/css/style.min.css">
+    <!-- Keep this ?v value aligned with the version variable above after any Object Storage replacement. -->
+    <link rel="stylesheet" href="./assets/getting-ready-workshop.css?v=20260728-event-delivery-v1">
     <link rel="shortcut icon" href="https://livelabs.oracle.com/cdn/common/redwood-hol/img/favicon.ico">
 </head>
 <body>

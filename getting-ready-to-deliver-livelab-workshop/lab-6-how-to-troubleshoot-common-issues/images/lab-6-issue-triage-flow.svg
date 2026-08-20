@@ -8,8 +8,8 @@
       <rect x="70" y="100" width="500" height="150" rx="8" fill="#ffffff" stroke="#806b54" stroke-width="3"/>
       <text x="100" y="140" font-size="22" font-weight="700">1. Identify the blocker</text>
       <text x="100" y="176" font-size="18">Start with the attendee screen, access path,</text>
-      <text x="100" y="202" font-size="18">account state, event code, sandbox status,</text>
-      <text x="100" y="228" font-size="18">network state, or OCI location.</text>
+<text x="100" y="202" font-size="18">account state, event code, sandbox status,</text>
+<text x="100" y="228" font-size="18">venue internet, Secure Desktop, or OCI location.</text>
     </g>
     <g class="card">
       <rect x="630" y="100" width="500" height="150" rx="8" fill="#ffffff" stroke="#806b54" stroke-width="3"/>
@@ -29,8 +29,8 @@
       <rect x="630" y="300" width="500" height="150" rx="8" fill="#f6eee8" stroke="#b48a6b" stroke-width="3"/>
       <text x="660" y="340" font-size="22" font-weight="700">4. Report with evidence</text>
       <text x="660" y="376" font-size="18">After the event, report unresolved issues</text>
-      <text x="660" y="402" font-size="18">in #livelabs-authors-help. Include the</text>
-      <text x="660" y="428" font-size="18">workshop, lab step, path, error, and proof.</text>
+<text x="660" y="402" font-size="18">in #livelabs-authors-help. Include the</text>
+<text x="660" y="428" font-size="18">workshop, path, network or desktop error, and proof.</text>
     </g>
     <g class="card">
       <rect x="70" y="500" width="1060" height="72" rx="8" fill="#f6eee8" stroke="#b48a6b" stroke-width="3"/>

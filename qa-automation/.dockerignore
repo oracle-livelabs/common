@@ -1,0 +1,11 @@
+node_modules/
+artifacts/
+reports/
+.auth/
+.env
+.env.local
+deploy/vm/.env
+deploy/vm/secrets/
+*.log
+*.tmp
+.git/

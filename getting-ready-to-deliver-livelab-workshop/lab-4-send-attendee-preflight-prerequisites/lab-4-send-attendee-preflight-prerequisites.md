@@ -2,96 +2,99 @@
 
 ## Introduction
 
-Attendee prep starts before the event. The customer should not discover Oracle account setup, email check, event codes, network checks, or sandbox timing after the call begins.
-
-In this lab, you create the [attendee checklist](#legend) and [preflight email](#legend).
+Send attendees only the values verified in [Lab 2](?lab=lab-2-request-livelabs-event-code) and [Lab 3](?lab=lab-3-run-workshop-test-green-button-path). This lab owns the [attendee checklist](#legend) and [preflight email](#legend); it does not redefine the access path.
 
 ### Objectives
 
 In this lab, you will:
 
-- Build the attendee [prerequisite](#legend) checklist.
-- Write a preflight email.
-- Add expected screens and support contacts.
-- Give authors a clear example of the preflight flow.
+- Build one concise attendee [prerequisite](#legend) checklist.
+- Send a preflight email with the verified URL, event code, and first ready screen.
 
-<!-- Estimated Time: intentionally not shown in this readiness guide. -->
+Estimated Time: 10 minutes
 
 ![Attendee preflight flow](./images/lab-4-attendee-preflight-flow.svg " ")
 
-## Task 1: Build the Attendee Checklist
+## Task 1: Confirm the Message Contents
 
-1. Start with this [attendee checklist](#legend).
+1. Include:
 
-    | Item | Required? | Notes |
-    | --- | --- | --- |
-    | Create Oracle account | Yes / No | Complete before event day. |
-    | Verify email address | Yes / No | Do not wait until the live session. |
-    | Sign in to Oracle LiveLabs | Yes / No | Test before event day. |
-    | Open LiveLab URL | Yes / No | Confirm correct page loads. |
-    | Enter event code | Yes / No | Include code and link. |
-    | Run [network check](#legend) | Yes / No | Use when the workshop needs HTTP access or secure desktop. |
-    | Use sandbox or own tenancy | Sandbox / Own tenancy | Make the selected path explicit. |
-    | Know expected first screen | Yes / No | Include text or screenshot. |
-    | Know support contact | Yes / No | Provide a [pre-event contact](#legend). |
+    - Exact attendee URL and event code.
+    - Selected access path.
+    - Oracle account creation, email verification, and sign-in.
+    - Workshop-specific [prerequisites](#legend) or [connectivity check](#legend) links.
+    - Expected first ready screen.
+    - Expected provisioning time.
+    - A [pre-event support contact](#legend).
 
-2. Remove any item that does not apply.
+    Add the author-provided prerequisites from the workshop and event plan. When the event is hosted at a customer venue, include the confirmed network and internet requirements, and any building-access or arrival instructions that attendees must complete beforehand. Keep the venue team's capacity confirmation and planned student count in the event notes. If Secure Desktops are required, include their access steps and any device or network checks.
 
-3. Add workshop-specific prerequisites.
+    Ask the customer whether they need specific information before the event and include the confirmed answers in the message or link to the approved workshop prerequisite material. Do not leave customer questions for the live session.
 
-4. Mark any prerequisite that must be complete before event day.
+2. Require each attendee to use their own verified Oracle account. Never share a personal Oracle account or credentials. You can share the instruction below with the customer in the preflight email.
+    - How to create an Oracle Account?
 
-## Task 2: Write the Preflight Email
+    Creating an Oracle account can be summarized in the following two simple steps.
+    1.	Navigate to [oracle.com](https://www.oracle.com), click the Account icon, and select Create an Account
 
-1. Copy this template into the event message draft.
+    ![Oracle.com Page](./images/oracle-page.png " ")
+
+    2.	Fill out the form and click Create Account
+
+    ![Create an account form](./images/create-account.png " ")
+
+3. Tell attendees not to wait until the workshop to create or verify their account.
+
+4. Use the workshop's existing prerequisite section or checklist as the source for author-specific setup checks. Add a new prerequisite only when the event plan or workshop owner confirms it, and keep the final checklist with the event notes.
+
+## Task 2: Send the Preflight Email
+
+1. Copy, complete, and shorten this template as needed:
 
     ```text
-    Subject: Action Required Before the LiveLab: Oracle Account and Access Check
+    Subject: Action Required Before the LiveLab: Account and Access Check
 
     Hello,
 
-    To make the LiveLab session productive, please complete these access steps before the workshop.
+    Before the workshop:
+    1. Create or confirm your Oracle account, verify its email address, and sign in.
+    2. Open [verified attendee URL] and enter event code [event code].
+    3. Follow this access path: [verified access path].
+    4. Complete [workshop-specific prerequisite or connectivity check link].
+    5. Confirm that you see [expected first ready screen].
 
-    Before the session:
-    1. Create or confirm your Oracle account.
-    2. Verify your email address.
-    3. Sign in to Oracle LiveLabs.
-    4. Open the LiveLab link: [insert LiveLab URL].
-    5. Enter the event code: [insert event code].
-    6. Confirm that you see this starting screen: [insert expected screen].
-    7. If provided, open the connectivity check link and confirm that your network can reach the required workshop resources: [insert check link].
+    Lab spaces should be ready in [expected provisioning time]. [Explain whether
+    they start before or during the event and what happens while attendees wait.]
 
-    Provisioning note:
-    [Choose one]
-    - If lab spaces start live: We will start provisioning first. Provisioning may take [insert expected time]. While lab spaces start, we will cover the overview, architecture, and customer context.
-    - If lab spaces start early: The lab space should be ready when you enter the lab. We will use the opening for quick account, access, and network checks.
+    [If Secure Desktops are required, add the Secure Desktop access steps and
+    device or network checks.]
+    [If the customer venue requires it, add building access, arrival, and
+    network instructions.]
 
-    Please do not wait until the workshop starts to create or verify your Oracle account. If you have trouble signing in, contact [insert support contact] before the session.
-
-    Thank you.
+    Do not wait until the workshop to create or verify your Oracle account. [Add the instruction on how to create an Oracle account.]
+    If a check fails, contact [pre-event support contact] before the session.
     ```
 
-2. Replace every bracketed value.
+2. Replace every bracketed value and remove anything that does not apply.
 
-3. Remove the provisioning note that does not apply.
+3. Send the message early enough for attendees to report blockers.
 
-4. Send the message early enough for attendees to create accounts and report blockers.
+## Task 3: Record the Handoff
 
-5. Use this example to check the message flow.
-
-    ![Preflight email example](./images/lab-4-preflight-email-example.svg " ")
+1. Keep the send date, message owner, verified attendee URL, event code, first ready screen, and support contact with the event notes.
 
 ## Legend
 
-| Term | Meaning | Why It Matters |
-| --- | --- | --- |
-| Attendee checklist | List of attendee actions required before the event. | Makes prep visible and trackable. |
-| Connectivity check link | URL attendees can use to test network reachability. | Finds blocked network paths before the live session. |
-| Network check | Test that confirms the attendee network can reach required resources. | Helps identify firewall or secure desktop issues early. |
-| Passkey | Browser or device sign-in method for an Oracle account. | Can confuse attendees if it appears during the live session. |
-| Pre-event contact | Person or alias attendees contact before the session starts. | Moves account issues out of live delivery time. |
-| Preflight email | Message sent before the event with required access steps. | Gives attendees time to prepare and report blockers. |
-| Prerequisite | Required task or condition attendees complete before the event. | Prevents avoidable access problems during the session. |
+| Term | Meaning |
+| --- | --- |
+| Attendee checklist | List of attendee actions required before the event. |
+| Connectivity check | Test or link that confirms the attendee network can reach required workshop resources. |
+| Connectivity check link | URL attendees can use to test network reachability. |
+| Network check | Test that confirms the attendee network can reach required resources. |
+| Passkey | Browser or device sign-in method for an Oracle account. |
+| Pre-event support contact | Person or alias attendees contact before the session starts. |
+| Preflight email | Message sent before the event with required access steps. |
+| Prerequisite | Required task or condition attendees complete before the event. |
 
 ## Acknowledgements
 

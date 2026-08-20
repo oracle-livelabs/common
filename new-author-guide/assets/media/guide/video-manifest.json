@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "releaseStatus": "recordings-pending",
+  "assetRoot": "assets/media/guide",
+  "deliveryRules": {
+    "format": "mp4",
+    "captions": "vtt",
+    "audio": "optional",
+    "requiredBeforeMigration": [
+      "Replace every preview asset with an approved walkthrough recording.",
+      "Add a matching WebVTT captions file for every recording.",
+      "Review the recording for secrets, private URLs, user data, and internal-only screens.",
+      "Verify every source and caption path with the local static server."
+    ]
+  },
+  "groups": [
+    {
+      "surface": "quickstart",
+      "items": [
+        { "id": "quickstart-nodoc", "title": "Create Workshop with NoDoc walkthrough", "capture": ["authoring path", "article shell", "preview handoff"] },
+        { "id": "quickstart-github", "title": "Create Workshop and source setup walkthrough", "capture": ["fork or clone", "sample structure", "local preview"] },
+        { "id": "quickstart-publish", "title": "Review and Publish walkthrough", "capture": ["quality checklist", "automated checks", "publishing handoff"] }
+      ]
+    },
+    {
+      "surface": "nodoc",
+      "items": [
+        { "id": "nodoc-lab-1-task-1", "title": "NoDoc Lab 1 Task 1: Sign In and Check Your Role", "capture": ["Oracle SSO", "role check", "authoring permissions"] },
+        { "id": "nodoc-lab-1-task-2", "title": "NoDoc Lab 1 Task 2: Open No Doc Repo", "capture": ["Focus Area", "No Doc Repo", "table of contents"] },
+        { "id": "nodoc-lab-2-task-1", "title": "NoDoc Lab 2 Task 1: Create the Article Shell", "capture": ["article", "version", "create from scratch"] },
+        { "id": "nodoc-lab-2-task-2", "title": "NoDoc Lab 2 Task 2: Add Pages", "capture": ["page order", "Prepare", "Author", "Review"] },
+        { "id": "nodoc-lab-2-task-3", "title": "NoDoc Lab 2 Task 3: Add Structured Content", "capture": ["metadata", "procedures", "code block"] },
+        { "id": "nodoc-lab-3-task-1", "title": "NoDoc Lab 3 Task 1: Add a Comment", "capture": ["anchored comment", "actionable suggestion", "save"] },
+        { "id": "nodoc-lab-3-task-2", "title": "NoDoc Lab 3 Task 2: Create a Draft", "capture": ["reviewer", "draft", "edit"] },
+        { "id": "nodoc-lab-3-task-3", "title": "NoDoc Lab 3 Task 3: Review and Approve", "capture": ["View Diff", "accept or reject", "owner approval"] },
+        { "id": "nodoc-lab-4-task-1", "title": "NoDoc Lab 4 Task 1: Run AI Correction Safely", "capture": ["Vibe Doc-ing", "Apply Standards", "Difference"] },
+        { "id": "nodoc-lab-4-task-2", "title": "NoDoc Lab 4 Task 2: Try an Inline Correction", "capture": ["selected text", "inline correction", "human review"] },
+        { "id": "nodoc-lab-4-task-3", "title": "NoDoc Lab 4 Task 3: Generate the Information Map", "capture": ["saved pages", "information map", "source links"] },
+        { "id": "nodoc-lab-5-task-1", "title": "NoDoc Lab 5 Task 1: Ingest Approved Content", "capture": ["approved article", "Ingest", "status"] },
+        { "id": "nodoc-lab-5-task-2", "title": "NoDoc Lab 5 Task 2: Ask a Focused Question", "capture": ["Ask No Doc", "Focus Area", "source context"] },
+        { "id": "nodoc-lab-5-task-3", "title": "NoDoc Lab 5 Task 3: Search and Export", "capture": ["metadata search", "Vibe Searching", "chat JSON"] },
+        { "id": "nodoc-lab-6-task-1", "title": "NoDoc Lab 6 Task 1: Run Pre-Publish Checks", "capture": ["metadata", "links", "open decisions"] },
+        { "id": "nodoc-lab-6-task-2", "title": "NoDoc Lab 6 Task 2: Generate a Preview", "capture": ["preview", "rendered output", "defects"] },
+        { "id": "nodoc-lab-6-task-3", "title": "NoDoc Lab 6 Task 3: Complete the Handoff", "capture": ["owner", "evidence", "release decision"] }
+      ]
+    },
+    {
+      "surface": "cheatsheet",
+      "items": [
+        { "id": "wms-request", "title": "WMS Request", "capture": ["request fields", "tags", "status flow"] },
+        { "id": "markdown-structure", "title": "Markdown Structure", "capture": ["folder layout", "manifest", "task structure"] },
+        { "id": "links-paths", "title": "Links and Paths", "capture": ["relative links", "image paths", "preview check"] },
+        { "id": "image-references", "title": "Image References", "capture": ["image placement", "alt text", "path validation"] },
+        { "id": "copy-sql", "title": "Copy SQL", "capture": ["code block", "learner sign-in", "validation"] },
+        { "id": "reuse-variables", "title": "Reuse Variables", "capture": ["variables file", "placeholder", "rendered value"] },
+        { "id": "quiz-blocks", "title": "Quiz Blocks", "capture": ["question", "answers", "scoring"] },
+        { "id": "freesql-embed", "title": "FreeSQL Embed", "capture": ["embed", "button", "learner flow"] },
+        { "id": "freesql-tutorial-publishing", "title": "FreeSQL Tutorial Publishing", "capture": ["tutorial", "private draft", "publish"] },
+        { "id": "freesql-button-integration", "title": "FreeSQL Button Integration", "capture": ["button label", "target", "testing"] },
+        { "id": "screenshots", "title": "Screenshots", "capture": ["capture tool", "redaction", "responsive check"] },
+        { "id": "optishot", "title": "OptiShot", "capture": ["install", "capture", "asset review"] },
+        { "id": "fixomat", "title": "FixOMat", "capture": ["validation", "fix", "rerun"] },
+        { "id": "Quality Assurance-checklist", "title": "Quality Assurance Checklist", "capture": ["checklist", "evidence", "handoff"] },
+        { "id": "pull request-checks", "title": "Pull Request Checks", "capture": ["check run", "failure class", "rerun"] },
+        { "id": "publish-request", "title": "Publish Request", "capture": ["production URLs", "request", "approval"] },
+        { "id": "review-sla", "title": "Review SLA", "capture": ["review state", "owner", "follow-up"] },
+        { "id": "livelabs-sprints", "title": "LiveLabs Sprints", "capture": ["sprint record", "manifest", "publish"] },
+        { "id": "graphical-remote-desktop", "title": "Graphical Remote Desktop", "capture": ["desktop setup", "service", "learner access"] },
+        { "id": "custom-image-capture", "title": "Custom Image Capture", "capture": ["image request", "metadata", "validation"] },
+        { "id": "marketplace-image-publish", "title": "Marketplace Image Publish", "capture": ["listing", "revision", "publish"] },
+        { "id": "wms-custom-image-update", "title": "WMS Custom Image Update", "capture": ["asset", "visibility", "status"] },
+        { "id": "livestack-create", "title": "Create a LiveStack", "capture": ["bundle", "guide", "validation"] },
+        { "id": "wms-assets", "title": "WMS Assets", "capture": ["asset order", "visibility", "review"] },
+        { "id": "secure-desktop-when", "title": "When to Use Secure Desktop", "capture": ["decision", "access", "fallback"] },
+        { "id": "secure-desktop-request", "title": "Request Secure Desktop", "capture": ["request", "permissions", "handoff"] },
+        { "id": "ai-developer-hub", "title": "AI Developer Hub", "capture": ["source guide", "skill bundle", "review"] }
+      ]
+    }
+  ]
+}

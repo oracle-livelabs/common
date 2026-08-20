@@ -3693,6 +3693,22 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   border-color: rgba(104, 96, 91, 0.28);
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] .generator-textarea-compact {
+  min-height: 4.25rem;
+  max-height: 7rem;
+  resize: vertical;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-input-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
@@ -3805,6 +3821,79 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   word-break: normal;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table-wrap {
+  margin-top: 0.75rem;
+  overflow-x: auto;
+  border: 1px solid rgba(212, 207, 202, 0.92);
+  border-radius: 0.65rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table {
+  width: 100%;
+  min-width: 42rem;
+  margin: 0;
+  border-collapse: collapse;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.84rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table th,
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table td {
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid rgba(212, 207, 202, 0.78);
+  vertical-align: top;
+  text-align: left;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table thead th {
+  background: #f8f7f5;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table tbody tr:last-child th,
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-group-row th {
+  padding-top: 0.8rem;
+  padding-bottom: 0.45rem;
+  background: #fff7f5;
+  color: #8f2f22;
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-label {
+  width: 15rem;
+  font-weight: 800;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-action {
+  width: 5.5rem;
+  text-align: right !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table .generated-example-pre {
+  max-height: 9rem;
+  border-radius: 0.45rem;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generator-state {
@@ -4146,7 +4235,8 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
   #app[data-redwood-creator-pass="2026-05-25"] .detail-milestone-grid,
   #app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-layout,
   #app[data-redwood-creator-pass="2026-05-25"] .generator-layout,
-  #app[data-redwood-creator-pass="2026-05-25"] .example-generator-input-row {
+  #app[data-redwood-creator-pass="2026-05-25"] .example-generator-input-row,
+  #app[data-redwood-creator-pass="2026-05-25"] .qa-order-layout {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -4162,5 +4252,902 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
 @media (max-width: 940px) {
   body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
     display: none !important;
+  }
+}
+
+/* Home must remain reachable when viewport height or width is constrained. */
+body.home-no-scroll {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body.home-no-scroll #app .app-shell {
+  grid-template-rows: auto minmax(min-content, 1fr) auto;
+  height: auto;
+}
+
+body.home-no-scroll #app #hub.hub-screen {
+  min-height: min-content;
+  overflow: visible;
+}
+
+body.home-no-scroll #app #hub > .container,
+body.home-no-scroll #app .hub-hero {
+  min-height: min-content;
+}
+
+@media (max-height: 820px) {
+  body.home-no-scroll #app #hub.hub-screen {
+    align-items: flex-start;
+  }
+}
+
+/* NoDoc route selector and page */
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-shell {
+  margin-top: 1.5rem;
+  border: 1px solid rgba(49, 45, 42, 0.18);
+  border-radius: 1rem;
+  background: #fff;
+  overflow: hidden;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-header {
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border-bottom: 1px solid rgba(49, 45, 42, 0.12);
+  background: #f8f7f5;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-header h3,
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-copy h3,
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-page-card h3 {
+  margin: 0.25rem 0 0.45rem;
+  color: #161513;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-header p {
+  margin: 0;
+  color: #5b5652;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem clamp(1rem, 2vw, 1.5rem) 0;
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(49, 45, 42, 0.12);
+  background: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  flex: 0 0 auto;
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-radius: 0.65rem 0.65rem 0 0;
+  background: transparent;
+  color: #312d2a;
+  font: inherit;
+  font-weight: 700;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tab:hover {
+  background: #f3f2f0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tab.is-active {
+  border-color: rgba(199, 70, 52, 0.22);
+  border-bottom-color: #c74634;
+  background: #fff7f5;
+  color: #8f2f22;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tab:focus-visible {
+  outline: 3px solid rgba(0, 104, 140, 0.35);
+  outline-offset: 2px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-badge {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  min-height: 1.75rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: #e9e1ca;
+  color: #312d2a;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-panel {
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-panel[hidden] {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-placeholder {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(15rem, 0.7fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-copy,
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-status {
+  min-width: 0;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  border-radius: 0.85rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-copy {
+  border: 1px solid rgba(49, 45, 42, 0.14);
+  background: #f8f7f5;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-status {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 1px solid rgba(95, 125, 79, 0.28);
+  background: #f2f6ef;
+  color: #312d2a;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-status strong {
+  color: #395a32;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-quickstart-list {
+  display: grid;
+  gap: 0.7rem;
+  padding-left: 1.2rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-quickstart-list li {
+  padding-left: 0.15rem;
+  line-height: 1.48;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] [data-authoring-only][hidden] {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .qa-order-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(14rem, 0.75fr);
+  gap: 1rem;
+  align-items: center;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .qa-order-layout .step-figure {
+  align-self: center;
+  margin: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .qa-order-layout .step-figure img {
+  width: min(100%, 18rem);
+  margin-inline: auto;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-page-hero {
+  margin-top: 32px;
+  margin-bottom: 1.25rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-page-hero .mode-title {
+  max-width: 18ch;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-status-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-status-panel h3,
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-next-card h3 {
+  margin: 0.65rem 0 0.55rem;
+  color: #161513;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-status-panel .panel-kicker {
+  white-space: nowrap;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-next-card .card-body {
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-grid.is-topic-grouped {
+  row-gap: 2rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-grid.is-topic-grouped > .cheatsheet-topic-group {
+  width: 100%;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-topic-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid rgba(49, 45, 42, 0.18);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-topic-heading h3 {
+  margin: 0;
+  color: #312d2a;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 700;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-topic-heading span {
+  color: #5b5652;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-placeholder {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .nodoc-page-hero {
+    margin-top: 20px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .nodoc-page-actions {
+    justify-content: flex-start;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tabs {
+    padding-inline: 0.75rem;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tab {
+    flex: 1 0 max-content;
+  }
+}
+
+/* Give the NoDoc opening panel the same shared top-panel treatment as Quickstart and Cheatsheet. */
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(22, 21, 19, 0.16) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .card-body {
+  min-height: 196px;
+  padding: 44px 56px 34px !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-overline {
+  margin: 0 0 14px;
+  color: var(--finance-teal);
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: capitalize;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-title {
+  margin: 0;
+  max-width: 18ch;
+  color: #161513;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 3.35vw, 56px);
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-copy {
+  max-width: 64ch;
+  margin-top: 1.25rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-decoration-strip {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 20px;
+  border-radius: 8px 8px 0 0;
+  background: url("../images/color-strip.png") center center / 100% 20px no-repeat;
+  pointer-events: none;
+}
+
+@media (max-width: 940px) {
+  #app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .card-body {
+    padding: 44px 22px 28px !important;
+  }
+}
+/* NoDoc workshop tree: native details keep the lab menu accessible without a second JS router. */
+.nodoc-workshop-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; }
+.nodoc-summary-tree { display: none; }
+.nodoc-full-tree { display: grid; gap: .75rem; }
+.nodoc-tree-content { padding: 0 1.15rem 1.15rem 2.8rem; color: #334e68; }
+.nodoc-tree-content h4 { margin: 1rem 0 .45rem; color: #172b4d; font-size: 1rem; }
+.nodoc-tree-content p { margin: .55rem 0 .8rem; }
+.nodoc-tree-content li { margin-bottom: .3rem; }
+.nodoc-task { margin: .65rem 0; border-left: 3px solid rgba(199,70,52,.45); background: rgba(246,248,250,.8); border-radius: 8px; }
+.nodoc-task summary { cursor: pointer; padding: .65rem .8rem; font-weight: 700; color: #243b53; list-style: none; }
+.nodoc-task summary::-webkit-details-marker { display: none; }
+.nodoc-task summary::before { content: "▸"; color: #c74634; margin-right: .45rem; }
+.nodoc-task[open] summary::before { content: "▾"; }
+.nodoc-task ol { padding: 0 1rem 1rem 2.7rem; margin: 0; }
+.nodoc-checkpoint { margin: .9rem 0; padding: .75rem .9rem; border-left: 4px solid #c74634; background: rgba(255,243,238,.85); color: #7b341e; }
+
+/* NoDoc uses the established guide left rail and a single content reader. */
+#nodocMode .nodoc-workshop-card,
+#nodocMode .nodoc-next-card {
+  display: none;
+}
+
+#nodocMode .nodoc-full-workshop-card {
+  margin-top: 1.25rem;
+}
+
+#nodocMode .nodoc-guide-layout {
+  grid-template-columns: 280px minmax(0, 1fr);
+  margin-top: 1.25rem;
+}
+
+#nodocMode .nodoc-sidebar {
+  width: auto;
+  left: auto;
+}
+
+#nodocMode .nodoc-sidebar .guide-sidebar-card {
+  padding: 1rem;
+}
+
+#nodocMode .nodoc-side-nav {
+  display: grid;
+  gap: .45rem;
+}
+
+#nodocMode .nodoc-nav-button,
+#nodocMode .nodoc-nav-group button {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: #243b53;
+  font: inherit;
+  text-align: left;
+}
+
+#nodocMode .nodoc-nav-button {
+  padding: .72rem .75rem;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+#nodocMode .nodoc-nav-button.is-active,
+#nodocMode .nodoc-nav-group button.is-active {
+  background: #fff1ed;
+  color: #a82e1b;
+}
+
+#nodocMode .nodoc-nav-group {
+  border-top: 1px solid rgba(36, 59, 83, .12);
+  padding-top: .35rem;
+}
+
+#nodocMode .nodoc-nav-group summary {
+  cursor: pointer;
+  list-style: none;
+  padding: .62rem .75rem;
+  color: #243b53;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+#nodocMode .nodoc-nav-group summary::-webkit-details-marker {
+  display: none;
+}
+
+#nodocMode .nodoc-nav-group summary::before {
+  content: "▸";
+  display: inline-block;
+  width: 1rem;
+  color: #c74634;
+}
+
+#nodocMode .nodoc-nav-group[open] summary::before {
+  content: "▾";
+}
+
+#nodocMode .nodoc-nav-group button {
+  display: block;
+  padding: .45rem .65rem .45rem 1.75rem;
+  border-radius: 7px;
+  font-size: .88rem;
+  line-height: 1.35;
+}
+
+#nodocMode .nodoc-nav-group button:hover,
+#nodocMode .nodoc-nav-group button:focus-visible {
+  background: rgba(199, 70, 52, .08);
+  color: #a82e1b;
+}
+
+#nodocMode .nodoc-guide-stage {
+  min-width: 0;
+}
+
+#nodocMode .nodoc-guide-stage[hidden] {
+  display: none !important;
+}
+
+#nodocMode .nodoc-guide-layout[hidden] {
+  display: none !important;
+}
+
+#nodocMode .nodoc-lab-panel {
+  display: block;
+  border: 1px solid rgba(36, 59, 83, .14);
+  border-radius: 14px;
+  background: #fff;
+}
+
+#nodocMode .nodoc-lab-panel[hidden] {
+  display: none;
+}
+
+#nodocMode .nodoc-tree-content {
+  padding: 1.5rem clamp(1.1rem, 3vw, 2.25rem);
+}
+
+#nodocMode .nodoc-lab-heading {
+  margin: 0 0 1rem;
+  color: #172b4d;
+  font-size: clamp(1.45rem, 2.5vw, 2rem);
+}
+
+#nodocMode .nodoc-task-section {
+  scroll-margin-top: 1rem;
+  margin: 1.75rem 0;
+  border-top: 1px solid rgba(36, 59, 83, .14);
+}
+
+#nodocMode .nodoc-task-section > summary {
+  cursor: pointer;
+  padding: 1rem 1.15rem;
+  color: #243b53;
+  font-size: 1.12rem;
+  font-weight: 800;
+  list-style: none;
+}
+
+#nodocMode .nodoc-task-section > summary::-webkit-details-marker {
+  display: none;
+}
+
+#nodocMode .nodoc-task-section > summary::before {
+  content: "+";
+  display: inline-block;
+  width: 1.25rem;
+  color: #c74634;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+#nodocMode .nodoc-task-section[open] > summary::before {
+  content: "−";
+}
+
+#nodocMode .nodoc-task-section > :not(summary) {
+  margin-left: 1.15rem;
+  margin-right: 1.15rem;
+}
+
+#nodocMode .nodoc-task-toggle {
+  margin: .25rem 0 1rem;
+  font-size: .86rem;
+  font-weight: 700;
+}
+
+#nodocMode .nodoc-launch-actions {
+  margin-top: .5rem;
+}
+
+#nodocMode .nodoc-task-section ol > li {
+  margin-bottom: .36rem;
+  line-height: 1.55;
+}
+
+#nodocMode .nodoc-launch-task-section ol {
+  display: grid;
+  gap: .85rem;
+  margin-top: .85rem;
+}
+
+#nodocMode .nodoc-launch-task-section ol > li {
+  margin-bottom: 0;
+}
+
+#nodocMode .nodoc-task-section[open] {
+  padding-bottom: 1.1rem;
+  border-radius: 10px;
+  background: #fbfcfe;
+  box-shadow: 0 6px 18px rgba(36, 59, 83, .06);
+}
+
+#nodocMode .nodoc-task-media {
+  display: grid;
+  gap: .85rem;
+  margin: 0 0 1rem;
+}
+
+#nodocMode .nodoc-page-navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(36, 59, 83, .14);
+}
+
+#nodocMode .nodoc-page-nav-button {
+  max-width: 48%;
+  white-space: normal;
+  text-align: left;
+}
+
+@media (max-width: 575.98px) {
+  #nodocMode .nodoc-page-navigation {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  #nodocMode .nodoc-page-nav-button {
+    max-width: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 991.98px) {
+  #nodocMode .nodoc-guide-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #nodocMode .nodoc-sidebar,
+  #nodocMode .nodoc-sidebar .guide-sidebar-card {
+    position: static;
+    max-height: none;
+  }
+}
+.nodoc-workshop-meta a { color: var(--oracle-red, #c74634); font-weight: 700; }
+.nodoc-workshop-tree { display: grid; gap: .7rem; }
+.nodoc-tree-group { border: 1px solid rgba(22, 42, 63, .14); border-radius: 14px; background: rgba(255,255,255,.86); overflow: hidden; }
+.nodoc-tree-group summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 1rem; padding: .9rem 1rem; font-weight: 700; color: #172b4d; }
+.nodoc-tree-group summary::-webkit-details-marker { display: none; }
+.nodoc-tree-group summary::before { content: "＋"; color: #c74634; font-size: 1.1rem; line-height: 1; }
+.nodoc-tree-group[open] summary::before { content: "−"; }
+.nodoc-tree-group summary small { color: #526477; font-weight: 400; text-align: right; }
+.nodoc-tree-group ol, .nodoc-tree-leaf, .nodoc-tree-evidence { margin: 0; padding: 0 1rem 1rem 2.8rem; color: #334e68; }
+.nodoc-tree-evidence { color: #7b341e; font-size: .94rem; }
+@media (max-width: 700px) { .nodoc-tree-group summary { display: block; } .nodoc-tree-group summary small { display: block; text-align: left; margin: .35rem 0 0 1.6rem; } }
+
+/* NoDoc search and coordinated left-navigation accordion. */
+#nodocMode .nodoc-search-form {
+  max-width: 760px;
+  margin: 1.1rem 0 .35rem;
+}
+
+#nodocMode .nodoc-search-form .search-group {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+#nodocMode .nodoc-search-form .input-group-text,
+#nodocMode .nodoc-search-form .form-control,
+#nodocMode .nodoc-search-form .btn {
+  min-height: 46px;
+  border-color: rgba(36, 59, 83, .22);
+}
+
+#nodocMode .nodoc-search-status {
+  min-height: 1.35rem;
+  margin-top: .4rem;
+  color: #526477;
+  font-size: .9rem;
+}
+
+#nodocMode .nodoc-search-results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .65rem;
+  margin: .45rem 0 1rem;
+}
+
+#nodocMode .nodoc-search-results[hidden] {
+  display: none;
+}
+
+#nodocMode .nodoc-search-result {
+  display: grid;
+  gap: .22rem;
+  padding: .85rem 1rem;
+  border: 1px solid rgba(36, 59, 83, .16);
+  border-radius: 8px;
+  background: #fff;
+  color: #243b53;
+  text-align: left;
+}
+
+#nodocMode .nodoc-search-result:hover,
+#nodocMode .nodoc-search-result:focus-visible {
+  border-color: rgba(199, 70, 52, .55);
+  background: #fff8f5;
+}
+
+#nodocMode .nodoc-search-result-meta {
+  color: #6b7785;
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+#nodocMode .nodoc-search-result strong {
+  color: #172b4d;
+}
+
+#nodocMode .nodoc-search-result > span:last-child {
+  color: #526477;
+  font-size: .88rem;
+}
+
+#nodocMode .nodoc-side-nav {
+  gap: 0;
+}
+
+#nodocMode .nodoc-nav-title,
+#nodocMode .nodoc-nav-tasks button {
+  width: 100%;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #243b53;
+  font: inherit;
+  text-align: left;
+}
+
+#nodocMode .nodoc-nav-title {
+  position: relative;
+  min-height: 42px;
+  padding: .68rem 2rem .68rem .75rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+#nodocMode .nodoc-nav-group {
+  border-top: 1px solid rgba(36, 59, 83, .12);
+  padding: .25rem 0;
+}
+
+#nodocMode .nodoc-nav-group > .nodoc-nav-title::after {
+  content: "+";
+  position: absolute;
+  top: 50%;
+  right: .72rem;
+  transform: translateY(-50%);
+  color: #c74634;
+  font-size: 1rem;
+}
+
+#nodocMode .nodoc-nav-group.is-open > .nodoc-nav-title::after {
+  content: "-";
+}
+
+#nodocMode .nodoc-nav-title:hover,
+#nodocMode .nodoc-nav-title:focus-visible,
+#nodocMode .nodoc-nav-tasks button:hover,
+#nodocMode .nodoc-nav-tasks button:focus-visible {
+  background: rgba(199, 70, 52, .08);
+  color: #a82e1b;
+}
+
+#nodocMode .nodoc-nav-title.is-active {
+  background: #fff1ed;
+  color: #a82e1b;
+}
+
+#nodocMode .nodoc-nav-tasks {
+  display: grid;
+  gap: .1rem;
+  padding: .15rem 0 .35rem;
+}
+
+#nodocMode .nodoc-nav-tasks[hidden] {
+  display: none;
+}
+
+#nodocMode .nodoc-nav-tasks button {
+  padding: .45rem .65rem .45rem 1.75rem;
+  font-size: .88rem;
+  line-height: 1.35;
+}
+
+#nodocMode .nodoc-nav-tasks button.is-active {
+  background: rgba(199, 70, 52, .1);
+  color: #a82e1b;
+  font-weight: 700;
+}
+
+#nodocMode .nodoc-lab-panel {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+#nodocMode .nodoc-tree-content {
+  padding: .25rem 0 1rem;
+}
+
+@media (max-width: 767.98px) {
+  #nodocMode .nodoc-search-results {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* NoDoc hero: keep the platform destination in the title so the page has one clear CTA. */
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .card-body {
+  min-height: 0;
+  padding: 30px 38px 26px !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-overline {
+  margin-bottom: 9px;
+  font-size: 16px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: .35em;
+  max-width: none;
+  font-size: clamp(32px, 3.2vw, 46px);
+  line-height: 1.06;
+  white-space: nowrap;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-copy {
+  max-width: 70ch;
+  margin-top: .8rem;
+}
+
+#nodocMode .nodoc-title-link {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  text-decoration: none !important;
+  transition: opacity 160ms ease;
+}
+
+#nodocMode .nodoc-hero-title-copy {
+  display: inline-block;
+  flex: 0 0 auto;
+  font-size: .8em;
+}
+
+#nodocMode .nodoc-title-logo {
+  display: block;
+  width: auto;
+  height: 1em;
+  max-width: 8em;
+  object-fit: contain;
+}
+
+#nodocMode .nodoc-title-link:hover,
+#nodocMode .nodoc-title-link:focus-visible {
+  opacity: .82;
+}
+
+#nodocMode .nodoc-search-form {
+  width: min(100%, 1080px);
+  max-width: none;
+  margin: 1.35rem auto .65rem;
+}
+
+#nodocMode .nodoc-search-form .search-group {
+  min-height: 58px;
+  box-shadow: 0 10px 24px rgba(36, 59, 83, .08);
+}
+
+#nodocMode .nodoc-search-form .input-group-text,
+#nodocMode .nodoc-search-form .form-control,
+#nodocMode .nodoc-search-form .btn {
+  min-height: 58px;
+}
+
+#nodocMode .nodoc-search-form .form-control {
+  font-size: 1.05rem;
+}
+
+/* All top-level workshop labels share this base treatment. Active state changes
+   color and background only, so Introduction and Lab 1-6 remain consistent. */
+#nodocMode .nodoc-nav-title {
+  display: block;
+  min-width: 0;
+  padding: .68rem 3.35rem .68rem .75rem !important;
+  font-size: .88rem;
+  font-weight: 400;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+#nodocMode .nodoc-nav-group > .nodoc-nav-title::after {
+  pointer-events: none;
+}
+
+#nodocMode .nodoc-tree-group > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(72px, 120px);
+  align-items: start;
+  gap: 1rem;
+}
+
+#nodocMode .nodoc-tree-group > summary > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+#nodocMode .nodoc-tree-group > summary > small {
+  min-width: 0;
+  max-width: 120px;
+  line-height: 1.35;
+}
+
+#nodocMode .nodoc-tree-content > .media-player-card {
+  margin: 0 0 1.25rem;
+}
+
+@media (max-width: 700px) {
+  #app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .card-body {
+    padding: 28px 22px 24px !important;
+  }
+
+  #nodocMode .nodoc-tree-group > summary {
+    display: block;
+  }
+
+  #nodocMode .nodoc-tree-group > summary > small {
+    display: block;
+    max-width: none;
+    margin: .35rem 0 0 1.65rem;
+    text-align: left;
   }
 }

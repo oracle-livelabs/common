@@ -1,0 +1,50 @@
+{
+  "bundle_name": "LiveLabs Analytics static C4U02 bundle",
+  "bundle_version": "2026-08-15-data-confidence-navigation",
+  "runtime": "static",
+  "entry_points": ["/", "/inventory/"],
+  "identity": {"record_key": "livelabs_id_or_wms_title_fallback", "family_key": "wms_id"},
+  "data_snapshot": {
+    "portfolio_inventory_generated_at": "2026-08-15T21:11:30.644354Z",
+    "canonical_portfolio_payload": "data/portfolio_inventory.json",
+    "source_snapshot_date": "2026-08-14",
+    "github_repository_snapshot_date": "2026-08-15",
+    "workshop_update_evidence_snapshot_date": "2026-08-14",
+    "fresh_data_pending": false
+  },
+  "data_quality": {
+    "record_count": 2250,
+    "update_evidence_classified_records": 2250,
+    "latest_github_update_records": 1397,
+    "wms_metadata_fallback_records": 853,
+    "repository_crossmapped_records": 26,
+    "remaining_unmapped_livelabs_id_records": 402,
+    "single_canonical_portfolio_payload": true
+  },
+  "internal_data_policy": {
+    "contact_email_values": "internal Oracle contacts retained",
+    "intended_audience": "internal",
+    "admin_backend_database_health_routes": "excluded",
+    "governance_status": "current WMS and dashboard snapshot; Git update evidence is source-classified; ambiguous title-only metrics are quarantined"
+  },
+  "delivery": {
+    "access_model": "internal-authenticated",
+    "public_exposure_allowed": false,
+    "gateway_or_approved_internal_edge_required": true,
+    "preauthenticated_request_is_not_end_user_authentication": true
+  },
+  "promotion_gates": {
+    "governance_snapshot_verified": false,
+    "replacement_resolution_verified": false,
+    "retirement_outputs_verified": false,
+    "source_recovery_manifest_required": true,
+    "strict_browser_regression_required": true
+  },
+  "object_storage_requirements": {
+    "index_documents": ["index.html"],
+    "json_content_type": "application/json",
+    "html_content_type": "text/html",
+    "query_strings_are_client_state": true,
+    "archive_must_not_be_uploaded": true
+  }
+}

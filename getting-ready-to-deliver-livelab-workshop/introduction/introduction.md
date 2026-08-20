@@ -1,44 +1,37 @@
-# Getting Ready to Deliver a LiveLab
+# Request and Deliver a LiveLabs Event
 
 ## Introduction
 
-This workshop helps a delivery team prepare for a customer-facing Oracle LiveLabs hands-on session. It covers event access, attendee prerequisites, launch timing, presenter roles, and troubleshooting.
-
-A LiveLab can fail even when the lab content is strong. Attendees may arrive without a checked Oracle account. The event code or sandbox path may feel unclear. Provisioning may run long.
-
-The delivery team also needs clear roles before the call starts. Decide who drives, who watches chat, and who answers technical questions before attendees join.
-
-Use this guide to confirm the path, message attendees early, test the launch flow, and give the delivery team one clear runbook.
+Use this guide to request, prepare, test, deliver, and document a customer-facing Oracle LiveLabs event without searching through repeated checklists.
 
 ### Objectives
 
 In this workshop, you will:
 
-- Create and test the LiveLabs event path.
-- Choose the attendee access model before the event.
-- Run the workshop and test the green-button or launch path.
-- Write attendee prerequisites and a preflight email.
-- Assign presenter, driver, support, and SME roles.
-- Plan the first 5 to 10 minutes of live prep checks.
-- Troubleshoot common issues and complete the final readiness checklist.
+- Build one event delivery plan.
+- Test the attendee path before the event.
+- Confirm the final readiness decision before delivery.
 
-<!-- Estimated Workshop Time: intentionally not shown in this readiness guide. -->
+![LiveLabs event delivery overview](./images/event-delivery-overview.svg " ")
 
-## TL;DR: Author Quick Guide
+## Delivery Path Summary
 
-Use this section when you need the delivery plan without reading every lab.
+Use this table when you need the delivery plan quickly.
 
-### 60-Second Ready Check
+| Lab | Quick Check | What You Need To Do |
+| --- | --- | --- |
+| [Lab 1](?lab=lab-1-build-facilitation-runbook) | Build the facilitation runbook. | Confirm venue network, internet, capacity, building access, customer questions, platform-team coordination, and Secure Desktop needs. Then assign the facilitator, screen driver, chat/support owner, technical SME, and event coordinator. |
+| [Lab 2](?lab=lab-2-request-livelabs-event-code) | Confirm event code, access, and capacity. | Request or verify the event code, choose Sandbox or Own tenancy, confirm the date, time zone, attendee count, provisioning plan, and support details. For 50 or more attendees, contact the Oracle LiveLabs Team. |
+| [Lab 3](?lab=lab-3-run-workshop-test-green-button-path) | Test the attendee path. | Run the workshop like an attendee with the same account, URL, network, browser, and access path. Record the first ready screen, provisioning time, and issues. |
+| [Lab 4](?lab=lab-4-send-attendee-preflight-prerequisites) | Prepare attendees. | Send the verified attendee URL, event code, access path, author-provided prerequisites, venue/access requirements, Oracle account steps, first ready screen, expected provisioning time, and support contact early. |
+| [Lab 5](?lab=lab-5-run-live-prep-checks) | Run the live opening check. | Confirm the verified event values, roles, support route, fallback, and final readiness state before hands-on work starts. |
+| [Lab 6](?lab=lab-6-how-to-troubleshoot-common-issues) | Keep troubleshooting ready. | Use the symptom table, route issues, capture evidence, and keep individual blockers from stopping the main session. |
 
-- Assign the facilitator, driver, help owner, SME, and event owner.
-- Choose one attendee path: event code, green button, or brown button.
-- Verify the event URL, code, first screen, attendee count, dates, and help contact.
-- For 50+, contact William and LiveLabs. Confirm available space and pre-provision.
-- Dry run with the same account, link, network, browser, and launch path.
-- Send account, access, network, event-code, first-screen, and support instructions early.
-- Record provisioning time. Prepare product context for the wait.
-- Complete Lab 5. Choose **Ready**, **Ready with risk**, or **Not ready**.
-- Keep Lab 6 open during the event.
+## Account Rules
+
+- Do not share a personal Oracle account with attendees.
+- Confirm the account-team representative understands the delivery plan and owns any remaining account-team actions.
+- Store final delivery notes in the approved event system so the team can find the decision later.
 
 ## Acknowledgements
 

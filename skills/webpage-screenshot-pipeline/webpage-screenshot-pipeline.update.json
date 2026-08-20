@@ -1,27 +1,38 @@
 {
   "name": "webpage-screenshot-pipeline",
-  "owner": "Not listed",
-  "authors": [],
-  "version": "1.0",
-  "published_at": "2026-05-21T00:00:00Z",
-  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/webpage-screenshot-pipeline/ready-to-deploy-archive/webpage-screenshot-pipeline.zip",
-  "archive_sha256": "9882f67b69caa648465f30a9b84cb401592f9f70ea12a4e736dc9dbe747a7c5f",
-  "content_hash": "7c40a50fc60cc2250ef69547aa74751595f3f5a0c64b9cabc3d77d5a69705275",
+  "owner": "Linda Foinding",
+  "authors": ["Linda Foinding", "Lucian Brinzei"],
+  "version": "1.1.0",
+  "published_at": "2026-08-05T00:00:00Z",
+  "archive_url": "pending-review",
+  "archive_sha256": "5503bbf8b449bd86ffc6c43d41bb96eb4eecdf72ab1d4258a0482ac89b5192ba",
+  "content_hash": "ed8a25dc39b58410466330214d7a0cc81d40218cb8573305022283902e6c879e",
   "min_updater_version": "2",
   "validation": [
-    "python3 scripts/check_skill_package.py <skill_root>"
+    "node --check tools/webpage-screenshot-pipeline/capture.mjs",
+    "python scripts/check_skill_package.py <skill_root>",
+    "skill-cleaner dry-run"
   ],
   "version_history": [
     {
+      "version": "1.1.0",
+      "published_at": "2026-08-05T00:00:00Z",
+      "authors": ["Linda Foinding", "Lucian Brinzei"],
+      "changes": [
+        "Added package-local Playwright dependency metadata, setup scripts, capture wrappers, and actionable missing-runtime diagnostics for Nodoc."
+      ],
+      "archive_sha256": "5503bbf8b449bd86ffc6c43d41bb96eb4eecdf72ab1d4258a0482ac89b5192ba",
+      "content_hash": "ed8a25dc39b58410466330214d7a0cc81d40218cb8573305022283902e6c879e",
+      "portal_status": "pending"
+    },
+    {
       "version": "1.0",
       "published_at": "2026-05-21T00:00:00Z",
-      "authors": [],
-      "changes": [
-        "Current repository package recorded from the published skill artifact."
-      ],
+      "authors": ["Linda Foinding"],
+      "changes": ["Current repository package recorded from the published skill artifact."],
       "archive_sha256": "9882f67b69caa648465f30a9b84cb401592f9f70ea12a4e736dc9dbe747a7c5f",
       "content_hash": "7c40a50fc60cc2250ef69547aa74751595f3f5a0c64b9cabc3d77d5a69705275",
-      "portal_status": "pending"
+      "portal_status": "uploaded"
     }
   ]
 }

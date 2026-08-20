@@ -22,8 +22,8 @@
       <rect x="70" y="300" width="500" height="150" rx="8" fill="#ffffff" stroke="#63715f" stroke-width="3"/>
       <text x="100" y="340" font-size="22" font-weight="700">3. Complete final checklist</text>
       <text x="100" y="376" font-size="18">Verify the dry run, launch path, event code,</text>
-      <text x="100" y="402" font-size="18">attendee prep, roles, connectivity,</text>
-      <text x="100" y="428" font-size="18">and open technical risks.</text>
+<text x="100" y="402" font-size="18">attendee prep, venue and internet checks,</text>
+<text x="100" y="428" font-size="18">platform review, Secure Desktop, and risks.</text>
     </g>
     <g class="card">
       <rect x="630" y="300" width="500" height="150" rx="8" fill="#ffffff" stroke="#63715f" stroke-width="3"/>
