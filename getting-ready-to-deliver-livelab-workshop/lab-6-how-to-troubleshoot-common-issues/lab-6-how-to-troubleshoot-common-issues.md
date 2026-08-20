@@ -2,107 +2,97 @@
 
 ## Introduction
 
-Use this lab when access, launch, support, or workshop-content issues appear. It helps the team triage problems, use LiveLabs Help, and report broken workshop content.
+Use this lab when a dry run or live opening check finds an access or launch problem. Triage the symptom, protect group time, and capture evidence for the right [support route](#legend).
 
 ### Objectives
 
 In this lab, you will:
 
-- Troubleshoot common access issues.
-- Decide when to pause the group or keep moving.
-- Use LiveLabs Help and author support paths.
-- Report broken workshop content with useful evidence.
+- Diagnose common symptoms.
+- Decide whether to pause, support separately, or use a fallback.
+- Send useful, redacted evidence to the correct support route.
 
-<!-- Estimated Time: intentionally not shown in this readiness guide. -->
+Estimated Time: 15 minutes
 
 ![Issue triage flow](./images/lab-6-issue-triage-flow.svg " ")
 
-## Task 1: Troubleshoot Access Issues
+## Task 1: Diagnose the Symptom
 
-1. Start with the current attendee screen and access path.
+1. Ask what the attendee sees, which tested access path they used, and whether others have the same symptom.
 
-2. Use this table during the dry run and live event.
+2. Apply the matching first response.
 
-    | Issue | What You May See | First Action |
-    | --- | --- | --- |
-    | Oracle account problem | Attendee cannot sign in, verify email, or complete a passkey flow. | Move the attendee to support. Keep the group moving. |
-    | Check email not received | Attendee cannot finish account setup. | Ask them to check spam and corporate filtering. |
-    | Passkey flow blocks progress | Attendee is stuck in a browser or device sign-in loop. | Ask them to sign out fully. Use a clean browser profile. |
-    | Event code opens the wrong page | Attendee lands on the wrong workshop or a generic page. | Resend the verified event-code link. Show the expected first screen. |
-    | Wrong access path | Attendee used a catalog page, old link, or own-tenancy path by mistake. | Route the attendee back to the selected path. |
-    | Sandbox launch is slow | Lab space says provisioning may take a while. | Confirm the wait. Continue with the planned talk track. |
-    | Sandbox launch fails | Booking, launch, or lab space start fails. | Capture the error. Check whether several attendees see it. |
-    | Corporate network blocks access | Pages hang, noVNC fails, or secure desktop cannot open. | Try the approved alternate network, browser, or support path. |
-    | OCI location confusion | Attendee cannot find the service, compartment, region, or user. | Name the correct region, compartment, and user. Show the expected screen. |
-    | Workshop step is broken | Lab command, screenshot, or step no longer matches the product. | Report it in [#livelabs-authors-help](https://oracle.enterprise.slack.com/archives/CTUPZQ5HA) with proof. |
-    | Presenter ownership is unclear | The team hesitates over who should answer or drive. | Return to the facilitation runbook and name the role. |
-
-3. Use these triage points for the failures that most often affect the group.
-
-    | Triage point | Check first | Route |
-    | --- | --- | --- |
-    | Attendee cannot find or enter the event code | Verified event-code URL, sign-in state, and exact code. | Resend the verified link; move account failures to support. |
-    | Green-button launch does not open the expected environment | Booking status, selected credentials, browser, and expected first screen. | Capture the error; check whether the issue is widespread before pausing the group. |
-    | Reservation, tenancy, or login path differs from the dry run | Attendee path against the documented green or brown button path. | Return the attendee to the chosen path; confirm tenancy and region for brown button. |
-    | Workshop content loads but images, links, or lab navigation fail | Exact lab/task URL, browser, and screenshot. | Keep the session moving and report the evidence to LiveLabs Authors Help. |
-3. Pause the group when most blocked attendees have the same issue.
-
-4. Continue the group when the issue affects only one or two attendees.
-
-5. Move unresolved individual issues to chat, [breakout support](#legend), or [watch-only mode](#legend).
-
-## Task 2: Use LiveLabs Help and Author Support
-
-1. Use the [LiveLabs Help icon](#legend) when an attendee needs LiveLabs support from the workshop page during the event.
-
-2. Log issues the team cannot solve during the event.
-
-3. Also log persistent technical issues, such as sandbox launch failures or provisioning errors.
-
-4. Report those issues in the LiveLabs Authors Help Slack channel, [#livelabs-authors-help](https://oracle.enterprise.slack.com/archives/CTUPZQ5HA).
-
-5. Include the evidence from Task 3.
-
-## Task 3: Report Issues With Useful Evidence
-
-1. Report workshop issues found during testing in the LiveLabs Authors Help Slack channel, [#livelabs-authors-help](https://oracle.enterprise.slack.com/archives/CTUPZQ5HA).
-
-2. Include the details support needs.
-
-    | Detail | Include This |
+    | Symptom | First Response |
     | --- | --- |
-    | Workshop | Workshop title, WMS ID, or LiveLabs ID. |
-    | Place | Lab number, task number, and step number. |
-    | Path | Sandbox, own tenancy, secure desktop, or other tested path. |
-    | Error | Exact error text or wrong screen. |
-    | Proof | Screenshot and steps already tried. |
+    | Account setup, email check, or passkey fails | Check spam and corporate filtering, then retry from a clean browser profile. Move the attendee to individual support; never offer a personal account. |
+    | Event code opens the wrong page | Resend the verified LiveLab URL and event code. Show the expected first screen. |
+    | Attendee used the wrong access path | Return them to the tested sandbox, own-tenancy, Secure Desktop, or other selected path. |
+    | Launch is slow | Confirm the expected wait and use the prepared provisioning-time talk track. |
+    | Launch, booking, or provisioning fails | Capture the exact error and check whether the issue affects one attendee or many. |
+    | Corporate network blocks a page, noVNC, or Secure Desktop | Use the approved alternate browser, network, or fallback recorded in the event runbook. |
+    | OCI screen, region, compartment, or user is unclear | State the tested region, compartment, and user, then show the expected screen. |
+    | A step, command, image, link, or page control is broken | Capture the exact lab, task, step, URL, and screenshot, then report it to [LiveLabs Authors Help](#legend). |
 
-3. Do not wait until the live event to report dry-run issues.
+3. Choose the response from the impact.
+
+    - **Many attendees blocked by the same issue:** pause, apply one common fix, and reassess readiness.
+    - **One or two attendees blocked:** keep the group moving; use chat or [breakout support](#legend).
+    - **Individual issue remains unresolved:** use the approved fallback or [watch-only mode](#legend).
+    - **The event cannot continue safely:** stop hands-on work and update the final state and decision in the event notes.
+
+## Task 2: Capture Evidence
+
+1. Record:
+
+    - workshop title and WMS ID or LiveLabs ID
+    - timestamp and time zone
+    - number of affected attendees
+    - lab, task, and step number
+    - tested access path
+    - browser, browser version, and operating system
+    - exact URL, event code, or event identifier
+    - exact error text or wrong screen
+    - screenshot and steps already tried
+
+2. Remove credentials, email addresses, and customer data from text and screenshots.
+
+3. Record whether the issue changes the go/no-go state, which fallback is active, and who owns the follow-up in the event notes.
+
+## Task 3: Route the Issue
+
+1. Use the [LiveLabs Help icon](#legend) on the workshop page for attendee support during the event.
+
+2. Report broken workshop content and persistent technical issues in the [LiveLabs Authors Help Slack channel](#legend): [#livelabs-authors-help](https://oracle.enterprise.slack.com/archives/CTUPZQ5HA). Include sandbox launch or provisioning failures.
+
+3. Include the evidence from Task 2. Report dry-run issues before the live event.
 
 ## Task 4: Keep the Event Moving
 
-1. Announce the route for each issue.
+1. Tell attendees whether the team will pause or provide individual support.
 
     ```text
-    This looks like a common access issue, so we will fix it once together.
+    This is affecting several attendees, so we will pause and apply one fix together.
     ```
 
     ```text
     This looks individual, so we will keep the group moving while support helps in chat.
     ```
 
-2. Keep hands-on work moving when the fix will take more than a few minutes.
+2. Use the recorded fallback when a fix will take more than a few minutes.
 
-3. Capture unresolved issues for follow-up after the event.
+3. Capture unresolved issues and owners in the event notes for follow-up.
 
 ## Legend
 
-| Term | Meaning | Why It Matters |
-| --- | --- | --- |
-| Breakout support | Separate support space for individual attendee issues. | Keeps the main session moving. |
-| LiveLabs Authors Help Slack channel | [#livelabs-authors-help](https://oracle.enterprise.slack.com/archives/CTUPZQ5HA) Slack channel for LiveLabs authors and delivery teams. | Use it after the event to report unresolved workshop or technical issues. |
-| LiveLabs Help icon | Question mark icon on a LiveLabs workshop page. | Attendees can use it to contact LiveLabs support. |
-| Watch-only mode | Fallback where blocked attendees follow along without completing the lab live. | Keeps attendees learning when access cannot work quickly. |
+| Term | Meaning |
+| --- | --- |
+| Breakout support | Separate support space for individual attendee issues. |
+| LiveLabs Authors Help | Support route for LiveLabs authors and delivery teams. |
+| LiveLabs Authors Help Slack channel | [#livelabs-authors-help](https://oracle.enterprise.slack.com/archives/CTUPZQ5HA) Slack channel for LiveLabs authors and delivery teams. |
+| LiveLabs Help icon | Help icon on a LiveLabs workshop page. |
+| Support route | Chat, bridge, LiveLabs Help, Slack, or other path for blocked attendees and follow-up issues. |
+| Watch-only mode | Fallback where blocked attendees follow along without completing the lab live. |
+| Workshop-content issue | Problem in the lab instructions, screenshots, links, commands, or steps. |
 
 ## Acknowledgements
 

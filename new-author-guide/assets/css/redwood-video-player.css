@@ -35,7 +35,8 @@
 }
 
 .media-player-header {
-  display: none;
+  display: grid;
+  gap: 0.45rem;
 }
 
 .media-player-kicker {
@@ -74,6 +75,18 @@
   margin: 0;
   color: var(--player-ink-soft);
   line-height: 1.65;
+}
+
+.media-player-status {
+  width: fit-content;
+  padding: 0.35rem 0.62rem;
+  border: 1px solid rgba(199, 70, 52, 0.24);
+  border-radius: 999px;
+  background: rgba(199, 70, 52, 0.08);
+  color: var(--player-rose);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
 
 .media-player-shell {
@@ -313,9 +326,30 @@
 }
 
 .media-player-footnote {
+  display: block;
   color: rgba(255, 255, 255, 0.74);
   line-height: 1.55;
   font-size: 0.8rem;
+}
+
+.media-player-transcript-toggle {
+  justify-self: start;
+  min-height: 2.2rem;
+  padding: 0.42rem 0.78rem;
+  border: 1px solid var(--player-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--player-ink-soft);
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.media-player-transcript-toggle:hover,
+.media-player-transcript-toggle:focus-visible {
+  outline: none;
+  border-color: var(--player-rose);
+  color: var(--player-rose);
 }
 
 .media-player-features {

@@ -53,7 +53,7 @@ The following steps describe how to access the Secure Desktop environment.
 
 * [Follow the steps in this guide to connect and access your LiveLabs workshop within an OCI secure desktop environment](https://oracle-livelabs.github.io/common/labs/testing-access/workshops/desktop/index.html?lab=livelabs-sandbox) 
 
-* [Additional documentation on how to get started with OCI Secure Desktop](https://oracle-livelabs.github.io/common/support/securedesktops/index.html#BeforeyougetStarted)
+* [Additional documentation on how to get started with OCI Secure Desktop](https://oracle-livelabs.github.io/common/support/securedesktops/index.html?lab=securedesktops)
 
 ## Acknowledgements
 * **Author** - Linda Foinding, Principal Product Manager

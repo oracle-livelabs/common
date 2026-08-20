@@ -1,5 +1,5 @@
 // Structured source content for the redesigned guide.
-// Keep Guided Path and Toolkit content here; the Full Guide now comes from the flat author-guide manifest.
+// Keep Guided Path and Toolkit content here; the Step by Step Guide now comes from the flat author-guide manifest.
 window.authorGuideContent = (function () {
   var canonicalRoot = "https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/?lab=";
   var officialLinks = {
@@ -12,7 +12,8 @@ window.authorGuideContent = (function () {
     validatorBash: "https://raw.githubusercontent.com/oracle-livelabs/common/main/md-validator/.github/scripts/validate-livelabs-markdown.sh",
     validatorPowerShell: "https://raw.githubusercontent.com/oracle-livelabs/common/main/md-validator/.github/scripts/validate-livelabs-markdown.ps1",
     secureDesktopAccess: "https://oracle-livelabs.github.io/common/labs/testing-access/workshops/desktop/index.html?lab=livelabs-sandbox",
-    secureDesktopDocs: "https://oracle-livelabs.github.io/common/support/securedesktops/index.html#BeforeyougetStarted",
+    secureDesktopDocs: "https://oracle-livelabs.github.io/common/support/securedesktops/index.html",
+    secureDesktopStart: "https://oracle-livelabs.github.io/common/support/securedesktops/index.html?lab=securedesktops",
     liveLabsAuthorsSlack: "https://oracle.enterprise.slack.com/archives/CTUPZQ5HA",
     freesql: "https://freesql.com/",
     sprintsRepo: "https://github.com/oracle-livelabs/sprints",
@@ -60,10 +61,10 @@ window.authorGuideContent = (function () {
       },
       {
         id: "step-2",
-        title: "Setup environment + Create Workshop",
+        title: "Create Workshop",
         guideTarget: "2-labs-github",
-        summary: "Set up GitHub Desktop and Visual Studio Code, fork and clone the right repos, copy the sample workshop, and validate preview early.",
-        keywords: ["github", "fork", "clone", "upstream", "git config", "github pages", "preview", "manifest"]
+        summary: "Choose NoDoc as the recommended default authoring path or use the existing GitHub process when direct source control is needed.",
+        keywords: ["nodoc", "no doc", "authoring path", "source workflow", "github process", "preview", "manifest"]
       },
       {
         id: "step-3",
@@ -131,7 +132,7 @@ window.authorGuideContent = (function () {
           caption: "The reviewer-facing request page is where the workshop scope and ownership are established."
         },
         sourceHref: labLink("1-labs-wms"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "start-here"
       },
       {
@@ -192,7 +193,7 @@ window.authorGuideContent = (function () {
           caption: "GitHub Desktop is the main fork, clone, commit, and pull request surface used throughout the guide."
         },
         sourceHref: labLink("2-labs-github"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
       },
       {
@@ -246,7 +247,7 @@ window.authorGuideContent = (function () {
           caption: "The sample structure is the cleanest baseline for new authoring work."
         },
         sourceHref: labLink("3-labs-sync-github"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
       },
       {
@@ -302,7 +303,7 @@ window.authorGuideContent = (function () {
           caption: "Add ?qa=true while previewing so structural issues surface before pull request review."
         },
         sourceHref: labLink("4-labs-markdown-develop-content"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
       },
       {
@@ -343,7 +344,7 @@ window.authorGuideContent = (function () {
           caption: "GitHub Pages is case-sensitive even when a local machine is not."
         },
         sourceHref: labLink("4-labs-markdown-develop-content"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
       },
       {
@@ -378,7 +379,7 @@ window.authorGuideContent = (function () {
           "Use alt text that tells the learner what the image proves or what UI they should recognize."
         ].join("\n"),
         sourceHref: labLink("4-labs-markdown-develop-content"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
       },
       {
@@ -415,7 +416,7 @@ window.authorGuideContent = (function () {
           "```"
         ].join("\n"),
         sourceHref: labLink("4-labs-markdown-develop-content"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
       },
       {
@@ -459,7 +460,7 @@ window.authorGuideContent = (function () {
           caption: "Conditional content should stay obvious enough that another author can follow it."
         },
         sourceHref: labLink("4-labs-markdown-develop-content"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
       },
       {
@@ -507,7 +508,7 @@ window.authorGuideContent = (function () {
           caption: "Use quiz-config only when scoring or badges are really part of the learning flow."
         },
         sourceHref: labLink("quiz"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
       },
       {
@@ -542,7 +543,7 @@ window.authorGuideContent = (function () {
           "4. Preview the rendered lab before review"
         ].join("\n"),
         sourceHref: labLink("freesqlembed"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
       },
       {
@@ -594,7 +595,7 @@ window.authorGuideContent = (function () {
           caption: "WMS turns the FreeSQL share link into the orange Run on FreeSQL entry."
         },
         sourceHref: labLink("11-create-freesql"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
       },
       {
@@ -634,7 +635,7 @@ window.authorGuideContent = (function () {
           "<freesql-button src=\"{tutorial-url}\">"
         ].join("\n"),
         sourceHref: labLink("12-freesql-integration"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
       },
       {
@@ -675,7 +676,7 @@ window.authorGuideContent = (function () {
           caption: "The screenshot standards page is the authoritative checklist for capture quality and privacy."
         },
         sourceHref: labLink("13-labs-capture-screens-best-practices"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "tools-productivity"
       },
       {
@@ -716,7 +717,7 @@ window.authorGuideContent = (function () {
           caption: "The summary tells you which images were resized, skipped, or optimized."
         },
         sourceHref: labLink("optishot"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "tools-productivity"
       },
       {
@@ -755,7 +756,7 @@ window.authorGuideContent = (function () {
           "4. Re-open pull request checks"
         ].join("\n"),
         sourceHref: labLink("fixomat"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "tools-productivity"
       },
       {
@@ -807,7 +808,7 @@ window.authorGuideContent = (function () {
           caption: "The checklist must be fully saved before Self Quality Assurance Complete can succeed."
         },
         sourceHref: labLink("5-labs-qa-checks"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "validation-publish"
       },
       {
@@ -859,7 +860,7 @@ window.authorGuideContent = (function () {
           caption: "Start with the failing workflow name so you fix the real blocker."
         },
         sourceHref: labLink("prcheck"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "validation-publish"
       },
       {
@@ -919,7 +920,7 @@ window.authorGuideContent = (function () {
           caption: "The Publishing tab is where the final production metadata is created and approved."
         },
         sourceHref: labLink("6-labs-publish"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "validation-publish"
       },
       {
@@ -953,7 +954,7 @@ window.authorGuideContent = (function () {
           "Workshop publishing        -> 1 business day"
         ].join("\n"),
         sourceHref: labLink("sla"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "validation-publish"
       },
       {
@@ -1005,7 +1006,7 @@ window.authorGuideContent = (function () {
           caption: "Sprints use a separate repository and publish request path from full workshops."
         },
         sourceHref: labLink("10-create-sprints-workflow"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1042,7 +1043,7 @@ window.authorGuideContent = (function () {
           "- Browser settings are optimized before image capture"
         ].join("\n"),
         sourceHref: labLink("6-labs-setup-graphical-remote-desktop"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1087,7 +1088,7 @@ window.authorGuideContent = (function () {
           "Validated remote desktop URL"
         ].join("\n"),
         sourceHref: labLink("7-labs-create-custom-image-for-marketplace"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1126,7 +1127,7 @@ window.authorGuideContent = (function () {
           "Support contacts"
         ].join("\n"),
         sourceHref: labLink("8-labs-publish-custom-image-to-marketplace"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1166,7 +1167,7 @@ window.authorGuideContent = (function () {
           "7. Save and retest the LiveLab"
         ].join("\n"),
         sourceHref: labLink("12-add-custom-image-to-workshop"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1218,7 +1219,7 @@ window.authorGuideContent = (function () {
           caption: "The details page is where authors add LiveLabs, assets, order, visibility, and publish status."
         },
         sourceHref: labLink("create-a-livestack"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1271,7 +1272,7 @@ window.authorGuideContent = (function () {
           caption: "WMS assets turn reusable files and links into shared, maintainable authoring objects."
         },
         sourceHref: labLink("17-assets"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1301,7 +1302,7 @@ window.authorGuideContent = (function () {
         resourcesIntro: "Keep these two pages open during access testing so you do not guess the launch flow.",
         resourceLinks: [
           resourceLink("Test access guide", officialLinks.secureDesktopAccess, "Use this to validate the full end-to-end participant path."),
-          resourceLink("OCI Secure Desktop docs", officialLinks.secureDesktopDocs, "Use this when you need the broader platform prerequisites and setup context.")
+          resourceLink("OCI Secure Desktop docs", officialLinks.secureDesktopStart, "Use this when you need the participant setup and launch sequence.")
         ],
         snippetMeta: "Decision gate",
         snippetTitle: "Use secure desktop only after this test sequence",
@@ -1313,7 +1314,7 @@ window.authorGuideContent = (function () {
           "5. For 100+ users, start planning earlier and test more than once"
         ].join("\n"),
         sourceHref: labLink("secure-desktop"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1344,7 +1345,7 @@ window.authorGuideContent = (function () {
         resourceLinks: [
           resourceLink("LiveLabs Authors Slack", officialLinks.liveLabsAuthorsSlack, "Post the request here with the full event context."),
           resourceLink("Test access guide", officialLinks.secureDesktopAccess, "Share this with participants for the launch flow."),
-          resourceLink("OCI Secure Desktop docs", officialLinks.secureDesktopDocs, "Use this when participants or reviewers need more setup detail.")
+          resourceLink("OCI Secure Desktop docs", officialLinks.secureDesktopStart, "Use this when participants or reviewers need the current setup and launch steps.")
         ],
         snippetMeta: "Bring this to the request",
         snippetTitle: "Secure desktop request details",
@@ -1361,7 +1362,58 @@ window.authorGuideContent = (function () {
           "- Logged out of OCI tenants"
         ].join("\n"),
         sourceHref: labLink("secure-desktop-how-to-request"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
+        guideTarget: "specialized-workflows"
+      },
+      {
+        id: "secure-desktop-participant-guide",
+        title: "Secure Desktops: Participant Launch Guide",
+        short: "Use the public participant guide to reserve a LiveLabs workshop, launch Secure Desktop, and recover from common login and pop-up issues.",
+        accent: "sienna",
+        tags: ["secure-desktop", "support"],
+        updatedAt: "2026-03-01",
+        description: "Use this card after the author or event owner has confirmed that Secure Desktops are required. It mirrors the current public participant guide and keeps the reservation, launch, and first-login sequence in one place.",
+        steps: [
+          "Before starting, use Google Chrome, enable pop-ups, and log out of any OCI tenants in that browser.",
+          "Open the assigned LiveLabs workshop, click START, choose Run on LiveLabs Sandbox, and sign in with the Oracle account required by the reservation flow.",
+          "In Reserve Workshop, select Start Workshop Now when appropriate, submit the reservation, and check My Reservations. Sandbox provisioning typically takes 10 to 20 minutes.",
+          "Launch the workshop and open View Login Info so you have the Secure Desktop tenancy and user details needed for the next step.",
+          "Click Launch Secure Desktop. If another OCI session is active, choose Sign in with a different user account, select the Default identity domain when prompted, and set the initial user password.",
+          "Choose an available desktop pool, allow the provisioning window to open, and wait for the desktop to become available. If the window does not appear, check the browser pop-up setting and retry the pool.",
+          "Inside the desktop, finish the initial Linux setup, open Firefox, and navigate to LiveLabs. Use the Secure Desktop clipboard controls when you need to move text into or out of the remote desktop."
+        ],
+        checkpoints: [
+          "Chrome, pop-ups, and OCI sign-out prerequisites are complete before the reservation starts.",
+          "The workshop reservation is visible in My Reservations and reaches an active state before launch.",
+          "The participant can open View Login Info, launch the desktop pool, complete first-login password reset, and open LiveLabs from Firefox.",
+          "The participant knows how to retry a failed pop-up or desktop-pool launch without creating a second reservation."
+        ],
+        watchFor: [
+          "Starting with a different OCI tenancy still signed in, which can route the launch to the wrong account.",
+          "Blocking pop-ups and then treating the missing desktop window as a provisioning failure.",
+          "Trying to use the desktop before the sandbox reservation becomes active.",
+          "Copying credentials or private workshop data through the clipboard without following the event owner guidance."
+        ],
+        resourcesTitle: "Participant guide",
+        resourcesIntro: "Use the public guide for the complete image-supported launch sequence and troubleshooting notes.",
+        resourceLinks: [
+          resourceLink("Secure Desktops guide", officialLinks.secureDesktopDocs, "Open the public guide requested for the Cheatsheet."),
+          resourceLink("Secure Desktops: Get Started", officialLinks.secureDesktopStart, "Open the current participant steps and task navigation."),
+          resourceLink("LiveLabs Secure Desktop access", officialLinks.secureDesktopAccess, "Use the access flow linked from the authoring guide when testing a workshop.")
+        ],
+        snippetMeta: "Participant launch sequence",
+        snippetTitle: "Before you share the launch link",
+        snippet: [
+          "Browser: Google Chrome",
+          "Pop-ups: enabled",
+          "OCI tenants: signed out",
+          "Reservation: active in My Reservations",
+          "Launch: View Login Info -> Launch Secure Desktop",
+          "Identity domain: Default when prompted",
+          "Desktop: wait for the pool and open LiveLabs in Firefox"
+        ].join("\n"),
+        sourceHref: officialLinks.secureDesktopStart,
+        sourceLabel: "Open Secure Desktops guide",
         guideTarget: "specialized-workflows"
       },
       {
@@ -1406,7 +1458,7 @@ window.authorGuideContent = (function () {
           "https://github.com/lfoinding/livelabs-ai-playground/tree/main/LiveLabs-AI-Developer"
         ].join("\n"),
         sourceHref: labLink("15-labs-livelabs-ai-developer-hub"),
-        sourceLabel: "Open Full Guide",
+        sourceLabel: "Open Step by Step Guide",
         guideTarget: "help-faq"
       }
     ]

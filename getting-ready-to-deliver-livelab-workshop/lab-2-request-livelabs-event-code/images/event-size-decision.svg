@@ -16,12 +16,12 @@
     <rect x="630" y="130" width="510" height="330" rx="10" fill="#fff8f3" stroke="#a33b20" stroke-width="4"/>
     <text x="665" y="180" font-size="27" font-weight="700" fill="#a33b20">50 or more attendees</text>
     <text x="665" y="225" font-size="20" font-weight="700">Pre-provisioning required</text>
-    <text x="665" y="258" font-size="18">Contact William and the LiveLabs team.</text>
+    <text x="665" y="258" font-size="18">Contact the Oracle LiveLabs Team.</text>
     <text x="665" y="288" font-size="18">Confirm capacity and environment timing.</text>
     <text x="665" y="340" font-size="20" font-weight="700">Do not plan live reservations</text>
     <text x="665" y="373" font-size="18">If capacity is not confirmed, stop and</text>
     <text x="665" y="401" font-size="18">resolve it before attendee instructions go out.</text>
     <rect x="60" y="505" width="1080" height="70" rx="8" fill="#f6eee8" stroke="#7f5f4a" stroke-width="3"/>
-    <text x="90" y="548" font-size="21" font-weight="700">Record: attendee count, provisioning path, owner, approval, expected ready time, and fallback.</text>
+<text x="90" y="548" font-size="21" font-weight="700">Record: attendee count, provisioning path, platform review, Secure Desktop decision, owner, and fallback.</text>
   </g>
 </svg>

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Opening LiveLabs Author Guide</title>
+</head>
+<body>
+  <p>Opening the LiveLabs Author Guide…</p>
+  <script>
+    (function () {
+      var path = window.location.pathname.replace(/\/+$/, "");
+      var route = path.split("/").pop().toLowerCase();
+      var supported = ["home", "quickstart", "cheatsheet", "nodoc"];
+      var base = path.slice(0, path.length - route.length);
+      var target = supported.indexOf(route) !== -1 ? route : "home";
+      window.location.replace(base + "index.html?route=" + encodeURIComponent(target));
+    }());
+  </script>
+</body>
+</html>

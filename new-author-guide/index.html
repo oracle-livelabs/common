@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Oracle LiveLabs Author Guide refresh with a guided path, reference toolkit, full guide, unified search, and a real workshop example.">
+  <meta name="description" content="Oracle LiveLabs Author Guide refresh with a guided path, reference toolkit, Step by Step Guide, unified search, and a real workshop example.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23C74634'/%3E%3C/svg%3E">
   <title>Oracle LiveLabs Author Guide</title>
   <script>
@@ -2147,7 +2147,7 @@
       background: linear-gradient(90deg, rgba(156, 106, 0, 0.88), rgba(156, 106, 0, 0.16));
     }
 
-    /* Full guide + Redwood cleanup */
+    /* Step by Step Guide + Redwood cleanup */
     #app {
       --accent-red: #ac3e2e;
       --accent-red-wash: rgba(255, 248, 247, 0.98);
@@ -5063,7 +5063,7 @@
       }
     }
 
-    /* Full Guide reset: keep the compact card-based section view stable. */
+    /* Step by Step Guide reset: keep the compact card-based section view stable. */
     #guideMode .guide-layout {
       display: grid;
       grid-template-columns: minmax(214px, 244px) minmax(0, 1fr);
@@ -5281,7 +5281,7 @@
     }
   </style>
   <link rel="stylesheet" href="./assets/css/redwood-video-player.css">
-  <link rel="stylesheet" href="./assets/css/author-guide-improvements.css?v=20260708-skill-generator-livestack">
+  <link rel="stylesheet" href="./assets/css/author-guide-improvements.css?v=20260805-nodoc-hero-lab-video">
 </head>
 <body>
   <div id="app" data-redwood-creator-pass="2026-05-25">
@@ -5334,7 +5334,16 @@
                     </span>
                     <span class="nav-control-text">Cheatsheet</span>
                   </button>
-                  <a class="btn nav-control" href="./workshops/livelabs/" data-full-guide-link target="_blank" rel="noreferrer" aria-label="Open full guide">
+                  <button class="btn nav-control" type="button" data-mode-target="nodoc" aria-label="Open NoDoc guide">
+                    <span class="nav-control-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M6 3.5h9l3 3V20H6V3.5Z" />
+                        <path d="M15 3.5V7h3M9 11h6M9 14h6M9 17h4" />
+                      </svg>
+                    </span>
+                    <span class="nav-control-text">NoDoc</span>
+                  </button>
+                  <a class="btn nav-control" href="./workshops/livelabs/" data-full-guide-link target="_blank" rel="noreferrer" aria-label="Open Step by Step Guide">
                     <span class="nav-control-icon" aria-hidden="true">
                       <svg viewBox="0 0 24 24" focusable="false">
                         <path d="M6.5 4.5h9.2a1.8 1.8 0 0 1 1.8 1.8v13.2H8.3a1.8 1.8 0 0 1-1.8-1.8V4.5Z" />
@@ -5342,7 +5351,7 @@
                         <path d="M4.5 6.5h2M4.5 9h2M4.5 11.5h2M4.5 14h2M4.5 16.5h2" />
                       </svg>
                     </span>
-                    <span class="nav-control-text">Full Guide</span>
+                    <span class="nav-control-text">Step by Step Guide</span>
                   </a>
                   <a class="btn nav-control" href="https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/" data-workshop-example-link target="_blank" rel="noreferrer" aria-label="Open a real LiveLabs workshop example">
                     <span class="nav-control-icon" aria-hidden="true">
@@ -5439,7 +5448,7 @@
                   <button type="button" class="progress-button" data-step-target="0" role="tab">
                     <span class="progress-mark" aria-hidden="true">1</span>
                     <span class="progress-label">
-                      <small>WMS Platform</small>
+                      <small>Step 1 / WMS Platform</small>
                       <strong>Submit Workshop Request</strong>
                     </span>
                   </button>
@@ -5447,7 +5456,7 @@
                     <span class="progress-mark" aria-hidden="true">2</span>
                     <span class="progress-label">
                       <small>Step 2</small>
-                      <strong>Setup environment + Create Workshop</strong>
+                      <strong>Create Workshop</strong>
                     </span>
                   </button>
                   <button type="button" class="progress-button" data-step-target="2" role="tab">
@@ -5477,40 +5486,23 @@
               <article class="step-shell">
                 <div class="lockable">
                   <div class="step-heading">
-                    <div class="step-kicker">WMS Platform</div>
+                    <div class="step-kicker">Step 1 / WMS Platform</div>
                     <h2 class="step-title">Submit Workshop Request</h2>
-                    <p class="step-summary">Create the WMS record first, fill it like a reviewer will read it, and understand the status path before you spend real time building the workshop.</p>
-                    <ul class="step-meta-list" aria-label="Step 1 summary">
-                      <li>Output: approved request</li>
-                      <li>Time: 5 to 10 minutes</li>
-                      <li>Leads to: repository work</li>
-                    </ul>
                   </div>
-
-                  <div class="guide-panel guided-only mb-4">
-                    WMS is not just intake. The same record follows the workshop through council review, development, Self Quality Assurance, stakeholder verification, publishing, and Quarterly Quality Assurance.
-                  </div>
-                  <div class="wms-platform-actions mb-4">
-                    <a class="btn btn-primary rounded-pill px-4" href="https://apex.oraclecorp.com/pls/apex/f?p=LIVELABS" data-wms-link target="_blank" rel="noreferrer" aria-label="Open WMS Platform in a new tab">Open WMS</a>
-                    <span class="wms-platform-note">Requires Oracle VPN and WMS access.</span>
-                  </div>
-
-                  <div
-                    data-video-card
-                    data-video-title="Template: Submit Workshop Request walkthrough"
-                    data-video-summary="This silent template clip marks where the final WMS walkthrough should appear. Use the written steps and inline screenshots as the authoritative guidance until the recorded walkthrough is replaced."
-                    data-video-features="WMS form|Status path|Reviewer checks"
-                  ></div>
 
                   <div class="step-sequence">
                     <section class="step-block">
                       <div class="step-block-header">
                         <div class="panel-kicker">Start in WMS</div>
                         <h3>Submit the request before development starts</h3>
-                        <p>The first reviewer should be able to tell what the learner will build, who owns the workshop, and what special delivery needs exist without asking follow-up questions.</p>
                       </div>
                       <ol class="action-list">
-                        <li>Connect to Corporate VPN, open <strong>Oracle Workshop Management System</strong>, and click <strong>Submit a New Workshop Request</strong>.</li>
+                        <li>Connect to Corporate VPN, open <strong>Oracle Workshop Management System</strong>, and click <strong>Submit a New Workshop Request</strong>.
+                          <span class="wms-platform-actions quickstart-wms-launch-actions mt-2">
+                            <a class="btn btn-primary rounded-pill px-4" href="https://apex.oraclecorp.com/pls/apex/f?p=LIVELABS" data-wms-link target="_blank" rel="noreferrer" aria-label="Open WMS Platform in a new tab">Open WMS</a>
+                            <span class="wms-platform-note">Requires Oracle VPN and WMS access.</span>
+                          </span>
+                        </li>
                         <li>Complete <strong>Workshop Basic Information</strong> thoroughly. The fields that matter most at this stage are <strong>Stakeholder</strong>, <strong>Workshop Council</strong>, <strong>Workshop Owner Group</strong>, <strong>Workshop Abstract</strong>, <strong>Workshop Outline</strong>, and <strong>Workshop Prerequisites</strong>. Use the <strong>?</strong> help beside those fields when you need examples.</li>
                         <li>Open <strong>Tags</strong> and set the required tag groups before you click <strong>Create</strong>: one <strong>Level</strong>, at least one <strong>Role</strong>, at least one <strong>Focus Area</strong>, and at least one <strong>Product</strong>.</li>
                         <li>Use <strong>Go to Market - Social</strong> while the workshop is still early if blog, social, video script, or promotional media details will be needed later in the publish flow.</li>
@@ -5539,18 +5531,19 @@
 
                     <section class="step-block example-generator-panel" aria-labelledby="wmsExampleGeneratorHeading">
                       <div class="step-block-header">
-                        <div class="panel-kicker">Prompt examples <span class="experimental-badge">Experimental</span></div>
-                        <h3 id="wmsExampleGeneratorHeading">Generate WMS-ready field examples from your workshop idea</h3>
-                        <p>Use these copy-ready examples for the WMS workshop request fields that usually need the most detail.</p>
+                        <div class="panel-kicker">Prompt examples</div>
+                        <h3 id="wmsExampleGeneratorHeading">Draft WMS fields from your workshop idea</h3>
                       </div>
-                      <form class="example-generator-form" id="wmsExampleForm">
-                        <label class="form-label filter-label" for="wmsExamplePrompt">Workshop topic or author prompt</label>
+                      <form class="example-generator-form" id="wmsExampleForm" novalidate>
+                        <label class="visually-hidden" for="wmsExamplePrompt">Workshop idea</label>
                         <div class="example-generator-input-row">
-                          <textarea id="wmsExamplePrompt" class="form-control generator-textarea" rows="4" placeholder="Example: Build AI agents with persistent memory using Oracle Database, ADB, Select AI, and OCI GenAI"></textarea>
+                          <textarea id="wmsExamplePrompt" class="form-control generator-textarea generator-textarea-compact" rows="2" required minlength="24" maxlength="320" aria-required="true" aria-describedby="wmsExamplePromptCount" placeholder="Example: For developers, build AI agents with persistent memory using Oracle Database, ADB, Select AI, and OCI GenAI, then validate the working result."></textarea>
                           <button class="btn btn-primary rounded-pill px-4" type="submit">Generate examples</button>
                         </div>
+                        <div class="generator-input-meta">
+                          <span id="wmsExamplePromptCount" aria-live="polite">0 / 320</span>
+                        </div>
                       </form>
-                      <div class="generator-state generator-empty-state" id="wmsExampleEmpty">Copy-ready WMS field examples will appear here.</div>
                       <div class="generator-state generator-loading-state d-none" id="wmsExampleLoading">Generating example fields...</div>
                       <div class="generator-state generator-error-state d-none" id="wmsExampleError" role="alert"></div>
                       <div class="detail-field-grid generated-example-grid d-none" id="wmsExampleResults" aria-live="polite"></div>
@@ -5669,29 +5662,118 @@
               </article>
             </section>
 
-            <section class="rabbit-step" id="step-2" data-step-index="1" data-step-name="Setup environment + Create Workshop" data-depth="2">
+            <section class="rabbit-step" id="step-2" data-step-index="1" data-step-name="Create Workshop" data-depth="2">
               <div class="step-orb" aria-hidden="true">2</div>
               <article class="step-shell">
                 <div class="lockable">
                   <div class="step-heading">
-                    <div class="step-kicker">Step 2 / Environment setup</div>
-                    <h2 class="step-title">Setup environment + Create Workshop</h2>
-                    <p class="step-summary">Set up the workstation, fork and clone the right repositories, copy the sample structure, and make preview work early so the workshop is cheap to fix.</p>
-                    <div class="step-meta-row">
-                      <span class="meta-pill">Output: live preview</span>
-                      <span class="meta-pill">Time: 15 to 20 minutes</span>
-                      <span class="meta-pill">Leads to: content authoring</span>
-                    </div>
+                    <div class="step-kicker">Step 2 / Workshop authoring</div>
+                    <h2 class="step-title">Create Workshop</h2>
                   </div>
 
-                  <div
-                    data-video-card
-                    data-video-title="Template: Create Workshop and GitHub setup walkthrough"
-                    data-video-summary="This silent template clip marks where the final GitHub setup walkthrough should appear. Use the definitions, screenshots, and copy blocks below as the authoritative setup guidance until the recording is replaced."
-                    data-video-features="Fork and clone|Sample structure|Preview setup"
-                  ></div>
+                  <div class="authoring-route-shell">
+                    <div class="authoring-route-header">
+                      <div>
+                        <div class="panel-kicker">Choose an authoring path</div>
+                        <h3>Create the workshop with NoDoc or GitHub</h3>
+                        <p>NoDoc is the recommended default. The existing GitHub process remains available as the second path.</p>
+                      </div>
+                    </div>
+                    <div class="authoring-route-tabs" role="tablist" aria-label="Workshop authoring paths">
+                      <button
+                        class="authoring-route-tab is-active"
+                        id="authoring-tab-no-doc"
+                        type="button"
+                        role="tab"
+                        aria-selected="true"
+                        aria-controls="authoring-panel-no-doc"
+                        data-authoring-route="no-doc"
+                        tabindex="0"
+                      >
+                        <span>NoDoc</span>
+                        <span class="authoring-route-badge">Recommended</span>
+                      </button>
+                      <button
+                        class="authoring-route-tab"
+                        id="authoring-tab-source"
+                        type="button"
+                        role="tab"
+                        aria-selected="false"
+                        aria-controls="authoring-panel-source"
+                        data-authoring-route="source"
+                        tabindex="-1"
+                      >
+                        GitHub
+                      </button>
+                    </div>
 
-                  <div class="step-sequence">
+                    <section
+                      class="authoring-route-panel"
+                      id="authoring-panel-no-doc"
+                      role="tabpanel"
+                      aria-labelledby="authoring-tab-no-doc"
+                      data-authoring-panel="no-doc"
+                    >
+                      <div class="nodoc-route-placeholder">
+                        <div class="nodoc-route-copy">
+                          <div class="panel-kicker">Fast path</div>
+                          <h3>Start in NoDoc</h3>
+                          <p>Use one article, one version, and a short review loop.</p>
+                          <ol class="nodoc-quickstart-list mb-0">
+                            <li><strong>Connect.</strong> Open NoDoc, sign in with Oracle SSO, and confirm your author or reviewer role.</li>
+                            <li><strong>Structure.</strong> In No Doc Repo, choose the Focus Area, create the article and version, then add the page set.</li>
+                            <li><strong>Author and review.</strong> Add the introduction, objectives, prerequisites, procedure, metadata, links, and code; use comments, drafts, and difference review before approval.</li>
+                            <li><strong>Validate and hand off.</strong> Apply AI corrections only with human review, inspect the preview, ingest approved content, test Ask No Doc, and record the WMS handoff.</li>
+                          </ol>
+                        </div>
+                        <div class="nodoc-route-status" role="note" aria-label="NoDoc content rule">
+                          <strong>Keep it safe</strong>
+                          <span>Do not put credentials, bypass codes, private screenshots, or internal-only data in workshop content.</span>
+                          <a class="btn btn-primary rounded-pill px-3 mt-2" href="https://nodoc.oraclecorp.com/" target="_blank" rel="noopener noreferrer">Open NoDoc</a>
+                        </div>
+                      </div>
+                      <div
+                        data-video-card
+                        data-video-id="quickstart-nodoc"
+                        data-video-status="preview"
+                        data-video-title="Preview: Create Workshop with NoDoc walkthrough"
+                        data-video-summary="Capture slot for the NoDoc default path: access, article structure, human review, preview, and release handoff."
+                        data-video-source-note="Preview asset only. Record the approved NoDoc environment and replace this asset before release."
+                        data-video-features="Access and role|Article structure|Review and handoff"
+                        data-video-compact="true"
+                        data-video-transcript-intro="Capture script for the approved NoDoc walkthrough. The template MP4 is not product evidence."
+                        data-video-transcript="00:00::Open the approved NoDoc environment and confirm the author or reviewer role.||00:12::Select the practice Focus Area and open No Doc Repo.||00:24::Create the article, version, and ordered page set.||00:36::Review changes, preview the result, and record the release handoff."
+                      ></div>
+                      <div class="step-footer">
+                        <div class="step-note">NoDoc is selected by default; the existing GitHub process remains available in the second tab.</div>
+                        <div class="d-flex flex-wrap gap-2">
+                          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-action="prev">Back</button>
+                          <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-mode-target="nodoc">Open NoDoc Page</button>
+                          <button type="button" class="btn btn-primary rounded-pill px-4" data-action="next">Next Step</button>
+                        </div>
+                      </div>
+                    </section>
+
+                    <section
+                      class="authoring-route-panel"
+                      id="authoring-panel-source"
+                      role="tabpanel"
+                      aria-labelledby="authoring-tab-source"
+                      data-authoring-panel="source"
+                      hidden
+                    >
+                    <div
+                      data-video-card
+                      data-video-id="quickstart-github"
+                      data-video-status="preview"
+                      data-video-title="Preview: Create Workshop and source setup walkthrough"
+                      data-video-summary="Capture slot for the source authoring path: account setup, sample structure, and local preview."
+                      data-video-source-note="Preview asset only. Record the approved source-control workflow and replace this asset before release."
+                      data-video-features="Fork and clone|Sample structure|Preview setup"
+                      data-video-compact="true"
+                      data-video-transcript="00:00::Confirm the approved source-control account and local tools.||00:12::Fork or clone the workshop structure and inspect the manifest.||00:24::Open the content in the editor and start the local preview.||00:36::Show the validation handoff and keep the source structure intact."
+                    ></div>
+                    <div class="step-sequence">
                     <section class="step-block">
                       <div class="step-block-header">
                         <div class="panel-kicker">Setup</div>
@@ -5989,6 +6071,8 @@ git push origin main</code></pre>
                       <button type="button" class="btn btn-primary rounded-pill px-4" data-action="next">Next Step</button>
                     </div>
                   </div>
+                    </section>
+                  </div>
                 </div>
               </article>
             </section>
@@ -6000,77 +6084,48 @@ git push origin main</code></pre>
                   <div class="step-heading">
                     <div class="step-kicker">Step 3 / Quality Assurance and release</div>
                     <h2 class="step-title">Review &amp; Publish</h2>
-                    <p class="step-summary">Complete Self Quality Assurance in the right order, fix pull request blockers by class, and submit the final publishing details only after the workshop is genuinely ready to move to production.</p>
-                    <div class="step-meta-row">
-                      <span class="meta-pill">Output: reviewed release</span>
-                      <span class="meta-pill">Time: 10 to 15 minutes</span>
-                      <span class="meta-pill">Leads to: production</span>
-                    </div>
-                  </div>
-
-                  <div class="guide-panel guided-only mb-4">
-                    The last step is about precision, not volume. Reviewers should see one stable preview, one saved checklist, one clean pull request, and the exact production URLs they expect.
+                    <p class="step-summary">Complete Self Quality Assurance in order, fix pull request blockers by class, and submit publishing details only when the workshop is production-ready.</p>
                   </div>
 
                   <div
                     data-video-card
-                    data-video-title="Template: Review and Publish walkthrough"
-                    data-video-summary="This silent template clip marks where the final Quality Assurance and publishing walkthrough should appear. Use the WMS checklist steps and handoff copy blocks below until the recording is replaced."
+                    data-video-id="quickstart-publish"
+                    data-video-status="preview"
+                    data-video-title="Preview: Review and Publish walkthrough"
+                    data-video-summary="Capture slot for the quality and publishing path: checklist evidence, automated checks, and release handoff."
+                    data-video-source-note="Preview asset only. Record the approved quality and publishing workflow and replace this asset before release."
                     data-video-features="Quality Assurance checklist|pull request checks|Publishing handoff"
+                    data-video-compact="true"
+                    data-video-transcript="00:00::Run the Self Quality Assurance checklist and record evidence.||00:12::Review automated checks and fix failures by class.||00:24::Confirm production-safe URLs and ownership.||00:36::Submit the publishing handoff through the approved process."
                   ></div>
 
                   <div class="step-sequence">
-                    <section class="step-block">
-                      <div class="step-block-header">
-                        <div class="panel-kicker">Self Quality Assurance order</div>
-                        <h3>Run Self Quality Assurance in WMS before you open the final publish handoff</h3>
-                        <p>This is the part that most often breaks the process. Save the checklist first, then certify the status change. Publishing only makes sense after Self Quality Assurance is complete and stakeholder review is underway or finished.</p>
-                      </div>
-                      <ol class="action-list">
-                        <li>Open the personal <code>github.io</code> workshop URL, append <code>?qa=true</code>, and run the workshop end to end before you ask anyone else to review it.</li>
-                        <li>On the WMS details page, update title, short description, long description, outline, prerequisites, tags, and <strong>Development GitHub/GitLab URL</strong> so WMS matches the actual workshop reviewers will open.</li>
-                        <li>Open <strong>Self Quality Assurance Checklist</strong>, check every required box, upload the requested evidence, add the pull request link when you create one, and add your personal <code>github.io</code> workshop link.</li>
-                        <li>Click <strong>Save</strong> on the checklist first. Only after the save succeeds should you move to <strong>Self Quality Assurance Complete</strong> and certify the change.</li>
-                        <li>Stakeholders verify the workshop from <strong>Self Quality Assurance Complete</strong>. Once they move it to <strong>Completed</strong>, the workshop is in the right place for final publishing handling.</li>
-                      </ol>
-                    </section>
+                    <div class="qa-order-layout">
+                      <section class="step-block">
+                        <div class="step-block-header">
+                          <div class="panel-kicker">Self Quality Assurance order</div>
+                          <h3>Save the checklist before the final handoff</h3>
+                          <p>Complete Self Quality Assurance in order, fix pull request blockers by class, and submit publishing details only when the workshop is production-ready.</p>
+                        </div>
+                        <ol class="action-list">
+                          <li>Open the review URL, append <code>?qa=true</code>, and run the workshop end to end.</li>
+                          <li data-authoring-only="source">Update WMS title, descriptions, outline, prerequisites, tags, and <strong>Development GitHub/GitLab URL</strong> to match the workshop reviewers will open.</li>
+                          <li data-authoring-only="no-doc">Confirm the WMS details, NoDoc article structure, metadata, preview, and ownership match the workshop reviewers will open.</li>
+                          <li>Open <strong>Self Quality Assurance Checklist</strong>, check every required box, and upload the requested evidence.</li>
+                          <li data-authoring-only="source">Add the pull request link and personal <code>github.io</code> preview link to the checklist.</li>
+                          <li data-authoring-only="no-doc">Add the NoDoc preview and article handoff evidence to the checklist.</li>
+                          <li>Click <strong>Save</strong> first. Then move to <strong>Self Quality Assurance Complete</strong> and certify the change.</li>
+                          <li>Stakeholders verify the workshop and move it to <strong>Completed</strong> before publishing.</li>
+                        </ol>
+                      </section>
 
-                    <figure class="step-figure evidence-figure">
-                      <figcaption>The checklist must be fully saved before the status can move cleanly to Self Quality Assurance Complete or Quarterly Quality Assurance Complete.</figcaption>
-                      <img src="./content/author-guide/5-labs-qa-checks/images/self-qa-checklist-1.png" alt="Self Quality Assurance checklist in WMS">
-                    </figure>
+                      <figure class="step-figure evidence-figure">
+                        <figcaption>Save the checklist before changing the WMS status.</figcaption>
+                        <img src="./content/author-guide/5-labs-qa-checks/images/self-qa-checklist-1.png" alt="Self Quality Assurance checklist in WMS">
+                      </figure>
+                    </div>
 
-                    <section class="step-block guided-only">
-                      <div class="step-block-header">
-                        <div class="panel-kicker">Status gate</div>
-                        <h3>Keep the release flow aligned with the real review state</h3>
-                        <p>Publishing is not the next step after draft content. It happens after Self Quality Assurance, stakeholder verification, and a clean pull request handoff.</p>
-                      </div>
-                      <div class="detail-milestone-grid">
-                        <article class="detail-milestone-card">
-                          <strong>Self Quality Assurance</strong>
-                          <p>The workshop is stable enough to test end to end and complete the checklist.</p>
-                        </article>
-                        <article class="detail-milestone-card">
-                          <strong>Self Quality Assurance Complete</strong>
-                          <p>The checklist is saved and certified, and stakeholders receive the workshop for verification.</p>
-                        </article>
-                        <article class="detail-milestone-card">
-                          <strong>Completed</strong>
-                          <p>Stakeholders have approved the handoff and the workshop is ready for publishing action.</p>
-                        </article>
-                        <article class="detail-milestone-card">
-                          <strong>Publish Requested / Approved</strong>
-                          <p>The production publishing entry is in motion and the merged workshop can roll out.</p>
-                        </article>
-                        <article class="detail-milestone-card">
-                          <strong>Quarterly Quality Assurance</strong>
-                          <p>Published workshops cycle back into Quality Assurance later, so keep WMS accurate after release too.</p>
-                        </article>
-                      </div>
-                    </section>
-
-                    <section class="step-block">
+                    <section class="step-block" data-authoring-only="source">
                       <div class="step-block-header">
                         <div class="panel-kicker">Pull request checks</div>
                         <h3>Fix review blockers by class instead of guessing</h3>
@@ -6083,56 +6138,16 @@ git push origin main</code></pre>
                       </ol>
                     </section>
 
-                    <section class="step-block">
-                      <div class="step-block-header">
-                        <div class="panel-kicker">Validator commands</div>
-                        <h3>Run the markdown validator locally before the next push</h3>
-                        <p>Choose the command block for your terminal environment and copy only that block.</p>
-                      </div>
-                      <div class="command-card-grid">
-                        <article class="card snippet-card command-card">
-                          <div class="card-body">
-                            <div class="snippet-header">
-                              <div>
-                                <div class="snippet-meta">Bash</div>
-                                <h3 class="mb-0">Linux or macOS terminal</h3>
-                              </div>
-                              <button class="copy-snippet" type="button" data-copy-target="snippet-step-3-validator-bash">Copy</button>
-                            </div>
-                            <p class="snippet-description">Use this command block when Bash is your normal terminal.</p>
-                            <pre><code id="snippet-step-3-validator-bash">curl -O https://raw.githubusercontent.com/oracle-livelabs/common/main/md-validator/.github/scripts/validate-livelabs-markdown.sh
-chmod +x validate-livelabs-markdown.sh
-./validate-livelabs-markdown.sh /path/to/workshop</code></pre>
-                          </div>
-                        </article>
-                        <article class="card snippet-card command-card">
-                          <div class="card-body">
-                            <div class="snippet-header">
-                              <div>
-                                <div class="snippet-meta">PowerShell</div>
-                                <h3 class="mb-0">Windows terminal</h3>
-                              </div>
-                              <button class="copy-snippet" type="button" data-copy-target="snippet-step-3-validator-powershell">Copy</button>
-                            </div>
-                            <p class="snippet-description">Use this command block on Windows and keep the execution policy bypass scoped to the current process.</p>
-                            <pre><code id="snippet-step-3-validator-powershell">Invoke-WebRequest -Uri "https://raw.githubusercontent.com/oracle-livelabs/common/main/md-validator/.github/scripts/validate-livelabs-markdown.ps1" -OutFile "validate-livelabs-markdown.ps1"
-Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
-.\validate-livelabs-markdown.ps1 C:\path\to\your\workshop</code></pre>
-                          </div>
-                        </article>
-                      </div>
-                    </section>
-
-                    <figure class="step-figure evidence-figure">
+                    <figure class="step-figure evidence-figure" data-authoring-only="source">
                       <figcaption>Start with the failing workflow name so you fix the real blocker instead of editing the wrong files.</figcaption>
                       <img src="./content/author-guide/prcheck/images/prerror.png" alt="Failed pull request checks in GitHub">
                     </figure>
 
-                    <section class="step-block">
+                    <section class="step-block" data-authoring-only="source">
                       <div class="step-block-header">
                         <div class="panel-kicker">Publish handoff</div>
-                        <h3>Open the pull request with the WMS ID and fill the Publishing tab with production URLs</h3>
-                        <p>The preview URL belongs in development review. The oracle-livelabs URL belongs in production publishing. Keep those two surfaces separate.</p>
+                        <h3>Move the approved GitHub change into publishing</h3>
+                        <p>Keep preview and production URLs separate.</p>
                       </div>
                       <ol class="action-list">
                         <li>Create the pull request from GitHub Desktop after the Quality Assurance fixes are pushed, and include the <strong>WMS ID</strong> in the pull request title because review will not start without it.</li>
@@ -6143,11 +6158,25 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
                       </ol>
                     </section>
 
-                    <section class="step-block">
+                    <section class="step-block" data-authoring-only="no-doc">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Publish handoff</div>
+                        <h3>Move the approved NoDoc article into release review</h3>
+                        <p>Use the NoDoc preview and WMS record as the release evidence.</p>
+                      </div>
+                      <ol class="action-list">
+                        <li>Confirm the article version, page order, metadata, links, code, and preview are correct in NoDoc.</li>
+                        <li>Save the Self Quality Assurance checklist with the NoDoc preview, ownership, and approval evidence.</li>
+                        <li>Update the WMS Publishing details and request the release handoff only after stakeholder approval.</li>
+                        <li>Verify the published workshop and keep the WMS record ready for Quarterly Quality Assurance.</li>
+                      </ol>
+                    </section>
+
+                    <section class="step-block" data-authoring-only="source">
                       <div class="step-block-header">
                         <div class="panel-kicker">Review handoff</div>
-                        <h3>Split the pull request title and URL patterns into separate copy blocks</h3>
-                        <p>These copy blocks are used during pull request review, WMS handoff, Self Quality Assurance, and final publishing. Copy only the value you need, then paste it into the matching GitHub or WMS field.</p>
+                        <h3>Keep review values ready to copy</h3>
+                        <p>Use each value in the matching GitHub or WMS field.</p>
                       </div>
                       <div class="detail-field-grid handoff-field-grid mb-3">
                         <article class="detail-field-card">
@@ -6240,6 +6269,28 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
                       </div>
                     </section>
 
+                    <section class="step-block" data-authoring-only="no-doc">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Review handoff</div>
+                        <h3>Give reviewers one clear NoDoc evidence set</h3>
+                        <p>Keep the article preview, WMS record, checklist, owner, and approval decision together.</p>
+                      </div>
+                      <div class="detail-field-grid handoff-field-grid">
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">Article preview</span>
+                          <p class="detail-field-value">Use the approved NoDoc preview that shows the final page order and content.</p>
+                        </article>
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">WMS record</span>
+                          <p class="detail-field-value">Keep ownership, status, publishing details, and production URLs current.</p>
+                        </article>
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">Approval evidence</span>
+                          <p class="detail-field-value">Include the saved Self Quality Assurance checklist and stakeholder approval.</p>
+                        </article>
+                      </div>
+                    </section>
+
                     <figure class="step-figure evidence-figure">
                       <figcaption>The Publishing tab is where the final production metadata is created and approved after the workshop is already in the right WMS state.</figcaption>
                       <img src="./content/author-guide/6-labs-publish/images/publishing-tab.png" alt="Publishing tab in WMS">
@@ -6251,11 +6302,13 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
                         <h3>Step 3 exit criteria</h3>
                       </div>
                       <ul class="check-list">
-                        <li>The preview works end to end with <code>?qa=true</code> and the WMS metadata matches the real workshop.</li>
-                        <li>The Self Quality Assurance checklist is saved before any status change and stakeholder verification has a clean handoff surface.</li>
-                        <li>The pull request title includes the WMS ID, the branch is current, and the failing check class is understood if continuous integration is red.</li>
-                        <li>The Publishing tab uses oracle-livelabs production URLs, not the personal preview link.</li>
-                        <li>The production workshop is verified after merge, and WMS stays accurate for future Quarterly Quality Assurance.</li>
+                        <li>The preview works end to end with <code>?qa=true</code>, and the WMS metadata matches the workshop.</li>
+                        <li>The Self Quality Assurance checklist is saved before any status change and stakeholder verification has a clear handoff.</li>
+                        <li data-authoring-only="source">The pull request title includes the WMS ID, the branch is current, and any failing check class is understood.</li>
+                        <li data-authoring-only="no-doc">The NoDoc article, preview, owner, and approval evidence are ready for release review.</li>
+                        <li data-authoring-only="source">The Publishing tab uses oracle-livelabs production URLs, not the personal preview link.</li>
+                        <li data-authoring-only="no-doc">The WMS Publishing details point to the approved production location.</li>
+                        <li>The production workshop is verified, and WMS stays accurate for Quarterly Quality Assurance.</li>
                       </ul>
                     </section>
 
@@ -6267,7 +6320,8 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
                       <ul class="mistake-list">
                         <li>Sharing a preview before checking tutorial order, links, images, and copy flows end to end.</li>
                         <li>Changing WMS status before the checklist is saved and certified.</li>
-                        <li>Mixing development and production URLs or opening a pull request from a stale branch.</li>
+                        <li data-authoring-only="source">Mixing development and production URLs or opening a pull request from a stale branch.</li>
+                        <li data-authoring-only="no-doc">Publishing a NoDoc article before the preview, ownership, and stakeholder approval are recorded.</li>
                       </ul>
                     </section>
                   </div>
@@ -6277,7 +6331,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
                     <div class="d-flex flex-wrap gap-2">
                       <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-action="prev">Back</button>
                       <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-mode-target="explorer">Open Cheatsheet</button>
-                      <a class="btn btn-primary rounded-pill px-4" href="./workshops/livelabs/" data-full-guide-link target="_blank" rel="noreferrer">Open Full Guide</a>
+                      <a class="btn btn-primary rounded-pill px-4" href="./workshops/livelabs/" data-full-guide-link target="_blank" rel="noreferrer">Open Step by Step Guide</a>
                     </div>
                   </div>
                 </div>
@@ -6318,8 +6372,9 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
                   <label for="toolkitSort" class="form-label filter-label">Sort cards</label>
                   <select class="form-select form-select-lg" id="toolkitSort" aria-label="Sort cheatsheet cards">
                     <option value="alphabetical" selected>Alphabetical</option>
-                    <option value="relevance">Most relevant</option>
                     <option value="latest">Latest</option>
+                    <option value="relevance">Most relevant</option>
+                    <option value="topic">Topic</option>
                   </select>
                 </div>
 
@@ -6342,14 +6397,72 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
           </div>
         </div>
       </section>
-      <!-- Full Guide -->
+      <!-- NoDoc -->
+      <section class="mode-screen d-none" id="nodocMode" aria-labelledby="nodocHeading">
+        <div class="container">
+          <div class="card mode-hero nodoc-page-hero">
+            <div class="card-body">
+              <div class="mode-overline">Recommended authoring path</div>
+              <h2 class="mode-title" id="nodocHeading"><span class="nodoc-hero-title-copy">Create workshops with</span><a class="nodoc-title-link" href="https://nodoc.oraclecorp.com/" target="_blank" rel="noopener noreferrer" aria-label="Open No Doc platform in a new tab"><img class="nodoc-title-logo" src="https://nodoc.oraclecorp.com/ords/r/nodoc/101/files/static/v872/No-Doc-formal.png" alt="No Doc"></a></h2>
+            </div>
+            <div class="nodoc-decoration-strip" aria-hidden="true"></div>
+          </div>
+
+          <section class="card content-card nodoc-full-workshop-card" aria-label="Workshop content">
+            <div class="card-body">
+              <form class="nodoc-search-form" id="nodocSearchForm" role="search" aria-label="Search NoDoc workshop documentation">
+                <label class="visually-hidden" for="nodocSearchInput">Search NoDoc documentation, labs, and tasks</label>
+                <div class="search-group input-group">
+                  <span class="input-group-text" aria-hidden="true">⌕</span>
+                  <input class="form-control" id="nodocSearchInput" type="search" autocomplete="off" placeholder="Search documentation, knowledge, labs, or tasks">
+                  <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+              </form>
+              <div class="nodoc-search-status" id="nodocSearchStatus" aria-live="polite"></div>
+              <div class="nodoc-search-results" id="nodocSearchResults" hidden></div>
+              <div class="guide-layout nodoc-guide-layout">
+                <aside class="guide-sidebar nodoc-sidebar" aria-label="NoDoc workshop navigation">
+                  <div class="guide-sidebar-card">
+                    <nav class="nodoc-side-nav" aria-label="NoDoc labs and tasks">
+                      <button class="nodoc-nav-title is-active" type="button" data-nodoc-nav="0" aria-current="page">Introduction</button>
+                      <div class="nodoc-nav-group" data-nodoc-group="1"><button class="nodoc-nav-title" type="button" data-nodoc-nav="1" aria-expanded="false" aria-controls="nodoc-nav-tasks-1">Lab 1 · Access and Navigation</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-1" hidden><button type="button" data-nodoc-nav="1" data-nodoc-task="1">Sign in and check your role</button><button type="button" data-nodoc-nav="1" data-nodoc-task="2">Open No Doc Repo</button></div></div>
+                      <div class="nodoc-nav-group" data-nodoc-group="2"><button class="nodoc-nav-title" type="button" data-nodoc-nav="2" aria-expanded="false" aria-controls="nodoc-nav-tasks-2">Lab 2 · Authoring and Structure</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-2" hidden><button type="button" data-nodoc-nav="2" data-nodoc-task="1">Create the article shell</button><button type="button" data-nodoc-nav="2" data-nodoc-task="2">Add pages</button><button type="button" data-nodoc-nav="2" data-nodoc-task="3">Add structured content</button></div></div>
+                      <div class="nodoc-nav-group" data-nodoc-group="3"><button class="nodoc-nav-title" type="button" data-nodoc-nav="3" aria-expanded="false" aria-controls="nodoc-nav-tasks-3">Lab 3 · Review and Drafts</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-3" hidden><button type="button" data-nodoc-nav="3" data-nodoc-task="1">Add a comment</button><button type="button" data-nodoc-nav="3" data-nodoc-task="2">Create a draft</button><button type="button" data-nodoc-nav="3" data-nodoc-task="3">Review and approve</button></div></div>
+                      <div class="nodoc-nav-group" data-nodoc-group="4"><button class="nodoc-nav-title" type="button" data-nodoc-nav="4" aria-expanded="false" aria-controls="nodoc-nav-tasks-4">Lab 4 · AI Correction and Maps</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-4" hidden><button type="button" data-nodoc-nav="4" data-nodoc-task="1">Run AI correction safely</button><button type="button" data-nodoc-nav="4" data-nodoc-task="2">Try an inline correction</button><button type="button" data-nodoc-nav="4" data-nodoc-task="3">Generate the information map</button></div></div>
+                      <div class="nodoc-nav-group" data-nodoc-group="5"><button class="nodoc-nav-title" type="button" data-nodoc-nav="5" aria-expanded="false" aria-controls="nodoc-nav-tasks-5">Lab 5 · Ingest and Ask No Doc</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-5" hidden><button type="button" data-nodoc-nav="5" data-nodoc-task="1">Ingest approved content</button><button type="button" data-nodoc-nav="5" data-nodoc-task="2">Ask a focused question</button><button type="button" data-nodoc-nav="5" data-nodoc-task="3">Search and export</button></div></div>
+                      <div class="nodoc-nav-group" data-nodoc-group="6"><button class="nodoc-nav-title" type="button" data-nodoc-nav="6" aria-expanded="false" aria-controls="nodoc-nav-tasks-6">Lab 6 · Publish and Release</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-6" hidden><button type="button" data-nodoc-nav="6" data-nodoc-task="1">Run pre-publish checks</button><button type="button" data-nodoc-nav="6" data-nodoc-task="2">Generate a preview</button><button type="button" data-nodoc-nav="6" data-nodoc-task="3">Complete the handoff</button></div></div>
+                    </nav>
+                  </div>
+                </aside>
+                <main class="guide-stage nodoc-guide-stage" id="nodocWorkshopReader">
+                  <div class="nodoc-full-tree" aria-label="NoDoc workshop content">
+                <details open class="nodoc-tree-group"><summary><span>Introduction · No Doc One Tool</span><small>Workshop orientation</small></summary><div class="nodoc-tree-content">
+                  <p>No Doc is an Oracle APEX documentation workbench for creating, organizing, reviewing, improving, ingesting, and preparing technical content for publication. In this workshop, you build a small documentation set, collaborate through drafts and comments, apply AI-assisted corrections with human review, generate an information map, ingest content for Ask No Doc, and complete a controlled pre-publish review.</p>
+                  <h4>Prerequisites</h4><ul><li>Oracle SSO access to the No Doc environment.</li><li>A No Doc role: <code>CONTRIBUTOR</code> for authoring or <code>READER</code> for review-only activities.</li></ul>
+                  <h4>Objectives</h4><ul><li><strong>Navigate</strong> No Doc and select the correct Focus Area.</li><li><strong>Create</strong> an article, version, and page set for a documentation topic.</li><li><strong>Edit</strong> content, apply metadata, and use supported editor features.</li><li><strong>Collaborate</strong> with comments and draft review without overwriting original content accidentally.</li><li><strong>Apply AI-assisted correction</strong> and generate an article information map with explicit human review.</li><li><strong>Ingest and query</strong> approved content with Ask No Doc while inspecting source context.</li><li><strong>Prepare a controlled preview</strong> while keeping release ownership and approvals explicit.</li></ul>
+                </div></details>
+                <details class="nodoc-tree-group"><summary><span>Lab 1 · Access And Navigation</span><small>10 minutes</small></summary><div class="nodoc-tree-content"><div data-video-card data-video-title="Lab 1 walkthrough" data-video-summary="Temporary test clip. Replace this source with the Lab 1 recording when it is ready." data-video-features="Access and navigation|Role check|NoDoc Repo"></div><p>Connect to No Doc, identify your role, and select the disposable Focus Area used throughout the workshop.</p><h4>Objectives</h4><ul><li>Sign in through Oracle SSO.</li><li>Distinguish <code>ADMINISTRATOR</code>, <code>CONTRIBUTOR</code>, and <code>READER</code> capabilities.</li><li>Navigate between Focus Area and No Doc Repo.</li></ul><details class="nodoc-task"><summary>Task 1 · Sign In And Check Your Role</summary><ol><li>Open the approved No Doc environment. <span class="wms-platform-actions nodoc-launch-actions"><a class="btn btn-primary rounded-pill px-4" href="https://nodoc.oraclecorp.com/" target="_blank" rel="noopener noreferrer" aria-label="Open No Doc in a new tab">Open NoDoc</a><span class="wms-platform-note">Requires Oracle VPN and NoDoc access.</span></span></li><li>Sign in through Oracle SSO. If the stage environment requests a bypass code, obtain it through the approved manager process; do not paste codes into workshop artifacts.</li><li>Confirm that your assigned role supports the lab actions. Readers can review; contributors can create and maintain their own content.</li></ol></details><details class="nodoc-task"><summary>Task 2 · Open No Doc Repo</summary><ol><li>Open the hamburger menu.</li><li>Select <strong>No Doc Repo</strong>.</li><li>Select the disposable Focus Area provided by your instructor.</li><li>Use <strong>Open All</strong> and <strong>Close All</strong> to inspect the table of contents.</li></ol></details></div></details>
+                <details class="nodoc-tree-group"><summary><span>Lab 2 · Authoring And Structure</span><small>20 minutes</small></summary><div class="nodoc-tree-content"><div data-video-card data-video-title="Lab 2 walkthrough" data-video-summary="Temporary test clip. Replace this source with the Lab 2 recording when it is ready." data-video-features="Article shell|Page structure|Metadata"></div><p>Create a versioned article and page set, then add metadata and structured content that can be reviewed, ingested, and published later.</p><h4>Objectives</h4><ul><li>Create an article from scratch.</li><li>Add pages at the correct TOC location.</li><li>Use metadata, links, code blocks, notes, and supported editor features.</li></ul><details class="nodoc-task"><summary>Task 1 · Create The Article Shell</summary><ol><li>In No Doc Repo, click the <strong>+</strong> icon beside the selected Focus Area.</li><li>Choose <strong>Article</strong>.</li><li>Enter a name such as <code>No Doc Workshop Practice</code> and a version such as <code>2026.08</code>.</li><li>Choose <strong>Create From Scratch</strong>, then create the article.</li><li>Leave the article's first page reserved for metadata and the later information map.</li></ol></details><details class="nodoc-task"><summary>Task 2 · Add Pages</summary><ol><li>Click <strong>+</strong> beside the article or an existing page.</li><li>Choose <strong>Page</strong> and create pages named <code>Prepare</code>, <code>Author</code>, and <code>Review</code>.</li><li>Confirm that pages appear under the intended article.</li><li>Add metadata tags at the top of each page, including product, release, topic type, and audience.</li></ol></details><details class="nodoc-task"><summary>Task 3 · Add Structured Content</summary><ol><li>Edit <code>Prepare</code> and add a short introduction, objectives, and prerequisites.</li><li>Add a numbered procedure, a note, a link, and a code block.</li><li>Use Markdown source mode to inspect the generated content when available.</li><li>Save the page and verify that the TOC and content remain aligned.</li></ol></details></div></details>
+                <details class="nodoc-tree-group"><summary><span>Lab 3 · Review And Drafts</span><small>15 minutes</small></summary><div class="nodoc-tree-content"><div data-video-card data-video-title="Lab 3 walkthrough" data-video-summary="Temporary test clip. Replace this source with the Lab 3 recording when it is ready." data-video-features="Comments|Drafts|Review decisions"></div><p>Use comments and drafts to collaborate without changing source content until the owner approves the change.</p><h4>Objectives</h4><ul><li>Add an anchored review comment.</li><li>Create and inspect a draft.</li><li>Review differences and apply an owner-approved overwrite.</li></ul><details class="nodoc-task"><summary>Task 1 · Add A Comment</summary><ol><li>Open the <code>Prepare</code> page in view or edit mode.</li><li>Select a sentence that needs clarification.</li><li>Add an inline comment with a specific, actionable suggestion.</li><li>Save and confirm the comment is anchored to the selected text.</li></ol></details><details class="nodoc-task"><summary>Task 2 · Create A Draft</summary><ol><li>Sign in as a non-owner reviewer, or use the supplied reviewer account.</li><li>Open the commented page and click <strong>Edit</strong>.</li><li>Accept the prompt to work on a draft.</li><li>Improve the selected sentence and save the draft.</li></ol></details><details class="nodoc-task"><summary>Task 3 · Review And Approve</summary><ol><li>Sign in as the page owner.</li><li>Open <strong>Drafts</strong> and inspect the pending draft.</li><li>Use <strong>View Diff</strong> to review each change.</li><li>Accept or reject changes individually.</li><li>Approve and overwrite only after confirming the final content.</li></ol></details></div></details>
+                <details class="nodoc-tree-group"><summary><span>Lab 4 · AI Correction And Information Maps</span><small>15 minutes</small></summary><div class="nodoc-tree-content"><div data-video-card data-video-title="Lab 4 walkthrough" data-video-summary="Temporary test clip. Replace this source with the Lab 4 recording when it is ready." data-video-features="AI correction|Difference review|Information maps"></div><p>Improve a page with AI-assisted tools while preserving human review, then generate an article information map after all pages exist.</p><h4>Objectives</h4><ul><li>Run a standards or persona-based AI correction.</li><li>Inspect differences before overwrite.</li><li>Generate an information map from the article's first page.</li></ul><details class="nodoc-task"><summary>Task 1 · Run AI Correction Safely</summary><ol><li>Open the <code>Author</code> page as its owner.</li><li>Choose <strong>Vibe Doc-ing</strong> and select <strong>Apply Standards</strong> or a supported persona extraction.</li><li>Review generated content and open <strong>Difference</strong>.</li><li>Reject unsupported changes; keep only improvements that preserve technical meaning.</li><li>Use <strong>Overwrite</strong> only after human review, then save.</li></ol></details><details class="nodoc-task"><summary>Task 2 · Try An Inline Correction</summary><ol><li>Select one sentence on the page.</li><li>Right-click and choose <strong>Vibe Doc-ing</strong>.</li><li>Select <strong>Formal</strong>, <strong>Heading</strong>, or a custom prompt.</li><li>Review the result and replace only the selected text if accurate.</li></ol></details><details class="nodoc-task"><summary>Task 3 · Generate The Information Map</summary><ol><li>Confirm that all workshop pages exist and are saved.</li><li>Open the first page of the article as the owner.</li><li>Choose <strong>Generate Information Map</strong>.</li><li>Confirm that page summaries and source links are generated while metadata remains intact.</li></ol></details></div></details>
+                <details class="nodoc-tree-group"><summary><span>Lab 5 · Ingest And Ask No Doc</span><small>15 minutes</small></summary><div class="nodoc-tree-content"><div data-video-card data-video-title="Lab 5 walkthrough" data-video-summary="Temporary test clip. Replace this source with the Lab 5 recording when it is ready." data-video-features="Ingestion|Focused questions|Source context"></div><p>Make approved content available to Ask No Doc, then constrain a question to the right Focus Area, article, and version.</p><h4>Objectives</h4><ul><li>Ingest a page or article deliberately.</li><li>Select a focused Ask No Doc context.</li><li>Check that answers remain grounded in workshop content.</li></ul><details class="nodoc-task"><summary>Task 1 · Ingest Approved Content</summary><ol><li>Confirm that the article content is approved and saved.</li><li>Select the article or a page and choose <strong>Ingest</strong>.</li><li>Wait for ingestion to complete; record status and timestamp.</li><li>Do not ingest production or confidential content.</li></ol></details><details class="nodoc-task"><summary>Task 2 · Ask A Focused Question</summary><ol><li>Open <strong>Ask No Doc</strong> from the application menu.</li><li>Choose <strong>Focus</strong> and select <strong>NoDoc</strong>.</li><li>Narrow context by Focus Area, article, and release version.</li><li>Ask a question answered by the <code>Prepare</code> page.</li><li>Inspect the answer and source/link context; tighten focus if needed.</li></ol></details><details class="nodoc-task"><summary>Task 3 · Search And Export</summary><ol><li>Use metadata select-and-search or Vibe Searching to find a workshop page.</li><li>Start a new chat if you need a clean context.</li><li>Download the current chat JSON only to the approved local test location.</li></ol></details></div></details>
+                <details class="nodoc-tree-group"><summary><span>Lab 6 · Pre-Publish And Release Handoff</span><small>15 minutes</small></summary><div class="nodoc-tree-content"><div data-video-card data-video-title="Lab 6 walkthrough" data-video-summary="Temporary test clip. Replace this source with the Lab 6 recording when it is ready." data-video-features="Pre-publish checks|Preview|Release handoff"></div><p>Prepare a publish preview and hand off evidence without treating a preview as approval to release.</p><h4>Objectives</h4><ul><li>Validate content before publication.</li><li>Generate a preview or package in the approved non-production path.</li><li>Record release evidence, ownership, and unresolved risks.</li></ul><details class="nodoc-task"><summary>Task 1 · Run The Pre-Publish Checks</summary><ol><li>Confirm required metadata, information-map content, links, code blocks, and page order.</li><li>Review comments, pending drafts, and open review decisions.</li><li>Confirm that no secrets or unsupported internal-only data are present.</li><li>Check representative content in view mode and Markdown source mode when available.</li></ol></details><details class="nodoc-task"><summary>Task 2 · Generate A Preview</summary><ol><li>Open the applicable <strong>LiveLabs Pre-Publish</strong> or OHC preview flow.</li><li>Select the workshop/article and version.</li><li>Generate the preview or download package in the approved test target.</li><li>Inspect rendered output, links, metadata, and navigation.</li><li>Record preview location and defects; do not push to a production repository.</li></ol></details><details class="nodoc-task"><summary>Task 3 · Complete The Handoff</summary><ol><li>Record owner, reviewer, version, environment, preview evidence, and release decision.</li><li>Link open defects or mark them as release risk.</li><li>Obtain release-owner approval before any push or overwrite.</li></ol></details></div></details>
+                  </div>
+                </main>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </section>
+      <!-- Step by Step Guide -->
       <section class="mode-screen d-none" id="guideMode" aria-labelledby="guideHeading">
         <div class="container">
           <div class="card mode-hero guide-mode-hero">
             <div class="card-body">
               <div class="row g-4 align-items-start">
                 <div class="col-xl-8">
-                  <div class="mode-overline">Full Guide</div>
+                  <div class="mode-overline">Step by Step Guide</div>
                   <h2 class="mode-title" id="guideHeading">Read the full author guide in the original page order.</h2>
                   <p class="mode-copy">
                     This mode keeps the original guide order, but each entry opens as a redesigned section surface with its own player, working dropdowns, and a direct link to the live original guide.
@@ -6376,7 +6489,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
           </div>
 
           <div class="guide-layout">
-            <aside class="guide-sidebar" aria-label="Full guide section navigation">
+            <aside class="guide-sidebar" aria-label="Step by Step Guide section navigation">
               <div class="guide-sidebar-card">
                 <div class="guide-nav-stack" id="guideSectionNav"></div>
               </div>
@@ -6574,7 +6687,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
             </div>
 
             <div class="modal-footer">
-              <a class="btn btn-outline-secondary rounded-pill px-4 d-none" id="bubbleModalSourceLink" href="#" target="_blank" rel="noreferrer">Open Full Guide</a>
+              <a class="btn btn-outline-secondary rounded-pill px-4 d-none" id="bubbleModalSourceLink" href="#" target="_blank" rel="noreferrer">Open Step by Step Guide</a>
               <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
             </div>
           </div>
@@ -6601,11 +6714,12 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="./assets/js/guide-content.js?v=20260708-skill-generator-livestack"></script>
+  <script src="./assets/js/guide-content.js?v=20260729-topic-sort-guide-label"></script>
   <script src="./assets/js/workshop-generator.js?v=20260708-skill-generator-livestack"></script>
-  <script src="./assets/js/redwood-video-player.js"></script>
   <script src="./assets/js/shared-side-nav.js?v=20260529-shared-nav-v2"></script>
-  <script src="./assets/js/author-guide-app.js?v=20260708-skill-generator-livestack"></script>
+  <script src="./assets/js/nodoc-workshop.js?v=20260817-task-media-progress-navigation"></script>
+  <script src="./assets/js/redwood-video-player.js"></script>
+  <script src="./assets/js/author-guide-app.js?v=20260804-cheatsheet-route"></script>
   <script src="./assets/js/shared-footer.js?v=20260516-followup"></script>
 </body>
 </html>

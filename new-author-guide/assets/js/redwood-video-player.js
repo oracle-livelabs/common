@@ -77,15 +77,19 @@
       title: node.getAttribute("data-video-title") || "Section walkthrough",
       summary: node.getAttribute("data-video-summary") || "Use this space for the recorded walkthrough.",
       kicker: node.getAttribute("data-video-kicker") || "Video walkthrough",
+      id: node.getAttribute("data-video-id") || "",
+      status: node.getAttribute("data-video-status") || "preview",
+      sourceNote: node.getAttribute("data-video-source-note") || "Preview asset only. Replace it with the approved walkthrough before release.",
       src: node.getAttribute("data-video-src") || fallback.src,
       captions: node.getAttribute("data-video-captions") || fallback.captions,
       features: toArray(node.getAttribute("data-video-features"), "|"),
       hasAudio: node.getAttribute("data-video-has-audio") === "true",
       transcriptTitle: node.getAttribute("data-video-transcript-title") || "Transcript",
-      transcriptIntro: node.getAttribute("data-video-transcript-intro") || "Use the transcript to review the demo clip and confirm the player behavior without relying on audio.",
+      transcriptIntro: node.getAttribute("data-video-transcript-intro") || "Use the capture script to review the required sequence without relying on audio.",
       transcript: parseTranscript(node.getAttribute("data-video-transcript"), {
         features: toArray(node.getAttribute("data-video-features"), "|")
       }),
+      compact: node.getAttribute("data-video-compact") === "true",
       autoplay: node.getAttribute("data-video-autoplay") !== "false",
       loop: node.getAttribute("data-video-loop") !== "false"
     };
@@ -111,6 +115,9 @@
       options.title ? ' data-video-title="' + escapeAttribute(options.title) + '"' : "",
       options.summary ? ' data-video-summary="' + escapeAttribute(options.summary) + '"' : "",
       options.kicker ? ' data-video-kicker="' + escapeAttribute(options.kicker) + '"' : "",
+      options.id ? ' data-video-id="' + escapeAttribute(options.id) + '"' : "",
+      options.status ? ' data-video-status="' + escapeAttribute(options.status) + '"' : "",
+      options.sourceNote ? ' data-video-source-note="' + escapeAttribute(options.sourceNote) + '"' : "",
       options.src ? ' data-video-src="' + escapeAttribute(options.src) + '"' : "",
       options.captions ? ' data-video-captions="' + escapeAttribute(options.captions) + '"' : "",
       options.hasAudio ? ' data-video-has-audio="true"' : "",
@@ -125,8 +132,16 @@
   }
 
   function buildMarkup(options) {
+    var features = options.features || [];
+
     return [
       '<section class="media-player-card is-paused" aria-label="', escapeAttribute(options.title), ' media player">',
+      '  <div class="media-player-header">',
+      options.compact ? "" : '    <span class="media-player-kicker">' + escapeHtml(options.kicker) + "</span>",
+      options.compact ? "" : '    <h3>' + escapeHtml(options.title) + "</h3>",
+      options.compact ? "" : '    <p>' + escapeHtml(options.summary) + "</p>",
+      options.compact ? "" : '    <div class="media-player-status" role="status">' + escapeHtml(options.status === "ready" ? "Approved recording" : "Preview asset · recording pending") + "</div>",
+      "  </div>",
       '  <div class="media-player-shell">',
       '    <div class="media-player-stage">',
       '      <video class="media-player-video" preload="metadata" playsinline muted',
@@ -161,8 +176,22 @@
       "    </div>",
       options.hasAudio
         ? ""
-        : '    <div class="media-player-footnote">Silent template clip. Use the onscreen steps until a final narrated recording is available.</div>',
+        : (options.compact ? "" : ['    <div class="media-player-footnote">', escapeHtml(options.sourceNote), "</div>"].join("")),
       "  </div>",
+      features.length && !options.compact
+        ? ['  <div class="media-player-features" aria-label="Walkthrough topics">', features.map(function (feature) { return '<span>' + escapeHtml(feature) + '</span>'; }).join(""), "</div>"].join("")
+        : "",
+      options.transcript.length
+        ? [
+            '  <button class="media-player-transcript-toggle" type="button" data-player-transcript>Show transcript</button>',
+            '  <section class="media-player-transcript" data-player-transcript-panel hidden aria-label="', escapeAttribute(options.transcriptTitle), '">',
+            '    <div class="media-player-transcript-head"><div><h4>', escapeHtml(options.transcriptTitle), '</h4><p>', escapeHtml(options.transcriptIntro), '</p></div></div>',
+            '    <ol class="media-player-transcript-list">',
+            options.transcript.map(function (entry) { return '<li><time>' + escapeHtml(entry.time) + '</time><span>' + escapeHtml(entry.text) + '</span></li>'; }).join(""),
+            "    </ol>",
+            "  </section>"
+          ].join("")
+        : "",
       "</section>"
     ].join("");
   }
@@ -325,6 +354,7 @@
     if (state.transcriptButton && state.transcriptPanel) {
       state.transcriptButton.addEventListener("click", function () {
         state.transcriptPanel.hidden = !state.transcriptPanel.hidden;
+        state.transcriptButton.textContent = state.transcriptPanel.hidden ? "Show transcript" : "Hide transcript";
         updateButtons(state);
       });
     }

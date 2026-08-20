@@ -1,10 +1,10 @@
 {
-  "workshoptitle": "Getting Ready to Deliver a LiveLab",
+  "workshoptitle": "Request and Deliver a LiveLabs Event",
   "help": "livelabs-help-db_us@oracle.com",
   "tutorials": [
     {
       "title": "Introduction",
-      "description": "Understand the readiness model for a customer-facing LiveLabs delivery.",
+      "description": "Understand the event delivery model for a customer-facing LiveLabs event.",
       "type": "livelabs",
       "filename": "../../introduction/introduction.md"
     },
@@ -15,18 +15,11 @@
       "filename": "../../lab-1-build-facilitation-runbook/lab-1-build-facilitation-runbook.md"
     },
     {
-      "title": "Facilitator Run-of-Show Template",
-      "description": "Record event timing, owners, backups, and status on one printable page.",
-      "type": "livelabs",
-      "filename": "../../facilitator-run-of-show-template.md"
-    },
-    {
       "title": "Lab 2: Request a LiveLabs Event Code",
       "description": "Request an event code in WMS and verify event details before approval.",
       "type": "livelabs",
       "filename": "../../lab-2-request-livelabs-event-code/lab-2-request-livelabs-event-code.md"
     },
-
     {
       "title": "Lab 3: Run the Workshop and Test the Green-Button Path",
       "description": "Run the lab as an attendee and test the environment launch path before the event.",
@@ -41,7 +34,7 @@
     },
     {
       "title": "Lab 5: Run Live Prep Checks",
-      "description": "Confirm the event path, attendee prep, roles, and final author checklist.",
+      "description": "Perform the final live opening check and record the readiness decision.",
       "type": "livelabs",
       "filename": "../../lab-5-run-live-prep-checks/lab-5-run-live-prep-checks.md"
     },
