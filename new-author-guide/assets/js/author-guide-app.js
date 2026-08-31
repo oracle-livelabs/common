@@ -57,7 +57,7 @@
     });
   var guideSections = [];
   var guideSectionMap = {};
-  var guideManifestHref = "./workshops/author-guide/manifest.json";
+  var guideManifestHref = "../workshops/author-guide/manifest.json";
   var fullGuideHref = "https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/";
   var workshopExampleHref = window.authorGuideWorkshopExampleHref || "https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/";
   var guideCatalogPromise = null;
@@ -225,24 +225,7 @@
     searchQuery: "",
     guideSection: guideSections.length ? guideSections[0].id : ""
   };
-  var quickstartStepDetails = [
-    {
-      output: "approved request",
-      time: "5 to 10 minutes",
-      leads: "repository work"
-    },
-    {
-      output: "workshop draft",
-      time: "depends on authoring path",
-      leads: "content authoring"
-    },
-    {
-      output: "reviewed release",
-      time: "10 to 15 minutes",
-      leads: "production"
-    }
-  ];
-  var wmsStatusGraphViewBox = { x: 0, y: 0, width: 1320, height: 660 };
+  var wmsStatusGraphViewBox = { x: 0, y: 0, width: 1540, height: 660 };
   var wmsStatusNodeHalfWidth = 82;
   var wmsStatusNodeHalfHeight = 31;
   var wmsStatusGraphZoomLevels = [25, 50, 75, 100, 125, 150, 200];
@@ -354,16 +337,32 @@
       label: "Completed",
       group: "Done",
       responsible: "LiveLabs owner / workshop owner",
-      meaning: "The workshop is complete and available for normal use, publication, or maintenance depending on your internal workflow.",
-      nextStep: "No immediate action is required. Later, the workshop may enter Quarterly QA or return to In Development if updates are required.",
+      meaning: "The workshop is complete and ready for the author to create a publish request.",
+      nextStep: "Create a Publish Request. The LiveLabs team reviews it and approves it or asks for changes before publication.",
       checks: [
         "Workshop is complete.",
         "Ownership is clear for future maintenance.",
-        "Future QA or update cycle can be scheduled."
+        "Publish request can be created and reviewed."
       ],
       x: 1180,
       y: 300,
       color: "#f0fdf4"
+    },
+    {
+      id: "publish-request",
+      label: "Publish Request",
+      group: "Publishing",
+      responsible: "Workshop author / LiveLabs publishing team",
+      meaning: "After the WMS request reaches Completed, the author creates a publish request for the LiveLabs team to review.",
+      nextStep: "The LiveLabs team reviews the publish request and approves it or asks for changes before publication.",
+      checks: [
+        "WMS status is Completed.",
+        "Preview, ownership, and production details are ready.",
+        "Publish request evidence is attached to the WMS record."
+      ],
+      x: 1410,
+      y: 300,
+      color: "#fff7ed"
     },
     {
       id: "quarterly-qa",
@@ -409,6 +408,7 @@
     { from: "self-qa", to: "in-development", type: "alt", label: "fix issues", labelX: 615, labelY: 374 },
     { from: "self-qa", to: "self-qa-complete", type: "normal", label: "QA passes", labelX: 835, labelY: 236 },
     { from: "self-qa-complete", to: "completed", type: "normal", label: "complete", labelX: 1065, labelY: 236 },
+    { from: "completed", to: "publish-request", type: "publish", label: "request publish", labelX: 1295, labelY: 236 },
     { from: "completed", to: "quarterly-qa", type: "normal", label: "scheduled review", labelX: 1088, labelY: 386 },
     { from: "quarterly-qa", to: "in-development", type: "alt", label: "updates needed", labelX: 720, labelY: 414 },
     { from: "quarterly-qa", to: "quarterly-qa-complete", type: "normal", label: "QA passes", labelX: 1065, labelY: 416 },
@@ -445,19 +445,11 @@
   var searchMode = document.getElementById("searchMode");
   var rabbitFlow = document.getElementById("rabbitFlow");
   var stepSections = Array.from(document.querySelectorAll(".rabbit-step"));
-  var progressButtons = Array.from(document.querySelectorAll(".progress-button"));
   var progressShell = document.getElementById("progressShell");
-  var progressCaption = document.getElementById("progressCaption");
   var authoringRouteTabs = Array.from(document.querySelectorAll("[data-authoring-route]"));
   var authoringRoutePanels = Array.from(document.querySelectorAll("[data-authoring-panel]"));
   var fastTrackToggle = document.getElementById("fastTrackToggle");
   var fastTrackStatus = document.getElementById("fastTrackStatus");
-  var quickstartProcessTitle = document.getElementById("quickstartProcessTitle");
-  var quickstartProcessIndex = document.getElementById("quickstartProcessIndex");
-  var quickstartProcessTotal = document.getElementById("quickstartProcessTotal");
-  var quickstartProcessOutput = document.getElementById("quickstartProcessOutput");
-  var quickstartProcessTime = document.getElementById("quickstartProcessTime");
-  var quickstartProcessLeads = document.getElementById("quickstartProcessLeads");
   var liveRegion = document.getElementById("liveRegion");
   var bubbleGrid = document.getElementById("bubbleGrid");
   var emptyState = document.getElementById("emptyState");
@@ -505,7 +497,7 @@
   var workshopMarkdownError = document.getElementById("workshopMarkdownError");
   var copyGeneratedMarkdown = document.getElementById("copyGeneratedMarkdown");
   var bubbleModalElement = document.getElementById("bubbleModal");
-  var bubbleModal = bootstrap.Modal.getOrCreateInstance(bubbleModalElement);
+  var bubbleModal = bubbleModalElement ? bootstrap.Modal.getOrCreateInstance(bubbleModalElement) : null;
   var imageLightbox = document.getElementById("imageLightbox");
   var imageLightboxImage = document.getElementById("imageLightboxImage");
   var imageLightboxCaption = document.getElementById("imageLightboxCaption");
@@ -520,14 +512,16 @@
   var wmsExamplePromptMinLength = 24;
   var wmsExamplePromptMaxLength = 320;
 
-  bubbleModalElement.addEventListener("hidden.bs.modal", function () {
-    closeImageLightbox({ announce: false, restoreFocus: false });
-    document.body.classList.remove("modal-open");
-    document.body.style.removeProperty("padding-right");
-    document.querySelectorAll(".modal-backdrop").forEach(function (backdrop) {
-      backdrop.remove();
+  if (bubbleModalElement) {
+    bubbleModalElement.addEventListener("hidden.bs.modal", function () {
+      closeImageLightbox({ announce: false, restoreFocus: false });
+      document.body.classList.remove("modal-open");
+      document.body.style.removeProperty("padding-right");
+      document.querySelectorAll(".modal-backdrop").forEach(function (backdrop) {
+        backdrop.remove();
+      });
     });
-  });
+  }
 
   function escapeHtml(value) {
     return String(value)
@@ -665,7 +659,7 @@
     var cleanPath = path.replace(/\/+$/, "");
     var lastSegment = cleanPath.split("/").pop().toLowerCase();
 
-    if (["home", "quickstart", "cheatsheet", "nodoc", "index.html"].indexOf(lastSegment) !== -1) {
+    if (["home", "home.html", "quickstart", "quickstart.html", "cheatsheet", "cheatsheet.html", "nodoc", "nodoc.html", "index.html"].indexOf(lastSegment) !== -1) {
       cleanPath = cleanPath.slice(0, cleanPath.length - lastSegment.length);
     } else if (!path.endsWith("/")) {
       cleanPath = path.slice(0, path.lastIndexOf("/") + 1);
@@ -675,22 +669,23 @@
   }
 
   var appBasePath = resolveAppBasePath();
+  var routeBasePath = appBasePath.replace(/pages\/$/i, "") || "/";
 
   function routeTokenFromLocation() {
     var routeParam = new URLSearchParams(window.location.search).get("route");
     var pathSegment = (window.location.pathname || "").replace(/\/+$/, "").split("/").pop().toLowerCase();
     var cleanRoute = String(routeParam || pathSegment || "").toLowerCase();
 
-    if (cleanRoute === "home") {
+    if (cleanRoute === "home" || cleanRoute === "home.html" || cleanRoute === "index.html") {
       return "#home";
     }
-    if (cleanRoute === "quickstart") {
+    if (cleanRoute === "quickstart" || cleanRoute === "quickstart.html") {
       return "#quickstart";
     }
-    if (cleanRoute === "cheatsheet" || cleanRoute === "quick-reference") {
+    if (cleanRoute === "cheatsheet" || cleanRoute === "cheatsheet.html" || cleanRoute === "quick-reference") {
       return "#quick-reference";
     }
-    if (cleanRoute === "nodoc" || cleanRoute === "no-doc") {
+    if (cleanRoute === "nodoc" || cleanRoute === "nodoc.html" || cleanRoute === "no-doc") {
       return "#nodoc";
     }
 
@@ -699,24 +694,31 @@
 
   function routeUrl(hash) {
     var cleaned = String(hash || "").replace(/^#/, "").toLowerCase();
+    var pageFile = function (cleanName) {
+      return routeBasePath + cleanName;
+    };
 
     if (!cleaned || cleaned === "home" || cleaned === "hub") {
-      return appBasePath + "home";
+      return pageFile("home");
     }
     if (cleaned === "guided" || cleaned === "quickstart" || cleaned.indexOf("step-") === 0) {
-      return appBasePath + "quickstart";
+      return pageFile("quickstart");
     }
     if (cleaned === "toolkit" || cleaned === "quick-reference" || cleaned === "cheatsheet" || cleaned === "explorer") {
-      return appBasePath + "cheatsheet";
+      return pageFile("cheatsheet");
     }
     if (cleaned === "nodoc" || cleaned === "no-doc") {
-      return appBasePath + "nodoc";
+      return pageFile("nodoc");
     }
 
-    return appBasePath + "index.html" + (hash || "");
+    return routeBasePath + "home" + (hash || "");
   }
 
   function setLiveMessage(message) {
+    if (!liveRegion) {
+      return;
+    }
+
     liveRegion.textContent = "";
     window.setTimeout(function () {
       liveRegion.textContent = message;
@@ -1445,7 +1447,9 @@
   }
 
   function updateNav() {
-    modeNav.classList.remove("d-none");
+    if (modeNav) {
+      modeNav.classList.remove("d-none");
+    }
     document.body.classList.toggle("home-no-scroll", state.mode === "hub");
     syncAuthorNavToggle();
 
@@ -1493,6 +1497,21 @@
       node.hidden = !isActive;
       node.setAttribute("aria-hidden", isActive ? "false" : "true");
     });
+  }
+
+  function releaseObserverAtTop() {
+    var deadline = Date.now() + 1600;
+
+    function checkPosition() {
+      if (window.pageYOffset <= 1 || Date.now() >= deadline) {
+        suppressObserver = false;
+        return;
+      }
+
+      window.requestAnimationFrame(checkPosition);
+    }
+
+    window.requestAnimationFrame(checkPosition);
   }
 
   function updateAuthoringRouteQuery(options) {
@@ -1547,82 +1566,22 @@
     }
   }
 
-  function updateProgressCaption() {
-    if (!progressCaption) {
-      return;
-    }
-
-    if (!stepMeta[state.currentStep]) {
-      progressCaption.textContent = "Step 1 of 3 is active.";
-      return;
-    }
-
-    if (state.mode !== "beginner") {
-      progressCaption.textContent = "Step 1 of 3 is active.";
-      return;
-    }
-
-    progressCaption.textContent = "Step " + (state.currentStep + 1) + " of 3: " +
-      stepMeta[state.currentStep].title + " (" + (state.fastTrack === "minimal" ? "Fast Track" : "Guided") + ").";
-  }
-
   function updateBeginnerUI() {
+    if (!rabbitFlow || !fastTrackToggle || !fastTrackStatus) {
+      return;
+    }
+
     rabbitFlow.classList.toggle("track-minimal", state.fastTrack === "minimal");
     fastTrackToggle.checked = state.fastTrack === "minimal";
     fastTrackStatus.textContent = state.fastTrack === "minimal"
       ? "Fast Track hides the longer notes and common mistakes."
       : "Guided mode keeps notes, common mistakes, and extra context visible.";
-    var activeStepMeta = stepMeta[state.currentStep] || stepMeta[0] || {};
-    var activeStepDetails = quickstartStepDetails[state.currentStep] || quickstartStepDetails[0];
-
-    if (quickstartProcessTitle) {
-      quickstartProcessTitle.textContent = activeStepMeta.title || "Submit Workshop Request";
-    }
-
-    if (quickstartProcessIndex) {
-      quickstartProcessIndex.textContent = String(state.currentStep + 1);
-    }
-
-    if (quickstartProcessTotal) {
-      quickstartProcessTotal.textContent = String(stepSections.length || 3);
-    }
-
-    if (quickstartProcessOutput && activeStepDetails) {
-      quickstartProcessOutput.textContent = activeStepDetails.output;
-    }
-
-    if (quickstartProcessTime && activeStepDetails) {
-      quickstartProcessTime.textContent = activeStepDetails.time;
-    }
-
-    if (quickstartProcessLeads && activeStepDetails) {
-      quickstartProcessLeads.textContent = activeStepDetails.leads;
-    }
-
-    progressButtons.forEach(function (button, index) {
-      var isActive = index === state.currentStep;
-      var isComplete = index < state.currentStep;
-      var mark = button.querySelector(".progress-mark");
-
-      button.classList.toggle("is-active", isActive);
-      button.classList.toggle("is-complete", isComplete);
-      button.classList.remove("is-locked");
-      button.setAttribute("aria-current", isActive ? "step" : "false");
-      button.setAttribute("aria-selected", isActive ? "true" : "false");
-      button.setAttribute("tabindex", isActive ? "0" : "-1");
-      if (mark) {
-        mark.innerHTML = isComplete ? "&#10003;" : String(index + 1);
-      }
-    });
-
     stepSections.forEach(function (section, index) {
       section.classList.toggle("is-active", index === state.currentStep);
       section.classList.toggle("is-complete", index < state.currentStep);
       section.classList.remove("is-locked");
     });
 
-    updateProgressCaption();
-    updateBreadcrumb();
   }
 
   function getTagFacets() {
@@ -1806,7 +1765,9 @@
     var queryText = state.toolkitQuery.trim();
     var activeTags = normalizeTagSelection(state.activeTags);
 
-    resultCount.textContent = "Showing " + count + " cheatsheet card" + (count === 1 ? "" : "s");
+    if (resultCount) {
+      resultCount.textContent = "Showing " + count + " cheatsheet card" + (count === 1 ? "" : "s");
+    }
 
     if (!filterSummary) {
       return;
@@ -1867,6 +1828,10 @@
   }
 
   function renderExplorer() {
+    if (!bubbleGrid || !emptyState) {
+      return;
+    }
+
     var query = state.toolkitQuery.trim();
     var selectedTags = normalizeTagSelection(state.activeTags);
     var visibleEntries = explorerItems.map(function (item) {
@@ -2497,7 +2462,7 @@
     setWmsStatusGraphViewBox(svg);
     defineWmsStatusMarkers(svg, graphId);
     svg.appendChild(createWmsStatusSvgElement("title", { id: graphId + "-title" })).textContent = "LiveLabs workshop status workflow graph";
-    svg.appendChild(createWmsStatusSvgElement("desc", { id: graphId + "-desc" })).textContent = "A clickable graph showing submitted, approval, development, self QA, completed, and quarterly QA statuses.";
+    svg.appendChild(createWmsStatusSvgElement("desc", { id: graphId + "-desc" })).textContent = "A clickable graph showing submitted, approval, development, self QA, completed, publish request, and quarterly QA statuses.";
     svg.setAttribute("role", "group");
     svg.setAttribute("aria-labelledby", graphId + "-title " + graphId + "-desc");
 
@@ -2505,7 +2470,7 @@
       var from = wmsStatusGraphNodeMap[transition.from];
       var to = wmsStatusGraphNodeMap[transition.to];
       var path = createWmsStatusSvgElement("path", {
-        class: "wms-status-edge" + (transition.type === "alt" ? " is-return-path" : ""),
+        class: "wms-status-edge" + (transition.type === "alt" ? " is-return-path" : transition.type === "publish" ? " is-publish-request" : ""),
         d: wmsStatusEdgePath(from, to, transition.type),
         "data-from": transition.from,
         "data-to": transition.to,
@@ -2859,8 +2824,8 @@
     }
 
     return window.RedwoodVideoPlayer.createMountMarkup(Object.assign({
-      src: "./assets/media/guide/author-guide-template.mp4",
-      captions: "./assets/media/guide/author-guide-template.vtt",
+      src: "../assets/media/guide/author-guide-template.mp4",
+      captions: "../assets/media/guide/author-guide-template.vtt",
       status: "preview",
       sourceNote: "Preview asset only. Use the written steps and transcript until the approved walkthrough is supplied.",
       autoplay: true,
@@ -2954,7 +2919,9 @@
     }
 
     hydrateVideoCards(bubbleModalElement);
-    bubbleModal.show();
+    if (bubbleModal) {
+      bubbleModal.show();
+    }
     setLiveMessage(item.title + " opened.");
   }
 
@@ -4151,7 +4118,7 @@
     setModeRegionVisibility(generatorMode, mode === "generator");
     setModeRegionVisibility(searchMode, mode === "search");
 
-    if (mode !== "explorer") {
+    if (mode !== "explorer" && bubbleModal) {
       bubbleModal.hide();
     }
 
@@ -4371,7 +4338,9 @@
 
   function handleShortcutBubble(id) {
     state.toolkitQuery = "";
-    bubbleSearch.value = "";
+    if (bubbleSearch) {
+      bubbleSearch.value = "";
+    }
     setActiveTag("all");
     switchMode("explorer", { openBubble: id });
   }
@@ -4529,7 +4498,6 @@
   document.addEventListener("click", function (event) {
     var modeButton = event.target.closest("[data-mode-target]");
     var authoringRouteTab = event.target.closest("[data-authoring-route]");
-    var progressButton = event.target.closest("[data-step-target]");
     var actionButton = event.target.closest("[data-action]");
     var guideButton = event.target.closest("[data-guide-target]");
     var guideSectionButton = event.target.closest("[data-guide-section]");
@@ -4548,6 +4516,10 @@
     var wmsStatusAction = event.target.closest("[data-wms-status-action]");
     var installCard = event.target.closest("[data-install-card]");
     var isPrimaryNav = modeButton && !!modeButton.closest(".nav-group-all");
+
+    if (modeButton && modeButton.tagName === "A") {
+      return;
+    }
 
     if (installCard && !copyTextButton) {
       var isComplete = !installCard.classList.contains("is-complete");
@@ -4624,11 +4596,6 @@
 
     if (event.target.closest("figure[data-expandable=\"true\"]")) {
       openImageLightbox(event.target.closest("figure[data-expandable=\"true\"]"));
-      return;
-    }
-
-    if (progressButton) {
-      goToStep(Number(progressButton.getAttribute("data-step-target")));
       return;
     }
 
@@ -4745,23 +4712,33 @@
     }
   }, true);
 
-  fastTrackToggle.addEventListener("change", function (event) {
-    state.fastTrack = event.target.checked ? "minimal" : "guided";
-    updateBeginnerUI();
-    setLiveMessage(state.fastTrack === "minimal" ? "Fast Track enabled." : "Guided mode enabled.");
-  });
+  if (fastTrackToggle) {
+    fastTrackToggle.addEventListener("change", function (event) {
+      state.fastTrack = event.target.checked ? "minimal" : "guided";
+      updateBeginnerUI();
+      setLiveMessage(state.fastTrack === "minimal" ? "Fast Track enabled." : "Guided mode enabled.");
+    });
+  }
 
-  bubbleSearch.addEventListener("input", function (event) {
-    state.toolkitQuery = event.target.value;
-    renderExplorer();
-  });
+  if (bubbleSearch) {
+    bubbleSearch.addEventListener("input", function (event) {
+      state.toolkitQuery = event.target.value;
+      renderExplorer();
+    });
+  }
 
-  clearSearch.addEventListener("click", function () {
-    state.toolkitQuery = "";
-    bubbleSearch.value = "";
-    renderExplorer();
-    bubbleSearch.focus();
-  });
+  if (clearSearch) {
+    clearSearch.addEventListener("click", function () {
+      state.toolkitQuery = "";
+      if (bubbleSearch) {
+        bubbleSearch.value = "";
+      }
+      renderExplorer();
+      if (bubbleSearch) {
+        bubbleSearch.focus();
+      }
+    });
+  }
 
   if (toolkitSort) {
     toolkitSort.addEventListener("change", function (event) {
@@ -4911,6 +4888,16 @@
 
   if (backToTopButton) {
     backToTopButton.addEventListener("click", function () {
+      if (state.mode === "beginner") {
+        suppressObserver = true;
+        goToStep(0, {
+          scroll: false,
+          hash: true,
+          replaceHistory: true,
+          announce: false
+        });
+        releaseObserverAtTop();
+      }
       window.scrollTo({ top: 0, behavior: smoothBehavior() });
       setLiveMessage("Returned to the top of the page.");
     });

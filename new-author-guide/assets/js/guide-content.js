@@ -54,7 +54,7 @@ window.authorGuideContent = (function () {
     stepMeta: [
       {
         id: "step-1",
-        title: "WMS Platform",
+        title: "Submit Workshop Request",
         guideTarget: "1-labs-wms",
         summary: "Start in WMS, fill the reviewer-facing request fields with real detail, and understand the approval to Quality Assurance status flow before development begins.",
         keywords: ["wms", "workshop request", "stakeholder", "council", "tags", "approved", "self Quality Assurance", "quarterly Quality Assurance"]
@@ -68,7 +68,7 @@ window.authorGuideContent = (function () {
       },
       {
         id: "step-3",
-        title: "Review & Publish",
+        title: "Review and Publish",
         guideTarget: "5-labs-qa-checks",
         summary: "Complete Self Quality Assurance in the right order, fix pull request check failures by class, create the pull request with the WMS ID, and request publishing with production URLs.",
         keywords: ["self Quality Assurance", "quarterly Quality Assurance", "validator", "pull request", "publish", "production", "wms id"]
@@ -127,7 +127,7 @@ window.authorGuideContent = (function () {
           milestone("Quarterly Quality Assurance", "Published workshops cycle back into Quality Assurance later, and missed Quality Assurance can disable the entry.")
         ],
         image: {
-          src: "./content/author-guide/1-labs-wms/images/submit_workshop.png",
+          src: "../content/author-guide/1-labs-wms/images/submit_workshop.png",
           alt: "Submit new workshop request page in WMS",
           caption: "The reviewer-facing request page is where the workshop scope and ownership are established."
         },
@@ -188,7 +188,7 @@ window.authorGuideContent = (function () {
           "- Path Intellisense"
         ].join("\n"),
         image: {
-          src: "./content/author-guide/2-labs-github/images/git-hub-desktop-login-screen.png",
+          src: "../content/author-guide/2-labs-github/images/git-hub-desktop-login-screen.png",
           alt: "GitHub Desktop sign-in screen",
           caption: "GitHub Desktop is the main fork, clone, commit, and pull request surface used throughout the guide."
         },
@@ -242,7 +242,7 @@ window.authorGuideContent = (function () {
           "https://<user>.github.io/<repository>/<path>/workshops/<variant>/index.html"
         ].join("\n"),
         image: {
-          src: "./content/author-guide/3-labs-sync-github/images/sample-workshop-structure.png",
+          src: "../content/author-guide/3-labs-sync-github/images/sample-workshop-structure.png",
           alt: "Sample workshop structure in Visual Studio Code",
           caption: "The sample structure is the cleanest baseline for new authoring work."
         },
@@ -298,7 +298,7 @@ window.authorGuideContent = (function () {
           "index.html?qa=true"
         ].join("\n"),
         image: {
-          src: "./content/author-guide/4-labs-markdown-develop-content/images/lintchecker.png",
+          src: "../content/author-guide/4-labs-markdown-develop-content/images/lintchecker.png",
           alt: "LintChecker enabled in preview with qa=true",
           caption: "Add ?qa=true while previewing so structural issues surface before pull request review."
         },
@@ -339,7 +339,7 @@ window.authorGuideContent = (function () {
           "The path and filename case must match what is on disk exactly."
         ].join("\n"),
         image: {
-          src: "./content/author-guide/4-labs-markdown-develop-content/images/case-sensitive.png",
+          src: "../content/author-guide/4-labs-markdown-develop-content/images/case-sensitive.png",
           alt: "Case-sensitive image and path reminder",
           caption: "GitHub Pages is case-sensitive even when a local machine is not."
         },
@@ -455,7 +455,7 @@ window.authorGuideContent = (function () {
           "</if>"
         ].join("\n"),
         image: {
-          src: "./content/author-guide/4-labs-markdown-develop-content/images/conditional-vsc1.png",
+          src: "../content/author-guide/4-labs-markdown-develop-content/images/conditional-vsc1.png",
           alt: "Conditional formatting example in Visual Studio Code",
           caption: "Conditional content should stay obvious enough that another author can follow it."
         },
@@ -503,7 +503,7 @@ window.authorGuideContent = (function () {
           "```"
         ].join("\n"),
         image: {
-          src: "./content/author-guide/quiz/images/quizconfig.png",
+          src: "../content/author-guide/quiz/images/quizconfig.png",
           alt: "Quiz configuration example",
           caption: "Use quiz-config only when scoring or badges are really part of the learning flow."
         },
@@ -590,7 +590,7 @@ window.authorGuideContent = (function () {
           "7. Save and verify the orange button"
         ].join("\n"),
         image: {
-          src: "./content/author-guide/11-labs-create-freesql/images/add-livesql-url.png",
+          src: "../content/author-guide/11-labs-create-freesql/images/add-livesql-url.png",
           alt: "Run on FreeSQL URL field in WMS",
           caption: "WMS turns the FreeSQL share link into the orange Run on FreeSQL entry."
         },
@@ -671,7 +671,7 @@ window.authorGuideContent = (function () {
           "- Keep only referenced files in the images folder"
         ].join("\n"),
         image: {
-          src: "./content/author-guide/13-labs-capture-screens-best-practices/images/screen-captures-general-guidelines.png",
+          src: "../content/author-guide/13-labs-capture-screens-best-practices/images/screen-captures-general-guidelines.png",
           alt: "General screenshot guidelines reference",
           caption: "The screenshot standards page is the authoritative checklist for capture quality and privacy."
         },
@@ -712,7 +712,7 @@ window.authorGuideContent = (function () {
           "-m 1280"
         ].join("\n"),
         image: {
-          src: "./content/author-guide/optishot/images/summary.png",
+          src: "../content/author-guide/optishot/images/summary.png",
           alt: "OptiShot summary output",
           caption: "The summary tells you which images were resized, skipped, or optimized."
         },
@@ -803,7 +803,7 @@ window.authorGuideContent = (function () {
           milestone("Quarterly Quality Assurance", "Published workshops cycle back into Quality Assurance later to stay current.")
         ],
         image: {
-          src: "./content/author-guide/5-labs-qa-checks/images/self-qa-checklist-1.png",
+          src: "../content/author-guide/5-labs-qa-checks/images/self-qa-checklist-1.png",
           alt: "Self Quality Assurance checklist in WMS",
           caption: "The checklist must be fully saved before Self Quality Assurance Complete can succeed."
         },
@@ -855,7 +855,7 @@ window.authorGuideContent = (function () {
           ".\\validate-livelabs-markdown.ps1 C:\\path\\to\\your\\workshop"
         ].join("\n"),
         image: {
-          src: "./content/author-guide/prcheck/images/prerror.png",
+          src: "../content/author-guide/prcheck/images/prerror.png",
           alt: "Failed pull request checks on GitHub",
           caption: "Start with the failing workflow name so you fix the real blocker."
         },
@@ -915,7 +915,7 @@ window.authorGuideContent = (function () {
           "https://oracle-livelabs.github.io/sprints/<category-folder>/<sprint-folder>/"
         ].join("\n"),
         image: {
-          src: "./content/author-guide/6-labs-publish/images/publishing-tab.png",
+          src: "../content/author-guide/6-labs-publish/images/publishing-tab.png",
           alt: "Publishing tab in WMS",
           caption: "The Publishing tab is where the final production metadata is created and approved."
         },
@@ -1001,7 +1001,7 @@ window.authorGuideContent = (function () {
           "- Production URL"
         ].join("\n"),
         image: {
-          src: "./content/author-guide/10-labs-create-sprints-workflow/images/sprints-workflow.png",
+          src: "../content/author-guide/10-labs-create-sprints-workflow/images/sprints-workflow.png",
           alt: "LiveLabs sprint workflow diagram",
           caption: "Sprints use a separate repository and publish request path from full workshops."
         },
@@ -1214,7 +1214,7 @@ window.authorGuideContent = (function () {
           "7. Change status to Publish Requested and wait for council email"
         ].join("\n"),
         image: {
-          src: "./content/author-guide/15-livestack/images/ls-details.png",
+          src: "../content/author-guide/15-livestack/images/ls-details.png",
           alt: "LiveStack details page in WMS",
           caption: "The details page is where authors add LiveLabs, assets, order, visibility, and publish status."
         },
@@ -1267,7 +1267,7 @@ window.authorGuideContent = (function () {
           "- Terraform Stack"
         ].join("\n"),
         image: {
-          src: "./content/author-guide/17-assets/images/2-new-asset-dialog.png",
+          src: "../content/author-guide/17-assets/images/2-new-asset-dialog.png",
           alt: "WMS Asset Details dialog for file or link assets",
           caption: "WMS assets turn reusable files and links into shared, maintainable authoring objects."
         },

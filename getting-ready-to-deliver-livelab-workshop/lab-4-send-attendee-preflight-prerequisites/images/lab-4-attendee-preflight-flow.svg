@@ -1,24 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
   <title id="title">Attendee preflight flow</title>
-  <desc id="desc">Three large cards show how authors build the attendee checklist, draft the preflight email, and send it early enough for blockers.</desc>
+  <desc id="desc">Three cards show how authors build, draft, and send the attendee preflight.</desc>
   <rect width="1200" height="560" fill="#f7f7f5"/>
   <text x="70" y="56" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#1f1f1f">Send attendee preflight</text>
   <g font-family="Arial, sans-serif" fill="#1f1f1f">
     <g class="card">
       <rect x="70" y="110" width="330" height="190" rx="8" fill="#ffffff" stroke="#5c6f86" stroke-width="3"/>
       <text x="100" y="150" font-size="22" font-weight="700">1. Checklist</text>
-<text x="100" y="188" font-size="18">Check URL, event code, access path,</text>
-<text x="100" y="214" font-size="18">account steps, prerequisites, network</text>
-<text x="100" y="240" font-size="18">check, ready screen, provisioning time,</text>
-<text x="100" y="266" font-size="18">and pre-event support contact.</text>
+<text x="100" y="188" font-size="18">Confirm the URL, event code,</text>
+<text x="100" y="214" font-size="18">access path, prerequisites,</text>
+<text x="100" y="240" font-size="18">and support contact.</text>
     </g>
     <g class="card">
       <rect x="435" y="110" width="330" height="190" rx="8" fill="#ffffff" stroke="#5c6f86" stroke-width="3"/>
       <text x="465" y="150" font-size="22" font-weight="700">2. Email draft</text>
-<text x="465" y="188" font-size="18">Replace every bracketed value.</text>
-<text x="465" y="214" font-size="18">Reflect every checklist item in</text>
-<text x="465" y="240" font-size="18">the message, including conditional</text>
-<text x="465" y="266" font-size="18">venue and Secure Desktop guidance.</text>
+<text x="465" y="188" font-size="18">Replace placeholders and</text>
+<text x="465" y="214" font-size="18">keep only the required</text>
+<text x="465" y="240" font-size="18">access instructions.</text>
     </g>
     <g class="card">
       <rect x="800" y="110" width="330" height="190" rx="8" fill="#ffffff" stroke="#5c6f86" stroke-width="3"/>

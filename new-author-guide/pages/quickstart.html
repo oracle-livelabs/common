@@ -1,0 +1,1103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Oracle LiveLabs Author Guide refresh with a guided path, reference toolkit, Step by Step Guide, unified search, and a real workshop example.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23C74634'/%3E%3C/svg%3E">
+  <title>Quickstart · Oracle LiveLabs Author Guide</title>
+  <script src="../assets/js/author-guide-config.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/author-guide.css">
+  <link rel="stylesheet" href="../assets/css/redwood-video-player.css">
+  <link rel="stylesheet" href="../assets/css/author-guide-improvements.css?v=20260805-nodoc-hero-lab-video">
+</head>
+<body data-author-guide-page="beginner">
+  <div id="app" data-redwood-creator-pass="2026-05-25">
+    <div class="app-shell">
+      <!-- Sticky Navigation -->
+      <button class="author-global-nav-toggle" type="button" id="authorGlobalNavToggle" aria-expanded="true" aria-controls="modeNav" aria-label="Close navigation" hidden>
+        <svg class="toggle-icon-open" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg class="toggle-icon-close" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+          <path d="M6 6l12 12M18 6 6 18"></path>
+        </svg>
+      </button>
+      <header class="mode-nav d-none" id="modeNav">
+        <div class="container">
+          <nav class="navbar nav-shell">
+            <div class="container-fluid px-0 gap-3 align-items-center">
+              <a class="brand-token border-0 bg-transparent" data-mode-target="hub" aria-label="Return to the author guide home" href="./home">
+                <span class="brand-mark" aria-hidden="true">
+                  <svg viewBox="0 0 109.36 22.96" xmlns="http://www.w3.org/2000/svg" role="img" focusable="false" aria-hidden="true">
+                    <path d="M47.9122 13.4234 54.459 13.4234 51 7.84135 44.6505 17.9233 41.75 17.9233 49.4805 5.82375C49.8106 5.33355 50.377 5.03665 50.9962 5.03665 51.6017 5.03665 52.1582 5.32375 52.4883 5.80225L60.2422 17.9233 57.3497 17.9233 55.9865 15.6694 49.3574 15.6694 47.9122 13.4234M77.9512 15.6694 77.9512 5.15975 75.4922 5.15975 75.4922 16.7027C75.4922 17.0172 75.6251 17.3258 75.8556 17.5483 76.09 17.7906 76.4121 17.9233 76.75 17.9233L87.9317 17.9233 89.3887 15.6694 77.9512 15.6694M37.3512 13.7906C39.7407 13.7906 41.6622 11.8569 41.6622 9.47415 41.6622 7.09135 39.7407 5.15975 37.3512 5.15975L26.6129 5.15975 26.6129 17.9233 29.0669 17.9233 29.0669 7.41555 37.188 7.41555C38.3278 7.41555 39.2515 8.33555 39.2515 9.47415 39.2515 10.6109 38.3278 11.5464 37.188 11.5464L30.2672 11.5406 37.5973 17.9233 41.1582 17.9233 36.235 13.7906 37.3512 13.7906M11.5142 17.9233 18.9331 17.9233C22.4625 17.9233 25.3043 15.0718 25.3043 11.5464 25.3043 8.01715 22.4625 5.15975 18.9331 5.15975L11.5142 5.15975C7.98886 5.15975 5.12945 8.01715 5.12945 11.5464 5.12945 15.0718 7.98886 17.9233 11.5142 17.9233M18.7633 15.6772 11.6774 15.6772C9.39705 15.6772 7.54935 13.8237 7.54935 11.5464 7.54935 9.25935 9.39705 7.41555 11.6774 7.41555L18.7633 7.41555C21.0513 7.41555 22.8971 9.25935 22.8971 11.5464 22.8971 13.8237 21.0513 15.6772 18.7633 15.6772M65.3672 17.9233 72.9415 17.9233 74.375 15.6772 65.5352 15.6772C63.2442 15.6772 61.3985 13.8237 61.3985 11.5464 61.3985 9.25935 63.2442 7.41555 65.5352 7.41555L72.7305 7.41555 74.1817 5.15975 65.3672 5.15975C61.8399 5.15975 58.9746 8.01715 58.9746 11.5464 58.9747 15.0718 61.84 17.9233 65.3672 17.9233M95.381 15.6772C93.4903 15.6772 91.8965 14.4078 91.4044 12.6714L101.893 12.6714 103.338 10.4214 91.4044 10.4214C91.8947 8.68125 93.4903 7.41555 95.381 7.41555L102.582 7.41555 104.022 5.15975 95.2169 5.15975C91.6953 5.15975 88.8379 8.01715 88.8379 11.5464 88.8379 15.0718 91.6953 17.9233 95.2169 17.9233L102.791 17.9233 104.231 15.6772 95.381 15.6772" fill="#C74634"/>
+                  </svg>
+                </span>
+                <span>
+                  <span class="brand-label">LiveLabs</span>
+                  <small>Author guide</small>
+                </span>
+              </a>
+
+              <div class="nav-main-grid">
+                <div class="nav-group nav-group-all" role="group" aria-label="Primary navigation">
+                  <a class="btn nav-control" data-mode-target="hub" aria-label="Open the author guide home" href="./home">
+                    <span class="nav-control-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false"><path d="M3 10.8 12 3l9 7.8v9.7a.5.5 0 0 1-.5.5h-5.2v-6.1H8.7V21H3.5a.5.5 0 0 1-.5-.5v-9.7Z"/></svg>
+                    </span>
+                    <span class="nav-control-text">Home</span>
+                  </a>
+                  <a class="btn nav-control" data-mode-target="beginner" aria-label="Open quickstart" href="./quickstart">
+                    <span class="nav-control-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M5 12h14" />
+                        <path d="m13 6 6 6-6 6" />
+                      </svg>
+                    </span>
+                    <span class="nav-control-text">Quickstart</span>
+                  </a>
+                  <a class="btn nav-control" data-mode-target="explorer" aria-label="Open cheatsheet" href="./cheatsheet">
+                    <span class="nav-control-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false"><path d="M8 4h8l1.5 2H20v14H4V6h2.5L8 4Zm0 7h8M8 15h6"/></svg>
+                    </span>
+                    <span class="nav-control-text">Cheatsheet</span>
+                  </a>
+                  <a class="btn nav-control" data-mode-target="nodoc" aria-label="Open NoDoc guide" href="./nodoc">
+                    <span class="nav-control-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M6 3.5h9l3 3V20H6V3.5Z" />
+                        <path d="M15 3.5V7h3M9 11h6M9 14h6M9 17h4" />
+                      </svg>
+                    </span>
+                    <span class="nav-control-text">NoDoc</span>
+                  </a>
+                  <a class="btn nav-control" href="../workshops/livelabs/" data-full-guide-link target="_blank" rel="noreferrer" aria-label="Open Step by Step Guide">
+                    <span class="nav-control-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M6.5 4.5h9.2a1.8 1.8 0 0 1 1.8 1.8v13.2H8.3a1.8 1.8 0 0 1-1.8-1.8V4.5Z" />
+                        <path d="M9.2 4.5v15M10.8 8h4M10.8 11h4M10.8 14h3" />
+                        <path d="M4.5 6.5h2M4.5 9h2M4.5 11.5h2M4.5 14h2M4.5 16.5h2" />
+                      </svg>
+                    </span>
+                    <span class="nav-control-text">Step by Step Guide</span>
+                  </a>
+                  <a class="btn nav-control" href="https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/" data-workshop-example-link target="_blank" rel="noreferrer" aria-label="Open a real LiveLabs workshop example">
+                    <span class="nav-control-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false"><path d="M9 3h6M10 3v5l-5.6 9.8A2.1 2.1 0 0 0 6.2 21h11.6a2.1 2.1 0 0 0 1.8-3.2L14 8V3M8 15h8"/></svg>
+                    </span>
+                    <span class="nav-control-text">Workshop Example</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      <section class="mode-screen d-none" id="beginnerMode" aria-labelledby="beginnerHeading">
+        <div class="container">
+          <div class="card mode-hero quickstart-process-hero">
+            <div class="card-body">
+              <div class="quickstart-process-head">
+                <div>
+                  <div class="mode-overline">Quickstart</div>
+                  <h2 class="mode-title" id="beginnerHeading">3 Steps To Get Your Workshop Published</h2>
+                </div>
+              </div>
+              <div class="progress-card quickstart-step-tabs" aria-label="Quickstart step navigation">
+                <div class="progress-summary">
+                  <div class="progress-eyebrow">Step-by-step</div>
+                  <p id="progressCaption">Three stages from request to publication.</p>
+                </div>
+                <div class="progress-rail" role="list" aria-label="Quickstart stages">
+                  <div class="progress-button progress-status-item" role="listitem">
+                    <span class="progress-mark" aria-hidden="true">1</span>
+                    <span class="progress-label">
+                      <strong>Step 1 / Submit Workshop Request</strong>
+                    </span>
+                  </div>
+                  <div class="progress-button progress-status-item" role="listitem">
+                    <span class="progress-mark" aria-hidden="true">2</span>
+                    <span class="progress-label">
+                      <strong>Step 2 / Create Workshop</strong>
+                    </span>
+                  </div>
+                  <div class="progress-button progress-status-item" role="listitem">
+                    <span class="progress-mark" aria-hidden="true">3</span>
+                    <span class="progress-label">
+                      <strong>Step 3 / Review and Publish</strong>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="feature-switch d-none">
+                <label class="form-check-label" for="fastTrackToggle">Fast Track</label>
+                <input class="form-check-input" type="checkbox" role="switch" id="fastTrackToggle" aria-label="Toggle fast track mode">
+              </div>
+              <p class="panel-copy d-none" id="fastTrackStatus">Guided mode keeps notes, common mistakes, and extra context visible.</p>
+            </div>
+            <div class="quickstart-decoration-strip" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="journey-column" id="rabbitFlow">
+            <section class="rabbit-step" id="step-1" data-step-index="0" data-step-name="Submit Workshop Request" data-depth="1">
+              <div class="step-orb" aria-hidden="true">1</div>
+              <article class="step-shell">
+                <div class="lockable">
+                  <div class="step-heading">
+                    <div class="step-kicker">Step 1 / Submit Workshop Request</div>
+                    <h2 class="step-title">Submit Workshop Request</h2>
+                  </div>
+
+                  <div class="step-sequence">
+                    <section class="step-block">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Start in WMS</div>
+                        <h3>Submit the request before development starts</h3>
+                      </div>
+                      <ol class="action-list">
+                        <li>Connect to Corporate VPN, open <strong>Oracle Workshop Management System</strong>, and click <strong>Submit a New Workshop Request</strong>.
+                          <span class="wms-platform-actions quickstart-wms-launch-actions mt-2">
+                            <a class="btn btn-primary rounded-pill px-4" href="https://apex.oraclecorp.com/pls/apex/f?p=LIVELABS" data-wms-link target="_blank" rel="noreferrer" aria-label="Open WMS Platform in a new tab">Open WMS</a>
+                            <span class="wms-platform-note">Requires Oracle VPN and WMS access.</span>
+                          </span>
+                        </li>
+                        <li>Complete <strong>Workshop Basic Information</strong> thoroughly. The fields that matter most at this stage are <strong>Stakeholder</strong>, <strong>Workshop Council</strong>, <strong>Workshop Owner Group</strong>, <strong>Workshop Abstract</strong>, <strong>Workshop Outline</strong>, and <strong>Workshop Prerequisites</strong>. Follow the field placeholders, open the <strong>?</strong> tooltips for detail, or use the <strong>Prompt examples</strong> generator below, then copy each result into its matching WMS field.</li>
+                        <li>Open <strong>Tags</strong> and set the required tag groups before you click <strong>Create</strong>: one <strong>Level</strong>, at least one <strong>Role</strong>, at least one <strong>Focus Area</strong>, and at least one <strong>Product</strong>.</li>
+                        <li>Use <strong>Go to Market - Social</strong> while the workshop is still early if blog, social, video script, or promotional media details will be needed later in the publish flow.</li>
+                        <li>Wait for council review after submission. Council review normally takes 2 to 3 business days; if nothing changes after 3 business days, use <strong>Message the Team</strong> or find council contacts under <strong>People &amp; Role Reports &gt; Workshop Council Members</strong>.</li>
+                      </ol>
+                      <div class="inline-evidence-grid" aria-label="WMS action screenshots">
+                        <figure class="inline-evidence-card">
+                          <img src="../content/author-guide/1-labs-wms/images/submit_workshop.png" alt="Submit a new workshop request in WMS">
+                          <figcaption>Start at Submit a New Workshop Request.</figcaption>
+                        </figure>
+                        <figure class="inline-evidence-card">
+                          <img src="../content/author-guide/1-labs-wms/images/detailed_info.png" alt="Workshop basic information help in WMS">
+                          <figcaption>Use field help for required WMS details.</figcaption>
+                        </figure>
+                        <figure class="inline-evidence-card">
+                          <img src="../content/author-guide/1-labs-wms/images/tags.png" alt="Required tag groups in WMS">
+                          <figcaption>Set Level, Role, Focus Area, and Product tags.</figcaption>
+                        </figure>
+                        <figure class="inline-evidence-card">
+                          <img src="../content/author-guide/1-labs-wms/images/socialtab1.png" alt="Go to Market Social tab in WMS">
+                          <figcaption>Capture social and launch context early when needed.</figcaption>
+                        </figure>
+                      </div>
+                    </section>
+
+                    <section class="step-block example-generator-panel" aria-labelledby="wmsExampleGeneratorHeading">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Prompt examples</div>
+                        <h3 id="wmsExampleGeneratorHeading">Draft WMS fields from your workshop idea</h3>
+                      </div>
+                      <form class="example-generator-form" id="wmsExampleForm" novalidate>
+                        <label class="visually-hidden" for="wmsExamplePrompt">Workshop idea</label>
+                        <div class="example-generator-input-row">
+                          <textarea id="wmsExamplePrompt" class="form-control generator-textarea generator-textarea-compact" rows="2" required minlength="24" maxlength="320" aria-required="true" aria-describedby="wmsExamplePromptCount" placeholder="Example: For developers, build AI agents with persistent memory using Oracle Database, ADB, Select AI, and OCI GenAI, then validate the working result."></textarea>
+                          <button class="btn btn-primary rounded-pill px-4" type="submit">Generate examples</button>
+                        </div>
+                        <div class="generator-input-meta">
+                          <span id="wmsExamplePromptCount" aria-live="polite">0 / 320</span>
+                        </div>
+                      </form>
+                      <div class="generator-state generator-loading-state d-none" id="wmsExampleLoading">Generating example fields...</div>
+                      <div class="generator-state generator-error-state d-none" id="wmsExampleError" role="alert"></div>
+                      <div class="detail-field-grid generated-example-grid d-none" id="wmsExampleResults" aria-live="polite"></div>
+                    </section>
+
+                    <section class="step-block guided-only">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Status flow</div>
+                        <h3>Understand the handoff path before you build</h3>
+                        <p>The graph below is the process map. Use these WMS states to understand when to wait for review, when to begin development, when to complete Quality Assurance, and when the workshop moves into publication and later maintenance.</p>
+                      </div>
+                      <div class="wms-status-graph" data-wms-status-graph data-default-status="submitted" data-wms-status-zoom="100">
+                        <div class="wms-status-graph-toolbar" aria-label="Status graph controls">
+                          <div class="wms-status-legend" aria-label="Status graph legend">
+                            <span class="wms-status-legend-pill">Normal progression</span>
+                            <span class="wms-status-legend-pill is-return-path">Rework or return path</span>
+                            <span class="wms-status-legend-pill is-selected">Selected status</span>
+                          </div>
+                          <div class="wms-status-actions">
+                            <button type="button" class="wms-status-action" data-wms-status-action="reset">Reset</button>
+                            <button type="button" class="wms-status-action" data-wms-status-action="main-path">Main path</button>
+                            <button type="button" class="wms-status-action" data-wms-status-action="qa-cycle">QA cycle</button>
+                            <button type="button" class="wms-status-action" data-wms-status-action="fit">Fit graph</button>
+                            <div class="wms-status-zoom-control" role="group" aria-label="Diagram zoom controls">
+                              <button type="button" class="wms-status-action wms-status-zoom-step" data-wms-status-action="zoom-out" aria-label="Zoom out" title="Zoom out">&minus;</button>
+                              <label class="wms-status-zoom-field">
+                                <span>Zoom</span>
+                                <select class="wms-status-zoom-select" data-wms-status-zoom-select>
+                                  <option value="fit">Fit</option>
+                                  <option value="25">25%</option>
+                                  <option value="50">50%</option>
+                                  <option value="75">75%</option>
+                                  <option value="100" selected>100%</option>
+                                  <option value="125">125%</option>
+                                  <option value="150">150%</option>
+                                  <option value="200">200%</option>
+                                </select>
+                              </label>
+                              <button type="button" class="wms-status-action wms-status-zoom-step" data-wms-status-action="zoom-in" aria-label="Zoom in" title="Zoom in">+</button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="wms-status-graph-layout">
+                          <div class="wms-status-graph-stage" tabindex="0" role="region" aria-label="Interactive workshop status path. Use the zoom controls to resize the diagram, then scroll to pan.">
+                            <svg class="wms-status-svg" data-wms-status-svg role="group"></svg>
+                          </div>
+                          <aside class="wms-status-detail" aria-live="polite">
+                            <div class="wms-status-detail-header">
+                              <span class="detail-field-label" data-wms-status-group>Intake</span>
+                              <h4 data-wms-status-title>Submitted</h4>
+                            </div>
+                            <div class="wms-status-detail-block">
+                              <strong>Meaning</strong>
+                              <p data-wms-status-meaning>The workshop has been submitted for initial review.</p>
+                            </div>
+                            <div class="wms-status-detail-block">
+                              <strong>Responsible</strong>
+                              <p data-wms-status-responsible>Workshop author / submitter</p>
+                            </div>
+                            <div class="wms-status-detail-block">
+                              <strong>Next step</strong>
+                              <p data-wms-status-next>The reviewer validates whether the submitted information is sufficient.</p>
+                            </div>
+                            <div class="wms-status-detail-block">
+                              <strong>QA / completion checks</strong>
+                              <ul data-wms-status-checklist>
+                                <li>Workshop details are present.</li>
+                              </ul>
+                            </div>
+                            <div class="wms-status-detail-block">
+                              <strong>Possible transitions</strong>
+                              <ul data-wms-status-transitions>
+                                <li>Approved: review passes</li>
+                              </ul>
+                            </div>
+                          </aside>
+                        </div>
+                      </div>
+                    </section>
+
+                    <div class="progression-pair" aria-label="Progression checkpoint">
+                    <section class="step-block step-block-quiet">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Before you move on</div>
+                        <h3>What you should know before moving on</h3>
+                      </div>
+                      <ul class="check-list">
+                        <li>The title, abstract, outline, and prerequisites tell a reviewer exactly what the workshop will accomplish.</li>
+                        <li>Stakeholder, council, owner group, and required tags are already correct in WMS.</li>
+                        <li>Check the WMS status before starting development. If the request is still in council review, wait for feedback or approval; begin development only after the initial WMS review gate clears.</li>
+                        <li>You understand that later Self Quality Assurance, stakeholder review, and Quarterly Quality Assurance all reuse this same WMS record.</li>
+                      </ul>
+                    </section>
+
+                    <section class="step-block step-block-quiet guided-only">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Watch for</div>
+                        <h3>Common first-step mistakes</h3>
+                      </div>
+                      <ul class="mistake-list">
+                        <li>Writing a vague abstract that forces the council to ask for more information.</li>
+                        <li>Starting content development before the request is aligned with the real workshop idea.</li>
+                        <li>Leaving tags, stakeholder ownership, or later publish requirements until the end of the flow.</li>
+                      </ul>
+                    </section>
+                    </div>
+                  </div>
+
+                  <div class="step-footer">
+                    <div class="d-flex flex-wrap gap-2">
+                      <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-action="surface">Back to Home</button>
+                      <a class="btn btn-outline-primary rounded-pill px-4" data-mode-target="explorer" href="./cheatsheet">Open Cheatsheet</a>
+                      <button type="button" class="btn btn-primary rounded-pill px-4" data-action="next">Next Step</button>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </section>
+
+            <section class="rabbit-step" id="step-2" data-step-index="1" data-step-name="Create Workshop" data-depth="2">
+              <div class="step-orb" aria-hidden="true">2</div>
+              <article class="step-shell">
+                <div class="lockable">
+                  <div class="step-heading">
+                    <div class="step-kicker">Step 2 / Workshop authoring</div>
+                    <h2 class="step-title">Create Workshop</h2>
+                  </div>
+
+                  <div class="authoring-route-shell">
+                    <div class="authoring-route-header">
+                      <div>
+                        <div class="panel-kicker">Choose an authoring path</div>
+                        <h3>Create the workshop with NoDoc or GitHub</h3>
+                        <p>NoDoc is the recommended default. The existing GitHub process remains available as the second path.</p>
+                      </div>
+                    </div>
+                    <div class="authoring-route-tabs" role="tablist" aria-label="Workshop authoring paths">
+                      <button
+                        class="authoring-route-tab is-active"
+                        id="authoring-tab-no-doc"
+                        type="button"
+                        role="tab"
+                        aria-selected="true"
+                        aria-controls="authoring-panel-no-doc"
+                        data-authoring-route="no-doc"
+                        tabindex="0"
+                      >
+                        <span>NoDoc</span>
+                        <span class="authoring-route-badge">Recommended</span>
+                      </button>
+                      <button
+                        class="authoring-route-tab"
+                        id="authoring-tab-source"
+                        type="button"
+                        role="tab"
+                        aria-selected="false"
+                        aria-controls="authoring-panel-source"
+                        data-authoring-route="source"
+                        tabindex="-1"
+                      >
+                        GitHub
+                      </button>
+                    </div>
+
+                    <section
+                      class="authoring-route-panel"
+                      id="authoring-panel-no-doc"
+                      role="tabpanel"
+                      aria-labelledby="authoring-tab-no-doc"
+                      data-authoring-panel="no-doc"
+                    >
+                      <div class="nodoc-route-placeholder nodoc-route-visual">
+                        <div class="nodoc-route-copy">
+                          <div class="panel-kicker">Recommended path</div>
+                          <h3>Build a reviewer-ready NoDoc article</h3>
+                          <p>Use No Doc Repo to turn the approved workshop idea into a structured article, then prepare the same content for preview and WMS review.</p>
+                          <ol class="nodoc-quickstart-list mb-0">
+                            <li><strong>Create the article shell.</strong> Sign in with Oracle SSO, confirm your author or reviewer role, choose the Focus Area, and create the article version in No Doc Repo.</li>
+                            <li><strong>Build the page set.</strong> Add the Prepare, Author, and Review pages in order, then apply the required metadata and structured content.</li>
+                            <li><strong>Review the change.</strong> Use comments, drafts, and Difference to keep revisions intentional and technically accurate.</li>
+                            <li><strong>Prepare the handoff.</strong> Preview the saved page set, verify links and page order, and record the NoDoc preview evidence in WMS.</li>
+                          </ol>
+                        </div>
+                        <a class="nodoc-route-logo-link" href="https://nodoc.oraclecorp.com/" target="_blank" rel="noopener noreferrer" aria-label="Open NoDoc authoring workspace in a new tab">
+                          <img class="quickstart-nodoc-logo" src="https://nodoc.oraclecorp.com/ords/r/nodoc/101/files/static/v872/No-Doc-formal.png" alt="NoDoc">
+                        </a>
+                      </div>
+                      <div class="step-footer">
+                        <div class="d-flex flex-wrap gap-2">
+                          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-action="prev">Back</button>
+                          <a class="btn btn-outline-primary rounded-pill px-4" data-mode-target="nodoc" href="./nodoc">Open NoDoc Page</a>
+                          <button type="button" class="btn btn-primary rounded-pill px-4" data-action="next">Next Step</button>
+                        </div>
+                      </div>
+                    </section>
+
+                    <section
+                      class="authoring-route-panel"
+                      id="authoring-panel-source"
+                      role="tabpanel"
+                      aria-labelledby="authoring-tab-source"
+                      data-authoring-panel="source"
+                      hidden
+                    >
+                    <div
+                      data-video-card
+                      data-video-id="quickstart-github"
+                      data-video-status="preview"
+                      data-video-title="Preview: Create Workshop and source setup walkthrough"
+                      data-video-summary="Capture slot for the source authoring path: account setup, sample structure, and local preview."
+                      data-video-source-note="Preview asset only. Record the approved source-control workflow and replace this asset before release."
+                      data-video-features="Fork and clone|Sample structure|Preview setup"
+                      data-video-compact="true"
+                      data-video-transcript="00:00::Confirm the approved source-control account and local tools.||00:12::Fork or clone the workshop structure and inspect the manifest.||00:24::Open the content in the editor and start the local preview.||00:36::Show the validation handoff and keep the source structure intact."
+                    ></div>
+                    <div class="step-sequence">
+                    <section class="step-block">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Setup</div>
+                        <h3>Prepare the authoring environment in order</h3>
+                        <p>Complete the account and tool setup before you fork, clone, or copy the workshop template.</p>
+                      </div>
+                      <div class="detail-resource-grid install-card-grid">
+                        <article class="detail-resource-link detail-resource-card install-card" data-install-card="github-account" aria-pressed="false">
+                          <div class="detail-resource-main">
+                            <span class="detail-resource-number">1</span>
+                            <span>
+                              <strong>GitHub account</strong>
+                              <span>Use your Oracle email. Finish profile name, username, photo, and two-factor authentication in GitHub Settings.</span>
+                            </span>
+                          </div>
+                          <div class="detail-resource-actions">
+                            <a class="btn btn-outline-primary rounded-pill px-3" href="https://github.com/" target="_blank" rel="noreferrer">Open</a>
+                            <button class="copy-snippet copy-link-button" type="button" data-copy-text="https://github.com/">Copy link</button>
+                          </div>
+                        </article>
+                        <article class="detail-resource-link detail-resource-card install-card" data-install-card="github-desktop" aria-pressed="false">
+                          <div class="detail-resource-main">
+                            <span class="detail-resource-number">2</span>
+                            <span>
+                              <strong>GitHub Desktop</strong>
+                              <span>Install it, open File &gt; Options &gt; Sign in, and confirm it uses the same account that will fork and clone.</span>
+                            </span>
+                          </div>
+                          <div class="detail-resource-actions">
+                            <a class="btn btn-outline-primary rounded-pill px-3" href="https://desktop.github.com/" target="_blank" rel="noreferrer">Open</a>
+                            <button class="copy-snippet copy-link-button" type="button" data-copy-text="https://desktop.github.com/">Copy link</button>
+                          </div>
+                        </article>
+                        <article class="detail-resource-link detail-resource-card install-card" data-install-card="vscode" aria-pressed="false">
+                          <div class="detail-resource-main">
+                            <span class="detail-resource-number">3</span>
+                            <span>
+                              <strong>Visual Studio Code</strong>
+                              <span>Install it before authoring. Set Markdown indentation to tabs size 4 before nested steps, images, or code blocks.</span>
+                            </span>
+                          </div>
+                          <div class="detail-resource-actions">
+                            <a class="btn btn-outline-primary rounded-pill px-3" href="https://code.visualstudio.com/download" target="_blank" rel="noreferrer">Open</a>
+                            <button class="copy-snippet copy-link-button" type="button" data-copy-text="https://code.visualstudio.com/download">Copy link</button>
+                          </div>
+                        </article>
+                        <article class="detail-resource-link detail-resource-card install-card" data-install-card="live-server" aria-pressed="false">
+                          <div class="detail-resource-main">
+                            <span class="detail-resource-number">4</span>
+                            <span>
+                              <strong>Live Server extension</strong>
+                              <span>Add it in Visual Studio Code so local preview is available before long content edits begin.</span>
+                            </span>
+                          </div>
+                          <div class="detail-resource-actions">
+                            <a class="btn btn-outline-primary rounded-pill px-3" href="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer" target="_blank" rel="noreferrer">Open</a>
+                            <button class="copy-snippet copy-link-button" type="button" data-copy-text="https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer">Copy link</button>
+                          </div>
+                        </article>
+                        <article class="detail-resource-link detail-resource-card install-card" data-install-card="repositories" aria-pressed="false">
+                          <div class="detail-resource-main">
+                            <span class="detail-resource-number">5</span>
+                            <span>
+                              <strong>Oracle LiveLabs repositories</strong>
+                              <span>Pick the product repository that will own production, then fork it before cloning to your laptop.</span>
+                            </span>
+                          </div>
+                          <div class="detail-resource-actions">
+                            <a class="btn btn-outline-primary rounded-pill px-3" href="https://github.com/orgs/oracle-livelabs/repositories" target="_blank" rel="noreferrer">Open</a>
+                            <button class="copy-snippet copy-link-button" type="button" data-copy-text="https://github.com/orgs/oracle-livelabs/repositories">Copy link</button>
+                          </div>
+                        </article>
+                        <article class="detail-resource-link detail-resource-card install-card" data-install-card="sample-template" aria-pressed="false">
+                          <div class="detail-resource-main">
+                            <span class="detail-resource-number">6</span>
+                            <span>
+                              <strong>Sample workshop template</strong>
+                              <span>Copy the canonical sample structure after the fork and clone are ready.</span>
+                            </span>
+                          </div>
+                          <div class="detail-resource-actions">
+                            <a class="btn btn-outline-primary rounded-pill px-3" href="https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop" target="_blank" rel="noreferrer">Open</a>
+                            <button class="copy-snippet copy-link-button" type="button" data-copy-text="https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-workshop">Copy link</button>
+                          </div>
+                        </article>
+                      </div>
+                    </section>
+
+                    <section class="step-block">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Fork, clone, sync</div>
+                        <h3>Build the repository in the same order the canonical guide expects</h3>
+                        <p>Keep production, your fork, and your local clone clearly separated. New authoring gets much harder when those roles blur.</p>
+                      </div>
+                      <ol class="action-list">
+                        <li><strong>Fork the repository.</strong> A fork is your personal GitHub copy of the official Oracle LiveLabs repository. Make changes in your fork before submitting them back to the official repository.</li>
+                        <li><strong>Clone your fork.</strong> A clone is the copy on your laptop. Use GitHub Desktop and select <strong>To contribute to the parent project</strong> when prompted so <strong>upstream/main</strong> stays connected.</li>
+                        <li><strong>Sync with upstream/main.</strong> <code>upstream/main</code> is the official Oracle LiveLabs source. Before editing each day, click <strong>Fetch origin</strong>, then open <strong>Branch &gt; Merge into Current Branch</strong> and merge <strong>upstream/main</strong> into <strong>main</strong>.</li>
+                        <li>After the merge succeeds, click <strong>Push origin</strong> so your local clone and your fork stay aligned before you author anything new.</li>
+                        <li>Copy the sample workshop structure from <strong>common/sample-livelabs-templates/sample-workshop</strong>, keep every file and folder lowercase, and point <code>manifest.json</code> at real markdown files instead of placeholders.</li>
+                      </ol>
+                      <div class="inline-evidence-grid github-progression-gallery is-numbered-gallery" aria-label="GitHub action screenshots">
+                        <figure class="inline-evidence-card">
+                          <img src="../content/author-guide/3-labs-sync-github/images/create-fork.png" alt="Create a fork in GitHub">
+                          <figcaption>Fork creates your writable copy.</figcaption>
+                        </figure>
+                        <figure class="inline-evidence-card">
+                          <img src="../content/author-guide/3-labs-sync-github/images/clone.png" alt="Clone repository option in GitHub Desktop">
+                          <figcaption>Clone brings the fork to your laptop.</figcaption>
+                        </figure>
+                        <figure class="inline-evidence-card">
+                          <img src="../content/author-guide/3-labs-sync-github/images/contribute-to-parent.png" alt="Contribute to parent project in GitHub Desktop">
+                          <figcaption>Keep the parent project connected.</figcaption>
+                        </figure>
+                        <figure class="inline-evidence-card">
+                          <img src="../content/author-guide/3-labs-sync-github/images/git-hub-merge-current-branch.png" alt="Merge upstream main in GitHub Desktop">
+                          <figcaption>Merge upstream/main before authoring.</figcaption>
+                        </figure>
+                        <figure class="inline-evidence-card">
+                          <img src="../content/author-guide/3-labs-sync-github/images/project-folder-displayed.png" alt="Workshop project folder displayed in Visual Studio Code">
+                          <figcaption>Open the cloned project in Visual Studio Code.</figcaption>
+                        </figure>
+                        <figure class="inline-evidence-card">
+                          <img src="../content/author-guide/3-labs-sync-github/images/sample-workshop-structure.png" alt="Sample workshop structure in Visual Studio Code">
+                          <figcaption>Copy the sample workshop structure.</figcaption>
+                        </figure>
+                        <figure class="inline-evidence-card">
+                          <img src="../content/author-guide/3-labs-sync-github/images/lab-folder-structure.png" alt="LiveLabs lab folder structure">
+                          <figcaption>Confirm lab folders, markdown, and images.</figcaption>
+                        </figure>
+                      </div>
+                    </section>
+
+                    <section class="step-block preview-checkpoint-section">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Preview checkpoint</div>
+                        <h3>Publish the preview checkpoint</h3>
+                        <p>Use GitHub Pages to prove the workshop path works before deep writing starts.</p>
+                      </div>
+                      <div class="preview-checkpoint-layout">
+                        <ol class="action-list">
+                          <li><strong>Open settings.</strong> In your fork, open <strong>Settings &gt; Pages</strong>.</li>
+                          <li><strong>Select source.</strong> Choose the <strong>main</strong> branch and save.</li>
+                          <li><strong>Wait for publish.</strong> Let GitHub Pages finish publishing before testing the link.</li>
+                          <li><strong>Open the exact variant.</strong> Test the workshop URL you plan to share, including <code>?qa=true</code>.</li>
+                          <li><strong>Keep checking both previews.</strong> Use local preview while editing, then confirm the same path works on your personal <code>github.io</code> site.</li>
+                        </ol>
+                        <figure class="inline-evidence-card preview-checkpoint-image">
+                          <img src="../content/author-guide/3-labs-sync-github/images/branch-main.png" alt="GitHub Pages branch selection screen">
+                          <figcaption>Use the personal GitHub Pages URL for review before production exists.</figcaption>
+                        </figure>
+                      </div>
+                    </section>
+
+                    <section class="step-block">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Commands and baseline</div>
+                        <h3>Group GitHub commands by the job they perform</h3>
+                        <p>Copy only the command group you need. Keep setup, synchronization, and manifest baseline work separate so review problems are easier to diagnose.</p>
+                      </div>
+                      <div class="command-card-grid">
+                        <article class="card snippet-card command-card">
+                          <div class="card-body">
+                            <div class="snippet-header">
+                              <div>
+                                <div class="snippet-meta">Git settings</div>
+                                <h3 class="mb-0">Configure paths and filename case</h3>
+                              </div>
+                              <button class="copy-snippet" type="button" data-copy-target="snippet-step-2-settings">Copy</button>
+                            </div>
+                            <p class="snippet-description">Run this once on a workstation before you work with long paths or case-sensitive filenames.</p>
+                            <pre><code id="snippet-step-2-settings">git config --global core.longpaths true
+git config --global core.ignorecase false</code></pre>
+                          </div>
+                        </article>
+                        <article class="card snippet-card command-card">
+                          <div class="card-body">
+                            <div class="snippet-header">
+                              <div>
+                                <div class="snippet-meta">Repository synchronization</div>
+                                <h3 class="mb-0">Sync your fork before editing</h3>
+                              </div>
+                              <button class="copy-snippet" type="button" data-copy-target="snippet-step-2-sync">Copy</button>
+                            </div>
+                            <p class="snippet-description">Use this group before a new authoring session so your fork and local clone start from the current upstream branch.</p>
+                            <pre><code id="snippet-step-2-sync">git remote -v
+git fetch upstream
+git merge upstream/main -m "Sync with main"
+git push origin main</code></pre>
+                          </div>
+                        </article>
+                        <article class="card snippet-card command-card">
+                          <div class="card-body">
+                            <div class="snippet-header">
+                              <div>
+                                <div class="snippet-meta">Manifest baseline</div>
+                                <h3 class="mb-0">Start with a minimal manifest</h3>
+                              </div>
+                              <button class="copy-snippet" type="button" data-copy-target="snippet-step-2-manifest">Copy</button>
+                            </div>
+                            <p class="snippet-description">The manifest drives workshop navigation. Each tutorials entry should point to a real markdown file in your workshop folder; if a filename is wrong, the lab may appear blank or fail to load.</p>
+                            <pre><code id="snippet-step-2-manifest">{
+  "workshoptitle": "My Workshop Title",
+  "help": "my-team@oracle.com",
+  "tutorials": [
+    {
+      "title": "Introduction",
+      "filename": "./../../introduction/introduction.md"
+    },
+    {
+      "title": "Lab 1: Build the environment",
+      "filename": "./../../1-build-environment/1-build-environment.md"
+    }
+  ]
+}</code></pre>
+                          </div>
+                        </article>
+                      </div>
+                      <div class="detail-field-grid manifest-field-grid mt-3">
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">workshoptitle</span>
+                          <p class="detail-field-value">Replace with the real workshop title from WMS.</p>
+                        </article>
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">help</span>
+                          <p class="detail-field-value">Replace with the correct support email or team alias.</p>
+                        </article>
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">tutorials.title</span>
+                          <p class="detail-field-value">Replace with the visible lab or task titles authors should see in the left navigation.</p>
+                        </article>
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">tutorials.filename</span>
+                          <p class="detail-field-value">Replace with the relative path to each real markdown file.</p>
+                        </article>
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">Lab entries</span>
+                          <p class="detail-field-value">Add or remove entries so the manifest matches the actual number of labs.</p>
+                        </article>
+                      </div>
+                    </section>
+
+                    <section class="step-block preview-url-section">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Preview URL</div>
+                        <h3>Keep the GitHub Pages preview URL separate</h3>
+                        <p>Use the personal GitHub Pages preview for review and quality checks before production publishing exists.</p>
+                      </div>
+                      <article class="card snippet-card command-card preview-url-card">
+                        <div class="card-body">
+                          <div class="snippet-header">
+                            <div>
+                              <div class="snippet-meta">Preview pattern</div>
+                              <h3 class="mb-0">Personal GitHub Pages URL</h3>
+                            </div>
+                            <button class="copy-snippet" type="button" data-copy-target="snippet-step-2-preview-url">Copy</button>
+                          </div>
+                          <p class="snippet-description">Replace the placeholders with your GitHub username, repository name, workshop path, and variant.</p>
+                          <pre><code id="snippet-step-2-preview-url">https://&lt;github-username&gt;.github.io/&lt;repository-name&gt;/&lt;path&gt;/workshops/&lt;variant&gt;/index.html?qa=true</code></pre>
+                        </div>
+                      </article>
+                    </section>
+
+                    <div class="progression-pair" aria-label="Progression checkpoint">
+                    <section class="step-block step-block-quiet">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Before you move on</div>
+                        <h3>Step 2 exit criteria</h3>
+                      </div>
+                      <ul class="check-list">
+                        <li>GitHub Desktop, Visual Studio Code, and Live Server are installed and working with the Oracle-linked GitHub account.</li>
+                        <li>The target repository and <strong>common</strong> are both forked or available, and the local clone still points to <strong>upstream/main</strong>.</li>
+                        <li>Folder names, file names, and manifest paths are lowercase and case-correct.</li>
+                        <li>Your personal GitHub Pages URL renders the same workshop path you intend to share for review.</li>
+                      </ul>
+                    </section>
+
+                    <section class="step-block step-block-quiet guided-only">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Watch for</div>
+                        <h3>Common build-stage mistakes</h3>
+                      </div>
+                      <ul class="mistake-list">
+                        <li>Using the wrong GitHub account or cloning the wrong repository before the workshop path is confirmed.</li>
+                        <li>Skipping the daily upstream merge and only discovering conflicts or stale templates at pull request time.</li>
+                        <li>Leaving sample manifest fields, mixed-case filenames, or broken tutorial paths behind.</li>
+                      </ul>
+                    </section>
+                    </div>
+                  </div>
+
+                  <div class="step-footer">
+                    <div class="d-flex flex-wrap gap-2">
+                      <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-action="prev">Back</button>
+                      <a class="btn btn-outline-primary rounded-pill px-4" data-mode-target="explorer" href="./cheatsheet">Open Cheatsheet</a>
+                      <button type="button" class="btn btn-primary rounded-pill px-4" data-action="next">Next Step</button>
+                    </div>
+                  </div>
+                    </section>
+                  </div>
+                </div>
+              </article>
+            </section>
+
+            <section class="rabbit-step" id="step-3" data-step-index="2" data-step-name="Review & Publish" data-depth="3">
+              <div class="step-orb" aria-hidden="true">3</div>
+              <article class="step-shell">
+                <div class="lockable">
+                  <div class="step-heading">
+                    <div class="step-kicker">Step 3 / Quality Assurance and release</div>
+                    <h2 class="step-title">Review &amp; Publish</h2>
+                    <p class="step-summary">Complete Self Quality Assurance in order, fix pull request blockers by class, and submit publishing details only when the workshop is production-ready.</p>
+                  </div>
+
+                  <div
+                    data-video-card
+                    data-video-id="quickstart-publish"
+                    data-video-status="preview"
+                    data-video-title="Preview: Review and Publish walkthrough"
+                    data-video-summary="Capture slot for the quality and publishing path: checklist evidence, automated checks, and release handoff."
+                    data-video-source-note="Preview asset only. Record the approved quality and publishing workflow and replace this asset before release."
+                    data-video-features="Quality Assurance checklist|pull request checks|Publishing handoff"
+                    data-video-compact="true"
+                    data-video-transcript="00:00::Run the Self Quality Assurance checklist and record evidence.||00:12::Review automated checks and fix failures by class.||00:24::Confirm production-safe URLs and ownership.||00:36::Submit the publishing handoff through the approved process."
+                  ></div>
+
+                  <div class="step-sequence">
+                    <section class="step-block qa-order-card">
+                      <div class="qa-order-content">
+                        <div class="qa-order-copy">
+                        <div class="step-block-header">
+                          <div class="panel-kicker">Self Quality Assurance order</div>
+                          <h3>Save the checklist before the final handoff</h3>
+                          <p>Complete Self Quality Assurance in order, save evidence, and submit publishing details only when the workshop is production-ready.</p>
+                        </div>
+                        <ol class="action-list">
+                          <li data-authoring-only="source">Open the review URL, append <code>?qa=true</code>, and run the workshop end to end.</li>
+                          <li data-authoring-only="no-doc">Open the approved NoDoc preview and run the article end to end.</li>
+                          <li data-authoring-only="source">Update WMS title, descriptions, outline, prerequisites, tags, and <strong>Development GitHub/GitLab URL</strong> to match the workshop reviewers will open.</li>
+                          <li data-authoring-only="no-doc">Confirm the WMS details, NoDoc article structure, metadata, preview, and ownership match the workshop reviewers will open.</li>
+                          <li>Open <strong>Self Quality Assurance Checklist</strong>, check every required box, and upload the requested evidence.</li>
+                          <li data-authoring-only="source">Add the pull request link and personal <code>github.io</code> preview link to the checklist.</li>
+                          <li data-authoring-only="no-doc">Add the NoDoc preview and article handoff evidence to the checklist.</li>
+                          <li>Click <strong>Save</strong> first. Then move to <strong>Self Quality Assurance Complete</strong> and certify the change.</li>
+                          <li>Stakeholders verify the workshop and move it to <strong>Completed</strong> before publishing.</li>
+                        </ol>
+                        </div>
+
+                      <figure class="step-figure evidence-figure">
+                        <img src="../content/author-guide/5-labs-qa-checks/images/self-qa-checklist-1.png" alt="Self Quality Assurance checklist in WMS">
+                      </figure>
+                      </div>
+                    </section>
+
+                    <section class="step-block" data-authoring-only="source">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Pull request checks</div>
+                        <h3>Fix review blockers by class instead of guessing</h3>
+                        <p>When the pull request shows a red X, name the failing workflow first. Image-size problems, markdown-structure problems, and publishing metadata problems are different repairs.</p>
+                      </div>
+                      <ol class="action-list">
+                        <li>If the pull request fails <strong>LiveLabs Image Validation</strong>, use <strong>OptiShot</strong> to resize the blocking image to 1280px or less in either dimension, then commit the updated image and rerun the checks.</li>
+                        <li>If the pull request fails <strong>LiveLabs Markdown Validation</strong>, fix the exact file and rule: required sections, task format, alt text, filename case, copy tags, or inline HTML.</li>
+                        <li>Use the local validator when you want faster repair loops than waiting for GitHub Actions after every commit.</li>
+                      </ol>
+                    </section>
+
+                    <figure class="step-figure evidence-figure" data-authoring-only="source">
+                      <figcaption>Start with the failing workflow name so you fix the real blocker instead of editing the wrong files.</figcaption>
+                      <img src="../content/author-guide/prcheck/images/prerror.png" alt="Failed pull request checks in GitHub">
+                    </figure>
+
+                    <section class="step-block" data-authoring-only="source">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Publish handoff</div>
+                        <h3>Move the approved GitHub change into publishing</h3>
+                        <p>Keep preview and production URLs separate.</p>
+                      </div>
+                      <ol class="action-list">
+                        <li>Create the pull request from GitHub Desktop after the Quality Assurance fixes are pushed, and include the <strong>WMS ID</strong> in the pull request title because review will not start without it.</li>
+                        <li>On the pull request page, fill the required checklist and general requirements from the Quality Assurance handoff so reviewers can tell the workshop is ready for merge.</li>
+                        <li>Confirm the branch is up to date with <strong>main</strong> and has no merge conflicts before you request approval.</li>
+                        <li>Open <strong>WMS &gt; Publishing</strong>, click <strong>Publish to LiveLabs</strong>, set the publish type and workshop time, and replace any personal preview URL with the final <strong>oracle-livelabs</strong> production path.</li>
+                        <li>After merge and publishing approval, verify the production workshop and leave WMS aligned for the next Quarterly Quality Assurance cycle.</li>
+                      </ol>
+                    </section>
+
+                    <section class="step-block" data-authoring-only="no-doc">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Publish handoff</div>
+                        <h3>Move the approved NoDoc article into release review</h3>
+                        <p>Use the NoDoc preview and WMS record as the release evidence.</p>
+                      </div>
+                      <ol class="action-list">
+                        <li>Confirm the article version, page order, metadata, links, code, and preview are correct in NoDoc.</li>
+                        <li>Save the Self Quality Assurance checklist with the NoDoc preview, ownership, and approval evidence.</li>
+                        <li>Update the WMS Publishing details and request the release handoff only after stakeholder approval.</li>
+                        <li>Verify the published workshop and keep the WMS record ready for Quarterly Quality Assurance.</li>
+                      </ol>
+                    </section>
+
+                    <section class="step-block" data-authoring-only="source">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Review handoff</div>
+                        <h3>Keep review values ready to copy</h3>
+                        <p>Use each value in the matching GitHub or WMS field.</p>
+                      </div>
+                      <div class="detail-field-grid handoff-field-grid mb-3">
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">Pull request title</span>
+                          <p class="detail-field-value">Use as the GitHub pull request title so reviewers can associate the pull request with the WMS record.</p>
+                        </article>
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">Preview URL</span>
+                          <p class="detail-field-value">Paste into the WMS Development GitHub/GitLab URL field, Self Quality Assurance checklist, or pull request description for reviewer testing.</p>
+                        </article>
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">Production URL</span>
+                          <p class="detail-field-value">Use after merge and publishing approval when confirming the final LiveLabs location.</p>
+                        </article>
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">Brown Button URL</span>
+                          <p class="detail-field-value">Paste into the WMS launch or configuration field for the tenancy variant, if applicable.</p>
+                        </article>
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">Sprint URL</span>
+                          <p class="detail-field-value">Use only for sprint content that belongs under the Oracle LiveLabs sprints site.</p>
+                        </article>
+                      </div>
+                      <div class="command-card-grid">
+                        <article class="card snippet-card command-card">
+                          <div class="card-body">
+                            <div class="snippet-header">
+                              <div>
+                                <div class="snippet-meta">Pull request title</div>
+                                <h3 class="mb-0">Include the WMS ID</h3>
+                              </div>
+                              <button class="copy-snippet" type="button" data-copy-target="snippet-step-3-pull-request-title">Copy</button>
+                            </div>
+                            <p class="snippet-description">Use this pattern so reviewers can associate the pull request with the WMS record.</p>
+                            <pre><code id="snippet-step-3-pull-request-title">Publish My Workshop Name (WMS 12345)</code></pre>
+                          </div>
+                        </article>
+                        <article class="card snippet-card command-card">
+                          <div class="card-body">
+                            <div class="snippet-header">
+                              <div>
+                                <div class="snippet-meta">Preview URL</div>
+                                <h3 class="mb-0">Personal GitHub Pages review link</h3>
+                              </div>
+                              <button class="copy-snippet" type="button" data-copy-target="snippet-step-3-preview-url">Copy</button>
+                            </div>
+                            <p class="snippet-description">Use this for quality checks and review before the workshop is published in production.</p>
+                            <pre><code id="snippet-step-3-preview-url">https://&lt;github-username&gt;.github.io/&lt;repository-name&gt;/&lt;path&gt;/workshops/&lt;variant&gt;/index.html?qa=true</code></pre>
+                          </div>
+                        </article>
+                        <article class="card snippet-card command-card">
+                          <div class="card-body">
+                            <div class="snippet-header">
+                              <div>
+                                <div class="snippet-meta">Production URL</div>
+                                <h3 class="mb-0">Final Oracle LiveLabs path</h3>
+                              </div>
+                              <button class="copy-snippet" type="button" data-copy-target="snippet-step-3-production-url">Copy</button>
+                            </div>
+                            <p class="snippet-description">Use this after merge and publishing approval, when the workshop is available from the production repository.</p>
+                            <pre><code id="snippet-step-3-production-url">https://livelabs.oracle.com/cdn/&lt;repository-name&gt;/&lt;path&gt;/workshops/&lt;variant&gt;/</code></pre>
+                          </div>
+                        </article>
+                        <article class="card snippet-card command-card">
+                          <div class="card-body">
+                            <div class="snippet-header">
+                              <div>
+                                <div class="snippet-meta">Brown Button URL</div>
+                                <h3 class="mb-0">Tenancy launch path</h3>
+                              </div>
+                              <button class="copy-snippet" type="button" data-copy-target="snippet-step-3-brown-button-url">Copy</button>
+                            </div>
+                            <p class="snippet-description">Use this pattern when the workshop launch button should open the tenancy variant.</p>
+                            <pre><code id="snippet-step-3-brown-button-url">https://livelabs.oracle.com/cdn/&lt;repository-name&gt;/&lt;path&gt;/workshops/tenancy/</code></pre>
+                          </div>
+                        </article>
+                        <article class="card snippet-card command-card">
+                          <div class="card-body">
+                            <div class="snippet-header">
+                              <div>
+                                <div class="snippet-meta">Sprint URL</div>
+                                <h3 class="mb-0">Sprint launch path</h3>
+                              </div>
+                              <button class="copy-snippet" type="button" data-copy-target="snippet-step-3-sprint-url">Copy</button>
+                            </div>
+                            <p class="snippet-description">Use this pattern only for sprint content that belongs under the Oracle LiveLabs sprints site.</p>
+                            <pre><code id="snippet-step-3-sprint-url">https://livelabs.oracle.com/cdn/sprints/&lt;category-folder&gt;/&lt;sprint-folder&gt;/</code></pre>
+                          </div>
+                        </article>
+                      </div>
+                    </section>
+
+                    <section class="step-block" data-authoring-only="no-doc">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Review handoff</div>
+                        <h3>Give reviewers one clear NoDoc evidence set</h3>
+                        <p>Keep the article preview, WMS record, checklist, owner, and approval decision together.</p>
+                      </div>
+                      <div class="detail-field-grid handoff-field-grid">
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">Article preview</span>
+                          <p class="detail-field-value">Use the approved NoDoc preview that shows the final page order and content.</p>
+                        </article>
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">WMS record</span>
+                          <p class="detail-field-value">Keep ownership, status, publishing details, and production URLs current.</p>
+                        </article>
+                        <article class="detail-field-card">
+                          <span class="detail-field-label">Approval evidence</span>
+                          <p class="detail-field-value">Include the saved Self Quality Assurance checklist and stakeholder approval.</p>
+                        </article>
+                      </div>
+                    </section>
+
+                    <figure class="step-figure evidence-figure">
+                      <figcaption>The Publishing tab is where the final production metadata is created and approved after the workshop is already in the right WMS state.</figcaption>
+                      <img src="../content/author-guide/6-labs-publish/images/publishing-tab.png" alt="Publishing tab in WMS">
+                    </figure>
+
+                    <div class="progression-pair" aria-label="Progression checkpoint">
+                    <section class="step-block step-block-quiet">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Before you move on</div>
+                        <h3>Step 3 exit criteria</h3>
+                      </div>
+                      <ul class="check-list">
+                        <li data-authoring-only="source">The preview works end to end with <code>?qa=true</code>, and the WMS metadata matches the workshop.</li>
+                        <li data-authoring-only="no-doc">The NoDoc preview works end to end, and the WMS metadata matches the workshop.</li>
+                        <li>The Self Quality Assurance checklist is saved before any status change and stakeholder verification has a clear handoff.</li>
+                        <li data-authoring-only="source">The pull request title includes the WMS ID, the branch is current, and any failing check class is understood.</li>
+                        <li data-authoring-only="no-doc">The NoDoc article, preview, owner, and approval evidence are ready for release review.</li>
+                        <li data-authoring-only="source">The Publishing tab uses oracle-livelabs production URLs, not the personal preview link.</li>
+                        <li data-authoring-only="no-doc">The WMS Publishing details point to the approved production location.</li>
+                        <li>The production workshop is verified, and WMS stays accurate for Quarterly Quality Assurance.</li>
+                      </ul>
+                    </section>
+
+                    <section class="step-block step-block-quiet guided-only">
+                      <div class="step-block-header">
+                        <div class="panel-kicker">Watch for</div>
+                        <h3>Common release-stage mistakes</h3>
+                      </div>
+                      <ul class="mistake-list">
+                        <li>Sharing a preview before checking tutorial order, links, images, and copy flows end to end.</li>
+                        <li>Changing WMS status before the checklist is saved and certified.</li>
+                        <li data-authoring-only="source">Mixing development and production URLs or opening a pull request from a stale branch.</li>
+                        <li data-authoring-only="no-doc">Publishing a NoDoc article before the preview, ownership, and stakeholder approval are recorded.</li>
+                      </ul>
+                    </section>
+                    </div>
+                  </div>
+
+                  <div class="step-footer">
+                    <div class="d-flex flex-wrap gap-2">
+                      <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-action="prev">Back</button>
+                      <a class="btn btn-outline-primary rounded-pill px-4" data-mode-target="explorer" href="./cheatsheet">Open Cheatsheet</a>
+                      <a class="btn btn-primary rounded-pill px-4" href="../workshops/livelabs/" data-full-guide-link target="_blank" rel="noreferrer">Open Step by Step Guide</a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </section>
+          </div>
+        </div>
+      </section>
+      <button type="button" class="back-to-top" id="backToTopButton" aria-label="Back to top" title="Back to top">
+        <span class="back-to-top-icon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+            <path d="M8 3.25 3.75 7.5l.9.9L7.5 5.56V13h1V5.56l2.85 2.84.9-.9L8 3.25Z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="back-to-top-label">Back to top</span>
+      </button>
+      <!-- Cheatsheet Detail Modal -->
+      <div class="modal fade" id="bubbleModal" tabindex="-1" aria-labelledby="bubbleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div>
+                <div class="modal-kicker" id="bubbleModalKicker">Cheatsheet Detail</div>
+                <h2 class="modal-title h3 mb-0" id="bubbleModalLabel">Cheatsheet detail</h2>
+              </div>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close detail view"></button>
+            </div>
+
+            <div class="modal-body">
+              <p class="lead mb-3" id="bubbleModalDescription"></p>
+              <div class="detail-tags mb-4" id="bubbleModalTags"></div>
+              <div class="modal-support-mount d-none" id="bubbleModalVideoMount"></div>
+
+              <div class="card modal-media-card mb-4 d-none" id="bubbleModalMediaCard">
+                <div class="card-body">
+                  <figure class="modal-media-figure mb-0">
+                    <figcaption id="bubbleModalImageCaption"></figcaption>
+                    <img id="bubbleModalImage" src="" alt="">
+                  </figure>
+                </div>
+              </div>
+
+              <div class="modal-support-mount d-none" id="bubbleModalMilestonesMount"></div>
+              <div class="modal-support-mount d-none" id="bubbleModalExampleMount"></div>
+
+              <div class="modal-grid">
+                <div class="modal-panel">
+                  <h3>Do this</h3>
+                  <ol id="bubbleModalSteps"></ol>
+                </div>
+
+                <div class="modal-panel">
+                  <h3>What to check</h3>
+                  <ul id="bubbleModalCheckpoints"></ul>
+                </div>
+
+                <div class="modal-panel">
+                  <h3>Watch for</h3>
+                  <ul id="bubbleModalWatchFor"></ul>
+                </div>
+              </div>
+
+              <div class="modal-support-mount d-none" id="bubbleModalResourcesMount"></div>
+
+              <div class="card snippet-card mt-4" id="bubbleModalSnippetCard">
+                <div class="card-body">
+                  <div class="snippet-header">
+                    <div>
+                      <div class="snippet-meta" id="bubbleModalSnippetMeta">Reference snippet</div>
+                      <h3 class="mb-0" id="bubbleModalSnippetTitle">Snippet</h3>
+                    </div>
+                    <button class="copy-snippet" type="button" data-copy-target="bubbleModalSnippet">Copy</button>
+                  </div>
+                  <pre><code id="bubbleModalSnippet"></code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <a class="btn btn-outline-secondary rounded-pill px-4 d-none" id="bubbleModalSourceLink" href="#" target="_blank" rel="noreferrer">Open Step by Step Guide</a>
+              <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="image-lightbox" id="imageLightbox" hidden aria-hidden="true">
+        <div class="image-lightbox-backdrop" data-lightbox-close="true"></div>
+        <div class="image-lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="imageLightboxTitle">
+          <div class="image-lightbox-header">
+            <p class="image-lightbox-kicker" id="imageLightboxTitle">Expanded Image</p>
+            <button type="button" class="image-lightbox-close" id="imageLightboxClose" aria-label="Close expanded image">Close</button>
+          </div>
+          <div class="image-lightbox-body">
+            <img id="imageLightboxImage" src="" alt="">
+          </div>
+          <p class="image-lightbox-caption" id="imageLightboxCaption"></p>
+        </div>
+      </div>
+      <div class="visually-hidden-live" aria-live="polite" id="liveRegion"></div>
+      <footer class="app-footer" aria-label="Site footer" data-shared-footer data-footer-variant="app">
+        <div class="container">Powered by Oracle LiveLabs Team &copy; 2026</div>
+      </footer>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/guide-content.js?v=20260729-topic-sort-guide-label"></script>
+  <script src="../assets/js/workshop-generator.js?v=20260708-skill-generator-livestack"></script>
+  <script src="../assets/js/shared-side-nav.js?v=20260529-shared-nav-v2"></script>
+  <script src="../assets/js/nodoc-workshop.js?v=20260817-task-media-progress-navigation"></script>
+  <script src="../assets/js/redwood-video-player.js"></script>
+  <script src="../assets/js/author-guide-app.js?v=20260804-separate-pages"></script>
+  <script src="../assets/js/shared-footer.js?v=20260516-followup"></script>
+</body>
+</html>

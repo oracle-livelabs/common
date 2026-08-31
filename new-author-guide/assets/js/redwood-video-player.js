@@ -65,8 +65,8 @@
 
   function defaultAssetConfig() {
     return {
-      src: "./assets/media/guide/author-guide-template.mp4",
-      captions: "./assets/media/guide/author-guide-template.vtt"
+      src: "../assets/media/guide/author-guide-template.mp4",
+      captions: "../assets/media/guide/author-guide-template.vtt"
     };
   }
 

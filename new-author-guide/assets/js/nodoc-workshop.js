@@ -1,6 +1,8 @@
 (function () {
   "use strict";
 
+  var nodocManifestHref = "../workshops/nodoc/manifest.json";
+
   function cleanLabel(value) {
     return String(value || "").replace(/\u00c2/g, "").replace(/\s+/g, " ").trim();
   }
@@ -54,9 +56,51 @@
     }
   }
 
+  function loadNoDocWorkshop() {
+    var source = document.querySelector("#nodocMode .nodoc-full-tree");
+    var manifestUrl;
+
+    if (!source) {
+      return;
+    }
+
+    manifestUrl = new URL(nodocManifestHref, window.location.href);
+    source.setAttribute("aria-busy", "true");
+
+    fetch(manifestUrl.toString(), { cache: "no-store" })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("NoDoc manifest request failed with HTTP " + response.status);
+        }
+        return response.json();
+      })
+      .then(function (manifest) {
+        if (!manifest || !manifest.content) {
+          throw new Error("NoDoc manifest does not define a content file");
+        }
+        return fetch(new URL(manifest.content, manifestUrl).toString(), { cache: "no-store" });
+      })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("NoDoc content request failed with HTTP " + response.status);
+        }
+        return response.text();
+      })
+      .then(function (markup) {
+        source.innerHTML = markup;
+        source.removeAttribute("aria-busy");
+        setupNoDocWorkshop();
+      })
+      .catch(function (error) {
+        source.removeAttribute("aria-busy");
+        source.innerHTML = "<p class=\"nodoc-load-error\">NoDoc workshop content could not be loaded.</p>";
+        console.error(error);
+      });
+  }
+
   function setupNoDocWorkshop() {
-    // The HTML keeps the complete workshop readable and source-friendly. This setup
-    // turns that static tree into one active reader panel plus a coordinated menu.
+    // The external fragment keeps the complete workshop readable and source-friendly.
+    // This setup turns that static tree into one active reader panel plus a coordinated menu.
     var mode = document.getElementById("nodocMode");
     var reader = document.getElementById("nodocWorkshopReader");
     var guideLayout = mode && mode.querySelector(".nodoc-guide-layout");
@@ -435,8 +479,8 @@
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", setupNoDocWorkshop, { once: true });
+    document.addEventListener("DOMContentLoaded", loadNoDocWorkshop, { once: true });
   } else {
-    setupNoDocWorkshop();
+    loadNoDocWorkshop();
   }
 }());
