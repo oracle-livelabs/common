@@ -79,31 +79,31 @@ window.authorGuideContent = (function () {
       {
         id: "wms-request",
         title: "WMS Request",
-        short: "VPN, request form, tags, council review, status flow, social planning, and the WMS gates that control authoring.",
+        short: "Submit the WMS request, set tags, pass council review, and manage the workshop through publishing.",
         accent: "red",
         tags: ["wms"],
-        description: "Use this card when you need the real WMS process from the source guide: how to submit, what metadata reviewers need, which status comes next, when GitHub work should start, and how the same WMS record carries the workshop through publishing and later Quarterly Quality Assurance.",
+        description: "Use this card to submit and manage a WMS request from review through publishing and Quarterly Quality Assurance.",
         steps: [
-          "Connect to Corporate VPN, open Oracle Workshop Management System, and click Submit a New Workshop Request.",
-          "Fill Workshop Basic Information completely, including Stakeholder, Workshop Council, Workshop Owner Group, Workshop Abstract, Workshop Outline, and Workshop Prerequisites. Use the field help when you are unsure what a reviewer expects.",
-          "Open the Tags tab and set the required Level, Role, Focus Area, and Product tags before you create the record. Tags are discovery and routing metadata, not late cleanup.",
+          "Connect to Corporate VPN, open WMS, and select Submit a New Workshop Request.",
+          "Complete the basic information: stakeholder, council, owner group, abstract, outline, and prerequisites.",
+          "Set the Level, Role, Focus Area, and Product tags before creating the request.",
           "Wait for council review after submission. Council review normally takes 2 to 3 business days; if nothing changes after 3 business days, use Message the Team or find council contacts under People & Role Reports > Workshop Council Members.",
-          "After approval, move to In Development when real GitHub authoring starts, then Self Quality Assurance when the workshop is stable enough for end-to-end testing.",
-          "Complete and save the Self Quality Assurance Checklist before changing to Self Quality Assurance Complete. Stakeholders verify from that state and move the workshop to Completed when it is ready for publishing.",
-          "Use Go to Market - Social while the workshop is still early if blog, social, video script, or marketing image details will be needed for publishing.",
-          "Return to the same WMS record for Quarterly Quality Assurance after publication. Missed Quarterly Quality Assurance can disable the production entry."
+          "After approval, move to In Development when GitHub authoring begins, then to Self Quality Assurance when testing is ready.",
+          "Save the Self Quality Assurance Checklist before moving to Self Quality Assurance Complete. Stakeholders then verify the workshop for publishing.",
+          "Add Go to Market - Social details early when publishing needs blog, social, video, or image assets.",
+          "Use the same record for Quarterly Quality Assurance after publishing. Missing it can disable the production entry."
         ],
         checkpoints: [
-          "The title, abstract, outline, prerequisites, owner group, stakeholder, and council tell reviewers what the learner will build and who owns the handoff.",
-          "Required tags are complete before the record is created: Level, Role, Focus Area, and Product.",
-          "The request already calls out unusual build elements such as embedded HTML, special media, Marketplace images, secure desktop, or sandbox dependencies.",
-          "The WMS status matches the real work state, not just the next status the author wants."
+          "The request clearly states the learner outcome and ownership.",
+          "Level, Role, Focus Area, and Product tags are complete.",
+          "Special requirements, such as media, Marketplace images, secure desktop, or sandboxes, are listed.",
+          "The WMS status reflects the actual work stage."
         ],
         watchFor: [
-          "Starting heavy repository work before council review has approved the request.",
-          "Leaving abstract, outline, or prerequisites too vague and forcing council follow-up.",
+          "Starting major repository work before council approval.",
+          "Submitting vague abstracts, outlines, or prerequisites.",
           "Changing status before the checklist is saved.",
-          "Forgetting that Self Quality Assurance, stakeholder review, publishing, and Quarterly Quality Assurance all depend on this same WMS record."
+          "Treating Self Quality Assurance, publishing, and Quarterly Quality Assurance as separate records."
         ],
         exampleTitle: "Prompt-ready WMS examples",
         exampleIntro: "Use these fields as a baseline, or generate prompt-driven examples from the Quickstart WMS Platform panel.",
@@ -138,26 +138,26 @@ window.authorGuideContent = (function () {
       {
         id: "github-setup",
         title: "GitHub Setup",
-        short: "Oracle email account, GitHub Desktop, Visual Studio Code, Live Server, and authoring-ready settings.",
+        short: "Set up your Oracle-linked GitHub account, GitHub Desktop, VS Code, and Live Server.",
         accent: "ocean",
         tags: ["github"],
-        description: "Use this card when the blocker is workstation setup. It focuses on the exact tools and UI steps the workshop uses for first-time authoring.",
+        description: "Use this card to set up the tools required for first-time authoring.",
         steps: [
-          "Create or confirm one GitHub account tied to your Oracle email, then finish GitHub Settings with your real name, profile photo, and username before you request repository access.",
+          "Create or confirm one GitHub account linked to your Oracle email. Add your name, photo, and username before requesting access.",
           "Enable two-factor authentication in GitHub Security and make sure you are not using a secondary personal account for LiveLabs work.",
-          "Install GitHub Desktop, open File > Options > Sign in, and confirm the client is authenticated against the same account you will fork and clone with.",
-          "Install Visual Studio Code, then install Live Server from the Extensions view so local preview exists before you start rewriting markdown.",
-          "Set Markdown indentation to tabs with size 4, then add the helper extensions you will actually use: markdownlint, Code Spell Checker, Delete Trailing Spaces, and Path Intellisense."
+          "Install GitHub Desktop and sign in with the same account you will use to fork and clone.",
+          "Install VS Code and Live Server before editing markdown.",
+          "Set Markdown indentation to tabs, size 4. Install markdownlint, Code Spell Checker, Delete Trailing Spaces, and Path Intellisense."
         ],
         checkpoints: [
           "GitHub profile, username, and 2FA are complete on the Oracle-linked account.",
           "GitHub Desktop is signed in and ready to clone or open repositories.",
-          "Visual Studio Code has Live Server and Markdown indentation set to 4 before you start nesting steps, images, or code blocks."
+          "VS Code has Live Server and Markdown indentation set to 4."
         ],
         watchFor: [
           "Creating or using a second GitHub account instead of the Oracle-linked one.",
-          "Skipping GitHub Desktop sign-in and discovering the problem at fork, clone, or push time.",
-          "Leaving editor setup until after you already created broken nested lists or code blocks."
+          "Discovering a GitHub Desktop sign-in issue when you fork, clone, or push.",
+          "Setting up the editor after creating malformed lists or code blocks."
         ],
         resourcesTitle: "Official downloads",
         resourcesIntro: "Use the official tool pages so the setup matches what the guide expects.",
@@ -199,27 +199,27 @@ window.authorGuideContent = (function () {
       {
         id: "sync-preview",
         title: "Sync & Preview",
-        short: "Fork, clone, merge upstream, sample structure, GitHub Pages, and preview URL patterns.",
+        short: "Fork, clone, sync upstream, copy the sample structure, and publish a preview.",
         accent: "ocean",
         tags: ["github"],
-        description: "Use this when the question is really about repository hygiene: where to fork, how to stay synced, what the folder structure should look like, and how preview URLs are derived.",
+        description: "Use this card to keep your repositories synced and create a working GitHub Pages preview.",
         steps: [
-          "After approval, fork the target oracle-livelabs repository and the common repository from the GitHub web UI so you have both the product repository and the shared sample assets.",
-          "Clone your fork in GitHub Desktop, pick a real local path, and when prompted choose To contribute to the parent project so upstream/oracle-livelabs remains connected.",
-          "Before you edit each day, switch to the repository you are using, click Fetch origin, then Branch > Merge into Current Branch and merge upstream/main into main.",
-          "After a successful merge, click Push origin so your local clone and your fork both stay aligned with production before you start new work.",
-          "Copy the sample-workshop structure from common, keep folder and file names lowercase, and commit only after manifest.json points to real labs and the repository structure is clean.",
-          "Enable GitHub Pages on your fork under Settings > Pages, save the main branch, wait for publication, and verify the preview URL before a long authoring session."
+          "After approval, fork the target and common repositories.",
+          "Clone your fork in GitHub Desktop and connect it to upstream/oracle-livelabs.",
+          "Before editing, fetch origin and merge upstream/main into main.",
+          "Push after merging to keep your fork aligned.",
+          "Copy the sample-workshop structure, use lowercase names, and verify manifest.json before committing.",
+          "Enable GitHub Pages from main and verify the preview URL."
         ],
         checkpoints: [
-          "Your local clone tracks your fork and still knows upstream/main.",
+          "Your clone tracks your fork and upstream/main.",
           "Both the target repository and common are available locally when you need sample templates or shared assets.",
-          "GitHub Pages publishes the exact workshop variant path you plan to share."
+          "GitHub Pages publishes the workshop path you will share."
         ],
         watchFor: [
-          "Skipping the daily upstream merge and opening a pull request from stale content.",
-          "Working directly in the production repository or forgetting to fork common as well.",
-          "Waiting until late review to discover path, case, or Pages publication problems."
+          "Opening a pull request from stale content.",
+          "Working in production or forgetting to fork common.",
+          "Finding path, case, or Pages issues late in review."
         ],
         resourcesTitle: "Core references",
         resourcesIntro: "These are the two references most authors need before they fork, clone, and copy the sample structure.",
@@ -253,27 +253,27 @@ window.authorGuideContent = (function () {
       {
         id: "markdown-structure",
         title: "Markdown Structure",
-        short: "Sample lab folders, required sections, common labs, variables, and LintChecker.",
+        short: "Build a valid workshop structure with sample labs, manifests, shared content, and LintChecker.",
         accent: "pine",
         tags: ["markdown"],
-        description: "Use this card when you need the core authoring rules that make a workshop render, validate, and survive review without structural rework.",
+        description: "Use this card to create a workshop structure that renders and validates cleanly.",
         steps: [
-          "Create the workshop folder inside the cloned product repository, then copy sample lab folders plus the workshops folder from common/sample-livelabs-templates/sample-workshop.",
-          "Rename the copied lab folder and its markdown file together, delete the copied files folder when you do not need it, and add images only inside that lab's images folder.",
-          "Copy the introduction folder when the workshop needs a dedicated landing lab, then add a README only when that variant actually needs one.",
-          "Edit manifest.json in workshops/tenancy, workshops/sandbox, and/or workshops/desktop so workshoptitle, help, tutorial order, and any variant settings match the real workshop.",
-          "Remove include or variables entries when they do not apply, and use absolute URLs for common labs or common images instead of duplicating shared content.",
-          "Keep every lab inside the validator contract: one H1, Introduction, Objectives, Estimated Time, Task headers, Acknowledgements, lowercase filenames, and ?qa=true preview as you work."
+          "Create the workshop folder and copy the sample labs and workshops folder.",
+          "Rename each lab folder and markdown file together. Remove unused files folders and keep images in each lab's images folder.",
+          "Copy the introduction folder when needed. Add a README only when the variant requires one.",
+          "Update each manifest with the correct title, help address, tutorial order, and variant settings.",
+          "Remove unused include or variables entries. Link shared labs and images with absolute URLs.",
+          "Meet the validator rules: one H1, required sections, task headers, acknowledgements, lowercase names, and ?qa=true preview."
         ],
         checkpoints: [
-          "Copied sample folders were renamed cleanly and no stale sample files remain in manifest.json.",
-          "Each lab has its own images folder and any unused files folder was removed.",
-          "Preview with ?qa=true shows the workshop order, structure, and help email exactly the way review will see them."
+          "Sample folders are renamed and manifest.json has no stale entries.",
+          "Each lab has an images folder; unused files folders are removed.",
+          "?qa=true preview shows the correct order, structure, and help address."
         ],
         watchFor: [
-          "Copying an old workshop instead of the canonical sample-workshop template.",
-          "Leaving unused include or variables entries that stop the workshop from rendering.",
-          "Using relative links for shared common labs or carrying mixed-case filenames into GitHub Pages."
+          "Using an old workshop instead of the canonical template.",
+          "Leaving unused include or variables entries.",
+          "Using relative common links or mixed-case filenames."
         ],
         snippetMeta: "Standard lab contract",
         snippetTitle: "Workshop skeleton and manifest baseline",
@@ -309,25 +309,25 @@ window.authorGuideContent = (function () {
       {
         id: "links-paths",
         title: "Links and Paths",
-        short: "Case-correct paths, markdown links, and shared URLs that keep preview and GitHub Pages aligned.",
+        short: "Use case-correct paths, Markdown links, and shared URLs that work locally and on GitHub Pages.",
         accent: "sienna",
         tags: ["markdown"],
-        description: "Use this card when links work locally but break in preview or production because the path, filename case, or link style is wrong.",
+        description: "Use this card when links work locally but fail in preview or production.",
         steps: [
-          "Keep every workshop file and folder lowercase and make the markdown path match the exact case used on disk.",
-          "Use standard Markdown links instead of raw HTML links unless the canonical guide explicitly requires an embed or special markup.",
-          "Use approved absolute URLs when you reference shared labs or shared assets from oracle-livelabs/common instead of copying them locally.",
-          "Preview on local Live Server and on personal github.io so you catch path errors before review."
+          "Use lowercase file and folder names, and match their exact case in links.",
+          "Use Markdown links unless the guide requires special markup.",
+          "Link shared labs and assets with approved absolute common URLs.",
+          "Check links in Live Server and your github.io preview."
         ],
         checkpoints: [
-          "Links resolve the same way locally and on GitHub Pages.",
-          "Shared references point to the canonical common location instead of duplicated copies.",
-          "No raw HTML links were used where normal Markdown would work."
+          "Links work locally and on GitHub Pages.",
+          "Shared content uses canonical common URLs.",
+          "Standard links use Markdown."
         ],
         watchFor: [
-          "Case-only renames on Windows or macOS that fail later on GitHub Pages.",
-          "Hard-coding a local relative path for content that really lives in common.",
-          "Treating a successful local preview as proof that the production path is correct."
+          "Case-only renames that fail on GitHub Pages.",
+          "Local paths for shared common content.",
+          "Assuming local preview proves the production path."
         ],
         snippetMeta: "Path-safe examples",
         snippetTitle: "Use Markdown links and case-correct paths",
@@ -350,25 +350,25 @@ window.authorGuideContent = (function () {
       {
         id: "image-references",
         title: "Image References",
-        short: "Images folder rules, shared image URLs, and alt text that survive preview and review.",
+        short: "Store images correctly, use shared URLs when needed, and write useful alt text.",
         accent: "ocean",
         tags: ["media", "markdown"],
-        description: "Use this card when the issue is how images are referenced inside markdown rather than how screenshots are captured.",
+        description: "Use this card to reference images correctly in Markdown.",
         steps: [
-          "Keep workshop images inside the current lab's images folder unless the asset is intentionally shared from oracle-livelabs/common.",
-          "Use descriptive alt text on every image so the step still makes sense if the image fails to load or is read by assistive technology.",
-          "Use the approved absolute image path pattern when referencing shared images from common.",
-          "Open the GitHub Pages preview and confirm the same image loads there before you ask anyone to review it."
+          "Store workshop images in the current lab's images folder unless they are shared from common.",
+          "Write alt text that explains what the image shows or proves.",
+          "Use approved absolute URLs for shared common images.",
+          "Confirm images load in your GitHub Pages preview."
         ],
         checkpoints: [
           "Every image has descriptive alt text.",
-          "The preview shows the same image on personal github.io that you saw locally.",
-          "Shared images point to a canonical common URL instead of an improvised local copy."
+          "The same images load locally and on github.io.",
+          "Shared images use canonical common URLs."
         ],
         watchFor: [
-          "Placing screenshots outside the images folder and losing track of them later.",
-          "Using vague alt text such as image1 or screenshot.",
-          "Breaking image paths with mixed case or partial folder names."
+          "Storing screenshots outside the images folder.",
+          "Vague alt text, such as image1 or screenshot.",
+          "Mixed-case or incomplete image paths."
         ],
         snippetMeta: "Image example",
         snippetTitle: "Shared image plus alt text pattern",
@@ -385,25 +385,25 @@ window.authorGuideContent = (function () {
       {
         id: "copy-sql",
         title: "Copy Tags and SQL Blocks",
-        short: "Copy-ready commands, SQL or PL/SQL blocks, and the patterns that make the LiveLabs copy button work.",
+        short: "Make commands and SQL easy to copy with the LiveLabs copy button.",
         accent: "pine",
         tags: ["markdown"],
-        description: "Use this card when the learner needs to copy commands or SQL directly from the guide and the code block has to behave correctly in preview.",
+        description: "Use this card when learners must copy commands or SQL from the guide.",
         steps: [
-          "Wrap copyable commands in <copy> tags so the LiveLabs copy button appears in preview.",
-          "Use sql or plsql fenced code blocks inside <copy> tags when the learner needs trailing newlines or multiple statements to execute cleanly.",
-          "Keep the copy block directly beside the step that uses it instead of pushing the command into a detached appendix.",
-          "Preview the page and test the copy button before you rely on it in review."
+          "Wrap copyable commands in <copy> tags.",
+          "Use sql or plsql fenced blocks inside <copy> tags for multiline SQL.",
+          "Place each copy block beside its step.",
+          "Preview and test the copy button."
         ],
         checkpoints: [
-          "Copy buttons appear where learners need commands, scripts, or SQL.",
-          "The SQL block keeps the intended line breaks and execution order.",
-          "The command block sits next to the step it supports."
+          "Copy buttons appear where needed.",
+          "SQL preserves line breaks and execution order.",
+          "Each copy block supports its nearby step."
         ],
         watchFor: [
-          "Plain fenced code blocks with no copy tag when the learner is expected to paste the content.",
-          "Putting too many unrelated commands into one copy block.",
-          "Leaving the copy behavior untested until stakeholder review."
+          "Plain blocks where learners must paste content.",
+          "Unrelated commands in one copy block.",
+          "Untested copy behavior."
         ],
         snippetMeta: "Copy-ready SQL",
         snippetTitle: "Wrap SQL inside copy tags",
@@ -422,24 +422,24 @@ window.authorGuideContent = (function () {
       {
         id: "reuse-variables",
         title: "Reuse & Variables",
-        short: "Common labs, manifest variables, and conditional content without duplicating pages.",
+        short: "Reuse common labs, variables, and conditional content without duplicating pages.",
         accent: "pine",
         tags: ["markdown"],
-        description: "Use this when a workshop needs shared content or variant-aware sections, and you need a real pattern instead of a vague reminder that reuse exists.",
+        description: "Use this card for shared content or variant-specific sections.",
         steps: [
-          "Reference stable common labs through absolute manifest URLs instead of copying them into the workshop.",
-          "Declare variables files near the top of manifest.json only when the workshop actually has reusable values across variants.",
-          "Use conditional formatting blocks when the workshop serves multiple delivery types such as livelabs and freetier from one markdown file.",
-          "Preview every branch of the conditional content, not only the first one that renders."
+          "Reference stable common labs with absolute manifest URLs.",
+          "Add manifest variables only for values reused across variants.",
+          "Use conditional blocks for multiple delivery types.",
+          "Preview every conditional branch."
         ],
         checkpoints: [
-          "The manifest only carries variables when reuse is real.",
-          "Conditional branches are obvious to the next author reading the file.",
-          "The tutorial order still makes sense when one branch is hidden."
+          "Variables serve a real reuse case.",
+          "Conditional branches are easy to follow.",
+          "Tutorial order works when a branch is hidden."
         ],
         watchFor: [
-          "Copying shared content that should stay central and canonical.",
-          "Hiding too much logic in conditionals and making the lab unreadable.",
+          "Copying canonical shared content.",
+          "Overly complex conditional logic.",
           "Testing only one delivery type."
         ],
         snippetMeta: "Variant pattern",
@@ -466,25 +466,25 @@ window.authorGuideContent = (function () {
       {
         id: "quiz-blocks",
         title: "LiveLabs Quizzes",
-        short: "Single-topic quizzes, scored quiz variants, and badge configuration that stay close to the step they reinforce.",
+        short: "Add focused quizzes, optional scoring, and badges where they reinforce a task.",
         accent: "sienna",
         tags: ["interactive"],
-        description: "Use this card when the learner should stop and verify understanding of the task that just happened, not when you only want decorative interactivity.",
+        description: "Use this card when a quiz helps learners confirm a completed task.",
         steps: [
-          "Add a quiz block in the task where the learner should stop and verify understanding of the step that just finished.",
-          "Use `Q:` for the question, `*` for correct answers, `-` for wrong answers, and `>` for the explanation shown after submit.",
-          "Use `quiz score` and a top-level `quiz-config` block only when the workshop truly benefits from scoring or a badge.",
-          "Preview the page and confirm that the answer states, scoring behavior, and any badge path all render correctly."
+          "Add the quiz immediately after the task it checks.",
+          "Use `Q:` for a question, `*` for correct answers, `-` for wrong answers, and `>` for the explanation.",
+          "Use `quiz score` and `quiz-config` only when scoring or a badge adds value.",
+          "Preview answer states, scoring, and badge paths."
         ],
         checkpoints: [
-          "The quiz is tied to the instructions immediately around it.",
-          "Scoring or badges are enabled only when they add real learner value.",
-          "Preview confirms that the quiz marks answers correctly."
+          "The quiz follows the related instructions.",
+          "Scoring or badges add learner value.",
+          "Preview shows correct answer marking."
         ],
         watchFor: [
-          "Adding quizzes that slow the flow instead of helping the learner confirm understanding.",
-          "Forgetting the explanation line on questions that need teaching value.",
-          "Leaving badge assets or quiz-config paths outside the images folder."
+          "Quizzes that slow the flow.",
+          "Missing explanations for teaching questions.",
+          "Badge assets or config paths outside images."
         ],
         snippetMeta: "Quiz starter",
         snippetTitle: "Quiz block with scoring and badge config",
@@ -514,25 +514,25 @@ window.authorGuideContent = (function () {
       {
         id: "freesql-embed",
         title: "FreeSQL Embed",
-        short: "Generate the FreeSQL embed, place it in the right task, and validate the rendered editor before review.",
+        short: "Generate a FreeSQL embed, place it beside the task, and validate it in preview.",
         accent: "pine",
         tags: ["freesql", "interactive"],
-        description: "Use this card when running SQL inline inside the lab materially improves the task flow for the learner.",
+        description: "Use this card when inline SQL improves the learner's task flow.",
         steps: [
-          "Prepare the SQL or PL/SQL the learner should run and generate the embed snippet from FreeSQL.",
-          "Paste the generated embed directly into the task where the learner needs SQL execution, and keep the surrounding instructions immediately beside it.",
-          "Render the lab and verify that the editor loads correctly, fits the available width, and still matches the surrounding steps.",
-          "Remove the embed if a normal copy block would explain the task more clearly."
+          "Prepare the SQL or PL/SQL and generate the FreeSQL embed.",
+          "Place the embed in the task that needs it, beside its instructions.",
+          "Preview the lab and check that the editor loads, fits, and supports the task.",
+          "Use a copy block instead if it is clearer."
         ],
         checkpoints: [
-          "The embed is scoped to one task or concept instead of taking over the whole page.",
-          "Preview confirms the runtime loads the editor where the learner expects it.",
-          "The task instructions still make sense without sending the learner somewhere else."
+          "The embed serves one task or concept.",
+          "Preview shows the editor where learners expect it.",
+          "Instructions remain clear."
         ],
         watchFor: [
-          "Adding an embed when a normal code block or copy tag would be clearer.",
-          "Separating the embed from the instructions it supports.",
-          "Modifying iframe behavior without validating the current renderer first."
+          "Using an embed when a code block is clearer.",
+          "Separating the embed from its instructions.",
+          "Changing iframe behavior without validating it."
         ],
         snippetMeta: "Placement rule",
         snippetTitle: "Keep the embed close to the task",
@@ -549,28 +549,28 @@ window.authorGuideContent = (function () {
       {
         id: "freesql-tutorial-publishing",
         title: "FreeSQL Tutorial Publishing",
-        short: "Create a FreeSQL tutorial, map modules to lab tasks, share the tutorial link, and enable the orange Run on FreeSQL option in WMS.",
+        short: "Create a FreeSQL tutorial, map modules to tasks, then publish its Run on FreeSQL link in WMS.",
         accent: "pine",
         tags: ["freesql", "publishing"],
         updatedAt: "2026-01-01",
-        description: "Use this card when SQL or PL/SQL learners should run content in FreeSQL instead of a sandbox or their own tenancy.",
+        description: "Use this card when learners should run SQL or PL/SQL in FreeSQL.",
         steps: [
-          "Open FreeSQL, choose the right database experience, sign in, and create a tutorial or script from My Content.",
-          "Match the tutorial name, description, and tags to the WMS workshop details so the FreeSQL content and LiveLabs entry tell the same story.",
-          "Add one tutorial module for the introduction and one module for each task that learners must run or read.",
-          "Open the tutorial in the FreeSQL worksheet, review the instructions, edit modules, and reorder modules until the flow matches the workshop.",
-          "Use Share to copy the tutorial link, then paste it into WMS Publishing > Run on FreeSQL URL and enable Run on FreeSQL.",
-          "Remember that orange-button instructions live in FreeSQL. Brown and green button instructions still come from GitHub markdown."
+          "Sign in to FreeSQL and create a tutorial or script from My Content.",
+          "Match the tutorial title, description, and tags to WMS.",
+          "Add an introduction module and one module per task.",
+          "Review, edit, and reorder modules to match the workshop flow.",
+          "Share the tutorial, add its link to WMS Publishing > Run on FreeSQL URL, and enable Run on FreeSQL.",
+          "Orange-button content lives in FreeSQL; brown and green buttons use GitHub Markdown."
         ],
         checkpoints: [
-          "The FreeSQL tutorial content matches the WMS title, description, and learner outcome.",
-          "Each task has a module, and the module order matches the learner flow.",
-          "The WMS Publishing tab has the FreeSQL URL and the Run on FreeSQL slider enabled."
+          "Tutorial content matches the WMS outcome.",
+          "Modules match task order.",
+          "WMS has the FreeSQL URL and Run on FreeSQL enabled."
         ],
         watchFor: [
-          "Updating GitHub markdown and expecting an orange-button FreeSQL tutorial to change.",
-          "Using a script when the content needs module navigation.",
-          "Publishing the LiveLabs entry before the tutorial share link opens and runs correctly."
+          "Expecting GitHub Markdown to update the orange-button tutorial.",
+          "Using a script when learners need modules.",
+          "Publishing before the shared tutorial works."
         ],
         resourcesTitle: "FreeSQL entry point",
         resourcesIntro: "Use the FreeSQL site for the tutorial and WMS for the public LiveLabs button.",
@@ -601,27 +601,27 @@ window.authorGuideContent = (function () {
       {
         id: "freesql-button-integration",
         title: "FreeSQL Button Integration",
-        short: "Add the FreeSQL button tag, wrap SQL in FreeSQL blocks, test the button locally, and use a tutorial link when code exceeds URL limits.",
+        short: "Add a FreeSQL button, wrap runnable SQL, test locally, and use a tutorial for long code.",
         accent: "pine",
         tags: ["freesql", "markdown"],
         updatedAt: "2026-01-01",
-        description: "Use this card when the markdown itself should create a FreeSQL worksheet or tutorial launch button for SQL-heavy workshops or sprints.",
+        description: "Use this card to launch a FreeSQL worksheet or tutorial from Markdown.",
         steps: [
-          "Place the <freesql-button> tag immediately after the lab title.",
-          "Wrap each runnable SQL block in <freesql> and </freesql> tags so FreeSQL can populate the worksheet.",
-          "Tell learners to sign in when the code modifies the database.",
-          "If the worksheet URL would exceed 2048 characters, create a FreeSQL tutorial and use <freesql-button src=\"{tutorial-url}\"> instead.",
-          "Open the workshop with Live Server, click Try It Now with FreeSQL, and run the worksheet or tutorial end to end."
+          "Place <freesql-button> immediately after the lab title.",
+          "Wrap runnable SQL in <freesql> tags.",
+          "Tell learners to sign in before running database-changing code.",
+          "For URLs over 2048 characters, create a tutorial and use <freesql-button src=\"{tutorial-url}\">.",
+          "Preview locally, click Try It Now with FreeSQL, and test end to end."
         ],
         checkpoints: [
-          "The button appears immediately after the lab title.",
-          "Every runnable SQL block that belongs in the worksheet is inside FreeSQL tags.",
-          "The generated worksheet or tutorial opens in FreeSQL and contains the expected code."
+          "The button follows the lab title.",
+          "Runnable worksheet SQL is inside FreeSQL tags.",
+          "The worksheet or tutorial opens with the expected code."
         ],
         watchFor: [
-          "Trying to fit long setup scripts into a worksheet URL instead of creating a tutorial.",
-          "Forgetting to test the button after local preview renders.",
-          "Leaving database-changing code without a learner sign-in note."
+          "Putting long scripts in a worksheet URL.",
+          "Failing to test the button locally.",
+          "Database-changing code without a sign-in note."
         ],
         snippetMeta: "Markdown pattern",
         snippetTitle: "Worksheet and tutorial button options",
@@ -641,25 +641,25 @@ window.authorGuideContent = (function () {
       {
         id: "screenshots",
         title: "Screenshot Standards",
-        short: "Crop to the action, redact correctly, keep files <= 1280px, and remove unused images.",
+        short: "Crop to the action, redact safely, keep images at 1280px or less, and remove unused files.",
         accent: "ocean",
         tags: ["media"],
-        description: "Use this card when screenshots are the real problem: capture quality, redaction, image size, or extra files that will fail review later.",
+        description: "Use this card for screenshot quality, redaction, size, and cleanup.",
         steps: [
-          "Capture only the part of the UI that supports the step instead of full-screen monitor shots.",
-          "Resize screenshots to 1280 pixels or less in width or height and prefer PNG for UI or text-heavy images.",
-          "Redact sensitive values by deleting the underlying pixels, filling with an opaque shape, and flattening the image before save.",
-          "Run the Check Unused Images tool before pull request time so each lab images folder contains only the screenshots the markdown actually references."
+          "Capture only the UI needed for the step.",
+          "Keep images at 1280 pixels or less; use PNG for UI and text.",
+          "Remove sensitive pixels, cover them with an opaque shape, and flatten before saving.",
+          "Run Check Unused Images so each images folder contains only referenced files."
         ],
         checkpoints: [
-          "The learner can tell exactly which UI control to click next.",
-          "The screenshot does not expose usernames, IP addresses, intranet URLs, passwords, or OCIDs.",
-          "Every image is in an images folder and referenced by markdown with alt text."
+          "The next UI action is clear.",
+          "No usernames, IP addresses, intranet URLs, passwords, or OCIDs are exposed.",
+          "Each image is in an images folder and has Markdown alt text."
         ],
         watchFor: [
-          "Oversized screenshots that pass local review but fail pull request validation.",
-          "Pseudo-redaction tricks such as translucent shapes or unflattened layers.",
-          "Leaving five or ten stale screenshots in a lab folder after rewriting the steps."
+          "Oversized screenshots that fail pull request validation.",
+          "Translucent or unflattened redaction.",
+          "Stale screenshots after changing steps."
         ],
         snippetMeta: "Capture checklist",
         snippetTitle: "Use this quality bar before you commit screenshots",
@@ -682,25 +682,25 @@ window.authorGuideContent = (function () {
       {
         id: "optishot",
         title: "OptiShot",
-        short: "Install, pick the folder, keep max size at 1280, and read the summary before you rerun checks.",
+        short: "Select the right folder, keep the 1280px limit, and review the summary before rerunning checks.",
         accent: "ocean",
         tags: ["media", "tools"],
-        description: "Use this card when the pull request is blocked on image size or when you want a fast cleanup pass across a screenshot-heavy workshop.",
+        description: "Use this card to resize images or clean up a screenshot-heavy workshop.",
         steps: [
-          "Install OptiShot for your platform and launch it so the folder picker opens immediately.",
-          "Select the workshop or images folder you want to process and let OptiShot recurse through subfolders while skipping .git.",
-          "Use the default 1280px maximum unless you have a smaller target in mind, and use dry-run first when you want to inspect what would change.",
-          "Read the summary at the end so you know what was resized, skipped, or optimized before you re-open the pull request checks."
+          "Install and launch OptiShot.",
+          "Select the workshop or images folder; OptiShot scans subfolders and skips .git.",
+          "Use the 1280px default. Run dry-run first to inspect changes.",
+          "Review resized, skipped, and optimized files before rerunning checks."
         ],
         checkpoints: [
-          "The folder you selected is the one that actually contains the images under review.",
-          "The max dimension stays at the LiveLabs limit of 1280 pixels.",
-          "You rerun preview or pull request checks after the tool finishes."
+          "The selected folder contains the images under review.",
+          "The maximum dimension is 1280 pixels.",
+          "Preview or pull request checks run after processing."
         ],
         watchFor: [
-          "Running it against the wrong directory and thinking your screenshots were fixed.",
-          "Changing max size away from 1280 and reintroducing review failures.",
-          "Treating OptiShot as a replacement for basic capture quality."
+          "Processing the wrong directory.",
+          "Changing the 1280px maximum.",
+          "Using OptiShot instead of good capture practices."
         ],
         snippetMeta: "Command-line option",
         snippetTitle: "Dry-run the image pass before you overwrite files",
@@ -723,25 +723,25 @@ window.authorGuideContent = (function () {
       {
         id: "fixomat",
         title: "Fixomat",
-        short: "Select the workshop root, choose the mode, and review FIXED versus MANUAL output carefully.",
+        short: "Select the workshop root, choose a mode, and review FIXED and MANUAL results.",
         accent: "pine",
         tags: ["tools", "validation"],
-        description: "Use this card late in the workflow when the workshop already exists and you want help cleaning markdown or images before review.",
+        description: "Use this card to clean up Markdown or images before review.",
         steps: [
-          "Launch LiveLabs Fixomat 2000 and select the workshop root directory, not an arbitrary nested lab folder.",
-          "Choose Fix Markdown only, Optimize images only, or the combined mode depending on what the review actually found.",
-          "Run the scan and read both the summary and the console output instead of assuming every issue was auto-fixed.",
-          "Follow up on MANUAL findings, then rerun Fixomat or preview again before you open or update the pull request."
+          "Launch Fixomat and select the workshop root, not a nested lab.",
+          "Choose Markdown, images, or combined mode for the reported issue.",
+          "Run the scan and read the summary and console output.",
+          "Resolve MANUAL findings, then rerun Fixomat or preview before updating the pull request."
         ],
         checkpoints: [
-          "The mode you chose matches the actual problem.",
-          "You reviewed the log and know which changes were applied automatically.",
-          "You still validate the workshop after the tool finishes."
+          "The selected mode matches the problem.",
+          "You know which changes were automatic.",
+          "The workshop is validated after processing."
         ],
         watchFor: [
-          "Running Fixomat too early and losing time on cleanup before the content is stable.",
-          "Ignoring MANUAL findings and assuming the app handled them.",
-          "Skipping preview after a bulk markdown or image pass."
+          "Running Fixomat before content is stable.",
+          "Ignoring MANUAL findings.",
+          "Skipping preview after bulk changes."
         ],
         snippetMeta: "Output reading",
         snippetTitle: "Interpret the result before you move on",
@@ -762,17 +762,17 @@ window.authorGuideContent = (function () {
       {
         id: "Quality Assurance-checklist",
         title: "Quality Assurance Checklist",
-        short: "Share the preview, set status correctly, save the checklist, and certify Self Quality Assurance in WMS.",
+        short: "Share the preview, set WMS status, save the checklist, and certify Self Quality Assurance.",
         accent: "red",
         tags: ["validation", "wms"],
-        description: "Use this card when the workshop is ready for review and you need the exact order for Self Quality Assurance or Quarterly Quality Assurance without guessing.",
+        description: "Use this card to complete Self Quality Assurance or Quarterly Quality Assurance in the correct order.",
         steps: [
-          "Open the personal GitHub Pages workshop URL and share that preview for review before you touch the Quality Assurance status in WMS.",
-          "Set Workshop Status to In Development while build work is still active, or Self Quality Assurance when the workshop is stable enough to test end to end.",
-          "On Workshop Details, update title, short description, long description, outline, prerequisites, and tags so WMS matches the real workshop that reviewers will open.",
-          "Update Development GitHub/GitLab URL to your personal github.io preview, and after merge replace your username with oracle-livelabs in Production GitHub/GitLab URL.",
-          "Open Self Quality Assurance Checklist, check every box, upload the requested evidence, add both the pull request link and the personal github.io workshop link, then click Save.",
-          "Only after the checklist save succeeds should you set Self Quality Assurance Complete or Quarterly Quality Assurance Complete, certify the submission, and wait for stakeholder verification."
+          "Share your GitHub Pages preview before changing Quality Assurance status in WMS.",
+          "Use In Development while building and Self Quality Assurance when end-to-end testing is ready.",
+          "Update WMS title, descriptions, outline, prerequisites, and tags to match the workshop.",
+          "Use your github.io preview as the Development URL; use oracle-livelabs as Production URL after merge.",
+          "Complete and save the checklist with evidence, pull request, and preview links.",
+          "After saving, set and certify Self Quality Assurance Complete or Quarterly Quality Assurance Complete, then wait for verification."
         ],
         checkpoints: [
           "Development URL points to your fork preview and Production URL points to oracle-livelabs only after merge.",
@@ -814,16 +814,16 @@ window.authorGuideContent = (function () {
       {
         id: "pull request-checks",
         title: "Pull Request Checks",
-        short: "Know the 1280px image limit, markdown validator rules, and how to run the scripts locally.",
+        short: "Fix image and Markdown validation failures, then run checks locally.",
         accent: "ocean",
         tags: ["validation", "github"],
-        description: "Use this card when GitHub Actions is blocking the pull request and you need the exact failure class instead of guessing from the red X.",
+        description: "Use this card when GitHub Actions blocks a pull request.",
         steps: [
-          "Open the Checks area on the pull request and name the exact failing workflow before you edit anything: LiveLabs Image Validation or LiveLabs Markdown Validation.",
-          "If the pull request fails LiveLabs Image Validation, use OptiShot to resize any PNG, JPG, or JPEG that exceeds 1280px in width or height, then rerun the pull request checks.",
-          "Use the markdown error log to fix the exact file and rule: missing required sections, bad task header format, missing alt text, inline HTML, unbalanced copy tags, or uppercase filenames.",
-          "Run the validator locally on the workshop root when you want faster repair loops than waiting for GitHub Actions after each commit.",
-          "On Windows, use the PowerShell script if Bash is not your normal workflow, and temporarily bypass execution policy only for the current session when needed."
+          "Identify the failing workflow: Image Validation or Markdown Validation.",
+          "For image failures, use OptiShot to resize PNG, JPG, or JPEG files over 1280px, then rerun checks.",
+          "Use the Markdown log to fix the exact file and rule.",
+          "Run the validator on the workshop root for faster repair cycles.",
+          "On Windows, use the PowerShell validator when Bash is unavailable."
         ],
         checkpoints: [
           "Each failure was fixed by class instead of mixing image cleanup with markdown repair.",
@@ -866,17 +866,17 @@ window.authorGuideContent = (function () {
       {
         id: "publish-request",
         title: "Publish Request",
-        short: "Create the pull request with the WMS ID, fill the Publishing tab correctly, and supply the final URLs.",
+        short: "Create the pull request with its WMS ID, complete Publishing, and provide final URLs.",
         accent: "red",
         tags: ["publishing", "wms"],
-        description: "Use this card when the workshop and checklist are ready and you need the final production handoff sequence for the pull request and WMS publishing request.",
+        description: "Use this card for the final pull request and WMS publishing handoff.",
         steps: [
-          "Create the pull request from GitHub Desktop after Quality Assurance fixes are pushed, and include the WMS ID in the pull request title because review will not start without it.",
-          "On the GitHub pull request page, fill the general requirements and checklist text from Self Quality Assurance so reviewers can see the workshop is ready for merge.",
-          "Confirm the branch has no merge conflicts and is up to date with main before you ask for approval or publishing.",
-          "Open WMS > Publishing, click Publish to LiveLabs, set Publish Type and Workshop Time, and provide the oracle-livelabs production URL that replaces your personal preview URL.",
-          "Enable Brown Button or LiveLabs Sprint only when the workshop really supports those delivery modes, then fill the corresponding URL pattern correctly.",
-          "Save the publishing entry, track Publish Requested and Publish Approved, then verify the production workshop after merge and rollout."
+          "Create the pull request after Quality Assurance fixes are pushed. Include the WMS ID in its title.",
+          "Complete the pull request requirements and Self Quality Assurance checklist.",
+          "Ensure the branch is current and conflict-free.",
+          "In WMS Publishing, select Publish to LiveLabs, set type and time, and add the oracle-livelabs production URL.",
+          "Enable Brown Button or Sprint only when supported, using the correct URL pattern.",
+          "Save, track publishing status, and verify production after rollout."
         ],
         checkpoints: [
           "pull request title includes the WMS ID and the branch is not behind main.",
@@ -926,14 +926,14 @@ window.authorGuideContent = (function () {
       {
         id: "review-sla",
         title: "Review SLA",
-        short: "Use the expected review and publishing windows before you escalate, and include the real deadline when timing matters.",
+        short: "Use expected review windows before escalating, and state real deadlines.",
         accent: "pine",
         tags: ["support", "publishing"],
-        description: "Use this card when the blocker is timing rather than content quality and you need the normal review windows for PRs, council review, Quality Assurance, or publishing.",
+        description: "Use this card for review, Quality Assurance, and publishing timelines.",
         steps: [
-          "Plan around 1 business day for pull request review, 2 to 3 business days for workshop submission review, 2 business days for stakeholder Quality Assurance verification, and 1 business day for publishing after approval.",
-          "Wait for the normal response window before escalating routine review work.",
-          "If the workshop is tied to an event or hard deadline, state that explicitly instead of assuming the urgency is obvious."
+          "Plan for 1 business day for pull request review, 2–3 for submission review, 2 for stakeholder Quality Assurance, and 1 for publishing after approval.",
+          "Wait through the normal response window before escalating.",
+          "State event dates and hard deadlines explicitly."
         ],
         checkpoints: [
           "You know whether the current wait time is still inside the expected SLA window.",
@@ -960,18 +960,18 @@ window.authorGuideContent = (function () {
       {
         id: "livelabs-sprints",
         title: "LiveLabs Sprints",
-        short: "Build a short sprint in the sprints repository, keep it under 10 to 15 minutes, open a pull request, and request sprint publishing in WMS.",
+        short: "Build a focused 10–15 minute sprint, open a pull request, and request publishing in WMS.",
         accent: "ocean",
         tags: ["sprints", "github"],
         updatedAt: "2026-01-01",
-        description: "Use this card when the deliverable is a quick answer to one technical question rather than a full workshop.",
+        description: "Use this card for a short answer to one technical question, not a full workshop.",
         steps: [
-          "Before creating a sprint, check WMS for an existing sprint with the same content.",
-          "Fork and clone oracle-livelabs/sprints, then copy the sample sprint structure into the correct domain folder.",
-          "Rename the sprint folder and markdown file together, update manifest.json, and keep the help address set to livelabs-help-sprints_us@oracle.com.",
-          "Write a focused sprint that answers one question and should take less than 10 to 15 minutes.",
-          "Preview with Live Server, commit, push, create the pull request, and set up GitHub Pages for review.",
-          "Submit the sprint publishing request in WMS, add the production URL pattern, and update the pull request with the WMS ID and LiveLabs ID."
+          "Check WMS for an existing sprint on the same topic.",
+          "Fork and clone oracle-livelabs/sprints, then copy the sample structure into the correct domain.",
+          "Rename the folder and Markdown file together, update manifest.json, and use the sprint help address.",
+          "Answer one question in 10–15 minutes or less.",
+          "Preview, commit, push, open a pull request, and publish a GitHub Pages review site.",
+          "Request publishing in WMS and add WMS and LiveLabs IDs to the pull request."
         ],
         checkpoints: [
           "The sprint belongs in the right domain folder, or the Sprints team has approved a new bucket.",
@@ -1012,10 +1012,10 @@ window.authorGuideContent = (function () {
       {
         id: "graphical-remote-desktop",
         title: "Graphical Remote Desktop",
-        short: "Configure static hostname, deploy noVNC, preload workshop URLs, and validate the desktop before image capture.",
+        short: "Set the hostname, deploy noVNC, preload URLs, and validate the desktop before image capture.",
         accent: "sienna",
         tags: ["secure-desktop"],
-        description: "Use this card when a workshop needs a prepared noVNC graphical desktop image instead of ordinary browser or cloud-shell steps.",
+        description: "Use this card when a workshop needs a prepared noVNC desktop image.",
         steps: [
           "Start from an Oracle Enterprise Linux 8 instance that meets Marketplace image requirements.",
           "Configure and preserve a static hostname before installing products that hardcode hostnames, listeners, or domain names.",
@@ -1049,11 +1049,11 @@ window.authorGuideContent = (function () {
       {
         id: "custom-image-capture",
         title: "Custom Image Capture",
-        short: "Clean the instance, check the OL9 and NoVNC warning, create the custom OCI image, test it with ORM, and verify desktop launch before Marketplace work.",
+        short: "Clean and capture the OCI image, test it with ORM, and verify desktop launch before Marketplace work.",
         accent: "sienna",
         tags: ["marketplace", "media"],
         updatedAt: "2026-01-01",
-        description: "Use this card when a workshop requires a reusable OCI compute image that will later be published or attached to a sandbox environment.",
+        description: "Use this card to create a reusable OCI image for a sandbox or publication.",
         steps: [
           "If the image needs NoVNC access, check the source warning before you choose OL9. The current guide asks authors to avoid OL9 images for NoVNC while the LiveLabs team investigates compatibility issues.",
           "SSH to the instance outside the remote desktop session and run the LiveLabs cleanup script before capture.",
@@ -1094,11 +1094,11 @@ window.authorGuideContent = (function () {
       {
         id: "marketplace-image-publish",
         title: "Marketplace Image Publishing",
-        short: "Prepare Marketplace listing assets, publish the custom image, and keep LiveLabs support details visible.",
+        short: "Prepare the Marketplace listing, publish the image, and include LiveLabs support details.",
         accent: "sienna",
         tags: ["marketplace", "publishing"],
         updatedAt: "2026-01-01",
-        description: "Use this card when the custom image has passed testing and needs to become a Marketplace-backed image for LiveLabs delivery.",
+        description: "Use this card to publish a tested custom image to Marketplace for LiveLabs.",
         steps: [
           "Confirm the custom image has been tested from a fresh provisioned instance before starting Marketplace publishing.",
           "Prepare required Marketplace listing details, terms of use, support information, and artifact metadata.",
@@ -1133,11 +1133,11 @@ window.authorGuideContent = (function () {
       {
         id: "wms-custom-image-update",
         title: "WMS Custom Image Update",
-        short: "Register a Marketplace listing in WMS, add the image version, and update an existing sandbox environment.",
+        short: "Register a Marketplace listing in WMS, add its image version, and update a sandbox.",
         accent: "red",
         tags: ["marketplace", "wms"],
         updatedAt: "2026-01-01",
-        description: "Use this card after a Marketplace image is published and you need to attach it to a pre-existing LiveLabs sandbox environment through WMS.",
+        description: "Use this card to attach a published Marketplace image to an existing WMS sandbox.",
         steps: [
           "Open WMS and register the Marketplace listing under Custom Images with listing name, listing OCID, and app catalog OCID.",
           "Add support contacts so the right people can view or edit the image entry later.",
@@ -1173,11 +1173,11 @@ window.authorGuideContent = (function () {
       {
         id: "livestack-create",
         title: "LiveStack Creation",
-        short: "Create an industry-focused LiveStack solution package, add LiveLabs and assets, manage visibility, and request publishing.",
+        short: "Create an industry-focused LiveStack package, add LiveLabs and assets, then request publishing.",
         accent: "ocean",
         tags: ["livestack", "assets"],
         updatedAt: "2026-07-01",
-        description: "Use this card when a solution needs a LiveStack package that combines a LiveStack Demo, LiveLabs workshops, deployment-ready assets, and supporting materials around one industry challenge or business outcome.",
+        description: "Use this card to package a LiveStack Demo, LiveLabs workshops, assets, and supporting material around one outcome.",
         steps: [
           "Open WMS, choose Create a LiveStack, review the landing-page overview, and create the initial LiveStack record.",
           "Use the LiveStack Details page as the working surface for LiveLab entries, assets, ordering, visibility, and publishing status.",
@@ -1225,11 +1225,11 @@ window.authorGuideContent = (function () {
       {
         id: "wms-assets",
         title: "WMS Asset Manager",
-        short: "Upload reusable files or links, share editor access, copy PAR links, and keep LiveStack or sandbox assets maintainable.",
+        short: "Upload reusable files or links, share editor access, copy PAR links, and maintain assets.",
         accent: "pine",
         tags: ["assets", "wms"],
         updatedAt: "2026-06-01",
-        description: "Use this card when a workshop, sandbox, tenancy flow, or LiveStack needs reusable files or links managed through WMS Self Services instead of ad hoc support requests.",
+        description: "Use this card to manage reusable workshop, sandbox, tenancy, or LiveStack assets in WMS.",
         steps: [
           "Open WMS, expand Self Services, choose Assets, and click New Asset.",
           "For files, choose Upload a File, pick the file, name it clearly, choose an asset type, and add a description when the name is not enough.",
@@ -1278,10 +1278,10 @@ window.authorGuideContent = (function () {
       {
         id: "secure-desktop-when",
         title: "Secure Desktop: When to Use It",
-        short: "Test normal access first, use secure desktop only for real restrictions, and validate with sample users before the event.",
+        short: "Test normal access first; use Secure Desktop only for real restrictions and validate it before the event.",
         accent: "sienna",
         tags: ["secure-desktop"],
-        description: "Use this card when the workshop audience may be on restricted corporate laptops and you need to decide whether OCI Secure Desktops are actually required.",
+        description: "Use this card to decide whether restricted users truly need OCI Secure Desktops.",
         steps: [
           "Assume standard access first, then test with one or two representative participants from the target organization before you request secure desktops.",
           "Ask those participants to open the normal workshop environment from their corporate laptop, then try Secure Desktop only if standard access is blocked.",
@@ -1320,10 +1320,10 @@ window.authorGuideContent = (function () {
       {
         id: "secure-desktop-request",
         title: "Secure Desktop: Request and Access",
-        short: "Post the request with full event details, plan earlier for large events, and make participants use the supported browser flow.",
+        short: "Request Secure Desktop with complete event details and plan early for large events.",
         accent: "sienna",
         tags: ["secure-desktop", "support"],
-        description: "Use this card when secure desktops are justified and you need the exact request details plus the participant-side launch prerequisites.",
+        description: "Use this card when Secure Desktop is required and you need request and launch details.",
         steps: [
           "Post the request in the LiveLabs Authors Slack channel and include event name, event date, workshop, participant count, and why standard access is blocked.",
           "If you need 100 or more secure desktops, start coordination 3 to 4 weeks ahead so infrastructure planning is possible.",
@@ -1368,11 +1368,11 @@ window.authorGuideContent = (function () {
       {
         id: "secure-desktop-participant-guide",
         title: "Secure Desktops: Participant Launch Guide",
-        short: "Use the public participant guide to reserve a LiveLabs workshop, launch Secure Desktop, and recover from common login and pop-up issues.",
+        short: "Use the participant guide to reserve a workshop, launch Secure Desktop, and resolve common access issues.",
         accent: "sienna",
         tags: ["secure-desktop", "support"],
         updatedAt: "2026-03-01",
-        description: "Use this card after the author or event owner has confirmed that Secure Desktops are required. It mirrors the current public participant guide and keeps the reservation, launch, and first-login sequence in one place.",
+        description: "Use this card after Secure Desktop is confirmed. It covers reservation, launch, and first login.",
         steps: [
           "Before starting, use Google Chrome, enable pop-ups, and log out of any OCI tenants in that browser.",
           "Open the assigned LiveLabs workshop, click START, choose Run on LiveLabs Sandbox, and sign in with the Oracle account required by the reservation flow.",
@@ -1419,35 +1419,35 @@ window.authorGuideContent = (function () {
       {
         id: "ai-developer-hub",
         title: "AI Developer Hub",
-        short: "Use the AI Developer Hub guide, repository, and skill bundles to speed up authoring work without replacing the canonical workflow.",
+        short: "Use the AI Developer Hub guide, repository, and skills to speed up authoring while following the canonical workflow.",
         accent: "pine",
         tags: ["ai", "tools"],
-        description: "Use this card when you want AI-assisted help for drafting, restructuring, or automating LiveLabs authoring tasks, but still need the output anchored to the canonical guide and validator rules.",
+        description: "Use AI to draft, restructure, or automate authoring tasks. Validate all output against the guide and validator rules.",
         steps: [
-          "Open the LiveLabs AI Developer Hub how-to guide first so you understand the intended workflow and starting points.",
-          "Review the repository and the LiveLabs AI Developer skill bundle folder to see what authoring helpers already exist before you invent a new prompt flow.",
-          "Use the hub for narrow, real tasks such as drafting task steps, tightening prose, extracting prerequisites, or producing a first pass that you will verify manually.",
-          "Review every AI-assisted output against the canonical guide, preview the workshop again, and run the validator before you trust the result."
+          "Start with the AI Developer Hub how-to guide.",
+          "Review the repository and skill bundle before creating a new prompt flow.",
+          "Use it for focused tasks: draft steps, tighten prose, extract prerequisites, or create a first pass.",
+          "Check AI output against the guide, preview the workshop, and run the validator."
         ],
         checkpoints: [
-          "The AI workflow starts from the published guide and skill bundle instead of freeform prompting alone.",
-          "Generated steps, commands, and screenshots still match the real workshop flow.",
-          "Human review happens before any AI-assisted content is committed."
+          "Start with the published guide and skill bundle.",
+          "Ensure generated steps, commands, and screenshots match the workshop flow.",
+          "Review all AI-assisted content before committing."
         ],
         watchFor: [
-          "Using AI to replace the canonical guide instead of accelerating work around it.",
-          "Keeping vague generated summaries that never become real steps, commands, or evidence.",
-          "Committing AI-generated content without preview or validator checks."
+          "Using AI instead of the canonical guide.",
+          "Keeping vague output that does not become usable steps, commands, or evidence.",
+          "Committing AI content without previewing or validating it."
         ],
         resourcesTitle: "Hub entry points",
-        resourcesIntro: "Start with the guide, then use the repository and skill bundle as the reusable working set.",
+        resourcesIntro: "Start with the guide, then use the repository and skill bundle.",
         resourceLinks: [
-          resourceLink("AI Developer Hub guide", officialLinks.aiHubGuide, "Open the how-to workflow first."),
-          resourceLink("AI Developer Hub repository", officialLinks.aiHubRepo, "Use the repository when you want the source materials locally."),
-          resourceLink("LiveLabs AI Developer skills", officialLinks.aiHubSkills, "Review the authoring skill bundle before you create a new flow.")
+          resourceLink("AI Developer Hub guide", officialLinks.aiHubGuide, "Start here."),
+          resourceLink("AI Developer Hub repository", officialLinks.aiHubRepo, "Access the source materials."),
+          resourceLink("LiveLabs AI Developer skills", officialLinks.aiHubSkills, "Review available skills first.")
         ],
         snippetMeta: "Quick start",
-        snippetTitle: "Start with these hub assets",
+        snippetTitle: "Hub resources",
         snippet: [
           "git clone https://github.com/lfoinding/livelabs-ai-playground.git",
           "",
