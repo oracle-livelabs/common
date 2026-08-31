@@ -43,6 +43,95 @@ test("approved dashboard shell and Inventory dimensions remain stable", async ({
   expect(pageErrors).toEqual([]);
 });
 
+test("search selection and both Back to Dashboard controls reset the search UI", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  const search = page.locator("#global-workshop-search");
+  const results = page.locator("[data-search-results]");
+  const query = "Autonomous AI Database";
+
+  await search.fill(query);
+  await expect(page.locator(".search-result-button").first()).toBeVisible();
+  await page.locator(".search-result-button").first().click();
+  await expect(page.locator("#search-workshop-view")).toBeVisible();
+  await expect(search).toHaveValue("");
+  await expect(results).toBeEmpty();
+  await expect(page.locator("[data-search-status]")).toBeHidden();
+  expect(new URL(page.url()).searchParams.has("q")).toBe(false);
+
+  await page.locator("#search-workshop-view [data-back-dashboard]").click();
+  await expect(page.locator("#search-workshop-view")).toBeHidden();
+  await expect(search).toHaveValue("");
+  await expect(results).toBeEmpty();
+
+  await search.fill(query);
+  await expect(page.locator(".search-result-button").first()).toBeVisible();
+  await page.locator(".search-result-button").first().click();
+  await expect(page.locator("#search-workshop-view")).toBeVisible();
+  await page.locator(".sidebar-back-button[data-back-dashboard]").click();
+  await expect(page.locator("#search-workshop-view")).toBeHidden();
+  await expect(search).toHaveValue("");
+  await expect(results).toBeEmpty();
+});
+
+test("rank column stays clickable while hidden from the sort dropdown", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  const table = page.locator('[data-filter-table="top-performer-top-100-workshops"]');
+  const tableDisclosure = page.locator("details.ranked-table-disclosure").filter({ has: table }).first();
+  if (!(await tableDisclosure.getAttribute("open"))) await tableDisclosure.locator(":scope > summary").click();
+  await table.scrollIntoViewIfNeeded();
+  const sortSelect = page.locator('[data-pagination-sort-for="top-performer-top-100-workshops"]');
+  await expect(sortSelect.locator("option", { hasText: "#" })).toHaveCount(0);
+  const rankHeader = table.locator('button[data-sort-table="top-performer-top-100-workshops"][data-column-index="0"]');
+  await expect(rankHeader).toHaveText("#");
+  await rankHeader.click();
+  await expect(table).toHaveAttribute("data-sort-column-index", "0");
+  await rankHeader.click();
+  await expect(table.locator('tbody tr[data-filter-row="true"]').first().locator("td").first()).toHaveText("100");
+});
+
+test("Portfolio Stats uses themed collapsible glance and example-first fallback guidance", async ({ page }) => {
+  await page.goto("/#portfolio-stats", { waitUntil: "networkidle" });
+  const portfolio = page.locator("#portfolio-stats");
+  const glance = portfolio.locator('[data-portfolio-glance="true"]');
+  await expect(glance).toBeVisible();
+  await expect(glance).not.toHaveAttribute("open", "");
+  await expect(glance.locator("summary h3")).toHaveText("Portfolio at a glance");
+  await expect(glance.locator("summary span")).toHaveCount(0);
+  await expect(glance.locator(".portfolio-glance-grid")).toBeHidden();
+  const disclosureArrows = await page.locator("main details.toggle-panel > summary.panel-head").evaluateAll((summaries) =>
+    summaries.map((summary) => getComputedStyle(summary, "::after").content)
+  );
+  expect(disclosureArrows.length).toBeGreaterThan(0);
+  expect(disclosureArrows.every((content) => content !== "none")).toBe(true);
+  await glance.locator("summary").click();
+  await expect(glance).toHaveAttribute("open", "");
+  await expect(portfolio.locator('[data-portfolio-glance="true"] strong')).toHaveText([
+    "885",
+    "285",
+    "473",
+    "433"
+  ]);
+  await expect(glance.getByText("WMS match rate", { exact: true })).toHaveCount(0);
+  await expect(portfolio.getByText("Portfolio Coverage", { exact: true })).toHaveCount(0);
+  await expect(portfolio.locator("details.toggle-panel > summary.panel-head")).toHaveCount(3);
+  const fallback = portfolio.locator("details").filter({ hasText: "Fallback Implementation Details" });
+  await expect(fallback).toBeVisible();
+  await fallback.locator("summary").click();
+  await expect(fallback.locator(".fallback-example-card")).toBeVisible();
+  await expect(fallback.locator(".fallback-example-card h4")).toHaveText("Retire-Now ranking needed more eligible rows");
+  await expect(fallback.locator(".fallback-rule-step.is-used .fallback-rule-name")).toHaveText("weighted_v4");
+  await expect(fallback.locator(".fallback-explanation.is-used")).toHaveCount(3);
+  const fallbackStepStyles = await fallback.locator(".fallback-rule-step, .fallback-explanation").evaluateAll((steps) =>
+    steps.map((step) => {
+      const style = getComputedStyle(step);
+      return [style.backgroundColor, style.color, style.borderLeftColor, style.borderLeftWidth];
+    })
+  );
+  expect(new Set(fallbackStepStyles.map((style) => JSON.stringify(style))).size).toBe(1);
+  await expect(fallback.getByText("One clear summary plus one real example.", { exact: true })).toHaveCount(0);
+  await expect(portfolio.locator("summary h3").filter({ hasText: "Explore the detailed breakdown" })).toBeVisible();
+});
+
 test("every Inventory record is routeable and formerly suppressed value clicks open details", async ({ page, request }) => {
   const payload = await (await request.get("/data/portfolio_inventory.json")).json();
   const records = payload.records || [];

@@ -20,7 +20,7 @@ Estimated Time: 15 minutes
 
 ## Task 1: Review the Verified Event Values
 
-1. Review the latest verified LiveLab URL, event code, selected access path, expected first screen, delivery roles, support route, fallback, and [event operations package](#legend).
+1. Review the latest verified LiveLab URL, event code, selected access path, access-control status, expected first screen, delivery roles, support route, fallback, and [event operations package](#legend).
 
 2. If a material value changed, stop and retest that path before attendees begin. Keep the new result with the event notes.
 

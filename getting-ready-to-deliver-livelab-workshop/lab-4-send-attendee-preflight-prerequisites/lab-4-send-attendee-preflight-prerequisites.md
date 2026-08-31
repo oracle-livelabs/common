@@ -27,7 +27,7 @@ Estimated Time: 10 minutes
     - Expected provisioning time.
     - A [pre-event support contact](#legend).
 
-    Add the author-provided prerequisites from the workshop and event plan. When the event is hosted at a customer venue, include the confirmed network and internet requirements, and any building-access or arrival instructions that attendees must complete beforehand. Keep the venue team's capacity confirmation and planned student count in the event notes. If Secure Desktops are required, include their access steps and any device or network checks.
+    Add the author-provided prerequisites from the workshop and event plan. When the event is hosted at a customer venue, include the confirmed network and internet requirements, and any building-access or arrival instructions that attendees must complete beforehand. Keep the venue team's capacity confirmation and planned student count in the event notes. If Secure Desktops or lab restrictions apply, identify the affected labs and include the required access steps, learner actions, and device or network checks.
 
     Ask the customer whether they need specific information before the event and include the confirmed answers in the message or link to the approved workshop prerequisite material. Do not leave customer questions for the live session.
 
@@ -68,6 +68,8 @@ Estimated Time: 10 minutes
 
     [If Secure Desktops are required, add the Secure Desktop access steps and
     device or network checks.]
+    [If lab restrictions apply, identify the affected labs and add the required
+    learner action, permission, network, or fallback instructions.]
     [If the customer venue requires it, add building access, arrival, and
     network instructions.]
 

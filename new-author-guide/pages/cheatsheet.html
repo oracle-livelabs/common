@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Oracle LiveLabs Author Guide refresh with a guided path, reference toolkit, Step by Step Guide, unified search, and a real workshop example.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23C74634'/%3E%3C/svg%3E">
+  <title>Cheatsheet · Oracle LiveLabs Author Guide</title>
+  <script src="../assets/js/author-guide-config.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/author-guide.css">
+  <link rel="stylesheet" href="../assets/css/redwood-video-player.css">
+  <link rel="stylesheet" href="../assets/css/author-guide-improvements.css?v=20260805-nodoc-hero-lab-video">
+</head>
+<body data-author-guide-page="explorer">
+  <div id="app" data-redwood-creator-pass="2026-05-25">
+    <div class="app-shell">
+      <!-- Sticky Navigation -->
+      <button class="author-global-nav-toggle" type="button" id="authorGlobalNavToggle" aria-expanded="true" aria-controls="modeNav" aria-label="Close navigation" hidden>
+        <svg class="toggle-icon-open" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+          <path d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg class="toggle-icon-close" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+          <path d="M6 6l12 12M18 6 6 18"></path>
+        </svg>
+      </button>
+      <header class="mode-nav d-none" id="modeNav">
+        <div class="container">
+          <nav class="navbar nav-shell">
+            <div class="container-fluid px-0 gap-3 align-items-center">
+              <a class="brand-token border-0 bg-transparent" data-mode-target="hub" aria-label="Return to the author guide home" href="./home">
+                <span class="brand-mark" aria-hidden="true">
+                  <svg viewBox="0 0 109.36 22.96" xmlns="http://www.w3.org/2000/svg" role="img" focusable="false" aria-hidden="true">
+                    <path d="M47.9122 13.4234 54.459 13.4234 51 7.84135 44.6505 17.9233 41.75 17.9233 49.4805 5.82375C49.8106 5.33355 50.377 5.03665 50.9962 5.03665 51.6017 5.03665 52.1582 5.32375 52.4883 5.80225L60.2422 17.9233 57.3497 17.9233 55.9865 15.6694 49.3574 15.6694 47.9122 13.4234M77.9512 15.6694 77.9512 5.15975 75.4922 5.15975 75.4922 16.7027C75.4922 17.0172 75.6251 17.3258 75.8556 17.5483 76.09 17.7906 76.4121 17.9233 76.75 17.9233L87.9317 17.9233 89.3887 15.6694 77.9512 15.6694M37.3512 13.7906C39.7407 13.7906 41.6622 11.8569 41.6622 9.47415 41.6622 7.09135 39.7407 5.15975 37.3512 5.15975L26.6129 5.15975 26.6129 17.9233 29.0669 17.9233 29.0669 7.41555 37.188 7.41555C38.3278 7.41555 39.2515 8.33555 39.2515 9.47415 39.2515 10.6109 38.3278 11.5464 37.188 11.5464L30.2672 11.5406 37.5973 17.9233 41.1582 17.9233 36.235 13.7906 37.3512 13.7906M11.5142 17.9233 18.9331 17.9233C22.4625 17.9233 25.3043 15.0718 25.3043 11.5464 25.3043 8.01715 22.4625 5.15975 18.9331 5.15975L11.5142 5.15975C7.98886 5.15975 5.12945 8.01715 5.12945 11.5464 5.12945 15.0718 7.98886 17.9233 11.5142 17.9233M18.7633 15.6772 11.6774 15.6772C9.39705 15.6772 7.54935 13.8237 7.54935 11.5464 7.54935 9.25935 9.39705 7.41555 11.6774 7.41555L18.7633 7.41555C21.0513 7.41555 22.8971 9.25935 22.8971 11.5464 22.8971 13.8237 21.0513 15.6772 18.7633 15.6772M65.3672 17.9233 72.9415 17.9233 74.375 15.6772 65.5352 15.6772C63.2442 15.6772 61.3985 13.8237 61.3985 11.5464 61.3985 9.25935 63.2442 7.41555 65.5352 7.41555L72.7305 7.41555 74.1817 5.15975 65.3672 5.15975C61.8399 5.15975 58.9746 8.01715 58.9746 11.5464 58.9747 15.0718 61.84 17.9233 65.3672 17.9233M95.381 15.6772C93.4903 15.6772 91.8965 14.4078 91.4044 12.6714L101.893 12.6714 103.338 10.4214 91.4044 10.4214C91.8947 8.68125 93.4903 7.41555 95.381 7.41555L102.582 7.41555 104.022 5.15975 95.2169 5.15975C91.6953 5.15975 88.8379 8.01715 88.8379 11.5464 88.8379 15.0718 91.6953 17.9233 95.2169 17.9233L102.791 17.9233 104.231 15.6772 95.381 15.6772" fill="#C74634"/>
+                  </svg>
+                </span>
+                <span>
+                  <span class="brand-label">LiveLabs</span>
+                  <small>Author guide</small>
+                </span>
+              </a>
+
+              <div class="nav-main-grid">
+                <div class="nav-group nav-group-all" role="group" aria-label="Primary navigation">
+                  <a class="btn nav-control" data-mode-target="hub" aria-label="Open the author guide home" href="./home">
+                    <span class="nav-control-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false"><path d="M3 10.8 12 3l9 7.8v9.7a.5.5 0 0 1-.5.5h-5.2v-6.1H8.7V21H3.5a.5.5 0 0 1-.5-.5v-9.7Z"/></svg>
+                    </span>
+                    <span class="nav-control-text">Home</span>
+                  </a>
+                  <a class="btn nav-control" data-mode-target="beginner" aria-label="Open quickstart" href="./quickstart">
+                    <span class="nav-control-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M5 12h14" />
+                        <path d="m13 6 6 6-6 6" />
+                      </svg>
+                    </span>
+                    <span class="nav-control-text">Quickstart</span>
+                  </a>
+                  <a class="btn nav-control" data-mode-target="explorer" aria-label="Open cheatsheet" href="./cheatsheet">
+                    <span class="nav-control-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false"><path d="M8 4h8l1.5 2H20v14H4V6h2.5L8 4Zm0 7h8M8 15h6"/></svg>
+                    </span>
+                    <span class="nav-control-text">Cheatsheet</span>
+                  </a>
+                  <a class="btn nav-control" data-mode-target="nodoc" aria-label="Open NoDoc guide" href="./nodoc">
+                    <span class="nav-control-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M6 3.5h9l3 3V20H6V3.5Z" />
+                        <path d="M15 3.5V7h3M9 11h6M9 14h6M9 17h4" />
+                      </svg>
+                    </span>
+                    <span class="nav-control-text">NoDoc</span>
+                  </a>
+                  <a class="btn nav-control" href="../workshops/livelabs/" data-full-guide-link target="_blank" rel="noreferrer" aria-label="Open Step by Step Guide">
+                    <span class="nav-control-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M6.5 4.5h9.2a1.8 1.8 0 0 1 1.8 1.8v13.2H8.3a1.8 1.8 0 0 1-1.8-1.8V4.5Z" />
+                        <path d="M9.2 4.5v15M10.8 8h4M10.8 11h4M10.8 14h3" />
+                        <path d="M4.5 6.5h2M4.5 9h2M4.5 11.5h2M4.5 14h2M4.5 16.5h2" />
+                      </svg>
+                    </span>
+                    <span class="nav-control-text">Step by Step Guide</span>
+                  </a>
+                  <a class="btn nav-control" href="https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/" data-workshop-example-link target="_blank" rel="noreferrer" aria-label="Open a real LiveLabs workshop example">
+                    <span class="nav-control-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" focusable="false"><path d="M9 3h6M10 3v5l-5.6 9.8A2.1 2.1 0 0 0 6.2 21h11.6a2.1 2.1 0 0 0 1.8-3.2L14 8V3M8 15h8"/></svg>
+                    </span>
+                    <span class="nav-control-text">Workshop Example</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      <section class="mode-screen d-none" id="explorerMode" aria-labelledby="explorerHeading">
+        <div class="container">
+          <h2 class="visually-hidden" id="explorerHeading">Cheatsheet</h2>
+
+          <div class="card toolbar-card cheatsheet-toolbar-card">
+            <div class="card-body">
+              <div class="cheatsheet-toolbar-main">
+                <div>
+                  <h3 class="cheatsheet-toolbar-title">Cheatsheet</h3>
+                  <p class="cheatsheet-toolbar-copy">Search fast answers by keyword or narrow the cards by topic.</p>
+                </div>
+                <div class="result-line">
+                  <strong id="resultCount">Showing cheatsheet cards</strong>
+                  <span class="result-helper" id="filterSummary">Alphabetical sort. All tags.</span>
+                </div>
+              </div>
+
+              <div class="cheatsheet-toolbar-controls">
+                <div class="cheatsheet-search-control">
+                  <label for="bubbleSearch" class="form-label filter-label">Search cheatsheet</label>
+                  <div class="input-group input-group-lg search-group">
+                    <span class="input-group-text">Search</span>
+                    <input id="bubbleSearch" class="form-control" type="search" placeholder="WMS, FAQ, FreeSQL, validator" aria-label="Search cheatsheet cards">
+                    <button type="button" class="btn btn-outline-secondary" id="clearSearch">Clear</button>
+                  </div>
+                </div>
+
+                <div class="cheatsheet-sort-control">
+                  <label for="toolkitSort" class="form-label filter-label">Sort cards</label>
+                  <select class="form-select form-select-lg" id="toolkitSort" aria-label="Sort cheatsheet cards">
+                    <option value="alphabetical" selected>Alphabetical</option>
+                    <option value="latest">Latest</option>
+                    <option value="relevance">Most relevant</option>
+                    <option value="topic">Topic</option>
+                  </select>
+                </div>
+
+                <div class="cheatsheet-tag-control">
+                  <div class="filter-label">Filter by tag</div>
+                  <div class="tag-pills" id="tagPills" aria-label="Cheatsheet tag filters">
+                    <button type="button" class="tag-pill is-active" data-tag="all" aria-pressed="true">All</button>
+                  </div>
+                </div>
+
+                <a class="btn btn-outline-secondary rounded-pill px-4" data-mode-target="beginner" href="./quickstart">Need sequence? Open Quickstart</a>
+              </div>
+            </div>
+            <div class="cheatsheet-decoration-strip" aria-hidden="true"></div>
+          </div>
+
+          <div class="garden-shell">
+            <div class="bubble-grid row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4" id="bubbleGrid"></div>
+            <div class="empty-state d-none" id="emptyState">No cheatsheet cards match that search yet. Clear the search or change the tag filter.</div>
+          </div>
+        </div>
+      </section>
+      <button type="button" class="back-to-top" id="backToTopButton" aria-label="Back to top" title="Back to top">
+        <span class="back-to-top-icon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+            <path d="M8 3.25 3.75 7.5l.9.9L7.5 5.56V13h1V5.56l2.85 2.84.9-.9L8 3.25Z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="back-to-top-label">Back to top</span>
+      </button>
+      <!-- Cheatsheet Detail Modal -->
+      <div class="modal fade" id="bubbleModal" tabindex="-1" aria-labelledby="bubbleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div>
+                <div class="modal-kicker" id="bubbleModalKicker">Cheatsheet Detail</div>
+                <h2 class="modal-title h3 mb-0" id="bubbleModalLabel">Cheatsheet detail</h2>
+              </div>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close detail view"></button>
+            </div>
+
+            <div class="modal-body">
+              <p class="lead mb-3" id="bubbleModalDescription"></p>
+              <div class="detail-tags mb-4" id="bubbleModalTags"></div>
+              <div class="modal-support-mount d-none" id="bubbleModalVideoMount"></div>
+
+              <div class="card modal-media-card mb-4 d-none" id="bubbleModalMediaCard">
+                <div class="card-body">
+                  <figure class="modal-media-figure mb-0">
+                    <figcaption id="bubbleModalImageCaption"></figcaption>
+                    <img id="bubbleModalImage" src="" alt="">
+                  </figure>
+                </div>
+              </div>
+
+              <div class="modal-support-mount d-none" id="bubbleModalMilestonesMount"></div>
+              <div class="modal-support-mount d-none" id="bubbleModalExampleMount"></div>
+
+              <div class="modal-grid">
+                <div class="modal-panel">
+                  <h3>Do this</h3>
+                  <ol id="bubbleModalSteps"></ol>
+                </div>
+
+                <div class="modal-panel">
+                  <h3>What to check</h3>
+                  <ul id="bubbleModalCheckpoints"></ul>
+                </div>
+
+                <div class="modal-panel">
+                  <h3>Watch for</h3>
+                  <ul id="bubbleModalWatchFor"></ul>
+                </div>
+              </div>
+
+              <div class="modal-support-mount d-none" id="bubbleModalResourcesMount"></div>
+
+              <div class="card snippet-card mt-4" id="bubbleModalSnippetCard">
+                <div class="card-body">
+                  <div class="snippet-header">
+                    <div>
+                      <div class="snippet-meta" id="bubbleModalSnippetMeta">Reference snippet</div>
+                      <h3 class="mb-0" id="bubbleModalSnippetTitle">Snippet</h3>
+                    </div>
+                    <button class="copy-snippet" type="button" data-copy-target="bubbleModalSnippet">Copy</button>
+                  </div>
+                  <pre><code id="bubbleModalSnippet"></code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <a class="btn btn-outline-secondary rounded-pill px-4 d-none" id="bubbleModalSourceLink" href="#" target="_blank" rel="noreferrer">Open Step by Step Guide</a>
+              <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="image-lightbox" id="imageLightbox" hidden aria-hidden="true">
+        <div class="image-lightbox-backdrop" data-lightbox-close="true"></div>
+        <div class="image-lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="imageLightboxTitle">
+          <div class="image-lightbox-header">
+            <p class="image-lightbox-kicker" id="imageLightboxTitle">Expanded Image</p>
+            <button type="button" class="image-lightbox-close" id="imageLightboxClose" aria-label="Close expanded image">Close</button>
+          </div>
+          <div class="image-lightbox-body">
+            <img id="imageLightboxImage" src="" alt="">
+          </div>
+          <p class="image-lightbox-caption" id="imageLightboxCaption"></p>
+        </div>
+      </div>
+      <div class="visually-hidden-live" aria-live="polite" id="liveRegion"></div>
+      <footer class="app-footer" aria-label="Site footer" data-shared-footer data-footer-variant="app">
+        <div class="container">Powered by Oracle LiveLabs Team &copy; 2026</div>
+      </footer>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/guide-content.js?v=20260729-topic-sort-guide-label"></script>
+  <script src="../assets/js/workshop-generator.js?v=20260708-skill-generator-livestack"></script>
+  <script src="../assets/js/shared-side-nav.js?v=20260529-shared-nav-v2"></script>
+  <script src="../assets/js/nodoc-workshop.js?v=20260817-task-media-progress-navigation"></script>
+  <script src="../assets/js/redwood-video-player.js"></script>
+  <script src="../assets/js/author-guide-app.js?v=20260804-separate-pages"></script>
+  <script src="../assets/js/shared-footer.js?v=20260516-followup"></script>
+</body>
+</html>

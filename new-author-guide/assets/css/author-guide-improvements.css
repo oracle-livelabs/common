@@ -58,6 +58,68 @@
   letter-spacing: 0;
 }
 
+/* Make each checkpoint read as a deliberate handoff: confirm the exit criteria, then scan the risks. */
+#app .progression-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: stretch;
+  gap: 0.9rem;
+  position: relative;
+}
+
+#app .progression-pair > .step-block {
+  height: 100%;
+}
+
+#app .progression-pair > .step-block:first-child {
+  grid-column: 1;
+}
+
+#app .progression-pair > .step-block:nth-child(2) {
+  grid-column: 3;
+}
+
+#app .progression-pair::after {
+  content: "→";
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  color: var(--oracle-red);
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+@media (max-width: 850px) {
+  #app .progression-pair {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.65rem;
+  }
+
+  #app .progression-pair > .step-block:first-child,
+  #app .progression-pair > .step-block:nth-child(2) {
+    grid-column: 1;
+  }
+
+  #app .progression-pair > .step-block:first-child {
+    grid-row: 1;
+  }
+
+  #app .progression-pair::after {
+    content: "↓  Next";
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: center;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase;
+  }
+
+  #app .progression-pair > .step-block:nth-child(2) {
+    grid-row: 3;
+  }
+}
+
 #app strong {
   font-weight: 700;
 }
@@ -1817,6 +1879,35 @@ body.home-no-scroll #app .app-footer .container {
   filter: none;
 }
 
+/* Use a red X for risks and mistakes so Watch for mirrors the green checks in Before you move on. */
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .mistake-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .mistake-list li {
+  position: relative;
+  padding-left: 1.95rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .mistake-list li::before {
+  content: "\2715";
+  position: absolute;
+  left: 0;
+  top: 0.08rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c74634, #e27362);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 900;
+  box-shadow: 0 12px 24px rgba(199, 70, 52, 0.16);
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero {
   position: relative;
   margin: 0;
@@ -1954,6 +2045,11 @@ body.home-no-scroll #app .app-footer .container {
   text-align: left;
   box-shadow: none;
   outline-offset: 5px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button {
+  cursor: default;
+  pointer-events: none;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button::after {
@@ -3568,6 +3664,12 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   stroke-dasharray: 8 6;
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge.is-publish-request {
+  stroke: var(--oracle-red);
+  stroke-dasharray: 2 8;
+  stroke-linecap: round;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge.is-selected {
   stroke-width: 3.5;
 }
@@ -4236,7 +4338,7 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
   #app[data-redwood-creator-pass="2026-05-25"] .preview-checkpoint-layout,
   #app[data-redwood-creator-pass="2026-05-25"] .generator-layout,
   #app[data-redwood-creator-pass="2026-05-25"] .example-generator-input-row,
-  #app[data-redwood-creator-pass="2026-05-25"] .qa-order-layout {
+  #app[data-redwood-creator-pass="2026-05-25"] .qa-order-content {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -4381,8 +4483,7 @@ body.home-no-scroll #app .hub-hero {
   align-items: stretch;
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-copy,
-#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-status {
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-copy {
   min-width: 0;
   padding: clamp(1rem, 2vw, 1.35rem);
   border-radius: 0.85rem;
@@ -4393,18 +4494,38 @@ body.home-no-scroll #app .hub-hero {
   background: #f8f7f5;
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-status {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.45rem;
-  border: 1px solid rgba(95, 125, 79, 0.28);
-  background: #f2f6ef;
-  color: #312d2a;
+#app[data-redwood-creator-pass="2026-05-25"] .quickstart-nodoc-logo {
+  display: block;
+  width: min(100%, 12rem);
+  height: auto;
+  margin: 0 0 1rem;
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-status strong {
-  color: #395a32;
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-visual .nodoc-route-copy {
+  background: linear-gradient(135deg, #fff8f5 0%, #f8f7f5 68%);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-logo-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 100%;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  border-radius: 0.85rem;
+  text-decoration: none;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-logo-link:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-logo-link:focus-visible {
+  background: rgba(255, 248, 245, 0.82);
+  transform: translateY(-2px);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-logo-link .quickstart-nodoc-logo {
+  width: min(100%, 15rem);
+  margin: 0;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .nodoc-quickstart-list {
@@ -4422,20 +4543,25 @@ body.home-no-scroll #app .hub-hero {
   display: none !important;
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .qa-order-layout {
+#app[data-redwood-creator-pass="2026-05-25"] .qa-order-content {
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(14rem, 0.75fr);
-  gap: 1rem;
+  grid-template-columns: minmax(0, 1.5fr) minmax(18rem, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.25rem);
   align-items: center;
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .qa-order-layout .step-figure {
+#app[data-redwood-creator-pass="2026-05-25"] .qa-order-card {
+  padding: clamp(1.15rem, 2vw, 1.5rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .qa-order-content .step-figure {
   align-self: center;
   margin: 0;
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] .qa-order-layout .step-figure img {
-  width: min(100%, 18rem);
+#app[data-redwood-creator-pass="2026-05-25"] .qa-order-content .step-figure img {
+  width: 100%;
+  max-width: none;
   margin-inline: auto;
 }
 

@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "purpose": "Editorial review signals for recurring AI-associated wording and style patterns. These rules do not determine authorship.",
+  "policy": {
+    "review_required": {
+      "minimum_high_signal_terms": 3,
+      "minimum_phrase_matches": 2,
+      "minimum_total_signals": 6
+    },
+    "style_thresholds": {
+      "em_dash": 3,
+      "semicolon": 4,
+      "colon_explanation": 5,
+      "parenthetical_aside": 4,
+      "bold_emphasis": 4,
+      "slash_construction": 2
+    }
+  },
+  "high_signal_terms": [
+    {"id": "delve", "pattern": "\\bdelv(?:e|es|ing)\\b", "rationale": "Often used as a polished invitation to explore a topic without naming the concrete action."},
+    {"id": "utilize", "pattern": "\\butilize\\b", "rationale": "Can replace the plainer and usually more precise word use."},
+    {"id": "harness", "pattern": "\\bharness(?:es|ed|ing)?\\b", "rationale": "Frequently frames a capability as an abstract source of potential rather than stating what it does."},
+    {"id": "foster", "pattern": "\\bfoster(?:s|ed|ing)?\\b", "rationale": "Often supplies a vague positive outcome without naming the actor or measurable result."},
+    {"id": "empower", "pattern": "\\bempower(?:s|ed|ing)?\\b", "rationale": "Can make a general promise about users or organizations without describing the enabled task."},
+    {"id": "elevate", "pattern": "\\belevat(?:e|es|ed|ing)\\b", "rationale": "Signals promotional uplift instead of a specific change in behavior or result."},
+    {"id": "unlock", "pattern": "\\bunlock(?:s|ed|ing)?\\b", "rationale": "Often presents access to unspecified value as a dramatic benefit."},
+    {"id": "streamline", "pattern": "\\bstreamlin(?:e|es|ed|ing)\\b", "rationale": "Needs the process, step, or measured reduction to be meaningful."},
+    {"id": "underscore", "pattern": "\\bunderscor(?:e|es|ed|ing)\\b", "rationale": "A common formal transition that can replace a direct statement of evidence."},
+    {"id": "showcase", "pattern": "\\bshowcas(?:e|es|ed|ing)\\b", "rationale": "Can introduce promotional framing where a concrete demonstration would be clearer."},
+    {"id": "illuminate", "pattern": "\\billuminat(?:e|es|ed|ing)\\b", "rationale": "Abstractly describes explanation or insight without identifying the evidence."},
+    {"id": "holistic", "pattern": "\\bholistic\\b", "rationale": "Broadens a claim without defining which parts of the system or workflow are included."},
+    {"id": "multifaceted", "pattern": "\\bmultifaceted\\b", "rationale": "Signals complexity without enumerating the relevant facets."},
+    {"id": "pivotal", "pattern": "\\bpivotal\\b", "rationale": "Adds emphasis to importance without explaining the dependency or consequence."},
+    {"id": "transformative", "pattern": "\\btransformative\\b", "rationale": "Promotional adjective that requires concrete evidence of the claimed transformation."},
+    {"id": "tapestry", "pattern": "\\btapestry\\b", "rationale": "Metaphorical language that commonly substitutes for a direct description of relationships."},
+    {"id": "paradigm", "pattern": "\\bparadigm\\b", "rationale": "Abstract framing that is often less precise than naming the design or operating model."},
+    {"id": "journey", "pattern": "\\bjourney\\b", "rationale": "Can turn a concrete sequence of tasks into generic transformation language."}
+  ],
+  "context_terms": [
+    {"id": "leverage", "pattern": "\\bleverage(?:s|d|ing)?\\b", "rationale": "Retained as context because it is common in technical writing; review only in a cluster."},
+    {"id": "robust", "pattern": "\\brobust\\b", "rationale": "Retained as context because it can be technically accurate; request evidence when repeated."},
+    {"id": "comprehensive", "pattern": "\\bcomprehensive\\b", "rationale": "Retained as context because scope claims need checking, not automatic removal."},
+    {"id": "seamless", "pattern": "\\bseamless\\b", "rationale": "Retained as context because it is promotional and may be valid only with supporting detail."},
+    {"id": "nuanced", "pattern": "\\bnuanced\\b", "rationale": "Retained as context because a technical distinction may genuinely be nuanced."},
+    {"id": "strategic", "pattern": "\\bstrategic\\b", "rationale": "Retained as context because it may describe an explicit planning decision."},
+    {"id": "landscape", "pattern": "\\blandscape\\b", "rationale": "Retained as context because domain landscape can be legitimate, but generic framing is common."},
+    {"id": "framework", "pattern": "\\bframework\\b", "rationale": "Retained as context because it is a valid technical term; inspect vague uses."},
+    {"id": "ecosystem", "pattern": "\\becosystem\\b", "rationale": "Retained as context because it can name a real product or integration set."},
+    {"id": "stakeholder", "pattern": "\\bstakeholders?\\b", "rationale": "Retained as context because it is useful when the actual role or group is named."}
+  ],
+  "phrases": [
+    {"id": "important-to-note", "pattern": "\\bit is (?:important|worth|essential) to (?:note|understand)\\b", "rationale": "Front-loads a generic warning instead of stating the fact directly."},
+    {"id": "evolving-landscape", "pattern": "\\b(?:today's rapidly evolving world|an increasingly digital world|the modern landscape|the ever-changing landscape)\\b", "rationale": "Uses broad scene-setting that rarely adds technical context."},
+    {"id": "navigate", "pattern": "\\bas we navigate\\b", "rationale": "Uses a collective metaphor instead of naming the decision or workflow."},
+    {"id": "organizations-continue", "pattern": "\\bas organizations continue to\\b", "rationale": "Introduces a generic organizational subject without identifying the affected team or task."},
+    {"id": "heart-core", "pattern": "\\bat (?:the heart|its core)\\b", "rationale": "Signals a generalized summary that can often be replaced by the actual mechanism."},
+    {"id": "key-consideration", "pattern": "\\ba key consideration is\\b", "rationale": "Labels importance without naming the decision criterion."},
+    {"id": "crucial-role", "pattern": "\\ba crucial role in\\b", "rationale": "Uses abstract importance language instead of describing the contribution."},
+    {"id": "highlights-importance", "pattern": "\\b(?:this highlights the importance of|this underscores the need for)\\b", "rationale": "Repeats a formal conclusion rather than connecting evidence to an action."},
+    {"id": "generic-certainty", "pattern": "\\b(?:there is no doubt that|it goes without saying|needless to say)\\b", "rationale": "Asserts certainty where direct evidence or a qualified claim is clearer."},
+    {"id": "generic-transition", "pattern": "\\b(?:that being said|with that in mind|at the same time|on the other hand)\\b", "rationale": "A polished transition that may obscure the actual relationship between statements."},
+    {"id": "moving-forward", "pattern": "\\b(?:moving forward|looking ahead)\\b", "rationale": "Adds time-oriented framing without stating the next action or owner."},
+    {"id": "benefits-are-clear", "pattern": "\\b(?:the benefits are clear|the result is a more)\\b", "rationale": "Claims an outcome without naming the measured benefit or comparison."},
+    {"id": "promotional-framing", "pattern": "\\b(?:a powerful tool for|a game-changer for|a testament to|a cornerstone of)\\b", "rationale": "Uses promotional language that needs concrete capability or evidence."},
+    {"id": "generic-quantity", "pattern": "\\b(?:a wide range of|a variety of|several key factors|several reasons why)\\b", "rationale": "Signals breadth without enumerating the relevant items."},
+    {"id": "reader-invitation", "pattern": "\\b(?:let's take a closer look|let's dive in|here's what you need to know)\\b", "rationale": "Conversational framing can be removed when the next instruction is already clear."},
+    {"id": "guide-will", "pattern": "\\b(?:the following sections will|this guide will walk you through)\\b", "rationale": "Describes the document instead of helping the reader perform the task."},
+    {"id": "false-binary", "pattern": "\\b(?:it is not about .{1,80}; it is about|.{1,60} is more than just .{1,60})\\b", "rationale": "Balanced contrast can sound formulaic and often hides the actual distinction."},
+    {"id": "one-size-fits-all", "pattern": "\\b(?:not one-size-fits-all|no silver bullet)\\b", "rationale": "Uses a stock caveat without explaining the specific tradeoff."},
+    {"id": "where-x-comes-in", "pattern": "\\bthis is where .{1,50} comes in\\b", "rationale": "Creates a dramatic handoff instead of naming the mechanism directly."},
+    {"id": "key-takeaway", "pattern": "\\bthe key takeaway is\\b", "rationale": "Announces a summary rather than stating the conclusion."},
+    {"id": "summary-transition", "pattern": "\\b(?:in summary|to summarize|taken together|in practical terms|in the broader context)\\b", "rationale": "A generic summary marker; review when repeated or paired with abstract claims."},
+    {"id": "when-it-comes", "pattern": "\\b(?:when it comes to|in terms of|it depends on several factors)\\b", "rationale": "Broad framing can replace a precise subject, criterion, or condition."},
+    {"id": "balanced-caveat", "pattern": "\\b(?:while there are challenges, the benefits|although .{1,80}, it is important to)\\b", "rationale": "A stock concession that can be shortened to the concrete tradeoff."},
+    {"id": "parallel-importance", "pattern": "\\bboth .{1,60} and .{1,60} play an important role\\b", "rationale": "Balanced phrasing often adds ceremony without describing the separate roles."},
+    {"id": "formulaic-sequence", "pattern": "\\b(?:there are three key areas|let's break this down|step by step)\\b", "rationale": "Signals a generic structure; retain only when the sequence is necessary for the task."},
+    {"id": "stock-quality-claim", "pattern": "\\b(?:a clear and concise overview|a comprehensive solution|a seamless experience|a robust framework|a scalable and flexible approach)\\b", "rationale": "Combines polished adjectives with an unspecific noun; replace with the actual scope or behavior."}
+  ],
+  "style_signals": [
+    {"id": "em-dash", "pattern": "—|--", "rationale": "Review only when repeated; a single dash is normal punctuation."},
+    {"id": "semicolon", "pattern": ";", "rationale": "Review repeated semicolons for compressed, heavily balanced prose."},
+    {"id": "colon-explanation", "pattern": ":\\s+[A-Za-z]", "rationale": "Review repeated colon-led explanations when they create a uniform template."},
+    {"id": "parenthetical-aside", "pattern": "\\([^()\\n]{4,}\\)", "rationale": "Review repeated asides when they interrupt direct instructions."},
+    {"id": "bold-emphasis", "pattern": "\\*\\*[^*\\n]+\\*\\*", "rationale": "Review repeated selective emphasis; use bold for functional scanning, not decoration."},
+    {"id": "slash-construction", "pattern": "\\b(?:and/or|input/output|users/authors)\\b", "rationale": "Review repeated slash pairs for a more precise actor or alternative."}
+  ]
+}

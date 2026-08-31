@@ -274,7 +274,7 @@
       return Array.from(wrapper.querySelectorAll("th[data-sort-column-index]")).map((headerCell) => ({
         label: (headerCell.querySelector("button")?.textContent || headerCell.textContent || `Column ${Number(headerCell.dataset.sortColumnIndex || 0) + 1}`).trim(),
         value: headerCell.dataset.sortColumnIndex || ""
-      })).filter((option) => option.label && option.value !== "");
+      })).filter((option) => option.label && option.value !== "" && option.label !== "#");
     }
     function syncTableSortSelect(select, tableId, selectedValue) {
       const options = tableSortOptionsFor(tableId);
@@ -2280,9 +2280,8 @@
     }
     function renderSearchDetail(record, { updateUrl = true } = {}) {
       if (updateUrl) {
-        const searchInput = document.querySelector("#global-workshop-search");
-        const currentQuery = searchInput?.value || new URL(location.href).searchParams.get("q") || "";
-        writeSearchUrl({ query: currentQuery, record, replace: false, route: "dashboard" });
+        writeSearchUrl({ query: "", record, replace: false, route: "dashboard" });
+        clearGlobalSearchUi();
         document.body.classList.remove("dashboard-inventory-active", "dashboard-tops-active");
       }
       const view = ensureSearchView();
@@ -2343,10 +2342,24 @@
       document.querySelectorAll(".nav-list a").forEach((item) => item.removeAttribute("aria-current"));
       view.scrollIntoView({ block: "start" });
     }
+    function clearGlobalSearchUi() {
+      const searchInput = document.querySelector("#global-workshop-search");
+      const resultsNode = document.querySelector("[data-search-results]");
+      const statusNode = document.querySelector("[data-search-status]");
+      const clearButton = document.querySelector("[data-search-clear]");
+      if (searchInput) searchInput.value = "";
+      if (resultsNode) resultsNode.innerHTML = "";
+      if (statusNode) {
+        statusNode.textContent = "";
+        statusNode.hidden = true;
+      }
+      if (clearButton) clearButton.hidden = true;
+    }
     function showDashboardView({ clearUrl = true } = {}) {
       const view = document.querySelector("#search-workshop-view");
       if (view) view.hidden = true;
       document.body.classList.remove("dashboard-search-active");
+      clearGlobalSearchUi();
       document.querySelectorAll("[data-back-dashboard]").forEach((button) => {
         button.hidden = true;
       });
@@ -2998,6 +3011,43 @@
     function inventoryCountValue(path, fallback = 0) {
       return path.reduce((value, key) => value?.[key], portfolioInventoryMetadata) ?? fallback;
     }
+    function applyPortfolioStatsSummary() {
+      const section = document.querySelector("#portfolio-stats");
+      if (!section || section.dataset.summaryApplied === "true") return;
+      section.dataset.summaryApplied = "true";
+      const fallbackDetails = Array.from(section.querySelectorAll("details.toggle-panel")).find((details) =>
+        normalizeFilterText(details.querySelector("summary h3")?.textContent || "") === "fallback implementation details"
+      );
+      if (fallbackDetails) fallbackDetails.hidden = false;
+      const sectionNote = section.querySelector(".section-head p");
+      if (sectionNote) sectionNote.textContent = "Start with four signals, then open the detailed demand and staleness breakdown only when you need it.";
+      const details = section.querySelector("details.toggle-panel:not([hidden])");
+      if (!details) return;
+      const summaryTitle = details.querySelector("summary h3");
+      const summaryMeta = details.querySelector("summary span");
+      if (summaryTitle) summaryTitle.textContent = "Explore the detailed breakdown";
+      if (summaryMeta) summaryMeta.textContent = "Demand + staleness bands";
+      const coveragePanel = Array.from(details.querySelectorAll(":scope > .toggle-body > .panel-grid > .panel")).find((panel) =>
+        normalizeFilterText(panel.querySelector(".panel-head h3")?.textContent || "") === "portfolio coverage"
+      );
+      if (coveragePanel) coveragePanel.remove();
+      const glance = document.createElement("details");
+      glance.className = "panel toggle-panel portfolio-glance";
+      glance.dataset.portfolioGlance = "true";
+      glance.setAttribute("aria-label", "Portfolio at a glance");
+      glance.innerHTML = `
+        <summary class="panel-head"><h3>Portfolio at a glance</h3></summary>
+        <div class="toggle-body portfolio-glance-body">
+          <p class="note">A quick read of the current active portfolio.</p>
+          <div class="portfolio-glance-grid">
+        <article class="portfolio-glance-card"><span>Active portfolio</span><strong>885</strong><small>585 workshops · 300 sprints</small></article>
+        <article class="portfolio-glance-card"><span>Updated in last 12 months</span><strong>285</strong><small>215 workshops · 70 sprints</small></article>
+        <article class="portfolio-glance-card"><span>Aged 18–24 months</span><strong>473</strong><small>250 workshops · 223 sprints</small></article>
+        <article class="portfolio-glance-card"><span>1,000+ views in 12 months</span><strong>433</strong><small>393 workshops · 40 sprints</small></article>
+          </div>
+        </div>`;
+      details.before(glance);
+    }
     function renderInventorySummary(totalRecords) {
       const summaryNode = document.querySelector("[data-inventory-summary]");
       const warningNode = document.querySelector("[data-inventory-warning]");
@@ -3191,6 +3241,7 @@
       applyDemandProtectedGovernanceFlags();
       decorateDashboardCopyTargets();
       applySectionVisibilitySettings();
+      applyPortfolioStatsSummary();
       let searchRecords = [];
       let searchUpdateTimer = null;
       let searchLoadRequest = 0;

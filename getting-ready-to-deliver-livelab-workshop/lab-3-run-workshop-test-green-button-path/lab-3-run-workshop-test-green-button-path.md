@@ -18,9 +18,9 @@ Estimated Time: 20 minutes
 
 ## Task 1: Run the Attendee Path End to End
 
-1. Copy the verified attendee URL, event code, access path, and provisioning model from Lab 2.
+1. Copy the verified attendee URL, event code, access path, access controls, and provisioning model from Lab 2.
 
-2. Start with a fresh attendee browser session. Follow every prompt, including account sign-in, event code, [booking](#legend), [consent checkbox](#legend), tenancy, region, compartment, credentials, or [SSH-key](#legend) steps that apply.
+2. Start with a fresh attendee browser session. Follow every prompt, including account sign-in, event code, [booking](#legend), [consent checkbox](#legend), Secure Desktop, tenancy, region, compartment, credentials, or [SSH-key](#legend) steps that apply.
 
 3. Complete every required workshop step. Record the exact attendee path and the first screen that confirms the lab space is ready.
 
