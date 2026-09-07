@@ -1,7 +1,10 @@
 {
   "schema_version": 1,
+  "rule_version": "2026-09-04",
   "purpose": "Editorial review signals for recurring AI-associated wording and style patterns. These rules do not determine authorship.",
   "policy": {
+    "default_severity": "warning",
+    "blocking_review_required": false,
     "review_required": {
       "minimum_high_signal_terms": 3,
       "minimum_phrase_matches": 2,

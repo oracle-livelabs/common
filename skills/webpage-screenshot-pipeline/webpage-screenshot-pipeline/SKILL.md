@@ -5,6 +5,14 @@ description: Capture reproducible browser-rendered screenshots for documentation
 
 # Webpage Screenshot Pipeline
 
+## Oracle Sans annotation font
+
+The package includes Oracle Sans regular and bold TrueType faces under
+`assets/fonts/`. Annotation and image-markup consumers should load these files
+and use the family name `Oracle Sans`, with regular weight `400` and bold weight
+`700`, before rendering labels, callouts, or other text. Keep the font files in
+the package so rendering does not depend on a machine-installed font.
+
 ## Runtime prerequisite
 
 This skill includes a package-local Playwright tool under `tools/webpage-screenshot-pipeline`. The original package only named an external `playwright` skill; that caused Nodoc to report that Playwright was not installed under the tool path.

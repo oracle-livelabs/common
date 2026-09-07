@@ -1,5 +1,13 @@
 # Package-local Playwright tool
 
+## Oracle Sans
+
+The skill bundles `assets/fonts/OracleSans_Rg.ttf` and
+`assets/fonts/OracleSans_Bd.ttf`. Annotation consumers should register them as
+`Oracle Sans` at weights 400 and 700 before drawing text. The capture runner
+does not draw annotations itself; it captures the rendered page supplied by the
+consumer.
+
 This directory is intentionally part of the skill package. It prevents the Nodoc runtime from looking for an undeclared external Playwright skill under `tools/webpage-screenshot-pipeline`.
 
 ## Setup
