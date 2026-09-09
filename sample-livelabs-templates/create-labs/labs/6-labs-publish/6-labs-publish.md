@@ -159,7 +159,7 @@ Use this task when the LiveLab publishing entry is for a LiveStack Demo instead 
 
         ![Upload a zip file for a LiveStack Demo](images/livestack-demo-upload-zip.png " ")
 
-5. Review the publishing settings and click **Create**.
+5. Review your publishing settings and click **Create**.
 
 The new publishing entry is created with a status of **Publish Requested**. The LiveLabs publishing team will review the request before it is published.
 
