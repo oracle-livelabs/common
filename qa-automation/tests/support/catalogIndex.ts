@@ -4,6 +4,7 @@ import path from "node:path";
 import type { TestInfo } from "@playwright/test";
 
 import { PROJECT_ROOT, parseIntegerFlag } from "../../config/projectConfig.js";
+import { sanitizeSourceUrl } from "./parAudit.js";
 
 export type CatalogIndexItemType = "workshop" | "livestack";
 
@@ -142,10 +143,31 @@ export function catalogIndexItems(type?: CatalogIndexItemType): CatalogIndexItem
 }
 
 export async function attachCatalogItem(testInfo: TestInfo, item: CatalogIndexItem): Promise<void> {
+  const safeItem = {
+    ...item,
+    href: sanitizeCatalogHref(item.href),
+    normalized_href: sanitizeCatalogHref(item.normalized_href),
+    absolute_url: sanitizeCatalogHref(item.absolute_url),
+  };
+
   await testInfo.attach("catalog-item.json", {
-    body: JSON.stringify(item, null, 2),
+    body: JSON.stringify(safeItem, null, 2),
     contentType: "application/json",
   });
+}
+
+function sanitizeCatalogHref(value: string): string {
+  try {
+    const relative = !/^https?:\/\//i.test(value);
+    const safeUrl = sanitizeSourceUrl(new URL(value, "https://livelabs.oracle.com/").toString());
+    if (!safeUrl) return "";
+
+    if (!relative) return safeUrl;
+    const parsed = new URL(safeUrl);
+    return parsed.pathname + parsed.search + parsed.hash;
+  } catch {
+    return "";
+  }
 }
 
 export function catalogItemTestTitle(item: CatalogIndexItem): string {

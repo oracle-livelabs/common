@@ -1,0 +1,63 @@
+jenkins:
+  systemMessage: "LiveLabs QA service. Use the PAR audit or overall regression jobs."
+  numExecutors: 2
+  mode: NORMAL
+  scmCheckoutRetryCount: 2
+  securityRealm:
+    local:
+      allowsSignup: false
+      enableCaptcha: false
+      users:
+        - id: "${JENKINS_ADMIN_USER}"
+          name: "LiveLabs QA administrator"
+          password: "${JENKINS_BOOTSTRAP_SECRET}"
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+  globalNodeProperties:
+    - envVars:
+        env:
+          - key: PLAYWRIGHT_BROWSERS_PATH
+            value: "/ms-playwright"
+          - key: QA_ROOT_REPORTS_BASE
+            value: "${QA_ROOT_REPORTS_BASE}"
+          - key: QA_AUTH_TARGET_URL
+            value: "${QA_AUTH_TARGET_URL}"
+          - key: QA_BASE_URL
+            value: "${QA_BASE_URL}"
+          - key: QA_OBJECT_STORAGE_NAMESPACE
+            value: "${QA_OBJECT_STORAGE_NAMESPACE}"
+          - key: QA_OBJECT_STORAGE_BUCKET
+            value: "${QA_OBJECT_STORAGE_BUCKET}"
+          - key: QA_OBJECT_STORAGE_PREFIX
+            value: "${QA_OBJECT_STORAGE_PREFIX}"
+          - key: QA_OCI_AUTH_MODE
+            value: "${QA_OCI_AUTH_MODE}"
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - string:
+              scope: GLOBAL
+              id: "livelabs-username"
+              description: "LiveLabs QA sign-in username loaded from OCI Vault"
+              secret: "${LIVELABS_USERNAME}"
+          - string:
+              scope: GLOBAL
+              id: "livelabs-secret"
+              description: "LiveLabs QA sign-in secret loaded from OCI Vault"
+              secret: "${LIVELABS_SECRET}"
+
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
+
+unclassified:
+  location:
+    adminAddress: "LiveLabs QA <noreply@example.invalid>"
+    url: "${QA_PUBLIC_URL}/jenkins/"
+
+jobs:
+  - file: /usr/share/jenkins/ref/jobs.groovy

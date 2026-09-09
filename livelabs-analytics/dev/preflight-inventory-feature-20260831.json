@@ -1,0 +1,104 @@
+{
+  "format": "livelabs-analytics-object-storage-preflight-v1",
+  "generated_at": "2026-08-31T12:25:35.970Z",
+  "release_root": "C:\\Users\\Lucian Brinzei\\Desktop\\Desktop\\Projects\\livelabs-repos\\common\\livelabs-analytics\\dev\\releases\\verification-inventory-feature-20260831T123000Z",
+  "release_id": "2026-08-15-data-confidence-navigation-223f63d0b7db04f7",
+  "strict": false,
+  "access_model": "internal-authenticated",
+  "status": "passed_with_warnings",
+  "summary": {
+    "passed": 10,
+    "warnings": 5,
+    "failures": 0
+  },
+  "required_object_metadata": {
+    "html": {
+      "content_type": "text/html; charset=utf-8",
+      "cache_control": "no-cache, must-revalidate"
+    },
+    "json": {
+      "content_type": "application/json; charset=utf-8",
+      "cache_control": "no-cache, must-revalidate"
+    },
+    "versioned_assets": {
+      "cache_control": "public, max-age=31536000, immutable"
+    }
+  },
+  "results": [
+    {
+      "status": "PASS",
+      "name": "release manifest integrity",
+      "detail": "13 declared files match exactly"
+    },
+    {
+      "status": "PASS",
+      "name": "static-only boundary",
+      "detail": "backend, admin, database, documentation, and local-runtime paths are absent"
+    },
+    {
+      "status": "PASS",
+      "name": "canonical portfolio snapshot consistency",
+      "detail": "2026-08-15T21:11:30.644354Z"
+    },
+    {
+      "status": "PASS",
+      "name": "source snapshot-date consistency",
+      "detail": "2026-08-14"
+    },
+    {
+      "status": "PASS",
+      "name": "stylesheet asset resolution",
+      "detail": "5 font and image reference(s) resolve"
+    },
+    {
+      "status": "PASS",
+      "name": "approved UI and accessibility contract",
+      "detail": "required component and accessibility markers present"
+    },
+    {
+      "status": "PASS",
+      "name": "single visible snapshot label",
+      "detail": "Data snapshot: 14 August 2026."
+    },
+    {
+      "status": "PASS",
+      "name": "governance table population",
+      "detail": "9 required table families contain rows"
+    },
+    {
+      "status": "PASS",
+      "name": "single paginated-table architecture",
+      "detail": "no separate Top 10, Top 50, or Top 100 panels found"
+    },
+    {
+      "status": "PASS",
+      "name": "contact-data access model",
+      "detail": "internal-authenticated"
+    },
+    {
+      "status": "WARN",
+      "name": "promotion gate: governance_snapshot_verified",
+      "detail": "not verified in release manifest"
+    },
+    {
+      "status": "WARN",
+      "name": "promotion gate: replacement_resolution_verified",
+      "detail": "not verified in release manifest"
+    },
+    {
+      "status": "WARN",
+      "name": "promotion gate: retirement_outputs_verified",
+      "detail": "not verified in release manifest"
+    },
+    {
+      "status": "WARN",
+      "name": "source recovery evidence",
+      "detail": "--recovery-manifest is required for promotion"
+    },
+    {
+      "status": "WARN",
+      "name": "browser regression evidence",
+      "detail": "--browser-evidence is required for promotion"
+    }
+  ]
+}

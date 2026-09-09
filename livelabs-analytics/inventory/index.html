@@ -7,21 +7,11 @@
   <title>LiveLabs Analytics Portfolio Inventory</title>
 </head>
 <body>
-  <p>Loading Portfolio Inventory...</p>
+  <p>Opening Portfolio Inventory...</p>
   <script>
-    (async () => {
-      try {
-        const response = await fetch("../index.html", { cache: "no-cache" });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const html = await response.text();
-        const routedHtml = html.replace(/<head(\s[^>]*)?>/i, (match) => `${match}<base href="../">`);
-        document.open();
-        document.write(routedHtml);
-        document.close();
-      } catch (error) {
-        document.body.innerHTML = '<p>Portfolio Inventory could not load. <a href="../index.html?view=inventory">Open it from the dashboard</a>.</p>';
-      }
-    })();
+    const target = new URL("../index.html", location.href);
+    target.search = new URLSearchParams({ view: "inventory" }).toString();
+    location.replace(target.href);
   </script>
 </body>
 </html>

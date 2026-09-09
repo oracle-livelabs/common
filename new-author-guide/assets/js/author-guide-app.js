@@ -3,12 +3,65 @@
 (function () {
   var content = window.authorGuideContent || {};
   var stepMeta = content.stepMeta || [];
-  var explorerItems = content.explorerItems || [];
+  var githubCheatsheetItemIds = {
+    "github-setup": true,
+    "sync-preview": true
+  };
+
+  function removeGithubMentions(value, key) {
+    if (Array.isArray(value)) {
+      return value.map(function (item) {
+        return removeGithubMentions(item, key);
+      }).filter(function (item) {
+        return item !== "";
+      });
+    }
+
+    if (value && typeof value === "object") {
+      return Object.keys(value).reduce(function (copy, property) {
+        copy[property] = removeGithubMentions(value[property], property);
+        return copy;
+      }, {});
+    }
+
+    if (typeof value !== "string" || key === "href" || key === "src" || key === "sourceHref") {
+      return value;
+    }
+
+    if (key === "snippet") {
+      return value.split("\n").filter(function (line) {
+        return !/github/i.test(line);
+      }).join("\n");
+    }
+
+    return value
+      .replace(/github\s*\/\s*gitlab/gi, "source repository")
+      .replace(/github pages/gi, "hosted preview")
+      .replace(/github desktop/gi, "desktop source-control client")
+      .replace(/github actions/gi, "automated checks")
+      .replace(/github\.io/gi, "hosted preview")
+      .replace(/github\.com/gi, "source repository")
+      .replace(/github/gi, "source repository");
+  }
+
+  var explorerItems = (content.explorerItems || [])
+    .filter(function (item) {
+      return !githubCheatsheetItemIds[item.id];
+    })
+    .map(function (item) {
+      return removeGithubMentions(Object.assign({}, item, {
+        tags: (item.tags || []).filter(function (tag) {
+          return tag !== "github";
+        })
+      }));
+    });
   var guideSections = [];
   var guideSectionMap = {};
-  var guideManifestHref = "./workshops/author-guide/manifest.json";
+  var guideCatalogHref = "";
   var fullGuideHref = "https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/";
   var workshopExampleHref = window.authorGuideWorkshopExampleHref || "https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/";
+  var nodocSearchEntries = [];
+  var nodocSearchLoadPromise = null;
   var guideCatalogPromise = null;
   var guideCatalogLoaded = false;
   var guideSectionSurfaceCache = {};
@@ -64,12 +117,67 @@
     ["validator", "markdown validation", "pr checks", "lintchecker", "checks", "validation"],
     ["images", "image", "screenshot", "screenshots", "optishot", "media"],
     ["markdown", "manifest", "copy tags", "task header", "acknowledgements"],
-    ["sql", "plsql", "free sql", "freesql", "sql developer"],
+    ["sql", "plsql", "sql developer"],
     ["help", "support", "faq", "message the team", "slack", "mailbox"],
     ["sla", "timeline", "timelines", "review window", "publishing window"],
     ["secure desktop", "secure desktops", "restricted laptop", "restricted corporate laptop", "novnc", "chrome", "popups"],
     ["ai", "ai developer hub", "agentic", "automation first", "skill bundle", "how to guide"]
   ];
+  var allowedToolkitSorts = {
+    alphabetical: true,
+    relevance: true,
+    latest: true,
+    topic: true
+  };
+  var tagFacetOrder = [
+    "wms",
+    "github",
+    "markdown",
+    "validation",
+    "publishing",
+    "media",
+    "interactive",
+    "marketplace",
+    "livestack",
+    "assets",
+    "secure-desktop",
+    "support",
+    "tools",
+    "sprints",
+    "ai"
+  ];
+  var recommendedCheatsheetOrder = [
+    "wms-request",
+    "github-setup",
+    "sync-preview",
+    "markdown-structure",
+    "links-paths",
+    "image-references",
+    "copy-sql",
+    "Quality Assurance-checklist",
+    "pull request-checks",
+    "publish-request",
+    "review-sla",
+    "screenshots",
+    "optishot",
+    "fixomat",
+    "reuse-variables",
+    "quiz-blocks",
+    "livelabs-sprints",
+    "graphical-remote-desktop",
+    "secure-desktop-when",
+    "secure-desktop-request",
+    "custom-image-capture",
+    "marketplace-image-publish",
+    "wms-custom-image-update",
+    "livestack-create",
+    "wms-assets",
+    "ai-developer-hub"
+  ];
+  var recommendedCheatsheetOrderMap = recommendedCheatsheetOrder.reduce(function (map, id, index) {
+    map[id] = index;
+    return map;
+  }, {});
 
   function fullGuideLabHref(labId, extraParams) {
     var target;
@@ -91,32 +199,223 @@
     }
   }
 
+  function normalizeAuthoringRoute(route) {
+    return route === "source" ? "source" : "no-doc";
+  }
+
+  function initialAuthoringRoute() {
+    try {
+      return normalizeAuthoringRoute(new URLSearchParams(window.location.search).get("authoring"));
+    } catch (error) {
+      return "no-doc";
+    }
+  }
+
   var state = {
     mode: "hub",
     currentStep: 0,
+    authoringRoute: initialAuthoringRoute(),
     fastTrack: "guided",
     activeTag: "all",
+    activeTags: [],
+    toolkitSort: "alphabetical",
     toolkitQuery: "",
     searchQuery: "",
     guideSection: guideSections.length ? guideSections[0].id : ""
   };
-  var quickstartStepDetails = [
+  var wmsStatusGraphViewBox = { x: 0, y: 0, width: 1540, height: 660 };
+  var wmsStatusNodeHalfWidth = 82;
+  var wmsStatusNodeHalfHeight = 31;
+  var wmsStatusGraphZoomLevels = [25, 50, 75, 100, 125, 150, 200];
+  var wmsStatusGraphStatuses = [
     {
-      output: "approved request",
-      time: "5 to 10 minutes",
-      leads: "repository work"
+      id: "submitted",
+      label: "Submitted",
+      group: "Intake",
+      responsible: "Workshop author / submitter",
+      meaning: "The workshop has been submitted for initial review. The author has provided the first set of workshop details and is waiting for review.",
+      nextStep: "The reviewer validates whether the submitted information is sufficient. If it is complete, the workshop moves to Approved. If it is incomplete, it moves to More Info Needed.",
+      checks: [
+        "Workshop details are present.",
+        "Workshop purpose and audience are clear.",
+        "Required owner or contact information is available."
+      ],
+      x: 110,
+      y: 300,
+      color: "#f3f4f6"
     },
     {
-      output: "live preview",
-      time: "15 to 20 minutes",
-      leads: "content authoring"
+      id: "more-info",
+      label: "More Info Needed",
+      group: "Rework",
+      responsible: "Workshop author / submitter",
+      meaning: "The reviewer needs clarifications or missing details before the workshop can continue.",
+      nextStep: "The author updates the requested information and resubmits the workshop for review.",
+      checks: [
+        "Respond to reviewer comments.",
+        "Add missing metadata, scope, owner, or setup details.",
+        "Confirm the resubmitted information is complete."
+      ],
+      x: 300,
+      y: 155,
+      color: "#fff7ed"
     },
     {
-      output: "reviewed release",
-      time: "10 to 15 minutes",
-      leads: "production"
+      id: "approved",
+      label: "Approved",
+      group: "Approval",
+      responsible: "LiveLabs reviewer / approver",
+      meaning: "The workshop request has enough information and is approved to move into the build or development stage.",
+      nextStep: "The author or workshop development owner starts the content build in In Development.",
+      checks: [
+        "Submission is understandable and actionable.",
+        "Workshop can proceed to content development.",
+        "Any approval notes are communicated to the author."
+      ],
+      x: 300,
+      y: 300,
+      color: "#ecfdf5"
+    },
+    {
+      id: "in-development",
+      label: "In Development",
+      group: "Build",
+      responsible: "Workshop author / development owner",
+      meaning: "The workshop content is being created or updated. This can include labs, Markdown content, images, manifests, setup steps, and validation work.",
+      nextStep: "When development is ready, the author moves the workshop to Self QA.",
+      checks: [
+        "Lab Markdown content is written or updated.",
+        "Images, manifests, and folder structure are in place.",
+        "Commands and code examples are ready to test.",
+        "Links and references are prepared for validation."
+      ],
+      x: 510,
+      y: 300,
+      color: "#eff6ff"
+    },
+    {
+      id: "self-qa",
+      label: "Self QA",
+      group: "QA",
+      responsible: "Workshop author / content owner",
+      meaning: "The author performs their own quality checks before marking the workshop as complete.",
+      nextStep: "If self-QA passes, move to Self QA Complete. If issues are found, return to In Development for fixes.",
+      checks: [
+        "Information in the workshop is adequate and updated.",
+        "Code is correct and working.",
+        "Links are correct.",
+        "Help email is included in manifest.json.",
+        "WMS URLs are updated as needed after approval.",
+        "Filenames are descriptive and lowercase.",
+        "Folder structure follows the sample workshop structure.",
+        "Images include useful alt text."
+      ],
+      x: 720,
+      y: 300,
+      color: "#f5f3ff"
+    },
+    {
+      id: "self-qa-complete",
+      label: "Self QA Complete",
+      group: "QA",
+      responsible: "Workshop author / content owner",
+      meaning: "The author has completed self-QA and confirmed that the workshop is ready to be marked complete or move forward in the publication workflow.",
+      nextStep: "Move the workshop to Completed.",
+      checks: [
+        "Self-QA checklist is complete.",
+        "No known blocking issues remain.",
+        "The workshop owner is ready to complete the workflow."
+      ],
+      x: 950,
+      y: 300,
+      color: "#eef2ff"
+    },
+    {
+      id: "completed",
+      label: "Completed",
+      group: "Done",
+      responsible: "LiveLabs owner / workshop owner",
+      meaning: "The workshop is complete and ready for the author to create a publish request.",
+      nextStep: "Create a Publish Request. The LiveLabs team reviews it and approves it or asks for changes before publication.",
+      checks: [
+        "Workshop is complete.",
+        "Ownership is clear for future maintenance.",
+        "Publish request can be created and reviewed."
+      ],
+      x: 1180,
+      y: 300,
+      color: "#f0fdf4"
+    },
+    {
+      id: "publish-request",
+      label: "Publish Request",
+      group: "Publishing",
+      responsible: "Workshop author / LiveLabs publishing team",
+      meaning: "After the WMS request reaches Completed, the author creates a publish request for the LiveLabs team to review.",
+      nextStep: "The LiveLabs team reviews the publish request and approves it or asks for changes before publication.",
+      checks: [
+        "WMS status is Completed.",
+        "Preview, ownership, and production details are ready.",
+        "Publish request evidence is attached to the WMS record."
+      ],
+      x: 1410,
+      y: 300,
+      color: "#fff7ed"
+    },
+    {
+      id: "quarterly-qa",
+      label: "Quarterly QA",
+      group: "Recurring QA",
+      responsible: "QA reviewer / workshop owner",
+      meaning: "The completed workshop is reviewed during a periodic QA cycle to make sure it is still accurate and working.",
+      nextStep: "If QA passes, move to Quarterly QA Complete. If problems are found, return to In Development for fixes.",
+      checks: [
+        "Workshop information is still accurate and updated.",
+        "Code and commands still work.",
+        "Links still resolve correctly.",
+        "Manifest and support contact details are still current.",
+        "Screenshots and instructions still match the product experience."
+      ],
+      x: 950,
+      y: 480,
+      color: "#fffbeb"
+    },
+    {
+      id: "quarterly-qa-complete",
+      label: "Quarterly QA Complete",
+      group: "Done",
+      responsible: "QA reviewer / LiveLabs owner",
+      meaning: "The scheduled QA review is complete and no blocking issues remain from that review cycle.",
+      nextStep: "Return the workshop to Completed until the next review cycle or update request.",
+      checks: [
+        "Quarterly QA review is complete.",
+        "Findings are resolved or documented.",
+        "Workshop can return to normal completed status."
+      ],
+      x: 1180,
+      y: 480,
+      color: "#f0fdf4"
     }
   ];
+  var wmsStatusGraphTransitions = [
+    { from: "submitted", to: "approved", type: "normal", label: "review passes", labelX: 205, labelY: 236 },
+    { from: "submitted", to: "more-info", type: "alt", label: "needs details", labelX: 188, labelY: 210 },
+    { from: "more-info", to: "submitted", type: "alt", label: "resubmit", labelX: 310, labelY: 220 },
+    { from: "approved", to: "in-development", type: "normal", label: "start build", labelX: 405, labelY: 236 },
+    { from: "in-development", to: "self-qa", type: "normal", label: "ready to test", labelX: 615, labelY: 236 },
+    { from: "self-qa", to: "in-development", type: "alt", label: "fix issues", labelX: 615, labelY: 374 },
+    { from: "self-qa", to: "self-qa-complete", type: "normal", label: "QA passes", labelX: 835, labelY: 236 },
+    { from: "self-qa-complete", to: "completed", type: "normal", label: "complete", labelX: 1065, labelY: 236 },
+    { from: "completed", to: "publish-request", type: "publish", label: "request publish", labelX: 1295, labelY: 236 },
+    { from: "completed", to: "quarterly-qa", type: "normal", label: "scheduled review", labelX: 1088, labelY: 386 },
+    { from: "quarterly-qa", to: "in-development", type: "alt", label: "updates needed", labelX: 720, labelY: 414 },
+    { from: "quarterly-qa", to: "quarterly-qa-complete", type: "normal", label: "QA passes", labelX: 1065, labelY: 416 },
+    { from: "quarterly-qa-complete", to: "completed", type: "normal", label: "return", labelX: 1210, labelY: 386 }
+  ];
+  var wmsStatusGraphNodeMap = wmsStatusGraphStatuses.reduce(function (map, status) {
+    map[status.id] = status;
+    return map;
+  }, {});
   var previousView = {
     mode: "hub",
     currentStep: 0,
@@ -138,28 +437,26 @@
   var hub = document.getElementById("hub");
   var beginnerMode = document.getElementById("beginnerMode");
   var explorerMode = document.getElementById("explorerMode");
+  var nodocMode = document.getElementById("nodocMode");
   var guideMode = document.getElementById("guideMode");
   var generatorMode = document.getElementById("generatorMode");
   var searchMode = document.getElementById("searchMode");
   var rabbitFlow = document.getElementById("rabbitFlow");
   var stepSections = Array.from(document.querySelectorAll(".rabbit-step"));
-  var progressButtons = Array.from(document.querySelectorAll(".progress-button"));
   var progressShell = document.getElementById("progressShell");
-  var progressCaption = document.getElementById("progressCaption");
+  var authoringRouteTabs = Array.from(document.querySelectorAll("[data-authoring-route]"));
+  var authoringRoutePanels = Array.from(document.querySelectorAll("[data-authoring-panel]"));
   var fastTrackToggle = document.getElementById("fastTrackToggle");
   var fastTrackStatus = document.getElementById("fastTrackStatus");
-  var quickstartProcessTitle = document.getElementById("quickstartProcessTitle");
-  var quickstartProcessIndex = document.getElementById("quickstartProcessIndex");
-  var quickstartProcessTotal = document.getElementById("quickstartProcessTotal");
-  var quickstartProcessOutput = document.getElementById("quickstartProcessOutput");
-  var quickstartProcessTime = document.getElementById("quickstartProcessTime");
-  var quickstartProcessLeads = document.getElementById("quickstartProcessLeads");
   var liveRegion = document.getElementById("liveRegion");
   var bubbleGrid = document.getElementById("bubbleGrid");
   var emptyState = document.getElementById("emptyState");
   var resultCount = document.getElementById("resultCount");
+  var filterSummary = document.getElementById("filterSummary");
   var bubbleSearch = document.getElementById("bubbleSearch");
   var clearSearch = document.getElementById("clearSearch");
+  var toolkitSort = document.getElementById("toolkitSort");
+  var tagPillsMount = document.getElementById("tagPills");
   var tagPills = Array.from(document.querySelectorAll(".tag-pill"));
   var guideLayout = document.querySelector(".guide-layout");
   var guideSidebar = document.querySelector(".guide-sidebar");
@@ -182,6 +479,7 @@
   var searchPageClear = document.getElementById("searchPageClear");
   var wmsExampleForm = document.getElementById("wmsExampleForm");
   var wmsExamplePrompt = document.getElementById("wmsExamplePrompt");
+  var wmsExamplePromptCount = document.getElementById("wmsExamplePromptCount");
   var wmsExampleResults = document.getElementById("wmsExampleResults");
   var wmsExampleEmpty = document.getElementById("wmsExampleEmpty");
   var wmsExampleLoading = document.getElementById("wmsExampleLoading");
@@ -197,7 +495,7 @@
   var workshopMarkdownError = document.getElementById("workshopMarkdownError");
   var copyGeneratedMarkdown = document.getElementById("copyGeneratedMarkdown");
   var bubbleModalElement = document.getElementById("bubbleModal");
-  var bubbleModal = bootstrap.Modal.getOrCreateInstance(bubbleModalElement);
+  var bubbleModal = bubbleModalElement ? bootstrap.Modal.getOrCreateInstance(bubbleModalElement) : null;
   var imageLightbox = document.getElementById("imageLightbox");
   var imageLightboxImage = document.getElementById("imageLightboxImage");
   var imageLightboxCaption = document.getElementById("imageLightboxCaption");
@@ -208,15 +506,27 @@
   var lastExpandedFigure = null;
   var layoutSyncFrame = 0;
   var generatedMarkdownText = "";
+  var defaultWmsExamplePrompt = "Build AI agents with persistent memory using Oracle Database, ADB, Select AI, and OCI GenAI";
+  var wmsExamplePromptMinLength = 24;
+  var wmsExamplePromptMaxLength = 320;
 
-  bubbleModalElement.addEventListener("hidden.bs.modal", function () {
-    closeImageLightbox({ announce: false, restoreFocus: false });
-    document.body.classList.remove("modal-open");
-    document.body.style.removeProperty("padding-right");
-    document.querySelectorAll(".modal-backdrop").forEach(function (backdrop) {
-      backdrop.remove();
+  if (bubbleModalElement) {
+    bubbleModalElement.addEventListener("shown.bs.modal", function () {
+      var closeControl = bubbleModalElement.querySelector(".modal-header [data-bs-dismiss='modal']");
+      if (closeControl && typeof closeControl.focus === "function") {
+        closeControl.focus();
+      }
     });
-  });
+
+    bubbleModalElement.addEventListener("hidden.bs.modal", function () {
+      closeImageLightbox({ announce: false, restoreFocus: false });
+      document.body.classList.remove("modal-open");
+      document.body.style.removeProperty("padding-right");
+      document.querySelectorAll(".modal-backdrop").forEach(function (backdrop) {
+        backdrop.remove();
+      });
+    });
+  }
 
   function escapeHtml(value) {
     return String(value)
@@ -349,7 +659,136 @@
     return prefersReducedMotion ? "auto" : "smooth";
   }
 
+  function resolveAppBasePath() {
+    var path = window.location.pathname || "/";
+    var cleanPath = path.replace(/\/+$/, "");
+    var segments = cleanPath.split("/").filter(Boolean);
+    var routeNames = ["home", "quickstart", "cheatsheet", "nodoc"];
+    var lastSegment = (segments[segments.length - 1] || "").toLowerCase();
+    var previousSegment = (segments[segments.length - 2] || "").toLowerCase();
+
+    // GitHub Pages serves each route directory through its index.html. Remove
+    // route segments when finding the guide root; otherwise a page would
+    // generate nested URLs such as quickstart/quickstart.
+    if (lastSegment === "index.html" && routeNames.indexOf(previousSegment) !== -1) {
+      segments.splice(-2, 2);
+    } else if (lastSegment === "index.html") {
+      segments.pop();
+    } else if (routeNames.indexOf(lastSegment) !== -1 || routeNames.indexOf(lastSegment.replace(/\.html$/, "")) !== -1) {
+      segments.pop();
+    } else if (!path.endsWith("/")) {
+      segments.pop();
+    }
+
+    if ((segments[segments.length - 1] || "").toLowerCase() === "pages") {
+      segments.pop();
+    }
+
+    return "/" + (segments.length ? segments.join("/") + "/" : "");
+  }
+
+  var appBasePath = resolveAppBasePath();
+  var routeBasePath = appBasePath.replace(/pages\/$/i, "") || "/";
+
+  function resolveGuideRuntimePath(path) {
+    if (window.AuthorGuidePaths && typeof window.AuthorGuidePaths.resolve === "function") {
+      return window.AuthorGuidePaths.resolve(path);
+    }
+
+    return new URL(routeBasePath + path.replace(/^\/+/, ""), window.location.href).toString();
+  }
+
+  guideCatalogHref = resolveGuideRuntimePath("assets/data/author-guide-catalog.json");
+
+  function routeTokenFromLocation() {
+    var routeParam = new URLSearchParams(window.location.search).get("route");
+    var pathSegments = (window.location.pathname || "").replace(/\/+$/, "").split("/").filter(Boolean);
+    var pathSegment = (pathSegments[pathSegments.length - 1] || "").toLowerCase();
+
+    if (pathSegment === "index.html" && pathSegments.length > 1) {
+      pathSegment = pathSegments[pathSegments.length - 2].toLowerCase();
+    }
+
+    var cleanRoute = String(routeParam || pathSegment || "").toLowerCase();
+
+    if (window.location.hash) {
+      return window.location.hash;
+    }
+
+    if (cleanRoute === "home" || cleanRoute === "home.html" || cleanRoute === "index.html") {
+      return "#home";
+    }
+    if (cleanRoute === "quickstart" || cleanRoute === "quickstart.html") {
+      return "#quickstart";
+    }
+    if (cleanRoute === "cheatsheet" || cleanRoute === "cheatsheet.html" || cleanRoute === "quick-reference") {
+      return "#quick-reference";
+    }
+    if (cleanRoute === "nodoc" || cleanRoute === "nodoc.html" || cleanRoute === "no-doc") {
+      return "#nodoc";
+    }
+
+    return window.location.hash || "#home";
+  }
+
+  function routeUrl(hash) {
+    var cleaned = String(hash || "").replace(/^#/, "").toLowerCase();
+    var pageFile = function (cleanName) {
+      return cleanName === "home"
+        ? routeBasePath
+        : routeBasePath + cleanName + "/";
+    };
+    var pageUrl = function (cleanName, pageHash) {
+      var authoring = "";
+
+      // The Quickstart authoring choice is intentionally shareable. Keep it
+      // when the step hash changes so Next, Back, reload, and browser history
+      // do not silently switch a GitHub author back to the NoDoc route.
+      if (cleanName === "quickstart") {
+        try {
+          authoring = new URLSearchParams(window.location.search).get("authoring") || "";
+        } catch (error) {
+          authoring = "";
+        }
+
+        if (authoring !== "source" && authoring !== "no-doc") {
+          authoring = "";
+        }
+      }
+
+      return pageFile(cleanName) + (authoring ? "?authoring=" + authoring : "") + (pageHash || "");
+    };
+
+    if (!cleaned || cleaned === "home" || cleaned === "hub") {
+      return pageUrl("home");
+    }
+    if (cleaned === "guided" || cleaned === "quickstart") {
+      return pageUrl("quickstart");
+    }
+    if (cleaned.indexOf("step-") === 0) {
+      return pageUrl("quickstart", hash);
+    }
+    if (cleaned === "toolkit" || cleaned === "quick-reference" || cleaned === "cheatsheet" || cleaned === "explorer") {
+      return pageUrl("cheatsheet");
+    }
+    if (cleaned.indexOf("cheatsheet:") === 0) {
+      return pageUrl("cheatsheet", hash);
+    }
+    if (cleaned === "nodoc" || cleaned === "no-doc") {
+      return pageUrl("nodoc");
+    }
+    if (cleaned.indexOf("nodoc:") === 0) {
+      return pageUrl("nodoc", hash);
+    }
+
+    return pageUrl("home", hash);
+  }
+
   function setLiveMessage(message) {
+    if (!liveRegion) {
+      return;
+    }
+
     liveRegion.textContent = "";
     window.setTimeout(function () {
       liveRegion.textContent = message;
@@ -361,8 +800,11 @@
       __authorGuideRoute: true,
       mode: state.mode,
       currentStep: state.currentStep,
+      authoringRoute: state.authoringRoute,
       fastTrack: state.fastTrack,
       activeTag: state.activeTag,
+      activeTags: state.activeTags,
+      toolkitSort: state.toolkitSort,
       toolkitQuery: state.toolkitQuery,
       searchQuery: state.searchQuery,
       guideSection: state.guideSection,
@@ -401,29 +843,38 @@
       scrollY: window.pageYOffset
     }, options || {});
     var payload = currentRoutePayload(hash, config.scrollY);
+    var targetUrl = routeUrl(hash);
+    var currentUrl = window.location.pathname + window.location.search + window.location.hash;
 
-    if (window.location.hash === hash) {
-      history.replaceState(payload, "", hash);
+    if (currentUrl === targetUrl) {
+      history.replaceState(payload, "", targetUrl);
       return;
     }
 
     if (config.replace || isRestoringHistory) {
-      history.replaceState(payload, "", hash);
+      history.replaceState(payload, "", targetUrl);
       return;
     }
 
     persistCurrentHistoryScroll();
-    history.pushState(payload, "", hash);
+    history.pushState(payload, "", targetUrl);
   }
 
   function updateHashFromState(options) {
+    var currentHash = window.location.hash || "";
+
     if (state.mode === "beginner") {
       setHash(state.currentStep === 0 ? "#quickstart" : "#step-" + (state.currentStep + 1), options);
       return;
     }
 
     if (state.mode === "explorer") {
-      setHash("#quick-reference", options);
+      setHash(currentHash.indexOf("#cheatsheet:") === 0 ? currentHash : "#quick-reference", options);
+      return;
+    }
+
+    if (state.mode === "nodoc") {
+      setHash(currentHash.indexOf("#nodoc:") === 0 ? currentHash : "#nodoc", options);
       return;
     }
 
@@ -645,11 +1096,33 @@
   }
 
   function titleCaseTag(tag) {
-    if (tag === "qa") {
-      return "Quality Assurance";
+    var normalized = normalizeTagValue(tag);
+    var labelMap = {
+      ai: "AI",
+      assets: "Assets",
+      freesql: "FreeSQL",
+      github: "GitHub",
+      interactive: "Interactive",
+      livestack: "LiveStack",
+      markdown: "Markdown",
+      marketplace: "Marketplace",
+      media: "Media",
+      publishing: "Publishing",
+      qa: "Quality Assurance",
+      "quality-assurance": "Quality Assurance",
+      "secure-desktop": "Secure Desktop",
+      sprints: "Sprints",
+      support: "Support",
+      tools: "Tools",
+      validation: "Validation",
+      wms: "WMS"
+    };
+
+    if (labelMap[normalized]) {
+      return labelMap[normalized];
     }
 
-    return tag
+    return normalized
       .split("-")
       .map(function (part) {
         return part.charAt(0).toUpperCase() + part.slice(1);
@@ -668,6 +1141,40 @@
   function uniqueList(items) {
     return Array.from(new Set((items || []).filter(Boolean)));
   }
+
+  function normalizeTagValue(tag) {
+    return normalizeText(tag).replace(/\s+/g, "-");
+  }
+
+  function normalizeToolkitSort(sort) {
+    var normalized = normalizeTagValue(sort || "");
+    return allowedToolkitSorts[normalized] ? normalized : "alphabetical";
+  }
+
+  function tagFacetWeight(tag) {
+    var index = tagFacetOrder.indexOf(tag);
+    return index === -1 ? tagFacetOrder.length : index;
+  }
+
+  function getItemTags(item) {
+    return uniqueList((item.tags || []).map(normalizeTagValue).filter(Boolean));
+  }
+
+  function normalizeTagSelection(tags) {
+    var list = Array.isArray(tags) ? tags : [tags];
+
+    // The Cheatsheet presents one topic filter at a time. Older browser
+    // history can still contain an array from the previous multi-select UI,
+    // so retain only the first valid value when that state is restored.
+    return uniqueList(list.map(normalizeTagValue).filter(function (tag) {
+      return tag && tag !== "all";
+    })).slice(0, 1);
+  }
+
+  explorerItems.forEach(function (item, index) {
+    item.__sourceOrder = index;
+    item.__tags = getItemTags(item);
+  });
 
   function resolveGuideTarget(target, sourceHref) {
     var requested = String(target || "").trim();
@@ -804,18 +1311,6 @@
     return "Loading task sections";
   }
 
-  function analyzeGuideSourceMarkdown(markdown) {
-    var headings = String(markdown || "").match(/^##\s+.+$/gm) || [];
-    var taskCount = headings.filter(function (line) {
-      return /^\s*##\s+(?:\([^)]+\)\s*)?Task\b/i.test(line);
-    }).length;
-
-    return {
-      taskCount: taskCount,
-      panelCount: headings.length
-    };
-  }
-
   function applyGuideSourceMeta(section, meta) {
     if (!section || !meta) {
       return;
@@ -827,7 +1322,9 @@
   }
 
   function loadGuideSourceMeta(section) {
-    if (!section || !section.id || !section.sourcePath) {
+    var meta;
+
+    if (!section || !section.id) {
       return Promise.resolve(null);
     }
 
@@ -835,43 +1332,12 @@
       return guideSectionMetaCache[section.id];
     }
 
-    guideSectionMetaCache[section.id] = fetch(section.sourcePath, { cache: "no-store" })
-      .then(function (response) {
-        if (!response.ok) {
-          throw new Error("Guide source markdown request failed with status " + response.status + ".");
-        }
-
-        return response.text();
-      })
-      .then(function (markdown) {
-        var meta = analyzeGuideSourceMarkdown(markdown);
-
-        applyGuideSourceMeta(section, meta);
-
-        if (guideSectionNav) {
-          renderGuideNav();
-        }
-
-        if (state.mode === "guide" && currentGuideSection() && currentGuideSection().id === section.id) {
-          renderGuideSection();
-        }
-
-        return meta;
-      })
-      .catch(function () {
-        var fallbackMeta = {
-          taskCount: 0,
-          panelCount: 0
-        };
-
-        applyGuideSourceMeta(section, fallbackMeta);
-
-        if (guideSectionNav) {
-          renderGuideNav();
-        }
-
-        return fallbackMeta;
-      });
+    meta = {
+      taskCount: Math.max(0, Number(section.taskCount) || 0),
+      panelCount: Math.max(0, Number(section.panelCount) || 0)
+    };
+    applyGuideSourceMeta(section, meta);
+    guideSectionMetaCache[section.id] = Promise.resolve(meta);
 
     return guideSectionMetaCache[section.id];
   }
@@ -881,7 +1347,11 @@
     var title = String((tutorial && tutorial.title) || "Guide Page");
     var summary = String((tutorial && tutorial.description) || "").trim();
     var basename = filename.split("/").pop() || "";
-    var id = basename.replace(/\.md$/i, "");
+    var id = String((tutorial && tutorial.id) || basename.replace(/\.md$/i, ""));
+    var sourceMeta = {
+      taskCount: Math.max(0, Number(tutorial && tutorial.taskCount) || 0),
+      panelCount: Math.max(0, Number(tutorial && tutorial.panelCount) || 0)
+    };
 
     return {
       id: id,
@@ -891,28 +1361,14 @@
       purpose: "Original author-guide content indexed for search with direct access to the original guide.",
       accent: guideAccentForEntry(title, summary),
       highlights: guideHighlightsForEntry(id, title, summary),
-      navState: "Loading sections",
+      navState: guideNavStateLabel(sourceMeta.taskCount, sourceMeta.panelCount),
+      taskCount: sourceMeta.taskCount,
+      panelCount: sourceMeta.panelCount,
       labs: [],
-      sourcePath: resolveGuideSourcePath(filename),
       sectionHref: fullGuideLabHref(id),
-      sectionLabel: "Open Full Guide",
+      sectionLabel: "Open Step by Step Guide",
       embedHref: fullGuideLabHref(id, { embed: "1" })
     };
-  }
-
-  function resolveGuideSourcePath(filename) {
-    var manifestUrl;
-
-    if (!filename) {
-      return "";
-    }
-
-    try {
-      manifestUrl = new URL(guideManifestHref, window.location.href);
-      return new URL(filename, manifestUrl).toString();
-    } catch (error) {
-      return filename;
-    }
   }
 
   function loadGuideCatalog() {
@@ -920,16 +1376,16 @@
       return guideCatalogPromise;
     }
 
-    guideCatalogPromise = fetch(guideManifestHref, { cache: "no-store" })
+    guideCatalogPromise = fetch(guideCatalogHref, { cache: "no-store" })
       .then(function (response) {
         if (!response.ok) {
-          throw new Error("Guide manifest request failed with status " + response.status + ".");
+          throw new Error("Guide catalog request failed with status " + response.status + ".");
         }
 
         return response.json();
       })
-      .then(function (manifest) {
-        guideSections = (manifest.tutorials || []).map(buildGuideEntry).filter(function (entry) {
+      .then(function (catalog) {
+        guideSections = (catalog.tutorials || []).map(buildGuideEntry).filter(function (entry) {
           return entry.id;
         });
         guideSectionMap = guideSections.reduce(function (accumulator, entry) {
@@ -1012,10 +1468,16 @@
     if (searchPageInput) {
       searchPageInput.value = state.searchQuery;
     }
+
+    if (searchPageClear) {
+      searchPageClear.hidden = !(searchPageInput && searchPageInput.value);
+    }
   }
 
   function updateNav() {
-    modeNav.classList.remove("d-none");
+    if (modeNav) {
+      modeNav.classList.remove("d-none");
+    }
     document.body.classList.toggle("home-no-scroll", state.mode === "hub");
     syncAuthorNavToggle();
 
@@ -1044,126 +1506,415 @@
     region.setAttribute("aria-hidden", isVisible ? "false" : "true");
   }
 
-  function updateProgressCaption() {
-    if (!progressCaption) {
-      return;
+  function updateAuthoringRouteUI() {
+    authoringRouteTabs.forEach(function (tab) {
+      var isActive = tab.getAttribute("data-authoring-route") === state.authoringRoute;
+      tab.classList.toggle("is-active", isActive);
+      tab.setAttribute("aria-selected", isActive ? "true" : "false");
+      tab.setAttribute("tabindex", isActive ? "0" : "-1");
+    });
+
+    authoringRoutePanels.forEach(function (panel) {
+      var isActive = panel.getAttribute("data-authoring-panel") === state.authoringRoute;
+      panel.hidden = !isActive;
+      panel.setAttribute("aria-hidden", isActive ? "false" : "true");
+    });
+
+    document.querySelectorAll("[data-authoring-only]").forEach(function (node) {
+      var isActive = node.getAttribute("data-authoring-only") === state.authoringRoute;
+      node.hidden = !isActive;
+      node.setAttribute("aria-hidden", isActive ? "false" : "true");
+    });
+  }
+
+  function releaseObserverAtTop() {
+    var deadline = Date.now() + 1600;
+
+    function checkPosition() {
+      if (window.pageYOffset <= 1 || Date.now() >= deadline) {
+        suppressObserver = false;
+        return;
+      }
+
+      window.requestAnimationFrame(checkPosition);
     }
 
-    if (!stepMeta[state.currentStep]) {
-      progressCaption.textContent = "Step 1 of 3 is active.";
+    window.requestAnimationFrame(checkPosition);
+  }
+
+  function updateAuthoringRouteQuery(options) {
+    var config = Object.assign({ replace: false }, options || {});
+    var url;
+    var payload;
+
+    try {
+      url = new URL(window.location.href);
+      url.searchParams.set("authoring", state.authoringRoute);
+      payload = currentRoutePayload(url.hash, window.pageYOffset);
+      history[config.replace ? "replaceState" : "pushState"](
+        payload,
+        "",
+        url.pathname + url.search + url.hash
+      );
+    } catch (error) {
       return;
     }
+  }
 
-    if (state.mode !== "beginner") {
-      progressCaption.textContent = "Step 1 of 3 is active.";
-      return;
+  function setAuthoringRoute(route, options) {
+    var config = Object.assign({
+      focus: false,
+      announce: true,
+      history: true,
+      replaceHistory: false
+    }, options || {});
+
+    state.authoringRoute = normalizeAuthoringRoute(route);
+    updateAuthoringRouteUI();
+
+    if (config.history) {
+      updateAuthoringRouteQuery({ replace: config.replaceHistory });
     }
 
-    progressCaption.textContent = "Step " + (state.currentStep + 1) + " of 3: " +
-      stepMeta[state.currentStep].title + " (" + (state.fastTrack === "minimal" ? "Fast Track" : "Guided") + ").";
+    if (config.focus) {
+      var activeTab = authoringRouteTabs.find(function (tab) {
+        return tab.getAttribute("data-authoring-route") === state.authoringRoute;
+      });
+      if (activeTab) {
+        activeTab.focus();
+      }
+    }
+
+    if (config.announce) {
+      setLiveMessage(
+        state.authoringRoute === "no-doc"
+          ? "NoDoc authoring path selected."
+          : "GitHub authoring process selected."
+      );
+    }
   }
 
   function updateBeginnerUI() {
+    if (!rabbitFlow || !fastTrackToggle || !fastTrackStatus) {
+      return;
+    }
+
     rabbitFlow.classList.toggle("track-minimal", state.fastTrack === "minimal");
     fastTrackToggle.checked = state.fastTrack === "minimal";
     fastTrackStatus.textContent = state.fastTrack === "minimal"
       ? "Fast Track hides the longer notes and common mistakes."
       : "Guided mode keeps notes, common mistakes, and extra context visible.";
-    var activeStepMeta = stepMeta[state.currentStep] || stepMeta[0] || {};
-    var activeStepDetails = quickstartStepDetails[state.currentStep] || quickstartStepDetails[0];
-
-    if (quickstartProcessTitle) {
-      quickstartProcessTitle.textContent = activeStepMeta.title || "Submit Workshop Request";
-    }
-
-    if (quickstartProcessIndex) {
-      quickstartProcessIndex.textContent = String(state.currentStep + 1);
-    }
-
-    if (quickstartProcessTotal) {
-      quickstartProcessTotal.textContent = String(stepSections.length || 3);
-    }
-
-    if (quickstartProcessOutput && activeStepDetails) {
-      quickstartProcessOutput.textContent = activeStepDetails.output;
-    }
-
-    if (quickstartProcessTime && activeStepDetails) {
-      quickstartProcessTime.textContent = activeStepDetails.time;
-    }
-
-    if (quickstartProcessLeads && activeStepDetails) {
-      quickstartProcessLeads.textContent = activeStepDetails.leads;
-    }
-
-    progressButtons.forEach(function (button, index) {
-      var isActive = index === state.currentStep;
-      var isComplete = index < state.currentStep;
-      var mark = button.querySelector(".progress-mark");
-
-      button.classList.toggle("is-active", isActive);
-      button.classList.toggle("is-complete", isComplete);
-      button.classList.remove("is-locked");
-      button.setAttribute("aria-current", isActive ? "step" : "false");
-      button.setAttribute("aria-selected", isActive ? "true" : "false");
-      button.setAttribute("tabindex", isActive ? "0" : "-1");
-      if (mark) {
-        mark.innerHTML = isComplete ? "&#10003;" : String(index + 1);
-      }
-    });
-
     stepSections.forEach(function (section, index) {
       section.classList.toggle("is-active", index === state.currentStep);
       section.classList.toggle("is-complete", index < state.currentStep);
       section.classList.remove("is-locked");
     });
 
-    updateProgressCaption();
-    updateBreadcrumb();
+  }
+
+  function getTagFacets() {
+    var counts = {};
+
+    explorerItems.forEach(function (item) {
+      (item.__tags || getItemTags(item)).forEach(function (tag) {
+        counts[tag] = (counts[tag] || 0) + 1;
+      });
+    });
+
+    return Object.keys(counts).sort(function (left, right) {
+      if (tagFacetWeight(left) !== tagFacetWeight(right)) {
+        return tagFacetWeight(left) - tagFacetWeight(right);
+      }
+      return titleCaseTag(left).localeCompare(titleCaseTag(right), undefined, { sensitivity: "base" });
+    }).map(function (tag) {
+      return {
+        tag: tag,
+        label: titleCaseTag(tag),
+        count: counts[tag]
+      };
+    });
+  }
+
+  function updateTagPillState() {
+    var activeTags = normalizeTagSelection(state.activeTags);
+
+    tagPills.forEach(function (pill) {
+      var tag = pill.getAttribute("data-tag");
+      var isAll = tag === "all";
+      var isActive = isAll ? activeTags.length === 0 : activeTags.indexOf(tag) !== -1;
+
+      pill.classList.toggle("is-active", isActive);
+      pill.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+  }
+
+  function renderTagPills() {
+    if (!tagPillsMount) {
+      return;
+    }
+
+    tagPillsMount.innerHTML = [
+      '<button type="button" class="tag-pill is-active" data-tag="all" aria-pressed="true">All <span class="tag-pill-count">', explorerItems.length, "</span></button>"
+    ].concat(getTagFacets().map(function (facet) {
+      return [
+        '<button type="button" class="tag-pill" data-tag="', escapeAttribute(facet.tag), '" aria-pressed="false">',
+        escapeHtml(facet.label),
+        ' <span class="tag-pill-count">',
+        facet.count,
+        "</span>",
+        "</button>"
+      ].join("");
+    })).join("");
+
+    tagPills = Array.from(tagPillsMount.querySelectorAll(".tag-pill"));
+    updateTagPillState();
+  }
+
+  function buildExplorerSearchEntry(item) {
+    return createSearchEntry({
+      id: item.id,
+      typeLabel: "Cheatsheet",
+      title: item.title,
+      summary: item.short || item.description || "",
+      path: "Cheatsheet / " + item.title,
+      sourceHref: item.sourceHref || "",
+      steps: item.steps,
+      checkpoints: item.checkpoints,
+      watchFor: item.watchFor,
+      snippet: item.snippet,
+      exampleFields: item.exampleFields,
+      resourceLinks: item.resourceLinks,
+      milestones: item.milestones,
+      tags: item.tags,
+      keywords: item.keywords
+    });
+  }
+
+  function itemUpdatedTime(item) {
+    var time = Date.parse(item.updatedAt || "");
+    return Number.isFinite(time) ? time : 0;
+  }
+
+  function compareExplorerTitle(left, right) {
+    return String(left.item.title || "").localeCompare(String(right.item.title || ""), undefined, {
+      sensitivity: "base"
+    });
+  }
+
+  function explorerTopic(entry) {
+    var tags = entry.item.__tags || getItemTags(entry.item);
+    return tags[0] || "other";
+  }
+
+  function compareExplorerTopic(left, right) {
+    var leftTopic = explorerTopic(left);
+    var rightTopic = explorerTopic(right);
+    var topicComparison = leftTopic.localeCompare(rightTopic, undefined, {
+      sensitivity: "base"
+    });
+
+    return topicComparison || compareExplorerTitle(left, right);
+  }
+
+  function recommendedIndexForEntry(entry) {
+    var id = entry && entry.item ? entry.item.id : "";
+    return Object.prototype.hasOwnProperty.call(recommendedCheatsheetOrderMap, id)
+      ? recommendedCheatsheetOrderMap[id]
+      : Number.MAX_SAFE_INTEGER;
+  }
+
+  function compareExplorerRelevance(left, right) {
+    if (recommendedIndexForEntry(left) !== recommendedIndexForEntry(right)) {
+      return recommendedIndexForEntry(left) - recommendedIndexForEntry(right);
+    }
+
+    if (left.item.__sourceOrder !== right.item.__sourceOrder) {
+      return left.item.__sourceOrder - right.item.__sourceOrder;
+    }
+
+    return compareExplorerTitle(left, right);
+  }
+
+  function sortExplorerEntries(entries, query) {
+    var mode = normalizeToolkitSort(state.toolkitSort);
+
+    return entries.slice().sort(function (left, right) {
+      if (mode === "relevance") {
+        if (right.score !== left.score) {
+          return right.score - left.score;
+        }
+        return compareExplorerRelevance(left, right);
+      }
+
+      if (mode === "latest") {
+        if (right.updatedTime !== left.updatedTime) {
+          return right.updatedTime - left.updatedTime;
+        }
+        return compareExplorerTitle(left, right);
+      }
+
+      if (mode === "topic") {
+        return compareExplorerTopic(left, right);
+      }
+
+      return compareExplorerTitle(left, right);
+    });
+  }
+
+  function renderExplorerMeta(entry) {
+    var bits = [];
+
+    if ((state.toolkitSort || "") === "relevance" && state.toolkitQuery.trim()) {
+      bits.push("Match " + entry.score);
+    }
+
+    if (!bits.length) {
+      return "";
+    }
+
+    return '<span class="bubble-meta">' + bits.map(function (bit) {
+      return '<span>' + escapeHtml(bit) + "</span>";
+    }).join("") + "</span>";
+  }
+
+  function currentSortLabel() {
+    var sortLabels = {
+      alphabetical: "Alphabetical",
+      latest: "Latest",
+      relevance: state.toolkitQuery.trim() ? "Best match" : "Recommended",
+      topic: "Topic"
+    };
+
+    return sortLabels[normalizeToolkitSort(state.toolkitSort)] || sortLabels.alphabetical;
+  }
+
+  function updateExplorerSummary(count) {
+    var tagText;
+    var queryText = state.toolkitQuery.trim();
+    var activeTags = normalizeTagSelection(state.activeTags);
+
+    if (resultCount) {
+      resultCount.textContent = "Showing " + count + " of " + explorerItems.length + " cheatsheet card" + (count === 1 ? "" : "s");
+    }
+
+    if (!filterSummary) {
+      return;
+    }
+
+    tagText = activeTags.length ? "Filter: " + titleCaseTag(activeTags[0]) : "All topics";
+    filterSummary.textContent = currentSortLabel() + " sort. " + tagText + (queryText ? '. Query: "' + queryText + '"' : ".");
+  }
+
+  function renderExplorerCard(entry) {
+    var item = entry.item;
+    var itemTags = item.__tags || getItemTags(item);
+    var tagLabel = itemTags.map(titleCaseTag).join(", ");
+
+    return [
+      '<div class="col bubble-item" data-bubble-id="', item.id, '">',
+      '  <button type="button" class="bubble-button" data-open-bubble="', item.id, '" data-accent="red" aria-label="Open ', escapeHtml(item.title), ' details">',
+      '    <span class="bubble-badge" aria-label="Tags: ', escapeAttribute(tagLabel), '">', escapeHtml(tagLabel), "</span>",
+      '    <span class="bubble-title">', escapeHtml(item.title), "</span>",
+      '    <span class="bubble-text">', escapeHtml(item.short), "</span>",
+      renderExplorerMeta(entry),
+      "  </button>",
+      "</div>"
+    ].join("");
+  }
+
+  function renderExplorerTopicGroups(entries) {
+    var groups = [];
+
+    entries.forEach(function (entry) {
+      var topic = explorerTopic(entry);
+      var group = groups[groups.length - 1];
+
+      if (!group || group.topic !== topic) {
+        group = {
+          topic: topic,
+          entries: []
+        };
+        groups.push(group);
+      }
+
+      group.entries.push(entry);
+    });
+
+    return groups.map(function (group) {
+      var headingId = "cheatsheet-topic-" + group.topic.replace(/[^a-z0-9-]+/g, "-");
+      var countLabel = group.entries.length === 1 ? "1 card" : group.entries.length + " cards";
+
+      return [
+        '<section class="col-12 cheatsheet-topic-group" aria-labelledby="', headingId, '" data-topic="', escapeHtml(group.topic), '">',
+        '  <div class="cheatsheet-topic-heading">',
+        '    <h3 id="', headingId, '">', escapeHtml(titleCaseTag(group.topic)), "</h3>",
+        '    <span>', countLabel, "</span>",
+        "  </div>",
+        '  <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">',
+        group.entries.map(renderExplorerCard).join(""),
+        "  </div>",
+        "</section>"
+      ].join("");
+    }).join("");
   }
 
   function renderExplorer() {
-    var query = state.toolkitQuery.trim().toLowerCase();
-    var visibleItems = explorerItems.filter(function (item) {
-      var haystack = [
-        item.title,
-        item.short,
-        item.description,
-        flattenList(item.steps),
-        flattenList(item.checkpoints),
-        flattenList(item.watchFor),
-        item.snippet || "",
-        flattenFields(item.exampleFields),
-        flattenResources(item.resourceLinks),
-        flattenMilestones(item.milestones)
-      ].concat(item.tags).join(" ").toLowerCase();
-      var matchesQuery = !query || haystack.indexOf(query) !== -1;
-      var matchesTag = state.activeTag === "all" || item.tags.indexOf(state.activeTag) !== -1;
-      return matchesQuery && matchesTag;
+    if (!bubbleGrid || !emptyState) {
+      return;
+    }
+
+    var query = state.toolkitQuery.trim();
+    var selectedTags = normalizeTagSelection(state.activeTags);
+    var selectedTag = selectedTags[0] || "";
+    var scoredEntries = explorerItems.map(function (item) {
+      var searchEntry = buildExplorerSearchEntry(item);
+      var itemTags = item.__tags || getItemTags(item);
+
+      return {
+        item: item,
+        directScore: query ? scoreSearchEntry(searchEntry, query, false) : 0,
+        expandedScore: query ? scoreSearchEntry(searchEntry, query, true) : 0,
+        updatedTime: itemUpdatedTime(item),
+        matchesTag: !selectedTag || itemTags.indexOf(selectedTag) !== -1
+      };
+    });
+    var hasDirectMatch = !!query && scoredEntries.some(function (entry) {
+      return entry.directScore >= 14;
+    });
+    var visibleEntries = scoredEntries.map(function (entry) {
+      entry.score = hasDirectMatch ? entry.directScore : entry.expandedScore;
+      entry.matchesQuery = !query || entry.score >= 14;
+      return entry;
+    }).filter(function (entry) {
+      return entry.matchesQuery && entry.matchesTag;
     });
 
-    bubbleGrid.innerHTML = visibleItems.map(function (item) {
-      return [
-        '<div class="col bubble-item" data-bubble-id="', item.id, '">',
-        '  <button type="button" class="bubble-button" data-open-bubble="', item.id, '" data-accent="red" aria-label="Open ', escapeHtml(item.title), ' details">',
-        '    <span class="bubble-badge">', escapeHtml(titleCaseTag(item.tags[0])), "</span>",
-        '    <span class="bubble-title">', escapeHtml(item.title), "</span>",
-        '    <span class="bubble-text">', escapeHtml(item.short), "</span>",
-        "  </button>",
-        "</div>"
-      ].join("");
-    }).join("");
+    visibleEntries = sortExplorerEntries(visibleEntries, query);
 
-    resultCount.textContent = "Showing " + visibleItems.length + " cheatsheet card" + (visibleItems.length === 1 ? "" : "s");
-    emptyState.classList.toggle("d-none", visibleItems.length !== 0);
+    bubbleGrid.classList.toggle("is-topic-grouped", state.toolkitSort === "topic");
+    bubbleGrid.innerHTML = state.toolkitSort === "topic"
+      ? renderExplorerTopicGroups(visibleEntries)
+      : visibleEntries.map(renderExplorerCard).join("");
+
+    updateExplorerSummary(visibleEntries.length);
+    emptyState.classList.toggle("d-none", visibleEntries.length !== 0);
   }
 
   function setActiveTag(tag) {
-    state.activeTag = tag;
-    tagPills.forEach(function (pill) {
-      pill.classList.toggle("is-active", pill.getAttribute("data-tag") === tag);
-    });
+    var normalized = normalizeTagValue(tag);
+
+    if (normalized === "all") {
+      state.activeTags = [];
+    } else {
+      state.activeTags = [normalized];
+    }
+
+    state.activeTag = state.activeTags[0] || "all";
+    updateTagPillState();
     renderExplorer();
+    setLiveMessage(normalized === "all"
+      ? "Showing all Cheatsheet cards."
+      : "Filtering Cheatsheet cards by " + titleCaseTag(normalized) + ".");
   }
 
   function fillList(id, items) {
@@ -1190,15 +1941,52 @@
       return;
     }
 
-    wmsExampleResults.innerHTML = (fields || []).map(function (field) {
-      return [
-        '<article class="detail-field-card generated-example-card">',
-        '  <span class="detail-field-label">', escapeHtml(field.label), "</span>",
-        renderFieldValueHtml(field.value),
-        field.note ? '  <p class="detail-field-note">' + escapeHtml(field.note) + "</p>" : "",
-        "</article>"
-      ].join("");
-    }).join("");
+    if (!fields || !fields.length) {
+      wmsExampleResults.innerHTML = "";
+      wmsExampleResults.classList.add("d-none");
+      return;
+    }
+
+    function fieldGroup(label) {
+      if (label === "Workshop Title" || label.indexOf("Description") !== -1) {
+        return "Core workshop fields";
+      }
+      if (label === "Workshop Abstract" || label === "Workshop Outline" || label === "Workshop Prerequisites") {
+        return "WMS review fields";
+      }
+      return "Optional notes";
+    }
+
+    var rows = [];
+    var activeGroup = "";
+    (fields || []).forEach(function (field, index) {
+      var group = fieldGroup(field.label || "");
+      var targetId = "wms-example-field-" + index;
+
+      if (group !== activeGroup) {
+        rows.push('<tr class="generated-example-group-row"><th colspan="3" scope="colgroup">' + escapeHtml(group) + "</th></tr>");
+        activeGroup = group;
+      }
+
+      rows.push([
+        '<tr class="generated-example-row">',
+        '  <th scope="row" class="generated-example-label">', escapeHtml(field.label), "</th>",
+        '  <td><pre class="generated-example-pre"><code id="', targetId, '">', escapeHtml(field.value), "</code></pre></td>",
+        '  <td class="generated-example-action"><button class="copy-snippet generated-example-copy" type="button" data-copy-target="', targetId, '">Copy</button></td>',
+        "</tr>"
+      ].join(""));
+    });
+
+    wmsExampleResults.classList.remove("d-none");
+    wmsExampleResults.innerHTML = [
+      '<div class="generated-example-table-wrap">',
+      '  <table class="generated-example-table">',
+      '    <caption>Generated WMS field examples</caption>',
+      '    <thead><tr><th scope="col">Field</th><th scope="col">Example</th><th scope="col">Action</th></tr></thead>',
+      '    <tbody>', rows.join(""), "</tbody>",
+      "  </table>",
+      "</div>"
+    ].join("");
   }
 
   function runWmsExampleGeneration() {
@@ -1227,6 +2015,28 @@
         setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Examples could not be generated. Try a shorter prompt.");
       }
     }, 180);
+  }
+
+  function validateWmsExamplePrompt() {
+    var prompt = wmsExamplePrompt ? wmsExamplePrompt.value.trim() : "";
+    var message = "";
+
+    if (!prompt) {
+      message = "Enter a workshop idea before generating examples.";
+    } else if (prompt.length < wmsExamplePromptMinLength) {
+      message = "Add more detail: include the audience, outcome, and Oracle products.";
+    } else if (prompt.length > wmsExamplePromptMaxLength) {
+      message = "Shorten the workshop idea to 320 characters or fewer.";
+    }
+
+    if (wmsExamplePrompt) {
+      wmsExamplePrompt.setCustomValidity(message);
+      wmsExamplePrompt.setAttribute("aria-invalid", message ? "true" : "false");
+    }
+    if (wmsExamplePromptCount) {
+      wmsExamplePromptCount.textContent = String((wmsExamplePrompt ? wmsExamplePrompt.value.length : 0)) + " / " + wmsExamplePromptMaxLength;
+    }
+    return message;
   }
 
   function setMarkdownOutput(value) {
@@ -1264,7 +2074,10 @@
         }
         setMarkdownOutput(snippet.body);
         if (workshopMarkdownSummary) {
-          workshopMarkdownSummary.textContent = snippet.summary + " Source: " + snippet.source + ".";
+          workshopMarkdownSummary.innerHTML = [
+            '<span class="generator-summary-row"><strong>Use case</strong><span>' + escapeHtml(snippet.summary) + "</span></span>",
+            '<span class="generator-summary-row"><strong>Source</strong><span>' + escapeHtml(snippet.source) + "</span></span>"
+          ].join("");
         }
         if (generatorOutputMeta) {
           generatorOutputMeta.textContent = snippet.group + " / " + snippet.source;
@@ -1276,6 +2089,508 @@
         setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "Snippet could not be generated. Try a different option.");
       }
     }, 180);
+  }
+
+  function createWmsStatusSvgElement(name, attrs) {
+    var element = document.createElementNS("http://www.w3.org/2000/svg", name);
+
+    Object.keys(attrs || {}).forEach(function (key) {
+      element.setAttribute(key, attrs[key]);
+    });
+
+    return element;
+  }
+
+  function wmsStatusBoundaryPoint(box, toward) {
+    var dx = toward.x - box.x;
+    var dy = toward.y - box.y;
+    var scale = Math.min(Math.abs(wmsStatusNodeHalfWidth / (dx || 0.0001)), Math.abs(wmsStatusNodeHalfHeight / (dy || 0.0001)));
+
+    return { x: box.x + dx * scale, y: box.y + dy * scale };
+  }
+
+  function wmsStatusEdgePath(from, to, type) {
+    var start = wmsStatusBoundaryPoint(from, to);
+    var end = wmsStatusBoundaryPoint(to, from);
+    var dx;
+    var dy;
+    var curve;
+    var mx;
+    var my;
+    var nx;
+    var ny;
+
+    if (type === "alt") {
+      dx = end.x - start.x;
+      dy = end.y - start.y;
+      curve = Math.max(80, Math.hypot(dx, dy) * 0.35);
+      mx = (start.x + end.x) / 2;
+      my = (start.y + end.y) / 2;
+      nx = -dy / Math.max(1, Math.hypot(dx, dy));
+      ny = dx / Math.max(1, Math.hypot(dx, dy));
+      return "M " + start.x + " " + start.y + " Q " + (mx + nx * curve) + " " + (my + ny * curve) + " " + end.x + " " + end.y;
+    }
+
+    return "M " + start.x + " " + start.y + " L " + end.x + " " + end.y;
+  }
+
+  function wmsStatusTransitionMidpoint(transition) {
+    var from = wmsStatusGraphNodeMap[transition.from];
+    var to = wmsStatusGraphNodeMap[transition.to];
+
+    if (Number.isFinite(transition.labelX) && Number.isFinite(transition.labelY)) {
+      return { x: transition.labelX, y: transition.labelY };
+    }
+
+    return {
+      x: (from.x + to.x) / 2,
+      y: (from.y + to.y) / 2 - (transition.type === "alt" ? 18 : 10)
+    };
+  }
+
+  function wmsStatusEdgeLabelWidth(label) {
+    return Math.max(54, Math.min(128, String(label || "").length * 7 + 18));
+  }
+
+  function setWmsStatusGraphViewBox(svg, box) {
+    var target = box || wmsStatusGraphViewBox;
+
+    svg.setAttribute("viewBox", target.x + " " + target.y + " " + target.width + " " + target.height);
+  }
+
+  function normalizeWmsStatusGraphZoom(value) {
+    var zoom = Number(value);
+
+    return wmsStatusGraphZoomLevels.indexOf(zoom) !== -1 ? zoom : null;
+  }
+
+  function getRenderedWmsStatusGraphZoom(graph) {
+    var svg = graph && graph.querySelector("[data-wms-status-svg]");
+    var renderedWidth = svg ? svg.getBoundingClientRect().width : 0;
+
+    return renderedWidth > 0 ? renderedWidth / wmsStatusGraphViewBox.width * 100 : 100;
+  }
+
+  function findDirectionalWmsStatusGraphZoom(current, direction) {
+    var tolerance = 0.05;
+    var index;
+
+    if (direction > 0) {
+      for (index = 0; index < wmsStatusGraphZoomLevels.length; index += 1) {
+        if (wmsStatusGraphZoomLevels[index] > current + tolerance) {
+          return wmsStatusGraphZoomLevels[index];
+        }
+      }
+    } else {
+      for (index = wmsStatusGraphZoomLevels.length - 1; index >= 0; index -= 1) {
+        if (wmsStatusGraphZoomLevels[index] < current - tolerance) {
+          return wmsStatusGraphZoomLevels[index];
+        }
+      }
+    }
+
+    return null;
+  }
+
+  function captureWmsStatusGraphViewport(stage) {
+    if (!stage || !stage.scrollWidth || !stage.scrollHeight) {
+      return null;
+    }
+
+    return {
+      x: (stage.scrollLeft + stage.clientWidth / 2) / stage.scrollWidth,
+      y: (stage.scrollTop + stage.clientHeight / 2) / stage.scrollHeight
+    };
+  }
+
+  function restoreWmsStatusGraphViewport(stage, viewport, resetScroll) {
+    var restore;
+
+    if (!stage) {
+      return;
+    }
+
+    restore = function () {
+      if (resetScroll) {
+        stage.scrollLeft = 0;
+        stage.scrollTop = 0;
+        return;
+      }
+
+      if (!viewport) {
+        return;
+      }
+
+      stage.scrollLeft = Math.max(0, viewport.x * stage.scrollWidth - stage.clientWidth / 2);
+      stage.scrollTop = Math.max(0, viewport.y * stage.scrollHeight - stage.clientHeight / 2);
+    };
+
+    if (typeof window.requestAnimationFrame === "function") {
+      window.requestAnimationFrame(restore);
+    } else {
+      restore();
+    }
+  }
+
+  function syncWmsStatusGraphZoomControls(graph) {
+    var value = graph.getAttribute("data-wms-status-zoom") || "100";
+    var isFit = value === "fit";
+    var zoom = normalizeWmsStatusGraphZoom(value);
+    var effectiveZoom;
+    var select = graph.querySelector("[data-wms-status-zoom-select]");
+    var zoomOut = graph.querySelector('[data-wms-status-action="zoom-out"]');
+    var zoomIn = graph.querySelector('[data-wms-status-action="zoom-in"]');
+
+    if (!isFit && zoom === null) {
+      zoom = 100;
+      value = "100";
+      graph.setAttribute("data-wms-status-zoom", value);
+    }
+
+    effectiveZoom = isFit ? getRenderedWmsStatusGraphZoom(graph) : zoom;
+
+    if (select) {
+      select.value = isFit ? "fit" : String(zoom);
+    }
+    if (zoomOut) {
+      zoomOut.disabled = findDirectionalWmsStatusGraphZoom(effectiveZoom, -1) === null;
+    }
+    if (zoomIn) {
+      zoomIn.disabled = findDirectionalWmsStatusGraphZoom(effectiveZoom, 1) === null;
+    }
+  }
+
+  function setWmsStatusGraphZoom(graph, value, options) {
+    var settings = options || {};
+    var isFit = String(value) === "fit";
+    var zoom = isFit ? null : normalizeWmsStatusGraphZoom(value);
+    var stage;
+    var svg;
+    var viewport;
+
+    if (!graph || (!isFit && zoom === null)) {
+      return false;
+    }
+
+    stage = graph.querySelector(".wms-status-graph-stage");
+    svg = graph.querySelector("[data-wms-status-svg]");
+    viewport = settings.preserveFocus === false ? null : captureWmsStatusGraphViewport(stage);
+
+    if (svg) {
+      setWmsStatusGraphViewBox(svg);
+    }
+
+    graph.setAttribute("data-wms-status-zoom", isFit ? "fit" : String(zoom));
+    syncWmsStatusGraphZoomControls(graph);
+    restoreWmsStatusGraphViewport(stage, viewport, settings.resetScroll === true);
+
+    if (settings.announce !== false) {
+      setLiveMessage(isFit ? "Status graph fitted to the viewport." : "Status graph zoom set to " + zoom + " percent.");
+    }
+
+    return true;
+  }
+
+  function stepWmsStatusGraphZoom(graph, direction) {
+    var value = graph.getAttribute("data-wms-status-zoom");
+    var current = value === "fit" ? getRenderedWmsStatusGraphZoom(graph) : normalizeWmsStatusGraphZoom(value);
+    var nextZoom;
+
+    if (current === null) {
+      return;
+    }
+
+    nextZoom = findDirectionalWmsStatusGraphZoom(current, direction);
+    if (nextZoom !== null) {
+      setWmsStatusGraphZoom(graph, nextZoom);
+    }
+  }
+
+  function defineWmsStatusMarkers(svg, graphId) {
+    var defs = createWmsStatusSvgElement("defs");
+    var normalMarker = createWmsStatusSvgElement("marker", {
+      id: graphId + "-arrow-normal",
+      viewBox: "0 -5 10 10",
+      refX: "10",
+      refY: "0",
+      markerWidth: "7",
+      markerHeight: "7",
+      orient: "auto"
+    });
+    var altMarker = createWmsStatusSvgElement("marker", {
+      id: graphId + "-arrow-alt",
+      viewBox: "0 -5 10 10",
+      refX: "10",
+      refY: "0",
+      markerWidth: "7",
+      markerHeight: "7",
+      orient: "auto"
+    });
+
+    normalMarker.appendChild(createWmsStatusSvgElement("path", { d: "M0,-5L10,0L0,5", fill: "#7c8794" }));
+    altMarker.appendChild(createWmsStatusSvgElement("path", { d: "M0,-5L10,0L0,5", fill: "#a16207" }));
+    defs.appendChild(normalMarker);
+    defs.appendChild(altMarker);
+    svg.appendChild(defs);
+  }
+
+  function renderWmsStatusList(list, items) {
+    if (!list) {
+      return;
+    }
+
+    list.innerHTML = "";
+    items.forEach(function (item) {
+      var li = document.createElement("li");
+      li.textContent = item;
+      list.appendChild(li);
+    });
+  }
+
+  function updateWmsStatusGraphDetails(graph, status) {
+    var outgoing = wmsStatusGraphTransitions.filter(function (transition) {
+      return transition.from === status.id;
+    });
+    var title = graph.querySelector("[data-wms-status-title]");
+    var group = graph.querySelector("[data-wms-status-group]");
+    var responsible = graph.querySelector("[data-wms-status-responsible]");
+    var meaning = graph.querySelector("[data-wms-status-meaning]");
+    var nextStep = graph.querySelector("[data-wms-status-next]");
+    var checklist = graph.querySelector("[data-wms-status-checklist]");
+    var transitionList = graph.querySelector("[data-wms-status-transitions]");
+
+    if (title) {
+      title.textContent = status.label;
+    }
+    if (group) {
+      group.textContent = status.group;
+    }
+    if (responsible) {
+      responsible.textContent = status.responsible;
+    }
+    if (meaning) {
+      meaning.textContent = status.meaning;
+    }
+    if (nextStep) {
+      nextStep.textContent = status.nextStep;
+    }
+
+    renderWmsStatusList(checklist, status.checks);
+    renderWmsStatusList(transitionList, outgoing.length ? outgoing.map(function (transition) {
+      return wmsStatusGraphNodeMap[transition.to].label + ": " + transition.label;
+    }) : ["No outgoing transition configured."]);
+  }
+
+  function applyWmsStatusGraphHighlights(graph) {
+    var selectedStatusId = graph.getAttribute("data-selected-status") || "";
+    var highlightedPath = (graph.getAttribute("data-highlighted-path") || "").split(",").filter(Boolean);
+    var connected = {};
+    var pathNodes = {};
+    var pathEdges = {};
+
+    if (selectedStatusId) {
+      connected[selectedStatusId] = true;
+      wmsStatusGraphTransitions.forEach(function (transition) {
+        if (transition.from === selectedStatusId || transition.to === selectedStatusId) {
+          connected[transition.from] = true;
+          connected[transition.to] = true;
+        }
+      });
+    }
+
+    highlightedPath.forEach(function (id, index) {
+      pathNodes[id] = true;
+      if (highlightedPath[index + 1]) {
+        pathEdges[id + "->" + highlightedPath[index + 1]] = true;
+      }
+    });
+
+    graph.querySelectorAll(".wms-status-node").forEach(function (node) {
+      var id = node.getAttribute("data-status-id");
+      var isSelected = id === selectedStatusId || !!pathNodes[id];
+      var shouldDim = selectedStatusId ? !connected[id] : highlightedPath.length ? !pathNodes[id] : false;
+
+      node.classList.toggle("is-selected", isSelected);
+      node.classList.toggle("is-dimmed", shouldDim);
+      node.setAttribute("aria-pressed", isSelected ? "true" : "false");
+    });
+
+    graph.querySelectorAll(".wms-status-edge").forEach(function (edge) {
+      var edgeKey = edge.getAttribute("data-from") + "->" + edge.getAttribute("data-to");
+      var selectedEdge = selectedStatusId && (edge.getAttribute("data-from") === selectedStatusId || edge.getAttribute("data-to") === selectedStatusId);
+      var pathEdge = !!pathEdges[edgeKey];
+      var shouldDim = selectedStatusId ? !selectedEdge : highlightedPath.length ? !pathEdge : false;
+
+      edge.classList.toggle("is-dimmed", shouldDim);
+      edge.classList.toggle("is-selected", selectedEdge || pathEdge);
+    });
+
+    graph.querySelectorAll(".wms-status-edge-label, .wms-status-edge-label-bg").forEach(function (label) {
+      var edgeKey = label.getAttribute("data-from") + "->" + label.getAttribute("data-to");
+      var selectedEdge = selectedStatusId && (label.getAttribute("data-from") === selectedStatusId || label.getAttribute("data-to") === selectedStatusId);
+      var pathEdge = !!pathEdges[edgeKey];
+      var shouldDim = selectedStatusId ? !selectedEdge : highlightedPath.length ? !pathEdge : false;
+
+      label.classList.toggle("is-dimmed", shouldDim);
+    });
+  }
+
+  function selectWmsStatusGraphNode(graph, id, options) {
+    var settings = options || {};
+    var status = wmsStatusGraphNodeMap[id];
+
+    if (!graph || !status) {
+      return;
+    }
+
+    graph.setAttribute("data-selected-status", id);
+    graph.removeAttribute("data-highlighted-path");
+    updateWmsStatusGraphDetails(graph, status);
+    applyWmsStatusGraphHighlights(graph);
+    if (settings.announce !== false) {
+      setLiveMessage(status.label + " status selected.");
+    }
+  }
+
+  function highlightWmsStatusGraphPath(graph, ids, label) {
+    graph.removeAttribute("data-selected-status");
+    graph.setAttribute("data-highlighted-path", ids.join(","));
+    updateWmsStatusGraphDetails(graph, wmsStatusGraphNodeMap[ids[0]] || wmsStatusGraphStatuses[0]);
+    applyWmsStatusGraphHighlights(graph);
+    setLiveMessage((label || "Status path") + " highlighted.");
+  }
+
+  function resetWmsStatusGraph(graph) {
+    if (!graph) {
+      return;
+    }
+
+    setWmsStatusGraphZoom(graph, 100, {
+      announce: false,
+      preserveFocus: false,
+      resetScroll: true
+    });
+    graph.removeAttribute("data-highlighted-path");
+    selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted", { announce: false });
+    setLiveMessage("Status graph reset to 100 percent.");
+  }
+
+  function fitWmsStatusGraph(graph) {
+    if (setWmsStatusGraphZoom(graph, "fit", { announce: false })) {
+      setLiveMessage("Status graph fitted to the viewport.");
+    }
+  }
+
+  function renderWmsStatusGraph(graph, index) {
+    var svg = graph.querySelector("[data-wms-status-svg]");
+    var graphId = "wms-status-graph-" + index;
+    var edgeLayer = createWmsStatusSvgElement("g", { class: "wms-status-edges" });
+    var labelLayer = createWmsStatusSvgElement("g", { class: "wms-status-edge-labels" });
+    var nodeLayer = createWmsStatusSvgElement("g", { class: "wms-status-nodes" });
+
+    if (!svg) {
+      return;
+    }
+
+    svg.innerHTML = "";
+    setWmsStatusGraphViewBox(svg);
+    defineWmsStatusMarkers(svg, graphId);
+    svg.appendChild(createWmsStatusSvgElement("title", { id: graphId + "-title" })).textContent = "LiveLabs workshop status workflow graph";
+    svg.appendChild(createWmsStatusSvgElement("desc", { id: graphId + "-desc" })).textContent = "A clickable graph showing submitted, approval, development, self QA, completed, publish request, and quarterly QA statuses.";
+    svg.setAttribute("role", "group");
+    svg.setAttribute("aria-labelledby", graphId + "-title " + graphId + "-desc");
+
+    wmsStatusGraphTransitions.forEach(function (transition) {
+      var from = wmsStatusGraphNodeMap[transition.from];
+      var to = wmsStatusGraphNodeMap[transition.to];
+      var path = createWmsStatusSvgElement("path", {
+        class: "wms-status-edge" + (transition.type === "alt" ? " is-return-path" : transition.type === "publish" ? " is-publish-request" : ""),
+        d: wmsStatusEdgePath(from, to, transition.type),
+        "data-from": transition.from,
+        "data-to": transition.to,
+        "marker-end": "url(#" + graphId + (transition.type === "alt" ? "-arrow-alt" : "-arrow-normal") + ")"
+      });
+      var midpoint = wmsStatusTransitionMidpoint(transition);
+      var labelWidth = wmsStatusEdgeLabelWidth(transition.label);
+      var labelBackground = createWmsStatusSvgElement("rect", {
+        class: "wms-status-edge-label-bg",
+        x: midpoint.x - labelWidth / 2,
+        y: midpoint.y - 12,
+        width: labelWidth,
+        height: 24,
+        rx: 8,
+        "data-from": transition.from,
+        "data-to": transition.to
+      });
+      var text = createWmsStatusSvgElement("text", {
+        class: "wms-status-edge-label",
+        x: midpoint.x,
+        y: midpoint.y,
+        "text-anchor": "middle",
+        "dominant-baseline": "middle",
+        "data-from": transition.from,
+        "data-to": transition.to
+      });
+
+      text.textContent = transition.label;
+      edgeLayer.appendChild(path);
+      labelLayer.appendChild(labelBackground);
+      labelLayer.appendChild(text);
+    });
+
+    wmsStatusGraphStatuses.forEach(function (status) {
+      var group = createWmsStatusSvgElement("g", {
+        class: "wms-status-node",
+        tabindex: "0",
+        role: "button",
+        "aria-pressed": "false",
+        "aria-label": status.label + " status",
+        transform: "translate(" + status.x + "," + status.y + ")",
+        "data-status-id": status.id
+      });
+      var rect = createWmsStatusSvgElement("rect", {
+        x: -wmsStatusNodeHalfWidth,
+        y: -wmsStatusNodeHalfHeight,
+        width: wmsStatusNodeHalfWidth * 2,
+        height: wmsStatusNodeHalfHeight * 2,
+        rx: "8",
+        fill: status.color
+      });
+      var label = createWmsStatusSvgElement("text", { x: "0", y: "-5", "text-anchor": "middle" });
+      var subtext = createWmsStatusSvgElement("text", { x: "0", y: "16", "text-anchor": "middle", class: "wms-status-node-subtext" });
+
+      label.textContent = status.label;
+      subtext.textContent = status.group;
+      group.appendChild(rect);
+      group.appendChild(label);
+      group.appendChild(subtext);
+      nodeLayer.appendChild(group);
+    });
+
+    svg.appendChild(edgeLayer);
+    svg.appendChild(labelLayer);
+    svg.appendChild(nodeLayer);
+    setWmsStatusGraphZoom(graph, graph.getAttribute("data-wms-status-zoom") || 100, { announce: false, preserveFocus: false });
+    selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted");
+  }
+
+  function initWmsStatusGraphs() {
+    document.querySelectorAll("[data-wms-status-graph]").forEach(function (graph, index) {
+      var zoomSelect;
+
+      renderWmsStatusGraph(graph, index + 1);
+      zoomSelect = graph.querySelector("[data-wms-status-zoom-select]");
+
+      if (zoomSelect) {
+        zoomSelect.addEventListener("change", function (event) {
+          if (event.target.value === "fit") {
+            fitWmsStatusGraph(graph);
+          } else {
+            setWmsStatusGraphZoom(graph, event.target.value);
+          }
+        });
+      }
+    });
   }
 
   function syncMarkdownSnippetSummary() {
@@ -1296,7 +2611,10 @@
       return;
     }
 
-    workshopMarkdownSummary.textContent = item.summary + " Source: " + item.source + ".";
+    workshopMarkdownSummary.innerHTML = [
+      '<span class="generator-summary-row"><strong>Use case</strong><span>' + escapeHtml(item.summary) + "</span></span>",
+      '<span class="generator-summary-row"><strong>Source</strong><span>' + escapeHtml(item.source) + "</span></span>"
+    ].join("");
   }
 
   function decorateExpandableMedia(root) {
@@ -1304,7 +2622,7 @@
       return;
     }
 
-    root.querySelectorAll(".step-figure, .guide-figure, .modal-media-figure, .evidence-figure, .inline-evidence-card, .guide-source-panel-prose figure, .guide-source-prose figure").forEach(function (figure) {
+    root.querySelectorAll(".step-figure, .guide-figure, .modal-media-figure, .evidence-figure, .inline-evidence-card, .nodoc-route-evidence, .guide-source-panel-prose figure, .guide-source-prose figure").forEach(function (figure) {
       var image = figure.querySelector("img");
       var caption = figure.querySelector("figcaption");
       var captionText;
@@ -1395,7 +2713,7 @@
 
     imageLightbox.setAttribute("hidden", "");
     imageLightbox.setAttribute("aria-hidden", "true");
-    imageLightboxImage.setAttribute("src", "");
+    imageLightboxImage.removeAttribute("src");
     imageLightboxImage.setAttribute("alt", "");
     imageLightboxCaption.textContent = "";
     document.body.classList.remove("image-lightbox-open");
@@ -1517,6 +2835,64 @@
     ].join(""), kicker || "Resources");
   }
 
+  function buildInstallCommandsHtml(title, intro, commands) {
+    if (!commands || !commands.length) {
+      return "";
+    }
+
+    return buildSupportBlockHtml(title || "Install and launch", intro || "Run the matching installer command, then launch the application from the location it creates.", [
+      '<div class="command-card-grid">',
+      commands.map(function (command) {
+        return [
+          '<article class="card command-card">',
+          '  <div class="card-body">',
+          '    <div>',
+          '      <div class="panel-kicker">', escapeHtml(command.platform || "Installer"), '</div>',
+          '      <h4 class="h5 mb-1">', escapeHtml(command.title || "Install"), '</h4>',
+          command.note ? '      <p class="snippet-description">' + escapeHtml(command.note) + '</p>' : '',
+          '    </div>',
+          '    <pre><code>', escapeHtml(command.command || ""), '</code></pre>',
+          '    <button class="copy-snippet" type="button" data-copy-text="', escapeAttribute(command.command || ""), '">Copy command</button>',
+          '  </div>',
+          '</article>'
+        ].join("");
+      }).join(""),
+      '</div>'
+    ].join(""), "Install");
+  }
+
+  function renderModalMedia(cardId, galleryId, images, title) {
+    var card = document.getElementById(cardId);
+    var gallery = document.getElementById(galleryId);
+
+    if (!card || !gallery) {
+      return;
+    }
+
+    gallery.innerHTML = "";
+    if (!images || !images.length) {
+      card.classList.add("d-none");
+      return;
+    }
+
+    images.forEach(function (image) {
+      var figure = document.createElement("figure");
+      var caption = document.createElement("figcaption");
+      var img = document.createElement("img");
+
+      figure.className = "modal-media-figure";
+      caption.textContent = image.caption || "";
+      img.src = window.AuthorGuideAssets.resolve(image.src);
+      img.alt = image.alt || title || "Reference image";
+      figure.appendChild(caption);
+      figure.appendChild(img);
+      gallery.appendChild(figure);
+    });
+
+    card.classList.remove("d-none");
+    decorateExpandableMedia(card);
+  }
+
   function setSupportMount(id, html) {
     var mount = document.getElementById(id);
 
@@ -1540,8 +2916,10 @@
     }
 
     return window.RedwoodVideoPlayer.createMountMarkup(Object.assign({
-      src: "./assets/media/guide/author-guide-template.mp4",
-      captions: "./assets/media/guide/author-guide-template.vtt",
+      src: "../assets/media/guide/author-guide-template.mp4",
+      captions: "../assets/media/guide/author-guide-template.vtt",
+      status: "preview",
+      sourceNote: "Preview asset only. Use the written steps and transcript until the approved walkthrough is supplied.",
       autoplay: true,
       loop: true
     }, config || {}));
@@ -1551,7 +2929,6 @@
     var item = explorerItems.find(function (candidate) {
       return candidate.id === id;
     });
-    var mediaCard;
     var sourceLink;
     var guideButton;
     var snippetCard;
@@ -1570,16 +2947,26 @@
     fillList("bubbleModalCheckpoints", item.checkpoints);
     fillList("bubbleModalWatchFor", item.watchFor);
 
-    mediaCard = document.getElementById("bubbleModalMediaCard");
-    if (item.image) {
-      document.getElementById("bubbleModalImage").setAttribute("src", item.image.src);
-      document.getElementById("bubbleModalImage").setAttribute("alt", item.image.alt || item.title);
-      document.getElementById("bubbleModalImageCaption").textContent = item.image.caption || "";
-      mediaCard.classList.remove("d-none");
-      decorateExpandableMedia(mediaCard);
-    } else {
-      mediaCard.classList.add("d-none");
-    }
+    setSupportMount(
+      "bubbleModalInstallMount",
+      buildInstallCommandsHtml(item.installTitle, item.installIntro, item.installCommands)
+    );
+    setSupportMount(
+      "bubbleModalPreImageResourcesMount",
+      buildResourceLinksHtml(item.preImageResourcesTitle, item.preImageResourcesIntro, item.preImageResourceLinks, "Skills")
+    );
+    renderModalMedia(
+      "bubbleModalMediaCard",
+      "bubbleModalMediaGallery",
+      item.interfaceImages || (item.image ? [item.image] : []),
+      item.title
+    );
+    renderModalMedia(
+      "bubbleModalOutcomeMediaCard",
+      "bubbleModalOutcomeMediaGallery",
+      item.outcomeImages,
+      item.title
+    );
 
     setSupportMount(
       "bubbleModalMilestonesMount",
@@ -1596,13 +2983,14 @@
     setSupportMount(
       "bubbleModalVideoMount",
       renderVideoPlaceholderCard(
-        "Recorded walkthrough for " + item.title,
-        "Watch the quick topic pass first, then use the panel details, snippets, and source links underneath.",
+        "Walkthrough preview for " + item.title,
+        "This player is the capture slot for the Cheatsheet walkthrough. Use the panel details, snippets, and source links underneath until the approved recording is supplied.",
         [
           "Topic walkthrough",
           "Audio controls",
           "Autoplay ready"
-        ]
+        ],
+        "cheatsheet-" + item.id
       )
     );
 
@@ -1620,7 +3008,7 @@
     sourceLink = document.getElementById("bubbleModalSourceLink");
     if (item.sourceHref) {
       sourceLink.setAttribute("href", item.sourceHref);
-      sourceLink.textContent = item.sourceLabel || "Open Full Guide";
+      sourceLink.textContent = item.sourceLabel || "Open Step by Step Guide";
       sourceLink.classList.remove("d-none");
     } else {
       sourceLink.classList.add("d-none");
@@ -1632,14 +3020,17 @@
     }
 
     hydrateVideoCards(bubbleModalElement);
-    bubbleModal.show();
+    if (bubbleModal) {
+      bubbleModal.show();
+    }
     setLiveMessage(item.title + " opened.");
   }
 
-  function renderVideoPlaceholderCard(title, summary, featureLabels) {
+  function renderVideoPlaceholderCard(title, summary, featureLabels, videoId) {
     return renderVideoCardMount({
       title: title,
       summary: summary,
+      id: videoId || "",
       features: featureLabels || [
         "Controls ready",
         "Audio controls",
@@ -1678,10 +3069,13 @@
       flattenList(config.tags),
       flattenList(config.keywords)
     ].join(" ");
-    var titleNorm = expandSearchText(titleText);
-    var summaryNorm = expandSearchText(summaryText);
-    var pathNorm = expandSearchText(pathText);
-    var bodyNorm = expandSearchText(bodyText);
+    // Keep index fields literal. Query expansion still supports useful
+    // synonyms, but expanding both index and query turns a precise term such
+    // as "stakeholder" into a match on nearly every WMS-related card.
+    var titleNorm = normalizeText(titleText);
+    var summaryNorm = normalizeText(summaryText);
+    var pathNorm = normalizeText(pathText);
+    var bodyNorm = normalizeText(bodyText);
 
     return {
       id: config.id,
@@ -1691,6 +3085,9 @@
       path: pathText,
       sourceHref: config.sourceHref || "",
       sourceLabel: config.sourceLabel || "",
+      resultHref: config.resultHref || "",
+      resultLabel: config.resultLabel || "Open Result",
+      resultExternal: !!config.resultExternal,
       open: config.open,
       titleNorm: titleNorm,
       summaryNorm: summaryNorm,
@@ -1704,9 +3101,9 @@
     };
   }
 
-  function scoreSearchEntry(entry, query) {
+  function scoreSearchEntry(entry, query, allowSynonyms) {
     var normalizedQuery = normalizeText(query);
-    var queryTokens = Array.from(new Set(tokenize(expandSearchText(query))));
+    var queryTokens = Array.from(new Set(tokenize(allowSynonyms ? expandSearchText(query) : normalizedQuery)));
     var matchedTokens = 0;
     var score = 0;
 
@@ -1765,6 +3162,13 @@
   }
 
   function renderSearchResultCard(result) {
+    var resultAction = result.resultHref
+      ? '<a class="btn btn-primary rounded-pill px-4" href="' + escapeHtml(result.resultHref) + '"' + (result.resultExternal ? ' target="_blank" rel="noreferrer"' : "") + '>' + escapeHtml(result.resultLabel) + "</a>"
+      : '<button type="button" class="btn btn-primary rounded-pill px-4" data-search-open="' + escapeHtml(result.id) + '">' + escapeHtml(result.resultLabel) + "</button>";
+    var sourceAction = result.sourceHref
+      ? '<a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(result.sourceHref) + '" target="_blank" rel="noreferrer">' + escapeHtml(result.sourceLabel || "Open Step by Step Guide") + "</a>"
+      : "";
+
     return [
       '<article class="search-result-card">',
       '  <div class="search-result-top">',
@@ -1774,8 +3178,8 @@
       '  <h3 class="search-result-title">', escapeHtml(result.title), "</h3>",
       '  <p class="search-result-summary">', escapeHtml(result.summary), "</p>",
       '  <div class="search-result-actions">',
-      '    <button type="button" class="btn btn-primary rounded-pill px-4" data-search-open="', result.id, '">Open Result</button>',
-      result.sourceHref ? '<a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(result.sourceHref) + '" target="_blank" rel="noreferrer">Open Full Guide</a>' : "",
+      "    ", resultAction,
+      sourceAction,
       "  </div>",
       "</article>"
     ].join("");
@@ -1794,7 +3198,7 @@
     }
 
     if (!query) {
-      searchSummary.textContent = "Enter keywords or a short question in the search field above. Results link back into the exact Quickstart step or Cheatsheet card that best matches the query.";
+      searchSummary.textContent = "";
       searchCountChip.textContent = "0 results";
       searchResultsMount.innerHTML = "";
       searchEmptyState.innerHTML = "Use the search field above to search by keywords such as <strong>WMS</strong>, <strong>Self Quality Assurance</strong>, <strong>GitHub Pages</strong>, <strong>validator</strong>, or a short question such as <strong>how do I publish</strong>.";
@@ -1803,15 +3207,26 @@
       return;
     }
 
-    results = searchIndex
+    var scoredResults = searchIndex
       .map(function (entry) {
+        var intentBoost = entry.id === "workshop-example" && isWorkshopExampleIntent(query) ? 30 : 0;
         return {
           entry: entry,
-          score: scoreSearchEntry(entry, query)
+          directScore: scoreSearchEntry(entry, query, false) + intentBoost,
+          expandedScore: scoreSearchEntry(entry, query, true) + intentBoost
         };
+      });
+    var hasDirectMatch = scoredResults.some(function (item) {
+      return item.directScore >= 14 && (item.entry.id !== "workshop-example" || isWorkshopExampleIntent(query));
+    });
+
+    results = scoredResults
+      .map(function (item) {
+        item.score = hasDirectMatch ? item.directScore : item.expandedScore;
+        return item;
       })
       .filter(function (item) {
-        return item.score >= 14;
+        return item.score >= 14 && (item.entry.id !== "workshop-example" || isWorkshopExampleIntent(query));
       })
       .sort(function (left, right) {
         return right.score - left.score;
@@ -1825,7 +3240,7 @@
     searchCountChip.textContent = results.length + " result" + (results.length === 1 ? "" : "s");
 
     if (results.length) {
-      searchSummary.textContent = "Results are ranked by title match, keyword overlap, path relevance, and deeper body matches across Quickstart and Cheatsheet.";
+      searchSummary.textContent = "Results are ranked by title match, keyword overlap, path relevance, and deeper body matches across Quickstart, Cheatsheet, and NoDoc.";
       searchEmptyState.classList.add("d-none");
     } else {
       searchSummary.textContent = "The guide did not find a strong match for that query yet.";
@@ -2260,7 +3675,7 @@
     var sectionSummary = guideSectionCountLabel(panelCount).toLowerCase();
     var detailCopy = taskCount > 0
       ? guideTaskSectionLabel(taskCount) + " available below, with the remaining reference sections still preserved."
-      : "Open the original guide sections below inside the redesigned Full Guide surface.";
+      : "Open the original guide sections below inside the redesigned Step by Step Guide surface.";
 
     return [
       '<div class="guide-source-toolbar">',
@@ -2401,7 +3816,7 @@
   function buildGuideBreadcrumb(section) {
     return [
       '<div class="guide-inline-breadcrumb" aria-label="Current guide section">',
-      "  <span>Full Guide</span>",
+      "  <span>Step by Step Guide</span>",
       "  <span>/</span>",
       "  <span>", escapeHtml(section.label), "</span>",
       "  <span>/</span>",
@@ -2441,7 +3856,7 @@
     }
 
     if (!section) {
-      guideSectionMount.innerHTML = '<article class="guide-section-card"><p class="guide-section-summary">The full guide is still loading.</p></article>';
+      guideSectionMount.innerHTML = '<article class="guide-section-card"><p class="guide-section-summary">The Step by Step Guide is still loading.</p></article>';
       renderGuideNav();
       updateBreadcrumb();
       return;
@@ -2468,11 +3883,12 @@
       renderVideoPlaceholderCard(
         section.title + " walkthrough",
         section.summary || section.purpose || "Use the section player first, then open the redesigned source sections underneath.",
-        guideSectionVideoFeatures(section)
+        guideSectionVideoFeatures(section),
+        "guide-section-" + section.id
       ),
       '      <div class="guide-section-actions">',
       '        <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-mode-target="explorer">Open Cheatsheet</button>',
-      section.sectionHref ? '<a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(section.sectionHref) + '" target="_blank" rel="noreferrer">Open Full Guide</a>' : "",
+      section.sectionHref ? '<a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(section.sectionHref) + '" target="_blank" rel="noreferrer">Open Step by Step Guide</a>' : "",
       "      </div>",
       "    </div>",
       "  </div>",
@@ -2539,8 +3955,8 @@
       sourceShell.innerHTML = [
         '<div class="guide-source-error">',
         "  <strong>Source content could not be rendered in the redesigned guide right now.</strong>",
-        "  <p>Open this page in the live Full Guide while the redesigned surface is refreshed.</p>",
-        section.sectionHref ? '  <a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(section.sectionHref) + '" target="_blank" rel="noreferrer">Open Full Guide</a>' : "",
+        "  <p>Open this page in the live Step by Step Guide while the redesigned surface is refreshed.</p>",
+        section.sectionHref ? '  <a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(section.sectionHref) + '" target="_blank" rel="noreferrer">Open Step by Step Guide</a>' : "",
         "</div>"
       ].join("");
       scheduleLayoutSync();
@@ -2708,6 +4124,7 @@
         path: "Quickstart / Step " + (index + 1),
         body: stepSections[index] ? stepSections[index].textContent : "",
         keywords: meta.keywords || [],
+        resultHref: routeUrl("#step-" + (index + 1)),
         open: {
           kind: "guided",
           step: index
@@ -2735,6 +4152,7 @@
         tags: item.tags,
         sourceHref: item.sourceHref,
         sourceLabel: item.sourceLabel,
+        resultHref: routeUrl("#cheatsheet:" + encodeURIComponent(item.id)),
         open: {
           kind: "toolkit",
           itemId: item.id
@@ -2745,7 +4163,108 @@
       searchEntryMap[entry.id] = entry;
     });
 
-    // Keep search scoped to visible redesigned surfaces. The original Full Guide remains available through explicit links only.
+    nodocSearchEntries.forEach(function (entry) {
+      searchIndex.push(entry);
+      searchEntryMap[entry.id] = entry;
+    });
+
+    var workshopExampleEntry = createSearchEntry({
+      id: "workshop-example",
+      typeLabel: "Workshop example",
+      title: "LiveLabs Workshop Example",
+      summary: "Open the working Finance AI Developer Hub workshop to study a real LiveLabs structure, labs, tasks, and learner flow.",
+      path: "Workshop Example / Finance AI Developer Hub",
+      keywords: ["workshop example", "sample", "reference", "template", "demo", "inspiration", "finance", "ai developer hub"],
+      resultHref: workshopExampleHref,
+      resultLabel: "Open Workshop Example",
+      resultExternal: true,
+      open: {
+        kind: "workshop-example"
+      }
+    });
+
+    searchIndex.push(workshopExampleEntry);
+    searchEntryMap[workshopExampleEntry.id] = workshopExampleEntry;
+  }
+
+  function createNoDocSearchEntries(markup) {
+    var documentFragment = new DOMParser().parseFromString(markup, "text/html");
+
+    return Array.from(documentFragment.querySelectorAll("details.nodoc-tree-group")).reduce(function (entries, panel, panelIndex) {
+      var panelSummary = panel.querySelector(":scope > summary");
+      var panelTitleNode = panelSummary && panelSummary.querySelector("span");
+      var panelTitle = panelTitleNode ? panelTitleNode.textContent.trim() : (panelSummary ? panelSummary.textContent.trim() : "NoDoc workshop section");
+      var panelText = panel.textContent.trim();
+      var panelEntry = createSearchEntry({
+        id: "nodoc-panel-" + panelIndex,
+        typeLabel: "NoDoc workshop",
+        title: panelTitle,
+        summary: "Open this NoDoc workshop section and its authoring tasks.",
+        path: "NoDoc / " + panelTitle,
+        body: panelText,
+        resultHref: routeUrl("#nodoc:" + panelIndex),
+        open: {
+          kind: "nodoc",
+          panel: panelIndex,
+          task: 0
+        }
+      });
+
+      entries.push(panelEntry);
+      Array.from(panel.querySelectorAll("details.nodoc-task")).forEach(function (task, taskIndex) {
+        var taskSummary = task.querySelector(":scope > summary");
+        var taskTitle = taskSummary ? taskSummary.textContent.trim() : "Task " + (taskIndex + 1);
+        var taskEntry = createSearchEntry({
+          id: "nodoc-panel-" + panelIndex + "-task-" + (taskIndex + 1),
+          typeLabel: "NoDoc workshop",
+          title: taskTitle,
+          summary: "Open this task in " + panelTitle + ".",
+          path: "NoDoc / " + panelTitle + " / " + taskTitle,
+          body: task.textContent.trim(),
+          resultHref: routeUrl("#nodoc:" + panelIndex + ":" + (taskIndex + 1)),
+          open: {
+            kind: "nodoc",
+            panel: panelIndex,
+            task: taskIndex + 1
+          }
+        });
+
+        entries.push(taskEntry);
+      });
+
+      return entries;
+    }, []);
+  }
+
+  function loadNoDocSearchEntries() {
+    if (nodocSearchLoadPromise) {
+      return nodocSearchLoadPromise;
+    }
+
+    nodocSearchLoadPromise = fetch(resolveGuideRuntimePath("content/nodoc/nodoc-workshop.html"), {
+      cache: "no-cache"
+    }).then(function (response) {
+      if (!response.ok) {
+        throw new Error("NoDoc workshop content returned HTTP " + response.status);
+      }
+      return response.text();
+    }).then(function (markup) {
+      nodocSearchEntries = createNoDocSearchEntries(markup);
+      buildSearchIndex();
+      if (state.mode === "search") {
+        renderSearchResults();
+      }
+      return nodocSearchEntries;
+    }).catch(function (error) {
+      console.warn("NoDoc content was not added to global search.", error);
+      return [];
+    });
+
+    return nodocSearchLoadPromise;
+  }
+
+  function isWorkshopExampleIntent(query) {
+    return /\b(example|sample|reference|template|demo|inspiration|finance)\b|ai developer hub/i.test(String(query || ""));
   }
 
   function runGlobalSearch(rawQuery) {
@@ -2822,11 +4341,12 @@
     setModeRegionVisibility(hub, mode === "hub");
     setModeRegionVisibility(beginnerMode, mode === "beginner");
     setModeRegionVisibility(explorerMode, mode === "explorer");
+    setModeRegionVisibility(nodocMode, mode === "nodoc");
     setModeRegionVisibility(guideMode, mode === "guide");
     setModeRegionVisibility(generatorMode, mode === "generator");
     setModeRegionVisibility(searchMode, mode === "search");
 
-    if (mode !== "explorer") {
+    if (mode !== "explorer" && bubbleModal) {
       bubbleModal.hide();
     }
 
@@ -2850,6 +4370,15 @@
           window.scrollTo({ top: 0, behavior: smoothBehavior() });
         } else {
           scrollToTarget(explorerMode);
+        }
+      }
+    } else if (mode === "nodoc") {
+      updateBreadcrumb();
+      if (config.scroll !== false) {
+        if (config.forceTop) {
+          window.scrollTo({ top: 0, behavior: smoothBehavior() });
+        } else {
+          scrollToTarget(nodocMode);
         }
       }
     } else if (mode === "guide") {
@@ -2909,8 +4438,10 @@
         setLiveMessage("Quickstart opened.");
       } else if (mode === "explorer") {
         setLiveMessage("Cheatsheet opened.");
+      } else if (mode === "nodoc") {
+        setLiveMessage("NoDoc guide opened.");
       } else if (mode === "guide") {
-        setLiveMessage("Full Guide opened at " + (currentGuideSection() ? currentGuideSection().title : "Start Guide") + ".");
+        setLiveMessage("Step by Step Guide opened at " + (currentGuideSection() ? currentGuideSection().title : "Start Guide") + ".");
       } else if (mode === "generator") {
         setLiveMessage("Markdown Workshop Generator opened.");
       } else if (mode === "search") {
@@ -2968,13 +4499,11 @@
     }
   }
 
-  function copyWithFallback(text) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      return navigator.clipboard.writeText(text);
-    }
-
+  function copyWithSelectionFallback(text) {
     return new Promise(function (resolve, reject) {
       var helper = document.createElement("textarea");
+      var copied;
+
       helper.value = text;
       helper.setAttribute("readonly", "");
       helper.style.position = "absolute";
@@ -2982,14 +4511,28 @@
       document.body.appendChild(helper);
       helper.select();
       try {
-        document.execCommand("copy");
-        resolve();
+        copied = document.execCommand("copy");
+        if (copied) {
+          resolve();
+        } else {
+          reject(new Error("The browser did not copy the requested text."));
+        }
       } catch (error) {
         reject(error);
       } finally {
         document.body.removeChild(helper);
       }
     });
+  }
+
+  function copyWithFallback(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).catch(function () {
+        return copyWithSelectionFallback(text);
+      });
+    }
+
+    return copyWithSelectionFallback(text);
   }
 
   function copyTarget(targetId, button) {
@@ -3035,7 +4578,9 @@
 
   function handleShortcutBubble(id) {
     state.toolkitQuery = "";
-    bubbleSearch.value = "";
+    if (bubbleSearch) {
+      bubbleSearch.value = "";
+    }
     setActiveTag("all");
     switchMode("explorer", { openBubble: id });
   }
@@ -3059,6 +4604,27 @@
 
     if (cleaned === "toolkit" || cleaned === "quick-reference" || cleaned === "cheatsheet" || cleaned === "explorer") {
       switchMode("explorer", { scroll: true, forceTop: true, hash: false, announce: false });
+      return;
+    }
+
+    if (cleaned.indexOf("cheatsheet:") === 0) {
+      switchMode("explorer", {
+        scroll: true,
+        forceTop: true,
+        hash: false,
+        announce: false,
+        openBubble: decodeURIComponent(cleaned.slice("cheatsheet:".length))
+      });
+      return;
+    }
+
+    if (cleaned === "nodoc" || cleaned === "no-doc") {
+      switchMode("nodoc", { scroll: true, forceTop: true, hash: false, announce: false });
+      return;
+    }
+
+    if (cleaned.indexOf("nodoc:") === 0) {
+      switchMode("nodoc", { scroll: true, forceTop: true, hash: false, announce: false });
       return;
     }
 
@@ -3104,14 +4670,17 @@
     var restoreY = Number(route && route.scrollY);
 
     if (!route || !route.__authorGuideRoute) {
-      applyHash(window.location.hash);
+      applyHash(routeTokenFromLocation());
       return;
     }
 
     isRestoringHistory = true;
     state.currentStep = Math.max(0, Math.min(Number(route.currentStep || 0), stepSections.length - 1));
+    state.authoringRoute = normalizeAuthoringRoute(route.authoringRoute || initialAuthoringRoute());
     state.fastTrack = route.fastTrack || state.fastTrack;
-    state.activeTag = route.activeTag || "all";
+    state.activeTags = normalizeTagSelection(route.activeTags || route.activeTag || []);
+    state.activeTag = state.activeTags[0] || "all";
+    state.toolkitSort = normalizeToolkitSort(route.toolkitSort || state.toolkitSort);
     state.toolkitQuery = route.toolkitQuery || "";
     state.searchQuery = route.searchQuery || "";
     state.guideSection = route.guideSection || state.guideSection;
@@ -3124,9 +4693,12 @@
       navSearchInput.value = state.searchQuery;
     }
 
-    tagPills.forEach(function (pill) {
-      pill.classList.toggle("is-active", pill.getAttribute("data-tag") === state.activeTag);
-    });
+    if (toolkitSort) {
+      toolkitSort.value = state.toolkitSort;
+    }
+
+    updateTagPillState();
+    updateAuthoringRouteUI();
 
     switchMode(route.mode || "hub", {
       scroll: false,
@@ -3180,8 +4752,9 @@
   });
 
   document.addEventListener("click", function (event) {
+    var scrollTargetLink = event.target.closest("[data-scroll-target]");
     var modeButton = event.target.closest("[data-mode-target]");
-    var progressButton = event.target.closest("[data-step-target]");
+    var authoringRouteTab = event.target.closest("[data-authoring-route]");
     var actionButton = event.target.closest("[data-action]");
     var guideButton = event.target.closest("[data-guide-target]");
     var guideSectionButton = event.target.closest("[data-guide-section]");
@@ -3196,12 +4769,30 @@
     var copyTextButton = event.target.closest("[data-copy-text]");
     var tagButton = event.target.closest("[data-tag]");
     var searchOpenButton = event.target.closest("[data-search-open]");
+    var wmsStatusNode = event.target.closest(".wms-status-node");
+    var wmsStatusAction = event.target.closest("[data-wms-status-action]");
     var installCard = event.target.closest("[data-install-card]");
     var isPrimaryNav = modeButton && !!modeButton.closest(".nav-group-all");
 
+    if (scrollTargetLink) {
+      var scrollTarget = document.getElementById(scrollTargetLink.getAttribute("data-scroll-target"));
+
+      if (scrollTarget) {
+        event.preventDefault();
+        scrollToTarget(scrollTarget);
+        return;
+      }
+    }
+
+    if (modeButton && modeButton.tagName === "A") {
+      return;
+    }
+
     if (installCard && !copyTextButton) {
-      installCard.classList.add("is-complete");
-      installCard.setAttribute("aria-pressed", "true");
+      var isComplete = !installCard.classList.contains("is-complete");
+
+      installCard.classList.toggle("is-complete", isComplete);
+      installCard.setAttribute("aria-pressed", isComplete ? "true" : "false");
     }
 
     if (modeButton) {
@@ -3211,10 +4802,23 @@
           forceTop: isPrimaryNav
         });
       } else if (modeButton.getAttribute("data-mode-target") === "beginner") {
-        switchMode("beginner", { resetStep: true, forceTop: isPrimaryNav || !!modeButton.closest(".hero-actions") });
+        var requestedStep = Number(modeButton.getAttribute("data-open-step") || "0");
+        switchMode("beginner", {
+          resetStep: !requestedStep,
+          forceTop: isPrimaryNav || !!modeButton.closest(".hero-actions"),
+          scroll: !requestedStep
+        });
+        if (requestedStep) {
+          goToStep(requestedStep - 1);
+        }
       } else {
         switchMode(modeButton.getAttribute("data-mode-target"), { forceTop: isPrimaryNav });
       }
+      return;
+    }
+
+    if (authoringRouteTab) {
+      setAuthoringRoute(authoringRouteTab.getAttribute("data-authoring-route"));
       return;
     }
 
@@ -3259,11 +4863,6 @@
 
     if (event.target.closest("figure[data-expandable=\"true\"]")) {
       openImageLightbox(event.target.closest("figure[data-expandable=\"true\"]"));
-      return;
-    }
-
-    if (progressButton) {
-      goToStep(Number(progressButton.getAttribute("data-step-target")));
       return;
     }
 
@@ -3317,6 +4916,47 @@
     if (searchOpenButton) {
       openSearchResult(searchOpenButton.getAttribute("data-search-open"));
     }
+
+    if (wmsStatusNode) {
+      selectWmsStatusGraphNode(wmsStatusNode.closest("[data-wms-status-graph]"), wmsStatusNode.getAttribute("data-status-id"));
+      return;
+    }
+
+    if (wmsStatusAction) {
+      var graph = wmsStatusAction.closest("[data-wms-status-graph]");
+      var action = wmsStatusAction.getAttribute("data-wms-status-action");
+
+      if (action === "main-path") {
+        highlightWmsStatusGraphPath(graph, ["submitted", "approved", "in-development", "self-qa", "self-qa-complete", "completed"], "Main path");
+      } else if (action === "qa-cycle") {
+        highlightWmsStatusGraphPath(graph, ["completed", "quarterly-qa", "quarterly-qa-complete", "completed"], "QA cycle");
+      } else if (action === "fit") {
+        fitWmsStatusGraph(graph);
+      } else if (action === "zoom-out") {
+        stepWmsStatusGraphZoom(graph, -1);
+      } else if (action === "zoom-in") {
+        stepWmsStatusGraphZoom(graph, 1);
+      } else if (action === "reset") {
+        resetWmsStatusGraph(graph);
+      }
+      return;
+    }
+  });
+
+  document.addEventListener("focusin", function (event) {
+    var node = event.target && event.target.closest ? event.target.closest(".wms-status-node") : null;
+    var stage;
+
+    if (!node) {
+      return;
+    }
+
+    stage = node.closest(".wms-status-graph-stage");
+    if (stage && typeof node.scrollIntoView === "function") {
+      window.requestAnimationFrame(function () {
+        node.scrollIntoView({ block: "nearest", inline: "nearest" });
+      });
+    }
   });
 
   document.addEventListener("keydown", function (event) {
@@ -3327,50 +4967,80 @@
       return;
     }
 
+    if (event.key === "Escape" && bubbleModalElement && bubbleModal && bubbleModalElement.classList.contains("show")) {
+      event.preventDefault();
+      bubbleModal.hide();
+      return;
+    }
+
     if ((event.key === "Enter" || event.key === " ") && event.target && event.target.closest && event.target.closest("figure[data-expandable=\"true\"]")) {
       event.preventDefault();
       openImageLightbox(event.target.closest("figure[data-expandable=\"true\"]"));
+      return;
+    }
+
+    if ((event.key === "Enter" || event.key === " ") && event.target && event.target.closest && event.target.closest(".wms-status-node")) {
+      event.preventDefault();
+      selectWmsStatusGraphNode(event.target.closest("[data-wms-status-graph]"), event.target.closest(".wms-status-node").getAttribute("data-status-id"));
     }
   }, true);
 
-  fastTrackToggle.addEventListener("change", function (event) {
-    state.fastTrack = event.target.checked ? "minimal" : "guided";
-    updateBeginnerUI();
-    setLiveMessage(state.fastTrack === "minimal" ? "Fast Track enabled." : "Guided mode enabled.");
-  });
-
-  bubbleSearch.addEventListener("input", function (event) {
-    state.toolkitQuery = event.target.value;
-    renderExplorer();
-  });
-
-  clearSearch.addEventListener("click", function () {
-    state.toolkitQuery = "";
-    bubbleSearch.value = "";
-    renderExplorer();
-    bubbleSearch.focus();
-  });
-
-  if (navSearchForm && navSearchInput) {
-    navSearchForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-      runGlobalSearch(navSearchInput.value);
+  if (fastTrackToggle) {
+    fastTrackToggle.addEventListener("change", function (event) {
+      state.fastTrack = event.target.checked ? "minimal" : "guided";
+      updateBeginnerUI();
+      setLiveMessage(state.fastTrack === "minimal" ? "Fast Track enabled." : "Guided mode enabled.");
     });
   }
 
-  if (homeSearchForm && homeSearchInput) {
-    homeSearchForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-      runGlobalSearch(homeSearchInput.value);
+  if (bubbleSearch) {
+    bubbleSearch.oninput = function (event) {
+      state.toolkitQuery = event.target.value;
+      renderExplorer();
+    };
+  }
+
+  if (searchPageInput) {
+    searchPageInput.addEventListener("input", function () {
+      if (searchPageClear) {
+        searchPageClear.hidden = !searchPageInput.value;
+      }
     });
   }
 
-  if (searchPageForm && searchPageInput) {
-    searchPageForm.addEventListener("submit", function (event) {
-      event.preventDefault();
-      runGlobalSearch(searchPageInput.value);
+  if (clearSearch) {
+    clearSearch.addEventListener("click", function () {
+      state.toolkitQuery = "";
+      if (bubbleSearch) {
+        bubbleSearch.value = "";
+      }
+      renderExplorer();
+      if (bubbleSearch) {
+        bubbleSearch.focus();
+      }
     });
   }
+
+  if (toolkitSort) {
+    toolkitSort.addEventListener("change", function (event) {
+      state.toolkitSort = normalizeToolkitSort(event.target.value);
+      renderExplorer();
+      setLiveMessage("Cheatsheet sorted by " + currentSortLabel() + ".");
+    });
+  }
+
+  document.addEventListener("submit", function (event) {
+    var form = event.target;
+    var input;
+
+    if (!form || ["navSearchForm", "homeSearchForm", "searchPageForm"].indexOf(form.id) === -1) {
+      return;
+    }
+
+    input = form.querySelector('input[type="search"], input[type="text"]');
+    event.preventDefault();
+    runGlobalSearch(input ? input.value : "");
+  });
 
   if (navSearchClear) {
     navSearchClear.addEventListener("click", function () {
@@ -3408,8 +5078,28 @@
   if (wmsExampleForm) {
     wmsExampleForm.addEventListener("submit", function (event) {
       event.preventDefault();
+      var validationMessage = validateWmsExamplePrompt();
+      if (validationMessage) {
+        setGeneratorState(null, wmsExampleLoading, wmsExampleError, false, false, validationMessage);
+        if (wmsExamplePrompt) {
+          wmsExamplePrompt.focus();
+        }
+        return;
+      }
       runWmsExampleGeneration();
     });
+    if (wmsExamplePrompt) {
+      wmsExamplePrompt.addEventListener("input", function () {
+        validateWmsExamplePrompt();
+        if (wmsExampleError && !wmsExamplePrompt.validationMessage) {
+          wmsExampleError.textContent = "";
+          wmsExampleError.classList.add("d-none");
+        }
+      });
+    }
+    renderGeneratedExampleFields([]);
+    validateWmsExamplePrompt();
+    setGeneratorState(null, wmsExampleLoading, wmsExampleError, false, false, "");
   }
 
   if (workshopMarkdownForm) {
@@ -3433,6 +5123,30 @@
     });
   }
 
+  authoringRouteTabs.forEach(function (tab, tabIndex) {
+    tab.addEventListener("keydown", function (event) {
+      var nextIndex = tabIndex;
+
+      if (event.key === "ArrowRight") {
+        nextIndex = (tabIndex + 1) % authoringRouteTabs.length;
+      } else if (event.key === "ArrowLeft") {
+        nextIndex = (tabIndex - 1 + authoringRouteTabs.length) % authoringRouteTabs.length;
+      } else if (event.key === "Home") {
+        nextIndex = 0;
+      } else if (event.key === "End") {
+        nextIndex = authoringRouteTabs.length - 1;
+      } else {
+        return;
+      }
+
+      event.preventDefault();
+      setAuthoringRoute(
+        authoringRouteTabs[nextIndex].getAttribute("data-authoring-route"),
+        { focus: true }
+      );
+    });
+  });
+
   window.addEventListener("hashchange", function () {
     if (isRestoringHistory) {
       return;
@@ -3447,6 +5161,16 @@
 
   if (backToTopButton) {
     backToTopButton.addEventListener("click", function () {
+      if (state.mode === "beginner") {
+        suppressObserver = true;
+        goToStep(0, {
+          scroll: false,
+          hash: true,
+          replaceHistory: true,
+          announce: false
+        });
+        releaseObserverAtTop();
+      }
       window.scrollTo({ top: 0, behavior: smoothBehavior() });
       setLiveMessage("Returned to the top of the page.");
     });
@@ -3475,17 +5199,24 @@
   window.addEventListener("scroll", scheduleLayoutSync, { passive: true });
   window.addEventListener("resize", function () {
     scheduleLayoutSync();
+    document.querySelectorAll('[data-wms-status-graph][data-wms-status-zoom="fit"]').forEach(function (graph) {
+      syncWmsStatusGraphZoomControls(graph);
+    });
   });
 
   hydrateVideoCards(document);
   decorateExpandableMedia(document);
+  initWmsStatusGraphs();
   updateNav();
   updateNavSearch();
   updateBeginnerUI();
+  updateAuthoringRouteUI();
+  renderTagPills();
   renderExplorer();
   renderGuideNav();
+  loadNoDocSearchEntries();
   loadGuideCatalog().finally(function () {
-    applyHash(window.location.hash);
+    applyHash(routeTokenFromLocation());
     updateHashFromState({ replace: true });
     scheduleLayoutSync();
   });

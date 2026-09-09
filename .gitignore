@@ -1,16 +1,52 @@
+# Operating-system metadata
 .DS_Store
+Thumbs.db
+Desktop.ini
+.AppleDouble
+._*
+
+# Python bytecode, tooling, coverage, and virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+coverage/
+htmlcov/
+.venv/
+venv/
+
+# IDE, editor, log, and temporary files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+*.log
+
+# Local environments and agent runtime state
+.env
+.env.*
+!.env.example
+.omx/
+
+# Repository-specific generated or local-only artifacts
 **/*.rpm
 **/*.jar
 **/*.bin
 *.patch
 env.sh
-labs/.DS_Store
-.vscode
 building-blocks/how-to-author-with-blocks/all-blocks-tasks.md
-/_scripts/__pycache__
 /_scripts/optishot/build
 /_scripts/optishot/dist
-/_scripts/fixomat/__pycache__
 /_scripts/fixomat/build
-/_scripts/fixomat/__pycache__
 /_scripts/fixomat/dist

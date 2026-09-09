@@ -58,6 +58,68 @@
   letter-spacing: 0;
 }
 
+/* Make each checkpoint read as a deliberate handoff: confirm the exit criteria, then scan the risks. */
+#app .progression-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: stretch;
+  gap: 0.9rem;
+  position: relative;
+}
+
+#app .progression-pair > .step-block {
+  height: 100%;
+}
+
+#app .progression-pair > .step-block:first-child {
+  grid-column: 1;
+}
+
+#app .progression-pair > .step-block:nth-child(2) {
+  grid-column: 3;
+}
+
+#app .progression-pair::after {
+  content: "→";
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  color: var(--oracle-red);
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+@media (max-width: 850px) {
+  #app .progression-pair {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.65rem;
+  }
+
+  #app .progression-pair > .step-block:first-child,
+  #app .progression-pair > .step-block:nth-child(2) {
+    grid-column: 1;
+  }
+
+  #app .progression-pair > .step-block:first-child {
+    grid-row: 1;
+  }
+
+  #app .progression-pair::after {
+    content: "↓  Next";
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: center;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase;
+  }
+
+  #app .progression-pair > .step-block:nth-child(2) {
+    grid-row: 3;
+  }
+}
+
 #app strong {
   font-weight: 700;
 }
@@ -218,33 +280,20 @@
   min-width: 0;
 }
 
+#app .modal-media-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+}
+
+#app .modal-media-gallery .modal-media-figure {
+  margin: 0;
+}
+
 #app .snippet-description {
   margin: 0;
   color: var(--ink-soft);
   line-height: 1.58;
-}
-
-#app .preview-url-section {
-  display: grid;
-  gap: 1rem;
-  overflow: visible;
-}
-
-#app .preview-url-section .step-block-header {
-  margin-bottom: 0;
-}
-
-#app .preview-url-card {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-}
-
-#app .preview-url-card pre {
-  max-width: 100%;
-  overflow-x: auto;
-  white-space: pre;
-  word-break: normal;
 }
 
 #app .result-line {
@@ -1817,6 +1866,35 @@ body.home-no-scroll #app .app-footer .container {
   filter: none;
 }
 
+/* Use a red X for risks and mistakes so Watch for mirrors the green checks in Before you move on. */
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .mistake-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .mistake-list li {
+  position: relative;
+  padding-left: 1.95rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .mistake-list li::before {
+  content: "\2715";
+  position: absolute;
+  left: 0;
+  top: 0.08rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c74634, #e27362);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 900;
+  box-shadow: 0 12px 24px rgba(199, 70, 52, 0.16);
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-process-hero {
   position: relative;
   margin: 0;
@@ -1954,6 +2032,11 @@ body.home-no-scroll #app .app-footer .container {
   text-align: left;
   box-shadow: none;
   outline-offset: 5px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button {
+  cursor: default;
+  pointer-events: none;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button::after {
@@ -2433,7 +2516,7 @@ body.home-no-scroll #app .app-footer .container {
 
 /* Redwood 26B resource card treatment for Quickstart setup cards. */
 #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
-  grid-template-columns: repeat(auto-fit, minmax(18.5rem, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -2442,10 +2525,10 @@ body.home-no-scroll #app .app-footer .container {
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card {
-  min-height: 240px;
+  min-height: 0;
   padding: 0 !important;
   display: grid;
-  grid-template-rows: minmax(172px, 1fr) auto;
+  grid-template-rows: auto auto;
   gap: 0;
   border: 1px solid rgba(22, 21, 19, 0.12) !important;
   border-radius: 8px !important;
@@ -2463,8 +2546,8 @@ body.home-no-scroll #app .app-footer .container {
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main {
   display: block;
-  min-height: 172px;
-  padding: 32px 64px 28px 32px;
+  min-height: 0;
+  padding: clamp(1rem, 2vw, 1.25rem) clamp(2.5rem, 4vw, 3.25rem) clamp(0.9rem, 1.8vw, 1.15rem) clamp(1rem, 2vw, 1.25rem);
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-number {
@@ -2478,11 +2561,11 @@ body.home-no-scroll #app .app-footer .container {
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main strong {
   display: block;
-  margin: 0 0 14px;
+  margin: 0 0 0.45rem;
   color: #161513;
   font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
-  font-size: clamp(1.25rem, 1.5vw, 1.55rem);
-  line-height: 1.18;
+  font-size: clamp(0.95rem, 1.15vw, 1.08rem);
+  line-height: 1.25;
   font-weight: 700;
   letter-spacing: 0;
 }
@@ -2491,32 +2574,35 @@ body.home-no-scroll #app .app-footer .container {
   display: block;
   color: rgba(22, 21, 19, 0.68);
   font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
-  font-size: clamp(1rem, 1.05vw, 1.12rem);
-  line-height: 1.48;
+  font-size: clamp(0.78rem, 0.9vw, 0.88rem);
+  line-height: 1.45;
   font-weight: 400;
   letter-spacing: 0;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions {
-  min-height: 68px;
-  padding: 16px 24px;
+  min-height: 0;
+  padding: 0.7rem 1rem;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 0.5rem;
   background: #f5f4f2;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions .btn,
 #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions .copy-link-button {
-  min-width: 100px;
-  min-height: 44px !important;
+  min-width: 0;
+  min-height: 2.15rem !important;
+  padding: 0.38rem 0.68rem;
+  font-size: 0.76rem;
+  line-height: 1.2;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .install-card::after {
-  top: 26px;
-  right: 28px;
-  width: 32px;
-  height: 32px;
+  top: 0.85rem;
+  right: 0.9rem;
+  width: 1.45rem;
+  height: 1.45rem;
   border: 2px solid rgba(67, 107, 29, 0.25);
   background: #fff;
 }
@@ -2630,7 +2716,7 @@ body.home-no-scroll #app .app-footer .container {
   min-height: 68px;
   padding: 24px 56px 28px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(14rem, 18rem) auto;
   gap: 18px 24px;
   align-items: end;
   background: #f5f4f2;
@@ -2638,12 +2724,25 @@ body.home-no-scroll #app .app-footer .container {
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-search-control,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-sort-control,
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-tag-control {
   min-width: 0;
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] .filter-help {
+  margin: 0 0 0.55rem;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-search-control {
   grid-column: 1;
+  grid-row: 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-sort-control {
+  grid-column: 2;
   grid-row: 1;
 }
 
@@ -2664,18 +2763,65 @@ body.home-no-scroll #app .app-footer .container {
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .search-group .input-group-text,
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .search-group .form-control,
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .search-group .btn,
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .form-select,
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .tag-pill {
   min-height: 44px !important;
   border-radius: 4px !important;
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .form-select {
+  border-color: rgba(22, 21, 19, 0.18);
+  box-shadow: none;
+  color: #161513;
+  font-size: 16px;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls > .btn {
-  grid-column: 2;
+  grid-column: 3;
   grid-row: 1;
   min-width: 14rem;
   min-height: 44px !important;
   margin-bottom: 0;
   white-space: nowrap;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill-count {
+  display: inline-flex;
+  min-width: 1.45rem;
+  min-height: 1.45rem;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.35rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: rgba(22, 21, 19, 0.08);
+  color: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .tag-pill.is-active .tag-pill-count {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.2rem;
+  color: rgba(22, 21, 19, 0.58);
+  font-size: 0.82rem;
+  line-height: 1.3;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-meta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.45rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(79, 125, 123, 0.1);
 }
 
 @media (max-width: 1180px) {
@@ -2690,7 +2836,15 @@ body.home-no-scroll #app .app-footer .container {
   }
 
   #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls > .btn {
+    grid-column: 1;
+    grid-row: auto;
     width: 100%;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-sort-control,
+  #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-tag-control {
+    grid-column: 1;
+    grid-row: auto;
   }
 }
 
@@ -3195,6 +3349,59 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   object-fit: contain;
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] .is-numbered-gallery {
+  counter-reset: evidence-step;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .is-numbered-gallery .inline-evidence-card {
+  counter-increment: evidence-step;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .is-numbered-gallery .inline-evidence-card::before {
+  content: counter(evidence-step);
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 999px;
+  background: var(--rose);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(32, 30, 28, 0.16);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .quickstart-split-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(18rem, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.25rem);
+  align-items: center;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .quickstart-split-card {
+  padding: clamp(1.15rem, 2vw, 1.5rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .quickstart-split-copy .action-list {
+  margin-bottom: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .quickstart-split-evidence {
+  margin: 0;
+  align-self: center;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .quickstart-split-evidence img {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] figure[data-expandable="true"] {
   cursor: zoom-in;
 }
@@ -3216,6 +3423,353 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   font-size: 0.72rem;
   font-weight: 800;
   pointer-events: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid rgba(212, 207, 202, 0.92);
+  border-radius: 8px;
+  background: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: 0.8rem;
+  border-bottom: 1px solid rgba(212, 207, 202, 0.82);
+  background: #fbf9f8;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-actions {
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  border: 1px solid rgba(104, 96, 91, 0.24);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill {
+  gap: 0.45rem;
+  padding: 0.35rem 0.65rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-action {
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-action:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-action:focus-visible {
+  border-color: rgba(199, 70, 52, 0.46);
+  background: #fff8f7;
+  color: var(--rose);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.25rem;
+  box-sizing: border-box;
+  padding: 0.2rem;
+  border: 1px solid rgba(104, 96, 91, 0.24);
+  border-radius: 999px;
+  background: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control .wms-status-action {
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.35rem;
+  border-color: transparent;
+  background: transparent;
+  font-size: 1rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control .wms-status-action:disabled,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control .wms-status-action:disabled:hover {
+  border-color: transparent;
+  background: transparent;
+  color: var(--ink-soft);
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-field {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-select {
+  min-height: 2.25rem;
+  max-width: 6rem;
+  padding: 0.3rem 1.7rem 0.3rem 0.55rem;
+  border: 1px solid rgba(104, 96, 91, 0.3);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-select:hover {
+  border-color: rgba(199, 70, 52, 0.46);
+  background: #fff8f7;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-select:focus-visible,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage:focus-visible {
+  outline: 3px solid rgba(0, 112, 173, 0.38);
+  outline-offset: 2px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill::before {
+  content: "";
+  width: 1.6rem;
+  height: 0;
+  border-top: 3px solid #7c8794;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill.is-return-path::before {
+  border-top-style: dashed;
+  border-top-color: #a16207;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill.is-selected::before {
+  width: 0.8rem;
+  height: 0.8rem;
+  border: 3px solid var(--ink);
+  border-radius: 4px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, 20rem);
+  min-height: 34rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
+  position: relative;
+  min-width: 0;
+  max-height: min(72vh, 50rem);
+  overflow: auto;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: auto;
+  scrollbar-gutter: stable both-edges;
+  border-right: 1px solid rgba(212, 207, 202, 0.82);
+  background:
+    linear-gradient(#eef2f7 1px, transparent 1px),
+    linear-gradient(90deg, #eef2f7 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-svg {
+  display: block;
+  width: 1320px;
+  max-width: none;
+  height: auto;
+  margin-inline: auto;
+  aspect-ratio: 2 / 1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="fit"] .wms-status-svg {
+  width: min(100%, 144vh, 100rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="25"] .wms-status-svg {
+  width: 330px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="50"] .wms-status-svg {
+  width: 660px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="75"] .wms-status-svg {
+  width: 990px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="125"] .wms-status-svg {
+  width: 1650px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="150"] .wms-status-svg {
+  width: 1980px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph[data-wms-status-zoom="200"] .wms-status-svg {
+  width: 2640px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node rect {
+  stroke: rgba(56, 52, 49, 0.72);
+  stroke-width: 1.2;
+  cursor: pointer;
+  filter: drop-shadow(0 7px 10px rgba(56, 52, 49, 0.12));
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node text {
+  fill: var(--ink);
+  font-size: 12.5px;
+  font-weight: 850;
+  pointer-events: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node .wms-status-node-subtext {
+  fill: var(--ink-soft);
+  font-size: 10.5px;
+  font-weight: 750;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node.is-selected rect {
+  stroke: var(--ink);
+  stroke-width: 4;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node:focus-visible rect {
+  stroke: var(--rose);
+  stroke-width: 4;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge {
+  fill: none;
+  stroke: #7c8794;
+  stroke-width: 2.5;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge.is-return-path {
+  stroke: #a16207;
+  stroke-dasharray: 8 6;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge.is-publish-request {
+  stroke: var(--oracle-red);
+  stroke-dasharray: 2 8;
+  stroke-linecap: round;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge.is-selected {
+  stroke-width: 3.5;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-node.is-dimmed,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge.is-dimmed,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge-label-bg.is-dimmed,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge-label.is-dimmed {
+  opacity: 0.2;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge-label-bg {
+  fill: rgba(255, 255, 255, 0.96);
+  stroke: rgba(212, 207, 202, 0.9);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-edge-label {
+  fill: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 800;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-linejoin: round;
+  stroke-width: 2px;
+  pointer-events: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail {
+  display: grid;
+  align-content: start;
+  gap: 0.95rem;
+  padding: 1rem;
+  background: #fbf9f8;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail h4 {
+  margin: 0.25rem 0 0;
+  font-size: 1.14rem;
+  font-weight: 850;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail-block {
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(212, 207, 202, 0.78);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail-block strong {
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail p,
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail li {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+  line-height: 1.48;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .wms-status-detail ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-card {
+  align-content: start;
+  gap: 0.85rem;
+  min-height: 0;
+  padding: 0.9rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-main {
+  align-items: flex-start;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-main strong {
+  font-size: 0.88rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-main span span {
+  font-size: 0.78rem;
+  line-height: 1.38;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .install-card-grid .detail-resource-actions {
+  margin-top: auto;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .example-generator-panel,
@@ -3246,8 +3800,207 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   border-color: rgba(104, 96, 91, 0.28);
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] .generator-textarea-compact {
+  min-height: 4.25rem;
+  max-height: 7rem;
+  resize: vertical;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-input-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] .generated-example-grid {
-  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  align-items: start;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-card {
+  overflow: hidden;
+  border: 1px solid rgba(212, 207, 202, 0.92);
+  border-radius: 8px;
+  background: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+  min-height: 2.25rem;
+  padding: 0.48rem 0.65rem;
+  cursor: pointer;
+  list-style: none;
+  background: #fbf9f8;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-summary::-webkit-details-marker {
+  display: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-summary::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 0.48rem;
+  height: 0.48rem;
+  border-right: 2px solid var(--ink-soft);
+  border-bottom: 2px solid var(--ink-soft);
+  transform: rotate(45deg);
+  transition: transform 160ms ease;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-card[open] .generated-example-summary::after {
+  transform: rotate(225deg);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-summary:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-summary:focus-visible {
+  background: #fff4f1;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-summary-main {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-title {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 850;
+  line-height: 1.18;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-body {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.5rem 0.6rem 0.65rem;
+  border-top: 1px solid rgba(212, 207, 202, 0.78);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-copy {
+  min-height: 1.75rem !important;
+  padding: 0.26rem 0.58rem !important;
+  font-size: 0.78rem !important;
+  line-height: 1.15 !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-pre {
+  width: 100%;
+  max-height: 8.5rem;
+  margin: 0;
+  padding: 0 !important;
+  overflow: auto;
+  border-radius: 8px;
+  background: #2b2927;
+  color: #f8f5f2;
+  font-size: 0.78rem;
+  line-height: 1.42;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-pre code {
+  display: block;
+  min-width: 0;
+  padding: 0.62rem;
+  color: inherit;
+  font-size: inherit !important;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table-wrap {
+  margin-top: 0.75rem;
+  overflow-x: auto;
+  border: 1px solid rgba(212, 207, 202, 0.92);
+  border-radius: 0.65rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table {
+  width: 100%;
+  min-width: 42rem;
+  margin: 0;
+  border-collapse: collapse;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.84rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table th,
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table td {
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid rgba(212, 207, 202, 0.78);
+  vertical-align: top;
+  text-align: left;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table thead th {
+  background: #f8f7f5;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table tbody tr:last-child th,
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-group-row th {
+  padding-top: 0.8rem;
+  padding-bottom: 0.45rem;
+  background: #fff7f5;
+  color: #8f2f22;
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-label {
+  width: 15rem;
+  font-weight: 800;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-action {
+  width: 5.5rem;
+  text-align: right !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generated-example-table .generated-example-pre {
+  max-height: 9rem;
+  border-radius: 0.45rem;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generator-state {
@@ -3261,6 +4014,8 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generator-snippet-summary {
+  display: grid;
+  gap: 0.55rem;
   margin-top: 1rem;
   padding: 0.85rem 1rem;
   border-left: 4px solid var(--rose);
@@ -3270,6 +4025,24 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   font-size: 0.92rem;
   font-weight: 650;
   line-height: 1.55;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-summary-row {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-summary-row strong {
+  color: var(--ink);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .generator-summary-row span {
+  min-width: 0;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .generator-error-state {
@@ -3322,12 +4095,72 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   #app[data-redwood-creator-pass="2026-05-25"] .generator-controls {
     grid-template-columns: 1fr;
   }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-toolbar,
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
+    border-right: 0;
+    border-bottom: 1px solid rgba(212, 207, 202, 0.82);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .quickstart-split-content {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
   #app[data-redwood-creator-pass="2026-05-25"] .inline-evidence-grid {
     grid-template-columns: 1fr;
   }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .generator-summary-row {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-actions,
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-action,
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-legend-pill {
+    justify-content: center;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-control {
+    grid-column: 1 / -1;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-field {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-zoom-select {
+    width: 6rem;
+  }
+
 }
 
 /* Final review fixes: keep the home menu neutral until hover and make the nav close state explicit. */
@@ -3378,10 +4211,10 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-input {
-  flex: 1 1 auto;
+  width: 100%;
   min-width: 0;
   height: 52px;
-  padding: 0 16px;
+  padding: 0 62px 0 16px;
   border: 0;
   color: var(--redwood-text);
   font: 600 15px/1.2 "Oracle Sans", "Segoe UI", Arial, sans-serif;
@@ -3397,6 +4230,12 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   outline: 0;
 }
 
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-input-wrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-form:focus-within {
   border-color: rgba(199, 70, 52, 0.62);
   box-shadow:
@@ -3404,8 +4243,7 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
     0 12px 28px rgba(49, 45, 42, 0.08);
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-button,
-#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-clear {
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-button {
   display: inline-flex;
   flex: 0 0 54px;
   align-items: center;
@@ -3427,13 +4265,31 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
   background: var(--oracle-bark);
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-clear:hover,
-#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-clear:focus-visible {
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-input-clear {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: inline-flex;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(84, 78, 73, 0.45);
+  border-radius: 4px;
+  transform: translateY(-50%);
+  background: #fff;
+  color: var(--redwood-text);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-input-clear:hover,
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-input-clear:focus-visible {
+  border-color: rgba(199, 70, 52, 0.7);
   background: rgba(199, 70, 52, 0.08);
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-button svg,
-#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-clear svg {
+#app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-input-clear svg {
   width: 21px;
   height: 21px;
   fill: none;
@@ -3448,10 +4304,15 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .author-glob
     width: 100%;
   }
 
-  #app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-button,
-  #app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-clear {
+  #app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-button {
     flex-basis: 46px;
     min-width: 46px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #searchMode .search-page-input-clear {
+    right: 5px;
+    width: 36px;
+    height: 36px;
   }
 }
 
@@ -3463,8 +4324,1775 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
   padding-left: 0 !important;
 }
 
+/* Release focus: keep documentation images compact and readable while recordings are pending. */
+#app[data-redwood-creator-pass="2026-05-25"] .action-list > li > .inline-evidence-card {
+  width: min(100%, 44rem);
+  margin: 0.8rem 0 1.35rem;
+  padding: 0.45rem;
+  overflow: hidden;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .action-list > li > .inline-evidence-card img {
+  width: 100%;
+  max-width: 100%;
+  max-height: min(20rem, 44vh);
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Keep the paired WMS request screenshots together without repeating a full-width card. */
+#app[data-redwood-creator-pass="2026-05-25"] .action-list > li > .wms-request-evidence {
+  display: flex;
+  gap: 0.75rem;
+  width: min(100%, 44rem);
+  margin: 0.8rem 0 1.35rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .action-list > li > .wms-request-evidence .inline-evidence-card {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+  margin: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .prompt-examples-link {
+  display: inline-block;
+  padding: 0.08rem 0.42rem;
+  border: 1px solid rgba(199, 70, 52, 0.45);
+  border-radius: 4px;
+  background: #fff4f1;
+  color: #9b2719;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .prompt-examples-link:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .prompt-examples-link:focus-visible {
+  background: #fbe0d9;
+  color: #721b11;
+  text-decoration: underline;
+}
+
+/* Suppress the browser-provided search cancel icon; the bordered in-field control is the only clear action. */
+#app[data-redwood-creator-pass="2026-05-25"] .search-page-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .search-page-input::-ms-clear {
+  display: none;
+}
+
+/* Recording components stay in the source for the next release, but are not shown in this functionality-and-content release. */
+#app[data-redwood-creator-pass="2026-05-25"] [data-video-card],
+#app[data-redwood-creator-pass="2026-05-25"] .media-player-card,
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-task-media,
+#app[data-redwood-creator-pass="2026-05-25"] video {
+  display: none !important;
+}
+
+@media (max-width: 640px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .action-list > li > .inline-evidence-card {
+    width: 100%;
+    margin: 0.7rem 0 1.1rem;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .action-list > li > .inline-evidence-card img {
+    max-height: 15rem;
+  }
+}
+
+/* Responsive density and overflow safeguards shared across every guide view. */
+#app[data-redwood-creator-pass="2026-05-25"] {
+  overflow-x: clip;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] :is(.guide-layout, .guide-stage, .guide-section-card, .step-block, .detail-resource-card, .detail-resource-main, .detail-resource-main > span, .generator-layout, .generator-workbench, .generator-output-panel, .quickstart-split-content, .wms-status-graph-layout) {
+  min-width: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] :is(img, video, iframe, pre, table) {
+  max-width: 100%;
+}
+
+@media (max-width: 1100px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .guide-section-card,
+  #app[data-redwood-creator-pass="2026-05-25"] .step-block {
+    padding: clamp(1rem, 2.5vw, 1.3rem);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-svg {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 2 / 1;
+  }
+}
+
+@media (max-width: 850px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-graph-stage {
+    max-height: min(72vh, 44rem);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .wms-status-svg {
+    min-width: 0;
+    height: auto;
+    aspect-ratio: 2 / 1;
+  }
+}
+
+@media (max-width: 700px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .command-card-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .detail-field-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .detail-resource-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .detail-milestone-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .quickstart-split-content,
+  #app[data-redwood-creator-pass="2026-05-25"] .generator-layout,
+  #app[data-redwood-creator-pass="2026-05-25"] .example-generator-input-row,
+  #app[data-redwood-creator-pass="2026-05-25"] .qa-order-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-main {
+    padding: 1rem 2.75rem 0.9rem 1rem;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .install-card .detail-resource-actions {
+    padding: 0.65rem 1rem;
+  }
+}
+
 @media (max-width: 940px) {
   body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
     display: none !important;
+  }
+}
+
+/* Home must remain reachable when viewport height or width is constrained. */
+body.home-no-scroll {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+body.home-no-scroll #app .app-shell {
+  grid-template-rows: auto minmax(min-content, 1fr) auto;
+  height: auto;
+}
+
+body.home-no-scroll #app #hub.hub-screen {
+  min-height: min-content;
+  overflow: visible;
+}
+
+body.home-no-scroll #app #hub > .container,
+body.home-no-scroll #app .hub-hero {
+  min-height: min-content;
+}
+
+@media (max-height: 820px) {
+  body.home-no-scroll #app #hub.hub-screen {
+    align-items: flex-start;
+  }
+}
+
+/* Responsive hardening: preserve the desktop sidebar while keeping each route
+   within narrow phone viewports. These selectors deliberately override older
+   home-shell rules with larger intrinsic grid minimums. */
+@media (max-width: 940px) {
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .app-shell,
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub.hub-screen,
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub > .container,
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .hub-hero,
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-action-panel,
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-search-form,
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub .home-mini-flow,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav > .container,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-shell,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .container-fluid,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-main-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-group-all {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] .app-shell,
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub.hub-screen,
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub > .container,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav > .container,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-shell,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .container-fluid,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-main-grid,
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-group-all {
+    width: 100%;
+  }
+
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub.hub-screen {
+    display: block;
+    overflow-x: clip;
+    padding: 0 16px 36px;
+  }
+
+  body.home-no-scroll #app[data-redwood-creator-pass="2026-05-25"] #hub > .container {
+    display: block;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav {
+    overflow-x: clip;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .container-fluid {
+    flex-wrap: wrap;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .brand-token {
+    flex: 0 1 auto;
+    max-width: 100%;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-main-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin-left: 0;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-group-all {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .mode-nav .nav-control {
+    min-width: 0;
+    white-space: normal;
+  }
+
+  body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode,
+  body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] #explorerMode,
+  body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] #nodocMode {
+    padding-top: 1.25rem !important;
+  }
+}
+
+@media (max-width: 700px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .qa-order-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .qa-order-content .step-figure,
+  #app[data-redwood-creator-pass="2026-05-25"] .qa-order-content .step-figure img {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tabs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(5.25rem, 0.62fr);
+    gap: 0.35rem;
+    overflow-x: visible;
+    padding: 0.6rem 0.75rem 0;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tab {
+    width: 100%;
+    min-width: 0;
+    padding: 0.55rem 0.45rem;
+    gap: 0.35rem;
+    flex: initial;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .authoring-route-badge {
+    min-height: 1.5rem;
+    padding: 0.2rem 0.48rem;
+    font-size: 0.68rem;
+  }
+}
+
+#nodocMode .nodoc-page-methods,
+#nodocMode .nodoc-metadata-guide {
+  margin: 1.15rem 0 0;
+}
+
+#nodocMode .nodoc-page-methods > h5,
+#nodocMode .nodoc-metadata-guide > h5 {
+  margin: 0 0 .7rem;
+  color: #172b4d;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+#nodocMode .nodoc-compact-list {
+  margin: .65rem 0 1rem;
+  padding-left: 1.35rem;
+}
+
+#nodocMode .nodoc-compact-list > li {
+  margin-bottom: .45rem;
+}
+
+#nodocMode .nodoc-reference-table-wrap {
+  max-width: 100%;
+  margin: .85rem 0;
+  overflow-x: auto;
+  border: 1px solid rgba(36, 59, 83, .14);
+  border-radius: .7rem;
+  background: #fff;
+  scrollbar-color: rgba(72, 101, 129, .7) transparent;
+  scrollbar-width: thin;
+}
+
+#nodocMode .nodoc-reference-table-wrap:focus-visible {
+  outline: 2px solid rgba(199, 70, 52, .45);
+  outline-offset: 2px;
+}
+
+#nodocMode .nodoc-reference-table {
+  width: 100%;
+  min-width: 47rem;
+  margin: 0;
+  border-collapse: collapse;
+  color: #334e68;
+  font-size: .88rem;
+  line-height: 1.45;
+}
+
+#nodocMode .nodoc-reference-table caption {
+  padding: .75rem .9rem;
+  color: #486581;
+  caption-side: top;
+  text-align: left;
+}
+
+#nodocMode .nodoc-reference-table th,
+#nodocMode .nodoc-reference-table td {
+  padding: .7rem .8rem;
+  border-top: 1px solid rgba(36, 59, 83, .1);
+  vertical-align: top;
+}
+
+#nodocMode .nodoc-reference-table thead th {
+  border-top: 0;
+  background: #edf2f7;
+  color: #172b4d;
+  font-weight: 800;
+}
+
+#nodocMode .nodoc-reference-table tbody th {
+  width: 10.5rem;
+  color: #243b53;
+  font-weight: 800;
+}
+
+#nodocMode .nodoc-reference {
+  margin: .9rem 0 0;
+  border: 1px solid rgba(36, 59, 83, .14);
+  border-radius: .7rem;
+  background: rgba(255, 255, 255, .75);
+}
+
+#nodocMode .nodoc-reference > summary {
+  cursor: pointer;
+  padding: .72rem .9rem;
+  color: #243b53;
+  font-weight: 800;
+  list-style: none;
+}
+
+#nodocMode .nodoc-reference > summary::-webkit-details-marker {
+  display: none;
+}
+
+#nodocMode .nodoc-reference > summary::before {
+  content: "+";
+  display: inline-block;
+  width: 1.2rem;
+  color: #c74634;
+  font-size: 1.1rem;
+}
+
+#nodocMode .nodoc-reference[open] > summary::before {
+  content: "−";
+}
+
+#nodocMode .nodoc-reference > :not(summary) {
+  margin-right: .9rem;
+  margin-left: .9rem;
+}
+
+#nodocMode .nodoc-reference > pre {
+  margin-bottom: .9rem;
+  padding: .75rem;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+#nodocMode .nodoc-task-section .nodoc-route-evidence {
+  width: min(100%, 46rem);
+  margin: .8rem 0 .5rem;
+}
+
+#nodocMode .nodoc-task-section .nodoc-route-evidence img {
+  max-height: min(24rem, 48vh);
+}
+
+#nodocMode .nodoc-task-section .nodoc-route-evidence figcaption {
+  margin: .55rem .15rem 0;
+  color: #526477;
+  font-size: .86rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 700px) {
+  #nodocMode .nodoc-reference-table {
+    min-width: 39rem;
+  }
+
+  #nodocMode .nodoc-task-section .nodoc-route-evidence {
+    width: 100%;
+  }
+}
+
+/* NoDoc route selector and page */
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-shell {
+  margin-top: 1.5rem;
+  border: 1px solid rgba(49, 45, 42, 0.18);
+  border-radius: 1rem;
+  background: #fff;
+  overflow: hidden;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-header {
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border-bottom: 1px solid rgba(49, 45, 42, 0.12);
+  background: #f8f7f5;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-header h3,
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-copy h3,
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-page-card h3 {
+  margin: 0.25rem 0 0.45rem;
+  color: #161513;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-header p {
+  margin: 0;
+  color: #5b5652;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem clamp(1rem, 2vw, 1.5rem) 0;
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(49, 45, 42, 0.12);
+  background: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  flex: 0 0 auto;
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-radius: 0.65rem 0.65rem 0 0;
+  background: transparent;
+  color: #312d2a;
+  font: inherit;
+  font-weight: 700;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tab:hover {
+  background: #f3f2f0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tab.is-active {
+  border-color: rgba(199, 70, 52, 0.22);
+  border-bottom-color: #c74634;
+  background: #fff7f5;
+  color: #8f2f22;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tab:focus-visible {
+  outline: 3px solid rgba(0, 104, 140, 0.35);
+  outline-offset: 2px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-badge {
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  min-height: 1.75rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: #e9e1ca;
+  color: #312d2a;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-panel {
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .authoring-route-panel[hidden] {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-placeholder {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(15rem, 0.7fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-copy {
+  min-width: 0;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  border-radius: 0.85rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-copy {
+  border: 1px solid rgba(49, 45, 42, 0.14);
+  background: #f8f7f5;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .quickstart-nodoc-logo {
+  display: block;
+  width: min(100%, 12rem);
+  height: auto;
+  margin: 0 0 1rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-visual .nodoc-route-copy {
+  background: linear-gradient(135deg, #fff8f5 0%, #f8f7f5 68%);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-logo-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 100%;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  border-radius: 0.85rem;
+  text-decoration: none;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-logo-link:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-logo-link:focus-visible {
+  background: rgba(255, 248, 245, 0.82);
+  transform: translateY(-2px);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-logo-link .quickstart-nodoc-logo {
+  width: min(100%, 15rem);
+  margin: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-evidence {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  margin: 0;
+  padding: 0.65rem;
+  border: 1px solid rgba(49, 45, 42, 0.14);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-task-section .nodoc-route-evidence {
+  display: grid;
+  gap: .55rem;
+  width: min(100%, 46rem);
+  margin: 1rem 0 1.25rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-task-section .nodoc-route-evidence figcaption {
+  margin: 0 .15rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.25rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-evidence-grid .nodoc-route-evidence {
+  width: 100%;
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  #app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-evidence-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-evidence img {
+  display: block;
+  width: 100%;
+  max-height: 18rem;
+  object-fit: contain;
+  border: 1px solid rgba(49, 45, 42, 0.12);
+  border-radius: 0.55rem;
+  background: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-copy .nodoc-route-evidence {
+  width: min(100%, 42rem);
+  margin: 1rem 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] [data-authoring-only][hidden] {
+  display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .qa-order-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(18rem, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.25rem);
+  align-items: center;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .qa-order-card {
+  padding: clamp(1.15rem, 2vw, 1.5rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .qa-order-content .step-figure {
+  align-self: center;
+  margin: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .qa-order-content .step-figure img {
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-page-hero {
+  margin-top: 32px;
+  margin-bottom: 1.25rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-page-hero .mode-title {
+  max-width: 18ch;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-status-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-status-panel h3,
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-next-card h3 {
+  margin: 0.65rem 0 0.55rem;
+  color: #161513;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-status-panel .panel-kicker {
+  white-space: nowrap;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-next-card .card-body {
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nodoc-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-grid.is-topic-grouped {
+  row-gap: 2rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .bubble-grid.is-topic-grouped > .cheatsheet-topic-group {
+  width: 100%;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-topic-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid rgba(49, 45, 42, 0.18);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-topic-heading h3 {
+  margin: 0;
+  color: #312d2a;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 700;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-topic-heading span {
+  color: #5b5652;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .nodoc-route-placeholder {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .nodoc-page-hero {
+    margin-top: 20px;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .nodoc-page-actions {
+    justify-content: flex-start;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tabs {
+    padding-inline: 0.75rem;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tab {
+    flex: 1 0 max-content;
+  }
+}
+
+/* Give the NoDoc opening panel the same shared top-panel treatment as Quickstart and Cheatsheet. */
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(22, 21, 19, 0.16) !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .card-body {
+  min-height: 196px;
+  padding: 44px 56px 34px !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-overline {
+  margin: 0 0 14px;
+  color: var(--finance-teal);
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: capitalize;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-title {
+  margin: 0;
+  max-width: 18ch;
+  color: #161513;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(42px, 3.35vw, 56px);
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-copy {
+  max-width: 64ch;
+  margin-top: 1.25rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-decoration-strip {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 20px;
+  border-radius: 8px 8px 0 0;
+  background: url("../images/color-strip.png") center center / 100% 20px no-repeat;
+  pointer-events: none;
+}
+
+@media (max-width: 940px) {
+  #app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .card-body {
+    padding: 44px 22px 28px !important;
+  }
+}
+/* NoDoc workshop tree: native details keep the lab menu accessible without a second JS router. */
+.nodoc-workshop-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem; }
+.nodoc-summary-tree { display: none; }
+.nodoc-full-tree { display: grid; gap: .75rem; }
+.nodoc-tree-content { padding: 0 1.15rem 1.15rem 2.8rem; color: #334e68; }
+.nodoc-tree-content h4 { margin: 1rem 0 .45rem; color: #172b4d; font-size: 1rem; }
+.nodoc-tree-content p { margin: .55rem 0 .8rem; }
+.nodoc-tree-content li { margin-bottom: .3rem; }
+.nodoc-task { margin: .65rem 0; border-left: 3px solid rgba(199,70,52,.45); background: rgba(246,248,250,.8); border-radius: 8px; }
+.nodoc-task summary { cursor: pointer; padding: .65rem .8rem; font-weight: 700; color: #243b53; list-style: none; }
+.nodoc-task summary::-webkit-details-marker { display: none; }
+.nodoc-task summary::before { content: "▸"; color: #c74634; margin-right: .45rem; }
+.nodoc-task[open] summary::before { content: "▾"; }
+.nodoc-task ol { padding: 0 1rem 1rem 2.7rem; margin: 0; }
+.nodoc-checkpoint { margin: .9rem 0; padding: .75rem .9rem; border-left: 4px solid #c74634; background: rgba(255,243,238,.85); color: #7b341e; }
+
+/* NoDoc uses the established guide left rail and a single content reader. */
+#nodocMode .nodoc-workshop-card,
+#nodocMode .nodoc-next-card {
+  display: none;
+}
+
+#nodocMode .nodoc-full-workshop-card {
+  margin-top: 1.25rem;
+}
+
+#nodocMode .nodoc-guide-layout {
+  grid-template-columns: 280px minmax(0, 1fr);
+  margin-top: 1.25rem;
+}
+
+#nodocMode .nodoc-sidebar {
+  width: auto;
+  left: auto;
+}
+
+#nodocMode .nodoc-sidebar .guide-sidebar-card {
+  padding: 1rem;
+}
+
+#nodocMode .nodoc-side-nav {
+  display: grid;
+  gap: .45rem;
+}
+
+#nodocMode .nodoc-nav-button,
+#nodocMode .nodoc-nav-group button {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: #243b53;
+  font: inherit;
+  text-align: left;
+}
+
+#nodocMode .nodoc-nav-button {
+  padding: .72rem .75rem;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+#nodocMode .nodoc-nav-button.is-active,
+#nodocMode .nodoc-nav-group button.is-active {
+  background: #fff1ed;
+  color: #a82e1b;
+}
+
+#nodocMode .nodoc-nav-group {
+  border-top: 1px solid rgba(36, 59, 83, .12);
+  padding-top: .35rem;
+}
+
+#nodocMode .nodoc-nav-group summary {
+  cursor: pointer;
+  list-style: none;
+  padding: .62rem .75rem;
+  color: #243b53;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+#nodocMode .nodoc-nav-group summary::-webkit-details-marker {
+  display: none;
+}
+
+#nodocMode .nodoc-nav-group summary::before {
+  content: "▸";
+  display: inline-block;
+  width: 1rem;
+  color: #c74634;
+}
+
+#nodocMode .nodoc-nav-group[open] summary::before {
+  content: "▾";
+}
+
+#nodocMode .nodoc-nav-group button {
+  display: block;
+  padding: .45rem .65rem .45rem 1.75rem;
+  border-radius: 7px;
+  font-size: .88rem;
+  line-height: 1.35;
+}
+
+#nodocMode .nodoc-nav-group button:hover,
+#nodocMode .nodoc-nav-group button:focus-visible {
+  background: rgba(199, 70, 52, .08);
+  color: #a82e1b;
+}
+
+#nodocMode .nodoc-guide-stage {
+  min-width: 0;
+}
+
+#nodocMode .nodoc-guide-stage[hidden] {
+  display: none !important;
+}
+
+#nodocMode .nodoc-guide-layout[hidden] {
+  display: none !important;
+}
+
+#nodocMode .nodoc-lab-panel {
+  display: block;
+  border: 1px solid rgba(36, 59, 83, .14);
+  border-radius: 14px;
+  background: #fff;
+}
+
+#nodocMode .nodoc-lab-panel[hidden] {
+  display: none;
+}
+
+#nodocMode .nodoc-tree-content {
+  padding: 1.5rem clamp(1.1rem, 3vw, 2.25rem);
+}
+
+#nodocMode .nodoc-lab-heading {
+  margin: 0 0 1rem;
+  color: #172b4d;
+  font-size: clamp(1.45rem, 2.5vw, 2rem);
+}
+
+#nodocMode .nodoc-task-section {
+  scroll-margin-top: 1rem;
+  margin: 1.75rem 0;
+  border-top: 1px solid rgba(36, 59, 83, .14);
+}
+
+#nodocMode .nodoc-task-section > summary {
+  cursor: pointer;
+  padding: 1rem 1.15rem;
+  color: #243b53;
+  font-size: 1.12rem;
+  font-weight: 800;
+  list-style: none;
+}
+
+#nodocMode .nodoc-task-section > summary::-webkit-details-marker {
+  display: none;
+}
+
+#nodocMode .nodoc-task-section > summary::before {
+  content: "+";
+  display: inline-block;
+  width: 1.25rem;
+  color: #c74634;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+#nodocMode .nodoc-task-section[open] > summary::before {
+  content: "−";
+}
+
+#nodocMode .nodoc-task-section > :not(summary) {
+  margin-left: 1.15rem;
+  margin-right: 1.15rem;
+}
+
+#nodocMode .nodoc-task-toggle {
+  margin: .25rem 0 1rem;
+  font-size: .86rem;
+  font-weight: 700;
+}
+
+#nodocMode .nodoc-launch-actions {
+  margin-top: .5rem;
+}
+
+#nodocMode .nodoc-task-section ol > li {
+  margin-bottom: .36rem;
+  line-height: 1.55;
+}
+
+/* Lab 2 authoring choices stay in the editable NoDoc fragment; this layer only
+   gives its Bootstrap tabs the compact reader treatment used elsewhere here. */
+#nodocMode .nodoc-creation-tabs {
+  margin: .9rem 0 .25rem;
+  padding: .9rem 0 0;
+  border-top: 1px solid rgba(36, 59, 83, .14);
+}
+
+#nodocMode .nodoc-creation-tabs-intro {
+  margin: 0 0 .75rem;
+  color: #486581;
+  font-size: .92rem;
+}
+
+#nodocMode .nodoc-creation-tablist {
+  gap: .25rem;
+  margin: 0 0 .8rem;
+  border-bottom: 0;
+}
+
+#nodocMode .nodoc-creation-tab {
+  min-width: 0;
+  margin-bottom: 0;
+  padding: .45rem .65rem;
+  border: 0 !important;
+  border-radius: 7px !important;
+  background: transparent;
+  color: #243b53;
+  font-size: .88rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: left;
+}
+
+#nodocMode .nodoc-creation-tab:hover,
+#nodocMode .nodoc-creation-tab:focus-visible {
+  background: rgba(199, 70, 52, .08);
+  color: #a82e1b;
+}
+
+#nodocMode .nodoc-creation-tab.active {
+  background: #fff1ed;
+  color: #a82e1b;
+}
+
+#nodocMode .nodoc-creation-tab:focus-visible {
+  outline: 2px solid rgba(199, 70, 52, .4);
+  outline-offset: 1px;
+}
+
+#nodocMode .nodoc-creation-panel {
+  padding: .85rem 1rem;
+  border-left: 3px solid rgba(199, 70, 52, .45);
+  border-radius: 8px;
+  background: rgba(246, 248, 250, .8);
+}
+
+#nodocMode .nodoc-creation-panel h5 {
+  margin: 0 0 .3rem;
+  color: #172b4d;
+  font-size: 1rem;
+}
+
+#nodocMode .nodoc-creation-panel p {
+  margin: 0;
+}
+
+#nodocMode .nodoc-creation-panel ol {
+  margin: .65rem 0 0;
+  padding: 0 0 0 1.3rem;
+}
+
+#nodocMode .nodoc-creation-panel ol > li:last-child {
+  margin-bottom: 0;
+}
+
+#nodocMode .nodoc-codex-prompt-builder {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: .75rem;
+  margin: 1rem 0 0;
+  min-width: 0;
+  max-width: 100%;
+}
+
+#nodocMode .nodoc-codex-prompt-builder > *,
+#nodocMode .nodoc-codex-skill-resource > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+#nodocMode .nodoc-task-section,
+#nodocMode .nodoc-task-section ol,
+#nodocMode .nodoc-task-section li,
+#nodocMode .nodoc-full-tree,
+#nodocMode .nodoc-lab-panel,
+#nodocMode .nodoc-tree-content,
+#nodocMode .nodoc-creation-tabs,
+#nodocMode .nodoc-creation-tab-content,
+#nodocMode .nodoc-creation-panel,
+#nodocMode .nodoc-codex-skill-plan,
+#nodocMode .nodoc-codex-skill-option,
+#nodocMode .nodoc-codex-skill-copy {
+  min-width: 0;
+  max-width: 100%;
+}
+
+#nodocMode .nodoc-full-tree {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+#nodocMode .nodoc-codex-prompt-builder > label,
+#nodocMode .nodoc-codex-skill-resource > label,
+#nodocMode .nodoc-codex-prompt-output-heading h6 {
+  color: #172b4d;
+  font-size: .92rem;
+  font-weight: 700;
+}
+
+#nodocMode .nodoc-codex-prompt-builder > label > span {
+  color: #486581;
+  font-weight: 400;
+}
+
+#nodocMode .nodoc-codex-skill-plan {
+  display: grid;
+  gap: .75rem;
+  margin: 0;
+  padding: .9rem;
+  border: 1px solid rgba(36, 59, 83, .16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .72);
+}
+
+#nodocMode .nodoc-codex-skill-plan-title {
+  margin: 0;
+  padding: 0;
+  color: #172b4d;
+  font-size: .92rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+#nodocMode .nodoc-codex-skill-plan > p {
+  margin: 0;
+  color: #486581;
+  font-size: .88rem;
+  line-height: 1.45;
+}
+
+#nodocMode .nodoc-codex-skill-list {
+  display: grid;
+  gap: .55rem;
+}
+
+#nodocMode .nodoc-codex-skill-option {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: .65rem;
+  align-items: start;
+  padding: .7rem;
+  border: 1px solid rgba(36, 59, 83, .14);
+  border-radius: 7px;
+  background: #fff;
+  color: #243b53;
+  cursor: pointer;
+}
+
+#nodocMode .nodoc-codex-skill-option input {
+  width: 1rem;
+  height: 1rem;
+  margin: .14rem 0 0;
+  accent-color: #c74634;
+}
+
+#nodocMode .nodoc-codex-skill-option input:disabled {
+  opacity: 1;
+}
+
+#nodocMode .nodoc-codex-skill-copy {
+  display: grid;
+  gap: .14rem;
+}
+
+#nodocMode .nodoc-codex-skill-copy strong {
+  color: #172b4d;
+  font-size: .9rem;
+}
+
+#nodocMode .nodoc-codex-skill-option input:checked + .nodoc-codex-skill-copy strong {
+  color: #a82e1b;
+}
+
+#nodocMode .nodoc-codex-skill-copy small {
+  color: #486581;
+  font-size: .82rem;
+  line-height: 1.4;
+}
+
+#nodocMode .nodoc-codex-skill-resource {
+  display: grid;
+  gap: .45rem;
+  padding: .75rem .85rem;
+  border-left: 3px solid rgba(199, 70, 52, .3);
+  border-radius: 7px;
+  background: rgba(255, 249, 247, .72);
+}
+
+#nodocMode .nodoc-codex-prompt-idea,
+#nodocMode .nodoc-codex-prompt-scope,
+#nodocMode .nodoc-codex-prompt-sources,
+#nodocMode .nodoc-codex-prompt-constraints,
+#nodocMode .nodoc-codex-skill-resource-input {
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  justify-self: stretch;
+  box-sizing: border-box;
+  resize: vertical;
+  border-color: rgba(36, 59, 83, .22);
+  color: #243b53;
+}
+
+#nodocMode .nodoc-codex-prompt-idea {
+  min-height: 8.75rem;
+}
+
+#nodocMode .nodoc-codex-prompt-scope,
+#nodocMode .nodoc-codex-prompt-sources,
+#nodocMode .nodoc-codex-prompt-constraints,
+#nodocMode .nodoc-codex-skill-resource-input {
+  min-height: 5.75rem;
+}
+
+#nodocMode .nodoc-codex-prompt-idea:focus,
+#nodocMode .nodoc-codex-prompt-scope:focus,
+#nodocMode .nodoc-codex-prompt-sources:focus,
+#nodocMode .nodoc-codex-prompt-constraints:focus,
+#nodocMode .nodoc-codex-skill-resource-input:focus {
+  border-color: #c74634;
+  box-shadow: 0 0 0 .18rem rgba(199, 70, 52, .14);
+}
+
+#nodocMode .nodoc-codex-prompt-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: .75rem;
+  color: #486581;
+  font-size: .82rem;
+  line-height: 1.4;
+}
+
+#nodocMode .nodoc-codex-prompt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+#nodocMode .nodoc-codex-prompt-build {
+  border-color: #c74634;
+  background: #c74634;
+  color: #fff;
+  font-weight: 700;
+}
+
+#nodocMode .nodoc-codex-prompt-build:hover,
+#nodocMode .nodoc-codex-prompt-build:focus-visible {
+  border-color: #a82e1b;
+  background: #a82e1b;
+  color: #fff;
+}
+
+#nodocMode .nodoc-codex-prompt-status {
+  min-height: 1.3rem;
+  margin: 0;
+  color: #486581;
+  font-size: .88rem;
+}
+
+#nodocMode .nodoc-codex-prompt-output {
+  margin-top: .25rem;
+  padding: .9rem;
+  border-left: 3px solid rgba(199, 70, 52, .45);
+  border-radius: 8px;
+  background: rgba(246, 248, 250, .8);
+}
+
+#nodocMode .nodoc-codex-prompt-output-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+}
+
+#nodocMode .nodoc-codex-prompt-output-heading h6 {
+  margin: 0;
+}
+
+#nodocMode .nodoc-codex-prompt-copy {
+  border: 1px solid rgba(199, 70, 52, .45);
+  background: #fff1ed;
+  color: #a82e1b;
+  font-weight: 700;
+}
+
+#nodocMode .nodoc-codex-prompt-copy:hover,
+#nodocMode .nodoc-codex-prompt-copy:focus-visible {
+  border-color: #a82e1b;
+  background: #c74634;
+  color: #fff;
+}
+
+#nodocMode .nodoc-codex-prompt-output pre {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  max-height: 30rem;
+  margin: .75rem 0 0;
+  overflow: auto;
+  padding: .9rem;
+  border: 1px solid rgba(36, 59, 83, .16);
+  border-radius: 7px;
+  background: #fff;
+  color: #243b53;
+  font-size: .82rem;
+  line-height: 1.48;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+#nodocMode .nodoc-codex-prompt-output pre:focus-visible {
+  outline: 2px solid rgba(199, 70, 52, .4);
+  outline-offset: 2px;
+}
+
+#nodocMode .nodoc-launch-task-section ol {
+  display: grid;
+  gap: .85rem;
+  margin-top: .85rem;
+}
+
+#nodocMode .nodoc-launch-task-section ol > li {
+  margin-bottom: 0;
+}
+
+#nodocMode .nodoc-task-section[open] {
+  padding-bottom: 1.1rem;
+  border-radius: 10px;
+  background: #fbfcfe;
+  box-shadow: 0 6px 18px rgba(36, 59, 83, .06);
+}
+
+#nodocMode .nodoc-task-media {
+  display: grid;
+  gap: .85rem;
+  margin: 0 0 1rem;
+}
+
+#nodocMode .nodoc-page-navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: .75rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(36, 59, 83, .14);
+}
+
+#nodocMode .nodoc-page-nav-button {
+  max-width: 48%;
+  white-space: normal;
+  text-align: left;
+}
+
+@media (max-width: 575.98px) {
+  #nodocMode .nodoc-page-navigation {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  #nodocMode .nodoc-page-nav-button {
+    max-width: none;
+    width: 100%;
+  }
+
+  #nodocMode .nodoc-creation-tablist {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #nodocMode .nodoc-creation-tab {
+    width: 100%;
+    padding: .5rem .55rem;
+  }
+
+  #nodocMode .nodoc-codex-prompt-meta,
+  #nodocMode .nodoc-codex-prompt-output-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  #nodocMode .nodoc-codex-prompt-copy {
+    width: 100%;
+  }
+}
+
+@media (max-width: 991.98px) {
+  #nodocMode .nodoc-guide-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #nodocMode .nodoc-sidebar,
+  #nodocMode .nodoc-sidebar .guide-sidebar-card {
+    position: static;
+    max-height: none;
+  }
+}
+.nodoc-workshop-meta a { color: var(--oracle-red, #c74634); font-weight: 700; }
+.nodoc-workshop-tree { display: grid; gap: .7rem; }
+.nodoc-tree-group { border: 1px solid rgba(22, 42, 63, .14); border-radius: 14px; background: rgba(255,255,255,.86); overflow: hidden; }
+.nodoc-tree-group summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 1rem; padding: .9rem 1rem; font-weight: 700; color: #172b4d; }
+.nodoc-tree-group summary::-webkit-details-marker { display: none; }
+.nodoc-tree-group summary::before { content: "＋"; color: #c74634; font-size: 1.1rem; line-height: 1; }
+.nodoc-tree-group[open] summary::before { content: "−"; }
+.nodoc-tree-group summary small { color: #526477; font-weight: 400; text-align: right; }
+.nodoc-tree-group ol, .nodoc-tree-leaf, .nodoc-tree-evidence { margin: 0; padding: 0 1rem 1rem 2.8rem; color: #334e68; }
+.nodoc-tree-evidence { color: #7b341e; font-size: .94rem; }
+@media (max-width: 700px) { .nodoc-tree-group summary { display: block; } .nodoc-tree-group summary small { display: block; text-align: left; margin: .35rem 0 0 1.6rem; } }
+
+/* NoDoc search and coordinated left-navigation accordion. */
+#nodocMode .nodoc-search-form {
+  max-width: 760px;
+  margin: 1.1rem 0 .35rem;
+}
+
+#nodocMode .nodoc-search-form .search-group {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+#nodocMode .nodoc-search-form .input-group-text,
+#nodocMode .nodoc-search-form .form-control,
+#nodocMode .nodoc-search-form .btn {
+  min-height: 46px;
+  border-color: rgba(36, 59, 83, .22);
+}
+
+#nodocMode .nodoc-search-status {
+  min-height: 1.35rem;
+  margin-top: .4rem;
+  color: #526477;
+  font-size: .9rem;
+}
+
+#nodocMode .nodoc-search-results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .65rem;
+  margin: .45rem 0 1rem;
+}
+
+#nodocMode .nodoc-search-results[hidden] {
+  display: none;
+}
+
+#nodocMode .nodoc-search-result {
+  display: grid;
+  gap: .22rem;
+  padding: .85rem 1rem;
+  border: 1px solid rgba(36, 59, 83, .16);
+  border-radius: 8px;
+  background: #fff;
+  color: #243b53;
+  text-align: left;
+}
+
+#nodocMode .nodoc-search-result:hover,
+#nodocMode .nodoc-search-result:focus-visible {
+  border-color: rgba(199, 70, 52, .55);
+  background: #fff8f5;
+}
+
+#nodocMode .nodoc-search-result-meta {
+  color: #6b7785;
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+#nodocMode .nodoc-search-result strong {
+  color: #172b4d;
+}
+
+#nodocMode .nodoc-search-result > span:last-child {
+  color: #526477;
+  font-size: .88rem;
+}
+
+#nodocMode .nodoc-side-nav {
+  gap: 0;
+}
+
+#nodocMode .nodoc-nav-title,
+#nodocMode .nodoc-nav-tasks button {
+  width: 100%;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #243b53;
+  font: inherit;
+  text-align: left;
+}
+
+#nodocMode .nodoc-nav-title {
+  position: relative;
+  min-height: 42px;
+  padding: .68rem 2rem .68rem .75rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+#nodocMode .nodoc-nav-group {
+  border-top: 1px solid rgba(36, 59, 83, .12);
+  padding: .25rem 0;
+}
+
+#nodocMode .nodoc-nav-group > .nodoc-nav-title::after {
+  content: "+";
+  position: absolute;
+  top: 50%;
+  right: .72rem;
+  transform: translateY(-50%);
+  color: #c74634;
+  font-size: 1rem;
+}
+
+#nodocMode .nodoc-nav-group.is-open > .nodoc-nav-title::after {
+  content: "-";
+}
+
+#nodocMode .nodoc-nav-title:hover,
+#nodocMode .nodoc-nav-title:focus-visible,
+#nodocMode .nodoc-nav-tasks button:hover,
+#nodocMode .nodoc-nav-tasks button:focus-visible {
+  background: rgba(199, 70, 52, .08);
+  color: #a82e1b;
+}
+
+#nodocMode .nodoc-nav-title.is-active {
+  background: #fff1ed;
+  color: #a82e1b;
+}
+
+#nodocMode .nodoc-nav-tasks {
+  display: grid;
+  gap: .1rem;
+  padding: .15rem 0 .35rem;
+}
+
+#nodocMode .nodoc-nav-tasks[hidden] {
+  display: none;
+}
+
+#nodocMode .nodoc-nav-tasks button {
+  padding: .45rem .65rem .45rem 1.75rem;
+  font-size: .88rem;
+  line-height: 1.35;
+}
+
+#nodocMode .nodoc-nav-tasks button.is-active {
+  background: rgba(199, 70, 52, .1);
+  color: #a82e1b;
+  font-weight: 700;
+}
+
+#nodocMode .nodoc-lab-panel {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+#nodocMode .nodoc-tree-content {
+  padding: .25rem 0 1rem;
+}
+
+@media (max-width: 767.98px) {
+  #nodocMode .nodoc-search-results {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* NoDoc hero: keep the platform destination in the title so the page has one clear CTA. */
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .card-body {
+  min-height: 0;
+  padding: 30px 38px 26px !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-overline {
+  margin-bottom: 9px;
+  font-size: 16px;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: .35em;
+  max-width: none;
+  font-size: clamp(32px, 3.2vw, 46px);
+  line-height: 1.06;
+  white-space: nowrap;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-copy {
+  max-width: 70ch;
+  margin-top: .8rem;
+}
+
+#nodocMode .nodoc-title-link {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  text-decoration: none !important;
+  transition: opacity 160ms ease;
+}
+
+#nodocMode .nodoc-hero-title-copy {
+  display: inline-block;
+  flex: 0 0 auto;
+  font-size: .8em;
+}
+
+#nodocMode .nodoc-title-logo {
+  display: block;
+  width: auto;
+  height: 1em;
+  max-width: 8em;
+  object-fit: contain;
+}
+
+#nodocMode .nodoc-title-link:hover,
+#nodocMode .nodoc-title-link:focus-visible {
+  opacity: .82;
+}
+
+#nodocMode .nodoc-search-form {
+  width: min(100%, 1080px);
+  max-width: none;
+  margin: 1.35rem auto .65rem;
+}
+
+#nodocMode .nodoc-search-form .search-group {
+  min-height: 58px;
+  box-shadow: 0 10px 24px rgba(36, 59, 83, .08);
+}
+
+#nodocMode .nodoc-search-form .input-group-text,
+#nodocMode .nodoc-search-form .form-control,
+#nodocMode .nodoc-search-form .btn {
+  min-height: 58px;
+}
+
+#nodocMode .nodoc-search-form .form-control {
+  font-size: 1.05rem;
+}
+
+/* All top-level workshop labels share this base treatment. Active state changes
+   color and background only, so Introduction and Lab 1-6 remain consistent. */
+#nodocMode .nodoc-nav-title {
+  display: block;
+  min-width: 0;
+  padding: .68rem 3.35rem .68rem .75rem !important;
+  font-size: .88rem;
+  font-weight: 400;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+#nodocMode .nodoc-nav-group > .nodoc-nav-title::after {
+  pointer-events: none;
+}
+
+#nodocMode .nodoc-tree-group > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(72px, 120px);
+  align-items: start;
+  gap: 1rem;
+}
+
+#nodocMode .nodoc-tree-group > summary > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+#nodocMode .nodoc-tree-group > summary > small {
+  min-width: 0;
+  max-width: 120px;
+  line-height: 1.35;
+}
+
+#nodocMode .nodoc-tree-content > .media-player-card {
+  margin: 0 0 1.25rem;
+}
+
+@media (max-width: 700px) {
+  #app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .card-body {
+    padding: 28px 22px 24px !important;
+  }
+
+  #nodocMode .nodoc-tree-group > summary {
+    display: block;
+  }
+
+  #nodocMode .nodoc-tree-group > summary > small {
+    display: block;
+    max-width: none;
+    margin: .35rem 0 0 1.65rem;
+    text-align: left;
+  }
+}
+
+/* Responsive overrides must remain after the component rules above. */
+@media (max-width: 700px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .qa-order-content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .qa-order-content .step-figure,
+  #app[data-redwood-creator-pass="2026-05-25"] .qa-order-content .step-figure img {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tabs {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(5.25rem, 0.62fr);
+    gap: 0.35rem;
+    overflow-x: visible;
+    padding: 0.6rem 0.75rem 0;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .authoring-route-tab {
+    width: 100%;
+    min-width: 0;
+    padding: 0.55rem 0.45rem;
+    gap: 0.35rem;
+    flex: initial;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] .authoring-route-badge {
+    min-height: 1.5rem;
+    padding: 0.2rem 0.48rem;
+    font-size: 0.68rem;
   }
 }

@@ -18,3 +18,5 @@ playwright/.auth/
 storage-state*.json
 *.log
 *.tmp
+deploy/vm/.env
+deploy/vm/secrets/
