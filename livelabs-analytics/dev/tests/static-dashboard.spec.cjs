@@ -15,7 +15,12 @@ test("approved dashboard shell and Inventory dimensions remain stable", async ({
     "Retirement"
   ]);
   await expect(page.locator("h3", { hasText: /^Top (10|50|100)$/ })).toHaveCount(0);
-  await page.locator('[data-load-lazy-section="replacement-suggestions"]').click();
+  await expect(page.locator(".lazy-section-button")).toHaveCount(0);
+  await expect(page.locator('#top-performers [data-filter-table="top-performer-top-100-workshops"]')).toHaveCount(1);
+  await expect(page.locator('#at-risk-content [data-filter-table="at-risk-top-100-workshops"]')).toHaveCount(1);
+  await expect(page.locator('#retire-now-content [data-filter-table="retire-now-top-100-workshops"]')).toHaveCount(1);
+  await expect(page.locator('#replacement-suggestions [data-filter-table="replacement-recommendations"]')).toHaveCount(1);
+  await expect(page.locator('#disabled-content [data-filter-table="disabled-workshops"]')).toHaveCount(1);
   await expect(page.locator('#replacement-recommendations tbody > tr.expandable-row[data-filter-row="true"]')).toHaveCount(100);
   const dashboardHeader = await page.locator("main > .page-header").boundingBox();
 
@@ -81,7 +86,6 @@ test("search selection and both Back to Dashboard controls reset the search UI",
 
 test("rank column stays clickable while hidden from the sort dropdown", async ({ page }) => {
   await page.goto("/", { waitUntil: "networkidle" });
-  await page.locator('[data-load-lazy-section="top-performers"]').click();
   const table = page.locator('[data-filter-table="top-performer-top-100-workshops"]');
   const tableDisclosure = page.locator("details.ranked-table-disclosure").filter({ has: table }).first();
   if (!(await tableDisclosure.getAttribute("open"))) await tableDisclosure.locator(":scope > summary").click();

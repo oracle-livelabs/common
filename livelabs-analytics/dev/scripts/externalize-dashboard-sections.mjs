@@ -11,27 +11,27 @@ const sections = [
   {
     id: "top-performers",
     label: "Top Performers",
-    description: "Load the scored Top 100 workshop and sprint review tables when you need them.",
+    description: "The scored Top 100 workshop and sprint review tables load automatically in the background.",
   },
   {
     id: "at-risk-content",
     label: "At-Risk Content",
-    description: "Load the at-risk review queue when you need to assess retirement signals.",
+    description: "The at-risk review queue loads automatically in the background.",
   },
   {
     id: "retire-now-content",
     label: "Retire-Now Content",
-    description: "Load the governed retirement review queue when you need it.",
+    description: "The governed retirement review queue loads automatically in the background.",
   },
   {
     id: "replacement-suggestions",
     label: "Replacement Suggestions",
-    description: "Load the algorithmic successor review queue when you need it.",
+    description: "The algorithmic successor review queue loads automatically in the background.",
   },
   {
     id: "disabled-content",
     label: "Disabled Content",
-    description: "Load the disabled-content audit tables when you need them.",
+    description: "The disabled-content audit tables load automatically in the background.",
   },
 ];
 
@@ -53,7 +53,7 @@ function sectionBounds(html, id) {
 }
 
 function placeholder(section) {
-  return `<section class="section lazy-section" id="${section.id}" data-lazy-section="${section.id}" data-lazy-src="./assets/fragments/${section.id}.html" aria-busy="false"><div class="section-head"><div class="section-head-top"><h2>${section.label}</h2></div><p>${section.description}</p></div><div class="lazy-section-panel"><p>This large review queue is loaded on demand so the dashboard opens quickly.</p><button class="lazy-section-button" type="button" data-load-lazy-section="${section.id}">Load ${section.label}</button></div></section>`;
+  return `<section class="section lazy-section" id="${section.id}" data-lazy-section="${section.id}" data-lazy-src="./assets/fragments/${section.id}.html" aria-busy="true"><div class="section-head"><div class="section-head-top"><h2>${section.label}</h2></div><p>${section.description}</p></div><div class="lazy-section-panel"><p class="lazy-section-status" role="status">Loading review queue in the background...</p></div></section>`;
 }
 
 let html = fs.readFileSync(htmlPath, "utf8");

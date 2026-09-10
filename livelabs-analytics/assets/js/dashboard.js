@@ -942,7 +942,7 @@
       section.dataset.lazyError = "true";
       section.setAttribute("aria-busy", "false");
       const panel = section.querySelector(".lazy-section-panel");
-      if (panel) panel.innerHTML = `<p>${escapeHtml(message)}</p><button class="lazy-section-button" type="button" data-load-lazy-section="${escapeHtml(section.dataset.lazySection || "")}">Try again</button>`;
+      if (panel) panel.innerHTML = `<p class="lazy-section-status" role="alert">${escapeHtml(message)}</p>`;
     }
     async function loadLazySection(sectionId) {
       const placeholder = lazySectionPlaceholder(sectionId);
@@ -992,13 +992,6 @@
     }
     function configureLazySections() {
       document.addEventListener("click", (event) => {
-        const loadButton = event.target.closest("[data-load-lazy-section]");
-        if (loadButton) {
-          event.preventDefault();
-          const sectionId = loadButton.dataset.loadLazySection;
-          loadLazySection(sectionId).then((section) => section?.scrollIntoView({ block: "start", behavior: "smooth" }));
-          return;
-        }
         const anchor = event.target.closest('a[href^="#"]');
         const sectionId = anchor?.getAttribute("href")?.slice(1);
         if (!sectionId || !lazySectionPlaceholder(sectionId)) return;
@@ -1007,6 +1000,10 @@
           history.replaceState(null, "", `#${sectionId}`);
           section?.scrollIntoView({ block: "start", behavior: "smooth" });
         });
+      });
+      document.querySelectorAll("[data-lazy-section]").forEach((section) => {
+        const sectionId = section.dataset.lazySection;
+        if (sectionId) void loadLazySection(sectionId);
       });
       const initialSectionId = location.hash.slice(1);
       if (initialSectionId && lazySectionPlaceholder(initialSectionId)) {

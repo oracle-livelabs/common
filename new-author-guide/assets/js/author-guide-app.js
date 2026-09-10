@@ -2905,24 +2905,48 @@
   }
 
   function hydrateVideoCards(root) {
+    var scope = root || document;
+
     if (window.RedwoodVideoPlayer && typeof window.RedwoodVideoPlayer.hydrate === "function") {
-      window.RedwoodVideoPlayer.hydrate(root || document);
+      window.RedwoodVideoPlayer.hydrate(scope);
     }
+
+    hidePreviewVideoComponents(scope);
+  }
+
+  function hidePreviewVideoComponents(root) {
+    var scope = root || document;
+
+    scope.querySelectorAll(
+      '[data-video-card], [data-video-status="preview"], [data-video-availability="future"], .media-player-card, .video-placeholder-card, video, audio'
+    ).forEach(function (node) {
+      node.hidden = true;
+      node.setAttribute("aria-hidden", "true");
+      if (node.matches('[data-video-card], [data-video-status="preview"], .media-player-card, .video-placeholder-card')) {
+        node.setAttribute("data-video-availability", "future");
+      }
+    });
   }
 
   function renderVideoCardMount(config) {
+    var options = Object.assign({}, config || {});
+
+    // Preview/template recordings are intentionally disabled. Re-enable this
+    // path only when an approved product recording is supplied explicitly.
+    if (!options.src || options.approvedRecording !== true) {
+      return "";
+    }
+
     if (!window.RedwoodVideoPlayer || typeof window.RedwoodVideoPlayer.createMountMarkup !== "function") {
       return "";
     }
 
+    delete options.approvedRecording;
     return window.RedwoodVideoPlayer.createMountMarkup(Object.assign({
-      src: "../assets/media/guide/author-guide-template.mp4",
-      captions: "../assets/media/guide/author-guide-template.vtt",
-      status: "preview",
-      sourceNote: "Preview asset only. Use the written steps and transcript until the approved walkthrough is supplied.",
-      autoplay: true,
-      loop: true
-    }, config || {}));
+      status: "approved",
+      autoplay: false,
+      loop: false
+    }, options));
   }
 
   function openBubble(id) {
