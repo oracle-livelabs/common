@@ -4388,9 +4388,14 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
 
 /* Recording components stay in the source for the next release, but are not shown in this functionality-and-content release. */
 #app[data-redwood-creator-pass="2026-05-25"] [data-video-card],
+#app[data-redwood-creator-pass="2026-05-25"] [data-video-status="preview"],
+#app[data-redwood-creator-pass="2026-05-25"] [data-video-status="future"],
+#app[data-redwood-creator-pass="2026-05-25"] [data-video-availability="future"],
 #app[data-redwood-creator-pass="2026-05-25"] .media-player-card,
+#app[data-redwood-creator-pass="2026-05-25"] .video-placeholder-card,
 #app[data-redwood-creator-pass="2026-05-25"] .nodoc-task-media,
-#app[data-redwood-creator-pass="2026-05-25"] video {
+#app[data-redwood-creator-pass="2026-05-25"] video,
+#app[data-redwood-creator-pass="2026-05-25"] audio {
   display: none !important;
 }
 
@@ -5410,6 +5415,46 @@ body.home-no-scroll #app .hub-hero {
   margin-bottom: 0;
 }
 
+#nodocMode .nodoc-vibe-introduction {
+  margin: .9rem 0 .25rem;
+  padding: .85rem 1rem;
+  border-left: 3px solid rgba(199, 70, 52, .35);
+  border-radius: 8px;
+  background: rgba(246, 248, 250, .68);
+}
+
+#nodocMode .nodoc-vibe-introduction h5 {
+  margin: 0 0 .45rem;
+  color: #172b4d;
+  font-size: 1rem;
+}
+
+#nodocMode .nodoc-architecture-scope-detail {
+  display: grid;
+  gap: .45rem;
+  margin: -.15rem 0 .15rem;
+  padding: .75rem .85rem;
+  border-left: 3px solid rgba(67, 124, 148, .32);
+  border-radius: 7px;
+  background: rgba(246, 248, 250, .72);
+}
+
+#nodocMode .nodoc-architecture-scope-detail[hidden] {
+  display: none;
+}
+
+#nodocMode .nodoc-architecture-scope-detail > label {
+  margin: 0;
+  color: #172b4d;
+  font-size: .88rem;
+  font-weight: 700;
+}
+
+#nodocMode .nodoc-architecture-scope-detail > .nodoc-codex-prompt-meta {
+  display: block;
+  margin: 0;
+}
+
 #nodocMode .nodoc-codex-prompt-builder {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -5547,7 +5592,9 @@ body.home-no-scroll #app .hub-hero {
 #nodocMode .nodoc-codex-prompt-scope,
 #nodocMode .nodoc-codex-prompt-sources,
 #nodocMode .nodoc-codex-prompt-constraints,
-#nodocMode .nodoc-codex-skill-resource-input {
+#nodocMode .nodoc-codex-skill-resource-input,
+#nodocMode .nodoc-custom-prompt-instruction,
+#nodocMode .nodoc-custom-prompt-complexity {
   width: auto;
   max-width: 100%;
   min-width: 0;
@@ -5573,7 +5620,9 @@ body.home-no-scroll #app .hub-hero {
 #nodocMode .nodoc-codex-prompt-scope:focus,
 #nodocMode .nodoc-codex-prompt-sources:focus,
 #nodocMode .nodoc-codex-prompt-constraints:focus,
-#nodocMode .nodoc-codex-skill-resource-input:focus {
+#nodocMode .nodoc-codex-skill-resource-input:focus,
+#nodocMode .nodoc-custom-prompt-instruction:focus,
+#nodocMode .nodoc-custom-prompt-complexity:focus {
   border-color: #c74634;
   box-shadow: 0 0 0 .18rem rgba(199, 70, 52, .14);
 }
@@ -5975,6 +6024,40 @@ body.home-no-scroll #app .hub-hero {
   object-fit: contain;
 }
 
+#nodocMode .nodoc-availability-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.6em;
+  padding: .2em .5em;
+  border: 1px solid rgba(22, 21, 19, .18);
+  border-radius: 999px;
+  color: #6b7280;
+  background: #f4f4f2;
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  font-size: .3em;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .02em;
+  white-space: nowrap;
+}
+
+#nodocMode .nodoc-participation-note {
+  max-width: 72ch;
+  margin: .9rem 0 0;
+  color: #161513;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.08rem, 1.55vw, 1.28rem);
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+#nodocMode .nodoc-participation-note a {
+  color: #8f2f20;
+  font-weight: 600;
+  text-underline-offset: .12em;
+  text-decoration-thickness: 1px;
+}
+
 #nodocMode .nodoc-title-link:hover,
 #nodocMode .nodoc-title-link:focus-visible {
   opacity: .82;
@@ -6043,6 +6126,15 @@ body.home-no-scroll #app .hub-hero {
 @media (max-width: 700px) {
   #app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .card-body {
     padding: 28px 22px 24px !important;
+  }
+
+  #app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-title {
+    flex-wrap: wrap;
+    white-space: normal;
+  }
+
+  #nodocMode .nodoc-availability-badge {
+    font-size: .31em;
   }
 
   #nodocMode .nodoc-tree-group > summary {
