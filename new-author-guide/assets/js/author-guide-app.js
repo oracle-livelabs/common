@@ -495,7 +495,9 @@
   var workshopMarkdownError = document.getElementById("workshopMarkdownError");
   var copyGeneratedMarkdown = document.getElementById("copyGeneratedMarkdown");
   var bubbleModalElement = document.getElementById("bubbleModal");
-  var bubbleModal = bubbleModalElement ? bootstrap.Modal.getOrCreateInstance(bubbleModalElement) : null;
+  var bubbleModal = bubbleModalElement && window.bootstrap && window.bootstrap.Modal
+    ? window.bootstrap.Modal.getOrCreateInstance(bubbleModalElement)
+    : null;
   var imageLightbox = document.getElementById("imageLightbox");
   var imageLightboxImage = document.getElementById("imageLightboxImage");
   var imageLightboxCaption = document.getElementById("imageLightboxCaption");
@@ -526,6 +528,45 @@
         backdrop.remove();
       });
     });
+
+    bubbleModalElement.addEventListener("click", function (event) {
+      if (!bubbleModal && event.target.closest("[data-bs-dismiss='modal']")) {
+        hideBubbleModal();
+      }
+    });
+  }
+
+  function showBubbleModal() {
+    if (bubbleModal) {
+      bubbleModal.show();
+      return;
+    }
+
+    if (!bubbleModalElement) {
+      return;
+    }
+
+    bubbleModalElement.classList.add("show");
+    bubbleModalElement.setAttribute("aria-hidden", "false");
+    bubbleModalElement.style.display = "block";
+    document.body.classList.add("modal-open");
+  }
+
+  function hideBubbleModal() {
+    if (bubbleModal) {
+      bubbleModal.hide();
+      return;
+    }
+
+    if (!bubbleModalElement) {
+      return;
+    }
+
+    closeImageLightbox({ announce: false, restoreFocus: false });
+    bubbleModalElement.classList.remove("show");
+    bubbleModalElement.setAttribute("aria-hidden", "true");
+    bubbleModalElement.style.display = "none";
+    document.body.classList.remove("modal-open");
   }
 
   function escapeHtml(value) {
@@ -729,6 +770,14 @@
     }
 
     return window.location.hash || "#home";
+  }
+
+  function routeNeedsGuideCatalog(route) {
+    var cleanRoute = String(route || "").toLowerCase();
+
+    return cleanRoute === "#search"
+      || cleanRoute.indexOf("#search:") === 0
+      || cleanRoute.indexOf("#guide-") === 0;
   }
 
   function routeUrl(hash) {
@@ -3044,9 +3093,7 @@
     }
 
     hydrateVideoCards(bubbleModalElement);
-    if (bubbleModal) {
-      bubbleModal.show();
-    }
+    showBubbleModal();
     setLiveMessage(item.title + " opened.");
   }
 
@@ -4370,8 +4417,8 @@
     setModeRegionVisibility(generatorMode, mode === "generator");
     setModeRegionVisibility(searchMode, mode === "search");
 
-    if (mode !== "explorer" && bubbleModal) {
-      bubbleModal.hide();
+    if (mode !== "explorer") {
+      hideBubbleModal();
     }
 
     updateNav();
@@ -4991,9 +5038,9 @@
       return;
     }
 
-    if (event.key === "Escape" && bubbleModalElement && bubbleModal && bubbleModalElement.classList.contains("show")) {
+    if (event.key === "Escape" && bubbleModalElement && bubbleModalElement.classList.contains("show")) {
       event.preventDefault();
-      bubbleModal.hide();
+      hideBubbleModal();
       return;
     }
 
@@ -5239,9 +5286,19 @@
   renderExplorer();
   renderGuideNav();
   loadNoDocSearchEntries();
-  loadGuideCatalog().finally(function () {
-    applyHash(routeTokenFromLocation());
+  var initialRoute = routeTokenFromLocation();
+  var initialRouteNeedsCatalog = routeNeedsGuideCatalog(initialRoute);
+
+  if (!initialRouteNeedsCatalog) {
+    applyHash(initialRoute);
     updateHashFromState({ replace: true });
+  }
+
+  loadGuideCatalog().finally(function () {
+    if (initialRouteNeedsCatalog) {
+      applyHash(routeTokenFromLocation());
+      updateHashFromState({ replace: true });
+    }
     scheduleLayoutSync();
   });
 }());
