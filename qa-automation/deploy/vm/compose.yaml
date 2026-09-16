@@ -20,6 +20,7 @@ services:
       QA_AUTH_TARGET_URL: ${QA_AUTH_TARGET_URL:-}
       QA_BASE_URL: ${QA_BASE_URL:-}
       QA_ROOT_REPORTS_BASE: /var/qa-reports
+      QA_CATALOG_EXCLUSIONS_FILE: /var/qa-config/catalog-exclusions.json
       QA_OBJECT_STORAGE_NAMESPACE: ${QA_OBJECT_STORAGE_NAMESPACE:-}
       QA_OBJECT_STORAGE_BUCKET: ${QA_OBJECT_STORAGE_BUCKET:-}
       QA_OBJECT_STORAGE_PREFIX: ${QA_OBJECT_STORAGE_PREFIX:-livelabs-qa}
@@ -32,6 +33,7 @@ services:
     volumes:
       - jenkins_home:/var/jenkins_home
       - qa_reports:/var/qa-reports
+      - qa_config:/var/qa-config:ro
     shm_size: 2gb
     security_opt:
       - no-new-privileges:true
@@ -65,6 +67,30 @@ services:
     networks:
       - qa_internal
 
+  exclusion-registry:
+    build:
+      context: ../..
+      dockerfile: deploy/vm/exclusion-registry/Containerfile
+    image: livelabs-qa-exclusion-registry:local
+    restart: unless-stopped
+    environment:
+      QA_EXCLUSION_REGISTRY_INTERNAL_PORT: ${QA_EXCLUSION_REGISTRY_INTERNAL_PORT}
+      QA_CATALOG_EXCLUSIONS_FILE: /var/qa-config/catalog-exclusions.json
+    volumes:
+      - qa_config:/var/qa-config
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:' + process.env.QA_EXCLUSION_REGISTRY_INTERNAL_PORT + '/healthz').then((response) => { if (!response.ok) process.exit(1); }).catch(() => process.exit(1))\""]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - qa_internal
+
   portal:
     build:
       context: ../..
@@ -76,9 +102,12 @@ services:
         condition: service_healthy
       par-resolver:
         condition: service_healthy
+      exclusion-registry:
+        condition: service_healthy
     environment:
       QA_JENKINS_INTERNAL_PORT: ${QA_JENKINS_INTERNAL_PORT}
       QA_PAR_RESOLVER_INTERNAL_PORT: ${QA_PAR_RESOLVER_INTERNAL_PORT}
+      QA_EXCLUSION_REGISTRY_INTERNAL_PORT: ${QA_EXCLUSION_REGISTRY_INTERNAL_PORT}
       QA_PORTAL_INTERNAL_PORT: ${QA_PORTAL_INTERNAL_PORT}
       NGINX_ENVSUBST_FILTER: ^QA_
     ports:
@@ -122,6 +151,7 @@ secrets:
 volumes:
   jenkins_home:
   qa_reports:
+  qa_config:
 
 networks:
   qa_internal:

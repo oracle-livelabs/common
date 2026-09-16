@@ -59,6 +59,7 @@ const DEFAULT_CATALOG_INDEX_FILE = path.join(
   "generated",
   "livelabs_catalog_index.json",
 );
+const DEFAULT_CATALOG_EXCLUSIONS_FILE = path.join(PROJECT_ROOT, "config", "catalog-exclusions.json");
 const STOP_WORDS = new Set([
   "about",
   "and",
@@ -80,6 +81,7 @@ const STOP_WORDS = new Set([
 ]);
 
 let cachedLoadResult: CatalogIndexLoadResult | undefined;
+let cachedExcludedIds: Set<string> | undefined;
 
 export function resolveCatalogIndexFile(): string {
   const configuredFile = process.env.QA_CATALOG_INDEX_FILE?.trim();
@@ -125,9 +127,14 @@ export function catalogIndexItems(type?: CatalogIndexItemType): CatalogIndexItem
   }
 
   const allowedIds = parseList(process.env.QA_CATALOG_INDEX_IDS);
+  const excludedIds = catalogExcludedIds();
   const configuredLimit = parseIntegerFlag(process.env.QA_CATALOG_INDEX_LIMIT, 0);
   const configuredShard = parseShard(process.env.QA_CATALOG_INDEX_SHARD);
   const selectedItems = loadResult.index.items.filter((item) => {
+    if (excludedIds.has(item.id) || excludedIds.has(item.slug) || excludedIds.has(item.normalized_href)) {
+      return false;
+    }
+
     if (allowedIds.length === 0) {
       return true;
     }
@@ -140,6 +147,37 @@ export function catalogIndexItems(type?: CatalogIndexItemType): CatalogIndexItem
   const filteredItems = type ? shardedItems.filter((item) => item.type === type) : shardedItems;
 
   return configuredLimit > 0 ? filteredItems.slice(0, configuredLimit) : filteredItems;
+}
+
+function catalogExcludedIds(): Set<string> {
+  if (cachedExcludedIds) return cachedExcludedIds;
+
+  const configuredFile = process.env.QA_CATALOG_EXCLUSIONS_FILE?.trim();
+  const filePath = configuredFile
+    ? path.isAbsolute(configuredFile)
+      ? configuredFile
+      : path.resolve(PROJECT_ROOT, configuredFile)
+    : DEFAULT_CATALOG_EXCLUSIONS_FILE;
+
+  if (!existsSync(filePath)) {
+    cachedExcludedIds = new Set();
+    return cachedExcludedIds;
+  }
+
+  const parsed = JSON.parse(readFileSync(filePath, "utf-8")) as unknown;
+  if (!isRecord(parsed) || !Array.isArray(parsed.items)) {
+    throw new Error(`Catalog exclusions must contain an items array: ${filePath}`);
+  }
+
+  cachedExcludedIds = new Set(
+    parsed.items.map((item, index) => {
+      if (!isRecord(item) || typeof item.id !== "string" || !item.id.trim()) {
+        throw new Error(`Catalog exclusion items[${index}] must contain a non-empty id: ${filePath}`);
+      }
+      return item.id.trim();
+    }),
+  );
+  return cachedExcludedIds;
 }
 
 export async function attachCatalogItem(testInfo: TestInfo, item: CatalogIndexItem): Promise<void> {

@@ -313,9 +313,20 @@ export default class RootSummaryReporter {
 
     return {
       runId,
+      attemptId: String(process.env.QA_RUN_ATTEMPT_ID || ""),
       reportChannel: reportChannelFromRoot(this.reportsRoot),
       runType: this.landingPage === "par-links.html" ? "par" : "regression",
       status: result.status,
+      completion: {
+        state:
+          result.status === "interrupted" ||
+          result.status === "timedout" ||
+          counts.interrupted > 0 ||
+          counts.timedOut > 0 ||
+          counts.total < this.totalTests
+            ? "incomplete"
+            : "completed",
+      },
       startedAt: this.startedAt.toISOString(),
       endedAt: endedAt.toISOString(),
       durationMs: endedAt.getTime() - this.startedAt.getTime(),
@@ -620,6 +631,7 @@ export function writeSummaryFiles(outputDir, summary, reportsRoot) {
   fs.writeFileSync(path.join(outputDir, "summary.html"), htmlSummary(summary, pageContext), "utf-8");
   fs.writeFileSync(path.join(outputDir, "retest-list.html"), reviewListPageHtml("retest", summary, pageContext), "utf-8");
   fs.writeFileSync(path.join(outputDir, "fix-list.html"), reviewListPageHtml("fix", summary, pageContext), "utf-8");
+  fs.writeFileSync(path.join(outputDir, "excluded-workshops.html"), excludedWorkshopsPageHtml(summary, pageContext), "utf-8");
   fs.writeFileSync(path.join(outputDir, "par-links.html"), parLinksPageHtml(summary, pageContext), "utf-8");
   fs.writeFileSync(
     path.join(outputDir, "par-retest-list.html"),
@@ -2148,10 +2160,70 @@ function htmlSummary(summary, context = {}) {
         updateReviewCounts();
       });
     }
+    let catalogExclusions = {};
+    function updateExclusionControls() {
+      for (const counter of document.querySelectorAll("[data-exclusion-count]")) {
+        counter.innerText = String(Object.keys(catalogExclusions).length);
+      }
+      for (const button of document.querySelectorAll("[data-exclusion-action]")) {
+        const entry = qaReviewItems[button.getAttribute("data-review-id") || ""];
+        const selected = Boolean(entry?.itemId && catalogExclusions[entry.itemId]);
+        button.classList.toggle("selected", selected);
+        button.setAttribute("aria-pressed", selected ? "true" : "false");
+        button.innerText = selected ? "Will not be scanned" : "Stop scanning this workshop";
+      }
+    }
+    function setCatalogExclusions(registry) {
+      catalogExclusions = Object.fromEntries((registry?.items || []).map((item) => [String(item.id), item]));
+      updateExclusionControls();
+    }
+    async function loadCatalogExclusions() {
+      try {
+        const response = await fetch("/api/catalog-exclusions", { cache: "no-store" });
+        if (!response.ok) throw new Error("Registry request failed");
+        setCatalogExclusions(await response.json());
+      } catch {
+        showReviewMessage("The excluded workshop registry is temporarily unavailable.");
+      }
+    }
+    for (const button of document.querySelectorAll("[data-exclusion-action]")) {
+      button.addEventListener("click", async () => {
+        const entry = qaReviewItems[button.getAttribute("data-review-id") || ""];
+        if (!entry?.itemId) {
+          showReviewMessage("This workshop does not have a WMS ID and cannot be excluded.");
+          return;
+        }
+        if (catalogExclusions[entry.itemId]) {
+          showReviewMessage("This workshop is already excluded. Use Excluded workshops to undo it.");
+          return;
+        }
+        button.disabled = true;
+        try {
+          const response = await fetch("/api/catalog-exclusions", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-QA-Action": "manage-catalog-exclusions" },
+            body: JSON.stringify({
+              id: entry.itemId,
+              title: entry.testName,
+              reason: "Retired workshop confirmed by the content owner",
+            }),
+          });
+          const registry = await response.json();
+          if (!response.ok) throw new Error(registry.error || "Registry update failed");
+          setCatalogExclusions(registry);
+          showReviewMessage(entry.testName + " will not be included in the next Jenkins scan.");
+        } catch (error) {
+          showReviewMessage(error.message || "The workshop could not be excluded.");
+        } finally {
+          button.disabled = false;
+        }
+      });
+    }
     window.addEventListener("storage", (event) => {
       if (event.key === REVIEW_STORAGE_KEY) updateReviewCounts();
     });
     updateReviewCounts();
+    loadCatalogExclusions();
   </script>
   ${context.isLatest ? latestSummaryRefreshScript(summary.runId) : ""}
 </body>
@@ -2248,7 +2320,98 @@ function reviewNavigationHtml(historyHref = "") {
     <a href="par-links.html">PAR Links</a>
     <a href="retest-list.html">Retest List <span class="review-count" data-review-count="retest">0</span></a>
     <a href="fix-list.html">Fix List <span class="review-count" data-review-count="fix">0</span></a>
+    <a href="excluded-workshops.html">Excluded workshops <span class="review-count" data-exclusion-count>0</span></a>
   </nav>`;
+}
+
+function excludedWorkshopsPageHtml(summary, context = {}) {
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Excluded workshops</title>
+  <style>
+    :root { font-family: Arial, Helvetica, sans-serif; color: #1f2933; background: #f5f7fb; --line:#d9e2ec; --muted:#52606d; --link:#005ea8; --warn:#8a5a00; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header { background: #fff; border-bottom: 1px solid var(--line); padding: 28px 32px 22px; }
+    main, .page-title { margin: 0 auto; max-width: 1160px; }
+    main { padding: 24px 28px 48px; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: 30px; margin-bottom: 8px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 17px; }
+    .meta, .item-meta { color: var(--muted); display: flex; flex-wrap: wrap; gap: 9px; font-size: 13px; }
+    .review-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .review-nav a, .button { align-items: center; appearance: none; background:#fff; border:1px solid #bcccdc; border-radius:6px; color:#1f2933; cursor:pointer; display:inline-flex; font:700 13px Arial,Helvetica,sans-serif; justify-content:center; min-height:36px; padding:8px 10px; text-decoration:none; }
+    .review-nav a:hover, .button:hover { border-color:var(--link); color:var(--link); }
+    .review-count { background:#e0f2fe; border:1px solid #bae6fd; border-radius:999px; color:#075985; margin-left:6px; min-width:22px; padding:3px 6px; text-align:center; }
+    .panel { background:#fff; border:1px solid var(--line); border-radius:8px; padding:18px; }
+    .panel-heading { margin-bottom:14px; }
+    .notice { background:#fff4d6; border:1px solid #f7d070; border-radius:6px; color:#6b4b00; line-height:1.45; margin-bottom:14px; padding:12px; }
+    .list { display:grid; gap:10px; }
+    .entry { align-items:center; background:#f9fbfd; border:1px solid var(--line); border-left:5px solid var(--warn); border-radius:6px; display:flex; gap:16px; justify-content:space-between; padding:14px; }
+    .entry p { color:var(--muted); margin-top:8px; }
+    .button.danger { color:#b42318; }
+    .empty { border:1px dashed #bcccdc; border-radius:6px; color:var(--muted); padding:22px; text-align:center; }
+    .message { color:var(--muted); min-height:20px; margin-top:12px; }
+    code { background:#eef2f7; border:1px solid #dbe4ee; border-radius:4px; padding:2px 5px; }
+    @media (max-width:720px) { header { padding:22px 18px; } main { padding:18px; } .entry { align-items:start; display:grid; } }
+  </style>
+</head>
+<body>
+  <header><div class="page-title">
+    <h1>Excluded workshops</h1>
+    <div class="meta"><span>Confirmed retired workshops are skipped automatically by every Jenkins scan.</span></div>
+    ${reviewNavigationHtml(context.historyHref)}
+  </div></header>
+  <main>
+    <section class="panel">
+      <div class="panel-heading"><h2><span data-count>0</span> workshop(s) will not be scanned</h2></div>
+      <p class="notice">Only exclude a workshop after its owner confirms that it was retired.</p>
+      <div class="list" data-list><div class="empty">Loading excluded workshops...</div></div>
+      <p class="message" data-message></p>
+    </section>
+  </main>
+  <script>
+    const list = document.querySelector("[data-list]");
+    const count = document.querySelector("[data-count]");
+    const message = document.querySelector("[data-message]");
+    function escapeText(value) { return String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;"); }
+    function showMessage(value) { message.innerText = value; }
+    function render(registry) {
+      const items = registry?.items || [];
+      count.innerText = String(items.length);
+      for (const counter of document.querySelectorAll("[data-exclusion-count]")) counter.innerText = String(items.length);
+      if (!items.length) {
+        list.innerHTML = '<div class="empty">No workshops are excluded.</div>';
+        return;
+      }
+      list.innerHTML = items.map((item) => '<article class="entry"><div><h3>' + escapeText(item.title || ("WMS " + item.id)) + '</h3><div class="item-meta"><span>WMS <code>' + escapeText(item.id) + '</code></span><span>Retired workshop</span></div><p>' + escapeText(item.reason) + '</p></div><button class="button danger" type="button" data-remove="' + escapeText(item.id) + '">Undo</button></article>').join("");
+      for (const button of document.querySelectorAll("[data-remove]")) {
+        button.addEventListener("click", async () => {
+          button.disabled = true;
+          try {
+            const response = await fetch("/api/catalog-exclusions/" + encodeURIComponent(button.getAttribute("data-remove") || ""), { method: "DELETE", headers: { "X-QA-Action": "manage-catalog-exclusions" } });
+            const registry = await response.json();
+            if (!response.ok) throw new Error(registry.error || "Registry update failed");
+            render(registry);
+            showMessage("The workshop will be included in the next Jenkins scan.");
+          } catch (error) {
+            button.disabled = false;
+            showMessage(error.message || "The workshop could not be restored.");
+          }
+        });
+      }
+    }
+    fetch("/api/catalog-exclusions", { cache: "no-store" })
+      .then(async (response) => { const registry = await response.json(); if (!response.ok) throw new Error(registry.error || "Registry request failed"); render(registry); })
+      .catch((error) => { list.innerHTML = '<div class="empty">The excluded workshop registry is unavailable.</div>'; showMessage(error.message); });
+  </script>
+  ${context.isLatest ? latestSummaryRefreshScript(summary.runId) : ""}
+</body>
+</html>`;
 }
 
 function reviewListPageHtml(type, summary, context = {}) {
@@ -3170,6 +3333,7 @@ function itemDetailHtml(item, failures, context) {
   const tests = item.tests || [];
   const url = item.catalogItem.normalized_href || item.catalogItem.absolute_url || item.catalogItem.href || "";
   const reviewId = reviewEntryId(item, context.summaryRunId || "");
+  const canExclude = canExcludeFromFutureScans(item);
   const issueHeading =
     issues.length === 0
       ? "No issues found"
@@ -3182,13 +3346,19 @@ function itemDetailHtml(item, failures, context) {
         <p>${escapeHtml(
           issues.length === 0
             ? "Every completed check passed for this item."
-            : "Review each problem below, make the change, then add the item to the retest list.",
+            : canExclude
+              ? "Confirm with the workshop owner that this item was retired, then stop scanning it."
+              : "Review each problem below, make the change, then add the item to the retest list.",
         )}</p>
       </div>
       <div class="result-actions">
-        ${url ? `<a class="link-button" href="${escapeAttribute(url)}" target="_blank" rel="noreferrer">Open item in LiveLabs</a>` : ""}
+        ${
+          canExclude
+            ? `<button class="review-button" type="button" data-exclusion-action data-review-id="${escapeAttribute(reviewId)}">Stop scanning this workshop</button>`
+            : `${url ? `<a class="link-button" href="${escapeAttribute(url)}" target="_blank" rel="noreferrer">Open item in LiveLabs</a>` : ""}
         <button class="review-button" type="button" data-review-action="retest" data-review-id="${escapeAttribute(reviewId)}">Add to Retest List</button>
-        ${issues.length > 0 ? `<button class="review-button" type="button" data-review-action="fix" data-review-id="${escapeAttribute(reviewId)}">Add To Fix List</button>` : ""}
+        ${issues.length > 0 ? `<button class="review-button" type="button" data-review-action="fix" data-review-id="${escapeAttribute(reviewId)}">Add To Fix List</button>` : ""}`
+        }
       </div>
     </div>
     ${
@@ -3207,6 +3377,10 @@ function itemDetailHtml(item, failures, context) {
       </div>
     </details>
   </div>`;
+}
+
+function canExcludeFromFutureScans(item) {
+  return (item.issues || []).some((issue) => issue.code === "ROUTING_INVALID_WORKSHOP_ID");
 }
 
 function operatorIssueListHtml(issues) {
@@ -3873,8 +4047,18 @@ function metric(label, value, className = "") {
 }
 
 function runStatusLabel(summary) {
+  if (
+    summary.completion?.state === "incomplete" ||
+    summary.status === "interrupted" ||
+    summary.status === "timedout" ||
+    summary.counts.interrupted > 0 ||
+    summary.counts.timedOut > 0
+  ) {
+    return "Failed - incomplete";
+  }
+
   if (summary.counts.unexpected > 0) {
-    return "Needs review";
+    return "Completed with findings";
   }
 
   if (summary.status === "passed") {
@@ -3889,6 +4073,16 @@ function runStatusLabel(summary) {
 }
 
 function runStatusTone(summary) {
+  if (
+    summary.completion?.state === "incomplete" ||
+    summary.status === "interrupted" ||
+    summary.status === "timedout" ||
+    summary.counts.interrupted > 0 ||
+    summary.counts.timedOut > 0
+  ) {
+    return "fail";
+  }
+
   if (summary.counts.unexpected > 0) {
     return "warn";
   }
@@ -4008,6 +4202,7 @@ function readReportHistory(reportsRoot, landingPage) {
             summary.runType ||
             (landingPage === "par-links.html" || summary.reportChannel === "par" ? "par" : "regression"),
           status: summary.status || "",
+          completionState: summary.completion?.state || "",
           startedAt: summary.startedAt || "",
           endedAt: summary.endedAt || "",
           durationMs: Number(summary.durationMs || 0),
@@ -4190,18 +4385,23 @@ export function reportHistoryPageHtml(history) {
 }
 
 function historyRunState(run, landingPage = "") {
-  const runType = historyRunType(run, landingPage);
-  if (runType.code === "par" && Number(run.parBroken || 0) > 0) {
-    return { label: "Broken links found", tone: "fail" };
+  if (
+    run.completionState === "incomplete" ||
+    run.status === "interrupted" ||
+    run.status === "timedout"
+  ) {
+    return { label: "Failed - incomplete", tone: "fail" };
   }
-  if (runType.code === "par" && Number(run.scanProblems || 0) > 0) {
-    return { label: "Pages not scanned", tone: "fail" };
+  if (
+    Number(run.unexpected || 0) > 0 ||
+    Number(run.parBroken || 0) > 0 ||
+    Number(run.scanProblems || 0) > 0 ||
+    Number(run.parUnverified || 0) > 0
+  ) {
+    return { label: "Completed with findings", tone: "warn" };
   }
-  if (runType.code === "par" && Number(run.parUnverified || 0) > 0) {
-    return { label: "Recheck", tone: "warn" };
-  }
-  if (Number(run.unexpected || 0) > 0 || (run.status && run.status !== "passed")) {
-    return { label: runType.code === "par" ? "Run failed" : "Test failures", tone: "fail" };
+  if (run.status && run.status !== "passed") {
+    return { label: "Failed", tone: "fail" };
   }
   return { label: "Passed", tone: "pass" };
 }

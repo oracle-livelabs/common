@@ -20,6 +20,7 @@ test("results CSV keeps one row per issue and masks sensitive URL values", () =>
     catalogItems: [
       {
         status: "failed",
+        completionState: "completed",
         catalogItem: {
           type: "workshop",
           id: "workshop-42",
@@ -211,7 +212,7 @@ test("renders a selectable history of saved report runs", () => {
   assert.match(html, /runs\/2026-07-20T08-00-00-000Z\/par-links\.html/);
   assert.match(html, /69 pages/);
   assert.match(html, /PAR audit/);
-  assert.match(html, /Pages not scanned/);
+  assert.match(html, /Completed with findings/);
   assert.doesNotMatch(html, /Needs review/);
   assert.match(html, /Passed/);
   assert.doesNotMatch(html, /http-equiv="refresh"/);
@@ -227,6 +228,7 @@ test("labels overall regression history rows separately from PAR audits", () => 
         reportChannel: "regression",
         runType: "regression",
         status: "failed",
+        completionState: "completed",
         startedAt: "2026-07-27T23:00:00.000Z",
         durationMs: 120000,
         itemsTested: 50,
@@ -239,9 +241,32 @@ test("labels overall regression history rows separately from PAR audits", () => 
 
   assert.match(html, /Overall regression/);
   assert.match(html, /QA Hub home/);
-  assert.match(html, /Test failures/);
+  assert.match(html, /Completed with findings/);
   assert.match(html, /50 items/);
   assert.doesNotMatch(html, /PAR audit/);
+});
+
+test("labels interrupted runs as failed and incomplete", () => {
+  const html = reportHistoryPageHtml({
+    report_channel: "regression",
+    landing_page: "summary.html",
+    runs: [
+      {
+        runId: "2026-07-27T23-30-00-000Z",
+        runType: "regression",
+        status: "interrupted",
+        completionState: "incomplete",
+        startedAt: "2026-07-27T23:30:00.000Z",
+        durationMs: 30000,
+        itemsTested: 8,
+        unexpected: 1,
+        href: "runs/2026-07-27T23-30-00-000Z/summary.html",
+      },
+    ],
+  });
+
+  assert.match(html, /Failed - incomplete/);
+  assert.doesNotMatch(html, /Completed with findings/);
 });
 
 test("renders overall regression items as searchable paginated expandable table rows", () => {
@@ -377,6 +402,47 @@ test("renders overall regression items as searchable paginated expandable table 
     assert.doesNotMatch(html, /<dialog/);
     assert.doesNotMatch(html, /showModal/);
     assert.doesNotMatch(html, /href="#item-workshop-877"/);
+  } finally {
+    fs.rmSync(reportsRoot, { recursive: true, force: true });
+  }
+});
+
+test("offers automatic exclusion only for an invalid workshop route", () => {
+  const reportsRoot = fs.mkdtempSync(path.join(os.tmpdir(), "livelabs-report-exclusion-"));
+  const outputDir = path.join(reportsRoot, "latest");
+  fs.mkdirSync(outputDir, { recursive: true });
+
+  try {
+    writeSummaryFiles(outputDir, {
+      runId: "2026-09-16T10-00-00-000Z",
+      reportChannel: "regression",
+      status: "failed",
+      startedAt: "2026-09-16T10:00:00.000Z",
+      endedAt: "2026-09-16T10:01:00.000Z",
+      durationMs: 60000,
+      counts: { total: 1, passed: 0, failed: 1, skipped: 0, timedOut: 0, interrupted: 0, unexpected: 1, flaky: 0 },
+      failureCategories: [{ code: "ROUTING_INVALID_WORKSHOP_ID", label: "Invalid workshop route", count: 1 }],
+      catalogItems: [{
+        key: "workshop-4005",
+        status: "failed",
+        issueCount: 1,
+        counts: { total: 1 },
+        sections: ["Generated Workshop Overview"],
+        catalogItem: { type: "workshop", id: "4005", title: "Retired workshop", absolute_url: "https://livelabs.oracle.com/retired" },
+        issues: [{ code: "ROUTING_INVALID_WORKSHOP_ID", label: "Invalid workshop route", severity: "blocker", message: "LiveLabs reports that this workshop no longer exists." }],
+        tests: [{ section: "Generated Workshop Overview", status: "failed", expectedStatus: "passed", file: "tests/platform/generated/workshopOverview.generated.spec.ts", line: 20, attachments: [] }],
+      }],
+      failures: [],
+      sections: [],
+    }, reportsRoot);
+
+    const summaryHtml = fs.readFileSync(path.join(outputDir, "summary.html"), "utf-8");
+    const exclusionsHtml = fs.readFileSync(path.join(outputDir, "excluded-workshops.html"), "utf-8");
+    assert.match(summaryHtml, /Stop scanning this workshop/);
+    assert.match(summaryHtml, /data-exclusion-action/);
+    assert.doesNotMatch(summaryHtml, /Open item in LiveLabs/);
+    assert.match(exclusionsHtml, /Excluded workshops/);
+    assert.match(exclusionsHtml, /method: "DELETE"/);
   } finally {
     fs.rmSync(reportsRoot, { recursive: true, force: true });
   }

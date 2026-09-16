@@ -1,0 +1,10 @@
+FROM docker.io/library/node:22-alpine
+
+WORKDIR /opt/livelabs-qa
+
+COPY scripts/catalog-exclusion-registry.mjs /opt/livelabs-qa/catalog-exclusion-registry.mjs
+RUN mkdir -p /var/qa-config && chown -R node:node /var/qa-config
+
+USER node
+
+CMD ["node", "/opt/livelabs-qa/catalog-exclusion-registry.mjs"]

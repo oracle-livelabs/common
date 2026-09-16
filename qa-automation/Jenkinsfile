@@ -71,6 +71,10 @@ def qaRuntimeEnv() {
     envValues.add("QA_REPORT_LANDING_PAGE=" + (profile == "par-audit" ? "par-links.html" : "summary.html"))
   }
 
+  if (hasText(env.QA_CATALOG_EXCLUSIONS_FILE)) {
+    envValues.add("QA_CATALOG_EXCLUSIONS_FILE=${env.QA_CATALOG_EXCLUSIONS_FILE.toString().trim()}")
+  }
+
   if (hasText(params.BASE_URL)) {
     envValues.add("QA_BASE_URL=${params.BASE_URL.trim()}")
   }
@@ -148,17 +152,37 @@ def parAuditRunCommand() {
 
 def runGeneratedSuite(runName, extraEnv) {
   withLiveLabsSecrets {
-    withEnv(qaRuntimeEnv() + extraEnv) {
-      sh generatedRunCommand(runName)
-    }
+    runQaCommand(generatedRunCommand(runName), runName, extraEnv)
   }
 }
 
 def runParAuditSuite() {
   withLiveLabsSecrets {
-    withEnv(qaRuntimeEnv()) {
-      sh parAuditRunCommand()
+    runQaCommand(parAuditRunCommand(), "par-audit", [])
+  }
+}
+
+def runQaCommand(command, runName, extraEnv) {
+  def attemptId = "${env.BUILD_TAG}-${runName}".replaceAll(/[^A-Za-z0-9._-]/, "-")
+  withEnv(qaRuntimeEnv() + extraEnv + ["QA_RUN_ATTEMPT_ID=${attemptId}"]) {
+    def exitCode = sh(script: command, returnStatus: true)
+    if (exitCode == 0) {
+      return
     }
+
+    def reportsRoot = hasText(env.QA_ROOT_REPORTS_BASE)
+      ? "${env.QA_ROOT_REPORTS_BASE.toString().trim().replaceAll('/+$', '')}/${reportChannel()}"
+      : "${pwd()}/reports"
+    def outcome = sh(
+      script: "node ./scripts/classify-run-outcome.mjs '${reportsRoot}' '${attemptId}'",
+      returnStdout: true,
+    ).trim()
+    if (outcome == "completed-with-findings") {
+      unstable("The scan completed and found issues. Open the QA report for the findings.")
+      return
+    }
+
+    error("The QA scan stopped before it produced a complete report.")
   }
 }
 
