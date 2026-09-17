@@ -23,6 +23,7 @@ export interface ParSourceDiscoveryResult {
   candidates: ParCandidate[];
   pagesScanned: number;
   scanErrors: ParSourceScanError[];
+  authorEmails: string[];
 }
 
 interface TutorialSource {
@@ -49,6 +50,7 @@ export async function collectWorkshopSourceParCandidates(
 ): Promise<ParSourceDiscoveryResult> {
   const tutorials = new Map<string, TutorialSource>();
   const scanErrors: ParSourceScanError[] = [];
+  const authorEmails = new Set<string>();
   let handled = false;
 
   for (const frame of page.frames()) {
@@ -88,7 +90,7 @@ export async function collectWorkshopSourceParCandidates(
   }
 
   if (!handled) {
-    return { handled: false, candidates: [], pagesScanned: 0, scanErrors };
+    return { handled: false, candidates: [], pagesScanned: 0, scanErrors, authorEmails: [] };
   }
 
   const candidates: ParCandidate[] = [];
@@ -104,6 +106,7 @@ export async function collectWorkshopSourceParCandidates(
     try {
       const text = await fetchSourceText(page, tutorial.sourceUrl);
       pagesScanned += 1;
+      for (const email of extractAuthorEmailsFromMarkdown(text)) authorEmails.add(email);
       candidates.push(
         ...sourceTextCandidates(text, {
           pageType: source.pageType + "-lab",
@@ -127,7 +130,36 @@ export async function collectWorkshopSourceParCandidates(
     candidates: mergeParCandidates(candidates),
     pagesScanned,
     scanErrors,
+    authorEmails: Array.from(authorEmails).sort(),
   };
+}
+
+export function extractAuthorEmailsFromMarkdown(text: string): string[] {
+  const lines = text.split(/\r?\n/);
+  const emails = new Set<string>();
+  let sectionLevel = 0;
+  let inAuthorSection = false;
+
+  for (const line of lines) {
+    const heading = line.match(/^(#{1,6})\s+(.+?)\s*$/);
+    if (heading) {
+      const level = heading[1].length;
+      if (inAuthorSection && level <= sectionLevel) inAuthorSection = false;
+      if (/\b(?:acknowledg(?:e)?ments?|authors?|contributors?)\b/i.test(heading[2])) {
+        inAuthorSection = true;
+        sectionLevel = level;
+      }
+      continue;
+    }
+
+    if (!inAuthorSection) continue;
+    for (const match of line.matchAll(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi)) {
+      const email = match[0].toLowerCase().replace(/[),.;:]+$/, "");
+      if (!email.includes("noreply") && !email.startsWith("livelabs-help")) emails.add(email);
+    }
+  }
+
+  return Array.from(emails).sort();
 }
 
 export function sourceTextCandidates(text: string, source: ParSource): ParCandidate[] {

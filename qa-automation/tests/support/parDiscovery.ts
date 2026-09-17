@@ -24,6 +24,7 @@ export interface ParDiscoveryResult {
   candidates: ParCandidate[];
   pagesScanned: number;
   scanErrors: ParScanError[];
+  authorEmails: string[];
 }
 
 interface FrameSnapshot {
@@ -92,7 +93,12 @@ export async function collectWorkshopInstructionParCandidates(
   if (sourceDiscovery.handled) {
     candidates.push(...sourceDiscovery.candidates);
     pagesScanned += sourceDiscovery.pagesScanned;
-    return { candidates: mergeParCandidates(candidates), pagesScanned, scanErrors };
+    return {
+      candidates: mergeParCandidates(candidates),
+      pagesScanned,
+      scanErrors,
+      authorEmails: sourceDiscovery.authorEmails,
+    };
   }
 
   const labUrls = await discoverWorkshopLabUrls(page, scanErrors);
@@ -133,7 +139,7 @@ export async function collectWorkshopInstructionParCandidates(
     }
   }
 
-  return { candidates: mergeParCandidates(candidates), pagesScanned, scanErrors };
+  return { candidates: mergeParCandidates(candidates), pagesScanned, scanErrors, authorEmails: [] };
 }
 
 export async function captureParCandidatesDuringAction(

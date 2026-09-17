@@ -7,7 +7,6 @@ import {
   parLinkGuidance,
   parScanErrorExplanation,
   parLinksPageHtml,
-  parRetestListPageHtml,
   readParAudits,
   sanitizeSensitiveText,
   writeParAuditDataFiles,
@@ -135,6 +134,7 @@ export default class RootSummaryReporter {
     const annotations = Object.fromEntries(test.annotations.map((annotation) => [annotation.type, annotation.description || ""]));
     const attachments = result.attachments.map(normalizeAttachment);
     const catalogItem = readCatalogItem(attachments);
+    const authorEmails = readCatalogAuthors(attachments);
     const parAudits = readParAudits(attachments);
     const issues = readQaIssues(attachments);
     const runContext = readRunContext(attachments);
@@ -166,6 +166,7 @@ export default class RootSummaryReporter {
       retry: result.retry,
       projectName: test.parent.project()?.name || "",
       catalogItem,
+      authorEmails,
       parAudits,
       catalogItemAnnotation: annotations["catalog-item"] || "",
       environment: annotations.environment || "",
@@ -278,9 +279,11 @@ export default class RootSummaryReporter {
           },
           tests: [],
           issues: [],
+          authorEmails: new Set(),
         };
 
         catalogEntry.sections.add(test.section);
+        for (const email of test.authorEmails || []) catalogEntry.authorEmails.add(email);
         catalogEntry.counts.total += 1;
         catalogEntry.counts[test.status] = (catalogEntry.counts[test.status] || 0) + 1;
         if (unexpected) {
@@ -340,6 +343,7 @@ export default class RootSummaryReporter {
         .map((item) => ({
           ...item,
           sections: Array.from(item.sections).sort(),
+          authorEmails: Array.from(item.authorEmails).sort(),
           status: catalogEntryStatus(item),
           issueCount: item.issues.length,
         }))
@@ -632,12 +636,6 @@ export function writeSummaryFiles(outputDir, summary, reportsRoot) {
   fs.writeFileSync(path.join(outputDir, "retest-list.html"), reviewListPageHtml("retest", summary, pageContext), "utf-8");
   fs.writeFileSync(path.join(outputDir, "fix-list.html"), reviewListPageHtml("fix", summary, pageContext), "utf-8");
   fs.writeFileSync(path.join(outputDir, "excluded-workshops.html"), excludedWorkshopsPageHtml(summary, pageContext), "utf-8");
-  fs.writeFileSync(path.join(outputDir, "par-links.html"), parLinksPageHtml(summary, pageContext), "utf-8");
-  fs.writeFileSync(
-    path.join(outputDir, "par-retest-list.html"),
-    parRetestListPageHtml(summary, pageContext),
-    "utf-8",
-  );
   writeParAuditDataFiles(outputDir, summary.parAudit);
 }
 
@@ -677,6 +675,7 @@ export function resultsCsv(summary) {
     "item_id",
     "item_title",
     "item_status",
+    "author_emails",
     "issue_count",
     "issue_code",
     "issue_label",
@@ -700,6 +699,7 @@ export function resultsCsv(summary) {
       catalogItem.id || catalogItem.slug || "",
       catalogItem.title || catalogItem.slug || catalogItem.id || "",
       item.status || "",
+      (item.authorEmails || []).join("; "),
       issues.length,
     ];
     const catalogUrl = sanitizeReportText(
@@ -755,6 +755,7 @@ export function resultsCsv(summary) {
           "",
           test.title || "",
           unexpected ? "failed" : test.status || "",
+          "",
           unexpected ? 1 : 0,
           unexpected ? test.classification?.code || "UNCLASSIFIED_FAILURE" : "",
           unexpected ? test.classification?.label || "Test failure" : "",
@@ -1304,6 +1305,19 @@ function htmlSummary(summary, context = {}) {
       display: grid;
       gap: 10px;
     }
+    .author-contacts {
+      align-items: center;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      padding: 11px 14px;
+    }
+    .author-contacts strong { font-size: 13px; }
+    .author-contacts a { font-size: 13px; font-weight: 700; }
+    .author-contacts span { color: var(--muted); font-size: 13px; }
     .operator-issue {
       background: #ffffff;
       border: 1px solid var(--line);
@@ -2317,11 +2331,24 @@ function reviewNavigationHtml(historyHref = "") {
   return `<nav class="review-nav" aria-label="Report views">
     <a href="/">QA Hub home</a>
     ${historyHref ? `<a href="${escapeHtml(historyHref)}">All runs</a>` : ""}
-    <a href="par-links.html">PAR Links</a>
     <a href="retest-list.html">Retest List <span class="review-count" data-review-count="retest">0</span></a>
     <a href="fix-list.html">Fix List <span class="review-count" data-review-count="fix">0</span></a>
     <a href="excluded-workshops.html">Excluded workshops <span class="review-count" data-exclusion-count>0</span></a>
   </nav>`;
+}
+
+function readCatalogAuthors(attachments) {
+  const attachment = attachments.find((item) => item.name === "catalog-authors.json" && item.bodyText);
+  if (!attachment) return [];
+
+  try {
+    const parsed = JSON.parse(attachment.bodyText);
+    return Array.isArray(parsed?.emails)
+      ? Array.from(new Set(parsed.emails.filter((email) => typeof email === "string" && email.includes("@")))).sort()
+      : [];
+  } catch {
+    return [];
+  }
 }
 
 function excludedWorkshopsPageHtml(summary, context = {}) {
@@ -3295,6 +3322,7 @@ function testedItemRowHtml(item, runId, failures, context) {
     ...sections,
     ...issueCodes,
     ...issues.map((issue) => `${issue.label} ${issue.message}`),
+    ...(item.authorEmails || []),
   ]
     .filter(Boolean)
     .join(" ");
@@ -3361,6 +3389,7 @@ function itemDetailHtml(item, failures, context) {
         }
       </div>
     </div>
+    ${issues.length > 0 ? workshopAuthorContactsHtml(item) : ""}
     ${
       issues.length > 0
         ? operatorIssueListHtml(issues)
@@ -3377,6 +3406,19 @@ function itemDetailHtml(item, failures, context) {
       </div>
     </details>
   </div>`;
+}
+
+function workshopAuthorContactsHtml(item) {
+  if (item.catalogItem?.type !== "workshop") return "";
+  const emails = item.authorEmails || [];
+  return `<section class="author-contacts" aria-label="Workshop author contacts">
+    <strong>Workshop authors</strong>
+    ${
+      emails.length > 0
+        ? emails.map((email) => `<a href="mailto:${escapeAttribute(email)}">${escapeHtml(email)}</a>`).join("\n")
+        : "<span>No author email was found in the workshop acknowledgements.</span>"
+    }
+  </section>`;
 }
 
 function canExcludeFromFutureScans(item) {

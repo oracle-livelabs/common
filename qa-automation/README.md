@@ -174,9 +174,7 @@ when you only want the report file and do not want findings to fail the command.
 
 ## PAR Link Audit
 
-The PAR audit discovers PAR links across the full generated workshop and LiveStack catalog. It needs no manually maintained link file, reports confirmed broken links separately from temporary or inconclusive checks, and masks every PAR token in reports and attachments.
-
-PAR scanning is a separate suite under `tests/platform/par`; normal generated regression runs do not execute it. The scanner reads workshop manifests and Markdown sources concurrently, using the browser only to discover each workshop or LiveStack instruction entry point.
+PAR checks run inside every generated catalog regression. The unified report groups routing, content, asset, and PAR findings under the same workshop or LiveStack row. It needs no manually maintained link file, masks every PAR token, and discovers author email addresses only from workshop acknowledgement or author sections.
 
 Run locally after generating the catalog:
 
@@ -191,8 +189,8 @@ Runbook: docs/runbooks/jenkins-generated-catalog.md
 ```
 
 Use Jenkins for the scheduled overnight catalog sweep. The Jenkins pipeline runs
-`tests/platform/generated`, not the homepage smoke lane, and supports a fast
-`pr-slice` profile plus a sharded `nightly-full` profile.
+the generated regression and PAR checks together in one report. It supports a
+fast `pr-slice` profile and a single-report `nightly-full` profile.
 
 A generic private-VM package is available under [`deploy/vm`](deploy/vm/README.md).
 It requires corporate OIDC, named group-based roles, OCI Vault-backed secrets,

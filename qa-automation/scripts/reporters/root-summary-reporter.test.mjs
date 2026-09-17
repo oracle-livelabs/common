@@ -302,6 +302,7 @@ test("renders overall regression items as searchable paginated expandable table 
             issueCount: 1,
             counts: { total: 1 },
             sections: ["Generated Tenancy Instructions"],
+            authorEmails: ["owner.one@oracle.com", "owner.two@oracle.com"],
             catalogItem: {
               type: "workshop",
               id: "877",
@@ -392,12 +393,19 @@ test("renders overall regression items as searchable paginated expandable table 
     assert.match(html, /Technical details for developers/);
     assert.match(html, /Checks run \(1\)/);
     assert.match(html, /One visible link did not load/);
+    assert.match(html, /Workshop authors/);
+    assert.match(html, /mailto:owner\.one@oracle\.com/);
+    assert.match(html, /mailto:owner\.two@oracle\.com/);
+    assert.doesNotMatch(html, />PAR Links</);
     assert.match(html, /Next action:/);
     assert.doesNotMatch(html, /<summary>Issue details<\/summary>/);
     assert.doesNotMatch(html, /<summary>Checks run \(1\)<\/summary>/);
     assert.doesNotMatch(html, /<summary>Bug report details<\/summary>/);
     assert.doesNotMatch(html, /What the test did/);
     assert.match(html, /results\.csv/);
+    const csv = fs.readFileSync(path.join(outputDir, "results.csv"), "utf-8");
+    assert.match(csv, /author_emails/);
+    assert.match(csv, /owner\.one@oracle\.com; owner\.two@oracle\.com/);
     assert.match(html, /latest\.runId !== loadedRunId/);
     assert.doesNotMatch(html, /<dialog/);
     assert.doesNotMatch(html, /showModal/);
