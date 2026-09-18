@@ -104,11 +104,14 @@ pipeline {
               string(name: "PAR_CHECK_CONCURRENCY", value: "4")
             ]
           )
-          currentBuild.description = "Engine #${downstream.number}: ${downstream.result}"
           if (downstream.result == "UNSTABLE") {
-            unstable("The scan completed and its findings are available in the unified QA report.")
+            currentBuild.description = "Completed with issues - Engine #${downstream.number}"
+            unstable("Completed with issues. Open the unified QA report to see what needs to be changed.")
           } else if (downstream.result != "SUCCESS") {
+            currentBuild.description = "Run stopped - Engine #${downstream.number}"
             error("Regression failed in engine build #${downstream.number}.")
+          } else {
+            currentBuild.description = "Completed - Engine #${downstream.number}"
           }
         }
       }

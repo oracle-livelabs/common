@@ -14,7 +14,11 @@ import {
   parFingerprint,
   parseParUrl,
 } from "../../support/parAudit.js";
-import { extractAuthorEmailsFromMarkdown, sourceTextCandidates } from "../../support/parSourceDiscovery.js";
+import {
+  extractAuthorEmailsFromMarkdown,
+  extractAuthorNamesFromMarkdown,
+  sourceTextCandidates,
+} from "../../support/parSourceDiscovery.js";
 import { catalogRouteFailure } from "../../support/indexedCatalogNavigation.js";
 
 const PAR_URL =
@@ -39,6 +43,23 @@ Ignore next.owner@oracle.com here.
     expect(extractAuthorEmailsFromMarkdown(markdown)).toEqual([
       "ada.author@oracle.com",
       "reviewer@oracle.com",
+    ]);
+  });
+
+  test("collects published author names even when acknowledgements contain no email", () => {
+    const markdown = `
+## Acknowledgements
+
+* **Authors**
+    * Kate D'Orazio - Oracle OCI Vision Services
+    * Vaishnavi Kotturu - Oracle OCI Vision Services
+* **Last Updated By/Date**
+    * Someone Else, February 2023
+`;
+
+    expect(extractAuthorNamesFromMarkdown(markdown)).toEqual([
+      "Kate D'Orazio - Oracle OCI Vision Services",
+      "Vaishnavi Kotturu - Oracle OCI Vision Services",
     ]);
   });
 

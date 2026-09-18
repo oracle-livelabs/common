@@ -25,6 +25,7 @@ export interface ParDiscoveryResult {
   pagesScanned: number;
   scanErrors: ParScanError[];
   authorEmails: string[];
+  authorNames: string[];
 }
 
 interface FrameSnapshot {
@@ -98,6 +99,7 @@ export async function collectWorkshopInstructionParCandidates(
       pagesScanned,
       scanErrors,
       authorEmails: sourceDiscovery.authorEmails,
+      authorNames: sourceDiscovery.authorNames,
     };
   }
 
@@ -139,7 +141,7 @@ export async function collectWorkshopInstructionParCandidates(
     }
   }
 
-  return { candidates: mergeParCandidates(candidates), pagesScanned, scanErrors, authorEmails: [] };
+  return { candidates: mergeParCandidates(candidates), pagesScanned, scanErrors, authorEmails: [], authorNames: [] };
 }
 
 export async function captureParCandidatesDuringAction(
@@ -231,7 +233,7 @@ async function discoverWorkshopLabUrls(
         const title = typeof tutorial.title === "string" ? tutorial.title.trim() : "";
         discovered.set(normalizedPageKey(labUrl.toString()), {
           url: labUrl.toString(),
-          label: title || "Lab " + (index + 1) + " (" + labId + ")",
+          label: title || labId.replace(/[-_]+/g, " ") || `Workshop section ${index + 1}`,
         });
       }
     } catch (error) {

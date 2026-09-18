@@ -6,7 +6,6 @@ Playwright writes a project-level summary here on every run.
 - `latest/summary.html` is the latest formatted run summary.
 - `latest/retest-list.html` is the local Retest List view for tests selected from the summary.
 - `latest/fix-list.html` is the local Fix List view for tests selected from the summary.
-- `latest/excluded-workshops.html` lists retired workshops skipped by future Jenkins runs.
 - `latest/summary.md` is the latest Markdown summary.
 - `latest/summary.json` is the latest machine-readable summary.
 - `runs/<timestamp>/` keeps timestamped summaries for previous runs.
@@ -34,10 +33,3 @@ node ./scripts/report-review-action.mjs fix --payload <payload.json>
 The fix action writes a Codex prompt and payload under `artifacts/review-lists/`.
 After the fixes are applied, rerun the same selected tests with the retest
 action so the normal QA report shows the final pass/fail result.
-
-## Excluded Workshops
-
-The Excluded workshops list is shared by the VM rather than browser storage.
-Only invalid WMS routes expose the exclusion action. Once a workshop owner
-confirms retirement, adding the workshop updates the persistent registry used by
-the next Jenkins run. `Undo` removes it from that registry.

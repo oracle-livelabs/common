@@ -234,17 +234,6 @@ list that produced it.
 
 The crawler retries transient navigation and card-rendering failures by default.
 
-### Retired workshops
-
-When LiveLabs confirms that an indexed WMS ID no longer exists, the report shows
-`Stop scanning this workshop`. After the workshop owner confirms retirement, an
-operator can add it to the shared Excluded workshops registry. Jenkins reads the
-registry before every catalog or PAR run, so excluded IDs are skipped
-automatically. Use `Undo` on the Excluded workshops page to include an item in
-future runs again.
-
-Local runs use `config/catalog-exclusions.json`. The VM sets
-`QA_CATALOG_EXCLUSIONS_FILE` to its persistent shared registry.
 For a deeper crawl or a slower network:
 
 ```powershell

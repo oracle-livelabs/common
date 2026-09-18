@@ -107,7 +107,7 @@ test.describe("LiveLabs generated LiveStack resource drilldown", { tag: GENERATE
                 contextName: `Generated LiveStack resource preview: ${resource.title}`,
                 expectedTerms: expectedTermsForText(resource.title),
                 expectedTermsMode: "any",
-              });
+              }, testInfo);
 
               if (previewPage !== page) {
                 await previewPage.close();
@@ -135,7 +135,7 @@ test.describe("LiveLabs generated LiveStack resource drilldown", { tag: GENERATE
                 contextName: `Generated LiveStack resource tenancy: ${resource.title}`,
                 expectedTerms: expectedTermsForText(resource.title),
                 expectedTermsMode: "any",
-              });
+              }, testInfo);
 
               if (tenancyPage !== page) {
                 await tenancyPage.close();

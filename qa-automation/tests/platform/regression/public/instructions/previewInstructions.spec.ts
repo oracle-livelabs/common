@@ -44,11 +44,11 @@ test.describe("LiveLabs preview instructions", { tag: PREVIEW_INSTRUCTIONS_TAGS 
       await signInIfRequired(previewPage, authRuntime, `Preview instructions: ${card.title}`);
 
       const instructionsPage = new WorkshopInstructionsPage(previewPage);
-      await instructionsPage.assertLoaded(target.expected_terms);
+      await instructionsPage.assertLoaded();
       await instructionsPage.assertContentQuality({
         contextName: `Preview instructions: ${card.title}`,
         expectedTerms: target.expected_terms,
-      });
+      }, testInfo);
 
       if (previewPage !== page) {
         await previewPage.close();

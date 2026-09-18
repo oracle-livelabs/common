@@ -64,10 +64,6 @@ def qaRuntimeEnv() {
     envValues.add("QA_REPORT_LANDING_PAGE=summary.html")
   }
 
-  if (hasText(env.QA_CATALOG_EXCLUSIONS_FILE)) {
-    envValues.add("QA_CATALOG_EXCLUSIONS_FILE=${env.QA_CATALOG_EXCLUSIONS_FILE.toString().trim()}")
-  }
-
   if (hasText(params.BASE_URL)) {
     envValues.add("QA_BASE_URL=${params.BASE_URL.trim()}")
   }
@@ -154,7 +150,8 @@ def runQaCommand(command, runName, extraEnv) {
       returnStdout: true,
     ).trim()
     if (outcome == "completed-with-findings") {
-      unstable("The scan completed and found issues. Open the QA report for the findings.")
+      currentBuild.description = "Completed with issues"
+      unstable("Completed with issues. Open the QA report to see what needs to be changed.")
       return
     }
 
