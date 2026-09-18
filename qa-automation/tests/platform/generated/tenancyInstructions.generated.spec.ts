@@ -69,12 +69,12 @@ test.describe("LiveLabs generated tenancy instructions", { tag: GENERATED_TENANC
         await signInIfRequired(instructionsPage, authRuntime, `Generated tenancy instructions: ${item.title}`);
 
         const workshopInstructionsPage = new WorkshopInstructionsPage(instructionsPage);
-        await workshopInstructionsPage.assertLoaded(expectedTermsForCatalogItem(item), "any");
+        await workshopInstructionsPage.assertLoaded();
         await workshopInstructionsPage.assertContentQuality({
           contextName: `Generated tenancy instructions: ${item.title}`,
           expectedTerms: expectedTermsForCatalogItem(item),
           expectedTermsMode: "any",
-        });
+        }, testInfo);
 
         if (instructionsPage !== page) {
           await instructionsPage.close();

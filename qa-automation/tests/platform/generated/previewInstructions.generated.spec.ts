@@ -74,7 +74,7 @@ test.describe("LiveLabs generated preview instructions", { tag: GENERATED_PREVIE
           contextName: `Generated preview instructions: ${item.title}`,
           expectedTerms: expectedTermsForCatalogItem(item),
           expectedTermsMode: "any",
-        });
+        }, testInfo);
 
         if (previewPage !== page) {
           await previewPage.close();

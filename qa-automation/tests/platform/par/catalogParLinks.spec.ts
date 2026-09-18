@@ -5,6 +5,7 @@ import { WorkshopLandingPage } from "../../../pages/platform/workshopLandingPage
 import { WorkshopLaunchOptionsDialog } from "../../../pages/platform/workshopLaunchOptionsDialog.js";
 import { signInIfRequired } from "../../support/authenticatedNavigation.js";
 import {
+  attachCatalogAuthors,
   attachCatalogItem,
   catalogIndexItems,
   catalogItemTestTitle,
@@ -59,6 +60,8 @@ test.describe("Generated catalog PAR link audit", { tag: PAR_CATALOG_TAGS }, () 
 
         const candidates: ParCandidate[] = [];
         const scanErrors: ParScanError[] = [];
+        const authorEmails = new Set<string>();
+        const authorNames = new Set<string>();
         const seenSourceFiles = new Set<string>();
         let pagesScanned = 0;
 
@@ -114,6 +117,8 @@ test.describe("Generated catalog PAR link audit", { tag: PAR_CATALOG_TAGS }, () 
               );
               candidates.push(...discovery.candidates);
               scanErrors.push(...discovery.scanErrors);
+              for (const email of discovery.authorEmails) authorEmails.add(email);
+              for (const name of discovery.authorNames) authorNames.add(name);
               pagesScanned += discovery.pagesScanned;
             });
           } else {
@@ -138,6 +143,8 @@ test.describe("Generated catalog PAR link audit", { tag: PAR_CATALOG_TAGS }, () 
               candidates,
               scanErrors,
               seenSourceFiles,
+              authorEmails,
+              authorNames,
               incrementPages: (count) => {
                 pagesScanned += count;
               },
@@ -152,6 +159,8 @@ test.describe("Generated catalog PAR link audit", { tag: PAR_CATALOG_TAGS }, () 
               candidates,
               scanErrors,
               seenSourceFiles,
+              authorEmails,
+              authorNames,
               incrementPages: (count) => {
                 pagesScanned += count;
               },
@@ -165,6 +174,7 @@ test.describe("Generated catalog PAR link audit", { tag: PAR_CATALOG_TAGS }, () 
           scanErrors,
         });
         await attachParAudit(testInfo, audit);
+        await attachCatalogAuthors(testInfo, authorEmails, authorNames);
         assertParAuditPassed(audit);
       });
     }
@@ -181,6 +191,8 @@ interface WorkshopSurfaceOptions {
   candidates: ParCandidate[];
   scanErrors: ParScanError[];
   seenSourceFiles: Set<string>;
+  authorEmails: Set<string>;
+  authorNames: Set<string>;
   incrementPages: (count: number) => void;
 }
 
@@ -308,6 +320,8 @@ async function scanInstructionOption(
       );
       options.candidates.push(...discovery.candidates);
       options.scanErrors.push(...discovery.scanErrors);
+      for (const email of discovery.authorEmails) options.authorEmails.add(email);
+      for (const name of discovery.authorNames) options.authorNames.add(name);
       options.incrementPages(discovery.pagesScanned);
     } finally {
       if (instructionsPage !== options.page && !instructionsPage.isClosed()) {
@@ -326,6 +340,8 @@ interface LiveStackSurfaceOptions {
   candidates: ParCandidate[];
   scanErrors: ParScanError[];
   seenSourceFiles: Set<string>;
+  authorEmails: Set<string>;
+  authorNames: Set<string>;
   incrementPages: (count: number) => void;
 }
 
@@ -381,6 +397,8 @@ async function scanLiveStackSurfaces(options: LiveStackSurfaceOptions): Promise<
         candidates: options.candidates,
         scanErrors: options.scanErrors,
         seenSourceFiles: options.seenSourceFiles,
+        authorEmails: options.authorEmails,
+        authorNames: options.authorNames,
         incrementPages: options.incrementPages,
       });
     }

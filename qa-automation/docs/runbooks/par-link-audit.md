@@ -1,6 +1,6 @@
 # PAR Link Audit
 
-The PAR audit checks PAR links discovered automatically from the LiveLabs catalog. It does not require a separate list of links.
+PAR links are checked automatically as part of the unified LiveLabs overall regression. They do not require a separate job, report, or maintained link list.
 
 ## What It Does
 
@@ -12,7 +12,7 @@ The PAR audit checks PAR links discovered automatically from the LiveLabs catalo
 6. Retries temporary failures before deciding whether a link is broken.
 7. Records the exact catalog item, lab, task, Markdown file, line, bucket, and object when available.
 
-The audit does not run overview, image, embed, or general link tests. Those belong to the overall regression job.
+The same run also performs overview, image, embed, routing, asset, and general link tests.
 
 ## Result Types
 
@@ -25,7 +25,7 @@ The audit does not run overview, image, embed, or general link tests. Those belo
 
 ## Run From The VM UI
 
-Open the private Jenkins page and select **LiveLabs PAR audit**.
+Open the private Jenkins page and select **LiveLabs overall regression**.
 
 For a complete crawl:
 
@@ -36,7 +36,7 @@ CATALOG_MAX_ITEMS = leave blank
 
 Then select **Build**. Leaving the item limit blank tells Jenkins to scan every card found by the crawler.
 
-The VM schedules this job weekly. The internal engine profile is still named `par-audit` for compatibility, but the VM schedule is weekly.
+The VM schedules the full unified regression nightly.
 
 ## Run Locally
 
@@ -54,13 +54,13 @@ Use `--max-items 5` during a small validation run. Remove that option for the fu
 
 ## Reports
 
-The VM publishes the PAR report under:
+The VM publishes one report under:
 
 ```text
-/par/
+/regression/
 ```
 
-Open `/par/` to choose any saved run. Inside a report:
+Open `/regression/` to choose any saved run. PAR issues use clear labels in the same expandable workshop table as every other issue.
 
 - **Previous report** and **Next report** move through runs in date order.
 - **All runs** returns to the dated history.
@@ -73,11 +73,11 @@ The report separates four outcomes:
 - **Working** is a confirmed successful response.
 - **Pages missed** means a workshop source could not be scanned, so its PAR status is unknown.
 
-Local runs use the configured report channel, for example:
+Local unified runs use the regression report channel:
 
 ```text
-reports/par/latest/par-links.html
-reports/par/runs/<run-id>/
+reports/regression/latest/summary.html
+reports/regression/runs/<run-id>/
 ```
 
 The CSV menu provides:

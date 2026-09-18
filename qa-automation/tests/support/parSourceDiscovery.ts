@@ -14,6 +14,8 @@ import {
 export interface ParSourceScanError {
   page_type: string;
   page_url: string;
+  source_file_url?: string;
+  lab_number?: number;
   label: string;
   error: string;
 }
@@ -23,11 +25,25 @@ export interface ParSourceDiscoveryResult {
   candidates: ParCandidate[];
   pagesScanned: number;
   scanErrors: ParSourceScanError[];
+  authorEmails: string[];
+  authorNames: string[];
+}
+
+export interface WorkshopSourceLinkLocation {
+  url: string;
+  pageUrl: string;
+  sourceFileUrl: string;
+  labTitle: string;
+  labNumber?: number;
+  section?: string;
+  instruction?: string;
+  sourceLine: number;
 }
 
 interface TutorialSource {
   sourceUrl: string;
   renderedUrl: string;
+  labNumber?: number;
   label: string;
 }
 
@@ -49,6 +65,8 @@ export async function collectWorkshopSourceParCandidates(
 ): Promise<ParSourceDiscoveryResult> {
   const tutorials = new Map<string, TutorialSource>();
   const scanErrors: ParSourceScanError[] = [];
+  const authorEmails = new Set<string>();
+  const authorNames = new Set<string>();
   let handled = false;
 
   for (const frame of page.frames()) {
@@ -60,7 +78,6 @@ export async function collectWorkshopSourceParCandidates(
       const manifest = await fetchManifest(page, manifestUrl);
       if (!manifest || !Array.isArray(manifest.tutorials)) continue;
       handled = true;
-
       for (const [index, tutorial] of manifest.tutorials.entries()) {
         const filename = typeof tutorial.filename === "string" ? tutorial.filename.trim() : "";
         if (!filename) continue;
@@ -70,11 +87,13 @@ export async function collectWorkshopSourceParCandidates(
         const renderedUrl = new URL(workshopUrl.toString());
         renderedUrl.searchParams.set("lab", labId);
         const title = typeof tutorial.title === "string" ? tutorial.title.trim() : "";
+        const labNumber = labNumberFromTitle(title);
 
         tutorials.set(normalizedPageKey(sourceUrl), {
           sourceUrl,
           renderedUrl: renderedUrl.toString(),
-          label: title || "Lab " + (index + 1) + " (" + labId + ")",
+          labNumber,
+          label: title || friendlySourceTitle(labId, index),
         });
       }
     } catch (error) {
@@ -88,7 +107,7 @@ export async function collectWorkshopSourceParCandidates(
   }
 
   if (!handled) {
-    return { handled: false, candidates: [], pagesScanned: 0, scanErrors };
+    return { handled: false, candidates: [], pagesScanned: 0, scanErrors, authorEmails: [], authorNames: [] };
   }
 
   const candidates: ParCandidate[] = [];
@@ -104,6 +123,8 @@ export async function collectWorkshopSourceParCandidates(
     try {
       const text = await fetchSourceText(page, tutorial.sourceUrl);
       pagesScanned += 1;
+      for (const email of extractAuthorEmailsFromMarkdown(text)) authorEmails.add(email);
+      for (const name of extractAuthorNamesFromMarkdown(text)) authorNames.add(name);
       candidates.push(
         ...sourceTextCandidates(text, {
           pageType: source.pageType + "-lab",
@@ -115,7 +136,9 @@ export async function collectWorkshopSourceParCandidates(
     } catch (error) {
       scanErrors.push({
         page_type: source.pageType + "-source",
-        page_url: sanitizeSourceUrl(tutorial.sourceUrl),
+        page_url: sanitizeSourceUrl(tutorial.renderedUrl),
+        source_file_url: sanitizeSourceUrl(tutorial.sourceUrl),
+        lab_number: tutorial.labNumber,
         label: source.label + ": " + tutorial.label,
         error: safeError(error),
       });
@@ -127,7 +150,120 @@ export async function collectWorkshopSourceParCandidates(
     candidates: mergeParCandidates(candidates),
     pagesScanned,
     scanErrors,
+    authorEmails: Array.from(authorEmails).sort(),
+    authorNames: Array.from(authorNames).sort().slice(0, 2),
   };
+}
+
+export async function locateWorkshopSourceLinks(
+  page: Page,
+  targetUrls: string[],
+): Promise<WorkshopSourceLinkLocation[]> {
+  const targets = new Map(targetUrls.map((url) => [comparableUrl(url), url]));
+  const tutorials = await discoverTutorialSources(page);
+  const locations: WorkshopSourceLinkLocation[] = [];
+
+  await mapWithConcurrency(tutorials, discoveryConcurrency(), async (tutorial) => {
+    const text = await fetchSourceText(page, tutorial.sourceUrl).catch(() => "");
+    if (!text) return;
+    const lines = text.split(/\r?\n/);
+
+    for (const [key, targetUrl] of targets) {
+      const lineIndex = lines.findIndex((line) => comparableText(line).includes(key));
+      if (lineIndex < 0) continue;
+      locations.push({
+        url: targetUrl,
+        pageUrl: sanitizeSourceUrl(tutorial.renderedUrl),
+        sourceFileUrl: sanitizeSourceUrl(tutorial.sourceUrl),
+        labTitle: tutorial.label,
+        labNumber: tutorial.labNumber,
+        section: nearestHeading(lines, lineIndex),
+        instruction: nearestInstruction(lines, lineIndex),
+        sourceLine: lineIndex + 1,
+      });
+    }
+  });
+
+  return locations;
+}
+
+export function extractAuthorEmailsFromMarkdown(text: string): string[] {
+  const lines = text.split(/\r?\n/);
+  const emails = new Set<string>();
+  let sectionLevel = 0;
+  let inAuthorSection = false;
+
+  for (const line of lines) {
+    const heading = line.match(/^(#{1,6})\s+(.+?)\s*$/);
+    if (heading) {
+      const level = heading[1].length;
+      if (inAuthorSection && level <= sectionLevel) inAuthorSection = false;
+      if (/\b(?:acknowledg(?:e)?ments?|authors?|contributors?)\b/i.test(heading[2])) {
+        inAuthorSection = true;
+        sectionLevel = level;
+      }
+      continue;
+    }
+
+    if (!inAuthorSection) continue;
+    for (const match of line.matchAll(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi)) {
+      const email = match[0].toLowerCase().replace(/[),.;:]+$/, "");
+      if (!email.includes("noreply") && !email.startsWith("livelabs-help")) emails.add(email);
+    }
+  }
+
+  return Array.from(emails).sort();
+}
+
+export function extractAuthorNamesFromMarkdown(text: string): string[] {
+  const lines = text.split(/\r?\n/);
+  const names = new Set<string>();
+  let sectionLevel = 0;
+  let inAuthorSection = false;
+  let currentRole = "";
+
+  for (const line of lines) {
+    const heading = line.match(/^(#{1,6})\s+(.+?)\s*$/);
+    if (heading) {
+      const level = heading[1].length;
+      if (inAuthorSection && level <= sectionLevel) inAuthorSection = false;
+      if (/\b(?:acknowledg(?:e)?ments?|authors?|contributors?)\b/i.test(heading[2])) {
+        inAuthorSection = true;
+        sectionLevel = level;
+      }
+      continue;
+    }
+
+    if (!inAuthorSection) continue;
+    let value = line
+      .replace(/^\s*(?:[-*+] |\d+[.)]\s+)/, "")
+      .replace(/[*_`]/g, "")
+      .replace(/\[([^\]]+)]\([^)]*\)/g, "$1")
+      .trim();
+    if (!value) continue;
+
+    const role = value.match(/^(?:(?:contributing|supporting)\s+)?(authors?|contributors?)\s*[-:]?\s*(.*)$/i);
+    if (role) {
+      currentRole = role[1];
+      value = role[2].replace(/^[-:]\s*/, "").trim();
+      if (!value) continue;
+    }
+    if (/^last updated/i.test(value)) {
+      currentRole = "";
+      continue;
+    }
+    if (!currentRole) continue;
+
+    const withoutEmail = value
+      .replace(/\(?[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\)?/gi, "")
+      .replace(/\(\s*\)/g, "")
+      .replace(/\s{2,}/g, " ")
+      .replace(/[,:;-]+$/, "")
+      .trim();
+    if (withoutEmail && !/^author(?:s)?$/i.test(withoutEmail)) names.add(withoutEmail);
+  }
+
+  return Array.from(names).sort();
 }
 
 export function sourceTextCandidates(text: string, source: ParSource): ParCandidate[] {
@@ -174,6 +310,36 @@ async function fetchManifest(page: Page, manifestUrl: string): Promise<WorkshopM
   } catch {
     throw new Error("Workshop manifest is not valid JSON.");
   }
+}
+
+async function discoverTutorialSources(page: Page): Promise<TutorialSource[]> {
+  const tutorials = new Map<string, TutorialSource>();
+
+  for (const frame of page.frames()) {
+    const workshopUrl = safeUrl(frame.url());
+    if (!workshopUrl || !shouldTryManifest(workshopUrl)) continue;
+    const manifestUrl = resolveManifestUrl(workshopUrl);
+    const manifest = await fetchManifest(page, manifestUrl).catch(() => undefined);
+    if (!manifest || !Array.isArray(manifest.tutorials)) continue;
+
+    for (const [index, tutorial] of manifest.tutorials.entries()) {
+      const filename = typeof tutorial.filename === "string" ? tutorial.filename.trim() : "";
+      if (!filename) continue;
+      const sourceUrl = normalizeLiveLabsSourceUrl(new URL(filename, manifestUrl)).toString();
+      const labId = labIdFromFilename(filename);
+      const renderedUrl = new URL(workshopUrl.toString());
+      renderedUrl.searchParams.set("lab", labId);
+      const title = typeof tutorial.title === "string" ? tutorial.title.trim() : "";
+      tutorials.set(normalizedPageKey(sourceUrl), {
+        sourceUrl,
+        renderedUrl: renderedUrl.toString(),
+        labNumber: labNumberFromTitle(title),
+        label: title || friendlySourceTitle(labId, index),
+      });
+    }
+  }
+
+  return Array.from(tutorials.values());
 }
 
 async function fetchSourceText(page: Page, sourceUrl: string): Promise<string> {
@@ -384,6 +550,28 @@ function labIdFromFilename(filename: string): string {
   const pathname = filename.split(/[?#]/)[0];
   const basename = pathname.split("/").filter(Boolean).pop() || pathname;
   return decodeURIComponent(basename).replace(/\.md$/i, "");
+}
+
+function labNumberFromTitle(title: string): number | undefined {
+  const match = title.match(/\bLab\s+(\d+)\b/i);
+  return match ? Number(match[1]) : undefined;
+}
+
+function friendlySourceTitle(labId: string, index: number): string {
+  const words = decodeURIComponent(labId).replace(/[-_]+/g, " ").trim();
+  return words ? words.replace(/\b\w/g, (letter) => letter.toUpperCase()) : `Workshop section ${index + 1}`;
+}
+
+function comparableUrl(value: string): string {
+  return comparableText(value).trim();
+}
+
+function comparableText(value: string): string {
+  return value
+    .replace(/&amp;/gi, "&")
+    .replace(/&#38;/g, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'");
 }
 
 function normalizedPageKey(value: string): string {

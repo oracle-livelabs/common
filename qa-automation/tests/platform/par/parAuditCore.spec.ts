@@ -14,13 +14,55 @@ import {
   parFingerprint,
   parseParUrl,
 } from "../../support/parAudit.js";
-import { sourceTextCandidates } from "../../support/parSourceDiscovery.js";
+import {
+  extractAuthorEmailsFromMarkdown,
+  extractAuthorNamesFromMarkdown,
+  sourceTextCandidates,
+} from "../../support/parSourceDiscovery.js";
 import { catalogRouteFailure } from "../../support/indexedCatalogNavigation.js";
 
 const PAR_URL =
   "https://objectstorage.eu-frankfurt-1.oraclecloud.com/p/fake-token-value/n/example/b/qa/o/assets/demo.zip";
 
 test.describe("PAR audit core", { tag: ["@par", "@unit"] }, () => {
+  test("collects workshop contacts only from author acknowledgement sections", () => {
+    const markdown = `
+Contact support@example.com before the lab.
+
+## Acknowledgements
+
+- Ada Author ([ada.author@oracle.com](mailto:ada.author@oracle.com))
+- Reviewer: reviewer@oracle.com
+- Automation: build-bot@users.noreply.github.com
+
+## Next steps
+
+Ignore next.owner@oracle.com here.
+`;
+
+    expect(extractAuthorEmailsFromMarkdown(markdown)).toEqual([
+      "ada.author@oracle.com",
+      "reviewer@oracle.com",
+    ]);
+  });
+
+  test("collects published author names even when acknowledgements contain no email", () => {
+    const markdown = `
+## Acknowledgements
+
+* **Authors**
+    * Kate D'Orazio - Oracle OCI Vision Services
+    * Vaishnavi Kotturu - Oracle OCI Vision Services
+* **Last Updated By/Date**
+    * Someone Else, February 2023
+`;
+
+    expect(extractAuthorNamesFromMarkdown(markdown)).toEqual([
+      "Kate D'Orazio - Oracle OCI Vision Services",
+      "Vaishnavi Kotturu - Oracle OCI Vision Services",
+    ]);
+  });
+
   test("recognizes confirmed invalid catalog redirects without waiting for a timeout", () => {
     expect(
       catalogRouteFailure(

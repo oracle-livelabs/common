@@ -12,7 +12,7 @@
     h1 { margin: 0; font-size: 28px; letter-spacing: 0; }
     header p { margin: 8px 0 0; color: #52606d; }
     main { width: min(1040px, calc(100% - 32px)); margin: 28px auto; }
-    .status { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid #cbd5df; background: #fff; }
+    .status { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid #cbd5df; background: #fff; }
     .entry { padding: 22px; border-right: 1px solid #d8dee4; min-width: 0; }
     .entry:last-child { border-right: 0; }
     .entry h2 { margin: 0 0 8px; font-size: 18px; letter-spacing: 0; }
@@ -35,14 +35,9 @@
   <main>
     <section class="status" aria-label="QA areas">
       <div class="entry">
-        <h2>PAR link audit</h2>
-        <p>Weekly stale-link results, cleanup CSVs, and pages that could not be scanned.</p>
-        <a href="/par/">Open PAR reports</a>
-      </div>
-      <div class="entry">
         <h2>Overall regression</h2>
-        <p>Nightly or targeted catalog-card, content, image, link, asset, and routing results.</p>
-        <a href="/regression/">Open regression reports</a>
+        <p>All catalog, content, image, routing, asset, and PAR link findings in one report.</p>
+        <a href="/regression/">Open QA reports</a>
       </div>
       <div class="entry">
         <h2>Jenkins</h2>
@@ -50,7 +45,7 @@
         <a href="/jenkins/">Open Jenkins</a>
       </div>
     </section>
-    <p class="note">Reports are read-only. Fix assignment and author contact remain in the team workflow; operators use Jenkins only to start or rerun tests.</p>
+    <p class="note">Reports show each issue, its workshop author contacts, and the exact checks that ran. Operators use Jenkins to start a full or targeted scan.</p>
   </main>
 </body>
 </html>
