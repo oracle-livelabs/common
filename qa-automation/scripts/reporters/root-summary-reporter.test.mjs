@@ -398,7 +398,7 @@ test("renders overall regression items as searchable paginated expandable table 
 
     const html = fs.readFileSync(path.join(outputDir, "summary.html"), "utf-8");
     assert.match(html, /Overall regression results/);
-    assert.match(html, /name="livelabs-qa-renderer" content="regression-table-v8"/);
+    assert.match(html, /name="livelabs-qa-renderer" content="regression-table-v10"/);
     assert.match(html, /role="table" aria-label="Overall regression results"/);
     assert.match(html, /<details class="result-row failed"\s+id="item-workshop-877"/);
     assert.match(html, /<summary class="result-summary">/);
@@ -438,9 +438,9 @@ test("renders overall regression items as searchable paginated expandable table 
     assert.doesNotMatch(html, /What the test did/);
     assert.match(html, /results\.csv/);
     const csv = fs.readFileSync(path.join(outputDir, "results.csv"), "utf-8");
-    assert.match(csv, /author_emails/);
+    assert.doesNotMatch(csv, /author_emails/);
     assert.doesNotMatch(csv, /author_names/);
-    assert.match(csv, /owner\.one@oracle\.com; owner\.two@oracle\.com/);
+    assert.doesNotMatch(csv, /owner\.one@oracle\.com|owner\.two@oracle\.com/);
     assert.match(html, /latest\.runId !== loadedRunId/);
     assert.doesNotMatch(html, /<dialog/);
     assert.doesNotMatch(html, /showModal/);

@@ -14,7 +14,7 @@ import {
 
 const PROJECT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const DEFAULT_REPORTS_ROOT = path.join(PROJECT_ROOT, "reports");
-export const REGRESSION_REPORT_RENDERER_VERSION = "regression-table-v8";
+export const REGRESSION_REPORT_RENDERER_VERSION = "regression-table-v10";
 const REVIEW_STORAGE_KEY = "livelabs-qa-review-lists:v1";
 const PAR_RESOLVER_SOURCE_HOSTS = new Set([
   "livelabs.oracle.com",
@@ -701,7 +701,6 @@ export function resultsCsv(summary) {
     "item_id",
     "item_title",
     "item_status",
-    "author_emails",
     "issue_count",
     "issue_code",
     "issue_label",
@@ -725,7 +724,6 @@ export function resultsCsv(summary) {
       catalogItem.id || catalogItem.slug || "",
       catalogItem.title || catalogItem.slug || catalogItem.id || "",
       item.status || "",
-      (item.authorEmails || []).join("; "),
       issues.length,
     ];
     const catalogUrl = sanitizeReportText(
@@ -3437,7 +3435,6 @@ function testedItemRowHtml(item, runId, failures, context) {
     ...sections,
     ...issueCodes,
     ...issues.map((issue) => `${issue.label} ${issue.message}`),
-    ...(item.authorEmails || []),
   ]
     .filter(Boolean)
     .join(" ");
