@@ -11,7 +11,7 @@
     (function () {
       var path = window.location.pathname.replace(/\/+$/, "");
       var route = path.split("/").pop().toLowerCase();
-      var supported = ["home", "quickstart", "cheatsheet", "nodoc"];
+      var supported = ["home", "quickstart", "cheatsheet", "markdown", "nodoc"];
       var base = path.slice(0, path.length - route.length);
       var target = supported.indexOf(route) !== -1 ? route : "home";
       window.location.replace(base + (target === "home" ? "" : target + "/") + window.location.search + window.location.hash);

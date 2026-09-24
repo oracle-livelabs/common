@@ -6,10 +6,10 @@
   <meta name="description" content="Oracle LiveLabs Author Guide refresh with a guided path, reference toolkit, Step by Step Guide, unified search, and a real workshop example.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23C74634'/%3E%3C/svg%3E">
   <title>Cheatsheet · Oracle LiveLabs Author Guide</title>
-  <script src="../assets/js/author-guide-config.js?v=20260903-clean-github-pages-routes-r2"></script>
+  <script src="../assets/js/author-guide-config.js?v=20260923-markdown-route"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/author-guide.css">
-  <link rel="stylesheet" href="../assets/css/author-guide-improvements.css?v=20260903-nodoc-documentation-expansion">
+  <link rel="stylesheet" href="../assets/css/author-guide-improvements.css?v=20260924-cheatsheet-menu-r10">
 </head>
 <body data-author-guide-page="explorer">
   <div id="app" data-redwood-creator-pass="2026-05-25">
@@ -56,12 +56,24 @@
                     </span>
                     <span class="nav-control-text">Quickstart</span>
                   </a>
-                  <a class="btn nav-control" data-mode-target="explorer" aria-label="Open cheatsheet" href="../cheatsheet/">
-                    <span class="nav-control-icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" focusable="false"><path d="M8 4h8l1.5 2H20v14H4V6h2.5L8 4Zm0 7h8M8 15h6"/></svg>
-                    </span>
-                    <span class="nav-control-text">Cheatsheet</span>
-                  </a>
+                  <details class="nav-menu-group" id="cheatsheetMenu">
+                    <summary class="nav-menu-summary is-active" aria-controls="cheatsheetMenuItems">
+                      <a class="btn nav-control nav-menu-parent" data-mode-target="explorer" href="../cheatsheet/" aria-current="page" aria-label="Open Cheatsheet">
+                        <span class="nav-control-icon" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" focusable="false"><path d="M8 4h8l1.5 2H20v14H4V6h2.5L8 4Zm0 7h8M8 15h6"/></svg>
+                        </span>
+                        <span class="nav-control-text">Cheatsheet</span>
+                      </a>
+                    </summary>
+                    <div class="nav-menu-items" id="cheatsheetMenuItems" aria-label="Related Cheatsheet pages">
+                      <a class="nav-menu-link" href="../markdown/" aria-label="Open Markdown reference">
+                        <span class="nav-control-icon" aria-hidden="true">
+                          <svg viewBox="0 0 24 24" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 4l-4 16"/></svg>
+                        </span>
+                        <span>Markdown</span>
+                      </a>
+                    </div>
+                  </details>
                   <a class="btn nav-control" data-mode-target="nodoc" aria-label="Open NoDoc guide" href="../nodoc/">
                     <span class="nav-control-icon" aria-hidden="true">
                       <svg viewBox="0 0 24 24" focusable="false">
@@ -256,11 +268,12 @@
   </div>
 
   <script async src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/js/guide-content.js?v=20260729-topic-sort-guide-label"></script>
+  <script src="../assets/js/guide-content.js?v=20260923-markdown-modal-reference-r3"></script>
   <script src="../assets/js/workshop-generator.js?v=20260708-skill-generator-livestack"></script>
   <script src="../assets/js/shared-side-nav.js?v=20260529-shared-nav-v2"></script>
   <script src="../assets/js/nodoc-workshop.js?v=20260902-nodoc-codex-skills-plan"></script>
-  <script src="../assets/js/author-guide-app.js?v=20260910-cheatsheet-first-load"></script>
+  <script src="../assets/js/markdown-reference-data.js?v=20260923"></script>
+  <script src="../assets/js/author-guide-app.js?v=20260923-tag-filter-hash-r4"></script>
   <script src="../assets/js/shared-footer.js?v=20260516-followup"></script>
 </body>
 </html>
