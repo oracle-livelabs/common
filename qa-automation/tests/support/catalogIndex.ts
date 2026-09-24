@@ -156,6 +156,25 @@ export async function attachCatalogItem(testInfo: TestInfo, item: CatalogIndexIt
   });
 }
 
+export async function attachCatalogAuthors(
+  testInfo: TestInfo,
+  emails: Iterable<string>,
+  names: Iterable<string> = [],
+): Promise<void> {
+  const authorEmails = Array.from(
+    new Set(Array.from(emails, (email) => email.trim().toLowerCase()).filter(Boolean)),
+  ).sort();
+  const authorNames = Array.from(
+    new Set(Array.from(names, (name) => name.trim()).filter(Boolean)),
+  ).sort();
+  if (authorEmails.length === 0 && authorNames.length === 0) return;
+
+  await testInfo.attach("catalog-authors.json", {
+    body: JSON.stringify({ schema_version: 2, emails: authorEmails, names: authorNames }, null, 2),
+    contentType: "application/json",
+  });
+}
+
 function sanitizeCatalogHref(value: string): string {
   try {
     const relative = !/^https?:\/\//i.test(value);

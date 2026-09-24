@@ -114,10 +114,13 @@ test("VM exposes the resolver only through the authenticated report portal", () 
   assert.match(nginx, /proxy_pass http:\/\/par-resolver:/);
   assert.match(
     jobs,
-    /stringParam\("CATALOG_ITEM_IDS", "", "Optional comma-separated WMS IDs for a targeted PAR retest"\)/,
+    /stringParam\("CATALOG_ITEM_IDS", "", "Optional comma-separated IDs for a targeted rerun"\)/,
   );
   assert.match(
     jobs,
-    /string\(name: "CATALOG_ITEM_IDS", value: params\.CATALOG_ITEM_IDS\?\.trim\(\) \?: ""\)/,
+    /string\(name: "CATALOG_ITEM_IDS", value: targeted \?: ""\)/,
   );
+  assert.match(jobs, /pipelineJob\("livelabs-overall-regression"\)/);
+  assert.match(jobs, /oldParJob\.delete\(\)/);
+  assert.doesNotMatch(jobs, /pipelineJob\("livelabs-par-audit"\)/);
 });

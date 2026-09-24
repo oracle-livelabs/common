@@ -8,20 +8,19 @@ The Jenkins job should use:
 Script Path: qa-automation/Jenkinsfile
 ```
 
-For a permanent private VM, use the prepared two-job appliance in
-[`deploy/vm`](../../deploy/vm/README.md). It creates separate operator jobs for
-the weekly PAR audit and nightly/targeted overall regression while reusing this
-same Jenkinsfile as the execution engine.
+For a permanent private VM, use the prepared appliance in
+[`deploy/vm`](../../deploy/vm/README.md). It creates one operator job for the
+nightly or targeted overall regression, including PAR checks.
 
 ## Goal
 
 Use Jenkins for repeatable generated catalog runs:
 
 - PR or manual smoke: crawl a small catalog slice and run generated tests against that slice.
-- Overnight: crawl the catalog and run generated tests in parallel shards.
+- Overnight: crawl the catalog and run every generated and PAR check in one report.
 - Manual investigation: target specific generated catalog IDs or slugs.
 
-The Jenkins job intentionally runs `tests/platform/generated`. It does not run the homepage smoke lane on every catalog sweep because the overnight goal is workshop, LiveStack, instruction, resource, link, image, embed, and asset coverage.
+The Jenkins job intentionally runs `tests/platform/generated` together with `tests/platform/par/catalogParLinks.spec.ts`. It does not run the homepage smoke lane on every catalog sweep because the overnight goal is workshop, LiveStack, instruction, resource, PAR, link, image, embed, and asset coverage.
 
 ## Jenkins Agent Requirements
 
@@ -76,16 +75,11 @@ npm run test:collect
 npm run catalog:index -- --max-pages 250
 ```
 
-Then it runs generated tests in shards:
+Then it runs all catalog checks in one report:
 
 ```text
-QA_CATALOG_INDEX_SHARD=1/4
-QA_CATALOG_INDEX_SHARD=2/4
-QA_CATALOG_INDEX_SHARD=3/4
-QA_CATALOG_INDEX_SHARD=4/4
+node ./scripts/qa.mjs tests/platform/generated tests/platform/par/catalogParLinks.spec.ts
 ```
-
-Use `SHARD_TOTAL` to change the number of shards.
 
 ### manual-items
 
@@ -99,29 +93,21 @@ The run still crawls the catalog broadly by default, but generated tests only
 execute matching indexed items. Override `CATALOG_MAX_PAGES` or
 `CATALOG_MAX_ITEMS` only when you intentionally want a smaller manual crawl.
 
-### par-audit
-
-Runs only full-catalog PAR discovery. Normal generated regression specs are skipped. It uses 250 catalog pages and no item cap by default, scans manifest-listed workshop sources concurrently, and reports exact Markdown locations for findings. No manually maintained PAR list is required.
-
-See [PAR Link Audit](par-link-audit.md) for scheduling, privacy, and report details.
-
 ## Key Parameters
 
 | Parameter | Use |
 | --- | --- |
-| RUN_PROFILE | pr-slice, nightly-full, manual-items, or par-audit. |
+| RUN_PROFILE | pr-slice, nightly-full, or manual-items. All include PAR checks. |
 | `BASE_URL` | Optional LiveLabs base URL override. |
 | `BROWSER_CHANNEL` | Optional local browser channel, such as `chrome` or `msedge`. |
 | `AUTH_TARGET_URL` | Private URL used to create storage state before crawling. |
 | `LIVELABS_USERNAME_CREDENTIAL_ID` | Jenkins string credential ID for the LiveLabs test username. |
 | `LIVELABS_SECRET_CREDENTIAL_ID` | Jenkins string credential ID for the LiveLabs test credential. |
-| CATALOG_MAX_PAGES | Catalog crawl page override. Defaults to 1 for pr-slice/manual-items and 250 for nightly-full/par-audit. |
+| CATALOG_MAX_PAGES | Catalog crawl page override. Defaults to 1 for pr-slice/manual-items and 250 for nightly-full. |
 | CATALOG_MAX_ITEMS | Small-run item cap. Defaults to 5 for pr-slice and no cap for the other profiles. |
 | `CATALOG_ITEM_IDS` | Comma-separated generated IDs/slugs for manual targeted runs. |
-| `SHARD_TOTAL` | Number of parallel generated shards for `nightly-full`. |
-| `TEST_WORKERS` | Playwright workers in each generated run. The VM package uses one shard and five workers so it produces one complete report. |
+| `TEST_WORKERS` | Playwright workers in the single combined report run. |
 | `CONTENT_LINK_LIMIT` | Visible links checked per generated content page; set `0` to check all. |
-| PAR_WORKERS | Parallel catalog items for par-audit. The reliable default is 2. |
 | PAR_DISCOVERY_CONCURRENCY | Concurrent manifest-listed Markdown files fetched inside each PAR item. The reliable default is 3. |
 | PAR_SOURCE_TIMEOUT_MS | Timeout for each workshop manifest or Markdown source request. The default is 45000 ms. |
 | PAR_RETRIES | Retry count for inconclusive PAR probes. |
@@ -157,7 +143,7 @@ Use the HTML reports and traces to show developers the exact failing page, image
 3. Add credentials and `AUTH_TARGET_URL`; rerun `pr-slice`.
 4. Run `manual-items` against one known workshop and one known LiveStack.
 5. Schedule `nightly-full` after the small runs are stable.
-6. Tune `SHARD_TOTAL` based on runtime. Start with `4`, then increase if the overnight run is too slow.
+6. Keep the full run as one report and tune `TEST_WORKERS` only after checking VM utilization.
 
 ## Failure Handling
 
