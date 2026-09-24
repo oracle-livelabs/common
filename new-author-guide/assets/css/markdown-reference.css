@@ -1,0 +1,212 @@
+/* The guide shell, menu, fonts, buttons, and palette come from the shared
+   author-guide styles. Keep reference-specific rules inside this page. */
+body[data-author-guide-page="markdown"] .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+body[data-author-guide-page="markdown"] .skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1100;
+  padding: 12px 18px;
+  background: #fff;
+  color: #00688c;
+  transform: translateY(-160%);
+}
+body[data-author-guide-page="markdown"] .skip-link:focus { transform: translateY(0); }
+#app #markdownMode { display: flow-root; }
+#app #markdownMode [hidden] { display: none !important; }
+#app #markdownMode :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--link-blue);
+  outline-offset: 3px;
+}
+#app #markdownMode .reference-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(260px, .8fr);
+  gap: 32px;
+  align-items: start;
+  margin: 32px 0 20px;
+  padding: 48px 38px 30px;
+  border: 1px solid var(--redwood-border) !important;
+  border-radius: 8px;
+  overflow: hidden;
+}
+#app #markdownMode .mode-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(30px, 3.35vw, 48px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: 0;
+  margin: 12px 0 18px;
+  max-width: none;
+  white-space: nowrap;
+}
+#app #markdownMode .mode-overline {
+  color: var(--finance-teal);
+  font-size: 16px;
+  font-weight: 600;
+}
+#app #markdownMode .hero-description {
+  color: var(--redwood-text);
+  font-size: 17px;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+#app #markdownMode .reference-layout { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 24px; align-items: start; }
+#app #markdownMode .reference-main { min-width: 0; }
+#app #markdownMode .section-sidebar { position: sticky; top: 24px; }
+#app #markdownMode .section-navigation {
+  padding: 20px 16px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  border-top: 6px solid var(--finance-teal);
+  border-radius: 6px;
+}
+#app #markdownMode .section-navigation .panel-kicker { margin: 0 0 12px; font-size: 14px; }
+#app #markdownMode .section-navigation ol { list-style: none; margin: 0; padding: 0; }
+#app #markdownMode .section-navigation li + li { border-top: 1px solid var(--redwood-border); }
+#app #markdownMode .section-navigation a {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 12px 8px;
+  font-size: 14px;
+  line-height: 1.45;
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--redwood-text);
+}
+#app #markdownMode .section-navigation a:hover { background: rgba(22, 21, 19, .04); }
+#app #markdownMode .section-navigation a[aria-current="location"] { background: #fff1ed; color: #a52b1e; }
+#app #markdownMode .section-number { flex-shrink: 0; color: var(--finance-teal); font-size: 13px; font-variant-numeric: tabular-nums; }
+#app #markdownMode .section-navigation .publish-link { margin-top: 12px; border-top: 1px solid var(--redwood-border); border-radius: 0; font-weight: 600; }
+#app #markdownMode .filter-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px auto;
+  gap: 12px 16px;
+  align-items: end;
+  padding: 24px;
+  margin-bottom: 28px;
+  border: 1px solid var(--redwood-border);
+  border-radius: 6px;
+  background: #f5f4f2;
+}
+#app #markdownMode .filter-panel label { display: block; font-size: 14px; font-weight: 600; margin: 0 0 8px; }
+#app #markdownMode .filter-panel .form-control,
+#app #markdownMode .filter-panel .form-select { min-height: 44px; border-radius: 4px; border-color: var(--redwood-border-strong); font-size: 14px; }
+#app #markdownMode .search-input-wrap { position: relative; }
+#app #markdownMode .search-input-wrap > span { position: absolute; top: 9px; left: 12px; font-size: 20px; color: var(--brand-neutral); }
+#app #markdownMode .search-input-wrap input { padding-left: 38px; }
+#app #markdownMode .filter-help { grid-column: 1 / -1; font-size: 13px; margin: 0; }
+#app #markdownMode .filter-status { grid-column: 1 / -1; margin: 0; padding-top: 12px; border-top: 1px solid var(--redwood-border); color: var(--finance-teal); font-size: 14px; font-weight: 600; }
+#app #markdownMode kbd { background: rgba(22, 21, 19, .08); color: var(--redwood-text); }
+#app #markdownMode .reference-section { margin-bottom: 40px; scroll-margin-top: 24px; }
+#app #markdownMode .section-heading { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+#app #markdownMode .section-heading h2 { font-size: 24px; font-weight: 600; line-height: 1.25; margin: 0 0 8px; }
+#app #markdownMode .section-heading p { font-size: 15px; line-height: 1.6; margin: 0; }
+#app #markdownMode .pattern-card {
+  padding: 24px;
+  margin-bottom: 20px;
+  background: var(--redwood-surface);
+  border: 1px solid var(--redwood-border);
+  border-top: 6px solid var(--finance-teal);
+  border-radius: 6px;
+  scroll-margin-top: 24px;
+}
+#app #markdownMode .card-topline { display: flex; justify-content: space-between; align-items: start; gap: 16px; margin-bottom: 12px; }
+#app #markdownMode .card-topline h3 { font-size: 19px; line-height: 1.3; font-weight: 600; margin: 0; }
+#app #markdownMode .card-title-link { color: var(--redwood-text); text-decoration: none; }
+#app #markdownMode .card-title-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+#app #markdownMode .pattern-kind { flex-shrink: 0; border-radius: 4px; background: rgba(22, 21, 19, .08); padding: 4px 8px; color: var(--redwood-text); font-size: 12px; font-weight: 600; }
+#app #markdownMode .kind-livelabs { background: #eef3f2; color: #365c5a; }
+#app #markdownMode .kind-caution { background: #f8f0d6; color: #60480d; }
+#app #markdownMode .card-description { margin: 0 0 18px; font-size: 15px; line-height: 1.65; }
+#app #markdownMode .pattern-example { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(200px, .8fr); gap: 24px; }
+#app #markdownMode .snippet-box { min-width: 0; overflow: hidden; border: 1px solid var(--redwood-border); background: #f8f7f5; border-radius: 4px; }
+#app #markdownMode .snippet-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--redwood-border); background: #f0eeeb; }
+#app #markdownMode .snippet-language { font-size: 12px; font-weight: 600; color: var(--oracle-bark); }
+#app #markdownMode .source-code { margin: 0; padding: 16px; border: 0; border-radius: 0; background: #fffdfa; color: #161513; font: 13px/1.65 Consolas, "SFMono-Regular", monospace; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 460px; overflow: auto; tab-size: 4; -webkit-text-fill-color: #161513; }
+#app #markdownMode .source-code code { background: transparent; font: inherit; color: inherit; -webkit-text-fill-color: inherit; }
+#app #markdownMode .snippet-editor { border-top: 1px solid var(--redwood-border); }
+#app #markdownMode .snippet-editor summary { padding: 10px 14px; color: var(--link-blue); font-size: 14px; font-weight: 600; cursor: pointer; }
+#app #markdownMode .editor-content { padding: 14px; }
+#app #markdownMode .editor-content label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+#app #markdownMode .editor-content textarea { display: block; width: 100%; min-height: 150px; max-height: 65vh; padding: 12px; border: 1px solid var(--redwood-border-strong); border-radius: 4px; background: #ffffff; color: #161513; caret-color: #161513; resize: vertical; font: 13px/1.6 Consolas, "SFMono-Regular", monospace; tab-size: 4; -webkit-text-fill-color: #161513; }
+#app #markdownMode .editor-hint { margin: 12px 0; font-size: 13px; line-height: 1.5; }
+#app #markdownMode .copy-feedback { padding: 12px; margin: 0; border-bottom: 1px solid var(--redwood-border); background: #f8f0d6; font-size: 13px; }
+#app #markdownMode .expected-result h4 { color: var(--finance-teal); font-size: 15px; font-weight: 600; margin: 0 0 10px; }
+#app #markdownMode .expected-result p { margin: 0; white-space: pre-line; font-size: 15px; line-height: 1.65; }
+#app #markdownMode .pattern-notes { padding-left: 20px; margin: 18px 0 0; font-size: 14px; line-height: 1.6; }
+#app #markdownMode .pattern-notes li + li { margin-top: 8px; }
+#app #markdownMode .pattern-links { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-top: 16px; font-size: 14px; }
+#app #markdownMode .empty-state { padding: 28px; margin-bottom: 28px; border: 1px solid var(--redwood-border); border-radius: 6px; background: var(--redwood-surface); text-align: center; }
+#app #markdownMode .empty-state h2 { font-size: 24px; }
+#app #markdownMode .publish-checklist { padding: 28px; border: 1px solid var(--redwood-border); border-top: 6px solid var(--finance-teal); border-radius: 6px; background: var(--redwood-surface); scroll-margin-top: 24px; }
+#app #markdownMode .publish-checklist h2 { font-size: 24px; }
+#app #markdownMode .publish-checklist ul { padding-left: 20px; font-size: 15px; line-height: 1.7; margin: 18px 0 24px; }
+#app #markdownMode .publish-checklist li + li { margin-top: 10px; }
+#app #markdownMode .text-link { font-weight: 600; }
+@media (max-width: 1250px) {
+  #app #markdownMode .reference-hero { grid-template-columns: 1fr; }
+  #app #markdownMode .reference-layout { grid-template-columns: 200px minmax(0, 1fr); }
+  #app #markdownMode .pattern-example { grid-template-columns: 1fr; gap: 20px; }
+  #app #markdownMode .filter-panel { grid-template-columns: minmax(0, 1fr) auto; }
+  #app #markdownMode .filter-input-group { grid-column: 1 / -1; }
+}
+@media (max-width: 940px) {
+  #app #markdownMode .reference-hero { margin-top: 20px; padding: 42px 24px 24px; gap: 24px; }
+  #app #markdownMode .reference-layout { grid-template-columns: 1fr; }
+  #app #markdownMode .section-sidebar { position: static; }
+  #app #markdownMode .section-navigation { max-height: none; overflow: visible; }
+  #app #markdownMode .section-navigation ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+  #app #markdownMode .pattern-example { grid-template-columns: minmax(0, 1.2fr) minmax(200px, .8fr); }
+  body.author-nav-closed #app #markdownMode { padding-top: 20px; }
+}
+@media (max-width: 590px) {
+  #app #markdownMode .reference-hero { padding: 40px 20px 22px; }
+  #app #markdownMode .mode-title { font-size: 32px; white-space: normal; }
+  #app #markdownMode .hero-description { font-size: 16px; }
+  #app #markdownMode .filter-panel, #app #markdownMode .pattern-card, #app #markdownMode .publish-checklist { padding: 20px 16px; }
+  #app #markdownMode .section-navigation { padding: 18px 12px; }
+  #app #markdownMode .section-navigation ol { grid-template-columns: 1fr; }
+  #app #markdownMode .card-topline { flex-wrap: wrap; gap: 10px; }
+  #app #markdownMode .pattern-example { grid-template-columns: 1fr; }
+  #app #markdownMode .section-heading h2 { font-size: 22px; }
+}
+@media print {
+  @page { margin: 14mm; }
+  body[data-author-guide-page="markdown"] #app .mode-nav,
+  body[data-author-guide-page="markdown"] #app .author-global-nav-toggle,
+  body[data-author-guide-page="markdown"] #app .app-footer,
+  body[data-author-guide-page="markdown"] .skip-link,
+  #app #markdownMode .section-sidebar,
+  #app #markdownMode .filter-panel,
+  #app #markdownMode .copy-button,
+  #app #markdownMode .snippet-editor,
+  #app #markdownMode .copy-feedback,
+  #app #markdownMode .empty-state,
+  #app #markdownMode .cheatsheet-decoration-strip { display: none !important; }
+  body[data-author-guide-page="markdown"] #app .app-shell { padding: 0 !important; }
+  body[data-author-guide-page="markdown"] #app, #app #markdownMode { background: #fff !important; padding: 0; overflow: visible; }
+  #app #markdownMode .reference-hero { display: block; margin: 0 0 20px; padding: 20px; }
+  #app #markdownMode .mode-title { font-size: 26pt; }
+  #app #markdownMode .reference-layout { display: block; }
+  #app #markdownMode .reference-section[hidden], #app #markdownMode .pattern-card[hidden], #app #markdownMode .source-code[hidden] { display: block !important; }
+  #app #markdownMode .pattern-card { break-inside: avoid; }
+  #app #markdownMode .pattern-example { display: block; }
+  #app #markdownMode .source-code { max-height: none; overflow: visible; font-size: 9pt; }
+  #app #markdownMode .expected-result { margin-top: 16px; }
+  #app #markdownMode .section-heading { break-after: avoid; }
+  #app #markdownMode .publish-checklist { break-inside: avoid; }
+}

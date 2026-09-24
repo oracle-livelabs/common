@@ -258,7 +258,10 @@ window.authorGuideContent = (function () {
         description: "Use this card to create a workshop structure that renders and validates cleanly.",
         steps: [
           "Create the workshop folder and copy the sample labs and workshops folder.",
-          "Rename each lab folder and markdown file together. Remove unused files folders and keep images in each lab's images folder.",
+          "Give each lab one # title, a short introduction, objectives, prerequisites, and one or more ## Task N: Action headings.",
+          "Use Estimated Time: in individual labs, keep Acknowledgements at the end, and add Learn More only when it helps the learner.",
+          "Rename each lab folder and markdown file together. Remove unused files/ folders and keep images in each lab's images/ folder.",
+          "Keep supporting files in each lab's files folder and use relative paths from the Markdown file for local images and files.",
           "Copy the introduction folder when needed. Add a README only when the variant requires one.",
           "Update each manifest with the correct title, help address, tutorial order, and variant settings.",
           "Remove unused include or variables entries. Link shared labs and images with absolute URLs.",
@@ -266,11 +269,12 @@ window.authorGuideContent = (function () {
         ],
         checkpoints: [
           "Sample folders are renamed and manifest.json has no stale entries.",
-          "Each lab has an images folder; unused files folders are removed.",
+          "Each lab has an images folder, any needed files folder, one H1, ordered task headings, and Acknowledgements.",
           "?qa=true preview shows the correct order, structure, and help address."
         ],
         watchFor: [
           "Using an old workshop instead of the canonical template.",
+          "Adding a second H1 or using bold paragraphs instead of task headings.",
           "Leaving unused include or variables entries.",
           "Using relative common links or mixed-case filenames."
         ],
@@ -287,15 +291,38 @@ window.authorGuideContent = (function () {
           "      index.html",
           "      manifest.json",
           "",
-          "manifest.json essentials",
-          "\"workshoptitle\": \"My Workshop Title\",",
-          "\"help\": \"my-team@oracle.com\",",
-          "\"tutorials\": [ ... ]",
-          "\"variables\": [\"../../variables/variables.json\"]  // only if needed",
+          "my-lab.md essentials",
+          "# Explore your environment",
+          "## Introduction",
+          "Estimated Time: 5 minutes",
+          "### Objectives",
+          "### Prerequisites",
+          "## Task 1: Check the environment",
+          "## Acknowledgements",
+          "",
+          "manifest.json essentials (add variables only when needed)",
+          "{",
+          "  \"workshoptitle\": \"My Workshop Title\",",
+          "  \"help\": \"my-team@oracle.com\",",
+          "  \"tutorials\": [",
+          "    {",
+          "      \"title\": \"Lab 1: Explore your environment\",",
+          "      \"filename\": \"../../my-lab/my-lab.md\"",
+          "    }",
+          "  ]",
+          "}",
           "",
           "Preview",
           "index.html?qa=true"
         ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Use these patterns for the lab contract, manifest paths, preview checks, and final validation.",
+        resourceLinks: [
+          resourceLink("Copy a starter lab", "../markdown/#lab-skeleton", "Use one title, objectives, prerequisites, a task, and acknowledgements."),
+          resourceLink("Put the lab in the workshop", "../markdown/#files-and-manifest", "Check manifest order and paths relative to the manifest."),
+          resourceLink("Preview the workshop and run QA", "../markdown/#preview-qa", "Serve the loader and use qa=true; it is not a pass certificate."),
+          resourceLink("Check paths, access, and safe examples", "../markdown/#final-checks", "Test links and assets and remove sensitive data before review.")
+        ],
         image: {
           src: "../assets/media/guide/author-guide/4-labs-markdown-develop-content/images/lintchecker.png",
           alt: "LintChecker enabled in preview with qa=true",
@@ -314,29 +341,47 @@ window.authorGuideContent = (function () {
         description: "Use this card when links work locally but fail in preview or production.",
         steps: [
           "Use lowercase file and folder names, and match their exact case in links.",
-          "Use Markdown links unless the guide requires special markup.",
+          "Use descriptive Markdown links and keep reference definitions on their own line when you reuse a destination.",
+          "Use LiveLabs navigation tokens for the workshop sequence, such as ?lab=lab-1, instead of linking directly to a .md file.",
+          "Keep supporting files in the lab's files folder. Use a normal link for browser-renderable files and add ?download=1 only when the learner must save the file.",
           "Link shared labs and assets with approved absolute common URLs.",
-          "Check links in Live Server and your github.io preview."
+          "Check links in local preview and hosted preview."
         ],
         checkpoints: [
           "Links work locally and on GitHub Pages.",
           "Shared content uses canonical common URLs.",
-          "Standard links use Markdown."
+          "Standard links use Markdown and lab navigation uses the actual workshop token.",
+          "Downloads, renderable files, and new-tab behavior are tested from the learner page."
         ],
         watchFor: [
           "Case-only renames that fail on GitHub Pages.",
           "Local paths for shared common content.",
+          "Linking directly to a lab .md file instead of using the workshop's ?lab= token.",
+          "Adding ?download=1 to every file or assuming target=\"_blank\" is supported.",
           "Assuming local preview proves the production path."
         ],
         snippetMeta: "Path-safe examples",
         snippetTitle: "Use Markdown links and case-correct paths",
         snippet: [
-          "[Open the next lab](./../../my-lab/my-lab.md)",
-          "[Open GitHub Desktop](https://desktop.github.com/)",
+          "[Open Lab 1](?lab=lab-1)",
+          "[Open the sample JSON](files/sample.json)",
+          "[Download the sample data](files/data.csv?download=1)",
+          "",
+          "[Oracle documentation][docs]",
+          "",
+          "[docs]: https://docs.oracle.com/ \"Oracle documentation\"",
           "",
           "Rule:",
           "The path and filename case must match what is on disk exactly."
         ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Use the reference examples for descriptive links, lab navigation, downloads, and final path checks.",
+        resourceLinks: [
+          resourceLink("Descriptive links and references", "../markdown/#links", "Use meaningful labels and keep reference definitions separate."),
+          resourceLink("Navigate between labs", "../markdown/#lab-navigation", "Use the actual ?lab= token from the workshop URL."),
+          resourceLink("Open or download a supporting file", "../markdown/#downloads", "Use ?download=1 only when saving is required."),
+          resourceLink("Check paths, access, and safe examples", "../markdown/#final-checks", "Test every destination from the learner environment.")
+        ],
         image: {
           src: "../assets/media/guide/author-guide/4-labs-markdown-develop-content/images/case-sensitive.png",
           alt: "Case-sensitive image and path reminder",
@@ -355,28 +400,44 @@ window.authorGuideContent = (function () {
         description: "Use this card to reference images correctly in Markdown.",
         steps: [
           "Store workshop images in the current lab's images folder unless they are shared from common.",
+          "Use relative paths from the Markdown file for local images and keep supporting downloads in the lab's files folder.",
           "Write alt text that explains what the image shows or proves.",
+          "Use the LiveLabs image-size extension only when default sizing does not fit; preserve automatic height with an asterisk.",
           "Use approved absolute URLs for shared common images.",
-          "Confirm images load in your GitHub Pages preview."
+          "Confirm images load in local and hosted preview, including on a narrow screen."
         ],
         checkpoints: [
           "Every image has descriptive alt text.",
-          "The same images load locally and on github.io.",
-          "Shared images use canonical common URLs."
+          "Local images use lowercase, case-correct paths relative to the lab Markdown file.",
+          "The same images load locally and on hosted preview.",
+          "Shared images use canonical common URLs and sizing does not distort the screenshot."
         ],
         watchFor: [
           "Storing screenshots outside the images folder.",
           "Vague alt text, such as image1 or screenshot.",
-          "Mixed-case or incomplete image paths."
+          "Mixed-case or incomplete image paths.",
+          "Blank alt text, sensitive data in screenshots, or an image carrying the only required instruction.",
+          "Fixed dimensions that make the image unreadable or distorted."
         ],
         snippetMeta: "Image example",
         snippetTitle: "Shared image plus alt text pattern",
         snippet: [
+          "![The resource list shows the new instance](images/instance-ready.png)",
+          "",
           "![Console home page](https://oracle-livelabs.github.io/common/images/console/home-page.png \" \")",
+          "",
+          "![Architecture overview](images/architecture.png =50%x*)",
           "",
           "Rule:",
           "Use alt text that tells the learner what the image proves or what UI they should recognize."
         ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Use the reference examples for local image paths, sizing, indentation, and accessible descriptions.",
+        resourceLinks: [
+          resourceLink("Add a useful screenshot", "../markdown/#images", "Keep essential instructions in text and describe what the image proves."),
+          resourceLink("Size an image without distortion", "../markdown/#image-sizing", "Prefer default sizing or automatic height with an asterisk."),
+          resourceLink("Paragraphs, images, and code inside a step", "../markdown/#step-content", "Indent supporting content by four spaces inside a numbered step.")
+        ],
         image: {
           src: "../assets/media/guide/author-guide/4-labs-markdown-develop-content/images/image-desc.png",
           alt: "Markdown image reference with descriptive alt text",
@@ -394,31 +455,52 @@ window.authorGuideContent = (function () {
         tags: ["markdown"],
         description: "Use this card when learners must copy commands or SQL from the guide.",
         steps: [
-          "Wrap copyable commands in <copy> tags.",
-          "Use sql or plsql fenced blocks inside <copy> tags for multiline SQL.",
-          "Place each copy block beside its step.",
-          "Preview and test the copy button."
+          "Put balanced <copy> tags inside a fenced bash, sql, or plsql block, and include only the command or SQL the learner should paste.",
+          "Use a separate text or output block for expected results; never put a shell prompt, secrets, or expected output inside <copy> tags.",
+          "Indent the code, expected output, and screenshots by four spaces when they belong inside a numbered step.",
+          "Place each copy block beside its step, preserve SQL order and line breaks, and preview the resulting copy button."
         ],
         checkpoints: [
           "Copy buttons appear where needed.",
-          "SQL preserves line breaks and execution order.",
-          "Each copy block supports its nearby step."
+          "Copied text excludes the <copy> tags and preserves SQL line breaks and execution order.",
+          "Expected output is visibly separate and each copy block supports its nearby step.",
+          "The intended client accepts the copied SQL or command."
         ],
         watchFor: [
           "Plain blocks where learners must paste content.",
           "Unrelated commands in one copy block.",
-          "Untested copy behavior."
+          "Shell prompts, secrets, expected output, or missing language labels in the fenced block.",
+          "Missing indentation that detaches a code block from its numbered step.",
+          "Untested copy behavior or a client-specific trailing newline."
         ],
         snippetMeta: "Copy-ready SQL",
         snippetTitle: "Wrap SQL inside copy tags",
         snippet: [
-          "```sql",
-          "<copy>",
-          "SELECT * FROM employees;",
-          "SELECT * FROM departments;",
-          "</copy>",
-          "```"
+          "1. Check the client version.",
+          "",
+          "    Run this command:",
+          "",
+          "    ```sql",
+          "    <copy>",
+          "    SELECT * FROM employees;",
+          "    SELECT * FROM departments;",
+          "    </copy>",
+          "    ```",
+          "",
+          "    Expected output:",
+          "",
+          "    ```text",
+          "    Two result sets appear.",
+          "    ```"
         ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Use the reference examples for fenced languages, copy tags, expected output, and nested step content.",
+        resourceLinks: [
+          resourceLink("Inline code and fenced blocks", "../markdown/#inline-code", "Label commands and expected output so learners know what to run."),
+          resourceLink("Add a LiveLabs copy button", "../markdown/#copy-code", "Keep balanced tags around only the learner's command."),
+          resourceLink("Paragraphs, images, and code inside a step", "../markdown/#step-content", "Indent supporting blocks by four spaces inside a numbered step."),
+          resourceLink("Reveal an optional answer", "../markdown/#reveal-code", "Keep optional solutions in details/summary outside required instructions.")
+        ],
         image: {
           src: "../assets/media/guide/author-guide/4-labs-markdown-develop-content/images/code-copy.png",
           alt: "LiveLabs copy tag inside a code block",
@@ -436,31 +518,35 @@ window.authorGuideContent = (function () {
         tags: ["markdown"],
         description: "Use this card for shared content or variant-specific sections.",
         steps: [
-          "Reference stable common labs with absolute manifest URLs.",
-          "Add manifest variables only for values reused across variants.",
-          "Use conditional blocks for multiple delivery types.",
-          "Preview every conditional branch."
+          "Insert a shared-content shortname such as [](include:shared-prerequisites), then map it to a file in the manifest's top-level include property.",
+          "Reference stable common labs with approved absolute URLs and resolve include paths from the manifest location.",
+          "Add manifest variables only for values reused across variants; keep the variables JSON path relative to the manifest and never store secrets there.",
+          "Put the matching type on the tutorial entry, keep shared steps outside <if> blocks, and preview every conditional branch.",
+          "Use maintained building blocks before duplicating common provisioning or setup content."
         ],
         checkpoints: [
           "Variables serve a real reuse case.",
-          "Conditional branches are easy to follow.",
-          "Tutorial order works when a branch is hidden."
+          "Include mappings, variable files, and tutorial type values match the manifest paths and names.",
+          "Conditional branches are easy to follow and every supported type has been tested.",
+          "Tutorial order works when a branch is hidden and reused content still fits the assembled lab."
         ],
         watchFor: [
           "Copying canonical shared content.",
           "Overly complex conditional logic.",
+          "Putting include mappings or type at the wrong manifest level.",
+          "Putting passwords or tokens in variables files.",
           "Testing only one delivery type."
         ],
         snippetMeta: "Variant pattern",
         snippetTitle: "Manifest variables plus conditional content",
         snippet: [
-          "\"variables\": [",
-          "  \"../../variables/variables.json\",",
-          "  \"../../variables/variables-in-another-file.json\"",
-          "]",
+          "\"include\": {",
+          "  \"shared-prerequisites\": \"../../shared/prerequisites.md\"",
+          "},",
+          "\"variables\": [\"../../variables/variables.json\"],",
           "",
-          "<if type=\"livelabs\">",
-          "Use the LiveLabs environment instructions here.",
+          "<if type=\"python\">",
+          "Use the Python environment instructions here.",
           "</if>"
         ].join("\n"),
         image: {
@@ -468,9 +554,183 @@ window.authorGuideContent = (function () {
           alt: "Conditional formatting example in Visual Studio Code",
           caption: "Conditional content should stay obvious enough that another author can follow it."
         },
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Use the reference examples for include mappings, conditional types, reusable values, and maintained building blocks.",
+        resourceLinks: [
+          resourceLink("Include a shared Markdown file", "../markdown/#include-content", "Use a shortname so common content stays maintainable."),
+          resourceLink("Map the include in the manifest", "../markdown/#include-mapping", "Keep the mapped file path relative to the manifest."),
+          resourceLink("Write conditional instructions", "../markdown/#conditional-content", "Keep variants readable and testable."),
+          resourceLink("Select the variant in the manifest", "../markdown/#conditional-manifest", "Put the matching type on the tutorial entry."),
+          resourceLink("Define a value and use it in Markdown", "../markdown/#variable-values", "Keep variable files valid, relative, and free of secrets."),
+          resourceLink("Use maintained building blocks", "../markdown/#building-blocks", "Prefer reusable building blocks over copied setup instructions.")
+        ],
         sourceHref: labLink("4-labs-markdown-develop-content"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
+      },
+      {
+        id: "markdown-writing",
+        title: "Markdown Writing Patterns",
+        short: "Use headings, paragraphs, lists, notes, and literal syntax that stay readable in LiveLabs.",
+        accent: "ocean",
+        tags: ["markdown"],
+        description: "Use this card when a lab needs a clear Markdown outline and learner-friendly prose.",
+        steps: [
+          "Use one # title, ## sections, ### subsections, and ## Task N: Action headings in sequence; do not replace headings with bold paragraphs.",
+          "Separate paragraphs with a blank line. Use two trailing spaces only when an intentional line break is required.",
+          "Use bold for interface labels, italic text sparingly, and blockquotes for context rather than required actions.",
+          "Use numbered lists for ordered actions, bullets for choices or prerequisites, and four-space indentation for nested lists or content inside a step.",
+          "Escape punctuation or use inline code when the lab needs to show Markdown syntax literally."
+        ],
+        checkpoints: [
+          "The page has one clear H1 and a predictable heading hierarchy.",
+          "Each procedure has one main action per numbered step and an observable result.",
+          "Notes support the procedure without hiding a required action.",
+          "Nested lists and supporting content stay attached to the correct step."
+        ],
+        watchFor: [
+          "A second H1 or skipped heading levels that make the outline hard to scan.",
+          "Single newlines used where a new paragraph was intended.",
+          "Bullets used for actions whose order matters.",
+          "Markdown markers that render instead of appearing as literal syntax."
+        ],
+        snippetMeta: "Readable Markdown",
+        snippetTitle: "Headings, steps, notes, and nested choices",
+        snippet: [
+          "# Explore your environment",
+          "",
+          "## Task 1: Check the environment",
+          "",
+          "1. Open the console.",
+          "",
+          "    > **Note:** Keep this tab open.",
+          "",
+          "    Select **Create**.",
+          "",
+          "    - Region",
+          "    - Compartment",
+          "        - Confirm the resource appears.",
+          "",
+          "Use `oci --version` to check the client."
+        ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Open the existing examples for headings, paragraphs, lists, notes, escaping, and content inside steps.",
+        resourceLinks: [
+          resourceLink("Headings and hierarchy", "../markdown/#headings", "Keep one H1 and use task headings for lab actions."),
+          resourceLink("Paragraphs and line breaks", "../markdown/#paragraphs", "Use blank lines and intentional breaks deliberately."),
+          resourceLink("Numbered steps", "../markdown/#ordered-lists", "Write one ordered action per step."),
+          resourceLink("Bullets and nested lists", "../markdown/#unordered-lists", "Use bullets for choices and prerequisites."),
+          resourceLink("Notes, blockquotes, and dividers", "../markdown/#quotes-and-rules", "Keep context separate from required actions."),
+          resourceLink("Show punctuation literally", "../markdown/#escape-characters", "Escape syntax when the learner must see it as text."),
+          resourceLink("Paragraphs, images, and code inside a step", "../markdown/#step-content", "Indent supporting content by four spaces.")
+        ],
+        sourceHref: labLink("4-labs-markdown-develop-content"),
+        sourceLabel: "Open Step by Step Guide",
+        guideTarget: "core-workflow"
+      },
+      {
+        id: "markdown-media-tables",
+        title: "Markdown Media & Tables",
+        short: "Add videos and compact comparison tables without hiding the learner's procedure.",
+        accent: "sienna",
+        tags: ["markdown"],
+        description: "Use this card when a lab needs a video explanation or a small comparison table.",
+        steps: [
+          "Use the documented provider prefix and video ID for YouTube or Video Hub embeds; replace every VIDEO_ID placeholder before publishing.",
+          "Use an approved direct video URL only when the audience can access it, and provide captions and a written alternative.",
+          "Use a table for compact comparison, keep the same number of columns in every row, and use descriptive link text or inline code in cells.",
+          "Add a table title immediately after the final row with {: title=\"...\"}; LiveLabs supplies the table number.",
+          "Preview media and tables on a narrow screen, then keep long procedures in numbered steps instead of dense tables."
+        ],
+        checkpoints: [
+          "Video embeds use a supported provider form and real accessible IDs.",
+          "The written lab remains complete if the video cannot be played.",
+          "Tables have a header, separator row, consistent columns, and a useful caption when needed.",
+          "Links, alignment, captions, and media render correctly in the assembled workshop."
+        ],
+        watchFor: [
+          "Ordinary watch URLs or image links used as LiveLabs embeds.",
+          "Videos without captions, access checks, or a text alternative.",
+          "Wide tables that hide the action on a phone.",
+          "A table caption separated from its table or placeholder video IDs left in production."
+        ],
+        snippetMeta: "Media and comparison",
+        snippetTitle: "Captioned table plus LiveLabs video embeds",
+        snippet: [
+          "| Resource | Status | Count |",
+          "| :--- | :---: | ---: |",
+          "| [Documentation](https://docs.oracle.com/) | **Ready** | `2` |",
+          "| `sample.json` | Review | `1` |",
+          "{: title=\"Resource status\"}",
+          "",
+          "[](youtube:VIDEO_ID:small)",
+          "[](videohub:VIDEO_ID:medium)",
+          "[](video:https://example.com/workshop-overview.mp4)"
+        ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Open the existing examples for supported video syntax, direct video files, tables, and captions.",
+        resourceLinks: [
+          resourceLink("Embed a video", "../markdown/#video-embeds", "Use the provider prefix and replace the video ID."),
+          resourceLink("Use a direct video file when needed", "../markdown/#direct-video", "Verify format, permissions, captions, and lifetime."),
+          resourceLink("Columns, alignment, and links", "../markdown/#table-alignment", "Keep comparison tables compact and consistent."),
+          resourceLink("Give a table a caption", "../markdown/#table-caption", "Place the title immediately after the table."),
+          resourceLink("Compare information in a table", "../markdown/#tables", "Use numbered steps for procedures."),
+          resourceLink("Check paths, access, and safe examples", "../markdown/#final-checks", "Test every media and table destination.")
+        ],
+        sourceHref: labLink("4-labs-markdown-develop-content"),
+        sourceLabel: "Open Step by Step Guide",
+        guideTarget: "core-workflow"
+      },
+      {
+        id: "markdown-preview-qa",
+        title: "Markdown Preview & QA",
+        short: "Preview the assembled workshop, run checks, and avoid Markdown extensions the renderer does not support.",
+        accent: "pine",
+        tags: ["markdown"],
+        description: "Use this card before review or publication to check the learner's real rendering.",
+        steps: [
+          "Serve the workshop over HTTP and open workshops/tenancy/index.html, not the Markdown file directly.",
+          "Use ?qa=true on the workshop URL, or &qa=true when a lab query already exists, to enable the available checks.",
+          "Run the documented Markdown validator, fix findings, and repeat the full learner procedure from the assembled workshop.",
+          "Check task order, copy buttons, includes, conditions, downloads, images, videos, links, tables, and narrow-screen readability.",
+          "Replace every placeholder, remove private data, and avoid unsupported extensions unless the actual LiveLabs renderer proves them safe."
+        ],
+        checkpoints: [
+          "The loader opens the intended lab and the workshop menu order is correct.",
+          "QA and validator findings are resolved rather than treated as a pass certificate.",
+          "Every link, download, asset, copy block, include, condition, and media item works from the learner environment.",
+          "The final page is readable on a narrow screen and contains no secrets or stale placeholders."
+        ],
+        watchFor: [
+          "Opening a .md file directly and assuming it matches the workshop loader.",
+          "Using qa=true as proof that all content is correct.",
+          "Features such as task checkboxes, footnotes, or definition lists that render literally.",
+          "Windows-only path casing, author-only permissions, or examples containing private information."
+        ],
+        snippetMeta: "Preview and final pass",
+        snippetTitle: "Run the workshop loader and final learner check",
+        snippet: [
+          "http://127.0.0.1:5500/workshops/tenancy/index.html?qa=true",
+          "http://127.0.0.1:5500/workshops/tenancy/index.html?lab=lab-1&qa=true",
+          "",
+          "Final pass:",
+          "- Follow the lab from start to finish as a learner.",
+          "- Open every link and download.",
+          "- Check code, images, tables, and narrow-screen layout.",
+          "- Replace placeholders and remove private information."
+        ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Open the existing QA and compatibility guidance before you hand the workshop to review or publication.",
+        resourceLinks: [
+          resourceLink("Preview the workshop and run QA", "../markdown/#preview-qa", "Open the loader with the appropriate qa=true query."),
+          resourceLink("Check paths, access, and safe examples", "../markdown/#final-checks", "Test from the intended learner environment."),
+          resourceLink("Do not assume every Markdown extension works", "../markdown/#unsupported-extensions", "Use only syntax the renderer supports."),
+          resourceLink("Before you publish", "../markdown/#before-publish", "Complete the final learner-focused pass."),
+          resourceLink("Navigate between labs", "../markdown/#lab-navigation", "Test the actual workshop sequence token.")
+        ],
+        sourceHref: labLink("4-labs-markdown-develop-content"),
+        sourceLabel: "Open Step by Step Guide",
+        guideTarget: "core-workflow"
       },
       {
         id: "quiz-blocks",

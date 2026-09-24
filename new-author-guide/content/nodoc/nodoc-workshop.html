@@ -2,19 +2,21 @@
   <summary><span>Introduction · NoDoc platform</span><small>Workshop orientation</small></summary>
   <div class="nodoc-tree-content">
     <p><strong>NoDoc</strong> is an Oracle APEX documentation workbench for creating, organizing, reviewing, improving,
-      ingesting, and preparing technical content for publication. This workshop follows the LiveLabs author journey:
-      select the right Focus Area, create an article and version, build focused pages, review changes, validate the
-      preview, then use the existing WMS publishing request path. Choose one creation route and one page route for the
-      required path; use the other routes as reference.</p>
+      ingesting, and preparing technical content for LiveLabs pre-publish. This workshop follows the LiveLabs author
+      journey: select the right Focus Area, create an article and version, build focused pages, review changes, validate
+      the content, and create a LiveLabs Pre Publish request. NoDoc takes the LiveLabs workflow through pre-publish; the
+      WMS publishing request is a separate handoff after that point. Choose one creation route and one page route for
+      the required path; use the other routes as reference.</p>
     <h4>Prerequisites</h4>
     <ul>
-      <li>Oracle SSO access to the NoDoc environment.</li>
-      <li>A NoDoc role that permits the authoring, comment, or review actions you will practice; deletion remains
-        limited
-        to the comment owner and roles with that privilege.</li>
+      <li>Oracle SSO is the only access prerequisite for NoDoc; no additional setup is required to open the
+        application. For workshop actions, use content your identity is allowed to view or change. LiveLabs authoring
+        does not require a contributor role.</li>
       <li>An approved practice article or page set in the LiveLabs Focus Area. Use non-confidential content for
         ingestion
         and AI-assisted review.</li>
+      <li>If you complete the MCP task, Codex installed on your Windows laptop and permission to create a user
+        environment variable.</li>
     </ul>
     <h4>Objectives</h4>
     <ul>
@@ -23,24 +25,28 @@
       <li><strong>Edit</strong> content, apply metadata, and use supported editor features.</li>
       <li><strong>Collaborate</strong> with comments and draft review without overwriting original content accidentally.
       </li>
+      <li><strong>Connect Codex to NoDoc through MCP</strong> using your own NoDoc identity and permissions.</li>
+      <li><strong>Review and recover history</strong> for articles and individual pages, including deleted article pages.</li>
       <li><strong>Validate and correct content with Vibe Doc-ing</strong> using standards, personas, custom prompts, and
         the approved Word-Checklist, with explicit human review.</li>
       <li><strong>Ingest and query</strong> approved content with Ask NoDoc while inspecting source context.</li>
-      <li><strong>Complete Quality Assurance and review</strong> before creating the WMS publishing request.</li>
+      <li><strong>Complete Quality Assurance and LiveLabs Pre Publish</strong> before handing the content to the WMS
+        publishing request.</li>
     </ul>
   </div>
 </details>
 <details class="nodoc-tree-group">
-  <summary><span>Lab 1 · Access and navigation</span><small>10 minutes</small></summary>
+  <summary><span>Lab 1 · Access, navigation, and Codex MCP</span></summary>
   <div class="nodoc-tree-content">
     <div data-video-card data-video-title="Lab 1 walkthrough"
-      data-video-summary="Preview learning aid. Confirm current labels and permissions in the approved NoDoc environment."
-      data-video-features="Access and navigation|Role check|LiveLabs repo"></div>
-    <p>Connect to NoDoc, confirm the assigned role, and open the LiveLabs Focus Area used throughout the workshop.</p>
+      data-video-summary="Preview learning aid. Sign in with Oracle SSO, navigate the NoDoc platform, and connect Codex to NoDoc through MCP."
+      data-video-features="Oracle SSO|NoDoc navigation|Codex MCP"></div>
+    <p>Sign in to NoDoc with Oracle SSO, open the LiveLabs Focus Area, and connect Codex through NoDoc MCP when you
+      want Codex to browse or update authorized content. LiveLabs does not require a contributor role.</p>
     <h4>Objectives</h4>
     <ul>
       <li>Sign in through Oracle SSO.</li>
-      <li>Navigate the NoDoc platform.</li>
+      <li>Read the Focus Area, LiveLabs repo, article, version, and page hierarchy before selecting content.</li>
     </ul>
     <details class="nodoc-task">
       <summary>Task 1 · Open NoDoc and confirm access</summary>
@@ -48,9 +54,8 @@
         <li>Open the approved NoDoc environment. <span class="wms-platform-actions nodoc-launch-actions"><a
               class="btn btn-primary rounded-pill px-4" href="https://nodoc.oraclecorp.com/" target="_blank"
               rel="noopener noreferrer" aria-label="Open NoDoc in a new tab">Open NoDoc</a><span
-              class="wms-platform-note">Requires Oracle VPN and NoDoc access.</span></span></li>
-        <li>Sign in through Oracle SSO. If the stage environment requests a bypass code, obtain it through the approved
-          manager process; do not paste codes into workshop artifacts.</li>
+              class="wms-platform-note">Sign in with Oracle SSO.</span></span></li>
+        <li>Sign in through Oracle SSO. No additional setup or bypass code is required.</li>
         <li>Choose the <strong>NoDoc</strong> application.
           <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
             aria-label="Expand image: NoDoc platform after successful Oracle SSO sign-in">
@@ -60,8 +65,8 @@
             <figcaption>Select NoDoc after the Oracle SSO sign-in completes.</figcaption>
           </figure>
         </li>
-        <li>Confirm that the NoDoc platform opens, then check the role or ownership indicator available in your tenancy.
-          Use a contributor role to author; use a reader or reviewer role only for the review actions it exposes.
+        <li>Confirm that the NoDoc platform opens. For LiveLabs, continue with the NoDoc access already assigned to your
+          account; do not treat a contributor role as an authoring prerequisite.
           <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
             aria-label="Expand image: Reached NoDoc platform">
             <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
@@ -72,55 +77,141 @@
       </ol>
     </details>
     <details class="nodoc-task">
-      <summary>Task 2 · Open LiveLabs Focus Area</summary>
+      <summary>Task 2 · Navigate the NoDoc platform</summary>
+      <p>After access is confirmed, navigate the NoDoc Repo table of contents before creating or editing content. Follow
+        the hierarchy first, then use the navigation steps to select the content you need.</p>
       <ol>
-        <li>Open the navigation menu and select <strong>LiveLabs Focus Area</strong>.
+        <li><strong>Start with the workspace hierarchy.</strong> The technical guide describes the Focus Area as the
+          top-level scope, with articles and pages shown in the selected workspace. Use the hierarchy below as your
+          navigation map.
+          <figure class="nodoc-route-evidence nodoc-hierarchy-diagram" data-expandable="true" tabindex="0" role="button"
+            aria-label="Expand diagram: NoDoc workspace hierarchy">
+            <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+            <img data-nodoc-asset="images/workspace-hierarchy.svg"
+              alt="Diagram showing Focus Area, LiveLabs repo, Article, optional Article version, and Page as nested NoDoc navigation levels"
+              class="img-fluid rounded">
+            <figcaption>Use the parent chain to keep the selected content in context.</figcaption>
+          </figure>
+        </li>
+        <li>Open the navigation menu and select the <strong>LiveLabs</strong> Focus Area. The Focus Area sets the
+          collection of content you are viewing; it is the first level in the hierarchy.
           <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
-            aria-label="Expand image: Select the LiveLabs Focus Area">
+            aria-label="Expand image: Select the LiveLabs Focus Area from the Focus Area selector">
             <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
             <img data-nodoc-asset="images/3_open_hamburger_menu.png" alt="Select the LiveLabs Focus Area"
               class="img-fluid rounded">
-            <figcaption>Choose the LiveLabs Focus Area from the application navigation.</figcaption>
+            <figcaption>Select the LiveLabs Focus Area before reading its workspace contents.</figcaption>
           </figure>
         </li>
-        <li>Open the <strong>LiveLabs repo</strong> in that Focus Area and confirm that its content is visible. In this
+        <li>Read the selected Focus Area's <strong>LiveLabs repo</strong> as the workspace table of contents. In this
           guide, “LiveLabs repo” means the NoDoc workspace content location; it does not require a local Git workflow.
+          Use <strong>Open All</strong> or <strong>Close All</strong> to inspect the available branches of the tree.
           <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
             aria-label="Expand image: LiveLabs Focus Area and LiveLabs repo content">
             <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
             <img data-nodoc-asset="images/4_livelabs_focus_area.png" alt="LiveLabs Focus Area and LiveLabs repo content"
               class="img-fluid rounded">
-            <figcaption>Open the LiveLabs repo inside the selected Focus Area.</figcaption>
+            <figcaption>The selected Focus Area exposes the LiveLabs repo table of contents.</figcaption>
           </figure>
         </li>
-        <li>Use <strong>Open All</strong> or <strong>Close All</strong>, if those controls are available, to inspect the
-          article and page hierarchy before adding content.</li>
+        <li>Expand an <strong>Article</strong>. An article is a top-level documentation item in the repo and is the
+          parent of its pages and any displayed versions.
+          <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
+            aria-label="Expand image: Article and page entries in the LiveLabs repo">
+            <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+            <img data-nodoc-asset="images/5_add_article.png"
+              alt="NoDoc article selection dialog with article nodes visible in the left table of contents"
+              class="img-fluid rounded">
+            <figcaption>The Article entry is the parent before the version and page levels.</figcaption>
+          </figure>
+        </li>
+        <li>If the article shows an <strong>Article version</strong>, treat that version as the next level before
+          selecting a page. A version is optional in the navigation path; do not invent one when the article does not
+          display it.
+          <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
+            aria-label="Expand image: Article version in the LiveLabs repo">
+            <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+            <img data-nodoc-asset="images/how_to_create_version_2_version_2_0_created.png"
+              alt="LiveLabs repo table of contents showing an article with version 2.0"
+              class="img-fluid rounded">
+            <figcaption>An article version is shown as a distinct versioned article entry in the table of contents.
+            </figcaption>
+          </figure>
+        </li>
+        <li>Expand the article or version and select the target <strong>Page</strong>. Pages are the leaf-level items
+          where you read, edit, comment, review history, or create a draft.
+          <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
+            aria-label="Expand image: Page-level entries and controls in the NoDoc table of contents">
+            <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+            <img data-nodoc-asset="images/add_page_2_plus_from_article.png"
+              alt="NoDoc table of contents showing page-level entries beneath articles"
+              class="img-fluid rounded">
+            <figcaption>Use the page node for page-level authoring and review actions.</figcaption>
+          </figure>
+        </li>
+        <li>Before an authoring, history, MCP, or Pre Publish action, record the complete target as
+          <strong>Focus Area → LiveLabs repo → Article → Article version (if available) → Page</strong>. This keeps
+          similarly named articles and pages from being mixed up.</li>
       </ol>
     </details>
     <details class="nodoc-task">
-      <summary>Task 3 · Understand the workspace hierarchy</summary>
-      <ul>
-        <li>When navigating the workspace, use the following hierarchy: <strong>Focus Area → LiveLabs repo → Article →
-            Article version (if available) → Page</strong>.</li>
-      </ul>
+      <summary>Task 3 · Connect Codex to NoDoc through MCP</summary>
+      <p>NoDoc MCP lets Codex browse and update NoDoc through your own NoDoc identity and permissions. The personal
+        token identifies you; it does not grant additional access.</p>
+      <ol>
+        <li>Open the <a href="https://asknodoc.oraclecorp.com/mcp-access-tokens" target="_blank"
+            rel="noopener noreferrer">NoDoc MCP Access Tokens</a> page. Sign in to NoDoc if prompted, enter a label,
+          choose an expiration date, select <strong>Generate Token</strong>, and copy the complete token immediately.
+          The token is shown only once. Never paste it into this guide, chat, screenshots, source control, or
+          <code>config.toml</code>.</li>
+        <li>Create a Windows <strong>user</strong> environment variable named
+          <code>ASK_NODOC_MCP_TOKEN</code> and paste the token into its value. Use a user variable, not a system
+          variable. Restart applications that were already open before the variable was created.</li>
+        <li>Open <code>C:\Users\&lt;username&gt;\.codex\config.toml</code> and add this section once. Keep the token out
+          of the file:
+          <pre class="nodoc-command"><code>[mcp_servers.nodoc]
+url = "https://asknodoc.oraclecorp.com/mcp"
+bearer_token_env_var = "ASK_NODOC_MCP_TOKEN"
+enabled = true
+required = false</code></pre>
+        </li>
+        <li>Fully close Codex, including any open Codex windows. Open Codex again, start a new chat, and enter:
+          <pre class="nodoc-command"><code>Use the nodoc MCP to list all focus areas.</code></pre>
+          <p>Codex should call <code>list_focus_areas</code> directly and return only the Focus Areas your NoDoc
+            identity can see.</p>
+          <p>If needed, enter this explicit follow-up:</p>
+          <pre class="nodoc-command"><code>Use the configured nodoc MCP tool directly. Do not use shell commands, curl, or a JSON-RPC fallback. List all focus areas and follow pagination until next_offset is null.</code></pre>
+        </li>
+        <li>Confirm that the verification returns only content your NoDoc identity can see. Do not print the token while
+          troubleshooting. Continue to <a href="#nodoc:8">Lab 8 · Use NoDoc MCP for authoring and Pre Publish</a> for
+          the supported browse, create, edit, collaborator, delete, history, diff, and LiveLabs pre-publish workflows.
+        </li>
+      </ol>
+      <p class="nodoc-callout"><strong>Next lab:</strong> <a href="#nodoc:8">Lab 8 · Use NoDoc MCP for authoring and
+          Pre Publish</a> covers the actual content actions. <strong>Documentation:</strong> See the approved <a
+          href="https://docs-uat.us.oracle.com/en/sptest/test-suite/test-product/test-release/nodoc/formal-nodoc-functionalities-and-usage/nodoc-mcp.html"
+          target="_blank" rel="noopener noreferrer">NoDoc MCP User Guide</a> for current token, configuration,
+        browse, edit, history, and LiveLabs pre-publish details.</p>
     </details>
   </div>
 </details>
 <details class="nodoc-tree-group">
-  <summary><span>Lab 2 · Create and manage article structure</span></summary>
+  <summary><span>Lab 2 · Create, manage, and recover article structure</span></summary>
   <div class="nodoc-tree-content">
     <div data-video-card data-video-title="Lab 2 walkthrough"
-      data-video-summary="Preview learning aid. Create an article, build its page hierarchy, choose an approved page creation route, and clean up only authorized content."
-      data-video-features="Article creation|Page structure|Creation routes|Page lifecycle"></div>
+      data-video-summary="Preview learning aid. Create an article, build its page hierarchy, choose an approved page creation route, and review or recover authorized content."
+      data-video-features="Article creation|Page structure|Creation routes|Page history|Page lifecycle"></div>
     <p>Build the article foundation before editing content or handing work to collaborators. Create the article, add
-      pages under the intended parents, choose the appropriate creation route for each page, and remove only content
-      you own and intend to delete. Follow one primary creation path end to end; the tabs document alternatives.</p>
+      pages under the intended parents, choose the appropriate creation route for each page, and remove or recover only
+      content you are authorized to manage. Follow one primary creation path end to end; the tabs document alternatives.</p>
     <h4>Objectives</h4>
     <ul>
       <li>Create an article with a clear name and content version.</li>
       <li>Build a page hierarchy under the intended article or parent page.</li>
       <li>Choose a page creation method that matches the approved source.</li>
       <li>Delete only authorized articles or pages after verifying the target.</li>
+      <li>Review article-level history and individual page history before taking recovery action.</li>
+      <li>Restore a retained page version or a deleted article page after verifying the exact target.</li>
     </ul>
     <details class="nodoc-task">
       <summary>Task 1 · Create an article</summary>
@@ -689,7 +780,7 @@
                   <div class="nodoc-architecture-scope-detail" data-nodoc-architecture-scope-detail hidden>
                     <label for="nodoc-architecture-scope-name">Scope name <span>(required for a lab or page scope)</span></label>
                     <input id="nodoc-architecture-scope-name" class="form-control" type="text" maxlength="160"
-                      placeholder="Example: Lab 8 · Pre Publish">
+                      placeholder="Example: Lab 9 · Pre Publish">
                     <span id="nodoc-architecture-scope-help" class="nodoc-codex-prompt-meta">Name the lab or page whose architecture the diagram should explain.</span>
                   </div>
                   <label for="nodoc-architecture-categories">4. Component categories <span>(optional)</span></label>
@@ -932,6 +1023,134 @@
         <li>Read the confirmation dialog, verify the target, then select <strong>OK</strong>. The selected content is
           deleted; verify that it no longer appears in the table of contents.</li>
       </ol>
+    </details>
+    <details class="nodoc-task">
+      <summary>Task 4 · Review and recover article and page history</summary>
+      <p>History has two separate scopes. Select the whole article when you need article-level history or recovery of a
+        deleted child page. Select an individual page when you need to compare, preview, or restore that page's retained
+        history versions. Do not mix the article-level deleted-page flow with the page-level retained-version flow.</p>
+      <section class="nodoc-history-scope" aria-labelledby="nodoc-article-history-scope">
+        <h5 id="nodoc-article-history-scope">Article-level History: review the whole article and restore deleted pages</h5>
+        <p>Select the article in the table of contents before opening <strong>History</strong>. The dialog is then scoped
+          to that article and version. Its <strong>Restore Deleted pages</strong> tab lists pages that were deleted from
+          the selected article; it is the only flow in this task that restores a deleted page.</p>
+        <ol>
+          <li>Select the article, choose <strong>History</strong>, confirm the Focus Area, article, and version, then
+            open <strong>Restore Deleted pages</strong>. Review the exact deleted-page row before choosing an action.
+            <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
+              aria-label="Expand image: Article-level History with Restore Deleted pages selected">
+              <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+              <img data-nodoc-asset="images/restore_deleted_pages_1_setup.png"
+                alt="NoDoc article-level History dialog showing the Restore Deleted pages tab and Preview and Restore actions"
+                class="img-fluid rounded">
+              <figcaption>Keep the article and version context visible while reviewing the deleted-page row.</figcaption>
+            </figure>
+          </li>
+          <li>Use <strong>Preview</strong> when you need to inspect the deleted page. To recover it, enter a clear reason,
+            choose <strong>Restore Deleted Page</strong>, confirm the dialog, and verify that the page returns to the
+            intended article version and page order.
+            <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
+              aria-label="Expand image: Confirm restoration of a deleted article page">
+              <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+              <img data-nodoc-asset="images/restore_deleted_pages_2_restore_deleted_page_confirmation_message.png"
+                alt="NoDoc Restore Deleted Page form and confirmation dialog for an article-level deleted page restore"
+                class="img-fluid rounded">
+              <figcaption>Restore the deleted page from the article-level History dialog and confirm the target.</figcaption>
+            </figure>
+          </li>
+        </ol>
+      </section>
+      <section class="nodoc-history-scope" aria-labelledby="nodoc-page-history-scope">
+        <h5 id="nodoc-page-history-scope">Page-level History: compare or restore one page</h5>
+        <p>Select one page in the table of contents before opening <strong>History</strong>. Every action in this section
+          applies only to that page in its article version. It does not restore deleted pages and it does not change
+          sibling pages.</p>
+        <ol>
+          <li>Select the individual page, choose <strong>History</strong>, and confirm the Focus Area, page name, article
+            version, and retained history options.
+            <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
+              aria-label="Expand image: Open History for an individual NoDoc page">
+              <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+              <img data-nodoc-asset="images/page_history_1_highlight_history_button.png"
+                alt="NoDoc individual page selected with the History button highlighted" class="img-fluid rounded">
+              <figcaption>Open page-level History from the exact page whose retained versions you need to review.</figcaption>
+            </figure>
+          </li>
+          <li><strong>Compare retained versions.</strong> Expand <strong>Compare History</strong>, choose the older base
+            snapshot and newer target snapshot, then select <strong>Compare</strong>. Read the side-by-side Markdown
+            result and record the changes before deciding whether the current page needs recovery.
+            <div class="nodoc-evidence-grid">
+              <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
+                aria-label="Expand image: NoDoc page history review options">
+                <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+                <img data-nodoc-asset="images/page_history_2_history_page_review_options.png"
+                  alt="NoDoc Page History with Compare History and Preview and Restore options"
+                  class="img-fluid rounded">
+                <figcaption>Choose Compare History when the question is which retained versions differ.</figcaption>
+              </figure>
+              <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
+                aria-label="Expand image: Set up a NoDoc history comparison">
+                <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+                <img data-nodoc-asset="images/page_history_3_history_page_compare_history_setup.png"
+                  alt="NoDoc Compare History with base version, target version, and Compare button"
+                  class="img-fluid rounded">
+                <figcaption>Select the base and target snapshots before comparing them.</figcaption>
+              </figure>
+            </div>
+            <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
+              aria-label="Expand image: NoDoc side-by-side history comparison">
+              <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+              <img data-nodoc-asset="images/page_history_4_history_page_compare_history_versions.png"
+                alt="NoDoc side-by-side comparison of base and target page history versions" class="img-fluid rounded">
+              <figcaption>Review the added and removed content before changing the current page.</figcaption>
+            </figure>
+          </li>
+          <li><strong>Preview a retained version.</strong> Expand <strong>Preview and Restore</strong>, select a history
+            point, and choose <strong>Preview</strong>. Inspect the historical snapshot without changing the current
+            page.
+            <div class="nodoc-evidence-grid">
+              <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
+                aria-label="Expand image: Select a NoDoc history point to preview">
+                <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+                <img data-nodoc-asset="images/page_history_5_history_page_preview_and_restore_option.png"
+                  alt="NoDoc Preview and Restore section with a history-point selector" class="img-fluid rounded">
+                <figcaption>Open Preview and Restore and choose the retained history point.</figcaption>
+              </figure>
+              <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
+                aria-label="Expand image: Preview a selected NoDoc history point">
+                <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+                <img data-nodoc-asset="images/page_history_6_history_page_preview_and_restore_setup_1.png"
+                  alt="NoDoc historical snapshot preview with a selected history point" class="img-fluid rounded">
+                <figcaption>Inspect the selected historical snapshot before deciding whether to restore it.</figcaption>
+              </figure>
+            </div>
+          </li>
+          <li><strong>Restore a retained page version.</strong> Only after reviewing the preview, enter a clear
+            <strong>Restore Reason</strong>, choose <strong>Restore History</strong>, and accept the confirmation. The
+            selected historical content becomes the new current state for that page and article version.
+            <div class="nodoc-evidence-grid">
+              <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
+                aria-label="Expand image: Restore a selected NoDoc page history version">
+                <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+                <img data-nodoc-asset="images/page_history_7_history_page_preview_and_restore_setup_2.png"
+                  alt="NoDoc Restore History form with a reason and Restore History button" class="img-fluid rounded">
+                <figcaption>Enter the restore reason and choose Restore History only after page-level review.</figcaption>
+              </figure>
+              <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
+                aria-label="Expand image: Confirm a NoDoc page history restore">
+                <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
+                <img data-nodoc-asset="images/page_history_8_history_page_preview_and_restore_option_restore_version_confirmation_message.png"
+                  alt="NoDoc confirmation dialog for restoring historical page content" class="img-fluid rounded">
+                <figcaption>Confirm that the selected historical content should become current for this page.</figcaption>
+              </figure>
+            </div>
+          </li>
+        </ol>
+      </section>
+      <p class="nodoc-callout"><strong>MCP boundary:</strong> <code>list_changed_pages</code>,
+        <code>get_page_history</code>, and <code>get_page_history_diff</code> provide read-only change information. Use
+        the NoDoc History interface for Preview, Restore History, and Restore Deleted Page actions. The dedicated <a
+          href="#nodoc:8">NoDoc MCP lab</a> shows the read-only history workflow and its other supported actions.</p>
     </details>
   </div>
 </details>
@@ -1288,7 +1507,7 @@ Linux-specific instructions.
   </div>
 </details>
 <details class="nodoc-tree-group">
-  <summary><span>Lab 5 · Repository exchange</span><small>10 minutes</small></summary>
+  <summary><span>Lab 5 · Repository exchange</span></summary>
   <div class="nodoc-tree-content">
     <div data-video-card data-video-title="Lab 5 walkthrough"
       data-video-summary="Preview learning aid. Verify current OraHub labels, branches, and permissions before importing or exporting content."
@@ -1342,7 +1561,7 @@ Linux-specific instructions.
   </div>
 </details>
 <details class="nodoc-tree-group">
-  <summary><span>Lab 6 · Vibe Doc-ing content validation and corrections</span><small>30 minutes</small></summary>
+  <summary><span>Lab 6 · Vibe Doc-ing content validation and corrections</span></summary>
   <div class="nodoc-tree-content">
     <div data-video-card data-video-title="Lab 6 walkthrough"
       data-video-summary="Preview learning aid. Confirm how to reach Vibe Doc-ing, choose a validation tab, review output and Difference, safely overwrite, and generate the article Information Map."
@@ -1655,7 +1874,7 @@ Linux-specific instructions.
   </div>
 </details>
 <details class="nodoc-tree-group">
-  <summary><span>Lab 7 · Ingest and use Ask NoDoc</span><small>25 minutes</small></summary>
+  <summary><span>Lab 7 · Ingest and use Ask NoDoc</span></summary>
   <div class="nodoc-tree-content">
     <div data-video-card data-video-title="Lab 7 walkthrough"
       data-video-summary="Preview learning aid. Follow ingestion, selected-workshop Ask NoDoc, and Focus Area chat controls in the approved NoDoc environment."
@@ -1785,9 +2004,159 @@ Linux-specific instructions.
   </div>
 </details>
 <details class="nodoc-tree-group">
-  <summary><span>Lab 8 · Pre Publish and validation results</span><small>25 minutes</small></summary>
+  <summary><span>Lab 8 · Use NoDoc MCP for authoring and Pre Publish</span></summary>
   <div class="nodoc-tree-content">
     <div data-video-card data-video-title="Lab 8 walkthrough"
+      data-video-summary="Preview learning aid. Use the configured NoDoc MCP connection to browse, create, edit, review, and pre-publish authorized LiveLabs content."
+      data-video-features="Browse and fetch|Create and reuse|Edit and collaborate|Delete safely|History and diff|LiveLabs Pre Publish"></div>
+    <p>Use this lab after <a href="#nodoc:1:3">Lab 1 Task 3</a> has verified the MCP connection and after the basic
+      NoDoc workflows in Labs 2 through 7 are familiar. The prompts below show how to ask Codex to use NoDoc MCP for
+      the documented actions. Work only in an approved practice article or page, keep the exact parent scope visible,
+      and require confirmation before a mutation.</p>
+    <p class="nodoc-callout"><strong>Scope and identity:</strong> NoDoc MCP uses your personal token and existing NoDoc
+      permissions. It does not grant access, bypass authorship, make reused content editable, or turn a read-only
+      history result into a restore action.</p>
+    <h4>Objectives</h4>
+    <ul>
+      <li>Browse Focus Areas, articles, pages, versions, order, and complete page Markdown with the configured MCP
+        connection.</li>
+      <li>Create or reuse authorized articles and pages without confusing reuse with an editable copy.</li>
+      <li>Replace, rename, merge, reorder, and collaborate on content with current revision information.</li>
+      <li>Delete only explicitly approved content after verifying its exact identity and revision.</li>
+      <li>Use read-only history and diff tools to find and compare changes.</li>
+      <li>Start, monitor, review, and explicitly authorize a LiveLabs Pre Publish push.</li>
+    </ul>
+    <details class="nodoc-task">
+      <summary>Task 1 · Browse NoDoc and fetch the exact content</summary>
+      <p>Start with the full parent chain from <a href="#nodoc:1:2">Lab 1 Task 2</a>. Browse before mutating so Codex
+        resolves the exact Focus Area, article, version, and page instead of guessing from a similar name.</p>
+      <ol>
+        <li>List the Focus Areas visible to your identity. Use the same verification prompt from Lab 1 and follow
+          pagination until <code>next_offset</code> is <code>null</code>.
+          <pre class="nodoc-command"><code>Use the configured nodoc MCP tool directly. List all focus areas and follow pagination until next_offset is null.</code></pre>
+        </li>
+        <li>List the articles in one approved Focus Area, then list the pages and saved versions in the exact article.
+          Keep the Focus Area, article, version, and page names in the response; do not continue from a partial match.
+          <pre class="nodoc-command"><code>Use NoDoc MCP to list every article in &lt;Focus Area&gt;. Then list the pages and saved versions in &lt;Focus Area&gt; / &lt;Article&gt;.</code></pre>
+        </li>
+        <li>Fetch the complete Markdown for one authorized page. If the response is chunked, ask Codex to follow
+          <code>next_offset</code> until the complete page is returned.
+          <pre class="nodoc-command"><code>Fetch the complete Markdown for &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Page&gt; / &lt;Version&gt;. Follow next_offset until the whole page is returned.</code></pre>
+        </li>
+      </ol>
+      <p class="nodoc-checkpoint"><strong>Expected result:</strong> you can state the exact content identity and current
+        revision before asking Codex to change anything.</p>
+    </details>
+    <details class="nodoc-task">
+      <summary>Task 2 · Create content and reuse approved content</summary>
+      <p>Use MCP creation actions only after the target and intended result are clear. An article can be added, and a page
+        can be added to an existing article version. Reuse keeps the source article or page linked and read-only; it does
+        not create an editable copy.</p>
+      <ol>
+        <li>Ask Codex to inspect the target and propose the article or page creation before it changes NoDoc. For a page,
+          provide an existing article version; the <code>add_page</code> action does not create a new article version.
+          <pre class="nodoc-command"><code>Use NoDoc MCP to inspect &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Version&gt;, then propose adding a page named &lt;Page Name&gt;. Show the resolved target and current revision, and wait for my confirmation before creating it.</code></pre>
+        </li>
+        <li>For reuse, name the source Focus Area, version, and article or page explicitly. Confirm that the resulting
+          content is a live read-only reference and that changes must be made in the source content.</li>
+        <li>After a create or reuse action, list the target article or page again and verify its name, version, order, and
+          read-only status before continuing.</li>
+      </ol>
+    </details>
+    <details class="nodoc-task">
+      <summary>Task 3 · Edit, organize, and collaborate on content</summary>
+      <p>Content mutations use the current revision to protect against overwriting a newer change. Ask Codex to fetch the
+        target first, propose the smallest change, and wait for confirmation.</p>
+      <ol>
+        <li>Replace a page's Markdown or rename a page or article only after verifying the exact parent chain. Do not
+          update a reused page or article as if it were locally owned.
+          <pre class="nodoc-command"><code>Use NoDoc MCP to fetch the current Markdown and revision for &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Page&gt; / &lt;Version&gt;. Propose this minimal change: &lt;change&gt;. Show the diff and wait for my confirmation before updating.</code></pre>
+        </li>
+        <li>When adding an image, ask Codex to use the NoDoc image-upload action. Do not place a local file path or a
+          temporary data URL in the page Markdown.</li>
+        <li>When merging or reordering content, first read the complete current page or article order. Submit every item
+          exactly once, then list the result again to verify the new order.</li>
+        <li>When managing collaborators, add or remove an article coauthor only where the current NoDoc permissions allow
+          it. The authenticated token determines the acting user; it cannot supply a different username to bypass
+          authorization.</li>
+      </ol>
+    </details>
+    <details class="nodoc-task">
+      <summary>Task 4 · Delete content safely</summary>
+      <p>Deletion is a separate mutation from editing and is permanent from the MCP user's perspective. Treat every
+        deletion as a confirmation checkpoint.</p>
+      <ol>
+        <li>For a page, fetch its current revision and confirm its exact name and complete parent chain. For an article,
+          also inspect the current page count and version count before asking Codex to delete it.</li>
+        <li>Do not delete reused content as if it were locally owned. Do not proceed when the target, revision, or
+          authorization is unclear.</li>
+        <li>Use a prompt that requires Codex to show the resolved target and wait for confirmation:
+          <pre class="nodoc-command"><code>Use NoDoc MCP to verify the exact target &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Page&gt; / &lt;Version&gt;, show its current revision, and wait for my explicit confirmation before deleting it.</code></pre>
+        </li>
+        <li>After deletion, list the parent article or Focus Area again and verify the expected order and remaining
+          content. A deleted page is recovered through the article-level History interface in <a href="#nodoc:2:4">Lab
+          2 Task 4</a>, not through the MCP history tools.</li>
+      </ol>
+    </details>
+    <details class="nodoc-task">
+      <summary>Task 5 · Find changes and compare page history</summary>
+      <p>MCP history tools are read-only. Use them to locate and compare retained page changes; use the NoDoc History
+        interface for Preview, Restore History, and Restore Deleted Page.</p>
+      <ol>
+        <li>Use <code>list_changed_pages</code> with an exact Focus Area, exact version, and bounded
+          <code>from_timestamp</code> and <code>to_timestamp</code> window.
+          <pre class="nodoc-command"><code>Use NoDoc MCP to list pages changed in &lt;Focus Area&gt; version &lt;Version&gt; between &lt;from timestamp&gt; and &lt;to timestamp&gt;. For each returned page, show its retained history. Do not edit any content.</code></pre>
+        </li>
+        <li>If <code>truncated</code> is true, narrow the time window before treating the result as complete. Deleted or
+          no-longer-queryable pages are not returned by this query.</li>
+        <li>For one returned page, use <code>get_page_history</code> with the exact Focus Area, article, page, and version.
+          Use a returned <code>valid_from_timestamp</code> value to select retained snapshots for review.</li>
+        <li>Use <code>get_page_history_diff</code> with the same page identity and two retained timestamps. Review the
+          bounded Markdown diff and line counts; if a change is needed, fetch the current page and use the normal edit
+          workflow.</li>
+      </ol>
+    </details>
+    <details class="nodoc-task">
+      <summary>Task 6 · Start, review, and push a pre-publish request</summary>
+      <p>Pre Publish is asynchronous. Starting a request returns a request ID and status; it does not mean that a preview
+        is ready and it does not push content live.</p>
+      <ol>
+        <li>For LiveLabs, target one exact article, not a whole Focus Area. Provide the LiveLabs Focus Area, article,
+          version, and content area, then start the request:
+          <pre class="nodoc-command"><code>Use NoDoc MCP to start a LiveLabs pre-publish for &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Version&gt; / &lt;Content Area&gt;. Return the request ID and status only. Do not push it live.</code></pre>
+        </li>
+        <li>Poll <code>get_pre_publish_status</code> with the same request ID. Treat <code>pending</code>,
+          <code>processing</code>, <code>ready</code>, and <code>error</code> as different outcomes. Review Preview,
+          Download, and Accessibility Report links only after the status is <strong>ready</strong>.</li>
+        <li>Ask explicitly before any push. Only a ready LiveLabs request may use <code>push_pre_publish_livelabs</code>;
+          it must never run automatically after pre-publish.</li>
+        <li>For the separate OHC path, use <code>get_pre_publish_metadata</code> first. Reuse saved metadata only after
+          explicit confirmation, or provide complete updated OHC metadata to start a new request. Do not treat OHC saved
+          metadata as LiveLabs metadata.</li>
+      </ol>
+    </details>
+    <details class="nodoc-task">
+      <summary>Task 7 · Apply authorization and troubleshooting boundaries</summary>
+      <ol>
+        <li>Seeing a tool in Codex does not prove that the current identity can use it. NoDoc checks Focus Area access,
+          article authorship, ownership, and other permissions for every request.</li>
+        <li>If tools do not appear, confirm one <code>[mcp_servers.nodoc]</code> section, the exact User variable
+          <code>ASK_NODOC_MCP_TOKEN</code>, and a full Codex restart followed by a new chat. Never print the token.</li>
+        <li>If NoDoc reports temporary unavailability, record the tool and approximate time and contact NoDoc support
+          instead of retrying repeatedly. If NoDoc denies an action, recheck the exact Focus Area, article, page, and
+          version before escalating a permissions issue.</li>
+      </ol>
+      <p class="nodoc-callout"><strong>Official reference:</strong> Review the approved <a
+          href="https://docs-uat.us.oracle.com/en/sptest/test-suite/test-product/test-release/nodoc/formal-nodoc-functionalities-and-usage/nodoc-mcp.html"
+          target="_blank" rel="noopener noreferrer">NoDoc MCP User Guide</a> for current action names, authorization
+        rules, pagination, history boundaries, and pre-publish behavior.</p>
+    </details>
+  </div>
+</details>
+<details class="nodoc-tree-group">
+  <summary><span>Lab 9 · Pre Publish and validation results</span></summary>
+  <div class="nodoc-tree-content">
+    <div data-video-card data-video-title="Lab 9 walkthrough"
       data-video-summary="Preview learning aid. Configure Pre Publish, create the required URLs, run both validations, review findings, and choose the next output."
       data-video-features="LiveLabs target|Sandbox and Tenancy URLs|Markdown validation|Text Check validation|Preview, Push, and Download Zip"></div>
     <p>Use <strong>Pre Publish</strong> after the NoDoc page and article are saved. Configure the LiveLabs target, create
@@ -1907,7 +2276,7 @@ Linux-specific instructions.
           </figure>
         </li>
         <li><strong>Push</strong> is available from this dialog, but availability is not approval. Complete the QA and
-          review gates in Lab 9 first, then return here and select <strong>Push</strong> when your role is authorized to
+          review gates in Lab 10 first, then return here and select <strong>Push</strong> when your role is authorized to
           publish the content. Confirm the success response before creating the WMS publishing request.
           <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
             aria-label="Expand image: Confirm a successful Push response">
@@ -1932,29 +2301,29 @@ Linux-specific instructions.
   </div>
 </details>
 <details class="nodoc-tree-group">
-  <summary><span>Lab 9 · Complete QA and submit the WMS publishing request</span><small>20 minutes</small></summary>
+  <summary><span>Lab 10 · Complete QA and submit the WMS publishing request</span></summary>
   <div class="nodoc-tree-content">
-    <div data-video-card data-video-title="Lab 9 walkthrough"
+    <div data-video-card data-video-title="Lab 10 walkthrough"
       data-video-summary="Preview learning aid. Complete Self Quality Assurance, resolve review findings, and follow the three-stage WMS publishing request flow using the URLs created in NoDoc Pre Publish."
       data-video-features="Self Quality Assurance|Review handoff|WMS Completed|Open Publishing|Publishing fields|Sandbox configuration"></div>
-    <p>Use this lab as the handoff from <a href="#nodoc:8">Lab 8</a>. Review the Preview output, complete the remaining
-      QA and review steps, then use the URLs created in Lab 8 to submit the WMS publishing request. The workshop record
+    <p>Use this lab as the handoff from <a href="#nodoc:9">Lab 9</a>. Review the Preview output, complete the remaining
+      QA and review steps, then use the URLs created in Lab 9 to submit the WMS publishing request. The workshop record
       is assumed to be in the required <strong>Completed</strong> state before you begin the request.</p>
     <h4>Objectives</h4>
     <ul>
-      <li>Review the workshop generated by <a href="#nodoc:8:3">Lab 8 Task 3</a> and complete Self Quality Assurance.</li>
+      <li>Review the workshop generated by <a href="#nodoc:9:3">Lab 9 Task 3</a> and complete Self Quality Assurance.</li>
       <li>Resolve reviewer findings with the relevant NoDoc page, <a href="#nodoc:6:1">Vibe Doc-ing</a>, and <a
-        href="#nodoc:8:2">Lab 8 Task 2</a> validation reruns.</li>
-      <li>Submit and configure the WMS publishing request with the URLs created in <a href="#nodoc:8:1">Lab 8 Task
+        href="#nodoc:9:2">Lab 9 Task 2</a> validation reruns.</li>
+      <li>Submit and configure the WMS publishing request with the URLs created in <a href="#nodoc:9:1">Lab 9 Task
         1</a>.</li>
     </ul>
     <details class="nodoc-task">
-      <summary>Task 1 · Review the Lab 8 output and complete Self Quality Assurance</summary>
+      <summary>Task 1 · Review the Lab 9 output and complete Self Quality Assurance</summary>
       <ol>
-        <li>Open the generated workshop with <strong>Preview</strong> from <a href="#nodoc:8:3">Lab 8 Task 3</a>. Check
+        <li>Open the generated workshop with <strong>Preview</strong> from <a href="#nodoc:9:3">Lab 9 Task 3</a>. Check
           the title, introduction, objectives, prerequisites, lab and task navigation, page order, links, code, images,
           alt text, metadata, and rendered content on each page.</li>
-        <li>Return to <a href="#nodoc:8:1">Lab 8 Task 1</a> and confirm the exact <strong>Sandbox URL</strong> and
+        <li>Return to <a href="#nodoc:9:1">Lab 9 Task 1</a> and confirm the exact <strong>Sandbox URL</strong> and
           <strong>Tenancy URL</strong> created by Pre Publish. Keep only the URLs for the environments selected for this
           workshop; these values are used again in Task 3.
           <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
@@ -1962,7 +2331,7 @@ Linux-specific instructions.
             <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
             <img data-nodoc-asset="images/how_to_pre_publish_3_create_url.png"
               alt="NoDoc Pre Publish form showing the generated Sandbox URL and Tenancy URL" class="img-fluid rounded">
-            <figcaption>Record the environment URLs generated in Lab 8; reuse them in the WMS publishing request.
+            <figcaption>Record the environment URLs generated in Lab 9; reuse them in the WMS publishing request.
             </figcaption>
           </figure>
         </li>
@@ -1979,22 +2348,22 @@ Linux-specific instructions.
           and archive as evidence; none of them by itself is WMS approval.</li>
         <li>If the reviewer identifies a content issue, return to the affected NoDoc page or <a href="#nodoc:6:1">Lab
           6 Task 1</a>. Inspect Difference, save accepted corrections, then rerun the relevant validations in <a
-          href="#nodoc:8:2">Lab 8 Task 2</a>.</li>
+          href="#nodoc:9:2">Lab 9 Task 2</a>.</li>
         <li>Update the Preview URL and QA record after any correction. Do not continue with outdated Preview or
           validation results.</li>
         <li>Continue only after the reviewer approves the content and WMS shows <strong>Completed</strong>. If authorized,
-          return to <a href="#nodoc:8:3">Lab 8 Task 3</a> and select <strong>Push</strong>; retain the success response
+          return to <a href="#nodoc:9:3">Lab 9 Task 3</a> and select <strong>Push</strong>; retain the success response
           with the QA evidence.</li>
       </ol>
     </details>
     <details class="nodoc-task">
       <summary>Task 3 · Create and configure the WMS publishing request</summary>
-      <p>Follow the three stages below after Lab 9 Task 2 is complete. They mirror the <a
+      <p>Follow the three stages below after Task 2 is complete. They mirror the <a
         href="../quickstart/#publishing-request-walkthrough">Quickstart Publishing request walkthrough</a>. Keep the
         exact URLs generated in <a
-        href="#nodoc:8:1">Lab 8 Task 1</a> available while you complete the WMS form. Use the Lab 8
+        href="#nodoc:9:1">Lab 9 Task 1</a> available while you complete the WMS form. Use the Lab 9
         <strong>Tenancy URL</strong> for the WMS tenancy URL
-        field, and use the Lab 8 <strong>Sandbox URL</strong> for the WMS LiveLabs Sandbox URL field when a sandbox is
+        field, and use the Lab 9 <strong>Sandbox URL</strong> for the WMS LiveLabs Sandbox URL field when a sandbox is
         required.</p>
       <section class="nodoc-publishing-stage" aria-labelledby="nodoc-publishing-stage-1">
         <h5 id="nodoc-publishing-stage-1">Stage 1 · Open Publishing</h5>
@@ -2016,26 +2385,26 @@ Linux-specific instructions.
       </section>
       <section class="nodoc-publishing-stage" aria-labelledby="nodoc-publishing-stage-2">
         <h5 id="nodoc-publishing-stage-2">Stage 2 · Set publishing fields</h5>
-        <p>Set the publishing values and carry the correct environment URL from Lab 8 into the corresponding WMS field.
+        <p>Set the publishing values and carry the correct environment URL from Lab 9 into the corresponding WMS field.
           Do not substitute the NoDoc preview URL or invent a new environment URL.</p>
         <ol class="nodoc-compact-list">
           <li>Choose the correct <strong>LiveLab Type</strong> and <strong>Publish Type</strong>.</li>
           <li>Enter the workshop's estimated completion time.</li>
           <li>Decide whether the workshop runs on <strong>Own Tenancy</strong>, <strong>LiveLabs Sandbox</strong>, or
-            both. When Own Tenancy is enabled, enter the Lab 8 <strong>Tenancy URL</strong> in <strong>Run on your
+            both. When Own Tenancy is enabled, enter the Lab 9 <strong>Tenancy URL</strong> in <strong>Run on your
             Tenancy URL</strong>.</li>
-          <li>Include the relevant Lab 8 environment link in the workshop instructions when the WMS form or publishing
+          <li>Include the relevant Lab 9 environment link in the workshop instructions when the WMS form or publishing
             workflow asks for it.</li>
           <li>Review the request details and select <strong>Create</strong>.</li>
         </ol>
         <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
-          aria-label="Expand image: Set WMS publishing fields and enter the Lab 8 Tenancy URL">
+          aria-label="Expand image: Set WMS publishing fields and enter the Lab 9 Tenancy URL">
           <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
           <img data-nodoc-asset="../../assets/media/guide/publishing/publish_page_1.png"
             alt="WMS Publishing Settings form with publishing fields and a Run on your Tenancy URL"
             class="img-fluid rounded">
           <figcaption>Set the publishing values, choose the destination, and enter the corresponding URL created in Lab
-            8 before selecting Create.</figcaption>
+            9 Task 1 before selecting Create.</figcaption>
         </figure>
       </section>
       <section class="nodoc-publishing-stage" aria-labelledby="nodoc-publishing-stage-3">
@@ -2057,7 +2426,7 @@ Linux-specific instructions.
           <figcaption>Open Sandbox Environment only when the publishing request includes a LiveLabs sandbox.</figcaption>
         </figure>
         <ol class="nodoc-compact-list" start="4">
-          <li>Enter the Lab 8 <strong>Sandbox URL</strong> in <strong>Run on LiveLabs Sandbox URL</strong>.</li>
+          <li>Enter the Lab 9 <strong>Sandbox URL</strong> in <strong>Run on LiveLabs Sandbox URL</strong>.</li>
           <li>Select <strong>Sandbox Lite</strong> or <strong>Run on LiveLabs Sandbox</strong>, as appropriate for the
             workshop.</li>
           <li>For a regular sandbox request, follow the displayed <strong>Open Jira Ticket</strong> flow and complete
@@ -2065,12 +2434,12 @@ Linux-specific instructions.
           <li>Select <strong>Save</strong> to retain the sandbox configuration.</li>
         </ol>
         <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
-          aria-label="Expand image: Configure the WMS LiveLabs Sandbox with the Lab 8 Sandbox URL">
+          aria-label="Expand image: Configure the WMS LiveLabs Sandbox with the Lab 9 Sandbox URL">
           <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
           <img data-nodoc-asset="../../assets/media/guide/publishing/publish_page_3.png"
             alt="WMS Sandbox Environment with the Run on LiveLabs Sandbox URL, sandbox options, and Open Jira Ticket flow"
             class="img-fluid rounded">
-          <figcaption>Use the Sandbox URL created in Lab 8, choose the appropriate sandbox option, and save the WMS
+          <figcaption>Use the Sandbox URL created in Lab 9, choose the appropriate sandbox option, and save the WMS
             configuration.</figcaption>
         </figure>
       </section>

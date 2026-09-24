@@ -1,5 +1,5 @@
 (function () {
-      var routeNames = ["home", "quickstart", "cheatsheet", "nodoc"];
+      var routeNames = ["home", "quickstart", "cheatsheet", "markdown", "nodoc"];
 
       function canonicalizeCurrentRoute() {
         var current = new URL(window.location.href);

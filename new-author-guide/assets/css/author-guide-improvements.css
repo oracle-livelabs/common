@@ -1018,7 +1018,7 @@ body.home-no-scroll #app .app-footer .container {
   overflow-y: visible;
 }
 
-#app[data-redwood-creator-pass="2026-05-25"] a:not(.btn):not(.nav-control):not(.home-mini-step):not(.guide-nav-link):not(.guide-quick-link):not(.detail-resource-card) {
+#app[data-redwood-creator-pass="2026-05-25"] a:not(.btn):not(.nav-control):not(.nav-menu-link):not(.home-mini-step):not(.guide-nav-link):not(.guide-quick-link):not(.detail-resource-card) {
   color: var(--link-blue);
   text-underline-offset: 0.16em;
 }
@@ -2035,8 +2035,9 @@ body.home-no-scroll #app .app-footer .container {
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button {
-  cursor: default;
-  pointer-events: none;
+  cursor: pointer;
+  pointer-events: auto;
+  font: inherit;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] #beginnerMode .quickstart-step-tabs .progress-button::after {
@@ -4622,6 +4623,162 @@ body.home-no-scroll #app .hub-hero {
   }
 }
 
+/* Final Cheatsheet menu treatment: direct parent link, in-flow Markdown child. */
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-group {
+  position: static;
+  display: block;
+  min-width: 0;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-summary {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.055);
+  box-shadow: none;
+  box-sizing: border-box;
+  color: rgba(255, 255, 255, 0.82);
+  list-style: none;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-summary::-webkit-details-marker {
+  display: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-parent {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: inherit !important;
+  transform: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-summary .nav-menu-parent,
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-summary .nav-menu-parent.is-active {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: inherit !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-summary::after {
+  display: block;
+  flex: 0 0 0.48rem;
+  width: 0.48rem;
+  height: 0.48rem;
+  margin: -0.22rem 0.88rem 0 0.2rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  content: "";
+  transform: rotate(45deg);
+  transition: transform 180ms ease, margin 180ms ease;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-group[open] > .nav-menu-summary::after {
+  margin-top: 0.3rem;
+  transform: rotate(225deg);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-summary:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-summary:focus-within {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-summary.is-active,
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-link.is-active {
+  border-color: rgba(199, 70, 52, 0.78);
+  background: var(--oracle-red);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.16) !important;
+  color: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-items {
+  position: static;
+  top: auto;
+  right: auto;
+  z-index: auto;
+  display: grid;
+  min-width: 0;
+  gap: 0.35rem;
+  margin: 0.4rem 0 0;
+  padding: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.035);
+  box-shadow: none;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  min-width: 0;
+  padding: 0.52rem 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: normal;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-link .nav-control-icon {
+  display: inline-flex;
+  flex: 0 0 1.65rem;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: currentColor;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-link .nav-control-icon svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-link:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-link:focus-visible {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-summary.is-active .nav-control-icon,
+#app[data-redwood-creator-pass="2026-05-25"] .nav-menu-link.is-active .nav-control-icon {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+@media (max-width: 940px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .nav-group-all .nav-menu-group {
+    grid-column: 1 / -1;
+  }
+}
+
 #nodocMode .nodoc-page-methods,
 #nodocMode .nodoc-metadata-guide {
   margin: 1.15rem 0 0;
@@ -4848,6 +5005,48 @@ body.home-no-scroll #app .hub-hero {
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.02em;
+}
+
+/* Shared overlay and snippet contrast fixes. Keep the page readable when a
+   modal is shown even if Bootstrap is unavailable during local preview. */
+#app #bubbleModal .modal-dialog {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - 2rem);
+  margin: 1rem auto;
+}
+
+#app #bubbleModal .modal-content {
+  width: 100%;
+  max-height: calc(100vh - 2rem);
+  overflow: hidden;
+}
+
+#app #bubbleModal .modal-body {
+  overflow-y: auto;
+}
+
+.modal-backdrop.show,
+.modal-backdrop {
+  background-color: rgba(22, 21, 19, 0.28) !important;
+  opacity: 1 !important;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+#app #bubbleModal .snippet-card pre {
+  border: 1px solid rgba(49, 45, 42, 0.18);
+  border-radius: 4px;
+  background: #fffdfa !important;
+  color: #161513 !important;
+  box-shadow: none;
+  -webkit-text-fill-color: #161513;
+}
+
+#app #bubbleModal .snippet-card pre code {
+  background: transparent !important;
+  color: inherit !important;
+  -webkit-text-fill-color: inherit;
 }
 
 #app[data-redwood-creator-pass="2026-05-25"] .authoring-route-panel {
@@ -5885,6 +6084,17 @@ body.home-no-scroll #app .hub-hero {
   gap: 0;
 }
 
+/* Keep expanded NoDoc lab groups inside an independently scrollable left rail. */
+@media (min-width: 992px) {
+  #nodocMode .nodoc-sidebar .guide-sidebar-card {
+    max-height: calc(100vh - 2rem);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+  }
+}
+
 #nodocMode .nodoc-nav-title,
 #nodocMode .nodoc-nav-tasks button {
   width: 100%;
@@ -5967,6 +6177,62 @@ body.home-no-scroll #app .hub-hero {
 
 #nodocMode .nodoc-tree-content {
   padding: .25rem 0 1rem;
+}
+
+/* NoDoc task rhythm: keep explanatory prose, actions, and command blocks visually distinct. */
+#nodocMode .nodoc-tree-content > p,
+#nodocMode .nodoc-tree-content > ul,
+#nodocMode .nodoc-tree-content > ol,
+#nodocMode .nodoc-task > p,
+#nodocMode .nodoc-task > ul,
+#nodocMode .nodoc-task > ol,
+#nodocMode .nodoc-task > section {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+#nodocMode .nodoc-tree-content p,
+#nodocMode .nodoc-task p {
+  line-height: 1.65;
+}
+
+#nodocMode .nodoc-task li > p {
+  margin-top: .75rem;
+  margin-bottom: .75rem;
+}
+
+#nodocMode .nodoc-task > ol > li,
+#nodocMode .nodoc-task > ul > li {
+  margin-bottom: .8rem;
+  line-height: 1.6;
+}
+
+#nodocMode .nodoc-task pre.nodoc-command,
+#nodocMode .nodoc-task pre {
+  margin: 1rem 0 1.15rem;
+  padding: .9rem 1rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+#nodocMode .nodoc-history-scope + .nodoc-history-scope {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(36, 59, 83, .14);
+}
+
+#nodocMode .nodoc-history-scope > h5 {
+  margin: 0 0 .75rem;
+  color: #172b4d;
+}
+
+#nodocMode .nodoc-history-scope > p {
+  margin: 0 0 1rem;
+}
+
+#nodocMode .nodoc-task > .nodoc-callout {
+  margin-top: 1.25rem;
 }
 
 @media (max-width: 767.98px) {
