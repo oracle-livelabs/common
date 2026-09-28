@@ -4,11 +4,18 @@ const { pathToFileURL } = require("node:url");
 
 test("approved dashboard shell and Inventory dimensions remain stable", async ({ page }) => {
   const pageErrors = [];
+  const lazyFragmentRequests = new Set();
   page.on("pageerror", (error) => pageErrors.push(error.message));
+  page.on("request", (request) => {
+    const pathname = new URL(request.url()).pathname;
+    const marker = "/assets/fragments/";
+    const markerIndex = pathname.indexOf(marker);
+    if (markerIndex >= 0) lazyFragmentRequests.add(pathname.slice(markerIndex + marker.length));
+  });
 
   await page.goto("/", { waitUntil: "networkidle" });
   await expect(page.getByRole("heading", { level: 1, name: "LiveLabs Analytics" })).toBeVisible();
-  await expect(page.getByText("Data snapshot: 14 August 2026.", { exact: true })).toHaveCount(1);
+  await expect(page.getByText(/Data snapshot: 28 September 2026\./)).toHaveCount(1);
   await expect(page.locator('section.metric-band[aria-label="Dashboard summary"] > span')).toHaveText([
     "Governance",
     "Demand",
@@ -16,6 +23,16 @@ test("approved dashboard shell and Inventory dimensions remain stable", async ({
   ]);
   await expect(page.locator("h3", { hasText: /^Top (10|50|100)$/ })).toHaveCount(0);
   await expect(page.locator(".lazy-section-button")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /^Load (Top Performers|At-Risk Content|Retire-Now Content|Replacement Suggestions|Disabled Content)$/ })).toHaveCount(0);
+  await expect(page.getByText(/loaded on demand/i)).toHaveCount(0);
+  await expect(page.locator("[data-lazy-section]")).toHaveCount(0);
+  expect([...lazyFragmentRequests].sort()).toEqual([
+    "at-risk-content.html",
+    "disabled-content.html",
+    "replacement-suggestions.html",
+    "retire-now-content.html",
+    "top-performers.html"
+  ]);
   await expect(page.locator('#top-performers [data-filter-table="top-performer-top-100-workshops"]')).toHaveCount(1);
   await expect(page.locator('#at-risk-content [data-filter-table="at-risk-top-100-workshops"]')).toHaveCount(1);
   await expect(page.locator('#retire-now-content [data-filter-table="retire-now-top-100-workshops"]')).toHaveCount(1);
@@ -27,7 +44,7 @@ test("approved dashboard shell and Inventory dimensions remain stable", async ({
   await page.goto("/inventory/index.html", { waitUntil: "networkidle" });
   await expect(page.locator("body")).toHaveClass(/dashboard-inventory-active/);
   expect(new URL(page.url()).searchParams.get("view")).toBe("inventory");
-  await expect(page.locator("[data-all-data-total]")).toHaveText("2,250 inventory records");
+  await expect(page.locator("[data-all-data-total]")).toHaveText("2,293 inventory records");
   await expect(page.locator("[data-all-data-rows] tr[data-all-data-key]")).toHaveCount(100);
   await expect(page.locator("[data-all-data-rows] tr[data-all-data-key]").first()).toBeVisible();
   const inventoryHeader = await page.locator("#all-data-browser > .page-header").boundingBox();
@@ -45,8 +62,8 @@ test("approved dashboard shell and Inventory dimensions remain stable", async ({
   
   const audit = await page.evaluate(() => window.__inventoryNavigationAudit);
   expect(audit).toEqual({
-    records: 2250,
-    uniqueKeys: 2250,
+    records: 2293,
+    uniqueKeys: 2293,
     duplicateKeys: [],
     missingKeys: [],
     status: "passed"
@@ -116,12 +133,12 @@ test("Portfolio Stats uses themed collapsible glance and example-first fallback 
   expect(disclosureArrows.every((content) => content !== "none")).toBe(true);
   await glance.locator("summary").click();
   await expect(glance).toHaveAttribute("open", "");
-  await expect(glance.getByText("A quick read across four portfolio metrics. The active portfolio contains 885 items: 585 workshops and 300 sprints.", { exact: true })).toBeVisible();
+  await expect(glance.getByText("A quick read across four portfolio metrics. The active portfolio contains 1012 items: 712 workshops and 300 sprints.", { exact: true })).toBeVisible();
   await expect(portfolio.locator('[data-portfolio-glance="true"] strong')).toHaveText([
-    "885",
-    "285",
-    "473",
-    "433"
+    "1012",
+    "622",
+    "70",
+    "453"
   ]);
   await expect(glance.getByText("WMS match rate", { exact: true })).toHaveCount(0);
   await expect(portfolio.getByText("Portfolio Coverage", { exact: true })).toHaveCount(0);
@@ -130,7 +147,7 @@ test("Portfolio Stats uses themed collapsible glance and example-first fallback 
   await expect(fallback).toBeVisible();
   await fallback.locator("summary").click();
   await expect(fallback.locator(".fallback-example-card")).toBeVisible();
-  await expect(fallback.locator(".fallback-example-card h4")).toHaveText("Retire-Now ranking needed more eligible rows");
+  await expect(fallback.locator(".fallback-example-card h4")).toHaveText("Retire-Now fallback example");
   await expect(fallback.locator(".fallback-rule-step.is-used .fallback-rule-name")).toHaveText("weighted_v4");
   await expect(fallback.locator(".fallback-explanation.is-used")).toHaveCount(3);
   const fallbackStepStyles = await fallback.locator(".fallback-rule-step, .fallback-explanation").evaluateAll((steps) =>
@@ -148,7 +165,7 @@ test("every Inventory record is routeable and formerly suppressed value clicks o
   const payload = await (await request.get("/inventory/data/portfolio_inventory.json")).json();
   const records = payload.records || [];
   const keys = records.map((record) => record.key);
-  expect(records).toHaveLength(2250);
+  expect(records).toHaveLength(2293);
   expect(new Set(keys).size).toBe(records.length);
   expect(records.every((record) => record.wmsId || record.livelabsId || record.key)).toBe(true);
 
@@ -179,7 +196,7 @@ test("Inventory loads its generated payload when opened directly from disk", asy
   const inventoryFile = path.resolve(__dirname, "..", "..", "inventory", "index.html");
   await page.goto(pathToFileURL(inventoryFile).href, { waitUntil: "networkidle" });
   await expect(page.locator("body")).toHaveClass(/dashboard-inventory-active/);
-  await expect(page.locator("[data-all-data-total]")).toHaveText("2,250 inventory records");
+  await expect(page.locator("[data-all-data-total]")).toHaveText("2,293 inventory records");
   await expect(page.locator("[data-all-data-rows] tr[data-all-data-key]")).toHaveCount(100);
   await expect.poll(() => page.evaluate(() => window.__portfolioInventoryError || null)).toBeNull();
 });

@@ -1,0 +1,20 @@
+{
+  "capturedOn": "2026-09-25",
+  "method": "CUA Edge browser viewport screenshot; unmodified JPEG bytes",
+  "scope": "Local development documentation; not approved for public release",
+  "caveats": [
+    "Signed-in screenshots can contain account details and existing personal progress. Recapture or sanitize before publication.",
+    "Controls were inspected read-only. No subscription, progress, reservation, or deployment changes were made.",
+    "These are viewport captures, not full-page captures. Catalog, bundle contents, and run choices can change.",
+    "Session identifiers and asset access tokens are deliberately omitted from source links."
+  ],
+  "captures": [
+    { "file": "catalog.jpg", "source": "https://livelabs.oracle.com/ords/r/dbpm/livelabs/livelabs-workshop-cards?clear=100", "state": "Type filter: LiveStack; catalog top", "capturedAt": "2026-09-25T08:25:42Z", "width": 1897, "height": 907 },
+    { "file": "retail-bundle.jpg", "source": "https://livelabs.oracle.com/ords/r/dbpm/livelabs/livestack-landing-page?p400_id=41", "state": "Retail overview and Assets; existing subscribed state", "capturedAt": "2026-09-25T08:27:43Z", "width": 1912, "height": 914 },
+    { "file": "my-livestacks.jpg", "source": "https://livelabs.oracle.com/ords/r/dbpm/livelabs/my-livestacks", "state": "In Progress and Subscribed regions; existing account state", "capturedAt": "2026-09-25T08:28:06Z", "width": 1897, "height": 907 },
+    { "file": "progress-controls.jpg", "source": "https://livelabs.oracle.com/ords/r/dbpm/livelabs/my-livestacks", "state": "Edit LiveStack dialog open; no action selected", "capturedAt": "2026-09-25T08:30:55Z", "width": 1912, "height": 914 },
+    { "file": "demo-run-options.jpg", "source": "https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=4412&p180_livestack_id=41&p180_livestack_entry_id=97", "state": "Start menu open; Sandbox and instruction preview options", "capturedAt": "2026-09-25T08:31:57Z", "width": 1912, "height": 914 },
+    { "file": "demo-scene.jpg", "source": "https://oracle-livelabs.github.io/livestack/aidatabaseindustrylivestack/retail/workshops/sandbox/?lab=scene-3-retail-command-center", "state": "Task 1 expanded in the public guide; no running application", "capturedAt": "2026-09-25T08:32:29Z", "width": 1897, "height": 907 },
+    { "file": "workshop-run-options.jpg", "source": "https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=4414&p180_livestack_id=41&p180_livestack_entry_id=98", "state": "Start menu open; own environment, Sandbox, and preview options", "capturedAt": "2026-09-25T08:32:49Z", "width": 1912, "height": 914 }
+  ]
+}

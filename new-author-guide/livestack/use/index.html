@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore LiveStacks on LiveLabs: find an industry bundle, subscribe, run the demo, complete hands-on workshops, use deployment assets, and return to your progress.">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#fbf9f8">
+  <title>LiveStacks on LiveLabs · Oracle LiveLabs Author Guide</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23C74634'/%3E%3C/svg%3E">
+  <script src="../../assets/js/author-guide-config.js?v=20260925-nested-livestack"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/author-guide.css">
+  <link rel="stylesheet" href="../../assets/css/author-guide-improvements.css?v=20260924-cheatsheet-menu-r10">
+  <link rel="stylesheet" href="../../assets/css/livestack-reference.css?v=20260925-shared-search-r5">
+  <script src="../../assets/js/shared-side-nav.js?v=20260529-shared-nav-v2" defer></script>
+  <script src="../../assets/js/livestack-search.js?v=20260925-shared-r2" defer></script>
+  <script src="../../assets/js/livestack-reference.js?v=20260925-shared-search-r5" defer></script>
+</head>
+<body data-author-guide-page="livestack">
+  <a class="skip-link" href="#livestackMode">Skip to content</a>
+  <div id="app" data-redwood-creator-pass="2026-05-25">
+    <div class="app-shell">
+      <button class="author-global-nav-toggle" type="button" id="authorGlobalNavToggle" aria-expanded="true" aria-controls="modeNav" aria-label="Close navigation" hidden>
+        <svg class="toggle-icon-open" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        <svg class="toggle-icon-close" viewBox="0 0 24 24" focusable="false" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+      <header class="mode-nav" id="modeNav">
+        <div class="container">
+          <nav class="navbar nav-shell">
+            <div class="container-fluid px-0 gap-3 align-items-center">
+              <a class="brand-token border-0 bg-transparent" data-mode-target="hub" aria-label="Return to the author guide home" href="../../">
+                <span class="brand-mark" aria-hidden="true">
+                  <svg viewBox="0 0 109.36 22.96" xmlns="http://www.w3.org/2000/svg" role="img" focusable="false" aria-hidden="true"><path d="M47.9122 13.4234 54.459 13.4234 51 7.84135 44.6505 17.9233 41.75 17.9233 49.4805 5.82375C49.8106 5.33355 50.377 5.03665 50.9962 5.03665 51.6017 5.03665 52.1582 5.32375 52.4883 5.80225L60.2422 17.9233 57.3497 17.9233 55.9865 15.6694 49.3574 15.6694 47.9122 13.4234M77.9512 15.6692 77.9512 5.15975 75.4922 5.15975 75.4922 16.7027C75.4922 17.0172 75.6251 17.3258 75.8556 17.5483 76.09 17.7906 76.4121 17.9233 76.75 17.9233L87.9317 17.9233 89.3887 15.6692 77.9512 15.6692M37.3512 13.7906C39.7407 13.7906 41.6622 11.8569 41.6622 9.47415 41.6622 7.09135 39.7407 5.15975 37.3512 5.15975L26.6129 5.15975 26.6129 17.9233 29.0669 17.9233 29.0669 7.41555 37.188 7.41555C38.3278 7.41555 39.2515 8.33555 39.2515 9.47415 39.2515 10.6109 38.3278 11.5464 37.188 11.5464L30.2672 11.5406 37.5973 17.9233 41.1582 17.9233 36.235 13.7906 37.3512 13.7906M11.5142 17.9233 18.9331 17.9233C22.4625 17.9233 25.3043 15.0718 25.3043 11.5464 25.3043 8.01715 22.4625 5.15975 18.9331 5.15975L11.5142 5.15975C7.98886 5.15975 5.12945 8.01715 5.12945 11.5464 5.12945 15.0718 7.98886 17.9233 11.5142 17.9233M18.7633 15.6772 11.6774 15.6772C9.39705 15.6772 7.54935 13.8237 7.54935 11.5464 7.54935 9.25935 9.39705 7.41555 11.6774 7.41555L18.7633 7.41555C21.0513 7.41555 22.8971 9.25935 22.8971 11.5464 22.8971 13.8237 21.0513 15.6772 18.7633 15.6772M65.3672 17.9233 72.9415 17.9233 74.375 15.6772 65.5352 15.6772C63.244 15.6772 61.3985 13.8237 61.3985 11.5464 61.3985 9.25935 63.244 7.41555 65.5352 7.41555L72.7305 7.41555 74.1817 5.15975 65.3672 5.15975C61.8399 5.15975 58.9746 8.01715 58.9746 11.5464 58.9747 15.0718 61.84 17.9233 65.3672 17.9233M95.381 15.6772C93.4903 15.6772 91.8965 14.4078 91.4044 12.6714L101.893 12.6714 103.338 10.4214 91.4044 10.4214C91.8947 8.68125 93.4903 7.41555 95.381 7.41555L102.582 7.41555 104.022 5.15975 95.2169 5.15975C91.6953 5.15975 88.8379 8.01715 88.8379 11.5464 88.8379 15.0718 91.6953 17.9233 95.2169 17.9233L102.791 17.9233 104.231 15.6772 95.381 15.6772" fill="#C74634"/></svg>
+                </span>
+                <span><span class="brand-label">LiveLabs</span><small>Author guide</small></span>
+              </a>
+              <div class="nav-main-grid">
+                <div class="nav-group nav-group-all" role="group" aria-label="Primary navigation">
+                  <a class="btn nav-control" aria-label="Open the author guide home" href="../../"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M3 10.8 12 3l9 7.8v9.7a.5.5 0 0 1-.5.5h-5.2v-6.1H8.7V21H3.5a.5.5 0 0 1-.5-.5v-9.7Z"/></svg></span><span class="nav-control-text">Home</span></a>
+                  <a class="btn nav-control" aria-label="Open quickstart" href="../../quickstart/"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span><span class="nav-control-text">Quickstart</span></a>
+                  <details class="nav-menu-group" id="cheatsheetMenu">
+                    <summary class="nav-menu-summary" aria-controls="cheatsheetMenuItems"><a class="btn nav-control nav-menu-parent" href="../../cheatsheet/" aria-label="Open Cheatsheet"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M8 4h8l1.5 2H20v14H4V6h2.5L8 4Zm0 7h8M8 15h6"/></svg></span><span class="nav-control-text">Cheatsheet</span></a></summary>
+                    <div class="nav-menu-items" id="cheatsheetMenuItems" aria-label="Related Cheatsheet pages"><a class="nav-menu-link" href="../../markdown/" aria-label="Open Markdown reference"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 4l-4 16"/></svg></span><span>Markdown</span></a></div>
+                  </details>
+                  <a class="btn nav-control" aria-label="Open NoDoc guide" href="../../nodoc/"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 3.5h9l3 3V20H6V3.5Z"/><path d="M15 3.5V7h3M9 11h6M9 14h6M9 17h4"/></svg></span><span class="nav-control-text">NoDoc</span></a>
+                  <a class="btn nav-control" href="https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" data-full-guide-link target="_blank" rel="noreferrer" aria-label="Open Step by Step Guide"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6.5 4.5h9.2a1.8 1.8 0 0 1 1.8 1.8v13.2H8.3a1.8 1.8 0 0 1-1.8-1.8V4.5Z"/><path d="M9.2 4.5v15M10.8 8h4M10.8 11h4M10.8 14h3"/><path d="M4.5 6.5h2M4.5 9h2M4.5 11.5h2M4.5 14h2M4.5 16.5h2"/></svg></span><span class="nav-control-text">Step by Step Guide</span></a>
+                  <a class="btn nav-control" href="https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/" data-workshop-example-link target="_blank" rel="noreferrer" aria-label="Open a real LiveLabs workshop example"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 3h6M10 3v5l-5.6 9.8A2.1 2.1 0 0 0 6.2 21h11.6a2.1 2.1 0 0 0 1.8-3.2L14 8V3M8 15h8"/></svg></span><span class="nav-control-text">Workshop Example</span></a>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      <main id="livestackMode" class="mode-screen" tabindex="-1" aria-labelledby="page-title">
+        <div class="ls-page" data-livestack-page="use">
+          
+          <header class="ls-hero" id="page-overview"><div class="ls-decoration-strip" aria-hidden="true"></div>
+            <p class="ls-eyebrow">LiveLabs platform guide</p>
+            <h1 id="page-title">LiveStacks on LiveLabs</h1>
+            <p>Find a solution, follow its demo, and explore the technology hands-on. This walkthrough uses the Retail LiveStack to show the journey from first visit to returning learner.</p>
+            <div class="ls-actions"><a class="ls-button" href="#find">Explore the catalog</a><a href="#subscribe">Find my subscriptions</a><a href="#start">Start the demo</a></div>
+          </header>
+          <nav class="ls-page-nav" aria-label="LiveStack pages"><a href="../">Introduction</a><a href="../use/" aria-current="page">LiveStacks on LiveLabs</a><a href="../create/">Create a LiveStack</a><a href="../events/">Create an event</a></nav>
+          <section class="ls-search-panel" aria-label="LiveStack guide search" hidden>
+            <form id="lsSearchForm" role="search" aria-label="Search all LiveStack guides">
+              <label class="form-label" for="lsSearchInput">Search LiveStack guides</label>
+              <div class="search-group input-group">
+                <input class="form-control" id="lsSearchInput" type="search" maxlength="200" autocomplete="off" placeholder="Search demos, subscriptions, WMS, or events" aria-describedby="lsSearchStatus" aria-controls="lsSearchResults">
+                <button class="btn btn-primary" type="submit">Search</button>
+                <button class="btn btn-outline-secondary" type="button" id="lsSearchClear">Clear</button>
+              </div>
+            </form>
+            <p class="ls-search-status" id="lsSearchStatus" role="status" aria-live="polite" aria-atomic="true">Search the introduction, LiveLabs guide, and WMS guides.</p>
+            <ol class="ls-search-results" id="lsSearchResults" aria-label="Search results" hidden></ol>
+          </section>
+          <div class="ls-doc-layout">
+            <nav class="ls-toc" aria-label="On this page"><p class="ls-eyebrow">On this page</p><ol>
+              <li><a href="#find">1. Find a LiveStack</a></li><li><a href="#bundle">2. Know the bundle</a></li>
+              <li><a href="#subscribe">3. Subscribe</a></li><li><a href="#start">4. Follow the demo</a></li>
+              <li><a href="#workshop">5. Work hands-on</a></li><li><a href="#assets">6. Use the assets</a></li>
+              <li><a href="#progress">7. Return and resume</a></li><li><a href="#share">8. Share or join an event</a></li>
+            </ol></nav>
+            <div class="ls-steps">
+              <section class="ls-step" id="find">
+                <p class="ls-eyebrow">Step 1</p><h2>Find a LiveStack for your goal</h2>
+                <ol><li>Open the <a href="https://livelabs.oracle.com/ords/r/dbpm/livelabs/livelabs-workshop-cards?clear=100" target="_blank" rel="noreferrer">LiveLabs catalog</a>.</li><li>Under <strong>Type</strong>, select <strong>LiveStack</strong>. Search for an industry or business problem.</li><li>Open a card to see its bundle. <strong>Copy Search Link</strong> shares the filtered catalog instead of one bundle.</li></ol>
+                <figure class="ls-shot"><a class="ls-shot-link" href="../../assets/media/livestack/platform/catalog.jpg" data-ls-image="Find LiveStacks in the catalog" aria-label="Enlarge: Find LiveStacks in the catalog"><img src="../../assets/media/livestack/platform/catalog.jpg" width="1897" height="907" alt="LiveLabs catalog with Type set to LiveStack and industry solution cards." loading="lazy" decoding="async"></a><figcaption>Select Type → LiveStack. The ribbon distinguishes bundles from individual workshops.<span class="ls-zoom-hint">Select image to enlarge</span></figcaption></figure>
+                <h3 class="ls-subheading">Explore an existing LiveStack</h3>
+                <div class="ls-cards ls-example-cards">
+                  <a href="https://livelabs.oracle.com/ords/r/dbpm/livelabs/livestack-landing-page?p400_id=41" target="_blank" rel="noreferrer"><h3>Retail Intelligence</h3><p>Connect demand, inventory, fulfillment, and AI-assisted decisions.</p><span>Our worked example →</span></a>
+                  <a href="https://livelabs.oracle.com/ords/r/dbpm/livelabs/livestack-landing-page?p400_id=101" target="_blank" rel="noreferrer"><h3>PeakGear AI Lakehouse</h3><p>Explore data integration, analytics, and AI through a retail scenario.</p><span>Explore PeakGear →</span></a>
+                  <a href="https://livelabs.oracle.com/ords/r/dbpm/livelabs/livestack-landing-page?p400_id=21" target="_blank" rel="noreferrer"><h3>Financial Intelligence</h3><p>Explore financial crime, risk, and operations on a unified data foundation.</p><span>Explore financial services →</span></a>
+                  <a href="https://livelabs.oracle.com/ords/r/dbpm/livelabs/livestack-landing-page?p400_id=42" target="_blank" rel="noreferrer"><h3>Healthcare Intelligence</h3><p>Connect patient services, operational workflows, analytics, and AI.</p><span>Explore healthcare →</span></a>
+                </div>
+                <details class="ls-extra"><summary>More industries in the catalog</summary><p>Energy and utilities, higher education, high tech, life sciences, manufacturing, media and entertainment, state and local government, telecommunications, and transportation logistics.</p><p>Examples checked September 25, 2026. Use the catalog for the current selection; bundles and their contents can change.</p></details>
+              </section>
+              <section class="ls-step" id="bundle">
+                <p class="ls-eyebrow">Step 2</p><h2>Know what is inside the bundle</h2>
+                <p>A LiveStack connects several experiences around one business problem. The bundle page is your starting point; its demo, workshops, and downloads serve different purposes.</p>
+                <figure class="ls-shot"><a class="ls-shot-link" href="../../assets/media/livestack/platform/retail-bundle.jpg" data-ls-image="Retail LiveStack bundle" aria-label="Enlarge: Retail LiveStack bundle"><img src="../../assets/media/livestack/platform/retail-bundle.jpg" width="1912" height="914" alt="Retail bundle with Share, Unsubscribe, introduction video, prerequisites, and Assets containing portable and Terraform packages." loading="lazy" decoding="async"></a><figcaption>The Retail landing page brings the scenario, prerequisites, subscription control, and supporting assets together. Scroll down for its demo and workshop entries.<span class="ls-zoom-hint">Select image to enlarge</span></figcaption></figure>
+                <dl class="ls-definitions ls-bundle-parts">
+                  <div><dt>Overview and supporting video</dt><dd>Learn the scenario and intended outcome. A video introduces the experience; it does not launch the runnable demo.</dd></div>
+                  <div><dt>Prerequisites</dt><dd>Check accounts, knowledge, and environment needs before starting. Each entry can have additional requirements.</dd></div>
+                  <div><dt>LiveStack Demo</dt><dd>Explore the working application through guided business scenes: what happens, why it matters, and which technology supports it.</dd></div>
+                  <div><dt>LiveLabs Workshop</dt><dd>Work through technical labs. A bundle may include a companion workshop and focused workshops on individual capabilities.</dd></div>
+                  <div><dt>Assets</dt><dd>Download or open supporting material: a portable package, deployment template, product documentation, or presentation where provided.</dd></div>
+                  <div><dt>Internal Assets</dt><dd>Oracle-employee-only resources are separate from public assets. Customers do not see the same internal material.</dd></div>
+                </dl>
+                <p class="ls-note"><strong>Retail example:</strong> Seer Sporting Goods follows demand for AllTerrain Hiking Boots. Start with the demo, inspect the database in the companion workshop, then explore focused entries for RAG, vectors, graph, JSON, or spatial features.</p>
+              </section>
+              <section class="ls-step" id="subscribe">
+                <p class="ls-eyebrow">Step 3</p><h2>Subscribe and keep the bundle handy</h2>
+                <ol><li>Sign in to LiveLabs with your Oracle account and open the bundle.</li><li>Select <strong>Subscribe</strong>. If the button already says <strong>Unsubscribe</strong>, you are already subscribed.</li><li>Open the account menu in the upper-right corner and select <strong>My LiveStacks</strong>.</li><li>Find the bundle under <strong>Subscribed</strong> and select <strong>View</strong> to return to it.</li></ol>
+                <figure class="ls-shot"><a class="ls-shot-link" href="../../assets/media/livestack/platform/my-livestacks.jpg" data-ls-image="My LiveStacks: subscriptions and progress" aria-label="Enlarge: My LiveStacks: subscriptions and progress"><img src="../../assets/media/livestack/platform/my-livestacks.jpg" width="1897" height="907" alt="My LiveStacks dashboard showing an In Progress Retail card with Resume and Edit, and subscribed bundles with status badges." loading="lazy" decoding="async"></a><figcaption>Your subscriptions and learning progress appear in My LiveStacks. The cards and progress shown are examples from an existing account.<span class="ls-zoom-hint">Select image to enlarge</span></figcaption></figure>
+                <p class="ls-note"><strong>Subscription is not a reservation.</strong> It keeps the bundle in your subscribed list; it does not provision the demo, enroll you in an event, or complete a workshop. Use <strong>Unsubscribe</strong> only when you want to stop following the bundle.</p>
+                <p><a href="https://livelabs.oracle.com/ords/r/dbpm/livelabs/my-livestacks" target="_blank" rel="noreferrer">Open My LiveStacks</a> on LiveLabs. This learner dashboard is separate from the authoring area with the same name in WMS.</p>
+              </section>
+              <section class="ls-step" id="start">
+                <p class="ls-eyebrow">Step 4</p><h2>Follow the business demo</h2>
+                <ol><li>In the Retail bundle, open <strong>LiveStack Demo</strong>. Review its outline and prerequisites.</li><li>Select <strong>Start</strong>. Choose <strong>Preview Sandbox Instructions</strong> to read the guide without creating an environment.</li><li>When ready to run, return to the entry and choose <strong>Run on LiveLabs Sandbox</strong>. Follow the reservation workflow and wait for the environment to be ready.</li><li>Use the guide’s <strong>Get Started</strong> instructions and your reservation’s login information to open the application. Keep the guide available beside it.</li><li>Follow the scenes in order. Perform each task in the application, inspect the result, and connect it to the business decision.</li></ol>
+                <figure class="ls-shot"><a class="ls-shot-link" href="../../assets/media/livestack/platform/demo-run-options.jpg" data-ls-image="Retail demo: run or preview" aria-label="Enlarge: Retail demo: run or preview"><img src="../../assets/media/livestack/platform/demo-run-options.jpg" width="1912" height="914" alt="Retail demo Start menu offering Run on LiveLabs Sandbox and Preview Sandbox Instructions." loading="lazy" decoding="async"></a><figcaption>Preview reads the instructions. Run on LiveLabs Sandbox starts the workflow for an Oracle-hosted environment. Use only the options offered by the entry.<span class="ls-zoom-hint">Select image to enlarge</span></figcaption></figure>
+                <h3 class="ls-subheading">Try a scene: Retail Command Center</h3>
+                <p>After orientation and the data foundation, open <strong>Retail Command Center</strong>. Review the business indicators, inspect customer signal velocity and trending products, then trace AllTerrain Hiking Boots into product details and its JSON representation.</p>
+                <figure class="ls-shot"><a class="ls-shot-link" href="../../assets/media/livestack/platform/demo-scene.jpg" data-ls-image="Retail demo scene instructions" aria-label="Enlarge: Retail demo scene instructions"><img src="../../assets/media/livestack/platform/demo-scene.jpg" width="1897" height="907" alt="Retail demo guide with Scene 3 tasks expanded and the remaining scenes listed in the sidebar." loading="lazy" decoding="async"></a><figcaption>The scene guide explains what to do and what to look for. This is an instruction preview, not a running reservation.<span class="ls-zoom-hint">Select image to enlarge</span></figcaption></figure>
+                <p class="ls-note"><strong>Look for the outcome:</strong> can you explain which demand signal needs attention and how the shared data supports that decision? Continue through creator influence, fulfillment, orders, analytics, Ask Retail Data, and the AI Agent Console. Sample values can change.</p>
+                <p><a href="https://oracle-livelabs.github.io/livestack/aidatabaseindustrylivestack/retail/workshops/sandbox/?lab=scene-3-retail-command-center" target="_blank" rel="noreferrer">Read the Retail Command Center scene</a>. A guide preview alone does not supply an application URL or credentials.</p>
+              </section>
+              <section class="ls-step" id="workshop">
+                <p class="ls-eyebrow">Step 5</p><h2>Go hands-on with the workshop</h2>
+                <p>Return to the bundle and open <strong>LiveLabs Workshop</strong>. The Retail companion workshop uses <strong>Database Actions SQL Worksheet</strong> to explore the objects and queries behind the application.</p>
+                <ol><li>Review the workshop outline and prerequisites, then select <strong>Start</strong>.</li><li>Preview the instructions and choose a supported run option. <strong>Run on LiveLabs Sandbox</strong> uses an Oracle-hosted environment; <strong>Run on Your Environment</strong> uses your own resources.</li><li>Complete the environment setup in that guide. Do not assume that a demo reservation supplies every workshop’s database, credentials, or data.</li><li>Work through the labs, run the supplied queries, and compare results with the expected output. Finish the conclusion and quiz where provided.</li><li>Follow the guide’s cleanup instructions, especially for resources in your own environment. Return to the bundle for the next entry.</li></ol>
+                <figure class="ls-shot"><a class="ls-shot-link" href="../../assets/media/livestack/platform/workshop-run-options.jpg" data-ls-image="Retail workshop run choices" aria-label="Enlarge: Retail workshop run choices"><img src="../../assets/media/livestack/platform/workshop-run-options.jpg" width="1912" height="914" alt="Retail companion workshop Start menu with Run on Your Environment, Run on LiveLabs Sandbox, and Preview Sandbox Instructions." loading="lazy" decoding="async"></a><figcaption>The companion workshop has its own run choices. Availability can differ from the demo and from other entries in the bundle.<span class="ls-zoom-hint">Select image to enlarge</span></figcaption></figure>
+                <div class="ls-note"><strong>From demo to database:</strong> inspect retail data and command-center queries, then explore JSON Relational Duality, AI Vector Search, Property Graph, Spatial, and Oracle Machine Learning. Use the focused workshops when you want more depth in one capability.</div>
+                <p><a href="https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=4414&amp;p180_livestack_id=41&amp;p180_livestack_entry_id=98" target="_blank" rel="noreferrer">Open the Retail companion workshop</a>. Your own environment may incur costs; check its requirements before deploying anything.</p>
+              </section>
+              <section class="ls-step" id="assets">
+                <p class="ls-eyebrow">Step 6</p><h2>Use the right supporting asset</h2>
+                <p>Return to <strong>Assets</strong> on the bundle page. Use <strong>Next</strong> when the panel has more than one page. Choose the material that matches your next step:</p>
+                <dl class="ls-definitions ls-bundle-parts">
+                  <div><dt>Portable LiveStack Package</dt><dd>Take the solution to a supported environment. Read the package’s README for its contents, dependencies, configuration, and run instructions.</dd></div>
+                  <div><dt>Terraform (OCI) package</dt><dd>Follow the solution’s OCI deployment guide. Check tenancy permissions, region, quotas, resource choices, costs, and cleanup.</dd></div>
+                  <div><dt>Product documentation</dt><dd>Learn the underlying feature and verify its requirements. Documentation is a reference, not a preconfigured environment.</dd></div>
+                  <div><dt>Other supporting material</dt><dd>Use decks or additional resources when the bundle supplies them. Do not assume every LiveStack includes the same files or deployment options.</dd></div>
+                </dl>
+                <p>For Retail, continue with <a href="https://oracle-livelabs.github.io/livestack/aidatabaseindustrylivestack/retail/workshops/sandbox/?lab=download-livestack-take-it-home" target="_blank" rel="noreferrer">Take It Home</a> or <a href="https://oracle-livelabs.github.io/livestack/aidatabaseindustrylivestack/retail/workshops/sandbox/?lab=deploy-livestack-terraform" target="_blank" rel="noreferrer">Take It Home (OCI): Deploy with Resource Manager</a>. Get the current download from the bundle rather than reusing an old file link.</p>
+                <p class="ls-note">A portable demo is a starting point for validation, not evidence that your deployment is production-ready. An empty Assets panel does not contain a hidden deployment package.</p>
+              </section>
+              <section class="ls-step" id="progress">
+                <p class="ls-eyebrow">Step 7</p><h2>Return, resume, and review progress</h2>
+                <ol><li>Open the account menu → <strong>My LiveStacks</strong>.</li><li>Under <strong>In Progress</strong>, review the completed-entry count and select <strong>Resume</strong> to return to the bundle.</li><li>Use the entry status to choose what to work on next. Open <strong>My Reservations</strong> from the account menu when you need an existing Sandbox and its access details.</li><li>Use <strong>Edit</strong> only when you intend to change the bundle’s progress record.</li></ol>
+                <figure class="ls-shot"><a class="ls-shot-link" href="../../assets/media/livestack/platform/progress-controls.jpg" data-ls-image="My LiveStacks progress controls" aria-label="Enlarge: My LiveStacks progress controls"><img src="../../assets/media/livestack/platform/progress-controls.jpg" width="1912" height="914" alt="Edit LiveStack dialog explaining Mark as Completed, Reset Progress, and Cancel." loading="lazy" decoding="async"></a><figcaption>Edit changes the learning-progress record. Cancel leaves it unchanged.<span class="ls-zoom-hint">Select image to enlarge</span></figcaption></figure>
+                <dl class="ls-definitions"><dt>Mark as Completed</dt><dd>Marks all steps complete and moves the LiveStack to <strong>Completed</strong>. Use it after finishing the work, not merely opening the guide.</dd><dt>Reset Progress</dt><dd>Resets all steps to <strong>Not Started</strong> and keeps the LiveStack in <strong>In Progress</strong>. This is not an instruction to reset or rebuild a Sandbox.</dd></dl>
+                <details class="ls-extra"><summary>Cannot find your bundle or environment?</summary><ul><li>Check that you are signed in to the same Oracle account used to subscribe or reserve.</li><li>Look in Subscribed, In Progress, and Completed; they describe different states.</li><li>Check My Reservations for the environment’s availability. A subscription does not keep a Sandbox running indefinitely.</li><li>For access or lab problems, use the entry guide’s <strong>Need Help?</strong> instructions.</li></ul></details>
+              </section>
+              <section class="ls-step" id="share">
+                <p class="ls-eyebrow">Step 8</p><h2>Share the bundle or join an event</h2>
+                <div class="ls-split"><div><h3>Share a self-paced journey</h3><p>Use <strong>Share</strong> on the bundle page to obtain its link. Share the bundle when you want someone to see the full path; share an entry when you mean one demo or workshop.</p><p>Recipients sign in and arrange their own environment as required. Do not share reservation credentials or employee-only assets.</p></div><div><h3>Join an organized session</h3><p>Use the organizer’s link and <strong>Event Code</strong> instructions. Follow the specified entries, schedule, and environment guidance rather than starting an unrelated reservation.</p><p>Organizing the session? Continue to the separate <a href="../events/">Create a LiveStack event</a> guide. Authoring a bundle belongs in <a href="../create/">Create a LiveStack</a>.</p></div></div>
+              </section>
+            </div>
+          </div>
+          <nav class="ls-next" aria-label="Continue learning"><a href="../">← LiveStack introduction</a><a href="../create/">Next: Create a LiveStack →</a></nav>
+          <p class="ls-sources">Screens and controls reviewed September 25, 2026. Sources: <a href="https://livelabs.oracle.com/ords/r/dbpm/livelabs/livelabs-workshop-cards?clear=100" target="_blank" rel="noreferrer">LiveLabs catalog</a><a href="https://livelabs.oracle.com/ords/r/dbpm/livelabs/livestack-landing-page?p400_id=41" target="_blank" rel="noreferrer">Retail LiveStack</a><a href="https://oracle-livelabs.github.io/livestack/aidatabaseindustrylivestack/retail/workshops/sandbox/" target="_blank" rel="noreferrer">Retail demo guide</a></p>
+        </div>
+      </main>
+      <footer class="app-footer" data-shared-footer data-footer-variant="app"></footer>
+    </div>
+  </div>
+  <dialog class="ls-image-dialog" id="lsImageDialog" aria-labelledby="lsImageTitle">
+    <header><h2 id="lsImageTitle">Image preview</h2><button type="button" autofocus>Close preview</button></header>
+    <figure><img alt=""><figcaption><span data-image-caption></span> <a data-image-original target="_blank" rel="noreferrer">Open original image</a></figcaption></figure>
+  </dialog>
+  <script src="../../assets/js/shared-footer.js"></script>
+</body>
+</html>
