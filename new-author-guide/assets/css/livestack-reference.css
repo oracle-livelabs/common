@@ -1,0 +1,135 @@
+/* LiveStack pages share the guide's Redwood tokens, fonts, and primary menu. */
+body[data-author-guide-page="livestack"] { background: #FBF9F7; }
+body[data-author-guide-page="livestack"] > .skip-link { position: fixed; left: 16px; top: -80px; z-index: 2000; padding: 10px 16px; color: #fff; background: #312D2A; }
+body[data-author-guide-page="livestack"] > .skip-link:focus { top: 12px; }
+#livestackMode .ls-page { max-width: var(--author-guide-panel-width,1500px); margin: 0 auto; padding: 32px 0 56px; color: var(--redwood-text); }
+#livestackMode .ls-page p, #livestackMode .ls-page li { line-height: 1.6; }
+#livestackMode .ls-page h1, #livestackMode .ls-page h2, #livestackMode .ls-page h3 { color: var(--oracle-bark); }
+#livestackMode .ls-page h1 { font: 400 clamp(32px, 3.2vw, 46px)/1.12 Georgia, serif; margin: 10px 0 16px; max-width: none; }
+#livestackMode .ls-page h2 { font-size: clamp(23px, 2.2vw, 30px); line-height: 1.25; margin: 0 0 14px; }
+#livestackMode .ls-page h3 { font-size: 18px; line-height: 1.35; margin: 0 0 8px; }
+#livestackMode .ls-page a:not(.ls-button):not(.ls-shot-link):not([aria-current]) { color: var(--link-blue); }
+#livestackMode .ls-page a:focus-visible, #livestackMode .ls-page button:focus-visible, #livestackMode .ls-page input:focus-visible,
+.ls-image-dialog :focus-visible { outline: 3px solid #00688C; outline-offset: 4px; }
+#livestackMode .ls-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--finance-teal); margin: 0; }
+#livestackMode .ls-page-nav { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 0 18px; margin-bottom: 20px; border-bottom: 1px solid var(--redwood-border); }
+#livestackMode .ls-page-nav a { padding: 10px 16px; font-weight: 600; font-size: 14px; border-radius: 4px; text-decoration: none; }
+#livestackMode .ls-page-nav a:hover { background: #E9E1CA; }
+#app #livestackMode .ls-page-nav a[aria-current="page"] { background: var(--oracle-red); color: #fff !important; }
+#livestackMode .ls-hero { position: relative; overflow: hidden; padding: 46px 38px 28px; background: #fff; border: 1px solid rgba(22,21,19,.16); border-radius: 8px; margin-bottom: 20px; scroll-margin-top: 24px; }
+#livestackMode .ls-decoration-strip { position: absolute; inset: 0 0 auto; height: 20px; border-radius: 8px 8px 0 0; background: url("../images/color-strip.png") center / 100% 20px no-repeat; pointer-events: none; }
+#livestackMode .ls-hero .ls-eyebrow { font-size: 16px; letter-spacing: 0; text-transform: none; }
+#livestackMode .ls-hero p:not(.ls-eyebrow) { max-width: 68ch; margin-bottom: 16px; }
+#livestackMode .ls-hero-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 32px; align-items: center; }
+#livestackMode .ls-hero-grid figure { margin: 0; }
+#livestackMode .ls-search-panel { padding: 22px 28px; border: 1px solid var(--redwood-border); border-radius: 8px; background: #F5F4F2; margin-bottom: 28px; }
+#livestackMode .ls-search-panel[hidden], #livestackMode .ls-search-results[hidden] { display: none; }
+#livestackMode .ls-search-panel .form-label { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+#app #livestackMode .ls-search-panel .search-group { display: grid; grid-template-columns: minmax(0,1fr) auto auto; gap: 8px; }
+#livestackMode .ls-search-panel .form-control { min-width: 100px; min-height: 48px; background: #fff; color: #161513; border: 1px solid var(--redwood-border-strong); border-radius: 4px; }
+#livestackMode .ls-search-panel .btn { min-height: 48px; border-radius: 4px; }
+#livestackMode .ls-search-status { font-size: 13px; color: #59534E; margin: 10px 0 0; }
+#livestackMode .ls-search-results { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); list-style: none; gap: 12px; padding: 0; margin: 18px 0 0; }
+#livestackMode .ls-search-results li { padding: 18px; border: 1px solid var(--redwood-border); border-radius: 4px; background: #fff; min-width: 0; }
+#livestackMode .ls-search-results a { display: block; font-weight: 600; overflow-wrap: anywhere; }
+#livestackMode .ls-search-page { display: block; margin-bottom: 6px; color: #59534E; font-size: 12px; }
+#livestackMode .ls-search-results p { font-size: 14px; margin: 8px 0 0; overflow-wrap: anywhere; }
+#livestackMode .ls-section:target, #livestackMode .ls-step:target { outline: 2px solid var(--finance-teal); outline-offset: 4px; }
+#livestackMode .ls-actions { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin-top: 20px; }
+#livestackMode .ls-button { display: inline-block; padding: 11px 18px; color: #fff; background: var(--oracle-red); border: 1px solid var(--oracle-red); border-radius: 4px; text-decoration: none; font-weight: 600; }
+#app #livestackMode a.ls-button { color: #fff !important; }
+#livestackMode .ls-button:hover { background: #A83829; }
+#livestackMode .ls-section { margin: 0 0 36px; scroll-margin-top: 28px; }
+#livestackMode .ls-section > p { max-width: 80ch; }
+#livestackMode .ls-journey { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); list-style: none; padding: 0; margin: 22px 0 0; border: 1px solid var(--redwood-border); border-radius: 8px; background: var(--redwood-surface); }
+#livestackMode .ls-journey li { padding: 24px; border-right: 1px solid var(--redwood-border); }
+#livestackMode .ls-journey li:last-child { border-right: 0; }
+#livestackMode .ls-journey span { display: block; font-size: 12px; color: var(--finance-teal); font-weight: 700; margin-bottom: 10px; }
+#livestackMode .ls-journey p { margin: 0; font-size: 14px; }
+#livestackMode .ls-split { display: grid; grid-template-columns: minmax(260px,.8fr) minmax(0,1.2fr); gap: 32px; align-items: start; }
+#livestackMode .ls-panel { padding: 28px; border: 1px solid var(--redwood-border); border-top: 5px solid var(--finance-teal); border-radius: 8px; background: var(--redwood-surface); }
+#livestackMode .ls-note { padding: 14px 18px; background: #F1EFEA; border-left: 3px solid var(--finance-teal); margin: 18px 0; font-size: 14px; }
+#livestackMode .ls-note p:last-child { margin-bottom: 0; }
+#livestackMode .ls-warning { border-color: var(--oracle-red); }
+#livestackMode .ls-cards { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+#livestackMode .ls-cards a { display: block; padding: 24px; background: var(--redwood-surface); border: 1px solid var(--redwood-border); border-top: 5px solid var(--finance-teal); border-radius: 8px; text-decoration: none; }
+#livestackMode .ls-cards a:hover { border-color: var(--finance-teal); background: #F2F5F3; }
+#livestackMode .ls-cards p { color: var(--redwood-text); margin-bottom: 12px; font-size: 14px; }
+#livestackMode .ls-cards span { font-weight: 600; font-size: 14px; }
+#livestackMode .ls-example-cards { grid-template-columns: repeat(2,minmax(0,1fr)); }
+#livestackMode .ls-page h3.ls-subheading { margin-top: 24px; }
+#livestackMode .ls-bundle-parts { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px 28px; margin: 24px 0; }
+#livestackMode .ls-bundle-parts > div { border-top: 2px solid var(--redwood-border); padding-top: 14px; }
+#livestackMode .ls-step > .ls-shot + p { margin-top: 20px; }
+#livestackMode .ls-doc-layout { display: grid; grid-template-columns: 190px minmax(0,1fr); gap: 30px; align-items: start; }
+#livestackMode .ls-toc { position: sticky; top: 24px; max-height: calc(100vh - 48px); overflow-y: auto; }
+#livestackMode .ls-toc ol { list-style: none; padding: 0; margin: 12px 0; }
+#livestackMode .ls-toc a { display: block; border-left: 3px solid transparent; padding: 9px 12px; font-size: 14px; text-decoration: none; }
+#livestackMode .ls-toc a:hover { background: #F1EFEA; }
+#livestackMode .ls-toc a[aria-current="location"] { border-color: var(--oracle-red); background: #F1EFEA; color: var(--oracle-bark); font-weight: 700; }
+#livestackMode .ls-steps { min-width: 0; }
+#livestackMode .ls-step { padding: 28px; margin-bottom: 24px; border: 1px solid var(--redwood-border); border-top: 5px solid var(--finance-teal); border-radius: 8px; background: var(--redwood-surface); scroll-margin-top: 24px; }
+#livestackMode .ls-step > .ls-eyebrow { margin-bottom: 8px; }
+#livestackMode .ls-step-layout { display: grid; grid-template-columns: minmax(230px,.8fr) minmax(0,1.2fr); gap: 26px; align-items: start; }
+#livestackMode .ls-step ul, #livestackMode .ls-step ol { padding-left: 20px; }
+#livestackMode .ls-step li + li { margin-top: 8px; }
+#livestackMode .ls-shot { margin: 0; min-width: 0; }
+#livestackMode .ls-shot-link { display: block; border: 1px solid var(--redwood-border-strong); border-radius: 6px; overflow: hidden; background: #F1EFEA; cursor: zoom-in; }
+#livestackMode .ls-shot img { display: block; width: 100%; height: auto; }
+#livestackMode .ls-shot figcaption { font-size: 12px; line-height: 1.5; color: #59534E; margin-top: 9px; }
+#livestackMode .ls-zoom-hint { display: block; color: var(--link-blue); font-weight: 600; margin-top: 3px; }
+#livestackMode .ls-extra { border-top: 1px solid var(--redwood-border); margin-top: 20px; padding-top: 14px; }
+#livestackMode .ls-extra summary { cursor: pointer; font-weight: 600; color: var(--link-blue); }
+#livestackMode .ls-extra > :not(summary) { margin-top: 18px; }
+#livestackMode .ls-definitions { margin: 0; }
+#livestackMode .ls-definitions dt { color: var(--oracle-bark); margin-top: 16px; }
+#livestackMode .ls-definitions dt:first-child { margin-top: 0; }
+#livestackMode .ls-definitions dd { font-size: 14px; margin: 4px 0 0; }
+#livestackMode .ls-next { display: flex; gap: 20px; justify-content: space-between; padding: 20px 0; border-top: 1px solid var(--redwood-border); }
+#livestackMode .ls-sources { font-size: 13px; color: #59534E; margin-top: 28px; }
+#livestackMode .ls-sources a { margin-right: 14px; }
+.ls-image-dialog { padding: 0; border: 1px solid rgba(49,45,42,.22); border-radius: 8px; color: #161513; background: #FBF9F7; width: min(1500px,96vw); max-width: 96vw; max-height: 94vh; margin: auto; font-family: "Oracle Sans","Segoe UI",sans-serif; }
+.ls-image-dialog::backdrop { background: rgba(49,45,42,.55); backdrop-filter: blur(4px); }
+.ls-image-dialog header { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 20px; border-bottom: 1px solid rgba(49,45,42,.2); }
+.ls-image-dialog h2 { font-size: 16px; margin: 0; }
+.ls-image-dialog button { background: #312D2A; border: 1px solid #312D2A; border-radius: 4px; padding: 8px 14px; color: #fff; }
+.ls-image-dialog figure { margin: 0; padding: 16px; overflow: auto; }
+.ls-image-dialog img { width: 100%; height: auto; display: block; }
+.ls-image-dialog figcaption { font-size: 13px; padding-top: 12px; }
+.ls-image-dialog a { color: #00688C; }
+body.ls-image-open { overflow: hidden; }
+@media (max-width: 1250px) {
+  #livestackMode .ls-step-layout { grid-template-columns: 1fr; }
+  #livestackMode .ls-hero-grid { grid-template-columns: 1fr; }
+  #livestackMode .ls-hero-grid figure { max-width: 800px; }
+  #livestackMode .ls-doc-layout { grid-template-columns: 170px minmax(0,1fr); gap: 20px; }
+}
+@media (max-width: 940px) {
+  #livestackMode .ls-page { padding: 20px 0 40px; }
+  #livestackMode .ls-doc-layout, #livestackMode .ls-split { grid-template-columns: 1fr; }
+  #livestackMode .ls-toc { position: static; max-height: none; }
+  #livestackMode .ls-toc ol { display: flex; flex-wrap: wrap; gap: 4px; }
+  #livestackMode .ls-journey { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  #livestackMode .ls-journey li:nth-child(2) { border-right: 0; }
+  #livestackMode .ls-journey li:nth-child(-n+2) { border-bottom: 1px solid var(--redwood-border); }
+}
+@media (max-width: 600px) {
+  #livestackMode .ls-page { padding: 20px 0 36px; }
+  #livestackMode .ls-panel, #livestackMode .ls-step, #livestackMode .ls-search-panel { padding: 20px; }
+  #livestackMode .ls-hero { padding: 42px 22px 24px; }
+  #app #livestackMode .ls-search-panel .search-group { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  #livestackMode .ls-search-panel .form-control { grid-column: 1 / -1; width: 100%; }
+  #livestackMode .ls-search-panel .btn { flex: 1; margin-left: 0; }
+  #livestackMode .ls-search-results { grid-template-columns: 1fr; }
+  #livestackMode .ls-page-nav { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 5px; }
+  #livestackMode .ls-page-nav a { padding: 11px 10px; font-size: 13px; text-align: center; }
+  #livestackMode .ls-cards, #livestackMode .ls-bundle-parts { grid-template-columns: 1fr; }
+  #livestackMode .ls-journey li { padding: 18px; }
+  #livestackMode .ls-next { flex-direction: column; }
+}
+@media print {
+  #modeNav, #authorGlobalNavToggle, .ls-page-nav, .ls-toc, .ls-zoom-hint, .ls-image-dialog, .ls-search-panel { display: none !important; }
+  #app .app-shell { padding-left: 0 !important; }
+  #livestackMode .ls-doc-layout, #livestackMode .ls-step-layout { display: block; }
+  #livestackMode .ls-step, #livestackMode .ls-shot { break-inside: avoid; }
+}

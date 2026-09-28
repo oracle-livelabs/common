@@ -1,5 +1,6 @@
 (function () {
-      var routeNames = ["home", "quickstart", "cheatsheet", "markdown", "nodoc"];
+      var configScriptUrl = document.currentScript && document.currentScript.src;
+      var routeNames = ["home", "quickstart", "cheatsheet", "markdown", "nodoc", "livestack"];
 
       function canonicalizeCurrentRoute() {
         var current = new URL(window.location.href);
@@ -55,9 +56,33 @@
 
       function guideRootUrl() {
         var current = new URL(window.location.href);
+        // The local config asset identifies the guide root even when a
+        // deployment prefix happens to end in a route name such as livestack.
+        if (configScriptUrl) {
+          var scriptUrl = new URL(configScriptUrl, current);
+          if (scriptUrl.origin === current.origin && /\/assets\/js\/author-guide-config\.js$/.test(scriptUrl.pathname)) {
+            return new URL("../../", scriptUrl);
+          }
+        }
         var segments = current.pathname.split("/").filter(Boolean);
         var lastSegment = segments[segments.length - 1] || "";
         var previousSegment = segments[segments.length - 2] || "";
+
+        // LiveStack documentation has real child routes. Remove the whole
+        // route suffix, not a deployment prefix that may have the same name.
+        var routeSegments = segments.slice();
+        if (lastSegment.toLowerCase() === "index.html") {
+          routeSegments.pop();
+        }
+        var child = routeSegments[routeSegments.length - 1];
+        if (["use", "create", "events"].indexOf(child) !== -1 &&
+            routeSegments[routeSegments.length - 2] === "livestack") {
+          routeSegments.splice(-2, 2);
+          current.pathname = "/" + (routeSegments.length ? routeSegments.join("/") + "/" : "");
+          current.search = "";
+          current.hash = "";
+          return current;
+        }
 
         if (lastSegment.toLowerCase() === "index.html" && routeNames.indexOf(previousSegment) !== -1) {
           segments.splice(-2, 2);

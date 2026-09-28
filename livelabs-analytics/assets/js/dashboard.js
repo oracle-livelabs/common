@@ -1010,12 +1010,128 @@
         loadLazySection(initialSectionId).then((section) => section?.scrollIntoView({ block: "start" }));
       }
     }
+    function dashboardRecordValue(record, label) {
+      const pair = (record?.values || []).find((item) => Array.isArray(item) && item[0] === label);
+      const value = Number(String(pair?.[1] ?? "").replace(/,/g, ""));
+      return Number.isFinite(value) ? value : null;
+    }
+    function dashboardRecordDate(record) {
+      const details = new Map((record?.details || []).filter((item) => Array.isArray(item) && item.length >= 2));
+      const candidates = [
+        details.get("Last Meaningful Workshop Update"),
+        details.get("Latest Workshop Commit Date"),
+        details.get("Latest GitHub Update"),
+        details.get("Latest Repository Update Proxy"),
+        details.get("WMS Last Update"),
+        record?.update
+      ];
+      for (const candidate of candidates) {
+        const text = String(candidate || "").trim();
+        const parsed = new Date(/^\d{4}-\d{2}-\d{2}$/.test(text) ? `${text}T00:00:00Z` : text);
+        if (!Number.isNaN(parsed.getTime())) return parsed;
+      }
+      return null;
+    }
+    function updatePortfolioStatsFromPayload(payload) {
+      const records = Array.isArray(payload?.records) ? payload.records : [];
+      if (!records.length) return;
+      const active = records.filter((record) => record.publishStatus === "Published" && ["Public", "Private"].includes(record.publishType));
+      const byType = (type) => active.filter((record) => record.type === type);
+      const disabled = records.filter((record) => record.publishType === "Disabled");
+      const events = records.filter((record) => record.publishType === "Event");
+      const notPublished = records.filter((record) => record.publishStatus !== "Published" && ["Public", "Private"].includes(record.publishType));
+      const infoRows = Array.from(document.querySelectorAll("#portfolio-stats .info-table tr"));
+      const setInfo = (label, value) => {
+        const row = infoRows.find((item) => item.querySelector("th")?.textContent.trim() === label);
+        const cell = row?.querySelector("td");
+        if (cell) cell.textContent = String(value);
+      };
+      setInfo("Active workshops", byType("Workshop").length);
+      setInfo("Active sprints", byType("Sprint").length);
+      setInfo("Disabled workshops", disabled.filter((record) => record.type === "Workshop").length);
+      setInfo("Disabled sprints", disabled.filter((record) => record.type === "Sprint").length);
+      setInfo("Events excluded", events.length);
+      setInfo("Not published", notPublished.length);
+      const matchedTwelveMonth = active.filter((record) => dashboardRecordValue(record, "Views - Last 12 Months") !== null).length;
+      setInfo("Dashboard rows matched to WMS (12m)", active.length ? `${((matchedTwelveMonth / active.length) * 100).toFixed(2)}%` : "N/A");
+      const snapshotDate = new Date(`${payload.metadata?.snapshot_date || "2026-09-28"}T00:00:00Z`);
+      const ageDays = (record) => {
+        const updated = dashboardRecordDate(record);
+        return updated ? Math.max(0, Math.floor((snapshotDate - updated) / 86400000)) : null;
+      };
+      const updatedInYear = active.filter((record) => ageDays(record) !== null && ageDays(record) <= 365);
+      const aged18to24 = active.filter((record) => ageDays(record) !== null && ageDays(record) > 548 && ageDays(record) <= 730);
+      const thousandPlus = active.filter((record) => (dashboardRecordValue(record, "Views - Last 12 Months") || 0) >= 1000);
+      const glance = document.querySelector('[data-portfolio-glance="true"]');
+      if (glance) {
+        const strongValues = glance.querySelectorAll(".portfolio-glance-card strong");
+        const smallValues = glance.querySelectorAll(".portfolio-glance-card small");
+        const workshopCount = byType("Workshop").length;
+        const sprintCount = byType("Sprint").length;
+        if (strongValues[0]) strongValues[0].textContent = String(active.length);
+        if (strongValues[1]) strongValues[1].textContent = String(updatedInYear.length);
+        if (strongValues[2]) strongValues[2].textContent = String(aged18to24.length);
+        if (strongValues[3]) strongValues[3].textContent = String(thousandPlus.length);
+        if (smallValues[0]) smallValues[0].textContent = `${workshopCount} workshops · ${sprintCount} sprints`;
+        if (smallValues[1]) smallValues[1].textContent = `${updatedInYear.filter((record) => record.type === "Workshop").length} workshops · ${updatedInYear.filter((record) => record.type === "Sprint").length} sprints`;
+        if (smallValues[2]) smallValues[2].textContent = `${aged18to24.filter((record) => record.type === "Workshop").length} workshops · ${aged18to24.filter((record) => record.type === "Sprint").length} sprints`;
+        if (smallValues[3]) smallValues[3].textContent = `${thousandPlus.filter((record) => record.type === "Workshop").length} workshops · ${thousandPlus.filter((record) => record.type === "Sprint").length} sprints`;
+        const glanceNote = glance.querySelector(".note");
+        if (glanceNote) glanceNote.textContent = `A quick read across four portfolio metrics. The active portfolio contains ${active.length} items: ${workshopCount} workshops and ${sprintCount} sprints.`;
+      }
+      const demandBands = [
+        ["5,000+ views", (value) => value >= 5000],
+        ["1,000-4,999 views", (value) => value >= 1000 && value < 5000],
+        ["250-999 views", (value) => value >= 250 && value < 1000],
+        ["50-249 views", (value) => value >= 50 && value < 250],
+        ["Under 50 views", (value) => value < 50]
+      ];
+      const stalenessBands = [
+        ["Updated in last 12 months", (days) => days <= 365],
+        ["Stale: 12-18 months", (days) => days > 365 && days <= 548],
+        ["Stale: 18-24 months", (days) => days > 548 && days <= 730],
+        ["Stale: 24+ months", (days) => days > 730]
+      ];
+      const updateChart = (heading, type, classifier, values, note) => {
+        const panel = Array.from(document.querySelectorAll("#portfolio-stats .chart-card")).find((item) => item.querySelector("h3")?.textContent.trim() === heading);
+        if (!panel) return;
+        const rows = Array.from(panel.querySelectorAll(".chart-row"));
+        const counts = new Map(classifier.map(([label]) => [label, 0]));
+        values.forEach((value) => {
+          const bucket = classifier.find(([, predicate]) => predicate(value));
+          if (bucket) counts.set(bucket[0], counts.get(bucket[0]) + 1);
+        });
+        const maximum = Math.max(...counts.values(), 1);
+        rows.forEach((row) => {
+          const label = row.querySelector("strong")?.textContent.trim();
+          if (!counts.has(label)) return;
+          const count = counts.get(label);
+          const countNode = row.querySelector(".chart-head span");
+          const noteNode = row.querySelector(".chart-note");
+          const fill = row.querySelector(".bar-fill");
+          if (countNode) countNode.textContent = `${count} ${type}`;
+          if (noteNode) noteNode.textContent = `${count} ${type} are in this band.`;
+          if (fill) fill.style.setProperty("--bar-width", `${((count / maximum) * 100).toFixed(1)}%`);
+        });
+        const noteNode = panel.querySelector(".note");
+        if (noteNode) noteNode.textContent = note;
+      };
+      for (const type of ["Workshop", "Sprint"]) {
+        const current = byType(type);
+        const demandValues = current.map((record) => dashboardRecordValue(record, "Views - Last 12 Months")).filter((value) => value !== null);
+        updateChart(`${type} Demand Bands`, `${type.toLowerCase()}s`, demandBands, demandValues, `Count of active ${type.toLowerCase()}s by 12-month demand band. Rows without a matched 12-month view are excluded from these five bands.`);
+        const ageValues = current.map((record) => dashboardRecordDate(record)).filter(Boolean).map((value) => Math.max(0, Math.floor((snapshotDate - value) / 86400000)));
+        updateChart(`${type} Staleness Bands`, `${type.toLowerCase()}s`, stalenessBands, ageValues, `Count of ${type.toLowerCase()}s by update age using available WMS/GitHub evidence; GitHub evidence is dated 14-15 August 2026.`);
+      }
+    }
     function normalizePortfolioPayload(payload) {
       portfolioInventoryMetadata = payload?.metadata || null;
-      return {
+      const normalized = {
         metadata: portfolioInventoryMetadata,
         records: Array.isArray(payload?.records) ? payload.records : []
       };
+      updatePortfolioStatsFromPayload(normalized);
+      return normalized;
     }
     function loadCanonicalPortfolioPayload() {
       if (portfolioPayloadPromise) return portfolioPayloadPromise;
@@ -3352,6 +3468,7 @@
       decorateDashboardCopyTargets();
       applySectionVisibilitySettings();
       applyPortfolioStatsSummary();
+      void loadCanonicalPortfolioPayload().catch(() => {});
       let searchRecords = [];
       let searchUpdateTimer = null;
       let searchLoadRequest = 0;
