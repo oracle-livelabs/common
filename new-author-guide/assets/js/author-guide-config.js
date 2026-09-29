@@ -35,7 +35,7 @@
       var lab = url.searchParams.get("lab");
       var fullGuideHref = "https://" + "oracle-livelabs" + ".github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/";
       var workshopExampleHref = "https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/";
-      var wmsHref = "https://apex.oraclecorp.com/pls/apex/f?p=LIVELABS";
+      var wmsHref = "https://livelabs.oracle.com/wms";
       var guideRoutes = {
         hub: "home",
         beginner: "quickstart",
