@@ -34,7 +34,7 @@ To start Oracle LiveLabs Sprints development, complete Lab 2:
 
 ## Task 1: Set Up Oracle LiveLabs Sprints GitHub Repository
 
-> **Note:** Before you create a new sprint, check if a sprint with the same content exists in [WMS](http://livelabs.oracle.com/wms). If no sprint with your content exists, proceed.
+> **Note:** Before you create a new sprint, check if a sprint with the same content exists in [WMS](https://livelabs.oracle.com/wms). If no sprint with your content exists, proceed.
 
 1. Navigate to the [oracle-livelabs/sprints](https://github.com/oracle-livelabs/sprints) repository in the Oracle LiveLabs GitHub Project.
 
@@ -119,7 +119,7 @@ You will push the updated content from your clone to the origin of your clone (y
 
 ##  Task 5: Request Sprint Publish in WMS
 
-1. After you submit the pull request, navigate to your domain sprint bucket in [WMS](http://bit.ly/oraclewms). If no existing domain sprint bucket fits your sprint, contact our LiveLabs Sprints team by emailing us at [livelabs-help-sprints_us@oracle.com](livelabs-help-sprints_us@oracle.com) or send us a message in Slack #workshop-authors-help to create a new bucket. We will respond within 20 minutes over Slack or within 24 hours via email and create the bucket if needed.
+1. After you submit the pull request, navigate to your domain sprint bucket in [WMS](https://livelabs.oracle.com/wms). If no existing domain sprint bucket fits your sprint, contact our LiveLabs Sprints team by emailing us at [livelabs-help-sprints_us@oracle.com](livelabs-help-sprints_us@oracle.com) or send us a message in Slack #workshop-authors-help to create a new bucket. We will respond within 20 minutes over Slack or within 24 hours via email and create the bucket if needed.
 
 2. In your sprint bucket in WMS, click on the **Publishing** tab, then click the **Publish to LiveLabs** button to submit a new sprint publish request.
 
