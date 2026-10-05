@@ -4623,6 +4623,181 @@ body.home-no-scroll #app .hub-hero {
   }
 }
 
+/* Modal rhythm: use one outer section gap and one inner card gap so dynamic
+   mounts do not inherit a mixture of Bootstrap margins or sit flush together. */
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModal .modal-content {
+  --modal-section-gap: 1.25rem;
+  --modal-inner-gap: 1rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModal .modal-body {
+  display: grid;
+  align-content: start;
+  gap: var(--modal-section-gap);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModal .modal-body > * {
+  margin-block: 0 !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModal .modal-grid,
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModal .modal-support-mount {
+  gap: var(--modal-inner-gap);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModal .modal-panel,
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModal .modal-media-card .card-body,
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModal .snippet-card .card-body,
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModal .detail-support-block {
+  padding: 1.25rem !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModal .detail-resource-grid {
+  gap: var(--modal-inner-gap);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModal .modal-footer {
+  gap: 0.75rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModal .modal-footer > * {
+  margin: 0 !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .image-lightbox-dialog {
+  gap: 1.25rem;
+  padding: 1.25rem;
+}
+
+/* Quiet resource cards: keep the shared reference pattern readable without
+   making every title, number, and action compete with Oracle Red. */
+#app[data-redwood-creator-pass="2026-05-25"] .detail-support-block {
+  border-color: rgba(79, 125, 123, 0.22) !important;
+  background: #f7faf9 !important;
+  color: var(--redwood-text);
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  box-shadow: 0 8px 20px rgba(49, 45, 42, 0.05);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-support-block::before {
+  height: 4px !important;
+  background: var(--finance-teal) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-support-block .detail-block-header h3 {
+  color: var(--oracle-bark);
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  font-weight: 600;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-support-block .detail-block-header p {
+  color: #637270;
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-card {
+  min-height: 100%;
+  gap: 0.8rem;
+  padding: 1rem;
+  border-color: rgba(79, 125, 123, 0.22) !important;
+  background: #fff !important;
+  color: var(--redwood-text);
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  box-shadow: 0 2px 8px rgba(49, 45, 42, 0.05);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-card:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-card:focus-within {
+  border-color: rgba(79, 125, 123, 0.58) !important;
+  background: #fbfdfc !important;
+  box-shadow: 0 5px 14px rgba(49, 45, 42, 0.08);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-number {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(79, 125, 123, 0.28);
+  border-radius: 6px !important;
+  background: #e4f0ee !important;
+  color: #2f6764 !important;
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-main strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--oracle-bark) !important;
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  font-size: 0.96rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-main span span {
+  display: block;
+  color: #637270;
+  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem;
+  align-self: stretch;
+  padding-top: 0.15rem;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-actions .resource-open-link {
+  width: 100%;
+  min-height: 2.75rem !important;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem !important;
+  border: 1px solid rgba(79, 125, 123, 0.34) !important;
+  border-radius: 8px !important;
+  background: #eef6f5 !important;
+  color: #2f6764 !important;
+  text-align: left;
+  white-space: normal;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-actions .resource-open-link::after {
+  content: "↗";
+  flex: 0 0 auto;
+  margin-left: 0.6rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-actions .resource-open-link:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-actions .resource-open-link:focus-visible {
+  border-color: rgba(79, 125, 123, 0.7) !important;
+  background: #e4f0ee !important;
+  color: #234e4c !important;
+  transform: translateY(-1px) !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-actions .resource-copy-link {
+  justify-self: start;
+  min-height: 2.25rem !important;
+  padding: 0.35rem 0.7rem !important;
+  border: 1px solid rgba(49, 45, 42, 0.2) !important;
+  border-radius: 6px !important;
+  background: transparent !important;
+  color: #637270 !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-actions .resource-copy-link:hover,
+#app[data-redwood-creator-pass="2026-05-25"] .detail-resource-actions .resource-copy-link:focus-visible {
+  border-color: rgba(79, 125, 123, 0.58) !important;
+  background: rgba(79, 125, 123, 0.08) !important;
+  color: #2f6764 !important;
+  transform: translateY(-1px) !important;
+}
+
 /* Final Cheatsheet menu treatment: direct parent link, in-flow Markdown child. */
 #app[data-redwood-creator-pass="2026-05-25"] .nav-menu-group {
   position: static;

@@ -15,6 +15,8 @@ This folder contains the static GitHub Pages review prototype:
 
 Current status: demo-only static prototype with seeded/browser-local data. It is ready for manager review from GitHub Pages after this folder is pushed with `app/dist`.
 
+The [On-Call Review local slice](docs/on-call-review-slice.md) adds an explicit synthetic preview for source health, inbox cases, versioned answer drafts and exact report references. Its support state stays in memory; private live review remains disabled until a verified backend is bound.
+
 Demo accounts:
 
 | Role | Email | Password |

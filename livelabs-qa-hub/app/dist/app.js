@@ -29,6 +29,8 @@ import {
   updateWatchEventStatus,
   watchdogTabs
 } from './state.mjs'
+import { createReviewPreview, loadOnCallSnapshot, unavailableOnCall } from './on-call-review.mjs'
+import { renderOnCallReview } from './on-call-view.mjs'
 
 const app = document.querySelector('#app')
 const storageKey = 'livelabs-qa-hub-state-v2'
@@ -36,6 +38,10 @@ const sessionKey = 'livelabs-qa-hub-session-v2'
 const routeKey = 'livelabs-qa-hub-route-v2'
 const tabKey = 'livelabs-qa-hub-watchdog-tab-v2'
 const hiddenViewMetadata = {
+  'on-call-review': {
+    label: 'On-Call Review',
+    help: 'Private inbox, versioned drafts, source coverage and report readiness; synthetic preview available.'
+  },
   'qa-watchdog': {
     label: 'QA Watchdog',
     help: 'Datadog-style alerts, logs, monitor definitions, and incident investigation for QA signals.'
@@ -69,7 +75,7 @@ const operationGroups = [
   {
     label: 'Monitor And Triage',
     description: 'Find the strongest signals first, then open the record that owns the next action.',
-    items: ['qa-watchdog', 'health-monitor']
+    items: ['on-call-review', 'qa-watchdog', 'health-monitor']
   },
   {
     label: 'Evidence And Automation',
@@ -88,6 +94,12 @@ const operationGroups = [
   }
 ]
 const operationsRegistry = [
+  {
+    id: 'on-call-review',
+    label: 'On-Call Review',
+    group: 'Monitor And Triage',
+    description: 'Review source health, cases, exact draft versions and private report readiness.'
+  },
   {
     id: 'qa-watchdog',
     label: 'QA Watchdog',
@@ -174,6 +186,13 @@ let selectedAlertId = null
 let selectedReportId = 'rep-daily'
 let reportPreview = ''
 let message = ''
+// Support responses never enter the browser-persisted demo state.
+let onCallSnapshot = unavailableOnCall()
+let onCallCaseId = ''
+let onCallReviewPreview = ''
+let onCallReviewError = ''
+let onCallLoading = false
+let onCallRequest = 0
 
 function loadState() {
   try {
@@ -228,6 +247,8 @@ function loadSession() {
 }
 
 function loadRoute() {
+  const requested = new URLSearchParams(window.location.search).get('view')
+  if (routableViews.has(requested)) return requested
   const saved = localStorage.getItem(routeKey)
   return routableViews.has(saved) ? saved : 'command-center'
 }
@@ -455,6 +476,7 @@ function renderShell() {
 }
 
 function renderView(user) {
+  if (activeView === 'on-call-review') return withOperationsChrome('on-call-review', renderOnCallReview(onCallSnapshot, { selectedCaseId: onCallCaseId, reviewPreview: onCallReviewPreview, reviewError: onCallReviewError, loading: onCallLoading }))
   if (activeView === 'command-center') return renderCommandCenter()
   if (activeView === 'operations') return renderOperationsHub()
   if (activeView === 'github-intake') return renderGithubIntake(user)
@@ -624,6 +646,7 @@ function renderOperationLauncher(id) {
 }
 
 function getOperationSignal(id) {
+  if (id === 'on-call-review') return { label: onCallSnapshot.mode === 'synthetic' ? 'Synthetic preview' : onCallSnapshot.availability === 'AVAILABLE' ? 'Private response' : 'Private access blocked', tone: 'warn' }
   const summary = deriveSummary(state.watchEvents, state.healthChecks)
   const domainTitle = hiddenViewMetadata[id]?.label || operationsRegistry.find((item) => item.id === id)?.label
   const domainChecks = state.healthChecks.filter((check) => domainTitle && (check.domain === domainTitle || domainTitle.includes(check.domain) || check.domain.includes(domainTitle.split(' ')[0])))
@@ -1474,6 +1497,46 @@ function syncBackToTop() {
 }
 
 function bindEvents() {
+  document.querySelectorAll('[data-on-call-load]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const request = ++onCallRequest
+      const mode = button.dataset.onCallLoad
+      onCallSnapshot = unavailableOnCall(mode === 'live' ? 'Checking private backend; previous review data cleared.' : 'Review data cleared.')
+      onCallCaseId = ''
+      onCallReviewPreview = ''
+      onCallReviewError = ''
+      onCallLoading = mode !== 'none'
+      render()
+      const endpoint = document.querySelector('meta[name="on-call-review-endpoint"]')?.content || ''
+      const next = await loadOnCallSnapshot({ mode, endpoint, origin: window.location.origin, assetBase: new URL('./', window.location.href).href })
+      if (request !== onCallRequest || !session) return
+      onCallSnapshot = next
+      onCallLoading = false
+      render()
+    })
+  })
+  document.querySelectorAll('[data-on-call-case]').forEach((button) => {
+    button.addEventListener('click', () => {
+      onCallCaseId = button.dataset.onCallCase
+      onCallReviewPreview = ''
+      onCallReviewError = ''
+      render()
+    })
+  })
+  document.querySelectorAll('[data-on-call-review]').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault()
+      try {
+        const preview = createReviewPreview(onCallSnapshot, form.dataset.onCallReview, new FormData(form).get('reviewer'))
+        onCallReviewPreview = JSON.stringify(preview, null, 2)
+        onCallReviewError = ''
+      } catch (error) {
+        onCallReviewPreview = ''
+        onCallReviewError = error.message
+      }
+      render()
+    })
+  })
   document.querySelector('#back-to-top')?.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   })
@@ -1497,6 +1560,12 @@ function bindEvents() {
   })
 
   document.querySelector('#logout-button')?.addEventListener('click', () => {
+    onCallRequest += 1
+    onCallSnapshot = unavailableOnCall()
+    onCallCaseId = ''
+    onCallReviewPreview = ''
+    onCallReviewError = ''
+    onCallLoading = false
     session = null
     activeView = 'command-center'
     selectedAlertId = null

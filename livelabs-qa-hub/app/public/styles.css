@@ -1688,3 +1688,18 @@ td {
     justify-content: flex-start;
   }
 }
+.on-call-draft,
+.on-call-report {
+  border-top: 1px solid var(--line, #ddd);
+  margin-top: 18px;
+  padding-top: 16px;
+}
+
+.on-call-draft .detail-list dd,
+.on-call-report code {
+  overflow-wrap: anywhere;
+}
+
+.on-call-draft .report-preview {
+  min-height: 130px;
+}
