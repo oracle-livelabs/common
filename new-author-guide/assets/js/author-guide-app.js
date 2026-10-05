@@ -862,6 +862,22 @@
     return !!findCheatsheetTagByHash(hash);
   }
 
+  function quickstartSectionTarget(hash) {
+    var id = String(hash || "").replace(/^#/, "");
+    var target;
+
+    try {
+      id = decodeURIComponent(id);
+    } catch (error) {
+      // Keep the literal hash when it contains an invalid escape sequence.
+    }
+
+    target = document.getElementById(id);
+    return target && target.closest(".rabbit-step") && target.closest("[data-quickstart-anchor]")
+      ? target
+      : null;
+  }
+
   function routeUrl(hash) {
     var cleaned = String(hash || "").replace(/^#/, "").toLowerCase();
     var pageFile = function (cleanName) {
@@ -895,6 +911,9 @@
     }
     if (cleaned === "guided" || cleaned === "quickstart") {
       return pageUrl("quickstart");
+    }
+    if (quickstartSectionTarget(hash)) {
+      return pageUrl("quickstart", hash);
     }
     if (cleaned.indexOf("step-") === 0) {
       return pageUrl("quickstart", hash);
@@ -999,6 +1018,14 @@
     var activeCheatsheetTag = normalizeTagSelection(state.activeTags)[0] || "";
 
     if (state.mode === "beginner") {
+      var sectionTarget = quickstartSectionTarget(currentHash);
+      var targetStep = sectionTarget && sectionTarget.closest(".rabbit-step");
+
+      if (targetStep && Number(targetStep.getAttribute("data-step-index")) === state.currentStep) {
+        setHash(currentHash, options);
+        return;
+      }
+
       setHash("#step-" + (state.currentStep + 1), options);
       return;
     }
@@ -1077,6 +1104,25 @@
       top: Math.max(0, top),
       behavior: smoothBehavior()
     });
+  }
+
+  function scrollToQuickstartSection(target) {
+    var performScroll = function () {
+      window.requestAnimationFrame(function () {
+        scrollToTarget(target);
+        window.setTimeout(function () {
+          suppressObserver = false;
+          syncBeginnerStepFromScroll();
+        }, prefersReducedMotion ? 100 : 700);
+      });
+    };
+
+    suppressObserver = true;
+    if (document.readyState === "complete") {
+      performScroll();
+    } else {
+      window.addEventListener("load", performScroll, { once: true });
+    }
   }
 
   function resetProgressDock() {
@@ -3001,8 +3047,8 @@
           "    </span>",
           "  </div>",
           '  <div class="detail-resource-actions">',
-          '    <a class="btn btn-outline-primary rounded-pill px-3" href="', escapeHtml(item.href), '" target="_blank" rel="noreferrer" aria-label="Open Markdown reference: ', escapeAttribute(item.label || "related reference"), '">Open: ', escapeHtml(item.label || "reference"), '</a>',
-          '    <button class="copy-snippet copy-link-button" type="button" data-copy-text="', escapeAttribute(item.href), '">Copy link</button>',
+          '    <a class="btn resource-open-link" href="', escapeHtml(item.href), '" target="_blank" rel="noreferrer" aria-label="Open Markdown reference: ', escapeAttribute(item.label || "related reference"), '">Open reference</a>',
+          '    <button class="copy-snippet copy-link-button resource-copy-link" type="button" data-copy-text="', escapeAttribute(item.href), '">Copy link</button>',
           "  </div>",
           "</article>"
         ].join("");
@@ -4827,6 +4873,27 @@
     if (cleaned === "guided" || cleaned === "quickstart") {
       switchMode("beginner", { scroll: true, forceTop: true, hash: false, announce: false });
       updateBeginnerUI();
+      return;
+    }
+
+    var quickstartTarget = quickstartSectionTarget(hash);
+    if (quickstartTarget) {
+      var containingStep = quickstartTarget.closest(".rabbit-step");
+      var authoringPanel = quickstartTarget.closest("[data-authoring-panel]");
+      var authoringOnly = quickstartTarget.closest("[data-authoring-only]");
+      var authoringRoute = authoringPanel
+        ? authoringPanel.getAttribute("data-authoring-panel")
+        : (authoringOnly ? authoringOnly.getAttribute("data-authoring-only") : "");
+
+      if (authoringRoute === "source" || authoringRoute === "no-doc") {
+        setAuthoringRoute(authoringRoute, { history: false, announce: false });
+      }
+
+      index = Number(containingStep.getAttribute("data-step-index"));
+      state.currentStep = Number.isNaN(index) ? 0 : Math.max(0, Math.min(index, stepSections.length - 1));
+      switchMode("beginner", { scroll: false, hash: false, announce: false });
+      updateBeginnerUI();
+      scrollToQuickstartSection(quickstartTarget);
       return;
     }
 
