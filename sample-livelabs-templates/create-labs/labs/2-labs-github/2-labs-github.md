@@ -35,7 +35,7 @@ In this Task, you will create and set up your GitHub account.
     *   Set your Name as it appears on your Aria employee page.
     *   Add your Profile Picture.
 
-4. Click **Account** to add your user name in the **Enter a user name** dialog. For example, achepuri, LauranSerhal, and so on.
+4. Click **Account** to add your user name in the **Enter a user name** dialog. For example, janedoe, and so on.
 
 5. Set up a 2 Factor Authentication here: [GitHub Security](https://github.com/settings/security).
 
@@ -140,11 +140,10 @@ This concludes this lab. You may now **proceed to the next lab**.
 
 * **Authors:**
     * Anuradha Chepuri, Consulting User Assistance Developer, Oracle GoldenGate
-    * Lauran Serhal, Consulting User Assistance Developer, Oracle Database and Big Data
 * **Contributors:**
     * Kay Malcolm, Vice President, Database Product Management
     * Madhusudhan Rao, Principal Product Manager, Database
     * Aslam Khan, Senior Manager, ODI, OGG, EDQ
 
 * **Last Updated By/Date:**
-    * Ana Coman, Technical Program Manager, Oracle Database Product Management, April 2024
+    * Ramona Magadan, Technical Program Manager, Oracle Database Product Management, October 2026
