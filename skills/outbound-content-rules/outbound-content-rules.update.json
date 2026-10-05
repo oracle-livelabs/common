@@ -1,0 +1,27 @@
+{
+  "name": "outbound-content-rules",
+  "owner": "Not listed",
+  "authors": [],
+  "version": "1.0",
+  "published_at": "2026-05-21T00:00:00Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/outbound-content-rules/ready-to-deploy-archive/outbound-content-rules.zip",
+  "archive_sha256": "3bb0292a59b8bef300c548d688ea7591a2b527e7dbeeba07c7f7de18f5b6200b",
+  "content_hash": "59c86cf16aa46cc1cf5cfce3485a1069e61c9bebfdcfb35ca97f8346c1663195",
+  "min_updater_version": "2",
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version_history": [
+    {
+      "version": "1.0",
+      "published_at": "2026-05-21T00:00:00Z",
+      "authors": [],
+      "changes": [
+        "Current repository package recorded from the published skill artifact."
+      ],
+      "archive_sha256": "3bb0292a59b8bef300c548d688ea7591a2b527e7dbeeba07c7f7de18f5b6200b",
+      "content_hash": "59c86cf16aa46cc1cf5cfce3485a1069e61c9bebfdcfb35ca97f8346c1663195",
+      "portal_status": "pending"
+    }
+  ]
+}

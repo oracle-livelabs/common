@@ -1,330 +1,211 @@
-# Publish Custom Image to OCI Marketplace
+# Publish Your Image to Oracle Marketplace
 
 ## Introduction
-This lab will show you how to create an OCI marketplace compute based artifact from your custom image, and use it to create a private listing on marketplace exclusively dedicated to your LiveLabs workshop.
+
+Estimated Time: 1 hour
+
+This lab shows you how to publish a LiveLabs custom compute image to Oracle Marketplace by using Marketplace Publisher in the OCI Console. Use the same OCI tenancy and compartment for the Marketplace Publisher resources, the custom compute image, and the listing package.
 
 ### Objectives
-- Create Marketplace Artifacts
-- Create Marketplace Listing
 
-### Prerequisites
-This lab assumes:
-- You're part of LiveLabs Team
-- You have access to the approved LiveLabs tenant (*C4U02*) configured for OCI Marketplace
-- The custom image to be used was created as prescribed in [Creating Compute Images for Marketplace](https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/compute/?lab=6-labs-setup-graphical-remote-desktop)
+In this lab, you will:
 
-## Task 1: Create and (or) Test Custom Image
-For custom images received from authors via imports from Object Storage pre-authenticated URLs, proceed as indicated below. If you built the image yourself and have already validated  using a test instance, then skip to **Task 4**.
+* Confirm Marketplace Publisher access and required OCI policies.
+* Create or select Marketplace terms of use.
+* Create a compute image artifact.
+* Create a new OCI application listing or update an existing listing revision.
+* Publish the approved listing revision to Oracle Marketplace.
 
-1. Login to the dedicated tenancy for marketplace images (*C4U02*) and navigate to */Compute/Custom Images*
+## Task 1: Get Publisher Access
 
-    ![](./images/import-image-1.png " ")
+1. Confirm that your organization has Oracle Marketplace Publisher access. Start from the [Oracle Marketplace partner page](https://marketplace.oracle.com/partnerHome) if you need to request or verify publisher access.
 
-2. Set the compartment to "*root/LiveLabs-Images/stage*" and click on *Import Image*
+2. Confirm that you have an OCI tenancy that Marketplace Publisher can use. Marketplace Publisher now runs in the OCI Console, so you must be able to sign in to that tenancy and work in the target compartment.
 
-    ![](./images/import-image-2.png " ")
+3. Ask a tenancy administrator to add the required Marketplace Publisher IAM policies. At minimum, your publisher group needs access to manage Marketplace Publisher resources, and the Marketplace service must be able to read the image resources used by the listing. See the current [Marketplace Publisher IAM policy documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/publisher-iam-policy.htm).
 
-3. Fill in the following details
+4. After receiving email approval, sign in to the OCI Console and open **Marketplace**. Under **Publisher**, confirm that you can access **Terms**, **Artifacts**, **Listings**, and **Listing revisions**.
 
-    - **Create in compartment**: Keep or set to "*Stage*"
-    - **Name**: Type in a name in the following format - *[short-name]-livelabs-[version]-src*.
-    ```
-    e.g.
-    <copy>emcc-livelabs-01-src</copy>
-    ```
-    - **Operating system**: Keep the default (*Linux*)
-    - **Select** *Import from an Object Storage URL*
-    - **Object Storage URL**: Enter the Object Storage pre-authenticated URL
-    - **Image type**: Select "*OCI*"
+    ![Marketplace Publisher approval email](images/omp-approval-email.png)
 
-5. Once the import is done, Edit image details and select or verify that all shapes are selected with the exception of *BM.Standard.A1.160* and *VM.Standard.A1.Flex*
+## Task 2: Add Terms of Use
 
-    ![](./../7-labs-create-custom-image-for-marketplace/images/create-image-3.png " ")
+> **Note:** You only need one Terms of Use per tenancy. Reuse the active terms when you create or update listing packages.
 
-6. Download the sample ORM stack zip archive
+1. Sign in to the OCI Console using a tenancy with Marketplace Publisher access. Open the navigation menu and select **Marketplace**. Under **Publisher**, select **Terms**.
 
-    - [ll-orm-mkplc-freetier.zip](https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-freetier.zip)
+2. Select **Create Terms of Use**.
 
-7. Unzip it locally on your computer to *ll-orm-mkplc-freetier*.
-8. Delete the downloaded file *ll-orm-mkplc-freetier.zip*.
-9. Copy the OCID of the new image
+    ![Create Terms of Use action](images/create-terms-1.png)
 
-    ![](./../7-labs-create-custom-image-for-marketplace/images/get-image-ocid.png " ")
+3. Select the compartment, enter a descriptive terms name, and create the terms resource.
 
-10. Navigate to *ll-orm-mkplc-freetier* and open the file *variables.tf*
+4. Open the terms resource and add a terms version. Upload the current [Oracle Standard Terms and Restrictions PDF](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/n9OHqZrPlUZh6UtSMnnI3yq7IJecJweZ5pDjiBFqiPbOLtIjuebugDo28-KJ6geD/n/c4u04/b/livelabsfiles/o/Oracle%20Standard%20Terms%20and%20Restrictions.pdf).
 
-11. Search and replace the string below with the OCID of the newly created custom image copied above
+    ![Create a terms version](images/create-terms-2.png)
 
-    ```
-    <copy>
-    replace-with-valid-image-OCID
-    </copy>
-    ```
+5. After you add the version, confirm that the term version is available. If the status shows **Not Available**, open the row actions menu and select **Activate**.
 
-    ![](./../7-labs-create-custom-image-for-marketplace/images/update-image-ocid.png " ")
+    A term version must be active before it appears in the **Terms of use** selector when you add a listing package.
 
-12. Update the value of the following variables to match the correct URLs for the workshop.
+    ![Activate Marketplace terms version action](images/create-terms-3.png)
 
-    - **`desktop_guide_url`**: Link to github.io guide ending with "*../workshops/desktop*"
-      ```
-      e.g.
-      https://oracle-livelabs.github.io/em-omc/enterprise-manager/emcc/workshops/desktop
-      ```
-    - **`desktop_app1_url`** (Optional): Link to any webapp that should be loaded on the desktop on noVNC boot.
-      ```
-      e.g.
-      https://emcc.livelabs.oraclevcn.com:7803/em
-      ```
-    - **`desktop_app2_url`** (Optional): Same as above a second webapp loaded on the second Google-Chrome browser tab
+For more information, see the [Marketplace Publisher terms documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/Tasks/create-terms.htm).
 
-    ![](./images/update-variables.png " ")
+## Task 3: Create an Artifact
 
-13. Save *variables.tf*
-14. Repackage the entire content of *ll-orm-mkplc-freetier* as  *ll-orm-mkplc-freetier.zip*
+1. Sign in to the OCI Console using a tenancy with Marketplace Publisher access. Open the navigation menu and select **Marketplace**. Under **Publisher**, select **Artifacts**.
 
-    ![](./../7-labs-create-custom-image-for-marketplace/images/zip-orm-stack.png " ")
+2. Select **Create Artifact**.
 
-15. Using the new zip file above, navigate to "*Developer Services > Stacks*" and create a test instance with Oracle Resources Manager (ORM). Make sure to opt for provisioning with an SSH key
+    ![Create Artifact action](images/click-create-artifact.png)
 
-    *Notes:* For more details on how to provision with ORM, refer to [setup-compute](https://oracle-livelabs.github.io/common/sample-livelabs-templates/sample-workshop-novnc/workshops/tenancy/?lab=setup-compute-novnc-ssh) lab guide.
+3. Enter a descriptive artifact name, select the target compartment, and set **Artifact type** to **Compute Image**.
 
-16. After successful instance creation, get the remote desktop URL and logon to validate
+    > **Note:** Create the artifact in the same compartment that you use for the listing.
 
-    ![](./../7-labs-create-custom-image-for-marketplace/images/get-remote-desktop-url.png " ")
+    ![Create a compute image artifact](images/create-artifact-1.png)
 
-17. Launch a browser session and navigate to the copied URL to validate
+4. Select **Select Image**. Choose the compartment that contains the custom image, select the image that you want to publish, select the compatible shapes, and then select **Update**.
 
-    ![](./images/remote-desktop-landing.png " ")
+    ![Select compatible compute shapes](images/select-compute-image-2.png)
 
-    *Notes:* If the setup was successful you should see two Google-chrome browser windows preloaded with the workshop guide on the left and webapps on the right (if *`desktop_app1_url`* or *`desktop_app2_url`* was provided).
+5. Review the mandatory guidelines, select the agreement checkbox, and select **Create artifact**.
 
-## Task 2: Refresh the Image
+6. Wait for the artifact status to become **Available**. If the artifact does not appear in the listing package selector, return to **Artifacts** and confirm that processing has finished.
 
-1. Open an SSH session from your local computer and connect to the instance created above using the SSH key that you provided during via ORM stack.
+    ![Available Marketplace artifact](images/create-artifact-2.png)
 
-2.  As opc, run *sudo su -* to login as root.
+Marketplace Publisher processing time depends on the image size. To add the artifact to a new listing, continue to Task 4A. To add it to an existing listing, continue to Task 4B.
 
-    ```
-    <copy>
-    sudo su - || (sudo sed -i -e 's|root:x:0:0:root:/root:.*$|root:x:0:0:root:/root:/bin/bash|g' /etc/passwd && sudo su -)
+For more information, see the [Marketplace Publisher artifact documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/Tasks/create-artifact.htm).
 
-    </copy>
-    ```
+## Task 4A: Create a New Listing
 
-3. Refresh *setup-firstboot.sh* to configure and enforce static hostname.
+1. In the OCI Console, open **Marketplace**. Under **Publisher**, select **Listings**.
 
-    ```
-    <copy>
-    cd /tmp
-    rm -rf ll-setup
-    wget https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/setup-novnc-livelabs.zip -O setup-novnc-livelabs.zip
-    unzip -o  setup-novnc-livelabs.zip -d ll-setup
-    cd ll-setup/
-    chmod +x *.sh .*.sh
-    ./setup-firstboot.sh && exit
+2. Select **Create Listing**.
 
-    </copy>
-    ```
+2. Click **Create Listing**.
+    ![Image](./images/create-listing-1.png)
 
-    You are prompted for the following inputs:
-    - (1) Do you want to keep and preserve the current hostname? [Y/N]. The current hostname is shown for confirmation and the input required is either Y or N
-    - (2) If Y, "Please press *ENTER* to accept the default *holserv1* or type in your preferred host shortname (not the FQDN, and must be lowercase and alphanumeric):"
-    - (3) Do you have additional host alias(es), virtualhost names, or FQDN required for labs that are using this instance? [Y/N]
-    - (4) If Y, "Enter each additional host alias, FQDN, or virtualhost name (separated from each other by a space. e.g. *serv1 serv1.demo.com*)"
+3. Select **OCI Application Listing**.
+    ![Image](./images/create-listing-2.png)
 
-4. Review the script output
-5. If you have additional entries you would like added to */etc/hosts* file whenever an instance is created from the image, edit */root/bootstrap/firstboot.sh* and add them under the ***Add Static Name to /etc/hosts*** block
+4. Fill out the header details. 
+    > **NOTE:** Be sure to set the package type to **Compute Image** and use the same compartment as your artifact.
 
-    In the example below, the following customization are added to a setup:
-    - 3 Additional host aliases:  *myapp*, *app1*, and *hr.demo.com*
-    - 3 Additional external host entries to "/etc/hosts"
+    Use these values for a LiveLabs compute image listing:
 
-    ```
-    <copy>
-    sudo cat /root/bootstrap/firstboot.sh
-    </copy>
-    ```
+    * **Package type:** Compute Image
+    * **Compartment:** The same compartment that contains your artifact
+    * **Listing name:** A descriptive internal name for the listing
 
-    ![](../6-labs-setup-graphical-remote-desktop/images/novnc-firstboot-1.png " ")
+    ![OCI application listing header details](images/app-listing-details-1.png)
 
-    This customization resulted in the following */etc/hosts* file.
+5. Complete **Listing revision details**.
 
-    ```
-    <copy>
-    sudo cat /etc/hosts
-    </copy>
-    ```
+    Include the required Marketplace content:
 
-    ![](../6-labs-setup-graphical-remote-desktop/images/novnc-firstboot-2.png " ")
+    * **Headline:** A short description of the image and its purpose
+    * **Categories:** The relevant OCI category
+    * **Price:** Free
+    * **Listing icon:** Use the approved [LiveLabs icon](https://cloudmarketplace.oracle.com/marketplace/content?contentId=95549453)
+    * **Short description and detailed description:** Explain what the image contains and when to use it
+    * **Market availability:** Select the markets where the listing should be available
+    * **Version details:** Enter the image or workshop version and release date
+    * **Configure URLs:** Add a LiveLabs workshop, training, or documentation URL when available
 
-6.  Still from the same SSH session, login again as root via SUDO and run the latest setup script to refresh the system. You will be prompted for the following input:
+    ![OCI application listing revision details](images/listing-revision-details.png)
 
-    - The *OS user* for which the remote desktop will be configured. *Default: Oracle*
+6. Complete **Support details**.
 
-    ```
-    <copy>
-    sudo su -
+    Include [LiveLabs](https://livelabs.oracle.com) as a support link and select English as a supported language.
 
-    </copy>
-    ```
+    ![OCI application listing support details](images/create-listing-4.png)
 
-    ```
-    <copy>
-    cd /tmp/ll-setup/
-    ./setup-novnc-livelabs.sh
+7. Complete **App install package**.
 
-    </copy>
-    ```
-7. Revisit the desktop URL from **Task 1** or use the URL from the script output above to validate.
+    Add the artifact that you created in Task 3, select the terms of use from Task 2, enter a package version, and mark the package as the default package when this image should be the default deployment option.
 
-8. If the setup was successful you should see two Google-chrome browser windows preloaded with the workshop guide on the left and webapps on the right (if *`desktop_app1_url`* or *`desktop_app2_url`* was provided).
+    The **Terms of use** menu only shows active term versions. The **Artifact** menu only shows artifacts that are available and in the same compartment as the listing.
 
-9. If the half-right desktop screen space is empty, follow [Appendix #1 of setup guide](https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/compute/?lab=6-labs-setup-graphical-remote-desktop#Appendix1:ConfiguringAdditionalDesktopAppsforAutoStartonVNCStartup) to add an auto-start task to launch the *Terminal* utility or another app such as *SQL Developer*.
+    ![OCI application listing app install package](images/create-listing-5.png)
 
-10. Close all open windows inside the remote desktop
+8. Review the summary, accept the required terms, and create the listing revision.
 
-## Task 3: Create Update Custom Image   
-With all windows inside the remote desktop now closed, proceed as indicated below to create a custom image from the updated instance.
+    ![Summary review for an OCI application listing](images/create-listing-6.png)
 
-1. Follow the [setup guide](https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/compute/?lab=7-labs-create-custom-image-for-marketplace)
+9. On the **Listing revisions** page, open the row actions menu and select **Submit**.
 
-## Task 4: Create Marketplace Artifacts   
-At this point, it's assumed that the test instance created in the previous lab has been successfully validated and can be submitted to OCI marketplace. This also assume that you have the required access for OCI Partner Portal. Proceed to OCI console to perform the next steps
+    ![Submit OCI application listing for review](images/submit-listing-revision.png)
 
-1. Launch your browser to OCI Marketplace Partner Portal, then navigate to *"Compute > Instances"*
+For more information, see the [OCI application listing documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/Tasks/creating-oci-application-listing.htm).
 
-    ```
-    URL: <copy>https://partner.cloudmarketplace.oracle.com/partner/index.html</copy>
-    ```
+## Task 4B: Modify an Existing Listing
 
-2. Click on the 3rd icon on the left to access the Artifacts section
+1. In the OCI Console, open **Marketplace**. Under **Publisher**, select **Listings**.
 
-    ![](./images/create-artifact-1.png " ")
+    ![Publisher Listings page in the OCI Console](images/go-to-listings.png)
 
-3. Click on *"Create Artifacts"*
+2. Open the listing that you want to update and review its revisions. The available actions depend on the revision status.
 
-    ![](./images/create-artifact-2.png " ")
+    ![Listing revisions with different publication statuses](images/listing-revisions-overview.png)
 
-4. Select *"OCI Compute Image"* from the dropdown, fill in the name, click on the search icon to lookup the custom image you created in the prior step, and click *"Create"*
+3. To update a revision that is already published, including one that is **Published as Private**, open its row actions menu and select **Clone**. Confirm the action and wait for the cloned revision to appear with the **New** status.
 
-    ![](./images/create-artifact-3.png " ")
+    ![Clone a privately published listing revision](images/clone-private-listing-revision.png)
 
-5. Select the tenant, region, and compartment where your custom image was created, and select that image. It's assumed here that your tenant has been properly configured for marketplace integration. If not, click **"?"** at the upper right-hand corner to access the help page.
+4. Open the row actions menu for an editable revision and select **Edit**. For example, an **Approved** revision can expose the **Edit** action. If **Edit** is not available, use an eligible published revision and create an editable clone as described in the previous step.
 
-    ![](./images/create-artifact-4.png " ")
+    ![Edit an approved listing revision](images/edit-approved-listing-revision.png)
 
-6. Scroll-down and check to confirm to confirm as indicated
+5. In **App install package**, add the new artifact. Select the terms of use, enter the package version, and choose whether the new package should be the default package.
 
-    ![](./images/create-artifact-5.png " ")
+    > **Note:** A listing can have only one default package at a time.
 
-7. Scroll-up and click *"Create"*  
+    ![Update the listing app install package](images/create-listing-5.png)
 
-    ![](./images/create-artifact-6.png " ")
+6. Review the details and save the revision.
 
-8. Monitor creation progress.   
+    ![Review the updated listing revision](images/create-listing-6.png)
 
-    ![](./images/create-artifact-6.png " ")
+7. On the **Listing revisions** page, open the row actions menu for the updated revision and select **Submit**. Confirm that you reviewed the mandatory listing guidelines, submit the revision, and wait for its status to change to **Pending review**.
 
-    *Note:* It can take 5 hours or more for the process to complete successfully. Upon completion you will receive an email notification. In case of failure, reach out to *#oci_marketplace_users* Slack channel
+    ![Submit the updated listing revision for review](images/submit-listing-revision.png)
 
-9. Confirm successful creation when status changes to *"Available"*
+> **Note:** Marketplace review can take up to a week. After the status changes to approved, continue to Task 5.
 
-    ![](./images/create-artifact-6.png " ")
+For more information, see the [listing revision editing documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/Tasks/edit-listing.htm).
 
-## Task 5: Create Marketplace Listing   
-1. Click on the 2nd icon on the top left to access the Listings section
+## Task 5: Publish Your Listing
 
-    ![](./images/create-listing-1.png " ")
+1. On the **Listing revisions** page, locate the revision that Oracle approved for publication. A revision that is ready to publish can show **Approved** or **Unpublished**, depending on its publication history.
 
-2. Select *"OCI Application Listing"* and Click *"Create"*  
+2. Open the row actions menu and select **Publish as Private**.
 
-    ![](./images/create-listing-2.png " ")
+    ![Publish an approved or unpublished listing revision](images/publish-listing-revision-options.png)
 
-3. Fill in the details as indicated for *"App Name"*, *"Headline"*, and *"Categories"*, Click on *"Pricing Information"* and Select **Free**, then Click on *"Save"*
+3. The **Publish as a private listing revision** confirmation dialog opens.
 
-    ![](./images/create-listing-3.png " ")
-    ![](./images/create-listing-4.png " ")
+4. Leave the **Allowed tenancies** field blank, then select **Publish as Private**.
 
-4. Download and save [LiveLabs icon](https://cloudmarketplace.oracle.com/marketplace/content?contentId=95549453) to your local drive, then Click on *"Click to upload an icon"*, select the downloaded file, and click *"Upload"*
+    ![Leave allowed tenancies blank before publishing a private listing](images/publish-private-listing-revision.png)
 
-    ![](./images/create-listing-icon-1.png " ")
-    ![](./images/create-listing-icon-2.png " ")
-    ![](./images/create-listing-icon-3.png " ")
-    ![](./images/create-listing-icon-4.png " ")
+5. Monitor the listing revision until its status changes to **Published as Private**.
 
-5. On the section labelled **"App by Oracle"**, Click on *"Edit"* and fill in the short and long descriptions
+Publishing can take 1 to 3 business days. If publishing takes longer or you have Oracle Marketplace questions, post in the [Marketplace Slack channel](https://oracle.enterprise.slack.com/archives/CEKCPA98B).
 
-    ![](./images/create-listing-desc-1.png " ")
-    ![](./images/create-listing-desc-2.png " ")
+For more information, see the [Marketplace Publisher publishing documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/Tasks/publish-listing.htm).
 
-6. Scroll down to the section labelled **"Markets"**, Click on *"Edit"* and select all markets listed.
+## Need Help?
 
-    ![](./images/create-listing-markets.png " ")
-
-7. Click on  **"App Install Package"** tab, provide a version name/ID, and Click on *"Save"* to create the version
-
-    ![](./images/create-listing-version-1.png " ")
-
-8. Scroll-down to the **"Configure OCI Compute Image"** section and Click on *"Edit"*
-
-    ![](./images/create-listing-version-2.png " ")
-
-9. Click on the search icon, select the artifact you created in the previous step, click on *"Save"*, then click on the **"App Listing"** tab
-
-    ![](./images/create-listing-version-3.png " ")
-    ![](./images/create-listing-version-4.png " ")
-    ![](./images/create-listing-version-5.png " ")
-
-10. Click on *"Submit"*
-
-    ![](./images/create-listing-submit-1.png " ")
-
-11. Provide a comment indicating the private listing nature, select the checkmark to confirm as shown, Click on *"Submit"*
-
-    ```
-    <copy>To be listed privately and exclusively for LiveLabs Workshops Platform</copy>
-    ```
-
-    ![](./images/create-listing-submit-2.png " ")
-
-12. Review and Click on *"OK"*
-
-    ![](./images/create-listing-submit-3.png " ")
-
-13. The Listing is now submitted and pending approval by the Marketplace Team. Once approved the three dots ***(...)*** next to your listing icon will change to a green checkmark
-
-    ![](./images/create-listing-submit-4.png " ")
-
-14. Once the listing has been approved, click on the hamburger menu on the far right and select *"Publish as Private"*
-
-    ![](./images/create-listing-publish-1.png " ")
-
-15. It will take a few hours for the listing to be propagated to all OCI regions. An email notification will be sent out to you and the private URL will be listed as shown below.
-
-    ![](./images/create-listing-done-1.png " ")
-
-16. Review your published listing by clicking on the hamburger menu, the selecting *"View Listing"*
-
-    ![](./images/create-listing-done-2.png " ")
-    ![](./images/create-listing-done-3.png " ")
-
-17. With the image fully published and Available in all OCI regions, click on **"App Install Package"** tab, select the appropriate version, and collect the 3 key details needed for creating ORM stacks or to support a *"green button"* image configuration in LiveLabs Management System.
-
-  - Listing Version
-  - Listing OCID
-  - Image OCID
-
-    ![](./images/get-listing-details-1.png " ")
-    ![](./images/get-listing-details-2.png " ")
-
-**This concludes this lab.**
-
-## Learn More
-* [Oracle Cloud Marketplace Partner Portal Documentation](https://docs.oracle.com/en/cloud/marketplace/partner-portal/index.html)
-* [Oracle Cloud Marketplace Partner Portal Videos](https://docs.oracle.com/en/cloud/marketplace/partner-portal/videos.html)
-
+* Ask questions in the [Marketplace Slack channel](https://oracle.enterprise.slack.com/archives/CEKCPA98B).
+* Review the [OCI Marketplace Publisher documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/partner-portal-overview.htm).
+* Review the [Marketplace Publisher IAM policy documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/publisher-iam-policy.htm).
 
 ## Acknowledgements
-* **Author** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, February 2021
-* **Contributors** - - -
-* **Last Updated By/Date** - Rene Fontcha, LiveLabs Platform Lead, NA Technology, June 2022
+
+* **Author** - Brianna Ambler, Database Product Manager
+* **Contributors** - Brianna Ambler, Database Product Manager
+* **Last Updated By/Date** - Oracle LiveLabs Team, July 2026

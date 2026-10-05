@@ -88,9 +88,11 @@ This lab assumes you have:
 
 4. Code examples that include variables
 
-	```
-  <copy>ssh -i <ssh-key-file></copy>
-  ```
+    ```
+    <copy>ssh -i <ssh-key-file></copy>
+    ```
+
+**Reminder:** If a code snippet, command, or script is copied or adapted from another author, repository, blog, documentation page, or sample project, cite the source near the code block and confirm the license allows reuse.
 
 ## Learn More
 
@@ -101,5 +103,8 @@ This lab assumes you have:
 
 ## Acknowledgements
 * **Author** - <Name, Title, Group>
-* **Contributors** -  <Name, Group> -- optional
+* **Contributors** - <Name, Group> -- optional
 * **Last Updated By/Date** - <Name, Group, Month Year>
+
+
+

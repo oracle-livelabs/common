@@ -1,0 +1,9 @@
+FROM docker.io/library/node:22-alpine
+
+WORKDIR /opt/livelabs-qa
+
+COPY scripts/reporters/par-link-resolver.mjs /opt/livelabs-qa/par-link-resolver.mjs
+
+USER node
+
+CMD ["node", "/opt/livelabs-qa/par-link-resolver.mjs"]

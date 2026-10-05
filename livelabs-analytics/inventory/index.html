@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="../assets/images/oracle-logo-white.svg" type="image/svg+xml">
+  <title>LiveLabs Analytics Portfolio Inventory</title>
+</head>
+<body>
+  <p>Opening Portfolio Inventory...</p>
+  <script>
+    const target = new URL("../index.html", location.href);
+    target.search = new URLSearchParams({ view: "inventory" }).toString();
+    location.replace(target.href);
+  </script>
+</body>
+</html>

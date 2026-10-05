@@ -1,45 +1,38 @@
 # Introduction to Oracle LiveLabs GitHub Project Repository
 
-## What is GitHub?
+## What Is GitHub?
 
-GitHub is a cloud-based version control system designed for software developers.
-  * At the core of GitHub is Git, an open source version control system that manages file versions and tracks the changes made by the members of a repository.
-  * The Hub is a cloud-based repository that manages storage of the files and provides a folder structure.
+GitHub is a cloud-based version control system for software developers.
+
+* **Git** is the open-source version control system that manages file versions and tracks changes made by repository members.
+* **Hub** is the cloud-based repository that stores files and provides folder structure.
+
   ![GitHub cloud-based control infographic.](./images/git-hub-what-is-github.png " ")
 
 ### **GitHub Projects and Repositories**
 
-GitHub is organized by projects. Each project has its own repository (commonly referred to as repo) that is accessed through a unique URL. As of January 2020, there were more than 190 million repositories on GitHub.
+GitHub organizes content by projects. Each project has its own repository (repo) accessed through a unique URL.
 
-In the following simplified example, the three-drawer filing cabinet represents three GitHub projects (one drawer per project). Each project can contain one or more repositories, represented by folders in the example. In this example, project 2 (second drawer) has three repositories (folders) and we are viewing one of those repositories.
+In the following example, the three-drawer filing cabinet represents three GitHub projects (one drawer per project). Each project contains one or more repositories, represented by folders. Project 2 (second drawer) has three repositories, and we are viewing one of them.
 
   ![GitHub project organization diagram.](./images/git-hub-projects-repositories.png " ")
 
 ### **Oracle LiveLabs GitHub Project Repository**
 
-Oracle LiveLabs has its own GitHub project that has 30 active repositories. This is separate from the Oracle GitHub project that has another 305 repositories with several code samples and architectures. The **oracle-livelabs** repository is where authors push their completed markdown and image files for their LiveLabs workshops. The repositories in **oracle-livelabs** match up with the council groups and products.
+Oracle LiveLabs has its own GitHub project with multiple active repositories, separate from the main Oracle GitHub project. Authors push their completed Markdown and image files for LiveLabs workshops to the **oracle-livelabs** repository. Repositories in **oracle-livelabs** correspond to council groups and products.
 
-+ You can access the **oracle-livelabs** GitHub project using the following URL:
-
-  [https://github.com/oracle-livelabs](https://github.com/oracle-livelabs)
++ Access the **oracle-livelabs** GitHub project: [https://github.com/oracle-livelabs](https://github.com/oracle-livelabs)
 
   ![Oracle LiveLabs GitHub Project](./images/oracle-livelabs-github-project.png " ")
 
-+ You can access all the **oracle-livelabs** GitHub project repositories using the following URL:
-  [https://github.com/orgs/oracle-livelabs/repositories](https://github.com/orgs/oracle-livelabs/repositories)
++ View all **oracle-livelabs** repositories: [https://github.com/orgs/oracle-livelabs/repositories](https://github.com/orgs/oracle-livelabs/repositories)
 
   ![Oracle LiveLabs GitHub Repositories.](./images/oracle-livelabs-github-repos.png " ")
 
-## Want to learn more about GitHub?
+## Learn More
 
-* [Get started with GitHub](https://docs.github.com/en/get-started)
+* [Get Started with GitHub](https://docs.github.com/en/get-started)
 
 ## Acknowledgements
 
-* **Authors:**
-    * Anuradha Chepuri, Consulting User Assistance Developer, Oracle GoldenGate
-    * Lauran Serhal, Consulting User Assistance Developer, Oracle Database and Big Data
-* **Contributors:**
-    * Aslam Khan, Senior Manager, ODI, OGG, EDQ
-* **Last Updated By/Date:**
-    * Ana Coman, Technical Program Manager, Oracle Database Product Management, March 2024
+* **Last Updated By/Date:** LiveLabs Team, January 2026

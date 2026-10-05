@@ -1,0 +1,6 @@
+{
+  "workshoptitle": "NoDoc Workshop",
+  "format": "html-fragment",
+  "content": "../../content/nodoc/nodoc-workshop.html",
+  "description": "Editable NoDoc workshop content loaded by the NoDoc page shell."
+}

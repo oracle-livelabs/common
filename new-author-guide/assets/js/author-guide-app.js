@@ -1,0 +1,5521 @@
+// Behavior layer for the redesigned guide.
+// Handles mode switching, sticky navigation, search ranking, toolkit detail views, and image expansion.
+(function () {
+  var content = window.authorGuideContent || {};
+  var stepMeta = content.stepMeta || [];
+  var githubCheatsheetItemIds = {
+    "github-setup": true,
+    "sync-preview": true
+  };
+
+  function removeGithubMentions(value, key) {
+    if (Array.isArray(value)) {
+      return value.map(function (item) {
+        return removeGithubMentions(item, key);
+      }).filter(function (item) {
+        return item !== "";
+      });
+    }
+
+    if (value && typeof value === "object") {
+      return Object.keys(value).reduce(function (copy, property) {
+        copy[property] = removeGithubMentions(value[property], property);
+        return copy;
+      }, {});
+    }
+
+    if (typeof value !== "string" || key === "href" || key === "src" || key === "sourceHref") {
+      return value;
+    }
+
+    if (key === "snippet") {
+      return value.split("\n").filter(function (line) {
+        return !/github/i.test(line);
+      }).join("\n");
+    }
+
+    return value
+      .replace(/github\s*\/\s*gitlab/gi, "source repository")
+      .replace(/github pages/gi, "hosted preview")
+      .replace(/github desktop/gi, "desktop source-control client")
+      .replace(/github actions/gi, "automated checks")
+      .replace(/github\.io/gi, "hosted preview")
+      .replace(/github\.com/gi, "source repository")
+      .replace(/github/gi, "source repository");
+  }
+
+  var explorerItems = (content.explorerItems || [])
+    .filter(function (item) {
+      return !githubCheatsheetItemIds[item.id];
+    })
+    .map(function (item) {
+      return removeGithubMentions(Object.assign({}, item, {
+        tags: (item.tags || []).filter(function (tag) {
+          return tag !== "github";
+        })
+      }));
+    });
+  var guideSections = [];
+  var guideSectionMap = {};
+  var guideCatalogHref = "";
+  var fullGuideHref = "https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/";
+  var workshopExampleHref = window.authorGuideWorkshopExampleHref || "https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/";
+  var nodocSearchEntries = [];
+  var nodocSearchLoadPromise = null;
+  var guideCatalogPromise = null;
+  var guideCatalogLoaded = false;
+  var guideSectionSurfaceCache = {};
+  var guideSectionMetaCache = {};
+  var guideSectionSurfaceRequestToken = 0;
+  var guideLegacyTargetMap = {
+    "start-here": "introduction",
+    "core-workflow": "1-labs-wms",
+    "core-workshop-flow": "1-labs-wms",
+    "validation-publish": "5-labs-qa-checks",
+    "reuse-enhancements": "11-create-freesql",
+    "tools-productivity": "13-labs-capture-screens-best-practices",
+    "specialized-workflows": "10-create-sprints-workflow",
+    "help-faq": "introduction"
+  };
+  var guideCurrentAdditionIds = {};
+  var stopWords = {
+    a: true,
+    an: true,
+    and: true,
+    are: true,
+    as: true,
+    at: true,
+    can: true,
+    do: true,
+    for: true,
+    from: true,
+    how: true,
+    i: true,
+    if: true,
+    in: true,
+    is: true,
+    it: true,
+    my: true,
+    of: true,
+    on: true,
+    or: true,
+    should: true,
+    that: true,
+    the: true,
+    this: true,
+    to: true,
+    what: true,
+    when: true,
+    where: true,
+    with: true
+  };
+  var synonymGroups = [
+    ["wms", "workshop management system", "workshop request", "stakeholder", "council", "owner group"],
+    ["qa", "self qa", "quarterly qa", "checklist", "quality assurance", "certify"],
+    ["github", "git hub", "fork", "clone", "merge", "branch", "origin", "upstream", "pull request", "pr", "pages", "preview", "github io"],
+    ["publish", "publishing", "production", "completed", "publish requested", "publish approved"],
+    ["validator", "markdown validation", "pr checks", "lintchecker", "checks", "validation"],
+    ["images", "image", "screenshot", "screenshots", "optishot", "media"],
+    ["markdown", "manifest", "copy tags", "task header", "acknowledgements"],
+    ["sql", "plsql", "sql developer"],
+    ["help", "support", "faq", "message the team", "slack", "mailbox"],
+    ["sla", "timeline", "timelines", "review window", "publishing window"],
+    ["secure desktop", "secure desktops", "restricted laptop", "restricted corporate laptop", "novnc", "chrome", "popups"],
+    ["ai", "ai developer hub", "agentic", "automation first", "skill bundle", "how to guide"]
+  ];
+  var allowedToolkitSorts = {
+    alphabetical: true,
+    relevance: true,
+    latest: true,
+    topic: true
+  };
+  var recommendedCheatsheetOrder = [
+    "wms-request",
+    "github-setup",
+    "sync-preview",
+    "markdown-structure",
+    "links-paths",
+    "image-references",
+    "copy-sql",
+    "Quality Assurance-checklist",
+    "pull request-checks",
+    "publish-request",
+    "review-sla",
+    "screenshots",
+    "optishot",
+    "fixomat",
+    "reuse-variables",
+    "quiz-blocks",
+    "livelabs-sprints",
+    "graphical-remote-desktop",
+    "secure-desktop-when",
+    "secure-desktop-request",
+    "custom-image-capture",
+    "marketplace-image-publish",
+    "wms-custom-image-update",
+    "livestack-create",
+    "wms-assets",
+    "ai-developer-hub"
+  ];
+  var recommendedCheatsheetOrderMap = recommendedCheatsheetOrder.reduce(function (map, id, index) {
+    map[id] = index;
+    return map;
+  }, {});
+
+  function fullGuideLabHref(labId, extraParams) {
+    var target;
+
+    try {
+      target = new URL(fullGuideHref, window.location.href);
+      if (labId) {
+        target.searchParams.set("lab", labId);
+      }
+      Object.keys(extraParams || {}).forEach(function (key) {
+        target.searchParams.set(key, extraParams[key]);
+      });
+      return target.toString();
+    } catch (error) {
+      if (!labId) {
+        return fullGuideHref;
+      }
+      return fullGuideHref + "?lab=" + encodeURIComponent(labId);
+    }
+  }
+
+  function normalizeAuthoringRoute(route) {
+    return route === "source" ? "source" : "no-doc";
+  }
+
+  function initialAuthoringRoute() {
+    try {
+      return normalizeAuthoringRoute(new URLSearchParams(window.location.search).get("authoring"));
+    } catch (error) {
+      return "no-doc";
+    }
+  }
+
+  var state = {
+    mode: "hub",
+    currentStep: 0,
+    authoringRoute: initialAuthoringRoute(),
+    fastTrack: "guided",
+    activeTag: "all",
+    activeTags: [],
+    toolkitSort: "alphabetical",
+    toolkitQuery: "",
+    searchQuery: "",
+    guideSection: guideSections.length ? guideSections[0].id : ""
+  };
+  var wmsStatusGraphViewBox = { x: 0, y: 0, width: 1540, height: 660 };
+  var wmsStatusNodeHalfWidth = 82;
+  var wmsStatusNodeHalfHeight = 31;
+  var wmsStatusGraphZoomLevels = [25, 50, 75, 100, 125, 150, 200];
+  var wmsStatusGraphStatuses = [
+    {
+      id: "submitted",
+      label: "Submitted",
+      group: "Intake",
+      responsible: "Workshop author / submitter",
+      meaning: "The workshop has been submitted for initial review. The author has provided the first set of workshop details and is waiting for review.",
+      nextStep: "The reviewer validates whether the submitted information is sufficient. If it is complete, the workshop moves to Approved. If it is incomplete, it moves to More Info Needed.",
+      checks: [
+        "Workshop details are present.",
+        "Workshop purpose and audience are clear.",
+        "Required owner or contact information is available."
+      ],
+      x: 110,
+      y: 300,
+      color: "#f3f4f6"
+    },
+    {
+      id: "more-info",
+      label: "More Info Needed",
+      group: "Rework",
+      responsible: "Workshop author / submitter",
+      meaning: "The reviewer needs clarifications or missing details before the workshop can continue.",
+      nextStep: "The author updates the requested information and resubmits the workshop for review.",
+      checks: [
+        "Respond to reviewer comments.",
+        "Add missing metadata, scope, owner, or setup details.",
+        "Confirm the resubmitted information is complete."
+      ],
+      x: 300,
+      y: 155,
+      color: "#fff7ed"
+    },
+    {
+      id: "approved",
+      label: "Approved",
+      group: "Approval",
+      responsible: "LiveLabs reviewer / approver",
+      meaning: "The workshop request has enough information and is approved to move into the build or development stage.",
+      nextStep: "The author or workshop development owner starts the content build in In Development.",
+      checks: [
+        "Submission is understandable and actionable.",
+        "Workshop can proceed to content development.",
+        "Any approval notes are communicated to the author."
+      ],
+      x: 300,
+      y: 300,
+      color: "#ecfdf5"
+    },
+    {
+      id: "in-development",
+      label: "In Development",
+      group: "Build",
+      responsible: "Workshop author / development owner",
+      meaning: "The workshop content is being created or updated. This can include labs, Markdown content, images, manifests, setup steps, and validation work.",
+      nextStep: "When development is ready, the author moves the workshop to Self QA.",
+      checks: [
+        "Lab Markdown content is written or updated.",
+        "Images, manifests, and folder structure are in place.",
+        "Commands and code examples are ready to test.",
+        "Links and references are prepared for validation."
+      ],
+      x: 510,
+      y: 300,
+      color: "#eff6ff"
+    },
+    {
+      id: "self-qa",
+      label: "Self QA",
+      group: "QA",
+      responsible: "Workshop author / content owner",
+      meaning: "The author performs their own quality checks before marking the workshop as complete.",
+      nextStep: "If self-QA passes, move to Self QA Complete. If issues are found, return to In Development for fixes.",
+      checks: [
+        "Information in the workshop is adequate and updated.",
+        "Code is correct and working.",
+        "Links are correct.",
+        "Help email is included in manifest.json.",
+        "WMS URLs are updated as needed after approval.",
+        "Filenames are descriptive and lowercase.",
+        "Folder structure follows the sample workshop structure.",
+        "Images include useful alt text."
+      ],
+      x: 720,
+      y: 300,
+      color: "#f5f3ff"
+    },
+    {
+      id: "self-qa-complete",
+      label: "Self QA Complete",
+      group: "QA",
+      responsible: "Workshop author / content owner",
+      meaning: "The author has completed self-QA and confirmed that the workshop is ready to be marked complete or move forward in the publication workflow.",
+      nextStep: "Move the workshop to Completed.",
+      checks: [
+        "Self-QA checklist is complete.",
+        "No known blocking issues remain.",
+        "The workshop owner is ready to complete the workflow."
+      ],
+      x: 950,
+      y: 300,
+      color: "#eef2ff"
+    },
+    {
+      id: "completed",
+      label: "Completed",
+      group: "Done",
+      responsible: "LiveLabs owner / workshop owner",
+      meaning: "The workshop is complete and ready for the author to create a publish request.",
+      nextStep: "Create a Publish Request. The LiveLabs team reviews it and approves it or asks for changes before publication.",
+      checks: [
+        "Workshop is complete.",
+        "Ownership is clear for future maintenance.",
+        "Publish request can be created and reviewed."
+      ],
+      x: 1180,
+      y: 300,
+      color: "#f0fdf4"
+    },
+    {
+      id: "publish-request",
+      label: "Publish Request",
+      group: "Publishing",
+      responsible: "Workshop author / LiveLabs publishing team",
+      meaning: "After the WMS request reaches Completed, the author creates a publish request for the LiveLabs team to review.",
+      nextStep: "The LiveLabs team reviews the publish request and approves it or asks for changes before publication.",
+      checks: [
+        "WMS status is Completed.",
+        "Preview, ownership, and production details are ready.",
+        "Publish request evidence is attached to the WMS record."
+      ],
+      x: 1410,
+      y: 300,
+      color: "#fff7ed"
+    },
+    {
+      id: "quarterly-qa",
+      label: "Quarterly QA",
+      group: "Recurring QA",
+      responsible: "QA reviewer / workshop owner",
+      meaning: "The completed workshop is reviewed during a periodic QA cycle to make sure it is still accurate and working.",
+      nextStep: "If QA passes, move to Quarterly QA Complete. If problems are found, return to In Development for fixes.",
+      checks: [
+        "Workshop information is still accurate and updated.",
+        "Code and commands still work.",
+        "Links still resolve correctly.",
+        "Manifest and support contact details are still current.",
+        "Screenshots and instructions still match the product experience."
+      ],
+      x: 950,
+      y: 480,
+      color: "#fffbeb"
+    },
+    {
+      id: "quarterly-qa-complete",
+      label: "Quarterly QA Complete",
+      group: "Done",
+      responsible: "QA reviewer / LiveLabs owner",
+      meaning: "The scheduled QA review is complete and no blocking issues remain from that review cycle.",
+      nextStep: "Return the workshop to Completed until the next review cycle or update request.",
+      checks: [
+        "Quarterly QA review is complete.",
+        "Findings are resolved or documented.",
+        "Workshop can return to normal completed status."
+      ],
+      x: 1180,
+      y: 480,
+      color: "#f0fdf4"
+    }
+  ];
+  var wmsStatusGraphTransitions = [
+    { from: "submitted", to: "approved", type: "normal", label: "review passes", labelX: 205, labelY: 236 },
+    { from: "submitted", to: "more-info", type: "alt", label: "needs details", labelX: 188, labelY: 210 },
+    { from: "more-info", to: "submitted", type: "alt", label: "resubmit", labelX: 310, labelY: 220 },
+    { from: "approved", to: "in-development", type: "normal", label: "start build", labelX: 405, labelY: 236 },
+    { from: "in-development", to: "self-qa", type: "normal", label: "ready to test", labelX: 615, labelY: 236 },
+    { from: "self-qa", to: "in-development", type: "alt", label: "fix issues", labelX: 615, labelY: 374 },
+    { from: "self-qa", to: "self-qa-complete", type: "normal", label: "QA passes", labelX: 835, labelY: 236 },
+    { from: "self-qa-complete", to: "completed", type: "normal", label: "complete", labelX: 1065, labelY: 236 },
+    { from: "completed", to: "publish-request", type: "publish", label: "request publish", labelX: 1295, labelY: 236 },
+    { from: "completed", to: "quarterly-qa", type: "normal", label: "scheduled review", labelX: 1088, labelY: 386 },
+    { from: "quarterly-qa", to: "in-development", type: "alt", label: "updates needed", labelX: 720, labelY: 414 },
+    { from: "quarterly-qa", to: "quarterly-qa-complete", type: "normal", label: "QA passes", labelX: 1065, labelY: 416 },
+    { from: "quarterly-qa-complete", to: "completed", type: "normal", label: "return", labelX: 1210, labelY: 386 }
+  ];
+  var wmsStatusGraphNodeMap = wmsStatusGraphStatuses.reduce(function (map, status) {
+    map[status.id] = status;
+    return map;
+  }, {});
+  var previousView = {
+    mode: "hub",
+    currentStep: 0,
+    guideSection: state.guideSection
+  };
+  var searchIndex = [];
+  var searchEntryMap = {};
+  var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var suppressObserver = false;
+  var suppressBubbleHashSync = false;
+  var isRestoringHistory = false;
+
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
+  var appRoot = document.getElementById("app");
+  var modeNav = document.getElementById("modeNav");
+  var breadcrumbTrail = document.getElementById("breadcrumbTrail");
+  var hub = document.getElementById("hub");
+  var beginnerMode = document.getElementById("beginnerMode");
+  var explorerMode = document.getElementById("explorerMode");
+  var nodocMode = document.getElementById("nodocMode");
+  var guideMode = document.getElementById("guideMode");
+  var generatorMode = document.getElementById("generatorMode");
+  var searchMode = document.getElementById("searchMode");
+  var rabbitFlow = document.getElementById("rabbitFlow");
+  var stepSections = Array.from(document.querySelectorAll(".rabbit-step"));
+  var progressButtons = Array.from(document.querySelectorAll(".quickstart-step-tabs .progress-button"));
+  var progressShell = document.getElementById("progressShell");
+  var authoringRouteTabs = Array.from(document.querySelectorAll("[data-authoring-route]"));
+  var authoringRoutePanels = Array.from(document.querySelectorAll("[data-authoring-panel]"));
+  var fastTrackToggle = document.getElementById("fastTrackToggle");
+  var fastTrackStatus = document.getElementById("fastTrackStatus");
+  var liveRegion = document.getElementById("liveRegion");
+  var bubbleGrid = document.getElementById("bubbleGrid");
+  var emptyState = document.getElementById("emptyState");
+  var resultCount = document.getElementById("resultCount");
+  var filterSummary = document.getElementById("filterSummary");
+  var bubbleSearch = document.getElementById("bubbleSearch");
+  var clearSearch = document.getElementById("clearSearch");
+  var toolkitSort = document.getElementById("toolkitSort");
+  var tagPillsMount = document.getElementById("tagPills");
+  var tagPills = Array.from(document.querySelectorAll(".tag-pill"));
+  var guideLayout = document.querySelector(".guide-layout");
+  var guideSidebar = document.querySelector(".guide-sidebar");
+  var guideSidebarCard = document.querySelector(".guide-sidebar-card");
+  var guideSectionNav = document.getElementById("guideSectionNav");
+  var guideQuickNav = document.getElementById("guideQuickNav");
+  var guideSectionMount = document.getElementById("guideSectionMount");
+  var searchResultsMount = document.getElementById("searchResults");
+  var searchEmptyState = document.getElementById("searchEmptyState");
+  var searchSummary = document.getElementById("searchSummary");
+  var searchQueryChip = document.getElementById("searchQueryChip");
+  var searchCountChip = document.getElementById("searchCountChip");
+  var navSearchForm = document.getElementById("navSearchForm");
+  var navSearchInput = document.getElementById("navSearchInput");
+  var navSearchClear = document.getElementById("navSearchClear");
+  var homeSearchForm = document.getElementById("homeSearchForm");
+  var homeSearchInput = document.getElementById("homeSearchInput");
+  var searchPageForm = document.getElementById("searchPageForm");
+  var searchPageInput = document.getElementById("searchPageInput");
+  var searchPageClear = document.getElementById("searchPageClear");
+  var wmsExampleForm = document.getElementById("wmsExampleForm");
+  var wmsExamplePrompt = document.getElementById("wmsExamplePrompt");
+  var wmsExamplePromptCount = document.getElementById("wmsExamplePromptCount");
+  var wmsExampleResults = document.getElementById("wmsExampleResults");
+  var wmsExampleEmpty = document.getElementById("wmsExampleEmpty");
+  var wmsExampleLoading = document.getElementById("wmsExampleLoading");
+  var wmsExampleError = document.getElementById("wmsExampleError");
+  var workshopMarkdownForm = document.getElementById("workshopMarkdownForm");
+  var workshopMarkdownPrompt = document.getElementById("workshopMarkdownPrompt");
+  var workshopMarkdownType = document.getElementById("workshopMarkdownType");
+  var workshopMarkdownOutput = document.getElementById("workshopMarkdownOutput");
+  var workshopMarkdownSummary = document.getElementById("workshopMarkdownSummary");
+  var generatorOutputMeta = document.getElementById("generatorOutputMeta");
+  var workshopMarkdownEmpty = document.getElementById("workshopMarkdownEmpty");
+  var workshopMarkdownLoading = document.getElementById("workshopMarkdownLoading");
+  var workshopMarkdownError = document.getElementById("workshopMarkdownError");
+  var copyGeneratedMarkdown = document.getElementById("copyGeneratedMarkdown");
+  var bubbleModalElement = document.getElementById("bubbleModal");
+  var bubbleModal = bubbleModalElement && window.bootstrap && window.bootstrap.Modal
+    ? window.bootstrap.Modal.getOrCreateInstance(bubbleModalElement)
+    : null;
+  var imageLightbox = document.getElementById("imageLightbox");
+  var imageLightboxImage = document.getElementById("imageLightboxImage");
+  var imageLightboxCaption = document.getElementById("imageLightboxCaption");
+  var imageLightboxClose = document.getElementById("imageLightboxClose");
+  var backToTopButton = document.getElementById("backToTopButton");
+  var authorGlobalNavToggle = document.getElementById("authorGlobalNavToggle");
+  var authorNavController = null;
+  var lastExpandedFigure = null;
+  var layoutSyncFrame = 0;
+  var generatedMarkdownText = "";
+  var defaultWmsExamplePrompt = "Build AI agents with persistent memory using Oracle Database, ADB, Select AI, and OCI GenAI";
+  var wmsExamplePromptMinLength = 24;
+  var wmsExamplePromptMaxLength = 320;
+
+  if (bubbleModalElement) {
+    bubbleModalElement.addEventListener("shown.bs.modal", function () {
+      var closeControl = bubbleModalElement.querySelector(".modal-header [data-bs-dismiss='modal']");
+      if (closeControl && typeof closeControl.focus === "function") {
+        closeControl.focus();
+      }
+    });
+
+    bubbleModalElement.addEventListener("hidden.bs.modal", function () {
+      closeImageLightbox({ announce: false, restoreFocus: false });
+      document.body.classList.remove("modal-open");
+      document.body.style.removeProperty("padding-right");
+      document.querySelectorAll(".modal-backdrop").forEach(function (backdrop) {
+        backdrop.remove();
+      });
+      if (!suppressBubbleHashSync && state.mode === "explorer" && isCheatsheetModalHash(window.location.hash)) {
+        setHash(cheatsheetFilterHash(state.activeTags[0]), { replace: true });
+      }
+      suppressBubbleHashSync = false;
+    });
+
+    bubbleModalElement.addEventListener("click", function (event) {
+      if (!bubbleModal && event.target.closest("[data-bs-dismiss='modal']")) {
+        hideBubbleModal();
+      }
+    });
+  }
+
+  function showBubbleModal() {
+    if (bubbleModal) {
+      bubbleModal.show();
+      return;
+    }
+
+    if (!bubbleModalElement) {
+      return;
+    }
+
+    if (!document.querySelector(".modal-backdrop")) {
+      var fallbackBackdrop = document.createElement("div");
+      fallbackBackdrop.className = "modal-backdrop fade show";
+      fallbackBackdrop.setAttribute("data-bubble-modal-backdrop", "true");
+      document.body.appendChild(fallbackBackdrop);
+    }
+    bubbleModalElement.classList.add("show");
+    bubbleModalElement.setAttribute("aria-hidden", "false");
+    bubbleModalElement.style.display = "block";
+    document.body.classList.add("modal-open");
+  }
+
+  function hideBubbleModal(options) {
+    var config = Object.assign({ syncHash: true }, options || {});
+
+    if (!config.syncHash) {
+      suppressBubbleHashSync = true;
+    }
+
+    if (bubbleModal) {
+      bubbleModal.hide();
+      return;
+    }
+
+    if (!bubbleModalElement) {
+      return;
+    }
+
+    closeImageLightbox({ announce: false, restoreFocus: false });
+    bubbleModalElement.classList.remove("show");
+    bubbleModalElement.setAttribute("aria-hidden", "true");
+    bubbleModalElement.style.display = "none";
+    document.body.classList.remove("modal-open");
+    document.querySelectorAll(".modal-backdrop").forEach(function (backdrop) {
+      backdrop.remove();
+    });
+    if (config.syncHash && state.mode === "explorer" && isCheatsheetModalHash(window.location.hash)) {
+      setHash(cheatsheetFilterHash(state.activeTags[0]), { replace: true });
+    }
+    suppressBubbleHashSync = false;
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function escapeAttribute(value) {
+    return escapeHtml(value).replace(/'/g, "&#39;");
+  }
+
+  function compactText(value, maxLength) {
+    var text = String(value || "").trim();
+    var bounded = Math.max(24, maxLength || 120);
+
+    if (!text || text.length <= bounded) {
+      return text;
+    }
+
+    return text.slice(0, bounded).replace(/\s+\S*$/, "").trim() + "...";
+  }
+
+  function rootCssPx(name, fallback) {
+    var styles;
+    var value;
+
+    if (!appRoot) {
+      return fallback;
+    }
+
+    styles = window.getComputedStyle(appRoot);
+    value = parseFloat(styles.getPropertyValue(name));
+    return Number.isFinite(value) ? value : fallback;
+  }
+
+  function isViewportAnchored(element) {
+    var position;
+
+    if (!element) {
+      return false;
+    }
+
+    position = window.getComputedStyle(element).position;
+    return position === "sticky" || position === "fixed";
+  }
+
+  function firstDirectContainer(parent) {
+    var match = null;
+
+    if (!parent) {
+      return null;
+    }
+
+    Array.prototype.some.call(parent.children, function (child) {
+      if (child.classList && child.classList.contains("container")) {
+        match = child;
+        return true;
+      }
+      return false;
+    });
+
+    return match;
+  }
+
+  function normalizeText(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/&/g, " and ")
+      .replace(/[^a-z0-9]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  synonymGroups = synonymGroups.map(function (group) {
+    return group.map(function (term) {
+      return normalizeText(term);
+    });
+  });
+
+  function tokenize(value) {
+    return normalizeText(value)
+      .split(" ")
+      .filter(function (token) {
+        return token && !stopWords[token];
+      });
+  }
+
+  function tokenSet(text) {
+    return new Set(Array.from(new Set(tokenize(text))));
+  }
+
+  function expandSearchText(value) {
+    var normalized = normalizeText(value);
+    var expanded = normalized ? [normalized] : [];
+
+    synonymGroups.forEach(function (group) {
+      if (group.some(function (term) { return normalized.indexOf(term) !== -1; })) {
+        expanded = expanded.concat(group);
+      }
+    });
+
+    return expanded.join(" ");
+  }
+
+  function flattenList(items) {
+    return (items || []).join(" ");
+  }
+
+  function flattenFields(items) {
+    return (items || []).map(function (item) {
+      return [item.label, item.value, item.guidance || item.note || ""].join(" ");
+    }).join(" ");
+  }
+
+  function flattenResources(items) {
+    return (items || []).map(function (item) {
+      return [item.label, item.note || "", item.href || ""].join(" ");
+    }).join(" ");
+  }
+
+  function flattenMilestones(items) {
+    return (items || []).map(function (item) {
+      return [item.label, item.detail].join(" ");
+    }).join(" ");
+  }
+
+  function smoothBehavior() {
+    return prefersReducedMotion ? "auto" : "smooth";
+  }
+
+  function resolveAppBasePath() {
+    var path = window.location.pathname || "/";
+    var cleanPath = path.replace(/\/+$/, "");
+    var segments = cleanPath.split("/").filter(Boolean);
+    var routeNames = ["home", "quickstart", "cheatsheet", "markdown", "nodoc"];
+    var lastSegment = (segments[segments.length - 1] || "").toLowerCase();
+    var previousSegment = (segments[segments.length - 2] || "").toLowerCase();
+
+    // GitHub Pages serves each route directory through its index.html. Remove
+    // route segments when finding the guide root; otherwise a page would
+    // generate nested URLs such as quickstart/quickstart.
+    if (lastSegment === "index.html" && routeNames.indexOf(previousSegment) !== -1) {
+      segments.splice(-2, 2);
+    } else if (lastSegment === "index.html") {
+      segments.pop();
+    } else if (routeNames.indexOf(lastSegment) !== -1 || routeNames.indexOf(lastSegment.replace(/\.html$/, "")) !== -1) {
+      segments.pop();
+    } else if (!path.endsWith("/")) {
+      segments.pop();
+    }
+
+    if ((segments[segments.length - 1] || "").toLowerCase() === "pages") {
+      segments.pop();
+    }
+
+    return "/" + (segments.length ? segments.join("/") + "/" : "");
+  }
+
+  var appBasePath = resolveAppBasePath();
+  var routeBasePath = appBasePath.replace(/pages\/$/i, "") || "/";
+
+  function resolveGuideRuntimePath(path) {
+    if (window.AuthorGuidePaths && typeof window.AuthorGuidePaths.resolve === "function") {
+      return window.AuthorGuidePaths.resolve(path);
+    }
+
+    return new URL(routeBasePath + path.replace(/^\/+/, ""), window.location.href).toString();
+  }
+
+  guideCatalogHref = resolveGuideRuntimePath("assets/data/author-guide-catalog.json");
+
+  function routeTokenFromLocation() {
+    var routeParam = new URLSearchParams(window.location.search).get("route");
+    var pathSegments = (window.location.pathname || "").replace(/\/+$/, "").split("/").filter(Boolean);
+    var pathSegment = (pathSegments[pathSegments.length - 1] || "").toLowerCase();
+
+    if (pathSegment === "index.html" && pathSegments.length > 1) {
+      pathSegment = pathSegments[pathSegments.length - 2].toLowerCase();
+    }
+
+    var cleanRoute = String(routeParam || pathSegment || "").toLowerCase();
+
+    if (window.location.hash) {
+      return window.location.hash;
+    }
+
+    if (cleanRoute === "home" || cleanRoute === "home.html" || cleanRoute === "index.html") {
+      return "#home";
+    }
+    if (cleanRoute === "quickstart" || cleanRoute === "quickstart.html") {
+      return "#quickstart";
+    }
+    if (cleanRoute === "cheatsheet" || cleanRoute === "cheatsheet.html" || cleanRoute === "quick-reference") {
+      return "#quick-reference";
+    }
+    if (cleanRoute === "nodoc" || cleanRoute === "nodoc.html" || cleanRoute === "no-doc") {
+      return "#nodoc";
+    }
+
+    return window.location.hash || "#home";
+  }
+
+  function routeNeedsGuideCatalog(route) {
+    var cleanRoute = String(route || "").toLowerCase();
+
+    return cleanRoute === "#search"
+      || cleanRoute.indexOf("#search:") === 0
+      || cleanRoute.indexOf("#guide-") === 0;
+  }
+
+  function slugifyHash(value) {
+    return String(value || "")
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/&/g, " and ")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+
+  function cheatsheetItemHash(item) {
+    return "#" + slugifyHash(item && (item.title || item.id)) + "/";
+  }
+
+  function findCheatsheetItemByHash(hash) {
+    var raw = String(hash || "").replace(/^#/, "");
+    var decoded = raw;
+    var slug;
+
+    try {
+      decoded = decodeURIComponent(raw);
+    } catch (error) {
+      decoded = raw;
+    }
+
+    if (decoded.indexOf("cheatsheet:") === 0) {
+      return explorerItems.find(function (item) {
+        return item.id === decoded.slice("cheatsheet:".length);
+      }) || null;
+    }
+
+    slug = decoded.replace(/\/+$/, "");
+    if (!slug) {
+      return null;
+    }
+
+    return explorerItems.find(function (item) {
+      return slugifyHash(item.title || item.id) === slug || slugifyHash(item.id) === slug;
+    }) || null;
+  }
+
+  function isCheatsheetModalHash(hash) {
+    return !!findCheatsheetItemByHash(hash);
+  }
+
+  function cheatsheetFilterHash(tag) {
+    var normalized = normalizeTagValue(tag);
+
+    return normalized && normalized !== "all"
+      ? "#tag-" + slugifyHash(normalized)
+      : "#quick-reference";
+  }
+
+  function findCheatsheetTagByHash(hash) {
+    var raw = String(hash || "").replace(/^#/, "").toLowerCase().replace(/\/+$/, "");
+    var candidate;
+    var hasTag;
+
+    if (raw.indexOf("tag-") !== 0) {
+      return "";
+    }
+
+    candidate = normalizeTagValue(raw.slice(4));
+    hasTag = explorerItems.some(function (item) {
+      return (item.__tags || getItemTags(item)).indexOf(candidate) !== -1;
+    });
+
+    return hasTag ? candidate : "";
+  }
+
+  function isCheatsheetTagHash(hash) {
+    return !!findCheatsheetTagByHash(hash);
+  }
+
+  function quickstartSectionTarget(hash) {
+    var id = String(hash || "").replace(/^#/, "");
+    var target;
+
+    try {
+      id = decodeURIComponent(id);
+    } catch (error) {
+      // Keep the literal hash when it contains an invalid escape sequence.
+    }
+
+    target = document.getElementById(id);
+    return target && target.closest(".rabbit-step") && target.closest("[data-quickstart-anchor]")
+      ? target
+      : null;
+  }
+
+  function routeUrl(hash) {
+    var cleaned = String(hash || "").replace(/^#/, "").toLowerCase();
+    var pageFile = function (cleanName) {
+      return cleanName === "home"
+        ? routeBasePath
+        : routeBasePath + cleanName + "/";
+    };
+    var pageUrl = function (cleanName, pageHash) {
+      var authoring = "";
+
+      // The Quickstart authoring choice is intentionally shareable. Keep it
+      // when the step hash changes so Next, Back, reload, and browser history
+      // do not silently switch a GitHub author back to the NoDoc route.
+      if (cleanName === "quickstart") {
+        try {
+          authoring = new URLSearchParams(window.location.search).get("authoring") || "";
+        } catch (error) {
+          authoring = "";
+        }
+
+        if (authoring !== "source" && authoring !== "no-doc") {
+          authoring = "";
+        }
+      }
+
+      return pageFile(cleanName) + (authoring ? "?authoring=" + authoring : "") + (pageHash || "");
+    };
+
+    if (!cleaned || cleaned === "home" || cleaned === "hub") {
+      return pageUrl("home");
+    }
+    if (cleaned === "guided" || cleaned === "quickstart") {
+      return pageUrl("quickstart");
+    }
+    if (quickstartSectionTarget(hash)) {
+      return pageUrl("quickstart", hash);
+    }
+    if (cleaned.indexOf("step-") === 0) {
+      return pageUrl("quickstart", hash);
+    }
+    if (cleaned === "toolkit" || cleaned === "quick-reference" || cleaned === "cheatsheet" || cleaned === "explorer") {
+      return pageUrl("cheatsheet");
+    }
+    if (cleaned.indexOf("tag-") === 0) {
+      return pageUrl("cheatsheet", hash);
+    }
+    if (cleaned.indexOf("cheatsheet:") === 0 || isCheatsheetModalHash(hash)) {
+      return pageUrl("cheatsheet", hash);
+    }
+    if (cleaned === "nodoc" || cleaned === "no-doc") {
+      return pageUrl("nodoc");
+    }
+    if (cleaned.indexOf("nodoc:") === 0) {
+      return pageUrl("nodoc", hash);
+    }
+
+    return pageUrl("home", hash);
+  }
+
+  function setLiveMessage(message) {
+    if (!liveRegion) {
+      return;
+    }
+
+    liveRegion.textContent = "";
+    window.setTimeout(function () {
+      liveRegion.textContent = message;
+    }, 20);
+  }
+
+  function currentRoutePayload(hash, scrollY) {
+    return {
+      __authorGuideRoute: true,
+      mode: state.mode,
+      currentStep: state.currentStep,
+      authoringRoute: state.authoringRoute,
+      fastTrack: state.fastTrack,
+      activeTag: state.activeTag,
+      activeTags: state.activeTags,
+      toolkitSort: state.toolkitSort,
+      toolkitQuery: state.toolkitQuery,
+      searchQuery: state.searchQuery,
+      guideSection: state.guideSection,
+      hash: hash,
+      scrollY: Number.isFinite(scrollY) ? scrollY : window.pageYOffset
+    };
+  }
+
+  function persistCurrentHistoryScroll() {
+    var current = history.state;
+
+    if (!current || !current.__authorGuideRoute) {
+      return;
+    }
+
+    current.scrollY = window.pageYOffset;
+    history.replaceState(current, "", window.location.href);
+  }
+
+  function refreshCurrentHistoryScrollSoon() {
+    window.setTimeout(function () {
+      var current = history.state;
+
+      if (!current || !current.__authorGuideRoute || isRestoringHistory) {
+        return;
+      }
+
+      current.scrollY = window.pageYOffset;
+      history.replaceState(current, "", window.location.href);
+    }, prefersReducedMotion ? 80 : 480);
+  }
+
+  function setHash(hash, options) {
+    var config = Object.assign({
+      replace: false,
+      scrollY: window.pageYOffset
+    }, options || {});
+    var payload = currentRoutePayload(hash, config.scrollY);
+    var targetUrl = routeUrl(hash);
+    var currentUrl = window.location.pathname + window.location.search + window.location.hash;
+
+    if (currentUrl === targetUrl) {
+      history.replaceState(payload, "", targetUrl);
+      return;
+    }
+
+    if (config.replace || isRestoringHistory) {
+      history.replaceState(payload, "", targetUrl);
+      return;
+    }
+
+    persistCurrentHistoryScroll();
+    history.pushState(payload, "", targetUrl);
+  }
+
+  function updateHashFromState(options) {
+    var currentHash = window.location.hash || "";
+    var activeCheatsheetTag = normalizeTagSelection(state.activeTags)[0] || "";
+
+    if (state.mode === "beginner") {
+      var sectionTarget = quickstartSectionTarget(currentHash);
+      var targetStep = sectionTarget && sectionTarget.closest(".rabbit-step");
+
+      if (targetStep && Number(targetStep.getAttribute("data-step-index")) === state.currentStep) {
+        setHash(currentHash, options);
+        return;
+      }
+
+      setHash("#step-" + (state.currentStep + 1), options);
+      return;
+    }
+
+    if (state.mode === "explorer") {
+      setHash(
+        isCheatsheetModalHash(currentHash) || currentHash.indexOf("#cheatsheet:") === 0
+          ? currentHash
+          : cheatsheetFilterHash(activeCheatsheetTag),
+        options
+      );
+      return;
+    }
+
+    if (state.mode === "nodoc") {
+      setHash(currentHash.indexOf("#nodoc:") === 0 ? currentHash : "#nodoc", options);
+      return;
+    }
+
+    if (state.mode === "guide") {
+      setHash("#guide-" + state.guideSection, options);
+      return;
+    }
+
+    if (state.mode === "generator") {
+      setHash("#markdown-generator", options);
+      return;
+    }
+
+    if (state.mode === "search") {
+      setHash(state.searchQuery ? "#search:" + encodeURIComponent(state.searchQuery) : "#search", options);
+      return;
+    }
+
+    setHash("#home", options);
+  }
+
+  function stickyOffset(target) {
+    var offset = 16;
+    var navRect = modeNav ? modeNav.getBoundingClientRect() : null;
+    var navHeight = (
+      modeNav &&
+      !modeNav.classList.contains("d-none") &&
+      isViewportAnchored(modeNav) &&
+      navRect &&
+      navRect.top <= 1 &&
+      navRect.width > window.innerWidth * 0.55 &&
+      navRect.height < window.innerHeight * 0.6
+    ) ? navRect.height : 0;
+    var progressHeight = 0;
+    var beginnerHeader = beginnerMode ? beginnerMode.firstElementChild : null;
+
+    if (
+      state.mode === "beginner" &&
+      beginnerHeader &&
+      isViewportAnchored(beginnerHeader) &&
+      !beginnerMode.classList.contains("d-none") &&
+      target &&
+      target !== beginnerMode
+    ) {
+      progressHeight = beginnerHeader.getBoundingClientRect().height;
+    }
+
+    return Math.ceil(navHeight + progressHeight + offset);
+  }
+
+  function scrollToTarget(target) {
+    var top;
+
+    if (!target) {
+      return;
+    }
+
+    top = window.pageYOffset + target.getBoundingClientRect().top - stickyOffset(target);
+    window.scrollTo({
+      top: Math.max(0, top),
+      behavior: smoothBehavior()
+    });
+  }
+
+  function scrollToQuickstartSection(target) {
+    var performScroll = function () {
+      window.requestAnimationFrame(function () {
+        scrollToTarget(target);
+        window.setTimeout(function () {
+          suppressObserver = false;
+          syncBeginnerStepFromScroll();
+        }, prefersReducedMotion ? 100 : 700);
+      });
+    };
+
+    suppressObserver = true;
+    if (document.readyState === "complete") {
+      performScroll();
+    } else {
+      window.addEventListener("load", performScroll, { once: true });
+    }
+  }
+
+  function resetProgressDock() {
+    if (!progressShell) {
+      return;
+    }
+
+    progressShell.style.position = "";
+    progressShell.style.top = "";
+    progressShell.style.left = "";
+    progressShell.style.width = "";
+  }
+
+  function syncProgressDockPosition() {
+    var topOffset;
+    var railWidth;
+    var hero;
+    var sectionRect;
+    var heroRect;
+    var heroTop;
+    var heroContainer;
+    var containerRect;
+    var absoluteLeft;
+    var fixedLeft;
+
+    if (!progressShell || window.innerWidth <= 1199 || state.mode !== "beginner" || !beginnerMode || beginnerMode.classList.contains("d-none")) {
+      resetProgressDock();
+      return;
+    }
+
+    hero = beginnerMode.querySelector(".mode-hero");
+    heroContainer = firstDirectContainer(beginnerMode);
+
+    if (!hero || !heroContainer) {
+      resetProgressDock();
+      return;
+    }
+
+    topOffset = 14;
+    railWidth = rootCssPx("--progress-rail-width", 150);
+    sectionRect = beginnerMode.getBoundingClientRect();
+    heroRect = hero.getBoundingClientRect();
+    heroTop = Math.max(0, Math.round(heroRect.top - sectionRect.top));
+    containerRect = heroContainer.getBoundingClientRect();
+    absoluteLeft = Math.round(containerRect.left - sectionRect.left);
+    fixedLeft = Math.round(containerRect.left);
+
+    progressShell.style.width = railWidth + "px";
+
+    if (heroRect.top > topOffset) {
+      progressShell.style.position = "absolute";
+      progressShell.style.top = heroTop + "px";
+      progressShell.style.left = absoluteLeft + "px";
+      return;
+    }
+
+    progressShell.style.position = "fixed";
+    progressShell.style.top = topOffset + "px";
+    progressShell.style.left = fixedLeft + "px";
+  }
+
+  function resetGuideSidebar() {
+    if (!guideSidebar || !guideSidebarCard) {
+      return;
+    }
+
+    guideSidebar.style.position = "";
+    guideSidebar.style.minHeight = "";
+    guideSidebarCard.style.position = "";
+    guideSidebarCard.style.top = "";
+    guideSidebarCard.style.left = "";
+    guideSidebarCard.style.width = "";
+  }
+
+  function syncGuideSidebar() {
+    var topOffset;
+    var sidebarRect;
+    var layoutRect;
+    var sidebarHeight;
+    var sidebarColumnHeight;
+    var fixedLeft;
+    var fixedWidth;
+    var absoluteTop;
+
+    if (
+      !guideLayout ||
+      !guideSidebar ||
+      !guideSidebarCard ||
+      window.innerWidth <= 1199 ||
+      state.mode !== "guide" ||
+      !guideMode ||
+      guideMode.classList.contains("d-none")
+    ) {
+      resetGuideSidebar();
+      return;
+    }
+
+    topOffset = stickyOffset(guideLayout);
+    sidebarRect = guideSidebar.getBoundingClientRect();
+    layoutRect = guideLayout.getBoundingClientRect();
+    sidebarHeight = guideSidebarCard.offsetHeight;
+    sidebarColumnHeight = guideSidebar.offsetHeight;
+    fixedLeft = Math.round(sidebarRect.left);
+    fixedWidth = Math.round(sidebarRect.width);
+    absoluteTop = Math.max(0, sidebarColumnHeight - sidebarHeight);
+
+    guideSidebar.style.position = "relative";
+    guideSidebar.style.minHeight = sidebarHeight + "px";
+
+    if (sidebarRect.top > topOffset) {
+      guideSidebarCard.style.position = "relative";
+      guideSidebarCard.style.top = "0";
+      guideSidebarCard.style.left = "0";
+      guideSidebarCard.style.width = "100%";
+      return;
+    }
+
+    if (layoutRect.bottom <= topOffset + sidebarHeight) {
+      guideSidebarCard.style.position = "absolute";
+      guideSidebarCard.style.top = absoluteTop + "px";
+      guideSidebarCard.style.left = "0";
+      guideSidebarCard.style.width = "100%";
+      return;
+    }
+
+    guideSidebarCard.style.position = "fixed";
+    guideSidebarCard.style.top = topOffset + "px";
+    guideSidebarCard.style.left = fixedLeft + "px";
+    guideSidebarCard.style.width = fixedWidth + "px";
+  }
+
+  function syncBackToTopButton() {
+    var showButton;
+
+    if (!backToTopButton) {
+      return;
+    }
+
+    showButton = window.pageYOffset > 320;
+
+    backToTopButton.classList.toggle("is-visible", showButton);
+    backToTopButton.setAttribute("aria-hidden", showButton ? "false" : "true");
+    backToTopButton.tabIndex = showButton ? 0 : -1;
+  }
+
+  function syncBeginnerStepFromScroll() {
+    var anchor;
+    var currentIndex = 0;
+
+    if (state.mode !== "beginner" || suppressObserver || !stepSections.length) {
+      return;
+    }
+
+    anchor = stickyOffset(stepSections[0]) + 24;
+    stepSections.forEach(function (section, index) {
+      if (section.getBoundingClientRect().top <= anchor) {
+        currentIndex = index;
+      }
+    });
+
+    if (currentIndex !== state.currentStep) {
+      state.currentStep = currentIndex;
+      updateBeginnerUI();
+      updateHashFromState({ replace: true });
+    }
+  }
+
+  function scheduleLayoutSync() {
+    if (layoutSyncFrame) {
+      return;
+    }
+
+    layoutSyncFrame = window.requestAnimationFrame(function () {
+      layoutSyncFrame = 0;
+      syncProgressDockPosition();
+      syncGuideSidebar();
+      syncBackToTopButton();
+      syncBeginnerStepFromScroll();
+    });
+  }
+
+  function titleCaseTag(tag) {
+    var normalized = normalizeTagValue(tag);
+    var labelMap = {
+      ai: "AI",
+      assets: "Assets",
+      freesql: "FreeSQL",
+      github: "GitHub",
+      interactive: "Interactive",
+      livestack: "LiveStack",
+      markdown: "Markdown",
+      marketplace: "Marketplace",
+      media: "Media",
+      publishing: "Publishing",
+      qa: "Quality Assurance",
+      "quality-assurance": "Quality Assurance",
+      "secure-desktop": "Secure Desktop",
+      sprints: "Sprints",
+      support: "Support",
+      tools: "Tools",
+      validation: "Validation",
+      wms: "WMS"
+    };
+
+    if (labelMap[normalized]) {
+      return labelMap[normalized];
+    }
+
+    return normalized
+      .split("-")
+      .map(function (part) {
+        return part.charAt(0).toUpperCase() + part.slice(1);
+      })
+      .join(" ");
+  }
+
+  function queryLabIdFromHref(href) {
+    try {
+      return new URL(href, window.location.href).searchParams.get("lab") || "";
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function uniqueList(items) {
+    return Array.from(new Set((items || []).filter(Boolean)));
+  }
+
+  function normalizeTagValue(tag) {
+    return normalizeText(tag).replace(/\s+/g, "-");
+  }
+
+  function normalizeToolkitSort(sort) {
+    var normalized = normalizeTagValue(sort || "");
+    return allowedToolkitSorts[normalized] ? normalized : "alphabetical";
+  }
+
+  function getItemTags(item) {
+    return uniqueList((item.tags || []).map(normalizeTagValue).filter(Boolean));
+  }
+
+  function normalizeTagSelection(tags) {
+    var list = Array.isArray(tags) ? tags : [tags];
+
+    // The Cheatsheet presents one topic filter at a time. Older browser
+    // history can still contain an array from the previous multi-select UI,
+    // so retain only the first valid value when that state is restored.
+    return uniqueList(list.map(normalizeTagValue).filter(function (tag) {
+      return tag && tag !== "all";
+    })).slice(0, 1);
+  }
+
+  explorerItems.forEach(function (item, index) {
+    item.__sourceOrder = index;
+    item.__tags = getItemTags(item);
+  });
+
+  function resolveGuideTarget(target, sourceHref) {
+    var requested = String(target || "").trim();
+    var sourceLab = queryLabIdFromHref(sourceHref);
+    var candidates = [requested, sourceLab];
+    var resolved = "";
+
+    candidates.some(function (candidate) {
+      if (!candidate) {
+        return false;
+      }
+
+      if (guideSectionMap[candidate]) {
+        resolved = candidate;
+        return true;
+      }
+
+      if (guideLegacyTargetMap[candidate] && guideSectionMap[guideLegacyTargetMap[candidate]]) {
+        resolved = guideLegacyTargetMap[candidate];
+        return true;
+      }
+
+      return false;
+    });
+
+    if (resolved) {
+      return resolved;
+    }
+
+    return guideSections.length ? guideSections[0].id : "";
+  }
+
+  function guideAccentForEntry(title, description) {
+    var text = normalizeText([title, description].join(" "));
+
+    if (text.indexOf("help") !== -1 || text.indexOf("faq") !== -1 || text.indexOf("sla") !== -1) {
+      return "pine";
+    }
+
+    if (text.indexOf("github") !== -1 || text.indexOf("sql") !== -1) {
+      return "ocean";
+    }
+
+    if (
+      text.indexOf("desktop") !== -1 ||
+      text.indexOf("marketplace") !== -1 ||
+      text.indexOf("screen") !== -1 ||
+      text.indexOf("optishot") !== -1 ||
+      text.indexOf("fixomat") !== -1 ||
+      text.indexOf("sprint") !== -1
+    ) {
+      return "sienna";
+    }
+
+    return "red";
+  }
+
+  function guideHighlightsForEntry(id, title, description) {
+    var text = normalizeText([id, title, description].join(" "));
+    var highlights = [];
+
+    if (text.indexOf("wms") !== -1) {
+      highlights.push("WMS");
+    }
+    if (text.indexOf("github") !== -1) {
+      highlights.push("GitHub");
+    }
+    if (text.indexOf("qa") !== -1 || text.indexOf("pull request") !== -1 || text.indexOf("publish") !== -1) {
+      highlights.push("Quality Assurance / Publish");
+    }
+    if (text.indexOf("sql") !== -1 || text.indexOf("freesql") !== -1) {
+      highlights.push("FreeSQL");
+    }
+    if (text.indexOf("quiz") !== -1) {
+      highlights.push("Quizzes");
+    }
+    if (text.indexOf("screen") !== -1 || text.indexOf("optishot") !== -1 || text.indexOf("fixomat") !== -1) {
+      highlights.push("Tools");
+    }
+    if (text.indexOf("desktop") !== -1) {
+      highlights.push("Desktop");
+    }
+    if (text.indexOf("marketplace") !== -1) {
+      highlights.push("Marketplace");
+    }
+    if (text.indexOf("help") !== -1 || text.indexOf("faq") !== -1) {
+      highlights.push("Support");
+    }
+    if (text.indexOf("ai") !== -1) {
+      highlights.push("AI");
+    }
+    if (text.indexOf("sprint") !== -1) {
+      highlights.push("Sprints");
+    }
+
+    if (!highlights.length) {
+      highlights.push("Author guide");
+    }
+
+    highlights.push("Original order");
+    highlights.push("Live original guide");
+    return uniqueList(highlights).slice(0, 3);
+  }
+
+  function guideTaskSectionLabel(count) {
+    if (count <= 0) {
+      return "No task sections";
+    }
+
+    return count + " task section" + (count === 1 ? "" : "s");
+  }
+
+  function guideSectionCountLabel(count) {
+    if (count <= 0) {
+      return "No sections";
+    }
+
+    return count + " section" + (count === 1 ? "" : "s");
+  }
+
+  function guideNavStateLabel(taskCount, sectionCount) {
+    if (taskCount > 0) {
+      return guideTaskSectionLabel(taskCount);
+    }
+
+    return guideSectionCountLabel(sectionCount);
+  }
+
+  function guideTaskStateLabel(section) {
+    if (section && typeof section.taskCount === "number") {
+      return guideTaskSectionLabel(section.taskCount);
+    }
+
+    return "Loading task sections";
+  }
+
+  function applyGuideSourceMeta(section, meta) {
+    if (!section || !meta) {
+      return;
+    }
+
+    section.taskCount = meta.taskCount;
+    section.panelCount = meta.panelCount;
+    section.navState = guideNavStateLabel(meta.taskCount, meta.panelCount);
+  }
+
+  function loadGuideSourceMeta(section) {
+    var meta;
+
+    if (!section || !section.id) {
+      return Promise.resolve(null);
+    }
+
+    if (guideSectionMetaCache[section.id]) {
+      return guideSectionMetaCache[section.id];
+    }
+
+    meta = {
+      taskCount: Math.max(0, Number(section.taskCount) || 0),
+      panelCount: Math.max(0, Number(section.panelCount) || 0)
+    };
+    applyGuideSourceMeta(section, meta);
+    guideSectionMetaCache[section.id] = Promise.resolve(meta);
+
+    return guideSectionMetaCache[section.id];
+  }
+
+  function buildGuideEntry(tutorial, index) {
+    var filename = String((tutorial && tutorial.filename) || "");
+    var title = String((tutorial && tutorial.title) || "Guide Page");
+    var summary = String((tutorial && tutorial.description) || "").trim();
+    var basename = filename.split("/").pop() || "";
+    var id = String((tutorial && tutorial.id) || basename.replace(/\.md$/i, ""));
+    var sourceMeta = {
+      taskCount: Math.max(0, Number(tutorial && tutorial.taskCount) || 0),
+      panelCount: Math.max(0, Number(tutorial && tutorial.panelCount) || 0)
+    };
+
+    return {
+      id: id,
+      label: "Section " + String(index + 1).padStart(2, "0"),
+      title: title,
+      summary: summary,
+      purpose: "Original author-guide content indexed for search with direct access to the original guide.",
+      accent: guideAccentForEntry(title, summary),
+      highlights: guideHighlightsForEntry(id, title, summary),
+      navState: guideNavStateLabel(sourceMeta.taskCount, sourceMeta.panelCount),
+      taskCount: sourceMeta.taskCount,
+      panelCount: sourceMeta.panelCount,
+      labs: [],
+      sectionHref: fullGuideLabHref(id),
+      sectionLabel: "Open Step by Step Guide",
+      embedHref: fullGuideLabHref(id, { embed: "1" })
+    };
+  }
+
+  function loadGuideCatalog() {
+    if (guideCatalogPromise) {
+      return guideCatalogPromise;
+    }
+
+    guideCatalogPromise = fetch(guideCatalogHref, { cache: "no-store" })
+      .then(function (response) {
+        if (!response.ok) {
+          throw new Error("Guide catalog request failed with status " + response.status + ".");
+        }
+
+        return response.json();
+      })
+      .then(function (catalog) {
+        guideSections = (catalog.tutorials || []).map(buildGuideEntry).filter(function (entry) {
+          return entry.id;
+        });
+        guideSectionMap = guideSections.reduce(function (accumulator, entry) {
+          accumulator[entry.id] = entry;
+          return accumulator;
+        }, {});
+        guideCatalogLoaded = true;
+        state.guideSection = resolveGuideTarget(state.guideSection);
+        previousView.guideSection = resolveGuideTarget(previousView.guideSection);
+        guideSections.forEach(function (section) {
+          loadGuideSourceMeta(section);
+        });
+        return guideSections;
+      })
+      .catch(function (error) {
+        guideCatalogLoaded = false;
+        console.error(error);
+        return guideSections;
+      });
+
+    return guideCatalogPromise.then(function (entries) {
+      renderGuideNav();
+      buildSearchIndex();
+
+      if (state.mode === "guide") {
+        renderGuideSection();
+      } else if (state.mode === "search") {
+        renderSearchResults();
+      }
+
+      return entries;
+    });
+  }
+
+  function currentGuideTarget() {
+    var preferred = "";
+
+    if (state.mode === "guide" && state.guideSection) {
+      preferred = state.guideSection;
+    } else if (state.mode === "beginner" && stepMeta[state.currentStep]) {
+      preferred = stepMeta[state.currentStep].guideTarget;
+    }
+
+    return resolveGuideTarget(preferred) || (guideSections[0] && guideSections[0].id) || "introduction";
+  }
+
+  function currentGuideSection() {
+    return guideSectionMap[state.guideSection] || guideSections[0];
+  }
+
+  function openFullGuide(url) {
+    var target = url || fullGuideHref;
+    if (!target) {
+      return;
+    }
+    window.open(target, "_blank", "noopener,noreferrer");
+  }
+
+  function rememberViewForSearch() {
+    if (state.mode === "search") {
+      return;
+    }
+
+    previousView = {
+      mode: state.mode,
+      currentStep: state.currentStep,
+      guideSection: state.guideSection
+    };
+  }
+
+  function updateNavSearch() {
+    if (navSearchInput) {
+      navSearchInput.value = state.searchQuery;
+    }
+
+    if (homeSearchInput) {
+      homeSearchInput.value = state.searchQuery;
+    }
+
+    if (searchPageInput) {
+      searchPageInput.value = state.searchQuery;
+    }
+
+    if (searchPageClear) {
+      searchPageClear.hidden = !(searchPageInput && searchPageInput.value);
+    }
+  }
+
+  function updateNav() {
+    if (modeNav) {
+      modeNav.classList.remove("d-none");
+    }
+    document.body.classList.toggle("home-no-scroll", state.mode === "hub");
+    syncAuthorNavToggle();
+
+    document.querySelectorAll(".nav-control[data-mode-target]").forEach(function (button) {
+      var targetMode = button.getAttribute("data-mode-target");
+      var isActive = targetMode === state.mode;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+  }
+
+  function updateBreadcrumb() {
+    if (!breadcrumbTrail) {
+      return;
+    }
+
+    breadcrumbTrail.innerHTML = "";
+  }
+
+  function setModeRegionVisibility(region, isVisible) {
+    if (!region) {
+      return;
+    }
+
+    region.classList.toggle("d-none", !isVisible);
+    region.setAttribute("aria-hidden", isVisible ? "false" : "true");
+  }
+
+  function updateAuthoringRouteUI() {
+    authoringRouteTabs.forEach(function (tab) {
+      var isActive = tab.getAttribute("data-authoring-route") === state.authoringRoute;
+      tab.classList.toggle("is-active", isActive);
+      tab.setAttribute("aria-selected", isActive ? "true" : "false");
+      tab.setAttribute("tabindex", isActive ? "0" : "-1");
+    });
+
+    authoringRoutePanels.forEach(function (panel) {
+      var isActive = panel.getAttribute("data-authoring-panel") === state.authoringRoute;
+      panel.hidden = !isActive;
+      panel.setAttribute("aria-hidden", isActive ? "false" : "true");
+    });
+
+    document.querySelectorAll("[data-authoring-only]").forEach(function (node) {
+      var isActive = node.getAttribute("data-authoring-only") === state.authoringRoute;
+      node.hidden = !isActive;
+      node.setAttribute("aria-hidden", isActive ? "false" : "true");
+    });
+  }
+
+  function releaseObserverAtTop() {
+    var deadline = Date.now() + 1600;
+
+    function checkPosition() {
+      if (window.pageYOffset <= 1 || Date.now() >= deadline) {
+        suppressObserver = false;
+        return;
+      }
+
+      window.requestAnimationFrame(checkPosition);
+    }
+
+    window.requestAnimationFrame(checkPosition);
+  }
+
+  function updateAuthoringRouteQuery(options) {
+    var config = Object.assign({ replace: false }, options || {});
+    var url;
+    var payload;
+
+    try {
+      url = new URL(window.location.href);
+      url.searchParams.set("authoring", state.authoringRoute);
+      payload = currentRoutePayload(url.hash, window.pageYOffset);
+      history[config.replace ? "replaceState" : "pushState"](
+        payload,
+        "",
+        url.pathname + url.search + url.hash
+      );
+    } catch (error) {
+      return;
+    }
+  }
+
+  function setAuthoringRoute(route, options) {
+    var config = Object.assign({
+      focus: false,
+      announce: true,
+      history: true,
+      replaceHistory: false
+    }, options || {});
+
+    state.authoringRoute = normalizeAuthoringRoute(route);
+    updateAuthoringRouteUI();
+
+    if (config.history) {
+      updateAuthoringRouteQuery({ replace: config.replaceHistory });
+    }
+
+    if (config.focus) {
+      var activeTab = authoringRouteTabs.find(function (tab) {
+        return tab.getAttribute("data-authoring-route") === state.authoringRoute;
+      });
+      if (activeTab) {
+        activeTab.focus();
+      }
+    }
+
+    if (config.announce) {
+      setLiveMessage(
+        state.authoringRoute === "no-doc"
+          ? "NoDoc authoring path selected."
+          : "GitHub authoring process selected."
+      );
+    }
+  }
+
+  function updateBeginnerUI() {
+    if (!rabbitFlow) {
+      return;
+    }
+
+    rabbitFlow.classList.toggle("track-minimal", state.fastTrack === "minimal");
+    if (fastTrackToggle) {
+      fastTrackToggle.checked = state.fastTrack === "minimal";
+    }
+    if (fastTrackStatus) {
+      fastTrackStatus.textContent = state.fastTrack === "minimal"
+        ? "Fast Track hides the longer notes and common mistakes."
+        : "Guided mode keeps notes, common mistakes, and extra context visible.";
+    }
+    stepSections.forEach(function (section, index) {
+      section.classList.toggle("is-active", index === state.currentStep);
+      section.classList.toggle("is-complete", index < state.currentStep);
+      section.classList.remove("is-locked");
+    });
+    progressButtons.forEach(function (button, index) {
+      button.classList.toggle("is-active", index === state.currentStep);
+      button.classList.toggle("is-complete", index < state.currentStep);
+      if (index === state.currentStep) {
+        button.setAttribute("aria-current", "step");
+      } else {
+        button.removeAttribute("aria-current");
+      }
+    });
+
+  }
+
+  function getTagFacets() {
+    var counts = {};
+
+    explorerItems.forEach(function (item) {
+      (item.__tags || getItemTags(item)).forEach(function (tag) {
+        counts[tag] = (counts[tag] || 0) + 1;
+      });
+    });
+
+    return Object.keys(counts).sort(function (left, right) {
+      return titleCaseTag(left).localeCompare(titleCaseTag(right), undefined, { sensitivity: "base" })
+        || left.localeCompare(right);
+    }).map(function (tag) {
+      return {
+        tag: tag,
+        label: titleCaseTag(tag),
+        count: counts[tag]
+      };
+    });
+  }
+
+  function updateTagPillState() {
+    var activeTags = normalizeTagSelection(state.activeTags);
+
+    tagPills.forEach(function (pill) {
+      var tag = pill.getAttribute("data-tag");
+      var isAll = tag === "all";
+      var isActive = isAll ? activeTags.length === 0 : activeTags.indexOf(tag) !== -1;
+
+      pill.classList.toggle("is-active", isActive);
+      pill.setAttribute("aria-pressed", isActive ? "true" : "false");
+    });
+  }
+
+  function renderTagPills() {
+    if (!tagPillsMount) {
+      return;
+    }
+
+    tagPillsMount.innerHTML = [
+      '<button type="button" class="tag-pill is-active" data-tag="all" aria-pressed="true">All <span class="tag-pill-count">', explorerItems.length, "</span></button>"
+    ].concat(getTagFacets().map(function (facet) {
+      return [
+        '<button type="button" class="tag-pill" data-tag="', escapeAttribute(facet.tag), '" aria-pressed="false">',
+        escapeHtml(facet.label),
+        ' <span class="tag-pill-count">',
+        facet.count,
+        "</span>",
+        "</button>"
+      ].join("");
+    })).join("");
+
+    tagPills = Array.from(tagPillsMount.querySelectorAll(".tag-pill"));
+    updateTagPillState();
+  }
+
+  function buildExplorerSearchEntry(item) {
+    return createSearchEntry({
+      id: item.id,
+      typeLabel: "Cheatsheet",
+      title: item.title,
+      summary: item.short || item.description || "",
+      path: "Cheatsheet / " + item.title,
+      sourceHref: item.sourceHref || "",
+      steps: item.steps,
+      checkpoints: item.checkpoints,
+      watchFor: item.watchFor,
+      snippet: item.snippet,
+      exampleFields: item.exampleFields,
+      resourceLinks: item.resourceLinks,
+      milestones: item.milestones,
+      tags: item.tags,
+      keywords: item.keywords
+    });
+  }
+
+  function itemUpdatedTime(item) {
+    var time = Date.parse(item.updatedAt || "");
+    return Number.isFinite(time) ? time : 0;
+  }
+
+  function compareExplorerTitle(left, right) {
+    return String(left.item.title || "").localeCompare(String(right.item.title || ""), undefined, {
+      sensitivity: "base"
+    });
+  }
+
+  function explorerTopic(entry) {
+    var tags = entry.item.__tags || getItemTags(entry.item);
+    return tags[0] || "other";
+  }
+
+  function compareExplorerTopic(left, right) {
+    var leftTopic = explorerTopic(left);
+    var rightTopic = explorerTopic(right);
+    var topicComparison = leftTopic.localeCompare(rightTopic, undefined, {
+      sensitivity: "base"
+    });
+
+    return topicComparison || compareExplorerTitle(left, right);
+  }
+
+  function recommendedIndexForEntry(entry) {
+    var id = entry && entry.item ? entry.item.id : "";
+    return Object.prototype.hasOwnProperty.call(recommendedCheatsheetOrderMap, id)
+      ? recommendedCheatsheetOrderMap[id]
+      : Number.MAX_SAFE_INTEGER;
+  }
+
+  function compareExplorerRelevance(left, right) {
+    if (recommendedIndexForEntry(left) !== recommendedIndexForEntry(right)) {
+      return recommendedIndexForEntry(left) - recommendedIndexForEntry(right);
+    }
+
+    if (left.item.__sourceOrder !== right.item.__sourceOrder) {
+      return left.item.__sourceOrder - right.item.__sourceOrder;
+    }
+
+    return compareExplorerTitle(left, right);
+  }
+
+  function sortExplorerEntries(entries, query) {
+    var mode = normalizeToolkitSort(state.toolkitSort);
+
+    return entries.slice().sort(function (left, right) {
+      if (mode === "relevance") {
+        if (right.score !== left.score) {
+          return right.score - left.score;
+        }
+        return compareExplorerRelevance(left, right);
+      }
+
+      if (mode === "latest") {
+        if (right.updatedTime !== left.updatedTime) {
+          return right.updatedTime - left.updatedTime;
+        }
+        return compareExplorerTitle(left, right);
+      }
+
+      if (mode === "topic") {
+        return compareExplorerTopic(left, right);
+      }
+
+      return compareExplorerTitle(left, right);
+    });
+  }
+
+  function renderExplorerMeta(entry) {
+    var bits = [];
+
+    if ((state.toolkitSort || "") === "relevance" && state.toolkitQuery.trim()) {
+      bits.push("Match " + entry.score);
+    }
+
+    if (!bits.length) {
+      return "";
+    }
+
+    return '<span class="bubble-meta">' + bits.map(function (bit) {
+      return '<span>' + escapeHtml(bit) + "</span>";
+    }).join("") + "</span>";
+  }
+
+  function currentSortLabel() {
+    var sortLabels = {
+      alphabetical: "Alphabetical",
+      latest: "Latest",
+      relevance: state.toolkitQuery.trim() ? "Best match" : "Recommended",
+      topic: "Topic"
+    };
+
+    return sortLabels[normalizeToolkitSort(state.toolkitSort)] || sortLabels.alphabetical;
+  }
+
+  function updateExplorerSummary(count) {
+    var tagText;
+    var queryText = state.toolkitQuery.trim();
+    var activeTags = normalizeTagSelection(state.activeTags);
+
+    if (resultCount) {
+      resultCount.textContent = "Showing " + count + " of " + explorerItems.length + " cheatsheet card" + (count === 1 ? "" : "s");
+    }
+
+    if (!filterSummary) {
+      return;
+    }
+
+    tagText = activeTags.length ? "Filter: " + titleCaseTag(activeTags[0]) : "All topics";
+    filterSummary.textContent = currentSortLabel() + " sort. " + tagText + (queryText ? '. Query: "' + queryText + '"' : ".");
+  }
+
+  function renderExplorerCard(entry) {
+    var item = entry.item;
+    var itemTags = item.__tags || getItemTags(item);
+    var tagLabel = itemTags.map(titleCaseTag).join(", ");
+
+    return [
+      '<div class="col bubble-item" data-bubble-id="', item.id, '">',
+      '  <button type="button" class="bubble-button" data-open-bubble="', item.id, '" data-accent="red" aria-label="Open ', escapeHtml(item.title), ' details">',
+      '    <span class="bubble-badge" aria-label="Tags: ', escapeAttribute(tagLabel), '">', escapeHtml(tagLabel), "</span>",
+      '    <span class="bubble-title">', escapeHtml(item.title), "</span>",
+      '    <span class="bubble-text">', escapeHtml(item.short), "</span>",
+      renderExplorerMeta(entry),
+      "  </button>",
+      "</div>"
+    ].join("");
+  }
+
+  function renderExplorerTopicGroups(entries) {
+    var groups = [];
+
+    entries.forEach(function (entry) {
+      var topic = explorerTopic(entry);
+      var group = groups[groups.length - 1];
+
+      if (!group || group.topic !== topic) {
+        group = {
+          topic: topic,
+          entries: []
+        };
+        groups.push(group);
+      }
+
+      group.entries.push(entry);
+    });
+
+    return groups.map(function (group) {
+      var headingId = "cheatsheet-topic-" + group.topic.replace(/[^a-z0-9-]+/g, "-");
+      var countLabel = group.entries.length === 1 ? "1 card" : group.entries.length + " cards";
+
+      return [
+        '<section class="col-12 cheatsheet-topic-group" aria-labelledby="', headingId, '" data-topic="', escapeHtml(group.topic), '">',
+        '  <div class="cheatsheet-topic-heading">',
+        '    <h3 id="', headingId, '">', escapeHtml(titleCaseTag(group.topic)), "</h3>",
+        '    <span>', countLabel, "</span>",
+        "  </div>",
+        '  <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4">',
+        group.entries.map(renderExplorerCard).join(""),
+        "  </div>",
+        "</section>"
+      ].join("");
+    }).join("");
+  }
+
+  function renderExplorer() {
+    if (!bubbleGrid || !emptyState) {
+      return;
+    }
+
+    var query = state.toolkitQuery.trim();
+    var selectedTags = normalizeTagSelection(state.activeTags);
+    var selectedTag = selectedTags[0] || "";
+    var scoredEntries = explorerItems.map(function (item) {
+      var searchEntry = buildExplorerSearchEntry(item);
+      var itemTags = item.__tags || getItemTags(item);
+
+      return {
+        item: item,
+        directScore: query ? scoreSearchEntry(searchEntry, query, false) : 0,
+        expandedScore: query ? scoreSearchEntry(searchEntry, query, true) : 0,
+        updatedTime: itemUpdatedTime(item),
+        matchesTag: !selectedTag || itemTags.indexOf(selectedTag) !== -1
+      };
+    });
+    var hasDirectMatch = !!query && scoredEntries.some(function (entry) {
+      return entry.directScore >= 14;
+    });
+    var visibleEntries = scoredEntries.map(function (entry) {
+      entry.score = hasDirectMatch ? entry.directScore : entry.expandedScore;
+      entry.matchesQuery = !query || entry.score >= 14;
+      return entry;
+    }).filter(function (entry) {
+      return entry.matchesQuery && entry.matchesTag;
+    });
+
+    visibleEntries = sortExplorerEntries(visibleEntries, query);
+
+    bubbleGrid.classList.toggle("is-topic-grouped", state.toolkitSort === "topic");
+    bubbleGrid.innerHTML = state.toolkitSort === "topic"
+      ? renderExplorerTopicGroups(visibleEntries)
+      : visibleEntries.map(renderExplorerCard).join("");
+
+    updateExplorerSummary(visibleEntries.length);
+    emptyState.classList.toggle("d-none", visibleEntries.length !== 0);
+  }
+
+  function setActiveTag(tag, options) {
+    var config = Object.assign({
+      hash: true,
+      replaceHistory: false
+    }, options || {});
+    var normalized = normalizeTagValue(tag);
+
+    if (normalized === "all") {
+      state.activeTags = [];
+    } else {
+      state.activeTags = [normalized];
+    }
+
+    state.activeTag = state.activeTags[0] || "all";
+    updateTagPillState();
+    renderExplorer();
+    if (config.hash) {
+      updateHashFromState({ replace: config.replaceHistory });
+    }
+    setLiveMessage(normalized === "all"
+      ? "Showing all Cheatsheet cards."
+      : "Filtering Cheatsheet cards by " + titleCaseTag(normalized) + ".");
+  }
+
+  function fillList(id, items) {
+    document.getElementById(id).innerHTML = (items || []).map(function (entry) {
+      return "<li>" + escapeHtml(entry) + "</li>";
+    }).join("");
+  }
+
+  function setGeneratorState(emptyNode, loadingNode, errorNode, isEmpty, isLoading, errorMessage) {
+    if (emptyNode) {
+      emptyNode.classList.toggle("d-none", !isEmpty);
+    }
+    if (loadingNode) {
+      loadingNode.classList.toggle("d-none", !isLoading);
+    }
+    if (errorNode) {
+      errorNode.textContent = errorMessage || "";
+      errorNode.classList.toggle("d-none", !errorMessage);
+    }
+  }
+
+  function renderGeneratedExampleFields(fields) {
+    if (!wmsExampleResults) {
+      return;
+    }
+
+    if (!fields || !fields.length) {
+      wmsExampleResults.innerHTML = "";
+      wmsExampleResults.classList.add("d-none");
+      return;
+    }
+
+    function fieldGroup(label) {
+      if (label === "Workshop Title" || label.indexOf("Description") !== -1) {
+        return "Core workshop fields";
+      }
+      if (label === "Workshop Abstract" || label === "Workshop Outline" || label === "Workshop Prerequisites") {
+        return "WMS review fields";
+      }
+      return "Optional notes";
+    }
+
+    var rows = [];
+    var activeGroup = "";
+    (fields || []).forEach(function (field, index) {
+      var group = fieldGroup(field.label || "");
+      var targetId = "wms-example-field-" + index;
+
+      if (group !== activeGroup) {
+        rows.push('<tr class="generated-example-group-row"><th colspan="3" scope="colgroup">' + escapeHtml(group) + "</th></tr>");
+        activeGroup = group;
+      }
+
+      rows.push([
+        '<tr class="generated-example-row">',
+        '  <th scope="row" class="generated-example-label">', escapeHtml(field.label), "</th>",
+        '  <td><pre class="generated-example-pre"><code id="', targetId, '">', escapeHtml(field.value), "</code></pre></td>",
+        '  <td class="generated-example-action"><button class="copy-snippet generated-example-copy" type="button" data-copy-target="', targetId, '">Copy</button></td>',
+        "</tr>"
+      ].join(""));
+    });
+
+    wmsExampleResults.classList.remove("d-none");
+    wmsExampleResults.innerHTML = [
+      '<div class="generated-example-table-wrap">',
+      '  <table class="generated-example-table">',
+      '    <caption>Generated WMS field examples</caption>',
+      '    <thead><tr><th scope="col">Field</th><th scope="col">Example</th><th scope="col">Action</th></tr></thead>',
+      '    <tbody>', rows.join(""), "</tbody>",
+      "  </table>",
+      "</div>"
+    ].join("");
+  }
+
+  function runWmsExampleGeneration() {
+    var prompt = wmsExamplePrompt ? wmsExamplePrompt.value.trim() : "";
+    var service = window.AuthorGuideWorkshopGenerator;
+
+    if (!prompt) {
+      renderGeneratedExampleFields([]);
+      setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Enter a workshop topic before generating examples.");
+      return;
+    }
+
+    if (!service || typeof service.generateExamples !== "function") {
+      setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Example generation is unavailable right now.");
+      return;
+    }
+
+    setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, true, "");
+    window.setTimeout(function () {
+      try {
+        renderGeneratedExampleFields(service.generateExamples(prompt).fields);
+        setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "");
+        setLiveMessage("WMS field examples generated.");
+      } catch (error) {
+        renderGeneratedExampleFields([]);
+        setGeneratorState(wmsExampleEmpty, wmsExampleLoading, wmsExampleError, false, false, "Examples could not be generated. Try a shorter prompt.");
+      }
+    }, 180);
+  }
+
+  function validateWmsExamplePrompt() {
+    var prompt = wmsExamplePrompt ? wmsExamplePrompt.value.trim() : "";
+    var message = "";
+
+    if (!prompt) {
+      message = "Enter a workshop idea before generating examples.";
+    } else if (prompt.length < wmsExamplePromptMinLength) {
+      message = "Add more detail: include the audience, outcome, and Oracle products.";
+    } else if (prompt.length > wmsExamplePromptMaxLength) {
+      message = "Shorten the workshop idea to 320 characters or fewer.";
+    }
+
+    if (wmsExamplePrompt) {
+      wmsExamplePrompt.setCustomValidity(message);
+      wmsExamplePrompt.setAttribute("aria-invalid", message ? "true" : "false");
+    }
+    if (wmsExamplePromptCount) {
+      wmsExamplePromptCount.textContent = String((wmsExamplePrompt ? wmsExamplePrompt.value.length : 0)) + " / " + wmsExamplePromptMaxLength;
+    }
+    return message;
+  }
+
+  function setMarkdownOutput(value) {
+    generatedMarkdownText = String(value || "");
+    if (workshopMarkdownOutput) {
+      workshopMarkdownOutput.textContent = generatedMarkdownText;
+      if (workshopMarkdownOutput.parentElement) {
+        workshopMarkdownOutput.parentElement.classList.toggle("d-none", !generatedMarkdownText);
+      }
+    }
+    if (copyGeneratedMarkdown) {
+      copyGeneratedMarkdown.disabled = !generatedMarkdownText;
+    }
+  }
+
+  function runMarkdownGeneration() {
+    var prompt = workshopMarkdownPrompt ? workshopMarkdownPrompt.value.trim() : "";
+    var type = workshopMarkdownType ? workshopMarkdownType.value : "all";
+    var service = window.AuthorGuideWorkshopGenerator;
+    var snippet;
+
+    if (!service || typeof service.generateSnippet !== "function") {
+      setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "Markdown generation is unavailable right now.");
+      return;
+    }
+
+    setMarkdownOutput("");
+    setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, true, "");
+    window.setTimeout(function () {
+      try {
+        snippet = service.generateSnippet(type, prompt);
+        if (snippet.requiresPrompt && !prompt) {
+          setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "Enter a workshop topic before generating an outline.");
+          return;
+        }
+        setMarkdownOutput(snippet.body);
+        if (workshopMarkdownSummary) {
+          workshopMarkdownSummary.innerHTML = [
+            '<span class="generator-summary-row"><strong>Use case</strong><span>' + escapeHtml(snippet.summary) + "</span></span>",
+            '<span class="generator-summary-row"><strong>Source</strong><span>' + escapeHtml(snippet.source) + "</span></span>"
+          ].join("");
+        }
+        if (generatorOutputMeta) {
+          generatorOutputMeta.textContent = snippet.group + " / " + snippet.source;
+        }
+        setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "");
+        setLiveMessage("Workshop snippet generated.");
+      } catch (error) {
+        setMarkdownOutput("");
+        setGeneratorState(workshopMarkdownEmpty, workshopMarkdownLoading, workshopMarkdownError, false, false, "Snippet could not be generated. Try a different option.");
+      }
+    }, 180);
+  }
+
+  function createWmsStatusSvgElement(name, attrs) {
+    var element = document.createElementNS("http://www.w3.org/2000/svg", name);
+
+    Object.keys(attrs || {}).forEach(function (key) {
+      element.setAttribute(key, attrs[key]);
+    });
+
+    return element;
+  }
+
+  function wmsStatusBoundaryPoint(box, toward) {
+    var dx = toward.x - box.x;
+    var dy = toward.y - box.y;
+    var scale = Math.min(Math.abs(wmsStatusNodeHalfWidth / (dx || 0.0001)), Math.abs(wmsStatusNodeHalfHeight / (dy || 0.0001)));
+
+    return { x: box.x + dx * scale, y: box.y + dy * scale };
+  }
+
+  function wmsStatusEdgePath(from, to, type) {
+    var start = wmsStatusBoundaryPoint(from, to);
+    var end = wmsStatusBoundaryPoint(to, from);
+    var dx;
+    var dy;
+    var curve;
+    var mx;
+    var my;
+    var nx;
+    var ny;
+
+    if (type === "alt") {
+      dx = end.x - start.x;
+      dy = end.y - start.y;
+      curve = Math.max(80, Math.hypot(dx, dy) * 0.35);
+      mx = (start.x + end.x) / 2;
+      my = (start.y + end.y) / 2;
+      nx = -dy / Math.max(1, Math.hypot(dx, dy));
+      ny = dx / Math.max(1, Math.hypot(dx, dy));
+      return "M " + start.x + " " + start.y + " Q " + (mx + nx * curve) + " " + (my + ny * curve) + " " + end.x + " " + end.y;
+    }
+
+    return "M " + start.x + " " + start.y + " L " + end.x + " " + end.y;
+  }
+
+  function wmsStatusTransitionMidpoint(transition) {
+    var from = wmsStatusGraphNodeMap[transition.from];
+    var to = wmsStatusGraphNodeMap[transition.to];
+
+    if (Number.isFinite(transition.labelX) && Number.isFinite(transition.labelY)) {
+      return { x: transition.labelX, y: transition.labelY };
+    }
+
+    return {
+      x: (from.x + to.x) / 2,
+      y: (from.y + to.y) / 2 - (transition.type === "alt" ? 18 : 10)
+    };
+  }
+
+  function wmsStatusEdgeLabelWidth(label) {
+    return Math.max(54, Math.min(128, String(label || "").length * 7 + 18));
+  }
+
+  function setWmsStatusGraphViewBox(svg, box) {
+    var target = box || wmsStatusGraphViewBox;
+
+    svg.setAttribute("viewBox", target.x + " " + target.y + " " + target.width + " " + target.height);
+  }
+
+  function normalizeWmsStatusGraphZoom(value) {
+    var zoom = Number(value);
+
+    return wmsStatusGraphZoomLevels.indexOf(zoom) !== -1 ? zoom : null;
+  }
+
+  function getRenderedWmsStatusGraphZoom(graph) {
+    var svg = graph && graph.querySelector("[data-wms-status-svg]");
+    var renderedWidth = svg ? svg.getBoundingClientRect().width : 0;
+
+    return renderedWidth > 0 ? renderedWidth / wmsStatusGraphViewBox.width * 100 : 100;
+  }
+
+  function findDirectionalWmsStatusGraphZoom(current, direction) {
+    var tolerance = 0.05;
+    var index;
+
+    if (direction > 0) {
+      for (index = 0; index < wmsStatusGraphZoomLevels.length; index += 1) {
+        if (wmsStatusGraphZoomLevels[index] > current + tolerance) {
+          return wmsStatusGraphZoomLevels[index];
+        }
+      }
+    } else {
+      for (index = wmsStatusGraphZoomLevels.length - 1; index >= 0; index -= 1) {
+        if (wmsStatusGraphZoomLevels[index] < current - tolerance) {
+          return wmsStatusGraphZoomLevels[index];
+        }
+      }
+    }
+
+    return null;
+  }
+
+  function captureWmsStatusGraphViewport(stage) {
+    if (!stage || !stage.scrollWidth || !stage.scrollHeight) {
+      return null;
+    }
+
+    return {
+      x: (stage.scrollLeft + stage.clientWidth / 2) / stage.scrollWidth,
+      y: (stage.scrollTop + stage.clientHeight / 2) / stage.scrollHeight
+    };
+  }
+
+  function restoreWmsStatusGraphViewport(stage, viewport, resetScroll) {
+    var restore;
+
+    if (!stage) {
+      return;
+    }
+
+    restore = function () {
+      if (resetScroll) {
+        stage.scrollLeft = 0;
+        stage.scrollTop = 0;
+        return;
+      }
+
+      if (!viewport) {
+        return;
+      }
+
+      stage.scrollLeft = Math.max(0, viewport.x * stage.scrollWidth - stage.clientWidth / 2);
+      stage.scrollTop = Math.max(0, viewport.y * stage.scrollHeight - stage.clientHeight / 2);
+    };
+
+    if (typeof window.requestAnimationFrame === "function") {
+      window.requestAnimationFrame(restore);
+    } else {
+      restore();
+    }
+  }
+
+  function syncWmsStatusGraphZoomControls(graph) {
+    var value = graph.getAttribute("data-wms-status-zoom") || "100";
+    var isFit = value === "fit";
+    var zoom = normalizeWmsStatusGraphZoom(value);
+    var effectiveZoom;
+    var select = graph.querySelector("[data-wms-status-zoom-select]");
+    var zoomOut = graph.querySelector('[data-wms-status-action="zoom-out"]');
+    var zoomIn = graph.querySelector('[data-wms-status-action="zoom-in"]');
+
+    if (!isFit && zoom === null) {
+      zoom = 100;
+      value = "100";
+      graph.setAttribute("data-wms-status-zoom", value);
+    }
+
+    effectiveZoom = isFit ? getRenderedWmsStatusGraphZoom(graph) : zoom;
+
+    if (select) {
+      select.value = isFit ? "fit" : String(zoom);
+    }
+    if (zoomOut) {
+      zoomOut.disabled = findDirectionalWmsStatusGraphZoom(effectiveZoom, -1) === null;
+    }
+    if (zoomIn) {
+      zoomIn.disabled = findDirectionalWmsStatusGraphZoom(effectiveZoom, 1) === null;
+    }
+  }
+
+  function setWmsStatusGraphZoom(graph, value, options) {
+    var settings = options || {};
+    var isFit = String(value) === "fit";
+    var zoom = isFit ? null : normalizeWmsStatusGraphZoom(value);
+    var stage;
+    var svg;
+    var viewport;
+
+    if (!graph || (!isFit && zoom === null)) {
+      return false;
+    }
+
+    stage = graph.querySelector(".wms-status-graph-stage");
+    svg = graph.querySelector("[data-wms-status-svg]");
+    viewport = settings.preserveFocus === false ? null : captureWmsStatusGraphViewport(stage);
+
+    if (svg) {
+      setWmsStatusGraphViewBox(svg);
+    }
+
+    graph.setAttribute("data-wms-status-zoom", isFit ? "fit" : String(zoom));
+    syncWmsStatusGraphZoomControls(graph);
+    restoreWmsStatusGraphViewport(stage, viewport, settings.resetScroll === true);
+
+    if (settings.announce !== false) {
+      setLiveMessage(isFit ? "Status graph fitted to the viewport." : "Status graph zoom set to " + zoom + " percent.");
+    }
+
+    return true;
+  }
+
+  function stepWmsStatusGraphZoom(graph, direction) {
+    var value = graph.getAttribute("data-wms-status-zoom");
+    var current = value === "fit" ? getRenderedWmsStatusGraphZoom(graph) : normalizeWmsStatusGraphZoom(value);
+    var nextZoom;
+
+    if (current === null) {
+      return;
+    }
+
+    nextZoom = findDirectionalWmsStatusGraphZoom(current, direction);
+    if (nextZoom !== null) {
+      setWmsStatusGraphZoom(graph, nextZoom);
+    }
+  }
+
+  function defineWmsStatusMarkers(svg, graphId) {
+    var defs = createWmsStatusSvgElement("defs");
+    var normalMarker = createWmsStatusSvgElement("marker", {
+      id: graphId + "-arrow-normal",
+      viewBox: "0 -5 10 10",
+      refX: "10",
+      refY: "0",
+      markerWidth: "7",
+      markerHeight: "7",
+      orient: "auto"
+    });
+    var altMarker = createWmsStatusSvgElement("marker", {
+      id: graphId + "-arrow-alt",
+      viewBox: "0 -5 10 10",
+      refX: "10",
+      refY: "0",
+      markerWidth: "7",
+      markerHeight: "7",
+      orient: "auto"
+    });
+
+    normalMarker.appendChild(createWmsStatusSvgElement("path", { d: "M0,-5L10,0L0,5", fill: "#7c8794" }));
+    altMarker.appendChild(createWmsStatusSvgElement("path", { d: "M0,-5L10,0L0,5", fill: "#a16207" }));
+    defs.appendChild(normalMarker);
+    defs.appendChild(altMarker);
+    svg.appendChild(defs);
+  }
+
+  function renderWmsStatusList(list, items) {
+    if (!list) {
+      return;
+    }
+
+    list.innerHTML = "";
+    items.forEach(function (item) {
+      var li = document.createElement("li");
+      li.textContent = item;
+      list.appendChild(li);
+    });
+  }
+
+  function updateWmsStatusGraphDetails(graph, status) {
+    var outgoing = wmsStatusGraphTransitions.filter(function (transition) {
+      return transition.from === status.id;
+    });
+    var title = graph.querySelector("[data-wms-status-title]");
+    var group = graph.querySelector("[data-wms-status-group]");
+    var responsible = graph.querySelector("[data-wms-status-responsible]");
+    var meaning = graph.querySelector("[data-wms-status-meaning]");
+    var nextStep = graph.querySelector("[data-wms-status-next]");
+    var checklist = graph.querySelector("[data-wms-status-checklist]");
+    var transitionList = graph.querySelector("[data-wms-status-transitions]");
+
+    if (title) {
+      title.textContent = status.label;
+    }
+    if (group) {
+      group.textContent = status.group;
+    }
+    if (responsible) {
+      responsible.textContent = status.responsible;
+    }
+    if (meaning) {
+      meaning.textContent = status.meaning;
+    }
+    if (nextStep) {
+      nextStep.textContent = status.nextStep;
+    }
+
+    renderWmsStatusList(checklist, status.checks);
+    renderWmsStatusList(transitionList, outgoing.length ? outgoing.map(function (transition) {
+      return wmsStatusGraphNodeMap[transition.to].label + ": " + transition.label;
+    }) : ["No outgoing transition configured."]);
+  }
+
+  function applyWmsStatusGraphHighlights(graph) {
+    var selectedStatusId = graph.getAttribute("data-selected-status") || "";
+    var highlightedPath = (graph.getAttribute("data-highlighted-path") || "").split(",").filter(Boolean);
+    var connected = {};
+    var pathNodes = {};
+    var pathEdges = {};
+
+    if (selectedStatusId) {
+      connected[selectedStatusId] = true;
+      wmsStatusGraphTransitions.forEach(function (transition) {
+        if (transition.from === selectedStatusId || transition.to === selectedStatusId) {
+          connected[transition.from] = true;
+          connected[transition.to] = true;
+        }
+      });
+    }
+
+    highlightedPath.forEach(function (id, index) {
+      pathNodes[id] = true;
+      if (highlightedPath[index + 1]) {
+        pathEdges[id + "->" + highlightedPath[index + 1]] = true;
+      }
+    });
+
+    graph.querySelectorAll(".wms-status-node").forEach(function (node) {
+      var id = node.getAttribute("data-status-id");
+      var isSelected = id === selectedStatusId || !!pathNodes[id];
+      var shouldDim = selectedStatusId ? !connected[id] : highlightedPath.length ? !pathNodes[id] : false;
+
+      node.classList.toggle("is-selected", isSelected);
+      node.classList.toggle("is-dimmed", shouldDim);
+      node.setAttribute("aria-pressed", isSelected ? "true" : "false");
+    });
+
+    graph.querySelectorAll(".wms-status-edge").forEach(function (edge) {
+      var edgeKey = edge.getAttribute("data-from") + "->" + edge.getAttribute("data-to");
+      var selectedEdge = selectedStatusId && (edge.getAttribute("data-from") === selectedStatusId || edge.getAttribute("data-to") === selectedStatusId);
+      var pathEdge = !!pathEdges[edgeKey];
+      var shouldDim = selectedStatusId ? !selectedEdge : highlightedPath.length ? !pathEdge : false;
+
+      edge.classList.toggle("is-dimmed", shouldDim);
+      edge.classList.toggle("is-selected", selectedEdge || pathEdge);
+    });
+
+    graph.querySelectorAll(".wms-status-edge-label, .wms-status-edge-label-bg").forEach(function (label) {
+      var edgeKey = label.getAttribute("data-from") + "->" + label.getAttribute("data-to");
+      var selectedEdge = selectedStatusId && (label.getAttribute("data-from") === selectedStatusId || label.getAttribute("data-to") === selectedStatusId);
+      var pathEdge = !!pathEdges[edgeKey];
+      var shouldDim = selectedStatusId ? !selectedEdge : highlightedPath.length ? !pathEdge : false;
+
+      label.classList.toggle("is-dimmed", shouldDim);
+    });
+  }
+
+  function selectWmsStatusGraphNode(graph, id, options) {
+    var settings = options || {};
+    var status = wmsStatusGraphNodeMap[id];
+
+    if (!graph || !status) {
+      return;
+    }
+
+    graph.setAttribute("data-selected-status", id);
+    graph.removeAttribute("data-highlighted-path");
+    updateWmsStatusGraphDetails(graph, status);
+    applyWmsStatusGraphHighlights(graph);
+    if (settings.announce !== false) {
+      setLiveMessage(status.label + " status selected.");
+    }
+  }
+
+  function highlightWmsStatusGraphPath(graph, ids, label) {
+    graph.removeAttribute("data-selected-status");
+    graph.setAttribute("data-highlighted-path", ids.join(","));
+    updateWmsStatusGraphDetails(graph, wmsStatusGraphNodeMap[ids[0]] || wmsStatusGraphStatuses[0]);
+    applyWmsStatusGraphHighlights(graph);
+    setLiveMessage((label || "Status path") + " highlighted.");
+  }
+
+  function resetWmsStatusGraph(graph) {
+    if (!graph) {
+      return;
+    }
+
+    setWmsStatusGraphZoom(graph, 100, {
+      announce: false,
+      preserveFocus: false,
+      resetScroll: true
+    });
+    graph.removeAttribute("data-highlighted-path");
+    selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted", { announce: false });
+    setLiveMessage("Status graph reset to 100 percent.");
+  }
+
+  function fitWmsStatusGraph(graph) {
+    if (setWmsStatusGraphZoom(graph, "fit", { announce: false })) {
+      setLiveMessage("Status graph fitted to the viewport.");
+    }
+  }
+
+  function renderWmsStatusGraph(graph, index) {
+    var svg = graph.querySelector("[data-wms-status-svg]");
+    var graphId = "wms-status-graph-" + index;
+    var edgeLayer = createWmsStatusSvgElement("g", { class: "wms-status-edges" });
+    var labelLayer = createWmsStatusSvgElement("g", { class: "wms-status-edge-labels" });
+    var nodeLayer = createWmsStatusSvgElement("g", { class: "wms-status-nodes" });
+
+    if (!svg) {
+      return;
+    }
+
+    svg.innerHTML = "";
+    setWmsStatusGraphViewBox(svg);
+    defineWmsStatusMarkers(svg, graphId);
+    svg.appendChild(createWmsStatusSvgElement("title", { id: graphId + "-title" })).textContent = "LiveLabs workshop status workflow graph";
+    svg.appendChild(createWmsStatusSvgElement("desc", { id: graphId + "-desc" })).textContent = "A clickable graph showing submitted, approval, development, self QA, completed, publish request, and quarterly QA statuses.";
+    svg.setAttribute("role", "group");
+    svg.setAttribute("aria-labelledby", graphId + "-title " + graphId + "-desc");
+
+    wmsStatusGraphTransitions.forEach(function (transition) {
+      var from = wmsStatusGraphNodeMap[transition.from];
+      var to = wmsStatusGraphNodeMap[transition.to];
+      var path = createWmsStatusSvgElement("path", {
+        class: "wms-status-edge" + (transition.type === "alt" ? " is-return-path" : transition.type === "publish" ? " is-publish-request" : ""),
+        d: wmsStatusEdgePath(from, to, transition.type),
+        "data-from": transition.from,
+        "data-to": transition.to,
+        "marker-end": "url(#" + graphId + (transition.type === "alt" ? "-arrow-alt" : "-arrow-normal") + ")"
+      });
+      var midpoint = wmsStatusTransitionMidpoint(transition);
+      var labelWidth = wmsStatusEdgeLabelWidth(transition.label);
+      var labelBackground = createWmsStatusSvgElement("rect", {
+        class: "wms-status-edge-label-bg",
+        x: midpoint.x - labelWidth / 2,
+        y: midpoint.y - 12,
+        width: labelWidth,
+        height: 24,
+        rx: 8,
+        "data-from": transition.from,
+        "data-to": transition.to
+      });
+      var text = createWmsStatusSvgElement("text", {
+        class: "wms-status-edge-label",
+        x: midpoint.x,
+        y: midpoint.y,
+        "text-anchor": "middle",
+        "dominant-baseline": "middle",
+        "data-from": transition.from,
+        "data-to": transition.to
+      });
+
+      text.textContent = transition.label;
+      edgeLayer.appendChild(path);
+      labelLayer.appendChild(labelBackground);
+      labelLayer.appendChild(text);
+    });
+
+    wmsStatusGraphStatuses.forEach(function (status) {
+      var group = createWmsStatusSvgElement("g", {
+        class: "wms-status-node",
+        tabindex: "0",
+        role: "button",
+        "aria-pressed": "false",
+        "aria-label": status.label + " status",
+        transform: "translate(" + status.x + "," + status.y + ")",
+        "data-status-id": status.id
+      });
+      var rect = createWmsStatusSvgElement("rect", {
+        x: -wmsStatusNodeHalfWidth,
+        y: -wmsStatusNodeHalfHeight,
+        width: wmsStatusNodeHalfWidth * 2,
+        height: wmsStatusNodeHalfHeight * 2,
+        rx: "8",
+        fill: status.color
+      });
+      var label = createWmsStatusSvgElement("text", { x: "0", y: "-5", "text-anchor": "middle" });
+      var subtext = createWmsStatusSvgElement("text", { x: "0", y: "16", "text-anchor": "middle", class: "wms-status-node-subtext" });
+
+      label.textContent = status.label;
+      subtext.textContent = status.group;
+      group.appendChild(rect);
+      group.appendChild(label);
+      group.appendChild(subtext);
+      nodeLayer.appendChild(group);
+    });
+
+    svg.appendChild(edgeLayer);
+    svg.appendChild(labelLayer);
+    svg.appendChild(nodeLayer);
+    setWmsStatusGraphZoom(graph, graph.getAttribute("data-wms-status-zoom") || 100, { announce: false, preserveFocus: false });
+    selectWmsStatusGraphNode(graph, graph.getAttribute("data-default-status") || "submitted");
+  }
+
+  function initWmsStatusGraphs() {
+    document.querySelectorAll("[data-wms-status-graph]").forEach(function (graph, index) {
+      var zoomSelect;
+
+      renderWmsStatusGraph(graph, index + 1);
+      zoomSelect = graph.querySelector("[data-wms-status-zoom-select]");
+
+      if (zoomSelect) {
+        zoomSelect.addEventListener("change", function (event) {
+          if (event.target.value === "fit") {
+            fitWmsStatusGraph(graph);
+          } else {
+            setWmsStatusGraphZoom(graph, event.target.value);
+          }
+        });
+      }
+    });
+  }
+
+  function syncMarkdownSnippetSummary() {
+    var service = window.AuthorGuideWorkshopGenerator;
+    var type = workshopMarkdownType ? workshopMarkdownType.value : "";
+    var item;
+
+    if (!workshopMarkdownSummary || !service || typeof service.getSnippetCatalog !== "function") {
+      return;
+    }
+
+    item = service.getSnippetCatalog().find(function (candidate) {
+      return candidate.id === type;
+    });
+
+    if (!item) {
+      workshopMarkdownSummary.textContent = "Select a snippet and generate it here.";
+      return;
+    }
+
+    workshopMarkdownSummary.innerHTML = [
+      '<span class="generator-summary-row"><strong>Use case</strong><span>' + escapeHtml(item.summary) + "</span></span>",
+      '<span class="generator-summary-row"><strong>Source</strong><span>' + escapeHtml(item.source) + "</span></span>"
+    ].join("");
+  }
+
+  function decorateExpandableMedia(root) {
+    if (!root) {
+      return;
+    }
+
+    root.querySelectorAll(".step-figure, .guide-figure, .modal-media-figure, .evidence-figure, .inline-evidence-card, .nodoc-route-evidence, .guide-source-panel-prose figure, .guide-source-prose figure").forEach(function (figure) {
+      var image = figure.querySelector("img");
+      var caption = figure.querySelector("figcaption");
+      var captionText;
+      var pill;
+
+      if (!image) {
+        return;
+      }
+
+      captionText = caption ? caption.textContent.trim() : "";
+      figure.setAttribute("data-expandable", "true");
+      figure.setAttribute("tabindex", "0");
+      figure.setAttribute("role", "button");
+      figure.setAttribute("aria-label", captionText ? "Expand image: " + captionText : "Expand image");
+
+      pill = figure.querySelector(".figure-expand-pill");
+      if (!pill) {
+        pill = document.createElement("span");
+        pill.className = "figure-expand-pill";
+        pill.setAttribute("aria-hidden", "true");
+        pill.textContent = "Click to expand";
+        figure.insertBefore(pill, image);
+      }
+    });
+  }
+
+  function syncAuthorNavToggle() {
+    var canToggle = state.mode !== "hub";
+    var expanded;
+
+    if (!authorGlobalNavToggle) {
+      return;
+    }
+
+    if (authorNavController && typeof authorNavController.sync === "function") {
+      authorNavController.sync();
+      return;
+    }
+
+    if (!canToggle) {
+      document.body.classList.remove("author-nav-closed");
+    }
+
+    expanded = !document.body.classList.contains("author-nav-closed");
+    authorGlobalNavToggle.hidden = !canToggle;
+    authorGlobalNavToggle.setAttribute("aria-hidden", canToggle ? "false" : "true");
+    authorGlobalNavToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+    authorGlobalNavToggle.setAttribute("aria-label", expanded ? "Close navigation" : "Open navigation");
+  }
+
+  function openImageLightbox(figure) {
+    var image;
+    var caption;
+    var captionText;
+
+    if (!figure || !imageLightbox) {
+      return;
+    }
+
+    image = figure.querySelector("img");
+    caption = figure.querySelector("figcaption");
+
+    if (!image) {
+      return;
+    }
+
+    captionText = caption ? caption.textContent.trim() : (image.getAttribute("alt") || "");
+    lastExpandedFigure = figure;
+    imageLightboxImage.setAttribute("src", image.currentSrc || image.getAttribute("src") || "");
+    imageLightboxImage.setAttribute("alt", image.getAttribute("alt") || "");
+    imageLightboxCaption.textContent = captionText;
+    imageLightbox.removeAttribute("hidden");
+    imageLightbox.setAttribute("aria-hidden", "false");
+    document.body.classList.add("image-lightbox-open");
+    imageLightboxClose.focus();
+    setLiveMessage("Expanded image opened.");
+  }
+
+  function closeImageLightbox(options) {
+    var config = Object.assign({
+      announce: true,
+      restoreFocus: true
+    }, options || {});
+
+    if (!imageLightbox || imageLightbox.hasAttribute("hidden")) {
+      return;
+    }
+
+    imageLightbox.setAttribute("hidden", "");
+    imageLightbox.setAttribute("aria-hidden", "true");
+    imageLightboxImage.removeAttribute("src");
+    imageLightboxImage.setAttribute("alt", "");
+    imageLightboxCaption.textContent = "";
+    document.body.classList.remove("image-lightbox-open");
+
+    if (config.restoreFocus && lastExpandedFigure && typeof lastExpandedFigure.focus === "function") {
+      lastExpandedFigure.focus();
+    }
+
+    lastExpandedFigure = null;
+
+    if (config.announce) {
+      setLiveMessage("Expanded image closed.");
+    }
+  }
+
+  function buildSupportBlockHtml(title, intro, innerHtml, kicker) {
+    if (!innerHtml) {
+      return "";
+    }
+
+    return [
+      '<section class="detail-support-block">',
+      '  <div class="detail-block-header">',
+      kicker ? '    <div class="panel-kicker">' + escapeHtml(kicker) + "</div>" : "",
+      title ? '    <h3>' + escapeHtml(title) + "</h3>" : "",
+      intro ? '    <p>' + escapeHtml(intro) + "</p>" : "",
+      "  </div>",
+      innerHtml,
+      "</section>"
+    ].join("");
+  }
+
+  function renderFieldValueHtml(value) {
+    var lines = String(value || "")
+      .split(/\n+/)
+      .map(function (line) {
+        return line.trim();
+      })
+      .filter(Boolean);
+
+    if (lines.length <= 1) {
+      return '  <p class="detail-field-value">' + escapeHtml(value) + "</p>";
+    }
+
+    return [
+      '  <p class="detail-field-value">', escapeHtml(lines[0]), "</p>",
+      '  <ul class="detail-inline-list">',
+      lines.slice(1).map(function (line) {
+        return "<li>" + escapeHtml(line) + "</li>";
+      }).join(""),
+      "  </ul>"
+    ].join("");
+  }
+
+  function buildFieldCardsHtml(title, intro, fields, kicker) {
+    if (!fields || !fields.length) {
+      return "";
+    }
+
+    return buildSupportBlockHtml(title, intro, [
+      '<div class="detail-field-grid">',
+      fields.map(function (field) {
+        return [
+          '<article class="detail-field-card">',
+          '  <span class="detail-field-label">', escapeHtml(field.label), "</span>",
+          renderFieldValueHtml(field.value),
+          field.guidance || field.note ? '  <p class="detail-field-note">' + escapeHtml(field.guidance || field.note) + "</p>" : "",
+          "</article>"
+        ].join("");
+      }).join(""),
+      "</div>"
+    ].join(""), kicker || "Worked example");
+  }
+
+  function buildMilestoneCardsHtml(title, intro, items, kicker) {
+    if (!items || !items.length) {
+      return "";
+    }
+
+    return buildSupportBlockHtml(title, intro, [
+      '<div class="detail-milestone-grid">',
+      items.map(function (item) {
+        return [
+          '<article class="detail-milestone-card">',
+          '  <strong>', escapeHtml(item.label), "</strong>",
+          '  <p>', escapeHtml(item.detail), "</p>",
+          "</article>"
+        ].join("");
+      }).join(""),
+      "</div>"
+    ].join(""), kicker || "Status flow");
+  }
+
+  function buildResourceLinksHtml(title, intro, items, kicker) {
+    if (!items || !items.length) {
+      return "";
+    }
+
+    return buildSupportBlockHtml(title, intro, [
+      '<div class="detail-resource-grid">',
+      items.map(function (item, index) {
+        return [
+          '<article class="detail-resource-link detail-resource-card">',
+          '  <div class="detail-resource-main">',
+          '    <span class="detail-resource-number">', index + 1, "</span>",
+          '    <span>',
+          '      <strong>', escapeHtml(item.label), "</strong>",
+          item.note ? '      <span>' + escapeHtml(item.note) + "</span>" : "",
+          "    </span>",
+          "  </div>",
+          '  <div class="detail-resource-actions">',
+          '    <a class="btn resource-open-link" href="', escapeHtml(item.href), '" target="_blank" rel="noreferrer" aria-label="Open Markdown reference: ', escapeAttribute(item.label || "related reference"), '">Open reference</a>',
+          '    <button class="copy-snippet copy-link-button resource-copy-link" type="button" data-copy-text="', escapeAttribute(item.href), '">Copy link</button>',
+          "  </div>",
+          "</article>"
+        ].join("");
+      }).join(""),
+      "</div>"
+    ].join(""), kicker || "Resources");
+  }
+
+  function buildInstallCommandsHtml(title, intro, commands) {
+    if (!commands || !commands.length) {
+      return "";
+    }
+
+    return buildSupportBlockHtml(title || "Install and launch", intro || "Run the matching installer command, then launch the application from the location it creates.", [
+      '<div class="command-card-grid">',
+      commands.map(function (command) {
+        return [
+          '<article class="card command-card">',
+          '  <div class="card-body">',
+          '    <div>',
+          '      <div class="panel-kicker">', escapeHtml(command.platform || "Installer"), '</div>',
+          '      <h4 class="h5 mb-1">', escapeHtml(command.title || "Install"), '</h4>',
+          command.note ? '      <p class="snippet-description">' + escapeHtml(command.note) + '</p>' : '',
+          '    </div>',
+          '    <pre><code>', escapeHtml(command.command || ""), '</code></pre>',
+          '    <button class="copy-snippet" type="button" data-copy-text="', escapeAttribute(command.command || ""), '">Copy command</button>',
+          '  </div>',
+          '</article>'
+        ].join("");
+      }).join(""),
+      '</div>'
+    ].join(""), "Install");
+  }
+
+  function renderModalMedia(cardId, galleryId, images, title) {
+    var card = document.getElementById(cardId);
+    var gallery = document.getElementById(galleryId);
+
+    if (!card || !gallery) {
+      return;
+    }
+
+    gallery.innerHTML = "";
+    if (!images || !images.length) {
+      card.classList.add("d-none");
+      return;
+    }
+
+    images.forEach(function (image) {
+      var figure = document.createElement("figure");
+      var caption = document.createElement("figcaption");
+      var img = document.createElement("img");
+
+      figure.className = "modal-media-figure";
+      caption.textContent = image.caption || "";
+      img.src = window.AuthorGuideAssets.resolve(image.src);
+      img.alt = image.alt || title || "Reference image";
+      figure.appendChild(caption);
+      figure.appendChild(img);
+      gallery.appendChild(figure);
+    });
+
+    card.classList.remove("d-none");
+    decorateExpandableMedia(card);
+  }
+
+  function setSupportMount(id, html) {
+    var mount = document.getElementById(id);
+
+    if (!mount) {
+      return;
+    }
+
+    mount.innerHTML = html || "";
+    mount.classList.toggle("d-none", !html);
+  }
+
+  function hydrateVideoCards(root) {
+    var scope = root || document;
+
+    if (window.RedwoodVideoPlayer && typeof window.RedwoodVideoPlayer.hydrate === "function") {
+      window.RedwoodVideoPlayer.hydrate(scope);
+    }
+
+    hidePreviewVideoComponents(scope);
+  }
+
+  function hidePreviewVideoComponents(root) {
+    var scope = root || document;
+
+    scope.querySelectorAll(
+      '[data-video-card], [data-video-status="preview"], [data-video-availability="future"], .media-player-card, .video-placeholder-card, video, audio'
+    ).forEach(function (node) {
+      node.hidden = true;
+      node.setAttribute("aria-hidden", "true");
+      if (node.matches('[data-video-card], [data-video-status="preview"], .media-player-card, .video-placeholder-card')) {
+        node.setAttribute("data-video-availability", "future");
+      }
+    });
+  }
+
+  function renderVideoCardMount(config) {
+    var options = Object.assign({}, config || {});
+
+    // Preview/template recordings are intentionally disabled. Re-enable this
+    // path only when an approved product recording is supplied explicitly.
+    if (!options.src || options.approvedRecording !== true) {
+      return "";
+    }
+
+    if (!window.RedwoodVideoPlayer || typeof window.RedwoodVideoPlayer.createMountMarkup !== "function") {
+      return "";
+    }
+
+    delete options.approvedRecording;
+    return window.RedwoodVideoPlayer.createMountMarkup(Object.assign({
+      status: "approved",
+      autoplay: false,
+      loop: false
+    }, options));
+  }
+
+  function openBubble(id) {
+    var item = explorerItems.find(function (candidate) {
+      return candidate.id === id;
+    });
+    var sourceLink;
+    var guideButton;
+    var snippetCard;
+    var modalHash;
+
+    if (!item) {
+      return;
+    }
+
+    document.getElementById("bubbleModalKicker").textContent = item.tags.map(titleCaseTag).join(" / ");
+    document.getElementById("bubbleModalLabel").textContent = item.title;
+    document.getElementById("bubbleModalDescription").textContent = item.description;
+    document.getElementById("bubbleModalTags").innerHTML = item.tags.map(function (tag) {
+      return '<span class="detail-tag">' + escapeHtml(titleCaseTag(tag)) + "</span>";
+    }).join("");
+    fillList("bubbleModalSteps", item.steps);
+    fillList("bubbleModalCheckpoints", item.checkpoints);
+    fillList("bubbleModalWatchFor", item.watchFor);
+
+    setSupportMount(
+      "bubbleModalInstallMount",
+      buildInstallCommandsHtml(item.installTitle, item.installIntro, item.installCommands)
+    );
+    setSupportMount(
+      "bubbleModalPreImageResourcesMount",
+      buildResourceLinksHtml(item.preImageResourcesTitle, item.preImageResourcesIntro, item.preImageResourceLinks, "Skills")
+    );
+    renderModalMedia(
+      "bubbleModalMediaCard",
+      "bubbleModalMediaGallery",
+      item.interfaceImages || (item.image ? [item.image] : []),
+      item.title
+    );
+    renderModalMedia(
+      "bubbleModalOutcomeMediaCard",
+      "bubbleModalOutcomeMediaGallery",
+      item.outcomeImages,
+      item.title
+    );
+
+    setSupportMount(
+      "bubbleModalMilestonesMount",
+      buildMilestoneCardsHtml(item.milestonesTitle || "Status flow", item.milestonesIntro || "", item.milestones, "Status flow")
+    );
+    setSupportMount(
+      "bubbleModalExampleMount",
+      buildFieldCardsHtml(item.exampleTitle || "Worked example", item.exampleIntro || "", item.exampleFields, "Worked example")
+    );
+    setSupportMount(
+      "bubbleModalResourcesMount",
+      buildResourceLinksHtml(item.resourcesTitle || "Useful links", item.resourcesIntro || "", item.resourceLinks, "Resources")
+    );
+    setSupportMount(
+      "bubbleModalVideoMount",
+      renderVideoPlaceholderCard(
+        "Walkthrough preview for " + item.title,
+        "This player is the capture slot for the Cheatsheet walkthrough. Use the panel details, snippets, and source links underneath until the approved recording is supplied.",
+        [
+          "Topic walkthrough",
+          "Audio controls",
+          "Autoplay ready"
+        ],
+        "cheatsheet-" + item.id
+      )
+    );
+
+    snippetCard = document.getElementById("bubbleModalSnippetCard");
+    if (item.snippet) {
+      document.getElementById("bubbleModalSnippetMeta").textContent = item.snippetMeta || "Reference snippet";
+      document.getElementById("bubbleModalSnippetTitle").textContent = item.snippetTitle || "Snippet";
+      document.getElementById("bubbleModalSnippet").textContent = item.snippet;
+      snippetCard.classList.remove("d-none");
+    } else {
+      document.getElementById("bubbleModalSnippet").textContent = "";
+      snippetCard.classList.add("d-none");
+    }
+
+    sourceLink = document.getElementById("bubbleModalSourceLink");
+    if (item.sourceHref) {
+      sourceLink.setAttribute("href", item.sourceHref);
+      sourceLink.textContent = item.sourceLabel || "Open Step by Step Guide";
+      sourceLink.classList.remove("d-none");
+    } else {
+      sourceLink.classList.add("d-none");
+    }
+
+    guideButton = document.getElementById("bubbleModalGuideButton");
+    if (guideButton) {
+      guideButton.classList.add("d-none");
+    }
+
+    hydrateVideoCards(bubbleModalElement);
+    showBubbleModal();
+    modalHash = cheatsheetItemHash(item);
+    setHash(modalHash, { replace: window.location.hash === modalHash });
+    setLiveMessage(item.title + " opened.");
+  }
+
+  function renderVideoPlaceholderCard(title, summary, featureLabels, videoId) {
+    return renderVideoCardMount({
+      title: title,
+      summary: summary,
+      id: videoId || "",
+      features: featureLabels || [
+        "Controls ready",
+        "Audio controls",
+        "Autoplay ready"
+      ]
+    });
+  }
+
+  function guideSectionVideoFeatures(section) {
+    var features = [
+      section && typeof section.taskCount === "number"
+        ? guideTaskStateLabel(section)
+        : "Redesigned controls"
+    ].concat(section.highlights || []);
+
+    if (!features.length) {
+      return ["Redesigned controls", "Audio controls", "Live original guide"];
+    }
+
+    return uniqueList(features).slice(0, 3);
+  }
+
+  function createSearchEntry(config) {
+    var titleText = config.title || "";
+    var summaryText = config.summary || "";
+    var pathText = config.path || "";
+    var bodyText = [
+      config.body || "",
+      flattenList(config.steps),
+      flattenList(config.checkpoints),
+      flattenList(config.watchFor),
+      config.snippet || "",
+      flattenFields(config.exampleFields),
+      flattenResources(config.resourceLinks),
+      flattenMilestones(config.milestones),
+      flattenList(config.tags),
+      flattenList(config.keywords)
+    ].join(" ");
+    // Keep index fields literal. Query expansion still supports useful
+    // synonyms, but expanding both index and query turns a precise term such
+    // as "stakeholder" into a match on nearly every WMS-related card.
+    var titleNorm = normalizeText(titleText);
+    var summaryNorm = normalizeText(summaryText);
+    var pathNorm = normalizeText(pathText);
+    var bodyNorm = normalizeText(bodyText);
+
+    return {
+      id: config.id,
+      typeLabel: config.typeLabel,
+      title: titleText,
+      summary: summaryText,
+      path: pathText,
+      sourceHref: config.sourceHref || "",
+      sourceLabel: config.sourceLabel || "",
+      resultHref: config.resultHref || "",
+      resultLabel: config.resultLabel || "Open Result",
+      resultExternal: !!config.resultExternal,
+      open: config.open,
+      titleNorm: titleNorm,
+      summaryNorm: summaryNorm,
+      pathNorm: pathNorm,
+      bodyNorm: bodyNorm,
+      combinedNorm: [titleNorm, summaryNorm, pathNorm, bodyNorm].join(" "),
+      titleTokens: tokenSet(titleNorm),
+      summaryTokens: tokenSet(summaryNorm),
+      pathTokens: tokenSet(pathNorm),
+      combinedTokens: tokenSet([titleNorm, summaryNorm, pathNorm, bodyNorm].join(" "))
+    };
+  }
+
+  function scoreSearchEntry(entry, query, allowSynonyms) {
+    var normalizedQuery = normalizeText(query);
+    var queryTokens = Array.from(new Set(tokenize(allowSynonyms ? expandSearchText(query) : normalizedQuery)));
+    var matchedTokens = 0;
+    var score = 0;
+
+    if (!normalizedQuery && !queryTokens.length) {
+      return 0;
+    }
+
+    if (normalizedQuery && entry.titleNorm.indexOf(normalizedQuery) !== -1) {
+      score += 80;
+    }
+
+    if (normalizedQuery && normalizedQuery.indexOf(" ") !== -1 && entry.summaryNorm.indexOf(normalizedQuery) !== -1) {
+      score += 38;
+    }
+
+    if (normalizedQuery && entry.pathNorm.indexOf(normalizedQuery) !== -1) {
+      score += 24;
+    }
+
+    if (normalizedQuery && entry.bodyNorm.indexOf(normalizedQuery) !== -1) {
+      score += 18;
+    }
+
+    queryTokens.forEach(function (token) {
+      if (entry.titleTokens.has(token)) {
+        matchedTokens += 1;
+        score += 14;
+        return;
+      }
+
+      if (entry.pathTokens.has(token)) {
+        matchedTokens += 1;
+        score += 10;
+        return;
+      }
+
+      if (entry.summaryTokens.has(token)) {
+        matchedTokens += 1;
+        score += 8;
+        return;
+      }
+
+      if (entry.combinedTokens.has(token)) {
+        matchedTokens += 1;
+        score += 4;
+      }
+    });
+
+    if (queryTokens.length && matchedTokens === queryTokens.length) {
+      score += 22;
+    } else if (queryTokens.length > 1 && matchedTokens >= 2) {
+      score += 8;
+    }
+
+    return score;
+  }
+
+  function renderSearchResultCard(result) {
+    var resultAction = result.resultHref
+      ? '<a class="btn btn-primary rounded-pill px-4" href="' + escapeHtml(result.resultHref) + '"' + (result.resultExternal ? ' target="_blank" rel="noreferrer"' : "") + '>' + escapeHtml(result.resultLabel) + "</a>"
+      : '<button type="button" class="btn btn-primary rounded-pill px-4" data-search-open="' + escapeHtml(result.id) + '">' + escapeHtml(result.resultLabel) + "</button>";
+    var sourceAction = result.sourceHref
+      ? '<a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(result.sourceHref) + '" target="_blank" rel="noreferrer">' + escapeHtml(result.sourceLabel || "Open Step by Step Guide") + "</a>"
+      : "";
+
+    return [
+      '<article class="search-result-card">',
+      '  <div class="search-result-top">',
+      '    <span class="search-result-kicker">', escapeHtml(result.typeLabel), "</span>",
+      "  </div>",
+      '  <div class="search-result-path">', escapeHtml(result.path), "</div>",
+      '  <h3 class="search-result-title">', escapeHtml(result.title), "</h3>",
+      '  <p class="search-result-summary">', escapeHtml(result.summary), "</p>",
+      '  <div class="search-result-actions">',
+      "    ", resultAction,
+      sourceAction,
+      "  </div>",
+      "</article>"
+    ].join("");
+  }
+
+  function renderSearchResults() {
+    var query = state.searchQuery.trim();
+    var results;
+
+    if (!searchResultsMount || !searchEmptyState) {
+      return;
+    }
+
+    if (searchQueryChip) {
+      searchQueryChip.textContent = query ? 'Query: "' + query + '"' : "No query yet";
+    }
+
+    if (!query) {
+      searchSummary.textContent = "";
+      searchCountChip.textContent = "0 results";
+      searchResultsMount.innerHTML = "";
+      searchEmptyState.innerHTML = "Use the search field above to search by keywords such as <strong>WMS</strong>, <strong>Self Quality Assurance</strong>, <strong>GitHub Pages</strong>, <strong>validator</strong>, or a short question such as <strong>how do I publish</strong>.";
+      searchEmptyState.classList.remove("d-none");
+      updateBreadcrumb();
+      return;
+    }
+
+    var scoredResults = searchIndex
+      .map(function (entry) {
+        var intentBoost = entry.id === "workshop-example" && isWorkshopExampleIntent(query) ? 30 : 0;
+        return {
+          entry: entry,
+          directScore: scoreSearchEntry(entry, query, false) + intentBoost,
+          expandedScore: scoreSearchEntry(entry, query, true) + intentBoost
+        };
+      });
+    var hasDirectMatch = scoredResults.some(function (item) {
+      return item.directScore >= 14 && (item.entry.id !== "workshop-example" || isWorkshopExampleIntent(query));
+    });
+
+    results = scoredResults
+      .map(function (item) {
+        item.score = hasDirectMatch ? item.directScore : item.expandedScore;
+        return item;
+      })
+      .filter(function (item) {
+        return item.score >= 14 && (item.entry.id !== "workshop-example" || isWorkshopExampleIntent(query));
+      })
+      .sort(function (left, right) {
+        return right.score - left.score;
+      })
+      .slice(0, 14)
+      .map(function (item) {
+        return item.entry;
+      });
+
+    searchResultsMount.innerHTML = results.map(renderSearchResultCard).join("");
+    searchCountChip.textContent = results.length + " result" + (results.length === 1 ? "" : "s");
+
+    if (results.length) {
+      searchSummary.textContent = "Results are ranked by title match, keyword overlap, path relevance, and deeper body matches across Quickstart, Cheatsheet, and NoDoc.";
+      searchEmptyState.classList.add("d-none");
+    } else {
+      searchSummary.textContent = "The guide did not find a strong match for that query yet.";
+      searchEmptyState.innerHTML = 'No strong matches for <strong>"' + escapeHtml(query) + '</strong>. Try shorter keywords such as <strong>publish</strong>, <strong>validator</strong>, <strong>Quarterly Quality Assurance</strong>, <strong>GitHub Pages</strong>, or <strong>manifest</strong>.';
+      searchEmptyState.classList.remove("d-none");
+    }
+
+    updateBreadcrumb();
+  }
+
+  function renderGuideNav() {
+    if (!guideSectionNav) {
+      return;
+    }
+
+    if (!guideSections.length) {
+      guideSectionNav.innerHTML = '<div class="guide-empty-state">Loading guide sections...</div>';
+      return;
+    }
+
+    guideSectionNav.innerHTML = guideSections.map(function (section) {
+      return [
+        '<button type="button" class="guide-nav-link',
+        section.id === state.guideSection ? " is-active" : "",
+        '" data-guide-section="', section.id, '" data-accent="', section.accent, '">',
+        '  <small>', escapeHtml(section.label), "</small>",
+        '  <strong>', escapeHtml(section.title), "</strong>",
+        '  <span class="guide-nav-meta">', escapeHtml(section.navState || "Loading sections"), "</span>",
+        "</button>"
+      ].join("");
+    }).join("");
+  }
+
+  function renderGuideQuickNav() {
+    if (!guideQuickNav) {
+      return;
+    }
+
+    guideQuickNav.innerHTML = guideSections.map(function (section) {
+      return [
+        '<button type="button" class="guide-quick-link',
+        section.id === state.guideSection ? " is-active" : "",
+        '" data-guide-section="', section.id, '">',
+        '  <span>', escapeHtml(section.label), "</span>",
+        '  <strong>', escapeHtml(section.title), "</strong>",
+        "</button>"
+      ].join("");
+    }).join("");
+  }
+
+  function createGuideSourceLoader(section) {
+    var frame = document.createElement("iframe");
+
+    frame.className = "guide-source-loader";
+    frame.setAttribute("aria-hidden", "true");
+    frame.tabIndex = -1;
+    frame.src = section.embedHref || section.sectionHref || "";
+    return frame;
+  }
+
+  function waitForGuideModuleContent(frame, remainingChecks) {
+    return new Promise(function (resolve, reject) {
+      function check() {
+        var moduleContent;
+        var textLength;
+
+        try {
+          moduleContent = frame.contentDocument && frame.contentDocument.getElementById("module-content");
+          textLength = moduleContent ? moduleContent.textContent.replace(/\s+/g, " ").trim().length : 0;
+        } catch (error) {
+          moduleContent = null;
+          textLength = 0;
+        }
+
+        if (moduleContent && textLength > 80) {
+          resolve(moduleContent);
+          return;
+        }
+
+        if (remainingChecks <= 0) {
+          reject(new Error("Guide source content did not finish rendering in time."));
+          return;
+        }
+
+        remainingChecks -= 1;
+        window.setTimeout(check, 250);
+      }
+
+      check();
+    });
+  }
+
+  function guideSourceSlug(value) {
+    var slug = normalizeText(value || "").replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "").replace(/\-+/g, "-");
+    return slug || "section";
+  }
+
+  function stripGuideSourceDisplay(node) {
+    var styleValue;
+
+    if (!node || !node.getAttribute) {
+      return;
+    }
+
+    styleValue = node.getAttribute("style");
+
+    if (!styleValue || !/display\s*:\s*none/i.test(styleValue)) {
+      return;
+    }
+
+    styleValue = styleValue
+      .replace(/\bdisplay\s*:\s*none;?/ig, "")
+      .replace(/\s{2,}/g, " ")
+      .trim();
+
+    if (styleValue) {
+      node.setAttribute("style", styleValue);
+      return;
+    }
+
+    node.removeAttribute("style");
+  }
+
+  function pruneGuideSourceArtifacts(root) {
+    if (!root) {
+      return;
+    }
+
+    Array.prototype.forEach.call(root.querySelectorAll(".hol-ToggleRegions, #btn_toggle, #modalWindow, #modalCaption, #modalClose, #modalImg, #markdownMediaLightbox, .md-lightbox, .md-expand-pill"), function (node) {
+      node.remove();
+    });
+
+    Array.prototype.forEach.call(root.querySelectorAll("[data-md-expandable]"), function (node) {
+      node.removeAttribute("data-md-expandable");
+      node.removeAttribute("role");
+      node.removeAttribute("tabindex");
+      node.removeAttribute("aria-label");
+    });
+
+    Array.prototype.forEach.call(root.querySelectorAll("[style]"), function (node) {
+      stripGuideSourceDisplay(node);
+    });
+
+    Array.prototype.forEach.call(root.querySelectorAll("p"), function (paragraph) {
+      var contentLength = paragraph.textContent.replace(/\s+/g, "").trim().length;
+      var keep = paragraph.querySelector("img, video, iframe, figure, table, pre, code, details, button");
+
+      if (!contentLength && !keep) {
+        paragraph.remove();
+      }
+    });
+  }
+
+  function guideSourceSectionKind(title) {
+    var text = String(title || "").trim();
+
+    if (/^(?:\([^)]+\)\s*)?Task\b/i.test(text)) {
+      return "task";
+    }
+
+    if (/^Acknowledgements?$/i.test(text)) {
+      return "acknowledgements";
+    }
+
+    if (/^Learn More$/i.test(text)) {
+      return "learn-more";
+    }
+
+    if (/^Introduction$/i.test(text)) {
+      return "introduction";
+    }
+
+    if (/^Summary$/i.test(text)) {
+      return "summary";
+    }
+
+    if (/^FAQ$/i.test(text)) {
+      return "faq";
+    }
+
+    if (/^Appendix\b/i.test(text)) {
+      return "appendix";
+    }
+
+    return "section";
+  }
+
+  function guideSourceSectionLabel(kind) {
+    switch (kind) {
+      case "task":
+        return "Task section";
+      case "acknowledgements":
+        return "Acknowledgements";
+      case "learn-more":
+        return "Reference";
+      case "introduction":
+        return "Overview";
+      case "summary":
+        return "Summary";
+      case "faq":
+        return "FAQ";
+      case "appendix":
+        return "Appendix";
+      default:
+        return "Section";
+    }
+  }
+
+  function guideSourceSectionMeta(kind, stepCount) {
+    if (kind === "task" && stepCount > 0) {
+      return stepCount + " step" + (stepCount === 1 ? "" : "s");
+    }
+
+    switch (kind) {
+      case "acknowledgements":
+        return "Owner and update note";
+      case "learn-more":
+        return "Additional links";
+      case "introduction":
+        return "Start here";
+      case "summary":
+        return "Wrap-up";
+      case "faq":
+        return "Support answers";
+      case "appendix":
+        return "Reference";
+      default:
+        return "Expandable section";
+    }
+  }
+
+  function guideSourceSectionDefaultOpen(kind, index, hasTaskPanels) {
+    if (kind === "introduction") {
+      return true;
+    }
+
+    return !hasTaskPanels && index === 0;
+  }
+
+  function countGuideSourceListItems(node, tagName) {
+    var list = null;
+
+    if (!node) {
+      return 0;
+    }
+
+    Array.prototype.some.call(node.children || [], function (child) {
+      if (child.tagName === tagName) {
+        list = child;
+        return true;
+      }
+
+      return false;
+    });
+
+    if (!list) {
+      return 0;
+    }
+
+    return Array.prototype.filter.call(list.children || [], function (child) {
+      return child.tagName === "LI";
+    }).length;
+  }
+
+  function guideSourceSectionStepCount(node) {
+    return countGuideSourceListItems(node, "OL") || countGuideSourceListItems(node, "UL");
+  }
+
+  function guideSourceHeadingAlias(node) {
+    var aliasNode;
+
+    if (!node) {
+      return "";
+    }
+
+    aliasNode = node.querySelector("div[name], [data-unique]");
+
+    if (!aliasNode) {
+      return "";
+    }
+
+    return aliasNode.getAttribute("name") || aliasNode.getAttribute("data-unique") || "";
+  }
+
+  function buildGuideSourcePanel(sectionNode, index, hasTaskPanels) {
+    var heading = sectionNode.querySelector("h2, h3, h4");
+    var title = heading ? heading.textContent.trim() : "Section " + String(index + 1).padStart(2, "0");
+    var clonedSection = sectionNode.cloneNode(true);
+    var clonedHeading = clonedSection.querySelector("h2, h3, h4");
+    var kind = guideSourceSectionKind(title);
+    var panelId = heading && heading.id ? heading.id : guideSourceSlug(title) + "-" + (index + 1);
+    var aliasId = guideSourceHeadingAlias(sectionNode);
+    var stepCount = guideSourceSectionStepCount(sectionNode);
+    var bodyHtml;
+
+    pruneGuideSourceArtifacts(clonedSection);
+
+    Array.prototype.forEach.call(clonedSection.querySelectorAll("div[name], [data-unique]"), function (node) {
+      if (!node.textContent.replace(/\s+/g, "").trim().length && !node.children.length) {
+        node.remove();
+      }
+    });
+
+    if (clonedHeading) {
+      clonedHeading.remove();
+    }
+
+    bodyHtml = clonedSection.innerHTML.trim();
+
+    return {
+      id: panelId,
+      aliasId: aliasId && aliasId !== panelId ? aliasId : "",
+      title: title,
+      kind: kind,
+      label: guideSourceSectionLabel(kind),
+      meta: guideSourceSectionMeta(kind, stepCount),
+      stepCount: stepCount,
+      open: guideSourceSectionDefaultOpen(kind, index, hasTaskPanels),
+      bodyHtml: bodyHtml || "<p>No additional content in this section.</p>"
+    };
+  }
+
+  function collectGuideSourcePanels(root) {
+    var article = root.querySelector("article") || root;
+    var sectionNodes = Array.prototype.filter.call(article.children || [], function (child) {
+      return child.tagName === "SECTION";
+    });
+    var hasTaskPanels = sectionNodes.some(function (sectionNode) {
+      var heading = sectionNode.querySelector("h2, h3, h4");
+      return guideSourceSectionKind(heading ? heading.textContent.trim() : "") === "task";
+    });
+
+    return sectionNodes.map(function (sectionNode, index) {
+      return buildGuideSourcePanel(sectionNode, index, hasTaskPanels);
+    }).filter(Boolean);
+  }
+
+  function normalizeGuideSourceNodes(root, baseHref) {
+    var baseUrl = new URL(baseHref, window.location.href);
+    var firstHeading = root.querySelector("article > h1");
+    var seenIds = {};
+
+    if (firstHeading) {
+      firstHeading.remove();
+    }
+
+    Array.prototype.forEach.call(root.querySelectorAll("script, style"), function (node) {
+      node.remove();
+    });
+
+    Array.prototype.forEach.call(root.querySelectorAll("h2, h3"), function (heading) {
+      var nextId = heading.id || guideSourceSlug(heading.textContent);
+
+      while (seenIds[nextId]) {
+        seenIds[nextId] += 1;
+        nextId = nextId + "-" + seenIds[nextId];
+      }
+
+      seenIds[nextId] = 1;
+      heading.id = nextId;
+    });
+
+    Array.prototype.forEach.call(root.querySelectorAll("img[src], iframe[src], source[src], video[src]"), function (node) {
+      var currentSrc = node.getAttribute("src");
+
+      if (!currentSrc) {
+        return;
+      }
+
+      node.setAttribute("src", new URL(currentSrc, baseUrl).toString());
+    });
+
+    Array.prototype.forEach.call(root.querySelectorAll("img[srcset], source[srcset]"), function (node) {
+      if (node.srcset) {
+        node.setAttribute("srcset", node.srcset);
+      }
+    });
+
+    Array.prototype.forEach.call(root.querySelectorAll("a[href]"), function (link) {
+      var rawHref = link.getAttribute("href");
+      var resolvedHref;
+
+      if (!rawHref || rawHref.indexOf("javascript:") === 0) {
+        return;
+      }
+
+      if (rawHref.charAt(0) === "#") {
+        return;
+      }
+
+      resolvedHref = new URL(rawHref, baseUrl);
+
+      if (
+        resolvedHref.origin === baseUrl.origin &&
+        resolvedHref.pathname === baseUrl.pathname &&
+        resolvedHref.search === baseUrl.search &&
+        resolvedHref.hash
+      ) {
+        link.setAttribute("href", resolvedHref.hash);
+        return;
+      }
+
+      link.setAttribute("href", resolvedHref.toString());
+
+      if (resolvedHref.origin !== window.location.origin) {
+        link.setAttribute("target", "_blank");
+        link.setAttribute("rel", "noreferrer");
+      }
+    });
+
+    Array.prototype.forEach.call(root.querySelectorAll("table"), function (table) {
+      table.classList.add("guide-source-table");
+    });
+
+    Array.prototype.forEach.call(root.querySelectorAll("pre"), function (block) {
+      block.classList.add("guide-source-pre");
+    });
+  }
+
+  function collectGuideSourceOutline(items) {
+    return (items || []).map(function (item) {
+      return {
+        id: item.id,
+        title: item.title
+      };
+    }).filter(function (item) {
+      return item.id && item.title;
+    });
+  }
+
+  function renderGuideSourceToolbar(taskCount, panelCount) {
+    var sectionSummary = guideSectionCountLabel(panelCount).toLowerCase();
+    var detailCopy = taskCount > 0
+      ? guideTaskSectionLabel(taskCount) + " available below, with the remaining reference sections still preserved."
+      : "Open the original guide sections below inside the redesigned Step by Step Guide surface.";
+
+    return [
+      '<div class="guide-source-toolbar">',
+      '  <div class="guide-source-toolbar-copy">',
+      '    <div class="panel-kicker">Section content</div>',
+      '    <h3>Open ', escapeHtml(sectionSummary), ' in the original guide order.</h3>',
+      '    <p>', escapeHtml(detailCopy), "</p>",
+      "  </div>",
+      '  <div class="guide-source-toolbar-actions">',
+      taskCount > 0 ? '    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-guide-source-expand-all="tasks">Expand all tasks</button>' : "",
+      "  </div>",
+      "</div>"
+    ].join("");
+  }
+
+  function renderGuideSourcePanels(items) {
+    if (!items.length) {
+      return "";
+    }
+
+    return [
+      '<div class="guide-source-panels">',
+      items.map(function (item) {
+        return [
+          '<section class="guide-source-panel-card',
+          item.open ? " is-open" : "",
+          '" data-guide-source-card="', escapeHtml(item.id), '" data-guide-source-kind="', escapeHtml(item.kind), '" id="', escapeHtml(item.id), '">',
+          item.aliasId ? '<span class="guide-source-anchor" id="' + escapeHtml(item.aliasId) + '" aria-hidden="true"></span>' : "",
+          '  <button type="button" class="guide-source-panel-toggle" data-guide-source-toggle="', escapeHtml(item.id), '" aria-expanded="', item.open ? "true" : "false", '">',
+          '    <span class="guide-source-panel-head">',
+          '      <span class="guide-source-panel-label">', escapeHtml(item.label), "</span>",
+          '      <span class="guide-source-panel-title">', escapeHtml(item.title), "</span>",
+          "    </span>",
+          '    <span class="guide-source-panel-side">',
+          '      <span class="guide-source-panel-meta">', escapeHtml(item.meta), "</span>",
+          '      <span class="guide-source-panel-icon" aria-hidden="true">+</span>',
+          "    </span>",
+          "  </button>",
+          '  <div class="guide-source-panel-body"', item.open ? "" : ' hidden', ">",
+          '    <div class="guide-source-prose guide-source-panel-prose">',
+          item.bodyHtml,
+          "    </div>",
+          "  </div>",
+          "</section>"
+        ].join("");
+      }).join(""),
+      "</div>"
+    ].join("");
+  }
+
+  function renderGuideSourceOutline(items) {
+    if (!items.length) {
+      return "";
+    }
+
+    return [
+      '<nav class="guide-source-outline" aria-label="Section outline">',
+      items.map(function (item) {
+        return '<button type="button" class="guide-source-outline-link" data-guide-source-jump="' + escapeHtml(item.id) + '">' + escapeHtml(item.title) + "</button>";
+      }).join(""),
+      "</nav>"
+    ].join("");
+  }
+
+  function loadGuideRenderedSection(section) {
+    if (!section || !section.id) {
+      return Promise.reject(new Error("Guide section is missing."));
+    }
+
+    if (guideSectionSurfaceCache[section.id]) {
+      return guideSectionSurfaceCache[section.id];
+    }
+
+    guideSectionSurfaceCache[section.id] = new Promise(function (resolve, reject) {
+      var frame = createGuideSourceLoader(section);
+      var settled = false;
+
+      function finish(error, payload) {
+        if (settled) {
+          return;
+        }
+
+        settled = true;
+
+        if (frame.parentNode) {
+          frame.parentNode.removeChild(frame);
+        }
+
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        resolve(payload);
+      }
+
+      frame.addEventListener("error", function () {
+        finish(new Error("Guide source page could not be loaded."));
+      }, { once: true });
+
+      frame.addEventListener("load", function () {
+        waitForGuideModuleContent(frame, 48).then(function (moduleContent) {
+          var clonedContent = moduleContent.cloneNode(true);
+          var panels;
+          var taskCount;
+
+          clonedContent.removeAttribute("id");
+          clonedContent.removeAttribute("title");
+          clonedContent.className = "";
+          normalizeGuideSourceNodes(clonedContent, frame.contentWindow.location.href);
+          panels = collectGuideSourcePanels(clonedContent);
+          taskCount = panels.filter(function (panel) {
+            return panel.kind === "task";
+          }).length;
+
+          finish(null, {
+            html: panels.length
+              ? renderGuideSourcePanels(panels)
+              : '<div class="guide-source-prose">' + clonedContent.innerHTML + "</div>",
+            outline: collectGuideSourceOutline(panels),
+            taskCount: taskCount,
+            panelCount: panels.length
+          });
+        }).catch(function (error) {
+          finish(error);
+        });
+      }, { once: true });
+
+      document.body.appendChild(frame);
+    }).catch(function (error) {
+      delete guideSectionSurfaceCache[section.id];
+      throw error;
+    });
+
+    return guideSectionSurfaceCache[section.id];
+  }
+
+  function buildGuideBreadcrumb(section) {
+    return [
+      '<div class="guide-inline-breadcrumb" aria-label="Current guide section">',
+      "  <span>Step by Step Guide</span>",
+      "  <span>/</span>",
+      "  <span>", escapeHtml(section.label), "</span>",
+      "  <span>/</span>",
+      "  <strong>", escapeHtml(section.title), "</strong>",
+      "</div>"
+    ].join("");
+  }
+
+  function syncGuideSectionStateBadges(section) {
+    var taskBadge;
+    var panelBadge;
+
+    if (!guideSectionMount || !section || !currentGuideSection() || currentGuideSection().id !== section.id) {
+      return;
+    }
+
+    taskBadge = guideSectionMount.querySelector("[data-guide-section-task-state]");
+    panelBadge = guideSectionMount.querySelector("[data-guide-section-panel-state]");
+
+    if (taskBadge) {
+      taskBadge.textContent = guideTaskStateLabel(section);
+    }
+
+    if (panelBadge) {
+      panelBadge.textContent = section.panelCount > 0
+        ? guideSectionCountLabel(section.panelCount)
+        : "Loading sections";
+    }
+  }
+
+  function renderGuideSection() {
+    var section = currentGuideSection();
+    var currentRequestToken;
+
+    if (!guideSectionMount) {
+      return;
+    }
+
+    if (!section) {
+      guideSectionMount.innerHTML = '<article class="guide-section-card"><p class="guide-section-summary">The Step by Step Guide is still loading.</p></article>';
+      renderGuideNav();
+      updateBreadcrumb();
+      return;
+    }
+
+    loadGuideSourceMeta(section);
+
+    guideSectionMount.innerHTML = [
+      '<article class="guide-section-card" data-accent="', escapeHtml(section.accent), '">',
+      '  <div class="guide-section-hero">',
+      '    <div class="guide-section-copy">',
+      buildGuideBreadcrumb(section),
+      '      <div class="panel-kicker">', escapeHtml(section.label), "</div>",
+      '      <h2 class="guide-section-title">', escapeHtml(section.title), "</h2>",
+      section.summary ? '      <p class="guide-section-summary">' + escapeHtml(section.summary) + "</p>" : "",
+      '      <p class="guide-section-purpose">', escapeHtml(section.purpose || ""), "</p>",
+      '      <div class="guide-highlight-row">',
+      '        <span class="guide-highlight-chip" data-guide-section-task-state>', escapeHtml(guideTaskStateLabel(section)), "</span>",
+      '        <span class="guide-highlight-chip" data-guide-section-panel-state>', escapeHtml(section.panelCount > 0 ? guideSectionCountLabel(section.panelCount) : "Loading sections"), "</span>",
+      (section.highlights || []).map(function (item) {
+        return '<span class="guide-highlight-chip">' + escapeHtml(item) + "</span>";
+      }).join(""),
+      "      </div>",
+      renderVideoPlaceholderCard(
+        section.title + " walkthrough",
+        section.summary || section.purpose || "Use the section player first, then open the redesigned source sections underneath.",
+        guideSectionVideoFeatures(section),
+        "guide-section-" + section.id
+      ),
+      '      <div class="guide-section-actions">',
+      '        <button type="button" class="btn btn-outline-primary rounded-pill px-4" data-mode-target="explorer">Open Cheatsheet</button>',
+      section.sectionHref ? '<a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(section.sectionHref) + '" target="_blank" rel="noreferrer">Open Step by Step Guide</a>' : "",
+      "      </div>",
+      "    </div>",
+      "  </div>",
+      '  <section class="guide-source-shell">',
+      '    <div class="guide-source-loading">Loading the redesigned section surface for this guide entry...</div>',
+      "  </section>",
+      "</article>"
+    ].join("");
+
+    renderGuideNav();
+    renderGuideQuickNav();
+    hydrateVideoCards(guideSectionMount);
+    scheduleLayoutSync();
+    updateBreadcrumb();
+
+    currentRequestToken = ++guideSectionSurfaceRequestToken;
+
+    loadGuideRenderedSection(section).then(function (payload) {
+      var sourceShell;
+
+      if (
+        currentRequestToken !== guideSectionSurfaceRequestToken ||
+        !currentGuideSection() ||
+        currentGuideSection().id !== section.id
+      ) {
+        return;
+      }
+
+      sourceShell = guideSectionMount.querySelector(".guide-source-shell");
+
+      if (!sourceShell) {
+        return;
+      }
+
+      applyGuideSourceMeta(section, {
+        taskCount: payload.taskCount,
+        panelCount: payload.panelCount
+      });
+      renderGuideNav();
+      syncGuideSectionStateBadges(section);
+
+      sourceShell.innerHTML = [
+        renderGuideSourceOutline(payload.outline),
+        '<div class="guide-source-body">',
+        renderGuideSourceToolbar(payload.taskCount, payload.panelCount),
+        payload.html,
+        "</div>"
+      ].join("");
+
+      Array.from(sourceShell.querySelectorAll("[data-guide-source-card]")).forEach(function (card) {
+        setGuideSourcePanelState(card, card.classList.contains("is-open"));
+      });
+      syncGuideSourceExpandButton(sourceShell.querySelector(".guide-source-body"));
+      hydrateVideoCards(sourceShell);
+      decorateExpandableMedia(sourceShell);
+      scheduleLayoutSync();
+    }).catch(function () {
+      var sourceShell = guideSectionMount.querySelector(".guide-source-shell");
+
+      if (!sourceShell || currentRequestToken !== guideSectionSurfaceRequestToken) {
+        return;
+      }
+
+      sourceShell.innerHTML = [
+        '<div class="guide-source-error">',
+        "  <strong>Source content could not be rendered in the redesigned guide right now.</strong>",
+        "  <p>Open this page in the live Step by Step Guide while the redesigned surface is refreshed.</p>",
+        section.sectionHref ? '  <a class="btn btn-outline-secondary rounded-pill px-4" href="' + escapeHtml(section.sectionHref) + '" target="_blank" rel="noreferrer">Open Step by Step Guide</a>' : "",
+        "</div>"
+      ].join("");
+      scheduleLayoutSync();
+    });
+  }
+
+  function guideSourceCardById(cardId) {
+    if (!guideSectionMount || !cardId) {
+      return null;
+    }
+
+    return guideSectionMount.querySelector('[data-guide-source-card="' + cardId + '"]');
+  }
+
+  function syncGuideSourceExpandButton(root) {
+    var expandButton;
+    var taskCards;
+    var allOpen;
+
+    if (!root) {
+      return;
+    }
+
+    expandButton = root.querySelector("[data-guide-source-expand-all]");
+
+    if (!expandButton) {
+      return;
+    }
+
+    taskCards = Array.from(root.querySelectorAll('[data-guide-source-kind="task"]'));
+
+    if (!taskCards.length) {
+      expandButton.remove();
+      return;
+    }
+
+    allOpen = taskCards.every(function (card) {
+      return card.classList.contains("is-open");
+    });
+
+    expandButton.textContent = allOpen ? "Collapse all tasks" : "Expand all tasks";
+    expandButton.setAttribute("aria-label", allOpen ? "Collapse all task sections" : "Expand all task sections");
+  }
+
+  function setGuideSourcePanelState(card, openState) {
+    var toggle;
+    var body;
+    var icon;
+
+    if (!card) {
+      return;
+    }
+
+    toggle = card.querySelector("[data-guide-source-toggle]");
+    body = card.querySelector(".guide-source-panel-body");
+    icon = card.querySelector(".guide-source-panel-icon");
+
+    card.classList.toggle("is-open", openState);
+
+    if (toggle) {
+      toggle.setAttribute("aria-expanded", openState ? "true" : "false");
+    }
+
+    if (body) {
+      if (openState) {
+        body.removeAttribute("hidden");
+      } else {
+        body.setAttribute("hidden", "");
+      }
+    }
+
+    if (icon) {
+      icon.textContent = openState ? "−" : "+";
+    }
+  }
+
+  function toggleGuideSourcePanel(cardId, forceOpen, scrollIntoView) {
+    var card = guideSourceCardById(cardId);
+    var sourceBody;
+    var nextOpenState;
+
+    if (!card) {
+      return;
+    }
+
+    nextOpenState = typeof forceOpen === "boolean" ? forceOpen : !card.classList.contains("is-open");
+    setGuideSourcePanelState(card, nextOpenState);
+
+    if (scrollIntoView) {
+      scrollToTarget(card);
+    }
+
+    sourceBody = card.closest(".guide-source-body");
+
+    if (sourceBody) {
+      syncGuideSourceExpandButton(sourceBody);
+    }
+  }
+
+  function toggleGuideSourceTaskPanels(button) {
+    var sourceBody = button && button.closest(".guide-source-body");
+    var taskCards;
+    var shouldOpen;
+
+    if (!sourceBody) {
+      return;
+    }
+
+    taskCards = Array.from(sourceBody.querySelectorAll('[data-guide-source-kind="task"]'));
+
+    if (!taskCards.length) {
+      return;
+    }
+
+    shouldOpen = taskCards.some(function (card) {
+      return !card.classList.contains("is-open");
+    });
+
+    taskCards.forEach(function (card) {
+      setGuideSourcePanelState(card, shouldOpen);
+    });
+
+    syncGuideSourceExpandButton(sourceBody);
+
+    if (taskCards[0]) {
+      scrollToTarget(taskCards[0]);
+    }
+  }
+
+  function copyGuideSourceCode(button) {
+    var block = button && button.closest("pre");
+    var target = block ? block.querySelector(".copy-code") : null;
+    var fallbackTarget = block ? block.querySelector("code") : null;
+    var text = target ? target.textContent : (fallbackTarget ? fallbackTarget.textContent : "");
+
+    if (!text.trim()) {
+      return;
+    }
+
+    copyWithFallback(text).then(function () {
+      var original = button.textContent;
+
+      button.textContent = "Copied";
+      button.classList.add("is-copied");
+      setLiveMessage("Code snippet copied to clipboard.");
+      window.setTimeout(function () {
+        button.textContent = original;
+        button.classList.remove("is-copied");
+      }, 1400);
+    }).catch(function () {
+      setLiveMessage("Copy failed. Select the code manually.");
+    });
+  }
+
+  function buildSearchIndex() {
+    searchIndex = [];
+    searchEntryMap = {};
+
+    stepMeta.forEach(function (meta, index) {
+      var entry = createSearchEntry({
+        id: "guided-" + meta.id,
+        typeLabel: "Quickstart",
+        title: meta.title,
+        summary: meta.summary || "",
+        path: "Quickstart / Step " + (index + 1),
+        body: stepSections[index] ? stepSections[index].textContent : "",
+        keywords: meta.keywords || [],
+        resultHref: routeUrl("#step-" + (index + 1)),
+        open: {
+          kind: "guided",
+          step: index
+        }
+      });
+
+      searchIndex.push(entry);
+      searchEntryMap[entry.id] = entry;
+    });
+
+    explorerItems.forEach(function (item) {
+      var entry = createSearchEntry({
+        id: "toolkit-" + item.id,
+        typeLabel: "Cheatsheet",
+        title: item.title,
+        summary: item.description || item.short || "",
+        path: "Cheatsheet / " + item.title,
+        steps: item.steps,
+        checkpoints: item.checkpoints,
+        watchFor: item.watchFor,
+        snippet: item.snippet,
+        exampleFields: item.exampleFields,
+        resourceLinks: item.resourceLinks,
+        milestones: item.milestones,
+        tags: item.tags,
+        sourceHref: item.sourceHref,
+        sourceLabel: item.sourceLabel,
+        resultHref: routeUrl("#cheatsheet:" + encodeURIComponent(item.id)),
+        open: {
+          kind: "toolkit",
+          itemId: item.id
+        }
+      });
+
+      searchIndex.push(entry);
+      searchEntryMap[entry.id] = entry;
+    });
+
+    nodocSearchEntries.forEach(function (entry) {
+      searchIndex.push(entry);
+      searchEntryMap[entry.id] = entry;
+    });
+
+    (window.LiveLabsMarkdownSections || []).forEach(function (section) {
+      section.patterns.forEach(function (pattern) {
+        var entry = createSearchEntry({
+          id: "markdown-" + pattern.id,
+          typeLabel: "Markdown reference",
+          title: pattern.title,
+          summary: pattern.description,
+          path: "Markdown / " + section.title,
+          body: [pattern.source || "", pattern.result, (pattern.notes || []).join(" ")].join(" "),
+          keywords: (pattern.keywords || "").split(/\s+/),
+          resultHref: resolveGuideRuntimePath("markdown/#" + pattern.id),
+          resultLabel: "Open Markdown example"
+        });
+        searchIndex.push(entry);
+        searchEntryMap[entry.id] = entry;
+      });
+    });
+
+    var workshopExampleEntry = createSearchEntry({
+      id: "workshop-example",
+      typeLabel: "Workshop example",
+      title: "LiveLabs Workshop Example",
+      summary: "Open the working Finance AI Developer Hub workshop to study a real LiveLabs structure, labs, tasks, and learner flow.",
+      path: "Workshop Example / Finance AI Developer Hub",
+      keywords: ["workshop example", "sample", "reference", "template", "demo", "inspiration", "finance", "ai developer hub"],
+      resultHref: workshopExampleHref,
+      resultLabel: "Open Workshop Example",
+      resultExternal: true,
+      open: {
+        kind: "workshop-example"
+      }
+    });
+
+    searchIndex.push(workshopExampleEntry);
+    searchEntryMap[workshopExampleEntry.id] = workshopExampleEntry;
+  }
+
+  function createNoDocSearchEntries(markup) {
+    var documentFragment = new DOMParser().parseFromString(markup, "text/html");
+
+    return Array.from(documentFragment.querySelectorAll("details.nodoc-tree-group")).reduce(function (entries, panel, panelIndex) {
+      var panelSummary = panel.querySelector(":scope > summary");
+      var panelTitleNode = panelSummary && panelSummary.querySelector("span");
+      var panelTitle = panelTitleNode ? panelTitleNode.textContent.trim() : (panelSummary ? panelSummary.textContent.trim() : "NoDoc workshop section");
+      var panelText = panel.textContent.trim();
+      var panelEntry = createSearchEntry({
+        id: "nodoc-panel-" + panelIndex,
+        typeLabel: "NoDoc workshop",
+        title: panelTitle,
+        summary: "Open this NoDoc workshop section and its authoring tasks.",
+        path: "NoDoc / " + panelTitle,
+        body: panelText,
+        resultHref: routeUrl("#nodoc:" + panelIndex),
+        open: {
+          kind: "nodoc",
+          panel: panelIndex,
+          task: 0
+        }
+      });
+
+      entries.push(panelEntry);
+      Array.from(panel.querySelectorAll("details.nodoc-task")).forEach(function (task, taskIndex) {
+        var taskSummary = task.querySelector(":scope > summary");
+        var taskTitle = taskSummary ? taskSummary.textContent.trim() : "Task " + (taskIndex + 1);
+        var taskEntry = createSearchEntry({
+          id: "nodoc-panel-" + panelIndex + "-task-" + (taskIndex + 1),
+          typeLabel: "NoDoc workshop",
+          title: taskTitle,
+          summary: "Open this task in " + panelTitle + ".",
+          path: "NoDoc / " + panelTitle + " / " + taskTitle,
+          body: task.textContent.trim(),
+          resultHref: routeUrl("#nodoc:" + panelIndex + ":" + (taskIndex + 1)),
+          open: {
+            kind: "nodoc",
+            panel: panelIndex,
+            task: taskIndex + 1
+          }
+        });
+
+        entries.push(taskEntry);
+      });
+
+      return entries;
+    }, []);
+  }
+
+  function loadNoDocSearchEntries() {
+    if (nodocSearchLoadPromise) {
+      return nodocSearchLoadPromise;
+    }
+
+    nodocSearchLoadPromise = fetch(resolveGuideRuntimePath("content/nodoc/nodoc-workshop.html"), {
+      cache: "no-cache"
+    }).then(function (response) {
+      if (!response.ok) {
+        throw new Error("NoDoc workshop content returned HTTP " + response.status);
+      }
+      return response.text();
+    }).then(function (markup) {
+      nodocSearchEntries = createNoDocSearchEntries(markup);
+      buildSearchIndex();
+      if (state.mode === "search") {
+        renderSearchResults();
+      }
+      return nodocSearchEntries;
+    }).catch(function (error) {
+      console.warn("NoDoc content was not added to global search.", error);
+      return [];
+    });
+
+    return nodocSearchLoadPromise;
+  }
+
+  function isWorkshopExampleIntent(query) {
+    return /\b(example|sample|reference|template|demo|inspiration|finance)\b|ai developer hub/i.test(String(query || ""));
+  }
+
+  function runGlobalSearch(rawQuery) {
+    state.searchQuery = String(rawQuery || "").trim();
+    rememberViewForSearch();
+    switchMode("search");
+  }
+
+  function openSearchResult(entryId) {
+    var entry = searchEntryMap[entryId];
+
+    if (!entry) {
+      return;
+    }
+
+    if (entry.open.kind === "guided") {
+      goToStep(entry.open.step);
+      return;
+    }
+
+    if (entry.open.kind === "toolkit") {
+      state.toolkitQuery = "";
+      bubbleSearch.value = "";
+      setActiveTag("all", { hash: false });
+      switchMode("explorer", { openBubble: entry.open.itemId });
+      return;
+    }
+
+    if (entry.open.kind === "guide-section") {
+      redirectToOriginalGuide(entry.open.sectionId);
+      return;
+    }
+
+  }
+
+  function redirectToOriginalGuide(sectionId) {
+    var resolved = resolveGuideTarget(sectionId || state.guideSection);
+    var section = resolved ? guideSectionMap[resolved] : null;
+    var href = section && section.sectionHref ? section.sectionHref : fullGuideHref;
+
+    persistCurrentHistoryScroll();
+    window.location.href = href;
+  }
+
+  function switchMode(mode, options) {
+    var config = Object.assign({
+      scroll: true,
+      hash: true,
+      announce: true,
+      openBubble: null,
+      guideSection: state.guideSection,
+      resetStep: false,
+      forceTop: false
+    }, options || {});
+
+    if ((mode === "guide" || mode === "search") && !guideCatalogLoaded) {
+      loadGuideCatalog().then(function () {
+        switchMode(mode, options);
+      });
+      return;
+    }
+
+    closeImageLightbox({ announce: false, restoreFocus: false });
+
+    if (mode === "guide" || config.guideSection) {
+      state.guideSection = resolveGuideTarget(config.guideSection || state.guideSection);
+    }
+
+    if (mode === "beginner" && config.resetStep) {
+      state.currentStep = 0;
+    }
+
+    state.mode = mode;
+    setModeRegionVisibility(hub, mode === "hub");
+    setModeRegionVisibility(beginnerMode, mode === "beginner");
+    setModeRegionVisibility(explorerMode, mode === "explorer");
+    setModeRegionVisibility(nodocMode, mode === "nodoc");
+    setModeRegionVisibility(guideMode, mode === "guide");
+    setModeRegionVisibility(generatorMode, mode === "generator");
+    setModeRegionVisibility(searchMode, mode === "search");
+
+    if (mode !== "explorer") {
+      hideBubbleModal({ syncHash: false });
+    }
+
+    updateNav();
+    updateNavSearch();
+
+    if (mode === "beginner") {
+      updateBeginnerUI();
+      if (config.scroll !== false) {
+        if (config.forceTop) {
+          window.scrollTo({ top: 0, behavior: smoothBehavior() });
+        } else {
+          goToStep(state.currentStep, { scroll: true, hash: false, announce: false });
+        }
+      }
+    } else if (mode === "explorer") {
+      renderExplorer();
+      updateBreadcrumb();
+      if (config.scroll !== false) {
+        if (config.forceTop) {
+          window.scrollTo({ top: 0, behavior: smoothBehavior() });
+        } else {
+          scrollToTarget(explorerMode);
+        }
+      }
+    } else if (mode === "nodoc") {
+      updateBreadcrumb();
+      if (config.scroll !== false) {
+        if (config.forceTop) {
+          window.scrollTo({ top: 0, behavior: smoothBehavior() });
+        } else {
+          scrollToTarget(nodocMode);
+        }
+      }
+    } else if (mode === "guide") {
+      renderGuideSection();
+      if (config.scroll !== false) {
+        if (config.forceTop) {
+          window.scrollTo({ top: 0, behavior: smoothBehavior() });
+        } else {
+          scrollToTarget(guideMode);
+        }
+      }
+    } else if (mode === "generator") {
+      updateBreadcrumb();
+      if (config.scroll !== false) {
+        if (config.forceTop) {
+          window.scrollTo({ top: 0, behavior: smoothBehavior() });
+        } else {
+          scrollToTarget(generatorMode);
+        }
+      }
+    } else if (mode === "search") {
+      renderSearchResults();
+      if (config.scroll !== false) {
+        if (config.forceTop) {
+          window.scrollTo({ top: 0, behavior: smoothBehavior() });
+        } else {
+          scrollToTarget(searchMode);
+        }
+      }
+    } else {
+      updateBreadcrumb();
+      if (config.scroll !== false) {
+        window.scrollTo({ top: 0, behavior: smoothBehavior() });
+      }
+    }
+
+    if (config.hash !== false) {
+      if (mode === "explorer" && config.openBubble) {
+        var requestedBubble = explorerItems.find(function (item) {
+          return item.id === config.openBubble;
+        });
+        setHash(requestedBubble ? cheatsheetItemHash(requestedBubble) : "#quick-reference", {
+          replace: !!config.replaceHistory
+        });
+      } else {
+        updateHashFromState({ replace: !!config.replaceHistory });
+      }
+    }
+
+    if (config.scroll !== false) {
+      refreshCurrentHistoryScrollSoon();
+    }
+
+    if (config.openBubble) {
+      window.setTimeout(function () {
+        openBubble(config.openBubble);
+      }, prefersReducedMotion ? 0 : 220);
+    }
+
+    scheduleLayoutSync();
+
+    if (config.announce !== false) {
+      if (mode === "hub") {
+        setLiveMessage("Returned to the guide home.");
+      } else if (mode === "beginner") {
+        setLiveMessage("Quickstart opened.");
+      } else if (mode === "explorer") {
+        setLiveMessage("Cheatsheet opened.");
+      } else if (mode === "nodoc") {
+        setLiveMessage("NoDoc guide opened.");
+      } else if (mode === "guide") {
+        setLiveMessage("Step by Step Guide opened at " + (currentGuideSection() ? currentGuideSection().title : "Start Guide") + ".");
+      } else if (mode === "generator") {
+        setLiveMessage("Markdown Workshop Generator opened.");
+      } else if (mode === "search") {
+        setLiveMessage("Search results opened.");
+      }
+    }
+  }
+
+  function goToStep(index, options) {
+    var config = Object.assign({
+      scroll: true,
+      hash: true,
+      announce: true
+    }, options || {});
+    var boundedIndex = Math.max(0, Math.min(index, stepSections.length - 1));
+
+    state.currentStep = boundedIndex;
+
+    if (state.mode !== "beginner") {
+      switchMode("beginner", { scroll: false, hash: false, announce: false });
+    }
+
+    updateBeginnerUI();
+
+    if (config.scroll !== false) {
+      suppressObserver = true;
+      scrollToTarget(stepSections[boundedIndex]);
+      window.setTimeout(function () {
+        suppressObserver = false;
+      }, prefersReducedMotion ? 50 : 420);
+    }
+
+    if (config.hash !== false) {
+      updateHashFromState({ replace: !!config.replaceHistory });
+    }
+
+    if (config.scroll !== false) {
+      refreshCurrentHistoryScrollSoon();
+    }
+
+    if (config.announce !== false) {
+      setLiveMessage("Step " + (boundedIndex + 1) + ". " + stepMeta[boundedIndex].title + ".");
+    }
+  }
+
+  function nextStep() {
+    if (state.currentStep < stepSections.length - 1) {
+      goToStep(state.currentStep + 1);
+    }
+  }
+
+  function prevStep() {
+    if (state.currentStep > 0) {
+      goToStep(state.currentStep - 1);
+    }
+  }
+
+  function copyWithSelectionFallback(text) {
+    return new Promise(function (resolve, reject) {
+      var helper = document.createElement("textarea");
+      var copied;
+
+      helper.value = text;
+      helper.setAttribute("readonly", "");
+      helper.style.position = "absolute";
+      helper.style.left = "-9999px";
+      document.body.appendChild(helper);
+      helper.select();
+      try {
+        copied = document.execCommand("copy");
+        if (copied) {
+          resolve();
+        } else {
+          reject(new Error("The browser did not copy the requested text."));
+        }
+      } catch (error) {
+        reject(error);
+      } finally {
+        document.body.removeChild(helper);
+      }
+    });
+  }
+
+  function copyWithFallback(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).catch(function () {
+        return copyWithSelectionFallback(text);
+      });
+    }
+
+    return copyWithSelectionFallback(text);
+  }
+
+  function copyTarget(targetId, button) {
+    var target = document.getElementById(targetId);
+    if (!target) {
+      return;
+    }
+
+    copyWithFallback(target.textContent).then(function () {
+      var original = button.textContent;
+      button.textContent = "Copied";
+      button.classList.add("is-copied");
+      setLiveMessage("Snippet copied to clipboard.");
+      window.setTimeout(function () {
+        button.textContent = original;
+        button.classList.remove("is-copied");
+      }, 1400);
+    }).catch(function () {
+      setLiveMessage("Copy failed. Select the text manually.");
+    });
+  }
+
+  function copyText(text, button) {
+    var value = String(text || "").trim();
+
+    if (!value) {
+      return;
+    }
+
+    copyWithFallback(value).then(function () {
+      var original = button.textContent;
+      button.textContent = "Copied";
+      button.classList.add("is-copied");
+      setLiveMessage("Copied to clipboard.");
+      window.setTimeout(function () {
+        button.textContent = original;
+        button.classList.remove("is-copied");
+      }, 1400);
+    }).catch(function () {
+      setLiveMessage("Copy failed. Select the text manually.");
+    });
+  }
+
+  function handleShortcutBubble(id) {
+    state.toolkitQuery = "";
+    if (bubbleSearch) {
+      bubbleSearch.value = "";
+    }
+    setActiveTag("all", { hash: false });
+    switchMode("explorer", { openBubble: id });
+  }
+
+  function applyHash(hash) {
+    var cleaned = (hash || "").replace("#", "").trim();
+    var index;
+    var query;
+    var guideHashTarget;
+
+    if (!cleaned || cleaned === "home" || cleaned === "hub") {
+      switchMode("hub", { scroll: false, hash: false, announce: false });
+      return;
+    }
+
+    if (cleaned === "guided" || cleaned === "quickstart") {
+      switchMode("beginner", { scroll: true, forceTop: true, hash: false, announce: false });
+      updateBeginnerUI();
+      return;
+    }
+
+    var quickstartTarget = quickstartSectionTarget(hash);
+    if (quickstartTarget) {
+      var containingStep = quickstartTarget.closest(".rabbit-step");
+      var authoringPanel = quickstartTarget.closest("[data-authoring-panel]");
+      var authoringOnly = quickstartTarget.closest("[data-authoring-only]");
+      var authoringRoute = authoringPanel
+        ? authoringPanel.getAttribute("data-authoring-panel")
+        : (authoringOnly ? authoringOnly.getAttribute("data-authoring-only") : "");
+
+      if (authoringRoute === "source" || authoringRoute === "no-doc") {
+        setAuthoringRoute(authoringRoute, { history: false, announce: false });
+      }
+
+      index = Number(containingStep.getAttribute("data-step-index"));
+      state.currentStep = Number.isNaN(index) ? 0 : Math.max(0, Math.min(index, stepSections.length - 1));
+      switchMode("beginner", { scroll: false, hash: false, announce: false });
+      updateBeginnerUI();
+      scrollToQuickstartSection(quickstartTarget);
+      return;
+    }
+
+    if (cleaned === "toolkit" || cleaned === "quick-reference" || cleaned === "cheatsheet" || cleaned === "explorer") {
+      switchMode("explorer", { scroll: true, forceTop: true, hash: false, announce: false });
+      setActiveTag("all", { hash: false });
+      return;
+    }
+
+    if (cleaned.indexOf("tag-") === 0) {
+      var requestedTag = findCheatsheetTagByHash(hash);
+
+      switchMode("explorer", { scroll: true, forceTop: true, hash: false, announce: false });
+      setActiveTag(requestedTag || "all", { hash: false });
+      return;
+    }
+
+    if (cleaned.indexOf("cheatsheet:") === 0 || isCheatsheetModalHash(hash)) {
+      var requestedBubble = findCheatsheetItemByHash(hash);
+
+      if (!requestedBubble) {
+        switchMode("explorer", { scroll: true, forceTop: true, hash: false, announce: false });
+        return;
+      }
+
+      switchMode("explorer", {
+        scroll: true,
+        forceTop: true,
+        hash: false,
+        announce: false,
+        openBubble: requestedBubble.id
+      });
+      return;
+    }
+
+    if (cleaned === "nodoc" || cleaned === "no-doc") {
+      switchMode("nodoc", { scroll: true, forceTop: true, hash: false, announce: false });
+      return;
+    }
+
+    if (cleaned.indexOf("nodoc:") === 0) {
+      switchMode("nodoc", { scroll: true, forceTop: true, hash: false, announce: false });
+      return;
+    }
+
+    if (cleaned === "generator" || cleaned === "markdown-generator" || cleaned === "workshop-markdown-generator") {
+      switchMode("generator", { scroll: true, forceTop: true, hash: false, announce: false });
+      return;
+    }
+
+    if (cleaned === "guide" || cleaned === "full-guide") {
+      window.location.href = fullGuideHref;
+      return;
+    }
+
+    guideHashTarget = cleaned.indexOf("guide-") === 0 ? resolveGuideTarget(cleaned.replace("guide-", "")) : "";
+
+    if (guideHashTarget) {
+      redirectToOriginalGuide(guideHashTarget);
+      return;
+    }
+
+    if (cleaned === "search" || cleaned.indexOf("search:") === 0) {
+      query = cleaned.indexOf("search:") === 0 ? decodeURIComponent(cleaned.slice(7)) : "";
+      state.searchQuery = query;
+      updateNavSearch();
+      switchMode("search", { scroll: false, hash: false, announce: false });
+      return;
+    }
+
+    if (cleaned.indexOf("step-") === 0) {
+      index = Number(cleaned.replace("step-", "")) - 1;
+      if (!Number.isNaN(index)) {
+        state.currentStep = Math.max(0, Math.min(index, stepSections.length - 1));
+        switchMode("beginner", { scroll: true, hash: false, announce: false });
+        updateBeginnerUI();
+        return;
+      }
+    }
+
+    switchMode("hub", { scroll: false, hash: false, announce: false });
+  }
+
+  function restoreHistoryRoute(route) {
+    var restoreY = Number(route && route.scrollY);
+    var historyBubble;
+
+    if (!route || !route.__authorGuideRoute) {
+      applyHash(routeTokenFromLocation());
+      return;
+    }
+
+    isRestoringHistory = true;
+    state.currentStep = Math.max(0, Math.min(Number(route.currentStep || 0), stepSections.length - 1));
+    state.authoringRoute = normalizeAuthoringRoute(route.authoringRoute || initialAuthoringRoute());
+    state.fastTrack = route.fastTrack || state.fastTrack;
+    state.activeTags = normalizeTagSelection(route.activeTags || route.activeTag || []);
+    state.activeTag = state.activeTags[0] || "all";
+    state.toolkitSort = normalizeToolkitSort(route.toolkitSort || state.toolkitSort);
+    state.toolkitQuery = route.toolkitQuery || "";
+    state.searchQuery = route.searchQuery || "";
+    state.guideSection = route.guideSection || state.guideSection;
+
+    if (bubbleSearch) {
+      bubbleSearch.value = state.toolkitQuery;
+    }
+
+    if (navSearchInput) {
+      navSearchInput.value = state.searchQuery;
+    }
+
+    if (toolkitSort) {
+      toolkitSort.value = state.toolkitSort;
+    }
+
+    updateTagPillState();
+    updateAuthoringRouteUI();
+
+    switchMode(route.mode || "hub", {
+      scroll: false,
+      hash: false,
+      announce: false,
+      guideSection: state.guideSection
+    });
+
+    if (state.mode === "explorer") {
+      historyBubble = findCheatsheetItemByHash(route.hash || window.location.hash);
+      if (historyBubble) {
+        openBubble(historyBubble.id);
+      } else {
+        hideBubbleModal({ syncHash: false });
+      }
+    }
+
+    window.setTimeout(function () {
+      window.scrollTo({
+        top: Number.isFinite(restoreY) ? Math.max(0, restoreY) : 0,
+        behavior: "auto"
+      });
+      isRestoringHistory = false;
+      scheduleLayoutSync();
+    }, 0);
+  }
+
+  document.addEventListener("click", function (event) {
+    var scrollTargetLink = event.target.closest("[data-scroll-target]");
+    var modeButton = event.target.closest("[data-mode-target]");
+    var authoringRouteTab = event.target.closest("[data-authoring-route]");
+    var actionButton = event.target.closest("[data-action]");
+    var guideButton = event.target.closest("[data-guide-target]");
+    var guideSectionButton = event.target.closest("[data-guide-section]");
+    var guideSourceJumpButton = event.target.closest("[data-guide-source-jump]");
+    var guideSourceToggleButton = event.target.closest("[data-guide-source-toggle]");
+    var guideSourceExpandButton = event.target.closest("[data-guide-source-expand-all]");
+    var guideSourceCopyButton = event.target.closest(".guide-source-panel-prose .copy-button, .guide-source-prose .copy-button");
+    var guideSourceHashLink = event.target.closest(".guide-source-shell a[href^=\"#\"]");
+    var shortcutBubble = event.target.closest("[data-open-bubble-direct]");
+    var bubbleButton = event.target.closest("[data-open-bubble]");
+    var copyButton = event.target.closest("[data-copy-target]");
+    var copyTextButton = event.target.closest("[data-copy-text]");
+    var tagButton = event.target.closest("[data-tag]");
+    var searchOpenButton = event.target.closest("[data-search-open]");
+    var wmsStatusNode = event.target.closest(".wms-status-node");
+    var wmsStatusAction = event.target.closest("[data-wms-status-action]");
+    var installCard = event.target.closest("[data-install-card]");
+    var isPrimaryNav = modeButton && !!modeButton.closest(".nav-group-all");
+
+    if (scrollTargetLink) {
+      var scrollTarget = document.getElementById(scrollTargetLink.getAttribute("data-scroll-target"));
+
+      if (scrollTarget) {
+        event.preventDefault();
+        scrollToTarget(scrollTarget);
+        return;
+      }
+    }
+
+    if (modeButton && modeButton.tagName === "A") {
+      return;
+    }
+
+    if (installCard && !copyTextButton) {
+      var isComplete = !installCard.classList.contains("is-complete");
+
+      installCard.classList.toggle("is-complete", isComplete);
+      installCard.setAttribute("aria-pressed", isComplete ? "true" : "false");
+    }
+
+    if (modeButton) {
+      if (modeButton.getAttribute("data-mode-target") === "guide" && modeButton.getAttribute("data-guide-target")) {
+        switchMode("guide", {
+          guideSection: resolveGuideTarget(modeButton.getAttribute("data-guide-target")) || currentGuideTarget(),
+          forceTop: isPrimaryNav
+        });
+      } else if (modeButton.getAttribute("data-mode-target") === "beginner") {
+        var requestedStep = Number(modeButton.getAttribute("data-open-step") || "0");
+        switchMode("beginner", {
+          resetStep: !requestedStep,
+          forceTop: isPrimaryNav || !!modeButton.closest(".hero-actions"),
+          scroll: !requestedStep,
+          hash: !requestedStep
+        });
+        if (requestedStep) {
+          goToStep(requestedStep - 1);
+        }
+      } else {
+        switchMode(modeButton.getAttribute("data-mode-target"), { forceTop: isPrimaryNav });
+      }
+      return;
+    }
+
+    if (authoringRouteTab) {
+      setAuthoringRoute(authoringRouteTab.getAttribute("data-authoring-route"));
+      return;
+    }
+
+    if (guideSourceJumpButton) {
+      toggleGuideSourcePanel(guideSourceJumpButton.getAttribute("data-guide-source-jump"), true, true);
+      return;
+    }
+
+    if (guideSourceToggleButton) {
+      toggleGuideSourcePanel(guideSourceToggleButton.getAttribute("data-guide-source-toggle"));
+      return;
+    }
+
+    if (guideSourceExpandButton) {
+      toggleGuideSourceTaskPanels(guideSourceExpandButton);
+      return;
+    }
+
+    if (guideSourceCopyButton) {
+      event.preventDefault();
+      copyGuideSourceCode(guideSourceCopyButton);
+      return;
+    }
+
+    if (guideSourceHashLink) {
+      var hashTargetId = guideSourceHashLink.getAttribute("href").replace(/^#/, "");
+      var hashTargetNode = hashTargetId ? document.getElementById(hashTargetId) : null;
+      var hashTargetCard = hashTargetNode && hashTargetNode.closest ? hashTargetNode.closest("[data-guide-source-card]") : null;
+
+      if (hashTargetCard) {
+        event.preventDefault();
+        toggleGuideSourcePanel(hashTargetCard.getAttribute("data-guide-source-card"), true);
+        scrollToTarget(hashTargetNode);
+        return;
+      }
+    }
+
+    if (event.target === imageLightboxClose || event.target.closest("[data-lightbox-close]")) {
+      closeImageLightbox();
+      return;
+    }
+
+    if (event.target.closest("figure[data-expandable=\"true\"]")) {
+      openImageLightbox(event.target.closest("figure[data-expandable=\"true\"]"));
+      return;
+    }
+
+    if (actionButton) {
+      if (actionButton.getAttribute("data-action") === "next") {
+        nextStep();
+      } else if (actionButton.getAttribute("data-action") === "prev") {
+        prevStep();
+      } else if (actionButton.getAttribute("data-action") === "surface") {
+        switchMode("hub");
+      }
+      return;
+    }
+
+    if (guideButton) {
+      openFullGuide(fullGuideHref);
+      return;
+    }
+
+    if (guideSectionButton) {
+      switchMode("guide", { guideSection: guideSectionButton.getAttribute("data-guide-section") });
+      return;
+    }
+
+    if (shortcutBubble) {
+      handleShortcutBubble(shortcutBubble.getAttribute("data-open-bubble-direct"));
+      return;
+    }
+
+    if (bubbleButton) {
+      openBubble(bubbleButton.getAttribute("data-open-bubble"));
+      return;
+    }
+
+    if (copyButton) {
+      copyTarget(copyButton.getAttribute("data-copy-target"), copyButton);
+      return;
+    }
+
+    if (copyTextButton) {
+      event.preventDefault();
+      copyText(copyTextButton.getAttribute("data-copy-text"), copyTextButton);
+      return;
+    }
+
+    if (tagButton) {
+      setActiveTag(tagButton.getAttribute("data-tag"));
+      return;
+    }
+
+    if (searchOpenButton) {
+      openSearchResult(searchOpenButton.getAttribute("data-search-open"));
+    }
+
+    if (wmsStatusNode) {
+      selectWmsStatusGraphNode(wmsStatusNode.closest("[data-wms-status-graph]"), wmsStatusNode.getAttribute("data-status-id"));
+      return;
+    }
+
+    if (wmsStatusAction) {
+      var graph = wmsStatusAction.closest("[data-wms-status-graph]");
+      var action = wmsStatusAction.getAttribute("data-wms-status-action");
+
+      if (action === "main-path") {
+        highlightWmsStatusGraphPath(graph, ["submitted", "approved", "in-development", "self-qa", "self-qa-complete", "completed"], "Main path");
+      } else if (action === "qa-cycle") {
+        highlightWmsStatusGraphPath(graph, ["completed", "quarterly-qa", "quarterly-qa-complete", "completed"], "QA cycle");
+      } else if (action === "fit") {
+        fitWmsStatusGraph(graph);
+      } else if (action === "zoom-out") {
+        stepWmsStatusGraphZoom(graph, -1);
+      } else if (action === "zoom-in") {
+        stepWmsStatusGraphZoom(graph, 1);
+      } else if (action === "reset") {
+        resetWmsStatusGraph(graph);
+      }
+      return;
+    }
+  });
+
+  document.addEventListener("focusin", function (event) {
+    var node = event.target && event.target.closest ? event.target.closest(".wms-status-node") : null;
+    var stage;
+
+    if (!node) {
+      return;
+    }
+
+    stage = node.closest(".wms-status-graph-stage");
+    if (stage && typeof node.scrollIntoView === "function") {
+      window.requestAnimationFrame(function () {
+        node.scrollIntoView({ block: "nearest", inline: "nearest" });
+      });
+    }
+  });
+
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && imageLightbox && !imageLightbox.hasAttribute("hidden")) {
+      event.preventDefault();
+      event.stopPropagation();
+      closeImageLightbox();
+      return;
+    }
+
+    if (event.key === "Escape" && bubbleModalElement && bubbleModalElement.classList.contains("show")) {
+      event.preventDefault();
+      hideBubbleModal();
+      return;
+    }
+
+    if ((event.key === "Enter" || event.key === " ") && event.target && event.target.closest && event.target.closest("figure[data-expandable=\"true\"]")) {
+      event.preventDefault();
+      openImageLightbox(event.target.closest("figure[data-expandable=\"true\"]"));
+      return;
+    }
+
+    if ((event.key === "Enter" || event.key === " ") && event.target && event.target.closest && event.target.closest(".wms-status-node")) {
+      event.preventDefault();
+      selectWmsStatusGraphNode(event.target.closest("[data-wms-status-graph]"), event.target.closest(".wms-status-node").getAttribute("data-status-id"));
+    }
+  }, true);
+
+  if (fastTrackToggle) {
+    fastTrackToggle.addEventListener("change", function (event) {
+      state.fastTrack = event.target.checked ? "minimal" : "guided";
+      updateBeginnerUI();
+      setLiveMessage(state.fastTrack === "minimal" ? "Fast Track enabled." : "Guided mode enabled.");
+    });
+  }
+
+  if (bubbleSearch) {
+    bubbleSearch.oninput = function (event) {
+      state.toolkitQuery = event.target.value;
+      renderExplorer();
+    };
+  }
+
+  if (searchPageInput) {
+    searchPageInput.addEventListener("input", function () {
+      if (searchPageClear) {
+        searchPageClear.hidden = !searchPageInput.value;
+      }
+    });
+  }
+
+  if (clearSearch) {
+    clearSearch.addEventListener("click", function () {
+      state.toolkitQuery = "";
+      if (bubbleSearch) {
+        bubbleSearch.value = "";
+      }
+      renderExplorer();
+      if (bubbleSearch) {
+        bubbleSearch.focus();
+      }
+    });
+  }
+
+  if (toolkitSort) {
+    toolkitSort.addEventListener("change", function (event) {
+      state.toolkitSort = normalizeToolkitSort(event.target.value);
+      renderExplorer();
+      setLiveMessage("Cheatsheet sorted by " + currentSortLabel() + ".");
+    });
+  }
+
+  document.addEventListener("submit", function (event) {
+    var form = event.target;
+    var input;
+
+    if (!form || ["navSearchForm", "homeSearchForm", "searchPageForm"].indexOf(form.id) === -1) {
+      return;
+    }
+
+    input = form.querySelector('input[type="search"], input[type="text"]');
+    event.preventDefault();
+    runGlobalSearch(input ? input.value : "");
+  });
+
+  if (navSearchClear) {
+    navSearchClear.addEventListener("click", function () {
+      state.searchQuery = "";
+      if (navSearchInput) {
+        navSearchInput.value = "";
+      }
+      if (homeSearchInput) {
+        homeSearchInput.value = "";
+      }
+      if (searchPageInput) {
+        searchPageInput.value = "";
+      }
+      if (state.mode === "search") {
+        renderSearchResults();
+        updateHashFromState({ replace: true });
+      }
+    });
+  }
+
+  if (searchPageClear) {
+    searchPageClear.addEventListener("click", function () {
+      state.searchQuery = "";
+      updateNavSearch();
+      if (state.mode === "search") {
+        renderSearchResults();
+        updateHashFromState({ replace: true });
+      }
+      if (searchPageInput) {
+        searchPageInput.focus();
+      }
+    });
+  }
+
+  if (wmsExampleForm) {
+    wmsExampleForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      var validationMessage = validateWmsExamplePrompt();
+      if (validationMessage) {
+        setGeneratorState(null, wmsExampleLoading, wmsExampleError, false, false, validationMessage);
+        if (wmsExamplePrompt) {
+          wmsExamplePrompt.focus();
+        }
+        return;
+      }
+      runWmsExampleGeneration();
+    });
+    if (wmsExamplePrompt) {
+      wmsExamplePrompt.addEventListener("input", function () {
+        validateWmsExamplePrompt();
+        if (wmsExampleError && !wmsExamplePrompt.validationMessage) {
+          wmsExampleError.textContent = "";
+          wmsExampleError.classList.add("d-none");
+        }
+      });
+    }
+    renderGeneratedExampleFields([]);
+    validateWmsExamplePrompt();
+    setGeneratorState(null, wmsExampleLoading, wmsExampleError, false, false, "");
+  }
+
+  if (workshopMarkdownForm) {
+    workshopMarkdownForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      runMarkdownGeneration();
+    });
+  }
+
+  if (workshopMarkdownType) {
+    workshopMarkdownType.addEventListener("change", syncMarkdownSnippetSummary);
+    syncMarkdownSnippetSummary();
+  }
+
+  if (copyGeneratedMarkdown) {
+    copyGeneratedMarkdown.addEventListener("click", function () {
+      if (!generatedMarkdownText) {
+        return;
+      }
+      copyText(generatedMarkdownText, copyGeneratedMarkdown);
+    });
+  }
+
+  authoringRouteTabs.forEach(function (tab, tabIndex) {
+    tab.addEventListener("keydown", function (event) {
+      var nextIndex = tabIndex;
+
+      if (event.key === "ArrowRight") {
+        nextIndex = (tabIndex + 1) % authoringRouteTabs.length;
+      } else if (event.key === "ArrowLeft") {
+        nextIndex = (tabIndex - 1 + authoringRouteTabs.length) % authoringRouteTabs.length;
+      } else if (event.key === "Home") {
+        nextIndex = 0;
+      } else if (event.key === "End") {
+        nextIndex = authoringRouteTabs.length - 1;
+      } else {
+        return;
+      }
+
+      event.preventDefault();
+      setAuthoringRoute(
+        authoringRouteTabs[nextIndex].getAttribute("data-authoring-route"),
+        { focus: true }
+      );
+    });
+  });
+
+  window.addEventListener("hashchange", function () {
+    if (isRestoringHistory) {
+      return;
+    }
+    applyHash(window.location.hash);
+    updateHashFromState({ replace: true });
+  });
+
+  window.addEventListener("popstate", function (event) {
+    restoreHistoryRoute(event.state);
+  });
+
+  if (backToTopButton) {
+    backToTopButton.addEventListener("click", function () {
+      if (state.mode === "beginner") {
+        suppressObserver = true;
+        goToStep(0, {
+          scroll: false,
+          hash: true,
+          replaceHistory: true,
+          announce: false
+        });
+        releaseObserverAtTop();
+      }
+      window.scrollTo({ top: 0, behavior: smoothBehavior() });
+      setLiveMessage("Returned to the top of the page.");
+    });
+  }
+
+  if (authorGlobalNavToggle) {
+    if (window.LiveLabsSideNav && typeof window.LiveLabsSideNav.bindSideNavToggle === "function") {
+      authorNavController = window.LiveLabsSideNav.bindSideNavToggle({
+        button: authorGlobalNavToggle,
+        bodyClass: "author-nav-closed",
+        canToggle: function () {
+          return state.mode !== "hub";
+        },
+        hiddenWhenDisabled: true,
+        onToggle: scheduleLayoutSync
+      });
+    } else {
+      authorGlobalNavToggle.addEventListener("click", function () {
+        document.body.classList.toggle("author-nav-closed");
+        syncAuthorNavToggle();
+        scheduleLayoutSync();
+      });
+    }
+  }
+
+  window.addEventListener("scroll", scheduleLayoutSync, { passive: true });
+  window.addEventListener("resize", function () {
+    scheduleLayoutSync();
+    document.querySelectorAll('[data-wms-status-graph][data-wms-status-zoom="fit"]').forEach(function (graph) {
+      syncWmsStatusGraphZoomControls(graph);
+    });
+  });
+
+  hydrateVideoCards(document);
+  decorateExpandableMedia(document);
+  initWmsStatusGraphs();
+  updateNav();
+  updateNavSearch();
+  updateBeginnerUI();
+  updateAuthoringRouteUI();
+  renderTagPills();
+  renderExplorer();
+  renderGuideNav();
+  loadNoDocSearchEntries();
+  var initialRoute = routeTokenFromLocation();
+  var initialRouteNeedsCatalog = routeNeedsGuideCatalog(initialRoute);
+
+  if (!initialRouteNeedsCatalog) {
+    applyHash(initialRoute);
+    updateHashFromState({ replace: true });
+  }
+
+  loadGuideCatalog().finally(function () {
+    if (initialRouteNeedsCatalog) {
+      applyHash(routeTokenFromLocation());
+      updateHashFromState({ replace: true });
+    }
+    scheduleLayoutSync();
+  });
+}());

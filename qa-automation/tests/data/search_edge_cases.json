@@ -1,0 +1,10 @@
+[
+  {
+    "id": "no_results",
+    "search_term": "zzzzzzzzzzunlikelyterm"
+  },
+  {
+    "id": "blank_spaces",
+    "search_term": "   "
+  }
+]

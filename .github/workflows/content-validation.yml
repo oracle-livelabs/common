@@ -1,0 +1,52 @@
+name: Content Validation Workflow
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  content-validation:
+    name: Review content signals
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run content validation
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          if [ -n "${BASE_SHA:-}" ]; then
+            python3 .github/scripts/validate_content.py \
+              --base "$BASE_SHA" \
+              --head "$HEAD_SHA" \
+              --rules .github/content-validation/rules.json \
+              --report "$RUNNER_TEMP/content-validation-report.md" | tee "$RUNNER_TEMP/content-validation-console.md"
+          else
+            mapfile -t CONTENT_FILES < <(git ls-files '*.md')
+            python3 .github/scripts/validate_content.py \
+              --files "${CONTENT_FILES[@]}" \
+              --rules .github/content-validation/rules.json \
+              --report "$RUNNER_TEMP/content-validation-report.md" | tee "$RUNNER_TEMP/content-validation-console.md"
+          fi
+
+      - name: Add report to job summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f "$RUNNER_TEMP/content-validation-report.md" ]; then
+            cat "$RUNNER_TEMP/content-validation-report.md" >> "$GITHUB_STEP_SUMMARY"
+          fi

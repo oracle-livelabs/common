@@ -1,0 +1,30 @@
+# On-Call Review local slice
+
+Prepared: 2026-10-02. Status: local reviewable slice; live integration disabled and unverified.
+
+Open QA Operations → On-Call Review, or `http://127.0.0.1:4192/?view=on-call-review`. The existing demo login is a product preview, not production identity. Start from `app/` using `node scripts/serve.mjs --root public --port 4192`.
+
+The page initially displays UNAVAILABLE/BLOCKED with no cases. **Load synthetic preview** explicitly loads a local copy of sealed synthetic run `synthetic-e5900984270976e44089`. It verifies snapshot/report hashes against that run's manifest and retains the exact case, draft and report identifiers. The snapshot and report copies contain invented fixtures only. The public preview does not contain live email/Slack content. The original completion manifest lists the complete runtime artifacts; the public preview includes only its snapshot/report and manifest copies.
+
+The page shows source collection coverage and limitations, a four-source inbox, sanitized answer drafts, exact source/knowledge/context/basis revisions, supersession and private readiness. Bounded collection does not prove complete historical coverage. Reported recovery, source resolution, owner confirmation and learner health remain independent.
+
+Reported review state is displayed separately from draft status. Supplied approval/request-changes metadata is checked against exact mode, version, source and knowledge revisions, decision/state, opaque reviewer reference and timestamp. A matching record leaves the pending-review count; a bare approval string or mismatched record remains unverified and pending. This client checks metadata consistency, not reviewer authority.
+
+**Preview review metadata** requires an opaque reviewer reference (`[a-zA-Z0-9_-]{1,80}`). It creates only an in-memory preview, with `authoritativeApproval:false` and `privatePersistencePerformed:false`; it does not approve or save a decision. The runtime's separate `reviewDraft` helper can create revision-bound local review metadata when explicitly invoked. No backend review-write endpoint is implemented by this UI. Changing case, clearing data, changing mode, refetching or signing out clears the displayed review preview; mode changes clear the previous response before a new read. Support payloads and preview decisions never enter the demo localStorage model.
+
+The report link opens **a local synthetic HTML viewing aid**, not a protected live report or a deployment. It escapes and displays the exact canonical sealed Markdown and its SHA-256. `report.md` and its completion-manifest hash remain unchanged; `report.html` is a separate preview artifact. This avoids text-file navigation blocked by the in-app browser without changing browser security settings. Slack publishing and QA infrastructure work remain deferred.
+
+## Read-only adapter contract
+
+`app/public/on-call-review.mjs` accepts `hub-operations.v1`, profile `on-call-review`, matching explicitly selected `synthetic`/`live` mode. `sources`, `cases`, `drafts` and `reports` must be typed arrays. Exactly four unique configured source rows are required: `SLACK-AUTHORS`, `MAIL-DB`, `MAIL-HELP`, `MAIL-COMMUNITY`; unchecked sources require an explicit unavailable state. Cases, drafts, reports and readiness must carry matching mode fields, and each report must carry the `on-call-review` profile. Case/draft identities and revisions are validated; drafts use `draftTextSanitized` exclusively. Superseded, incomplete and stale-context versions cannot create review previews. Arbitrary external links, signed/query URLs and unsupported source-write claims are rejected.
+
+No live endpoint is configured. A future approved deployment may provide inert metadata `<meta name="on-call-review-endpoint" content="/api/on-call/review">`. Reads are same-origin GET, `credentials:same-origin`, `cache:no-store`, redirect rejection and a ten-second timeout. The endpoint must return JSON and enforce authentication/authorization, redaction and retention itself. Client response assertions do not independently prove those controls.
+
+A live response additionally requires `readiness.liveStatus:'READY'` and all of `configuredForLive`, `independentLiveVerificationPerformed`, `backendAuthorizationVerified`, `privateAudienceVerified`, `retentionVerified`, `redactionVerified` set to true. These gates are currently unmet. An unavailable, unauthorized, invalid or mismatched live response returns no cases/drafts and never falls back to synthetic data. A future live report URL is limited to the same-origin `/api/on-call/reports/` path without credentials, query or fragment. Textual live report references must be opaque `protected-ref:` identifiers, not URLs, contact information or secret-bearing text. Synthetic report references are limited to manifest-relative paths. The server must enforce protected access on every report request.
+
+## Validation
+
+- Existing 14 helper tests remain passing.
+- Added 21 tests cover mode isolation, sealed synthetic identity/hash verification, no live fallback, scoped endpoints, source limitations, stale/superseded/incomplete drafts, exact preview revisions, opaque reviewer references, no authority/persistence/source writes, independent recovery, escaped view content, required nested modes/typed arrays/source rows, safe report references, exact escaped HTML report generation and reviewed-metadata state semantics.
+- Total: 35 tests passed; syntax check, build and static project validation passed. A separate read-only integration probe used the runtime's actual `reviewDraft` helper with the sealed core state: exact APPROVE and REQUEST_CHANGES records normalized correctly, reduced the pending count from four to three and preserved `sourceAnswerSentOrPosted:false`.
+- Root task owns browser checks and records their result separately. No production source access, private audience control, retention enforcement, schedule execution or publication is verified by local tests.

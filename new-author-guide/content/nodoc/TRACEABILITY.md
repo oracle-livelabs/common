@@ -1,0 +1,15 @@
+# NoDoc content traceability
+
+This record covers the NoDoc additions in `nodoc-workshop.html`.
+
+| Workshop area | Source | Source class | Evidence used | Notes |
+| --- | --- | --- | --- | --- |
+| Introduction, Lab 1, and MCP task | [NoDoc MCP User Guide](https://docs-uat.us.oracle.com/en/sptest/test-suite/test-product/test-release/nodoc/formal-nodoc-functionalities-and-usage/nodoc-mcp.html) | Oracle-owned/internal | Browser-reviewed product documentation | Supports personal-token authentication, Windows user-variable setup, `config.toml`, direct tool verification, authorization boundaries, read-only history tools, and LiveLabs pre-publish status/push behavior. |
+| Lab 8 dedicated MCP lab | [NoDoc MCP User Guide](https://docs-uat.us.oracle.com/en/sptest/test-suite/test-product/test-release/nodoc/formal-nodoc-functionalities-and-usage/nodoc-mcp.html) | Oracle-owned/internal | Browser-reviewed product documentation | Supports browse and fetch, create and reuse, edit and organize, collaborators, delete, read-only history and diff, OHC and LiveLabs pre-publish, authorization boundaries, and troubleshooting. |
+| Lab 1 workspace hierarchy | [NoDoc Repo Application](https://docs-uat.us.oracle.com/en/sptest/test-suite/test-product/test-release/nodoc/formal-nodoc-functionalities-and-usage/nodoc-repo-application.html) and [Formal NoDoc Functionalities and Usage](https://docs-uat.us.oracle.com/en/sptest/test-suite/test-product/test-release/nodoc/formal-nodoc-functionalities-and-usage.html) | Oracle-owned/internal | Browser-reviewed product documentation | Supports Focus Area selection, the left table of contents, Open All/Close All navigation, article and page placement, optional article versions, and page-level actions. |
+| Lab 1 workspace hierarchy | `content/nodoc/images/workspace-hierarchy.svg` | Original local diagram | Authored from the verified NoDoc hierarchy and the supplied UI screenshots | Makes the navigation path visible as nested scope instead of presenting it as a text-only arrow chain. |
+| MCP token setup | [NoDoc MCP Access Tokens](https://asknodoc.oraclecorp.com/mcp-access-tokens) | Oracle-owned/internal | Linked source workflow | The guide tells authors to create and store a token without exposing the token in content, chat, screenshots, or source control. |
+| Lab 2 history task | `C:\Users\Lucian Brinzei\Desktop\img\page_history_*.png` | Oracle-owned/internal, user-supplied | Supplied NoDoc UI screenshots | Supports article-level History and Restore Deleted pages, page-level Compare History, Preview and Restore, restore reason, and confirmation flows. Copied into `images/` for the local guide. |
+| Lab 2 history task | `C:\Users\Lucian Brinzei\Desktop\img\restore_deleted_pages_*.png` | Oracle-owned/internal, user-supplied | Supplied NoDoc UI screenshots | Supports review and restoration of deleted article pages. |
+
+No external or unclear sources were used. The UAT documentation link is retained here for provenance and is also linked from the MCP task for authors who have approved access.

@@ -1,12 +1,7 @@
-# How to test access to your sandbox environments
+# Technical Readiness & Connectivity Guide: Oracle LiveLabs Workshop
 
 ## Introduction
-
-To get started, you need to have an active Oracle Cloud account and a LiveLabs reservation. An Oracle Cloud account is free and needed to gain access to your LiveLabs reservation, Oracle Support, and other Oracle publicly-accessible content.
-
-If you already have an Oracle Cloud account, you can skip to Task 3.
-
-Estimated Time: 5 minutes
+The upcoming **Oracle Hands-on Lab (HOL)** is an interactive, educational session designed to give your developers real-world experience with Oracle technologies. Participants will use the **Oracle LiveLabs Sandbox environment**, which provisions temporary, isolated cloud infrastructure for learning purposes.
 
 ### Objectives
 
@@ -101,4 +96,4 @@ If a browser window opens showing the virtual environment, your network supports
 ## Acknowledgements
 
 - **Created By/Date** - Ramona Magadan, Database Product Management, May 2025
-- **Last Updated By/Date** - Ramona Magadan, December 2025
+- **Last Updated By/Date** - Matt Kowalik, February 2026

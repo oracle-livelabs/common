@@ -1,0 +1,4 @@
+interface:
+  display_name: "Polly Private"
+  short_description: "Save private repository memory across sessions"
+  default_prompt: "Use $polly-private to remember this note only for my future Codex sessions."

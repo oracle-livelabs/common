@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Cleaner"
+  short_description: "Clean, portability-check, security-scan, and validate skill packages"
+  default_prompt: "Use $skill-cleaner to inspect a skill folder or ZIP, remove only confirmed cruft, flag hardcoded environment paths with portable alternatives, scan for secrets, validate references, and write a cleanup QA report."

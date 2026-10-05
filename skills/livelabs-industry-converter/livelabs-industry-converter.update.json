@@ -1,0 +1,27 @@
+{
+  "name": "livelabs-industry-converter",
+  "owner": "Not listed",
+  "authors": [],
+  "version": "1.0",
+  "published_at": "2026-05-21T00:00:00Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/livelabs-industry-converter/ready-to-deploy-archive/livelabs-industry-converter.zip",
+  "archive_sha256": "cfb93466c7e81ba3510a00ca5641b4060d4048bdcf8020bd77919c29948d6e10",
+  "content_hash": "495eb2905b478fe40cb727f7bb053f79d62a1865c8fae74179f17f6633884cb6",
+  "min_updater_version": "2",
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version_history": [
+    {
+      "version": "1.0",
+      "published_at": "2026-05-21T00:00:00Z",
+      "authors": [],
+      "changes": [
+        "Current repository package recorded from the published skill artifact."
+      ],
+      "archive_sha256": "cfb93466c7e81ba3510a00ca5641b4060d4048bdcf8020bd77919c29948d6e10",
+      "content_hash": "495eb2905b478fe40cb727f7bb053f79d62a1865c8fae74179f17f6633884cb6",
+      "portal_status": "pending"
+    }
+  ]
+}

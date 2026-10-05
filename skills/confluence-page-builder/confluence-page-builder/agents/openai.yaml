@@ -1,0 +1,4 @@
+interface:
+  display_name: "Confluence Page Builder"
+  short_description: "Build and QA versioned Confluence pages"
+  default_prompt: "Use $confluence-page-builder to create a Desktop workspace, turn these notes into a summary-first Confluence storage-format page, run the storage audit and QA gate, write a task report, and ask targeted refinement questions."

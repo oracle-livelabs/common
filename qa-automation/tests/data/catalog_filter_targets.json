@@ -1,0 +1,64 @@
+{
+  "facet_sections": [
+    "Level",
+    "Type",
+    "Product",
+    "Workshop Series",
+    "Focus Area",
+    "Role"
+  ],
+  "single_facet_targets": [
+    {
+      "facet": "Level",
+      "option": "Beginner",
+      "expected_result_kind": "any"
+    },
+    {
+      "facet": "Type",
+      "option": "LiveStack",
+      "expected_result_kind": "livestack"
+    },
+    {
+      "facet": "Product",
+      "option": "SQL",
+      "expected_result_kind": "any"
+    },
+    {
+      "facet": "Workshop Series",
+      "option": "DBA Essentials",
+      "expected_result_kind": "any"
+    },
+    {
+      "facet": "Focus Area",
+      "option": "Database",
+      "expected_result_kind": "any"
+    },
+    {
+      "facet": "Role",
+      "option": "Application Developer",
+      "expected_result_kind": "any"
+    }
+  ],
+  "combined_filter_targets": [
+    {
+      "name": "SQL database path",
+      "filters": [
+        {
+          "facet": "Product",
+          "option": "SQL"
+        },
+        {
+          "facet": "Focus Area",
+          "option": "Database"
+        }
+      ],
+      "expected_result_kind": "any"
+    }
+  ],
+  "overflow_facets": [
+    "Product",
+    "Workshop Series",
+    "Focus Area",
+    "Role"
+  ]
+}

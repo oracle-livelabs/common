@@ -1,0 +1,81 @@
+# Node dependencies and local package-manager logs
+node_modules/
+pnpm-lock.yaml
+yarn.lock
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build and cache artifacts
+dist/
+build/
+out/
+public/
+.cache/
+coverage/
+.tmp/
+
+# System files
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.log
+*.bak
+*.tmp
+
+# Runtime secrets and database wallets
+.env
+.env.*
+!.env.example
+Wallet*/
+Wallet_*/
+*.key
+*.pem
+*.p12
+*.sso
+*.jks
+backend.env
+
+# This project is a static hosted-file bundle. Backend, database, VM, and admin
+# material belongs in the migration archive, not in the deployable subtree.
+/app/
+/database/
+/server/
+/ops/
+/dataset/
+/_local/
+/release/
+/releases/
+/release.previous-*/
+/release.staging-*/
+/admin/
+/admin.html
+/login.html
+
+# IDE/editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python local tooling (optional)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Local dashboard debug artifacts (do not publish)
+__codex_*
+MISSING_MARKDOWN_DETAILS_LOG_*.md
+LiveLabs_Analytics_Dashboard_*/
+test-results/
+playwright-report/
+/.ci-release/
+/.ci-preflight.json
+/dev/.ci-release/
+/dev/.ci-preflight.json
+/dev/releases/
+/dev/migration-audit/
+
+# Local QA planning and source datasets
+QA_TEST_PLAN.md

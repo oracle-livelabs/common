@@ -1,0 +1,17 @@
+{
+  "name": "livelabs-analytics-static",
+  "private": true,
+  "version": "2026.8.16",
+  "scripts": {
+    "validate": "node ../scripts/validate-dashboard.mjs",
+    "sync:file-data": "node ../scripts/build-file-inventory-fallback.mjs",
+    "test:browser": "node ../node_modules/@playwright/test/cli.js test --config playwright.config.cjs",
+    "build:release:ci": "node ../scripts/build-static-release.mjs --output dev/.ci-release",
+    "preflight:ci": "node ../scripts/preflight-object-storage.mjs --release dev/.ci-release --report dev/.ci-preflight.json"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "http-server": "14.1.1",
+    "wait-on": "8.0.5"
+  }
+}

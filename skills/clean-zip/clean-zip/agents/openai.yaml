@@ -1,0 +1,4 @@
+interface:
+  display_name: "Clean ZIP"
+  short_description: "Create distributable ZIP archives without OS, VCS, editor, or generated metadata"
+  default_prompt: "Use $clean-zip to create a clean distributable ZIP from a file or folder, exclude macOS metadata, caches, VCS files, editor junk, and generated artifacts, validate the archive contents, and report the created ZIP path plus skipped paths."

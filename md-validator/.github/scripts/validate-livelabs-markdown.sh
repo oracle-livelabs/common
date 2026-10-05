@@ -1,0 +1,430 @@
+#!/bin/bash
+# LiveLabs Markdown Formatting Validator
+# Validates markdown files against LiveLabs formatting standards
+
+# Don't exit on first error - we want to check all files
+set +e
+
+ERRORS=0
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+log_error() {
+    echo -e "${RED}ERROR${NC}: $1"
+    ((ERRORS++))
+}
+
+log_success() {
+    echo -e "${GREEN}PASS${NC}: $1"
+}
+
+filter_supported_files() {
+    local filtered=()
+    local file
+    local basename_lower
+    for file in "$@"; do
+        [ -z "$file" ] && continue
+        basename_lower=$(basename "$file" | tr '[:upper:]' '[:lower:]')
+        case "$basename_lower" in
+            readme.md)
+                continue
+                ;;
+            *.md|index.html|manifest.json)
+                filtered+=("$file")
+                ;;
+        esac
+    done
+    FILES=("${filtered[@]}")
+}
+
+# Get supported validation files from args, directory, or find all in current directory
+FILES=()
+if [ $# -gt 0 ]; then
+    # Check if first argument is a directory
+    if [ -d "$1" ]; then
+        TARGET_DIR="$1"
+        echo "Scanning directory: $TARGET_DIR"
+        echo ""
+        while IFS= read -r file; do
+            FILES+=("$file")
+        done < <(find "$TARGET_DIR" -type f \( -name "*.md" -o -name "index.html" -o -name "manifest.json" \) ! -path '*/node_modules/*' ! -path '*/.github/*' | LC_ALL=C sort)
+    else
+        # Treat arguments as individual files
+        FILES=("$@")
+    fi
+else
+    while IFS= read -r file; do
+        FILES+=("$file")
+    done < <(find . -type f \( -name "*.md" -o -name "index.html" -o -name "manifest.json" \) ! -path '*/node_modules/*' ! -path '*/.github/*' | LC_ALL=C sort)
+fi
+
+filter_supported_files "${FILES[@]}"
+
+# Check if any files were found
+if [ ${#FILES[@]} -eq 0 ]; then
+    echo "No validation files found."
+    exit 0
+fi
+
+echo "================================================"
+echo "LiveLabs Markdown Formatting Validator"
+echo "================================================"
+echo ""
+
+for file in "${FILES[@]}"; do
+    if [ ! -f "$file" ]; then
+        continue
+    fi
+
+    echo "Checking: $file"
+    FILE_ERRORS=0
+    basename_file=$(basename "$file")
+    basename_lower=$(printf '%s' "$basename_file" | tr '[:upper:]' '[:lower:]')
+
+    if [ "$basename_lower" = "index.html" ] || [ "$basename_lower" = "manifest.json" ]; then
+        legacy_url_lines=$(grep -Ein 'oracle-livelabs\.github\.io' "$file" || true)
+        if [ -n "$legacy_url_lines" ]; then
+            while IFS= read -r legacy_line; do
+                [ -z "$legacy_line" ] && continue
+                legacy_lineno=${legacy_line%%:*}
+                log_error "$file (line $legacy_lineno): Found legacy URL 'oracle-livelabs.github.io'. Replace it with 'livelabs.oracle.com/cdn'."
+                ((FILE_ERRORS++))
+            done <<< "$legacy_url_lines"
+        fi
+
+        if [ $FILE_ERRORS -eq 0 ]; then
+            log_success "$file passed all required checks"
+        fi
+        echo ""
+        continue
+    fi
+
+    # Rule 1: Check for H1 title (must be first non-empty line)
+    first_content=$(grep -v '^$' "$file" | head -1)
+    if [[ ! "$first_content" =~ ^#[^#] ]]; then
+        log_error "$file: First line must be an H1 title (# Title)"
+        ((FILE_ERRORS++))
+    fi
+
+    # Rule 2: Check for only one H1 per file (excluding code blocks)
+    # Use awk to skip content inside fenced code blocks
+    # Only match proper fenced code blocks: ``` alone or ```language (not inline code spans)
+    h1_count=$(awk '
+        /^[[:space:]]*```[^`]*$/ {
+            in_code = !in_code
+            next
+        }
+        !in_code && /^# / { count++ }
+        END { print count+0 }
+    ' "$file")
+    if [ "$h1_count" -gt 1 ]; then
+        log_error "$file: Multiple H1 headers found ($h1_count). Only one H1 allowed per file."
+        ((FILE_ERRORS++))
+    fi
+
+    # Rule 3: Check for Acknowledgements section
+    if ! grep -q "^## Acknowledgements" "$file"; then
+        log_error "$file: Missing '## Acknowledgements' section"
+        ((FILE_ERRORS++))
+    fi
+
+    # Rule 4: (Removed - no longer checking for Author format in Acknowledgements)
+
+    # Rule 5: Check image references have alt text
+    # Pattern: ![](images/...) is invalid, should be ![alt text](images/...)
+    empty_alt_lines=$(awk '
+        /^[[:space:]]*```[^`]*$/ {
+            in_code = !in_code
+            next
+        }
+        !in_code && /!\[[[:space:]]*\][[:space:]]*\(/ && $0 !~ /!\[[[:space:]]*\]\(youtube:/ {
+            print NR ":" $0
+        }
+    ' "$file")
+    if [ -n "$empty_alt_lines" ]; then
+        lines=$(printf '%s\n' "$empty_alt_lines" | cut -d: -f1 | paste -sd',' - | sed 's/,/, /g')
+        log_error "$file (line $lines): Image references must have alt text: ![alt text](images/file.png)"
+        ((FILE_ERRORS++))
+    fi
+
+    # Rule 5b: Disallow inline HTML anchor tags
+    anchor_lines=$(awk '
+        BEGIN { IGNORECASE = 1 }
+        /^[[:space:]]*```[^`]*$/ {
+            in_code = !in_code
+            next
+        }
+        !in_code && /<a[[:space:]]*href=/ {
+            print NR ":" $0
+        }
+    ' "$file")
+    if [ -n "$anchor_lines" ]; then
+        while IFS= read -r anchor_line; do
+            [ -z "$anchor_line" ] && continue
+            anchor_lineno=${anchor_line%%:*}
+            log_error "$file (line $anchor_lineno): HTML anchor tags (<a href=...>) are not allowed; use Markdown links instead."
+            ((FILE_ERRORS++))
+        done <<< "$anchor_lines"
+    fi
+
+    # Rule 6: Check YouTube format is correct
+    # Accepts both:
+    #   [](youtube:VIDEO_ID)
+    #   [Optional text](youtube:VIDEO_ID[:small|:medium|:large])
+    bad_youtube_lines=$(awk '
+        /^[[:space:]]*```[^`]*$/ {
+            in_code = !in_code
+            next
+        }
+        !in_code && /youtube:/ && $0 !~ /\[[^]]*\]\(youtube:[A-Za-z0-9_-]+(:small|:medium|:large)?\)/ {
+            print NR ":" $0
+        }
+    ' "$file")
+    if [ -n "$bad_youtube_lines" ]; then
+        while IFS= read -r yt_line; do
+            [ -z "$yt_line" ] && continue
+            yt_lineno=${yt_line%%:*}
+            log_error "$file (line $yt_lineno): YouTube embeds should use format: [optional text](youtube:VIDEO_ID[:small|:medium|:large]); size is optional."
+            ((FILE_ERRORS++))
+        done <<< "$bad_youtube_lines"
+    fi
+
+    # Rule 7: Check for proper Task format
+    # (## Task Number and/or string: Description)
+    task_headers=$(grep -n "^## Task" "$file" || true)
+    if [ -n "$task_headers" ]; then
+        while IFS= read -r line; do
+            [ -z "$line" ] && continue
+            if [[ ! "$line" =~ ^[0-9]+:##\ Task\ [^:[:space:]][^:]*: ]]; then
+                linenum=$(echo "$line" | cut -d: -f1)
+                log_error "$file (line $linenum): Task headers should follow format '## Task Number and/or string: Description'"
+                ((FILE_ERRORS++))
+            fi
+
+        done <<< "$task_headers"
+    fi
+
+    # Rule 8: Check <copy> tags are properly closed
+    open_copy=$(grep -c '<copy>' "$file" || true)
+    close_copy=$(grep -c '</copy>' "$file" || true)
+    if [ "$open_copy" -ne "$close_copy" ]; then
+        log_error "$file: Mismatched <copy> tags (open: $open_copy, close: $close_copy)"
+        ((FILE_ERRORS++))
+    fi
+
+    # Rule 9: Check Note format (skipped - blockquotes used for other purposes)
+
+    # Rule 9b: Check for tab characters after numbered list items (e.g. "1.\t" instead of "1. ")
+    tab_lines=$(grep -En $'^[[:space:]]*[0-9]+\\.\\t' "$file" | cut -d: -f1 | tr '\n' ',' | sed 's/,$//')
+    if [ -n "$tab_lines" ]; then
+        log_error "$file (line $tab_lines): Numbered list items use a tab after the period - use a space instead (e.g. '1. ' not '1.\t')"
+        ((FILE_ERRORS++))
+    fi
+
+    # Rule 9c: Check for multiple spaces after numbered list items (e.g. "1.  " instead of "1. ")
+    multspace_lines=$(grep -En '^[[:space:]]*[0-9]+\.  ' "$file" | cut -d: -f1 | tr '\n' ',' | sed 's/,$//')
+    if [ -n "$multspace_lines" ]; then
+        log_error "$file (line $multspace_lines): Numbered list items have multiple spaces after the period - use a single space (e.g. '1. ' not '1.  ')"
+        ((FILE_ERRORS++))
+    fi
+
+    # Rule 10: Check for Introduction or About section in labs
+    if grep -q "^## Task" "$file"; then
+        if ! grep -q "^## Introduction" "$file"; then
+            log_error "$file: Labs with Tasks should have an '## Introduction' section"
+            ((FILE_ERRORS++))
+        fi
+    fi
+
+    # Rule 11: Check for Objectives section
+    if ! grep -q "^### Objectives" "$file" && ! grep -q "^## Objectives" "$file"; then
+        log_error "$file: Missing '### Objectives' section"
+        ((FILE_ERRORS++))
+    fi
+
+    # Rule 12 & 13: Check for Estimated Time
+    if [ "$basename_file" = "introduction.md" ]; then
+        # Rule 13: introduction.md must have "Estimated Workshop Time:"
+        if ! grep -q "Estimated Workshop Time.*:" "$file"; then
+            log_error "$file: introduction.md must contain 'Estimated Workshop Time:'"
+            ((FILE_ERRORS++))
+        fi
+    else
+        # Rule 12: Other files must have "Estimated Time:"
+        if ! grep -qi "Estimated.*Time.*:" "$file"; then
+            log_error "$file: Missing 'Estimated Time:' information"
+            ((FILE_ERRORS++))
+        fi
+    fi
+
+    # Rule 14: Check filenames in image references are lowercase
+    image_refs=$(awk '
+        /^[[:space:]]*```[^`]*$/ {
+            in_code = !in_code
+            next
+        }
+        !in_code {
+            line = $0
+            while (match(line, /!\[[^]]*\]\((images\/[^)"[:space:]]+)/)) {
+                match_text = substr(line, RSTART, RLENGTH)
+                sub(/^.*\(/, "", match_text)
+                print match_text
+                line = substr(line, RSTART + RLENGTH)
+            }
+        }
+    ' "$file")
+    while IFS= read -r img; do
+        [ -z "$img" ] && continue
+        lowercase_img=$(echo "$img" | tr '[:upper:]' '[:lower:]')
+        if [ "$img" != "$lowercase_img" ]; then
+            log_error "$file: Image filename should be lowercase: $img"
+            ((FILE_ERRORS++))
+        fi
+    done <<< "$image_refs"
+
+    # Rule 16-18: Task sections with ordered lists need indented content inside numbered steps.
+    # Task sections without ordered lists are exempt from indentation rules.
+    indentation_errors=$(python3 - "$file" <<'PY'
+import sys, re
+path = sys.argv[1]
+with open(path, encoding='utf-8') as handle:
+    lines = handle.readlines()
+
+# Find all ## headings and ## Task headings
+heading_indices = []
+task_indices = []
+for idx, raw in enumerate(lines):
+    if re.match(r'^## ', raw):
+        heading_indices.append(idx)
+        if re.match(r'^## Task', raw):
+            task_indices.append(idx)
+
+errors = []
+for pos_index, start in enumerate(task_indices):
+    section_start = start + 1
+    # Bound section at the next ## heading (not just next Task)
+    next_headings = [h for h in heading_indices if h > start]
+    section_end = next_headings[0] if next_headings else len(lines)
+    block = lines[section_start:section_end]
+    if not block:
+        continue
+
+    # Check if this task section contains a top-level ordered list
+    has_ordered_list = any(re.match(r'[0-9]+\. ', ln) for ln in block)
+
+    # If no ordered list, indentation rules do not apply
+    if not has_ordered_list:
+        continue
+
+    # Find where the first numbered step begins
+    first_step_offset = None
+    for offset, ln in enumerate(block):
+        if re.match(r'[0-9]+\. ', ln):
+            first_step_offset = offset
+            break
+
+    if first_step_offset is None:
+        continue
+
+    # Validate each ordered-list block independently.
+    # A heading can terminate a list block, and a single trailing transition line
+    # is allowed when no later ordered steps exist in the task section.
+    in_code_block = False
+    in_ordered_block = False
+    for offset in range(first_step_offset, len(block)):
+        ln = block[offset]
+        raw_line = ln.rstrip('\n\r')
+        stripped = raw_line.lstrip(' ')
+        indent = len(raw_line) - len(stripped)
+        line_no = section_start + offset + 1
+
+        # Top-level ordered list item starts/continues a list block.
+        if re.match(r'[0-9]+\. ', raw_line):
+            in_ordered_block = True
+            in_code_block = False
+            continue
+
+        # Outside an ordered list block, indentation rule does not apply.
+        if not in_ordered_block:
+            continue
+
+        # Track fenced code blocks
+        if stripped.startswith('```'):
+            if not in_code_block:
+                in_code_block = True
+                if indent < 4:
+                    errors.append(f"line {line_no}: Code blocks inside numbered steps must be indented with 4 spaces.")
+            else:
+                in_code_block = False
+            continue
+
+        # Skip lines inside code blocks
+        if in_code_block:
+            continue
+
+        # Skip empty lines
+        if not stripped:
+            continue
+
+        # Allow raw HTML element lines inside ordered steps without indentation.
+        if indent < 4 and stripped.startswith('<') and stripped.endswith('>'):
+            continue
+
+        # A top-level header ends the ordered list block.
+        if indent < 4 and stripped.startswith('#'):
+            in_ordered_block = False
+            continue
+
+        # Exception: allow a trailing unindented transition line if no later
+        # ordered steps appear in this task section.
+        if indent < 4:
+            remaining = block[offset + 1:]
+            has_later_step = any(re.match(r'[0-9]+\. ', future) for future in remaining)
+            if not has_later_step:
+                in_ordered_block = False
+                continue
+
+        # All other content inside ordered list blocks must be indented >= 4 spaces
+        if indent < 4:
+            if stripped.startswith('!['):
+                errors.append(f"line {line_no}: Images inside numbered steps must be indented with 4 spaces.")
+            else:
+                errors.append(f"line {line_no}: Content inside numbered steps must be indented with 4 spaces.")
+
+if errors:
+    sys.stdout.write("\n".join(errors))
+PY
+)
+
+    if [ -n "$indentation_errors" ]; then
+        while IFS= read -r err_line; do
+            [ -z "$err_line" ] && continue
+            log_error "$file: $err_line"
+            ((FILE_ERRORS++))
+        done <<< "$indentation_errors"
+    fi
+
+    # Rule 15: Check for Learn More section (optional - no check)
+
+    if [ $FILE_ERRORS -eq 0 ]; then
+        log_success "$file passed all required checks"
+    fi
+    echo ""
+done
+
+echo "================================================"
+echo "Summary"
+echo "================================================"
+echo "Errors: $ERRORS"
+echo ""
+
+if [ $ERRORS -gt 0 ]; then
+    echo -e "${RED}Validation FAILED${NC}"
+    exit 1
+else
+    echo -e "${GREEN}Validation PASSED${NC}"
+    exit 0
+fi

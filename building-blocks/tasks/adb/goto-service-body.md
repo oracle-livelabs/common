@@ -3,7 +3,7 @@
         "name":"goto-service-body.md",
         "description":"Navigate to ADB using the OCI Navigation menu. AUTHORS: For expediency, this task uses the ADMIN user/password to open Database Actions. In your workshop, you might want to substitute a different user/password to open Database Actions.",
         "author":"Lauran K. Serhal, Consulting User Assistance Developer",
-        "lastUpdated":"Lauran K. Serhal, October 2025"
+        "lastUpdated":"Lauran K. Serhal, March 2026"
     }
 -->
 1. Open the **Navigation** menu.
@@ -25,7 +25,7 @@
     <if type="freetier">
     The **Autonomous AI Databases** page is displayed.
 
-    ![The Autonomous Databases page is displayed.](images/autonomous-ai-databases-page.png =65%x*)
+    ![The Autonomous Databases page is displayed.](images/adb-show-compartment-button.png =65%x*)
 
     OCI resources are organized into compartments. Click the **Compartment** field to select the compartment where you want to create your Autonomous Database.
     </if>

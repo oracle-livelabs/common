@@ -1,0 +1,27 @@
+{
+  "name": "create-newsletter",
+  "owner": "Not listed",
+  "authors": [],
+  "version": "1.0",
+  "published_at": "2026-05-21T00:00:00Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/create-newsletter/ready-to-deploy-archive/create-newsletter.zip",
+  "archive_sha256": "7e3c0df23f276ca3758627e04c13d0156f882c329be216391878664c9ed998dd",
+  "content_hash": "cbbb9d6511956a77b1fe0fdbb97730d4c4a7b85596c0ad9ba11446c05e54838e",
+  "min_updater_version": "2",
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version_history": [
+    {
+      "version": "1.0",
+      "published_at": "2026-05-21T00:00:00Z",
+      "authors": [],
+      "changes": [
+        "Current repository package recorded from the published skill artifact."
+      ],
+      "archive_sha256": "7e3c0df23f276ca3758627e04c13d0156f882c329be216391878664c9ed998dd",
+      "content_hash": "cbbb9d6511956a77b1fe0fdbb97730d4c4a7b85596c0ad9ba11446c05e54838e",
+      "portal_status": "pending"
+    }
+  ]
+}

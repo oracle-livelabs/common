@@ -1,0 +1,36 @@
+{
+  "name": "qa_automation_js",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "test": "node ./scripts/qa.mjs",
+    "test:collect": "node ./scripts/qa.mjs tests --collect-only",
+    "test:generated": "node ./scripts/qa.mjs tests/platform/generated tests/platform/par/catalogParLinks.spec.ts",
+    "catalog:index": "node ./scripts/catalog-index.mjs",
+    "workshop:qa": "node ./QA_GUI/scripts/published-workshop-qa.mjs",
+    "workshop:qa:app": "node ./QA_GUI/scripts/workshop-qa-app.mjs",
+    "review:retest": "node ./scripts/report-review-action.mjs retest",
+    "review:fix": "node ./scripts/report-review-action.mjs fix",
+    "test:review-lists": "node --test ./scripts/report-review-action.test.mjs",
+    "auth:storage": "node ./scripts/auth-storage-state.mjs",
+    "doctor": "node ./scripts/qa.mjs doctor",
+    "install:browsers": "playwright install",
+    "playwright": "playwright",
+    "report": "node ./scripts/qa.mjs report",
+    "trace": "node ./scripts/qa.mjs trace",
+    "codegen": "node ./scripts/qa.mjs codegen",
+    "ui": "node ./scripts/qa.mjs tests --ui",
+    "typecheck": "tsc --noEmit",
+    "test:par": "node ./scripts/qa.mjs tests/platform/par/catalogParLinks.spec.ts",
+    "test:reporters": "node --test ./scripts/reporters/*.test.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.0",
+    "@types/node": "^25.5.2",
+    "typescript": "^6.0.2"
+  }
+}

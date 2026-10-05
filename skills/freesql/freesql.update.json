@@ -1,0 +1,27 @@
+{
+  "name": "freesql",
+  "owner": "Not listed",
+  "authors": [],
+  "version": "1.0",
+  "published_at": "2026-05-21T00:00:00Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/freesql/ready-to-deploy-archive/freesql.zip",
+  "archive_sha256": "7be52a03b50ba34a597209541cf2b2559dd57c462b854c50d0bd6dab7cef34d9",
+  "content_hash": "c5020e072aaa309da958d6724d49bd5707cb28e0de7d326d3b5d03808ffcf1ba",
+  "min_updater_version": "2",
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version_history": [
+    {
+      "version": "1.0",
+      "published_at": "2026-05-21T00:00:00Z",
+      "authors": [],
+      "changes": [
+        "Current repository package recorded from the published skill artifact."
+      ],
+      "archive_sha256": "7be52a03b50ba34a597209541cf2b2559dd57c462b854c50d0bd6dab7cef34d9",
+      "content_hash": "c5020e072aaa309da958d6724d49bd5707cb28e0de7d326d3b5d03808ffcf1ba",
+      "portal_status": "pending"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Redwood Creator"
+  short_description: "Oracle Redwood and JET content creation"
+  default_prompt: "Use $redwood-creator to create or review Oracle Redwood content and enforce Oracle JET compatibility for app UI."

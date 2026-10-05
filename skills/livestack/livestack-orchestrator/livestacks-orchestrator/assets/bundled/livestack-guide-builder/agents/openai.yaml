@@ -1,0 +1,4 @@
+interface:
+  display_name: "LiveStack Guide Builder"
+  short_description: "Build scene runbook guides for LiveStacks"
+  default_prompt: "Use $livestack-guide-builder to create or validate a LiveStack guide as a scene-by-scene demo runbook."
