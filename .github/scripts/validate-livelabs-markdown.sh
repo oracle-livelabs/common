@@ -293,10 +293,34 @@ path = sys.argv[1]
 with open(path, encoding='utf-8') as handle:
     lines = handle.readlines()
 
-# Find all ## headings and ## Task headings
+# Identify complete fenced regions before looking for headings or list items.
+# Content displayed as an example must not be treated as workshop structure.
+fenced_lines = set()
+fence_starts = set()
+fence_char = None
+fence_length = 0
+for idx, raw in enumerate(lines):
+    stripped = raw.rstrip('\n\r').lstrip(' ')
+    if fence_char is None:
+        match = re.match(r'(`{3,}|~{3,})', stripped)
+        if match:
+            marker = match.group(1)
+            fence_char = marker[0]
+            fence_length = len(marker)
+            fence_starts.add(idx)
+            fenced_lines.add(idx)
+    else:
+        fenced_lines.add(idx)
+        if re.match(rf'{re.escape(fence_char)}{{{fence_length},}}\s*$', stripped):
+            fence_char = None
+            fence_length = 0
+
+# Find all real ## headings and ## Task headings outside fenced examples.
 heading_indices = []
 task_indices = []
 for idx, raw in enumerate(lines):
+    if idx in fenced_lines:
+        continue
     if re.match(r'^## ', raw):
         heading_indices.append(idx)
         if re.match(r'^## Task', raw):
@@ -312,8 +336,12 @@ for pos_index, start in enumerate(task_indices):
     if not block:
         continue
 
-    # Check if this task section contains a top-level ordered list
-    has_ordered_list = any(re.match(r'[0-9]+\. ', ln) for ln in block)
+    # Check if this task section contains a real top-level ordered list.
+    has_ordered_list = any(
+        re.match(r'[0-9]+\. ', ln)
+        and section_start + offset not in fenced_lines
+        for offset, ln in enumerate(block)
+    )
 
     # If no ordered list, indentation rules do not apply
     if not has_ordered_list:
@@ -322,7 +350,10 @@ for pos_index, start in enumerate(task_indices):
     # Find where the first numbered step begins
     first_step_offset = None
     for offset, ln in enumerate(block):
-        if re.match(r'[0-9]+\. ', ln):
+        if (
+            re.match(r'[0-9]+\. ', ln)
+            and section_start + offset not in fenced_lines
+        ):
             first_step_offset = offset
             break
 
@@ -332,7 +363,6 @@ for pos_index, start in enumerate(task_indices):
     # Validate each ordered-list block independently.
     # A heading can terminate a list block, and a single trailing transition line
     # is allowed when no later ordered steps exist in the task section.
-    in_code_block = False
     in_ordered_block = False
     for offset in range(first_step_offset, len(block)):
         ln = block[offset]
@@ -340,29 +370,22 @@ for pos_index, start in enumerate(task_indices):
         stripped = raw_line.lstrip(' ')
         indent = len(raw_line) - len(stripped)
         line_no = section_start + offset + 1
+        global_index = section_start + offset
+
+        # Ignore content inside fenced examples. For a real fence opened inside
+        # an ordered step, still enforce indentation on its opening delimiter.
+        if global_index in fenced_lines:
+            if global_index in fence_starts and in_ordered_block and indent < 4:
+                errors.append(f"line {line_no}: Code blocks inside numbered steps must be indented with 4 spaces.")
+            continue
 
         # Top-level ordered list item starts/continues a list block.
         if re.match(r'[0-9]+\. ', raw_line):
             in_ordered_block = True
-            in_code_block = False
             continue
 
         # Outside an ordered list block, indentation rule does not apply.
         if not in_ordered_block:
-            continue
-
-        # Track fenced code blocks
-        if stripped.startswith('```'):
-            if not in_code_block:
-                in_code_block = True
-                if indent < 4:
-                    errors.append(f"line {line_no}: Code blocks inside numbered steps must be indented with 4 spaces.")
-            else:
-                in_code_block = False
-            continue
-
-        # Skip lines inside code blocks
-        if in_code_block:
             continue
 
         # Skip empty lines
@@ -381,8 +404,11 @@ for pos_index, start in enumerate(task_indices):
         # Exception: allow a trailing unindented transition line if no later
         # ordered steps appear in this task section.
         if indent < 4:
-            remaining = block[offset + 1:]
-            has_later_step = any(re.match(r'[0-9]+\. ', future) for future in remaining)
+            has_later_step = any(
+                re.match(r'[0-9]+\. ', future)
+                and section_start + future_offset not in fenced_lines
+                for future_offset, future in enumerate(block[offset + 1:], start=offset + 1)
+            )
             if not has_later_step:
                 in_ordered_block = False
                 continue
