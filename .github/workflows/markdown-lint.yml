@@ -18,6 +18,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Test PAR URL validator
+        if: github.repository == 'oracle-livelabs/common'
+        run: python3 .github/scripts/test-validate-par-urls.py
+
       - name: Validate PAR URL tenancy
         shell: bash
         run: |
