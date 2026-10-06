@@ -18,6 +18,26 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Test PAR URL validator
+        if: github.repository == 'oracle-livelabs/common'
+        run: python3 .github/scripts/test-validate-par-urls.py
+
+      - name: Validate PAR URL tenancy
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          PR_SHA="${{ github.sha }}"
+          git fetch --no-tags --prune origin "$BASE_SHA:$BASE_SHA" || true
+
+          VALIDATOR=".github/scripts/validate-par-urls.py"
+          if [ "$GITHUB_REPOSITORY" != "oracle-livelabs/common" ] || [ ! -f "$VALIDATOR" ]; then
+            VALIDATOR="/tmp/validate-par-urls.py"
+            curl -sSfL https://raw.githubusercontent.com/oracle-livelabs/common/refs/heads/main/.github/scripts/validate-par-urls.py -o "$VALIDATOR"
+          fi
+          python3 "$VALIDATOR" --base "$BASE_SHA" --head "$PR_SHA"
+
       - name: Get validation files from PR
         id: changed-files
         shell: bash
@@ -64,7 +84,12 @@ jobs:
         run: |
           if [ -n "${{ steps.changed-files.outputs.markdown_files }}" ]; then
             echo "Running markdownlint on PR markdown files..."
-            echo "${{ steps.changed-files.outputs.markdown_files }}" | xargs markdownlint --config .markdownlint.json || true
+            CONFIG=".markdownlint.json"
+            if [ ! -f "$CONFIG" ]; then
+              CONFIG="/tmp/.markdownlint.json"
+              curl -sSfL https://raw.githubusercontent.com/oracle-livelabs/common/refs/heads/main/.markdownlint.json -o "$CONFIG"
+            fi
+            echo "${{ steps.changed-files.outputs.markdown_files }}" | xargs markdownlint --config "$CONFIG" || true
           else
             echo "No markdown files to lint."
           fi
