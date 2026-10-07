@@ -17,6 +17,10 @@ const requiredFiles = [
   'app/public/app.js',
   'app/public/state.mjs',
   'app/public/styles.css',
+  'app/public/table.mjs',
+  'app/public/on-call-workspace.mjs',
+  'app/scripts/local-data.mjs',
+  'docs/connected-qa-hub-plan.md',
   'app/dist/index.html',
   'app/dist/app.js',
   'app/dist/state.mjs',
@@ -33,9 +37,7 @@ const requiredDirs = [
   'sections/sprint-ops',
   'sections/reports-insights',
   'sections/user-access',
-  'sections/github-intake',
-  'sections/knowledge-base',
-  'sections/test-management'
+  'sections/github-intake'
 ]
 
 const failures = []
@@ -53,27 +55,21 @@ for (const dir of requiredDirs) {
 }
 
 const requirements = readFileSync(resolve(projectRoot, 'docs/requirements.md'), 'utf8')
-for (const phrase of ['QA Watchdog', 'Health Monitor', 'LiveStack', 'Usage Metrics', 'Roles And Permissions']) {
+for (const phrase of ['Jenkins Reports', 'PAR Links', 'On-Call', 'Repositories', 'Roles And Permissions']) {
   if (!requirements.includes(phrase)) {
     failures.push(`Requirements missing phrase: ${phrase}`)
   }
 }
 
 const appJs = readFileSync(resolve(projectRoot, 'app/public/app.js'), 'utf8')
-for (const phrase of ['renderLogin', 'renderWatchdog', 'renderAdminConsole', 'renderReports', 'renderGithubIntake', 'renderKnowledgeBase', 'routeKey', 'createWatchEvent']) {
+for (const phrase of ['renderLogin', 'renderOverview', 'renderJenkins', 'renderPar', 'renderAutomation', 'renderRepositories', 'routeKey']) {
   if (!appJs.includes(phrase)) {
     failures.push(`Prototype missing app hook: ${phrase}`)
   }
 }
 
-for (const phrase of ['siblingAppUrl', 'livelabs-qa-tms']) {
-  if (!appJs.includes(phrase)) {
-    failures.push(`Prototype missing GitHub Pages routing hook: ${phrase}`)
-  }
-}
-
 const stateJs = readFileSync(resolve(projectRoot, 'app/public/state.mjs'), 'utf8')
-for (const phrase of ['seedSources', 'seedEvidence', 'seedMonitors', 'seedHealthChecks', 'seedGithubItems', 'seedKnowledgeItems', 'generateReport', 'resetDemoState']) {
+for (const phrase of ['seedSources', 'seedEvidence', 'seedMonitors', 'seedHealthChecks', 'seedGithubItems', 'generateReport', 'resetDemoState']) {
   if (!stateJs.includes(phrase)) {
     failures.push(`State model missing V3 hook: ${phrase}`)
   }

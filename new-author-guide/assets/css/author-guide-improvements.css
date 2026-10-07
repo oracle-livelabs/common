@@ -4623,6 +4623,80 @@ body.home-no-scroll #app .hub-hero {
   }
 }
 
+/* NoDoc MCP: setup checkpoints, workflow chooser, and copyable recipes. */
+#nodocMode .nodoc-mcp-source {
+  color: #546159;
+  font-size: 0.88rem;
+}
+#nodocMode .nodoc-mcp-index {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 1.4rem 0 1.8rem;
+}
+#nodocMode .nodoc-mcp-index a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid #cdd8cf;
+  border-radius: 0.65rem;
+  background: #f5f7f2;
+  color: #204f46;
+  text-decoration: none;
+}
+#nodocMode .nodoc-mcp-index a span { color: #46524c; font-size: 0.9rem; }
+#nodocMode .nodoc-mcp-index a:hover { background: #e8efe6; border-color: #507969; }
+#nodocMode .nodoc-mcp-index a:focus-visible { outline: 3px solid #386a60; outline-offset: 3px; }
+#nodocMode .nodoc-mcp-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.2rem 0;
+}
+#nodocMode .nodoc-mcp-steps span {
+  padding: 0.45rem 0.8rem;
+  background: #e8efe6;
+  border-radius: 1.5rem;
+  color: #244d42;
+  font-weight: 650;
+}
+#nodocMode .nodoc-mcp-snippet {
+  margin: 1rem 0 1.4rem;
+  border: 1px solid #cdd8cf;
+  border-radius: 0.65rem;
+  overflow: hidden;
+  min-width: 0;
+}
+#nodocMode .nodoc-mcp-snippet-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0.85rem;
+  background: #eef2ec;
+}
+#nodocMode .nodoc-mcp-snippet .nodoc-command {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 1rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+#app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-mcp-figure img {
+  height: auto;
+  width: 100%;
+  max-height: none;
+}
+#nodocMode .nodoc-mcp-table-wrap { max-width: 100%; overflow-x: auto; }
+#nodocMode .nodoc-mcp-content td { overflow-wrap: anywhere; }
+@media (max-width: 700px) {
+  #nodocMode .nodoc-mcp-index { grid-template-columns: 1fr; }
+  #nodocMode .nodoc-mcp-snippet-bar { align-items: flex-start; gap: 0.5rem; }
+  #nodocMode .nodoc-mcp-snippet-bar .copy-snippet { flex-shrink: 0; }
+}
+
 /* Modal rhythm: use one outer section gap and one inner card gap so dynamic
    mounts do not inherit a mixture of Bootstrap margins or sit flush together. */
 #app[data-redwood-creator-pass="2026-05-25"] #bubbleModal .modal-content {
@@ -4667,6 +4741,21 @@ body.home-no-scroll #app .hub-hero {
 #app[data-redwood-creator-pass="2026-05-25"] .image-lightbox-dialog {
   gap: 1.25rem;
   padding: 1.25rem;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+#app .image-lightbox-body {
+  min-height: 0;
+}
+
+#app .image-lightbox-body img {
+  max-height: 100%;
+  object-fit: contain;
+}
+
+#app .image-lightbox-caption {
+  max-height: 25vh;
+  overflow-y: auto;
 }
 
 /* Quiet resource cards: keep the shared reference pattern readable without
