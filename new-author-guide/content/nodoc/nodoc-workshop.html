@@ -7,6 +7,7 @@
       the content, and create a LiveLabs Pre Publish request. NoDoc takes the LiveLabs workflow through pre-publish; the
       WMS publishing request is a separate handoff after that point. Choose one creation route and one page route for
       the required path; use the other routes as reference.</p>
+    <p class="nodoc-callout"><strong>Here for Codex?</strong> <a href="#nodoc:1:3">Connect NoDoc in five steps</a>, then <a href="#nodoc:8">choose an MCP workflow</a>.</p>
     <h4>Prerequisites</h4>
     <ul>
       <li>Oracle SSO is the only access prerequisite for NoDoc; no additional setup is required to open the
@@ -35,7 +36,7 @@
     </ul>
   </div>
 </details>
-<details class="nodoc-tree-group">
+<details class="nodoc-tree-group" data-search-summary="Open NoDoc, understand the content hierarchy, and connect Codex with a token, configuration, and usage skill." data-search-keywords="access navigation windows mcp installation setup token skill">
   <summary><span>Lab 1 · Access, navigation, and Codex MCP</span></summary>
   <div class="nodoc-tree-content">
     <div data-video-card data-video-title="Lab 1 walkthrough"
@@ -154,45 +155,34 @@
           similarly named articles and pages from being mixed up.</li>
       </ol>
     </details>
-    <details class="nodoc-task">
-      <summary>Task 3 · Connect Codex to NoDoc through MCP</summary>
-      <p>NoDoc MCP lets Codex browse and update NoDoc through your own NoDoc identity and permissions. The personal
-        token identifies you; it does not grant additional access.</p>
-      <ol>
-        <li>Open the <a href="https://asknodoc.oraclecorp.com/mcp-access-tokens" target="_blank"
-            rel="noopener noreferrer">NoDoc MCP Access Tokens</a> page. Sign in to NoDoc if prompted, enter a label,
-          choose an expiration date, select <strong>Generate Token</strong>, and copy the complete token immediately.
-          The token is shown only once. Never paste it into this guide, chat, screenshots, source control, or
-          <code>config.toml</code>.</li>
-        <li>Create a Windows <strong>user</strong> environment variable named
-          <code>ASK_NODOC_MCP_TOKEN</code> and paste the token into its value. Use a user variable, not a system
-          variable. Restart applications that were already open before the variable was created.</li>
-        <li>Open <code>C:\Users\&lt;username&gt;\.codex\config.toml</code> and add this section once. Keep the token out
-          of the file:
-          <pre class="nodoc-command"><code>[mcp_servers.nodoc]
-url = "https://asknodoc.oraclecorp.com/mcp"
-bearer_token_env_var = "ASK_NODOC_MCP_TOKEN"
+<details class="nodoc-task" data-search-summary="Set up the Windows token variable and config.toml, verify the connection, and install or update the nodoc-mcp usage skill." data-search-keywords="mcp installation setup connect configuration personal token environment variable ASK_NODOC_MCP_TOKEN config.toml usage skill update get_nodoc_mcp_usage_skill"><summary>Task 3 · Connect Codex to NoDoc through MCP</summary>
+      <p>Connect Codex once, then use it to browse and work on the NoDoc content your account can access. This Windows setup uses a personal token; your existing NoDoc permissions still apply.</p>
+      <p class="nodoc-callout"><strong>Before you start:</strong> open NoDoc successfully, have Codex installed, and choose content you can view. You need permission to add a Windows user environment variable. Do not enter your token into a chat or this guide.</p>
+      <div class="nodoc-mcp-steps" aria-label="Five setup steps"><span>1. Token</span><span>2. User variable</span><span>3. Config</span><span>4. Verify</span><span>5. Usage skill</span></div>
+      <h4>1. Create a token for this computer</h4>
+      <ol><li>Open <a href="https://asknodoc.oraclecorp.com/mcp-access-tokens" target="_blank" rel="noopener noreferrer">NoDoc MCP Access Tokens</a> and sign in if prompted.</li><li>Enter a recognizable label, such as <strong>Windows laptop</strong>, and choose an expiry date. The form uses UTC and currently allows tomorrow through 90 days.</li><li>Select <strong>Generate access token</strong>. Copy the complete token immediately; it is shown only once. Keep it private while you complete step 2.</li></ol>
+<figure class="nodoc-route-evidence nodoc-mcp-figure"><img data-nodoc-asset="images/mcp/01-token-form.jpg" alt="NoDoc MCP access-token form with token label, expiry date, and Generate access token button." width="1264" height="801" loading="lazy"><figcaption>Step 1a · Open the token page. Actual product screenshot, 7 October 2026; no token was generated.</figcaption></figure><figure class="nodoc-route-evidence nodoc-mcp-figure"><img data-nodoc-asset="images/mcp/02-token-label.jpg" alt="Token label filled with Windows laptop; expiry date and Generate access token button remain visible." width="1264" height="801" loading="lazy"><figcaption>Step 1b · Give the token a recognizable label and check its expiry. The date shown is an example.</figcaption></figure>
+      <p>If you lose the token, revoke it on this page and create another. Do not send it in email, save it in source control, or include it in screenshots.</p>
+      <h4>2. Save it in a Windows user variable</h4>
+      <ol><li>In Windows Search, open <strong>Edit the system environment variables</strong>.</li><li>In <strong>System Properties</strong>, select <strong>Environment Variables</strong>.</li><li>Under <strong>User variables for your account</strong>, select <strong>New</strong>.</li><li>Set <strong>Variable name</strong> to <code>ASK_NODOC_MCP_TOKEN</code>. Paste the complete token into <strong>Variable value</strong>.</li><li>Select <strong>OK</strong> in each dialog to save. Use the user-variable section so the value belongs to your Windows account.</li></ol>
+<figure class="nodoc-route-evidence nodoc-mcp-figure"><img data-nodoc-asset="images/mcp/windows-variable.svg" alt="Windows setup path: System Properties, Environment Variables, User variables, then New. Set ASK_NODOC_MCP_TOKEN to the personal token." width="1120" height="610" loading="lazy"><figcaption>Step 2 · Explanatory illustration of the Windows dialog sequence. The value is deliberately omitted.</figcaption></figure><p class="nodoc-checkpoint"><strong>Check your result:</strong> The variable name appears under User variables. Do not display or print its value. Applications already running need a restart to see it.</p>
+      <h4>3. Add the NoDoc connection to Codex</h4>
+      <p>Open <code>C:\Users\&lt;username&gt;\.codex\config.toml</code> in a text editor. Replace <code>&lt;username&gt;</code> with your Windows account folder. If the file is absent, create a plain-text file named <code>config.toml</code> in the <code>.codex</code> folder; check that Windows has not added <code>.txt</code>.</p>
+      <p>Keep existing settings. Add the section below once, or update the existing <code>[mcp_servers.nodoc]</code> section.</p>
+<div class="nodoc-mcp-snippet"><div class="nodoc-mcp-snippet-bar"><strong>Codex configuration</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-config">Copy</button></div><pre class="nodoc-command"><code id="nodoc-mcp-config">[mcp_servers.nodoc]
+url = &quot;https://asknodoc.oraclecorp.com/mcp&quot;
+bearer_token_env_var = &quot;ASK_NODOC_MCP_TOKEN&quot;
 enabled = true
-required = false</code></pre>
-        </li>
-        <li>Fully close Codex, including any open Codex windows. Open Codex again, start a new chat, and enter:
-          <pre class="nodoc-command"><code>Use the nodoc MCP to list all focus areas.</code></pre>
-          <p>Codex should call <code>list_focus_areas</code> directly and return only the Focus Areas your NoDoc
-            identity can see.</p>
-          <p>If needed, enter this explicit follow-up:</p>
-          <pre class="nodoc-command"><code>Use the configured nodoc MCP tool directly. Do not use shell commands, curl, or a JSON-RPC fallback. List all focus areas and follow pagination until next_offset is null.</code></pre>
-        </li>
-        <li>Confirm that the verification returns only content your NoDoc identity can see. Do not print the token while
-          troubleshooting. Continue to <a href="#nodoc:8">Lab 8 · Use NoDoc MCP for authoring and Pre Publish</a> for
-          the supported browse, create, edit, collaborator, delete, history, diff, and LiveLabs pre-publish workflows.
-        </li>
-      </ol>
-      <p class="nodoc-callout"><strong>Next lab:</strong> <a href="#nodoc:8">Lab 8 · Use NoDoc MCP for authoring and
-          Pre Publish</a> covers the actual content actions. <strong>Documentation:</strong> See the approved <a
-          href="https://docs-uat.us.oracle.com/en/sptest/test-suite/test-product/test-release/nodoc/formal-nodoc-functionalities-and-usage/nodoc-mcp.html"
-          target="_blank" rel="noopener noreferrer">NoDoc MCP User Guide</a> for current token, configuration,
-        browse, edit, history, and LiveLabs pre-publish details.</p>
-    </details>
+required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp-figure"><img data-nodoc-asset="images/mcp/config-map.svg" alt="The Codex config contains the server URL and the name of a Windows user variable; the secret value stays in that variable." width="1120" height="500" loading="lazy"><figcaption>Step 3 · Configuration map. Copy the text above; this diagram explains the values, not a live connection.</figcaption></figure><p class="nodoc-checkpoint"><strong>Check your result:</strong> The file has exactly one NoDoc section. It names the variable and contains no token value.</p>
+      <h4>4. Restart Codex and make a read-only call</h4>
+      <ol><li>Fully close every Codex window, then reopen Codex.</li><li>Start a <strong>new chat</strong> so it loads the current MCP tool catalog.</li><li>Paste this prompt:</li></ol>
+<div class="nodoc-mcp-snippet"><div class="nodoc-mcp-snippet-bar"><strong>Verify the connection</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-verify">Copy</button></div><pre class="nodoc-command"><code id="nodoc-mcp-verify">Use the configured nodoc MCP tool directly to list all focus areas. Follow next_offset until it is null. Do not use shell commands, curl, or a JSON-RPC fallback. Do not change any content.</code></pre></div><p class="nodoc-checkpoint"><strong>Check your result:</strong> Codex calls <code>list_focus_areas</code> and returns a result from NoDoc for your account. A configured server or a visible tool alone does not verify access. An empty authorized result needs an access check before authoring.</p>
+      <p>If the call fails, use <a href="#nodoc:8:7">Task 7 · Troubleshoot the connection</a>. Keep the token out of diagnostics.</p>
+      <h4>5. Install or refresh the NoDoc usage skill</h4>
+      <p>The MCP connection supplies tools; the versioned <code>nodoc-mcp</code> skill teaches Codex the NoDoc workflow. Install it after the connection works:</p>
+<div class="nodoc-mcp-snippet"><div class="nodoc-mcp-snippet-bar"><strong>Install the usage skill</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-skill">Copy</button></div><pre class="nodoc-command"><code id="nodoc-mcp-skill">Use NoDoc MCP to call get_nodoc_mcp_usage_skill, install the returned nodoc-mcp skill locally, and verify the installed version. Report the returned version, installed version, and local installation path.</code></pre></div><p class="nodoc-checkpoint"><strong>Check your result:</strong> Codex reports matching returned and installed versions. The skill contains no personal token and changes no NoDoc content. Repeat this prompt when refreshing the skill.</p>
+      <p class="nodoc-callout"><strong>Ready to work:</strong> continue to <a href="#nodoc:8">Lab 8 · NoDoc MCP workflows</a>. Browse and read first; use an approved practice article for changes.</p>
+</details>
   </div>
 </details>
 <details class="nodoc-tree-group">
@@ -1024,7 +1014,7 @@ required = false</code></pre>
           deleted; verify that it no longer appears in the table of contents.</li>
       </ol>
     </details>
-    <details class="nodoc-task">
+    <details class="nodoc-task" data-search-summary="Use NoDoc history controls to compare revisions, restore a page, or recover deleted pages." data-search-keywords="manual ui browser history restore recover deleted page compare revisions">
       <summary>Task 4 · Review and recover article and page history</summary>
       <p>History has two separate scopes. Select the whole article when you need article-level history or recovery of a
         deleted child page. Select an individual page when you need to compare, preview, or restore that page's retained
@@ -1154,7 +1144,7 @@ required = false</code></pre>
     </details>
   </div>
 </details>
-<details class="nodoc-tree-group">
+<details class="nodoc-tree-group" data-search-summary="Create and review drafts in the NoDoc UI, control Autosave, apply metadata, and edit page content." data-search-keywords="manual browser ui draft review autosave metadata editing">
   <summary><span>Lab 3 · Edit and organize page content</span></summary>
   <div class="nodoc-tree-content">
     <div data-video-card data-video-title="Lab 3 walkthrough"
@@ -1199,11 +1189,14 @@ required = false</code></pre>
           non-owners use <strong>Save Draft</strong> for owner review.</li>
       </ol>
     </details>
-    <details class="nodoc-task">
-      <summary>Task 2 · Create and manage page drafts</summary>
-      <p>Use a draft to propose changes to a page owned by another author. The original page remains unchanged while
-        you edit the draft. After you save it, review the draft history and compare the draft with the original before
-        approving or rejecting the proposed changes.</p>
+    <details class="nodoc-task" data-search-summary="Manual NoDoc UI: save a draft, open Drafts and View Diff, accept or reject individual changes, and approve the review." data-search-keywords="manual browser ui draft drafts review approve reject changes difference viewer save draft">
+      <summary>Task 2 · Create and review page drafts in the NoDoc UI</summary>
+      <p><strong>Manual workflow:</strong> Create and save a draft in the NoDoc browser interface, then use
+        <strong>Drafts</strong> and <strong>View Diff</strong> to review it. Draft edits leave the original page unchanged
+        until an authorized reviewer approves the changes.</p>
+      <p>To review, approve, or discard an existing draft directly in Codex, use
+        <a href="#nodoc:8:8">Lab 8, Task 8 · Draft review through Codex MCP</a>.</p>
+      <h5>Create and save a draft</h5>
       <ol>
         <li>From the article or workshop list, select a page from content created by another author, then select
           <strong>Edit</strong>. When NoDoc asks whether to create or continue a draft, verify the selected page and
@@ -1240,7 +1233,11 @@ required = false</code></pre>
             <figcaption>Save the proposed content as a draft and verify the success toast.</figcaption>
           </figure>
         </li>
-        <li>To review a saved draft, select <strong>Drafts</strong> on the article page. In the <strong>Draft Version</strong>
+      </ol>
+      <h5>Review and approve changes in NoDoc</h5>
+      <p>As an authorized reviewer, select the exact article, page, and version that contains the saved draft.</p>
+      <ol>
+        <li>Select <strong>Drafts</strong> on the article page. In the <strong>Draft Version</strong>
           window, review the draft table, including the draft name, editor, date, status, age, and content size. Select
           <strong>View Diff</strong> for the draft you want to inspect.
           <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
@@ -1253,9 +1250,9 @@ required = false</code></pre>
           </figure>
         </li>
         <li>In the <strong>Draft Difference Viewer</strong>, compare the original content on the left with the draft on the
-          right. Use <strong>Prev Change</strong> and <strong>Next Change</strong> to move through the differences. For
-          each change, select the green check to accept it or the red X to reject it. When the review is complete, select
-          <strong>Approve</strong> to apply the accepted draft changes.
+          right. Use <strong>Prev Change</strong> and <strong>Next Change</strong> to move through the differences.
+          Select the green check to accept an individual change or the red X to reject that change. When the review
+          is complete, select <strong>Approve</strong> to apply the accepted changes.
           <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
             aria-label="Expand image: NoDoc Draft Difference Viewer with change navigation, accept, reject, and Approve controls">
             <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
@@ -1265,7 +1262,12 @@ required = false</code></pre>
             <figcaption>Review each difference, accept or reject it, then select Approve to apply the reviewed draft.</figcaption>
           </figure>
         </li>
+        <li>Reopen the page and its draft history. Confirm the accepted content and updated draft status. Approval
+          updates the live NoDoc page; publishing remains a separate workflow.</li>
       </ol>
+      <p><strong>Rejecting a change and discarding a draft are different actions.</strong> The red X shown above
+        rejects one difference. It does not document a whole-draft discard action. To discard an entire draft through
+        Codex, follow the <a href="#nodoc:8:8">MCP discard instructions</a>.</p>
     </details>
     <details class="nodoc-task">
       <summary>Task 3 · Apply metadata tags</summary>
@@ -2003,157 +2005,141 @@ Linux-specific instructions.
     </details>
   </div>
 </details>
-<details class="nodoc-tree-group">
-  <summary><span>Lab 8 · Use NoDoc MCP for authoring and Pre Publish</span></summary>
-  <div class="nodoc-tree-content">
-    <div data-video-card data-video-title="Lab 8 walkthrough"
-      data-video-summary="Preview learning aid. Use the configured NoDoc MCP connection to browse, create, edit, review, and pre-publish authorized LiveLabs content."
-      data-video-features="Browse and fetch|Create and reuse|Edit and collaborate|Delete safely|History and diff|LiveLabs Pre Publish"></div>
-    <p>Use this lab after <a href="#nodoc:1:3">Lab 1 Task 3</a> has verified the MCP connection and after the basic
-      NoDoc workflows in Labs 2 through 7 are familiar. The prompts below show how to ask Codex to use NoDoc MCP for
-      the documented actions. Work only in an approved practice article or page, keep the exact parent scope visible,
-      and require confirmation before a mutation.</p>
-    <p class="nodoc-callout"><strong>Scope and identity:</strong> NoDoc MCP uses your personal token and existing NoDoc
-      permissions. It does not grant access, bypass authorship, make reused content editable, or turn a read-only
-      history result into a restore action.</p>
-    <h4>Objectives</h4>
-    <ul>
-      <li>Browse Focus Areas, articles, pages, versions, order, and complete page Markdown with the configured MCP
-        connection.</li>
-      <li>Create or reuse authorized articles and pages without confusing reuse with an editable copy.</li>
-      <li>Replace, rename, merge, reorder, and collaborate on content with current revision information.</li>
-      <li>Delete only explicitly approved content after verifying its exact identity and revision.</li>
-      <li>Use read-only history and diff tools to find and compare changes.</li>
-      <li>Start, monitor, review, and explicitly authorize a LiveLabs Pre Publish push.</li>
-    </ul>
-    <details class="nodoc-task">
-      <summary>Task 1 · Browse NoDoc and fetch the exact content</summary>
-      <p>Start with the full parent chain from <a href="#nodoc:1:2">Lab 1 Task 2</a>. Browse before mutating so Codex
-        resolves the exact Focus Area, article, version, and page instead of guessing from a similar name.</p>
-      <ol>
-        <li>List the Focus Areas visible to your identity. Use the same verification prompt from Lab 1 and follow
-          pagination until <code>next_offset</code> is <code>null</code>.
-          <pre class="nodoc-command"><code>Use the configured nodoc MCP tool directly. List all focus areas and follow pagination until next_offset is null.</code></pre>
-        </li>
-        <li>List the articles in one approved Focus Area, then list the pages and saved versions in the exact article.
-          Keep the Focus Area, article, version, and page names in the response; do not continue from a partial match.
-          <pre class="nodoc-command"><code>Use NoDoc MCP to list every article in &lt;Focus Area&gt;. Then list the pages and saved versions in &lt;Focus Area&gt; / &lt;Article&gt;.</code></pre>
-        </li>
-        <li>Fetch the complete Markdown for one authorized page. If the response is chunked, ask Codex to follow
-          <code>next_offset</code> until the complete page is returned.
-          <pre class="nodoc-command"><code>Fetch the complete Markdown for &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Page&gt; / &lt;Version&gt;. Follow next_offset until the whole page is returned.</code></pre>
-        </li>
-      </ol>
-      <p class="nodoc-checkpoint"><strong>Expected result:</strong> you can state the exact content identity and current
-        revision before asking Codex to change anything.</p>
-    </details>
-    <details class="nodoc-task">
-      <summary>Task 2 · Create content and reuse approved content</summary>
-      <p>Use MCP creation actions only after the target and intended result are clear. An article can be added, and a page
-        can be added to an existing article version. Reuse keeps the source article or page linked and read-only; it does
-        not create an editable copy.</p>
-      <ol>
-        <li>Ask Codex to inspect the target and propose the article or page creation before it changes NoDoc. For a page,
-          provide an existing article version; the <code>add_page</code> action does not create a new article version.
-          <pre class="nodoc-command"><code>Use NoDoc MCP to inspect &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Version&gt;, then propose adding a page named &lt;Page Name&gt;. Show the resolved target and current revision, and wait for my confirmation before creating it.</code></pre>
-        </li>
-        <li>For reuse, name the source Focus Area, version, and article or page explicitly. Confirm that the resulting
-          content is a live read-only reference and that changes must be made in the source content.</li>
-        <li>After a create or reuse action, list the target article or page again and verify its name, version, order, and
-          read-only status before continuing.</li>
-      </ol>
-    </details>
-    <details class="nodoc-task">
-      <summary>Task 3 · Edit, organize, and collaborate on content</summary>
-      <p>Content mutations use the current revision to protect against overwriting a newer change. Ask Codex to fetch the
-        target first, propose the smallest change, and wait for confirmation.</p>
-      <ol>
-        <li>Replace a page's Markdown or rename a page or article only after verifying the exact parent chain. Do not
-          update a reused page or article as if it were locally owned.
-          <pre class="nodoc-command"><code>Use NoDoc MCP to fetch the current Markdown and revision for &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Page&gt; / &lt;Version&gt;. Propose this minimal change: &lt;change&gt;. Show the diff and wait for my confirmation before updating.</code></pre>
-        </li>
-        <li>When adding an image, ask Codex to use the NoDoc image-upload action. Do not place a local file path or a
-          temporary data URL in the page Markdown.</li>
-        <li>When merging or reordering content, first read the complete current page or article order. Submit every item
-          exactly once, then list the result again to verify the new order.</li>
-        <li>When managing collaborators, add or remove an article coauthor only where the current NoDoc permissions allow
-          it. The authenticated token determines the acting user; it cannot supply a different username to bypass
-          authorization.</li>
-      </ol>
-    </details>
-    <details class="nodoc-task">
-      <summary>Task 4 · Delete content safely</summary>
-      <p>Deletion is a separate mutation from editing and is permanent from the MCP user's perspective. Treat every
-        deletion as a confirmation checkpoint.</p>
-      <ol>
-        <li>For a page, fetch its current revision and confirm its exact name and complete parent chain. For an article,
-          also inspect the current page count and version count before asking Codex to delete it.</li>
-        <li>Do not delete reused content as if it were locally owned. Do not proceed when the target, revision, or
-          authorization is unclear.</li>
-        <li>Use a prompt that requires Codex to show the resolved target and wait for confirmation:
-          <pre class="nodoc-command"><code>Use NoDoc MCP to verify the exact target &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Page&gt; / &lt;Version&gt;, show its current revision, and wait for my explicit confirmation before deleting it.</code></pre>
-        </li>
-        <li>After deletion, list the parent article or Focus Area again and verify the expected order and remaining
-          content. A deleted page is recovered through the article-level History interface in <a href="#nodoc:2:4">Lab
-          2 Task 4</a>, not through the MCP history tools.</li>
-      </ol>
-    </details>
-    <details class="nodoc-task">
-      <summary>Task 5 · Find changes and compare page history</summary>
-      <p>MCP history tools are read-only. Use them to locate and compare retained page changes; use the NoDoc History
-        interface for Preview, Restore History, and Restore Deleted Page.</p>
-      <ol>
-        <li>Use <code>list_changed_pages</code> with an exact Focus Area, exact version, and bounded
-          <code>from_timestamp</code> and <code>to_timestamp</code> window.
-          <pre class="nodoc-command"><code>Use NoDoc MCP to list pages changed in &lt;Focus Area&gt; version &lt;Version&gt; between &lt;from timestamp&gt; and &lt;to timestamp&gt;. For each returned page, show its retained history. Do not edit any content.</code></pre>
-        </li>
-        <li>If <code>truncated</code> is true, narrow the time window before treating the result as complete. Deleted or
-          no-longer-queryable pages are not returned by this query.</li>
-        <li>For one returned page, use <code>get_page_history</code> with the exact Focus Area, article, page, and version.
-          Use a returned <code>valid_from_timestamp</code> value to select retained snapshots for review.</li>
-        <li>Use <code>get_page_history_diff</code> with the same page identity and two retained timestamps. Review the
-          bounded Markdown diff and line counts; if a change is needed, fetch the current page and use the normal edit
-          workflow.</li>
-      </ol>
-    </details>
-    <details class="nodoc-task">
-      <summary>Task 6 · Start, review, and push a pre-publish request</summary>
-      <p>Pre Publish is asynchronous. Starting a request returns a request ID and status; it does not mean that a preview
-        is ready and it does not push content live.</p>
-      <ol>
-        <li>For LiveLabs, target one exact article, not a whole Focus Area. Provide the LiveLabs Focus Area, article,
-          version, and content area, then start the request:
-          <pre class="nodoc-command"><code>Use NoDoc MCP to start a LiveLabs pre-publish for &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Version&gt; / &lt;Content Area&gt;. Return the request ID and status only. Do not push it live.</code></pre>
-        </li>
-        <li>Poll <code>get_pre_publish_status</code> with the same request ID. Treat <code>pending</code>,
-          <code>processing</code>, <code>ready</code>, and <code>error</code> as different outcomes. Review Preview,
-          Download, and Accessibility Report links only after the status is <strong>ready</strong>.</li>
-        <li>Ask explicitly before any push. Only a ready LiveLabs request may use <code>push_pre_publish_livelabs</code>;
-          it must never run automatically after pre-publish.</li>
-        <li>For the separate OHC path, use <code>get_pre_publish_metadata</code> first. Reuse saved metadata only after
-          explicit confirmation, or provide complete updated OHC metadata to start a new request. Do not treat OHC saved
-          metadata as LiveLabs metadata.</li>
-      </ol>
-    </details>
-    <details class="nodoc-task">
-      <summary>Task 7 · Apply authorization and troubleshooting boundaries</summary>
-      <ol>
-        <li>Seeing a tool in Codex does not prove that the current identity can use it. NoDoc checks Focus Area access,
-          article authorship, ownership, and other permissions for every request.</li>
-        <li>If tools do not appear, confirm one <code>[mcp_servers.nodoc]</code> section, the exact User variable
-          <code>ASK_NODOC_MCP_TOKEN</code>, and a full Codex restart followed by a new chat. Never print the token.</li>
-        <li>If NoDoc reports temporary unavailability, record the tool and approximate time and contact NoDoc support
-          instead of retrying repeatedly. If NoDoc denies an action, recheck the exact Focus Area, article, page, and
-          version before escalating a permissions issue.</li>
-      </ol>
-      <p class="nodoc-callout"><strong>Official reference:</strong> Review the approved <a
-          href="https://docs-uat.us.oracle.com/en/sptest/test-suite/test-product/test-release/nodoc/formal-nodoc-functionalities-and-usage/nodoc-mcp.html"
-          target="_blank" rel="noopener noreferrer">NoDoc MCP User Guide</a> for current action names, authorization
-        rules, pagination, history boundaries, and pre-publish behavior.</p>
-    </details>
-  </div>
+<details class="nodoc-tree-group" data-search-summary="Use Codex MCP to read, create, edit, review drafts, compare history, and prepare a LiveLabs preview with QA." data-search-keywords="codex mcp architecture workflow features tools documentation">
+<summary><span>Lab 8 · Use NoDoc MCP for authoring and Pre Publish</span></summary>
+<div class="nodoc-tree-content nodoc-mcp-content">
+<p>Choose the action you need. Each recipe identifies the target, explains the result, and gives you a prompt to adapt. Complete <a href="#nodoc:1:3">the five-step connection setup</a> first.</p>
+<p class="nodoc-mcp-source">Checked against the <a href="https://docs-uat.us.oracle.com/en/sptest/test-suite/test-product/test-release/nodoc/formal-nodoc-functionalities-and-usage/nodoc-mcp.html" target="_blank" rel="noopener noreferrer">Oracle NoDoc MCP User Guide</a> on 7 October 2026. Feature access depends on your NoDoc role and content permissions.</p>
+<div class="nodoc-mcp-index" aria-label="Choose a NoDoc MCP workflow">
+<a href="#nodoc:8:1"><strong>Browse &amp; read</strong><span>Resolve the exact page and version</span></a>
+<a href="#nodoc:8:2"><strong>Create &amp; reuse</strong><span>Add content or a live reference</span></a>
+<a href="#nodoc:8:3"><strong>Edit &amp; organize</strong><span>Update text, images, order, or coauthors</span></a>
+<a href="#nodoc:8:8"><strong>Review drafts in Codex</strong><span>Compare, approve, or discard through MCP</span></a>
+<a href="#nodoc:8:5"><strong>Compare history</strong><span>Find changes and inspect a diff</span></a>
+<a href="#nodoc:8:6"><strong>Preview &amp; run QA</strong><span>Review the result before a push</span></a>
+<a href="#nodoc:8:4"><strong>Delete content</strong><span>Confirm the exact target and scope</span></a>
+<a href="#nodoc:8:7"><strong>Troubleshoot</strong><span>Check connection, access, or conflicts</span></a></div>
+<h4>How the connection works</h4>
+<figure class="nodoc-route-evidence nodoc-mcp-figure" data-hide-caption="true">
+  <picture>
+    <source media="(max-width: 900px)" data-nodoc-asset="images/mcp/architecture-compact.svg?v=20261007-r3" width="760" height="1144">
+    <img data-nodoc-asset="images/mcp/architecture.svg?v=20261007-r3" alt="Follow steps 1 to 3: Codex sends an authenticated MCP request over HTTPS; NoDoc checks your identity and permissions; authorized content is read or changed. Results return through the MCP service to Codex. The Windows user variable supplies the token, and the local nodoc-mcp skill supplies workflow guidance." width="1440" height="680" loading="lazy">
+  </picture>
+</figure>
+<p><strong>Use an exact target:</strong> <code>Focus Area / Article / Page / Version</code>. Select an existing version, read the current revision, then review a proposed change. Reused content is a live, read-only reference to its source.</p>
+<p class="nodoc-callout"><strong>Start with a read-only task.</strong> For a change, review the scope and diff, authorize the action, then read back the saved result. Draft approval changes the live NoDoc page; publishing requires its own workflow.</p>
+<details class="nodoc-task" data-search-summary="Ask Codex to resolve the Focus Area, article, page, and version, then retrieve the complete content through MCP." data-search-keywords="mcp codex browse read fetch discovery pagination markdown content"><summary>Task 1 · Browse NoDoc and fetch the exact content</summary>
+<ol><li>List the Focus Areas visible to your account, then the articles, pages, and saved versions in your chosen area.</li><li>Resolve exact names before reading a page. Follow every <code>next_offset</code> until it is <code>null</code> for both lists and chunked Markdown.</li><li>Keep the resolved identity and revision with the result so later changes use fresh information.</li></ol>
+<div class="nodoc-mcp-snippet"><div class="nodoc-mcp-snippet-bar"><strong>Browse, then read</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-browse">Copy</button></div><pre class="nodoc-command"><code id="nodoc-mcp-browse">Use NoDoc MCP to list every article in &lt;Focus Area&gt;, then the pages and saved versions in &lt;Article&gt;. Resolve the exact target &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Page&gt; / &lt;Version&gt;. Fetch all of its Markdown, following next_offset until null. Show the resolved identity and current revision. Do not edit anything.</code></pre></div><p class="nodoc-checkpoint"><strong>Check your result:</strong> You have the full page, its exact version, and its revision. A partial match or the first response chunk is not enough.</p></details>
+<details class="nodoc-task" data-search-summary="Create NoDoc content through Codex MCP or insert a live, read-only reference to an approved source." data-search-keywords="mcp codex create article page reuse reference read only"><summary>Task 2 · Create content and reuse approved content</summary>
+<ol><li>Choose an existing Focus Area. To add a page, also choose an existing article version and a page name unique within that article. <code>add_page</code> does not create a version.</li><li>Ask Codex to show the proposed content and destination, then confirm the creation.</li><li>For reuse, supply the exact source and destination. The result stays linked to the source and read-only; edit the source to change it.</li><li>List the destination again to check the name, version, placement, and ownership.</li></ol>
+<div class="nodoc-mcp-snippet"><div class="nodoc-mcp-snippet-bar"><strong>Prepare a new page</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-create">Copy</button></div><pre class="nodoc-command"><code id="nodoc-mcp-create">Use NoDoc MCP to inspect &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Version&gt;. Prepare a new page named &lt;Page Name&gt; with this content: &lt;content&gt;. Verify the version exists and the name is unique. Show the destination and proposed page, then wait for my confirmation before creating it.</code></pre></div><p class="nodoc-checkpoint"><strong>Check your result:</strong> The new page belongs to the intended existing version. A reused item is identified as a reference.</p></details>
+<details class="nodoc-task" data-search-summary="Use Codex MCP to update text and images, reorder content, and manage authorized collaboration." data-search-keywords="mcp codex edit images image insert reorder move coauthor collaboration revision"><summary>Task 3 · Edit, organize, and collaborate on content</summary>
+<p>Fetch the current page and revision before a change. If the revision has changed by save time, fetch again, review the new diff, and reconfirm the update.</p>
+<div class="nodoc-mcp-snippet"><div class="nodoc-mcp-snippet-bar"><strong>Propose a focused edit</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-edit">Copy</button></div><pre class="nodoc-command"><code id="nodoc-mcp-edit">Use NoDoc MCP to fetch the complete current Markdown and revision for &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Page&gt; / &lt;Version&gt;. Propose this change: &lt;change&gt;. Show the diff and wait for my confirmation before updating. After saving, fetch the page again and verify the change.</code></pre></div>
+<div class="nodoc-mcp-table-wrap"><table class="nodoc-reference-table"><caption>Other supported editing actions</caption><thead><tr><th scope="col">Action</th><th scope="col">What to specify and check</th></tr></thead><tbody>
+<tr><th scope="row">Insert an image</th><td>Provide a PNG, JPEG, or GIF and its intended location. Ask for the NoDoc image-upload tool. Verify the stored image renders; a local file path or temporary data URL is not a usable NoDoc image.</td></tr>
+<tr><th scope="row">Rename</th><td>Name the exact page or article and its replacement name. Read the result back.</td></tr>
+<tr><th scope="row">Merge pages</th><td>Identify source and target. The target receives the combined Markdown; the source page remains.</td></tr>
+<tr><th scope="row">Reorder</th><td>Read the complete current article or page order. Submit every item exactly once, then check the resulting order.</td></tr>
+<tr><th scope="row">Manage coauthors</th><td>Name the exact article, person, and add/remove action. Your account must be authorized; the token always determines the acting user.</td></tr>
+</tbody></table></div>
+<p class="nodoc-checkpoint"><strong>Check your result:</strong> The read-back matches the approved change and unrelated content remains intact.</p></details>
+<details class="nodoc-task" data-search-summary="Confirm the exact article or page and authorize its deletion through Codex MCP." data-search-keywords="mcp codex delete deletion article page confirmation"><summary>Task 4 · Delete content safely</summary>
+<p>Deletion is permanent from the MCP user's perspective. Use this task only for content you intend to remove.</p>
+<ol><li>Fetch the exact page and its current revision. For an article, also inspect its current page count and version count.</li><li>Review the resolved names and scope. Confirm the exact name only after you understand what will be deleted.</li><li>After deletion, list the parent again and verify the remaining content.</li></ol>
+<div class="nodoc-mcp-snippet"><div class="nodoc-mcp-snippet-bar"><strong>Inspect before deleting</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-delete">Copy</button></div><pre class="nodoc-command"><code id="nodoc-mcp-delete">Use NoDoc MCP to inspect &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Page&gt; / &lt;Version&gt; for deletion. Show the exact names and current revision. If deleting an article, include its page and version counts. Do not delete anything until I explicitly confirm the resolved target.</code></pre></div><p class="nodoc-checkpoint"><strong>Check your result:</strong> Only the confirmed target was removed. MCP history tools cannot undo deletion; see <a href="#nodoc:2:4">NoDoc History</a> for available UI recovery options.</p></details>
+<details class="nodoc-task" data-search-summary="Use Codex MCP to find changes and compare saved page history. This is separate from reviewing pending drafts." data-search-keywords="mcp codex history compare revision difference diff get_page_history_diff"><summary>Task 5 · Find changes and compare page history</summary>
+<ol><li>Call <code>list_changed_pages</code> for an exact Focus Area, version, and <code>from_timestamp</code>/<code>to_timestamp</code> window. Specify the time zone. If <code>truncated</code> is true, narrow the window.</li><li>Call <code>get_page_history</code> for a returned page. Choose two retained <code>valid_from_timestamp</code> values.</li><li>Call <code>get_page_history_diff</code> for that same page and version. Review the bounded Markdown diff and added/removed line counts.</li></ol>
+<div class="nodoc-mcp-snippet"><div class="nodoc-mcp-snippet-bar"><strong>Review retained changes</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-history">Copy</button></div><pre class="nodoc-command"><code id="nodoc-mcp-history">Use NoDoc MCP to list pages changed in &lt;Focus Area&gt;, version &lt;Version&gt;, from &lt;start timestamp with time zone&gt; to &lt;end timestamp with time zone&gt;. If truncated, narrow the window. For &lt;Article&gt; / &lt;Page&gt;, show retained history and compare two available snapshots I select. Do not edit or restore content.</code></pre></div>
+<p>The change list includes currently queryable, authorized, non-reused pages. Deleted or unavailable pages are excluded, and retained history is bounded. These tools review changes; use a fresh fetch and the normal edit workflow to change the current page.</p>
+<p class="nodoc-checkpoint"><strong>Check your result:</strong> Both timestamps came from the returned history. Describe any truncation or missing history with the result.</p></details>
+<details class="nodoc-task" data-search-summary="Use Codex MCP to create a ready preview, run LiveLabs QA, review findings, and explicitly authorize a push." data-search-keywords="mcp codex prepublish pre publish preview qa validation run_livelabs_qa request status push ohc metadata"><summary>Task 6 · Start, review, and push a pre-publish request</summary>
+<p>For LiveLabs, the target is one article and an existing version. Keep one request ID through status checks and QA.</p>
+<figure class="nodoc-route-evidence nodoc-mcp-figure"><img data-nodoc-asset="images/mcp/publish-lifecycle.svg" alt="LiveLabs workflow: start request, pending or processing, ready preview, QA processing then completed, review, explicit push decision. Error states stop the workflow." width="1120" height="650" loading="lazy"><figcaption>LiveLabs request lifecycle · A ready preview and completed QA are separate results. Push requires an explicit instruction.</figcaption></figure>
+<ol><li><strong>Start.</strong> Supply the LiveLabs Focus Area, article, version, and content area. <code>start_pre_publish_livelabs</code> creates the archive and starts a preview request; it does not push content live.</li></ol>
+<div class="nodoc-mcp-snippet"><div class="nodoc-mcp-snippet-bar"><strong>Create a LiveLabs preview</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-prepublish">Copy</button></div><pre class="nodoc-command"><code id="nodoc-mcp-prepublish">Use NoDoc MCP to start a LiveLabs pre-publish for &lt;LiveLabs Focus Area&gt; / &lt;Article&gt; / &lt;Version&gt; / &lt;Content Area&gt;. Return the request ID, status, and estimate. Do not push it live.</code></pre></div>
+<ol start="2"><li><strong>Wait for ready.</strong> Poll <code>get_pre_publish_status</code> using the returned request ID. <code>pending</code> and <code>processing</code> mean wait; <code>error</code> means inspect the failure. Preview, download, and accessibility-report links appear at <code>ready</code>. Only the token subject that created the request can access its ID.</li><li><strong>Run QA.</strong> Once ready, call <code>run_livelabs_qa</code>. If it returns <code>processing</code>, poll that tool with the same ID until <code>completed</code> or <code>error</code>. Do not start another pre-publish request while QA is running.</li></ol>
+<div class="nodoc-mcp-snippet"><div class="nodoc-mcp-snippet-bar"><strong>Check the ready preview</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-qa">Copy</button></div><pre class="nodoc-command"><code id="nodoc-mcp-qa">Use NoDoc MCP to run LiveLabs QA for request ID &lt;request_id&gt;. If processing, poll run_livelabs_qa with that same ID until completed or error. Show the page-scoped findings. Do not start another pre-publish request or push anything live.</code></pre></div>
+<ol start="4"><li><strong>Review.</strong> Inspect the page findings, preview, and accessibility report. QA is read-only and uses the current LiveLabs CDN validator; <code>completed</code> does not mean every check passed. If fixes are needed, edit and verify the content, then create and validate a new preview.</li><li><strong>Decide whether to push.</strong> Complete the required <a href="#nodoc:10">QA and release review</a>. Only then explicitly request <code>push_pre_publish_livelabs</code> for the reviewed, ready LiveLabs request. The tool rejects OHC and non-ready requests. Continue the separate WMS publishing handoff as required.</li></ol>
+<p class="nodoc-checkpoint"><strong>Check your result:</strong> You can show the request ID, ready preview, completed QA findings, and review decision. Starting a request alone is not a finished preview or a successful release.</p>
+<details class="nodoc-reference"><summary>OHC reference: use publication metadata</summary><p>OHC targets an exact Focus Area and publication version. First call <code>get_pre_publish_metadata</code>; this reads the last confirmed metadata and estimate without starting a request.</p><ul><li>To reuse the metadata, review it and explicitly confirm <code>start_pre_publish_ohc_using_saved_metadata</code>.</li><li>To change it, use <code>start_pre_publish_ohc</code> with document title, title, content type, part number, description, print month/year, platform, and base URL. Author/contributor lists are optional.</li></ul><p>An accepted request returns a 32-character <code>request_id</code>. Poll <code>get_pre_publish_status</code>. Saved metadata belongs to that Focus Area/version and is not used for LiveLabs; the LiveLabs push tool does not push OHC.</p></details></details>
+<details class="nodoc-task" data-search-summary="Resolve missing MCP tools, expired tokens, access errors, revision conflicts, and incomplete results." data-search-keywords="mcp codex troubleshooting troubleshoot error permissions authorization expired token missing tools conflict"><summary>Task 7 · Apply authorization and troubleshooting boundaries</summary>
+<div class="nodoc-mcp-table-wrap"><table class="nodoc-reference-table"><caption>Find the symptom, then take one targeted next step</caption><thead><tr><th scope="col">Symptom</th><th scope="col">What to do</th><th scope="col">Success signal</th></tr></thead><tbody>
+<tr><th scope="row">No NoDoc tools</th><td>Check one <code>[mcp_servers.nodoc]</code> section, the exact user-variable name, and the token's expiry/revocation state. Fully restart Codex and open a new chat.</td><td>A direct <code>list_focus_areas</code> call returns a result.</td></tr>
+<tr><th scope="row">Expired, revoked, or lost token</th><td>Return to the <a href="https://asknodoc.oraclecorp.com/mcp-access-tokens" target="_blank" rel="noopener noreferrer">token page</a>. Revoke the old token, create a replacement, update the user variable, and restart Codex.</td><td>The read-only verification works again.</td></tr>
+<tr><th scope="row">Not authorized</th><td>Check the exact Focus Area, article, page, and version. Ask the content owner to verify your role or authorship. A token cannot expand your access.</td><td>The intended authorized content is accessible.</td></tr>
+<tr><th scope="row">Reused item is read-only</th><td>Resolve and edit the owned source if authorized.</td><td>The source change appears in the reference.</td></tr>
+<tr><th scope="row">Content changed since fetch</th><td>Fetch the latest revision, compare again, and reconfirm. Do not force an older revision.</td><td>The saved result matches the newly reviewed change.</td></tr>
+<tr><th scope="row">Data temporarily unavailable</th><td>Stop repeated retries. Record the tool name, approximate time, and non-sensitive error category for NoDoc support.</td><td>Support resolves the service issue before retry.</td></tr>
+<tr><th scope="row">Request ID unavailable</th><td>Confirm the exact ID and that the current token subject created the request.</td><td>The same request returns its current status.</td></tr>
+<tr><th scope="row">Partial list, Markdown, or history</th><td>Follow <code>next_offset</code> to <code>null</code>; narrow a truncated history window.</td><td>Report completeness and any remaining bounds.</td></tr>
+</tbody></table></div>
+<p>Never print a token while debugging. The visible tool catalog does not prove permission to run every action. When audit storage is available, NoDoc records the acting user and request outcome; it does not store the raw token or page content in the MCP audit record.</p>
+<p class="nodoc-checkpoint"><strong>Check your result:</strong> Repeat the smallest read-only check after fixing the issue. Refresh the <a href="#nodoc:1:3">usage skill</a> when its workflow guidance is out of date.</p></details>
+<details class="nodoc-task" data-search-summary="Codex MCP: review existing drafts and HTML diffs in chat, approve or discard one draft, then verify the saved result." data-search-keywords="codex mcp draft drafts review approve approval discard rejection list_page_drafts approve_page_draft discard_page_draft">
+<summary>Task 8 · Review, approve, or discard drafts through Codex MCP</summary>
+<p><strong>Work directly in Codex:</strong> Ask Codex to retrieve existing drafts, show their differences, and carry
+out your decision through NoDoc MCP. You do not need to open NoDoc's Drafts dialog or click Approve in the browser.
+You review the result and choose the action in chat; Codex performs the tool calls.</p>
+<p><strong>Before you start:</strong> Complete the <a href="#nodoc:1:3">MCP connection setup</a> and identify the exact
+<code>Focus Area / Article / Page / Version</code>. For LiveLabs, you must be an administrator, Focus Area owner,
+or article author/coauthor. Other NoDoc content requires an Author of the selected page.</p>
+<p>For draft creation and the manual browser workflow, see
+<a href="#nodoc:3:2">Lab 3, Task 2 · Create and review page drafts in the NoDoc UI</a>.</p>
+
+<h5>1. Ask Codex to retrieve and compare the drafts</h5>
+<p>Replace the placeholders with your target. Start with a read-only review.</p>
+<div class="nodoc-mcp-snippet">
+  <div class="nodoc-mcp-snippet-bar"><strong>Review drafts in Codex</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-drafts">Copy</button></div>
+  <pre class="nodoc-command"><code id="nodoc-mcp-drafts">Use NoDoc MCP to list every draft for &lt;Focus Area&gt; / &lt;Article&gt; / &lt;Page&gt; / &lt;Version&gt;. Follow next_offset until null. Show each draft ID, creator, editor, status, timestamps, and the returned HTML diff against the live page. State any diff limits. Do not approve, discard, edit, or publish anything.</code></pre>
+</div>
+<p><strong>Expected result:</strong> Codex shows the draft details and proposed changes in chat. The diff compares
+draft HTML with live page HTML and can be bounded; it is separate from the Markdown history comparison.
+If no drafts are returned, confirm the target before continuing. An authorization error does not reveal draft content.</p>
+
+<h5>2. Choose one action in the same Codex chat</h5>
+<p>Review the differences and copy the exact draft ID from Codex's response. Choose <strong>Approve</strong> or
+<strong>Discard</strong> for that draft. These tools act on a whole draft; the browser's per-change accept/reject controls
+belong to the <a href="#nodoc:3:2">manual UI workflow</a>.</p>
+<div class="nodoc-mcp-table-wrap"><table class="nodoc-reference-table">
+<caption>What your decision changes</caption>
+<thead><tr><th scope="col">Decision</th><th scope="col">Live page</th><th scope="col">Draft status</th></tr></thead>
+<tbody>
+<tr><th scope="row">Approve</th><td>Applies the selected draft. It does not publish the page.</td><td>Marks <strong>all pending drafts for that page REVIEWED</strong>, including the other pending drafts.</td></tr>
+<tr><th scope="row">Discard</th><td>Leaves the live page unchanged.</td><td>Marks only the selected draft <strong>REVIEWED</strong> and retains it for audit. Other pending drafts remain unchanged.</td></tr>
+</tbody></table></div>
+<div class="nodoc-mcp-snippet">
+  <div class="nodoc-mcp-snippet-bar"><strong>Option A · Approve the reviewed draft</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-draft-approve">Copy</button></div>
+  <pre class="nodoc-command"><code id="nodoc-mcp-draft-approve">Approve draft &lt;draft_id&gt; for the exact page and version we just reviewed through NoDoc MCP. I understand this applies the selected draft and marks all pending drafts for that page REVIEWED. Use the reviewed revision; if the page has changed, stop and show a fresh comparison for my review. Then list the drafts again and fetch the live page to verify the saved result. Do not publish.</code></pre>
+</div>
+<div class="nodoc-mcp-snippet">
+  <div class="nodoc-mcp-snippet-bar"><strong>Option B · Discard the reviewed draft</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-draft-discard">Copy</button></div>
+  <pre class="nodoc-command"><code id="nodoc-mcp-draft-discard">Discard draft &lt;draft_id&gt; for the exact page and version we just reviewed through NoDoc MCP. Mark only that draft REVIEWED and retain it for audit. Leave the live page and other pending drafts unchanged. Then list the drafts again and fetch the live page to verify the result. Do not publish.</code></pre>
+</div>
+
+<h5>3. Check Codex's read-back</h5>
+<p>Confirm that Codex reports the selected draft ID, the action result, and the refreshed draft statuses.
+For approval, compare the fetched live page with the accepted draft. For discard, confirm that the live page
+and other pending drafts remain unchanged. An attempted call or an error is not a saved result.</p>
+<details class="nodoc-reference">
+<summary>What Codex handles through MCP</summary>
+<ul>
+<li><code>list_page_drafts</code> retrieves draft details and the bounded HTML diff. Codex follows
+<code>next_offset</code> to <code>null</code> before claiming the draft list is complete.</li>
+<li><code>approve_page_draft</code> requires the prior listing, exact <code>draft_id</code>, matching
+<code>confirm_draft_id</code>, and the returned <code>current_last_updated</code> value unchanged.
+If the page changes, review fresh information before authorizing another attempt.</li>
+<li><code>discard_page_draft</code> requires the exact <code>draft_id</code> and matching <code>confirm_draft_id</code>.
+You do not need to construct the tool arguments yourself.</li>
+</ul>
 </details>
-<details class="nodoc-tree-group">
+<p class="nodoc-checkpoint"><strong>Check your result:</strong> Your decision is verified in Codex through a fresh
+draft listing and page read. No manual NoDoc browser step or publishing action is required for this workflow.</p>
+</details>
+</div>
+</details>
+<details class="nodoc-tree-group" data-search-summary="Use NoDoc Pre Publish controls to configure LiveLabs output, run validations, and choose Preview, Push, or Download Zip." data-search-keywords="manual ui browser prepublish pre publish validation preview push download">
   <summary><span>Lab 9 · Pre Publish and validation results</span></summary>
   <div class="nodoc-tree-content">
     <div data-video-card data-video-title="Lab 9 walkthrough"
@@ -2171,7 +2157,7 @@ Linux-specific instructions.
       <li>Run and inspect both mandatory validation sets, then use Vibe Doc-ing to correct flagged content when needed.</li>
       <li>Choose the correct post-validation output: Preview, Push, or Download Zip.</li>
     </ul>
-    <details class="nodoc-task">
+    <details class="nodoc-task" data-search-summary="In the NoDoc UI, set the LiveLabs target and generate the Sandbox or Tenancy URLs for review." data-search-keywords="manual ui browser prepublish pre publish target sandbox tenancy urls">
       <summary>Task 1 · Configure the LiveLabs Pre Publish target</summary>
       <ol>
         <li>From the saved NoDoc article, click the <strong>Pre Publish</strong> button in the upper action row, then
@@ -2208,7 +2194,7 @@ Linux-specific instructions.
         </li>
       </ol>
     </details>
-    <details class="nodoc-task">
+    <details class="nodoc-task" data-search-summary="Run Markdown and Text Check validations in NoDoc, inspect findings, and correct or acknowledge issues before continuing." data-search-keywords="manual ui browser validation markdown text check findings prepublish pre publish">
       <summary>Task 2 · Run mandatory validations and resolve findings</summary>
       <ol>
         <li>Select <strong>Run Markdown Validations</strong>. Review the Markdown result table by severity, page, rule
@@ -2252,7 +2238,7 @@ Linux-specific instructions.
         </li>
       </ol>
     </details>
-    <details class="nodoc-task">
+    <details class="nodoc-task" data-search-summary="After validation, use the NoDoc UI to preview the workshop, push approved output, or download a ZIP archive." data-search-keywords="manual ui browser prepublish pre publish preview push download zip">
       <summary>Task 3 · Choose the post-validation output</summary>
       <ol>
         <li>After Pre Publish completes, review the available actions: <strong>Preview</strong>, <strong>Push</strong>,
@@ -2300,7 +2286,7 @@ Linux-specific instructions.
     </details>
   </div>
 </details>
-<details class="nodoc-tree-group">
+<details class="nodoc-tree-group" data-search-summary="Complete Self Quality Assurance, resolve review findings, and submit the separate WMS publishing request." data-search-keywords="qa self quality assurance release review wms publishing handoff">
   <summary><span>Lab 10 · Complete QA and submit the WMS publishing request</span></summary>
   <div class="nodoc-tree-content">
     <div data-video-card data-video-title="Lab 10 walkthrough"
@@ -2317,7 +2303,7 @@ Linux-specific instructions.
       <li>Submit and configure the WMS publishing request with the URLs created in <a href="#nodoc:9:1">Lab 9 Task
         1</a>.</li>
     </ul>
-    <details class="nodoc-task">
+    <details class="nodoc-task" data-search-summary="Review the generated Lab 9 workshop output and complete the Self Quality Assurance checklist." data-search-keywords="manual self qa quality assurance preview workshop review">
       <summary>Task 1 · Review the Lab 9 output and complete Self Quality Assurance</summary>
       <ol>
         <li>Open the generated workshop with <strong>Preview</strong> from <a href="#nodoc:9:3">Lab 9 Task 3</a>. Check
@@ -2341,7 +2327,7 @@ Linux-specific instructions.
           findings are resolved or explicitly accepted by the responsible reviewer.</li>
       </ol>
     </details>
-    <details class="nodoc-task">
+    <details class="nodoc-task" data-search-summary="Resolve reviewer findings, repeat required checks, and confirm approval before requesting publication." data-search-keywords="qa release approval reviewer findings publishing readiness">
       <summary>Task 2 · Resolve review findings and confirm release approval</summary>
       <ol>
         <li>Share the Preview URL and QA evidence through the approved review route. Treat the Preview, Push response,
@@ -2356,7 +2342,7 @@ Linux-specific instructions.
           with the QA evidence.</li>
       </ol>
     </details>
-    <details class="nodoc-task">
+    <details class="nodoc-task" data-search-summary="Create the WMS publishing request using the reviewed NoDoc output and verify publishing and sandbox settings." data-search-keywords="wms publish publishing request sandbox handoff release">
       <summary>Task 3 · Create and configure the WMS publishing request</summary>
       <p>Follow the three stages below after Task 2 is complete. They mirror the <a
         href="../quickstart/#publishing-request-walkthrough">Quickstart Publishing request walkthrough</a>. Keep the

@@ -13,7 +13,8 @@
 
   function hydrateNoDocAssets(root, contentUrl) {
     root.querySelectorAll("[data-nodoc-asset]").forEach(function (image) {
-      image.setAttribute("src", new URL(image.getAttribute("data-nodoc-asset"), contentUrl).toString());
+      var attribute = image.tagName === "SOURCE" ? "srcset" : "src";
+      image.setAttribute(attribute, new URL(image.getAttribute("data-nodoc-asset"), contentUrl).toString());
     });
   }
 
@@ -994,6 +995,7 @@
       return;
     }
 
+    searchIndex = window.NoDocSearch.build(source);
     hydrateNoDocVideoContracts(source);
     setupNoDocCodexPromptBuilder(source);
     setupNoDocArchitecturePromptBuilder(source);
@@ -1269,72 +1271,6 @@
       }
     }
 
-    function buildSearchIndex() {
-      // Index the rendered reader text once. Search results point back to the exact
-      // lab or task instead of creating a second copy of the workshop content. A
-      // lab entry contains only its overview; task text stays with the task entry
-      // so a query does not return every parent section as a duplicate match.
-      searchIndex = [];
-      panels.forEach(function (panel, panelIndex) {
-        var heading = panel.querySelector(".nodoc-lab-heading");
-        var panelTitle = heading ? cleanLabel(heading.textContent) : "Workshop section";
-        var content = panel.querySelector(":scope > .nodoc-tree-content");
-        var panelText = content ? cleanLabel(Array.from(content.children).filter(function (child) {
-          return !child.classList.contains("nodoc-task-section") && !child.matches("[data-video-card]");
-        }).map(function (child) {
-          return child.textContent;
-        }).join(" ")) : "";
-
-        searchIndex.push({
-          panel: panelIndex,
-          task: 0,
-          kind: panelIndex === 0 ? "Introduction" : "Lab",
-          title: panelTitle,
-          text: panelText,
-          searchable: normalize(panelTitle + " " + panelText)
-        });
-
-        panel.querySelectorAll(".nodoc-task-section").forEach(function (section, taskIndex) {
-          var taskHeading = section.querySelector(":scope > summary");
-          var taskTitle = taskHeading ? cleanLabel(taskHeading.textContent) : "Task " + (taskIndex + 1);
-          var taskText = cleanLabel(Array.from(section.children).filter(function (child) {
-            return child.tagName !== "SUMMARY" && !child.classList.contains("nodoc-task-media");
-          }).map(function (child) {
-            return child.textContent;
-          }).join(" "));
-          searchIndex.push({
-            panel: panelIndex,
-            task: taskIndex + 1,
-            kind: panelTitle,
-            title: taskTitle,
-            text: taskText,
-            searchable: normalize(panelTitle + " " + taskTitle + " " + taskText)
-          });
-        });
-      });
-    }
-
-    function searchScore(entry, query, terms) {
-      var title = normalize(entry.title);
-      var titleTokens = title.match(/[a-z0-9]+/g) || [];
-      var score = 0;
-
-      if (title === query) {
-        score += 100;
-      } else if (title.indexOf(query) !== -1) {
-        score += 60;
-      }
-      terms.forEach(function (term) {
-        if (titleTokens.indexOf(term) !== -1) {
-          score += 10;
-        }
-      });
-      if (entry.task === 0) {
-        score += 1;
-      }
-      return score;
-    }
-
     function setSearchMode(active) {
       if (!guideLayout) {
         return;
@@ -1373,15 +1309,8 @@
 
       setSearchMode(true);
 
-      var terms = query.match(/[a-z0-9]+/g) || [];
-      latestMatches = searchIndex.filter(function (entry) {
-        var tokens = entry.searchable.match(/[a-z0-9]+/g) || [];
-        return terms.length > 0 && terms.every(function (term) {
-          return tokens.indexOf(term) !== -1;
-        });
-      }).sort(function (left, right) {
-        return searchScore(right, query, terms) - searchScore(left, query, terms);
-      }).slice(0, 10);
+      var matches = window.NoDocSearch.find(searchIndex, query);
+      latestMatches = matches.slice(0, 10);
 
       latestMatches.forEach(function (entry) {
         var button = document.createElement("button");
@@ -1396,14 +1325,14 @@
         meta.className = "nodoc-search-result-meta";
         meta.textContent = entry.kind;
         title.textContent = entry.title;
-        summary.textContent = excerpt(entry.text, query);
+        summary.textContent = entry.summary || excerpt(entry.text, query);
         button.append(meta, title, summary);
         fragment.appendChild(button);
       });
 
       searchResults.appendChild(fragment);
       searchResults.hidden = latestMatches.length === 0;
-      searchStatus.textContent = latestMatches.length ? latestMatches.length + " result" + (latestMatches.length === 1 ? "" : "s") + " found." : "No workshop content matches that search.";
+      searchStatus.textContent = matches.length ? (matches.length > 10 ? "Showing 10 of " + matches.length + " results. Add another term to narrow your search." : matches.length + " result" + (matches.length === 1 ? "" : "s") + " found.") : "No matching lab or task. Try MCP setup, manual drafts, Codex drafts, or Pre Publish.";
     }
 
     mode.addEventListener("click", function (event) {
@@ -1468,7 +1397,6 @@
     });
 
     if (searchInput && searchResults && searchStatus) {
-      buildSearchIndex();
       searchInput.addEventListener("input", function () {
         // Debounce typing so larger workshop text is not searched on every keystroke.
         window.clearTimeout(searchTimer);
@@ -1513,6 +1441,7 @@
 
     var initialHash = readWorkshopHash();
     activate(initialHash.panel, initialHash.task, { scroll: initialHash.matched, syncHash: false });
+    document.dispatchEvent(new CustomEvent("nodoc:content-ready"));
   }
 
   if (document.readyState === "loading") {

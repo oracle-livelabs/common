@@ -2866,7 +2866,7 @@
         pill.className = "figure-expand-pill";
         pill.setAttribute("aria-hidden", "true");
         pill.textContent = "Click to expand";
-        figure.insertBefore(pill, image);
+        figure.insertBefore(pill, image.closest("picture") || image);
       }
     });
   }
@@ -2911,11 +2911,12 @@
       return;
     }
 
-    captionText = caption ? caption.textContent.trim() : (image.getAttribute("alt") || "");
+    captionText = figure.hasAttribute("data-hide-caption") ? "" : (caption ? caption.textContent.trim() : (image.getAttribute("alt") || ""));
     lastExpandedFigure = figure;
     imageLightboxImage.setAttribute("src", image.currentSrc || image.getAttribute("src") || "");
     imageLightboxImage.setAttribute("alt", image.getAttribute("alt") || "");
     imageLightboxCaption.textContent = captionText;
+    imageLightboxCaption.hidden = !captionText;
     imageLightbox.removeAttribute("hidden");
     imageLightbox.setAttribute("aria-hidden", "false");
     document.body.classList.add("image-lightbox-open");
@@ -4453,52 +4454,20 @@
   }
 
   function createNoDocSearchEntries(markup) {
-    var documentFragment = new DOMParser().parseFromString(markup, "text/html");
-
-    return Array.from(documentFragment.querySelectorAll("details.nodoc-tree-group")).reduce(function (entries, panel, panelIndex) {
-      var panelSummary = panel.querySelector(":scope > summary");
-      var panelTitleNode = panelSummary && panelSummary.querySelector("span");
-      var panelTitle = panelTitleNode ? panelTitleNode.textContent.trim() : (panelSummary ? panelSummary.textContent.trim() : "NoDoc workshop section");
-      var panelText = panel.textContent.trim();
-      var panelEntry = createSearchEntry({
-        id: "nodoc-panel-" + panelIndex,
+    var source = new DOMParser().parseFromString(markup, "text/html");
+    return window.NoDocSearch.build(source).map(function (entry) {
+      return createSearchEntry({
+        id: "nodoc-panel-" + entry.panel + (entry.task ? "-task-" + entry.task : ""),
         typeLabel: "NoDoc workshop",
-        title: panelTitle,
-        summary: "Open this NoDoc workshop section and its authoring tasks.",
-        path: "NoDoc / " + panelTitle,
-        body: panelText,
-        resultHref: routeUrl("#nodoc:" + panelIndex),
-        open: {
-          kind: "nodoc",
-          panel: panelIndex,
-          task: 0
-        }
+        title: entry.title,
+        summary: entry.summary,
+        path: "NoDoc / " + entry.path,
+        body: entry.text,
+        keywords: entry.keywords.split(/\s+/),
+        resultHref: routeUrl("#nodoc:" + entry.panel + (entry.task ? ":" + entry.task : "")),
+        open: { kind: "nodoc", panel: entry.panel, task: entry.task }
       });
-
-      entries.push(panelEntry);
-      Array.from(panel.querySelectorAll("details.nodoc-task")).forEach(function (task, taskIndex) {
-        var taskSummary = task.querySelector(":scope > summary");
-        var taskTitle = taskSummary ? taskSummary.textContent.trim() : "Task " + (taskIndex + 1);
-        var taskEntry = createSearchEntry({
-          id: "nodoc-panel-" + panelIndex + "-task-" + (taskIndex + 1),
-          typeLabel: "NoDoc workshop",
-          title: taskTitle,
-          summary: "Open this task in " + panelTitle + ".",
-          path: "NoDoc / " + panelTitle + " / " + taskTitle,
-          body: task.textContent.trim(),
-          resultHref: routeUrl("#nodoc:" + panelIndex + ":" + (taskIndex + 1)),
-          open: {
-            kind: "nodoc",
-            panel: panelIndex,
-            task: taskIndex + 1
-          }
-        });
-
-        entries.push(taskEntry);
-      });
-
-      return entries;
-    }, []);
+    });
   }
 
   function loadNoDocSearchEntries() {
@@ -5493,6 +5462,11 @@
   });
 
   hydrateVideoCards(document);
+  // NoDoc content arrives after the initial page decoration. Apply the same
+  // accessible image controls after the workshop renderer has mounted it.
+  document.addEventListener("nodoc:content-ready", function () {
+    decorateExpandableMedia(document.getElementById("nodocWorkshopReader"));
+  });
   decorateExpandableMedia(document);
   initWmsStatusGraphs();
   updateNav();

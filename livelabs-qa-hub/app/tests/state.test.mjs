@@ -6,7 +6,6 @@ import {
   can,
   createAuditEvent,
   createGithubItem,
-  createKnowledgeItem,
   createMonitor,
   createUser,
   createWatchEvent,
@@ -34,11 +33,9 @@ test('role permissions gate admin actions', () => {
   assert.equal(can('admin', 'manage_watchdog'), true)
   assert.equal(can('admin', 'configure_monitors'), true)
   assert.equal(can('admin', 'manage_github_intake'), true)
-  assert.equal(can('admin', 'manage_knowledge_base'), true)
   assert.equal(can('user', 'view'), true)
   assert.equal(can('user', 'manage_users'), false)
   assert.equal(can('user', 'configure_monitors'), false)
-  assert.equal(can('user', 'manage_knowledge_base'), false)
 })
 
 test('admin can create update and delete users', () => {
@@ -117,21 +114,6 @@ test('admin can create GitHub intake records', () => {
   assert.equal(created[0].type, 'Pull Request')
   assert.equal(created[0].history.length, 1)
   assert.throws(() => createGithubItem(githubItems, { title: 'Blocked' }, 'user'), /Admin role required/)
-})
-
-test('admin can create knowledge base records', () => {
-  const { knowledgeItems } = getSeedState()
-  const created = createKnowledgeItem(knowledgeItems, {
-    title: 'Reviewed source note',
-    summary: 'Source is relevant for QA release readiness.',
-    source: 'Local file',
-    owner: 'LiveLabs QA'
-  }, 'admin')
-
-  assert.equal(created.length, knowledgeItems.length + 1)
-  assert.equal(created[0].status, 'New')
-  assert.equal(created[0].source, 'Local file')
-  assert.throws(() => createKnowledgeItem(knowledgeItems, { title: 'Blocked', summary: 'Nope' }, 'user'), /Admin role required/)
 })
 
 test('summary derives active events and health groups', () => {

@@ -15,7 +15,6 @@ export const roles = {
       'configure_monitors',
       'manage_demo_data',
       'manage_github_intake',
-      'manage_knowledge_base',
       'view_admin_console'
     ]
   }
@@ -29,13 +28,13 @@ export const futureRoles = [
 ]
 
 export const navigation = [
-  { id: 'command-center', label: 'Command Center', help: 'Triage-first overview of active risk, health, evidence, and decisions.' },
-  { id: 'operations', label: 'QA Operations', help: 'Watchdog, health monitor, automation runs, and domain quality areas.' },
-  { id: 'github-intake', label: 'GitHub Intake', help: 'PRs, issues, logs, and review history for repository-driven QA work.' },
-  { id: 'knowledge-base', label: 'Knowledge Base', help: 'Notebook-style source intake for files, links, summaries, and QA review notes.' },
-  { id: 'test-management', label: 'Test Management', help: 'Launch point for the linked LiveLabs TMS prototype.' },
-  { id: 'reports', label: 'Reports', help: 'Demo report templates and local Markdown or JSON exports.' },
-  { id: 'admin-console', label: 'Admin Console', help: 'Users, roles, sources, monitors, demo data, and audit events.' }
+  { id: 'overview', label: 'Overview', help: 'Latest results, findings and source connections.' },
+  { id: 'on-call', label: 'On-Call', help: 'Important issues, draft reviews and monitoring coverage.' },
+  { id: 'jenkins', label: 'Jenkins Reports', help: 'Regression history and evidence from each run.' },
+  { id: 'par-links', label: 'PAR Links', help: 'Broken links, unverified probes and scan coverage.' },
+  { id: 'automation', label: 'QA Automation', help: 'Test inventory, results and execution profiles.' },
+  { id: 'repositories', label: 'Repositories', help: 'LiveLabs repository coverage and review sources.' },
+  { id: 'settings', label: 'Settings', help: 'Connections, access and data freshness.' }
 ]
 
 export const watchdogTabs = [
@@ -72,7 +71,7 @@ export const seedSources = [
   { id: 'src-analytics', name: 'LiveLabs Analytics', type: 'Analytics JSON', freshnessMinutes: 125, confidence: 'Needs Review', owner: 'Analytics QA', status: 'Stale demo' },
   { id: 'src-livestack', name: 'LiveStack Validation', type: 'Guide validation', freshnessMinutes: 64, confidence: 'Inferred', owner: 'LiveStack QA', status: 'Demo evidence' },
   { id: 'src-platform', name: 'LiveLabs Platform Checks', type: 'Platform smoke', freshnessMinutes: 12, confidence: 'Confirmed', owner: 'Platform QA', status: 'Demo pass' },
-  { id: 'src-wms', name: 'WMS/TMS Readiness', type: 'Publishing process', freshnessMinutes: 240, confidence: 'Stale', owner: 'Content Ops', status: 'Needs refresh' },
+  { id: 'src-wms', name: 'WMS Readiness', type: 'Publishing process', freshnessMinutes: 240, confidence: 'Stale', owner: 'Content Ops', status: 'Needs refresh' },
   { id: 'src-manual', name: 'Manual QA Review', type: 'Human review', freshnessMinutes: 20, confidence: 'Confirmed', owner: 'LiveLabs QA', status: 'Demo note' }
 ]
 
@@ -123,7 +122,7 @@ export const seedEvidence = [
   },
   {
     id: 'ev-wms-stale',
-    title: 'WMS/TMS process snapshot is stale',
+    title: 'WMS process snapshot is stale',
     type: 'Process readiness',
     sourceId: 'src-wms',
     timestamp: '2026-05-26 07:10',
@@ -176,7 +175,7 @@ export const seedMonitors = [
   },
   {
     id: 'mon-wms',
-    name: 'WMS/TMS freshness',
+    name: 'WMS freshness',
     domain: 'Platform And Content',
     status: 'Stale',
     cadence: 'Daily',
@@ -201,11 +200,6 @@ export const seedWatchEvents = [
     monitorId: 'mon-usage',
     evidenceIds: ['ev-usage-drop'],
     nextAction: 'Confirm whether usage drop is source-data drift, content relevance, or platform launch issue.',
-    tmsLinks: [
-      { type: 'requirement', id: 'REQ-004', label: 'Usage anomaly requirement' },
-      { type: 'test-case', id: 'TC-004', label: 'Usage anomaly test' },
-      { type: 'plan', id: 'TP-2026-05', label: 'May readiness plan' }
-    ],
     updated: '2026-05-26 10:20',
     incident: true,
     timeline: [
@@ -224,11 +218,6 @@ export const seedWatchEvents = [
     monitorId: 'mon-livestack',
     evidenceIds: ['ev-livestack-guide'],
     nextAction: 'Compare desktop, sandbox, and tenancy guide variants and attach validation evidence.',
-    tmsLinks: [
-      { type: 'requirement', id: 'REQ-002', label: 'LiveStack readiness requirement' },
-      { type: 'test-case', id: 'TC-002', label: 'LiveStack guide test' },
-      { type: 'execution', id: 'EX-002', label: 'Blocked execution' }
-    ],
     updated: '2026-05-26 09:42',
     incident: false,
     timeline: [
@@ -247,10 +236,6 @@ export const seedWatchEvents = [
     monitorId: 'mon-platform-smoke',
     evidenceIds: ['ev-platform-smoke'],
     nextAction: 'Keep watch for repeated transient failures before opening an incident.',
-    tmsLinks: [
-      { type: 'test-case', id: 'TC-001', label: 'Catalog search test' },
-      { type: 'execution', id: 'EX-001', label: 'Passed smoke execution' }
-    ],
     updated: '2026-05-25 17:15',
     incident: false,
     timeline: [
@@ -260,7 +245,7 @@ export const seedWatchEvents = [
   },
   {
     id: 'wd-004',
-    title: 'WMS/TMS readiness source is stale',
+    title: 'WMS readiness source is stale',
     domain: 'Platform And Content',
     severity: 'Medium',
     status: 'New',
@@ -269,11 +254,6 @@ export const seedWatchEvents = [
     monitorId: 'mon-wms',
     evidenceIds: ['ev-wms-stale'],
     nextAction: 'Refresh publishing-readiness source before using it for release decisions.',
-    tmsLinks: [
-      { type: 'requirement', id: 'REQ-003', label: 'Content integrity requirement' },
-      { type: 'test-case', id: 'TC-003', label: 'Link validation test' },
-      { type: 'execution', id: 'EX-003', label: 'Failed link execution' }
-    ],
     updated: '2026-05-26 07:10',
     incident: true,
     timeline: [
@@ -377,7 +357,7 @@ export const seedHealthChecks = [
   {
     id: 'hl-007',
     domain: 'Platform And Content',
-    name: 'WMS/TMS readiness freshness',
+    name: 'WMS readiness freshness',
     status: 'Stale',
     owner: 'Content Ops',
     cadence: 'Daily',
@@ -417,10 +397,6 @@ export const seedGithubItems = [
     updated: '2026-05-26 10:35',
     signal: 'Preview links and redirect behavior require smoke validation.',
     link: 'demo://github/pr-613',
-    tmsLinks: [
-      { type: 'test-case', id: 'TC-003', label: 'Published link validation' },
-      { type: 'plan', id: 'TP-CONTENT-05', label: 'Content regression plan' }
-    ],
     history: ['Branch synced with upstream', 'Local review server used', 'Pending final PR page validation']
   },
   {
@@ -433,10 +409,6 @@ export const seedGithubItems = [
     updated: '2026-05-26 11:11',
     signal: 'Disabled workshops retained but no longer eligible for exception badges.',
     link: 'demo://github/analytics-admin',
-    tmsLinks: [
-      { type: 'requirement', id: 'REQ-004', label: 'Usage ownership requirement' },
-      { type: 'test-case', id: 'TC-004', label: 'Usage monitor test' }
-    ],
     history: ['Script syntax parsed', '183 JSON files parsed', 'Headless Chrome smoke passed']
   },
   {
@@ -449,56 +421,7 @@ export const seedGithubItems = [
     updated: '2026-05-25 11:47',
     signal: 'Lean Playwright setup validated with doctor, collect, and typecheck gates.',
     link: 'demo://github/qa-framework',
-    tmsLinks: [
-      { type: 'test-case', id: 'TC-003', label: 'Automation link test' },
-      { type: 'execution', id: 'EX-003', label: 'Failed execution evidence' }
-    ],
     history: ['Removed future-only bloat', 'Docs refreshed', 'HTTP health retry passed']
-  }
-]
-
-export const seedKnowledgeItems = [
-  {
-    id: 'kb-analytics-exclusion',
-    title: 'Analytics QA exclusion criteria',
-    type: 'Dashboard rule note',
-    status: 'Reviewed',
-    owner: 'Analytics QA',
-    updated: '2026-05-26',
-    source: 'LiveLabs Analytics admin review',
-    link: '../livelabs-analytics/admin/',
-    summary: 'QA exclusion should use age, staleness, demand, and score thresholds, with item-level overrides for workshops and sprints.',
-    nextAction: 'Promote accepted criteria into the analytics admin configuration backlog.',
-    extractedFacts: ['Default QA exclusion is off for static Pages review.', 'Item-level overrides can mark selected candidate rows as QA Excluded.', 'Future OCI/ADB version needs shared config persistence.'],
-    relatedSignals: ['Analytics', 'Governance', 'TMS']
-  },
-  {
-    id: 'kb-author-guide-release',
-    title: 'Author Guide release feedback',
-    type: 'Feedback file',
-    status: 'Needs Source Refresh',
-    owner: 'Content QA',
-    updated: '2026-05-25',
-    source: 'New Author Guide review notes',
-    link: '../new-author-guide/',
-    summary: 'Feedback maps to quickstart clarity, cheatsheet lookup, sample workshop flow, and demo-first navigation.',
-    nextAction: 'Attach feedback source and keep a traceability row for each accepted change.',
-    extractedFacts: ['Demo should appear before labs in the sample workshop menu.', 'Quickstart and cheatsheet serve different author workflows.', 'Automated link and mobile checks should run before push.'],
-    relatedSignals: ['Content', 'Authoring', 'GitHub']
-  },
-  {
-    id: 'kb-private-auth-runbook',
-    title: 'Private page automation access',
-    type: 'Runbook',
-    status: 'New',
-    owner: 'Automation QA',
-    updated: '2026-05-26',
-    source: 'QA automation runbook',
-    link: '../qa-automation/docs/runbooks/authenticated-page-access.md',
-    summary: 'Authenticated page testing should use approved storage state or a test-only session bootstrap endpoint, not copied session URLs.',
-    nextAction: 'Review with platform owner before enabling CI private-page smoke tests.',
-    extractedFacts: ['Storage state files are ignored and must not be committed.', 'Bootstrap token must live in a local or CI secret.', 'Ready text should confirm the app is past SSO.'],
-    relatedSignals: ['Automation', 'Platform', 'Security']
   }
 ]
 
@@ -521,8 +444,8 @@ export const sectionSummaries = {
   },
   'platform-content': {
     title: 'Platform And Content QA',
-    description: 'Catalog, search, launch, metadata, WMS/TMS, and content quality risk.',
-    points: ['Content link validation failed', 'WMS/TMS freshness is stale', 'Publishing risks should route to Sprint Ops']
+    description: 'Catalog, search, launch, metadata, WMS, and content quality risk.',
+    points: ['Content link validation failed', 'WMS freshness is stale', 'Publishing risks should route to Sprint Ops']
   },
   'usage-metrics': {
     title: 'Usage Metrics',
@@ -552,7 +475,6 @@ export function getSeedState() {
     automationRuns: clone(seedAutomationRuns),
     reports: clone(seedReports),
     githubItems: clone(seedGithubItems),
-    knowledgeItems: clone(seedKnowledgeItems),
     auditEvents: clone(seedAuditEvents),
     reportExports: []
   }
@@ -713,63 +635,6 @@ export function createGithubItem(items, payload, actorRole) {
     },
     ...items
   ]
-}
-
-export function createKnowledgeItem(items, payload, actorRole) {
-  if (!can(actorRole, 'manage_knowledge_base')) {
-    throw new Error('Admin role required to add knowledge notes.')
-  }
-
-  const link = String(payload.link || '').trim()
-  const source = String(payload.source || '').trim()
-  const summary = String(payload.summary || '').trim()
-  if (!link && !source && !summary) {
-    throw new Error('Add a source link, file reference, or summary to create a knowledge item.')
-  }
-  const type = String(payload.type || 'Link').trim()
-  const title = String(payload.title || source || link || 'Manual QA knowledge item').trim()
-  const domain = String(payload.domain || 'QA Hub').trim()
-  const extractedFacts = [
-    summary || `Demo extraction from ${link || source}.`,
-    `Classified as ${domain}.`,
-    'Ready for review, tagging, and promotion into the QA backlog.'
-  ]
-
-  return [
-    {
-      id: `kb-${Date.now()}`,
-      title,
-      type,
-      status: 'New',
-      owner: String(payload.owner || `${domain} owner`).trim(),
-      updated: new Date().toISOString().slice(0, 10),
-      source: source || type,
-      link: link || 'demo://knowledge/manual-intake',
-      summary: summary || `Static prototype extraction for ${title}.`,
-      nextAction: String(payload.nextAction || 'Review, edit, and promote into the QA operating backlog.').trim(),
-      extractedFacts,
-      relatedSignals: [domain, 'Knowledge Base']
-    },
-    ...items
-  ]
-}
-
-export function updateKnowledgeItemStatus(items, id, status, actorRole) {
-  if (!can(actorRole, 'manage_knowledge_base')) {
-    throw new Error('Admin role required to update knowledge items.')
-  }
-  const allowed = ['New', 'Needs Source Refresh', 'Reviewed', 'Promoted', 'Archived']
-  if (!allowed.includes(status)) {
-    throw new Error('Unsupported knowledge status.')
-  }
-  return items.map((item) => item.id === id ? { ...item, status, updated: new Date().toISOString().slice(0, 10) } : item)
-}
-
-export function deleteKnowledgeItem(items, id, actorRole) {
-  if (!can(actorRole, 'manage_knowledge_base')) {
-    throw new Error('Admin role required to delete knowledge items.')
-  }
-  return items.filter((item) => item.id !== id)
 }
 
 export function updateWatchEventStatus(events, id, status, actorRole) {

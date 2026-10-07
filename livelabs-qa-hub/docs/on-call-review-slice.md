@@ -2,7 +2,7 @@
 
 Prepared: 2026-10-02. Status: local reviewable slice; live integration disabled and unverified.
 
-Open QA Operations → On-Call Review, or `http://127.0.0.1:4192/?view=on-call-review`. The existing demo login is a product preview, not production identity. Start from `app/` using `node scripts/serve.mjs --root public --port 4192`.
+Open On-Call directly, or `http://127.0.0.1:4192/?view=on-call`. The old `on-call-review` route remains an alias. The October 5 interface uses a searchable case table and on-demand draft details in `on-call-workspace.mjs`; the adapter contract below is unchanged. The existing demo login is a product preview, not production identity. Start from `app/` using `node scripts/serve.mjs --root public --port 4192`.
 
 The page initially displays UNAVAILABLE/BLOCKED with no cases. **Load synthetic preview** explicitly loads a local copy of sealed synthetic run `synthetic-e5900984270976e44089`. It verifies snapshot/report hashes against that run's manifest and retains the exact case, draft and report identifiers. The snapshot and report copies contain invented fixtures only. The public preview does not contain live email/Slack content. The original completion manifest lists the complete runtime artifacts; the public preview includes only its snapshot/report and manifest copies.
 

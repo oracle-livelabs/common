@@ -1,3 +1,9 @@
+# QA Hub implementation roadmap
+
+The current plan is [Connected QA Hub implementation plan](connected-qa-hub-plan.md), updated 5 October 2026. It covers the minimal interface, local readers, live Jenkins/PAR evidence, private on-call review, repository queues and authorized execution.
+
+The material below is the historical V3 planning baseline. Its old navigation and module scope are superseded by the current plan and requirements.
+
 # LiveLabs QA Hub Implementation Plan
 
 Date: 2026-05-26
@@ -21,7 +27,7 @@ Start with a front-end prototype to settle product shape, roles, and page taxono
 | UI | Static Redwood-styled app | Oracle JET/Redwood or approved app framework |
 | Auth | Seeded local demo accounts | Oracle internal auth/SSO |
 | Data | Local seeded JSON and local storage | ORDS/API service with audit storage |
-| Integrations | Mocked source records | Jira, CI/CD, LiveLabs analytics, WMS/TMS, LiveStack validation outputs |
+| Integrations | Mocked source records | Jira, CI/CD, LiveLabs analytics, WMS, LiveStack validation outputs |
 | Audit | Browser-only demo logs | Server-side audit events and immutable evidence records |
 
 ## Phase Plan
