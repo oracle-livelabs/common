@@ -36,7 +36,7 @@ Estimated Time: x
     * Set your Name as it appears on your Aria employee page
     * Add your profile picture
 
-4. Click **Account** to set your username (e.g., achepuri, LauranSerhal).
+4. Click **Account** to set your username (for example, `oracleauthor42`).
 
 5. Set up two-factor authentication at [GitHub Security](https://github.com/settings/security).
 

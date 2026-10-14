@@ -43,7 +43,7 @@
         nodoc: "nodoc"
       };
       var markdownLabMap = {
-        "start-here": "introduction",
+        "start-here": "paths",
         "core-workflow": "1-labs-wms",
         "core-workshop-flow": "1-labs-wms",
         "validation-publish": "5-labs-qa-checks",

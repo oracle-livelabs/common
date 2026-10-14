@@ -9,3 +9,4 @@ deploy/vm/secrets/
 *.log
 *.tmp
 .git/
+archive/

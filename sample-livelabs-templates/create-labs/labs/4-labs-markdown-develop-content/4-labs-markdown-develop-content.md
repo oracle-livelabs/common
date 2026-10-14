@@ -351,11 +351,11 @@ Use large when you want the video to take up more of the available lab page widt
 
 The screenshots below show how video sizing appears inside a workshop:
 
-![Small video](<./images/small-video.png>)
+![Small video](./images/small-video.png)
 
  This screenshot shows a video displayed at **small** size.
 
-![Medium video](<./images/medium-video.png>)
+![Medium video](./images/medium-video.png)
 
 This screenshot shows a video displayed at **medium** size.
 
