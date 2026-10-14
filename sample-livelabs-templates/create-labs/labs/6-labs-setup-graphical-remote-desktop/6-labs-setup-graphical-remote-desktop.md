@@ -37,7 +37,7 @@ Follow these steps to establish a unique static hostname that will be enforced o
     <copy>
     cd /tmp
     rm -rf ll-setup
-    wget https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/0KJXHnQejxYeC2hoPMapIUn6ACWLwfsGwXnSxT_hCoxoCWj68IiFduta88Htf63-/n/c4u02/b/hosted_workshops/o/stacks/setup-novnc-livelabs-v2.zip -O setup-novnc-livelabs.zip
+    wget https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/setup-novnc-livelabs-v2.zip -O setup-novnc-livelabs.zip
     unzip -o  setup-novnc-livelabs.zip -d ll-setup
     cd ll-setup/
     chmod +x *.sh .*.sh
