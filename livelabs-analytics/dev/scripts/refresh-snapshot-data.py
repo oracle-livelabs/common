@@ -15,12 +15,17 @@ import csv
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 import json
+import hashlib
 import re
 import subprocess
 import unicodedata
 from pathlib import Path
 
 from openpyxl import load_workbook
+from ownership_corrections import apply_ownership_corrections
+
+SOURCE_DESCRIPTION = "28 September 2026 WMS, dashboard views, and WMS tag reports; GitHub repository/update evidence retained from 14-15 August 2026"
+REPORT_DATE_LABEL = "28 September 2026"
 
 
 VIEW_FIELDS = (
@@ -39,8 +44,9 @@ METRIC_LABELS = set(VIEW_LABELS.values()) | set(VIEW_RANK_LABELS.values())
 REPLACED_LABELS = {
     "LiveLabs ID", "WMS ID", "WMS Workshop Title", "Content Type", "Publish Status", "Publish Type",
     "Workshop Status", "Council Area", "WMS Last Update", "Completion Date", "Author Coverage",
+    "Publish Type Source",
     "Contact Coverage Tier", "Workshop Time", "Production URL", "Production GitHub URL", "Owner Email",
-    "Owner Group", "Short Description", "Long Description", "YouTube Link", "Dashboard Metric Status",
+    "Owner Group", "Support Contact Email", "Tech Contact Email", "Short Description", "Long Description", "YouTube Link", "Dashboard Metric Status",
     "Dashboard Metric Scope", "Dashboard Metric Resolution", "Dashboard Shared Record Count",
 }
 REPLACED_LABELS |= TAG_LABELS | METRIC_LABELS
@@ -170,7 +176,7 @@ def metric_resolution(
 ) -> tuple[dict[str, int], dict[str, int], str, str, str, int | None]:
     by_window = view_index.get(title_key, {})
     if not by_window:
-        return {}, {}, "not_in_dashboard_snapshot", "unavailable", "No exact title row exists in the 28 September 2026 dashboard workbook.", None
+        return {}, {}, "not_in_dashboard_snapshot", "unavailable", f"No exact title row exists in the {REPORT_DATE_LABEL} dashboard workbook.", None
     metrics: dict[str, int] = {}
     ranks: dict[str, int] = {}
     ambiguous_windows: list[str] = []
@@ -223,12 +229,13 @@ def make_record(
     wms_id = clean(row.get("Workshop Id"))
     publish_title = clean(row.get("Publish Title")) or clean(row.get("Workshop Title")) or "N/A"
     workshop_title = clean(row.get("Workshop Title"))
-    record_type = old.get("type") or ("Sprint" if sprint_by_id.get(livelabs_id) == "Y" else "Workshop")
+    sprint_flag = sprint_by_id.get(livelabs_id)
+    record_type = ("Sprint" if sprint_flag == "Y" else "Workshop") if sprint_flag in {"Y", "N"} else (old.get("type") or "Workshop")
     owner_email = clean(row.get("Workshop Owner Email"))
     owner_group = clean(row.get("Workshop Owner Group"))
     owner = owner_email or owner_group
     coverage_label, coverage_tier = display_contact(row)
-    publish_type = clean(old.get("publishType"))
+    publish_type = clean(row.get("Publish Type")) or clean(old.get("publishType"))
     key = f"livelabs:{livelabs_id}" if livelabs_id else f"wms:{wms_id}:{normalize_title(publish_title)}"
 
     previous_details = [pair for pair in old.get("details", []) if isinstance(pair, list) and clean(pair[0]) not in REPLACED_LABELS]
@@ -256,6 +263,8 @@ def make_record(
         add_pair(target, "Production GitHub URL", row.get("Prod Github Url"))
         add_pair(target, "Owner Email", owner_email)
         add_pair(target, "Owner Group", owner_group)
+        add_pair(target, "Support Contact Email", row.get("Support Contact Email"))
+        add_pair(target, "Tech Contact Email", row.get("Tech Contact Email"))
         add_pair(target, "Short Description", row.get("Short Desc"))
         add_pair(target, "Long Description", row.get("Long Desc"))
         add_pair(target, "YouTube Link", row.get("Youtube Link"))
@@ -281,6 +290,7 @@ def make_record(
     add_pair(base_details, "Dashboard Metric Scope", metric_scope)
     add_pair(base_details, "Dashboard Metric Resolution", metric_reason)
     add_pair(base_details, "Dashboard Shared Record Count", shared_count)
+    add_pair(base_details, "Publish Type Source", "Current WMS export" if clean(row.get("Publish Type")) else "Retained from prior inventory; current WMS export does not supply this field" if publish_type else "Unavailable in current source")
     for label, values in sorted(tags.items()):
         add_pair(base_details, label, ", ".join(sorted(values)))
 
@@ -292,7 +302,7 @@ def make_record(
             "in_dashboard_windows": bool(metrics),
             "in_top_1000": any(rank <= 1000 for rank in ranks.values()),
             "in_wms_14_august": False,
-            "in_wms_2026_09_28": True,
+            "wms_snapshot_date": snapshot_date,
             "dashboard_snapshot_date": snapshot_date,
             "dashboard_metric_status": metric_status,
             "dashboard_metric_scope": metric_scope,
@@ -325,7 +335,7 @@ def make_record(
             "status": clean(row.get("Workshop Status")),
             "lifecycleState": clean(row.get("Workshop Status")),
             "update": parse_date(row.get("Last Update Time")),
-            "source": "28 September 2026 WMS, dashboard views, and WMS tag reports; GitHub repository/update evidence retained from 14-15 August 2026",
+            "source": SOURCE_DESCRIPTION,
             "values": previous_values + base_values,
             "details": previous_details + base_details,
             "titleMissing": not bool(clean(row.get("Publish Title")) or clean(row.get("Workshop Title"))),
@@ -372,12 +382,14 @@ def rebuild_families(records: list[dict]) -> None:
 
 
 def main() -> int:
+    global SOURCE_DESCRIPTION, REPORT_DATE_LABEL
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--snapshot", type=Path, required=True)
     parser.add_argument("--inventory", type=Path, default=Path("inventory/data/portfolio_inventory.json"))
     parser.add_argument("--baseline-git", help="Read the comparison baseline from a Git object such as HEAD:inventory/data/portfolio_inventory.json")
     parser.add_argument("--snapshot-date", default="2026-09-28")
     parser.add_argument("--generated-at")
+    parser.add_argument("--source-manifest", type=Path, help="JSON manifest with dated WMS, sprint, views and tag file paths")
     args = parser.parse_args()
 
     if args.baseline_git:
@@ -385,20 +397,40 @@ def main() -> int:
     else:
         old_payload = json.loads(args.inventory.read_text(encoding="utf-8"))
     old_records = old_payload.get("records", [])
+    manifest = json.loads(args.source_manifest.read_text(encoding="utf-8")) if args.source_manifest else {}
+    if manifest:
+        args.snapshot_date = manifest["snapshot_date"]
+    elif args.snapshot_date != "2026-09-28":
+        raise ValueError("A new snapshot date requires --source-manifest so file identities and dates are explicit.")
+    REPORT_DATE_LABEL = datetime.strptime(args.snapshot_date, "%Y-%m-%d").strftime("%d %B %Y").lstrip("0")
+    retained_dates = old_payload.get("metadata", {}).get("data_freshness", {})
+    SOURCE_DESCRIPTION = f"{REPORT_DATE_LABEL} WMS, dashboard views, and WMS tag reports; GitHub/update evidence retained from prior snapshot ({retained_dates.get('workshop_update_evidence_snapshot_date', 'date unavailable')})"
+    source_files = manifest.get("files", {})
+    source_inputs = []
+    def source_file(role: str, default: str) -> Path:
+        path = args.snapshot / source_files.get(role, default)
+        if not path.is_file():
+            raise ValueError(f"Missing {role} input: {path}")
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        if manifest.get("sha256", {}).get(role) and digest != manifest["sha256"][role]:
+            raise ValueError(f"Source hash mismatch for {role}")
+        source_inputs.append({"role": role, "file": path.name, "sha256": digest, "observed_date": args.snapshot_date})
+        return path
     old_by_id = {clean(record.get("livelabsId")): record for record in old_records if clean(record.get("livelabsId"))}
     old_by_fallback = {(clean(record.get("wmsId")), normalize_title(record.get("rawTitle") or record.get("title"))): record for record in old_records if not clean(record.get("livelabsId"))}
 
-    wms_path = args.snapshot / "All Workshops Report (4).csv"
+    wms_path = source_file("wms", "All Workshops Report (4).csv")
     wms_rows = parse_csv(wms_path)
-    sprint_rows = parse_csv(args.snapshot / "All Workshops Report (2).csv")
+    sprint_rows = parse_csv(source_file("sprints", "All Workshops Report (2).csv"))
     sprint_by_id = {clean(row.get("Livelabs ID")): clean(row.get("Sprint Flg")).upper() for row in sprint_rows if clean(row.get("Livelabs ID"))}
-    views, view_counts = parse_views(args.snapshot / "livelabs_dashboard_top_views.xlsx")
+    views_path = source_file("views", "livelabs_dashboard_top_views.xlsx")
+    views, view_counts = parse_views(views_path)
     view_index = build_view_index(views)
     tags = read_tags(
-        args.snapshot / "Workshop by Tags (Role, Product, Focus).csv",
-        args.snapshot / "Workshop by Tags (Role, Product, Focus) (1).csv",
-        args.snapshot / "Workshop by Tags (Role, Product, Focus) (2).csv",
-        args.snapshot / "Workshop by Tags (Role, Product, Focus) (3).csv",
+        source_file("tags_product", "Workshop by Tags (Role, Product, Focus).csv"),
+        source_file("tags_role", "Workshop by Tags (Role, Product, Focus) (1).csv"),
+        source_file("tags_focus", "Workshop by Tags (Role, Product, Focus) (2).csv"),
+        source_file("tags_sales_play", "Workshop by Tags (Role, Product, Focus) (3).csv"),
     )
 
     title_counts = Counter(normalize_title(row.get("Publish Title") or row.get("Workshop Title")) for row in wms_rows)
@@ -435,7 +467,8 @@ def main() -> int:
         "metadata": {
             "generated_at": generated_at,
             "snapshot_date": args.snapshot_date,
-            "source": "28 September 2026 WMS, dashboard views, and WMS tag reports; GitHub repository/update evidence retained from 14-15 August 2026",
+            "source": SOURCE_DESCRIPTION,
+            "source_manifest": {"inputs": source_inputs, "period_definitions": manifest.get("period_definitions", {}), "schema_version": 1},
             "row_identity": "livelabs_id_or_wms_title_fallback",
             "family_grouping": "wms_id",
             "records": len(records),
@@ -461,13 +494,9 @@ def main() -> int:
             },
             "source_files": {
                 "wms": wms_path.name,
-                "views": "livelabs_dashboard_top_views.xlsx",
-                "tags": [
-                    "Tags.csv", "Workshop by Tags (Role, Product, Focus).csv",
-                    "Workshop by Tags (Role, Product, Focus) (1).csv",
-                    "Workshop by Tags (Role, Product, Focus) (2).csv",
-                    "Workshop by Tags (Role, Product, Focus) (3).csv",
-                ],
+                "sprints": next(item["file"] for item in source_inputs if item["role"] == "sprints"),
+                "views": views_path.name,
+                "tags": [item["file"] for item in source_inputs if item["role"].startswith("tags_")],
             },
             "dashboard_window_row_counts": view_counts,
             "dashboard_metric_status_counts": dict(metric_statuses),
@@ -475,26 +504,24 @@ def main() -> int:
                 "wms_snapshot_date": args.snapshot_date,
                 "dashboard_views_snapshot_date": args.snapshot_date,
                 "tag_snapshot_date": args.snapshot_date,
-                "github_repository_snapshot_date": "2026-08-15",
-                "workshop_update_evidence_snapshot_date": "2026-08-14",
+                "github_repository_snapshot_date": retained_dates.get("github_repository_snapshot_date"),
+                "workshop_update_evidence_snapshot_date": retained_dates.get("workshop_update_evidence_snapshot_date"),
                 "governance_evidence_refresh_required": True,
             },
             "github_audit": old_payload.get("metadata", {}).get("github_audit", {}),
             "workshop_updates": {
                 **old_payload.get("metadata", {}).get("workshop_updates", {}),
-                "source_snapshot_date": "2026-08-14",
+                "source_snapshot_date": retained_dates.get("workshop_update_evidence_snapshot_date"),
                 "refresh_status": "retained_from_prior_snapshot",
-                "matched_records": len(records),
-                "unmatched_wms_records": 0,
-                "orphan_update_records": 0,
+                "matched_records": sum(1 for record in records if record.get("sourceFlags", {}).get("github_update_evidence_source")),
+                "unmatched_wms_records": sum(1 for record in records if not record.get("sourceFlags", {}).get("github_update_evidence_source")),
+                "orphan_update_records": None,
                 "meaningful_git_update_records": sum(1 for record in records if record.get("sourceFlags", {}).get("github_update_evidence_available")),
                 "workshop_specific_git_update_records": sum(1 for record in records if record.get("sourceFlags", {}).get("github_workshop_path_evidence")),
                 "repository_proxy_git_update_records": sum(1 for record in records if record.get("sourceFlags", {}).get("github_repository_proxy_evidence")),
                 "wms_metadata_fallback_records": sum(1 for record in records if not record.get("sourceFlags", {}).get("github_update_evidence_available")),
-                "source_counts": {
-                    **old_payload.get("metadata", {}).get("workshop_updates", {}).get("source_counts", {}),
-                    "wms_metadata_fallback": 43,
-                },
+                "source_counts": dict(Counter(record.get("sourceFlags", {}).get("github_update_evidence_source") or "wms_metadata_fallback" for record in records)),
+                "confidence_counts": dict(Counter(record.get("sourceFlags", {}).get("github_update_evidence_confidence") or "unknown" for record in records)),
             },
             "source_snapshot_comparison": {
                 "prior_snapshot_date": old_payload.get("metadata", {}).get("snapshot_date"),
@@ -511,10 +538,11 @@ def main() -> int:
                 "publish_type": dict(Counter(record.get("publishType") or "Missing" for record in records)),
                 "contact_coverage": dict(Counter(record.get("contactCoverage", {}).get("tier") for record in records)),
             },
-            "governance_layer_notice": "Inventory, WMS metadata, tags, and dashboard view metrics are refreshed to 28 September 2026. GitHub/update evidence and replacement similarity remain dated 14-15 August 2026 until their source exports are refreshed.",
+            "governance_layer_notice": SOURCE_DESCRIPTION + ". Replacement similarity remains historical until its source evidence is refreshed.",
         },
         "records": records,
     }
+    apply_ownership_corrections(payload)
     args.inventory.write_text(json.dumps(payload, separators=(",", ":"), ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({
         "inventory": str(args.inventory),

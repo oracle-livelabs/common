@@ -1,0 +1,58 @@
+{
+  "reviewed_at": "2026-10-09",
+  "snapshot_date": "2026-09-28",
+  "records_checked": 2293,
+  "unmatched_source_records": [],
+  "owner_mapping_mismatches": [],
+  "owner_detail_field_mismatches": [],
+  "cross_export_owner_conflicts": [],
+  "confirmed_disputed_ownership": [],
+  "owner_equals_updater_count": 147,
+  "owner_equals_updater_notice": "Diagnostic overlap only. Being both owner and updater is not proof of an error.",
+  "records_reporting_user_as_owner": [
+    {
+      "key": "livelabs:4074",
+      "livelabs_id": "4074",
+      "wms_id": "11763",
+      "title": "Oracle DB 23ai Vector Search using OCI Generative AI and Llama Index",
+      "wms_reported_owner": "vasile-lucian.brinzei@oracle.com",
+      "last_update_person": "vasile-lucian.brinzei@oracle.com",
+      "support_contact": "marco.antonio.luchian@oracle.com",
+      "technical_contact": "ramona.magadan@oracle.com",
+      "acknowledgement_authors": "Enis Aras, Travis Ledbetter, Shay Hameed"
+    },
+    {
+      "key": "livelabs:4505",
+      "livelabs_id": "4505",
+      "wms_id": "12184",
+      "title": "NODOC TEST - Build A GenAI App On Oracle AI Database Psychiatry Edition",
+      "wms_reported_owner": "vasile-lucian.brinzei@oracle.com",
+      "last_update_person": "vasile-lucian.brinzei@oracle.com",
+      "support_contact": "teodor.constantin.nechita@oracle.com",
+      "technical_contact": "vasile-lucian.brinzei@oracle.com",
+      "acknowledgement_authors": ""
+    },
+    {
+      "key": "livelabs:4513",
+      "livelabs_id": "4513",
+      "wms_id": "12184",
+      "title": "NODOC TEST - Build A GenAI App On Oracle AI Database Psychiatry Edition",
+      "wms_reported_owner": "vasile-lucian.brinzei@oracle.com",
+      "last_update_person": "vasile-lucian.brinzei@oracle.com",
+      "support_contact": "teodor.constantin.nechita@oracle.com",
+      "technical_contact": "vasile-lucian.brinzei@oracle.com",
+      "acknowledgement_authors": ""
+    },
+    {
+      "key": "wms:12031:build a rag first responder in clinical setting",
+      "livelabs_id": "",
+      "wms_id": "12031",
+      "title": "Build A RAG First Responder in Clinical Setting",
+      "wms_reported_owner": "vasile-lucian.brinzei@oracle.com",
+      "last_update_person": "vasile-lucian.brinzei@oracle.com",
+      "support_contact": "",
+      "technical_contact": "",
+      "acknowledgement_authors": ""
+    }
+  ]
+}

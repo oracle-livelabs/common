@@ -306,8 +306,9 @@
       display: none;
       gap: 18px;
       align-content: start;
-      max-width: 1540px;
-      margin: 0 auto;
+      /* Keep the shared results banner aligned with the full-width dashboard hero. */
+      min-width: 0;
+      margin: 0;
       padding: 0 24px 24px;
     }
     .search-view[hidden] {
@@ -1510,6 +1511,16 @@
       pointer-events: auto;
       transform: translateY(0);
     }
+    .search-copy-target > .copy-value-button {
+      margin-inline-start: 6px;
+      vertical-align: middle;
+    }
+    .search-copy-target:hover > .copy-value-button,
+    .search-copy-target:focus-within > .copy-value-button {
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+    }
     .copy-value-button:hover,
     .copy-value-button:focus-visible {
       background: rgba(246, 221, 208, .8);
@@ -1984,3 +1995,47 @@
       .swatch { min-width: 0; width: 100%; }
       .search-meta-list { grid-template-columns: 1fr; }
     }
+
+/* Shared candidate comparison, including narrow screens. */
+.replacement-comparison { scroll-margin-top: 24px; }
+.replacement-comparison[hidden] { display:none !important; }
+.comparison-controls { display:flex; flex-wrap:wrap; align-items:end; gap:12px; }
+.comparison-controls label { flex:1 1 280px; display:grid; gap:6px; }
+.comparison-controls input { width:100%; box-sizing:border-box; padding:10px; }
+.comparison-table-wrap { overflow-x:auto; }
+.comparison-table-wrap table { width:100%; border-collapse:collapse; table-layout:fixed; }
+.comparison-table-wrap th,.comparison-table-wrap td { text-align:left; vertical-align:top; padding:12px; border-bottom:1px solid #d9d4ce; overflow-wrap:anywhere; white-space:pre-wrap; }
+.comparison-table-wrap th:first-child { width:20%; }
+@media(max-width:600px) { .comparison-table-wrap table { min-width:650px; } }
+
+/* Related records share the governance panel without requiring a wide table. */
+.search-family-section { min-width:0; display:grid; gap:12px; margin-top:6px; padding-top:18px; border-top:1px solid var(--line); }
+.search-family-section .panel-head { flex-wrap:wrap; gap:8px; }
+.search-family-section .panel-head > span { color:var(--muted); font-size:12px; }
+.search-family-section .note { margin:0; font-size:13px; line-height:1.5; }
+.search-family-records { max-height:360px; overflow:auto; overscroll-behavior:contain; padding:0 12px; border:1px solid var(--line-soft); border-radius:8px; background:var(--page); }
+.family-record { padding:14px 0; }
+.family-record + .family-record { border-top:1px solid var(--line); }
+.family-record .search-detail-table { table-layout:fixed; }
+.family-record .search-detail-table th { width:32%; font-size:11px; }
+.family-record .search-detail-table td { font-size:13px; }
+.family-record .nav-link { max-width:100%; white-space:normal; text-align:left; line-height:1.4; overflow-wrap:anywhere; }
+
+/* One export disclosure shared by all result pages. */
+.report-export-dropdown { position:relative; width:100%; }
+.report-export-dropdown > summary { display:flex; align-items:center; justify-content:center; gap:10px; list-style:none; width:100%; text-align:center; }
+.report-export-dropdown > summary::-webkit-details-marker { display:none; }
+.report-export-dropdown[open] > summary > span { transform:rotate(180deg); }
+.search-view-header:has(.report-export-dropdown[open]) { overflow:visible; z-index:2; }
+.report-export-options { position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:20; display:grid; gap:4px; padding:6px; border:1px solid var(--line); border-radius:8px; background:var(--paper); box-shadow:0 8px 24px rgba(22,21,19,.18); }
+.report-export-options button { width:100%; padding:10px 12px; border:0; border-radius:6px; background:var(--paper); color:var(--ink); font:inherit; font-size:13px; text-align:left; cursor:pointer; }
+.report-export-options button:hover { background:var(--page); color:var(--oracle-red); }
+.report-export-options button:focus-visible,.report-export-dropdown > summary:focus-visible { outline:2px solid var(--oracle-red); outline-offset:2px; }
+
+/* QA evidence keeps uncertainty and ranking policy visible in pilot bundles. */
+.qa-pilot-notice { margin:12px 0 20px; padding:12px 16px; border-left:4px solid #9b6b27; background:#fff8e9; color:#503b1c; }
+.qa-evidence { border-left:4px solid #49736b; }
+.qa-evidence h4 { margin:16px 0 10px; }
+.qa-evidence-table { width:100%; }
+.qa-evidence-table td,.qa-evidence .search-detail-table td { overflow-wrap:anywhere; white-space:normal; }
+#all-content-data-table th:nth-last-child(-n+2),#all-content-data-table td:nth-last-child(-n+2) { min-width:125px; }

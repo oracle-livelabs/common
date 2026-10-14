@@ -636,7 +636,8 @@
       });
     }
     function scheduleInitialTableSetup() {
-      const setup = () => initializeTablesIn(document);
+      const endLoading = window.LiveLabsLoading.begin('Preparing dashboard tables…');
+      const setup = () => { try { initializeTablesIn(document); } finally { endLoading(); } };
       if (typeof window.requestIdleCallback === "function") {
         window.requestIdleCallback(setup, { timeout: 900 });
       } else {
@@ -740,7 +741,7 @@
     }
     function sourceRowsHtml(record) {
       const rows = Array.from(record.values.entries())
-        .filter(([label, value]) => label && value && normalizeFilterText(label) !== "source")
+        .filter(([label, value]) => label && value && normalizeFilterText(label) !== "source" && !label.startsWith("QA "))
         .map(([label, value]) => `<tr><th>${escapeHtml(label)}</th><td>${escapeHtml(displayDetailValue(label, value))}</td></tr>`);
       return rows.length ? rows.join("") : `<tr><td colspan="2">No dashboard row fields available.</td></tr>`;
     }
@@ -766,6 +767,7 @@
         ["WMS ID", record.wmsId || "N/A"],
         ["LiveLabs ID", record.livelabsId || "N/A"],
         ["Owner", record.owner || "N/A"],
+        record.details.get("Ownership Status") ? ["Ownership Status", record.details.get("Ownership Status")] : null,
         ["Publish Status", record.details.get("Publish Status") || "N/A"],
         ["Publish Type", record.details.get("Publish Type") || "N/A"],
         ["Update Evidence", record.details.get("Update Evidence") || "N/A"],
@@ -874,6 +876,8 @@
         fileUpdates,
         livelabsId: String(raw?.livelabsId || ""),
         owner: cleanContactEnumeration(raw?.owner || ""),
+        ownership: raw?.ownership || null,
+        qa: raw?.qa || null,
         recordKey: raw?.key || "",
         row: null,
         searchable,
@@ -905,8 +909,9 @@
           category: existing.category || record.category,
           details,
           family: existing.family || record.family,
+          qa: record.qa || existing.qa || null,
           fileUpdates: existing.fileUpdates?.length ? existing.fileUpdates : record.fileUpdates,
-          owner: existing.owner || record.owner,
+          owner: existing.ownership?.status === "disputed" ? "" : existing.owner || record.owner,
           recordKey: key,
           row: existing.row || record.row,
           searchable: normalizeFilterText([record.searchable, existing.searchable].join(" ")),
@@ -968,6 +973,7 @@
             throw new Error("fragment has an invalid section root");
           }
           placeholder.replaceWith(section);
+          normalizeSectionLinks(section);
           applyRankedTableDisclosures();
           applyQaExceptionPrototype();
           applyAdminRowOverrides();
@@ -985,23 +991,54 @@
           lazySectionLoads.delete(sectionId);
           const current = lazySectionPlaceholder(sectionId);
           if (current) lazySectionError(current, `Could not load this review queue (${error.message}).`);
+          window.LiveLabsLoading.fail('A review queue could not be loaded. Please try again.');
           return current;
         });
       lazySectionLoads.set(sectionId, request);
-      return request;
+      return window.LiveLabsLoading.track(request, 'Loading review queues…');
+    }
+    function normalizeSectionLinks(container = document) {
+      container.querySelectorAll('a[href^="#"]').forEach(link => {
+        const hash = link.getAttribute('href');
+        link.dataset.sectionHash = hash;
+        const target = link.classList.contains('skip-link') ? new URL(location.href)
+          : new URL(location.protocol === 'file:' ? 'index.html' : 'dashboard/', document.baseURI);
+        target.hash = hash;
+        link.href = target.href;
+      });
     }
     function configureLazySections() {
       document.addEventListener("click", (event) => {
-        const anchor = event.target.closest('a[href^="#"]');
-        const sectionId = anchor?.getAttribute("href")?.slice(1);
-        if (!sectionId || !lazySectionPlaceholder(sectionId)) return;
+        const anchor = event.target.closest('a[data-section-hash], a[href^="#"]');
+        const sectionId = anchor?.hash?.slice(1);
+        if (!sectionId || event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
+        if (anchor.classList.contains('skip-link')) {
+          document.getElementById(sectionId)?.scrollIntoView({ block: 'start' });
+          return;
+        }
+        if (!lazySectionPlaceholder(sectionId)) {
+          history.pushState(null, '', anchor.href);
+          document.getElementById(sectionId)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+          return;
+        }
         loadLazySection(sectionId).then((section) => {
-          history.replaceState(null, "", `#${sectionId}`);
+          history.pushState(null, "", anchor.href);
           section?.scrollIntoView({ block: "start", behavior: "smooth" });
         });
       });
-      document.querySelectorAll("[data-lazy-section]").forEach((section) => {
+      const route = readSearchUrlState();
+      const isInventory = document.body.classList.contains('dashboard-inventory-active');
+      const needsDashboard = !isInventory && !hasSearchIdentity(route) && !route.query;
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          observer.unobserve(entry.target);
+          void loadLazySection(entry.target.dataset.lazySection);
+        });
+      });
+      document.querySelectorAll('[data-lazy-section]').forEach(section => observer.observe(section));
+      if (needsDashboard) document.querySelectorAll("[data-lazy-section]").forEach((section) => {
         const sectionId = section.dataset.lazySection;
         if (sectionId) void loadLazySection(sectionId);
       });
@@ -1182,6 +1219,7 @@
         .catch((error) => {
           portfolioInventoryMetadata = null;
           window.__portfolioInventoryError = `Portfolio inventory load failed. ${error?.stack || error?.message || error || ""}`;
+          window.LiveLabsLoading.fail('Portfolio data could not be loaded. Please try again.');
           return [];
         });
       return portfolioInventoryRecordsPromise;
@@ -1226,7 +1264,9 @@
       { key: "wmsId", label: "WMS ID", type: "number" },
       { key: "livelabsId", label: "LiveLabs ID", type: "number" },
       { key: "category", label: "Category", type: "text" },
-      { key: "contact", label: "Contact", type: "text" }
+      { key: "contact", label: "Contact", type: "text" },
+      { key: "qaError", label: "QA Error Score", type: "number" },
+      { key: "qaState", label: "QA Evidence", type: "text" }
     ];
     const allDataReviewGroupOptions = [
       { key: "no-author", label: "No author/contact gap" },
@@ -1680,17 +1720,6 @@
       ["livelabs id", "LiveLabs ID"],
       ["current livelabs id", "LiveLabs ID"]
     ]);
-    const copyableDetailFields = new Set([
-      "owner",
-      "owner email",
-      "author email",
-      "wms id",
-      "livelabs id",
-      "category",
-      "status",
-      "workshop status",
-      "manager email"
-    ]);
     function copyableValueHtml(value, label, fallback = "N/A") {
       const text = String(value ?? "").trim() || fallback;
       const safeText = escapeHtml(text);
@@ -1746,14 +1775,101 @@
       const row = element.closest("tr");
       const tableLabel = row?.querySelector("th")?.textContent || "";
       if (tableLabel) return tableLabel.trim();
+      if (row) {
+        const headers = element.closest("table")?.querySelectorAll("thead th");
+        return headers?.[element.cellIndex]?.textContent?.trim() || "value";
+      }
       const definition = element.closest("div");
       return definition?.querySelector("dt")?.textContent?.trim() || "";
     }
+    function detailReportText(element) {
+      if (!element) return "";
+      const clone = element.cloneNode(true);
+      clone.querySelectorAll("[data-copy-value]").forEach((button) => button.remove());
+      clone.querySelectorAll("br").forEach((node) => node.replaceWith("\n"));
+      clone.querySelectorAll(".subtle").forEach((node) => node.prepend("\n"));
+      return (clone.textContent || "").trim();
+    }
     function decorateDetailCopyTargets(root = document) {
-      root.querySelectorAll?.("#search-workshop-view .search-result-card dd, #search-workshop-view .search-meta-list dd, #search-workshop-view .search-detail-table td").forEach((element) => {
-        const label = detailFieldLabelForElement(element);
-        if (copyableDetailFields.has(normalizeFilterText(label))) copyValueFromElement(element, label);
+      root.querySelectorAll?.(".search-result-card dd, .search-meta-list dd, .search-detail-panel td, .search-detail-panel .note, .search-detail-panel .panel-head > span").forEach((element) => {
+        if (element.querySelector("[data-copy-value]")) return;
+        const text = detailReportText(element);
+        if (!text) return;
+        const label = element.matches("h2") ? "Workshop/Sprint Title"
+          : element.matches(".search-kicker") ? "Content Type"
+          : element.matches(".search-view-subtitle") ? "Page context"
+          : detailFieldLabelForElement(element) || "Section information";
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "copy-value-button";
+        button.dataset.copyValue = text;
+        button.setAttribute("aria-label", `Copy ${label}`);
+        button.title = `Copy ${label}`;
+        button.textContent = "Copy";
+        element.classList.add("search-copy-target");
+        element.append(button);
       });
+    }
+    // A rectangular report preserves the page's section order and table row groups.
+    function searchDetailReportRows(view) {
+      const rows = [["Section", "Row", "Field", "Value"]];
+      const add = (section, row, field, value) => rows.push([section, row, field, value]);
+      add("Page Overview", "", "Content Type", detailReportText(view.querySelector(".search-kicker")));
+      add("Page Overview", "", "Title", detailReportText(view.querySelector("h2")));
+      const context = detailReportText(view.querySelector(".search-view-subtitle"));
+      if (context) add("Page Overview", "", "Context", context);
+      view.querySelectorAll(".search-result-card").forEach((card) => {
+        add("Summary", "", detailReportText(card.querySelector("dt")), detailReportText(card.querySelector("dd")));
+      });
+      view.querySelectorAll(".search-detail-panel, [data-report-section]").forEach((panel) => {
+        const belongsToSection = (element) => element.closest(".search-detail-panel, [data-report-section]") === panel;
+        const section = detailReportText(panel.querySelector("h3"));
+        Array.from(panel.querySelectorAll(".panel-head > span, .note")).filter(belongsToSection).forEach((element) => {
+          add(section, "", element.matches(".note") ? "Note" : "Count", detailReportText(element));
+        });
+        Array.from(panel.querySelectorAll("dl > div")).filter(belongsToSection).forEach((item) => {
+          add(section, "", detailReportText(item.querySelector("dt")), detailReportText(item.querySelector("dd")));
+        });
+        Array.from(panel.querySelectorAll("table")).filter(belongsToSection).forEach((table) => {
+          const headers = Array.from(table.querySelectorAll("thead th"), detailReportText);
+          table.querySelectorAll("tbody tr").forEach((row, index) => {
+            const cells = Array.from(row.querySelectorAll("td"));
+            const label = row.querySelector("th");
+            if (label) {
+              add(section, "", detailReportText(label), detailReportText(cells[0]));
+            } else if (cells.length === 1 && cells[0].colSpan > 1) {
+              add(section, "", "Note", detailReportText(cells[0]));
+            } else {
+              cells.forEach((cell, column) => add(section, String(index + 1), headers[column] || `Column ${column + 1}`, detailReportText(cell)));
+            }
+          });
+        });
+      });
+      return rows;
+    }
+    function reportCsvCell(value) {
+      let text = value == null || String(value).trim() === "" ? "N/A" : String(value);
+      // Keep spreadsheet applications from interpreting source text as a formula.
+      if (/^\s*[=+\-@]/.test(text)) text = `'${text}`;
+      return `"${text.replace(/"/g, '""')}"`;
+    }
+    function exportSearchDetailCsv(record, view) {
+      const csv = "\uFEFF" + searchDetailReportRows(view)
+        .map((row) => row.map(reportCsvCell).join(","))
+        .join("\r\n") + "\r\n";
+      const slug = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      const identity = record.livelabsId ? `livelabs-${record.livelabsId}` : record.wmsId ? `wms-${record.wmsId}` : record.title;
+      const filename = `${slug(record.type) || "content"}-${slug(identity).slice(0, 100) || "result"}-report.csv`;
+      const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      const statusNode = document.getElementById("copy-status");
+      if (statusNode) statusNode.textContent = `CSV report downloaded for ${record.title}`;
     }
     async function copyValueFromButton(button) {
       const text = button?.dataset.copyValue || "";
@@ -2212,7 +2328,7 @@
         const visible = dashboardAdminState.sectionVisibility?.[settingKey] !== false;
         const section = document.getElementById(sectionId);
         if (section) section.hidden = !visible;
-        document.querySelectorAll(`a[href="#${sectionId}"]`).forEach((link) => {
+        document.querySelectorAll(`a[href="#${sectionId}"], a[data-section-hash="#${sectionId}"]`).forEach((link) => {
           link.hidden = !visible;
           link.setAttribute("aria-hidden", visible ? "false" : "true");
         });
@@ -2364,6 +2480,11 @@
         "Manifest Path",
         "Owner Group",
         "Manager Email",
+        "Support Contact Email",
+        "Tech Contact Email",
+        "Ownership Status",
+        "WMS Reported Owner Email (disputed)",
+        "Ownership Review Evidence",
         "Author Coverage"
       ];
       const rows = preferredFields
@@ -2419,22 +2540,23 @@
         const titleHtml = related
           ? `<button class="nav-link" type="button" data-family-search-key="${escapeHtml(item.key)}">${escapeHtml(title)}</button>`
           : escapeHtml(title);
-        return `<tr><td>${titleHtml}</td><td>${escapeHtml(livelabsId)}</td><td>${escapeHtml(wmsId)}</td><td>${escapeHtml(status)}</td><td>${escapeHtml(category)}</td></tr>`;
+        return `<div class="family-record"><table class="search-detail-table"><tbody>
+          <tr><th>Related Content</th><td>${titleHtml}</td></tr>
+          <tr><th>LiveLabs ID</th><td>${escapeHtml(livelabsId || "N/A")}</td></tr>
+          <tr><th>WMS ID</th><td>${escapeHtml(wmsId || "N/A")}</td></tr>
+          <tr><th>Status</th><td>${escapeHtml(status || "N/A")}</td></tr>
+          <tr><th>Category</th><td>${escapeHtml(category || "N/A")}</td></tr>
+        </tbody></table></div>`;
       }).join("");
       return `
-        <section class="search-detail-panel search-detail-panel-wide">
+        <div class="search-family-section" data-report-section>
           <div class="panel-head">
             <h3>Same WMS Family</h3>
-            <span>${escapeHtml(family.total)} rows</span>
+            <span>${escapeHtml(family.total)} records · ${siblings.length} related</span>
           </div>
           <p class="note">These rows share WMS ID ${escapeHtml(family.wmsId || record.wmsId || "")}. Each LiveLabs ID remains a separate searchable result and detail page.</p>
-          <div class="search-files-table-wrap">
-            <table class="search-files-table">
-              <thead><tr><th>Related Content</th><th>LiveLabs ID</th><th>WMS ID</th><th>Status</th><th>Category</th></tr></thead>
-              <tbody>${rows || `<tr><td colspan="5">No sibling rows available.</td></tr>`}</tbody>
-            </table>
-          </div>
-        </section>`;
+          <div class="search-family-records">${rows || `<p>No sibling rows available.</p>`}</div>
+        </div>`;
     }
     function adminTagsPanelHtml(record) {
       const tags = adminTagsForRecord(record);
@@ -2457,11 +2579,15 @@
     function writeSearchUrl({ query = "", record = null, identity = null, replace = true, route = "current", clearHash = null } = {}) {
       const url = new URL(location.href);
       const selectedIdentity = record ? canonicalRecordIdentity(record) : normalizeSearchIdentity(identity || {});
-      if (route === "dashboard") {
-        const normalizedPath = url.pathname.replace(/\/+$/, "").toLowerCase();
-        if (normalizedPath.endsWith("/inventory") || normalizedPath.endsWith("/inventory/index.html")) {
-          url.pathname = new URL("../index.html", url).pathname;
-        }
+      const onInventory = /\/inventory(?:\/index\.html)?\/?$/i.test(url.pathname) || url.searchParams.get('view') === 'inventory';
+      const inventoryFamilyFilter = onInventory && selectedIdentity.wmsId && !selectedIdentity.livelabsId && !selectedIdentity.contentKey;
+      let destination = route;
+      if (route === 'current') {
+        if ((hasSearchIdentity(selectedIdentity) && !inventoryFamilyFilter) || (query && !onInventory)) destination = 'search';
+        else if (!query && !hasSearchIdentity(selectedIdentity) && /\/search(?:\/index\.html)?\/?$/i.test(url.pathname)) destination = 'dashboard';
+      }
+      if (destination === 'dashboard' || destination === 'search') {
+        url.pathname = new URL(location.protocol === 'file:' ? 'index.html' : destination + '/', document.baseURI).pathname;
         url.searchParams.delete("view");
       }
       if (query) url.searchParams.set("q", query);
@@ -2472,6 +2598,7 @@
       if (selectedIdentity.contentKey) url.searchParams.set("content_key", selectedIdentity.contentKey);
       const shouldClearHash = clearHash ?? Boolean(query || hasSearchIdentity(selectedIdentity));
       if (shouldClearHash) url.hash = "";
+      else if (!url.hash && !query && !hasSearchIdentity(selectedIdentity) && url.pathname === new URL('dashboard/', document.baseURI).pathname) url.hash = '#overview';
       const method = replace ? "replaceState" : "pushState";
       history[method](null, "", `${url.pathname}${url.search}${url.hash}`);
     }
@@ -2490,16 +2617,31 @@
       }
       window.setTimeout(() => { button.textContent = "Copy link"; }, 1800);
     }
+    function qaEvidenceState(record) {
+      const qa = record.qa;
+      return qa ? (qa.match_status === "matched" ? qa.state : qa.match_status) : "not_observed";
+    }
+    function qaEvidenceHtml(record) {
+      if (!record.qa) return "";
+      const qa = record.qa;
+      const rows = Array.from(record.details.entries()).filter(([label]) => label.startsWith("QA "));
+      const warnings = qa.freshness_warnings?.length ? ` Source checks: ${qa.freshness_warnings.join("; ")}.` : "";
+      return `<section class="search-detail-panel search-detail-panel-wide qa-evidence" data-qa-evidence>
+        <h3>QA evidence</h3>
+        <p class="note">${qa.mode === "pilot" ? "Local pilot. " : ""}The error score measures reported defect burden from 0 to 100; lower is better. It is not a test failure percentage. Unknown evidence is not a pass.${escapeHtml(warnings)}</p>
+        <table class="search-detail-table"><tbody>${rows.map(([label, value]) => `<tr><th>${escapeHtml(label)}</th><td>${escapeHtml(value)}</td></tr>`).join("")}</tbody></table>
+      </section>`;
+    }
     function renderSearchDetail(record, { updateUrl = true } = {}) {
       if (updateUrl) {
-        writeSearchUrl({ query: "", record, replace: false, route: "dashboard" });
+        writeSearchUrl({ query: "", record, replace: false, route: "search" });
         clearGlobalSearchUi();
         document.body.classList.remove("dashboard-inventory-active", "dashboard-tops-active");
       }
       const view = ensureSearchView();
       const summaryItems = summaryItemsFor(record);
       const governanceItems = governanceItemsFor(record);
-      const subtitle = [record.source || "Dashboard", record.status || "", record.owner ? `Owner: ${record.owner}` : ""].filter(Boolean).join(" | ");
+      const subtitle = [record.source || "Dashboard", record.status || "", record.ownership?.status === "disputed" ? "Ownership needs review" : record.owner ? `WMS reported owner: ${record.owner}` : ""].filter(Boolean).join(" | ");
       view.innerHTML = `
         <div class="search-view-header">
           <div>
@@ -2507,12 +2649,13 @@
             <h2>${escapeHtml(record.title)}</h2>
             ${subtitle ? `<p class="search-view-subtitle">${escapeHtml(subtitle)}</p>` : ""}
           </div>
-          <span class="search-view-actions"><button class="nav-link" type="button" data-copy-search-link>Copy link</button><button class="nav-link" type="button" data-back-dashboard>Back to Dashboard</button></span>
+          <span class="search-view-actions"><button class="nav-link" type="button" data-copy-search-link>Copy link</button><details class="report-export-dropdown"><summary class="nav-link">Export report <span aria-hidden="true">▾</span></summary><div class="report-export-options"><button type="button" data-export-search-xlsx>Excel (.xlsx)</button><button type="button" data-export-search-csv>CSV (.csv)</button></div></details><button class="nav-link" type="button" data-back-dashboard>Back to Dashboard</button></span>
         </div>
         <dl class="search-result-summary">
           ${summaryItems.map(([label, value]) => `<div class="search-result-card"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}
         </dl>
         <div class="search-detail-grid">
+          ${qaEvidenceHtml(record)}
           <section class="search-detail-panel">
             <h3>Governance Summary</h3>
             <dl class="search-meta-list">
@@ -2521,12 +2664,12 @@
                 return `<div${wide ? ` class="wide"` : ""}><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`;
               }).join("")}
             </dl>
+            ${familyHtml(record)}
           </section>
           <section class="search-detail-panel">
             <h3>Dashboard Row</h3>
             <table class="search-detail-table"><tbody>${sourceRowsHtml(record)}</tbody></table>
           </section>
-          ${familyHtml(record)}
           ${fileUpdatesHtml(record)}
           <section class="search-detail-panel search-detail-panel-wide">
             <h3>Additional Details</h3>
@@ -2538,6 +2681,33 @@
       });
       view.querySelectorAll("[data-copy-search-link]").forEach((button) => {
         button.addEventListener("click", () => copySearchLink(button));
+      });
+      const exportDropdown = view.querySelector(".report-export-dropdown");
+      const closeExportDropdown = () => {
+        exportDropdown.open = false;
+        exportDropdown.querySelector("summary").focus();
+      };
+      view.exportMenuController?.abort();
+      view.exportMenuController = new AbortController();
+      document.addEventListener("click", (event) => {
+        if (!exportDropdown.contains(event.target)) exportDropdown.open = false;
+      }, { signal: view.exportMenuController.signal });
+      exportDropdown.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") { event.preventDefault(); closeExportDropdown(); }
+      });
+      exportDropdown.addEventListener("focusout", () => {
+        window.setTimeout(() => {
+          if (!exportDropdown.contains(document.activeElement)) exportDropdown.open = false;
+        }, 0);
+      });
+      view.querySelector("[data-export-search-csv]").addEventListener("click", () => {
+        closeExportDropdown();
+        exportSearchDetailCsv(record, view);
+      });
+      view.querySelector("[data-export-search-xlsx]").addEventListener("click", () => {
+        closeExportDropdown();
+        const identity = record.livelabsId ? `livelabs-${record.livelabsId}` : `wms-${record.wmsId || "result"}`;
+        window.LiveLabsExport.xlsx(searchDetailReportRows(view), `${String(record.type || "content").toLowerCase()}-${identity}-report.xlsx`);
       });
       view.querySelectorAll("[data-family-search-key]").forEach((button) => {
         button.addEventListener("click", () => {
@@ -2629,7 +2799,7 @@
       const navListForInventory = document.querySelector(".nav-list");
       if (navListForInventory && !navListForInventory.querySelector("[data-inventory-link]")) {
         const inventoryItem = document.createElement("a");
-        inventoryItem.href = "./inventory/index.html";
+        inventoryItem.href = new URL(location.protocol === 'file:' ? 'inventory/index.html' : 'inventory', document.baseURI).href;
         inventoryItem.dataset.inventoryLink = "true";
         inventoryItem.innerHTML = `<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"></path><path d="M5 9h14"></path><path d="M5 14h14"></path><path d="M10 4v16"></path></svg><span>Portfolio Inventory</span>`;
         const topPerformers = navListForInventory.querySelector('a[href="#top-performers"]');
@@ -2646,7 +2816,7 @@
         }
         if (!navList.querySelector('[data-inventory-link]')) {
           const inventoryItem = document.createElement("a");
-          inventoryItem.href = "./inventory/index.html";
+          inventoryItem.href = new URL(location.protocol === 'file:' ? 'inventory/index.html' : 'inventory', document.baseURI).href;
           inventoryItem.dataset.inventoryLink = "true";
           inventoryItem.innerHTML = `<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"></path><path d="M5 9h14"></path><path d="M5 14h14"></path><path d="M10 4v16"></path></svg><span>Portfolio Inventory</span>`;
           const topPerformers = navList.querySelector('a[href="#top-performers"]');
@@ -2705,8 +2875,8 @@
                 ${allDataControlsHtml("top")}
                 <div class="table-wrap">
                   <table id="all-content-data-table" class="all-data-table">
-                    <thead><tr><th class="all-data-row-number">#</th><th>Title</th><th>Type</th><th>Publish Status</th><th>Publish Type</th><th>WMS ID</th><th>LiveLabs ID</th><th>Category</th><th>Contact</th></tr></thead>
-                    <tbody data-all-data-rows><tr><td colspan="9" class="empty">Open Portfolio Inventory to load records</td></tr></tbody>
+                    <thead><tr><th class="all-data-row-number">#</th><th>Title</th><th>Type</th><th>Publish Status</th><th>Publish Type</th><th>WMS ID</th><th>LiveLabs ID</th><th>Category</th><th>Contact</th><th>QA Error Score</th><th>QA Evidence</th></tr></thead>
+                    <tbody data-all-data-rows><tr><td colspan="11" class="empty">Open Portfolio Inventory to load records</td></tr></tbody>
                   </table>
                 </div>
                 ${allDataControlsHtml("bottom")}
@@ -2842,7 +3012,7 @@
         return { authorMissing: false, detail: authorContact || "N/A", label: "Author", rank: "author" };
       }
       if (inventoryCoverage?.rank === "fallback") {
-        const fallbackContact = cleanContactEnumeration(record.owner || allDataExactValue(record, ["Workshop Team", "Manager Email", "Acknowledgement Updater", "Owner Group"]));
+        const fallbackContact = cleanContactEnumeration(record.owner || allDataExactValue(record, ["Tech Contact Email", "Support Contact Email", "Workshop Team", "Manager Email", "Acknowledgement Updater", "Owner Group"]));
         return { authorMissing: true, detail: fallbackContact || "Fallback contact present", label: "Fallback contact", rank: "fallback" };
       }
       if (inventoryCoverage?.rank === "covered") {
@@ -3001,9 +3171,11 @@
         source: record.source,
         title: record.title,
         type: allDataType(record),
+        qaError: record.qa?.observed_error_score == null ? "" : String(record.qa.observed_error_score),
+        qaState: qaEvidenceState(record),
         wmsId: record.wmsId
       };
-      return values[key] || "";
+      return values[key] ?? "";
     }
     function sortAllDataRecords(records) {
       const sortField = allDataSortFields.find((field) => field.key === allDataState.sortKey);
@@ -3012,6 +3184,11 @@
       }
       const direction = allDataState.sortDirection === "desc" ? "desc" : "asc";
       return records.slice().sort((left, right) => {
+        if (sortField.key === "qaError") {
+          const missingLeft = left.qa?.observed_error_score == null;
+          const missingRight = right.qa?.observed_error_score == null;
+          if (missingLeft !== missingRight) return missingLeft ? 1 : -1;
+        }
         const comparison = compareSortValues(allDataSortValue(left, sortField.key), allDataSortValue(right, sortField.key), sortField.type);
         if (comparison === 0) return (left.inventoryIndex ?? 0) - (right.inventoryIndex ?? 0);
         return direction === "desc" ? -comparison : comparison;
@@ -3091,7 +3268,7 @@
     function setInventoryLoadingState(message = "Loading inventory") {
       document.querySelectorAll("[data-all-data-count]").forEach((node) => { node.textContent = message; });
       const rowsNode = document.querySelector("[data-all-data-rows]");
-      if (rowsNode) rowsNode.innerHTML = `<tr><td colspan="9" class="empty">${escapeHtml(message)}</td></tr>`;
+      if (rowsNode) rowsNode.innerHTML = `<tr><td colspan="11" class="empty">${escapeHtml(message)}</td></tr>`;
       const totalNode = document.querySelector("[data-all-data-total]");
       if (totalNode) totalNode.textContent = message;
     }
@@ -3111,7 +3288,7 @@
         return Promise.resolve(loadedFullSearchRecords);
       }
       setInventoryLoadingState("Loading inventory");
-      return loadPortfolioInventoryRecords().then((fullRecords) => {
+      const inventoryRequest = loadPortfolioInventoryRecords().then((fullRecords) => {
         loadedFullSearchRecords = fullRecords.map((record, index) => {
           if (record.inventoryIndex === undefined) record.inventoryIndex = index;
           return record;
@@ -3147,6 +3324,7 @@
         }
         return loadedFullSearchRecords;
       });
+      return window.LiveLabsLoading.track(inventoryRequest, 'Loading portfolio records…');
     }
     function focusAllDataFilters() {
       const filters = document.querySelector("#all-data-panel .all-data-filter-grid");
@@ -3217,6 +3395,8 @@
         <td>${copyableValueHtml(record.livelabsId, "LiveLabs ID")}</td>
         <td>${escapeHtml(record.category || "N/A")}</td>
         <td>${copyableValueHtml(contact, "Author Email")}</td>
+        <td>${escapeHtml(record.qa?.observed_error_score ?? "Unknown")}</td>
+        <td>${escapeHtml(qaEvidenceState(record).replaceAll("_", " "))}</td>
       </tr>`;
     }
     function openAllDataRecordDetail(row) {
@@ -3294,8 +3474,9 @@
           .join("");
       }
       if (warningNode) {
-        warningNode.hidden = true;
-        warningNode.textContent = "";
+        const qa = portfolioInventoryMetadata?.qa_governance;
+        warningNode.hidden = !qa;
+        warningNode.textContent = qa ? `QA ${qa.mode}: Jenkins ${qa.started_at}; Analytics ${qa.snapshot_date}. Error score 0–100; lower is better. Unknown is not a pass. ${qa.promotion_gaps.join("; ")}.` : "";
       }
     }
     function renderAllDataTable() {
@@ -3306,7 +3487,7 @@
       const totalRecords = loadedFullSearchRecords.length;
       if (totalNode) totalNode.textContent = totalRecords ? `${totalRecords.toLocaleString()} inventory records` : "Loading inventory";
       if (!totalRecords) {
-        rowsNode.innerHTML = `<tr><td colspan="9" class="empty">Open Portfolio Inventory to load records</td></tr>`;
+        rowsNode.innerHTML = `<tr><td colspan="11" class="empty">Open Portfolio Inventory to load records</td></tr>`;
         syncAllDataControls(0, 1, 0, 0, null);
         return;
       }
@@ -3328,7 +3509,7 @@
       const last = records.length ? (selectedRange ? Math.min(selectedRange.end, records.length) : start + pageRecords.length) : 0;
       rowsNode.innerHTML = pageRecords.length
         ? pageRecords.map((record, index) => allDataRowHtml(record, first + index)).join("")
-        : `<tr><td colspan="9" class="empty">No matching rows</td></tr>`;
+        : `<tr><td colspan="11" class="empty">No matching rows</td></tr>`;
       if (panel) panel.dataset.totalPages = String(totalPages);
       syncAllDataControls(records.length, totalPages, first, last, selectedRange);
     }
@@ -3341,8 +3522,8 @@
         const defaultHash = mode === "tops" ? "#top-performers" : mode === "inventory" ? "" : "#overview";
         const normalizedHash = targetHash || defaultHash;
         const hashLink = normalizedHash
-          ? navLinks.find((item) => item.getAttribute("href") === normalizedHash && !item.dataset.dashboardView)
-            || navLinks.find((item) => item.getAttribute("href") === normalizedHash)
+          ? navLinks.find((item) => item.hash === normalizedHash && !item.dataset.dashboardView)
+            || navLinks.find((item) => item.hash === normalizedHash)
           : null;
         const modeLink = navLinks.find((item) => item.dataset.dashboardView === mode);
         const current = mode === "inventory"
@@ -3366,10 +3547,7 @@
           || normalizedPath.endsWith("/inventory/index.html");
       };
       const dashboardEntryUrl = () => {
-        const normalizedPath = location.pathname.replace(/\/+$/, "").toLowerCase();
-        return normalizedPath.endsWith("/inventory") || normalizedPath.endsWith("/inventory/index.html")
-          ? new URL("../index.html", location.href)
-          : new URL("./index.html", location.href);
+        return new URL(location.protocol === 'file:' ? 'index.html' : 'dashboard/', document.baseURI);
       };
       const replaceDashboardUrl = (targetHash) => {
         if (!targetHash) return;
@@ -3400,7 +3578,7 @@
       document.querySelectorAll("[data-dashboard-view]").forEach((link) => {
         link.addEventListener("click", (event) => {
           event.preventDefault();
-          setDashboardMode(link.dataset.dashboardView || "overview", link.getAttribute("href") || "");
+          setDashboardMode(link.dataset.dashboardView || "overview", link.hash || "");
         });
       });
       navLinks.filter((link) => !link.dataset.dashboardView && !link.dataset.inventoryLink).forEach((link) => {
@@ -3409,13 +3587,13 @@
             event.preventDefault();
             const target = dashboardEntryUrl();
             target.search = "";
-            target.hash = link.getAttribute("href") || "#overview";
+            target.hash = link.hash || "#overview";
             window.location.assign(`${target.pathname}${target.search}${target.hash}`);
             return;
           }
           showDashboardView();
           document.body.classList.remove("dashboard-inventory-active", "dashboard-tops-active");
-          setNavCurrent("overview", link.getAttribute("href") || "");
+          setNavCurrent("overview", link.hash || "");
         });
       });
       window.addEventListener("hashchange", () => {
@@ -3446,7 +3624,7 @@
       const initialParams = new URLSearchParams(location.search);
       const legacyInventoryRequested = !onInventoryPage && location.hash === "#all-data-browser";
       if (legacyInventoryRequested) {
-        const target = new URL("./inventory/index.html", location.href);
+        const target = new URL(location.protocol === 'file:' ? 'inventory/index.html' : 'inventory', document.baseURI);
         target.search = initialParams.toString();
         target.hash = "";
         window.location.replace(`${target.pathname}${target.search}`);
@@ -3468,7 +3646,6 @@
       decorateDashboardCopyTargets();
       applySectionVisibilitySettings();
       applyPortfolioStatsSummary();
-      void loadCanonicalPortfolioPayload().catch(() => {});
       let searchRecords = [];
       let searchUpdateTimer = null;
       let searchLoadRequest = 0;
@@ -3534,14 +3711,18 @@
           writeSearchUrl({
             query: state.query,
             identity: state,
-            route: identityRequested && !inventoryWmsFilterOnly ? "dashboard" : "current"
+            route: identityRequested && !inventoryWmsFilterOnly ? "search" : "current"
           });
         }
-        if (inventoryWmsFilterOnly) {
+        if (inventoryRouteRequested() && (!identityRequested || inventoryWmsFilterOnly)) {
+          allDataState.query = state.query;
+          allDataState.wmsId = state.wmsId;
+          const inventorySearch = document.querySelector('#all-data-search');
+          if (inventorySearch) inventorySearch.value = state.query || state.wmsId;
           setDashboardMode("inventory", "");
-          applyInventoryUrlState();
           return;
         }
+        document.body.classList.remove('dashboard-inventory-active', 'dashboard-tops-active');
         if (identityRequested) {
           document.body.classList.remove("dashboard-inventory-active", "dashboard-tops-active");
           setSearchStatus(`Loading record for ${searchIdentityLabel(state)}`);
@@ -3549,7 +3730,7 @@
             searchRecords = buildSearchIndex(records, { includeTableRecords: false });
             const resolution = resolveSearchRecordIdentity(searchRecords, state);
             if (resolution.record) {
-              writeSearchUrl({ query: state.query, record: resolution.record, replace: true, route: "dashboard" });
+              writeSearchUrl({ query: state.query, record: resolution.record, replace: true, route: "search" });
               renderSearchDetail(resolution.record, { updateUrl: false });
               setSearchStatus("");
             } else {
@@ -3668,8 +3849,10 @@
           initializeTablesIn(disclosure, { force: true });
         }
       }, true);
+      normalizeSectionLinks();
       configureLazySections();
       scheduleInitialTableSetup();
+      window.LiveLabsLoading.ready();
       window.addEventListener("storage", (event) => {
         if (event.key === adminStorageKey) reloadDashboardAdminState();
       });

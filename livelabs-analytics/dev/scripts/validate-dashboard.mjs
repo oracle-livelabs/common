@@ -94,7 +94,8 @@ function checkDashboardScripts() {
       .filter((source) => !/^(?:https?:|data:|javascript:)/i.test(source));
     inlineScripts.forEach((script, index) => new vm.Script(script, { filename: `${file}:script${index}` }));
     externalScripts.forEach((source) => {
-      const sourcePath = path.resolve(path.dirname(path.join(root, file)), source);
+      const baseHref = html.match(/<base\s+href="([^"]+)"/i)?.[1] || './';
+      const sourcePath = path.resolve(path.dirname(path.join(root, file)), baseHref, source);
       new vm.Script(fs.readFileSync(sourcePath, "utf8"), { filename: source });
     });
     pass(`${file} scripts parse`, `${inlineScripts.length} inline and ${externalScripts.length} external script(s)`);
@@ -106,13 +107,13 @@ function checkInventoryPageContract() {
   const html = fs.readFileSync(filePath, "utf8");
   const dashboardHtml = readDashboardSourceBundle();
   const requiredMarkers = [
-    'new URL("../index.html", location.href)',
-    'new URLSearchParams({ view: "inventory" })',
-    'location.replace(target.href)'
+    '<base href="../">',
+    './assets/js/page-loading.js',
+    './assets/js/dashboard.js'
   ];
   const missing = requiredMarkers.filter((marker) => !html.includes(marker));
   if (missing.length) fail("Inventory route shell", `missing: ${missing.join(", ")}`);
-  else pass("Inventory route shell", "explicit inventory entry redirects to the dashboard renderer without fetching or rewriting HTML");
+  else pass("Inventory route shell", "static inventory entry uses the shared renderer with an explicit asset base and no inline redirect");
   const presentationMarkers = [
     'class="page-header inventory-page-header"',
     'class="hero-stripe"',
@@ -179,7 +180,7 @@ function checkUpdateEvidenceAndNaContracts() {
 
   if (
     updateEvidenceCount !== search.records.length
-    || metadata.matched_records !== search.records.length
+    || Number(metadata.matched_records || 0) + Number(metadata.unmatched_wms_records || 0) !== search.records.length
     || sourceCount !== search.records.length
   ) {
     fail(
@@ -209,7 +210,9 @@ function checkCopyInteractionContracts() {
     '["owner email", "Author Email"]',
     '["current wms id", "WMS ID"]',
     '["current livelabs id", "LiveLabs ID"]',
-    "copyableDetailFields",
+    "function searchDetailReportRows",
+    "function exportSearchDetailCsv",
+    "data-export-search-csv",
     "function decorateDashboardCopyTargets",
     "function decorateDetailCopyTargets",
     "function copyValueFromButton",
@@ -227,7 +230,9 @@ function checkCopyInteractionContracts() {
 
   const hoverFocusMarkers = [
     ".copy-value-target:hover .copy-value-button",
-    ".copy-value-target:focus-within .copy-value-button"
+    ".copy-value-target:focus-within .copy-value-button",
+    ".search-copy-target:hover > .copy-value-button",
+    ".search-copy-target:focus-within > .copy-value-button"
   ];
   const forcedVisibilityMarkers = [
     ".search-view .copy-value-button",
@@ -237,7 +242,7 @@ function checkCopyInteractionContracts() {
   const forcedVisibility = forcedVisibilityMarkers.filter((marker) => html.includes(marker));
   missingHoverFocus.length || forcedVisibility.length
     ? fail("copy interaction visibility", `missing hover/focus markers: ${missingHoverFocus.join(", ") || "none"}; forced-visible markers: ${forcedVisibility.join(", ") || "none"}`)
-    : pass("copy interaction visibility", "Copy controls remain hidden by default and appear on hover or keyboard focus");
+    : pass("copy interaction visibility", "table and detail-page Copy controls appear on hover or keyboard focus");
 
   const dashboardTableIds = [
     "top-performer-top-100-workshops",
@@ -422,13 +427,14 @@ function checkHtmlReferences() {
     const filePath = path.join(root, file);
     const fileDir = path.dirname(filePath);
     const html = fs.readFileSync(filePath, "utf8");
+    const baseHref = html.match(/<base\s+href="([^"]+)"/i)?.[1] || './';
     const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
     const duplicates = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
     const refs = [...html.matchAll(/(?:href|src)="(?!https?:|mailto:|#|data:|javascript:)([^"]+)"/g)]
       .map((match) => match[1].split(/[?#]/)[0])
       .filter((ref) => ref !== "./admin/")
       .filter(Boolean);
-    const missing = [...new Set(refs)].filter((ref) => !fs.existsSync(path.resolve(fileDir, ref)));
+    const missing = [...new Set(refs)].filter((ref) => !fs.existsSync(path.resolve(fileDir, baseHref, ref)));
     const hasFavicon = /<link[^>]+rel="icon"/i.test(html);
 
     if (duplicates.length) fail(`${file} duplicate ids`, duplicates.slice(0, 5).join(", "));
@@ -517,7 +523,7 @@ function checkStaticBoundary() {
 function checkUrlContracts() {
   const html = readDashboardSourceBundle();
   const requiredMarkers = [
-    'inventoryItem.href = "./inventory/index.html"',
+    "'inventory/index.html' : 'inventory', document.baseURI",
     "data-inventory-link",
     "readSearchUrlState",
     "writeSearchUrl",
@@ -536,7 +542,7 @@ function checkUrlContracts() {
     'data-copy-search-link',
     'data-back-dashboard',
     'const dashboardEntryUrl = () =>',
-    'new URL("../index.html", location.href)',
+    "'index.html' : 'dashboard/', document.baseURI",
     'url.searchParams.delete("view");',
     'addEventListener("popstate"'
   ];
@@ -546,7 +552,7 @@ function checkUrlContracts() {
   if (html.includes('inventoryItem.dataset.dashboardView = "inventory"')) {
     fail("Inventory route contract", "legacy dashboard-mode assignment remains on the menu item");
   } else {
-    pass("Inventory route contract", "menu item navigates to the explicit /inventory/index.html entry");
+    pass("Inventory route contract", "menu item uses /inventory over HTTP and the explicit entry for local files");
   }
 }
 

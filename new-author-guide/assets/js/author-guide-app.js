@@ -2,6 +2,7 @@
 // Handles mode switching, sticky navigation, search ranking, toolkit detail views, and image expansion.
 (function () {
   var content = window.authorGuideContent || {};
+  var tagGroups = content.tagGroups || [];
   var stepMeta = content.stepMeta || [];
   var githubCheatsheetItemIds = {
     "github-setup": true,
@@ -1306,6 +1307,15 @@
 
   function titleCaseTag(tag) {
     var normalized = normalizeTagValue(tag);
+    var groupedLabel = "";
+    tagGroups.some(function (group) {
+      var match = [group].concat(group.children || []).find(function (entry) {
+        return entry.tag === normalized;
+      });
+      if (match) groupedLabel = match.label;
+      return !!match;
+    });
+    if (groupedLabel) return groupedLabel;
     var labelMap = {
       ai: "AI",
       assets: "Assets",
@@ -1378,6 +1388,7 @@
   explorerItems.forEach(function (item, index) {
     item.__sourceOrder = index;
     item.__tags = getItemTags(item);
+    if (item.sourceRoute) item.sourceHref = routeUrl(item.sourceRoute);
   });
 
   function resolveGuideTarget(target, sourceHref) {
@@ -1857,10 +1868,27 @@
       var tag = pill.getAttribute("data-tag");
       var isAll = tag === "all";
       var isActive = isAll ? activeTags.length === 0 : activeTags.indexOf(tag) !== -1;
+      var parentGroup = tagGroups.find(function (group) {
+        return group.tag === pill.getAttribute("data-tag-parent");
+      });
+      if (parentGroup && parentGroup.children.some(function (child) {
+        return activeTags.indexOf(child.tag) !== -1;
+      })) isActive = true;
 
       pill.classList.toggle("is-active", isActive);
       pill.setAttribute("aria-pressed", isActive ? "true" : "false");
     });
+
+    if (tagPillsMount) {
+      tagPillsMount.querySelectorAll("[data-tag-group]").forEach(function (node) {
+        var group = tagGroups.find(function (entry) {
+          return entry.tag === node.getAttribute("data-tag-group");
+        });
+        node.hidden = !group || ![group].concat(group.children).some(function (entry) {
+          return activeTags.indexOf(entry.tag) !== -1;
+        });
+      });
+    }
   }
 
   function renderTagPills() {
@@ -1868,18 +1896,39 @@
       return;
     }
 
-    tagPillsMount.innerHTML = [
-      '<button type="button" class="tag-pill is-active" data-tag="all" aria-pressed="true">All <span class="tag-pill-count">', explorerItems.length, "</span></button>"
-    ].concat(getTagFacets().map(function (facet) {
+    var facets = getTagFacets();
+    var childTags = tagGroups.reduce(function (tags, group) {
+      return tags.concat(group.children.map(function (child) { return child.tag; }));
+    }, []);
+
+    function tagButton(facet, label, isParent) {
       return [
-        '<button type="button" class="tag-pill" data-tag="', escapeAttribute(facet.tag), '" aria-pressed="false">',
-        escapeHtml(facet.label),
+        '<button type="button" class="tag-pill" data-tag="', escapeAttribute(facet.tag), '"',
+        isParent ? ' data-tag-parent="' + escapeAttribute(facet.tag) + '"' : "",
+        ' aria-pressed="false">',
+        escapeHtml(label || facet.label),
         ' <span class="tag-pill-count">',
         facet.count,
         "</span>",
         "</button>"
       ].join("");
-    })).join("");
+    }
+
+    tagPillsMount.innerHTML = '<div class="tag-pills cheatsheet-primary-tags">' +
+      '<button type="button" class="tag-pill is-active" data-tag="all" aria-pressed="true">All <span class="tag-pill-count">' + explorerItems.length + "</span></button>" +
+      facets.filter(function (facet) { return childTags.indexOf(facet.tag) === -1; }).map(function (facet) {
+        return tagButton(facet, "", tagGroups.some(function (group) { return group.tag === facet.tag; }));
+      }).join("") + "</div>" + tagGroups.map(function (group) {
+        var parent = facets.find(function (facet) { return facet.tag === group.tag; });
+        if (!parent) return "";
+        return '<div class="cheatsheet-subtag-group" data-tag-group="' + escapeAttribute(group.tag) + '" hidden>' +
+          '<div class="filter-label">' + escapeHtml(group.label) + ' topics</div>' +
+          '<div class="tag-pills" role="group" aria-label="' + escapeAttribute(group.label) + ' topic filter">' +
+          tagButton(parent, "All " + group.label) + group.children.map(function (child) {
+            var facet = facets.find(function (entry) { return entry.tag === child.tag; });
+            return facet ? tagButton(facet) : "";
+          }).join("") + "</div></div>";
+      }).join("");
 
     tagPills = Array.from(tagPillsMount.querySelectorAll(".tag-pill"));
     updateTagPillState();
@@ -2016,7 +2065,10 @@
       return;
     }
 
-    tagText = activeTags.length ? "Filter: " + titleCaseTag(activeTags[0]) : "All topics";
+    var parent = tagGroups.find(function (group) {
+      return group.children.some(function (child) { return child.tag === activeTags[0]; });
+    });
+    tagText = activeTags.length ? "Filter: " + (parent ? parent.label + " / " : "") + titleCaseTag(activeTags[0]) : "All topics";
     filterSummary.textContent = currentSortLabel() + " sort. " + tagText + (queryText ? '. Query: "' + queryText + '"' : ".");
   }
 
@@ -4398,6 +4450,7 @@
         resourceLinks: item.resourceLinks,
         milestones: item.milestones,
         tags: item.tags,
+        keywords: item.keywords,
         sourceHref: item.sourceHref,
         sourceLabel: item.sourceLabel,
         resultHref: routeUrl("#cheatsheet:" + encodeURIComponent(item.id)),

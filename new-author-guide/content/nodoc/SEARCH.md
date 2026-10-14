@@ -20,6 +20,14 @@ Title and curated-keyword matches outrank incidental body mentions and cross-ref
 
 Global search uses the same NoDoc records and descriptions with its existing broader author-guide ranking. It can also show partial matches from other guide sections.
 
+## Cheatsheet quick answers
+
+`assets/js/nodoc-cheatsheet-data.js` supplies 53 concise NoDoc modules and 11 topic sub-tags to the shared cheatsheet collection. The NoDoc parent tag opens the sub-tags; choosing a sub-tag narrows the cards while retaining the NoDoc context. Tag URLs and individual module URLs support refresh and browser history. The guide's global search also indexes these modules and their keywords.
+
+These cards are curated summaries of this guide, so update the matching cards when a documented workflow changes. Keep each card's `source: [lab, task]` reference aligned with the source task order (`[0]` links to the introduction). The shared renderer resolves those references for the current guide location. Preserve the distinctions between browser and MCP draft review, saved history and pending drafts, article and page recovery, and Pre Publish and the WMS publishing handoff.
+
+The October 7 cheatsheet browser check confirmed coverage of all 35 current source tasks, all 53 module detail views and source links, all 11 sub-tag filters, search, sorting, refresh, browser history, and mobile layouts. The local check and results are under `output/nodoc-cheatsheet/`; captures are under `output/screenshots/nodoc-cheatsheet/`. This verifies the guide UI and content links, not authenticated NoDoc actions.
+
 ## Validation for this refresh
 
 - 79 automated tests passed: 13 search behavior checks and the existing 66-test suite.

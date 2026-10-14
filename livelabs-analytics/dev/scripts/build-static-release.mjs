@@ -27,9 +27,16 @@ if (fs.existsSync(output) && !replaceExisting) {
 }
 
 childProcess.execFileSync(process.execPath, [fileFallbackBuilder], { cwd: root, stdio: "inherit" });
+// Keep the directory entry identical to the dashboard, with assets based at its parent.
+for (const entry of ['dashboard', 'search', 'inventory']) {
+  fs.mkdirSync(path.join(root, entry), { recursive: true });
+  fs.writeFileSync(path.join(root, entry, 'index.html'), fs.readFileSync(path.join(root, 'index.html'), 'utf8').replace('<head>', '<head>\n  <base href="../">'));
+}
 
 const releaseInputs = [
   { source: "index.html", target: "index.html" },
+  { source: "dashboard/index.html", target: "dashboard/index.html" },
+  { source: "search/index.html", target: "search/index.html" },
   { source: "inventory/index.html", target: "inventory/index.html" },
   { source: "dev/config/.nojekyll", target: ".nojekyll" },
   { source: "dev/config/release-manifest.json", target: "release-manifest.json" },
@@ -88,7 +95,7 @@ try {
   for (const { source: sourceRelativePath, target: targetRelativePath } of releaseInputs) {
     const source = path.join(root, sourceRelativePath);
     const target = path.join(staging, targetRelativePath);
-    if (!fs.existsSync(source)) throw new Error(`Missing release input: ${relativePath}`);
+    if (!fs.existsSync(source)) throw new Error(`Missing release input: ${sourceRelativePath}`);
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.cpSync(source, target, { recursive: true });
   }
@@ -100,7 +107,18 @@ try {
     ...(manifest.data_snapshot || {}),
     portfolio_inventory_generated_at: inventoryData.metadata?.generated_at || null,
     canonical_portfolio_payload: "inventory/data/portfolio_inventory.json",
+    source_snapshot_date: inventoryData.metadata?.snapshot_date || null,
+    ...Object.fromEntries(Object.entries(inventoryData.metadata?.data_freshness || {}).filter(([key]) => key.endsWith("snapshot_date"))),
   };
+  const records = inventoryData.records || [];
+  manifest.data_quality = {
+    ...(manifest.data_quality || {}),
+    record_count: records.length,
+    update_evidence_classified_records: records.filter(record => record.sourceFlags?.github_update_evidence_source).length,
+    latest_github_update_records: records.filter(record => record.sourceFlags?.github_update_evidence_available).length,
+    wms_metadata_fallback_records: records.filter(record => !record.sourceFlags?.github_update_evidence_available).length,
+  };
+  manifest.admin_service = { runtime: "separate authenticated service", entry_point: "/admin-panel-login", included_in_static_bundle: false };
   manifest.release_files = releaseFileEntries(staging);
   const contentIdentity = crypto.createHash("sha256").update(JSON.stringify(manifest.release_files)).digest("hex").slice(0, 16);
   const version = String(manifest.bundle_version || "unversioned").replace(/[^a-z0-9._-]+/gi, "-");

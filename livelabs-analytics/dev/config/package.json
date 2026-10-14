@@ -3,6 +3,9 @@
   "private": true,
   "version": "2026.8.16",
   "scripts": {
+    "admin:start": "python ../scripts/admin-server.py --port 4175",
+    "admin:configure": "python ../scripts/admin-server.py --configure",
+    "snapshot:capture": "python ../scripts/capture-snapshot.py",
     "validate": "node ../scripts/validate-dashboard.mjs",
     "sync:file-data": "node ../scripts/build-file-inventory-fallback.mjs",
     "test:browser": "node ../node_modules/@playwright/test/cli.js test --config playwright.config.cjs",

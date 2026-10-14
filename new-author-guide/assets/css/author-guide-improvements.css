@@ -2752,6 +2752,26 @@ body.home-no-scroll #app .app-footer .container {
   grid-row: 2;
 }
 
+#app .cheatsheet-primary-tags,
+#app .cheatsheet-subtag-group {
+  width: 100%;
+  min-width: 0;
+}
+
+#app .cheatsheet-subtag-group {
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(22, 21, 19, 0.12);
+}
+
+#app .cheatsheet-subtag-group[hidden] {
+  display: none;
+}
+
+#app .cheatsheet-subtag-group .filter-label {
+  margin-bottom: 0.55rem;
+}
+
 #app[data-redwood-creator-pass="2026-05-25"] .cheatsheet-toolbar-controls .search-group {
   grid-template-columns: auto minmax(0, 1fr) auto !important;
   box-shadow: none !important;

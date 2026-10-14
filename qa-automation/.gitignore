@@ -20,3 +20,4 @@ storage-state*.json
 *.tmp
 deploy/vm/.env
 deploy/vm/secrets/
+archive/
