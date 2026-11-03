@@ -21,8 +21,13 @@ function parseCsv(csv) {
 }
 
 async function downloadReport(page) {
+  const menu = page.locator("#search-workshop-view .report-export-dropdown");
+  if (await menu.count()) {
+    const open = await menu.evaluate((element) => element.hasAttribute("open"));
+    if (!open) await menu.locator(":scope > summary").click();
+  }
   const pending = page.waitForEvent("download");
-  await page.getByRole("button", { name: "Export CSV report", exact: true }).click();
+  await page.locator("#search-workshop-view [data-export-search-csv]").click();
   const download = await pending;
   const csv = await fs.readFile(await download.path(), "utf8");
   expect(csv.startsWith("\uFEFF")).toBe(true);
@@ -32,23 +37,22 @@ async function downloadReport(page) {
   return { rows, filename: download.suggestedFilename() };
 }
 
-test("workshop, sprint, and WMS-only result pages copy and export their displayed content", async ({ page, context, request }) => {
+test("public workshop and sprint details copy and export their displayed content", async ({ page, context, request }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-  const { records } = await (await request.get("/inventory/data/portfolio_inventory.json")).json();
+  const { records } = await (await request.get("/inventory/data/public_portfolio_inventory.json")).json();
   const samples = [
     records.find((record) => record.type === "Workshop" && record.family?.total > 1 && record.livelabsId),
-    records.find((record) => record.type === "Sprint" && record.livelabsId),
-    records.find((record) => record.wmsId && !record.livelabsId)
+    records.find((record) => record.type === "Sprint" && record.livelabsId)
   ];
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   for (const record of samples) {
     const params = new URLSearchParams(record.livelabsId ? { livelabs_id: record.livelabsId } : { wms_id: record.wmsId });
-    await page.goto(`/?${params}`, { waitUntil: "networkidle" });
+    await page.goto(`/search/?${params}`, { waitUntil: "networkidle" });
     const view = page.locator("#search-workshop-view");
     await expect(view).toBeVisible();
     const actions = view.locator(".search-view-actions > button");
-    await expect(actions).toHaveText(["Copy link", "Export CSV report", "Back to Dashboard"]);
+    await expect(actions).toHaveText(["Copy link", "Back to Dashboard"]);
     await expect(view.locator(".search-view-header [data-copy-value]")).toHaveCount(0);
     const latest = view.locator(".search-result-card").filter({ has: page.locator("dt", { hasText: "Latest Update" }) });
     const latestButton = latest.getByRole("button", { name: "Copy Latest Update", exact: true });
@@ -70,8 +74,8 @@ test("workshop, sprint, and WMS-only result pages copy and export their displaye
     }
     const { rows, filename } = await downloadReport(page);
     expect(filename).toMatch(/-report\.csv$/);
-    expect(rows).toContainEqual(["Page Overview", "", "Title", record.title]);
-    expect(rows).toContainEqual(["Summary", "", "Latest Update", expectedLatest]);
+    expect(rows).toContainEqual(["Page Overview", "N/A", "Title", record.title]);
+    expect(rows).toContainEqual(["Summary", "N/A", "Latest Update", expectedLatest]);
     const expectedSections = await view.locator(".search-detail-panel h3").allTextContents();
     expect([...new Set(rows.slice(1).map((row) => row[0]))]).toEqual(["Page Overview", "Summary", ...expectedSections]);
     // Every rendered data value must appear in the download and have a Copy control.
@@ -87,11 +91,11 @@ test("workshop, sprint, and WMS-only result pages copy and export their displaye
 });
 
 test("WMS-reported ownership is preserved separately from support contacts", async ({ page, request }) => {
-  const { records } = await (await request.get("/inventory/data/portfolio_inventory.json")).json();
+  const { records } = await (await request.get("/inventory/data/public_portfolio_inventory.json")).json();
   const record = records.find((item) => item.livelabsId === "4074");
   expect(record.owner).toBe("vasile-lucian.brinzei@oracle.com");
   expect(record.ownership).toBeUndefined();
-  await page.goto("/?livelabs_id=4074&wms_id=11763", { waitUntil: "networkidle" });
+  await page.goto("/search/?livelabs_id=4074&wms_id=11763", { waitUntil: "networkidle" });
   const view = page.locator("#search-workshop-view");
   await expect(view).toBeVisible();
   await expect(view.locator(".search-view-subtitle")).toContainText("WMS reported owner: vasile-lucian.brinzei@oracle.com");
@@ -103,13 +107,13 @@ test("WMS-reported ownership is preserved separately from support contacts", asy
   await copy.focus();
   await expect(copy).toHaveCSS("opacity", "1");
   const { rows } = await downloadReport(page);
-  expect(rows).toContainEqual(["Governance Summary", "", "Owner", "vasile-lucian.brinzei@oracle.com"]);
+  expect(rows).toContainEqual(["Governance Summary", "N/A", "Owner", "vasile-lucian.brinzei@oracle.com"]);
   expect(rows.some((row) => row[2] === "WMS Reported Owner Email (disputed)")).toBe(false);
-  expect(rows).toContainEqual(["Additional Details", "", "Support Contact Email", "marco.antonio.luchian@oracle.com"]);
+  expect(rows).toContainEqual(["Additional Details", "N/A", "Support Contact Email", "marco.antonio.luchian@oracle.com"]);
 });
 
 test("CSV preserves file detail, Unicode, quotes, newlines, and safe spreadsheet text", async ({ page }) => {
-  await page.goto("/?livelabs_id=634", { waitUntil: "networkidle" });
+  await page.goto("/search/?livelabs_id=598", { waitUntil: "networkidle" });
   await expect(page.locator("#search-workshop-view")).toBeVisible();
   await page.evaluate(() => {
     const record = {
@@ -122,10 +126,10 @@ test("CSV preserves file detail, Unicode, quotes, newlines, and safe spreadsheet
     renderSearchDetail(record, { updateUrl: false });
   });
   const { rows } = await downloadReport(page);
-  expect(rows).toContainEqual(["Page Overview", "", "Title", 'CSV fixture: "quoted", café\nSecond line']);
-  expect(rows).toContainEqual(["Summary", "", "Category", "'@category"]);
-  expect(rows).toContainEqual(["Governance Summary", "", "Owner", "'+owner"]);
-  expect(rows).toContainEqual(["Governance Summary", "", "Workshop Path", '\'=HYPERLINK("https://example.invalid")']);
+  expect(rows).toContainEqual(["Page Overview", "N/A", "Title", 'CSV fixture: "quoted", café\nSecond line']);
+  expect(rows).toContainEqual(["Summary", "N/A", "Category", "'@category"]);
+  expect(rows).toContainEqual(["Governance Summary", "N/A", "Owner", "'+owner"]);
+  expect(rows).toContainEqual(["Governance Summary", "N/A", "Workshop Path", '\'=HYPERLINK("https://example.invalid")']);
   expect(rows).toContainEqual(["Files Updated On GitHub", "1", "Markdown File", 'Intro, "first".md\nlabs/café/intro.md']);
   expect(rows).toContainEqual(["Files Updated On GitHub", "1", "Date Check", "Review\nFirst line\nSecond line"]);
   expect(rows.some((row) => row.some((value) => value === "Copy" || value === "Copied"))).toBe(false);
@@ -134,6 +138,10 @@ test("CSV preserves file detail, Unicode, quotes, newlines, and safe spreadsheet
   expect(exportButton.y).toBeGreaterThanOrEqual(link.y + link.height);
   await page.screenshot({ path: "../test-results/search-detail-desktop.png", fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
+  const exportMenu = page.locator("#search-workshop-view .report-export-dropdown");
+  if (!(await exportMenu.evaluate((element) => element.hasAttribute("open")))) {
+    await exportMenu.locator(":scope > summary").click();
+  }
   await expect(page.locator("[data-export-search-csv]")).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: "../test-results/search-detail-mobile.png", fullPage: true });

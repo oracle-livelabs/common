@@ -118,8 +118,12 @@ def catalogIndexCommand() {
 }
 
 def generatedRunCommand(runName) {
+  def coverageGate = "node ./scripts/catalog-coverage.mjs --type workshop --require-nonzero && node ./scripts/catalog-coverage.mjs --type livestack --require-nonzero"
+  if (runProfile() == "nightly-full") {
+    coverageGate += " && node ./scripts/catalog-coverage.mjs --all-livestacks"
+  }
   return [
-    "node ./scripts/qa.mjs tests/platform/generated tests/platform/par/catalogParLinks.spec.ts",
+    "${coverageGate} && node ./scripts/qa.mjs tests/generated/platform tests/generated/workshops tests/generated/livestacks tests/generated/platform/par/catalogParLinks.spec.ts",
     "--output artifacts/jenkins/${runName}/test-results",
     "--junit on",
     "--junit-file artifacts/jenkins/${runName}/junit.xml",

@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "source": "LiveLabs catalog Type=LiveStack filter",
+  "observed_at": "2026-10-15",
+  "expected_count": 13,
+  "items": [
+    {
+      "slug": "build-financial-crime-and-operations-intelligence-on-one-governed-oracle-data-platform",
+      "title": "Build Financial Crime and Operations Intelligence on One Governed Oracle Data Platform"
+    },
+    {
+      "slug": "autonomous-ai-lakehouse-the-peakgear-livestack",
+      "title": "Autonomous AI Lakehouse - The PeakGear LiveStack"
+    },
+    {
+      "slug": "build-retail-intelligence-on-one-governed-oracle-data-platform",
+      "title": "Build Retail Intelligence on One Governed Oracle Data Platform"
+    },
+    {
+      "slug": "build-energy-utilities-intelligence-on-one-governed-oracle-data-platform",
+      "title": "Build Energy & Utilities Intelligence on One Governed Oracle Data Platform"
+    },
+    {
+      "slug": "build-healthcare-intelligence-on-one-governed-oracle-data-platform",
+      "title": "Build Healthcare Intelligence on One Governed Oracle Data Platform"
+    },
+    {
+      "slug": "build-transportation-logistics-on-one-governed-oracle-data-platform",
+      "title": "Build Transportation Logistics on one Governed Oracle Data Platform"
+    },
+    {
+      "slug": "build-state-and-local-government-intelligence-on-one-governed-oracle-data-platform",
+      "title": "Build State and Local Government Intelligence on One Governed Oracle Data Platform"
+    },
+    {
+      "slug": "build-manufacturing-intelligence-on-one-governed-oracle-data-platform",
+      "title": "Build Manufacturing Intelligence on One Governed Oracle Data Platform"
+    },
+    {
+      "slug": "build-higher-education-intelligence-on-one-governed-oracle-data-platform",
+      "title": "Build Higher Education Intelligence on One Governed Oracle Data Platform"
+    },
+    {
+      "slug": "build-telecommunications-intelligence-on-one-governed-oracle-data-platform",
+      "title": "Build Telecommunications Intelligence on One Governed Oracle Data Platform"
+    },
+    {
+      "slug": "build-media-and-entertainment-intelligence-on-one-governed-oracle-data-platform",
+      "title": "Build Media and Entertainment Intelligence on One Governed Oracle Data Platform"
+    },
+    {
+      "slug": "build-life-sciences-intelligence-on-one-governed-oracle-data-platform",
+      "title": "Build Life Sciences Intelligence on One Governed Oracle Data Platform"
+    },
+    {
+      "slug": "build-high-tech-intelligence-on-one-governed-oracle-data-platform",
+      "title": "Build High Tech Intelligence on One Governed Oracle Data Platform"
+    }
+  ]
+}

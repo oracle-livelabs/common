@@ -2,18 +2,20 @@
   "bundle_name": "LiveLabs Analytics static C4U02 bundle",
   "bundle_version": "2026-09-28-snapshot-refresh",
   "runtime": "static",
-  "entry_points": ["/", "/inventory/"],
+  "entry_points": ["/", "/dashboard/", "/search/"],
   "identity": {"record_key": "livelabs_id_or_wms_title_fallback", "family_key": "wms_id"},
   "data_snapshot": {
     "portfolio_inventory_generated_at": "2026-09-28T00:00:00Z",
-    "canonical_portfolio_payload": "inventory/data/portfolio_inventory.json",
+    "canonical_portfolio_payload": "inventory/data/public_portfolio_inventory.json",
     "source_snapshot_date": "2026-09-28",
     "github_repository_snapshot_date": "2026-08-15",
     "workshop_update_evidence_snapshot_date": "2026-08-14",
     "fresh_data_pending": true
   },
   "data_quality": {
-    "record_count": 2293,
+    "record_count": 894,
+    "source_record_count": 2293,
+    "data_scope": "public_published",
     "update_evidence_classified_records": 2250,
     "latest_github_update_records": 1395,
     "wms_metadata_fallback_records": 898,
@@ -25,7 +27,7 @@
     "contact_email_values": "internal Oracle contacts retained",
     "intended_audience": "internal",
     "admin_backend_database_health_routes": "excluded",
-    "governance_status": "current WMS, views, and tag snapshot; Git/update and replacement evidence remains source-classified from 14-15 August; ambiguous title-only metrics are quarantined"
+    "governance_status": "author-facing search and rankings use public, published records; Jenkins score coverage depends on the applied report; update evidence remains source-classified"
   },
   "delivery": {
     "access_model": "internal-authenticated",
@@ -35,7 +37,6 @@
   },
   "promotion_gates": {
     "governance_snapshot_verified": false,
-    "replacement_resolution_verified": false,
     "retirement_outputs_verified": false,
     "source_recovery_manifest_required": true,
     "strict_browser_regression_required": true

@@ -609,15 +609,11 @@
       {
         label: "Workshop Outline",
         value: [
-          "Define the scenario and learner outcome: Understand the problem, the target audience, and where " + data.product + " fits.",
-          "",
-          "Prepare the environment: Confirm required accounts, access, sample data, repositories, and service configuration.",
-          "",
-          titleCase(data.verb) + " the core workflow: Complete the main " + topicTitle + " implementation with guided, copy-ready steps.",
-          "",
-          "Validate and troubleshoot: Run checks that prove the solution works and capture common fixes.",
-          "",
-          "Prepare for WMS review: Record prerequisites, tags, expected results, QA notes, and publishing handoff details."
+          "Lab 1: Scenario and learner outcome — Understand the problem, the target audience, and where " + data.product + " fits.",
+          "Lab 2: Prepare the environment — Confirm required accounts, access, sample data, repositories, and service configuration.",
+          "Lab 3: Build the core workflow — Complete the main " + topicTitle + " implementation with guided, copy-ready steps.",
+          "Lab 4: Validate and troubleshoot — Run checks that prove the solution works and capture common fixes.",
+          "Lab 5: WMS review and handoff — Record prerequisites, tags, expected results, QA notes, and publishing handoff details."
         ].join("\n")
       },
       {
@@ -660,16 +656,16 @@
       "",
       "## Proposed lab outline",
       "",
-      "1. **Introduction and setup**",
+      "1. **Lab 1: Introduction and setup**",
       "   - Explain the scenario, prerequisites, and expected result.",
       "   - Confirm account, repository, and tool access.",
-      "2. **Build the core workflow**",
+      "2. **Lab 2: Build the core workflow**",
       "   - Implement the main " + data.product + " task in small validated steps.",
       "   - Add copy-ready commands, screenshots, and checks close to the actions.",
-      "3. **Add workshop polish**",
+      "3. **Lab 3: Add workshop polish**",
       "   - Add tables, callouts, images, quizzes, or FreeSQL blocks only where they help learning.",
       "   - Verify accessibility, links, image paths, and code-copy behavior.",
-      "4. **Validate and hand off**",
+      "4. **Lab 4: Validate and hand off**",
       "   - Run preview with `?qa=true`.",
       "   - Update WMS fields and prepare Self Quality Assurance notes.",
       "",

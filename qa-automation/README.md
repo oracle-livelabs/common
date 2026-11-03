@@ -32,7 +32,7 @@ If browser installation is blocked on your network, install dependencies with `n
 Use the wrapper directly:
 
 ```powershell
-node ./scripts/qa.mjs tests/platform/smoke
+node ./scripts/qa.mjs tests/smoke/platform
 ```
 
 On Windows, you can also use:
@@ -47,14 +47,17 @@ Common commands:
 npm run doctor
 npm run typecheck
 npm run test:collect
+npm run test:unit
 npm run catalog:index
 npm run auth:storage -- --target-url "https://livelabs.oracle.com/..."
 npm run test:generated
-node ./scripts/qa.mjs tests/platform/smoke
-node ./scripts/qa.mjs tests/platform/regression
-node ./scripts/qa.mjs tests/platform --tag smoke
-node ./scripts/qa.mjs tests/platform --tag search
-node ./scripts/qa.mjs tests/platform/smoke/public/homepage/homePage.spec.ts --headed
+node ./scripts/qa.mjs tests/smoke/platform
+node ./scripts/qa.mjs tests/regression/platform
+node ./scripts/qa.mjs tests/smoke/workshops
+node ./scripts/qa.mjs tests/regression/workshops
+node ./scripts/qa.mjs tests/regression/livestacks
+node ./scripts/qa.mjs tests/smoke/platform --tag search
+node ./scripts/qa.mjs tests/smoke/platform/public/homepage/homePage.spec.ts --headed
 ```
 
 Useful options:
@@ -74,27 +77,47 @@ Useful options:
 
 ## Test Lanes
 
+See [`TEST-ARCHITECTURE.md`](TEST-ARCHITECTURE.md) for the current suite
+inventory, architecture grade, coverage gaps, and evidence rules.
+
+Tests are grouped first by product area and then by test purpose:
+
+```text
+tests/
+  platform/       # shared homepage, catalog, search, auth, and PAR checks
+  workshops/      # smoke, regression, generated catalog, and unit-test plans
+  livestacks/     # smoke, regression, generated catalog, and source-unit plans
+  unit/           # framework-owned Node tests grouped by catalog, runner, reporting, and livestacks
+  support/        # shared fixtures, helpers, and data access
+  data/           # checked-in test inputs and generated catalog artifacts
+```
+
+`smoke` covers short, high-value journeys; `regression` covers deeper behavior
+and edge cases; `generated` fans checks out across catalog-indexed targets;
+`unit` covers browser-free logic. A domain folder with only a README documents
+a coverage gap rather than claiming tests already exist.
+
 Public smoke:
 
 ```powershell
-node ./scripts/qa.mjs tests/platform/smoke
+node ./scripts/qa.mjs tests/smoke/platform
 ```
 
 Public regression:
 
 ```powershell
-node ./scripts/qa.mjs tests/platform/regression
+node ./scripts/qa.mjs tests/regression/platform
 ```
 
 LiveStack unit tests:
 
 ```powershell
 $env:QA_LIVESTACK_ROOT = "C:\path\to\livestack"
-npm run test:unit:livestack
+npm run test:unit:livestacks
 ```
 
 This lane runs the existing package-owned Node.js unit suites without launching
-Playwright browsers. See [`tests/unit/livestack/UNIT-TEST-PLAN.md`](tests/unit/livestack/UNIT-TEST-PLAN.md)
+Playwright browsers. See [`tests/unit/livestacks/UNIT-TEST-PLAN.md`](tests/unit/livestacks/UNIT-TEST-PLAN.md)
 for the source inventory and expansion plan.
 
 Generated catalog rollout:
@@ -156,7 +179,7 @@ The internal provisioning record supplies those values at deployment time.
 To see the generated test names without opening a browser:
 
 ```powershell
-node ./scripts/qa.mjs tests/platform/generated --collect-only
+node ./scripts/qa.mjs tests/generated/platform tests/generated/workshops tests/generated/livestacks --collect-only
 ```
 
 For a quick local slice:
@@ -212,7 +235,7 @@ Authenticated checks:
 ```powershell
 $env:QA_STORAGE_STATE="path\to\storage-state.json"
 $env:QA_RESERVATIONS_URL="https://example-reservations-url"
-node ./scripts/qa.mjs tests/platform/auth --tag auth
+node ./scripts/qa.mjs tests/smoke/platform/auth --tag auth
 ```
 
 Private authenticated page mockup:
@@ -221,7 +244,7 @@ Private authenticated page mockup:
 $env:QA_STORAGE_STATE="playwright\.auth\livelabs-auth.json"
 $env:QA_AUTH_TARGET_URL="https://livelabs.oracle.com/ords/r/dbpm/<app-alias>/home"
 $env:QA_AUTH_READY_TEXT="<text visible only after auth>"
-node ./scripts/qa.mjs tests/platform/auth/privatePageAccess.spec.ts --tag auth
+node ./scripts/qa.mjs tests/smoke/platform/auth/privatePageAccess.spec.ts --tag auth
 ```
 
 Private-content authentication must use an access method approved by the application and security owners. Keep its contract and secret-handling procedure in the internal runbook, not this public repository.
@@ -230,7 +253,7 @@ Do not commit storage-state files, credentials, screenshots with private data, o
 
 ## Creating Tests
 
-1. Add the spec under the matching lane: `tests/platform/smoke` for fast confidence checks or `tests/platform/regression` for focused edge cases.
+1. Add the spec under its test category and area: `tests/smoke/workshops` or `tests/smoke/livestacks` for fast journeys, the matching `regression` folder for deeper behavior, or `tests/unit` for browser-free framework checks.
 2. Put selectors and navigation behavior in page objects under `pages/platform`.
 3. Put shared data in `tests/data` and shared helpers in `tests/support` only when more than one spec needs them.
 4. Import the canonical fixture from `tests/support/test.ts`.
@@ -266,7 +289,7 @@ Before committing a new test:
 ```powershell
 npm run typecheck
 npm run test:collect
-node ./scripts/qa.mjs tests/platform/smoke/public/newSpec.spec.ts
+node ./scripts/qa.mjs tests/smoke/platform/public/newSpec.spec.ts
 ```
 
 ## Reports And Debugging
@@ -311,5 +334,5 @@ $env:QA_CATALOG_INDEX_LIMIT="25"
 $env:QA_CATALOG_INDEX_SHARD="1/4"
 $env:QA_AUTH_TARGET_URL="https://example-private-page-url"
 $env:QA_TRACE="on"
-node ./scripts/qa.mjs tests/platform/smoke
+node ./scripts/qa.mjs tests/smoke/platform
 ```

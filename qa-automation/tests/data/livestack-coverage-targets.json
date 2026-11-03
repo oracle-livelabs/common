@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "source": "LDA-1850",
+  "expected_count": 13,
+  "target_ids": [],
+  "status": "needs-target-id-reconciliation",
+  "note": "Do not claim all-13 coverage until the 13 LiveStack catalog IDs are reconciled. The current industry allocation names 12 industries for 13 LiveStacks."
+}

@@ -39,7 +39,7 @@ def build(args):
             'Text-matched finding deduplication and aggregate occurrence parsing require source-level finding IDs for stronger guarantees.',
             'Legacy At-Risk and Retire-Now membership/base scores are retained until their full governed inputs are refreshed.',
             'Replacement candidates retain their original pair population. Target QA changes ranking, not approval.',
-            'Unknown QA remains visible with a null score. Rankings do not certify unobserved content.']})
+            'Items without QA evidence remain visible with no score adjustment. Rankings do not confirm whether the content has been tested.']})
     payload['metadata']['qa_governance'] = manifest
     output.mkdir(parents=True)
     inputs=output/'inputs';inputs.mkdir()
@@ -96,7 +96,7 @@ def build(args):
         leader=next((r for r in comparisons if r['table']==table and r['adjusted_rank']==1),None)
         record=by_id.get(leader['livelabs_id']) if leader else None
         title=record['title'] if record else 'No eligible record'
-        note=(f"Adjusted score {leader['adjusted_score']} | QA {leader['qa_error_score'] if leader['qa_error_score'] is not None else 'Unknown'} | {leader['evidence_state']}" if leader else 'Evidence unavailable')
+        note=(f"Adjusted score {leader['adjusted_score']} | QA {leader['qa_error_score'] if leader['qa_error_score'] is not None else 'N/A'} | {leader['evidence_state']}" if leader else 'Evidence unavailable')
         if leader and leader['base_source']=='published_historical_score':note+=' | historical baseline'
         pattern=r'(<div class="card compact-card"><span>'+re.escape(label)+r'</span>)<strong>.*?</strong><p>.*?</p>'
         shell,count=re.subn(pattern,lambda m:m[1]+'<strong>'+escape(title)+'</strong><p>'+escape(note)+'</p>',shell,flags=re.S)

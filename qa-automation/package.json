@@ -9,13 +9,17 @@
   "scripts": {
     "test": "node ./scripts/qa.mjs",
     "test:collect": "node ./scripts/qa.mjs tests --collect-only",
-    "test:generated": "node ./scripts/qa.mjs tests/platform/generated tests/platform/par/catalogParLinks.spec.ts",
-    "test:unit:livestack": "npm run test:unit:livestack:framework && node ./scripts/livestack-unit.mjs",
-    "test:unit:livestack:framework": "node --test ./tests/unit/livestack/*.test.mjs",
+    "test:generated": "node ./scripts/catalog-coverage.mjs --type workshop --require-nonzero && node ./scripts/catalog-coverage.mjs --type livestack --require-nonzero && node ./scripts/qa.mjs tests/generated/platform tests/generated/workshops tests/generated/livestacks tests/generated/platform/par/catalogParLinks.spec.ts",
+    "test:generated:all-13": "node ./scripts/catalog-coverage.mjs --all-livestacks && node ./scripts/qa.mjs tests/generated/livestacks",
+    "test:unit": "node --test ./tests/unit/catalog/*.test.mjs ./tests/unit/par/*.test.mjs ./tests/unit/runner/*.test.mjs ./tests/unit/reporting/*.test.mjs ./tests/unit/livestacks/*.test.mjs ./tests/unit/workshops/*.test.mjs",
+    "test:unit:livestacks": "npm run test:unit:livestacks:framework && node ./scripts/livestack-unit.mjs",
+    "test:unit:livestacks:framework": "node --test ./tests/unit/livestacks/*.test.mjs",
+    "test:unit:livestack": "npm run test:unit:livestacks",
+    "test:unit:livestack:framework": "npm run test:unit:livestacks:framework",
     "catalog:index": "node ./scripts/catalog-index.mjs",
     "review:retest": "node ./scripts/report-review-action.mjs retest",
     "review:fix": "node ./scripts/report-review-action.mjs fix",
-    "test:review-lists": "node --test ./scripts/report-review-action.test.mjs",
+    "test:review-lists": "node --test ./tests/unit/runner/report-review-action.test.mjs",
     "auth:storage": "node ./scripts/auth-storage-state.mjs",
     "doctor": "node ./scripts/qa.mjs doctor",
     "install:browsers": "playwright install",
@@ -25,8 +29,8 @@
     "codegen": "node ./scripts/qa.mjs codegen",
     "ui": "node ./scripts/qa.mjs tests --ui",
     "typecheck": "tsc --noEmit",
-    "test:par": "node ./scripts/qa.mjs tests/platform/par/catalogParLinks.spec.ts",
-    "test:reporters": "node --test ./scripts/reporters/*.test.mjs"
+    "test:par": "node ./scripts/catalog-coverage.mjs --require-nonzero && node ./scripts/qa.mjs tests/generated/platform/par/catalogParLinks.spec.ts",
+    "test:reporters": "node --test ./tests/unit/reporting/*.test.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.0",

@@ -2,7 +2,7 @@
   'use strict';
   // Pin relative assets and links before client-side navigation changes the URL.
   const appRoot = new URL('../../', document.currentScript.src);
-  if (location.pathname !== '/admin-panel-login') {
+  if (location.pathname !== '/admin') {
     let base = document.querySelector('base');
     if (!base) { base = document.createElement('base'); document.head.prepend(base); }
     base.href = appRoot.href;

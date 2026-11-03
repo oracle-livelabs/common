@@ -26,9 +26,17 @@ if (fs.existsSync(output) && !replaceExisting) {
   throw new Error(`Release output already exists: ${output}. Use a new immutable path or pass --replace for a recoverable local replacement.`);
 }
 
+childProcess.execFileSync(process.execPath, [path.join(root, "dev", "scripts", "build-public-inventory.mjs")], { cwd: root, stdio: "inherit" });
+const publicInventory = path.join(root, "inventory", "data", "public_portfolio_inventory.json");
+childProcess.execFileSync("python", [
+  path.join(root, "dev", "scripts", "refresh-top-performers.py"),
+  "--inventory", publicInventory,
+  "--snapshot-date", "2026-09-28",
+], { cwd: root, stdio: "inherit" });
+childProcess.execFileSync("python", [path.join(root, "dev", "scripts", "build-public-review-fragments.py")], { cwd: root, stdio: "inherit" });
 childProcess.execFileSync(process.execPath, [fileFallbackBuilder], { cwd: root, stdio: "inherit" });
 // Keep the directory entry identical to the dashboard, with assets based at its parent.
-for (const entry of ['dashboard', 'search', 'inventory']) {
+for (const entry of ['dashboard', 'search']) {
   fs.mkdirSync(path.join(root, entry), { recursive: true });
   fs.writeFileSync(path.join(root, entry, 'index.html'), fs.readFileSync(path.join(root, 'index.html'), 'utf8').replace('<head>', '<head>\n  <base href="../">'));
 }
@@ -37,11 +45,10 @@ const releaseInputs = [
   { source: "index.html", target: "index.html" },
   { source: "dashboard/index.html", target: "dashboard/index.html" },
   { source: "search/index.html", target: "search/index.html" },
-  { source: "inventory/index.html", target: "inventory/index.html" },
   { source: "dev/config/.nojekyll", target: ".nojekyll" },
   { source: "dev/config/release-manifest.json", target: "release-manifest.json" },
   { source: "assets", target: "assets" },
-  { source: "inventory/data/portfolio_inventory.json", target: "inventory/data/portfolio_inventory.json" },
+  { source: "inventory/data/public_portfolio_inventory.json", target: "inventory/data/public_portfolio_inventory.json" },
   { source: "inventory/data/portfolio_inventory.file.js", target: "inventory/data/portfolio_inventory.file.js" },
 ];
 const staging = `${output}.staging-${process.pid}-${Date.now()}`;
@@ -102,11 +109,11 @@ try {
 
   const manifestPath = path.join(staging, "release-manifest.json");
   const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
-  const inventoryData = JSON.parse(fs.readFileSync(path.join(staging, "inventory/data/portfolio_inventory.json"), "utf8"));
+  const inventoryData = JSON.parse(fs.readFileSync(path.join(staging, "inventory/data/public_portfolio_inventory.json"), "utf8"));
   manifest.data_snapshot = {
     ...(manifest.data_snapshot || {}),
     portfolio_inventory_generated_at: inventoryData.metadata?.generated_at || null,
-    canonical_portfolio_payload: "inventory/data/portfolio_inventory.json",
+    canonical_portfolio_payload: "inventory/data/public_portfolio_inventory.json",
     source_snapshot_date: inventoryData.metadata?.snapshot_date || null,
     ...Object.fromEntries(Object.entries(inventoryData.metadata?.data_freshness || {}).filter(([key]) => key.endsWith("snapshot_date"))),
   };
@@ -114,11 +121,13 @@ try {
   manifest.data_quality = {
     ...(manifest.data_quality || {}),
     record_count: records.length,
+    source_record_count: inventoryData.metadata?.source_record_count || null,
+    data_scope: inventoryData.metadata?.data_scope || "public_published",
     update_evidence_classified_records: records.filter(record => record.sourceFlags?.github_update_evidence_source).length,
     latest_github_update_records: records.filter(record => record.sourceFlags?.github_update_evidence_available).length,
     wms_metadata_fallback_records: records.filter(record => !record.sourceFlags?.github_update_evidence_available).length,
   };
-  manifest.admin_service = { runtime: "separate authenticated service", entry_point: "/admin-panel-login", included_in_static_bundle: false };
+  manifest.admin_service = { runtime: "separate authenticated service", entry_point: "/admin", dashboard_management_page: "/admin/dashboard-management", inventory_page: "/admin/inventory", full_inventory_in_static_bundle: false, included_in_static_bundle: false };
   manifest.release_files = releaseFileEntries(staging);
   const contentIdentity = crypto.createHash("sha256").update(JSON.stringify(manifest.release_files)).digest("hex").slice(0, 16);
   const version = String(manifest.bundle_version || "unversioned").replace(/[^a-z0-9._-]+/gi, "-");

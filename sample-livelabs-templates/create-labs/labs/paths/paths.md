@@ -39,7 +39,7 @@ Use it to understand what to do next, prepare your request, and choose between N
 
 Continue with this guide if you want to work directly with workshop files, Markdown, and GitHub. The labs walk through submitting a request, setting up your tools, keeping your repository in sync, developing content, checking quality, and publishing through WMS. You can follow them in order or open a specific topic when you need it.
 
-<a href="?lab=paths" style="display:inline-block;padding:0.65rem 1rem;background-color:#C74634;border:1px solid #C74634;border-radius:4px;color:#ffffff;font-weight:700;text-decoration:none;">Open Step-by-Step Guide</a>
+<a href="?lab=introduction" style="display:inline-block;padding:0.65rem 1rem;background-color:#C74634;border:1px solid #C74634;border-radius:4px;color:#ffffff;font-weight:700;text-decoration:none;">Start with Step-by-Step Guide</a>
 
 **Go directly to a topic:**
 

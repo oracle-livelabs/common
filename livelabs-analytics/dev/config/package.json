@@ -7,6 +7,7 @@
     "admin:configure": "python ../scripts/admin-server.py --configure",
     "snapshot:capture": "python ../scripts/capture-snapshot.py",
     "validate": "node ../scripts/validate-dashboard.mjs",
+    "sync:public-data": "node ../scripts/build-public-inventory.mjs && python ../scripts/refresh-top-performers.py --inventory ../../inventory/data/public_portfolio_inventory.json --output ../../assets/fragments/top-performers.html --snapshot-date 2026-09-28 && python ../scripts/build-public-review-fragments.py && node ../scripts/build-file-inventory-fallback.mjs",
     "sync:file-data": "node ../scripts/build-file-inventory-fallback.mjs",
     "test:browser": "node ../node_modules/@playwright/test/cli.js test --config playwright.config.cjs",
     "build:release:ci": "node ../scripts/build-static-release.mjs --output dev/.ci-release",

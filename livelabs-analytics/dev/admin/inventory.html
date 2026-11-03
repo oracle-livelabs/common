@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/assets/js/page-loading.js?v=20261030-public-scope"></script>
+  <link rel="stylesheet" href="/assets/css/page-loading.css?v=20261030-public-scope">
+  <title>Portfolio inventory — LiveLabs Analytics Admin</title>
+  <link rel="stylesheet" href="/assets/css/dashboard.css?v=20261030-public-scope">
+  <link rel="stylesheet" href="/admin-assets/admin.css?v=20261030-redwood">
+  <link rel="stylesheet" href="/admin-assets/inventory.css?v=20261030-public-scope">
+  <script defer src="/admin-assets/inventory.js?v=20261030-public-scope"></script>
+</head>
+<body class="admin-page admin-inventory-page">
+  <a class="skip-link" href="#inventory-results">Skip to inventory</a>
+  <div class="layout">
+    <aside class="rail">
+      <div class="brand"><a class="brand-mark" href="/dashboard/#overview" aria-label="Back to LiveLabs Analytics"><img src="/assets/images/oracle-logo-white.svg" alt="Oracle"></a><span>LiveLabs Analytics</span></div>
+      <p class="admin-rail-label">Administration</p>
+      <nav class="nav-list" aria-label="Admin pages">
+        <a href="/admin/dashboard-management">Dashboard management</a>
+        <a href="/admin/data-merge">Data merge</a>
+        <a href="/admin/governance">Data governance</a>
+        <a href="/admin/inventory" aria-current="page">Portfolio inventory</a>
+        <a href="/admin/user-settings">Account</a>
+      </nav>
+      <a class="sidebar-back-button nav-dashboard-link" href="/dashboard/#overview">Back to dashboard</a>
+    </aside>
+    <main>
+      <header class="page-header admin-hero">
+        <div>
+          <p class="eyebrow">Admin · full portfolio</p>
+          <h1>Portfolio inventory</h1>
+          <p class="intro">Search all Analytics records, including private, disabled, event, and unpublished items. Jenkins findings appear only for public and published records.</p>
+        </div>
+        <div class="admin-hero-actions"><a class="nav-link" href="/dashboard/#overview">Author dashboard</a></div>
+      </header>
+      <div class="hero-stripe" aria-hidden="true"></div>
+      <p id="inventory-status" class="admin-source-note" role="status" aria-live="polite">Loading the full inventory…</p>
+      <section class="inventory-summary" aria-label="Inventory counts">
+        <div class="inventory-stat"><span>All records</span><strong id="count-all">—</strong></div>
+        <div class="inventory-stat"><span>Public and published</span><strong id="count-public">—</strong></div>
+        <div class="inventory-stat"><span>Disabled or removal requested</span><strong id="count-disabled">—</strong></div>
+      </section>
+      <section id="inventory-results" class="admin-inset inventory-results">
+        <div class="inventory-heading"><div><h2>Find a record</h2><p class="admin-muted">Filter by title, ID, owner, publish state, workflow status, or Jenkins priority.</p></div><span id="inventory-count" class="panel-count">—</span></div>
+        <div class="inventory-shortcuts" role="group" aria-label="Common inventory views">
+          <button type="button" data-inventory-scope="all" aria-pressed="true">All records</button>
+          <button type="button" data-inventory-scope="public">Public and published</button>
+          <button type="button" data-inventory-scope="disabled">Disabled and removal requests</button>
+          <button type="button" data-inventory-scope="private">Private</button>
+          <button type="button" data-inventory-scope="not-public">Not public and published</button>
+        </div>
+        <div class="inventory-controls">
+          <label>Search inventory<input id="inventory-search" type="search" placeholder="Title, LiveLabs ID, WMS ID, author, keyword"></label>
+          <label>Content type<select id="inventory-type"><option value="">All types</option></select></label>
+          <label>Publish type<select id="inventory-publish-type"><option value="">All publish types</option></select></label>
+          <label>Publish status<select id="inventory-publish-status"><option value="">All publish statuses</option></select></label>
+          <label>Workflow status<select id="inventory-workflow"><option value="">All workflow statuses</option></select></label>
+          <label>Jenkins priority<select id="inventory-jenkins-priority"><option value="">All Jenkins states</option><option>P1</option><option>P2</option><option>P3</option><option>Unmapped</option><option>No report</option><option>Not scanned</option></select></label>
+        </div>
+        <div class="table-wrap inventory-table-wrap">
+          <table class="data-table" id="inventory-table">
+            <thead><tr><th>Title</th><th>Type</th><th>Publish type</th><th>Publish status</th><th>Workflow status</th><th>LiveLabs ID</th><th>WMS ID</th><th>Author / owner</th><th>Jenkins Error Score</th><th>Jenkins findings</th></tr></thead>
+            <tbody id="inventory-rows"><tr><td colspan="10" class="empty">Loading inventory…</td></tr></tbody>
+          </table>
+        </div>
+        <div class="inventory-pagination"><span id="inventory-page-status">—</span><div class="controls"><button id="inventory-previous" type="button" disabled>Previous</button><button id="inventory-next" type="button" disabled>Next</button></div></div>
+      </section>
+      <footer class="site-footer">Powered by Oracle LiveLabs Team &copy; 2026</footer>
+    </main>
+  </div>
+</body>
+</html>

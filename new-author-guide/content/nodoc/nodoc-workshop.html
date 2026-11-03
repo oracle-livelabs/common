@@ -16,8 +16,8 @@
       <li>An approved practice article or page set in the LiveLabs Focus Area. Use non-confidential content for
         ingestion
         and AI-assisted review.</li>
-      <li>If you complete the MCP task, Codex installed on your Windows laptop and permission to create a user
-        environment variable.</li>
+      <li>If you complete the MCP task, Codex installed on a Windows or macOS computer and permission to create a
+        user environment variable.</li>
     </ul>
     <h4>Objectives</h4>
     <ul>
@@ -36,7 +36,7 @@
     </ul>
   </div>
 </details>
-<details class="nodoc-tree-group" data-search-summary="Open NoDoc, understand the content hierarchy, and connect Codex with a token, configuration, and usage skill." data-search-keywords="access navigation windows mcp installation setup token skill">
+<details class="nodoc-tree-group" data-search-summary="Open NoDoc, understand the content hierarchy, and connect Codex with a token, configuration, and usage skill." data-search-keywords="access navigation Windows macOS mcp installation setup token skill">
   <summary><span>Lab 1 · Access, navigation, and Codex MCP</span></summary>
   <div class="nodoc-tree-content">
     <div data-video-card data-video-title="Lab 1 walkthrough"
@@ -155,25 +155,34 @@
           similarly named articles and pages from being mixed up.</li>
       </ol>
     </details>
-<details class="nodoc-task" data-search-summary="Set up the Windows token variable and config.toml, verify the connection, and install or update the nodoc-mcp usage skill." data-search-keywords="mcp installation setup connect configuration personal token environment variable ASK_NODOC_MCP_TOKEN config.toml usage skill update get_nodoc_mcp_usage_skill"><summary>Task 3 · Connect Codex to NoDoc through MCP</summary>
-      <p>Connect Codex once, then use it to browse and work on the NoDoc content your account can access. This Windows setup uses a personal token; your existing NoDoc permissions still apply.</p>
-      <p class="nodoc-callout"><strong>Before you start:</strong> open NoDoc successfully, have Codex installed, and choose content you can view. You need permission to add a Windows user environment variable. Do not enter your token into a chat or this guide.</p>
+<details class="nodoc-task" data-search-summary="Set up the Windows or macOS token variable and config.toml, verify the connection, and install or update the nodoc-mcp usage skill." data-search-keywords="mcp installation setup connect configuration personal token environment variable Windows macOS ASK_NODOC_MCP_TOKEN config.toml usage skill update get_nodoc_mcp_usage_skill"><summary>Task 3 · Connect Codex to NoDoc through MCP</summary>
+      <p>Connect Codex once, then use it to browse and work on the NoDoc content your account can access. This setup supports Windows and macOS; your existing NoDoc permissions still apply.</p>
+      <p class="nodoc-callout"><strong>Before you start:</strong> open NoDoc successfully, have Codex installed, and choose content you can view. You need permission to add a user environment variable. Do not enter your token into a chat or this guide.</p>
       <div class="nodoc-mcp-steps" aria-label="Five setup steps"><span>1. Token</span><span>2. User variable</span><span>3. Config</span><span>4. Verify</span><span>5. Usage skill</span></div>
       <h4>1. Create a token for this computer</h4>
-      <ol><li>Open <a href="https://asknodoc.oraclecorp.com/mcp-access-tokens" target="_blank" rel="noopener noreferrer">NoDoc MCP Access Tokens</a> and sign in if prompted.</li><li>Enter a recognizable label, such as <strong>Windows laptop</strong>, and choose an expiry date. The form uses UTC and currently allows tomorrow through 90 days.</li><li>Select <strong>Generate access token</strong>. Copy the complete token immediately; it is shown only once. Keep it private while you complete step 2.</li></ol>
-<figure class="nodoc-route-evidence nodoc-mcp-figure"><img data-nodoc-asset="images/mcp/01-token-form.jpg" alt="NoDoc MCP access-token form with token label, expiry date, and Generate access token button." width="1264" height="801" loading="lazy"><figcaption>Step 1a · Open the token page. Actual product screenshot, 7 October 2026; no token was generated.</figcaption></figure><figure class="nodoc-route-evidence nodoc-mcp-figure"><img data-nodoc-asset="images/mcp/02-token-label.jpg" alt="Token label filled with Windows laptop; expiry date and Generate access token button remain visible." width="1264" height="801" loading="lazy"><figcaption>Step 1b · Give the token a recognizable label and check its expiry. The date shown is an example.</figcaption></figure>
+      <ol><li>Open <a href="https://asknodoc.oraclecorp.com/mcp-access-tokens" target="_blank" rel="noopener noreferrer">NoDoc MCP Access Tokens</a> and sign in if prompted.</li><li>Enter a recognizable label, such as <strong>Windows laptop</strong> or <strong>MacBook</strong>, and choose an expiry date. The form uses UTC and currently allows tomorrow through 90 days.</li><li>Select <strong>Generate access token</strong>. Copy the complete token immediately; it is shown only once. Keep it private while you complete step 2.</li></ol>
+<figure class="nodoc-route-evidence nodoc-mcp-figure"><img data-nodoc-asset="images/mcp/01-token-form.jpg" alt="NoDoc MCP access-token form with token label, expiry date, and Generate access token button." width="1264" height="801" loading="lazy"><figcaption>Step 1a · Open the token page. Actual product screenshot, 7 October 2026; no token was generated.</figcaption></figure><figure class="nodoc-route-evidence nodoc-mcp-figure"><img data-nodoc-asset="images/mcp/02-token-label.jpg" alt="Token label filled with Windows laptop; expiry date and Generate access token button remain visible." width="1264" height="801" loading="lazy"><figcaption>Step 1b · The example label identifies the computer; check the expiry before generating a token.</figcaption></figure>
       <p>If you lose the token, revoke it on this page and create another. Do not send it in email, save it in source control, or include it in screenshots.</p>
-      <h4>2. Save it in a Windows user variable</h4>
+      <h4>2. Save it in a user environment variable</h4>
+      <h5>Windows</h5>
       <ol><li>In Windows Search, open <strong>Edit the system environment variables</strong>.</li><li>In <strong>System Properties</strong>, select <strong>Environment Variables</strong>.</li><li>Under <strong>User variables for your account</strong>, select <strong>New</strong>.</li><li>Set <strong>Variable name</strong> to <code>ASK_NODOC_MCP_TOKEN</code>. Paste the complete token into <strong>Variable value</strong>.</li><li>Select <strong>OK</strong> in each dialog to save. Use the user-variable section so the value belongs to your Windows account.</li></ol>
 <figure class="nodoc-route-evidence nodoc-mcp-figure"><img data-nodoc-asset="images/mcp/windows-variable.svg" alt="Windows setup path: System Properties, Environment Variables, User variables, then New. Set ASK_NODOC_MCP_TOKEN to the personal token." width="1120" height="610" loading="lazy"><figcaption>Step 2 · Explanatory illustration of the Windows dialog sequence. The value is deliberately omitted.</figcaption></figure><p class="nodoc-checkpoint"><strong>Check your result:</strong> The variable name appears under User variables. Do not display or print its value. Applications already running need a restart to see it.</p>
+      <h5>macOS</h5>
+      <p>In Terminal (the default zsh shell), run the commands below. Paste the token only at the hidden prompt; the value is not included in the command history. <code>launchctl setenv</code> makes it available to apps started in your current login session. Repeat this step after you sign out or restart the Mac.</p>
+<div class="nodoc-mcp-snippet"><div class="nodoc-mcp-snippet-bar"><strong>Set the macOS user-session variable</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-macos-variable">Copy</button></div><pre class="nodoc-command"><code id="nodoc-mcp-macos-variable">read -s 'ASK_NODOC_MCP_TOKEN?Paste the NoDoc token: '
+printf '\n'
+launchctl setenv ASK_NODOC_MCP_TOKEN "$ASK_NODOC_MCP_TOKEN"
+unset ASK_NODOC_MCP_TOKEN</code></pre></div>
+      <p class="nodoc-checkpoint"><strong>Check your result:</strong> The command returns without an error and does not print the token. Fully quit and reopen Codex so it can read the new variable. Do not run <code>launchctl getenv ASK_NODOC_MCP_TOKEN</code>; that would print the secret.</p>
       <h4>3. Add the NoDoc connection to Codex</h4>
-      <p>Open <code>C:\Users\&lt;username&gt;\.codex\config.toml</code> in a text editor. Replace <code>&lt;username&gt;</code> with your Windows account folder. If the file is absent, create a plain-text file named <code>config.toml</code> in the <code>.codex</code> folder; check that Windows has not added <code>.txt</code>.</p>
-      <p>Keep existing settings. Add the section below once, or update the existing <code>[mcp_servers.nodoc]</code> section.</p>
+      <p>Open the config file for your operating system in a text editor. Keep existing settings. If the file is absent, create a plain-text <code>config.toml</code> in the <code>.codex</code> folder.</p>
+      <ul><li><strong>Windows:</strong> <code>%USERPROFILE%\.codex\config.toml</code> (or <code>C:\Users\&lt;username&gt;\.codex\config.toml</code>).</li><li><strong>macOS:</strong> <code>~/.codex/config.toml</code>.</li></ul>
+      <p>On Windows, replace <code>&lt;username&gt;</code> with your account folder if you use the full path, and check that Windows has not added <code>.txt</code>. Add the section below once, or update the existing <code>[mcp_servers.nodoc]</code> section.</p>
 <div class="nodoc-mcp-snippet"><div class="nodoc-mcp-snippet-bar"><strong>Codex configuration</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-config">Copy</button></div><pre class="nodoc-command"><code id="nodoc-mcp-config">[mcp_servers.nodoc]
 url = &quot;https://asknodoc.oraclecorp.com/mcp&quot;
 bearer_token_env_var = &quot;ASK_NODOC_MCP_TOKEN&quot;
 enabled = true
-required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp-figure"><img data-nodoc-asset="images/mcp/config-map.svg" alt="The Codex config contains the server URL and the name of a Windows user variable; the secret value stays in that variable." width="1120" height="500" loading="lazy"><figcaption>Step 3 · Configuration map. Copy the text above; this diagram explains the values, not a live connection.</figcaption></figure><p class="nodoc-checkpoint"><strong>Check your result:</strong> The file has exactly one NoDoc section. It names the variable and contains no token value.</p>
+required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp-figure"><img data-nodoc-asset="images/mcp/config-map.svg" alt="The Codex config contains the server URL and the name of a user environment variable; the secret value stays in that variable." width="1120" height="500" loading="lazy"><figcaption>Step 3 · This configuration map uses the Windows example; macOS uses the same server entry and token-variable name.</figcaption></figure><p class="nodoc-checkpoint"><strong>Check your result:</strong> The file has exactly one NoDoc section. It names the variable and contains no token value.</p>
       <h4>4. Restart Codex and make a read-only call</h4>
       <ol><li>Fully close every Codex window, then reopen Codex.</li><li>Start a <strong>new chat</strong> so it loads the current MCP tool catalog.</li><li>Paste this prompt:</li></ol>
 <div class="nodoc-mcp-snippet"><div class="nodoc-mcp-snippet-bar"><strong>Verify the connection</strong><button type="button" class="copy-snippet" data-copy-target="nodoc-mcp-verify">Copy</button></div><pre class="nodoc-command"><code id="nodoc-mcp-verify">Use the configured nodoc MCP tool directly to list all focus areas. Follow next_offset until it is null. Do not use shell commands, curl, or a JSON-RPC fallback. Do not change any content.</code></pre></div><p class="nodoc-checkpoint"><strong>Check your result:</strong> Codex calls <code>list_focus_areas</code> and returns a result from NoDoc for your account. A configured server or a visible tool alone does not verify access. An empty authorized result needs an access check before authoring.</p>
@@ -1153,6 +1162,11 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
     <p>After the article and page structure exist, prepare each page for authoring. Set the saving behavior, apply
       approved metadata, write structured LiveLabs content, and use drafts when proposing changes to pages owned by
       another author.</p>
+    <p class="nodoc-callout"><strong>Before editing, recognize page metadata.</strong> NoDoc uses special markers at
+      the top of a page for catalog labels. For example, <code>@@@@ReleaseVersion="Latest"</code> records the approved
+      release value; it is page metadata, not learner-facing prose. Keep existing approved markers at the top when you
+      edit. Do not invent or change values. The metadata task below explains the labels and how they differ from
+      in-page filter markers.</p>
     <h4>Objectives</h4>
     <ul>
       <li>Choose the appropriate Autosave behavior and confirm the saved state.</li>
@@ -1274,6 +1288,7 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
       <section class="nodoc-metadata-guide" aria-labelledby="nodoc-metadata-title">
         <h5 id="nodoc-metadata-title">Metadata tags: what they are and how to use them</h5>
         <p>Metadata tags are controlled labels at the top of a page. They help organize, filter, ingest, and find pages.
+          The highlighted marker in the example is a page label; preserve approved values when editing.
         </p>
         <ol class="nodoc-compact-list">
           <li>Place metadata at the top of the page, then recheck it after a rename or move.
@@ -1282,7 +1297,7 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
               <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
               <img data-nodoc-asset="images/how_to_tags.png"
                 alt="NoDoc page showing metadata tags at the top of the content" class="img-fluid rounded">
-              <figcaption>Check the page metadata before saving or moving the page.</figcaption>
+              <figcaption>The highlighted line is page metadata, not learner-facing body text. Check it before saving or moving the page.</figcaption>
             </figure>
           </li>
         </ol>
@@ -2020,6 +2035,8 @@ Linux-specific instructions.
 <a href="#nodoc:8:4"><strong>Delete content</strong><span>Confirm the exact target and scope</span></a>
 <a href="#nodoc:8:7"><strong>Troubleshoot</strong><span>Check connection, access, or conflicts</span></a></div>
 <h4>How the connection works</h4>
+<p>The diagram illustrates the Windows setup. On macOS, use the same config entry and token-variable name; Step 2
+  sets the variable for the current login session with <code>launchctl setenv</code>.</p>
 <figure class="nodoc-route-evidence nodoc-mcp-figure" data-hide-caption="true">
   <picture>
     <source media="(max-width: 900px)" data-nodoc-asset="images/mcp/architecture-compact.svg?v=20261007-r3" width="760" height="1144">
@@ -2139,22 +2156,23 @@ draft listing and page read. No manual NoDoc browser step or publishing action i
 </details>
 </div>
 </details>
-<details class="nodoc-tree-group" data-search-summary="Use NoDoc Pre Publish controls to configure LiveLabs output, run validations, and choose Preview, Push, or Download Zip." data-search-keywords="manual ui browser prepublish pre publish validation preview push download">
+<details class="nodoc-tree-group" data-search-summary="Use NoDoc Pre Publish controls to configure LiveLabs output, run validations, review the live preview with QA Linter, and choose Preview, Push, or Download Zip." data-search-keywords="manual ui browser prepublish pre publish validation preview QA Linter linter live workshop errors push download">
   <summary><span>Lab 9 · Pre Publish and validation results</span></summary>
   <div class="nodoc-tree-content">
     <div data-video-card data-video-title="Lab 9 walkthrough"
-      data-video-summary="Preview learning aid. Configure Pre Publish, create the required URLs, run both validations, review findings, and choose the next output."
-      data-video-features="LiveLabs target|Sandbox and Tenancy URLs|Markdown validation|Text Check validation|Preview, Push, and Download Zip"></div>
+      data-video-summary="Preview learning aid. Configure Pre Publish, create the required URLs, run both validations, review the live preview with QA Linter, and choose the next output."
+      data-video-features="LiveLabs target|Sandbox and Tenancy URLs|Markdown validation|Text Check validation|Preview and QA Linter|Push and Download Zip"></div>
     <p>Use <strong>Pre Publish</strong> after the NoDoc page and article are saved. Configure the LiveLabs target, create
       the Sandbox and/or Tenancy URLs you need, run both mandatory validations, and inspect each result before deciding
       whether to correct findings or continue with an approved exception.</p>
     <p><strong>Flow:</strong> Configure the target and URLs → run Markdown and Text Check validations → inspect findings
       → correct and rerun when needed → acknowledge remaining findings only when authorized → use Preview, Push, or
-      Download Zip.</p>
+      Download Zip. Run QA Linter against the generated live preview before release.</p>
     <h4>Objectives</h4>
     <ul>
       <li>Complete the LiveLabs Pre Publish details and create the URLs required for the workshop.</li>
       <li>Run and inspect both mandatory validation sets, then use Vibe Doc-ing to correct flagged content when needed.</li>
+      <li>Open the generated workshop preview and run QA Linter to check it for errors before publishing.</li>
       <li>Choose the correct post-validation output: Preview, Push, or Download Zip.</li>
     </ul>
     <details class="nodoc-task" data-search-summary="In the NoDoc UI, set the LiveLabs target and generate the Sandbox or Tenancy URLs for review." data-search-keywords="manual ui browser prepublish pre publish target sandbox tenancy urls">
@@ -2238,8 +2256,8 @@ draft listing and page read. No manual NoDoc browser step or publishing action i
         </li>
       </ol>
     </details>
-    <details class="nodoc-task" data-search-summary="After validation, use the NoDoc UI to preview the workshop, push approved output, or download a ZIP archive." data-search-keywords="manual ui browser prepublish pre publish preview push download zip">
-      <summary>Task 3 · Choose the post-validation output</summary>
+    <details class="nodoc-task" data-search-summary="After validation, open the generated workshop, run QA Linter against the live preview, then choose Preview, Push, or Download Zip." data-search-keywords="manual ui browser prepublish pre publish preview QA Linter linter live preview workshop errors push download zip">
+      <summary>Task 3 · Preview the workshop, run QA Linter, and choose the output</summary>
       <ol>
         <li>After Pre Publish completes, review the available actions: <strong>Preview</strong>, <strong>Push</strong>,
           and <strong>Download Zip</strong>.
@@ -2261,9 +2279,23 @@ draft listing and page read. No manual NoDoc browser step or publishing action i
             <figcaption>Use Preview as the primary QA entry point for the generated workshop.</figcaption>
           </figure>
         </li>
+        <li><strong>Run QA Linter against the live preview.</strong> Return to the NoDoc <strong>Pre Publish</strong>
+          dialog and select <strong>QA Linter</strong>. Review the result for errors in the generated workshop before
+          publishing. This is a separate check from the Markdown and Text Check validations in Task 2; a successful
+          result in those tables does not replace checking the running preview. If you generated more than one
+          workshop type, confirm the result applies to the type you intend to release. Record the result with the
+          Preview URL and selected workshop type. Fix reported problems in the source page, regenerate the preview,
+          and run QA Linter again before continuing. Resolve reported errors before Push; record any approved exception
+          with the reviewer and QA evidence.</li>
+        <li class="nodoc-callout"><strong>If QA Linter reports an error:</strong> The feedback example
+          <code>{"error":"Preview file not found","path":"common/workshops/tenancy/index.html"}</code> means the
+          linter did not complete a check of that preview file. Treat it as an unavailable check, not as zero findings
+          or a pass. Confirm that Pre Publish generated a preview for the selected workshop type and that the preview
+          opens. Retry QA Linter; if the same error remains, record the error and path and contact NoDoc support.</li>
         <li><strong>Push</strong> is available from this dialog, but availability is not approval. Complete the QA and
-          review gates in Lab 10 first, then return here and select <strong>Push</strong> when your role is authorized to
-          publish the content. Confirm the success response before creating the WMS publishing request.
+          review gates in <a href="#nodoc:10">Lab 10</a> first, including a QA Linter result for the current preview.
+          Then return here and select <strong>Push</strong> when your role is authorized to publish the content. Confirm
+          the success response before creating the WMS publishing request.
           <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
             aria-label="Expand image: Confirm a successful Push response">
             <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
@@ -2297,7 +2329,7 @@ draft listing and page read. No manual NoDoc browser step or publishing action i
       is assumed to be in the required <strong>Completed</strong> state before you begin the request.</p>
     <h4>Objectives</h4>
     <ul>
-      <li>Review the workshop generated by <a href="#nodoc:9:3">Lab 9 Task 3</a> and complete Self Quality Assurance.</li>
+      <li>Review the workshop generated by <a href="#nodoc:9:3">Lab 9 Task 3</a>, confirm QA Linter checked the current live preview, and complete Self Quality Assurance.</li>
       <li>Resolve reviewer findings with the relevant NoDoc page, <a href="#nodoc:6:1">Vibe Doc-ing</a>, and <a
         href="#nodoc:9:2">Lab 9 Task 2</a> validation reruns.</li>
       <li>Submit and configure the WMS publishing request with the URLs created in <a href="#nodoc:9:1">Lab 9 Task
@@ -2308,7 +2340,8 @@ draft listing and page read. No manual NoDoc browser step or publishing action i
       <ol>
         <li>Open the generated workshop with <strong>Preview</strong> from <a href="#nodoc:9:3">Lab 9 Task 3</a>. Check
           the title, introduction, objectives, prerequisites, lab and task navigation, page order, links, code, images,
-          alt text, metadata, and rendered content on each page.</li>
+          alt text, metadata, and rendered content on each page. Confirm that QA Linter completed against this same
+          preview; after any correction or preview regeneration, rerun the linter and replace the old result.</li>
         <li>Return to <a href="#nodoc:9:1">Lab 9 Task 1</a> and confirm the exact <strong>Sandbox URL</strong> and
           <strong>Tenancy URL</strong> created by Pre Publish. Keep only the URLs for the environments selected for this
           workshop; these values are used again in Task 3.
@@ -2322,9 +2355,12 @@ draft listing and page read. No manual NoDoc browser step or publishing action i
           </figure>
         </li>
         <li>Use the <a href="../quickstart/#step-3">Quickstart Review &amp; Publish checklist</a> as the reference for
-          the QA handoff. Record the Preview URL, validation status, approved exceptions, and downloaded archive.</li>
+          the QA handoff. Record the Preview URL, Markdown and Text Check status, QA Linter result, approved exceptions,
+          and downloaded archive. If the linter returns an error instead of checking the preview, record it as blocked
+          and resolve it before treating Self Quality Assurance as complete.</li>
         <li>Complete the checklist and mark <strong>Self Quality Assurance Complete</strong> only when the remaining
-          findings are resolved or explicitly accepted by the responsible reviewer.</li>
+          findings are resolved or explicitly accepted by the responsible reviewer, and QA Linter has returned a
+          result for the current preview with no unresolved errors.</li>
       </ol>
     </details>
     <details class="nodoc-task" data-search-summary="Resolve reviewer findings, repeat required checks, and confirm approval before requesting publication." data-search-keywords="qa release approval reviewer findings publishing readiness">
@@ -2335,8 +2371,8 @@ draft listing and page read. No manual NoDoc browser step or publishing action i
         <li>If the reviewer identifies a content issue, return to the affected NoDoc page or <a href="#nodoc:6:1">Lab
           6 Task 1</a>. Inspect Difference, save accepted corrections, then rerun the relevant validations in <a
           href="#nodoc:9:2">Lab 9 Task 2</a>.</li>
-        <li>Update the Preview URL and QA record after any correction. Do not continue with outdated Preview or
-          validation results.</li>
+        <li>Update the Preview URL and QA record after any correction. Rerun the relevant validations and QA Linter
+          against the regenerated preview. Do not continue with outdated Preview or validation results.</li>
         <li>Continue only after the reviewer approves the content and WMS shows <strong>Completed</strong>. If authorized,
           return to <a href="#nodoc:9:3">Lab 9 Task 3</a> and select <strong>Push</strong>; retain the success response
           with the QA evidence.</li>

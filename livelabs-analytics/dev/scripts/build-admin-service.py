@@ -19,12 +19,14 @@ def main():
     paths = [ROOT / 'index.html', ROOT / 'dashboard/index.html', ROOT / 'search/index.html', ROOT / 'inventory/index.html',
              ROOT / 'inventory/data/portfolio_inventory.json', ROOT / 'inventory/data/portfolio_inventory.file.js']
     paths += [p for p in (ROOT / 'assets').rglob('*') if p.is_file()]
-    paths += [ROOT / 'dev/admin' / name for name in ('login.html', 'login.js', 'panel.html', 'panel.js', 'admin.css', 'README.md', 'TENANCY-DEPLOYMENT.md')]
+    paths += [ROOT / 'dev/admin' / name for name in ('login.html', 'login.js', 'dashboard-management.html', 'dashboard-management.js',
+             'data-merge.html', 'data-merge.js', 'panel.html', 'panel.js', 'user-settings.html', 'user-settings.js', 'admin.css', 'README.md', 'TENANCY-DEPLOYMENT.md')]
     paths += [ROOT / 'dev/scripts' / name for name in ('admin-server.py', 'admin_data.py', 'capture-snapshot.py', 'refresh-top-performers.py')]
     allowed = {p.relative_to(ROOT).as_posix() for p in paths}
     if any('.private' in Path(p).parts or Path(p).suffix in ('.sqlite3', '.db', '.env') for p in allowed):
         raise ValueError('Private material cannot be packaged.')
-    manifest = {'runtime': 'Python 3.10 or newer', 'entryPoint': '/admin-panel-login',
+    manifest = {'runtime': 'Python 3.10 or newer', 'entryPoint': '/admin',
+                'dashboardManagementPage': '/admin/dashboard-management',
                 'requiresRunningService': True, 'credentialsIncluded': False, 'privateStateDirectory': '.private/admin',
                 'files': [{'path': p.relative_to(ROOT).as_posix(), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()} for p in paths]}
     args.output.parent.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,384 @@
+#nodocMode .nodoc-error-help-card {
+  margin: 0 0 1.4rem;
+  border: 1px solid rgba(36, 59, 83, .18);
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fff 0%, #f8fbfa 100%);
+  box-shadow: 0 10px 26px rgba(36, 59, 83, .06);
+}
+
+#nodocMode .nodoc-error-help-card .card-body {
+  padding: clamp(1.1rem, 2.6vw, 2rem);
+}
+
+#nodocMode .nodoc-error-kicker {
+  margin: 0 0 .35rem;
+  color: #8f2f20;
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+#nodocMode .nodoc-error-help-card h2 {
+  margin: 0;
+  color: #172b4d;
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  font-weight: 700;
+}
+
+#nodocMode .nodoc-error-intro {
+  max-width: 82ch;
+  margin: .55rem 0 .9rem;
+  color: #526477;
+}
+
+#nodocMode .nodoc-error-source-scope {
+  margin: .8rem 0 0;
+  padding: .7rem .85rem;
+  border-left: 3px solid #c74634;
+  background: rgba(255, 255, 255, .8);
+  color: #465563;
+  font-size: .9rem;
+}
+
+#nodocMode .nodoc-error-search-form {
+  width: 100%;
+  margin: .85rem 0 .25rem;
+}
+
+#nodocMode .nodoc-error-search-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+}
+
+#nodocMode .nodoc-error-search-controls .form-control {
+  flex: 1 1 360px;
+  min-width: min(100%, 230px);
+  min-height: 48px;
+  border-color: rgba(36, 59, 83, .24);
+}
+
+#nodocMode .nodoc-error-search-controls .btn {
+  min-height: 48px;
+}
+
+#nodocMode .nodoc-error-search-hint {
+  margin: .45rem 0 .1rem;
+  color: #64748b;
+  font-size: .86rem;
+}
+
+#nodocMode .nodoc-error-search-status {
+  min-height: 1.4rem;
+  margin: .3rem 0 .75rem;
+  color: #526477;
+  font-size: .9rem;
+}
+
+#nodocMode .nodoc-error-results {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .8rem;
+}
+
+#nodocMode .nodoc-error-results[hidden] {
+  display: none;
+}
+
+#nodocMode .nodoc-error-result {
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid rgba(36, 59, 83, .17);
+  border-radius: 10px;
+  background: #fff;
+  color: #243b53;
+}
+
+#nodocMode .nodoc-error-result-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-bottom: .45rem;
+  color: #64748b;
+  font-size: .77rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+#nodocMode .nodoc-error-kind {
+  padding: .18rem .5rem;
+  border-radius: 999px;
+  background: #edf7f0;
+  color: #28623c;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+#nodocMode .nodoc-error-result h3 {
+  margin: 0 0 .25rem;
+  color: #172b4d;
+  font-size: 1.08rem;
+  line-height: 1.35;
+}
+
+#nodocMode .nodoc-error-area {
+  margin: 0 0 .55rem;
+  color: #8f2f20;
+  font-size: .82rem;
+  font-weight: 650;
+}
+
+#nodocMode .nodoc-error-summary {
+  margin: 0 0 .7rem;
+  color: #465563;
+}
+
+#nodocMode .nodoc-error-result h4 {
+  margin: .6rem 0 .3rem;
+  color: #243b53;
+  font-size: .92rem;
+  font-weight: 700;
+}
+
+#nodocMode .nodoc-error-result ol {
+  margin: 0;
+  padding-left: 1.35rem;
+  color: #334e68;
+}
+
+#nodocMode .nodoc-error-result li + li {
+  margin-top: .32rem;
+}
+
+#nodocMode .nodoc-error-related {
+  margin: .7rem 0 0;
+  font-size: .9rem;
+}
+
+#nodocMode .nodoc-error-related a {
+  color: #8f2f20;
+  font-weight: 650;
+  text-underline-offset: .15em;
+}
+
+#nodocMode .nodoc-error-source-note {
+  margin: .65rem 0 0;
+  padding: .55rem .65rem;
+  border-radius: 6px;
+  background: #f6f5f2;
+  color: #55514b;
+  font-size: .85rem;
+}
+
+#nodocMode .nodoc-error-visual,
+#troubleshootingMode .nodoc-error-visual {
+  margin: .85rem 0 .2rem;
+  padding: .5rem;
+  border: 1px solid rgba(36, 59, 83, .14);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+#nodocMode .nodoc-error-visual img,
+#troubleshootingMode .nodoc-error-visual img {
+  display: block;
+  width: 100%;
+  max-height: 260px;
+  border-radius: 5px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+#nodocMode .nodoc-error-visual a:focus-visible,
+#troubleshootingMode .nodoc-error-visual a:focus-visible {
+  outline: 3px solid #c74634;
+  outline-offset: 3px;
+}
+
+#nodocMode .nodoc-error-visual figcaption,
+#troubleshootingMode .nodoc-error-visual figcaption {
+  margin-top: .45rem;
+  color: #526477;
+  font-size: .8rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 767.98px) {
+  #nodocMode .nodoc-error-results {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #nodocMode .nodoc-error-search-controls .btn {
+    flex: 1 1 110px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #nodocMode .nodoc-error-help-card,
+  #nodocMode .nodoc-error-result {
+    scroll-behavior: auto;
+    transition: none;
+  }
+}
+
+#troubleshootingMode .troubleshooting-toolbar-card {
+  margin: 0 0 1.2rem;
+}
+
+#troubleshootingMode .troubleshooting-kicker {
+  margin: 0 0 .45rem;
+  color: #8f2f20;
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+#troubleshootingMode .troubleshooting-toolbar-controls {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+}
+
+#troubleshootingMode .troubleshooting-toolbar-controls > .btn {
+  grid-column: 2;
+  min-width: 13rem;
+  align-self: end;
+}
+
+#troubleshootingMode .troubleshooting-tag-control {
+  grid-column: 1 / -1;
+}
+
+#troubleshootingMode .troubleshooting-tag-control .tag-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+
+#troubleshootingMode .troubleshooting-groups {
+  display: grid;
+  gap: 1.65rem;
+}
+
+#troubleshootingMode .troubleshooting-topic-group .cheatsheet-topic-heading {
+  margin: 0 0 .85rem;
+}
+
+#troubleshootingMode .nodoc-troubleshooting-result {
+  height: 100%;
+  border: 1px solid rgba(36, 59, 83, .17);
+  border-radius: 10px;
+  background: #fff;
+  color: #243b53;
+  box-shadow: 0 8px 22px rgba(36, 59, 83, .05);
+}
+
+#troubleshootingMode .nodoc-troubleshooting-result .card-body {
+  padding: 1rem;
+}
+
+#troubleshootingMode .nodoc-error-result-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-bottom: .55rem;
+  color: #64748b;
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+#troubleshootingMode .troubleshooting-topic-chip {
+  max-width: 70%;
+  padding: .18rem .5rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #eef4f2;
+  color: #345c55;
+  letter-spacing: 0;
+  text-overflow: ellipsis;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+#troubleshootingMode .nodoc-error-kind {
+  padding: .18rem .5rem;
+  border-radius: 999px;
+  background: #edf7f0;
+  color: #28623c;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+#troubleshootingMode .nodoc-troubleshooting-result h3 {
+  margin: 0 0 .3rem;
+  color: #172b4d;
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+#troubleshootingMode .nodoc-troubleshooting-result .nodoc-error-area {
+  margin: 0 0 .55rem;
+  color: #8f2f20;
+  font-size: .82rem;
+  font-weight: 650;
+}
+
+#troubleshootingMode .nodoc-troubleshooting-result .nodoc-error-summary {
+  margin: 0 0 .7rem;
+  color: #465563;
+}
+
+#troubleshootingMode .nodoc-troubleshooting-result h4 {
+  margin: .6rem 0 .3rem;
+  color: #243b53;
+  font-size: .92rem;
+  font-weight: 700;
+}
+
+#troubleshootingMode .nodoc-troubleshooting-result ol {
+  margin: 0;
+  padding-left: 1.35rem;
+  color: #334e68;
+}
+
+#troubleshootingMode .nodoc-troubleshooting-result li + li {
+  margin-top: .32rem;
+}
+
+#troubleshootingMode .nodoc-troubleshooting-result .nodoc-error-related {
+  margin: .7rem 0 0;
+  font-size: .9rem;
+}
+
+#troubleshootingMode .nodoc-troubleshooting-result .nodoc-error-related a {
+  color: #8f2f20;
+  font-weight: 650;
+  text-underline-offset: .15em;
+}
+
+#troubleshootingMode .troubleshooting-source-note {
+  margin: .65rem 0 0;
+  padding: .55rem .65rem;
+  border-radius: 6px;
+  background: #f6f5f2;
+  color: #55514b;
+  font-size: .85rem;
+}
+
+@media (max-width: 767.98px) {
+  #troubleshootingMode .troubleshooting-toolbar-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #troubleshootingMode .troubleshooting-toolbar-controls > .btn {
+    grid-column: 1;
+    width: 100%;
+  }
+}
