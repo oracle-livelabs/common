@@ -1,85 +1,85 @@
-const { test, expect } = require('@playwright/test');
-const fs = require('node:fs/promises');
-let payload;
-test.beforeAll(async ({ request }) => { payload = await (await request.get('/inventory/data/portfolio_inventory.json')).json(); });
-test.beforeEach(() => { test.skip(!payload.metadata.qa_governance, 'Run against a generated governance candidate.'); });
+const { test, expect } = require("@playwright/test");
 
-test('QA details distinguish findings, reported passes, conflicts and missing evidence; exports carry evidence', async ({ page }, testInfo) => {
-  const samples = [
-    payload.records.find(r => r.qa.ranking_applicable && r.qa.observed_error_score > 0),
-    payload.records.find(r => r.qa.state === 'reported_pass'),
-    payload.records.find(r => r.qa.match_status === 'type_conflict'),
-    payload.records.find(r => r.qa.state === 'not_observed')
-  ];
-  const errors = []; page.on('pageerror', e => errors.push(e.message));
-  for (const record of samples) {
-    expect(record).toBeTruthy();
-    await page.goto('/search/?' + new URLSearchParams(record.livelabsId ? {livelabs_id:record.livelabsId} : {wms_id:record.wmsId}), {waitUntil:'networkidle'});
-    const evidence = page.locator('[data-qa-evidence]');
-    await expect(evidence).toBeVisible();
-    await expect(evidence).toContainText('not a test failure percentage');
-    const score = evidence.locator('tr').filter({has:page.getByRole('rowheader',{name:'QA Error Score',exact:true})});
-    await expect(score.locator('td')).toContainText(String(record.qa.observed_error_score ?? 'Unknown'));
-    if (record.qa.match_status === 'type_conflict') await expect(evidence).toContainText('type_conflict');
-    await page.locator('#search-workshop-view .report-export-dropdown > summary').click();
-    const pending = page.waitForEvent('download');
-    await page.locator('[data-export-search-csv]').click();
-    const csv = await fs.readFile(await (await pending).path(), 'utf8');
-    expect(csv).toContain('QA Error Score');
-    expect(csv).toContain('QA Owner Action');
-    expect(csv).toContain('QA Findings Detail');
-    if (record === samples[0]) await page.screenshot({path:testInfo.outputPath('qa-search-evidence.png'),fullPage:true});
-  }
-  expect(errors).toEqual([]);
-});
-
-test('Inventory exposes QA scores, retains unknowns and sorts numeric scores before missing evidence', async ({page},testInfo) => {
-  const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('/inventory/',{waitUntil:'networkidle'});
-  await expect(page.locator('[data-inventory-warning]')).toContainText('Analytics snapshot predates Jenkins run');
-  await expect(page.locator('#all-content-data-table thead')).toContainText('QA Error Score');
-  await page.locator('[data-all-data-sort]').first().selectOption('qaError');
-  expect(errors).toEqual([]);
-  await expect(page.locator('[data-all-data-rows] tr').first().locator('td').nth(9)).toHaveText('0');
-  await page.locator('[data-all-data-sort-direction]').first().click();
-  const max = Math.max(...payload.records.map(r => r.qa.observed_error_score ?? -1));
-  await expect(page.locator('[data-all-data-rows] tr').first().locator('td').nth(9)).toHaveText(String(max));
-  await page.screenshot({path:testInfo.outputPath('qa-inventory.png'),fullPage:false});
-  await page.locator('[data-all-data-rows] tr').first().locator('td').nth(9).click();
-  await expect(page.locator('[data-qa-evidence]')).toBeVisible();
-});
-
-test('all nine tables contain QA evidence and paired details, with replacement target evidence', async ({page},testInfo) => {
-  const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('/dashboard/',{waitUntil:'networkidle'});
-  const tables=page.locator('[data-filter-table] > table[id]');
-  await expect(tables).toHaveCount(9);
-  for (const table of await tables.all()) {
-    for (const disclosure of await table.locator('xpath=ancestor::details').all()) {
-      if (await disclosure.getAttribute('open') === null) await disclosure.locator(':scope > summary').click();
+test("public cohort and Jenkins score overlay use one public-only data boundary", async ({ request }) => {
+  const inventoryResponse = await request.get("/inventory/data/public_portfolio_inventory.json");
+  expect(inventoryResponse.ok()).toBe(true);
+  const inventory = await inventoryResponse.json();
+  const publicIds = new Set(inventory.records.map((record) => String(record.livelabsId || "").trim()).filter(Boolean));
+  expect(inventory.metadata.data_scope).toBe("public_published");
+  expect(inventory.records).toHaveLength(894);
+  expect(inventory.records.every((record) => record.publishType === "Public" && record.publishStatus === "Published")).toBe(true);
+  for (const record of inventory.records) {
+    for (const sibling of record.family?.siblings || []) {
+      expect(sibling.publishType).toBe("Public");
+      expect(sibling.publishStatus).toBe("Published");
     }
-    await expect(table.locator(':scope > thead')).toContainText('QA Error Score');
-    const rows = table.locator('tbody > tr.expandable-row');
-    expect(await rows.count()).toBeGreaterThan(0);
-    await rows.first().click();
-    const detail = table.locator('tbody > tr.detail-row').first();
-    await expect(detail).toBeVisible();
-    await expect(detail.locator('.qa-evidence')).toContainText('QA evidence and score adjustment');
-    const cols = await table.locator(':scope > thead > tr > th').count();
-    await expect(detail.locator(':scope > td')).toHaveAttribute('colspan',String(cols));
-    await rows.first().click();
   }
-  await expect(page.locator('#replacement-recommendations > thead')).toContainText('Target QA Error Score');
-  await page.screenshot({path:testInfo.outputPath('qa-ranking-tables.png'),fullPage:false});
-  expect(errors).toEqual([]);
+
+  const stateResponse = await request.get("/api/dashboard-admin-state");
+  expect(stateResponse.ok()).toBe(true);
+  const state = await stateResponse.json();
+  const merge = state.qaReportMerge;
+  expect(merge.summary.publicScope).toEqual({
+    eligibleItems: 894,
+    matchedItems: 861,
+    unmatchedItems: 33,
+    coveragePercent: 96.3
+  });
+  const overlays = Object.entries(merge.overlay);
+  expect(overlays).toHaveLength(861);
+  expect(overlays.every(([id]) => publicIds.has(id))).toBe(true);
+  const unmatchedRecords = inventory.records.filter((record) => !Object.hasOwn(merge.overlay, String(record.livelabsId)));
+  expect(unmatchedRecords).toHaveLength(33);
+  expect(unmatchedRecords.every((record) => record.type === "Workshop")).toBe(true);
+
+  let p1Rows = 0;
+  let p2Occurrences = 0;
+  let p3Occurrences = 0;
+  let scored = 0;
+  for (const [, overlay] of overlays) {
+    const counts = overlay.priorityCounts;
+    p1Rows += Number(counts.p1 || 0) + Number(counts.p1Verification || 0);
+    p2Occurrences += Number(counts.p2Occurrences || 0);
+    p3Occurrences += Number(counts.p3Occurrences || 0);
+    expect(overlay.scoreState).toMatch(/^(scored|unmapped-priority)$/);
+    if (overlay.jenkinsErrorScore !== null) {
+      scored++;
+      const burden = 2 * Number(counts.p2Occurrences || 0) + Number(counts.p3Occurrences || 0);
+      const expected = Math.round((100 * burden / (burden + 20)) * 100) / 100;
+      expect(overlay.jenkinsErrorScore).toBe(expected);
+      expect(overlay.scoreState).toBe("scored");
+    } else {
+      expect(Number(counts.unmapped || 0)).toBeGreaterThan(0);
+    }
+  }
+  expect(p1Rows).toBe(91);
+  expect(p2Occurrences).toBeGreaterThan(0);
+  expect(p3Occurrences).toBeGreaterThanOrEqual(0);
+  expect(scored).toBeGreaterThan(0);
 });
 
-test('evidence layout remains usable at narrow viewport', async ({page},testInfo) => {
-  const record=payload.records.find(r=>r.qa.ranking_applicable && r.qa.observed_error_score>0);
-  await page.setViewportSize({width:390,height:844});
-  await page.goto('/search/?livelabs_id='+record.livelabsId,{waitUntil:'networkidle'});
-  await expect(page.locator('[data-qa-evidence]')).toBeVisible();
-  const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>window.innerWidth+2);
-  expect(overflow).toBe(false);
-  await page.screenshot({path:testInfo.outputPath('qa-mobile.png'),fullPage:true});
+test("full Inventory and Admin pages stay behind the sign-in boundary", async ({ page, request }) => {
+  const adminInventory = await request.get("/api/admin/inventory");
+  expect(adminInventory.status()).toBe(401);
+  const privateAsset = await request.get("/inventory/data/portfolio_inventory.json");
+  expect(privateAsset.status()).toBe(404);
+
+  const oldInventoryRoute = await request.get("/inventory/", { maxRedirects: 0 });
+  expect(oldInventoryRoute.status()).toBe(302);
+  expect(oldInventoryRoute.headers().location).toBe("/admin/inventory");
+
+  const pageErrors = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  const routes = [
+    "/admin", "/admin/dashboard-management", "/admin/data-merge",
+    "/admin/governance", "/admin/inventory", "/admin/user-settings"
+  ];
+  for (const route of routes) {
+    const response = await page.goto(route, { waitUntil: "networkidle" });
+    expect(response.ok(), `${route} should serve the sign-in gate`).toBe(true);
+    await expect(page.locator("body")).toHaveClass(/admin-login-page/);
+    await expect(page.getByRole("heading", { level: 1, name: "Admin sign in" })).toBeVisible();
+    await expect(page.locator('link[rel="stylesheet"][href*="admin-login.css"]')).toHaveCount(1);
+  }
+  expect(pageErrors).toEqual([]);
 });

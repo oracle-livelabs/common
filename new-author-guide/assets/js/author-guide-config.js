@@ -1,6 +1,6 @@
 (function () {
       var configScriptUrl = document.currentScript && document.currentScript.src;
-      var routeNames = ["home", "quickstart", "cheatsheet", "markdown", "nodoc", "livestack"];
+      var routeNames = ["home", "quickstart", "cheatsheet", "markdown", "nodoc", "troubleshooting", "livestack"];
 
       function canonicalizeCurrentRoute() {
         var current = new URL(window.location.href);
@@ -40,7 +40,8 @@
         hub: "home",
         beginner: "quickstart",
         explorer: "cheatsheet",
-        nodoc: "nodoc"
+        nodoc: "nodoc",
+        troubleshooting: "troubleshooting"
       };
       var markdownLabMap = {
         "start-here": "paths",

@@ -310,8 +310,8 @@
     },
     {
       id: "mcp-setup", title: "Connect Codex to NoDoc MCP", topic: "mcp", source: [1, 3],
-      short: "Configure a personal access token, Windows user variable, and one NoDoc server entry.",
-      steps: ["Open NoDoc MCP Access Tokens from the guide, choose a recognizable label and expiry, and generate a token. Copy it immediately; it is shown once.", "Save it privately in the Windows user variable ASK_NODOC_MCP_TOKEN.", "Add or update one [mcp_servers.nodoc] section in C:\\Users\\<username>\\.codex\\config.toml using the snippet below.", "Fully restart Codex, open a new chat, and make a direct read-only list_focus_areas call.", "After access works, install or refresh the nodoc-mcp usage skill."],
+      short: "Configure a personal access token in a Windows or macOS user environment, then add one NoDoc server entry.",
+      steps: ["Open NoDoc MCP Access Tokens from the guide, choose a recognizable device label and expiry, and generate a token. Copy it immediately; it is shown once.", "Windows: save it in the ASK_NODOC_MCP_TOKEN user variable. macOS: enter it at the hidden Terminal prompt and use launchctl setenv for the current login session.", "Add or update one [mcp_servers.nodoc] section in %USERPROFILE%\\.codex\\config.toml (Windows) or ~/.codex/config.toml (macOS) using the snippet below.", "Fully restart Codex, open a new chat, and make a direct read-only list_focus_areas call.", "After access works, install or refresh the nodoc-mcp usage skill."],
       checkpoints: ["A direct MCP call returns an authorized NoDoc result. The config names the environment variable and contains no secret value."],
       watchFor: ["Never paste the token into chat, source control, email, screenshots, or diagnostic output.", "Configured tools alone do not prove access. An empty authorized result needs an access check before authoring."],
       keywords: ["MCP installation", "setup", "connect", "personal token", "ASK_NODOC_MCP_TOKEN", "config.toml", "list_focus_areas"],
@@ -416,20 +416,20 @@
       keywords: ["Run Markdown Validations", "Run Text Check Validations", "rules", "severity", "exceptions"]
     },
     {
-      id: "prepublish-output", title: "Choose Preview, Push, or Download Zip", topic: "publishing", source: [9, 3],
-      short: "Inspect the generated workshop and choose the appropriate post-validation output.",
-      steps: ["After Pre Publish completes, select Preview and inspect the rendered workshop.", "Use Download Zip to retain the archive for review, handoff, or recovery.", "Complete QA and review before selecting Push with the required authorization.", "Confirm the Push success response before creating the WMS publishing request."],
-      checkpoints: ["The selected output and its evidence match the current review or release stage."],
-      watchFor: ["An available Push button is not approval. Preview or archive creation alone is not WMS publishing approval."],
-      keywords: ["Preview", "Push", "Download Zip", "archive", "output"]
+      id: "prepublish-output", title: "Preview the workshop and run QA Linter", topic: "publishing", source: [9, 3],
+      short: "Inspect the rendered workshop, check the live preview for errors with QA Linter, and choose the appropriate output.",
+      steps: ["After Pre Publish completes, select Preview and inspect the rendered workshop.", "Return to the Pre Publish dialog, select QA Linter, and review the result for errors in the live preview. This check is separate from Markdown and Text Check validations.", "If the linter reports a problem, fix the source, regenerate the preview, and rerun the linter. Record the result with the Preview URL and workshop type.", "Use Download Zip to retain the archive for review, handoff, or recovery.", "Complete QA and review before selecting Push with the required authorization.", "Confirm the Push success response before creating the WMS publishing request."],
+      checkpoints: ["QA Linter returned a result for the current preview with no unresolved errors, and the selected output and its evidence match the review or release stage."],
+      watchFor: ["A Preview file not found error means the linter did not check that preview; treat it as blocked, not as a pass. Verify the generated preview and selected workshop type, then retry.", "An available Push button is not approval. Preview or archive creation alone is not WMS publishing approval."],
+      keywords: ["Preview", "QA Linter", "linter", "live preview", "errors", "Push", "Download Zip", "archive", "output"]
     },
     {
       id: "self-qa", title: "Complete Self Quality Assurance", topic: "publishing", source: [10, 1],
       short: "Review the generated workshop and retain the evidence needed for the QA handoff.",
-      steps: ["Open the generated Preview and check title, introduction, objectives, prerequisites, navigation, page order, links, code, images, alt text, metadata, and rendered content.", "Confirm the exact generated Sandbox and Tenancy URLs for the selected environments.", "Use the Quickstart Review & Publish checklist and record the Preview URL, validation status, approved exceptions, and downloaded archive.", "Mark Self Quality Assurance Complete only when findings are resolved or explicitly accepted by the responsible reviewer."],
+      steps: ["Open the generated Preview and check title, introduction, objectives, prerequisites, navigation, page order, links, code, images, alt text, metadata, and rendered content.", "Confirm QA Linter completed against this same preview. After corrections or regeneration, rerun it and replace the old result.", "Confirm the exact generated Sandbox and Tenancy URLs for the selected environments.", "Use the Quickstart Review & Publish checklist and record the Preview URL, Markdown and Text Check status, QA Linter result, approved exceptions, and downloaded archive.", "Mark Self Quality Assurance Complete only when findings are resolved or explicitly accepted by the responsible reviewer and the linter has not returned an unresolved error."],
       checkpoints: ["The completed checklist and evidence describe the current workshop output."],
       watchFor: ["Do not mark QA complete based only on generated files or a successful validation run."],
-      keywords: ["self QA", "Self Quality Assurance", "checklist", "rendered preview", "handoff"]
+      keywords: ["self QA", "Self Quality Assurance", "checklist", "rendered preview", "QA Linter", "linter", "handoff"]
     },
     {
       id: "release-review", title: "Resolve review findings before release", topic: "publishing", source: [10, 2],

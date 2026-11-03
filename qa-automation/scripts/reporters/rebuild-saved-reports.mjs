@@ -161,7 +161,18 @@ function replaceDirectory(sourceDir, targetDir) {
       fs.renameSync(targetDir, backupDir);
       movedExisting = true;
     }
-    fs.renameSync(temporaryDir, targetDir);
+    try {
+      fs.renameSync(temporaryDir, targetDir);
+    } catch (error) {
+      if (!error || !["EPERM", "EXDEV", "EACCES"].includes(error.code) || fs.existsSync(targetDir)) {
+        throw error;
+      }
+      // Some Windows filesystems and sandboxed workspaces reject directory
+      // renames even when the source and destination share a volume.
+      fs.mkdirSync(targetDir, { recursive: true });
+      fs.cpSync(temporaryDir, targetDir, { recursive: true });
+      fs.rmSync(temporaryDir, { recursive: true, force: true });
+    }
     fs.rmSync(backupDir, { recursive: true, force: true });
   } catch (error) {
     fs.rmSync(temporaryDir, { recursive: true, force: true });

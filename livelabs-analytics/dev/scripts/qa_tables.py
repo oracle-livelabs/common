@@ -43,7 +43,7 @@ def parse(text):return Parser(text).root
 def el(tag,text='',**attrs):return Node(tag,attrs,[str(text)])
 def cell(value):
     text='' if value is None else str(value)
-    return el('td',text,**{'data-sort-value':'' if text=='Unknown' else text,'data-filter-value':text.lower()})
+    return el('td',text,**{'data-sort-value':'' if text=='N/A' else text,'data-filter-value':text.lower()})
 def number(value):
     try:return float(str(value).replace(',',''))
     except (ValueError,TypeError):return None
@@ -138,8 +138,8 @@ def update_tables(document, by_id, kind, policy, comparisons):
             adjusted=adjusted_score(baseline,effective,kind,policy)
             if score_ix is not None: row.children[row.children.index(cells[score_ix])]=cell(adjusted)
             display_qa=effective or {}
-            row.children.extend([cell(display_qa.get('observed_error_score') if display_qa.get('observed_error_score') is not None else 'Unknown'),
-                                 cell(display_qa.get('finding_count','Unknown')),
+            row.children.extend([cell(display_qa.get('observed_error_score') if display_qa.get('observed_error_score') is not None else 'N/A'),
+                                 cell(display_qa.get('finding_count','N/A')),
                                  cell((display_qa.get('match_status') if display_qa.get('match_status')!='matched' else display_qa.get('state')) or 'not_observed')])
             if detail:
                 detail.first('td').attrs['colspan']=str(len(heads)+3)
@@ -180,11 +180,11 @@ def build_rankings(payload,root,output,policy,fragments=None):
     by_id={str(r['livelabsId']):r for r in payload['records'] if r.get('livelabsId')}
     comparisons=[]
     notes={
-        'top':'Full eligible population rescored before selecting the top 100. Baseline demand/freshness × (1 − QA error score/100). Unknown QA receives no adjustment, not a clean score.',
+        'top':'Full eligible population rescored before selecting the top 100. Baseline demand/freshness × (1 − QA error score/100). Items without observed QA evidence receive no adjustment; that does not mean they passed.',
         'risk':'Historical queue membership and baseline scores retained. Review priority = baseline + (100 − baseline) × QA error score/100. Base governance evidence requires refresh.',
         'retire':'Historical retirement candidate membership retained. Review priority = baseline + (100 − baseline) × 0.25 × QA error score/100. QA does not make a retirement decision.',
-        'replacement':'Similarity score is recalculated where all five original components exist, then multiplied by the replacement target quality factor. Source QA remains context. Unknown target QA means suitability is unverified.',
-        'disabled':'Disabled membership is unchanged. Review order uses applicable observed QA burden; missing evidence stays unknown.'}
+        'replacement':'Similarity score is recalculated where all five original components exist, then multiplied by the replacement target quality factor. Source QA remains context. Without QA evidence for the target, suitability is unverified.',
+        'disabled':'Disabled membership is unchanged. Review order uses applicable observed QA burden; missing evidence remains unverified.'}
     for name,kind in [('top-performers','top'),('at-risk-content','risk'),('retire-now-content','retire'),('replacement-suggestions','replacement'),('disabled-content','disabled')]:
         doc=top_fragments(payload,root)[0] if kind=='top' else parse((fragments/f'{name}.html').read_text(encoding='utf-8'))
         update_tables(doc,by_id,kind,policy,comparisons)

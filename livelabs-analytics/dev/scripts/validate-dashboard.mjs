@@ -11,8 +11,6 @@ const configDir = path.join(root, "dev", "config");
 const inventoryDataDir = path.join(root, "inventory", "data");
 const defaultBaseUrl = "http://127.0.0.1:4175";
 const baseUrl = process.env.DASHBOARD_URL || defaultBaseUrl;
-const strictGovernance = process.argv.includes("--strict-governance") || process.env.STRICT_GOVERNANCE_VALIDATION === "1";
-
 const results = [];
 
 function pass(name, detail = "") {
@@ -42,10 +40,6 @@ function numberValue(value) {
   if (value === null || value === undefined || value === "") return null;
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : null;
-}
-
-function round2(value) {
-  return Math.round((value + Number.EPSILON) * 100) / 100;
 }
 
 function normalizeText(value) {
@@ -86,7 +80,7 @@ function readDashboardSourceBundle() {
 }
 
 function checkDashboardScripts() {
-  for (const file of ["index.html", "inventory/index.html"]) {
+  for (const file of ["index.html", "dashboard/index.html", "search/index.html"]) {
     const html = fs.readFileSync(path.join(root, file), "utf8");
     const inlineScripts = [...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)].map((match) => match[1]);
     const externalScripts = [...html.matchAll(/<script[^>]*\bsrc="([^"]+)"[^>]*><\/script>/gi)]
@@ -100,47 +94,25 @@ function checkDashboardScripts() {
     });
     pass(`${file} scripts parse`, `${inlineScripts.length} inline and ${externalScripts.length} external script(s)`);
   }
+  new vm.Script(fs.readFileSync(path.join(root, "dev/admin/inventory.js"), "utf8"), { filename: "dev/admin/inventory.js" });
+  pass("Admin Inventory script parse", "protected inventory page script parses");
 }
 
 function checkInventoryPageContract() {
-  const filePath = path.join(root, "inventory/index.html");
+  const filePath = path.join(root, "dev/admin/inventory.html");
   const html = fs.readFileSync(filePath, "utf8");
-  const dashboardHtml = readDashboardSourceBundle();
-  const requiredMarkers = [
-    '<base href="../">',
-    './assets/js/page-loading.js',
-    './assets/js/dashboard.js'
-  ];
-  const missing = requiredMarkers.filter((marker) => !html.includes(marker));
-  if (missing.length) fail("Inventory route shell", `missing: ${missing.join(", ")}`);
-  else pass("Inventory route shell", "static inventory entry uses the shared renderer with an explicit asset base and no inline redirect");
-  const presentationMarkers = [
-    'class="page-header inventory-page-header"',
-    'class="hero-stripe"',
-    'class="metric-band" aria-label="Inventory capabilities"',
-    '<h1>Portfolio Inventory</h1>',
-    '<span>Search</span>',
-    '<span>Filter</span>',
-    '<span>Review</span>'
-  ];
-  const missingPresentation = presentationMarkers.filter((marker) => !dashboardHtml.includes(marker));
-  missingPresentation.length
-    ? fail("Inventory visual/runtime parity", `missing dashboard-theme markers: ${missingPresentation.join(", ")}`)
-    : pass("Inventory visual/runtime parity", "route reuses the dashboard header, color stripe, capability band, shell, and data-table implementation");
-
-  const inventoryMarkers = [
-    'id="all-data-tag"',
-    '<th>Contact</th><th>Tags</th>',
-    'allDataState.tag',
-    'allDataTagHtml(record)',
-    'allDataAssignedTags(record)',
-    'allDataRecordMatchesTag(record, allDataState.tag)',
-    '${adminTagsPanelHtml(record)}'
-  ];
-  const remaining = inventoryMarkers.filter((marker) => dashboardHtml.includes(marker));
-  remaining.length
-    ? fail("Inventory tags boundary", `Inventory tag markers remain: ${remaining.join(", ")}`)
-    : pass("Inventory tags boundary", "static Tags column, values, filter, sort path, and public detail panel are removed from Inventory");
+  const script = fs.readFileSync(path.join(root, "dev/admin/inventory.js"), "utf8");
+  const server = fs.readFileSync(path.join(root, "dev/scripts/admin-server.py"), "utf8");
+  const required = ["/admin-assets/inventory.js", 'id="inventory-jenkins-priority"', "Jenkins Error Score", 'id="count-public"', 'id="count-disabled"'];
+  const missing = required.filter((marker) => !html.includes(marker));
+  const scriptMarkers = ["/api/admin/inventory", "/api/dashboard-admin-state", "jenkinsState(record)", "Outside Jenkins public scan scope"];
+  const missingScript = scriptMarkers.filter((marker) => !script.includes(marker));
+  const authRoute = server.includes("'/admin/inventory': 'inventory.html'") && server.includes("if not self.session():\n                return self.file(PRIVATE / 'login.html')");
+  if (missing.length || missingScript.length || !authRoute) {
+    fail("Admin Inventory contract", `page=${missing.join(", ") || "ok"}; script=${missingScript.join(", ") || "ok"}; authenticated route=${authRoute}`);
+  } else {
+    pass("Admin Inventory contract", "full inventory is behind the Admin session and includes Jenkins state and priority filtering");
+  }
 }
 
 function checkInternalContactData() {
@@ -195,7 +167,7 @@ function checkUpdateEvidenceAndNaContracts() {
   } else {
     pass("Latest GitHub update coverage", `${latestGithubCount} evidence-backed dates; ${metadata.wms_metadata_fallback_records || 0} explicit WMS fallbacks`);
   }
-  pass("Search/Inventory payload deduplication", `${search.records.length} records share one canonical portfolio payload`);
+  pass("Admin inventory source coverage", `${search.records.length} full-scope records remain available through the protected Admin inventory API`);
   machinePathLeak
     ? fail("Portable data metadata", "machine-local Windows path found in static JSON")
     : pass("Portable data metadata", "static JSON excludes machine-local source paths");
@@ -226,7 +198,7 @@ function checkCopyInteractionContracts() {
   const missing = requiredMarkers.filter((marker) => !html.includes(marker));
   missing.length
     ? fail("copy interaction contract", `missing: ${missing.join(", ")}`)
-    : pass("copy interaction contract", "dashboard tables, Inventory, detail fields, and row-event guards are wired");
+    : pass("copy interaction contract", "ranked dashboard tables and item details provide copy controls");
 
   const hoverFocusMarkers = [
     ".copy-value-target:hover .copy-value-button",
@@ -250,10 +222,7 @@ function checkCopyInteractionContracts() {
     "at-risk-top-100-workshops",
     "at-risk-top-100-sprints",
     "retire-now-top-100-workshops",
-    "retire-now-top-100-sprints",
-    "replacement-recommendations",
-    "disabled-workshops",
-    "disabled-sprints"
+    "retire-now-top-100-sprints"
   ];
   const targetLabels = new Set([
     "title",
@@ -365,10 +334,7 @@ function checkEmbeddedDashboardOutputs() {
     "at-risk-top-100-workshops",
     "at-risk-top-100-sprints",
     "retire-now-top-100-workshops",
-    "retire-now-top-100-sprints",
-    "replacement-recommendations",
-    "disabled-workshops",
-    "disabled-sprints"
+    "retire-now-top-100-sprints"
   ];
   const empty = [];
   for (const id of tableIds) {
@@ -423,7 +389,7 @@ function checkBundleSize() {
 }
 
 function checkHtmlReferences() {
-  for (const file of ["index.html", "inventory/index.html"]) {
+  for (const file of ["index.html", "dashboard/index.html", "search/index.html"]) {
     const filePath = path.join(root, file);
     const fileDir = path.dirname(filePath);
     const html = fs.readFileSync(filePath, "utf8");
@@ -432,9 +398,10 @@ function checkHtmlReferences() {
     const duplicates = [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))];
     const refs = [...html.matchAll(/(?:href|src)="(?!https?:|mailto:|#|data:|javascript:)([^"]+)"/g)]
       .map((match) => match[1].split(/[?#]/)[0])
+      .filter((ref) => !["/dashboard/", "/search/"].includes(ref))
       .filter((ref) => ref !== "./admin/")
       .filter(Boolean);
-    const missing = [...new Set(refs)].filter((ref) => !fs.existsSync(path.resolve(fileDir, baseHref, ref)));
+    const missing = [...new Set(refs)].filter((ref) => !fs.existsSync(ref.startsWith("/") ? path.resolve(root, ref.slice(1)) : path.resolve(fileDir, baseHref, ref)));
     const hasFavicon = /<link[^>]+rel="icon"/i.test(html);
 
     if (duplicates.length) fail(`${file} duplicate ids`, duplicates.slice(0, 5).join(", "));
@@ -466,7 +433,8 @@ function checkStylesheetReferences() {
 function checkStaticBoundary() {
   const requiredFiles = [
     "index.html",
-    "inventory/index.html",
+    "dashboard/index.html",
+    "search/index.html",
     "assets/css/dashboard.css",
     "assets/js/dashboard.js",
     "assets/fonts/OracleSans_Rg.ttf",
@@ -479,9 +447,7 @@ function checkStaticBoundary() {
     "assets/fragments/top-performers.html",
     "assets/fragments/at-risk-content.html",
     "assets/fragments/retire-now-content.html",
-    "assets/fragments/replacement-suggestions.html",
-    "assets/fragments/disabled-content.html",
-    "inventory/data/portfolio_inventory.json",
+    "inventory/data/public_portfolio_inventory.json",
     "inventory/data/portfolio_inventory.file.js",
     "dev/config/.nojekyll",
     "dev/config/release-manifest.json"
@@ -493,179 +459,85 @@ function checkStaticBoundary() {
   const retainedForbidden = forbiddenPaths.filter((file) => fs.existsSync(path.join(root, file)));
   retainedForbidden.length ? fail("static-only boundary", `forbidden paths present: ${retainedForbidden.join(", ")}`) : pass("static-only boundary", "admin, backend, database, dataset, and local runtime paths absent");
 
-  const requiredData = ["inventory/data/portfolio_inventory.json"];
+  const requiredData = ["inventory/data/public_portfolio_inventory.json"];
   for (const file of requiredData) {
     try {
       const value = readJson(path.join(root, file));
-      if (file.endsWith("portfolio_inventory.json") && !Array.isArray(value.records)) fail(`${file} contract`, "records array missing");
+      if (!Array.isArray(value.records)) fail(`${file} contract`, "records array missing");
+      else if (value.metadata?.data_scope !== "public_published") fail(`${file} contract`, "public/published scope marker missing");
       else pass(`${file} contract`, "JSON parses and required array is present");
     } catch (error) {
       fail(`${file} contract`, error.message);
     }
   }
 
-  const canonicalInventory = readJson(path.join(root, "inventory", "data", "portfolio_inventory.json"));
+  const canonicalInventory = readJson(path.join(root, "inventory", "data", "public_portfolio_inventory.json"));
   const fileFallbackPath = path.join(root, "inventory", "data", "portfolio_inventory.file.js");
   try {
     const fallbackText = fs.readFileSync(fileFallbackPath, "utf8");
     const match = fallbackText.match(/globalThis\.__livelabsPortfolioInventoryPayload\s*=\s*([\s\S]+);\s*$/);
     if (!match) throw new Error("payload assignment is missing");
     const fallbackPayload = JSON.parse(match[1]);
-    if (fallbackPayload.metadata?.generated_at !== canonicalInventory.metadata?.generated_at || fallbackPayload.records?.length !== canonicalInventory.records?.length) {
-      throw new Error("generated metadata or record count differs from the canonical JSON payload");
+    if (fallbackPayload.metadata?.generated_at !== canonicalInventory.metadata?.generated_at || fallbackPayload.records?.length !== canonicalInventory.records?.length || fallbackPayload.metadata?.data_scope !== "public_published") {
+      throw new Error("generated metadata, public scope, or record count differs from the public JSON projection");
     }
-    pass("file-safe Inventory payload", `${fallbackPayload.records.length} records match canonical JSON metadata`);
+    pass("file-safe Dashboard payload", `${fallbackPayload.records.length} public/published records match JSON metadata`);
   } catch (error) {
     fail("file-safe Inventory payload", error.message);
   }
 }
 
 function checkUrlContracts() {
-  const html = readDashboardSourceBundle();
-  const requiredMarkers = [
-    "'inventory/index.html' : 'inventory', document.baseURI",
-    "data-inventory-link",
-    "readSearchUrlState",
-    "writeSearchUrl",
-    'route = "current"',
-    'route: "dashboard"',
-    'params.get("content_key")',
-    'function canonicalRecordIdentity',
-    'function resolveSearchRecordIdentity',
-    '["livelabs_id", "wms_id", "content_key"]',
-    'url.searchParams.set("livelabs_id", selectedIdentity.livelabsId)',
-    'url.searchParams.set("wms_id", selectedIdentity.wmsId)',
-    'url.searchParams.set("content_key", selectedIdentity.contentKey)',
-    'if (shouldClearHash) url.hash = "";',
-    'function canonicalSearchLink',
-    'search-view-actions',
-    'data-copy-search-link',
-    'data-back-dashboard',
-    'const dashboardEntryUrl = () =>',
-    "'index.html' : 'dashboard/', document.baseURI",
-    'url.searchParams.delete("view");',
-    'addEventListener("popstate"'
-  ];
-  const missing = requiredMarkers.filter((marker) => !html.includes(marker));
-  if (missing.length) fail("URL contracts", `missing: ${missing.join(", ")}`);
-  else pass("URL contracts", "Search and Inventory share dual-ID, fallback-key, Copy-link, and browser-history URL state");
-  if (html.includes('inventoryItem.dataset.dashboardView = "inventory"')) {
-    fail("Inventory route contract", "legacy dashboard-mode assignment remains on the menu item");
-  } else {
-    pass("Inventory route contract", "menu item uses /inventory over HTTP and the explicit entry for local files");
-  }
+  const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  const dashboard = fs.readFileSync(path.join(root, "assets/js/dashboard.js"), "utf8");
+  const server = fs.readFileSync(path.join(root, "dev/scripts/admin-server.py"), "utf8");
+  const nav = html.match(/<nav class="nav-list"[\s\S]*?<\/nav>/i)?.[0] || "";
+  const missing = ["writeSearchUrl", "function canonicalRecordIdentity", "function resolveSearchRecordIdentity", "function canonicalSearchLink", "loadFullSearchRecords()", "./inventory/data/public_portfolio_inventory.json"]
+    .filter((marker) => !dashboard.includes(marker));
+  const removedNav = /Replacements|Disabled\s*&amp;\s*archived|Portfolio Inventory/i.test(nav);
+  if (missing.length || removedNav) fail("URL and navigation contracts", `missing=${missing.join(", ") || "none"}; removed navigation present=${removedNav}`);
+  else pass("URL and navigation contracts", "text search stays on Overview and record details use public LiveLabs identities");
+  const protectedInventory = server.includes("'/admin/inventory': 'inventory.html'") && server.includes("/api/admin/inventory") && server.includes("inventory/data/public_portfolio_inventory.json");
+  if (!protectedInventory) fail("Inventory route contract", "Admin inventory route or public/static inventory boundary is missing");
+  else pass("Inventory route contract", "full inventory is served through authenticated Admin while public routes use the projection");
 }
 
 function checkJsonAndDataContracts() {
   const { jsonFiles, rowFiles } = loadRowFiles();
   pass("JSON parse", `${jsonFiles.length} JSON file(s) parsed`);
-
-  let topFormulaTotal = 0;
-  let topFormulaFailures = 0;
-  let replacementFormulaTotal = 0;
-  let replacementFormulaFailures = 0;
-  let activeGateTotal = 0;
-  let activeGateFailures = 0;
-  let disabledGateTotal = 0;
-  let disabledGateFailures = 0;
-  let replacementIdentityTotal = 0;
-  let replacementIdentityFailures = 0;
-
-  const governedFilePattern = /^(top_(10|15|50|100|500|1000)|top_current_demand|top_stable_demand|top_blended_performers|top_best_workshops|top_performers|top_retire_candidates|top_to_retire|retire_now_strict|replacement_recommendations|replacement_validation_queue|refresh_priority_queue|retirement_priority_queue|low_demand_watchlist|possible_retirement_review).*\.json$/;
-
-  for (const [file, rows] of rowFiles.entries()) {
-    for (const row of rows) {
-      const topInputs = [
-        numberValue(row.recent_views_12m_content_percentile),
-        numberValue(row.recent_views_90d_content_percentile),
-        numberValue(row.top_performer_freshness_score),
-        numberValue(row.best_performer_score),
-      ];
-      if (topInputs.every((value) => value !== null)) {
-        topFormulaTotal += 1;
-        const expected = round2(0.45 * topInputs[0] + 0.35 * topInputs[1] + 0.2 * topInputs[2]);
-        if (Math.abs(expected - topInputs[3]) > 0.02) topFormulaFailures += 1;
-      }
-
-      const replacementInputs = [
-        numberValue(row.candidate_content_similarity),
-        numberValue(row.candidate_category_similarity),
-        numberValue(row.candidate_recency_similarity),
-        numberValue(row.candidate_level_similarity),
-        numberValue(row.candidate_title_similarity),
-        numberValue(row.replacement_similarity_score),
-      ];
-      if (replacementInputs.every((value) => value !== null)) {
-        replacementFormulaTotal += 1;
-        const expected = round2(
-          0.55 * replacementInputs[0]
-          + 0.15 * replacementInputs[1]
-          + 0.15 * replacementInputs[2]
-          + 0.1 * replacementInputs[3]
-          + 0.05 * replacementInputs[4],
-        );
-        if (Math.abs(expected - replacementInputs[5]) > 0.02) replacementFormulaFailures += 1;
-      }
-
-      if (governedFilePattern.test(file)) {
-        activeGateTotal += 1;
-        const active =
-          String(row.publish_status).toLowerCase() === "published"
-          && ["public", "private"].includes(String(row.publish_type).toLowerCase())
-          && row.publish_state_active === true;
-        if (!active) activeGateFailures += 1;
-      }
-
-      if (row.candidate_workshop_key || row.candidate_wms_id || row.candidate_livelabs_id) {
-        replacementIdentityTotal += 1;
-        if (
-          String(row.candidate_wms_id || "") === String(row.wms_id || "")
-          || String(row.candidate_livelabs_id || "") === String(row.livelabs_id || "")
-          || normalizeText(row.candidate_title) === normalizeText(row.title)
-        ) {
-          replacementIdentityFailures += 1;
-        }
-      }
-    }
+  const projection = readJson(path.join(root, "inventory/data/public_portfolio_inventory.json"));
+  if (!Array.isArray(projection.records) || projection.records.length !== Number(projection.metadata?.record_count)) {
+    fail("public data projection contract", "record_count does not match the public/published records array");
+  } else {
+    pass("public data projection contract", `${projection.records.length} eligible records loaded for public calculations`);
   }
-
-  for (const file of ["disabled_workshops.json", "disabled_sprints.json"]) {
-    const rows = rowFiles.get(file) || [];
-    for (const row of rows) {
-      disabledGateTotal += 1;
-      const valid =
-        String(row.publish_type).toLowerCase() === "disabled"
-        && row.publish_state_active === false
-        && numberValue(row.retire_score) === null
-        && numberValue(row.best_performer_score) === null
-        && !/qa\s*exception/i.test(JSON.stringify(row));
-      if (!valid) disabledGateFailures += 1;
-    }
-  }
-
-  function reportGovernancePopulation(name, total, failures, unit) {
-    if (failures) {
-      fail(name, `${failures} failure(s) of ${total}`);
-      return;
-    }
-    if (!total) {
-      const detail = `0 ${unit} checked; governed source evidence is absent from the static-only data directory`;
-      strictGovernance ? fail(name, detail) : warn(name, detail);
-      return;
-    }
-    pass(name, `${total} ${unit} checked`);
-  }
-
-  reportGovernancePopulation("Top Performer formula", topFormulaTotal, topFormulaFailures, "row occurrence(s)");
-  reportGovernancePopulation("Replacement Similarity formula", replacementFormulaTotal, replacementFormulaFailures, "row occurrence(s)");
-  reportGovernancePopulation("Active ranked-output gate", activeGateTotal, activeGateFailures, "row occurrence(s)");
-  reportGovernancePopulation("Disabled content audit-only gate", disabledGateTotal, disabledGateFailures, "disabled row(s)");
-  reportGovernancePopulation("Replacement identity exclusions", replacementIdentityTotal, replacementIdentityFailures, "replacement row occurrence(s)");
+  if (rowFiles.has("portfolio_inventory.json")) pass("full inventory source available to Admin build", "canonical inventory remains in the protected Admin service source");
 }
 
-function requestHead(url) {
+function checkRankingFormulaContracts() {
+  const top = fs.readFileSync(path.join(root, "dev/scripts/refresh-top-performers.py"), "utf8");
+  const review = fs.readFileSync(path.join(root, "dev/scripts/build-public-review-fragments.py"), "utf8");
+  const dashboard = fs.readFileSync(path.join(root, "assets/js/dashboard.js"), "utf8");
+  const scoreBlock = dashboard.match(/function jenkinsOverlayForId\([\s\S]*?\n    function jenkinsPrioritySummary/)?.[0] || "";
+  const requirements = [
+    [top, 'record.get("publishStatus") == "Published"', "Top Performer public/published gate"],
+    [top, "0.45 * components[\"recent_views_12m_content_percentile\"] + 0.35 * components[\"recent_views_90d_content_percentile\"] + 0.20 * components[\"top_performer_freshness_score\"]", "Top Performer Analytics formula"],
+    [review, "components.append((0.50, 100 - view_percentile))", "review demand input weight"],
+    [review, "components.append((0.35, min(100, age_months / 36 * 100)))", "review update-age input weight"],
+    [review, "components.append((0.15, 100 if missing_author else 0))", "review author-coverage input weight"],
+    [dashboard, "baseline * (1 - jenkinsShare) + (100 - error) * jenkinsShare", "performance score Jenkins blend"],
+    [dashboard, "baseline * (1 - jenkinsShare) + error * jenkinsShare", "review score Jenkins blend"],
+  ];
+  const missing = requirements.filter(([source, marker]) => !source.includes(marker)).map(([, , label]) => label);
+  const p1Excluded = scoreBlock.includes('occurrenceCount("P1")') || scoreBlock.includes("priorityCounts.p1");
+  if (!scoreBlock.includes('occurrenceCount("P2")') || !scoreBlock.includes('occurrenceCount("P3")') || p1Excluded) missing.push("P2/P3-only Jenkins Error Score inputs");
+  if (missing.length) fail("rank calculation contracts", `missing or invalid: ${missing.join(", ")}`);
+  else pass("rank calculation contracts", "available Analytics inputs stay in baseline scores; P2/P3 Jenkins burden adjusts applicable rankings and P1 stays separate");
+}
+
+function requestGetStatus(url) {
   return new Promise((resolve, reject) => {
-    const req = http.request(url, { method: "HEAD", timeout: 5000 }, (res) => {
+    const req = http.request(url, { method: "GET", timeout: 5000 }, (res) => {
       res.resume();
       resolve(res.statusCode);
     });
@@ -684,42 +556,37 @@ function appUrl(route) {
 }
 
 async function checkHttpSmoke() {
-  const paths = [
-    "/",
-    "/index.html",
-    "/inventory/",
-    "/inventory/index.html",
-    "/assets/css/dashboard.css",
-    "/assets/js/dashboard.js",
-    "/inventory/data/portfolio_inventory.json",
-    "/?q=autonomous%20database",
-    "/?livelabs_id=4074",
-    "/inventory/?wms_id=11040",
-    "/assets/images/oracle-logo-white.svg",
-    "/assets/images/livelabs-logo-white.svg",
-    "/assets/images/ill-abst-000109-16x9.png",
-    "/assets/images/color-strip.png",
-    "/assets/fonts/OracleSans_Rg.ttf",
-    "/assets/fonts/OracleSans_SBd.ttf",
-    "/assets/fonts/OracleSans_Bd.ttf",
-  ];
+  const paths = new Map([
+    ["/", 302], ["/index.html", 302], ["/dashboard/", 200],
+    ["/dashboard/?view=performance", 200], ["/dashboard/?view=errors", 200],
+    ["/dashboard/?view=retirement", 200], ["/dashboard/?view=stats", 200],
+    ["/inventory/", 302], ["/inventory/index.html", 302],
+    ["/assets/css/dashboard.css", 200], ["/assets/js/dashboard.js", 200],
+    ["/inventory/data/public_portfolio_inventory.json", 200], ["/inventory/data/portfolio_inventory.json", 404],
+    ["/?q=autonomous%20database", 302], ["/?livelabs_id=4074", 302],
+    ["/search/?livelabs_id=4074", 200], ["/inventory/?wms_id=11040", 302],
+    ["/admin", 200], ["/admin/inventory", 200], ["/api/admin/inventory", 401], ["/api/dashboard-admin-state", 200],
+    ["/assets/images/oracle-logo-white.svg", 200], ["/assets/images/livelabs-logo-white.svg", 200],
+    ["/assets/images/ill-abst-000109-16x9.png", 200], ["/assets/images/color-strip.png", 200],
+    ["/assets/fonts/OracleSans_Rg.ttf", 200], ["/assets/fonts/OracleSans_SBd.ttf", 200], ["/assets/fonts/OracleSans_Bd.ttf", 200],
+  ]);
 
-  for (const route of paths) {
+  for (const [route, expected] of paths) {
     const url = appUrl(route);
     try {
-      const status = await requestHead(url);
-      if (status === 200) pass(`HTTP ${route}`, "200");
-      else fail(`HTTP ${route}`, String(status));
+      const status = await requestGetStatus(url);
+      if (status === expected) pass(`HTTP ${route}`, String(status));
+      else fail(`HTTP ${route}`, `expected ${expected}, got ${status}`);
     } catch (error) {
       warn(`HTTP ${route}`, `skipped or unavailable at ${baseUrl}: ${error.message}`);
     }
   }
 
-  for (const route of ["/login.html", "/admin.html", "/admin/", "/app/", "/api/health", "/health", "/health.html", "/database/", "/dataset/"]) {
+  for (const [route, expected] of [["/login.html", 303], ["/admin.html", 303], ["/admin/", 302], ["/app/", 404], ["/api/health", 404], ["/health", 404], ["/health.html", 404], ["/database/", 404], ["/dataset/", 404]]) {
     const url = appUrl(route);
     try {
-      const status = await requestHead(url);
-      status === 404 ? pass(`HTTP absent ${route}`, "404") : fail(`HTTP absent ${route}`, `unexpected ${status}`);
+      const status = await requestGetStatus(url);
+      status === expected ? pass(`HTTP absent ${route}`, String(status)) : fail(`HTTP absent ${route}`, `expected ${expected}, got ${status}`);
     } catch (error) {
       warn(`HTTP absent ${route}`, `skipped or unavailable at ${baseUrl}: ${error.message}`);
     }
@@ -727,7 +594,6 @@ async function checkHttpSmoke() {
 }
 
 function checkDataConfidenceAndInventoryNavigation() {
-  const html = readDashboardSourceBundle();
   const payload = readJson(path.join(root, "inventory", "data", "portfolio_inventory.json"));
   const records = payload.records || [];
   const keys = records.map((record) => String(record.key || "").trim());
@@ -747,23 +613,25 @@ function checkDataConfidenceAndInventoryNavigation() {
   const unavailableRepositories = records.filter((record) => record.sourceFlags?.repository_evidence_status === "live_repository_unavailable");
 
   if (keys.some((key) => !key) || uniqueKeys.size !== records.length || routeable.length !== records.length) {
-    fail("Inventory all-row navigation data contract", `records=${records.length}, uniqueKeys=${uniqueKeys.size}, routeable=${routeable.length}`);
+    fail("Admin inventory identity contract", `records=${records.length}, uniqueKeys=${uniqueKeys.size}, routeable=${routeable.length}`);
   } else {
-    pass("Inventory all-row navigation data contract", `${records.length} records have unique keys and deterministic URL identity`);
+    pass("Admin inventory identity contract", `${records.length} full-scope records have unique keys and deterministic identifiers`);
   }
 
-  const requiredNavigationMarkers = [
-    "let inventoryRecordByKey = new Map()",
-    "inventoryRecordByKey.set(key, record)",
-    "window.__inventoryNavigationAudit",
-    'if (event.target.closest("button[data-copy-value]")) return',
-    "const record = inventoryRecordByKey.get(key) || searchRecordByKey.get(key)",
+  const inventoryHtml = fs.readFileSync(path.join(root, "dev/admin/inventory.html"), "utf8");
+  const inventoryUi = fs.readFileSync(path.join(root, "dev/admin/inventory.js"), "utf8");
+  const inventoryMarkers = [
+    [inventoryHtml, 'id="inventory-jenkins-priority"'],
+    [inventoryHtml, "Jenkins Error Score"],
+    [inventoryUi, 'fetch("/api/admin/inventory"'],
+    [inventoryUi, "inventory-jenkins-priority"],
+    [inventoryUi, "jenkinsSummary(record)"],
+    [inventoryUi, "jenkinsScore(record)"]
   ];
-  const missingMarkers = requiredNavigationMarkers.filter((marker) => !html.includes(marker));
-  const suppressesValueClicks = html.includes('button[data-copy-value], .copy-value-target');
-  missingMarkers.length || suppressesValueClicks
-    ? fail("Inventory row interaction contract", `missing=${missingMarkers.join(", ") || "none"}; suppressed value clicks=${suppressesValueClicks}`)
-    : pass("Inventory row interaction contract", "title, ID, contact, plain-cell, and keyboard row activation resolve through the O(1) key map");
+  const inventoryMissing = inventoryMarkers.filter(([source, marker]) => !source.includes(marker)).map(([, marker]) => marker);
+  inventoryMissing.length
+    ? fail("Admin inventory filtering contract", `missing: ${inventoryMissing.join(", ")}`)
+    : pass("Admin inventory filtering contract", "full inventory supports Jenkins priority and score detail");
 
   if (missingMappingStatus.length || missingMetricStatus.length || unresolvedPublishType.length) {
     fail(
@@ -781,27 +649,29 @@ function checkDataConfidenceAndInventoryNavigation() {
   }
 }
 
-function checkReplacementConfidencePresentation() {
-  const replacementPath = path.join(root, "assets", "fragments", "replacement-suggestions.html");
-  if (!fs.existsSync(replacementPath)) {
-    fail("Replacement confidence presentation", "Replacement Suggestions section is missing");
-    return;
-  }
-  const section = fs.readFileSync(replacementPath, "utf8");
-  const rows = [...section.matchAll(/<tr class="expandable-row"[^>]*data-detail-row-id="replacement-recommendations-detail-[^"]+"[^>]*>[\s\S]*?<\/tr>/g)];
-  const mismatches = [];
-  for (const row of rows) {
-    const cells = [...row[0].matchAll(/<td(?: [^>]*)?>([\s\S]*?)<\/td>/g)].map((cell) => cell[1].replace(/<[^>]+>/g, "").trim());
-    const score = Number((cells[9] || "").replace(/,/g, ""));
-    const expected = score >= 85 ? "Strong algorithmic candidate" : score >= 70 ? "Review required" : "No reliable candidate";
-    if (!Number.isFinite(score) || cells[10] !== expected) mismatches.push({ score, displayed: cells[10], expected });
-  }
-  const unsupportedConfirmedLabels = section.includes("Strong successor confirmed");
-  if (unsupportedConfirmedLabels || mismatches.length) {
-    fail("Replacement confidence presentation", `rows=${rows.length}, mislabeled=${mismatches.length}, unsupported confirmed labels=${unsupportedConfirmedLabels}`);
-  } else {
-    pass("Replacement confidence presentation", `${rows.length} rows use algorithmic-candidate or review labels; no automatic confirmation claims`);
-  }
+function checkPublicScopeDesign() {
+  const source = readJson(path.join(root, "inventory/data/portfolio_inventory.json"));
+  const projection = readJson(path.join(root, "inventory/data/public_portfolio_inventory.json"));
+  const eligible = source.records.filter((record) => String(record.publishType || "").toLowerCase() === "public" && String(record.publishStatus || "").toLowerCase() === "published");
+  const publicIds = new Set(eligible.map((record) => String(record.livelabsId || "").trim()).filter(Boolean));
+  const projectionKeys = new Set(projection.records.map((record) => String(record.key || "").trim()));
+  const invalidRecords = projection.records.filter((record) => record.publishType !== "Public" || record.publishStatus !== "Published");
+  const familyLeaks = projection.records.flatMap((record) => (record.family?.siblings || []).filter((sibling) => !publicIds.has(String(sibling.livelabsId || "").trim()) && !projectionKeys.has(String(sibling.key || "").trim())));
+  const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  const navigation = html.match(/<nav class="nav-list"[\s\S]*?<\/nav>/i)?.[0] || "";
+  const javascript = fs.readFileSync(path.join(root, "assets/js/dashboard.js"), "utf8");
+  const fragments = ["assets/fragments/at-risk-content.html", "assets/fragments/retire-now-content.html"].map((file) => fs.readFileSync(path.join(root, file), "utf8")).join("\n");
+  const release = fs.readFileSync(path.join(root, "dev/scripts/build-static-release.mjs"), "utf8");
+  const failures = [];
+  if (projection.metadata?.data_scope !== "public_published" || projection.records.length !== eligible.length) failures.push(`projection=${projection.records.length}/${eligible.length}`);
+  if (invalidRecords.length) failures.push(`ineligible public rows=${invalidRecords.length}`);
+  if (familyLeaks.length) failures.push(`nonpublic related records=${familyLeaks.length}`);
+  if (/Replacements|Disabled\s*&amp;\s*archived|Portfolio Inventory/i.test(navigation)) failures.push("author navigation still exposes archived or full inventory pages");
+  if (!javascript.includes("loadFullSearchRecords()") || !javascript.includes("public_portfolio_inventory.json")) failures.push("search does not load the public projection");
+  if (/Replacement\s+Score|replacement scores?/i.test(fragments)) failures.push("retirement/risk fragments mention replacement scoring");
+  if (release.includes('{ source: "inventory/data/portfolio_inventory.json"')) failures.push("static release includes the full inventory payload");
+  if (failures.length) fail("public scope and redesign", failures.join("; "));
+  else pass("public scope and redesign", `${projection.records.length} public/published items (${projection.records.filter((record) => record.type === "Workshop").length} workshops, ${projection.records.filter((record) => record.type === "Sprint").length} sprints); family references are scoped; replacement score is absent`);
 }
 
 function printResults() {
@@ -831,8 +701,9 @@ try {
   checkAccessibilityAndSecurityContracts();
   checkBundleSize();
   checkJsonAndDataContracts();
+  checkRankingFormulaContracts();
   checkDataConfidenceAndInventoryNavigation();
-  checkReplacementConfidencePresentation();
+  checkPublicScopeDesign();
   await checkHttpSmoke();
 } catch (error) {
   fail("Unhandled validation error", error.stack || error.message);

@@ -100,6 +100,10 @@ export class LiveStackLandingPage extends BasePage {
     return collectActionRecords(this.page.locator('main a[href*="view-workshop"]:visible'));
   }
 
+  async demoRecords(): Promise<LiveStackActionRecord[]> {
+    return collectActionRecords(this.page.locator("main a[href]:visible, main button:visible").filter({ hasText: /demo/i }));
+  }
+
   async assetActionRecords(): Promise<LiveStackActionRecord[]> {
     return collectActionRecords(this.assetActions);
   }

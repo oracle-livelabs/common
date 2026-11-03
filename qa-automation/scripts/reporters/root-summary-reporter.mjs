@@ -7,6 +7,7 @@ import {
   parLinkGuidance,
   parScanErrorExplanation,
   parLinksPageHtml,
+  parRetestListPageHtml,
   readParAudits,
   sanitizeSensitiveText,
   writeParAuditDataFiles,
@@ -663,6 +664,15 @@ export function writeSummaryFiles(outputDir, summary, reportsRoot) {
   fs.writeFileSync(path.join(outputDir, "retest-list.html"), reviewListPageHtml(summary, pageContext), "utf-8");
   fs.rmSync(path.join(outputDir, "fix-list.html"), { force: true });
   writeParAuditDataFiles(outputDir, summary.parAudit);
+  if (summary.reportChannel === "par" || summary.runType === "par") {
+    const parContext = {
+      outputDir,
+      historyHref: relativeReportHref(outputDir, path.join(reportsRoot, "index.html")),
+      reportType: "par",
+    };
+    fs.writeFileSync(path.join(outputDir, "par-links.html"), parLinksPageHtml(summary, parContext), "utf-8");
+    fs.writeFileSync(path.join(outputDir, "par-retest-list.html"), parRetestListPageHtml(summary, parContext), "utf-8");
+  }
 }
 
 function sectionFromFile(file) {

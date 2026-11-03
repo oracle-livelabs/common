@@ -79,10 +79,7 @@
       "retire-now-top-100-sprints"
     ]);
     const tenRowDefaultTableIds = new Set([
-      ...rankedTop100TableIds,
-      "replacement-recommendations",
-      "disabled-workshops",
-      "disabled-sprints"
+      ...rankedTop100TableIds
     ]);
     function defaultPageSizeForWrapper(wrapper) {
       return tenRowDefaultTableIds.has(wrapper?.dataset?.filterTable) ? rankedDefaultPageSize : defaultPageSize;
@@ -164,7 +161,7 @@
     function enhanceCategoryFilters(root = document) {
       root.querySelectorAll?.('[data-table-filter]').forEach((control) => {
         if (control.tagName.toLowerCase() === "select") return;
-        if (normalizeFilterText(filterLabelFor(control)) !== "category") return;
+        if (!["category", "council"].includes(normalizeFilterText(filterLabelFor(control)))) return;
         const tableId = control.dataset.tableFilter;
         const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
         if (!wrapper) return;
@@ -189,7 +186,7 @@
         });
         const allOption = document.createElement("option");
         allOption.value = "";
-        allOption.textContent = "All categories";
+        allOption.textContent = normalizeFilterText(filterLabelFor(control)) === "council" ? "All councils" : "All categories";
         select.appendChild(allOption);
         Array.from(categories.entries())
           .sort((entryA, entryB) => textSortCollator.compare(entryA[1], entryB[1]))
@@ -271,10 +268,13 @@
     function tableSortOptionsFor(tableId) {
       const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
       if (!wrapper) return [];
-      return Array.from(wrapper.querySelectorAll("th[data-sort-column-index]")).map((headerCell) => ({
+      return Array.from(wrapper.querySelectorAll("th[data-sort-column-index]"))
+        .filter((headerCell) => !headerCell.hidden && headerCell.getAttribute("aria-hidden") !== "true")
+        .map((headerCell) => ({
         label: (headerCell.querySelector("button")?.textContent || headerCell.textContent || `Column ${Number(headerCell.dataset.sortColumnIndex || 0) + 1}`).trim(),
         value: headerCell.dataset.sortColumnIndex || ""
-      })).filter((option) => option.label && option.value !== "" && option.label !== "#");
+        }))
+        .filter((option) => option.label && option.value !== "" && option.label !== "#");
     }
     function syncTableSortSelect(select, tableId, selectedValue) {
       const options = tableSortOptionsFor(tableId);
@@ -747,7 +747,7 @@
     }
     function summaryItemsFor(record) {
       const ids = [record.wmsId ? `WMS ${record.wmsId}` : "", record.livelabsId ? `LiveLabs ${record.livelabsId}` : ""].filter(Boolean).join(" | ");
-      const score = labeledValue(record, ["Score", "Retire Score", "Replacement Score", "Similarity Score"]);
+      const score = labeledValue(record, ["Score", "Retire Score"]);
       const views12m = labeledValue(record, ["Views 12m", "Recent Views 12m", "Page Views 12m"]);
       const views90d = labeledValue(record, ["Views 90d", "Recent Views 90d", "Page Views 90d"]);
       return [
@@ -869,7 +869,7 @@
         Array.from(details.values()).join(" "),
         siblingSearchText
       ].filter(Boolean).join(" "));
-      return {
+      const record = {
         category: raw?.category || "",
         details,
         family: raw?.family || null,
@@ -889,6 +889,7 @@
         values,
         wmsId: String(raw?.wmsId || "")
       };
+      return applyJenkinsMergeToRecord(record);
     }
     function mergeSearchRecords(...recordSets) {
       const merged = new Map();
@@ -939,6 +940,52 @@
         document.head.append(script);
       });
     }
+    const dashboardPageConfig = {
+      performance: { sections: ["top-performers"] },
+      urgent: { sections: [] },
+      "at-risk": { sections: ["at-risk-content"] },
+      retirement: { sections: ["retire-now-content"] }
+    };
+    const dashboardSectionPage = {
+      "top-performers": "performance",
+      "jenkins-p1-slot": "urgent",
+      "at-risk-content": "at-risk",
+      "retire-now-content": "retirement",
+      "portfolio-stats": "performance"
+    };
+    const dashboardSectionMembership = {
+      "top-performers": "performance",
+      "at-risk-content": "at-risk",
+      "retire-now-content": "retirement"
+    };
+    function normalizeDashboardPage(value) {
+      const normalized = String(value || "overview").trim().toLowerCase();
+      if (normalized === "inventory") return "inventory";
+      const aliases = {
+        overview: "performance", dashboard: "performance", stats: "performance", tops: "performance",
+        errors: "at-risk", "at-risk-content": "at-risk", p1: "urgent", "p1-urgent-action": "urgent",
+        "immediate-retirement": "retirement"
+      };
+      const page = aliases[normalized] || normalized;
+      return dashboardPageConfig[page] ? page : "performance";
+    }
+    function applyDashboardPageView(value) {
+      const page = normalizeDashboardPage(value);
+      document.body.dataset.dashboardPage = page;
+      const sectionSettings = { "top-performers": "topPerformers", "at-risk-content": "atRiskContent", "retire-now-content": "retireNowContent", "portfolio-stats": "portfolioStats" };
+      document.querySelectorAll("[data-dashboard-page]").forEach((element) => {
+        const pages = String(element.dataset.dashboardPage || "").split(/\s+/);
+        const settingKey = sectionSettings[element.id];
+        const adminVisible = !settingKey || dashboardAdminState.sectionVisibility?.[settingKey] !== false;
+        element.hidden = (!pages.includes("all") && !pages.includes(page)) || !adminVisible;
+      });
+      document.querySelectorAll("[data-dashboard-tab]").forEach((tab) => {
+        const selected = tab.dataset.dashboardTab === page;
+        tab.setAttribute("aria-selected", selected ? "true" : "false");
+        tab.tabIndex = selected ? 0 : -1;
+      });
+      return page;
+    }
     const lazySectionLoads = new Map();
     function lazySectionPlaceholder(sectionId) {
       return document.querySelector(`[data-lazy-section="${sectionId}"]`);
@@ -972,7 +1019,22 @@
           if (!(section instanceof HTMLElement) || section.tagName !== "SECTION" || section.id !== sectionId) {
             throw new Error("fragment has an invalid section root");
           }
+          section.dataset.dashboardPage = dashboardSectionMembership[sectionId] || dashboardSectionPage[sectionId] || "overview";
+          const tabLabels = {
+            "top-performers": "dashboard-tab-performance",
+            "at-risk-content": "dashboard-tab-at-risk",
+            "retire-now-content": "dashboard-tab-retirement"
+          };
+          if (tabLabels[sectionId]) {
+            section.classList.add("dashboard-tab-panel");
+            section.setAttribute("role", "tabpanel");
+            section.setAttribute("aria-labelledby", tabLabels[sectionId]);
+            section.tabIndex = 0;
+          }
           placeholder.replaceWith(section);
+          normalizeRankedTablePresentation(section);
+          updateJenkinsScoreExplanations(section);
+          applyDashboardPageView(document.body.dataset.dashboardPage || "overview");
           normalizeSectionLinks(section);
           applyRankedTableDisclosures();
           applyQaExceptionPrototype();
@@ -983,6 +1045,7 @@
           applySectionVisibilitySettings();
           enhanceCategoryFilters(section);
           initializeTablesIn(section);
+          applyJenkinsMergeToRankedTables();
           tableSearchRecordsCache = null;
           refreshDashboardSearch();
           return section;
@@ -1012,6 +1075,12 @@
         const anchor = event.target.closest('a[data-section-hash], a[href^="#"]');
         const sectionId = anchor?.hash?.slice(1);
         if (!sectionId || event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        const targetPage = dashboardSectionPage[sectionId];
+        if (targetPage && targetPage !== normalizeDashboardPage(document.body.dataset.dashboardPage)) {
+          event.preventDefault();
+          window.setDashboardPage?.(targetPage, { targetHash: anchor.hash, updateUrl: true });
+          return;
+        }
         event.preventDefault();
         if (anchor.classList.contains('skip-link')) {
           document.getElementById(sectionId)?.scrollIntoView({ block: 'start' });
@@ -1038,13 +1107,18 @@
         });
       });
       document.querySelectorAll('[data-lazy-section]').forEach(section => observer.observe(section));
-      if (needsDashboard) document.querySelectorAll("[data-lazy-section]").forEach((section) => {
-        const sectionId = section.dataset.lazySection;
-        if (sectionId) void loadLazySection(sectionId);
-      });
+      if (needsDashboard) {
+        const page = normalizeDashboardPage(document.body.dataset.dashboardPage);
+        (dashboardPageConfig[page]?.sections || []).forEach((sectionId) => void loadLazySection(sectionId));
+      }
       const initialSectionId = location.hash.slice(1);
       if (initialSectionId && lazySectionPlaceholder(initialSectionId)) {
-        loadLazySection(initialSectionId).then((section) => section?.scrollIntoView({ block: "start" }));
+        const targetPage = dashboardSectionPage[initialSectionId];
+        if (targetPage && targetPage !== normalizeDashboardPage(document.body.dataset.dashboardPage)) {
+          window.setDashboardPage?.(targetPage, { targetHash: location.hash, updateUrl: false });
+        } else {
+          loadLazySection(initialSectionId).then((section) => section?.scrollIntoView({ block: "start" }));
+        }
       }
     }
     function dashboardRecordValue(record, label) {
@@ -1069,14 +1143,49 @@
       }
       return null;
     }
+    const portfolioMetricTooltips = {
+      "public-count": "Counts workshops and sprints that are both Published and Public. These items are available in author search and dashboard rankings.",
+      "jenkins-scored-count": "Jenkins runs automated tests on public workshops and sprints. P2 means fix next (for example, grammar or Markdown formatting); P3 means routine cleanup for a minor issue that does not change the steps or result. Both affect the final score; P2 counts twice as much as P3. P1 does not affect that score; it is reviewed separately because it may stop learners.",
+      "jenkins-p1-count": "P1 means an issue may stop a learner—for example, a required link or image is broken, or a step cannot be completed. From the Dashboard, open P1 urgent action, check the evidence, and fix confirmed issues. If you cannot reproduce one, ask a reviewer to verify it.",
+      "jenkins-match-count": "Counts public, published items matched to a row in the applied Jenkins report. A match means evidence is available; it does not mean errors were found."
+    };
+    function addPortfolioMetricTooltips(root = document) {
+      root.querySelectorAll?.(".metric-card [data-overview-metric]").forEach((metric) => {
+        const copy = portfolioMetricTooltips[metric.dataset.overviewMetric];
+        const card = metric.closest(".metric-card");
+        const title = card?.querySelector(":scope > span");
+        if (!copy || !card || !title || card.dataset.metricTooltip === "true") return;
+        const titleText = title.textContent.trim();
+        const tooltipId = `metric-tooltip-${metric.dataset.overviewMetric}`;
+        const heading = document.createElement("div");
+        heading.className = "metric-card-heading";
+        const helpWrap = document.createElement("span");
+        helpWrap.className = "metric-help-wrap";
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "metric-help-button";
+        button.setAttribute("aria-label", `About ${titleText}`);
+        button.setAttribute("aria-describedby", tooltipId);
+        button.textContent = "i";
+        const tooltip = document.createElement("span");
+        tooltip.id = tooltipId;
+        tooltip.className = "metric-tooltip";
+        tooltip.setAttribute("role", "tooltip");
+        tooltip.textContent = copy;
+        card.insertBefore(heading, title);
+        heading.append(title, helpWrap);
+        helpWrap.append(button, tooltip);
+        card.dataset.metricTooltip = "true";
+      });
+    }
     function updatePortfolioStatsFromPayload(payload) {
       const records = Array.isArray(payload?.records) ? payload.records : [];
       if (!records.length) return;
-      const active = records.filter((record) => record.publishStatus === "Published" && ["Public", "Private"].includes(record.publishType));
+      const active = records.filter((record) => record.publishType === "Public" && record.publishStatus === "Published");
       const byType = (type) => active.filter((record) => record.type === type);
-      const disabled = records.filter((record) => record.publishType === "Disabled");
-      const events = records.filter((record) => record.publishType === "Event");
-      const notPublished = records.filter((record) => record.publishStatus !== "Published" && ["Public", "Private"].includes(record.publishType));
+      const disabled = [];
+      const events = [];
+      const notPublished = [];
       const infoRows = Array.from(document.querySelectorAll("#portfolio-stats .info-table tr"));
       const setInfo = (label, value) => {
         const row = infoRows.find((item) => item.querySelector("th")?.textContent.trim() === label);
@@ -1180,7 +1289,7 @@
         portfolioPayloadPromise = loadFilePortfolioPayload().then(normalizePortfolioPayload);
         return portfolioPayloadPromise;
       }
-      portfolioPayloadPromise = fetch("./inventory/data/portfolio_inventory.json", { cache: "no-cache" })
+      portfolioPayloadPromise = fetch("./inventory/data/public_portfolio_inventory.json", { cache: "no-cache" })
         .then((response) => response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`)))
         .then(normalizePortfolioPayload);
       return portfolioPayloadPromise;
@@ -1188,7 +1297,13 @@
     function loadFullSearchRecords() {
       if (fullSearchRecordsPromise) return fullSearchRecordsPromise;
       fullSearchRecordsPromise = loadCanonicalPortfolioPayload()
-        .then((payload) => payload.records.map(fullIndexRecordToSearchRecord))
+        .then((payload) => {
+          portfolioInventoryMetadata = payload.metadata || null;
+          publicRawRecords = Array.isArray(payload.records) ? payload.records : [];
+          publicLivelabsIds = new Set(publicRawRecords.map((record) => String(record.livelabsId || "").trim()).filter(Boolean));
+          loadedFullSearchRecords = publicRawRecords.map(fullIndexRecordToSearchRecord);
+          return loadedFullSearchRecords;
+        })
         .catch(() => []);
       return fullSearchRecordsPromise;
     }
@@ -1225,6 +1340,7 @@
       return portfolioInventoryRecordsPromise;
     }
     const adminStorageKey = "livelabsAnalyticsAdminState";
+    const qaMergeRefreshKey = "livelabsQaReportMergeRefresh";
     const sessionKey = "livelabsAnalyticsSession";
     const adminSessionDurationMs = 12 * 60 * 60 * 1000;
     const adminStateSchemaVersion = 3;
@@ -1234,6 +1350,8 @@
     let portfolioPayloadPromise = null;
     let portfolioInventoryRecordsPromise = null;
     let loadedFullSearchRecords = [];
+    let publicRawRecords = [];
+    let publicLivelabsIds = new Set();
     let portfolioInventoryMetadata = null;
     let portfolioInventoryLoadComplete = false;
     let tableSearchRecordsCache = null;
@@ -1244,6 +1362,8 @@
     const allDataPageSizeSteps = [25, 50, 100, 250, 500, 1000, 1500, 2500, 5000, 10000];
     const allDataState = {
       coverage: "",
+      jenkinsData: "",
+      jenkinsPriority: "",
       page: 1,
       pageRange: "",
       pageSize: 100,
@@ -1265,7 +1385,9 @@
       { key: "livelabsId", label: "LiveLabs ID", type: "number" },
       { key: "category", label: "Category", type: "text" },
       { key: "contact", label: "Contact", type: "text" },
-      { key: "qaError", label: "QA Error Score", type: "number" },
+      { key: "qaError", label: "Analytics QA Error Score", type: "number" },
+      { key: "jenkinsError", label: "Jenkins Error Score", type: "number" },
+      { key: "jenkinsPriority", label: "Jenkins Priority", type: "text" },
       { key: "qaState", label: "QA Evidence", type: "text" }
     ];
     const allDataReviewGroupOptions = [
@@ -1278,14 +1400,14 @@
       { key: "missing", label: "Missing governance data" }
     ];
     const defaultTagDefinitions = [
-      { key: "no-author", label: "No Author", className: "governance-group-no-author" },
-      { key: "stale-high-demand", label: "Stale, High Demand", className: "governance-group-stale-high-demand" },
-      { key: "retirement-review", label: "Retirement Review", className: "governance-group-retire-review" },
-      { key: "refresh", label: "Refresh", className: "governance-group-stale-high-demand" },
-      { key: "keep", label: "Keep", className: "" },
-      { key: "inactive", label: "Inactive/Event", className: "governance-group-inactive" },
-      { key: "missing", label: "Missing Data", className: "governance-group-missing" },
-      { key: "manager-review", label: "Manager Review", className: "" }
+      { key: "no-author", label: "No Author", description: "Use this tag when an item does not identify an author or contact.", className: "governance-group-no-author" },
+      { key: "stale-high-demand", label: "Stale, High Demand", description: "Use this tag when content may be outdated but demand remains high.", className: "governance-group-stale-high-demand" },
+      { key: "retirement-review", label: "Retirement Review", description: "Use this tag when an item needs review for possible retirement.", className: "governance-group-retire-review" },
+      { key: "refresh", label: "Refresh", description: "Use this tag when an item should be refreshed or updated.", className: "governance-group-stale-high-demand" },
+      { key: "keep", label: "Keep", description: "Use this tag when an item should remain available.", className: "" },
+      { key: "inactive", label: "Inactive/Event", description: "Use this tag when an item is inactive or tied to a time-bound event.", className: "governance-group-inactive" },
+      { key: "missing", label: "Missing Data", description: "Use this tag when key item information is missing.", className: "governance-group-missing" },
+      { key: "manager-review", label: "Manager Review", description: "Use this tag when a manager needs to review an item or decision.", className: "" }
     ];
     const defaultTagClassByKey = new Map(defaultTagDefinitions.map((tag) => [tag.key, tag.className || ""]));
     const tagKeyBlocklist = new Set(["qa-excluded"]);
@@ -1315,8 +1437,6 @@
       topPerformers: true,
       atRiskContent: true,
       retireNowContent: true,
-      replacementSuggestions: true,
-      disabledContent: true,
       portfolioStats: true
     };
     const defaultAdminState = {
@@ -1338,14 +1458,559 @@
       manager: { details: ["Manager Email", "Owner Group", "Owner Email", "Author Email"], headers: ["Author Email", "Owner Group", "Manager Email", "Owner"] },
       monthsSinceUpdate: { details: ["Months Since Update", "Months Since Last Update"], headers: ["Stale Months", "Months Since Update"] },
       publishDate: { details: ["Publish Date Used", "First Workshop File Commit Date", "Publish Date"], headers: ["Publish Date"] },
-      score: { details: ["Score", "Best Performer Score", "Retire Score", "Replacement Similarity Score"], headers: ["Score", "Risk Score", "Retire Score", "Replacement Score"] },
+      score: { details: ["Score", "Best Performer Score", "Retire Score"], headers: ["Score", "Risk Score", "Retire Score"] },
       title: { details: ["Title"], headers: ["Title", "Current Item", "Candidate Title"] },
       views12m: { details: ["Views 12m", "Recent Views 12m", "Page Views 12m"], headers: ["Views 12m", "Recent Views 12m", "Page Views 12m"] },
       views90d: { details: ["Views 90d", "Recent Views 90d", "Page Views 90d"], headers: ["Views 90d", "Recent Views 90d", "Page Views 90d"] },
       wmsId: { details: ["WMS ID", "Current WMS ID", "Candidate WMS ID"], headers: ["WMS ID", "Current WMS ID", "Candidate WMS ID"] }
     };
     let dashboardAdminState = readDashboardAdminState();
+    let dashboardQaReportMerge = null;
     let refreshDashboardSearch = () => {};
+    function jenkinsOverlayForId(livelabsId) {
+      const overlay = dashboardQaReportMerge?.overlay?.[String(livelabsId || "")];
+      if (!overlay) return null;
+      const findings = Array.isArray(overlay.findings) ? overlay.findings : [];
+      const originalCounts = overlay.priorityCounts || {};
+      const occurrenceCount = (priority) => findings.filter((issue) => issue.priority === priority)
+        .reduce((sum, issue) => sum + Math.max(0, Number(issue.count || 0)), 0);
+      const priorityCounts = {
+        ...originalCounts,
+        unmapped: Number(originalCounts.unmapped ?? findings.filter((issue) => !["P1", "P2", "P3"].includes(issue.priority) && issue.group !== "internal-qa").length),
+        p3: Number(originalCounts.p3 || findings.filter((issue) => issue.priority === "P3").length),
+        p2Occurrences: Number(originalCounts.p2Occurrences ?? occurrenceCount("P2")),
+        p3Occurrences: Number(originalCounts.p3Occurrences ?? occurrenceCount("P3"))
+      };
+      const policy = overlay.scorePolicy || dashboardQaReportMerge.summary?.scorePolicy || {};
+      const weights = policy.weights || { P2: 2, P3: 1 };
+      const referenceBurden = Number(policy.referenceBurden || 20);
+      const score = overlay.jenkinsErrorScore !== undefined
+        ? overlay.jenkinsErrorScore
+        : Number(priorityCounts.unmapped || 0) > 0
+          ? null
+          : (() => {
+            const burden = Number(weights.P2 || 2) * priorityCounts.p2Occurrences + Number(weights.P3 || 1) * priorityCounts.p3Occurrences;
+            return Math.round((10000 * burden / (burden + referenceBurden)) || 0) / 100;
+          })();
+      return { ...overlay, priorityCounts, jenkinsErrorScore: score };
+    }
+    function jenkinsPrioritySummary(overlay) {
+      if (!overlay) return "No Jenkins report";
+      const counts = overlay.priorityCounts || {};
+      const parts = [];
+      ["p1", "p2", "p3"].forEach((key) => {
+        if (Number(counts[key] || 0)) parts.push(`${key.toUpperCase()} ${Number(counts[key]).toLocaleString()}`);
+      });
+      if (Number(counts.unmapped || 0)) parts.push(`Unmapped ${Number(counts.unmapped).toLocaleString()}`);
+      return parts.join(" · ") || "No prioritized findings";
+    }
+    function applyJenkinsMergeToRecord(record) {
+      if (!record) return record;
+      const overlay = jenkinsOverlayForId(record.livelabsId);
+      record.jenkins = overlay;
+      record.jenkinsErrorScore = overlay?.jenkinsErrorScore ?? null;
+      record.jenkinsPrioritySummary = jenkinsPrioritySummary(overlay);
+      const findings = Array.isArray(overlay?.findings) ? overlay.findings : [];
+      record.jenkinsIssueCodes = Array.from(new Set(findings.map((issue) => String(issue.code || "").trim()).filter(Boolean))).join(" ");
+      record.jenkinsIssueSearch = findings.map((issue) => [issue.priority, issue.code, issue.label, issue.message, issue.file, issue.section].filter(Boolean).join(" ")).join(" ");
+      if (record.searchableBase === undefined) record.searchableBase = record.searchable || "";
+      record.searchable = normalizeFilterText([record.searchableBase, record.jenkinsPrioritySummary, record.jenkinsIssueCodes, record.jenkinsIssueSearch, overlay?.runId].filter(Boolean).join(" "));
+      ["Jenkins Error Score", "Jenkins Priority", "Jenkins Issue Codes", "Jenkins Issue Summary", "Jenkins Run ID"].forEach((key) => {
+        record.details?.delete?.(key);
+        record.values?.delete?.(key);
+      });
+      if (overlay) {
+        const details = record.details instanceof Map ? record.details : (record.details = new Map());
+        const values = record.values instanceof Map ? record.values : (record.values = new Map());
+        const fields = [
+          ["Jenkins Error Score", overlay.jenkinsErrorScore ?? "N/A"],
+          ["Jenkins Priority", record.jenkinsPrioritySummary],
+          ["Jenkins Issue Codes", record.jenkinsIssueCodes || "None reported"],
+          ["Jenkins Issue Summary", record.jenkinsIssueSearch || "No issue details reported"],
+          ["Jenkins Run ID", overlay.runId || "Not reported"]
+        ];
+        fields.forEach(([key, value]) => { details.set(key, String(value)); values.set(key, String(value)); });
+      }
+      return record;
+    }
+    function applyJenkinsMergeToLoadedRecords() {
+      const seen = new Set();
+      loadedFullSearchRecords.forEach((record) => {
+        if (!record || seen.has(record)) return;
+        seen.add(record);
+        applyJenkinsMergeToRecord(record);
+      });
+      searchRecordByKey.forEach(applyJenkinsMergeToRecord);
+      inventoryRecordByKey.forEach(applyJenkinsMergeToRecord);
+    }
+    const jenkinsRankedTableConfigs = [
+      { id: "top-performer-top-100-workshops", mode: "performance", scoreHeader: "Final Score", idHeader: "LiveLabs ID" },
+      { id: "top-performer-top-100-sprints", mode: "performance", scoreHeader: "Final Score", idHeader: "LiveLabs ID" },
+      { id: "at-risk-top-100-workshops", mode: "risk", scoreHeader: "Final Score", idHeader: "LiveLabs ID" },
+      { id: "at-risk-top-100-sprints", mode: "risk", scoreHeader: "Final Score", idHeader: "LiveLabs ID" },
+      { id: "retire-now-top-100-workshops", mode: "risk", scoreHeader: "Final Score", idHeader: "LiveLabs ID" },
+      { id: "retire-now-top-100-sprints", mode: "risk", scoreHeader: "Final Score", idHeader: "LiveLabs ID" }
+    ];
+    function updateJenkinsScoreExplanations(root = document) {
+      const policy = dashboardQaReportMerge?.summary?.scorePolicy || {};
+      const configuredShare = Number(policy.tableShare ?? 0.25);
+      const jenkinsShare = Math.min(0.45, Math.max(0.05, Number.isFinite(configuredShare) ? configuredShare : 0.25));
+      const shares = { analytics: `${Math.round((1 - jenkinsShare) * 100)}%`, jenkins: `${Math.round(jenkinsShare * 100)}%` };
+      root.querySelectorAll("[data-score-share]").forEach((node) => {
+        const label = shares[node.dataset.scoreShare];
+        if (label) node.textContent = label;
+      });
+    }
+    function dashboardTableHeaderLabel(cell) {
+      return normalizeFilterText(cell?.querySelector("button")?.textContent || cell?.textContent || "");
+    }
+    function dashboardTableColumnIndex(wrapper, label) {
+      const wanted = normalizeFilterText(label);
+      return Array.from(wrapper?.querySelectorAll("thead tr:first-child th") || []).findIndex((cell) => {
+        const header = dashboardTableHeaderLabel(cell);
+        return header === wanted || (!header.startsWith("jenkins ") && header.endsWith(` ${wanted}`));
+      });
+    }
+    function dashboardTableCellForHeader(row, label) {
+      const index = dashboardTableColumnIndex(row?.closest("[data-filter-table]"), label);
+      return index < 0 ? null : row.querySelectorAll("td[data-filter-value]")[index] || null;
+    }
+    const rankedTableColumnOrder = [
+      "#", "WMS ID", "LiveLabs ID", "Title", "Author", "Author Email", "Council", "Last Update",
+      "Views 12m", "Views 90d", "Final Score", "Score Evidence", "Errors Found", "Jenkins Error Score"
+    ];
+    function rankedTableDisplayLabel(label) {
+      const normalized = normalizeFilterText(label);
+      if (["category", "council area"].includes(normalized)) return "Council";
+      if (normalized === "last meaningful update") return "Last Update";
+      if (["score", "review score", "retire score"].includes(normalized)) return "Final Score";
+      if (normalized === "jenkins priority") return "Errors Found";
+      return label;
+    }
+    function normalizeRankedTablePresentation(root = document) {
+      if (!root?.querySelector) return;
+      jenkinsRankedTableConfigs.forEach((config) => {
+        const selector = `[data-filter-table="${config.id}"]`;
+        const wrapper = root.matches?.(selector) ? root : root.querySelector(selector);
+        const table = wrapper?.querySelector("table");
+        const headerRow = table?.querySelector("thead tr:first-child");
+        if (!wrapper || !table || !headerRow) return;
+        const entries = Array.from(headerRow.children).map((cell, currentIndex) => {
+          if (cell.dataset.rankedSourceColumnIndex === undefined) cell.dataset.rankedSourceColumnIndex = String(currentIndex);
+          const originalLabel = (cell.querySelector(".sort-button")?.textContent || cell.textContent || "").trim();
+          const label = rankedTableDisplayLabel(originalLabel);
+          const button = cell.querySelector(".sort-button");
+          if (button && label !== originalLabel) {
+            button.textContent = label;
+            button.title = `Sort by ${label}`;
+          }
+          const orderIndex = rankedTableColumnOrder.findIndex((candidate) => normalizeFilterText(candidate) === normalizeFilterText(label));
+          return { cell, currentIndex, label, sourceIndex: Number(cell.dataset.rankedSourceColumnIndex), orderIndex: orderIndex < 0 ? rankedTableColumnOrder.length : orderIndex };
+        }).sort((left, right) => left.orderIndex - right.orderIndex || left.currentIndex - right.currentIndex);
+        const newIndexByCurrentIndex = new Map();
+        entries.forEach((entry, newIndex) => {
+          newIndexByCurrentIndex.set(entry.currentIndex, newIndex);
+          entry.cell.dataset.sortColumnIndex = String(newIndex);
+          const button = entry.cell.querySelector(".sort-button");
+          if (button) button.dataset.columnIndex = String(newIndex);
+          headerRow.appendChild(entry.cell);
+        });
+        const targetColumnOrder = entries.map((entry) => entry.sourceIndex);
+        table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach((row) => {
+          const rowCells = Array.from(row.children).filter((cell) => cell.tagName === "TD");
+          if (rowCells.length !== entries.length) return;
+          let currentColumnOrder = row.dataset.rankedColumnOrder
+            ? row.dataset.rankedColumnOrder.split(",").map(Number)
+            : Array.from({ length: rowCells.length }, (_, index) => index);
+          const currentSet = new Set(currentColumnOrder);
+          entries.forEach((entry) => {
+            if (!currentSet.has(entry.sourceIndex)) currentColumnOrder.push(entry.sourceIndex);
+          });
+          if (currentColumnOrder.length !== rowCells.length) return;
+          const orderedCells = targetColumnOrder.map((sourceIndex) => rowCells[currentColumnOrder.indexOf(sourceIndex)]);
+          if (orderedCells.some((cell) => !cell)) return;
+          orderedCells.forEach((cell) => row.appendChild(cell));
+          row.dataset.rankedColumnOrder = targetColumnOrder.join(",");
+        });
+        wrapper.closest(".toggle-body")?.querySelectorAll(`[data-table-filter="${config.id}"]`).forEach((control) => {
+          const oldIndex = Number(control.dataset.columnIndex);
+          const newIndex = newIndexByCurrentIndex.get(oldIndex);
+          if (newIndex === undefined) return;
+          control.dataset.columnIndex = String(newIndex);
+          const label = entries[newIndex]?.label;
+          const fieldLabel = control.closest(".filter-field")?.querySelector("span");
+          if (label && fieldLabel) {
+            fieldLabel.textContent = label;
+            if (control.tagName.toLowerCase() !== "select") control.placeholder = `Filter ${label}`;
+            else if (normalizeFilterText(label) === "council" && control.options[0]) control.options[0].textContent = "All councils";
+          }
+        });
+        const existingSortIndex = Number(wrapper.dataset.sortColumnIndex);
+        if (newIndexByCurrentIndex.has(existingSortIndex)) wrapper.dataset.sortColumnIndex = String(newIndexByCurrentIndex.get(existingSortIndex));
+      });
+    }
+    function ensureJenkinsTableColumns(wrapper) {
+      const tableId = wrapper?.dataset?.filterTable || "";
+      const table = wrapper?.querySelector("table");
+      const headerRow = table?.querySelector("thead tr:first-child");
+      if (!wrapper || !table || !headerRow) return null;
+      if (wrapper.dataset.analyticsColumnCount === undefined) {
+        wrapper.dataset.analyticsColumnCount = String(headerRow.children.length);
+        wrapper.dataset.analyticsSortColumnIndex = wrapper.dataset.sortColumnIndex || "";
+        wrapper.dataset.analyticsSortDirection = wrapper.dataset.sortDirection || "none";
+      }
+      let scoreCell = headerRow.querySelector('[data-jenkins-column="score"]');
+      let priorityCell = headerRow.querySelector('[data-jenkins-column="priority"]');
+      const startIndex = headerRow.children.length;
+      if (!scoreCell) {
+        scoreCell = document.createElement("th");
+        scoreCell.dataset.jenkinsColumn = "score";
+        scoreCell.dataset.rankedSourceColumnIndex = String(startIndex);
+        scoreCell.dataset.sortColumnIndex = String(startIndex);
+        scoreCell.dataset.sortType = "number";
+        scoreCell.innerHTML = `<button class="sort-button" type="button" data-sort-table="${escapeHtml(tableId)}" data-column-index="${startIndex}" data-default-direction="desc" title="Sort by Jenkins Error Score">Jenkins Error Score</button>`;
+        headerRow.appendChild(scoreCell);
+      }
+      scoreCell.hidden = true;
+      scoreCell.setAttribute("aria-hidden", "true");
+      if (!priorityCell) {
+        priorityCell = document.createElement("th");
+        priorityCell.dataset.jenkinsColumn = "priority";
+        priorityCell.dataset.rankedSourceColumnIndex = String(headerRow.children.length);
+        priorityCell.dataset.sortColumnIndex = String(headerRow.children.length);
+        priorityCell.dataset.sortType = "text";
+        priorityCell.innerHTML = `<button class="sort-button" type="button" data-sort-table="${escapeHtml(tableId)}" data-column-index="${headerRow.children.length}" data-default-direction="asc" title="Sort by errors found">Errors Found</button>`;
+        headerRow.appendChild(priorityCell);
+      }
+      const filterGrid = wrapper.closest(".toggle-body")?.querySelector(".filter-grid") || wrapper.parentElement?.querySelector(".filter-grid");
+      [[scoreCell.dataset.rankedSourceColumnIndex, "Jenkins Error Score", "Filter Jenkins error score"], [priorityCell.dataset.rankedSourceColumnIndex, "Errors Found", "Filter P1, P2, or P3"]].forEach(([index, label, placeholder]) => {
+        if (!filterGrid || filterGrid.querySelector(`[data-jenkins-filter="${index}"]`)) return;
+        const filterLabel = document.createElement("label");
+        filterLabel.className = "filter-field";
+        filterLabel.dataset.jenkinsFilter = String(index);
+        filterLabel.innerHTML = `<span>${escapeHtml(label)}</span><input type="search" placeholder="${escapeHtml(placeholder)}" data-table-filter="${escapeHtml(tableId)}" data-column-index="${index}">`;
+        filterGrid.appendChild(filterLabel);
+      });
+      table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach((row) => {
+        if (row.dataset.analyticsOriginalIndex === undefined) row.dataset.analyticsOriginalIndex = row.dataset.originalIndex || "0";
+        if (!row.querySelector('[data-jenkins-column="score"]')) {
+          const cell = document.createElement("td");
+          cell.dataset.jenkinsColumn = "score";
+          cell.hidden = true;
+          cell.setAttribute("aria-hidden", "true");
+          cell.dataset.filterValue = "";
+          cell.dataset.sortValue = "";
+          row.appendChild(cell);
+        }
+        if (!row.querySelector('[data-jenkins-column="priority"]')) {
+          const cell = document.createElement("td");
+          cell.dataset.jenkinsColumn = "priority";
+          cell.dataset.filterValue = "";
+          cell.dataset.sortValue = "";
+          row.appendChild(cell);
+        }
+      });
+      table.querySelectorAll('[data-jenkins-column="score"]').forEach((cell) => {
+        cell.hidden = true;
+        cell.setAttribute("aria-hidden", "true");
+      });
+      normalizeRankedTablePresentation(wrapper);
+      table.querySelectorAll("tbody tr.detail-row").forEach((row) => {
+        const colspan = row.querySelector("td[colspan]");
+        if (colspan) colspan.colSpan = headerRow.children.length;
+      });
+      const scoreIndex = Array.from(headerRow.children).indexOf(scoreCell);
+      const priorityIndex = Array.from(headerRow.children).indexOf(priorityCell);
+      return { table, scoreIndex, priorityIndex };
+    }
+    function tableRecordId(row, columnIndex) {
+      return String(row?.querySelectorAll('td[data-filter-value]')?.[columnIndex]?.dataset?.filterValue || "").trim();
+    }
+    function mergeScoreForTable(config, baseline, sourceOverlay) {
+      if (!Number.isFinite(baseline)) return null;
+      const jenkinsShare = Math.min(0.45, Math.max(0.05, Number(dashboardQaReportMerge?.summary?.scorePolicy?.tableShare ?? 0.25)));
+      if (config.mode === "performance") {
+        const error = sourceOverlay?.jenkinsErrorScore == null ? null : Number(sourceOverlay.jenkinsErrorScore);
+        return error != null && Number.isFinite(error) ? baseline * (1 - jenkinsShare) + (100 - error) * jenkinsShare : baseline;
+      }
+      if (config.mode === "risk") {
+        const error = sourceOverlay?.jenkinsErrorScore == null ? null : Number(sourceOverlay.jenkinsErrorScore);
+        return error != null && Number.isFinite(error) ? baseline * (1 - jenkinsShare) + error * jenkinsShare : baseline;
+      }
+      return null;
+    }
+    function humanReadableJenkinsFinding(issue) {
+      const label = String(issue?.label || issue?.code || "").trim();
+      if (!label || issue?.label) return label;
+      return label.replace(/[_-]+/g, " ").toLowerCase().replace(/\b[a-z]/g, (letter) => letter.toUpperCase());
+    }
+    function jenkinsColumnValue(overlay, withScore = false) {
+      if (!overlay) return withScore ? "" : "No Jenkins report";
+      const score = overlay.jenkinsErrorScore;
+      if (withScore) return score == null ? "N/A" : Number(score).toFixed(2);
+      const counts = overlay.priorityCounts || {};
+      const findings = Array.isArray(overlay.findings) ? overlay.findings : [];
+      const priorityLabels = [
+        ["p1", "P1", "urgent"],
+        ["p2", "P2", "review needed"],
+        ["p3", "P3", "minor"]
+      ];
+      const parts = priorityLabels.flatMap(([key, priority, meaning]) => {
+        const findingCount = findings.filter((issue) => issue.priority === priority).length;
+        const count = Math.max(Number(counts[key] || 0), findingCount);
+        return count ? [`${priority}: ${count} ${meaning}`] : [];
+      });
+      const unmapped = Number(counts.unmapped || 0);
+      if (unmapped) parts.push(`Unclassified: ${unmapped} · review with QA`);
+      const issues = Array.from(new Set(findings.map(humanReadableJenkinsFinding).filter(Boolean))).slice(0, 2);
+      const summary = parts.join(" · ") || "No P1/P2/P3 findings reported";
+      return issues.length ? `${summary} — ${issues.join(", ")}` : summary;
+    }
+    function rankedTableSourceScoreCell(row, config) {
+      if (!config.scoreHeader) return null;
+      const index = dashboardTableColumnIndex(row.closest("[data-filter-table]"), config.scoreHeader);
+      const cell = index < 0 ? null : row.querySelectorAll('td[data-filter-value]')[index];
+      if (!cell) return null;
+      if (cell.dataset.analyticsBaseline === undefined) cell.dataset.analyticsBaseline = cell.dataset.sortValue || cell.textContent.trim();
+      return cell;
+    }
+    function applyJenkinsMergeToRankedTables() {
+      if (!dashboardQaReportMerge) return;
+      const mergeId = String(dashboardQaReportMerge.id || dashboardQaReportMerge.appliedAt || "active");
+      let anyUpdated = false;
+      jenkinsRankedTableConfigs.forEach((config) => {
+        const wrapper = document.querySelector(`[data-filter-table="${config.id}"]`);
+        if (!wrapper || wrapper.dataset.jenkinsMergeId === mergeId) return;
+        const columns = ensureJenkinsTableColumns(wrapper);
+        if (!columns) return;
+        anyUpdated = true;
+        const idIndex = dashboardTableColumnIndex(wrapper, config.idHeader);
+        const originalIndex = config.scoreHeader ? dashboardTableColumnIndex(wrapper, config.scoreHeader) : -1;
+        const rows = Array.from(columns.table.querySelectorAll('tbody tr[data-filter-row="true"]'));
+        rows.forEach((row) => {
+          const sourceId = tableRecordId(row, idIndex);
+          const sourceOverlay = jenkinsOverlayForId(sourceId);
+          const priorityLabel = jenkinsColumnValue(sourceOverlay);
+          const sourceErrorScore = sourceOverlay?.jenkinsErrorScore == null ? null : Number(sourceOverlay.jenkinsErrorScore);
+          const scoreLabel = jenkinsColumnValue(sourceOverlay, true);
+          const scoreSortValue = scoreLabel && scoreLabel !== "N/A" ? Number(scoreLabel) : null;
+          const scoreCell = row.querySelector('[data-jenkins-column="score"]');
+          const priorityCell = row.querySelector('[data-jenkins-column="priority"]');
+          if (!scoreCell || !priorityCell) return;
+          scoreCell.dataset.filterValue = normalizeFilterText(scoreLabel);
+          scoreCell.dataset.sortValue = scoreSortValue == null || !Number.isFinite(scoreSortValue) ? "" : String(scoreSortValue);
+          scoreCell.textContent = scoreLabel || "N/A";
+          priorityCell.dataset.filterValue = normalizeFilterText(priorityLabel);
+          priorityCell.dataset.sortValue = normalizeFilterText(priorityLabel);
+          priorityCell.textContent = priorityLabel;
+          if (config.scoreHeader) {
+            const baseCell = row.querySelectorAll('td[data-filter-value]')[originalIndex];
+            if (baseCell.dataset.analyticsBaseline === undefined) {
+              baseCell.dataset.analyticsBaseline = baseCell.dataset.sortValue || baseCell.textContent.trim();
+              baseCell.dataset.analyticsFilterValue = baseCell.dataset.filterValue || "";
+              baseCell.dataset.analyticsSortValue = baseCell.dataset.sortValue || "";
+            }
+            const baseline = Number.parseFloat(baseCell.dataset.analyticsBaseline);
+          const blended = mergeScoreForTable(config, baseline, sourceOverlay);
+            if (blended != null) {
+              baseCell.textContent = blended.toFixed(2);
+              baseCell.dataset.filterValue = normalizeFilterText(blended.toFixed(2));
+              baseCell.dataset.sortValue = blended.toFixed(4);
+            }
+          }
+        });
+        const scoreSortIndex = config.scoreHeader ? dashboardTableColumnIndex(wrapper, config.scoreHeader) : columns.scoreIndex;
+        wrapper.dataset.sortColumnIndex = String(scoreSortIndex >= 0 ? scoreSortIndex : columns.scoreIndex);
+        wrapper.dataset.sortDirection = "desc";
+        const sortedRows = rows.slice().sort((left, right) => {
+          const a = Number.parseFloat(left.querySelectorAll('td[data-sort-value]')[scoreSortIndex >= 0 ? scoreSortIndex : columns.scoreIndex]?.dataset.sortValue || "");
+          const b = Number.parseFloat(right.querySelectorAll('td[data-sort-value]')[scoreSortIndex >= 0 ? scoreSortIndex : columns.scoreIndex]?.dataset.sortValue || "");
+          if (!Number.isFinite(a) && !Number.isFinite(b)) return Number(left.dataset.originalIndex || 0) - Number(right.dataset.originalIndex || 0);
+          if (!Number.isFinite(a)) return 1;
+          if (!Number.isFinite(b)) return -1;
+          return b - a;
+        });
+        sortedRows.forEach((row, index) => {
+          row.dataset.originalIndex = String(index);
+          const rankCell = row.querySelector('td[data-sort-value]');
+          if (rankCell) {
+            rankCell.textContent = String(index + 1);
+            rankCell.dataset.filterValue = String(index + 1);
+            rankCell.dataset.sortValue = String(index + 1);
+          }
+          columns.table.querySelector("tbody")?.appendChild(row);
+          const detailRow = detailRowFor(row);
+          if (detailRow) columns.table.querySelector("tbody")?.appendChild(detailRow);
+        });
+        wrapper.dataset.jenkinsMergeId = mergeId;
+      });
+      if (!anyUpdated) return;
+      refreshInitializedTableStates({ resetPage: true });
+    }
+    function clearJenkinsRankedTableMerge() {
+      let cleared = false;
+      jenkinsRankedTableConfigs.forEach((config) => {
+        const wrapper = document.querySelector(`[data-filter-table="${config.id}"][data-jenkins-merge-id]`);
+        const table = wrapper?.querySelector("table");
+        const headerRow = table?.querySelector("thead tr:first-child");
+        if (!wrapper || !table || !headerRow) return;
+        cleared = true;
+        const scoreIndex = config.scoreHeader ? dashboardTableColumnIndex(wrapper, config.scoreHeader) : -1;
+        table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach((row) => {
+          if (config.scoreHeader && scoreIndex >= 0) {
+            const scoreCell = row.querySelectorAll('td[data-filter-value]')[scoreIndex];
+            if (scoreCell?.dataset.analyticsBaseline !== undefined) {
+              scoreCell.textContent = scoreCell.dataset.analyticsBaseline;
+              scoreCell.dataset.filterValue = scoreCell.dataset.analyticsFilterValue || "";
+              scoreCell.dataset.sortValue = scoreCell.dataset.analyticsSortValue || "";
+              delete scoreCell.dataset.analyticsBaseline;
+              delete scoreCell.dataset.analyticsFilterValue;
+              delete scoreCell.dataset.analyticsSortValue;
+            }
+          }
+          const rankCell = row.querySelector('td[data-sort-value]');
+          if (rankCell?.dataset.analyticsRank !== undefined) {
+            rankCell.textContent = rankCell.dataset.analyticsRank;
+            rankCell.dataset.filterValue = rankCell.dataset.analyticsRankFilter || rankCell.dataset.analyticsRank;
+            rankCell.dataset.sortValue = rankCell.dataset.analyticsRankSort || rankCell.dataset.analyticsRank;
+            delete rankCell.dataset.analyticsRank;
+            delete rankCell.dataset.analyticsRankFilter;
+            delete rankCell.dataset.analyticsRankSort;
+          }
+          row.dataset.originalIndex = row.dataset.analyticsOriginalIndex || "0";
+          delete row.dataset.analyticsOriginalIndex;
+          row.querySelectorAll('[data-jenkins-column]').forEach((cell) => cell.remove());
+        });
+        headerRow.querySelectorAll('[data-jenkins-column]').forEach((cell) => cell.remove());
+        const staticColumnOrder = Array.from(headerRow.children, (cell) => cell.dataset.rankedSourceColumnIndex).join(",");
+        table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach((row) => { row.dataset.rankedColumnOrder = staticColumnOrder; });
+        wrapper.closest(".toggle-body")?.querySelectorAll("[data-jenkins-filter]").forEach((field) => field.remove());
+        table.querySelectorAll("tbody tr.detail-row").forEach((row) => {
+          const colspan = row.querySelector("td[colspan]");
+          if (colspan) colspan.colSpan = Number(wrapper.dataset.analyticsColumnCount || headerRow.children.length);
+        });
+        if (wrapper.dataset.analyticsSortColumnIndex) wrapper.dataset.sortColumnIndex = wrapper.dataset.analyticsSortColumnIndex;
+        else delete wrapper.dataset.sortColumnIndex;
+        wrapper.dataset.sortDirection = wrapper.dataset.analyticsSortDirection || "none";
+        ["analyticsColumnCount", "analyticsSortColumnIndex", "analyticsSortDirection", "jenkinsMergeId"].forEach((key) => { delete wrapper.dataset[key]; });
+      });
+      if (cleared) refreshInitializedTableStates({ resetPage: true });
+    }
+    function ownersForJenkinsQueue() {
+      const owners = new Map();
+      [inventoryRecordByKey, searchRecordByKey].forEach((records) => records.forEach((record) => {
+        const id = String(record?.livelabsId || "").trim();
+        if (id && record?.owner && !owners.has(id)) owners.set(id, record.owner);
+      }));
+      document.querySelectorAll('tr[data-filter-row="true"]').forEach((row) => {
+        const values = rowValuesByHeader(row);
+        const id = String(values.get("LiveLabs ID") || "").trim();
+        const owner = values.get("Author Email") || values.get("Owner Email") || values.get("Owner");
+        if (id && owner && !owners.has(id)) owners.set(id, owner);
+      });
+      return owners;
+    }
+    function jenkinsPriorityGuideMarkup() {
+      return `<details class="panel toggle-panel jenkins-priority-guide"><summary class="panel-head"><h3>What Jenkins priorities mean</h3></summary><div class="toggle-body"><p class="jenkins-priority-intro">Jenkins runs automated tests on public workshops and sprints. P1 may stop learners, so review it first. P2 needs a fix next; P3 is for routine cleanup. P2 and P3 affect the final score; P1 does not and is handled separately.</p><div class="jenkins-priority-grid"><article class="jenkins-priority-card" data-priority="P1"><h4>P1 · urgent</h4><p>May stop a learner. Examples: a broken required link or image, or a step they cannot complete. Check the evidence, fix confirmed issues, and ask a reviewer to verify anything you cannot reproduce.</p></article><article class="jenkins-priority-card" data-priority="P2"><h4>P2 · fix next</h4><p>Needs an author fix, but may not stop learners. Examples: grammar, a typo, or Markdown formatting. Each P2 finding counts twice as much as P3 in the final score.</p></article><article class="jenkins-priority-card" data-priority="P3"><h4>P3 · routine</h4><p>A minor issue for routine cleanup. For example, a detail that does not change the steps or result. P3 affects the final score less than P2.</p></article></div><p class="jenkins-priority-author-note">Open the record and read the finding and evidence before making a change. In this table, use Open record; in Search, select the result. If you cannot reproduce a P1 finding, ask a reviewer to verify the report.</p></div></details>`;
+    }
+    function renderJenkinsP1ActionQueue() {
+      const anchor = document.getElementById("jenkins-p1-slot");
+      if (!anchor) return;
+      let section = document.getElementById("jenkins-p1-action-queue");
+      if (!section) {
+        section = document.createElement("section");
+        section.className = "section jenkins-p1-section";
+        section.id = "jenkins-p1-action-queue";
+        section.dataset.dashboardPage = "urgent";
+        anchor.append(section);
+      }
+      const mergeId = String(dashboardQaReportMerge?.id || dashboardQaReportMerge?.appliedAt || "no-report");
+      if (section.dataset.mergeId === mergeId) return;
+      if (!dashboardQaReportMerge) {
+        section.innerHTML = `<div class="section-head"><div class="section-head-top"><h2>P1 · Urgent reviewer actions</h2></div><p>If your workshop or sprint appears here, review it first: a P1 finding may stop learners from completing it. Fix confirmed issues, or ask a reviewer to verify a finding you cannot reproduce.</p></div>${jenkinsPriorityGuideMarkup()}<details class="panel toggle-panel ranked-table-panel ranked-table-disclosure"><summary class="panel-head"><h3>P1 findings to address first</h3></summary><div class="toggle-body"><p class="empty">Add a Jenkins report in Admin to see P1 findings here.</p></div></details>`;
+        section.dataset.mergeId = mergeId;
+        applyDashboardPageView(document.body.dataset.dashboardPage || "performance");
+        return;
+      }
+      const owners = ownersForJenkinsQueue();
+      const rows = [];
+      Object.entries(dashboardQaReportMerge.overlay || {}).forEach(([livelabsId, overlay]) => {
+        if (!publicLivelabsIds.has(String(livelabsId).trim())) return;
+        (Array.isArray(overlay.findings) ? overlay.findings : []).filter((issue) => issue.priority === "P1").forEach((issue) => {
+          const verification = issue.group === "verification-required" || /verify/i.test(issue.priorityLabel || "");
+          const title = overlay.itemTitle || issue.itemTitle || "LiveLabs item";
+          const issueSummary = [issue.label || issue.code || "Unclassified issue", issue.message || "No finding summary supplied"].filter(Boolean).join(" · ");
+          const owner = owners.get(String(livelabsId)) || "Reviewer assignment needed";
+          const action = verification ? "Verify report" : "Author fix";
+          const occurrenceCount = Math.max(0, Number(issue.count || 0));
+          const values = [action, title, livelabsId, issueSummary, occurrenceCount, owner, livelabsId];
+          const cells = values.map((value, index) => {
+            const display = index === 4 ? occurrenceCount.toLocaleString() : escapeHtml(value);
+            const filterValue = escapeHtml(normalizeFilterText(value));
+            const sortValue = escapeHtml(value);
+            const content = index === 6 ? `<a href="/search/?livelabs_id=${encodeURIComponent(livelabsId)}">Open record</a>` : display;
+            return `<td data-filter-value="${filterValue}" data-sort-value="${sortValue}">${content}</td>`;
+          }).join("");
+          rows.push(`<tr data-filter-row="true" data-original-index="${rows.length}">${cells}</tr>`);
+        });
+      });
+      const tableId = "jenkins-p1-action-table";
+      const columns = ["Action", "Workshop / sprint", "LiveLabs ID", "Finding", "Occurrences", "Author / owner", "Record"];
+      const filters = columns.map((label, index) => `<label class="filter-field" for="${tableId}-filter-${index}"><span>${label}</span><input id="${tableId}-filter-${index}" type="search" placeholder="Filter ${escapeHtml(label)}" data-table-filter="${tableId}" data-column-index="${index}"></label>`).join("");
+      const headers = columns.map((label, index) => `<th data-sort-column-index="${index}" data-sort-type="${index === 4 || index === 2 ? "number" : "text"}" aria-sort="none"><button class="sort-button" type="button" data-sort-table="${tableId}" data-column-index="${index}" data-default-direction="${index === 4 ? "desc" : "asc"}" title="Sort by ${escapeHtml(label)}">${escapeHtml(label)}</button></th>`).join("");
+      section.innerHTML = `<div class="section-head"><div class="section-head-top"><h2>P1 · Urgent reviewer actions</h2></div><p>If your workshop or sprint appears here, review it first: a P1 finding may stop learners from completing it. Fix confirmed issues, or ask a reviewer to verify a finding you cannot reproduce.</p></div>${jenkinsPriorityGuideMarkup()}<div class="panel-stack ranked-table-stack"><details class="panel toggle-panel ranked-table-panel ranked-table-disclosure"><summary class="panel-head"><h3>P1 findings to address first</h3></summary><div class="toggle-body"><div class="table-tools"><span class="table-count" data-table-count-for="${tableId}">${rows.length.toLocaleString()} rows</span><span class="table-hint">Filter the findings, sort a column, or open a record.</span><button class="filter-reset" type="button" data-clear-filters-for="${tableId}">Clear filters</button></div><details class="filter-disclosure"><summary><span>Apply filters</span><span class="filter-chevron" aria-hidden="true"></span></summary><div class="filter-grid">${filters}</div></details><div class="table-wrap" data-filter-table="${tableId}"><table class="data-table jenkins-p1-table" id="${tableId}"><thead><tr>${headers}</tr></thead><tbody>${rows.length ? rows.join("") : '<tr><td colspan="7" class="empty">No P1 findings in the applied Jenkins report.</td></tr>'}</tbody></table></div></div></details></div>`;
+      section.dataset.mergeId = mergeId;
+      applyDashboardPageView(document.body.dataset.dashboardPage || "overview");
+      initializeTablesIn(section, { force: true });
+    }
+    function applyJenkinsDashboardMerge() {
+      applyJenkinsMergeToLoadedRecords();
+      updateJenkinsScoreExplanations();
+      if (!dashboardQaReportMerge) clearJenkinsRankedTableMerge();
+      renderJenkinsP1ActionQueue();
+      applyJenkinsMergeToRankedTables();
+      applyPortfolioStatsSummary();
+      tableSearchRecordsCache = null;
+      refreshDashboardSearch();
+      if (loadedFullSearchRecords.length) renderAllDataTable();
+      if (dashboardQaReportMerge) refreshRenderedSearchDetail();
+    }
+    function ensureDashboardQaMergeLoaded() {
+      if (dashboardQaReportMerge) return Promise.resolve(dashboardQaReportMerge);
+      return fetch("/api/dashboard-admin-state", { cache: "no-store" })
+        .then((response) => response.ok ? response.json() : null)
+        .then((payload) => {
+          dashboardQaReportMerge = payload?.qaReportMerge || null;
+          if (dashboardQaReportMerge) applyJenkinsMergeToLoadedRecords();
+          return dashboardQaReportMerge;
+        })
+        .catch(() => dashboardQaReportMerge);
+    }
+    function refreshRenderedSearchDetail() {
+      const view = document.querySelector(".search-workshop-view");
+      const identity = readSearchUrlState();
+      if (!view || !view.querySelector(".search-view-header") || !hasSearchIdentity(identity)) return;
+      const record = resolveSearchRecordIdentity(Array.from(searchRecordByKey.values()), identity).record;
+      if (record) renderSearchDetail(record, { updateUrl: false });
+    }
+    function reloadDashboardJenkinsMerge() {
+      fetch("/api/dashboard-admin-state", { cache: "no-store" })
+        .then((response) => response.ok ? response.json() : null)
+        .then((payload) => {
+          dashboardQaReportMerge = payload?.qaReportMerge || null;
+          applyJenkinsDashboardMerge();
+        })
+        .catch(() => {});
+    }
+    function observeJenkinsDashboardTables() {
+      if (window.__jenkinsDashboardMergeObserver || !document.body) return;
+      window.__jenkinsDashboardMergeObserver = new MutationObserver(() => {
+        if (!dashboardQaReportMerge) return;
+        renderJenkinsP1ActionQueue();
+        applyJenkinsMergeToRankedTables();
+      });
+      window.__jenkinsDashboardMergeObserver.observe(document.body, { childList: true, subtree: true });
+    }
     function adminNumberOrNull(value) {
       if (value === null || value === undefined || value === "") return null;
       const match = String(value).replace(/,/g, "").match(/-?\d+(?:\.\d+)?/);
@@ -1413,6 +2078,7 @@
     }
     function sanitizeTagDefinitions(tags = defaultTagDefinitions) {
       const seen = new Set();
+      const allowedColors = new Set(["teal", "blue", "purple", "green", "amber", "red", "slate"]);
       return (Array.isArray(tags) ? tags : [])
         .map((tag) => {
           const label = String(tag?.label || formatOverrideStatus(tag?.key || "")).trim();
@@ -1420,11 +2086,13 @@
           if (!label || !requestedKey || tagKeyBlocklist.has(requestedKey)) return null;
           const key = uniqueTagKey(requestedKey, seen);
           seen.add(key);
+          const requestedColor = String(tag?.color || "teal").toLowerCase();
           return {
             key,
             label,
-            note: String(tag?.note || ""),
-            className: String(tag?.className || defaultTagClassByKey.get(key) || "")
+            description: String(tag?.description || tag?.note || ""),
+            className: String(tag?.className || defaultTagClassByKey.get(key) || ""),
+            color: allowedColors.has(requestedColor) ? requestedColor : "teal"
           };
         })
         .filter(Boolean);
@@ -1440,14 +2108,14 @@
         .filter((tag) => allowed.has(tag))));
     }
     function tagDefinitionFor(key) {
-      return tagDefinitionsForState(dashboardAdminState).find((tag) => tag.key === key) || { key, label: formatOverrideStatus(key), className: "" };
+      return tagDefinitionsForState(dashboardAdminState).find((tag) => tag.key === key) || { key, label: formatOverrideStatus(key), description: "", className: "", color: "teal" };
     }
     function tagPillsHtml(tags = []) {
       const cleaned = sanitizeAssignedTags(tags, tagDefinitionsForState(dashboardAdminState));
       if (!cleaned.length) return "";
       return `<span class="governance-group-list">${cleaned.map((tagKey) => {
         const tag = tagDefinitionFor(tagKey);
-        return `<span class="governance-group-pill ${escapeHtml(tag.className || "")}" data-admin-tag="${escapeHtml(tag.key)}">${escapeHtml(tag.label)}</span>`;
+        return `<span class="governance-group-pill ${escapeHtml(tag.className || "")} tag-tone-${escapeHtml(tag.color || "teal")}" data-admin-tag="${escapeHtml(tag.key)}"${tag.description ? ` title="${escapeHtml(tag.description)}"` : ""}>${escapeHtml(tag.label)}</span>`;
       }).join("")}</span>`;
     }
     function adminTagsForRecord(record) {
@@ -1464,6 +2132,7 @@
         note: String(override?.note || ""),
         qaExcluded: false,
         status,
+        tagsOnly: override?.tagsOnly === true,
         tags: sanitizeAssignedTags(override?.tags, tagDefinitions),
         target: ["title", "wms_id", "livelabs_id"].includes(override?.target) ? override.target : "wms_id",
         value: String(override?.value || "").trim()
@@ -1524,7 +2193,7 @@
       const link = document.querySelector("[data-admin-link]");
       if (!link) return;
       const session = refreshCachedAdminSession(readDashboardSession());
-      link.href = "./admin/";
+      link.href = "/admin";
       link.title = session
         ? `Open admin panel as ${session.email || session.name || "admin"}`
         : "Sign in to open the admin panel";
@@ -1533,7 +2202,7 @@
         const cachedSession = refreshCachedAdminSession(readDashboardSession());
         if (!cachedSession) return;
         event.preventDefault();
-        window.location.href = "./admin/";
+        window.location.href = "/admin";
       }, { once: true });
     }
     function activeQaExceptionRules() {
@@ -1676,7 +2345,7 @@
     }
     function addQaExceptionBadge(row, label = "QA Review", extraClass = "") {
       if (authorFacingGovernanceTagsHidden) return;
-      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      const titleCell = dashboardTableCellForHeader(row, "Title");
       if (!titleCell || titleCell.querySelector(".qa-exception-badge")) return;
       const badge = document.createElement("span");
       badge.className = `qa-exception-badge ${extraClass}`.trim();
@@ -1791,7 +2460,7 @@
       return (clone.textContent || "").trim();
     }
     function decorateDetailCopyTargets(root = document) {
-      root.querySelectorAll?.(".search-result-card dd, .search-meta-list dd, .search-detail-panel td, .search-detail-panel .note, .search-detail-panel .panel-head > span").forEach((element) => {
+      root.querySelectorAll?.(".search-result-card dd, .search-meta-list dd, .search-detail-panel td").forEach((element) => {
         if (element.querySelector("[data-copy-value]")) return;
         const text = detailReportText(element);
         if (!text) return;
@@ -2023,7 +2692,7 @@
     }
     function addNoAuthorBadge(row) {
       if (authorFacingGovernanceTagsHidden) return;
-      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      const titleCell = dashboardTableCellForHeader(row, "Title");
       if (!titleCell || titleCell.querySelector(".no-author-badge")) return;
       const badge = document.createElement("span");
       badge.className = "no-author-badge";
@@ -2048,7 +2717,7 @@
     function clearNoAuthorMarkers(row) {
       row.classList.remove("no-author-row");
       delete row.dataset.noAuthor;
-      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      const titleCell = dashboardTableCellForHeader(row, "Title");
       if (titleCell?.dataset.noAuthorBaseFilterValue !== undefined) {
         titleCell.dataset.filterValue = titleCell.dataset.noAuthorBaseFilterValue;
       }
@@ -2102,13 +2771,13 @@
     }
     function rowDemandProtectionDetailText(row) {
       const status = rowDemandProtectionStatus(row);
-      const months = status.staleMonths === null ? "unknown age" : `${status.staleMonths} months since update`;
+      const months = status.staleMonths === null ? "N/A (update date unavailable)" : `${status.staleMonths} months since update`;
       const reasonText = status.reasons.length ? status.reasons.join("; ") : "no demand-protection threshold met";
       return `Stale threshold match: ${months}. Demand protection: ${reasonText}. Review for refresh or keep-active handling before treating this as a clean retirement candidate.`;
     }
     function addDemandProtectedBadge(row) {
       if (authorFacingGovernanceTagsHidden) return;
-      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      const titleCell = dashboardTableCellForHeader(row, "Title");
       if (!titleCell || titleCell.querySelector(".demand-protected-badge")) return;
       const badge = document.createElement("span");
       badge.className = "demand-protected-badge";
@@ -2189,7 +2858,9 @@
       const needle = normalizeFilterText(override?.value || "");
       if (!needle || !record) return false;
       if (override.target === "livelabs_id") return normalizeFilterText(record.livelabsId || "") === needle;
-      if (override.target === "title") return normalizeFilterText(record.title || "").includes(needle);
+      if (override.target === "title") return override.tagsOnly
+        ? normalizeFilterText(record.title || "") === needle
+        : normalizeFilterText(record.title || "").includes(needle);
       return normalizeFilterText(record.wmsId || "") === needle;
     }
     function adminOverrideForRecord(record) {
@@ -2247,7 +2918,7 @@
       }
     }
     function removeAdminTagBadges(row) {
-      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      const titleCell = dashboardTableCellForHeader(row, "Title");
       if (titleCell?.dataset.adminTagBaseFilterValue !== undefined) {
         titleCell.dataset.filterValue = titleCell.dataset.adminTagBaseFilterValue;
         delete titleCell.dataset.adminTagBaseFilterValue;
@@ -2261,7 +2932,7 @@
     function addAdminTagBadges(row, tags = []) {
       const cleaned = sanitizeAssignedTags(tags, tagDefinitionsForState(dashboardAdminState));
       if (!cleaned.length) return;
-      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      const titleCell = dashboardTableCellForHeader(row, "Title");
       if (!titleCell || titleCell.querySelector(".admin-tag-badges")) return;
       const labels = cleaned.map((tagKey) => tagDefinitionFor(tagKey).label);
       const baseFilterValue = titleCell.dataset.filterValue || "";
@@ -2286,21 +2957,25 @@
         });
         detailRowFor(row)?.querySelectorAll("[data-admin-override-detail]").forEach((detail) => detail.remove());
         detailRowFor(row)?.querySelectorAll("[data-admin-tags-detail]").forEach((detail) => detail.remove());
-        const override = activeRowOverrides().find((item) => adminTargetMatches(row, item.target || "wms_id", item.value));
+        const override = activeRowOverrides().find((item) => item.tagsOnly && item.target === "title"
+          ? normalizeFilterText(adminMatchContextFor(row).title) === normalizeFilterText(item.value)
+          : adminTargetMatches(row, item.target || "wms_id", item.value));
         if (!override) return;
         applyAdminFieldEdits(row, override);
         row.dataset.adminOverride = "true";
-        row.dataset.adminStatus = override.status || "pending";
+        if (!override.tagsOnly) row.dataset.adminStatus = override.status || "pending";
         const tags = sanitizeAssignedTags(override.tags, tagDefinitionsForState(dashboardAdminState));
         addAdminTagBadges(row, tags);
         const detailBody = detailRowFor(row)?.querySelector(".detail-table tbody");
         if (!detailBody) return;
-        const detail = document.createElement("tr");
-        detail.dataset.adminOverrideDetail = "true";
-        const status = override.status || "pending";
-        const note = override.note || "No note provided.";
-        detail.innerHTML = `<th>Admin Override</th><td>${escapeHtml(`${formatOverrideStatus(status)}. ${note}`)}</td>`;
-        detailBody.prepend(detail);
+        if (!override.tagsOnly) {
+          const detail = document.createElement("tr");
+          detail.dataset.adminOverrideDetail = "true";
+          const status = override.status || "pending";
+          const note = override.note || "No note provided.";
+          detail.innerHTML = `<th>Admin Override</th><td>${escapeHtml(`${formatOverrideStatus(status)}. ${note}`)}</td>`;
+          detailBody.prepend(detail);
+        }
         if (tags.length) {
           const tagDetail = document.createElement("tr");
           tagDetail.dataset.adminTagsDetail = "true";
@@ -2320,14 +2995,16 @@
         ["top-performers", "topPerformers"],
         ["at-risk-content", "atRiskContent"],
         ["retire-now-content", "retireNowContent"],
-        ["replacement-suggestions", "replacementSuggestions"],
-        ["disabled-content", "disabledContent"],
         ["portfolio-stats", "portfolioStats"]
       ];
       mappings.forEach(([sectionId, settingKey]) => {
         const visible = dashboardAdminState.sectionVisibility?.[settingKey] !== false;
         const section = document.getElementById(sectionId);
-        if (section) section.hidden = !visible;
+        if (section) {
+          const pages = String(section.dataset.dashboardPage || "all").split(/\s+/);
+          const pageVisible = pages.includes("all") || pages.includes(normalizeDashboardPage(document.body.dataset.dashboardPage));
+          section.hidden = !visible || !pageVisible;
+        }
         document.querySelectorAll(`a[href="#${sectionId}"], a[data-section-hash="#${sectionId}"]`).forEach((link) => {
           link.hidden = !visible;
           link.setAttribute("aria-hidden", visible ? "false" : "true");
@@ -2470,8 +3147,6 @@
         "Publish Date Used",
         "Lifecycle State",
         "Suggested Action",
-        "Replacement Title",
-        "Replacement Score",
         "Why This Rule Matched",
         "Why It Is Included Or Excluded",
         "Sprint Signal Reason",
@@ -2505,13 +3180,13 @@
         </tr>`;
       }).join("");
       return `
-        <section class="search-detail-panel search-detail-panel-wide">
+        <section class="search-detail-panel search-detail-panel-wide search-file-update-panel">
           <div class="panel-head">
-            <h3>Files Updated On GitHub</h3>
+            <h3>GitHub file updates</h3>
             <span>${record.fileUpdates.length} files</span>
           </div>
-          <p class="note">Pulled from the existing markdown file date check for this dashboard row.</p>
-          <div class="search-files-table-wrap">
+          <p class="note">Review Git update dates, acknowledgement dates, and the date check for each file.</p>
+          <details class="search-disclosure"><summary><span>View file update details</span><span class="search-disclosure-count">${record.fileUpdates.length} files</span></summary><div class="search-disclosure-body"><div class="search-files-table-wrap">
             <table class="search-files-table">
               <thead>
                 <tr>
@@ -2523,40 +3198,42 @@
               </thead>
               <tbody>${rows}</tbody>
             </table>
-          </div>
+          </div></div></details>
         </section>`;
     }
     function familyHtml(record) {
       const family = record.family;
-      if (!family || Number(family.total || 0) <= 1) return "";
+      const wmsId = String(family?.wmsId || record.wmsId || "").trim();
+      if (!family || !wmsId || Number(family.total || 0) <= 1) return "";
       const siblings = Array.isArray(family.siblings) ? family.siblings : [];
       const rows = siblings.map((item) => {
         const related = searchRecordByKey.get(item.key);
         const title = item.title || related?.title || "Untitled";
         const livelabsId = item.livelabsId || related?.livelabsId || "";
-        const wmsId = item.wmsId || related?.wmsId || family.wmsId || "";
         const status = [item.publishStatus, item.publishType].filter(Boolean).join(" / ") || related?.status || "";
         const category = item.category || related?.category || "";
         const titleHtml = related
           ? `<button class="nav-link" type="button" data-family-search-key="${escapeHtml(item.key)}">${escapeHtml(title)}</button>`
           : escapeHtml(title);
-        return `<div class="family-record"><table class="search-detail-table"><tbody>
-          <tr><th>Related Content</th><td>${titleHtml}</td></tr>
-          <tr><th>LiveLabs ID</th><td>${escapeHtml(livelabsId || "N/A")}</td></tr>
-          <tr><th>WMS ID</th><td>${escapeHtml(wmsId || "N/A")}</td></tr>
-          <tr><th>Status</th><td>${escapeHtml(status || "N/A")}</td></tr>
-          <tr><th>Category</th><td>${escapeHtml(category || "N/A")}</td></tr>
-        </tbody></table></div>`;
+        const meta = [
+          livelabsId ? `<span>LiveLabs ${escapeHtml(livelabsId)}</span>` : "",
+          status ? `<span>${escapeHtml(status)}</span>` : "",
+          category ? `<span>${escapeHtml(category)}</span>` : ""
+        ].filter(Boolean).join("");
+        return `<article class="family-record">
+          <div class="family-record-title">${titleHtml}</div>
+          <div class="family-record-meta">${meta || `<span>Record details unavailable</span>`}</div>
+        </article>`;
       }).join("");
       return `
-        <div class="search-family-section" data-report-section>
+        <section class="search-detail-panel search-detail-panel-wide search-family-panel" data-report-section>
           <div class="panel-head">
-            <h3>Same WMS Family</h3>
-            <span>${escapeHtml(family.total)} records · ${siblings.length} related</span>
+            <h3>Other items with the same WMS ID</h3>
+            <span>${siblings.length} other items · ${escapeHtml(family.total)} total</span>
           </div>
-          <p class="note">These rows share WMS ID ${escapeHtml(family.wmsId || record.wmsId || "")}. Each LiveLabs ID remains a separate searchable result and detail page.</p>
-          <div class="search-family-records">${rows || `<p>No sibling rows available.</p>`}</div>
-        </div>`;
+          <p class="note">These public, published records share WMS ID ${escapeHtml(wmsId)}. We group by exact WMS ID, not by title. Select a title to open another record.</p>
+          <div class="search-family-records">${rows || `<p>No related records available.</p>`}</div>
+        </section>`;
     }
     function adminTagsPanelHtml(record) {
       const tags = adminTagsForRecord(record);
@@ -2583,8 +3260,8 @@
       const inventoryFamilyFilter = onInventory && selectedIdentity.wmsId && !selectedIdentity.livelabsId && !selectedIdentity.contentKey;
       let destination = route;
       if (route === 'current') {
-        if ((hasSearchIdentity(selectedIdentity) && !inventoryFamilyFilter) || (query && !onInventory)) destination = 'search';
-        else if (!query && !hasSearchIdentity(selectedIdentity) && /\/search(?:\/index\.html)?\/?$/i.test(url.pathname)) destination = 'dashboard';
+        if (hasSearchIdentity(selectedIdentity) && !inventoryFamilyFilter) destination = 'search';
+        else if (!hasSearchIdentity(selectedIdentity) && /\/search(?:\/index\.html)?\/?$/i.test(url.pathname)) destination = 'dashboard';
       }
       if (destination === 'dashboard' || destination === 'search') {
         url.pathname = new URL(location.protocol === 'file:' ? 'index.html' : destination + '/', document.baseURI).pathname;
@@ -2598,7 +3275,10 @@
       if (selectedIdentity.contentKey) url.searchParams.set("content_key", selectedIdentity.contentKey);
       const shouldClearHash = clearHash ?? Boolean(query || hasSearchIdentity(selectedIdentity));
       if (shouldClearHash) url.hash = "";
-      else if (!url.hash && !query && !hasSearchIdentity(selectedIdentity) && url.pathname === new URL('dashboard/', document.baseURI).pathname) url.hash = '#overview';
+      else if (!query && !hasSearchIdentity(selectedIdentity) && url.pathname === new URL('dashboard/', document.baseURI).pathname) {
+        if (!url.searchParams.has("view")) url.searchParams.set("view", "performance");
+        if (url.hash === "#overview") url.hash = "";
+      }
       const method = replace ? "replaceState" : "pushState";
       history[method](null, "", `${url.pathname}${url.search}${url.hash}`);
     }
@@ -2627,9 +3307,105 @@
       const rows = Array.from(record.details.entries()).filter(([label]) => label.startsWith("QA "));
       const warnings = qa.freshness_warnings?.length ? ` Source checks: ${qa.freshness_warnings.join("; ")}.` : "";
       return `<section class="search-detail-panel search-detail-panel-wide qa-evidence" data-qa-evidence>
-        <h3>QA evidence</h3>
-        <p class="note">${qa.mode === "pilot" ? "Local pilot. " : ""}The error score measures reported defect burden from 0 to 100; lower is better. It is not a test failure percentage. Unknown evidence is not a pass.${escapeHtml(warnings)}</p>
-        <table class="search-detail-table"><tbody>${rows.map(([label, value]) => `<tr><th>${escapeHtml(label)}</th><td>${escapeHtml(value)}</td></tr>`).join("")}</tbody></table>
+        <div class="panel-head"><h3>QA source evidence</h3></div>
+        <p class="note">${qa.mode === "pilot" ? "Local pilot. " : ""}The Jenkins Error Score reflects reported issue severity and counts, not the percentage of failed tests. Evidence without a confirmed QA status needs review.${escapeHtml(warnings)}</p>
+        ${rows.length ? `<details class="search-disclosure"><summary><span>View QA evidence fields</span><span class="search-disclosure-count">${rows.length} fields</span></summary><div class="search-disclosure-body"><table class="search-detail-table"><tbody>${rows.map(([label, value]) => `<tr><th>${escapeHtml(label)}</th><td>${escapeHtml(value)}</td></tr>`).join("")}</tbody></table></div></details>` : ""}
+      </section>`;
+    }
+    function qaReportOverlayHtml(record) {
+      const overlay = dashboardQaReportMerge?.overlay?.[String(record.livelabsId || "")];
+      if (!overlay) return "";
+      const counts = overlay.testCounts || {};
+      const priorities = overlay.priorityCounts || {};
+      const tests = Array.isArray(overlay.tests) ? overlay.tests : [];
+      const findings = Array.isArray(overlay.findings) ? overlay.findings : [];
+      const reportWarnings = Array.isArray(dashboardQaReportMerge.summary?.report?.warnings) ? dashboardQaReportMerge.summary.report.warnings : [];
+      const p1Findings = findings.filter((issue) => issue.priority === "P1");
+      const otherFindings = findings.filter((issue) => issue.priority !== "P1");
+      const totalTests = Number(counts.passed || 0) + Number(counts.failed || 0) + Number(counts.skipped || 0) + Number(counts.other || 0);
+      const score = overlay.jenkinsErrorScore == null ? "N/A" : Number(overlay.jenkinsErrorScore).toFixed(2);
+      const p1Blockers = Number(priorities.p1 || 0);
+      const p1Verify = Number(priorities.p1Verification || 0);
+      const p1Total = Math.max(p1Blockers + p1Verify, p1Findings.length);
+      const p2Issues = Number(priorities.p2 || 0);
+      const p3Issues = Number(priorities.p3 || 0);
+      const runStatus = overlay.runStatus || "N/A";
+      const itemStatus = overlay.itemStatus || "N/A";
+      const hasCountsWithoutDetails = !findings.length && (p1Total > 0 || p2Issues > 0 || p3Issues > 0 || Number(overlay.findingRows || 0) > 0);
+      const countPhrase = (count, singular, plural = `${singular}s`) => `${count} ${count === 1 ? singular : plural}`;
+      const detailCount = [findings.length ? countPhrase(findings.length, "finding") : "", tests.length ? countPhrase(tests.length, "test") : "", Number(overlay.findingRows || 0) ? countPhrase(Number(overlay.findingRows || 0), "issue row") : ""].filter(Boolean).join(" · ") || "Run summary";
+      const recordKey = String(record.livelabsId || "item").replace(/[^a-zA-Z0-9_-]/g, "-");
+      let helpSequence = 0;
+      const help = (label, description) => {
+        const id = `qa-help-${recordKey}-${++helpSequence}`;
+        return `<span class="qa-help-wrap"><abbr class="qa-help-trigger" tabindex="0" aria-label="About ${escapeHtml(label)}" aria-describedby="${escapeHtml(id)}">i</abbr><span class="qa-help-tooltip" id="${escapeHtml(id)}" role="tooltip">${escapeHtml(description)}</span></span>`;
+      };
+      const tooltipLabel = (label, description) => {
+        const id = `qa-help-${recordKey}-${++helpSequence}`;
+        return `<span class="qa-help-wrap qa-help-text-wrap"><abbr class="qa-help-term" tabindex="0" aria-label="About ${escapeHtml(label)}" aria-describedby="${escapeHtml(id)}">${escapeHtml(label)}</abbr><span class="qa-help-tooltip" id="${escapeHtml(id)}" role="tooltip">${escapeHtml(description)}</span></span>`;
+      };
+      const labeled = tooltipLabel;
+      const detailField = (label, value, description, wide = false) => `<div${wide ? " class=\"qa-detail-wide\"" : ""}><dt>${labeled(label, description)}</dt><dd>${escapeHtml(value == null || value === "" ? "N/A" : String(value))}</dd></div>`;
+      const timestampField = (label, value, description) => {
+        const timestamp = value == null || value === "" ? "" : String(value);
+        const parts = timestamp.match(/^(\d{4}-\d{2}-\d{2})T(.+)$/);
+        if (!parts) return detailField(label, timestamp || "N/A", description);
+        return `<div><dt>${labeled(label, description)}</dt><dd><time class="qa-timestamp" datetime="${escapeHtml(timestamp)}"><span>${escapeHtml(parts[1])}</span><span>${escapeHtml(parts[2])}</span></time></dd></div>`;
+      };
+      const priorityHelp = {
+        P1: "Urgent: this may stop a learner, such as a broken required link or a step they cannot complete. Review the evidence, then fix it or ask a reviewer. P1 is handled separately from the score.",
+        P2: "Fix next. Examples include a typo, grammar issue, or Markdown problem. Each P2 occurrence counts twice as much as a P3 occurrence in the error score.",
+        P3: "Minor cleanup with little effect on the learner, such as wording polish that does not change a step or result. Each P3 occurrence counts half as much as a P2 occurrence in the error score."
+      };
+      const findingCards = (items) => `<div class="qa-evidence-list">${items.map((issue) => {
+        const priority = issue.priority || "N/A";
+        const priorityLabel = issue.priorityLabel || "Unmapped · review";
+        const issueType = issue.label || issue.code || "Unclassified";
+        const source = issue.file ? `${issue.file}${issue.line ? `:${issue.line}` : ""}` : (issue.section || "N/A");
+        const priorityDescription = priorityHelp[priority] || "Priority was not mapped from the report. Review the finding details with a reviewer.";
+        return `<article class="qa-evidence-card"><div class="qa-evidence-card-heading"><h5>${escapeHtml(issueType)}</h5><span class="qa-priority-chip">${tooltipLabel(priorityLabel, priorityDescription)}</span></div><dl class="qa-evidence-grid">
+          ${detailField("QA severity", issue.severity || "N/A", "Severity assigned by the QA check. The P1, P2, and P3 priority describes how urgently an author should act.")}
+          ${detailField("Occurrences", Number(issue.count || 0), "How many times this finding was reported. One issue row can represent multiple occurrences.")}
+          ${detailField("Reported finding", issue.message || "N/A", "The finding text supplied by the report. Use it to locate the affected instruction or content.", true)}
+          ${detailField("Test source", source, "The file and line, or report section, where the check found this issue.")}
+          ${detailField("Evidence status", issue.evidenceStatus || "Needs review", "Whether the report includes enough detail to confirm and act on this finding.")}
+        </dl></article>`;
+      }).join("")}</div>`;
+      const testCards = `<div class="qa-evidence-list">${tests.map((test) => `<article class="qa-evidence-card qa-test-card"><h5>${escapeHtml(test.title || "Untitled test")}</h5><dl class="qa-evidence-grid">
+        ${detailField("Result", test.status || "N/A", "What the automated check reported for this run.")}
+        ${detailField("Expected", test.expectedStatus || "N/A", "The result the check expected.")}
+        ${detailField("Classification", test.classification || "N/A", "The report's category for this check.")}
+        ${detailField("Issues", test.issueCodes || "N/A", "Issue codes linked to this test, when the report provides them.")}
+      </dl></article>`).join("")}</div>`;
+      const runLabel = (label, description) => `<span class="qa-run-label">${tooltipLabel(label, description)}:</span>`;
+      const scoreHelp = "Weights each P2 occurrence twice as much as a P3 occurrence, then scales the total issue burden. P1 is handled separately. This is not the percentage of failed tests; higher means more P2/P3 issues. N/A means the report's priorities could not be mapped.";
+      const p2Occurrences = Number(priorities.p2Occurrences || 0);
+      const p3Occurrences = Number(priorities.p3Occurrences || 0);
+      const p1Detail = !p1Total ? "None reported" : (p1Blockers + p1Verify > 0 ? `${countPhrase(p1Blockers, "learner blocker")} · ${countPhrase(p1Verify, "finding to verify", "findings to verify")}` : countPhrase(p1Total, "P1 finding"));
+      return `<section class="search-detail-panel search-detail-panel-wide qa-report-overlay" data-qa-report-overlay>
+        <div class="qa-report-heading"><div><h3>Jenkins test results ${help("Jenkins test results", "Jenkins runs automated checks on workshops and sprints and reports test results and content findings.")}</h3></div><span class="qa-score-badge"><span>${labeled("Jenkins error score", scoreHelp)}</span><strong>${escapeHtml(score)}</strong></span></div>
+        <p class="note">Automated checks flag issues in workshops and sprints. Review P1 first; P2 and P3 affect the score.</p>
+        <dl class="qa-signal-grid" aria-label="Jenkins issue priorities">
+          <div data-priority="P1"><dt>${labeled("P1 · urgent", priorityHelp.P1)}</dt><dd>${p1Total}</dd><span class="qa-signal-detail">${p1Detail}</span></div>
+          <div data-priority="P2"><dt>${labeled("P2 · fix next", priorityHelp.P2)}</dt><dd>${countPhrase(p2Issues, "finding")} · ${countPhrase(p2Occurrences, "occurrence")}</dd></div>
+          <div data-priority="P3"><dt>${labeled("P3 · minor", priorityHelp.P3)}</dt><dd>${countPhrase(p3Issues, "finding")} · ${countPhrase(p3Occurrences, "occurrence")}</dd></div>
+        </dl>
+        <p class="qa-run-summary"><span>${runLabel("Run", "The overall result of the Jenkins job that ran the checks.")} <strong>${escapeHtml(runStatus)}</strong></span><span>${runLabel("Item", "The result Jenkins reported for this workshop or sprint in the report.")} <strong>${escapeHtml(itemStatus)}</strong></span><span>${runLabel("Tests", "Counts checks reported as passed, failed, or skipped. These counts do not directly set the error score.")} <strong>${Number(counts.passed || 0)} passed · ${Number(counts.failed || 0)} failed · ${Number(counts.skipped || 0)} skipped</strong></span></p>
+        ${hasCountsWithoutDetails ? `<p class="qa-status-note">The report has summary counts but no item-level findings to review.</p>` : ""}
+        <details class="search-disclosure qa-report-detail"><summary><span class="qa-detail-summary-title">Full report details ${help("Full report details", "Run times, finding counts, and item-level evidence copied from the Jenkins report.")}</span><span class="search-disclosure-count">${escapeHtml(detailCount)}</span></summary><div class="search-disclosure-body">
+          <dl class="qa-run-details">
+            ${timestampField("Started", overlay.startedAt, "When Jenkins started this run.")}
+            ${timestampField("Report applied", dashboardQaReportMerge.appliedAt, "When this report was added to the Analytics view.")}
+            ${detailField("Issue rows", Number(overlay.findingRows || 0), "Finding entries in the imported report. A row may include more than one occurrence.")}
+            ${detailField("Reported occurrences", Number(overlay.findingOccurrences || 0), "Total number of times findings were reported across the issue rows.")}
+            ${detailField("Tests reported", totalTests, "Total checks counted as passed, failed, skipped, or another reported status.")}
+            ${detailField("Internal QA only", Number(priorities.internalQa || 0), "Findings reserved for the QA team, rather than author action items.")}
+          </dl>
+          ${p1Findings.length ? `<div class="qa-report-detail-group"><h4>${tooltipLabel("P1 findings", "Urgent findings that may stop learners. Review these first and confirm the evidence.")}</h4>${findingCards(p1Findings)}</div>` : ""}
+          ${otherFindings.length ? `<div class="qa-report-detail-group"><h4>${tooltipLabel("Other findings", "P2 findings need a fix next. P3 findings are lower-impact cleanup. Both contribute to the error score.")}</h4>${findingCards(otherFindings)}</div>` : ""}
+          ${tests.length ? `<details class="search-disclosure qa-test-details"><summary><span class="qa-detail-summary-title">Test case details ${help("Test case details", "Per-test results and any issue codes linked to each check.")}</span><span class="search-disclosure-count">${tests.length} tests</span></summary><div class="search-disclosure-body">${testCards}</div></details>` : ""}
+          ${reportWarnings.length ? `<div class="qa-report-warnings"><strong>${labeled("Report notes", "Notes supplied with the imported report that may affect how its evidence should be read.")}</strong><p class="note">${reportWarnings.map(escapeHtml).join(" ")}</p></div>` : ""}
+        </div></details>
       </section>`;
     }
     function renderSearchDetail(record, { updateUrl = true } = {}) {
@@ -2641,6 +3417,13 @@
       const view = ensureSearchView();
       const summaryItems = summaryItemsFor(record);
       const governanceItems = governanceItemsFor(record);
+      const updateLabels = new Set(["Update Evidence", "Latest GitHub Update", "Suggested Action", "Recommended Action", "Lifecycle State", "Workshop Path"]);
+      const profileItems = governanceItems.filter(([label]) => !["WMS ID", "LiveLabs ID"].includes(label) && !updateLabels.has(label));
+      const qaReportHtml = qaReportOverlayHtml(record);
+      const metaListHtml = (items) => items.length ? `<dl class="search-meta-list">${items.map(([label, value]) => {
+        const wide = ["Latest GitHub Update", "Workshop Path"].includes(label) || String(value).length > 48;
+        return `<div${wide ? ` class="wide"` : ""}><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`;
+      }).join("")}</dl>` : `<p class="note">No details were reported in this group.</p>`;
       const subtitle = [record.source || "Dashboard", record.status || "", record.ownership?.status === "disputed" ? "Ownership needs review" : record.owner ? `WMS reported owner: ${record.owner}` : ""].filter(Boolean).join(" | ");
       view.innerHTML = `
         <div class="search-view-header">
@@ -2651,30 +3434,23 @@
           </div>
           <span class="search-view-actions"><button class="nav-link" type="button" data-copy-search-link>Copy link</button><details class="report-export-dropdown"><summary class="nav-link">Export report <span aria-hidden="true">▾</span></summary><div class="report-export-options"><button type="button" data-export-search-xlsx>Excel (.xlsx)</button><button type="button" data-export-search-csv>CSV (.csv)</button></div></details><button class="nav-link" type="button" data-back-dashboard>Back to Dashboard</button></span>
         </div>
-        <dl class="search-result-summary">
+        <section class="search-summary-section" aria-label="Record summary"><h3 class="search-section-title">At a glance</h3><dl class="search-result-summary">
           ${summaryItems.map(([label, value]) => `<div class="search-result-card"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}
-        </dl>
+        </dl></section>
+        <section class="search-detail-panel search-detail-panel-wide search-ownership-panel"><h3>Ownership &amp; publishing</h3>${metaListHtml(profileItems)}</section>
+        ${qaEvidenceHtml(record)}
+        <div class="search-detail-grid${qaReportHtml ? " search-qa-source-grid" : ""}">
+          ${qaReportHtml}
+          <section class="search-detail-panel search-detail-panel-wide search-source-panel" data-report-section>
+            <div class="panel-head"><h3>Source details</h3><span>Full record fields</span></div>
+            <p class="note">Open a group when you need the source values used in this view.</p>
+            <details class="search-disclosure"><summary><span>Dashboard row</span><span class="search-disclosure-count">${record.values.size} fields</span></summary><div class="search-disclosure-body"><table class="search-detail-table"><tbody>${sourceRowsHtml(record)}</tbody></table></div></details>
+            <details class="search-disclosure"><summary><span>Additional source fields</span><span class="search-disclosure-count">${record.details.size} fields</span></summary><div class="search-disclosure-body"><table class="search-detail-table"><tbody>${fieldRowsHtml(record)}</tbody></table></div></details>
+          </section>
+        </div>
         <div class="search-detail-grid">
-          ${qaEvidenceHtml(record)}
-          <section class="search-detail-panel">
-            <h3>Governance Summary</h3>
-            <dl class="search-meta-list">
-              ${governanceItems.map(([label, value]) => {
-                const wide = ["Latest GitHub Update", "Workshop Path"].includes(label) || String(value).length > 48;
-                return `<div${wide ? ` class="wide"` : ""}><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`;
-              }).join("")}
-            </dl>
-            ${familyHtml(record)}
-          </section>
-          <section class="search-detail-panel">
-            <h3>Dashboard Row</h3>
-            <table class="search-detail-table"><tbody>${sourceRowsHtml(record)}</tbody></table>
-          </section>
           ${fileUpdatesHtml(record)}
-          <section class="search-detail-panel search-detail-panel-wide">
-            <h3>Additional Details</h3>
-            <table class="search-detail-table"><tbody>${fieldRowsHtml(record)}</tbody></table>
-          </section>
+          ${familyHtml(record)}
         </div>`;
       view.querySelectorAll("[data-back-dashboard]").forEach((button) => {
         button.addEventListener("click", () => showDashboardView({ clearUrl: true }));
@@ -2747,6 +3523,18 @@
       });
       if (clearUrl) writeSearchUrl();
     }
+    function mountPrimarySearch() {
+      const existing = document.querySelector(".primary-search-panel");
+      const search = document.querySelector(".rail .sidebar-search");
+      const header = document.querySelector("#overview");
+      if (existing || !search || !header) return;
+      const panel = document.createElement("section");
+      panel.className = "primary-search-panel";
+      panel.setAttribute("aria-label", "Search public workshops and sprints");
+      panel.innerHTML = '<div class="primary-search-copy"><div class="primary-search-heading"><h2>Find a workshop or sprint</h2></div></div><div class="primary-search-control"></div>';
+      panel.querySelector(".primary-search-control").append(search);
+      header.append(panel);
+    }
     function renderSearchResults(records, query) {
       const resultsNode = document.querySelector("[data-search-results]");
       const statusNode = document.querySelector("[data-search-status]");
@@ -2774,7 +3562,13 @@
         button.className = "search-result-button";
         const familyNote = record.family?.total > 1 ? `Family ${record.family.total}` : "";
         const tagNote = recordAdminTagText(record);
-        button.innerHTML = `<strong>${escapeHtml(record.title)}</strong><span>${escapeHtml([record.category, record.wmsId ? `WMS ${record.wmsId}` : "", record.livelabsId ? `LiveLabs ${record.livelabsId}` : "", record.owner || "", tagNote ? `Tags: ${tagNote}` : "", familyNote].filter(Boolean).join(" | "))}</span>`;
+        const overlay = jenkinsOverlayForId(record.livelabsId);
+        const findings = Array.isArray(overlay?.findings) ? overlay.findings : [];
+        const p1 = findings.filter((finding) => finding.priority === "P1").length;
+        const p2p3 = findings.filter((finding) => ["P2", "P3"].includes(finding.priority)).reduce((sum, finding) => sum + Math.max(1, Number(finding.count || 0)), 0);
+        const score = overlay?.jenkinsErrorScore != null && Number.isFinite(Number(overlay.jenkinsErrorScore)) ? `Jenkins Error Score ${Number(overlay.jenkinsErrorScore).toFixed(2)}` : "Jenkins Error Score N/A";
+        const jenkinsNote = overlay ? `${p1} P1 · ${p2p3} P2/P3 occurrences · ${score}` : "No Jenkins report attached";
+        button.innerHTML = `<strong>${escapeHtml(record.title)}</strong><span class="search-result-meta">${escapeHtml([record.category, record.wmsId ? `WMS ${record.wmsId}` : "", record.livelabsId ? `LiveLabs ${record.livelabsId}` : "", record.owner || "", tagNote ? `Tags: ${tagNote}` : "", familyNote].filter(Boolean).join(" | "))}</span><span class="search-result-jenkins">${escapeHtml(jenkinsNote)}</span>`;
         button.addEventListener("click", () => renderSearchDetail(record));
         resultsNode.appendChild(button);
       });
@@ -2796,6 +3590,9 @@
       });
     }
     function ensureAllDataDashboardUi() {
+      document.querySelectorAll("[data-inventory-link], [data-dashboard-view='inventory']").forEach((item) => item.remove());
+      document.getElementById("all-data-browser")?.remove();
+      return;
       const navListForInventory = document.querySelector(".nav-list");
       if (navListForInventory && !navListForInventory.querySelector("[data-inventory-link]")) {
         const inventoryItem = document.createElement("a");
@@ -2808,11 +3605,11 @@
       const navList = document.querySelector(".nav-list");
       if (navList) {
         navList.querySelectorAll('[data-dashboard-view="tops"]').forEach((item) => item.remove());
-        const overviewLink = navList.querySelector('a[href="#overview"]');
-        if (overviewLink) {
-          overviewLink.dataset.dashboardView = "overview";
-          const label = overviewLink.querySelector("span");
-          if (label) label.textContent = "Dashboard Overview";
+        const dashboardLink = navList.querySelector('[data-dashboard-view="performance"]') || navList.querySelector('[data-dashboard-view="overview"]') || navList.querySelector('a[href="#overview"]');
+        if (dashboardLink) {
+          dashboardLink.dataset.dashboardView = "performance";
+          const label = dashboardLink.querySelector("span");
+          if (label) label.textContent = "Dashboard";
         }
         if (!navList.querySelector('[data-inventory-link]')) {
           const inventoryItem = document.createElement("a");
@@ -2831,6 +3628,7 @@
         const section = document.createElement("section");
         section.className = "section all-data-section";
         section.id = "all-data-browser";
+        section.dataset.dashboardPage = "inventory";
         section.innerHTML = `
           <header class="page-header inventory-page-header">
             <div>
@@ -2871,12 +3669,14 @@
                   <label class="filter-field" for="all-data-publish-type"><span>Publish Type</span><select id="all-data-publish-type" data-all-data-select="publishType"><option value="">All publish types</option></select></label>
                   <label class="filter-field" for="all-data-review-state"><span>Review state</span><select id="all-data-review-state"><option value="">All review states</option><option value="Content to review/remove">Content to review/remove</option><option value="Ready">Ready</option></select></label>
                   <label class="filter-field" for="all-data-coverage"><span>Contact Coverage</span><select id="all-data-coverage"><option value="">All coverage</option><option value="author">Author</option><option value="fallback">Fallback contact</option><option value="author-missing">Author missing</option><option value="contact-gap">No author/fallback contact</option><option value="owner">Owner/stakeholder only</option><option value="missing">No contact evidence</option></select></label>
+                  <label class="filter-field" for="all-data-jenkins-data"><span>Jenkins data</span><select id="all-data-jenkins-data"><option value="">All records</option><option value="reported">Report applied</option><option value="issues">Has findings</option><option value="no-report">No report</option></select></label>
+                  <label class="filter-field" for="all-data-jenkins-priority"><span>Jenkins priority</span><select id="all-data-jenkins-priority"><option value="">All priorities</option><option value="P1">P1 · urgent</option><option value="P2">P2 · review</option><option value="P3">P3 · minor</option><option value="unmapped">Unmapped</option></select></label>
                 </div>
                 ${allDataControlsHtml("top")}
                 <div class="table-wrap">
                   <table id="all-content-data-table" class="all-data-table">
-                    <thead><tr><th class="all-data-row-number">#</th><th>Title</th><th>Type</th><th>Publish Status</th><th>Publish Type</th><th>WMS ID</th><th>LiveLabs ID</th><th>Category</th><th>Contact</th><th>QA Error Score</th><th>QA Evidence</th></tr></thead>
-                    <tbody data-all-data-rows><tr><td colspan="11" class="empty">Open Portfolio Inventory to load records</td></tr></tbody>
+                    <thead><tr><th class="all-data-row-number">#</th><th>Title</th><th>Type</th><th>Publish Status</th><th>Publish Type</th><th>WMS ID</th><th>LiveLabs ID</th><th>Category</th><th>Contact</th><th>Analytics QA Error Score</th><th>Jenkins Error Score</th><th>Jenkins Priority</th><th>QA Evidence</th></tr></thead>
+                    <tbody data-all-data-rows><tr><td colspan="13" class="empty">Open Portfolio Inventory to load records</td></tr></tbody>
                   </table>
                 </div>
                 ${allDataControlsHtml("bottom")}
@@ -2895,7 +3695,7 @@
         allDataState.pageRange = "";
         scheduleAllDataRender();
       });
-      [["all-data-type", "type"], ["all-data-publish-status", "publishStatus"], ["all-data-publish-type", "publishType"], ["all-data-review-state", "reviewState"], ["all-data-coverage", "coverage"]].forEach(([id, key]) => {
+      [["all-data-type", "type"], ["all-data-publish-status", "publishStatus"], ["all-data-publish-type", "publishType"], ["all-data-review-state", "reviewState"], ["all-data-coverage", "coverage"], ["all-data-jenkins-data", "jenkinsData"], ["all-data-jenkins-priority", "jenkinsPriority"]].forEach(([id, key]) => {
         const control = document.getElementById(id);
         if (!control) return;
         control.addEventListener("change", () => {
@@ -3165,6 +3965,8 @@
       const values = {
         category: record.category,
         contact: coverage.detail || record.owner,
+        jenkinsError: record.jenkinsErrorScore == null ? "" : String(record.jenkinsErrorScore),
+        jenkinsPriority: record.jenkinsPrioritySummary || "",
         livelabsId: record.livelabsId,
         publishStatus: allDataPublishStatus(record),
         publishType: allDataPublishType(record),
@@ -3184,9 +3986,10 @@
       }
       const direction = allDataState.sortDirection === "desc" ? "desc" : "asc";
       return records.slice().sort((left, right) => {
-        if (sortField.key === "qaError") {
-          const missingLeft = left.qa?.observed_error_score == null;
-          const missingRight = right.qa?.observed_error_score == null;
+        if (sortField.key === "qaError" || sortField.key === "jenkinsError") {
+          const scoreFor = (record) => sortField.key === "jenkinsError" ? record.jenkinsErrorScore : record.qa?.observed_error_score;
+          const missingLeft = scoreFor(left) == null;
+          const missingRight = scoreFor(right) == null;
           if (missingLeft !== missingRight) return missingLeft ? 1 : -1;
         }
         const comparison = compareSortValues(allDataSortValue(left, sortField.key), allDataSortValue(right, sortField.key), sortField.type);
@@ -3251,6 +4054,8 @@
     }
     function resetAllDataFilters() {
       allDataState.coverage = "";
+      allDataState.jenkinsData = "";
+      allDataState.jenkinsPriority = "";
       allDataState.page = 1;
       allDataState.pageRange = "";
       allDataState.publishStatus = "";
@@ -3260,7 +4065,7 @@
       allDataState.sortDirection = "asc";
       allDataState.sortKey = "";
       allDataState.type = "";
-      ["all-data-search", "all-data-type", "all-data-publish-status", "all-data-publish-type", "all-data-review-state", "all-data-coverage"].forEach((id) => {
+      ["all-data-search", "all-data-type", "all-data-publish-status", "all-data-publish-type", "all-data-review-state", "all-data-coverage", "all-data-jenkins-data", "all-data-jenkins-priority"].forEach((id) => {
         const control = document.getElementById(id);
         if (control) control.value = "";
       });
@@ -3268,7 +4073,7 @@
     function setInventoryLoadingState(message = "Loading inventory") {
       document.querySelectorAll("[data-all-data-count]").forEach((node) => { node.textContent = message; });
       const rowsNode = document.querySelector("[data-all-data-rows]");
-      if (rowsNode) rowsNode.innerHTML = `<tr><td colspan="11" class="empty">${escapeHtml(message)}</td></tr>`;
+      if (rowsNode) rowsNode.innerHTML = `<tr><td colspan="13" class="empty">${escapeHtml(message)}</td></tr>`;
       const totalNode = document.querySelector("[data-all-data-total]");
       if (totalNode) totalNode.textContent = message;
     }
@@ -3348,6 +4153,14 @@
         Array.from(record.details?.values?.() || []).join(" ")
       ].filter(Boolean).join(" "));
     }
+    function jenkinsPriorityMatches(record, priority) {
+      if (!priority) return true;
+      const overlay = record.jenkins || jenkinsOverlayForId(record.livelabsId);
+      if (!overlay) return false;
+      return priority === "unmapped"
+        ? Number(overlay.priorityCounts?.unmapped || 0) > 0
+        : Number(overlay.priorityCounts?.[priority.toLowerCase()] || 0) > 0;
+    }
     function syncAllDataSelect(select, values, allLabel) {
       if (!select) return;
       const current = select.value;
@@ -3376,6 +4189,11 @@
         if (allDataState.publishStatus && allDataPublishStatus(record) !== allDataState.publishStatus) return false;
         if (allDataState.publishType && allDataPublishType(record) !== allDataState.publishType) return false;
         if (allDataState.reviewState && allDataReviewState(record) !== allDataState.reviewState) return false;
+        const jenkins = record.jenkins || jenkinsOverlayForId(record.livelabsId);
+        if (allDataState.jenkinsData === "reported" && !jenkins) return false;
+        if (allDataState.jenkinsData === "issues" && !(Number(jenkins?.findingRows || 0) > 0)) return false;
+        if (allDataState.jenkinsData === "no-report" && jenkins) return false;
+        if (!jenkinsPriorityMatches(record, allDataState.jenkinsPriority)) return false;
         const coverage = allDataContactCoverage(record);
         if (!allDataRecordMatchesCoverage(coverage, allDataState.coverage)) return false;
         if (normalizedQuery && !allDataSearchText(record).includes(normalizedQuery)) return false;
@@ -3395,7 +4213,9 @@
         <td>${copyableValueHtml(record.livelabsId, "LiveLabs ID")}</td>
         <td>${escapeHtml(record.category || "N/A")}</td>
         <td>${copyableValueHtml(contact, "Author Email")}</td>
-        <td>${escapeHtml(record.qa?.observed_error_score ?? "Unknown")}</td>
+        <td>${escapeHtml(record.qa?.observed_error_score ?? "N/A")}</td>
+        <td>${escapeHtml(record.jenkinsErrorScore ?? "N/A")}</td>
+        <td>${escapeHtml(record.jenkinsPrioritySummary || "No Jenkins report")}</td>
         <td>${escapeHtml(qaEvidenceState(record).replaceAll("_", " "))}</td>
       </tr>`;
     }
@@ -3414,40 +4234,28 @@
     }
     function applyPortfolioStatsSummary() {
       const section = document.querySelector("#portfolio-stats");
-      if (!section || section.dataset.summaryApplied === "true") return;
-      section.dataset.summaryApplied = "true";
-      const fallbackDetails = Array.from(section.querySelectorAll("details.toggle-panel")).find((details) =>
-        normalizeFilterText(details.querySelector("summary h3")?.textContent || "") === "fallback implementation details"
-      );
-      if (fallbackDetails) fallbackDetails.hidden = false;
-      const sectionNote = section.querySelector(".section-head p");
-      if (sectionNote) sectionNote.textContent = "Start with four signals, then open the detailed demand and staleness breakdown only when you need it.";
-      const details = section.querySelector("details.toggle-panel:not([hidden])");
-      if (!details) return;
-      const summaryTitle = details.querySelector("summary h3");
-      const summaryMeta = details.querySelector("summary span");
-      if (summaryTitle) summaryTitle.textContent = "Explore the detailed breakdown";
-      if (summaryMeta) summaryMeta.textContent = "Demand + staleness bands";
-      const coveragePanel = Array.from(details.querySelectorAll(":scope > .toggle-body > .panel-grid > .panel")).find((panel) =>
-        normalizeFilterText(panel.querySelector(".panel-head h3")?.textContent || "") === "portfolio coverage"
-      );
-      if (coveragePanel) coveragePanel.remove();
-      const glance = document.createElement("details");
-      glance.className = "panel toggle-panel portfolio-glance";
-      glance.dataset.portfolioGlance = "true";
-      glance.setAttribute("aria-label", "Portfolio at a glance");
-      glance.innerHTML = `
-        <summary class="panel-head"><h3>Portfolio at a glance</h3><span>4 portfolio metrics</span></summary>
-        <div class="toggle-body portfolio-glance-body">
-          <p class="note">A quick read across four portfolio metrics. The active portfolio contains 885 items: 585 workshops and 300 sprints.</p>
-          <div class="portfolio-glance-grid">
-        <article class="portfolio-glance-card"><span>Active portfolio</span><strong>885</strong><small>585 workshops · 300 sprints</small></article>
-        <article class="portfolio-glance-card"><span>Updated in last 12 months</span><strong>285</strong><small>215 workshops · 70 sprints</small></article>
-        <article class="portfolio-glance-card"><span>Aged 18–24 months</span><strong>473</strong><small>250 workshops · 223 sprints</small></article>
-        <article class="portfolio-glance-card"><span>1,000+ views in 12 months</span><strong>433</strong><small>393 workshops · 40 sprints</small></article>
-          </div>
-        </div>`;
-      details.before(glance);
+      if (!section) return;
+      const records = publicRawRecords;
+      const overlay = dashboardQaReportMerge?.overlay || {};
+      const matched = Object.entries(overlay).filter(([id]) => publicLivelabsIds.has(String(id).trim()));
+      const scored = matched.filter(([, item]) => item?.jenkinsErrorScore != null && Number.isFinite(Number(item.jenkinsErrorScore)));
+      const p1Count = matched.reduce((total, [, item]) => total + (Array.isArray(item?.findings) ? item.findings.filter((finding) => finding.priority === "P1").length : 0), 0);
+      const countByType = (type) => records.filter((record) => record.type === type).length;
+      const values = {
+        "public-count": records.length,
+        "jenkins-p1-count": p1Count,
+        "workshop-count": countByType("Workshop"),
+        "sprint-count": countByType("Sprint"),
+        "jenkins-scored-count": scored.length,
+        "p1-count": p1Count
+      };
+      Object.entries(values).forEach(([key, value]) => {
+        document.querySelectorAll(`[data-overview-metric="${key}"], [data-public-stat="${key}"]`).forEach((node) => {
+          node.textContent = Number(value).toLocaleString();
+        });
+      });
+      const cohortNote = section.querySelector('[data-overview-note="public-breakdown"]');
+      if (cohortNote) cohortNote.textContent = `${countByType("Workshop").toLocaleString()} workshops · ${countByType("Sprint").toLocaleString()} sprints`;
     }
     function renderInventorySummary(totalRecords) {
       const summaryNode = document.querySelector("[data-inventory-summary]");
@@ -3476,7 +4284,7 @@
       if (warningNode) {
         const qa = portfolioInventoryMetadata?.qa_governance;
         warningNode.hidden = !qa;
-        warningNode.textContent = qa ? `QA ${qa.mode}: Jenkins ${qa.started_at}; Analytics ${qa.snapshot_date}. Error score 0–100; lower is better. Unknown is not a pass. ${qa.promotion_gaps.join("; ")}.` : "";
+        warningNode.textContent = qa ? `QA ${qa.mode}: Jenkins ${qa.started_at}; Analytics ${qa.snapshot_date}. Error score 0–100; lower is better. Missing QA evidence does not count as a pass. ${qa.promotion_gaps.join("; ")}.` : "";
       }
     }
     function renderAllDataTable() {
@@ -3487,7 +4295,7 @@
       const totalRecords = loadedFullSearchRecords.length;
       if (totalNode) totalNode.textContent = totalRecords ? `${totalRecords.toLocaleString()} inventory records` : "Loading inventory";
       if (!totalRecords) {
-        rowsNode.innerHTML = `<tr><td colspan="11" class="empty">Open Portfolio Inventory to load records</td></tr>`;
+        rowsNode.innerHTML = `<tr><td colspan="13" class="empty">Open Portfolio Inventory to load records</td></tr>`;
         syncAllDataControls(0, 1, 0, 0, null);
         return;
       }
@@ -3509,30 +4317,23 @@
       const last = records.length ? (selectedRange ? Math.min(selectedRange.end, records.length) : start + pageRecords.length) : 0;
       rowsNode.innerHTML = pageRecords.length
         ? pageRecords.map((record, index) => allDataRowHtml(record, first + index)).join("")
-        : `<tr><td colspan="11" class="empty">No matching rows</td></tr>`;
+        : `<tr><td colspan="13" class="empty">No matching rows</td></tr>`;
       if (panel) panel.dataset.totalPages = String(totalPages);
       syncAllDataControls(records.length, totalPages, first, last, selectedRange);
     }
     document.addEventListener("DOMContentLoaded", () => {
+      mountPrimarySearch();
       ensureAllDataDashboardUi();
       applyRankedTableDisclosures();
+      observeJenkinsDashboardTables();
+      addPortfolioMetricTooltips(document);
       const navLinks = Array.from(document.querySelectorAll(".nav-list a"));
-      const setNavCurrent = (mode, targetHash = "") => {
+      const setNavCurrent = (mode) => {
         navLinks.forEach((item) => item.removeAttribute("aria-current"));
-        const defaultHash = mode === "tops" ? "#top-performers" : mode === "inventory" ? "" : "#overview";
-        const normalizedHash = targetHash || defaultHash;
-        const hashLink = normalizedHash
-          ? navLinks.find((item) => item.hash === normalizedHash && !item.dataset.dashboardView)
-            || navLinks.find((item) => item.hash === normalizedHash)
-          : null;
-        const modeLink = navLinks.find((item) => item.dataset.dashboardView === mode);
-        const current = mode === "inventory"
-          ? (document.querySelector("[data-inventory-link]") || hashLink)
-          : mode === "overview"
-          ? (hashLink || modeLink)
-          : (modeLink || hashLink)
-          || document.querySelector('.nav-list a[data-dashboard-view="overview"]')
-          || document.querySelector('.nav-list a[href="#overview"]');
+        const normalizedMode = normalizeDashboardPage(mode);
+        const current = normalizedMode === "inventory"
+          ? navLinks.find((item) => item.hasAttribute("data-inventory-link"))
+          : navLinks.find((item) => item.dataset.dashboardView === normalizedMode);
         current?.setAttribute("aria-current", "true");
       };
       const scrollDashboardTarget = (targetHash) => {
@@ -3549,74 +4350,79 @@
       const dashboardEntryUrl = () => {
         return new URL(location.protocol === 'file:' ? 'index.html' : 'dashboard/', document.baseURI);
       };
-      const replaceDashboardUrl = (targetHash) => {
-        if (!targetHash) return;
-        const normalizedPath = location.pathname.replace(/\/+$/, "").toLowerCase();
-        if (normalizedPath.endsWith("/inventory") || normalizedPath.endsWith("/inventory/index.html")) {
-          const target = dashboardEntryUrl();
-          target.search = "";
-          target.hash = targetHash;
-          history.replaceState(null, "", `${target.pathname}${target.search}${target.hash}`);
-          return;
-        }
-        history.replaceState(null, "", targetHash);
-      };
-      const setDashboardMode = (mode = "overview", targetHash = "") => {
+      const setDashboardMode = (mode = "overview", options = {}) => {
+        if (typeof options === "string") options = { targetHash: options };
+        const targetHash = options.targetHash || "";
         showDashboardView({ clearUrl: false });
-        const normalizedMode = ["overview", "tops", "inventory"].includes(mode) ? mode : "overview";
-        if (normalizedMode !== "inventory") writeSearchUrl({ route: "dashboard" });
+        const normalizedMode = normalizeDashboardPage(mode);
         document.body.classList.toggle("dashboard-inventory-active", normalizedMode === "inventory");
-        document.body.classList.toggle("dashboard-tops-active", normalizedMode === "tops");
-        setNavCurrent(normalizedMode, targetHash);
-        replaceDashboardUrl(targetHash);
+        document.body.classList.remove("dashboard-tops-active");
+        applyDashboardPageView(normalizedMode);
+        setNavCurrent(normalizedMode);
+        if (options.updateUrl) {
+          const target = normalizedMode === "inventory"
+            ? new URL(location.protocol === "file:" ? "inventory/index.html" : "inventory/", document.baseURI)
+            : dashboardEntryUrl();
+          target.search = "";
+          if (normalizedMode !== "inventory") target.searchParams.set("view", normalizedMode);
+          target.hash = targetHash;
+          history.pushState(null, "", `${target.pathname}${target.search}${target.hash}`);
+        }
         if (normalizedMode === "inventory") {
           ensurePortfolioInventoryLoaded({ render: true }).finally(() => scrollDashboardTarget(targetHash || "#all-data-browser"));
           return;
         }
-        scrollDashboardTarget(targetHash || (normalizedMode === "tops" ? "#top-performers" : "#overview"));
+        const sections = dashboardPageConfig[normalizedMode]?.sections || [];
+        const sectionLoads = sections.map((sectionId) => loadLazySection(sectionId));
+        if (targetHash) Promise.all(sectionLoads).then(() => scrollDashboardTarget(targetHash));
+        else if (options.updateUrl && !options.preserveScroll) scrollDashboardTarget("#dashboard-top");
       };
+      window.setDashboardPage = setDashboardMode;
+      const dashboardTabs = Array.from(document.querySelectorAll("[data-dashboard-tab]"));
+      dashboardTabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => setDashboardMode(tab.dataset.dashboardTab, { updateUrl: true, preserveScroll: true }));
+        tab.addEventListener("keydown", (event) => {
+          const nextIndex = event.key === "ArrowRight" ? (index + 1) % dashboardTabs.length
+            : event.key === "ArrowLeft" ? (index - 1 + dashboardTabs.length) % dashboardTabs.length
+              : event.key === "Home" ? 0 : event.key === "End" ? dashboardTabs.length - 1 : -1;
+          if (nextIndex < 0) return;
+          event.preventDefault();
+          dashboardTabs[nextIndex].focus();
+          dashboardTabs[nextIndex].click();
+        });
+      });
       document.querySelectorAll("[data-dashboard-view]").forEach((link) => {
         link.addEventListener("click", (event) => {
           event.preventDefault();
-          setDashboardMode(link.dataset.dashboardView || "overview", link.hash || "");
+          setDashboardMode(link.dataset.dashboardView || "overview", { targetHash: link.hash || "", updateUrl: true });
         });
       });
       navLinks.filter((link) => !link.dataset.dashboardView && !link.dataset.inventoryLink).forEach((link) => {
         link.addEventListener("click", (event) => {
-          if (inventoryRouteRequested()) {
-            event.preventDefault();
-            const target = dashboardEntryUrl();
-            target.search = "";
-            target.hash = link.hash || "#overview";
-            window.location.assign(`${target.pathname}${target.search}${target.hash}`);
-            return;
-          }
-          showDashboardView();
-          document.body.classList.remove("dashboard-inventory-active", "dashboard-tops-active");
-          setNavCurrent("overview", link.hash || "");
+          event.preventDefault();
+          const targetPage = dashboardSectionPage[link.hash.slice(1)] || "overview";
+          setDashboardMode(targetPage, { targetHash: link.hash || "", updateUrl: true });
         });
       });
       window.addEventListener("hashchange", () => {
         if (inventoryRouteRequested()) {
-          setDashboardMode("inventory", "");
+          setDashboardMode("inventory", { updateUrl: false });
           return;
         }
-        const targetHash = location.hash || "#overview";
-        document.body.classList.remove("dashboard-inventory-active", "dashboard-tops-active");
-        showDashboardView({ clearUrl: false });
-        setNavCurrent("overview", targetHash);
+        const targetHash = location.hash === "#overview" ? "" : location.hash;
+        const requestedPage = new URLSearchParams(location.search).get("view") || dashboardSectionPage[targetHash.slice(1)] || "performance";
+        setDashboardMode(requestedPage, { targetHash, updateUrl: false });
+        if (location.hash === "#overview") {
+          const canonical = new URL(location.href);
+          canonical.searchParams.set("view", normalizeDashboardPage(requestedPage));
+          canonical.hash = "";
+          history.replaceState(null, "", `${canonical.pathname}${canonical.search}`);
+        }
       });
       document.querySelectorAll("[data-dashboard-home]").forEach((link) => {
         link.addEventListener("click", (event) => {
           event.preventDefault();
-          if (inventoryRouteRequested()) {
-            const target = dashboardEntryUrl();
-            target.search = "";
-            target.hash = "#overview";
-            window.location.assign(`${target.pathname}${target.search}${target.hash}`);
-            return;
-          }
-          setDashboardMode("overview", "#overview");
+          setDashboardMode("performance", { updateUrl: true });
         });
       });
       const normalizedPath = location.pathname.replace(/\/+$/, "").toLowerCase();
@@ -3634,9 +4440,20 @@
         history.replaceState(null, "", `${location.pathname}${location.search}`);
       }
       if (inventoryRouteRequested()) {
-        setDashboardMode("inventory", "");
+        setDashboardMode("inventory", { updateUrl: false });
       } else {
-        setNavCurrent("overview", location.hash || "#overview");
+        const normalizedPathForRoute = location.pathname.replace(/\/+$/, "").toLowerCase();
+        const isDashboardRoute = normalizedPathForRoute.endsWith("/dashboard") || normalizedPathForRoute.endsWith("/dashboard/index.html") || normalizedPathForRoute === "";
+        const requestedPage = initialParams.get("view") || dashboardSectionPage[location.hash.slice(1)] || "performance";
+        const normalizedRequestedPage = normalizeDashboardPage(requestedPage);
+        const targetHash = location.hash === "#overview" ? "" : location.hash;
+        setDashboardMode(requestedPage, { targetHash, updateUrl: false });
+        if (isDashboardRoute && normalizedRequestedPage !== "inventory") {
+          const canonical = new URL(location.href);
+          canonical.searchParams.set("view", normalizedRequestedPage);
+          if (location.hash === "#overview") canonical.hash = "";
+          history.replaceState(null, "", `${canonical.pathname}${canonical.search}${canonical.hash}`);
+        }
       }
       syncAdminEntryLink();
       applyQaExceptionPrototype();
@@ -3677,13 +4494,14 @@
           return;
         }
         if (!detailViewActive) writeSearchUrl({ query: searchInput.value });
-        if (!loadedFullSearchRecords.length && !portfolioInventoryLoadComplete) {
+        if (!loadedFullSearchRecords.length) {
           const requestId = ++searchLoadRequest;
-          setSearchStatus("Loading full portfolio search");
+          setSearchStatus("Loading public portfolio search");
           syncSearchClear();
-          ensurePortfolioInventoryLoaded({ render: document.body.classList.contains("dashboard-inventory-active") }).then(() => {
+          loadFullSearchRecords().then((records) => {
             if (requestId !== searchLoadRequest) return;
             searchRecords = buildActiveSearchIndex();
+            if (!records.length) setSearchStatus("Public portfolio search is unavailable");
             renderSearchResults(searchRecords, searchInput.value);
             syncSearchClear();
           });
@@ -3714,22 +4532,17 @@
             route: identityRequested && !inventoryWmsFilterOnly ? "search" : "current"
           });
         }
-        if (inventoryRouteRequested() && (!identityRequested || inventoryWmsFilterOnly)) {
-          allDataState.query = state.query;
-          allDataState.wmsId = state.wmsId;
-          const inventorySearch = document.querySelector('#all-data-search');
-          if (inventorySearch) inventorySearch.value = state.query || state.wmsId;
-          setDashboardMode("inventory", "");
-          return;
-        }
+        if (inventoryRouteRequested()) return;
         document.body.classList.remove('dashboard-inventory-active', 'dashboard-tops-active');
         if (identityRequested) {
           document.body.classList.remove("dashboard-inventory-active", "dashboard-tops-active");
           setSearchStatus(`Loading record for ${searchIdentityLabel(state)}`);
-          ensurePortfolioInventoryLoaded({ render: false }).then((records) => {
+          loadFullSearchRecords().then(async (records) => {
             searchRecords = buildSearchIndex(records, { includeTableRecords: false });
             const resolution = resolveSearchRecordIdentity(searchRecords, state);
             if (resolution.record) {
+              await ensureDashboardQaMergeLoaded();
+              if (dashboardQaReportMerge) applyJenkinsMergeToRecord(resolution.record);
               writeSearchUrl({ query: state.query, record: resolution.record, replace: true, route: "search" });
               renderSearchDetail(resolution.record, { updateUrl: false });
               setSearchStatus("");
@@ -3743,7 +4556,10 @@
           return;
         }
         if (state.query) updateSearch();
-        else showDashboardView({ clearUrl: false });
+        else {
+          const requestedPage = new URLSearchParams(location.search).get("view") || dashboardSectionPage[location.hash.slice(1)] || "overview";
+          setDashboardMode(requestedPage, { targetHash: location.hash, updateUrl: false });
+        }
       };
       window.addEventListener("popstate", restoreSearchFromUrl);
       const scheduleSearchUpdate = (delay = 120) => {
@@ -3777,7 +4593,7 @@
           showDashboardView({ clearUrl: true });
           if (document.body.classList.contains("dashboard-inventory-active")) setNavCurrent("inventory", "");
           else if (document.body.classList.contains("dashboard-tops-active")) setNavCurrent("tops", "#top-performers");
-          else setNavCurrent("overview", location.hash || "#overview");
+          else setNavCurrent("performance");
         });
       });
       document.addEventListener("click", (event) => {
@@ -3855,5 +4671,29 @@
       window.LiveLabsLoading.ready();
       window.addEventListener("storage", (event) => {
         if (event.key === adminStorageKey) reloadDashboardAdminState();
+        if (event.key === qaMergeRefreshKey) reloadDashboardJenkinsMerge();
       });
+      loadFullSearchRecords().then(() => {
+        applyPortfolioStatsSummary();
+        return fetch("/api/dashboard-admin-state", { cache: "no-store" });
+      })
+        .then((response) => response.ok ? response.json() : null)
+        .then((payload) => {
+          dashboardQaReportMerge = payload?.qaReportMerge || null;
+          applyJenkinsDashboardMerge();
+          if (!payload?.configured || !payload.state) return;
+          const tagDefinitions = Array.isArray(payload.state.tagDefinitions) ? payload.state.tagDefinitions : [];
+          const remoteAssignments = Array.isArray(payload.state.rowOverrides) ? payload.state.rowOverrides : [];
+          const rowOverrides = dashboardAdminState.rowOverrides.map((override) => ({ ...override, tags: [], tagsOnly: false }));
+          remoteAssignments.forEach((remote) => {
+            const existing = rowOverrides.find((item) => item.target === remote.target
+              && normalizeFilterText(item.value) === normalizeFilterText(remote.value));
+            if (existing) existing.tags = remote.tags || [];
+            else rowOverrides.push({ ...remote, fieldEdits: {}, note: "", tagsOnly: true });
+          });
+          dashboardAdminState = sanitizeDashboardAdminState({ ...dashboardAdminState, tagDefinitions, rowOverrides });
+          window.localStorage.setItem(adminStorageKey, JSON.stringify(dashboardAdminState));
+          reloadDashboardAdminState();
+        })
+        .catch(() => {});
     });

@@ -1,10 +1,13 @@
 # Administration and snapshot review
 
 The dashboard remains a static release. Administration runs as a separate,
-authenticated local service; its only page entry point is `/admin-panel-login`.
-This URL renders the sign-in form until a server-issued session is valid, then
-renders the admin panel. There is no dashboard navigation link to administration.
-Private APIs and assets check the session independently.
+authenticated local service. `/admin` is the sign-in entry point and redirects
+signed-in users to Dashboard management at `/admin/dashboard-management`.
+Dashboard management and the other pages can be bookmarked individually:
+`/admin/dashboard-management`, `/admin/data-merge`, `/admin/governance` (Data
+governance), and `/admin/user-settings`. Governance uses tabs for snapshot
+comparisons, the data quality queue, and review decisions. Private APIs and
+assets check the session independently.
 
 From the project root:
 
@@ -13,17 +16,35 @@ python dev/scripts/admin-server.py --configure
 python dev/scripts/admin-server.py --port 4175
 ```
 
-For a generated initial password instead of interactive setup, run
+Without “Keep me logged in,” the browser receives a session cookie and the
+server expires it after two hours. With it enabled, the persistent cookie and
+server session expire after seven days at the latest; eight hours without an
+authenticated request ends the remembered session sooner. Both limits are
+enforced by the server, and logout revokes the session immediately.
+
+Change the password from Users settings. For a generated initial password
+instead of interactive setup, run
 `python dev/scripts/admin-server.py --initialize-local-account` once. Credentials
 are stored in the project's `.private/admin` folder, excluded by `.gitignore`
 and all deployment packages. The server never serves this folder. Change the
-generated password in Account.
+generated password from Users settings.
 The service binds only to loopback. Sessions expire after two hours; sign-out
 and password changes revoke them. Passwords are stored as salted PBKDF2 hashes,
 cookies are HttpOnly/SameSite Strict, mutations require an origin check and
 session CSRF token, and sign-in attempts are bounded.
 
 ## Snapshot workflow
+
+Dashboard management stores tag definitions and item assignments in the admin
+database. The public dashboard receives only those tag definitions and assignments;
+private review notes and field edits are not included in that projection.
+
+Data Merge reads saved QA report run summaries from the local
+`../qa-automation/reports/runs` archive and can export the selected Analytics
+inventory snapshot and saved QA run to CSV. This is not a live Jenkins
+connection. Set `LIVELABS_ADMIN_QA_REPORTS_DIR` to the report archive directory
+when the QA automation checkout is stored elsewhere. Merged output remains
+disabled until its matching, duplicate, and conflict rules are chosen.
 
 Use `dev/config/snapshot-source-manifest.example.json` as the input contract;
 replace its date and filenames with the actual incoming exports. Optional

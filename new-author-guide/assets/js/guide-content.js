@@ -15,12 +15,22 @@ window.authorGuideContent = (function () {
     secureDesktopDocs: "https://oracle-livelabs.github.io/common/support/securedesktops/index.html",
     secureDesktopStart: "https://oracle-livelabs.github.io/common/support/securedesktops/index.html?lab=securedesktops",
     liveLabsAuthorsSlack: "https://oracle.enterprise.slack.com/archives/CTUPZQ5HA",
+    wms: "https://livelabs.oracle.com/wms",
     sprintsRepo: "https://github.com/oracle-livelabs/sprints",
     sampleSprints: "https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-sprints",
     aiHubGuide: "https://lfoinding.github.io/livelabs-ai-playground/skills/how-to/workshops/sandbox/index.html",
     aiHubRepo: "https://github.com/lfoinding/livelabs-ai-playground",
     aiHubSkills: "https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill=4E66D8B27E76D7DFE0631C16000A11D6&clear=5&session=5940804516414"
   };
+
+  var eventCodeGuideHref = "markdown/event-code/";
+  if (window.AuthorGuidePaths && typeof window.AuthorGuidePaths.root === "function") {
+    try {
+      eventCodeGuideHref = new URL("markdown/event-code/", window.AuthorGuidePaths.root()).toString();
+    } catch (error) {
+      // Keep the relative guide route when the page is running outside its normal site shell.
+    }
+  }
 
   function labLink(labId) {
     return canonicalRoot + labId;
@@ -1728,6 +1738,77 @@ window.authorGuideContent = (function () {
         sourceHref: labLink("15-labs-livelabs-ai-developer-hub"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "help-faq"
+      },
+      {
+        id: "request-event-code",
+        title: "Request a LiveLabs Event Code",
+        short: "Request an eligible Event Code, follow review and publication, then help participants enter it.",
+        accent: "red",
+        tags: ["wms", "events", "event code"],
+        description: "Request an Event Code in WMS, track its approval and publication, then guide participants through entering the code on LiveLabs.",
+        steps: [
+          "In WMS, open Events and select Request an Event Code.",
+          "Choose the workshop by title, WMS ID, or LiveLabs ID. Its publish type must be public or event.",
+          "Enter the requestor, dates, timezone, and workshop completion estimate. Add optional contacts or event title; set Green Button capacity and attendee time only when needed.",
+          "Complete the workshop details, check the links, and submit. The first WMS email confirms receipt and that the request is under review; it is not approval or a usable code.",
+          "Wait while WMS reviews the request, and respond to any requested changes. The approval email means the request passed review; it says publication may take up to 24 hours.",
+          "After approval, wait for the scheduled publishing job and the separate Event Published email after deployment succeeds. Copy the code from that email or the published WMS record; then enter it under Event Code on LiveLabs, select Submit Event Code, and select Start on the event page."
+        ],
+        checkpoints: [
+          "The selected workshop is the right one and uses the public or event publish type.",
+          "The dates, timezone, links, and applicable Green Button limits are correct.",
+          "Share the Event Code only after WMS confirms Event Published; submission or approval alone does not mean the code is ready."
+        ],
+        watchFor: [
+          "A tenancy without the workshop's required resources can prevent it from working.",
+          "For a green-button event, complete the capacity and attendee-time fields; explain a time over 8 hours in Remarks."
+        ],
+        resourcesTitle: "Continue the event-code workflow",
+        resourcesIntro: "Use the full guide for annotated steps, open WMS to submit a request, or go to LiveLabs to enter an approved code.",
+        resourceLinks: [
+          resourceLink("Read the full Event Code guide", eventCodeGuideHref, "Open the dedicated step-by-step page in this author guide."),
+          resourceLink("Open Workshop Management System", officialLinks.wms, "Request the Event Code from Events in WMS."),
+          resourceLink("Open LiveLabs", "https://livelabs.oracle.com/ords/r/dbpm/livelabs/home", "Enter an approved Event Code from the LiveLabs navigation.")
+        ],
+        interfaceImages: [
+          {
+            src: "assets/images/event-code/how_to_ll_event.png",
+            alt: "Diagram showing the WMS Event Code request from opening the form through approval",
+            caption: "Event Code request overview"
+          },
+          {
+            src: "assets/images/event-code/request_event_code.png",
+            alt: "WMS Events menu with Request an Event Code highlighted",
+            caption: "Open the Event Code request in WMS"
+          },
+          {
+            src: "assets/images/event-code/event-submitted-email.png",
+            alt: "WMS email confirming that the Event Code request was received and is under review",
+            caption: "The first email confirms submission and starts the review period"
+          },
+          {
+            src: "assets/images/event-code/event-approved-email.png",
+            alt: "WMS approval email explaining that the Event Code will be pushed to LiveLabs",
+            caption: "Approval follows review; the code still needs to be published"
+          },
+          {
+            src: "assets/images/event-code/event-published-email.png",
+            alt: "WMS Event Published email showing the Event Code ready to share",
+            caption: "Copy the code from the Event Published notice"
+          },
+          {
+            src: "assets/images/event-code/livelabs-submit-event-code.png",
+            alt: "LiveLabs Event Code dialog with an entered code and Submit Event Code highlighted",
+            caption: "Enter and submit the published code on LiveLabs"
+          }
+        ],
+        video: {
+          src: "assets/videos/event-code-request-walkthrough.mp4",
+          poster: "assets/images/event-code/how_to_ll_event.png",
+          title: "Event Code request walkthrough",
+          summary: "Watch the WMS request process, from choosing a workshop through submitting the request for approval."
+        },
+        guideTarget: "specialized-workflows"
       }
     ]
   };

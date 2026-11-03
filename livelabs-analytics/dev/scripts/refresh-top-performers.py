@@ -136,7 +136,7 @@ def detail_table(record: dict, components: dict[str, float]) -> str:
 
 
 def table(records: list[dict], content_type: str, snapshot_date: date) -> str:
-    eligible = [record for record in records if record.get("type") == content_type and record.get("publishStatus") == "Published" and record.get("publishType") in {"Public", "Private"} and set(view_map(record)) >= {"recent_views_12m", "recent_views_90d"}]
+    eligible = [record for record in records if record.get("type") == content_type and record.get("publishStatus") == "Published" and record.get("publishType") == "Public" and set(view_map(record)) >= {"recent_views_12m", "recent_views_90d"}]
     twelve = [view_map(record)["recent_views_12m"] for record in eligible]
     ninety = [view_map(record)["recent_views_90d"] for record in eligible]
     scored: list[tuple[dict, float, dict[str, float]]] = []

@@ -1,0 +1,23 @@
+.admin-inventory-page .inventory-summary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:0 30px 18px; }
+.admin-inventory-page .inventory-stat { display:grid; gap:4px; padding:15px 18px; border:1px solid var(--line); border-top:3px solid var(--oracle-red); border-radius:8px; background:var(--paper); }
+.admin-inventory-page .inventory-stat span { color:var(--muted); font-size:12px; font-weight:700; }
+.admin-inventory-page .inventory-stat strong { color:var(--oracle-bark); font-size:24px; }
+.admin-inventory-page .inventory-results { margin:0 30px 36px; padding:22px; }
+.admin-inventory-page .inventory-heading { display:flex; justify-content:space-between; align-items:start; gap:18px; margin-bottom:16px; }
+.admin-inventory-page .inventory-heading h2 { margin:0 0 4px; }
+.admin-inventory-page .inventory-heading p { margin:0; }
+.admin-inventory-page .inventory-shortcuts { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 16px; }
+.admin-inventory-page .inventory-shortcuts button[aria-pressed="true"] { border-color:var(--oracle-red); background:#fcece8; color:var(--oracle-bark); font-weight:700; }
+.admin-inventory-page .inventory-controls { display:grid; grid-template-columns:minmax(240px,2fr) repeat(3,minmax(150px,1fr)); align-items:end; gap:10px; margin:0 0 14px; }
+.admin-inventory-page .inventory-controls label { display:grid; gap:5px; color:var(--ink); font-size:12px; font-weight:700; }
+.admin-inventory-page .inventory-controls input,.admin-inventory-page .inventory-controls select { width:100%; min-width:0; min-height:40px; padding:8px 10px; border:1px solid var(--line); border-radius:7px; background:#fff; color:var(--ink); font:inherit; }
+.admin-inventory-page .inventory-controls input:focus,.admin-inventory-page .inventory-controls select:focus { outline:2px solid #c7463440; border-color:var(--oracle-red); }
+.admin-inventory-page .inventory-table-wrap { max-height:62vh; }
+.admin-inventory-page .inventory-table-wrap table { min-width:1180px; }
+.admin-inventory-page .inventory-table-wrap th { position:sticky; top:0; z-index:1; background:#f3eeeb; }
+.admin-inventory-page .inventory-table-wrap td { vertical-align:top; }
+.admin-inventory-page .inventory-table-wrap td:nth-last-child(-n+2) { min-width:150px; white-space:normal; }
+.admin-inventory-page .inventory-pagination { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:14px; color:var(--muted); font-size:13px; }
+.admin-inventory-page .inventory-pagination .controls { margin:0; }
+@media(max-width:900px) { .admin-inventory-page .inventory-controls { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:700px) { .admin-inventory-page .inventory-summary { grid-template-columns:1fr; margin-inline:14px; } .admin-inventory-page .inventory-results { margin-inline:14px; padding:14px; } .admin-inventory-page .inventory-controls { grid-template-columns:1fr; } .admin-inventory-page .inventory-pagination { align-items:stretch; flex-direction:column; } }

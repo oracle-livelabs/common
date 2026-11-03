@@ -290,6 +290,17 @@
   margin: 0;
 }
 
+#app .modal-media-figure img[src*="event-submitted-email.png"],
+#app .modal-media-figure img[src*="event-approved-email.png"],
+#app .modal-media-figure img[src*="event-published-email.png"] {
+  width: auto;
+  max-width: 100%;
+  max-height: 220px;
+  margin-right: auto;
+  margin-left: auto;
+  object-fit: contain;
+}
+
 #app .snippet-description {
   margin: 0;
   color: var(--ink-soft);
@@ -4418,6 +4429,25 @@ body.author-nav-closed #app[data-redwood-creator-pass="2026-05-25"] .app-shell {
 #app[data-redwood-creator-pass="2026-05-25"] video,
 #app[data-redwood-creator-pass="2026-05-25"] audio {
   display: none !important;
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModalVideoMount .modal-event-code-video-card {
+  border-color: var(--redwood-border);
+  background: var(--redwood-surface);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModalVideoMount .modal-event-code-video-summary {
+  color: var(--redwood-text-soft);
+}
+
+#app[data-redwood-creator-pass="2026-05-25"] #bubbleModalVideoMount video.modal-event-code-video[data-author-approved-video="true"] {
+  display: block !important;
+  width: 100%;
+  max-height: min(54vh, 480px);
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  background: #171717;
+  object-fit: contain;
 }
 
 @media (max-width: 640px) {

@@ -33,8 +33,9 @@ python dev/scripts/admin-server.py --host 127.0.0.1 --port 4175 --public-origin 
 
 Replace the placeholder with the exact origin users open, with no trailing slash
 or path. The gateway must preserve that Host header. It must route
-`/admin-panel-login`, `/api/admin/*`, `/admin-assets/*`, `/assets/admin-login.js`
-and `/assets/admin-login.css` to the service. Shared `/assets/*` and dashboard
+`/admin`, `/admin/dashboard-management`, `/admin/data-merge`, `/admin/governance`, `/admin/user-settings`, `/api/admin/*`, `/api/dashboard-admin-state`,
+`/admin-assets/*`, `/assets/admin-login.js`, and `/assets/admin-login.css`
+to the service. Shared `/assets/*` and dashboard
 paths can be served by the service as well, or by the existing static origin
 under the same application domain. Hosting the entire service under a URL path
 prefix requires additional URL configuration; the current routes assume origin
@@ -45,6 +46,11 @@ the configured HTTPS origin. Keep the service port private; only the gateway
 should reach it. Use the platform's process supervisor and a persistent disk
 mounted at `<project>/.private/admin` when deploying as a container. Configure
 the platform's internal access controls for the intended audience.
+
+To export saved QA report runs in Data Merge, mount or copy the QA automation
+report archive on the service host and set `LIVELABS_ADMIN_QA_REPORTS_DIR` to its
+`reports` directory. The service reads local run summaries; it does not connect
+to a Jenkins server.
 
 ## Dashboard, search and inventory routes
 

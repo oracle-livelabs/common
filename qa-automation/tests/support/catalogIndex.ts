@@ -3,8 +3,13 @@ import path from "node:path";
 
 import type { TestInfo } from "@playwright/test";
 
-import { PROJECT_ROOT, parseIntegerFlag } from "../../config/projectConfig.js";
+import { PROJECT_ROOT } from "../../config/projectConfig.js";
 import { sanitizeSourceUrl } from "./parAudit.js";
+import {
+  expectedTermsForText as expectedTermsForTextCore,
+  parseCatalogShard,
+  selectCatalogIndexItems,
+} from "./catalogIndexCore.mjs";
 
 export type CatalogIndexItemType = "workshop" | "livestack";
 
@@ -59,26 +64,6 @@ const DEFAULT_CATALOG_INDEX_FILE = path.join(
   "generated",
   "livelabs_catalog_index.json",
 );
-const STOP_WORDS = new Set([
-  "about",
-  "and",
-  "build",
-  "create",
-  "demo",
-  "from",
-  "into",
-  "livelab",
-  "livelabs",
-  "livestack",
-  "oracle",
-  "overview",
-  "the",
-  "this",
-  "using",
-  "with",
-  "workshop",
-]);
-
 let cachedLoadResult: CatalogIndexLoadResult | undefined;
 
 export function resolveCatalogIndexFile(): string {
@@ -125,21 +110,14 @@ export function catalogIndexItems(type?: CatalogIndexItemType): CatalogIndexItem
   }
 
   const allowedIds = parseList(process.env.QA_CATALOG_INDEX_IDS);
-  const configuredLimit = parseIntegerFlag(process.env.QA_CATALOG_INDEX_LIMIT, 0);
-  const configuredShard = parseShard(process.env.QA_CATALOG_INDEX_SHARD);
-  const selectedItems = loadResult.index.items.filter((item) => {
-    if (allowedIds.length === 0) {
-      return true;
-    }
-
-    return allowedIds.includes(item.id) || allowedIds.includes(item.slug);
+  const configuredLimit = Number.parseInt(process.env.QA_CATALOG_INDEX_LIMIT ?? "0", 10) || 0;
+  const configuredShard = parseCatalogShard(process.env.QA_CATALOG_INDEX_SHARD);
+  return selectCatalogIndexItems(loadResult.index.items, {
+    type,
+    ids: allowedIds,
+    shard: configuredShard,
+    limit: configuredLimit,
   });
-  const shardedItems = configuredShard
-    ? selectedItems.filter((_, index) => index % configuredShard.total === configuredShard.current - 1)
-    : selectedItems;
-  const filteredItems = type ? shardedItems.filter((item) => item.type === type) : shardedItems;
-
-  return configuredLimit > 0 ? filteredItems.slice(0, configuredLimit) : filteredItems;
 }
 
 export async function attachCatalogItem(testInfo: TestInfo, item: CatalogIndexItem): Promise<void> {
@@ -203,15 +181,7 @@ export function expectedTermsForCatalogItem(item: CatalogIndexItem, maxTerms = 3
 }
 
 export function expectedTermsForText(value: string, maxTerms = 3): string[] {
-  const words = value
-    .replace(/[^A-Za-z0-9+#. ]+/g, " ")
-    .split(/\s+/)
-    .map((word) => word.trim())
-    .filter(Boolean)
-    .filter((word) => word.length >= 3)
-    .filter((word) => !STOP_WORDS.has(word.toLowerCase()));
-
-  return Array.from(new Set(words)).slice(0, maxTerms);
+  return expectedTermsForTextCore(value, maxTerms);
 }
 
 function assertCatalogIndex(value: unknown, filePath: string): asserts value is CatalogIndex {
@@ -261,27 +231,6 @@ function parseList(value: string | undefined): string[] {
     .split(",")
     .map((part) => part.trim())
     .filter(Boolean);
-}
-
-function parseShard(value: string | undefined): { current: number; total: number } | undefined {
-  const normalized = value?.trim();
-  if (!normalized) {
-    return undefined;
-  }
-
-  const match = normalized.match(/^(\d+)\/(\d+)$/);
-  if (!match) {
-    throw new Error(`QA_CATALOG_INDEX_SHARD must use the format "current/total", for example "1/4". Received: ${value}`);
-  }
-
-  const current = Number.parseInt(match[1], 10);
-  const total = Number.parseInt(match[2], 10);
-
-  if (!Number.isFinite(current) || !Number.isFinite(total) || total < 1 || current < 1 || current > total) {
-    throw new Error(`QA_CATALOG_INDEX_SHARD is out of range. Received: ${value}`);
-  }
-
-  return { current, total };
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

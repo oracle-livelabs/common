@@ -132,6 +132,7 @@
   };
   var recommendedCheatsheetOrder = [
     "wms-request",
+    "request-event-code",
     "github-setup",
     "sync-preview",
     "markdown-structure",
@@ -423,6 +424,7 @@
   var beginnerMode = document.getElementById("beginnerMode");
   var explorerMode = document.getElementById("explorerMode");
   var nodocMode = document.getElementById("nodocMode");
+  var troubleshootingMode = document.getElementById("troubleshootingMode");
   var guideMode = document.getElementById("guideMode");
   var generatorMode = document.getElementById("generatorMode");
   var searchMode = document.getElementById("searchMode");
@@ -713,7 +715,7 @@
     var path = window.location.pathname || "/";
     var cleanPath = path.replace(/\/+$/, "");
     var segments = cleanPath.split("/").filter(Boolean);
-    var routeNames = ["home", "quickstart", "cheatsheet", "markdown", "nodoc"];
+    var routeNames = ["home", "quickstart", "cheatsheet", "markdown", "nodoc", "troubleshooting"];
     var lastSegment = (segments[segments.length - 1] || "").toLowerCase();
     var previousSegment = (segments[segments.length - 2] || "").toLowerCase();
 
@@ -776,6 +778,9 @@
     }
     if (cleanRoute === "nodoc" || cleanRoute === "nodoc.html" || cleanRoute === "no-doc") {
       return "#nodoc";
+    }
+    if (cleanRoute === "troubleshooting" || cleanRoute === "troubleshooting.html" || cleanRoute === "error-help") {
+      return "#troubleshooting";
     }
 
     return window.location.hash || "#home";
@@ -934,6 +939,9 @@
     if (cleaned.indexOf("nodoc:") === 0) {
       return pageUrl("nodoc", hash);
     }
+    if (cleaned === "troubleshooting" || cleaned === "error-help") {
+      return pageUrl("troubleshooting");
+    }
 
     return pageUrl("home", hash);
   }
@@ -1043,6 +1051,11 @@
 
     if (state.mode === "nodoc") {
       setHash(currentHash.indexOf("#nodoc:") === 0 ? currentHash : "#nodoc", options);
+      return;
+    }
+
+    if (state.mode === "troubleshooting") {
+      setHash("#troubleshooting", options);
       return;
     }
 
@@ -1698,9 +1711,13 @@
 
     document.querySelectorAll(".nav-control[data-mode-target]").forEach(function (button) {
       var targetMode = button.getAttribute("data-mode-target");
-      var isActive = targetMode === state.mode;
+      var isActive = targetMode === state.mode || (targetMode === "nodoc" && state.mode === "troubleshooting");
+      var menuSummary = button.closest(".nav-menu-summary");
       button.classList.toggle("is-active", isActive);
       button.setAttribute("aria-pressed", isActive ? "true" : "false");
+      if (menuSummary) {
+        menuSummary.classList.toggle("is-active", isActive);
+      }
     });
   }
 
@@ -2896,7 +2913,7 @@
       return;
     }
 
-    root.querySelectorAll(".step-figure, .guide-figure, .modal-media-figure, .evidence-figure, .inline-evidence-card, .nodoc-route-evidence, .guide-source-panel-prose figure, .guide-source-prose figure").forEach(function (figure) {
+    root.querySelectorAll(".step-figure, .guide-figure, .event-code-figure, .modal-media-figure, .evidence-figure, .inline-evidence-card, .nodoc-route-evidence, .guide-source-panel-prose figure, .guide-source-prose figure").forEach(function (figure) {
       var image = figure.querySelector("img");
       var caption = figure.querySelector("figcaption");
       var captionText;
@@ -3168,6 +3185,35 @@
     decorateExpandableMedia(card);
   }
 
+  function renderEventCodeModalVideo(video, title) {
+    var videoTitle;
+    var src;
+    var poster;
+
+    if (!video || !video.src) {
+      return "";
+    }
+
+    videoTitle = video.title || title || "Event Code request walkthrough";
+    src = window.AuthorGuideAssets.resolve(video.src);
+    poster = video.poster ? window.AuthorGuideAssets.resolve(video.poster) : "";
+
+    return [
+      '<section class="card modal-event-code-video-card mb-4">',
+      '  <div class="card-body">',
+      '    <p class="panel-kicker">VIDEO WALKTHROUGH</p>',
+      '    <h3 class="h5">', escapeHtml(videoTitle), '</h3>',
+      video.summary ? '    <p class="modal-event-code-video-summary">' + escapeHtml(video.summary) + '</p>' : "",
+      '    <video class="modal-event-code-video" data-author-approved-video="true" controls preload="metadata" playsinline aria-label="', escapeAttribute(videoTitle), '"',
+        poster ? ' poster="' + escapeAttribute(poster) + '"' : "", '>',
+      '      <source src="', escapeAttribute(src), '" type="video/mp4">',
+      '      Your browser does not support HTML video.',
+      '    </video>',
+      '  </div>',
+      '</section>'
+    ].join("");
+  }
+
   function setSupportMount(id, html) {
     var mount = document.getElementById(id);
 
@@ -3193,7 +3239,7 @@
     var scope = root || document;
 
     scope.querySelectorAll(
-      '[data-video-card], [data-video-status="preview"], [data-video-availability="future"], .media-player-card, .video-placeholder-card, video, audio'
+      '[data-video-card], [data-video-status="preview"], [data-video-availability="future"], .media-player-card, .video-placeholder-card, video:not([data-author-approved-video="true"]), audio'
     ).forEach(function (node) {
       node.hidden = true;
       node.setAttribute("aria-hidden", "true");
@@ -3282,16 +3328,7 @@
     );
     setSupportMount(
       "bubbleModalVideoMount",
-      renderVideoPlaceholderCard(
-        "Walkthrough preview for " + item.title,
-        "This player is the capture slot for the Cheatsheet walkthrough. Use the panel details, snippets, and source links underneath until the approved recording is supplied.",
-        [
-          "Topic walkthrough",
-          "Audio controls",
-          "Autoplay ready"
-        ],
-        "cheatsheet-" + item.id
-      )
+      renderEventCodeModalVideo(item.video, item.title)
     );
 
     snippetCard = document.getElementById("bubbleModalSnippetCard");
@@ -4629,6 +4666,7 @@
     setModeRegionVisibility(beginnerMode, mode === "beginner");
     setModeRegionVisibility(explorerMode, mode === "explorer");
     setModeRegionVisibility(nodocMode, mode === "nodoc");
+    setModeRegionVisibility(troubleshootingMode, mode === "troubleshooting");
     setModeRegionVisibility(guideMode, mode === "guide");
     setModeRegionVisibility(generatorMode, mode === "generator");
     setModeRegionVisibility(searchMode, mode === "search");
@@ -4667,6 +4705,15 @@
         } else {
           scrollToTarget(nodocMode);
         }
+    } else if (mode === "troubleshooting") {
+      updateBreadcrumb();
+      if (config.scroll !== false) {
+        if (config.forceTop) {
+          window.scrollTo({ top: 0, behavior: smoothBehavior() });
+        } else {
+          scrollToTarget(troubleshootingMode);
+        }
+      }
       }
     } else if (mode === "guide") {
       renderGuideSection();
@@ -4958,6 +5005,11 @@
 
     if (cleaned.indexOf("nodoc:") === 0) {
       switchMode("nodoc", { scroll: true, forceTop: true, hash: false, announce: false });
+      return;
+    }
+
+    if (cleaned === "troubleshooting" || cleaned === "error-help") {
+      switchMode("troubleshooting", { scroll: true, forceTop: true, hash: false, announce: false });
       return;
     }
 

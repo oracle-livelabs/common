@@ -53,6 +53,10 @@ if (!repoRootInput) {
 }
 
 const repoRoot = path.resolve(FRAMEWORK_ROOT, repoRootInput);
+if (!fs.existsSync(repoRoot) || !fs.statSync(repoRoot).isDirectory()) {
+  console.error(`Invalid LiveStack repository path: ${repoRoot}. Expected an existing directory.`);
+  process.exit(2);
+}
 const missing = SUITES.flatMap(({ packagePath, script }) => {
   const packageDir = path.join(repoRoot, packagePath);
   const packageFile = path.join(packageDir, "package.json");
@@ -72,6 +76,7 @@ if (missing.length > 0) {
 }
 
 let failures = 0;
+const results = [];
 for (const suite of SUITES) {
   const cwd = path.join(repoRoot, suite.packagePath);
   console.log(`\n=== ${suite.name} (${suite.packagePath}) ===`);
@@ -85,10 +90,19 @@ for (const suite of SUITES) {
   if (result.error) {
     console.error(result.error.message);
     failures += 1;
+    results.push({ name: suite.name, status: "FAIL", detail: result.error.message });
   } else if (result.status !== 0) {
     console.error(`Suite exited with status ${result.status ?? "unknown"}.`);
     failures += 1;
+    results.push({ name: suite.name, status: "FAIL", detail: `exit ${result.status ?? "unknown"}` });
+  } else {
+    results.push({ name: suite.name, status: "PASS", detail: "exit 0" });
   }
 }
 
+console.log("\nLiveStack package suite results:");
+for (const result of results) {
+  console.log(`- ${result.status}: ${result.name} (${result.detail})`);
+}
+console.log(`Summary: ${results.length - failures}/${results.length} package suites passed.`);
 process.exitCode = failures === 0 ? 0 : 1;

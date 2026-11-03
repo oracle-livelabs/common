@@ -238,15 +238,15 @@ def qa_pairs(qa):
     qa = {'state':'not_observed', 'match_status':'not_observed', 'policy_version':'Not recorded', **qa}
     counts = qa.get('severity_counts', {})
     return [
-        ['QA Error Score', qa.get('observed_error_score') if qa.get('observed_error_score') is not None else 'Unknown'],
+        ['QA Error Score', qa.get('observed_error_score') if qa.get('observed_error_score') is not None else 'N/A'],
         ['QA Evidence State', qa.get('match_status') if qa.get('match_status') != 'matched' else qa.get('state')],
         ['QA Score Applies To Ranking', 'Yes — ' + qa.get('mode', '') if qa.get('ranking_applicable') else 'No'],
-        ['QA Findings', qa.get('finding_count', 'Unknown')], ['QA Reported Occurrences', qa.get('occurrence_count', 'Unknown')],
-        ['QA Severity Counts', ', '.join(f'{s}: {counts.get(s,0)}' for s in ('blocker','critical','major','minor')) if qa.get('state') != 'not_observed' else 'Unknown'],
-        ['QA Weighted Burden', qa.get('weighted_burden', 'Unknown')], ['QA Evidence Gaps', qa.get('evidence_gap_count', 'Unknown')],
+        ['QA Findings', qa.get('finding_count', 'N/A')], ['QA Reported Occurrences', qa.get('occurrence_count', 'N/A')],
+        ['QA Severity Counts', ', '.join(f'{s}: {counts.get(s,0)}' for s in ('blocker','critical','major','minor')) if qa.get('state') != 'not_observed' else 'N/A'],
+        ['QA Weighted Burden', qa.get('weighted_burden', 'N/A')], ['QA Evidence Gaps', qa.get('evidence_gap_count', 'N/A')],
         ['QA Completeness', qa.get('completeness')], ['QA Run ID', qa.get('run_id', 'Not observed')],
         ['QA Run Started', qa.get('started_at', 'Not observed')], ['QA Policy', qa['policy_version']],
-        ['QA Owner Action', qa.get('owner_action')], ['QA Source Type', qa.get('jenkins_type', 'Unknown')],
+        ['QA Owner Action', qa.get('owner_action')], ['QA Source Type', qa.get('jenkins_type', 'N/A')],
         ['QA Findings Detail', ' | '.join(f"{f['code']} [{f['severity']}; {f['occurrences']} occurrence(s)]: {f['message']}" for f in qa.get('findings', [])) or ('No QA evidence for this item' if qa.get('state') == 'not_observed' else 'No findings in supplied evidence')],
     ]
 

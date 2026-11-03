@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Submit a LiveLabs Event Code request in WMS, track approval and publication, then use the code in LiveLabs.">
+  <meta name="theme-color" content="#fbf9f8">
+  <title>Event Code · Oracle LiveLabs Author Guide</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23C74634'/%3E%3C/svg%3E">
+  <script src="../../assets/js/author-guide-config.js?v=20260923-markdown-route"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/css/author-guide.css">
+  <link rel="stylesheet" href="../../assets/css/author-guide-improvements.css?v=20261019-event-email-thumbnails">
+  <link rel="stylesheet" href="../../assets/css/markdown-reference.css?v=20260924-header-r2">
+  <link rel="stylesheet" href="../../assets/css/event-code-guide.css?v=20261019-event-email-sizing">
+  <script src="../../assets/js/shared-side-nav.js?v=20261021-nav-dropdowns" defer></script>
+</head>
+<body data-author-guide-page="markdown">
+  <a class="skip-link" href="#markdownMode">Skip to content</a>
+  <div id="app" data-redwood-creator-pass="2026-05-25">
+    <div class="app-shell">
+      <div data-shared-side-nav></div>
+
+      <main id="markdownMode" class="mode-screen" tabindex="-1">
+        <div class="container">
+          <section class="card mode-hero reference-hero" aria-labelledby="page-title">
+            <div class="hero-copy">
+              <p class="mode-overline">WMS event workflow</p>
+              <h1 class="mode-title" id="page-title">Request a LiveLabs Event Code</h1>
+          <p class="hero-description">A 15-minute guide to completing the WMS request, tracking code publication, and opening the event on LiveLabs.</p>
+            </div>
+            <div class="cheatsheet-decoration-strip" aria-hidden="true"></div>
+          </section>
+
+          <div class="reference-layout">
+            <aside class="section-sidebar" aria-label="Event Code guide navigation">
+              <nav class="guide-sidebar-card section-navigation" aria-labelledby="section-nav-title">
+                <p class="panel-kicker" id="section-nav-title">IN THIS GUIDE</p>
+                <ol>
+                  <li><a href="#before-you-request">Introduction and requirements</a></li>
+                  <li><a href="#complete-the-form">Complete the request form</a></li>
+                  <li><a href="#review-and-submit">Review and submit</a></li>
+                  <li><a href="#after-submission">Track review and publication</a></li>
+                </ol>
+              </nav>
+            </aside>
+
+            <div class="reference-main">
+              <section class="event-code-callout" aria-label="Approval note">
+                <p class="panel-kicker">REQUEST AND PUBLICATION</p>
+                <p><strong>Submitting the form requests an Event Code; it does not issue one.</strong> WMS first confirms submission and starts review, then emails you after approval. A scheduled publishing job runs next; share the code only after the separate Event Published email confirms deployment.</p>
+              </section>
+
+              <div class="event-code-flow" aria-label="Event Code request stages">
+                <article><span>01 · Prepare</span><strong>Choose an eligible workshop</strong></article>
+                <article><span>02 · Request</span><strong>Complete and submit the WMS form</strong></article>
+                <article><span>03 · Use</span><strong>Enter the code after publication</strong></article>
+              </div>
+
+              <section class="event-code-section" id="before-you-request" aria-labelledby="before-title" tabindex="-1">
+                <p class="panel-kicker">INTRODUCTION · 15 MINUTES</p>
+                <h2 id="before-title">Introduction and requirements</h2>
+                <p>Use an Event Code to manage registrations, track attendance, and organize an event, from a small seminar to a large conference. This walkthrough covers requesting the code in the Workshop Management System (WMS), tracking approval and publication, and entering the published code on LiveLabs.</p>
+                <p class="event-code-objective"><strong>Objective:</strong> Request an Event Code.</p>
+                <h3>What do you need?</h3>
+                <p>Have access to the <a href="https://livelabs.oracle.com/wms" target="_blank" rel="noreferrer">Workshop Management System</a> and identify the workshop by title, WMS ID, or LiveLabs ID.</p>
+                <ul>
+                  <li>Only workshops with the <strong>public</strong> or <strong>event</strong> publish type can be selected.</li>
+                  <li>Know the requestor, start and end dates, and timezone. Other notification contacts and the event title are optional.</li>
+                  <li>For a green-button event, decide the maximum users, concurrent users, and attendee completion time.</li>
+                </ul>
+                <details class="event-code-reference">
+                  <summary>Where WMS shows the workshop publish type</summary>
+                  <p>In the workshop's <strong>Publishing</strong> tab, select <strong>Publish to LiveLabs</strong> to view the publish type. Event Code requests can use workshops whose publish type is <strong>public</strong> or <strong>event</strong>.</p>
+                  <div class="event-code-reference-grid">
+                    <figure class="event-code-figure">
+                      <img src="../../assets/images/event-code/publishing_tab.png" alt="Workshop Management System Publishing tab with Publish to LiveLabs highlighted" loading="lazy">
+                      <figcaption>Open the Publishing tab to view LiveLabs publishing options.</figcaption>
+                    </figure>
+                    <figure class="event-code-figure">
+                      <img src="../../assets/images/event-code/publish_to_ll_form.png" alt="LiveLabs Publishing Information form with the Publish Type field set to Event" loading="lazy">
+                      <figcaption>The Publish Type field identifies an Event workshop.</figcaption>
+                    </figure>
+                  </div>
+                </details>
+                <figure class="event-code-figure event-code-overview">
+                  <img src="../../assets/images/event-code/how_to_ll_event.png" alt="Workflow diagram showing how to request a LiveLabs Event Code in WMS, populate workshop details, verify links, and wait for approval" loading="lazy">
+                  <figcaption>Event Code request workflow overview</figcaption>
+                </figure>
+                <div class="event-code-video">
+                  <div>
+                    <p class="panel-kicker">VIDEO WALKTHROUGH</p>
+                    <h3>Watch the WMS request walkthrough</h3>
+                  </div>
+                  <p>Watch the WMS request here, or continue with the illustrated steps below. Use the player controls to play or pause, seek, adjust volume, or enter full screen.</p>
+                  <video class="event-code-video-player" controls preload="metadata" playsinline poster="../../assets/images/event-code/how_to_ll_event.png" aria-label="Video walkthrough for requesting a LiveLabs Event Code">
+                    <source src="../../assets/videos/event-code-request-walkthrough.mp4" type="video/mp4">
+                    Your browser does not support MP4 video playback. <a href="../../assets/videos/event-code-request-walkthrough.mp4">Open or download the walkthrough video</a>.
+                  </video>
+                </div>
+                <div class="event-code-actions">
+                  <a class="btn btn-primary rounded-pill px-4" href="https://livelabs.oracle.com/wms" target="_blank" rel="noreferrer">Open WMS</a>
+                  <a class="btn btn-outline-secondary rounded-pill px-4" href="#complete-the-form">View the form steps <span aria-hidden="true">↓</span></a>
+                </div>
+              </section>
+
+              <section class="event-code-section" id="complete-the-form" aria-labelledby="form-title" tabindex="-1">
+                <p class="panel-kicker">IN WMS · EVENTS</p>
+                <h2 id="form-title">Complete the request form</h2>
+                <ol class="event-code-steps">
+                  <li>
+                    <div>
+                      <h3>Open the Event Code request</h3>
+                      <p>In WMS, open <strong>Events</strong> and select <strong>Request an Event Code</strong>.</p>
+                      <figure class="event-code-figure">
+                        <img src="../../assets/images/event-code/request_event_code.png" alt="WMS Events menu with Request an Event Code highlighted" loading="lazy">
+                        <figcaption>Select Request an Event Code from the Events menu.</figcaption>
+                      </figure>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3>Complete the event request form</h3>
+                      <p>Provide the event requestor, workshop, start and end dates, and timezone. Add other people to notify and an event title when useful.</p>
+                      <p>For a green-button event only, set <strong>Max Users</strong> (how many people may use the code) and <strong>Concurrent Users</strong> (how many may use it at the same time). Tenancy is optional; use it only when the event needs a specific tenancy. A tenancy without the required workshop resources can break the workshop.</p>
+                      <figure class="event-code-figure">
+                        <img src="../../assets/images/event-code/complete_details.png" alt="WMS event request form with event fields and optional green-button settings" loading="lazy">
+                        <figcaption>Required event details and optional capacity settings.</figcaption>
+                      </figure>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3>Set workshop and attendee completion times</h3>
+                      <p>Enter the estimated time a user needs to complete the workshop. For a green-button event, also set how long attendees have to finish. The attendee limit is 8 hours; explain a longer request in <strong>Remarks to the LiveLabs team</strong> for follow-up.</p>
+                      <figure class="event-code-figure">
+                        <img src="../../assets/images/event-code/estimated_time.png" alt="WMS fields for workshop estimated completion time and attendee time limit" loading="lazy">
+                        <figcaption>Workshop estimate and green-button attendee time limit.</figcaption>
+                      </figure>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3>Populate workshop fields</h3>
+                      <p>Select <strong>Populate Workshop Fields</strong> to automatically add the workshop details.</p>
+                      <figure class="event-code-figure">
+                        <img src="../../assets/images/event-code/populate_workshop_fields.png" alt="WMS request form with Populate Workshop Fields highlighted" loading="lazy">
+                        <figcaption>Populate the form with the selected workshop's details.</figcaption>
+                      </figure>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3>Verify workshop links</h3>
+                      <p>Select <strong>Edit Workshop Links</strong>. Confirm that the URLs are populated and working before submitting.</p>
+                      <figure class="event-code-figure">
+                        <img src="../../assets/images/event-code/edit_workshop_links.png" alt="WMS Edit Workshop Links dialog showing workshop delivery URLs" loading="lazy">
+                        <figcaption>Check that the event's workshop links are present and open correctly.</figcaption>
+                      </figure>
+                    </div>
+                  </li>
+                </ol>
+                <dl class="event-code-fields">
+                  <div><dt>Required event details</dt><dd>Requestor, workshop, start date, end date, timezone, and the workshop completion estimate.</dd></div>
+                  <div><dt>Optional details</dt><dd>Additional people to notify, event title, and a specific tenancy when the event requires it.</dd></div>
+                  <div><dt>Green-button capacity</dt><dd>Maximum users, concurrent users, and attendee completion time.</dd></div>
+                  <div><dt>Workshop links</dt><dd>Use Populate Workshop Fields, then check the URLs under Edit Workshop Links.</dd></div>
+                </dl>
+              </section>
+
+              <section class="event-code-section" id="review-and-submit" aria-labelledby="review-title" tabindex="-1">
+                <p class="panel-kicker">FINAL CHECK</p>
+                <h2 id="review-title">Review and submit</h2>
+                <ul>
+                  <li>The selected workshop is the right one and has a public or event publish type.</li>
+                  <li>Event dates and timezone are correct, and the workshop links work.</li>
+                  <li>Green-button capacity and attendee time fields are complete when they apply.</li>
+                  <li>A specific tenancy is included only when required and suitable for the workshop.</li>
+                </ul>
+                <p>When the form is complete, select <strong>Request Event</strong> to send it for approval.</p>
+                <figure class="event-code-figure">
+                  <img src="../../assets/images/event-code/request_event_final.png" alt="WMS Event Code request form ready to be submitted with Request Event" loading="lazy">
+                  <figcaption>Submit the completed request for approval.</figcaption>
+                </figure>
+              </section>
+
+              <section class="publish-checklist" id="after-submission" aria-labelledby="approval-title" tabindex="-1">
+                <p class="panel-kicker">AFTER SUBMISSION · APPROVAL AND PUBLICATION</p>
+                <h2 id="approval-title">Follow the request from submission to LiveLabs</h2>
+                <p>Follow the emails in order. The submission email confirms receipt, review comes next, and approval is followed by a scheduled publishing job. Copy and share the code only after WMS confirms that the event is published to LiveLabs.</p>
+                <ol class="event-code-steps event-code-after-steps">
+                  <li>
+                    <div>
+                      <h3>Receive the submission email</h3>
+                      <p>After you select <strong>Request Event</strong>, WMS emails the requestor to confirm that it received the Event Code request. This message means the request is under review; it is not an approval and does not contain a usable code.</p>
+                      <figure class="event-code-figure event-code-email-figure">
+                        <img src="../../assets/images/event-code/event-submitted-email.png" alt="WMS email confirming that an Event Code request was submitted and is under review" loading="lazy">
+                        <figcaption>1 · Submitted: the confirmation email says the request is under review.</figcaption>
+                      </figure>
+                      <p>The LiveLabs team reviews the request details. Allow the <strong>1–2 business days</strong> noted in the submission email. While it is pending, the WMS record can show <strong>Submitted</strong> and <strong>To be assigned</strong>. If WMS requests changes, update the request using the review notes; the request returns for review after you respond.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3>Receive the approval email</h3>
+                      <p>After review, WMS emails the requestor when the Event Code request is approved. Approval means the request passed review; the code is not available to share yet. The notice says the code will be pushed to LiveLabs sometime in the next 24 hours.</p>
+                      <figure class="event-code-figure event-code-email-figure">
+                        <img src="../../assets/images/event-code/event-approved-email.png" alt="WMS email confirming the Event Code request is approved and will be published to LiveLabs" loading="lazy">
+                        <figcaption>2 · Approved: the approval email says to wait for LiveLabs deployment.</figcaption>
+                      </figure>
+                      <p>After approval, the scheduled publishing job publishes the event and its code to LiveLabs. Wait for the job to run. WMS then sends a separate <strong>Event Published</strong> email after deployment succeeds; the approval email is not the publication confirmation.</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3>Copy the code from the Event Published email</h3>
+                      <p>The Event Published email confirms that the code is live and shows it under <strong>Your Event Code</strong>. Copy the code exactly. You can also check the request in WMS after publishing. Confirm the event name and date before sharing the code with participants.</p>
+                      <figure class="event-code-figure event-code-email-figure">
+                        <img src="../../assets/images/event-code/event-published-email.png" alt="WMS Event Published email showing the Event Code to copy and share" loading="lazy">
+                        <figcaption>Step 3 · Published: copy the live Event Code from the email or its WMS request record.</figcaption>
+                      </figure>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3>Enter and submit the code on LiveLabs</h3>
+                      <p>Open LiveLabs and select <strong>Event Code</strong> in the top navigation. Enter the code you copied, then select <strong>Submit Event Code</strong>. Participants use the same steps with the code you share.</p>
+                      <figure class="event-code-figure">
+                        <img src="../../assets/images/event-code/livelabs-submit-event-code.png" alt="LiveLabs Event Code dialog with an entered code and Submit Event Code highlighted" loading="lazy">
+                        <figcaption>Step 4 · Enter the copied code and select Submit Event Code.</figcaption>
+                      </figure>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <h3>Open the event page</h3>
+                      <p>After LiveLabs accepts the code, it opens the associated event page. Check that the event title and date match the event you expect, then select <strong>Start</strong> to access the event workshop.</p>
+                      <figure class="event-code-figure">
+                        <img src="../../assets/images/event-code/livelabs-event-page.png" alt="LiveLabs event page with the event title and Start button highlighted" loading="lazy">
+                        <figcaption>Step 5 · Confirm the event details and select Start.</figcaption>
+                      </figure>
+                      <div class="event-code-actions">
+                        <a class="btn btn-primary rounded-pill px-4" href="https://livelabs.oracle.com/ords/r/dbpm/livelabs/home" target="_blank" rel="noreferrer">Open LiveLabs</a>
+                      </div>
+                    </div>
+                  </li>
+                </ol>
+              </section>
+
+            </div>
+          </div>
+        </div>
+      </main>
+      <div class="image-lightbox" id="imageLightbox" hidden aria-hidden="true">
+        <div class="image-lightbox-backdrop" data-lightbox-close="true"></div>
+        <div class="image-lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="imageLightboxTitle">
+          <div class="image-lightbox-header">
+            <p class="image-lightbox-kicker" id="imageLightboxTitle">Expanded Image</p>
+            <button type="button" class="image-lightbox-close" id="imageLightboxClose" aria-label="Close expanded image">Close</button>
+          </div>
+          <div class="image-lightbox-body">
+            <img id="imageLightboxImage" alt="">
+          </div>
+          <p class="image-lightbox-caption" id="imageLightboxCaption"></p>
+        </div>
+      </div>
+      <footer class="app-footer" aria-label="Site footer" data-shared-footer data-footer-variant="app"><div class="container">Powered by Oracle LiveLabs Team &copy; 2026</div></footer>
+    </div>
+  </div>
+  <script src="../../assets/js/shared-footer.js?v=20260516-followup"></script>
+  <script src="../../assets/js/event-code-guide.js?v=20261019-expandable-images"></script>
+  <div class="sr-only" id="copy-status" role="status" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

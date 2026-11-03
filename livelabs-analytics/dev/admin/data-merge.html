@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <script src="/assets/js/page-loading.js?v=20261016-admin-pages"></script>
+  <link rel="stylesheet" href="/assets/css/page-loading.css?v=20261016-admin-pages">
+  <title>Data merge — LiveLabs Analytics</title>
+  <link rel="stylesheet" href="/assets/css/dashboard.css?v=20261029-jenkins-merge">
+  <link rel="stylesheet" href="/admin-assets/admin.css?v=20261029-jenkins-merge">
+  <script src="/assets/js/report-export.js" defer></script>
+  <script src="/admin-assets/data-merge.js?v=20261029-jenkins-merge" defer></script>
+</head>
+<body class="admin-page admin-merge-page">
+  <a class="skip-link" href="#merge-workflow-title">Skip to data merge</a>
+  <div class="layout">
+    <aside class="rail">
+      <div class="brand"><a class="brand-mark" href="/dashboard/#overview" aria-label="Back to LiveLabs Analytics dashboard"><img src="/assets/images/oracle-logo-white.svg" alt="Oracle"></a><span>LiveLabs Analytics</span></div>
+      <p class="admin-rail-label">Administration</p>
+      <nav class="nav-list" aria-label="Admin pages">
+        <a href="/admin/dashboard-management">Dashboard management</a><a href="/admin/data-merge" aria-current="page">Data merge</a><a href="/admin/governance">Data governance</a><a href="/admin/user-settings">Account</a>
+        <a href="/admin/inventory">Portfolio inventory</a>
+</nav>
+      <a class="sidebar-back-button nav-dashboard-link" href="/dashboard/#overview">Back to dashboard</a>
+    </aside>
+    <main>
+      <header class="page-header admin-hero">
+        <div><p class="eyebrow">Sources · mapping · apply</p><h1>Data merge</h1><p class="merge-hero-copy">Choose a LiveLabs Analytics snapshot and Jenkins report. Map their item identifiers, review the combined records, then apply the results to the dashboard.</p><p id="identity"></p></div>
+        <div class="admin-hero-actions"><a class="nav-link" href="/dashboard/#overview">View dashboard</a></div>
+      </header>
+      <div class="hero-stripe"></div>
+      <p id="status" role="status" aria-live="polite"></p>
+
+      <section class="merge-workflow" aria-labelledby="merge-workflow-title">
+        <div class="merge-workflow-heading"><p class="eyebrow">Three steps</p><h2 id="merge-workflow-title">Combine two sources</h2><p>Applied Jenkins findings become part of each matched dashboard record and its ranking signals.</p></div>
+        <ol class="merge-workflow-steps">
+          <li><span>1</span><div><strong>Choose sources</strong><small>Select snapshots or import files.</small></div></li>
+          <li><span>2</span><div><strong>Map records</strong><small>Match IDs, inspect gaps and score changes.</small></div></li>
+          <li><span>3</span><div><strong>Apply</strong><small>Update dashboard tables, inventory and search.</small></div></li>
+        </ol>
+      </section>
+
+      <section id="sources" class="merge-source-section" aria-labelledby="source-title">
+        <div class="tag-section-heading merge-section-heading">
+          <div><p class="eyebrow">Step 1 · Choose sources</p><h2 id="source-title">Select snapshots or import files</h2></div>
+          <p>Use a saved version when one is available. Imports accept JSON, CSV, and Excel workbooks (.xlsx or .xlsm).</p>
+        </div>
+        <div class="admin-split-grid">
+          <section class="admin-inset merge-source-card analytics-source-card" aria-labelledby="analytics-source-title">
+            <div class="panel-heading"><div><p class="eyebrow">Source 1</p><h3 id="analytics-source-title">LiveLabs Analytics</h3></div><span class="source-badge analytics-badge">Inventory</span></div>
+            <label for="snapshot-select">Analytics snapshot<select id="snapshot-select"></select></label>
+            <p id="snapshot-info" class="source-info admin-muted"></p>
+            <label class="import-snapshot-label" for="import-snapshot">Import Analytics file<input id="import-snapshot" type="file" accept=".json,.csv,.xlsx,.xlsm,application/json,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel.sheet.macroEnabled.12"><small>Canonical JSON or a table with item IDs and titles · up to 20 MB.</small></label>
+            <details class="merge-advanced-source"><summary>Advanced snapshot tools</summary>
+              <div class="source-tools"><p class="source-tools-label">Analytics snapshot actions</p><div class="controls source-actions"><button id="capture-snapshot" type="button">Capture current inventory</button><button id="download-snapshot" type="button">Download JSON</button><button id="edit-snapshot" type="button">Edit as new version</button><button id="delete-snapshot" class="danger-button" type="button">Delete version</button><button id="export-analytics-csv" class="source-export-button" type="button">Download CSV</button></div></div>
+              <div class="source-history-block"><div class="source-history-heading"><h4>Snapshot history</h4><span id="analytics-history-count"></span></div><div id="analytics-history" class="source-history-list" aria-live="polite"></div></div>
+            </details>
+          </section>
+          <section class="admin-inset merge-source-card jenkins-source-card" aria-labelledby="jenkins-source-title">
+            <div class="panel-heading"><div><p class="eyebrow">Source 2</p><h3 id="jenkins-source-title">Jenkins reports</h3></div><span class="source-badge jenkins-badge">QA</span></div>
+            <label for="jenkins-select">Jenkins report snapshot<select id="jenkins-select"></select></label>
+            <p id="jenkins-info" class="source-info admin-muted"></p>
+            <label class="import-snapshot-label" for="import-jenkins-pair">Import Jenkins report file(s)<input id="import-jenkins-pair" type="file" accept=".json,.csv,.xlsx,.xlsm,application/json,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel.sheet.macroEnabled.12" multiple><small>Choose one report file, or the catalog JSON and findings CSV/Excel from the same run · up to 20 MB per file.</small></label>
+            <details class="merge-advanced-source"><summary>Advanced report tools</summary>
+              <div class="source-tools"><p class="source-tools-label">Jenkins snapshot actions</p><div class="controls source-actions"><button id="download-jenkins" type="button">Download JSON</button><button id="edit-jenkins" type="button">Edit as new version</button><button id="delete-jenkins" class="danger-button" type="button">Delete version</button><button id="export-jenkins-csv" class="source-export-button" type="button">Download CSV</button></div></div>
+              <div class="archive-copy-panel"><label for="archive-run-select">Copy a saved local report<select id="archive-run-select"></select></label><button id="copy-archive-run" type="button">Add report to snapshot history</button><p class="source-note">This project reads uploaded files and local QA archives. It does not connect to Jenkins.</p></div>
+              <div class="source-history-block"><div class="source-history-heading"><h4>Report history</h4><span id="jenkins-history-count"></span></div><div id="jenkins-history" class="source-history-list" aria-live="polite"></div></div>
+            </details>
+          </section>
+        </div>
+      </section>
+
+      <section id="merge-output" class="merge-output-section" aria-labelledby="merge-output-title">
+        <div class="tag-section-heading merge-section-heading">
+          <div><p class="eyebrow">Step 2 · Map records</p><h2 id="merge-output-title">Choose the matching fields</h2></div>
+          <p>Use the same identifier in both sources where possible. Ambiguous and unmatched rows stay out of the applied merge.</p>
+        </div>
+        <div class="mapping-controls">
+          <label for="analytics-match-field">LiveLabs field<select id="analytics-match-field"><option value="livelabsId">LiveLabs ID</option><option value="wmsId">WMS ID</option><option value="title">Title</option></select></label>
+          <span class="mapping-connector" aria-hidden="true">matches</span>
+          <label for="qa-match-field">Jenkins field<select id="qa-match-field"><option value="livelabsId">LiveLabs ID</option><option value="wmsId">WMS ID</option><option value="title">Catalog item title</option></select></label>
+          <button id="map-reports" class="primary-action" type="button">Map selected reports</button>
+          <p class="mapping-rule-note"><strong>Match rule:</strong> trimmed, case-insensitive exact values. WMS IDs can identify multiple Analytics records; ambiguous matches need a different field. <strong>Jenkins Error Score:</strong> 100 × burden ÷ (burden + 20), where burden = (P2 occurrences × 2) + P3 occurrences. P1 stays in the urgent action queue. Ranked scores blend the existing Analytics score with the Jenkins score.</p>
+        </div>
+        <div class="merge-readiness-panel" id="merge-summary" aria-live="polite">
+          <div class="merge-readiness-status"><span class="status-dot" aria-hidden="true"></span><div><strong id="merge-status-title">Select both sources</strong><small id="merge-status-detail">Map the selected reports to review the merge.</small></div></div>
+          <ul id="merge-counts" class="merge-count-grid"><li>Waiting for sources</li></ul>
+        </div>
+        <section id="preview" class="merge-result-preview" aria-labelledby="preview-title"><div class="preview-card-heading"><div><p class="eyebrow">Mapped result</p><h3 id="preview-title">Combined records</h3></div><span id="merge-preview-count" class="preview-count">Waiting</span></div><p id="merge-preview-meta" class="preview-meta">Select both sources, then map their records.</p><div id="merge-preview-content" class="preview-table-shell"><p class="admin-empty">The merged preview appears after mapping.</p></div></section>
+        <details class="merge-source-previews"><summary>Inspect source previews</summary>
+          <div class="merge-preview-grid">
+            <section id="analytics-preview-card" class="admin-inset merge-preview-card analytics-preview-card" aria-labelledby="analytics-preview-title" aria-busy="true"><div class="preview-card-heading"><div><p class="eyebrow">Selected Analytics snapshot</p><h3 id="analytics-preview-title">Inventory records</h3></div><span id="analytics-preview-count" class="preview-count">Waiting</span></div><p id="analytics-preview-meta" class="preview-meta">Select an Analytics snapshot.</p><div id="analytics-preview-content" class="preview-table-shell"><p class="admin-empty">No source preview loaded.</p></div><p id="analytics-preview-fields" class="preview-footnote"></p></section>
+            <section id="jenkins-preview-card" class="admin-inset merge-preview-card jenkins-preview-card" aria-labelledby="jenkins-preview-title" aria-busy="true"><div class="preview-card-heading"><div><p class="eyebrow">Selected Jenkins report</p><h3 id="jenkins-preview-title">QA findings</h3></div><span id="jenkins-preview-count" class="preview-count">Waiting</span></div><p id="jenkins-preview-meta" class="preview-meta">Select a Jenkins snapshot.</p><div id="jenkins-preview-content" class="preview-table-shell"><p class="admin-empty">No source preview loaded.</p></div><p id="jenkins-preview-fields" class="preview-footnote"></p></section>
+          </div>
+        </details>
+        <div class="merge-output-controls"><button id="merge-csv" type="button" disabled>Download mapped CSV</button><button id="apply-merge" class="primary-action" type="button" disabled>Apply merged data to dashboard</button><p class="selection-summary-card"><strong>Selected versions</strong><span id="selection-summary">Loading source versions…</span></p></div>
+      </section>
+
+      <details id="merge-history-section" class="merge-history-section"><summary><span><strong>Applied merge history</strong><small>Review or remove a previous dashboard integration.</small></span></summary><div class="merge-history-body"><div id="merge-history" class="source-history-list" aria-live="polite"></div></div></details>
+      <footer class="site-footer">Powered by Oracle LiveLabs Team &copy; 2026</footer>
+    </main>
+  </div>
+  <dialog id="json-editor" class="snapshot-editor-dialog" aria-labelledby="json-editor-title">
+    <form id="json-editor-form" method="dialog">
+      <div class="editor-heading"><div><p class="eyebrow">Create an immutable version</p><h2 id="json-editor-title">Edit snapshot JSON</h2></div><button type="button" id="close-editor" aria-label="Close editor">×</button></div>
+      <p id="json-editor-help" class="admin-muted">Edit the JSON and save it as a new snapshot. The selected version remains in history.</p>
+      <label for="json-editor-label">Version label<input id="json-editor-label" maxlength="160" required></label>
+      <label for="json-editor-content">Snapshot JSON<textarea id="json-editor-content" rows="20" spellcheck="false" required></textarea></label>
+      <p id="json-editor-error" role="alert"></p>
+      <div class="editor-actions"><button value="cancel" type="button" id="cancel-editor">Cancel</button><button value="save" class="primary-action" type="submit">Save as new version</button></div>
+    </form>
+  </dialog>
+</body>
+</html>
