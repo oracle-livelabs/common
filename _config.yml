@@ -10,3 +10,4 @@ exclude:
   - vendor/gems/
   - vendor/ruby/
   - skills/
+  - new-author-guide/troubleshooting/
