@@ -84,15 +84,16 @@ async function walk(dir, prefix = '') {
 }
 
 export async function readFramework(automationRoot) {
-  const files = (await walk(resolve(automationRoot, 'tests/platform'))).filter(file => file.endsWith('.spec.ts'))
+  const files = (await walk(resolve(automationRoot, 'tests'))).filter(file => file.endsWith('.spec.ts'))
   const packageInfo = await json(automationRoot, 'package.json')
   const lanes = [
     ['smoke', 'Public smoke', 'smoke/', 'Home, search, catalog, accessibility and event entry'],
     ['regression', 'Public regression', 'regression/', 'Filters, search, workshop overview and instructions'],
     ['generated', 'Generated catalog', 'generated/', 'Workshop and LiveStack tests expanded from the catalog'],
     ['par', 'PAR checks', 'par/', 'Discovery, probes and scan coverage'],
-    ['auth', 'Authenticated', 'auth/', 'Private navigation and reservations; requires approved auth state']
-  ].map(([id, name, prefix, scope]) => ({ id, name, scope, specs: files.filter(file => file.startsWith(prefix)).length }))
+    ['auth', 'Authenticated', 'auth/', 'Private navigation and reservations; requires approved auth state'],
+    ['unit', 'Source unit plans', 'unit/', 'Only executable spec files are counted; README plans do not count as tests']
+  ].map(([id, name, prefix, scope]) => ({ id, name, scope, specs: files.filter(file => file.startsWith(prefix) || file.includes('/' + prefix)).length }))
   return { schema: 'qa-hub.framework.v1', mode: 'local', observedAt: new Date().toISOString(),
     node: packageInfo.engines?.node, playwright: packageInfo.devDependencies?.['@playwright/test'],
     specFiles: files.length, lanes,

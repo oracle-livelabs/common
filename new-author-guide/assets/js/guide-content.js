@@ -23,10 +23,10 @@ window.authorGuideContent = (function () {
     aiHubSkills: "https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill=4E66D8B27E76D7DFE0631C16000A11D6&clear=5&session=5940804516414"
   };
 
-  var eventCodeGuideHref = "markdown/event-code/";
+  var eventCodeGuideHref = "markdown/event-code/index.html";
   if (window.AuthorGuidePaths && typeof window.AuthorGuidePaths.root === "function") {
     try {
-      eventCodeGuideHref = new URL("markdown/event-code/", window.AuthorGuidePaths.root()).toString();
+      eventCodeGuideHref = new URL("markdown/event-code/index.html", window.AuthorGuidePaths.root()).toString();
     } catch (error) {
       // Keep the relative guide route when the page is running outside its normal site shell.
     }
@@ -328,10 +328,10 @@ window.authorGuideContent = (function () {
         resourcesTitle: "Go further in the Markdown reference",
         resourcesIntro: "Use these patterns for the lab contract, manifest paths, preview checks, and final validation.",
         resourceLinks: [
-          resourceLink("Copy a starter lab", "../markdown/#lab-skeleton", "Use one title, objectives, prerequisites, a task, and acknowledgements."),
-          resourceLink("Put the lab in the workshop", "../markdown/#files-and-manifest", "Check manifest order and paths relative to the manifest."),
-          resourceLink("Preview the workshop and run QA", "../markdown/#preview-qa", "Serve the loader and use qa=true; it is not a pass certificate."),
-          resourceLink("Check paths, access, and safe examples", "../markdown/#final-checks", "Test links and assets and remove sensitive data before review.")
+          resourceLink("Copy a starter lab", "../markdown/index.html#lab-skeleton", "Use one title, objectives, prerequisites, a task, and acknowledgements."),
+          resourceLink("Put the lab in the workshop", "../markdown/index.html#files-and-manifest", "Check manifest order and paths relative to the manifest."),
+          resourceLink("Preview the workshop and run QA", "../markdown/index.html#preview-qa", "Serve the loader and use qa=true; it is not a pass certificate."),
+          resourceLink("Check paths, access, and safe examples", "../markdown/index.html#final-checks", "Test links and assets and remove sensitive data before review.")
         ],
         image: {
           src: "../assets/media/guide/author-guide/4-labs-markdown-develop-content/images/lintchecker.png",
@@ -387,10 +387,10 @@ window.authorGuideContent = (function () {
         resourcesTitle: "Go further in the Markdown reference",
         resourcesIntro: "Use the reference examples for descriptive links, lab navigation, downloads, and final path checks.",
         resourceLinks: [
-          resourceLink("Descriptive links and references", "../markdown/#links", "Use meaningful labels and keep reference definitions separate."),
-          resourceLink("Navigate between labs", "../markdown/#lab-navigation", "Use the actual ?lab= token from the workshop URL."),
-          resourceLink("Open or download a supporting file", "../markdown/#downloads", "Use ?download=1 only when saving is required."),
-          resourceLink("Check paths, access, and safe examples", "../markdown/#final-checks", "Test every destination from the learner environment.")
+          resourceLink("Descriptive links and references", "../markdown/index.html#links", "Use meaningful labels and keep reference definitions separate."),
+          resourceLink("Navigate between labs", "../markdown/index.html#lab-navigation", "Use the actual ?lab= token from the workshop URL."),
+          resourceLink("Open or download a supporting file", "../markdown/index.html#downloads", "Use ?download=1 only when saving is required."),
+          resourceLink("Check paths, access, and safe examples", "../markdown/index.html#final-checks", "Test every destination from the learner environment.")
         ],
         image: {
           src: "../assets/media/guide/author-guide/4-labs-markdown-develop-content/images/case-sensitive.png",
@@ -444,9 +444,9 @@ window.authorGuideContent = (function () {
         resourcesTitle: "Go further in the Markdown reference",
         resourcesIntro: "Use the reference examples for local image paths, sizing, indentation, and accessible descriptions.",
         resourceLinks: [
-          resourceLink("Add a useful screenshot", "../markdown/#images", "Keep essential instructions in text and describe what the image proves."),
-          resourceLink("Size an image without distortion", "../markdown/#image-sizing", "Prefer default sizing or automatic height with an asterisk."),
-          resourceLink("Paragraphs, images, and code inside a step", "../markdown/#step-content", "Indent supporting content by four spaces inside a numbered step.")
+          resourceLink("Add a useful screenshot", "../markdown/index.html#images", "Keep essential instructions in text and describe what the image proves."),
+          resourceLink("Size an image without distortion", "../markdown/index.html#image-sizing", "Prefer default sizing or automatic height with an asterisk."),
+          resourceLink("Paragraphs, images, and code inside a step", "../markdown/index.html#step-content", "Indent supporting content by four spaces inside a numbered step.")
         ],
         image: {
           src: "../assets/media/guide/author-guide/4-labs-markdown-develop-content/images/image-desc.png",
@@ -506,10 +506,10 @@ window.authorGuideContent = (function () {
         resourcesTitle: "Go further in the Markdown reference",
         resourcesIntro: "Use the reference examples for fenced languages, copy tags, expected output, and nested step content.",
         resourceLinks: [
-          resourceLink("Inline code and fenced blocks", "../markdown/#inline-code", "Label commands and expected output so learners know what to run."),
-          resourceLink("Add a LiveLabs copy button", "../markdown/#copy-code", "Keep balanced tags around only the learner's command."),
-          resourceLink("Paragraphs, images, and code inside a step", "../markdown/#step-content", "Indent supporting blocks by four spaces inside a numbered step."),
-          resourceLink("Reveal an optional answer", "../markdown/#reveal-code", "Keep optional solutions in details/summary outside required instructions.")
+          resourceLink("Inline code and fenced blocks", "../markdown/index.html#inline-code", "Label commands and expected output so learners know what to run."),
+          resourceLink("Add a LiveLabs copy button", "../markdown/index.html#copy-code", "Keep balanced tags around only the learner's command."),
+          resourceLink("Paragraphs, images, and code inside a step", "../markdown/index.html#step-content", "Indent supporting blocks by four spaces inside a numbered step."),
+          resourceLink("Reveal an optional answer", "../markdown/index.html#reveal-code", "Keep optional solutions in details/summary outside required instructions.")
         ],
         image: {
           src: "../assets/media/guide/author-guide/4-labs-markdown-develop-content/images/code-copy.png",
@@ -567,12 +567,12 @@ window.authorGuideContent = (function () {
         resourcesTitle: "Go further in the Markdown reference",
         resourcesIntro: "Use the reference examples for include mappings, conditional types, reusable values, and maintained building blocks.",
         resourceLinks: [
-          resourceLink("Include a shared Markdown file", "../markdown/#include-content", "Use a shortname so common content stays maintainable."),
-          resourceLink("Map the include in the manifest", "../markdown/#include-mapping", "Keep the mapped file path relative to the manifest."),
-          resourceLink("Write conditional instructions", "../markdown/#conditional-content", "Keep variants readable and testable."),
-          resourceLink("Select the variant in the manifest", "../markdown/#conditional-manifest", "Put the matching type on the tutorial entry."),
-          resourceLink("Define a value and use it in Markdown", "../markdown/#variable-values", "Keep variable files valid, relative, and free of secrets."),
-          resourceLink("Use maintained building blocks", "../markdown/#building-blocks", "Prefer reusable building blocks over copied setup instructions.")
+          resourceLink("Include a shared Markdown file", "../markdown/index.html#include-content", "Use a shortname so common content stays maintainable."),
+          resourceLink("Map the include in the manifest", "../markdown/index.html#include-mapping", "Keep the mapped file path relative to the manifest."),
+          resourceLink("Write conditional instructions", "../markdown/index.html#conditional-content", "Keep variants readable and testable."),
+          resourceLink("Select the variant in the manifest", "../markdown/index.html#conditional-manifest", "Put the matching type on the tutorial entry."),
+          resourceLink("Define a value and use it in Markdown", "../markdown/index.html#variable-values", "Keep variable files valid, relative, and free of secrets."),
+          resourceLink("Use maintained building blocks", "../markdown/index.html#building-blocks", "Prefer reusable building blocks over copied setup instructions.")
         ],
         sourceHref: labLink("4-labs-markdown-develop-content"),
         sourceLabel: "Open Step by Step Guide",
@@ -626,13 +626,13 @@ window.authorGuideContent = (function () {
         resourcesTitle: "Go further in the Markdown reference",
         resourcesIntro: "Open the existing examples for headings, paragraphs, lists, notes, escaping, and content inside steps.",
         resourceLinks: [
-          resourceLink("Headings and hierarchy", "../markdown/#headings", "Keep one H1 and use task headings for lab actions."),
-          resourceLink("Paragraphs and line breaks", "../markdown/#paragraphs", "Use blank lines and intentional breaks deliberately."),
-          resourceLink("Numbered steps", "../markdown/#ordered-lists", "Write one ordered action per step."),
-          resourceLink("Bullets and nested lists", "../markdown/#unordered-lists", "Use bullets for choices and prerequisites."),
-          resourceLink("Notes, blockquotes, and dividers", "../markdown/#quotes-and-rules", "Keep context separate from required actions."),
-          resourceLink("Show punctuation literally", "../markdown/#escape-characters", "Escape syntax when the learner must see it as text."),
-          resourceLink("Paragraphs, images, and code inside a step", "../markdown/#step-content", "Indent supporting content by four spaces.")
+          resourceLink("Headings and hierarchy", "../markdown/index.html#headings", "Keep one H1 and use task headings for lab actions."),
+          resourceLink("Paragraphs and line breaks", "../markdown/index.html#paragraphs", "Use blank lines and intentional breaks deliberately."),
+          resourceLink("Numbered steps", "../markdown/index.html#ordered-lists", "Write one ordered action per step."),
+          resourceLink("Bullets and nested lists", "../markdown/index.html#unordered-lists", "Use bullets for choices and prerequisites."),
+          resourceLink("Notes, blockquotes, and dividers", "../markdown/index.html#quotes-and-rules", "Keep context separate from required actions."),
+          resourceLink("Show punctuation literally", "../markdown/index.html#escape-characters", "Escape syntax when the learner must see it as text."),
+          resourceLink("Paragraphs, images, and code inside a step", "../markdown/index.html#step-content", "Indent supporting content by four spaces.")
         ],
         sourceHref: labLink("4-labs-markdown-develop-content"),
         sourceLabel: "Open Step by Step Guide",
@@ -680,12 +680,12 @@ window.authorGuideContent = (function () {
         resourcesTitle: "Go further in the Markdown reference",
         resourcesIntro: "Open the existing examples for supported video syntax, direct video files, tables, and captions.",
         resourceLinks: [
-          resourceLink("Embed a video", "../markdown/#video-embeds", "Use the provider prefix and replace the video ID."),
-          resourceLink("Use a direct video file when needed", "../markdown/#direct-video", "Verify format, permissions, captions, and lifetime."),
-          resourceLink("Columns, alignment, and links", "../markdown/#table-alignment", "Keep comparison tables compact and consistent."),
-          resourceLink("Give a table a caption", "../markdown/#table-caption", "Place the title immediately after the table."),
-          resourceLink("Compare information in a table", "../markdown/#tables", "Use numbered steps for procedures."),
-          resourceLink("Check paths, access, and safe examples", "../markdown/#final-checks", "Test every media and table destination.")
+          resourceLink("Embed a video", "../markdown/index.html#video-embeds", "Use the provider prefix and replace the video ID."),
+          resourceLink("Use a direct video file when needed", "../markdown/index.html#direct-video", "Verify format, permissions, captions, and lifetime."),
+          resourceLink("Columns, alignment, and links", "../markdown/index.html#table-alignment", "Keep comparison tables compact and consistent."),
+          resourceLink("Give a table a caption", "../markdown/index.html#table-caption", "Place the title immediately after the table."),
+          resourceLink("Compare information in a table", "../markdown/index.html#tables", "Use numbered steps for procedures."),
+          resourceLink("Check paths, access, and safe examples", "../markdown/index.html#final-checks", "Test every media and table destination.")
         ],
         sourceHref: labLink("4-labs-markdown-develop-content"),
         sourceLabel: "Open Step by Step Guide",
@@ -732,11 +732,11 @@ window.authorGuideContent = (function () {
         resourcesTitle: "Go further in the Markdown reference",
         resourcesIntro: "Open the existing QA and compatibility guidance before you hand the workshop to review or publication.",
         resourceLinks: [
-          resourceLink("Preview the workshop and run QA", "../markdown/#preview-qa", "Open the loader with the appropriate qa=true query."),
-          resourceLink("Check paths, access, and safe examples", "../markdown/#final-checks", "Test from the intended learner environment."),
-          resourceLink("Do not assume every Markdown extension works", "../markdown/#unsupported-extensions", "Use only syntax the renderer supports."),
-          resourceLink("Before you publish", "../markdown/#before-publish", "Complete the final learner-focused pass."),
-          resourceLink("Navigate between labs", "../markdown/#lab-navigation", "Test the actual workshop sequence token.")
+          resourceLink("Preview the workshop and run QA", "../markdown/index.html#preview-qa", "Open the loader with the appropriate qa=true query."),
+          resourceLink("Check paths, access, and safe examples", "../markdown/index.html#final-checks", "Test from the intended learner environment."),
+          resourceLink("Do not assume every Markdown extension works", "../markdown/index.html#unsupported-extensions", "Use only syntax the renderer supports."),
+          resourceLink("Before you publish", "../markdown/index.html#before-publish", "Complete the final learner-focused pass."),
+          resourceLink("Navigate between labs", "../markdown/index.html#lab-navigation", "Test the actual workshop sequence token.")
         ],
         sourceHref: labLink("4-labs-markdown-develop-content"),
         sourceLabel: "Open Step by Step Guide",

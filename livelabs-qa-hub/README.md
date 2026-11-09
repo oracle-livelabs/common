@@ -1,46 +1,62 @@
 # LiveLabs QA Hub
 
-A compact Redwood-styled workspace for QA results, on-call review, PAR findings, test coverage and repository information.
+A shared local workspace for QA planning, test management, bug triage, and automation evidence. The main UI uses the Asana-inspired design reviewed on 4 November 2026, with Oracle Sans and warm Redwood colors.
 
 ## Open locally
 
-From this folder:
+From `app/`:
 
 ```powershell
-cd app
 npm start
 ```
 
-Open [QA Hub](http://127.0.0.1:4192/). The local server binds to `127.0.0.1:4192` and reads the sibling `qa-automation` folder and LiveLabs repository checkouts. Use this address rather than `localhost` because the development reader validates the Host header.
+Open [QA Hub](http://127.0.0.1:4192/). The dashboard and every integrated view use this single origin so browser-local work stays shared. Use `127.0.0.1`, not `localhost`; the read-only development reader validates the Host header.
 
-Demo accounts: `admin@livelabs.qa` / `admin123`, or `user@livelabs.qa` / `user123`. The demo sign-in controls presentation only and is not production authentication.
+## Main menu
 
-## Pages
+- **QA dashboard:** current collection counts, catalog setup guards, open findings, local plans, and dated execution evidence.
+- **QA work:** local tasks in Board, List, or monthly Roadmap views.
+- **Tests:** automation cases collected from the sibling `qa-automation` project, historical-only records, and local manual tests.
+- **Bugs & findings:** Needs triage → Confirmed → In progress → Ready to retest → Closed.
+- **Test plans:** create a scope from selected tests or the current filtered test view; edit membership and plan status.
+- **Requirements:** capture expected behavior and link tests in both directions.
+- **Automation runs:** saved run history and per-test evidence; Live Jenkins Reports are not connected.
+- **PAR Links, On-Call, Repositories:** existing local readers and the explicit synthetic/private on-call review flow.
+- **Sources & workspace:** availability, local backup, and earlier UI entry points.
 
-Overview → On-Call → Jenkins Reports → PAR Links → QA Automation → Repositories. Settings is at the bottom of the menu. The QA Operations launcher, TMS and Knowledge Base are removed from the current interface. Old Hub route names redirect to relevant pages.
+Test workflow uses Backlog → Ready → In progress → In review → Done. Workflow edits never overwrite imported execution results. Local manual tests can record a separate manual outcome with required evidence. Bugs link to tests and saved run occurrences; a later pass does not silently close a bug.
 
-Tables support search, a relevant filter, column sorting, result counts and pagination. Technical detail is disclosed on demand. Oracle Sans, Bark navigation, warm neutral surfaces and restrained statuses follow the Analytics/Author Guide family.
+## Data and persistence
 
-## Data available now
+The TMS project owns `app/public/workspace-model.mjs` and `app/scripts/automation-adapter.mjs`. Hub serves the shared model at `/tms/workspace-model.mjs` and the minimized read-only evidence projection at `/api/local/tms`.
 
-- Saved local run reports and original HTML report links, with source dates and stale labels.
-- Automation spec-file counts, test lanes and latest section results.
-- Local LiveLabs repository, workflow and manifest inventory. This is not a live PR feed.
-- Explicitly loaded synthetic on-call cases and version-bound review previews. Support data stays in memory.
-- A test request preview. The Run tests button remains disabled until the private execution API is connected.
+Refresh uses Playwright `--list --reporter=json --project=chromium` to collect names without executing tests, then reads saved reports. Results are cached for 60 seconds; explicit refresh rebuilds the projection. Imported contacts, access URLs, raw errors, and attachments are excluded.
 
-No local endpoint triggers jobs or writes to external systems. The original HTML report is a local read-only preview; network actions and adjacent report artifacts are not enabled by that link. The three `/api/local/*` routes expose a minimized projection; local reports are not copied into public assets or `app/dist`.
+At validation, the source contained 67 spec files and 89 collected cases, including 46 catalog setup guards. Another 28 test identities were present only in saved reports. Two saved runs from 24 September 2026 produced 12 distinct findings requiring triage. These are source observations, not current platform-health claims.
 
-## Delivery and plans
+Workflow edits, notes, local tests/bugs/tasks, plans, and requirements use `livelabs-qa-unified-workspace-v1` in browser storage. Imported evidence and support data remain in memory. No Jira writeback, job execution, notifications, deployment, or production authentication is implemented.
 
-- [Architecture review and page actions](docs/architecture-and-actions-review-2026-10-05.md) — recommended QA Automation tabs, Analytics/author workflows, Jenkins/VM findings and live access limits.
-- [Framework capability inventory](docs/automation-capability-inventory.json) — 28 spec files and 30 declared tags; source inventory only.
-- [Connected QA Hub implementation plan](docs/connected-qa-hub-plan.md)
-- [Source review and inventory](docs/source-review-2026-10-05.md)
-- [Current requirements](docs/requirements.md)
-- [Redwood design notes](docs/redwood-design-notes.md)
-- [On-call adapter contract](docs/on-call-review-slice.md)
+## Earlier interfaces
 
-Build the static review package with `npm run build` from `app/`. A static host cannot serve the local source readers: it shows unavailable states and the optional synthetic on-call preview. Live production integration requires the private backend described in the plan. No deployment or GitHub publication is part of this local update.
+- [Original Hub](http://127.0.0.1:4192/legacy.html), with original demo session/storage intact.
+- [First visual prototype](http://127.0.0.1:4192/prototype.html), with its separate sample-task storage.
+- [Original TMS](http://127.0.0.1:4193/legacy.html), after starting the TMS app. Its existing browser data is retained on port 4193.
 
-The existing `npm test`, `npm run validate` and `npm run smoke` commands remain available for a requested validation pass. This iteration includes syntax, build, HTTP and manual browser checks; automated test suites were not run.
+Starting `npm start` in the sibling TMS app provides its port-4193 entry, starts the Hub if needed, and opens the canonical Hub Tests view. Earlier TMS records are not silently merged into framework evidence.
+
+## Validation and build
+
+From `app/`:
+
+```powershell
+npm test
+npm run build
+npm run validate
+npm run smoke
+```
+
+The integrated smoke test requires the Hub and TMS local entry servers, installed Chrome, and the sibling QA Automation Playwright dependency. It uses an isolated browser context. `npm run smoke:legacy` checks the retained Hub interface; `npm run smoke:prototype` checks the first design prototype.
+
+The static build copies the TMS model into `app/dist/tms/`. Static hosting cannot access local readers and shows unavailable evidence states instead of fabricated results.
+
+See [integration decisions and validation](docs/integrated-tms-v2.md), [requirements](docs/requirements.md), and [screenshot evidence](output/screenshots/unified-hub-v2/manifest.md). Earlier version reports are historical design records.

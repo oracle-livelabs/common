@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "passedTests": 6,
+  "failedTests": 0,
+  "releaseId": "2026-09-28-snapshot-refresh-7f372a8ea72ba9bf",
+  "manifestSha256": "61c5f9553bf27ea80cdf0881043fa1e85e6895fbce125584af796af6e5d73c30",
+  "checkedAt": "2026-11-08T16:30:27.757Z",
+  "checks": [
+    "Public cohort count",
+    "Jenkins P1 count survives static delivery",
+    "No public full-inventory file",
+    "Invalid QA retains baseline in packaged details",
+    "Mobile has no page overflow",
+    "No browser script errors"
+  ]
+}

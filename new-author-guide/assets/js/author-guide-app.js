@@ -63,6 +63,8 @@
   var workshopExampleHref = window.authorGuideWorkshopExampleHref || "https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/";
   var nodocSearchEntries = [];
   var nodocSearchLoadPromise = null;
+  var nodocIndexState = "loading";
+  var catalogIndexState = "loading";
   var guideCatalogPromise = null;
   var guideCatalogLoaded = false;
   var guideSectionSurfaceCache = {};
@@ -712,6 +714,9 @@
   }
 
   function resolveAppBasePath() {
+    if (window.AuthorGuidePaths && typeof window.AuthorGuidePaths.root === "function") {
+      return window.AuthorGuidePaths.root().pathname;
+    }
     var path = window.location.pathname || "/";
     var cleanPath = path.replace(/\/+$/, "");
     var segments = cleanPath.split("/").filter(Boolean);
@@ -732,15 +737,11 @@
       segments.pop();
     }
 
-    if ((segments[segments.length - 1] || "").toLowerCase() === "pages") {
-      segments.pop();
-    }
-
     return "/" + (segments.length ? segments.join("/") + "/" : "");
   }
 
   var appBasePath = resolveAppBasePath();
-  var routeBasePath = appBasePath.replace(/pages\/$/i, "") || "/";
+  var routeBasePath = appBasePath || "/";
 
   function resolveGuideRuntimePath(path) {
     if (window.AuthorGuidePaths && typeof window.AuthorGuidePaths.resolve === "function") {
@@ -754,7 +755,12 @@
 
   function routeTokenFromLocation() {
     var routeParam = new URLSearchParams(window.location.search).get("route");
-    var pathSegments = (window.location.pathname || "").replace(/\/+$/, "").split("/").filter(Boolean);
+    var routePath = window.location.pathname || "";
+    if (window.AuthorGuidePaths && typeof window.AuthorGuidePaths.root === "function") {
+      var rootPath = window.AuthorGuidePaths.root().pathname;
+      if (routePath.indexOf(rootPath) === 0) routePath = routePath.slice(rootPath.length);
+    }
+    var pathSegments = routePath.replace(/\/+$/, "").split("/").filter(Boolean);
     var pathSegment = (pathSegments[pathSegments.length - 1] || "").toLowerCase();
 
     if (pathSegment === "index.html" && pathSegments.length > 1) {
@@ -789,9 +795,7 @@
   function routeNeedsGuideCatalog(route) {
     var cleanRoute = String(route || "").toLowerCase();
 
-    return cleanRoute === "#search"
-      || cleanRoute.indexOf("#search:") === 0
-      || cleanRoute.indexOf("#guide-") === 0;
+    return cleanRoute.indexOf("#guide-") === 0;
   }
 
   function slugifyHash(value) {
@@ -888,8 +892,8 @@
     var cleaned = String(hash || "").replace(/^#/, "").toLowerCase();
     var pageFile = function (cleanName) {
       return cleanName === "home"
-        ? routeBasePath
-        : routeBasePath + cleanName + "/";
+        ? routeBasePath + "index.html"
+        : routeBasePath + cleanName + "/index.html";
     };
     var pageUrl = function (cleanName, pageHash) {
       var authoring = "";
@@ -1604,15 +1608,11 @@
       return guideCatalogPromise;
     }
 
-    guideCatalogPromise = fetch(guideCatalogHref, { cache: "no-store" })
-      .then(function (response) {
-        if (!response.ok) {
-          throw new Error("Guide catalog request failed with status " + response.status + ".");
-        }
-
-        return response.json();
-      })
+    catalogIndexState = "loading";
+    renderSearchSourceState();
+    guideCatalogPromise = window.AuthorGuideLoader.loadCatalog()
       .then(function (catalog) {
+        catalogIndexState = "ready";
         guideSections = (catalog.tutorials || []).map(buildGuideEntry).filter(function (entry) {
           return entry.id;
         });
@@ -1629,6 +1629,8 @@
         return guideSections;
       })
       .catch(function (error) {
+        catalogIndexState = "error";
+        guideCatalogPromise = null;
         guideCatalogLoaded = false;
         console.error(error);
         return guideSections;
@@ -3522,6 +3524,37 @@
     ].join("");
   }
 
+  function renderSearchSourceState() {
+    if (!searchSummary) return;
+    var notice = document.getElementById("searchSourceStatus");
+    if (!notice) {
+      notice = document.createElement("div");
+      notice.id = "searchSourceStatus";
+      notice.className = "guide-load-state search-source-status";
+      var message = document.createElement("p");
+      message.setAttribute("role", "status");
+      message.setAttribute("aria-live", "polite");
+      var retry = document.createElement("button");
+      retry.type = "button";
+      retry.className = "btn btn-outline-secondary";
+      retry.textContent = "Try again";
+      retry.addEventListener("click", function () {
+        if (nodocIndexState === "error") loadNoDocSearchEntries();
+        if (catalogIndexState === "error") loadGuideCatalog();
+      });
+      notice.append(message, retry);
+      searchSummary.insertAdjacentElement("afterend", notice);
+    }
+    var pending = nodocIndexState === "loading" || catalogIndexState === "loading";
+    var failed = nodocIndexState === "error" || catalogIndexState === "error";
+    notice.hidden = !pending && !failed;
+    notice.querySelector("p").textContent = pending
+      ? "Loading more guide results… Other results are available below."
+      : "Some guide results couldn’t be loaded. Check your connection and try again.";
+    notice.querySelector("button").hidden = !failed;
+    notice.querySelector("button").disabled = pending;
+  }
+
   function renderSearchResults() {
     var query = state.searchQuery.trim();
     var results;
@@ -3529,6 +3562,7 @@
     if (!searchResultsMount || !searchEmptyState) {
       return;
     }
+    renderSearchSourceState();
 
     if (searchQueryChip) {
       searchQueryChip.textContent = query ? 'Query: "' + query + '"' : "No query yet";
@@ -3583,6 +3617,11 @@
       searchSummary.textContent = "The guide did not find a strong match for that query yet.";
       searchEmptyState.innerHTML = 'No strong matches for <strong>"' + escapeHtml(query) + '</strong>. Try shorter keywords such as <strong>publish</strong>, <strong>validator</strong>, <strong>Quarterly Quality Assurance</strong>, <strong>GitHub Pages</strong>, or <strong>manifest</strong>.';
       searchEmptyState.classList.remove("d-none");
+      if (nodocIndexState === "loading" || catalogIndexState === "loading") {
+        searchEmptyState.textContent = "Results will appear as the guide finishes loading.";
+      } else if (nodocIndexState === "error" || catalogIndexState === "error") {
+        searchEmptyState.textContent = "No matches in the available content. Try loading the rest of the guide above.";
+      }
     }
 
     updateBreadcrumb();
@@ -4516,7 +4555,7 @@
           path: "Markdown / " + section.title,
           body: [pattern.source || "", pattern.result, (pattern.notes || []).join(" ")].join(" "),
           keywords: (pattern.keywords || "").split(/\s+/),
-          resultHref: resolveGuideRuntimePath("markdown/#" + pattern.id),
+          resultHref: resolveGuideRuntimePath("markdown/index.html#" + pattern.id),
           resultLabel: "Open Markdown example"
         });
         searchIndex.push(entry);
@@ -4565,22 +4604,23 @@
       return nodocSearchLoadPromise;
     }
 
-    nodocSearchLoadPromise = fetch(resolveGuideRuntimePath("content/nodoc/nodoc-workshop.html"), {
-      cache: "no-cache"
-    }).then(function (response) {
-      if (!response.ok) {
-        throw new Error("NoDoc workshop content returned HTTP " + response.status);
-      }
-      return response.text();
-    }).then(function (markup) {
-      nodocSearchEntries = createNoDocSearchEntries(markup);
+    nodocIndexState = "loading";
+    renderSearchSourceState();
+    nodocSearchLoadPromise = window.AuthorGuideLoader.loadNoDoc().then(function (result) {
+      nodocIndexState = "ready";
+      nodocSearchEntries = createNoDocSearchEntries(result.markup);
       buildSearchIndex();
+      renderSearchSourceState();
       if (state.mode === "search") {
         renderSearchResults();
       }
       return nodocSearchEntries;
     }).catch(function (error) {
+      nodocIndexState = "error";
+      nodocSearchLoadPromise = null;
       console.warn("NoDoc content was not added to global search.", error);
+      renderSearchSourceState();
+      if (state.mode === "search") renderSearchResults();
       return [];
     });
 
@@ -4644,9 +4684,14 @@
       forceTop: false
     }, options || {});
 
-    if ((mode === "guide" || mode === "search") && !guideCatalogLoaded) {
+    if (mode === "guide" && !guideCatalogLoaded) {
+      if (catalogIndexState === "error") {
+        redirectToOriginalGuide(config.guideSection);
+        return;
+      }
       loadGuideCatalog().then(function () {
-        switchMode(mode, options);
+        if (guideCatalogLoaded) switchMode(mode, options);
+        else redirectToOriginalGuide(config.guideSection);
       });
       return;
     }
@@ -5582,6 +5627,9 @@
   renderExplorer();
   renderGuideNav();
   loadNoDocSearchEntries();
+  document.addEventListener("author-guide:retry-content", function () {
+    if (nodocIndexState === "error") loadNoDocSearchEntries();
+  });
   var initialRoute = routeTokenFromLocation();
   var initialRouteNeedsCatalog = routeNeedsGuideCatalog(initialRoute);
 

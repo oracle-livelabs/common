@@ -6,10 +6,10 @@
   <meta name="description" content="Connect Codex to NoDoc and learn authoring, review, history, preview, and QA.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23C74634'/%3E%3C/svg%3E">
   <title>NoDoc · Oracle LiveLabs Author Guide</title>
-  <script src="../assets/js/author-guide-config.js?v=20260923-markdown-route"></script>
+  <script src="../assets/js/author-guide-config.js?v=20261109-object-storage"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/author-guide.css">
-  <link rel="stylesheet" href="../assets/css/author-guide-improvements.css?v=20261007-nodoc-cheatsheet">
+  <link rel="stylesheet" href="../assets/css/author-guide-improvements.css?v=20261109-object-storage">
 </head>
 <body data-author-guide-page="nodoc">
   <div id="app" data-redwood-creator-pass="2026-05-25">
@@ -22,8 +22,7 @@
           <div class="card mode-hero nodoc-page-hero">
             <div class="card-body">
               <div class="mode-overline">Recommended authoring path</div>
-              <h2 class="mode-title" id="nodocHeading"><span class="nodoc-hero-title-copy">Create workshops with</span><a class="nodoc-title-link" href="https://nodoc.oraclecorp.com/" target="_blank" rel="noopener noreferrer" aria-label="Open No Doc platform in a new tab"><img class="nodoc-title-logo" src="../assets/images/no-doc-formal.png" data-guide-asset="assets/images/no-doc-formal.png" alt="No Doc"></a><span class="nodoc-availability-badge">Limited Availability</span></h2>
-              <p class="nodoc-participation-note">To participate, reach out through <a href="https://oracle.enterprise.slack.com/team/U0AEG4E0MHP" target="_blank" rel="noopener noreferrer">Slack</a> or <a href="mailto:vasile-lucian.brinzei@oracle.com">Email</a>.</p>
+              <h2 class="mode-title" id="nodocHeading"><span class="nodoc-hero-title-copy">Create workshops with</span><a class="nodoc-title-link" href="https://nodoc.oraclecorp.com/" target="_blank" rel="noopener noreferrer" aria-label="Open No Doc platform in a new tab"><img class="nodoc-title-logo" src="../assets/images/no-doc-formal.png" data-guide-asset="assets/images/no-doc-formal.png" alt="No Doc"></a></h2>
             </div>
             <div class="nodoc-decoration-strip" aria-hidden="true"></div>
           </div>
@@ -33,8 +32,8 @@
               <form class="nodoc-search-form" id="nodocSearchForm" role="search" aria-label="Search NoDoc workshop documentation">
                 <label class="visually-hidden" for="nodocSearchInput">Search NoDoc documentation, labs, and tasks</label>
                 <div class="search-group input-group">
-                  <input class="form-control" id="nodocSearchInput" type="search" autocomplete="off" placeholder="Search MCP setup, manual drafts, Codex drafts, QA…" aria-describedby="nodocSearchHelp">
-                  <button class="btn btn-primary" type="submit">Search</button>
+                  <input class="form-control" id="nodocSearchInput" disabled type="search" autocomplete="off" placeholder="Search MCP setup, manual drafts, Codex drafts, QA…" aria-describedby="nodocSearchHelp">
+                  <button class="btn btn-primary" type="submit" disabled>Search</button>
                 </div>
               </form>
               <p id="nodocSearchHelp" class="small text-muted mt-2 mb-2">Search current lab and task titles, workflow names, or MCP tools such as <code>discard_page_draft</code>.</p>
@@ -43,7 +42,7 @@
               <div class="guide-layout nodoc-guide-layout">
                 <aside class="guide-sidebar nodoc-sidebar" aria-label="NoDoc workshop navigation">
                   <div class="guide-sidebar-card">
-                    <nav class="nodoc-side-nav" aria-label="NoDoc labs and tasks">
+                    <nav inert class="nodoc-side-nav" aria-label="NoDoc labs and tasks">
                       <button class="nodoc-nav-title is-active" type="button" data-nodoc-nav="0" aria-current="page">Introduction</button>
                       <div class="nodoc-nav-group" data-nodoc-group="1"><button class="nodoc-nav-title" type="button" data-nodoc-nav="1" aria-expanded="false" aria-controls="nodoc-nav-tasks-1">Lab 1 · Access, navigation, and Codex MCP</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-1" hidden><button type="button" data-nodoc-nav="1" data-nodoc-task="1">Open NoDoc and confirm access</button><button type="button" data-nodoc-nav="1" data-nodoc-task="2">Understand the workspace hierarchy</button><button type="button" data-nodoc-nav="1" data-nodoc-task="3">Connect Codex to NoDoc through MCP</button></div></div>
                       <div class="nodoc-nav-group" data-nodoc-group="2"><button class="nodoc-nav-title" type="button" data-nodoc-nav="2" aria-expanded="false" aria-controls="nodoc-nav-tasks-2">Lab 2 · Create, manage, and recover article structure</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-2" hidden><button type="button" data-nodoc-nav="2" data-nodoc-task="1">Create an article</button><button type="button" data-nodoc-nav="2" data-nodoc-task="2">Add pages</button><button type="button" data-nodoc-nav="2" data-nodoc-task="3">Delete an article or page</button><button type="button" data-nodoc-nav="2" data-nodoc-task="4">Review and recover article and page history</button></div></div>
@@ -60,8 +59,9 @@
                 </aside>
                 <main class="guide-stage nodoc-guide-stage" id="nodocWorkshopReader">
                   <!-- Source: content/nodoc/nodoc-workshop.html, loaded by nodoc-workshop.js. -->
-                  <div class="nodoc-full-tree" aria-label="NoDoc workshop content">
-</div>
+                  <div class="nodoc-full-tree" aria-label="NoDoc workshop content" aria-busy="true">
+                    <div class="guide-load-state" role="status" aria-live="polite"><p>Loading the NoDoc guide… Please wait.</p></div>
+                  </div>
                 </main>
               </div>
             </div>
@@ -168,14 +168,15 @@
   </div>
 
   <script async src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/js/guide-content.js?v=20261016-event-code"></script>
+  <script src="../assets/js/guide-content.js?v=20261109-object-storage"></script>
   <script src="../assets/js/nodoc-cheatsheet-data.js?v=20261007-nodoc-cheatsheet"></script>
   <script src="../assets/js/workshop-generator.js?v=20260708-skill-generator-livestack"></script>
-  <script src="../assets/js/shared-side-nav.js?v=20261021-nav-dropdowns"></script>
+  <script src="../assets/js/shared-side-nav.js?v=20261109-object-storage"></script>
   <script src="../assets/js/nodoc-search.js?v=20261007-search"></script>
-  <script src="../assets/js/nodoc-workshop.js?v=20261007-search"></script>
-  <script src="../assets/js/markdown-reference-data.js?v=20260923"></script>
-  <script src="../assets/js/author-guide-app.js?v=20261021-nav-dropdowns"></script>
+  <script src="../assets/js/guide-loader.js?v=20261109-object-storage"></script>
+  <script src="../assets/js/nodoc-workshop.js?v=20261109-object-storage"></script>
+  <script src="../assets/js/markdown-reference-data.js?v=20261109-object-storage"></script>
+  <script src="../assets/js/author-guide-app.js?v=20261109-object-storage"></script>
   <script src="../assets/js/shared-footer.js?v=20260516-followup"></script>
 </body>
 </html>

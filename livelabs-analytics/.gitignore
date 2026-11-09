@@ -78,6 +78,7 @@ playwright-report/
 /dev/releases/
 /dev/migration-audit/
 /dev/snapshots/
+/dev/logs/
 
 # Local QA planning and source datasets
 QA_TEST_PLAN.md

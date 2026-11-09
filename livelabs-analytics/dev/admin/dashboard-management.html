@@ -6,22 +6,15 @@
   <link rel="stylesheet" href="/assets/css/page-loading.css?v=20261016-admin-pages">
   <title>Dashboard management — LiveLabs Analytics</title>
   <link rel="stylesheet" href="/assets/css/dashboard.css?v=20261020-admin-tag-colors">
-  <link rel="stylesheet" href="/admin-assets/admin.css?v=20261020-admin-theme">
-  <script defer src="/admin-assets/dashboard-management.js?v=20261020-tag-management-refresh"></script>
+  <link rel="stylesheet" href="/admin-assets/admin.css?v=20261109-assignment-table">
+  <script defer src="/admin-assets/dashboard-management.js?v=20261109-assignment-table"></script>
 </head>
 <body class="admin-page admin-management-page">
   <a class="skip-link" href="/admin/dashboard-management#tags">Skip to dashboard management</a>
-  <div class="layout">
-    <aside class="rail"><div class="brand"><a class="brand-mark" href="/dashboard/#overview" aria-label="Back to LiveLabs Analytics dashboard"><img src="/assets/images/oracle-logo-white.svg" alt="Oracle"></a><span>LiveLabs Analytics</span></div>
-      <p class="admin-rail-label">Administration</p>
-      <nav class="nav-list" aria-label="Admin pages">
-        <a href="/admin/dashboard-management" aria-current="page">Dashboard management</a><a href="/admin/data-merge">Data merge</a><a href="/admin/governance">Data governance</a><a href="/admin/user-settings">Users settings</a>
-        <a href="/admin/inventory">Portfolio inventory</a>
-</nav>
-      <a class="sidebar-back-button nav-dashboard-link" href="/dashboard/#overview">Back to dashboard</a>
-    </aside>
+  <div class="layout analytics-shell-layout">
+    <!-- ADMIN_NAV -->
     <main>
-      <header class="page-header admin-hero"><div><p class="eyebrow">Portfolio controls</p><h1>Dashboard management</h1><p id="identity"></p></div><div class="admin-hero-actions"><a class="nav-link" href="/dashboard/#overview">Back to dashboard</a></div></header>
+      <header class="page-header admin-hero"><div><p class="eyebrow">Portfolio controls</p><h1>Dashboard management</h1><p id="identity"></p></div></header>
       <div class="hero-stripe"></div>
       <p id="status" role="status" aria-live="polite"></p>
       <section id="tags" class="tag-management-section"><div class="tag-section-heading"><div><p class="eyebrow">Organize portfolio content</p><h2>Dashboard tags</h2></div><p>Create reusable labels, choose a color for each one, and assign them to LiveLabs items. Saved tags appear on matching dashboard rows and their detail panels.</p></div>
@@ -31,7 +24,41 @@
             <form id="assignment-form" class="assignment-editor" hidden><h4 id="selected-item-title"></h4><p id="selected-item-ids" class="admin-muted"></p><label>Match item by<select id="assignment-target"></select></label><fieldset id="assignment-tags" class="admin-checkbox-list"><legend>Tags</legend></fieldset><div class="controls"><button type="submit">Save tags</button><button id="cancel-assignment" type="button">Cancel</button></div></form>
           </section>
         </div>
-        <section class="current-assignment-panel"><div class="panel-heading"><div><p class="eyebrow">Live assignment preview</p><h3>Current assignments</h3></div><span class="panel-count" id="assignment-count">0 items</span></div><p class="assignment-help">Review each item, its identifiers, and the tag descriptions. Edit an assignment to change its tags, or open the item’s search page.</p><label class="assignment-filter">Filter assignments<input id="assignment-search" type="search" placeholder="Search title, ID, tag, or description"></label><div id="assignments" class="admin-assignment-list"></div></section>
+        <section class="current-assignment-panel" aria-labelledby="assignment-heading">
+          <div class="panel-heading"><div><p class="eyebrow">Assigned portfolio items</p><h3 id="assignment-heading">Current assignments</h3></div><span class="panel-count" id="assignment-count">0 items</span></div>
+          <p class="assignment-help" id="assignment-help">Select a row to see item details, edit its tags, or remove its assignment. Each row shows one item and its matching rule; family rules can apply to several items.</p>
+          <div class="assignment-table-filters">
+            <label class="assignment-search-field">Search assignments<input id="assignment-search" type="search" placeholder="Title, ID, author, tag, or description"></label>
+            <label>Content type<select id="assignment-type"><option value="">All items</option><option value="Workshop">Workshops only</option><option value="Sprint">Sprints only</option><option value="Unknown">Unknown type</option></select></label>
+            <button id="assignment-clear" type="button">Clear filters</button>
+          </div>
+          <details class="assignment-filter-disclosure"><summary>Apply filters</summary><div class="assignment-table-filters">
+            <label>LiveLabs ID<input id="assignment-livelabs-filter" type="search" placeholder="Filter LiveLabs ID"></label>
+            <label>WMS ID<input id="assignment-wms-filter" type="search" placeholder="Filter WMS ID"></label>
+            <label>Council<select id="assignment-council"><option value="">All councils</option></select></label>
+            <label>Tag<select id="assignment-tag"><option value="">All tags</option></select></label>
+            <label>Match rule<select id="assignment-target-filter"><option value="">All match rules</option><option value="livelabs_id">LiveLabs ID</option><option value="wms_id">WMS family ID</option><option value="title">Exact title</option></select></label>
+          </div></details>
+          <div class="assignment-table-toolbar">
+            <p id="assignment-page-status" aria-live="polite">No assignments</p>
+            <label>Rows per page<select id="assignment-page-size"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select></label>
+            <button id="assignment-export" type="button">Export filtered CSV</button>
+            <nav aria-label="Assignment table pages"><button id="assignment-previous" type="button">Previous</button><span id="assignment-page-number">Page 1 of 1</span><button id="assignment-next" type="button">Next</button></nav>
+          </div>
+          <div class="assignment-table-scroll" tabindex="0" role="region" aria-label="Current assignments table" aria-describedby="assignment-help">
+            <table id="assignment-table"><caption class="sr-only">Current tag assignments. Activate a LiveLabs ID button or select a row to expand its details.</caption><thead><tr>
+              <th scope="col" aria-sort="ascending"><button type="button" data-assignment-sort="livelabsId" aria-label="Sort by LiveLabs ID">LiveLabs ID</button></th>
+              <th scope="col"><button type="button" data-assignment-sort="wmsId" aria-label="Sort by WMS ID">WMS ID</button></th>
+              <th scope="col"><button type="button" data-assignment-sort="title" aria-label="Sort by Title">Title</button></th>
+              <th scope="col"><button type="button" data-assignment-sort="category" aria-label="Sort by Council">Council</button></th>
+              <th scope="col"><button type="button" data-assignment-sort="owner" aria-label="Sort by Author / owner">Author / owner</button></th>
+              <th scope="col"><button type="button" data-assignment-sort="type" aria-label="Sort by Type">Type</button></th>
+              <th scope="col"><button type="button" data-assignment-sort="tags" aria-label="Sort by Tags">Tags</button></th>
+              <th scope="col"><button type="button" data-assignment-sort="rule" aria-label="Sort by Match rule">Match rule</button></th>
+              <th scope="col"><button type="button" data-assignment-sort="createdAt" aria-label="Sort by Added">Added</button></th>
+            </tr></thead><tbody id="assignments"></tbody></table>
+          </div>
+        </section>
       </section>
       <footer class="site-footer">Powered by Oracle LiveLabs Team &copy; 2026</footer>
     </main>

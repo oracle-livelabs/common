@@ -1,16 +1,6 @@
 (function () {
   "use strict";
 
-  var nodocManifestHref = "workshops/nodoc/manifest.json";
-
-  function resolveGuideRuntimePath(path) {
-    if (window.AuthorGuidePaths && typeof window.AuthorGuidePaths.resolve === "function") {
-      return window.AuthorGuidePaths.resolve(path);
-    }
-
-    return new URL(path.replace(/^\/+/, ""), window.location.href).toString();
-  }
-
   function hydrateNoDocAssets(root, contentUrl) {
     root.querySelectorAll("[data-nodoc-asset]").forEach(function (image) {
       var attribute = image.tagName === "SOURCE" ? "srcset" : "src";
@@ -931,45 +921,47 @@
 
   function loadNoDocWorkshop() {
     var source = document.querySelector("#nodocMode .nodoc-full-tree");
-    var manifestUrl;
-    var contentUrl;
+    var loadingTimer;
+    var search;
+    var submit;
+    var navigation;
 
     if (!source) {
       return;
     }
 
-    manifestUrl = new URL(resolveGuideRuntimePath(nodocManifestHref));
+    search = document.getElementById("nodocSearchInput");
+    submit = document.querySelector("#nodocSearchForm button[type='submit']");
+    navigation = document.querySelector(".nodoc-side-nav");
+    if (search) search.disabled = true;
+    if (submit) submit.disabled = true;
+    if (navigation) navigation.inert = true;
     source.setAttribute("aria-busy", "true");
+    source.innerHTML = '<div class="guide-load-state" role="status" aria-live="polite"><p data-nodoc-loading-message>Loading the NoDoc guide… Please wait.</p></div>';
+    loadingTimer = window.setTimeout(function () {
+      var message = source.querySelector("[data-nodoc-loading-message]");
+      if (message) message.textContent = "This is taking longer than usual. Please keep this page open.";
+    }, 8000);
 
-    fetch(manifestUrl.toString(), { cache: "no-store" })
-      .then(function (response) {
-        if (!response.ok) {
-          throw new Error("NoDoc manifest request failed with HTTP " + response.status);
-        }
-        return response.json();
-      })
-      .then(function (manifest) {
-        if (!manifest || !manifest.content) {
-          throw new Error("NoDoc manifest does not define a content file");
-        }
-        contentUrl = new URL(manifest.content, manifestUrl);
-        return fetch(contentUrl.toString(), { cache: "no-store" });
-      })
-      .then(function (response) {
-        if (!response.ok) {
-          throw new Error("NoDoc content request failed with HTTP " + response.status);
-        }
-        return response.text();
-      })
-      .then(function (markup) {
-        source.innerHTML = markup;
-        hydrateNoDocAssets(source, contentUrl);
-        source.removeAttribute("aria-busy");
+    window.AuthorGuideLoader.loadNoDoc()
+      .then(function (result) {
+        window.clearTimeout(loadingTimer);
+        source.innerHTML = result.markup;
+        hydrateNoDocAssets(source, result.contentUrl);
         setupNoDocWorkshop();
+        source.setAttribute("aria-busy", "false");
+        if (search) search.disabled = false;
+        if (submit) submit.disabled = false;
+        if (navigation) navigation.inert = false;
       })
       .catch(function (error) {
-        source.removeAttribute("aria-busy");
-        source.innerHTML = "<p class=\"nodoc-load-error\">NoDoc workshop content could not be loaded.</p>";
+        window.clearTimeout(loadingTimer);
+        source.setAttribute("aria-busy", "false");
+        source.innerHTML = '<div class="guide-load-state"><p role="alert">We couldn’t load the NoDoc guide. Check your connection and try again.</p><button type="button" class="btn btn-primary" data-nodoc-retry>Try again</button></div>';
+        source.querySelector("[data-nodoc-retry]").addEventListener("click", function () {
+          loadNoDocWorkshop();
+          document.dispatchEvent(new CustomEvent("author-guide:retry-content"));
+        });
         console.error(error);
       });
   }

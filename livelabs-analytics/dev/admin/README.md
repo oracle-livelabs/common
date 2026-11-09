@@ -4,8 +4,11 @@ The dashboard remains a static release. Administration runs as a separate,
 authenticated local service. `/admin` is the sign-in entry point and redirects
 signed-in users to Dashboard management at `/admin/dashboard-management`.
 Dashboard management and the other pages can be bookmarked individually:
-`/admin/dashboard-management`, `/admin/data-merge`, `/admin/governance` (Data
-governance), and `/admin/user-settings`. Governance uses tabs for snapshot
+`/admin/dashboard-management`, `/admin/governance`, `/admin/data-merge`,
+`/admin/jenkins`, and `/admin/inventory`, in alphabetical menu order.
+The shared sidebar owns the dashboard return link and Sign out. Saved Jenkins
+reports and their retest lists use the same sidebar. Users settings is withdrawn;
+old bookmarks redirect to Dashboard management. Governance uses tabs for snapshot
 comparisons, the data quality queue, and review decisions. Private APIs and
 assets check the session independently.
 
@@ -16,18 +19,55 @@ python dev/scripts/admin-server.py --configure
 python dev/scripts/admin-server.py --port 4175
 ```
 
+For an already configured Windows workspace, use `./dev/scripts/start-local.ps1`.
+It starts the service hidden on loopback, or verifies the existing service, and
+prints `http://127.0.0.1:4175/dashboard/`. Logs stay in ignored `dev/logs/`.
+Use this service for the saved Jenkins overlay; a generic static server cannot
+provide `/api/dashboard-admin-state`. The canonical page source is
+`dashboard/index.html`. Explicitly synchronize legacy entries with
+`python dev/scripts/build-page-entrypoints.py` after reviewing a page change.
+Release builders check these entries and do not regenerate source files.
+
+## Dashboard content visibility
+
+Portfolio inventory now includes Admin-only tests/training, internal team content,
+and a classification-review queue. Use **Manage** on an individual record, select
+its classification, enter a reason, and save. The service stages and rebuilds the
+public projection, offline fallback and all ranking fragments before confirming.
+The source inventory is never deleted or rewritten. Selecting Learner content
+restores eligibility only when the record is also Public and Published.
+
+Decisions are persisted in `dev/config/dashboard-policy.json` by LiveLabs ID
+(or the exact existing record key when no ID exists). Revision checks reject
+stale edits; audit history is private under `.private/admin/content-policy-history`.
+The internal Slack roster is `.private/admin/team-roster.json`, outside packages.
+Channel membership and an Oracle email are review context, not automatic test
+classification. No whole WMS family or author is hidden by an individual decision.
+
+The eligibility panel shows population counts, missing metrics and proxy updates.
+Its retirement threshold preview is read-only. Current saved criteria remain
+250 annual views and update evidence older than 12 calendar months, evaluated at
+the source snapshot date. All eligible records reach QA scoring before pagination;
+there is no pre-scoring top-100 cutoff. Full details remain on each record page.
+
+Visibility publishing requires Node.js 18+ as well as Python 3.10+. If generation
+fails, the previous policy and generated files are retained. Restart the service
+after updating Python modules, and refresh dashboard tabs after a saved policy
+change. Static releases must be rebuilt and redeployed separately.
+
 Without “Keep me logged in,” the browser receives a session cookie and the
 server expires it after two hours. With it enabled, the persistent cookie and
 server session expire after seven days at the latest; eight hours without an
 authenticated request ends the remembered session sooner. Both limits are
 enforced by the server, and logout revokes the session immediately.
 
-Change the password from Users settings. For a generated initial password
+Change the password with `python dev/scripts/admin-server.py --configure`.
+This interactive command revokes existing sessions. For a generated initial password
 instead of interactive setup, run
 `python dev/scripts/admin-server.py --initialize-local-account` once. Credentials
 are stored in the project's `.private/admin` folder, excluded by `.gitignore`
 and all deployment packages. The server never serves this folder. Change the
-generated password from Users settings.
+generated password with the same interactive configuration command.
 The service binds only to loopback. Sessions expire after two hours; sign-out
 and password changes revoke them. Passwords are stored as salted PBKDF2 hashes,
 cookies are HttpOnly/SameSite Strict, mutations require an origin check and
@@ -101,3 +141,7 @@ Replacement comparison lives on the main dashboard. It presents supplied
 descriptions/objectives, prerequisites, products, versions, environment and
 update evidence side by side. Missing evidence is explicit; substitutability is
 not inferred from a match score. Human decisions remain in administration.
+
+# Tiered review and evidence
+
+See [Review queues and calculations](REVIEW-RULES.md) for the shared rules, public calculation help, lifecycle queue, confidence labels, Admin review decisions and build/test requirements. Portfolio inventory → Manage now records retirement decisions and verified source dates separately from visibility classification. The author dashboard shows the same methodology in each ranking section.

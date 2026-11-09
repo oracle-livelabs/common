@@ -5,10 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LiveLabs TMS</title>
     <link rel="icon" href="data:," />
-    <link rel="stylesheet" href="./styles.css" />
+    <style>body{font:16px system-ui;background:#f5f3ef;color:#312d2a;padding:10vh 8vw}a{color:#00688c}</style>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="./app.js"></script>
+    <h1>Test Management is part of QA Hub</h1>
+    <p>Opening the shared test workspace…</p>
+    <p><a id="hub-link" href="http://127.0.0.1:4192/#section=tests">Open Tests in QA Hub</a></p>
+    <p><a href="./legacy.html">Open the previous TMS and its browser data</a></p>
+    <script type="module">
+      const target = ['127.0.0.1', 'localhost'].includes(location.hostname) ? 'http://127.0.0.1:4192/#section=tests' : '../../../livelabs-qa-hub/app/dist/index.html#section=tests';
+      document.querySelector('#hub-link').href = target;
+      const oldObject = decodeURIComponent(location.hash.slice(1)).startsWith('object:');
+      location.replace(oldObject ? './legacy.html' + location.hash : target);
+    </script>
   </body>
 </html>

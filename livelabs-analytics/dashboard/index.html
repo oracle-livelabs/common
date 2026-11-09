@@ -12,14 +12,14 @@
   <link rel="stylesheet" href="./assets/css/page-loading.css?v=20261009-loading">
   <link rel="icon" href="./assets/images/oracle-logo-white.svg" type="image/svg+xml">
 
-  <link rel="stylesheet" href="./assets/css/dashboard.css?v=20261102-search-detail-v9">
+  <link rel="stylesheet" href="./assets/css/dashboard.css?v=20261108-evidence-v3">
 
 </head>
 <body>
   <a class="skip-link" href="#dashboard-top">Skip to dashboard content</a>
   <div class="sr-only" id="copy-status" role="status" aria-live="polite" aria-atomic="true"></div>
   <div class="layout">
-    <aside class="rail"><div class="brand">
+    <aside class="rail" id="analytics-menu" aria-label="Main menu" aria-hidden="true" inert><div class="brand">
 <a class="brand-mark" href="/dashboard/?view=performance" data-dashboard-home aria-label="Back to LiveLabs Analytics dashboard"><img src="./assets/images/oracle-logo-white.svg" alt="Oracle"></a><span>LiveLabs Analytics</span>
 </div>
 <section class="sidebar-search" aria-label="Search"><label for="global-workshop-search">Search</label><span class="search-box"><input id="global-workshop-search" type="search" autocomplete="off" placeholder="Title, ID, author, keyword"><button class="search-clear-button" type="button" data-search-clear aria-label="Clear search" hidden><svg viewbox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"></path></svg></button></span><div class="search-status" data-search-status role="status" aria-live="polite" aria-atomic="true" hidden></div>
@@ -36,36 +36,37 @@
       <section class="overview-portfolio-stats" id="portfolio-stats" data-dashboard-page="all" aria-label="Portfolio statistics">
   <div class="metric-band" aria-label="Public portfolio signals" data-public-stats="true">
     <article class="metric-card"><span>Public and published</span><strong data-overview-metric="public-count">—</strong><small data-overview-note="public-breakdown">Workshop and sprint counts</small></article>
-    <article class="metric-card"><span>Items with Jenkins Error Score</span><strong data-overview-metric="jenkins-scored-count">—</strong><small>P2 and P3 findings affect the final score</small></article>
-    <article class="metric-card"><span>P1 findings to review</span><strong data-overview-metric="jenkins-p1-count">—</strong><small>Check possible issues that may stop learners first</small></article>
+    <article class="metric-card"><span>P1 findings to review</span><strong data-overview-metric="jenkins-p1-count">—</strong><small>Check learner blockers first</small></article>
+    <article class="metric-card"><span>Items with errors</span><strong data-overview-metric="error-items-count">—</strong><small>Items with P2 or P3 findings</small></article>
   </div>
 </section>
 <nav class="dashboard-tabs" role="tablist" aria-label="Dashboard sections" data-dashboard-page="all">
   <button id="dashboard-tab-performance" type="button" role="tab" aria-selected="true" aria-controls="top-performers" data-dashboard-tab="performance">Top Performers</button>
   <button id="dashboard-tab-urgent" type="button" role="tab" aria-selected="false" aria-controls="jenkins-p1-slot" data-dashboard-tab="urgent" tabindex="-1">P1 urgent action</button>
   <button id="dashboard-tab-at-risk" type="button" role="tab" aria-selected="false" aria-controls="at-risk-content" data-dashboard-tab="at-risk" tabindex="-1">At-risk</button>
-  <button id="dashboard-tab-retirement" type="button" role="tab" aria-selected="false" aria-controls="retire-now-content" data-dashboard-tab="retirement" tabindex="-1">Immediate retirement</button>
+  <button id="dashboard-tab-retirement" type="button" role="tab" aria-selected="false" aria-controls="retire-now-content" data-dashboard-tab="retirement" tabindex="-1">Retirement review</button>
 </nav>
-<section class="section lazy-section dashboard-tab-panel" id="top-performers" role="tabpanel" aria-labelledby="dashboard-tab-performance" tabindex="0" data-dashboard-page="performance" data-lazy-section="top-performers" data-lazy-src="./assets/fragments/top-performers.html?v=20261031-author-action-copy-v3" aria-busy="true"><div class="section-head">
+<section class="section lazy-section dashboard-tab-panel" id="top-performers" role="tabpanel" aria-labelledby="dashboard-tab-performance" tabindex="0" data-dashboard-page="performance" data-lazy-section="top-performers" data-lazy-src="./assets/fragments/top-performers.html?v=20261106-author-report-v2" aria-busy="true"><div class="section-head">
 <div class="section-head-top"><h2>Top Performers</h2></div>
-<p>These rankings highlight public workshops and sprints with strong views and recent updates. Keep useful instructions accurate and current, and review any test issues flagged in the score.</p>
+<p>Explore content ranked by demand, freshness and QA results.</p>
 </div>
 <div class="lazy-section-panel"><p class="lazy-section-status" role="status">Loading performance tables…</p></div></section>
 <section id="jenkins-p1-slot" class="section dashboard-tab-panel" role="tabpanel" aria-labelledby="dashboard-tab-urgent" tabindex="0" data-dashboard-page="urgent" hidden></section>
-<section class="section lazy-section dashboard-tab-panel" id="at-risk-content" role="tabpanel" aria-labelledby="dashboard-tab-at-risk" tabindex="0" data-dashboard-page="at-risk" data-lazy-section="at-risk-content" data-lazy-src="./assets/fragments/at-risk-content.html?v=20261031-author-action-copy-v2" aria-busy="true" hidden><div class="section-head">
+<section class="section lazy-section dashboard-tab-panel" id="at-risk-content" role="tabpanel" aria-labelledby="dashboard-tab-at-risk" tabindex="0" data-dashboard-page="at-risk" data-lazy-section="at-risk-content" data-lazy-src="./assets/fragments/at-risk-content.html?v=20261106-author-report-v2" aria-busy="true" hidden><div class="section-head">
 <div class="section-head-top"><h2>At-risk</h2></div>
-<p>At-risk highlights public workshops and sprints with lower views, older updates, missing author details, or P2/P3 test findings. Review each record; refresh outdated instructions, add missing contact details, or fix confirmed test issues as needed. Use the P1 urgent action tab for findings that may block learners.</p>
+<p>Review content by demand, age and QA findings.</p>
 </div>
 <div class="lazy-section-panel"><p class="lazy-section-status" role="status">Loading at-risk tables…</p></div></section>
-<section class="section lazy-section dashboard-tab-panel" id="retire-now-content" role="tabpanel" aria-labelledby="dashboard-tab-retirement" tabindex="0" data-dashboard-page="retirement" data-lazy-section="retire-now-content" data-lazy-src="./assets/fragments/retire-now-content.html?v=20261031-author-action-copy-v2" aria-busy="true" hidden><div class="section-head">
-<div class="section-head-top"><h2>Immediate retirement</h2></div>
-<p>These workshops and sprints have low recent views and no meaningful update in the past year. Check the evidence, then confirm with the owner whether the content is still needed before proposing retirement. The score flags items for review; it does not retire them.</p>
+<section class="section lazy-section dashboard-tab-panel" id="retire-now-content" role="tabpanel" aria-labelledby="dashboard-tab-retirement" tabindex="0" data-dashboard-page="retirement" data-lazy-section="retire-now-content" data-lazy-src="./assets/fragments/retire-now-content.html?v=20261106-author-report-v2" aria-busy="true" hidden><div class="section-head">
+<div class="section-head-top"><h2>Retirement review</h2></div>
+<p>Review removal requests and low-demand content before deciding what to retire.</p>
 </div>
 <div class="lazy-section-panel"><p class="lazy-section-status" role="status">Loading retirement tables…</p></div></section><footer class="site-footer">Powered by Oracle LiveLabs Team © 2026</footer>
     </main>
   </div>
 
   <script src="./assets/js/report-export.js?v=20261009-admin-review"></script>
-  <script src="./assets/js/dashboard.js?v=20261102-search-detail-v9"></script>
+  <script src="./assets/js/author-report.js?v=20261108-evidence-validity-v3"></script>
+  <script src="./assets/js/dashboard.js?v=20261108-evidence-validity-v3"></script>
   </body>
 </html>

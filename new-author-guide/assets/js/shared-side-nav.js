@@ -65,11 +65,7 @@
       '                <a class="nav-menu-link" data-shared-nav-route="markdown/" href="#" aria-label="Open Markdown reference"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 4l-4 16"/></svg></span><span>Markdown</span></a>',
       '              </div>',
       '            </details>',
-      '            <details class="nav-menu-group" id="nodocMenu">',
-      '              <summary class="nav-menu-summary" aria-controls="nodocMenuItems"><a class="btn nav-control nav-menu-parent" data-mode-target="nodoc" data-shared-nav-route="nodoc/" href="#" aria-label="Open NoDoc guide"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 3.5h9l3 3V20H6V3.5Z"/><path d="M15 3.5V7h3M9 11h6M9 14h6M9 17h4"/></svg></span><span class="nav-control-text">NoDoc</span></a></summary>',
-      '              <div class="nav-menu-items" id="nodocMenuItems" aria-label="Related NoDoc pages">',
-      '              </div>',
-      '            </details>',
+      '            <a class="btn nav-control" data-mode-target="nodoc" data-shared-nav-route="nodoc/" href="#" aria-label="Open NoDoc guide"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 3.5h9l3 3V20H6V3.5Z"/><path d="M15 3.5V7h3M9 11h6M9 14h6M9 17h4"/></svg></span><span class="nav-control-text">NoDoc</span></a>',
       '            <a class="btn nav-control" data-full-guide-link href="#" target="_blank" rel="noreferrer" aria-label="Open Step by Step Guide"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6.5 4.5h9.2a1.8 1.8 0 0 1 1.8 1.8v13.2H8.3a1.8 1.8 0 0 1-1.8-1.8V4.5Z"/><path d="M9.2 4.5v15M10.8 8h4M10.8 11h4M10.8 14h3"/><path d="M4.5 6.5h2M4.5 9h2M4.5 11.5h2M4.5 14h2M4.5 16.5h2"/></svg></span><span class="nav-control-text">Step by Step Guide</span></a>',
       '            <a class="btn nav-control" data-workshop-example-link href="#" target="_blank" rel="noreferrer" aria-label="Open a real LiveLabs workshop example"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 3h6M10 3v5l-5.6 9.8A2.1 2.1 0 0 0 6.2 21h11.6a2.1 2.1 0 0 0 1.8-3.2L14 8V3M8 15h8"/></svg></span><span class="nav-control-text">Workshop Example</span></a>',
       '          </div>',
@@ -85,7 +81,7 @@
 
     document.querySelectorAll("[data-shared-nav-route]").forEach(function (link) {
       var route = link.getAttribute("data-shared-nav-route");
-      link.href = new URL(route, rootUrl).toString();
+      link.href = new URL((route || "") + "index.html", rootUrl).toString();
     });
 
     document.querySelectorAll("[data-full-guide-link]").forEach(function (link) {

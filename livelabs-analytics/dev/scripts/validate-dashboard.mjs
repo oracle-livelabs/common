@@ -105,9 +105,9 @@ function checkInventoryPageContract() {
   const server = fs.readFileSync(path.join(root, "dev/scripts/admin-server.py"), "utf8");
   const required = ["/admin-assets/inventory.js", 'id="inventory-jenkins-priority"', "Jenkins Error Score", 'id="count-public"', 'id="count-disabled"'];
   const missing = required.filter((marker) => !html.includes(marker));
-  const scriptMarkers = ["/api/admin/inventory", "/api/dashboard-admin-state", "jenkinsState(record)", "Outside Jenkins public scan scope"];
+  const scriptMarkers = ["/api/admin/inventory", "/api/admin/qa-overlay", "jenkinsState(record)", "Outside Jenkins public scan scope"];
   const missingScript = scriptMarkers.filter((marker) => !script.includes(marker));
-  const authRoute = server.includes("'/admin/inventory': 'inventory.html'") && server.includes("if not self.session():\n                return self.file(PRIVATE / 'login.html')");
+  const authRoute = server.includes("'/admin/inventory': 'inventory.html'") && server.includes("if path == '/api/admin/inventory':") && /session = self\.session\(\)[\s\S]*?if not session:[\s\S]*?return self\.send\(401/.test(server);
   if (missing.length || missingScript.length || !authRoute) {
     fail("Admin Inventory contract", `page=${missing.join(", ") || "ok"}; script=${missingScript.join(", ") || "ok"}; authenticated route=${authRoute}`);
   } else {
@@ -217,12 +217,7 @@ function checkCopyInteractionContracts() {
     : pass("copy interaction visibility", "table and detail-page Copy controls appear on hover or keyboard focus");
 
   const dashboardTableIds = [
-    "top-performer-top-100-workshops",
-    "top-performer-top-100-sprints",
-    "at-risk-top-100-workshops",
-    "at-risk-top-100-sprints",
-    "retire-now-top-100-workshops",
-    "retire-now-top-100-sprints"
+    "top-performers-table", "at-risk-table", "retirement-review-table"
   ];
   const targetLabels = new Set([
     "title",
@@ -329,12 +324,7 @@ function checkIdentityDataContract() {
 function checkEmbeddedDashboardOutputs() {
   const html = readDashboardSourceBundle();
   const tableIds = [
-    "top-performer-top-100-workshops",
-    "top-performer-top-100-sprints",
-    "at-risk-top-100-workshops",
-    "at-risk-top-100-sprints",
-    "retire-now-top-100-workshops",
-    "retire-now-top-100-sprints"
+    "top-performers-table", "at-risk-table", "retirement-review-table"
   ];
   const empty = [];
   for (const id of tableIds) {
@@ -521,7 +511,9 @@ function checkRankingFormulaContracts() {
   const scoreBlock = dashboard.match(/function jenkinsOverlayForId\([\s\S]*?\n    function jenkinsPrioritySummary/)?.[0] || "";
   const requirements = [
     [top, 'record.get("publishStatus") == "Published"', "Top Performer public/published gate"],
-    [top, "0.45 * components[\"recent_views_12m_content_percentile\"] + 0.35 * components[\"recent_views_90d_content_percentile\"] + 0.20 * components[\"top_performer_freshness_score\"]", "Top Performer Analytics formula"],
+    [top, "weighted = [(0.45, percentile12m), (0.35, percentile90d)]", "Top Performer demand weights"],
+    [top, "weighted.append((0.20, freshness))", "Top Performer known-freshness weight"],
+    [top, "return weighted_score(weighted)", "Top Performer shared missing-input normalization"],
     [review, "components.append((0.50, 100 - view_percentile))", "review demand input weight"],
     [review, "components.append((0.35, min(100, age_months / 36 * 100)))", "review update-age input weight"],
     [review, "components.append((0.15, 100 if missing_author else 0))", "review author-coverage input weight"],
@@ -652,7 +644,9 @@ function checkDataConfidenceAndInventoryNavigation() {
 function checkPublicScopeDesign() {
   const source = readJson(path.join(root, "inventory/data/portfolio_inventory.json"));
   const projection = readJson(path.join(root, "inventory/data/public_portfolio_inventory.json"));
-  const eligible = source.records.filter((record) => String(record.publishType || "").toLowerCase() === "public" && String(record.publishStatus || "").toLowerCase() === "published");
+  const visibilityPolicy = readJson(path.join(root, 'dev/config/dashboard-policy.json'));
+  const eligible = source.records.filter((record) => String(record.publishType || "").toLowerCase() === "public" && String(record.publishStatus || "").toLowerCase() === "published"
+    && !['test_content','internal_training'].includes(visibilityPolicy.decisions[record.livelabsId ? `livelabs:${record.livelabsId}` : record.key]?.classification));
   const publicIds = new Set(eligible.map((record) => String(record.livelabsId || "").trim()).filter(Boolean));
   const projectionKeys = new Set(projection.records.map((record) => String(record.key || "").trim()));
   const invalidRecords = projection.records.filter((record) => record.publishType !== "Public" || record.publishStatus !== "Published");
@@ -665,6 +659,7 @@ function checkPublicScopeDesign() {
   const failures = [];
   if (projection.metadata?.data_scope !== "public_published" || projection.records.length !== eligible.length) failures.push(`projection=${projection.records.length}/${eligible.length}`);
   if (invalidRecords.length) failures.push(`ineligible public rows=${invalidRecords.length}`);
+  if (projection.records.some(record => !eligible.some(row => row.key === record.key))) failures.push('Excluded test/training record in public projection');
   if (familyLeaks.length) failures.push(`nonpublic related records=${familyLeaks.length}`);
   if (/Replacements|Disabled\s*&amp;\s*archived|Portfolio Inventory/i.test(navigation)) failures.push("author navigation still exposes archived or full inventory pages");
   if (!javascript.includes("loadFullSearchRecords()") || !javascript.includes("public_portfolio_inventory.json")) failures.push("search does not load the public projection");

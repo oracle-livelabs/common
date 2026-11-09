@@ -505,7 +505,7 @@ window.LiveLabsMarkdownSections = [
         "links": [
           {
             "label": "Continue to review and publication",
-            "href": "../quickstart/#step-3"
+            "href": "../quickstart/index.html#step-3"
           }
         ],
         "keywords": "security case sensitive trusted content checks publish review access secrets"
