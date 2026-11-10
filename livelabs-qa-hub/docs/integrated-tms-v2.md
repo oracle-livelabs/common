@@ -74,3 +74,15 @@ Evidence: `output/screenshots/unified-hub-v2/manifest.md` and `results.json`. Re
 ## Review and limits
 
 Review Dashboard → Tests → Bugs & Findings → a linked test → Plans/Requirements. Imported saved evidence is dated and read-only. Workflow changes, manual outcomes, and notes are browser-local. Shared persistence, production authentication, live Jenkins/Jira integration, actual test execution controls, and external writeback remain outside this local iteration.
+
+## Objectives
+
+Describe the local QA Hub and TMS integration, its source boundaries, and its review limits.
+
+## Estimated Time
+
+Estimated Time: About 10 minutes to review the architecture and validation notes.
+
+## Acknowledgements
+
+Imported evidence remains read-only and local workflow edits stay browser-local; shared persistence and production integration are outside this iteration.

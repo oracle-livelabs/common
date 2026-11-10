@@ -104,7 +104,7 @@ function redactAccessLinks(value) {
 }
 const projection = redactAccessLinks({ ...source, metadata, records: publicRecords });
 projection.metadata.access_link_redactions = redactions + Number(source.metadata?.access_link_redactions || 0);
-const outputText = `${JSON.stringify(projection)}\n`;
+const outputText = `${JSON.stringify(projection, null, 2)}\n`;
 if (process.argv.includes("--check")) {
   if (fs.readFileSync(outputPath, "utf8") !== outputText) throw new Error("Public projection is stale. Regenerate and review it before packaging.");
 } else {

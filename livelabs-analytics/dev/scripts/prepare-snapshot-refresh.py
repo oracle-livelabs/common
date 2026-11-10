@@ -41,7 +41,7 @@ def main():
     output.mkdir(parents=True)
     (output / 'before-snapshot.json').write_text(json.dumps(before, ensure_ascii=False), encoding='utf-8')
     inventory = output / 'portfolio_inventory.json'
-    inventory.write_text(json.dumps({k:v for k,v in before.items() if k not in ('capture', 'rankings')}, ensure_ascii=False), encoding='utf-8')
+    inventory.write_text(json.dumps({k:v for k,v in before.items() if k not in ('capture', 'rankings')}, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     subprocess.run([sys.executable, str(ROOT / 'dev/scripts/refresh-snapshot-data.py'), '--snapshot', str(args.snapshot.resolve()), '--source-manifest', str(args.manifest.resolve()), '--inventory', str(inventory)], cwd=ROOT, check=True)
     payload = validate_snapshot(json.loads(inventory.read_text(encoding='utf-8')))
     public = output / 'public_portfolio_inventory.json'

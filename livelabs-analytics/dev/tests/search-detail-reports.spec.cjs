@@ -37,7 +37,7 @@ async function downloadReport(page) {
   return { rows, filename: download.suggestedFilename() };
 }
 
-test("Jenkins evidence retains exact lab locations, source excerpts, and PAR diagnostics", async ({ page, context }) => {
+test("Jenkins evidence retains exact lab locations, source excerpts, and PAR diagnostics", async ({ page, context }, testInfo) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -76,15 +76,15 @@ test("Jenkins evidence retains exact lab locations, source excerpts, and PAR dia
   expect(rows.some(row => row[3].includes('HTTP 401'))).toBe(true);
   expect(await report.locator('a[href*="/p/"]').count()).toBe(0);
   await model.scrollIntoViewIfNeeded();
-  await page.screenshot({ path: 'output/screenshots/jenkins-evidence-20261109/desktop.png' });
+  await page.screenshot({ path: testInfo.outputPath('jenkins-evidence-desktop.png') });
   await page.setViewportSize({ width: 390, height: 844 });
   await model.scrollIntoViewIfNeeded();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-  await model.screenshot({ path: 'output/screenshots/jenkins-evidence-20261109/mobile-detail.png' });
+  await model.screenshot({ path: testInfo.outputPath('jenkins-evidence-mobile-detail.png') });
   expect(errors).toEqual([]);
 });
 
-test('opening an error leads with the exact content location before generic QA details', async ({page}) => {
+test('opening an error leads with the exact content location before generic QA details', async ({page}, testInfo) => {
   await page.goto('/search/?livelabs_id=3570', {waitUntil:'networkidle'});
   const report=page.locator('[data-qa-report-overlay]');
   const par=report.locator('.author-finding-group').filter({has:page.locator(':scope > summary strong',{hasText:'Stale PAR link'})});
@@ -115,14 +115,14 @@ test('opening an error leads with the exact content location before generic QA d
   expect(rows.some(row=>row[3].includes('Rendered lab'))).toBe(true);
   expect(rows.some(row=>row[2]==='Suggested action')).toBe(true);
   await par.locator(':scope > summary').scrollIntoViewIfNeeded();
-  await page.screenshot({path:'output/screenshots/jenkins-location-first-20261109/desktop.png'});
+  await page.screenshot({path:testInfo.outputPath('jenkins-location-first-desktop.png')});
   await page.setViewportSize({width:390,height:844});
   await primary.scrollIntoViewIfNeeded();
   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-  await primary.screenshot({path:'output/screenshots/jenkins-location-first-20261109/mobile.png'});
+  await primary.screenshot({path:testInfo.outputPath('jenkins-location-first-mobile.png')});
 });
 
-test('record details prioritize ownership and keep errors and score tables compact', async ({page}) => {
+test('record details prioritize ownership and keep errors and score tables compact', async ({page}, testInfo) => {
   for (const width of [1440,390]) {
     await page.setViewportSize({width,height:1000});
     await page.goto('/search/?livelabs_id=3570',{waitUntil:'networkidle'});
@@ -155,13 +155,13 @@ test('record details prioritize ownership and keep errors and score tables compa
     const {rows}=await downloadReport(page);
     expect(rows).toContainEqual(['Score and evidence','1','Annual demand / Final weight','33.75%']);
     expect(rows.some(row=>row[2]==='Report date'&&row[3]==='15 Oct 2026')).toBe(true);
-    await table.screenshot({path:`output/screenshots/compact-record-20261109/score-${width}.png`});
+    await table.screenshot({path:testInfo.outputPath(`compact-record-score-${width}.png`)});
     await view.locator('h2').click();
-    await page.screenshot({path:`output/screenshots/compact-record-20261109/page-${width}.png`,fullPage:true});
+    await page.screenshot({path:testInfo.outputPath(`compact-record-page-${width}.png`),fullPage:true});
   }
 });
 
-test("public workshop and sprint details copy and export their displayed content", async ({ page, context, request }) => {
+test("public workshop and sprint details copy and export their displayed content", async ({ page, context, request }, testInfo) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   const { records } = await (await request.get("/inventory/data/public_portfolio_inventory.json")).json();
   const samples = [
@@ -240,7 +240,11 @@ test("CSV preserves file detail, Unicode, quotes, newlines, and safe spreadsheet
     const section = document.createElement('section'); section.className='search-detail-panel';
     const heading=document.createElement('h3');heading.textContent='CSV fixture';section.append(heading);
     const table=document.createElement('table'), body=document.createElement('tbody');table.className='search-detail-table';table.append(body);section.append(table);
-    for(const [key,value] of [['Unicode and quotes','CSV fixture: "quoted", café\nSecond line'],['Formula','=HYPERLINK("https://example.invalid")'],['File','Intro, "first".md\nlabs/café/intro.md']]) {
+    for (const [key, value] of [
+      ['Unicode and quotes', 'CSV fixture: "quoted", café\nSecond line'],
+      ['Formula', '=HYPERLINK("https://example.invalid")'],
+      ['File', 'Intro, "first".md\nlabs/café/intro.md']
+    ]) {
       const row=document.createElement('tr'),label=document.createElement('th'),cell=document.createElement('td');label.textContent=key;cell.textContent=value;row.append(label,cell);body.append(row);
     }
     document.querySelector('#search-workshop-view').append(section);
@@ -254,7 +258,7 @@ test("CSV preserves file detail, Unicode, quotes, newlines, and safe spreadsheet
   const link = await page.locator("[data-copy-search-link]").boundingBox();
   const exportButton = await page.locator("[data-export-search-csv]").boundingBox();
   expect(exportButton.y).toBeGreaterThanOrEqual(link.y + link.height);
-  await page.screenshot({ path: "../test-results/search-detail-desktop.png", fullPage: true });
+  await page.screenshot({ path: testInfo.outputPath("search-detail-desktop.png"), fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   const exportMenu = page.locator("#search-workshop-view .report-export-dropdown");
   if (!(await exportMenu.evaluate((element) => element.hasAttribute("open")))) {
@@ -262,5 +266,5 @@ test("CSV preserves file detail, Unicode, quotes, newlines, and safe spreadsheet
   }
   await expect(page.locator("[data-export-search-csv]")).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
-  await page.screenshot({ path: "../test-results/search-detail-mobile.png", fullPage: true });
+  await page.screenshot({ path: testInfo.outputPath("search-detail-mobile.png"), fullPage: true });
 });

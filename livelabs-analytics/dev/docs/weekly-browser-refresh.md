@@ -100,3 +100,15 @@ The supplied local Complete JSON is the completed October 15, 2026 run, containi
 918 catalog entries and 4,193 checks. Six entries group multiple LiveLabs IDs, so
 the existing adapter blocks a direct per-ID merge. It is retained as historical
 fallback evidence, not a newly executed run or an already-applied QA update.
+
+## Objectives
+
+Guide a browser-based Analytics evidence refresh and explain the recorded run states.
+
+## Estimated Time
+
+Estimated Time: About 10 minutes to review the collection workflow.
+
+## Acknowledgements
+
+The report separates historical fallback evidence from a newly executed run and an applied QA update.

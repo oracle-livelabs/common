@@ -55,3 +55,15 @@ Run `python -m unittest discover -s dev/tests -p 'test_*.py'`, `node dev/scripts
 This feature does not refresh WMS, views or Jenkins, inspect every workshop diff, publish to Object Storage, or implement public server-side pagination. Those release/migration tasks remain separate.
 
 Score details disclose baseline and final weights, unknown components, source confidence, retirement readiness and QA contribution. Missing contact remains an assignment signal; current weights are retained pending calibration against reviewed outcomes.
+
+## Objectives
+
+Define how review queues, confidence scores, Admin decisions, and regenerated evidence are interpreted.
+
+## Estimated Time
+
+Estimated Time: About 10 minutes to review the policy and examples.
+
+## Acknowledgements
+
+These rules describe the current local Analytics review policy; thresholds remain provisional until reviewed outcomes support calibration.

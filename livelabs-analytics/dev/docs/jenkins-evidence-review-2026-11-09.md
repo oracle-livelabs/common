@@ -53,3 +53,15 @@ Ownership and publishing now appears first and opens by default. Error summaries
 Removed the requested activity, retirement-readiness and shared-demand paragraphs. The score table retains its four columns in a compact layout with readable desktop and phone widths. Scoring and underlying evidence are unchanged.
 
 Validation: 11 browser checks passed, including ownership ordering, compact error groups, mobile column overflow, score values, copying and CSV exports. Rendering unit checks and 80 dashboard checks passed. Desktop and phone screenshots were inspected in `output/screenshots/compact-record-20261109/`. These are local UI changes; no new report run or publication occurred.
+
+## Objectives
+
+Summarize the Jenkins finding detail changes, evidence limits, and browser verification.
+
+## Estimated Time
+
+Estimated Time: About 5 minutes to review this evidence summary.
+
+## Acknowledgements
+
+Checks used a local disposable test database and retained report data; no new report run or publication occurred.

@@ -547,7 +547,7 @@ def main() -> int:
     apply_ownership_corrections(payload)
     # Correct presentation only after raw source titles have matched demand data.
     apply_title_corrections(payload)
-    args.inventory.write_text(json.dumps(payload, separators=(",", ":"), ensure_ascii=False) + "\n", encoding="utf-8")
+    args.inventory.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({
         "inventory": str(args.inventory),
         "records": len(records),

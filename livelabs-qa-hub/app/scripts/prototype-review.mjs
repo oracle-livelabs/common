@@ -8,6 +8,8 @@ const { chromium } = await import('../../../qa-automation/node_modules/playwrigh
 const root = fileURLToPath(new URL('../..', import.meta.url))
 const output = resolve(root, 'output/screenshots/asana-redesign-v1')
 const url = process.env.QA_PROTOTYPE_URL || 'http://127.0.0.1:4192/prototype.html'
+const maxImageDimension = 1280
+const tileOverlap = 64
 await mkdir(output, { recursive: true })
 const browser = await chromium.launch({ headless: true, channel: 'chrome' })
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce', acceptDownloads: true, locale: 'en-GB' })
@@ -16,10 +18,42 @@ const errors = [], checks = [], screenshots = []
 page.on('pageerror', error => errors.push(error.message))
 page.on('console', message => { if (message.type() === 'error') errors.push(message.text()) })
 const check = (name, condition) => { assert.ok(condition, name); checks.push(name) }
+const splitAxis = length => {
+  const count = Math.max(1, Math.ceil((length - tileOverlap) / (maxImageDimension - tileOverlap)))
+  const size = Math.ceil((length + (count - 1) * tileOverlap) / count)
+  const step = size - tileOverlap
+  return Array.from({ length: count }, (_, index) => {
+    const start = Math.min(index * step, length - size)
+    return { start, size: Math.min(size, length - start) }
+  })
+}
 const capture = async name => {
   await page.locator('#toast.toast-visible').waitFor({ state: 'hidden' })
-  await page.screenshot({ path: resolve(output, name), fullPage: true })
-  screenshots.push({ name, viewport: page.viewportSize(), url: page.url(), captureMode: 'full page' })
+  const viewport = page.viewportSize()
+  const documentSize = await page.evaluate(() => ({
+    width: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
+    height: Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
+  }))
+  const width = Math.max(viewport.width, documentSize.width)
+  const height = Math.max(viewport.height, documentSize.height)
+  const columns = splitAxis(width), rows = splitAxis(height)
+  const tiled = columns.length > 1 || rows.length > 1
+  const files = []
+  for (const [rowIndex, row] of rows.entries()) {
+    for (const [columnIndex, column] of columns.entries()) {
+      const file = tiled
+        ? name.replace(/\.png$/i, `__r${String(rowIndex + 1).padStart(2, '0')}-c${String(columnIndex + 1).padStart(2, '0')}.png`)
+        : name
+      const path = resolve(output, file)
+      if (tiled) {
+        await page.screenshot({ path, clip: { x: column.start, y: row.start, width: column.size, height: row.size }, animations: 'disabled' })
+      } else {
+        await page.screenshot({ path, fullPage: true, animations: 'disabled' })
+      }
+      files.push(file)
+    }
+  }
+  screenshots.push({ name: files[0], files, originalDimensions: { width, height }, tileGrid: { rows: rows.length, columns: columns.length }, tileOverlapPixels: tiled ? tileOverlap : 0, viewport, url: page.url(), captureMode: 'full page' })
 }
 try {
   await page.goto(url)
@@ -132,7 +166,7 @@ try {
   await page.locator('[data-nav="board"]').click()
   check('No browser runtime or asset errors', errors.length === 0)
   await writeFile(resolve(output, 'results.json'), JSON.stringify({ url, checks, errors, screenshots }, null, 2))
-  await writeFile(resolve(output, 'manifest.md'), `# QA Hub redesign review\n\nCaptured: ${new Date().toISOString()}\n\nSource: ${url}\n\nBrowser: Chromium (installed Google Chrome), fresh isolated browser context. All data is synthetic; no live integrations are tested.\n\n## Screenshots\n\n${screenshots.map(s => `- ${s.name}: ${s.viewport.width} × ${s.viewport.height}, ${s.captureMode}, ${s.url}`).join('\n')}\n\n## Interaction checks\n\n${checks.map(c => `- PASS: ${c}`).join('\n')}\n\nBrowser errors: ${errors.length}\n`)
+  await writeFile(resolve(output, 'manifest.md'), `# QA Hub redesign review\n\nCaptured: ${new Date().toISOString()}\n\nSource: ${url}\n\nBrowser: Chromium (installed Google Chrome), fresh isolated browser context. All data is synthetic; no live integrations are tested.\n\n## Objectives\n\nMap each original review capture to its linked lossless PNG tiles.\n\n## Estimated Time\n\nEstimated Time: About 5 minutes to review this evidence set.\n\n## Screenshots\n\n${screenshots.map(s => `- ${s.files.map(file => `[${file}](${file})`).join(', ')} — source ${s.originalDimensions.width} × ${s.originalDimensions.height}${s.files.length > 1 ? `; ${s.tileGrid.rows} × ${s.tileGrid.columns} lossless tiles with ${s.tileOverlapPixels}px overlap` : ''}; ${s.captureMode}, ${s.url}`).join('\n')}\n\n## Interaction checks\n\n${checks.map(c => `- PASS: ${c}`).join('\n')}\n\nBrowser errors: ${errors.length}\n\n## Acknowledgements\n\nCapture context and test conditions are recorded above and in the project review notes.\n`)
   console.log(JSON.stringify({ passed: checks.length, errors, output }, null, 2))
 } finally {
   await browser.close()

@@ -17,3 +17,15 @@ Replaced Dashboard management's assignment cards with a full-width table. The ta
 - JavaScript syntax and scoped diff whitespace checks passed.
 - Desktop and mobile screenshots inspected under `output/screenshots/assignment-table-20261109/`. These use synthetic assignment records and a disposable authenticated Admin service; tests do not modify the user's saved assignments.
 - Local implementation only. No release package or Object Storage publication was performed.
+
+## Objectives
+
+Describe the current assignments table changes and their local verification.
+
+## Estimated Time
+
+Estimated Time: About 5 minutes to review this implementation note.
+
+## Acknowledgements
+
+The screenshots use synthetic assignment records and a disposable authenticated Admin service; tests do not change saved assignments.

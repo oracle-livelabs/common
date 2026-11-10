@@ -46,3 +46,15 @@ The QA export is cohort-scoped and bound to the public inventory hash. Packaging
 Clear `fresh_data_pending` and the governance/retirement verification flags only after the new source and resulting queues have been reviewed. Rebuild and revalidate the final candidate after changing those declarations. Keep contact-bearing output behind the already specified authenticated delivery boundary.
 
 Upload the static directory contents under the manifest's immutable release prefix, using correct HTML/JSON/JS/CSS/font content types. The Admin service ZIP is a separate authenticated runtime, not website content and not an upload to the public static prefix. Validate the uploaded objects and routes, switch the approved stable route, then smoke-test it. Preserve the previous release prefix and route for rollback. No upload or route change was performed in this implementation.
+
+## Objectives
+
+Describe how to stage, inspect, rebuild, and verify a refreshed Analytics release before publication.
+
+## Estimated Time
+
+Estimated Time: About 10 minutes to review the release procedure.
+
+## Acknowledgements
+
+No upload or stable-route change was performed; contact-bearing Admin output remains within the authenticated delivery boundary.

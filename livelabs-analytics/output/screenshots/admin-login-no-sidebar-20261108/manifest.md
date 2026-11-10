@@ -23,7 +23,7 @@ Results:
     "mainX": 0,
     "backNavigation": "/dashboard/",
     "errors": [],
-    "screenshot": "C:\\Users\\Lucian Brinzei\\Desktop\\Desktop\\Projects\\livelabs-repos\\common\\livelabs-analytics\\output\\screenshots\\admin-login-no-sidebar-20261108\\01-login-desktop-no-sidebar.png"
+    "screenshot": "C:\\Users\\Lucian Brinzei\\Desktop\\Desktop\\Projects\\livelabs-repos\\common\\livelabs-analytics\\output\\screenshots\\admin-login-no-sidebar-20261108\\01-login-desktop-no-sidebar__r01-c01.png"
   },
   {
     "device": "mobile",
@@ -40,3 +40,21 @@ Results:
   }
 ]
 ```
+
+## Lossless slices
+
+Original capture dimensions are recorded below; every tile is a pixel-exact PNG crop with a 64-pixel overlap.
+
+- Original `01-login-desktop-no-sidebar.png` (1440 × 1000; 1 × 2 tiles): [01-login-desktop-no-sidebar__r01-c01.png](01-login-desktop-no-sidebar__r01-c01.png), [01-login-desktop-no-sidebar__r01-c02.png](01-login-desktop-no-sidebar__r01-c02.png)
+
+## Objectives
+
+Map each review capture to its linked lossless PNG tiles.
+
+## Estimated Time
+
+Estimated Time: About 5 minutes to review this evidence set.
+
+## Acknowledgements
+
+Capture context is recorded in this manifest and the related project review notes.

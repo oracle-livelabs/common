@@ -8,11 +8,11 @@ Browser: Chromium (installed Google Chrome), fresh isolated browser context. All
 
 ## Screenshots
 
-- 01-desktop-board.png: 1440 × 1000, full page, http://127.0.0.1:4192/prototype.html
-- 02-desktop-task-detail.png: 1440 × 1000, full page, http://127.0.0.1:4192/prototype.html
-- 03-desktop-list.png: 1440 × 1000, full page, http://127.0.0.1:4192/prototype.html#view=list
-- 04-desktop-roadmap.png: 1440 × 1000, full page, http://127.0.0.1:4192/prototype.html#view=roadmap
-- 05-desktop-overview.png: 1440 × 1000, full page, http://127.0.0.1:4192/prototype.html#view=overview
+- 01-desktop-board__r01-c01.png: 1440 × 1000, full page, http://127.0.0.1:4192/prototype.html
+- 02-desktop-task-detail__r01-c01.png: 1440 × 1000, full page, http://127.0.0.1:4192/prototype.html
+- 03-desktop-list__r01-c01.png: 1440 × 1000, full page, http://127.0.0.1:4192/prototype.html#view=list
+- 04-desktop-roadmap__r01-c01.png: 1440 × 1000, full page, http://127.0.0.1:4192/prototype.html#view=roadmap
+- 05-desktop-overview__r01-c01.png: 1440 × 1000, full page, http://127.0.0.1:4192/prototype.html#view=overview
 - 06-mobile-board.png: 390 × 844, full page, http://127.0.0.1:4192/prototype.html#view=board
 - 07-mobile-task-detail.png: 390 × 844, full page, http://127.0.0.1:4192/prototype.html#view=board&area=par-links
 
@@ -53,3 +53,25 @@ Browser: Chromium (installed Google Chrome), fresh isolated browser context. All
 - PASS: No browser runtime or asset errors
 
 Browser errors: 0
+
+## Lossless slices
+
+Original capture dimensions are recorded below; every tile is a pixel-exact PNG crop with a 64-pixel overlap.
+
+- Original `01-desktop-board.png` (1440 × 1000; 1 × 2 tiles): [01-desktop-board__r01-c01.png](01-desktop-board__r01-c01.png), [01-desktop-board__r01-c02.png](01-desktop-board__r01-c02.png)
+- Original `02-desktop-task-detail.png` (1440 × 1000; 1 × 2 tiles): [02-desktop-task-detail__r01-c01.png](02-desktop-task-detail__r01-c01.png), [02-desktop-task-detail__r01-c02.png](02-desktop-task-detail__r01-c02.png)
+- Original `03-desktop-list.png` (1440 × 1000; 1 × 2 tiles): [03-desktop-list__r01-c01.png](03-desktop-list__r01-c01.png), [03-desktop-list__r01-c02.png](03-desktop-list__r01-c02.png)
+- Original `04-desktop-roadmap.png` (1440 × 1000; 1 × 2 tiles): [04-desktop-roadmap__r01-c01.png](04-desktop-roadmap__r01-c01.png), [04-desktop-roadmap__r01-c02.png](04-desktop-roadmap__r01-c02.png)
+- Original `05-desktop-overview.png` (1440 × 1000; 1 × 2 tiles): [05-desktop-overview__r01-c01.png](05-desktop-overview__r01-c01.png), [05-desktop-overview__r01-c02.png](05-desktop-overview__r01-c02.png)
+
+## Objectives
+
+Map each review capture to its linked lossless PNG tiles.
+
+## Estimated Time
+
+Estimated Time: About 5 minutes to review this evidence set.
+
+## Acknowledgements
+
+Capture context is recorded in this manifest and the related project review notes.

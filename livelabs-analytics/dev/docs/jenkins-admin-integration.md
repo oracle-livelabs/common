@@ -46,3 +46,15 @@ The builder pins upstream dependencies, hashes the source and adapter, and adds 
 Validated 65 Python tests, 80 dashboard checks, two Node adapter/rendering fixture scripts, and 33 upstream renderer tests. Browser checks use an isolated authenticated test database with the real saved report, preserving the user's credentials and applied merge. Search, issue details, Retest List selection and JSON payload download were exercised. The main local service serves `/dashboard/` and the protected `/admin/jenkins` route.
 
 Remaining deployment work: receive a genuinely newer QA run and Analytics snapshot, reconcile IDs and preview the merge, then publish the reviewed public static bundle to Object Storage. For live Admin actions, configure a protected QA Hub/Jenkins bridge and report synchronization. Preserve local coverage gates when adapting the upstream retest pipeline; do not overwrite the Jenkinsfile wholesale.
+
+## Objectives
+
+Document how saved Jenkins report evidence is integrated into the Analytics Admin and the remaining deployment work.
+
+## Estimated Time
+
+Estimated Time: About 10 minutes to review the integration and boundaries.
+
+## Acknowledgements
+
+The integration was verified locally with an isolated test database; live Jenkins data refresh and production deployment remain separate.

@@ -6,17 +6,51 @@ import { chromium } from '../../../qa-automation/node_modules/playwright/index.m
 
 const url = process.env.QA_HUB_URL || 'http://127.0.0.1:4192/'
 const out = resolve(fileURLToPath(new URL('../..', import.meta.url)), 'output/screenshots/unified-hub-v2')
+const maxImageDimension = 1280
+const tileOverlap = 64
 await mkdir(out, { recursive: true })
 const browser = await chromium.launch({ channel: 'chrome', headless: true })
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' })
 const page = await context.newPage(), checks = [], errors = [], screenshots = []
 page.on('pageerror', error => errors.push(error.message))
 const check = (label, value) => { assert.ok(value, label); checks.push(label) }
+const splitAxis = length => {
+  const count = Math.max(1, Math.ceil((length - tileOverlap) / (maxImageDimension - tileOverlap)))
+  const size = Math.ceil((length + (count - 1) * tileOverlap) / count)
+  const step = size - tileOverlap
+  return Array.from({ length: count }, (_, index) => {
+    const start = Math.min(index * step, length - size)
+    return { start, size: Math.min(size, length - start) }
+  })
+}
 const nav = async section => page.locator(`.sidebar [data-nav="${section}"]`).click()
 const capture = async file => {
   await page.locator('#toast.toast-visible').waitFor({ state: 'hidden' })
-  await page.screenshot({ path: resolve(out, file), fullPage: true })
-  screenshots.push({ file, url: page.url(), viewport: page.viewportSize(), mode: 'full page' })
+  const viewport = page.viewportSize()
+  const documentSize = await page.evaluate(() => ({
+    width: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
+    height: Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
+  }))
+  const width = Math.max(viewport.width, documentSize.width)
+  const height = Math.max(viewport.height, documentSize.height)
+  const columns = splitAxis(width), rows = splitAxis(height)
+  const tiled = columns.length > 1 || rows.length > 1
+  const files = []
+  for (const [rowIndex, row] of rows.entries()) {
+    for (const [columnIndex, column] of columns.entries()) {
+      const tile = tiled
+        ? file.replace(/\.png$/i, `__r${String(rowIndex + 1).padStart(2, '0')}-c${String(columnIndex + 1).padStart(2, '0')}.png`)
+        : file
+      const path = resolve(out, tile)
+      if (tiled) {
+        await page.screenshot({ path, clip: { x: column.start, y: row.start, width: column.size, height: row.size }, animations: 'disabled' })
+      } else {
+        await page.screenshot({ path, fullPage: true, animations: 'disabled' })
+      }
+      files.push(tile)
+    }
+  }
+  screenshots.push({ file: files[0], files, originalDimensions: { width, height }, tileGrid: { rows: rows.length, columns: columns.length }, tileOverlapPixels: tiled ? tileOverlap : 0, url: page.url(), viewport, mode: 'full page' })
 }
 const closeDetail = async () => { await page.locator('#task-dialog [data-close="detail"]').first().click() }
 try {
@@ -174,6 +208,6 @@ try {
   check('Unavailable reader is explicit and does not fall back to demo evidence', await offline.locator('.source-banner').textContent().then(s => s.includes('unavailable')) && await offline.locator('.stat-value').first().textContent() === '—')
   await offline.close()
   await writeFile(resolve(out, 'results.json'), JSON.stringify({ checks, errors, source: { current: current.length, guards: guards.length, historical: data.tests.length - current.length, findings: data.bugs.length, runs: data.runs.length }, screenshots }, null, 2))
-  await writeFile(resolve(out, 'manifest.md'), `# Unified QA Hub review\n\nCaptured ${new Date().toISOString()} against ${url}. Installed Chrome, isolated context. Real local framework inventory and saved report projections; created records exist only in the disposable test browser.\n\n${screenshots.map(s => `- ${s.file}: ${s.viewport.width} × ${s.viewport.height}, ${s.mode}; ${s.url}`).join('\n')}\n\n${checks.map(c => `- PASS: ${c}`).join('\n')}\n\nRuntime errors: ${errors.length}\n`)
+  await writeFile(resolve(out, 'manifest.md'), `# Unified QA Hub review\n\nCaptured ${new Date().toISOString()} against ${url}. Installed Chrome, isolated context. Real local framework inventory and saved report projections; created records exist only in the disposable test browser.\n\n## Objectives\n\nMap each original review capture to its linked lossless PNG tiles.\n\n## Estimated Time\n\nEstimated Time: About 5 minutes to review this evidence set.\n\n## Screenshots\n\n${screenshots.map(s => `- ${s.files.map(file => `[${file}](${file})`).join(', ')} — source ${s.originalDimensions.width} × ${s.originalDimensions.height}${s.files.length > 1 ? `; ${s.tileGrid.rows} × ${s.tileGrid.columns} lossless tiles with ${s.tileOverlapPixels}px overlap` : ''}; ${s.mode}; ${s.url}`).join('\n')}\n\n## Interaction checks\n\n${checks.map(c => `- PASS: ${c}`).join('\n')}\n\nRuntime errors: ${errors.length}\n\n## Acknowledgements\n\nCapture context and test conditions are recorded above and in the project review notes.\n`)
   console.log(JSON.stringify({ passed: checks.length, errors, source: { current: current.length, setupGuards: guards.length, historical: data.tests.length - current.length }, output: out }, null, 2))
 } finally { await browser.close() }

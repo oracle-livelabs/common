@@ -2,11 +2,11 @@
 
 Captured 2026-11-04T17:51:30.975Z against http://127.0.0.1:4192/. Installed Chrome, isolated context. Real local framework inventory and saved report projections; created records exist only in the disposable test browser.
 
-- 01-dashboard.png: 1440 × 1000, full page; http://127.0.0.1:4192/
-- 02-tests.png: 1440 × 1000, full page; http://127.0.0.1:4192/#section=tests&view=board
-- 03-finding-detail.png: 1440 × 1000, full page; http://127.0.0.1:4192/#section=bugs&view=board&record=AF-d67c0d439105bbea3fd7&kind=bugs
-- 04-bug-board.png: 1440 × 1000, full page; http://127.0.0.1:4192/#section=bugs&view=board
-- 05-test-plans.png: 1440 × 1000, full page; http://127.0.0.1:4192/#section=plans&view=board
+- 01-dashboard__r01-c01.png: 1440 × 1000, full page; http://127.0.0.1:4192/
+- 02-tests__r01-c01.png: 1440 × 1000, full page; http://127.0.0.1:4192/#section=tests&view=board
+- 03-finding-detail__r01-c01.png: 1440 × 1000, full page; http://127.0.0.1:4192/#section=bugs&view=board&record=AF-d67c0d439105bbea3fd7&kind=bugs
+- 04-bug-board__r01-c01.png: 1440 × 1000, full page; http://127.0.0.1:4192/#section=bugs&view=board
+- 05-test-plans__r01-c01.png: 1440 × 1000, full page; http://127.0.0.1:4192/#section=plans&view=board
 - 06-mobile-bugs.png: 390 × 844, full page; http://127.0.0.1:4192/#section=bugs&view=board
 - 07-mobile-dashboard.png: 390 × 844, full page; http://127.0.0.1:4192/#section=dashboard&view=board
 - 08-mobile-detail.png: 390 × 844, full page; http://127.0.0.1:4192/#section=dashboard&view=board&record=AF-d67c0d439105bbea3fd7&kind=bugs
@@ -59,3 +59,25 @@ Captured 2026-11-04T17:51:30.975Z against http://127.0.0.1:4192/. Installed Chro
 - PASS: Unavailable reader is explicit and does not fall back to demo evidence
 
 Runtime errors: 0
+
+## Lossless slices
+
+Original capture dimensions are recorded below; every tile is a pixel-exact PNG crop with a 64-pixel overlap.
+
+- Original `01-dashboard.png` (1440 × 1000; 1 × 2 tiles): [01-dashboard__r01-c01.png](01-dashboard__r01-c01.png), [01-dashboard__r01-c02.png](01-dashboard__r01-c02.png)
+- Original `02-tests.png` (1440 × 1000; 1 × 2 tiles): [02-tests__r01-c01.png](02-tests__r01-c01.png), [02-tests__r01-c02.png](02-tests__r01-c02.png)
+- Original `03-finding-detail.png` (1440 × 1000; 1 × 2 tiles): [03-finding-detail__r01-c01.png](03-finding-detail__r01-c01.png), [03-finding-detail__r01-c02.png](03-finding-detail__r01-c02.png)
+- Original `04-bug-board.png` (1440 × 1000; 1 × 2 tiles): [04-bug-board__r01-c01.png](04-bug-board__r01-c01.png), [04-bug-board__r01-c02.png](04-bug-board__r01-c02.png)
+- Original `05-test-plans.png` (1440 × 1000; 1 × 2 tiles): [05-test-plans__r01-c01.png](05-test-plans__r01-c01.png), [05-test-plans__r01-c02.png](05-test-plans__r01-c02.png)
+
+## Objectives
+
+Map each review capture to its linked lossless PNG tiles.
+
+## Estimated Time
+
+Estimated Time: About 5 minutes to review this evidence set.
+
+## Acknowledgements
+
+Capture context is recorded in this manifest and the related project review notes.

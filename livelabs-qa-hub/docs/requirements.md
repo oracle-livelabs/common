@@ -45,3 +45,15 @@ The server accepts read-only local requests and exposes no test-execution or ext
 Browser-local workflow edits use a separate shared key on port 4192. Preserve previous Hub, visual-prototype, and TMS storage. The TMS default entry resolves to the Hub origin; the old TMS stays at port 4193 `/legacy.html` for existing records. Do not silently treat old demo records as current framework evidence.
 
 Build both projects. Validate data reconciliation, immutability, linked-object workflows, reload/refresh persistence, unavailable sources, keyboard behavior, mobile layout, and retained legacy entry points. No publication or deployment is part of this request.
+
+## Objectives
+
+Define the QA Hub pages, roles, source contract, persistence behavior, and validation scope.
+
+## Estimated Time
+
+Estimated Time: About 15 minutes to review the product requirements.
+
+## Acknowledgements
+
+The requirements preserve the existing TMS entry points and distinguish imported evidence from browser-local workflow state.

@@ -102,3 +102,15 @@ every browser and cannot enforce access to admin data.
 
 This package is prepared locally. No tenancy host, gateway, DNS or deployment has
 been configured by this task.
+
+## Objectives
+
+Describe the intended tenancy deployment boundary and the Analytics Admin routes it would expose.
+
+## Estimated Time
+
+Estimated Time: About 10 minutes to review the deployment notes.
+
+## Acknowledgements
+
+The package was prepared locally. This document records intended configuration and explicitly leaves tenancy deployment unverified.

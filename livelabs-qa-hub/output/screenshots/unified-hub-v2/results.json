@@ -57,49 +57,114 @@
   },
   "screenshots": [
     {
-      "file": "01-dashboard.png",
+      "file": "01-dashboard__r01-c01.png",
       "url": "http://127.0.0.1:4192/",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "mode": "full page"
+      "mode": "full page",
+      "files": [
+        "01-dashboard__r01-c01.png",
+        "01-dashboard__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
     },
     {
-      "file": "02-tests.png",
+      "file": "02-tests__r01-c01.png",
       "url": "http://127.0.0.1:4192/#section=tests&view=board",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "mode": "full page"
+      "mode": "full page",
+      "files": [
+        "02-tests__r01-c01.png",
+        "02-tests__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
     },
     {
-      "file": "03-finding-detail.png",
+      "file": "03-finding-detail__r01-c01.png",
       "url": "http://127.0.0.1:4192/#section=bugs&view=board&record=AF-d67c0d439105bbea3fd7&kind=bugs",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "mode": "full page"
+      "mode": "full page",
+      "files": [
+        "03-finding-detail__r01-c01.png",
+        "03-finding-detail__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
     },
     {
-      "file": "04-bug-board.png",
+      "file": "04-bug-board__r01-c01.png",
       "url": "http://127.0.0.1:4192/#section=bugs&view=board",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "mode": "full page"
+      "mode": "full page",
+      "files": [
+        "04-bug-board__r01-c01.png",
+        "04-bug-board__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
     },
     {
-      "file": "05-test-plans.png",
+      "file": "05-test-plans__r01-c01.png",
       "url": "http://127.0.0.1:4192/#section=plans&view=board",
       "viewport": {
         "width": 1440,
         "height": 1000
       },
-      "mode": "full page"
+      "mode": "full page",
+      "files": [
+        "05-test-plans__r01-c01.png",
+        "05-test-plans__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
     },
     {
       "file": "06-mobile-bugs.png",

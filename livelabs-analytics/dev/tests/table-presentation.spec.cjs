@@ -87,7 +87,7 @@ test('dashboard tabs stay readable and support navigation on desktop and mobile'
     await nav.screenshot({path:testInfo.outputPath(`tabs-focus-${width}.png`),animations:'disabled'});
     await page.getByRole('heading',{level:1}).click();
     await page.mouse.move(0,0);
-    await nav.screenshot({path:`output/screenshots/dashboard-tabs-20261109/tabs-${width}.png`,animations:'disabled'});
-    await page.screenshot({path:`output/screenshots/dashboard-tabs-20261109/dashboard-${width}.png`,animations:'disabled'});
+    await nav.screenshot({path:testInfo.outputPath(`tabs-${width}.png`),animations:'disabled'});
+    await page.screenshot({path:testInfo.outputPath(`dashboard-${width}.png`),animations:'disabled'});
   }
 });

@@ -77,3 +77,15 @@ For existing saved data, create a separate reversible evidence sidecar rather th
 ## Builder choices
 
 Use the existing plain JavaScript/Python implementation and current Oracle styling; no new UI framework or dependency. Exact spacing, CSS breakpoints, focus-management details, enrichment file organization and test fixture structure are implementation choices within this design. Keep export contents aligned with what the public report displays, including added evidence but excluding removed diagnostic score surfaces.
+
+## Objectives
+
+Specify the Analytics author report redesign, evidence hierarchy, constraints, and acceptance criteria.
+
+## Estimated Time
+
+Estimated Time: About 10 minutes to review this design specification.
+
+## Acknowledgements
+
+The design keeps the existing JavaScript and Python stack and documents the approved scope and implementation choices.
