@@ -398,19 +398,19 @@
     await refreshPreviews();
   }
 
-  async function readJsonFile(file) {
+  async function readJsonFile(file, maxMb = 30) {
     if (!file) return null;
-    if (file.size > 30 * 1024 * 1024) throw new Error('JSON files must be 30 MB or smaller.');
+    if (file.size > maxMb * 1024 * 1024) throw new Error(`JSON files must be ${maxMb} MB or smaller.`);
     try { return JSON.parse(await file.text()); }
     catch { throw new Error('This file is not valid JSON.'); }
   }
 
   function fileExtension(file) { return String(file?.name || '').split('.').pop().toLowerCase(); }
 
-  async function readImportedFile(file) {
-    if (!file || file.size > 20 * 1024 * 1024) throw new Error('Each imported file must be 20 MB or smaller.');
+  async function readImportedFile(file, maxMb = 20) {
+    if (!file || file.size > maxMb * 1024 * 1024) throw new Error(`Each imported file must be ${maxMb} MB or smaller.`);
     const extension = fileExtension(file);
-    if (extension === 'json') return readJsonFile(file);
+    if (extension === 'json') return readJsonFile(file, maxMb);
     if (extension === 'csv') return { kind: 'table', rows: parseCsv(await file.text()), headers: [] };
     if (extension === 'xlsx' || extension === 'xlsm') {
       const bytes = new Uint8Array(await file.arrayBuffer());
@@ -532,6 +532,8 @@
         message, section: String(rowValue(row, ['test_section', 'section']) || ''),
         testTitle, file: String(rowValue(row, ['test_file', 'file', 'source_file']) || ''),
         line: String(rowValue(row, ['test_line', 'line']) || ''),
+        catalogUrl: String(rowValue(row, ['catalog_url', 'catalogUrl']) || ''),
+        finalUrl: String(rowValue(row, ['final_url', 'finalUrl']) || ''),
       });
     }
     if (!grouped.size) throw new Error('No Jenkins catalog items could be identified.');
@@ -540,7 +542,7 @@
       runId, runType: 'imported report', status: runStatus, startedAt,
       counts: { total: items.reduce((sum, item) => sum + item.counts.total, 0), passed: items.reduce((sum, item) => sum + item.counts.passed, 0), failed: items.reduce((sum, item) => sum + item.counts.failed, 0), skipped: items.reduce((sum, item) => sum + item.counts.skipped, 0) },
       catalogItems: items,
-      sourceReport: { format: 'tabular import', sourceFiles: { report: filename }, warnings: ['Check the field mapping and sample rows before applying this report.'], findingsCsvIssueRows: items.reduce((sum, item) => sum + item.issues.length, 0) },
+      sourceReport: { format: 'tabular import', sourceFiles: { report: filename }, warnings: ['This table supplies finding summaries. Import the matching Complete JSON as well to retain exact lab locations, source text, and link diagnostics. Check the mapping before applying.'], findingsCsvIssueRows: items.reduce((sum, item) => sum + item.issues.length, 0) },
     };
   }
 
@@ -551,16 +553,24 @@
     if (parsed && typeof parsed === 'object' && Array.isArray(parsed.rows)) return normalizeJenkinsRows(parsed.rows, filename);
     if (parsed?.schemaVersion === 2 && parsed.run && Array.isArray(parsed.items)) {
       const run = parsed.run;
+      if (parsed.items.some(item => new Set([String(item.livelabsId || item.catalog?.id || ''), ...(item.catalog?.ids || []).map(String), ...(item.catalog?.duplicate_ids || []).map(String)]).size > 1)) {
+        throw new Error('This export groups multiple LiveLabs IDs. Import a per-ID summary or the reconciled JSON/CSV pair; grouped findings cannot be assigned to each ID.');
+      }
       return {
+        ...run,
         runId: String(run.id || ''), runType: String(run.type || 'regression'), status: String(run.status || ''),
         startedAt: String(run.startedAt || ''), endedAt: String(run.endedAt || ''), counts: run.counts || {},
+        failures: parsed.items.flatMap(item => (Array.isArray(item.evidence) ? item.evidence : []).map(evidence => ({
+          ...evidence, attachments: [], catalogItem: {...item.catalog, id: String(item.livelabsId ?? item.catalog?.id ?? ''),
+            livelabsId: String(item.livelabsId ?? item.catalog?.id ?? ''), type: String(item.type || item.catalog?.type || 'workshop')},
+        }))),
         catalogItems: parsed.items.map((item, index) => ({
           key: `${item.type || 'workshop'}:${item.livelabsId || item.catalog?.id || item.title || index}`,
           type: String(item.type || 'workshop'), status: String(item.status || ''), counts: item.counts || {},
-          catalogItem: { livelabsId: String(item.livelabsId ?? item.catalog?.id ?? ''), wmsId: String(item.wmsId || ''), title: String(item.title || item.catalog?.title || ''), type: String(item.type || 'workshop') },
-          tests: Array.isArray(item.tests) ? item.tests : [], issues: Array.isArray(item.issues) ? item.issues : [],
+          catalogItem: { ...item.catalog, livelabsId: String(item.livelabsId ?? item.catalog?.id ?? ''), wmsId: String(item.wmsId || ''), title: String(item.title || item.catalog?.title || ''), type: String(item.type || 'workshop') },
+          tests: Array.isArray(item.checks) ? item.checks : Array.isArray(item.tests) ? item.tests : [], issues: Array.isArray(item.issues) ? item.issues : [],
         })),
-        sourceReport: { format: 'catalog-results-v2', sourceFiles: { catalogJson: filename }, warnings: ['This file contains no paired findings table.'] },
+        sourceReport: { format: 'catalog-results-v2', sourceFiles: { catalogJson: filename }, warnings: ['Imported Complete JSON with checks and detailed issue evidence.'] },
       };
     }
     throw new Error('Use a Jenkins summary JSON, catalog-results JSON, or a CSV/Excel report table.');
@@ -594,8 +604,8 @@
     const jsonFile = files.find((file) => file.name.toLowerCase().endsWith('.json'));
     const findingsFile = files.find((file) => ['csv', 'xlsx', 'xlsm'].includes(fileExtension(file)));
     if (files.length !== 2 || !jsonFile || !findingsFile) throw new Error('Choose one catalog-results JSON and one findings CSV/Excel file from the same Jenkins run.');
-    if (jsonFile.size > 20 * 1024 * 1024 || findingsFile.size > 20 * 1024 * 1024) throw new Error('Each report file must be 20 MB or smaller.');
-    const report = parsedFiles.get(jsonFile) || await readImportedFile(jsonFile);
+    if (jsonFile.size > 90 * 1024 * 1024 || findingsFile.size > 20 * 1024 * 1024) throw new Error('Jenkins JSON must be 90 MB or smaller; the findings table must be 20 MB or smaller.');
+    const report = parsedFiles.get(jsonFile) || await readImportedFile(jsonFile, 90);
     if (!report || report.schemaVersion !== 2 || !report.run || !Array.isArray(report.items)) throw new Error('Expected a Jenkins catalog-results JSON report with schemaVersion 2, run metadata, and items.');
     const run = report.run;
     const runId = String(run.id || '').trim();
@@ -608,6 +618,20 @@
     if (rows.some((row) => row.run_id !== runId)) throw new Error('The JSON and CSV contain different Jenkins run IDs.');
     if (run.startedAt && rows.some((row) => row.started_at && row.started_at !== run.startedAt)) throw new Error('The JSON and CSV start times do not match.');
 
+    // CSV determines per-ID findings/counts; exact JSON checks supply rich evidence.
+    // Never use title, family membership, or catalog aliases to transfer locations.
+    const evidenceKey = (type,id,issue) => JSON.stringify([type,id,String(issue.code||'').trim().toUpperCase(),
+      String(issue.section||''),String(issue.file||''),String(issue.line??'')]);
+    const evidenceByCheck = new Map();
+    for (const source of report.items) {
+      const type=String(source?.type||'').trim(), id=String(source?.livelabsId??source?.catalog?.id??'').trim();
+      for (const issue of Array.isArray(source.issues)?source.issues:[]) {
+        const key=evidenceKey(type,id,issue);
+        if(!evidenceByCheck.has(key))evidenceByCheck.set(key,[]);
+        evidenceByCheck.get(key).push(issue);
+      }
+    }
+    let detailedEvidenceRows=0;
     const items = new Map();
     for (const source of report.items) {
       const type = String(source?.type || '').trim();
@@ -652,7 +676,18 @@
       csvCategoryCounts[code] = (csvCategoryCounts[code] || 0) + 1;
       csvFindingOccurrences += count;
       const item = items.get(`${String(row.item_type).trim()}:${String(row.item_id).trim()}`);
+      const candidates=evidenceByCheck.get(evidenceKey(String(row.item_type).trim(),String(row.item_id).trim(),
+        {code,section:row.test_section,file:row.test_file,line:row.test_line}))||[];
+      const rich=candidates.length===1?candidates[0]:null;
+      const evidence={};
+      if(rich && Number(rich.count??rich.findingCount??count)===count) {
+        for(const field of ['problem','reproduction','action','location','affectedItems','details','authorEvidence']) {
+          if(rich[field]!=null)evidence[field]=rich[field];
+        }
+        if(Object.keys(evidence).length)detailedEvidenceRows++;
+      }
       item.issues.push({
+        ...evidence,
         code, label: String(row.issue_label || code), priority: String(row.issue_priority || row.priority || ''), severity: String(row.severity || ''), count,
         message: String(row.issue_summary || ''), section: String(row.test_section || ''),
         file: String(row.test_file || ''), line: String(row.test_line || ''),
@@ -669,6 +704,7 @@
     const runTestCount = Number(run.counts?.total || 0);
     const csvOnlyItemCount = [...csvItemKeys].filter((key) => !jsonItemKeys.has(key)).length;
     const warnings = [];
+    if(detailedEvidenceRows<findingRows.length)warnings.push(`${findingRows.length-detailedEvidenceRows} findings have summary evidence only; no unique matching JSON check with the same ID and occurrence count was available.`);
     if (jsonFindingOccurrences !== csvFindingOccurrences) warnings.push(`CSV issue_count sums to ${csvFindingOccurrences.toLocaleString()}, while catalog JSON findingCount sums to ${jsonFindingOccurrences.toLocaleString()}. Keep both values for reconciliation.`);
     if (itemTestCounts !== runTestCount) warnings.push(`Per-item test totals sum to ${itemTestCounts.toLocaleString()}, while the run total is ${runTestCount.toLocaleString()}.`);
     if (csvOnlyItemCount) warnings.push(`${csvOnlyItemCount} catalog IDs with findings appear only in the CSV; their rows are retained and matched by LiveLabs ID.`);
@@ -687,6 +723,7 @@
         sourceFiles: { catalogJson: jsonFile.name, findingsCsv: findingsFile.name },
         catalogItemsInJson: report.items.length, catalogItemsInMerged: items.size,
         findingsCsvRows: rows.length, findingsCsvIssueRows: findingRows.length,
+        detailedEvidenceRows, summaryOnlyRows: findingRows.length-detailedEvidenceRows,
         csvFindingOccurrences, jsonFindingOccurrences, categoryRowsMatch,
         itemTestCounts, runTestCount, csvOnlyItemCount, csvStatusMismatchCount: csvStatusMismatchKeys.size,
         categories: categoryRows, warnings
@@ -806,7 +843,7 @@
       if (!files.length) return;
       try {
         setStatus('Reading Jenkins report file(s)…');
-        const parsed = await Promise.all(files.map(readImportedFile));
+        const parsed = await Promise.all(files.map(file => readImportedFile(file, fileExtension(file) === 'json' ? 90 : 20)));
         const parsedFiles = new Map(files.map((file, index) => [file, parsed[index]]));
         const summary = files.length === 1
           ? normalizeJenkinsSingle(parsed[0], files[0].name)

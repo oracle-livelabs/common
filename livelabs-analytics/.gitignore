@@ -69,6 +69,7 @@ venv/
 __codex_*
 MISSING_MARKDOWN_DETAILS_LOG_*.md
 LiveLabs_Analytics_Dashboard_*/
+/dev/reports/dashboard-state-*.json
 test-results/
 playwright-report/
 /.ci-release/
@@ -78,6 +79,7 @@ playwright-report/
 /dev/releases/
 /dev/migration-audit/
 /dev/snapshots/
+/dev/logs/
 
 # Local QA planning and source datasets
 QA_TEST_PLAN.md

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Jenkins reports — LiveLabs Analytics</title>
+  <link rel="stylesheet" href="/assets/css/dashboard.css?v=20261106-jenkins">
+  <link rel="stylesheet" href="/admin-assets/admin.css">
+  <link rel="stylesheet" href="/admin-assets/jenkins.css">
+  <script defer src="/admin-assets/jenkins.js"></script>
+</head>
+<body class="admin-page admin-jenkins-page">
+  <a class="skip-link" href="#report-controls">Skip to reports</a>
+  <div class="layout analytics-shell-layout">
+    <!-- ADMIN_NAV -->
+    <main>
+      <header class="page-header admin-hero"><div><p class="eyebrow">Administration</p><h1>Jenkins reports</h1><p>Review saved checks, find issues and prepare a retest list.</p></div></header>
+      <div class="hero-stripe"></div>
+      <section class="jenkins-controls" id="report-controls">
+        <label>Saved report<select id="report-version" disabled><option>Loading reports…</option></select></label>
+        <a class="nav-link" id="open-report" hidden>Open report</a>
+        <p id="report-status" role="status" aria-live="polite">Loading saved reports…</p>
+        <details><summary>Report source and availability</summary><p id="report-provenance"></p><p>Reports keep their original run data. Analytics scores change only when a reviewed merge is applied. Live Jenkins retests and protected-resource resolution are not connected.</p></details>
+      </section>
+    </main>
+  </div>
+</body></html>

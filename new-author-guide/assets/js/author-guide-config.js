@@ -4,30 +4,18 @@
 
       function canonicalizeCurrentRoute() {
         var current = new URL(window.location.href);
-        var segments = current.pathname.split("/").filter(Boolean);
-        var lastSegment = (segments[segments.length - 1] || "").toLowerCase();
-        var changed = false;
-
-        // GitHub Pages serves a directory's index.html automatically. Keep
-        // the directory URL visible, while retaining old direct links as
-        // compatible entry points.
-        if (lastSegment === "index.html") {
-          segments.pop();
-          changed = true;
+        var root = guideRootUrl();
+        var homePath = new URL("home/", root).pathname;
+        // Object Storage addresses exact file keys. Preserve index.html so
+        // refreshes and copied links work without a directory-index server.
+        if (current.pathname === homePath || current.pathname === homePath + "index.html") {
+          current.pathname = new URL("index.html", root).pathname;
+        } else if (current.pathname.endsWith("/")) {
+          current.pathname += "index.html";
         }
-
-        // Home is the guide root, not a second public route.
-        if ((segments[segments.length - 1] || "").toLowerCase() === "home") {
-          segments.pop();
-          changed = true;
+        if (current.href !== window.location.href) {
+          window.history.replaceState(window.history.state, document.title, current.pathname + current.search + current.hash);
         }
-
-        if (!changed) {
-          return;
-        }
-
-        current.pathname = "/" + (segments.length ? segments.join("/") + "/" : "");
-        window.history.replaceState(window.history.state, document.title, current.pathname + current.search + current.hash);
       }
 
       var url = new URL(window.location.href);
@@ -119,11 +107,17 @@
           var route = guideRoutes[link.getAttribute("data-mode-target")];
 
           if (route) {
-            link.href = route === "home"
-              ? guideRootUrl().toString()
-              : new URL(route + "/", guideRootUrl()).toString();
+            link.href = pageUrl(route === "home" ? "" : route + "/");
           }
         });
+      }
+
+      function pageUrl(route) {
+        var destination = new URL(route || "", guideRootUrl());
+        if (!/\.html$/i.test(destination.pathname)) {
+          destination.pathname = destination.pathname.replace(/\/?$/, "/") + "index.html";
+        }
+        return destination.toString();
       }
 
       function hydrateAssets(root) {
@@ -145,7 +139,8 @@
       };
       window.AuthorGuidePaths = {
         root: guideRootUrl,
-        resolve: assetUrl
+        resolve: assetUrl,
+        page: pageUrl
       };
       document.addEventListener("DOMContentLoaded", function () {
         canonicalizeCurrentRoute();

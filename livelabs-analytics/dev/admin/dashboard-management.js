@@ -26,9 +26,11 @@
     {key:'missing',label:'Missing Data',description:'Use this tag when key item information is missing.',className:'governance-group-missing',color:'teal'},
     {key:'manager-review',label:'Manager Review',description:'Use this tag when a manager needs to review an item or decision.',className:'',color:'red'}
   ];
-  let csrf = '', sessionTimer, definitions = [], assignments = [], records = [], selectedRecord = null;
+  let csrf = '', sessionTimer, definitions = [], assignments = [], records = [], selectedRecord = null, savingState = false;
   const editDrafts = new Map();
   const assignmentDrafts = new Map();
+  const assignmentView = {page:1, size:10, sort:'livelabsId', direction:1, expanded:'', removing:'', busy:false, message:''};
+  const assignmentFilterIds = ['assignment-search','assignment-type','assignment-livelabs-filter','assignment-wms-filter','assignment-council','assignment-tag','assignment-target-filter'];
 
   function status(message) { $('status').textContent = message; }
   function scheduleExpiry(expires) { clearTimeout(sessionTimer); sessionTimer = setTimeout(() => location.replace('/admin'), Math.max(0, expires * 1000 - Date.now())); }
@@ -68,9 +70,18 @@
     } catch {}
   }
   async function save() {
-    const result = await api('dashboard-state',{tagDefinitions:definitions,rowOverrides:assignments});
-    writeLocal();
-    status(`Saved ${result.tagDefinitions} tags and ${result.assignments} item assignments. Dashboard badges update as pages reload.`);
+    // Every tag mutation saves the complete rule set. Prevent overlapping edits.
+    savingState=true;
+    const controls=Array.from($('tags').querySelectorAll('button,input,select,textarea')).filter(control=>!control.disabled);
+    controls.forEach(control=>control.disabled=true);
+    try {
+      const result = await api('dashboard-state',{tagDefinitions:definitions,rowOverrides:assignments});
+      writeLocal();
+      status(`Saved ${result.tagDefinitions} tags and ${result.assignments} item assignments. Dashboard badges update as pages reload.`);
+    } finally {
+      savingState=false;
+      controls.forEach(control=>{if(control.isConnected)control.disabled=false;});
+    }
   }
   function colorOptions(selected='teal') {
     return Object.entries(colors).map(([key,color])=>`<option value="${key}" ${key===safeColor(selected)?'selected':''}>${color.label}</option>`).join('');
@@ -161,9 +172,9 @@
   function recordsForAssignment(assignment) {
     const matches=records.filter((record)=>assignment.target==='livelabs_id'?normalize(record.livelabsId)===normalize(assignment.value):assignment.target==='wms_id'?normalize(record.wmsId)===normalize(assignment.value):normalize(record.title)===normalize(assignment.value));
     if(matches.length)return matches;
-    if(assignment.recordTitle||assignment.livelabsId||assignment.wmsId)return [{title:assignment.recordTitle||assignment.value,livelabsId:assignment.livelabsId||'',wmsId:assignment.wmsId||'',category:'',key:''}];
-    if(assignment.target==='title')return [{title:assignment.value,livelabsId:'',wmsId:'',category:'',key:''}];
-    return [];
+    return [{title:assignment.recordTitle||(assignment.target==='title'?assignment.value:'Item unavailable'),
+      livelabsId:assignment.livelabsId||(assignment.target==='livelabs_id'?assignment.value:''),
+      wmsId:assignment.wmsId||(assignment.target==='wms_id'?assignment.value:''),category:'',key:'',missing:true}];
   }
   function searchHref(record, fallback={}) {
     const params=new URLSearchParams();
@@ -179,47 +190,164 @@
     return Number.isFinite(parsed)?new Date(parsed).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'}):'Date not recorded';
   }
   function targetLabel(target) { return target==='livelabs_id'?'LiveLabs ID':target==='wms_id'?'WMS family ID':'Exact title'; }
-  function assignmentCard(assignment,index) {
-    const editing=assignmentDrafts.has(assignment.id), draft=assignmentDrafts.get(assignment.id)||new Set(assignment.tags);
-    const matched=recordsForAssignment(assignment);
-    const tagDetails=assignment.tags.map((key)=>definitions.find((tag)=>tag.key===key)||{key,label:key,description:'Tag definition is no longer available.',color:'slate'});
-    const previews=matched.map((record)=>`<article class="assignment-item-preview"><div class="assignment-item-title"><span class="preview-mark" aria-hidden="true">LL</span><div><p class="eyebrow">Assigned item</p><h4>${esc(record.title||'Untitled item')}</h4><p class="assignment-category">${esc(record.category||'LiveLabs portfolio item')}</p></div></div><dl class="assignment-identifiers"><div><dt>LiveLabs ID</dt><dd>${esc(record.livelabsId||assignment.livelabsId||'—')}</dd></div><div><dt>WMS ID</dt><dd>${esc(record.wmsId||assignment.wmsId||'—')}</dd></div></dl><a class="assignment-search-link" href="${esc(searchHref(record,assignment))}">Open item search <span aria-hidden="true">↗</span></a></article>`).join('');
-    const tagContent=editing?`<fieldset class="admin-checkbox-list assignment-edit-tags">${tagCheckboxes(Array.from(draft))}</fieldset>`:`<div class="assignment-tag-preview">${tagDetails.map((tag)=>`<div class="assignment-tag-detail">${tagChip(tag)}<p>${esc(tag.description||tag.note||'No description provided.')}</p></div>`).join('')}</div>`;
-    return `<article class="admin-assignment-card" data-assignment-card="${esc(assignment.id)}"><header class="assignment-card-header"><div><p class="eyebrow">Match rule · ${esc(targetLabel(assignment.target))}</p><h4>${esc(assignment.value)}</h4></div><div class="assignment-date"><span>Added</span><strong>${esc(displayDate(assignment.createdAt))}</strong></div></header><div class="assignment-preview-grid">${previews||'<p class="admin-muted">The assigned item is not in the current inventory snapshot.</p>'}</div><section class="assignment-tags-area"><h5>Assigned tags <span>${assignment.tags.length}</span></h5>${tagContent}</section><footer class="assignment-card-actions">${editing?`<button type="button" class="admin-primary-action" data-save-assignment="${esc(assignment.id)}">Save</button><button type="button" data-cancel-assignment-edit="${esc(assignment.id)}">Cancel</button>`:`<button type="button" data-edit-assignment="${esc(assignment.id)}">Edit</button>`}<button type="button" class="admin-remove-action" data-delete-assignment="${esc(assignment.id)}">Remove assignment</button></footer></article>`;
+  function assignmentTags(assignment) {
+    return assignment.tags.map(key=>definitions.find(tag=>tag.key===key)||{key,label:key,description:'Tag definition is no longer available.',color:'slate'});
+  }
+  function assignmentRows() {
+    return assignments.flatMap(assignment=>recordsForAssignment(assignment).map((record,index)=>({assignment,record,
+      key:JSON.stringify([assignment.id,record.key||record.livelabsId||record.wmsId,index]),
+      type:record.type||'Unknown',tags:assignmentTags(assignment)})));
+  }
+  function assignmentCell(row, field) {
+    if(field==='tags')return row.tags.map(tag=>tag.label||tag.key).join(', ');
+    if(field==='rule')return `${targetLabel(row.assignment.target)}: ${row.assignment.value}`;
+    if(field==='createdAt')return row.assignment.createdAt||'';
+    if(field==='type')return row.type;
+    return String(row.record[field]??'');
+  }
+  function filteredAssignmentRows(rows=assignmentRows()) {
+    const query=normalize($('assignment-search').value);
+    return rows.filter(row=>{
+      const {record,assignment}=row;
+      const haystack=[record.title,record.livelabsId,record.wmsId,record.category,record.owner,row.type,
+        assignment.value,targetLabel(assignment.target),...row.tags.map(tag=>`${tag.label} ${tag.description||tag.note||''}`)].join(' ');
+      return (!query||normalize(haystack).includes(query))
+        && (!$('assignment-type').value||row.type===$('assignment-type').value)
+        && normalize(record.livelabsId).includes(normalize($('assignment-livelabs-filter').value))
+        && normalize(record.wmsId).includes(normalize($('assignment-wms-filter').value))
+        && (!$('assignment-council').value||record.category===$('assignment-council').value)
+        && (!$('assignment-tag').value||assignment.tags.includes($('assignment-tag').value))
+        && (!$('assignment-target-filter').value||assignment.target===$('assignment-target-filter').value);
+    }).sort((a,b)=>assignmentView.direction*assignmentCell(a,assignmentView.sort).localeCompare(assignmentCell(b,assignmentView.sort),undefined,{numeric:true,sensitivity:'base'}));
+  }
+  function refreshAssignmentOptions() {
+    for(const [id,empty,options] of [
+      ['assignment-council','All councils',[...new Set(records.map(record=>record.category).filter(Boolean))].sort().map(value=>[value,value])],
+      ['assignment-tag','All tags',definitions.map(tag=>[tag.key,tag.label])]
+    ]) {
+      const selected=$(id).value;
+      $(id).innerHTML=`<option value="">${empty}</option>`+options.map(([value,label])=>`<option value="${esc(value)}">${esc(label)}</option>`).join('');
+      if(options.some(([value])=>value===selected))$(id).value=selected;
+    }
+  }
+  function fieldLabel(value) {
+    return String(value).replace(/([a-z])([A-Z])/g,'$1 $2').replaceAll('_',' ').replace(/^./,char=>char.toUpperCase());
+  }
+  function detailValue(value) {
+    if(value===null||value===undefined||value==='')return 'Not recorded';
+    if(typeof value==='boolean')return value?'Yes':'No';
+    if(Array.isArray(value))return value.length?`<ul>${value.map(item=>`<li>${detailValue(item)}</li>`).join('')}</ul>`:'None recorded';
+    if(typeof value==='object')return detailFields(Object.entries(value).map(([key,item])=>[fieldLabel(key),item]));
+    const text=String(value);
+    if(/^https?:\/\//i.test(text)&&!/[\s<>"']/.test(text))return `<a href="${esc(text)}" target="_blank" rel="noopener noreferrer">${esc(text)}</a>`;
+    return esc(text);
+  }
+  function detailFields(fields) {
+    return `<dl class="assignment-info-grid">${fields.map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${detailValue(value)}</dd></div>`).join('')}</dl>`;
+  }
+  function assignmentDetail(row) {
+    const {assignment,record,tags}=row, editing=assignmentDrafts.has(assignment.id);
+    const matched=recordsForAssignment(assignment).filter(item=>!item.missing);
+    const scope=`${targetLabel(assignment.target)}: ${assignment.value}. This rule matches ${matched.length} ${matched.length===1?'item':'items'} in the current inventory. Editing or removing this rule affects all its matched items.`;
+    const summaryKeys=['livelabsId','wmsId','title','category','owner','type','publishType','publishStatus','status','update'];
+    const extra=Object.entries(record).filter(([key])=>!summaryKeys.includes(key)&&!['details','values','searchable','missing'].includes(key));
+    const fields=Array.isArray(record.details)?record.details.filter(field=>Array.isArray(field)&&field.length>=2):[];
+    return `<div class="assignment-detail-content" data-assignment-card="${esc(assignment.id)}">
+      <div class="assignment-detail-heading"><h4>${esc(record.title||'Item unavailable')}</h4><button type="button" data-close-assignment>Close details</button></div>
+      <p class="assignment-rule-scope">${esc(scope)} ${assignment.enabled===false?'<strong>Disabled — this rule is not applied to dashboard items.</strong>':''}</p>
+      ${matched.length>1?`<details class="assignment-related"><summary>Items matched by this rule (${matched.length})</summary><ul>${matched.map(item=>`<li>LiveLabs ${esc(item.livelabsId||'—')} · ${esc(item.type||'Unknown')} · ${esc(item.title)}</li>`).join('')}</ul></details>`:''}
+      <div class="assignment-detail-grid"><section class="assignment-item-details"><h5>Item information</h5>
+        ${record.missing?'<p class="admin-empty">This item is not in the current inventory. Only saved assignment information is available.</p>':''}
+        ${detailFields([['LiveLabs ID',record.livelabsId],['WMS ID',record.wmsId],['Title',record.title],['Council',record.category],['Author / owner',record.owner],['Type',record.type],['Publish type',record.publishType],['Publish status',record.publishStatus],['Workflow status',record.status],['Last update',record.update]])}
+        <a class="assignment-search-link" href="${esc(searchHref(record,assignment))}">Open item search</a>
+        ${fields.length?`<details><summary>Source fields</summary>${detailFields(fields)}</details>`:''}
+        ${extra.length?`<details><summary>Review and provenance</summary>${detailFields(extra.map(([key,value])=>[fieldLabel(key),value]))}</details>`:''}
+      </section><section class="assignment-tags-editor"><h5>Assigned tags (${assignment.tags.length})</h5>
+        ${editing?`<fieldset class="admin-checkbox-list assignment-edit-tags" ${assignmentView.busy?'disabled':''}>${tagCheckboxes([...assignmentDrafts.get(assignment.id)])}</fieldset>`:
+          `<div class="assignment-tag-preview">${tags.map(tag=>`<div class="assignment-tag-detail">${tagChip(tag)}<p>${esc(tag.description||tag.note||'No description provided.')}</p></div>`).join('')}</div>`}
+        <p class="assignment-date-note">Added ${esc(displayDate(assignment.createdAt))}</p>
+        <p class="assignment-action-status" role="status" aria-live="polite">${esc(assignmentView.message)}</p>
+        <div class="assignment-card-actions">${editing?`<button type="button" class="admin-primary-action" data-save-assignment>Save tags</button><button type="button" data-cancel-assignment-edit>Cancel</button>`:`<button type="button" data-edit-assignment>Edit tags</button>`}
+          <button type="button" data-delete-assignment>Remove assignment</button></div>
+        ${assignmentView.removing===assignment.id?`<div class="assignment-remove-confirm"><p>Remove this rule and its tags from ${matched.length||'the saved'} ${matched.length===1?'item':'items'}? The items and tag definitions will remain.</p><button type="button" data-confirm-assignment-delete>Confirm removal</button><button type="button" data-cancel-assignment-delete>Keep assignment</button></div>`:''}
+      </section></div></div>`;
   }
   function renderAssignments() {
-    const query=normalize($('assignment-search').value);
-    const filtered=assignments.filter((assignment)=>{
-      const tagText=assignment.tags.map((key)=>{const tag=definitions.find((item)=>item.key===key);return `${tag?.label||key} ${tag?.description||''}`;}).join(' ');
-      const recordText=recordsForAssignment(assignment).map((record)=>`${record.title} ${record.livelabsId} ${record.wmsId} ${record.category}`).join(' ');
-      return !query||normalize(`${assignment.value} ${assignment.target} ${tagText} ${recordText}`).includes(query);
+    refreshAssignmentOptions();
+    const all=assignmentRows(), filtered=filteredAssignmentRows(all);
+    const items=new Set(all.filter(row=>!row.record.missing).map(row=>row.record.key||row.record.livelabsId));
+    const unmatched=new Set(all.filter(row=>row.record.missing).map(row=>row.assignment.id)).size;
+    $('assignment-count').textContent=`${items.size} ${items.size===1?'item':'items'} · ${assignments.length} ${assignments.length===1?'rule':'rules'}${unmatched?` · ${unmatched} unmatched`:''}`;
+    const pages=Math.max(1,Math.ceil(filtered.length/assignmentView.size));
+    assignmentView.page=Math.max(1,Math.min(assignmentView.page,pages));
+    const start=(assignmentView.page-1)*assignmentView.size, visible=filtered.slice(start,start+assignmentView.size);
+    $('assignment-page-status').textContent=filtered.length?`${start+1}–${start+visible.length} of ${filtered.length} rows`:'No records to show';
+    $('assignment-page-number').textContent=`Page ${assignmentView.page} of ${pages}`;
+    $('assignment-previous').disabled=assignmentView.page===1;
+    $('assignment-next').disabled=assignmentView.page===pages;
+    $('assignment-export').disabled=!filtered.length;
+    document.querySelectorAll('[data-assignment-sort]').forEach(button=>{
+      if(button.dataset.assignmentSort===assignmentView.sort)button.parentElement.setAttribute('aria-sort',assignmentView.direction===1?'ascending':'descending');
+      else button.parentElement.removeAttribute('aria-sort');
     });
-    const itemCount=assignments.reduce((count,assignment)=>count+Math.max(1,recordsForAssignment(assignment).length),0);
-    $('assignment-count').textContent=`${itemCount} ${itemCount===1?'item':'items'} · ${assignments.length} ${assignments.length===1?'rule':'rules'}`;
-    $('assignments').innerHTML=filtered.length?filtered.map((assignment)=>assignmentCard(assignment,assignments.indexOf(assignment))).join(''):'<p class="admin-empty">No tag assignments match this filter.</p>';
-    $('assignments').querySelectorAll('[data-edit-assignment]').forEach((button)=>button.addEventListener('click',()=>{
-      const assignment=assignments.find((item)=>item.id===button.dataset.editAssignment);
-      if(!assignment)return;
-      assignmentDrafts.set(assignment.id,new Set(assignment.tags));
-      renderAssignments();
-      $('assignments').querySelector(`[data-assignment-card="${CSS.escape(assignment.id)}"] input[type="checkbox"]`)?.focus();
+    $('assignments').innerHTML=visible.map((row,index)=>{
+      const {record,assignment}=row, open=assignmentView.expanded===row.key, detailId=`assignment-detail-${index}`;
+      return `<tr data-assignment-row="${esc(row.key)}" class="${open?'is-expanded':''}">
+        <td><button type="button" class="assignment-row-toggle" data-toggle-assignment aria-expanded="${open}" aria-controls="${detailId}" aria-label="${open?'Hide':'Show'} details for ${esc(record.title)}">${esc(record.livelabsId||'—')}</button></td>
+        <td>${esc(record.wmsId||'—')}</td><td>${esc(record.title||'Item unavailable')}</td><td>${esc(record.category||'—')}</td><td>${esc(record.owner||'—')}</td><td>${esc(row.type)}</td>
+        <td>${row.tags.map(tag=>tagChip(tag)).join('')}</td><td>${esc(assignmentCell(row,'rule'))}${assignment.enabled===false?'<span class="assignment-disabled">Disabled</span>':''}</td><td>${esc(displayDate(assignment.createdAt))}</td></tr>
+        <tr id="${detailId}" class="assignment-row-detail" ${open?'':'hidden'}><td colspan="9">${open?assignmentDetail(row):''}</td></tr>`;
+    }).join('')||`<tr><td colspan="9" class="admin-empty">${assignments.length?'No assignments match these filters.':'No assignments yet. Assign tags to an item above to get started.'}</td></tr>`;
+    $('assignments').querySelectorAll('[data-assignment-row]').forEach(element=>element.addEventListener('click',event=>{
+      if(savingState||assignmentView.busy||event.target.closest('a,input,select,textarea')||(!event.target.closest('button')&&window.getSelection()?.toString()))return;
+      assignmentView.expanded=assignmentView.expanded===element.dataset.assignmentRow?'':element.dataset.assignmentRow;
+      assignmentView.removing='';assignmentView.message='';renderAssignments();focusAssignmentToggle(element.dataset.assignmentRow);
     }));
-    $('assignments').querySelectorAll('[data-cancel-assignment-edit]').forEach((button)=>button.addEventListener('click',()=>{assignmentDrafts.delete(button.dataset.cancelAssignmentEdit);renderAssignments();}));
-    $('assignments').querySelectorAll('[data-save-assignment]').forEach((button)=>button.addEventListener('click',async()=>{
-      const assignment=assignments.find((item)=>item.id===button.dataset.saveAssignment), card=button.closest('[data-assignment-card]');
-      if(!assignment||!card)return;
-      const tags=Array.from(card.querySelectorAll('.assignment-edit-tags input:checked')).map((input)=>input.value);
-      if(!tags.length){status('Choose at least one tag, or remove the assignment.');card.querySelector('.assignment-edit-tags input')?.focus();return;}
-      const previous={...assignment,tags:[...assignment.tags]};
-      assignment.tags=tags;assignmentDrafts.delete(assignment.id);renderAssignments();
-      try{await save();}catch(error){Object.assign(assignment,previous);renderAssignments();status(`Could not save assignment: ${error.message}`);}
+    const row=visible.find(item=>item.key===assignmentView.expanded);
+    if(row)bindAssignmentActions(row);
+  }
+  function focusAssignmentToggle(key=assignmentView.expanded) {
+    const element=Array.from($('assignments').querySelectorAll('[data-assignment-row]')).find(row=>row.dataset.assignmentRow===key);
+    element?.querySelector('[data-toggle-assignment]')?.focus({preventScroll:true});
+  }
+  function bindAssignmentActions(row) {
+    const card=$('assignments').querySelector('[data-assignment-card]'), {assignment}=row;
+    const action=(selector,handler)=>card.querySelector(selector)?.addEventListener('click',handler);
+    card.querySelectorAll('button').forEach(button=>button.disabled=assignmentView.busy);
+    action('[data-close-assignment]',()=>{assignmentView.expanded='';renderAssignments();Array.from($('assignments').querySelectorAll('[data-assignment-row]')).find(element=>element.dataset.assignmentRow===row.key)?.querySelector('button').focus();});
+    action('[data-edit-assignment]',()=>{assignmentDrafts.set(assignment.id,new Set(assignment.tags));assignmentView.message='';renderAssignments();$('assignments').querySelector('.assignment-edit-tags input')?.focus();});
+    card.querySelectorAll('.assignment-edit-tags input').forEach(input=>input.addEventListener('change',()=>{
+      const draft=assignmentDrafts.get(assignment.id);if(input.checked)draft.add(input.value);else draft.delete(input.value);
     }));
-    $('assignments').querySelectorAll('[data-delete-assignment]').forEach((button)=>button.addEventListener('click',async()=>{
-      const index=assignments.findIndex((item)=>item.id===button.dataset.deleteAssignment);
-      if(index<0)return;
-      const [removed]=assignments.splice(index,1);assignmentDrafts.delete(removed.id);renderAssignments();
-      try{await save();}catch(error){assignments.splice(index,0,removed);renderAssignments();status(`Could not remove assignment: ${error.message}`);}
-    }));
+    action('[data-cancel-assignment-edit]',()=>{assignmentDrafts.delete(assignment.id);assignmentView.message='';renderAssignments();$('assignments').querySelector('[data-edit-assignment]')?.focus();});
+    action('[data-save-assignment]',async()=>{
+      const tags=[...assignmentDrafts.get(assignment.id)];
+      if(!tags.length){assignmentView.message='Choose at least one tag, or remove the assignment.';renderAssignments();return;}
+      const previous=assignment.tags;
+      assignment.tags=definitions.filter(tag=>tags.includes(tag.key)).map(tag=>tag.key);
+      assignmentView.busy=true;assignmentView.message='Saving tags…';renderAssignments();
+      try{await save();assignmentDrafts.delete(assignment.id);assignmentView.message='Tags saved.';}
+      catch(error){assignment.tags=previous;assignmentView.message=`Could not save assignment: ${error.message} Your edits are kept for retry.`;status(assignmentView.message);}
+      finally{assignmentView.busy=false;renderAssignments();$('assignments').querySelector('[data-save-assignment],[data-edit-assignment]')?.focus({preventScroll:true});}
+    });
+    action('[data-delete-assignment]',()=>{assignmentView.removing=assignment.id;renderAssignments();$('assignments').querySelector('[data-confirm-assignment-delete]')?.focus();});
+    action('[data-cancel-assignment-delete]',()=>{assignmentView.removing='';renderAssignments();$('assignments').querySelector('[data-delete-assignment]')?.focus();});
+    action('[data-confirm-assignment-delete]',async()=>{
+      const index=assignments.indexOf(assignment);
+      assignmentView.busy=true;assignmentView.message='Removing assignment…';renderAssignments();
+      assignments.splice(index,1);
+      try{await save();assignmentDrafts.delete(assignment.id);assignmentView.removing='';assignmentView.expanded='';assignmentView.message='';}
+      catch(error){assignments.splice(index,0,assignment);assignmentView.message=`Could not remove assignment: ${error.message}`;status(assignmentView.message);}
+      finally{assignmentView.busy=false;renderAssignments();if(assignmentView.expanded)$('assignments').querySelector('[data-confirm-assignment-delete]')?.focus();else $('assignment-page-status').scrollIntoView({block:'nearest'});}
+    });
+  }
+  function exportAssignments() {
+    const fields=['livelabsId','wmsId','title','category','owner','type','tags','rule','createdAt'];
+    const headers=Array.from($('assignment-table').querySelectorAll('thead th')).map(th=>th.textContent.trim());
+    const cell=value=>{let text=String(value??'');if(/^[\s]*[=+@-]/.test(text)||/^[\t\r\n]/.test(text))text="'"+text;return '"'+text.replaceAll('"','""')+'"';};
+    const csv=[headers,...filteredAssignmentRows().map(row=>fields.map(field=>assignmentCell(row,field)))].map(row=>row.map(cell).join(',')).join('\r\n');
+    const url=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
+    const link=document.createElement('a');link.href=url;link.download='current-assignments.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
 
   $('tag-color').innerHTML=colorOptions('teal');
@@ -236,7 +364,16 @@
     try{await save();}catch(error){definitions=definitions.filter((item)=>item.key!==key);renderDefinitions();renderAssignments();status(`Could not add tag: ${error.message}`);}
   });
   $('item-search').addEventListener('input',searchRecords);
-  $('assignment-search').addEventListener('input',renderAssignments);
+  assignmentFilterIds.forEach(id=>$(id).addEventListener($(id).tagName==='SELECT'?'change':'input',()=>{assignmentView.page=1;renderAssignments();}));
+  $('assignment-clear').addEventListener('click',()=>{assignmentFilterIds.forEach(id=>$(id).value='');assignmentView.page=1;renderAssignments();});
+  $('assignment-page-size').addEventListener('change',()=>{assignmentView.size=Number($('assignment-page-size').value);assignmentView.page=1;renderAssignments();});
+  $('assignment-previous').addEventListener('click',()=>{assignmentView.page--;renderAssignments();});
+  $('assignment-next').addEventListener('click',()=>{assignmentView.page++;renderAssignments();});
+  $('assignment-export').addEventListener('click',exportAssignments);
+  document.querySelectorAll('[data-assignment-sort]').forEach(button=>button.addEventListener('click',()=>{
+    const field=button.dataset.assignmentSort;
+    assignmentView.direction=assignmentView.sort===field?-assignmentView.direction:1;assignmentView.sort=field;assignmentView.page=1;renderAssignments();
+  }));
   $('assignment-form').addEventListener('submit',async(event)=>{
     event.preventDefault();
     if(!selectedRecord)return;
@@ -257,9 +394,7 @@
     const saved=await api('dashboard-state'),initial=saved.state||localFallback();
     definitions=Array.isArray(initial.tagDefinitions)?initial.tagDefinitions.map((tag)=>({...tag,description:String(tag?.description||tag?.note||defaultTags.find((item)=>item.key===tag?.key)?.description||''),color:safeColor(tag?.color||defaultTags.find((item)=>item.key===tag?.key)?.color)})):[];
     assignments=Array.isArray(initial.rowOverrides)?initial.rowOverrides.filter((row)=>row&&row.tags?.length).map((row)=>({enabled:row.enabled!==false,id:row.id||uniqueId(),target:row.target,value:row.value,tags:row.tags.filter((key)=>definitions.some((tag)=>tag.key===key)),createdAt:row.createdAt||'',recordTitle:String(row.recordTitle||''),livelabsId:String(row.livelabsId||''),wmsId:String(row.wmsId||'')})).filter((row)=>row.tags.length):[];
-    const response=await fetch('/inventory/data/portfolio_inventory.json');
-    if(!response.ok)throw new Error('Could not load the current inventory.');
-    const payload=await response.json();
+    const payload=await api('inventory');
     records=(Array.isArray(payload.records)?payload.records:[]).map((record)=>({...record,key:String(record.key||`${record.livelabsId||''}|${record.wmsId||''}|${record.title||''}`)}));
     renderDefinitions();renderAssignments();searchRecords();window.LiveLabsLoading.ready();
     status(saved.state?'Loaded saved dashboard tags.':'Loaded existing browser tags. Save changes to store them in the admin service.');

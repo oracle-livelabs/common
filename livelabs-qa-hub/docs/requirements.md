@@ -1,57 +1,59 @@
 # LiveLabs QA Hub requirements
 
-Updated 5 October 2026. Current scope replaces the V3 prototype navigation and seeded operational dashboards.
+Updated 4 November 2026. This iteration integrates QA TMS into the main Hub rather than linking to a separate default interface.
 
 ## Purpose
 
-Bring Jenkins CI evidence, PAR results, on-call review, QA Automation coverage and repository follow-up into one minimal workspace. Prioritize reviewable data, provenance and the next useful action.
+Connect QA planning, test readiness, bug triage, and requirements to source-backed framework evidence. Distinguish what the team plans or marks complete from what an execution actually observed.
 
 ## Pages and hierarchy
 
-1. Overview: latest result counts, findings and source state.
-2. On-Call: important cases, current drafts, source coverage and reports.
-3. Jenkins Reports: run history, outcomes and immutable evidence.
-4. PAR Links: broken/unverified results and incomplete scan coverage.
-5. QA Automation: inventory, results, execution profiles and future run control.
-6. Repositories: local inventory and future live PR/check queues.
-7. Settings: connection status, access boundaries and freshness.
+1. QA dashboard: current test collection, setup guards, open findings, plans, and dated run evidence.
+2. QA work: local task Board, List, and Roadmap.
+3. Tests: current automation inventory, historical-only tests, manual tests, and workflow.
+4. Bugs & findings: triage, confirmation, progress, retest, and closure.
+5. Test plans: editable test membership, plan status, and independent workflow/result counts.
+6. Requirements: expected behavior and explicit test coverage links.
+7. Automation runs: saved run history; Live Jenkins Reports remain unavailable.
+8. PAR Links: measured, broken, unverified, and unavailable coverage states.
+9. On-Call: existing synthetic/private review flow; support data remains in memory.
+10. Repositories: local checkout inventory, not a live PR queue.
+11. Sources & workspace: availability, backup, and legacy entry points.
 
-Analytics and Author Guide remain companion links. QA Operations, TMS, Knowledge Base, standalone domain card pages and duplicate report templates are absent from the current menu. Legacy URLs map to active pages. Old model helpers and historical section notes are retained for compatibility; they are not active pages.
+## UI and behavior
 
-## UI requirements
+Use the reviewed Asana patterns with Oracle Sans, Bark navigation, warm surfaces, compact status labels, view tabs, and a side detail panel. Boards support drag-and-drop and keyboard/touch status editing. Provide search, filters, sorting, counts, empty states, and responsive layouts without page-level horizontal overflow.
 
-- One title and one concise description per page; avoid repeated page introductions and nested containers.
-- Use Oracle Sans, Bark navigation, warm neutral backgrounds and functional link/status colors.
-- Use shared tables with search, filtering where relevant, sortable column headers, counts, empty states and pagination.
-- Keep technical details in expandable rows or dialogs; retain keyboard focus and accessible control labels.
-- Desktop sidebar; compact expandable navigation on narrow screens. Horizontal overflow must remain inside tables.
-- Preserve URL/history navigation, deep links and local demo-session restoration.
-- Never populate operational metrics with obsolete seed data when a real source is unavailable.
+Link tests, bugs, plans, requirements, and runs by stable identity. Local manual outcomes require evidence. A test's workflow completion must never change its recorded automated outcome, and a later pass must not silently close a bug.
 
-## Data and provenance
+## Source contract
 
-- Local reports identify themselves as local artifacts; never imply Jenkins execution provenance without an actual build ID.
-- Show source timestamps and stale state. The local preview uses a 24-hour stale threshold for reports; production thresholds are source-specific.
-- Keep execution completion and quality findings distinct. Preserve raw report and Jenkins outcomes in the production contract.
-- PAR `has_data:false` means not measured. Broken, unverified and unscanned-source counts stay separate.
-- Spec files, expanded tests, catalog items and manifest files have different grains and must have explicit labels.
-- Local repository timestamps are local commit dates; workflow files do not prove enabled or passing CI.
-- On-call synthetic and private modes remain isolated. Unavailable live data never falls back silently to synthetic records.
+Collect Playwright test names using list-only mode. Read saved run summaries through a minimized projection. Keep collection/setup guards, historical unmatched identities, and manual records distinct. Catalog guard cases do not establish expanded catalog coverage.
+
+Normalize only the known old domain/purpose path order when matching historical evidence. Do not fuzzy-match titles across unrelated sources. Select the final retry per test/browser/run; retain browser distinctions. Deduplicate findings by test identity, browser, and classification, with multiple run occurrences.
+
+Show source timestamps and stale labels; do not infer current health from the September saved runs. Missing sources yield unavailable states, never obsolete seed data. PAR not-measured is not healthy. Contacts, access URLs, raw errors, and attachments do not enter the planning projection or static assets.
 
 ## Roles And Permissions
 
-The current demo login is a local presentation mechanism. It cannot authorize production jobs or protect a deployed API. Production requirements are Viewer read-only, Operator run/cancel/triage and Admin configuration, enforced on every server request. Keep private reviewer access distinct from general QA report access.
+This iteration is a loopback-only local development workspace. The earlier demo login was a presentation mechanism, not production authentication; it remains in the legacy Hub. Production identity, authorization, shared state, and authenticated private reviewer access are not implemented in this local redesign.
 
-The local development server accepts read-only requests from its loopback origin and exposes no execution endpoint. Do not deploy it as an authenticated production service.
+The server accepts read-only local requests and exposes no test-execution or external-write endpoint. Local owners and statuses are not production authorization controls.
 
-## Run requests
+## Persistence and delivery
 
-The current UI previews a profile and optional catalog item IDs only. Run tests is disabled. Production run requests require an approved job/environment allowlist, bounded parameters, server-held credentials, idempotency, queue/build/report correlation, audit and restart-safe persistence. Jenkins retains scheduling ownership.
+Browser-local workflow edits use a separate shared key on port 4192. Preserve previous Hub, visual-prototype, and TMS storage. The TMS default entry resolves to the Hub origin; the old TMS stays at port 4193 `/legacy.html` for existing records. Do not silently treat old demo records as current framework evidence.
 
-## On-call requirements
+Build both projects. Validate data reconciliation, immutability, linked-object workflows, reload/refresh persistence, unavailable sources, keyboard behavior, mobile layout, and retained legacy entry points. No publication or deployment is part of this request.
 
-Use the existing `hub-operations.v1` contract, four configured sources and exact revision-bound review rules. Show source health, changed/current cases, important issues, next human actions and draft version. Keep support data out of browser storage and public assets. Review approval, delivery, source resolution, reported recovery and learner verification remain independent facts.
+## Objectives
 
-## Integration and acceptance
+Define the QA Hub pages, roles, source contract, persistence behavior, and validation scope.
 
-Follow [the connected Hub plan](connected-qa-hub-plan.md) for phased integration, metric definitions, source ownership and acceptance gates. Live APIs, credentials, deployment and real test execution are future increments. Local rendering/build evidence must be reported separately from those capabilities.
+## Estimated Time
+
+Estimated Time: About 15 minutes to review the product requirements.
+
+## Acknowledgements
+
+The requirements preserve the existing TMS entry points and distinguish imported evidence from browser-local workflow state.

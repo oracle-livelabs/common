@@ -6326,6 +6326,18 @@ body.home-no-scroll #app .hub-hero {
 @media (max-width: 700px) { .nodoc-tree-group summary { display: block; } .nodoc-tree-group summary small { display: block; text-align: left; margin: .35rem 0 0 1.6rem; } }
 
 /* NoDoc search and coordinated left-navigation accordion. */
+.guide-load-state {
+  padding: 1.25rem;
+  margin: .75rem 0;
+  border: 1px solid rgba(79, 125, 123, .3);
+  border-radius: 8px;
+  background: rgba(79, 125, 123, .04);
+}
+
+.guide-load-state p { margin: 0; }
+.guide-load-state button { margin-top: .75rem; }
+.guide-load-state[hidden] { display: none; }
+
 #nodocMode .nodoc-search-form {
   max-width: 760px;
   margin: 1.1rem 0 .35rem;
@@ -6604,40 +6616,6 @@ body.home-no-scroll #app .hub-hero {
   object-fit: contain;
 }
 
-#nodocMode .nodoc-availability-badge {
-  display: inline-flex;
-  align-items: center;
-  min-height: 1.6em;
-  padding: .2em .5em;
-  border: 1px solid rgba(22, 21, 19, .18);
-  border-radius: 999px;
-  color: #6b7280;
-  background: #f4f4f2;
-  font-family: "Oracle Sans", "Segoe UI", Arial, sans-serif;
-  font-size: .3em;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: .02em;
-  white-space: nowrap;
-}
-
-#nodocMode .nodoc-participation-note {
-  max-width: 72ch;
-  margin: .9rem 0 0;
-  color: #161513;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1.08rem, 1.55vw, 1.28rem);
-  font-weight: 500;
-  line-height: 1.45;
-}
-
-#nodocMode .nodoc-participation-note a {
-  color: #8f2f20;
-  font-weight: 600;
-  text-underline-offset: .12em;
-  text-decoration-thickness: 1px;
-}
-
 #nodocMode .nodoc-title-link:hover,
 #nodocMode .nodoc-title-link:focus-visible {
   opacity: .82;
@@ -6711,10 +6689,6 @@ body.home-no-scroll #app .hub-hero {
   #app[data-redwood-creator-pass="2026-05-25"] #nodocMode .nodoc-page-hero .mode-title {
     flex-wrap: wrap;
     white-space: normal;
-  }
-
-  #nodocMode .nodoc-availability-badge {
-    font-size: .31em;
   }
 
   #nodocMode .nodoc-tree-group > summary {

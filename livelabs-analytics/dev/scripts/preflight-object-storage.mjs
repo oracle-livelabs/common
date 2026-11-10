@@ -62,7 +62,7 @@ function verifyReleaseManifest(manifest) {
 
 function verifyRecoveryManifest(filePath) {
   if (!filePath) {
-    blockIfStrict("source recovery evidence", "--recovery-manifest is required for promotion");
+    pass("optional historical recovery evidence", "Not supplied; this release is verified through its content manifest. Historical recovery is not a recurring deployment prerequisite.");
     return;
   }
   const absolutePath = path.resolve(projectRoot, filePath);
@@ -73,7 +73,7 @@ function verifyRecoveryManifest(filePath) {
       const recovered = path.join(base, file.path);
       return !fs.existsSync(recovered) || fs.statSync(recovered).size !== file.bytes || sha256(recovered) !== file.sha256;
     });
-    if (manifest.file_count !== manifest.files?.length || manifest.file_count !== 99 || failures.length || manifest.all_files_exact_from_git_head !== true) {
+    if (manifest.file_count !== manifest.files?.length || failures.length || manifest.all_files_exact_from_git_head !== true) {
       fail("source recovery evidence", `declared=${manifest.file_count}, entries=${manifest.files?.length || 0}, mismatches=${failures.length}`);
     } else {
       pass("source recovery evidence", `${manifest.file_count} deleted tracked files have exact Git-HEAD recovery copies`);
@@ -90,7 +90,7 @@ function verifyBrowserEvidence(filePath) {
   }
   try {
     const evidence = readJson(path.resolve(projectRoot, filePath));
-    evidence.status === "passed" && Number(evidence.failedTests || 0) === 0
+    evidence.status === "passed" && Number(evidence.failedTests || 0) === 0 && evidence.releaseId === manifest.release_id && evidence.manifestSha256 === sha256(path.join(releaseRoot, "release-manifest.json"))
       ? pass("browser regression evidence", `${evidence.passedTests || "all"} tests passed`)
       : fail("browser regression evidence", `status=${evidence.status || "missing"}, failed=${evidence.failedTests ?? "unknown"}`);
   } catch (error) {
@@ -111,7 +111,21 @@ retainedForbidden.length
   ? fail("static-only boundary", `forbidden paths: ${retainedForbidden.join(", ")}`)
   : pass("static-only boundary", "backend, admin, database, documentation, and local-runtime paths are absent");
 
-const inventoryPayload = readJson(path.join(releaseRoot, "inventory/data/portfolio_inventory.json"));
+const inventoryPayload = readJson(path.join(releaseRoot, "inventory/data/public_portfolio_inventory.json"));
+const rows = inventoryPayload.records || [];
+const publicOnly = rows.length > 0 && rows.every(row => String(row.publishType).toLowerCase() === 'public' && String(row.publishStatus).toLowerCase() === 'published');
+publicOnly && !fs.existsSync(path.join(releaseRoot, 'inventory/data/portfolio_inventory.json'))
+  ? pass('public cohort boundary', `${rows.length} public/published rows; full inventory absent`)
+  : fail('public cohort boundary', 'ineligible records or full inventory included');
+const ids = rows.map(row => String(row.livelabsId || '').trim());
+ids.every(Boolean) && new Set(ids).size === ids.length
+  ? pass('record identity', `${ids.length} unique nonempty LiveLabs IDs`)
+  : fail('record identity', 'Missing or duplicate LiveLabs IDs');
+const normalizeEntry = text => text.replace(/\s*<base\s+href="\.\.\/">/, '').replace(/\r\n/g, '\n');
+const canonicalEntry = normalizeEntry(fs.readFileSync(path.join(releaseRoot, 'dashboard/index.html'), 'utf8'));
+['index.html', 'search/index.html'].every(name => normalizeEntry(fs.readFileSync(path.join(releaseRoot, name), 'utf8')) === canonicalEntry)
+  ? pass('canonical page parity', 'root and search match the reviewed dashboard')
+  : fail('canonical page parity', 'A stale entry page remains');
 const generatedDates = [
   manifest.data_snapshot?.portfolio_inventory_generated_at,
   inventoryPayload.metadata?.generated_at,
@@ -147,10 +161,10 @@ missingStylesheetRefs.length
   ? fail("stylesheet asset resolution", `missing: ${missingStylesheetRefs.join(", ")}`)
   : pass("stylesheet asset resolution", `${new Set(stylesheetRefs).size} font and image reference(s) resolve`);
 const requiredUiMarkers = [
-  '<section class="metric-band" aria-label="Dashboard summary">',
-  "<span>Governance</span>",
-  "<span>Demand</span>",
-  "<span>Retirement</span>",
+  'data-dashboard-tab="performance"',
+  'data-dashboard-tab="urgent"',
+  'data-dashboard-tab="at-risk"',
+  'data-dashboard-tab="retirement"',
   'class="skip-link"',
   'role="status"',
   'aria-live="polite"',
@@ -160,24 +174,31 @@ const requiredUiMarkers = [
 const missingUiMarkers = requiredUiMarkers.filter((marker) => !dashboardSourceBundle.includes(marker));
 missingUiMarkers.length ? fail("approved UI and accessibility contract", `missing: ${missingUiMarkers.join(", ")}`) : pass("approved UI and accessibility contract", "required component and accessibility markers present");
 
-const snapshotLabels = [...html.matchAll(/Data snapshot:[^<]*/g)].map((match) => match[0].trim());
-snapshotLabels.length === 1 ? pass("single visible snapshot label", snapshotLabels[0]) : fail("single visible snapshot label", `${snapshotLabels.length} labels found`);
+manifest.data_snapshot?.fresh_data_pending === true
+  ? blockIfStrict('fresh source snapshot', 'The recorded source snapshot is awaiting refresh; build time does not establish freshness')
+  : pass('fresh source snapshot declaration', 'Refresh flag cleared; source evidence is checked separately');
+if (manifest.jenkins_delivery?.static_overlay_included === true) {
+  try {
+    const state = readJson(path.join(releaseRoot, 'assets/data/dashboard-state.json'));
+    const inventoryHash = sha256(path.join(releaseRoot, 'inventory/data/public_portfolio_inventory.json'));
+    const eligibleIds = new Set(ids);
+    const overlay = state.qaReportMerge?.overlay;
+    if (state.releaseEvidence?.inventorySha256 !== inventoryHash || !overlay || !Object.keys(overlay).length
+      || Object.entries(overlay).some(([id, item]) => !eligibleIds.has(id) || item.scoreValidityVersion !== 2
+        || (item.scoreState !== 'scored' && item.jenkinsErrorScore !== null))) throw new Error('Jenkins evidence does not match this cohort or validity policy.');
+    pass('static Jenkins projection', `${Object.keys(overlay).length} matched items; inventory hash and score validity verified`);
+  } catch (error) { fail('static Jenkins projection', error.message); }
+} else blockIfStrict('static Jenkins evidence', 'Saved Jenkins overlay is not included; requires a reviewed export or same-origin API');
 
 const tableIds = [
-  "top-performer-top-100-workshops",
-  "top-performer-top-100-sprints",
-  "at-risk-top-100-workshops",
-  "at-risk-top-100-sprints",
-  "retire-now-top-100-workshops",
-  "retire-now-top-100-sprints",
-  "replacement-recommendations",
-  "disabled-workshops",
-  "disabled-sprints",
+  "top-performers-table", "at-risk-table", "retirement-review-table",
 ];
 const emptyTables = tableIds.filter((id) => {
   const table = dashboardSourceBundle.match(new RegExp(`<table[^>]*\\bid="${id}"[\\s\\S]*?<\\/table>`, "i"))?.[0] || "";
   return !/data-filter-row="true"/i.test(table);
 });
+const accessMaterial = walk(releaseRoot).filter(name => /\.(json|html|js|css)$/i.test(name)).filter(name => /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|https?:\/\/[^\s"<>]*objectstorage[^\s"<>]*\/p\/[A-Za-z0-9_-]{12,}\/|\bghp_[A-Za-z0-9]{30,}/i.test(fs.readFileSync(path.join(releaseRoot, name), 'utf8')));
+accessMaterial.length ? fail('access-bearing material scan', accessMaterial.join(', ')) : pass('access-bearing material scan', 'No matched private-key, GitHub-token or OCI PAR patterns; not a full security audit');
 emptyTables.length ? fail("governance table population", `empty: ${emptyTables.join(", ")}`) : pass("governance table population", `${tableIds.length} required table families contain rows`);
 
 const duplicateCutHeadings = [...dashboardSourceBundle.matchAll(/<h[23][^>]*>([\s\S]*?)<\/h[23]>/gi)]

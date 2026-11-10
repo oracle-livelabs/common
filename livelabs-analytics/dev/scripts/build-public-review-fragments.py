@@ -4,16 +4,23 @@
 from __future__ import annotations
 
 from datetime import date, datetime
+import argparse
+import calendar
 from html import escape
 import json
+import math
 from pathlib import Path
+from review_presentation import focus_cell, row_attributes, controls, review_status
+from review_rules import DEFAULT_CRITERIA, evaluate, parse_date, methodology_html, TIER_LABELS, weighted_score
 
 
 ROOT = Path(__file__).resolve().parents[2]
 INPUT = ROOT / "inventory" / "data" / "public_portfolio_inventory.json"
 FRAGMENTS = ROOT / "assets" / "fragments"
-SNAPSHOT_DATE = date(2026, 9, 28)
-MAX_ROWS = 100
+SNAPSHOT_DATE = None
+RETIREMENT = {'maxViews12m': 250, 'olderThanMonths': 12}
+REVIEW_CRITERIA = DEFAULT_CRITERIA
+EVALUATION_DATE = None
 
 
 def clean(value: object) -> str:
@@ -26,7 +33,8 @@ def detail_map(record: dict) -> dict[str, str]:
 
 def numeric(value: object) -> float | None:
     try:
-        return float(str(value).replace(",", "").strip())
+        number = float(str(value).replace(",", "").strip())
+        return number if math.isfinite(number) and number >= 0 else None
     except (TypeError, ValueError):
         return None
 
@@ -75,7 +83,12 @@ def review_metrics(records: list[dict], content_type: str) -> list[dict]:
         key = str(record.get("livelabsId") or record.get("key"))
         view_count = views[key]
         updated = last_update(record)
-        age_months = round(max(0, (SNAPSHOT_DATE - updated).days) / 30.4375, 1) if updated else None
+        if updated and updated > SNAPSHOT_DATE:
+            updated = None
+        review = record.get('review') or evaluate(record, SNAPSHOT_DATE, REVIEW_CRITERIA)
+        updated = parse_date(review['recordedUpdate'])
+        scoring_updated = parse_date(review['scoringUpdate'])
+        age_months = (SNAPSHOT_DATE - scoring_updated).days / 30.4375 if scoring_updated else None
         missing_author = record.get("ownerMissing") if isinstance(record.get("ownerMissing"), bool) else None
         components = []
         view_percentile = percentile(view_count, population) if view_count is not None else None
@@ -85,7 +98,7 @@ def review_metrics(records: list[dict], content_type: str) -> list[dict]:
             components.append((0.35, min(100, age_months / 36 * 100)))
         if missing_author is not None:
             components.append((0.15, 100 if missing_author else 0))
-        score = round(sum(weight * value for weight, value in components) / sum(weight for weight, _ in components), 2) if components else None
+        score = weighted_score(components)
         rows.append({
             "record": record,
             "views12m": view_count,
@@ -93,9 +106,25 @@ def review_metrics(records: list[dict], content_type: str) -> list[dict]:
             "ageMonths": age_months,
             "missingAuthor": missing_author,
             "score": score,
-            "scoreCoverage": "Complete" if len(components) == 3 else "Partial" if components else "N/A",
+            "componentValues": [100 - view_percentile if view_percentile is not None else None,
+                min(100, age_months / 36 * 100) if age_months is not None else None,
+                (100 if missing_author else 0) if missing_author is not None else None],
+            "scoreCoverage": review['confidence'],
+            "review": review,
         })
     return rows
+
+
+def retirement_cutoff(months=None):
+    months = RETIREMENT['olderThanMonths'] if months is None else months
+    total = SNAPSHOT_DATE.year * 12 + SNAPSHOT_DATE.month - 1 - months
+    year, month = divmod(total, 12)
+    return date(year, month + 1, min(SNAPSHOT_DATE.day, calendar.monthrange(year, month + 1)[1]))
+
+
+def retirement_candidate(item, max_views=None, months=None):
+    maximum = RETIREMENT['maxViews12m'] if max_views is None else max_views
+    return item['views12m'] is not None and item['views12m'] <= maximum and item['updated'] is not None and item['updated'] < retirement_cutoff(months)
 
 
 def td(value: object, kind: str = "text") -> str:
@@ -109,12 +138,12 @@ def td(value: object, kind: str = "text") -> str:
     return f'<td data-filter-value="{escape(normalized)}" data-sort-value="{escape(sort)}">{escape(text or "N/A")}</td>'
 
 
-def table_html(rows: list[dict], content_type: str, table_id: str, retirement: bool = False) -> str:
+def table_html(rows: list[dict], content_type: str, table_id: str, retirement: bool = False, label_override=None) -> str:
     columns = [
         ("#", "number"), ("Title", "text"), ("Author", "text"), ("WMS ID", "number"),
         ("LiveLabs ID", "number"), ("Category", "text"), ("Views 12m", "number"),
         ("Last Meaningful Update", "date"), ("Retire Score" if retirement else "Review Score", "number"),
-        ("Score Evidence", "text"),
+        ("Type", "text"), ("Review status", "text"),
     ]
     header = "".join(
         f'<th data-sort-column-index="{index}" data-sort-type="{kind}" aria-sort="none">'
@@ -131,6 +160,7 @@ def table_html(rows: list[dict], content_type: str, table_id: str, retirement: b
     body = []
     for index, item in enumerate(rows):
         record = item["record"]
+        review = item['review']
         details = detail_map(record)
         title = clean(record.get("title")) or "Untitled item"
         owner = clean(record.get("owner")) or "No author listed"
@@ -141,55 +171,50 @@ def table_html(rows: list[dict], content_type: str, table_id: str, retirement: b
             td(index + 1, "number"), td(title), td(owner), td(record.get("wmsId"), "number"),
             td(record.get("livelabsId"), "number"), td(record.get("category")),
             td(f'{item["views12m"]:,.0f}' if item["views12m"] is not None else "N/A", "number"),
-            td(updated, "date"), td(score, "number"), td(item["scoreCoverage"]),
+            td(updated, "date"), td(score, "number"), td(record.get('type')), td(review_status(review)),
         ])
-        body.append(f'<tr class="expandable-row" data-filter-row="true" data-original-index="{index}" data-detail-row-id="{detail_id}" data-expanded="false" tabindex="0" aria-expanded="false">{base}</tr>')
+        body.append(f'<tr class="expandable-row" data-filter-row="true" {row_attributes(record)} data-review-tier="{review["tier"]}" data-review-order="{review["tierOrder"]}" data-original-index="{index}" data-detail-row-id="{detail_id}" data-expanded="false" tabindex="0" aria-expanded="false">{base}</tr>')
         detail_rows = [
-            ("Content type", record.get("type")), ("Publish status", record.get("publishStatus")),
+            ("Review band", review["tierLabel"]), ("Confidence", review["confidence"]), ("Why included", " ".join(review["reasons"])), ("Content type", record.get("type")), ("Publish status", record.get("publishStatus")),
             ("Publish type", record.get("publishType")), ("Workflow status", record.get("status")),
             ("Views in the last 12 months", f'{item["views12m"]:,.0f}' if item["views12m"] is not None else "N/A"),
-            ("Last meaningful update", updated), ("Author/contact", owner),
+            ("Recorded update", updated), ("Update used for scoring", review['scoringUpdate']),
+            ("Update evidence", review['updateEvidence']), ("Recorded Markdown update", review['markdownUpdate']),
+            ("Demand mapping", review['metricScope']), ("Within-type demand percentile", review['demandPercentile']),
+            ("Review state", review['reviewState']), ("First publication verified", review['firstPublishedDate']),
+            ("Keep-active expiry", review['keepUntil']), ("Source snapshot", review['snapshotDate']), ("Author/contact", owner),
             ("Review score inputs", "Public demand, update age, and author/contact coverage"),
         ]
         detail_html = "".join(f'<tr><th>{escape(clean(label))}</th><td>{escape(clean(value) or "N/A")}</td></tr>' for label, value in detail_rows)
         body.append(f'<tr class="detail-row" data-detail-for="{detail_id}" hidden><td colspan="{len(columns)}"><div class="detail-shell"><p class="detail-title">Review details for {escape(title)}.</p><table class="detail-table"><tbody>{detail_html}</tbody></table></div></td></tr>')
-    label = "Retirement Review" if retirement else "At-Risk Content"
-    notes = (
-        "Candidates have 12-month views at or below 250 and no meaningful update in the last 12 months. Review the source evidence before deciding; this score does not recommend an automatic retirement."
-        if retirement else
-        "Ranked from the current public cohort using available demand, update-age, and author/contact signals. Jenkins P2/P3 findings adjust the review score when a matched report is available."
-    )
+    label = 'Retirement review' if retirement else 'At-risk items'
+    bands = {item['review']['tier'] for item in rows}
+    band_options = ''.join(f'<option value="{key}">{escape(value)} ({sum(item["review"]["tier"] == key for item in rows)})</option>' for key,value in TIER_LABELS.items() if key in bands)
     return (
-        f'<section class="panel ranked-table-panel"><div class="panel-head"><h3>{label} {content_type}s</h3><span>{len(rows)} rows</span></div>'
-        f'<div class="toggle-body"><p class="note">{escape(notes)}</p>'
+        f'<section class="panel ranked-table-panel"><div class="panel-head"><h3>{label}</h3><span>{len(rows)} rows</span></div>'
+        f'<div class="toggle-body">'
+        f'<label class="review-band-filter" for="{table_id}-band">Review band <select id="{table_id}-band" data-table-filter="{table_id}" data-filter-mode="review-tier"><option value="">All review bands</option>{band_options}</select></label>'
         f'<div class="table-tools"><span class="table-count" data-table-count-for="{table_id}">{len(rows)} rows</span>'
         f'<span class="table-hint">Open a row to review its source fields.</span><button class="filter-reset" type="button" data-clear-filters-for="{table_id}">Clear filters</button></div>'
         f'<details class="filter-disclosure"><summary><span>Apply filters</span><span class="filter-chevron" aria-hidden="true"></span></summary>'
-        f'<div class="filter-grid">{filters}</div></details><div class="table-wrap" data-filter-table="{table_id}">'
+        f'{controls(table_id)}<div class="filter-grid">{filters}</div></details><div class="table-wrap" data-filter-table="{table_id}" data-review-priority="true">'
         f'<table class="data-table" id="{table_id}"><thead><tr>{header}</tr></thead><tbody>{"".join(body)}</tbody></table></div></div></section>'
     )
 
 
 def build_fragment(records: list[dict], retirement: bool) -> str:
-    content = []
-    for content_type in ("Workshop", "Sprint"):
-        rows = review_metrics(records, content_type)
-        if retirement:
-            rows = [item for item in rows if item["views12m"] is not None and item["ageMonths"] is not None and item["views12m"] <= 250 and item["ageMonths"] > 12]
-        rows.sort(key=lambda item: (item["score"] is None, -(item["score"] or 0), clean(item["record"].get("title")).lower()))
-        rows = rows[:MAX_ROWS]
-        table_id = f'{"retire-now" if retirement else "at-risk"}-top-100-{content_type.lower()}s'
-        content.append(table_html(rows, content_type, table_id, retirement))
-    title = "Retirement Review" if retirement else "At-Risk Content"
-    summary = (
-        '<details class="panel toggle-panel"><summary class="panel-head"><h3>How the Retirement Review Score Works</h3><span>Available Analytics signals</span></summary><div class="toggle-body"><p class="note">The base score combines low-demand percentile (50%), update age capped at 36 months (35%), and missing author/contact (15%). Available components are reweighted when a source value is missing. A matched Jenkins Error Score contributes 25% to review priority.</p></div></details>'
-        if retirement else
-        '<details class="panel toggle-panel"><summary class="panel-head"><h3>How the Review Score Works</h3><span>Available Analytics signals</span></summary><div class="toggle-body"><p class="note">The base score combines low-demand percentile (50%), update age capped at 36 months (35%), and missing author/contact (15%). Available components are reweighted when a source value is missing. Jenkins Error Score contributes 25% to review priority when matched evidence is available.</p></div></details>'
-    )
+    rows = [row for kind in ('Workshop','Sprint') for row in review_metrics(records, kind)]
+    if retirement:
+        rows = [row for row in rows if row['review']['queue'] in ('lifecycle','retirement','evidence')]
+    rows.sort(key=lambda item: (item['review']['tierOrder'], item['score'] is None, -(item['score'] or 0), str(item['record'].get('livelabsId'))))
+    table_id = 'retirement-review-table' if retirement else 'at-risk-table'
+    content = [table_html(rows, 'All', table_id, retirement)]
+    title = "Retirement review" if retirement else "At-risk"
+    summary = methodology_html(REVIEW_CRITERIA, SNAPSHOT_DATE, EVALUATION_DATE, section='retirement' if retirement else 'risk')
     intro = (
-        "Review low-demand public workshops and sprints with older update evidence. A person confirms retirement decisions."
+        "Review removal requests and low-demand content before deciding what to retire."
         if retirement else
-        "Review published public workshops and sprints using the current Analytics signals and matched Jenkins findings. P1 issues stay in their separate urgent queue."
+        "Review content by demand, age and QA findings."
     )
     return (
         f'<section class="section" id="{"retire-now-content" if retirement else "at-risk-content"}">'
@@ -199,19 +224,29 @@ def build_fragment(records: list[dict], retirement: bool) -> str:
 
 
 def main() -> None:
-    payload = json.loads(INPUT.read_text(encoding="utf-8"))
+    global SNAPSHOT_DATE, RETIREMENT, REVIEW_CRITERIA, EVALUATION_DATE
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--inventory', type=Path, default=INPUT)
+    parser.add_argument('--output-dir', type=Path, default=FRAGMENTS)
+    parser.add_argument('--policy', type=Path)
+    args = parser.parse_args()
+    payload = json.loads(args.inventory.read_text(encoding="utf-8"))
+    RETIREMENT = payload['metadata'].get('retirement_criteria', RETIREMENT)
+    REVIEW_CRITERIA = payload['metadata'].get('review_criteria', DEFAULT_CRITERIA)
+    EVALUATION_DATE = payload['metadata'].get('review_evaluation_date')
+    SNAPSHOT_DATE = date.fromisoformat(payload['metadata']['snapshot_date'])
     records = payload.get("records")
     if not isinstance(records, list) or payload.get("metadata", {}).get("data_scope") != "public_published":
         raise SystemExit("Expected the public/published inventory projection.")
-    FRAGMENTS.mkdir(parents=True, exist_ok=True)
-    (FRAGMENTS / "at-risk-content.html").write_text(build_fragment(records, False), encoding="utf-8")
-    (FRAGMENTS / "retire-now-content.html").write_text(build_fragment(records, True), encoding="utf-8")
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    (args.output_dir / "at-risk-content.html").write_text(build_fragment(records, False), encoding="utf-8")
+    (args.output_dir / "retire-now-content.html").write_text(build_fragment(records, True), encoding="utf-8")
     print(json.dumps({
         "publicRecords": len(records),
-        "atRiskWorkshopRows": len(review_metrics(records, "Workshop")[:MAX_ROWS]),
-        "atRiskSprintRows": len(review_metrics(records, "Sprint")[:MAX_ROWS]),
-        "retirementWorkshopCandidates": len([r for r in review_metrics(records, "Workshop") if r["views12m"] is not None and r["ageMonths"] is not None and r["views12m"] <= 250 and r["ageMonths"] > 12]),
-        "retirementSprintCandidates": len([r for r in review_metrics(records, "Sprint") if r["views12m"] is not None and r["ageMonths"] is not None and r["views12m"] <= 250 and r["ageMonths"] > 12]),
+        "atRiskWorkshopRows": len(review_metrics(records, "Workshop")),
+        "atRiskSprintRows": len(review_metrics(records, "Sprint")),
+        "retirementWorkshopCandidates": sum(r['review']['queue']=='retirement' for r in review_metrics(records, "Workshop")),
+        "retirementSprintCandidates": sum(r['review']['queue']=='retirement' for r in review_metrics(records, "Sprint")),
     }, indent=2))
 
 

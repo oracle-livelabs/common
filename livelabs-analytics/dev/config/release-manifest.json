@@ -38,7 +38,7 @@
   "promotion_gates": {
     "governance_snapshot_verified": false,
     "retirement_outputs_verified": false,
-    "source_recovery_manifest_required": true,
+    "source_recovery_manifest_required": false,
     "strict_browser_regression_required": true
   },
   "object_storage_requirements": {

@@ -70,14 +70,7 @@
     const defaultPageSize = 20;
     const rankedDefaultPageSize = 10;
     const pageSizeSteps = [10, 20, 40, 60, 80, 100, 120, 140];
-    const rankedTop100TableIds = new Set([
-      "top-performer-top-100-workshops",
-      "top-performer-top-100-sprints",
-      "at-risk-top-100-workshops",
-      "at-risk-top-100-sprints",
-      "retire-now-top-100-workshops",
-      "retire-now-top-100-sprints"
-    ]);
+    const rankedTop100TableIds = new Set(['top-performers-table', 'at-risk-table', 'retirement-review-table', 'jenkins-p1-action-table']);
     const tenRowDefaultTableIds = new Set([
       ...rankedTop100TableIds
     ]);
@@ -98,6 +91,10 @@
         const originalIndexB = Number(rowB.dataset.originalIndex || 0);
         if (!activeColumnIndex || activeDirection === "none") return originalIndexA - originalIndexB;
         const headerCell = wrapper.querySelector(`th[data-sort-column-index="${activeColumnIndex}"]`);
+        if (wrapper.dataset.reviewPriority === "true" && dashboardTableHeaderLabel(headerCell) === "score") {
+          const bandDifference = Number(rowA.dataset.reviewOrder || 0) - Number(rowB.dataset.reviewOrder || 0);
+          if (bandDifference) return bandDifference;
+        }
         const sortType = headerCell?.dataset.sortType || "text";
         const cellA = rowA.querySelectorAll("td[data-sort-value]")[Number(activeColumnIndex)];
         const cellB = rowB.querySelectorAll("td[data-sort-value]")[Number(activeColumnIndex)];
@@ -122,6 +119,7 @@
       return rows;
     }
     function isActiveFilter(control) {
+      if (control.type === "checkbox") return control.checked;
       if (control.dataset.filterMode === "no-author") return control.checked === true;
       if (control.dataset.filterMode === "demand-protected") return control.checked === true;
       return normalizeFilterText(control.value) !== "";
@@ -135,8 +133,14 @@
     }
     function rowMatchesFilters(row, filters) {
       if (row.dataset.qaAnalyticsExcluded === "true") return false;
+      const selectedFocus = filters.filter(control => control.dataset.filterMode === 'review-focus' && control.checked).map(control => control.value);
+      const rowFocus = JSON.parse(row.dataset.reviewFocus || '[]');
+      if (selectedFocus.length && !selectedFocus.some(focus => rowFocus.includes(focus))) return false;
       const cells = row.querySelectorAll("td[data-filter-value]");
       return filters.every((control) => {
+        if (control.dataset.filterMode === 'review-focus') return true;
+        if (control.dataset.filterMode === 'content-type') return !control.value || control.value === row.dataset.contentType;
+        if (control.dataset.filterMode === "review-tier") return !control.value || row.dataset.reviewTier === control.value;
         if (control.dataset.filterMode === "no-author") {
           return control.checked !== true || row.dataset.noAuthor === "true";
         }
@@ -741,7 +745,7 @@
     }
     function sourceRowsHtml(record) {
       const rows = Array.from(record.values.entries())
-        .filter(([label, value]) => label && value && normalizeFilterText(label) !== "source" && !label.startsWith("QA "))
+        .filter(([label, value]) => label && value && normalizeFilterText(label) !== "source" && !label.startsWith("QA ") && !/jenkins error score|analytics qa error score/i.test(label))
         .map(([label, value]) => `<tr><th>${escapeHtml(label)}</th><td>${escapeHtml(displayDetailValue(label, value))}</td></tr>`);
       return rows.length ? rows.join("") : `<tr><td colspan="2">No dashboard row fields available.</td></tr>`;
     }
@@ -878,6 +882,7 @@
         owner: cleanContactEnumeration(raw?.owner || ""),
         ownership: raw?.ownership || null,
         qa: raw?.qa || null,
+        review: raw?.review || null,
         recordKey: raw?.key || "",
         row: null,
         searchable,
@@ -1145,7 +1150,7 @@
     }
     const portfolioMetricTooltips = {
       "public-count": "Counts workshops and sprints that are both Published and Public. These items are available in author search and dashboard rankings.",
-      "jenkins-scored-count": "Jenkins runs automated tests on public workshops and sprints. P2 means fix next (for example, grammar or Markdown formatting); P3 means routine cleanup for a minor issue that does not change the steps or result. Both affect the final score; P2 counts twice as much as P3. P1 does not affect that score; it is reviewed separately because it may stop learners.",
+      "error-items-count": "Public items with at least one P2 or P3 finding. Each item counts once; P1-only items are covered by the separate P1 findings card. Unclassified findings remain in record details.",
       "jenkins-p1-count": "P1 means an issue may stop a learner—for example, a required link or image is broken, or a step cannot be completed. From the Dashboard, open P1 urgent action, check the evidence, and fix confirmed issues. If you cannot reproduce one, ask a reviewer to verify it.",
       "jenkins-match-count": "Counts public, published items matched to a row in the applied Jenkins report. A match means evidence is available; it does not mean errors were found."
     };
@@ -1294,10 +1299,20 @@
         .then(normalizePortfolioPayload);
       return portfolioPayloadPromise;
     }
+    let authorScoreBaselines = {};
+    function recordScore(record, context = scoreContext()) {
+      const baseline = authorScoreBaselines[String(record.livelabsId)]?.[context];
+      return baseline == null ? null : mergeScoreForTable({mode: context}, baseline, jenkinsOverlayForId(record.livelabsId));
+    }
+    function scoreContext() { return new URLSearchParams(location.search).get('score_context') === 'risk' ? 'risk' : 'performance'; }
+    function recordLink(record, context = 'performance') {
+      return `/search/?livelabs_id=${encodeURIComponent(record.livelabsId)}&score_context=${context}`;
+    }
     function loadFullSearchRecords() {
       if (fullSearchRecordsPromise) return fullSearchRecordsPromise;
-      fullSearchRecordsPromise = loadCanonicalPortfolioPayload()
-        .then((payload) => {
+      fullSearchRecordsPromise = Promise.all([loadCanonicalPortfolioPayload(), fetch('./assets/data/score-baselines.json', {cache:'no-cache'}).then(response => response.ok ? response.json() : {}).catch(() => ({}))])
+        .then(([payload, scores]) => {
+          authorScoreBaselines = scores.records || {};
           portfolioInventoryMetadata = payload.metadata || null;
           publicRawRecords = Array.isArray(payload.records) ? payload.records : [];
           publicLivelabsIds = new Set(publicRawRecords.map((record) => String(record.livelabsId || "").trim()).filter(Boolean));
@@ -1484,7 +1499,8 @@
       const policy = overlay.scorePolicy || dashboardQaReportMerge.summary?.scorePolicy || {};
       const weights = policy.weights || { P2: 2, P3: 1 };
       const referenceBurden = Number(policy.referenceBurden || 20);
-      const score = overlay.jenkinsErrorScore !== undefined
+      const validity = window.LiveLabsAuthor.qaValidity(overlay);
+      const score = validity !== 'scored' ? null : overlay.jenkinsErrorScore !== undefined
         ? overlay.jenkinsErrorScore
         : Number(priorityCounts.unmapped || 0) > 0
           ? null
@@ -1492,7 +1508,7 @@
             const burden = Number(weights.P2 || 2) * priorityCounts.p2Occurrences + Number(weights.P3 || 1) * priorityCounts.p3Occurrences;
             return Math.round((10000 * burden / (burden + referenceBurden)) || 0) / 100;
           })();
-      return { ...overlay, priorityCounts, jenkinsErrorScore: score };
+      return { ...overlay, priorityCounts, jenkinsErrorScore: score, scoreState: validity === 'scored' && score === null ? 'unmapped-priority' : validity };
     }
     function jenkinsPrioritySummary(overlay) {
       if (!overlay) return "No Jenkins report";
@@ -1502,6 +1518,7 @@
         if (Number(counts[key] || 0)) parts.push(`${key.toUpperCase()} ${Number(counts[key]).toLocaleString()}`);
       });
       if (Number(counts.unmapped || 0)) parts.push(`Unmapped ${Number(counts.unmapped).toLocaleString()}`);
+      if (overlay.scoreState !== "scored") parts.push("QA incomplete");
       return parts.join(" · ") || "No prioritized findings";
     }
     function applyJenkinsMergeToRecord(record) {
@@ -1544,14 +1561,10 @@
       inventoryRecordByKey.forEach(applyJenkinsMergeToRecord);
     }
     const jenkinsRankedTableConfigs = [
-      { id: "top-performer-top-100-workshops", mode: "performance", scoreHeader: "Final Score", idHeader: "LiveLabs ID" },
-      { id: "top-performer-top-100-sprints", mode: "performance", scoreHeader: "Final Score", idHeader: "LiveLabs ID" },
-      { id: "at-risk-top-100-workshops", mode: "risk", scoreHeader: "Final Score", idHeader: "LiveLabs ID" },
-      { id: "at-risk-top-100-sprints", mode: "risk", scoreHeader: "Final Score", idHeader: "LiveLabs ID" },
-      { id: "retire-now-top-100-workshops", mode: "risk", scoreHeader: "Final Score", idHeader: "LiveLabs ID" },
-      { id: "retire-now-top-100-sprints", mode: "risk", scoreHeader: "Final Score", idHeader: "LiveLabs ID" }
-    ];
-    function updateJenkinsScoreExplanations(root = document) {
+      { id: 'top-performers-table', mode: 'performance', scoreHeader: 'Score', idHeader: 'LiveLabs ID' },
+      { id: 'at-risk-table', mode: 'risk', scoreHeader: 'Score', idHeader: 'LiveLabs ID' },
+      { id: 'retirement-review-table', mode: 'risk', scoreHeader: 'Score', idHeader: 'LiveLabs ID' }
+    ];    function updateJenkinsScoreExplanations(root = document) {
       const policy = dashboardQaReportMerge?.summary?.scorePolicy || {};
       const configuredShare = Number(policy.tableShare ?? 0.25);
       const jenkinsShare = Math.min(0.45, Math.max(0.05, Number.isFinite(configuredShare) ? configuredShare : 0.25));
@@ -1575,21 +1588,20 @@
       const index = dashboardTableColumnIndex(row?.closest("[data-filter-table]"), label);
       return index < 0 ? null : row.querySelectorAll("td[data-filter-value]")[index] || null;
     }
-    const rankedTableColumnOrder = [
-      "#", "WMS ID", "LiveLabs ID", "Title", "Author", "Author Email", "Council", "Last Update",
-      "Views 12m", "Views 90d", "Final Score", "Score Evidence", "Errors Found", "Jenkins Error Score"
-    ];
+    // Follow WMS identity/content/contact order, then retain Analytics-only fields.
+    // Missing WMS fields are skipped; presentation never adds or removes columns.
+    const rankedTableColumnOrder = ['LiveLabs ID', 'WMS ID', 'Title', 'Council', 'Production URL', 'Completion Date', 'Last Update', 'Author', 'Author Email', 'Author / owner', 'Support Contact Email', '#', 'Type', 'Review status', 'Views 12m', 'Views 90d', 'Score', 'Errors Found'];
     function rankedTableDisplayLabel(label) {
       const normalized = normalizeFilterText(label);
       if (["category", "council area"].includes(normalized)) return "Council";
       if (normalized === "last meaningful update") return "Last Update";
-      if (["score", "review score", "retire score"].includes(normalized)) return "Final Score";
+      if (["score", "review score", "retire score"].includes(normalized)) return "Score";
       if (normalized === "jenkins priority") return "Errors Found";
       return label;
     }
     function normalizeRankedTablePresentation(root = document) {
       if (!root?.querySelector) return;
-      jenkinsRankedTableConfigs.forEach((config) => {
+      [...jenkinsRankedTableConfigs, {id:'jenkins-p1-action-table', mode:'urgent'}].forEach((config) => {
         const selector = `[data-filter-table="${config.id}"]`;
         const wrapper = root.matches?.(selector) ? root : root.querySelector(selector);
         const table = wrapper?.querySelector("table");
@@ -1611,6 +1623,7 @@
         entries.forEach((entry, newIndex) => {
           newIndexByCurrentIndex.set(entry.currentIndex, newIndex);
           entry.cell.dataset.sortColumnIndex = String(newIndex);
+          entry.cell.dataset.columnLabel = entry.label;
           const button = entry.cell.querySelector(".sort-button");
           if (button) button.dataset.columnIndex = String(newIndex);
           headerRow.appendChild(entry.cell);
@@ -1629,10 +1642,11 @@
           if (currentColumnOrder.length !== rowCells.length) return;
           const orderedCells = targetColumnOrder.map((sourceIndex) => rowCells[currentColumnOrder.indexOf(sourceIndex)]);
           if (orderedCells.some((cell) => !cell)) return;
-          orderedCells.forEach((cell) => row.appendChild(cell));
+          orderedCells.forEach((cell, index) => { cell.dataset.columnLabel = entries[index].label; row.appendChild(cell); });
           row.dataset.rankedColumnOrder = targetColumnOrder.join(",");
         });
         wrapper.closest(".toggle-body")?.querySelectorAll(`[data-table-filter="${config.id}"]`).forEach((control) => {
+          if (control.dataset.columnIndex === undefined) return;
           const oldIndex = Number(control.dataset.columnIndex);
           const newIndex = newIndexByCurrentIndex.get(oldIndex);
           if (newIndex === undefined) return;
@@ -1645,90 +1659,83 @@
             else if (normalizeFilterText(label) === "council" && control.options[0]) control.options[0].textContent = "All councils";
           }
         });
+        const body = wrapper.closest('.toggle-body');
+        const grid = body?.querySelector('.filter-grid');
+        if (grid) {
+          [...grid.children].sort((a,b) => Number(a.querySelector('[data-column-index]')?.dataset.columnIndex ?? 999) - Number(b.querySelector('[data-column-index]')?.dataset.columnIndex ?? 999)).forEach(field => grid.append(field));
+        }
+        const typeSelect = body?.querySelector(`[data-table-filter="${config.id}"][data-filter-mode="content-type"]`);
+        if (typeSelect) {
+          typeSelect.setAttribute('aria-label', 'Content type');
+          const labels = {'':'All items', Workshop:'Workshops only', Sprint:'Sprints only'};
+          [...typeSelect.options].forEach(option => {
+            const value = option.value;
+            option.value = value;
+            option.textContent = labels[value] || option.textContent;
+          });
+          const label = typeSelect.closest('label');
+          label.classList.add('table-type-filter');
+          let typeBar = body.querySelector('.table-content-type-controls');
+          if (!typeBar) {
+            typeBar = document.createElement('div');
+            typeBar.className = 'table-content-type-controls';
+            body.insertBefore(typeBar, body.querySelector('.filter-disclosure') || wrapper);
+          }
+          typeBar.append(label);
+        }
+        table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach(row => {
+          if (config.mode === 'urgent') return;
+          const detail = detailRowFor(row);
+          if (!detail) return;
+          let link = detail.querySelector('a[href*="/search/"]');
+          if (!link && row.dataset.livelabsId) { link = document.createElement('a'); detail.querySelector('.detail-shell')?.append(link); }
+          if (link && row.dataset.livelabsId) {
+            link.href = recordLink({livelabsId:row.dataset.livelabsId}, config.mode);
+            link.className = 'author-button author-button-primary'; link.textContent = 'Open record';
+          }
+        });
         const existingSortIndex = Number(wrapper.dataset.sortColumnIndex);
         if (newIndexByCurrentIndex.has(existingSortIndex)) wrapper.dataset.sortColumnIndex = String(newIndexByCurrentIndex.get(existingSortIndex));
       });
     }
     function ensureJenkinsTableColumns(wrapper) {
-      const tableId = wrapper?.dataset?.filterTable || "";
-      const table = wrapper?.querySelector("table");
-      const headerRow = table?.querySelector("thead tr:first-child");
-      if (!wrapper || !table || !headerRow) return null;
+      const table = wrapper?.querySelector('table');
+      const header = table?.querySelector('thead tr');
+      if (!header) return null;
       if (wrapper.dataset.analyticsColumnCount === undefined) {
-        wrapper.dataset.analyticsColumnCount = String(headerRow.children.length);
-        wrapper.dataset.analyticsSortColumnIndex = wrapper.dataset.sortColumnIndex || "";
-        wrapper.dataset.analyticsSortDirection = wrapper.dataset.sortDirection || "none";
+        wrapper.dataset.analyticsColumnCount = String(header.children.length);
+        wrapper.dataset.analyticsSortColumnIndex = wrapper.dataset.sortColumnIndex || '';
+        wrapper.dataset.analyticsSortDirection = wrapper.dataset.sortDirection || 'none';
       }
-      let scoreCell = headerRow.querySelector('[data-jenkins-column="score"]');
-      let priorityCell = headerRow.querySelector('[data-jenkins-column="priority"]');
-      const startIndex = headerRow.children.length;
-      if (!scoreCell) {
-        scoreCell = document.createElement("th");
-        scoreCell.dataset.jenkinsColumn = "score";
-        scoreCell.dataset.rankedSourceColumnIndex = String(startIndex);
-        scoreCell.dataset.sortColumnIndex = String(startIndex);
-        scoreCell.dataset.sortType = "number";
-        scoreCell.innerHTML = `<button class="sort-button" type="button" data-sort-table="${escapeHtml(tableId)}" data-column-index="${startIndex}" data-default-direction="desc" title="Sort by Jenkins Error Score">Jenkins Error Score</button>`;
-        headerRow.appendChild(scoreCell);
+      if (!header.querySelector('[data-jenkins-column="priority"]')) {
+        const index = header.children.length;
+        const cell = document.createElement('th');
+        cell.dataset.jenkinsColumn = 'priority';
+        cell.dataset.rankedSourceColumnIndex = String(index);
+        cell.dataset.sortType = 'text';
+        cell.innerHTML = `<button class="sort-button" type="button" data-sort-table="${wrapper.dataset.filterTable}" data-column-index="${index}" data-default-direction="asc">Errors Found</button>`;
+        header.append(cell);
+        const grid = wrapper.closest('.toggle-body')?.querySelector('.filter-grid');
+        if (grid) grid.insertAdjacentHTML('beforeend', `<label class="filter-field" data-jenkins-filter="priority"><span>Errors Found</span><input type="search" placeholder="Filter P1, P2, or P3" data-table-filter="${wrapper.dataset.filterTable}" data-column-index="${index}"></label>`);
       }
-      scoreCell.hidden = true;
-      scoreCell.setAttribute("aria-hidden", "true");
-      if (!priorityCell) {
-        priorityCell = document.createElement("th");
-        priorityCell.dataset.jenkinsColumn = "priority";
-        priorityCell.dataset.rankedSourceColumnIndex = String(headerRow.children.length);
-        priorityCell.dataset.sortColumnIndex = String(headerRow.children.length);
-        priorityCell.dataset.sortType = "text";
-        priorityCell.innerHTML = `<button class="sort-button" type="button" data-sort-table="${escapeHtml(tableId)}" data-column-index="${headerRow.children.length}" data-default-direction="asc" title="Sort by errors found">Errors Found</button>`;
-        headerRow.appendChild(priorityCell);
-      }
-      const filterGrid = wrapper.closest(".toggle-body")?.querySelector(".filter-grid") || wrapper.parentElement?.querySelector(".filter-grid");
-      [[scoreCell.dataset.rankedSourceColumnIndex, "Jenkins Error Score", "Filter Jenkins error score"], [priorityCell.dataset.rankedSourceColumnIndex, "Errors Found", "Filter P1, P2, or P3"]].forEach(([index, label, placeholder]) => {
-        if (!filterGrid || filterGrid.querySelector(`[data-jenkins-filter="${index}"]`)) return;
-        const filterLabel = document.createElement("label");
-        filterLabel.className = "filter-field";
-        filterLabel.dataset.jenkinsFilter = String(index);
-        filterLabel.innerHTML = `<span>${escapeHtml(label)}</span><input type="search" placeholder="${escapeHtml(placeholder)}" data-table-filter="${escapeHtml(tableId)}" data-column-index="${index}">`;
-        filterGrid.appendChild(filterLabel);
-      });
-      table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach((row) => {
-        if (row.dataset.analyticsOriginalIndex === undefined) row.dataset.analyticsOriginalIndex = row.dataset.originalIndex || "0";
-        if (!row.querySelector('[data-jenkins-column="score"]')) {
-          const cell = document.createElement("td");
-          cell.dataset.jenkinsColumn = "score";
-          cell.hidden = true;
-          cell.setAttribute("aria-hidden", "true");
-          cell.dataset.filterValue = "";
-          cell.dataset.sortValue = "";
-          row.appendChild(cell);
-        }
+      table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach(row => {
+        if (row.dataset.analyticsOriginalIndex === undefined) row.dataset.analyticsOriginalIndex = row.dataset.originalIndex || '0';
         if (!row.querySelector('[data-jenkins-column="priority"]')) {
-          const cell = document.createElement("td");
-          cell.dataset.jenkinsColumn = "priority";
-          cell.dataset.filterValue = "";
-          cell.dataset.sortValue = "";
-          row.appendChild(cell);
+          const cell = document.createElement('td');
+          cell.dataset.jenkinsColumn = 'priority'; cell.dataset.filterValue = ''; cell.dataset.sortValue = ''; row.append(cell);
         }
-      });
-      table.querySelectorAll('[data-jenkins-column="score"]').forEach((cell) => {
-        cell.hidden = true;
-        cell.setAttribute("aria-hidden", "true");
       });
       normalizeRankedTablePresentation(wrapper);
-      table.querySelectorAll("tbody tr.detail-row").forEach((row) => {
-        const colspan = row.querySelector("td[colspan]");
-        if (colspan) colspan.colSpan = headerRow.children.length;
-      });
-      const scoreIndex = Array.from(headerRow.children).indexOf(scoreCell);
-      const priorityIndex = Array.from(headerRow.children).indexOf(priorityCell);
-      return { table, scoreIndex, priorityIndex };
+      table.querySelectorAll('tbody tr.detail-row td[colspan]').forEach(cell => { cell.colSpan = header.children.length; });
+      return {table, scoreIndex: dashboardTableColumnIndex(wrapper, 'Score'), priorityIndex: dashboardTableColumnIndex(wrapper, 'Errors Found')};
     }
     function tableRecordId(row, columnIndex) {
       return String(row?.querySelectorAll('td[data-filter-value]')?.[columnIndex]?.dataset?.filterValue || "").trim();
     }
     function mergeScoreForTable(config, baseline, sourceOverlay) {
       if (!Number.isFinite(baseline)) return null;
-      const jenkinsShare = Math.min(0.45, Math.max(0.05, Number(dashboardQaReportMerge?.summary?.scorePolicy?.tableShare ?? 0.25)));
+      const configuredShare = Number(dashboardQaReportMerge?.summary?.scorePolicy?.tableShare ?? 0.25);
+      const jenkinsShare = Math.min(0.45, Math.max(0.05, Number.isFinite(configuredShare) ? configuredShare : 0.25));
       if (config.mode === "performance") {
         const error = sourceOverlay?.jenkinsErrorScore == null ? null : Number(sourceOverlay.jenkinsErrorScore);
         return error != null && Number.isFinite(error) ? baseline * (1 - jenkinsShare) + (100 - error) * jenkinsShare : baseline;
@@ -1738,6 +1745,30 @@
         return error != null && Number.isFinite(error) ? baseline * (1 - jenkinsShare) + error * jenkinsShare : baseline;
       }
       return null;
+    }
+    const reviewFocusLabels = ['Lifecycle', 'Low demand', 'Older updates', 'Needs evidence', 'QA issues', 'Missing contact', 'Keep active', 'New content'];
+    function focusBadges(tags) {
+      return `<span class="review-focus-tags">${tags.map(tag => `<span class="review-focus-tag">${escapeHtml(tag)}</span>`).join('') || '<span class="muted">—</span>'}</span>`;
+    }
+    function reviewFocusForRecord(record) {
+      const tags = [...(record?.review?.focusTags || [])];
+      const qa = dashboardQaReportMerge?.overlay?.[String(record?.livelabsId || '')];
+      if (qa?.findings?.length) tags.push('QA issues');
+      return [...new Set(tags)];
+    }
+    function updateRowReviewFocus(row, overlay) {
+      if (!row.dataset.baseReviewFocus) row.dataset.baseReviewFocus = row.dataset.reviewFocus || '[]';
+      const tags = JSON.parse(row.dataset.baseReviewFocus);
+      if (overlay?.findings?.length) tags.push('QA issues');
+      row.dataset.reviewFocus = JSON.stringify([...new Set(tags)]);
+      const cell = row.querySelector('[data-review-focus-cell]');
+      if (cell) {
+        cell.innerHTML = focusBadges([...new Set(tags)]);
+        cell.dataset.filterValue = cell.dataset.sortValue = tags.join(' | ').toLowerCase();
+      }
+    }
+    function combinedTableControls(tableId) {
+      return `<div class="review-table-controls"><label>Type <select aria-label="Type" data-table-filter="${tableId}" data-filter-mode="content-type"><option value="">All types</option><option>Workshop</option><option>Sprint</option></select></label><fieldset class="review-focus-filter"><legend>Review focus <small>choose any</small></legend>${reviewFocusLabels.map(tag => `<label class="focus-choice"><input type="checkbox" value="${tag}" data-table-filter="${tableId}" data-filter-mode="review-focus">${tag}</label>`).join('')}</fieldset></div>`;
     }
     function humanReadableJenkinsFinding(issue) {
       const label = String(issue?.label || issue?.code || "").trim();
@@ -1790,16 +1821,10 @@
         rows.forEach((row) => {
           const sourceId = tableRecordId(row, idIndex);
           const sourceOverlay = jenkinsOverlayForId(sourceId);
+          updateRowReviewFocus(row, sourceOverlay);
           const priorityLabel = jenkinsColumnValue(sourceOverlay);
-          const sourceErrorScore = sourceOverlay?.jenkinsErrorScore == null ? null : Number(sourceOverlay.jenkinsErrorScore);
-          const scoreLabel = jenkinsColumnValue(sourceOverlay, true);
-          const scoreSortValue = scoreLabel && scoreLabel !== "N/A" ? Number(scoreLabel) : null;
-          const scoreCell = row.querySelector('[data-jenkins-column="score"]');
           const priorityCell = row.querySelector('[data-jenkins-column="priority"]');
-          if (!scoreCell || !priorityCell) return;
-          scoreCell.dataset.filterValue = normalizeFilterText(scoreLabel);
-          scoreCell.dataset.sortValue = scoreSortValue == null || !Number.isFinite(scoreSortValue) ? "" : String(scoreSortValue);
-          scoreCell.textContent = scoreLabel || "N/A";
+          if (!priorityCell) return;
           priorityCell.dataset.filterValue = normalizeFilterText(priorityLabel);
           priorityCell.dataset.sortValue = normalizeFilterText(priorityLabel);
           priorityCell.textContent = priorityLabel;
@@ -1823,6 +1848,10 @@
         wrapper.dataset.sortColumnIndex = String(scoreSortIndex >= 0 ? scoreSortIndex : columns.scoreIndex);
         wrapper.dataset.sortDirection = "desc";
         const sortedRows = rows.slice().sort((left, right) => {
+          if (wrapper.dataset.reviewPriority === "true") {
+            const bandDifference = Number(left.dataset.reviewOrder || 0) - Number(right.dataset.reviewOrder || 0);
+            if (bandDifference) return bandDifference;
+          }
           const a = Number.parseFloat(left.querySelectorAll('td[data-sort-value]')[scoreSortIndex >= 0 ? scoreSortIndex : columns.scoreIndex]?.dataset.sortValue || "");
           const b = Number.parseFloat(right.querySelectorAll('td[data-sort-value]')[scoreSortIndex >= 0 ? scoreSortIndex : columns.scoreIndex]?.dataset.sortValue || "");
           if (!Number.isFinite(a) && !Number.isFinite(b)) return Number(left.dataset.originalIndex || 0) - Number(right.dataset.originalIndex || 0);
@@ -1832,7 +1861,7 @@
         });
         sortedRows.forEach((row, index) => {
           row.dataset.originalIndex = String(index);
-          const rankCell = row.querySelector('td[data-sort-value]');
+          const rankCell = row.querySelector('td[data-column-label="#"]');
           if (rankCell) {
             rankCell.textContent = String(index + 1);
             rankCell.dataset.filterValue = String(index + 1);
@@ -1868,7 +1897,7 @@
               delete scoreCell.dataset.analyticsSortValue;
             }
           }
-          const rankCell = row.querySelector('td[data-sort-value]');
+          const rankCell = row.querySelector('td[data-column-label="#"]');
           if (rankCell?.dataset.analyticsRank !== undefined) {
             rankCell.textContent = rankCell.dataset.analyticsRank;
             rankCell.dataset.filterValue = rankCell.dataset.analyticsRankFilter || rankCell.dataset.analyticsRank;
@@ -1879,6 +1908,7 @@
           }
           row.dataset.originalIndex = row.dataset.analyticsOriginalIndex || "0";
           delete row.dataset.analyticsOriginalIndex;
+          updateRowReviewFocus(row, null);
           row.querySelectorAll('[data-jenkins-column]').forEach((cell) => cell.remove());
         });
         headerRow.querySelectorAll('[data-jenkins-column]').forEach((cell) => cell.remove());
@@ -1911,57 +1941,44 @@
       return owners;
     }
     function jenkinsPriorityGuideMarkup() {
-      return `<details class="panel toggle-panel jenkins-priority-guide"><summary class="panel-head"><h3>What Jenkins priorities mean</h3></summary><div class="toggle-body"><p class="jenkins-priority-intro">Jenkins runs automated tests on public workshops and sprints. P1 may stop learners, so review it first. P2 needs a fix next; P3 is for routine cleanup. P2 and P3 affect the final score; P1 does not and is handled separately.</p><div class="jenkins-priority-grid"><article class="jenkins-priority-card" data-priority="P1"><h4>P1 · urgent</h4><p>May stop a learner. Examples: a broken required link or image, or a step they cannot complete. Check the evidence, fix confirmed issues, and ask a reviewer to verify anything you cannot reproduce.</p></article><article class="jenkins-priority-card" data-priority="P2"><h4>P2 · fix next</h4><p>Needs an author fix, but may not stop learners. Examples: grammar, a typo, or Markdown formatting. Each P2 finding counts twice as much as P3 in the final score.</p></article><article class="jenkins-priority-card" data-priority="P3"><h4>P3 · routine</h4><p>A minor issue for routine cleanup. For example, a detail that does not change the steps or result. P3 affects the final score less than P2.</p></article></div><p class="jenkins-priority-author-note">Open the record and read the finding and evidence before making a change. In this table, use Open record; in Search, select the result. If you cannot reproduce a P1 finding, ask a reviewer to verify the report.</p></div></details>`;
+      return `<details class="panel toggle-panel jenkins-priority-guide"><summary class="panel-head"><h3>What P1 priority means</h3></summary><div class="toggle-body"><p>P1 findings may stop learners. <strong>Author fix</strong> means check the evidence and fix the issue. <strong>Verify report</strong> means confirm the finding first.</p><p>One row represents one item. Open it for individual findings. P1 does not change the score or approve retirement.</p></div></details>`;
     }
     function renderJenkinsP1ActionQueue() {
-      const anchor = document.getElementById("jenkins-p1-slot");
+      const anchor = document.getElementById('jenkins-p1-slot');
       if (!anchor) return;
-      let section = document.getElementById("jenkins-p1-action-queue");
+      let section = document.getElementById('jenkins-p1-action-queue');
       if (!section) {
-        section = document.createElement("section");
-        section.className = "section jenkins-p1-section";
-        section.id = "jenkins-p1-action-queue";
-        section.dataset.dashboardPage = "urgent";
-        anchor.append(section);
+        section = document.createElement('section'); section.id = 'jenkins-p1-action-queue';
+        section.className = 'section jenkins-p1-section'; section.dataset.dashboardPage = 'urgent'; anchor.append(section);
       }
-      const mergeId = String(dashboardQaReportMerge?.id || dashboardQaReportMerge?.appliedAt || "no-report");
+      const mergeId = String(dashboardQaReportMerge?.id || dashboardQaReportMerge?.appliedAt || 'no-report');
       if (section.dataset.mergeId === mergeId) return;
-      if (!dashboardQaReportMerge) {
-        section.innerHTML = `<div class="section-head"><div class="section-head-top"><h2>P1 · Urgent reviewer actions</h2></div><p>If your workshop or sprint appears here, review it first: a P1 finding may stop learners from completing it. Fix confirmed issues, or ask a reviewer to verify a finding you cannot reproduce.</p></div>${jenkinsPriorityGuideMarkup()}<details class="panel toggle-panel ranked-table-panel ranked-table-disclosure"><summary class="panel-head"><h3>P1 findings to address first</h3></summary><div class="toggle-body"><p class="empty">Add a Jenkins report in Admin to see P1 findings here.</p></div></details>`;
-        section.dataset.mergeId = mergeId;
-        applyDashboardPageView(document.body.dataset.dashboardPage || "performance");
-        return;
-      }
-      const owners = ownersForJenkinsQueue();
-      const rows = [];
-      Object.entries(dashboardQaReportMerge.overlay || {}).forEach(([livelabsId, overlay]) => {
-        if (!publicLivelabsIds.has(String(livelabsId).trim())) return;
-        (Array.isArray(overlay.findings) ? overlay.findings : []).filter((issue) => issue.priority === "P1").forEach((issue) => {
-          const verification = issue.group === "verification-required" || /verify/i.test(issue.priorityLabel || "");
-          const title = overlay.itemTitle || issue.itemTitle || "LiveLabs item";
-          const issueSummary = [issue.label || issue.code || "Unclassified issue", issue.message || "No finding summary supplied"].filter(Boolean).join(" · ");
-          const owner = owners.get(String(livelabsId)) || "Reviewer assignment needed";
-          const action = verification ? "Verify report" : "Author fix";
-          const occurrenceCount = Math.max(0, Number(issue.count || 0));
-          const values = [action, title, livelabsId, issueSummary, occurrenceCount, owner, livelabsId];
-          const cells = values.map((value, index) => {
-            const display = index === 4 ? occurrenceCount.toLocaleString() : escapeHtml(value);
-            const filterValue = escapeHtml(normalizeFilterText(value));
-            const sortValue = escapeHtml(value);
-            const content = index === 6 ? `<a href="/search/?livelabs_id=${encodeURIComponent(livelabsId)}">Open record</a>` : display;
-            return `<td data-filter-value="${filterValue}" data-sort-value="${sortValue}">${content}</td>`;
-          }).join("");
-          rows.push(`<tr data-filter-row="true" data-original-index="${rows.length}">${cells}</tr>`);
-        });
-      });
-      const tableId = "jenkins-p1-action-table";
-      const columns = ["Action", "Workshop / sprint", "LiveLabs ID", "Finding", "Occurrences", "Author / owner", "Record"];
-      const filters = columns.map((label, index) => `<label class="filter-field" for="${tableId}-filter-${index}"><span>${label}</span><input id="${tableId}-filter-${index}" type="search" placeholder="Filter ${escapeHtml(label)}" data-table-filter="${tableId}" data-column-index="${index}"></label>`).join("");
-      const headers = columns.map((label, index) => `<th data-sort-column-index="${index}" data-sort-type="${index === 4 || index === 2 ? "number" : "text"}" aria-sort="none"><button class="sort-button" type="button" data-sort-table="${tableId}" data-column-index="${index}" data-default-direction="${index === 4 ? "desc" : "asc"}" title="Sort by ${escapeHtml(label)}">${escapeHtml(label)}</button></th>`).join("");
-      section.innerHTML = `<div class="section-head"><div class="section-head-top"><h2>P1 · Urgent reviewer actions</h2></div><p>If your workshop or sprint appears here, review it first: a P1 finding may stop learners from completing it. Fix confirmed issues, or ask a reviewer to verify a finding you cannot reproduce.</p></div>${jenkinsPriorityGuideMarkup()}<div class="panel-stack ranked-table-stack"><details class="panel toggle-panel ranked-table-panel ranked-table-disclosure"><summary class="panel-head"><h3>P1 findings to address first</h3></summary><div class="toggle-body"><div class="table-tools"><span class="table-count" data-table-count-for="${tableId}">${rows.length.toLocaleString()} rows</span><span class="table-hint">Filter the findings, sort a column, or open a record.</span><button class="filter-reset" type="button" data-clear-filters-for="${tableId}">Clear filters</button></div><details class="filter-disclosure"><summary><span>Apply filters</span><span class="filter-chevron" aria-hidden="true"></span></summary><div class="filter-grid">${filters}</div></details><div class="table-wrap" data-filter-table="${tableId}"><table class="data-table jenkins-p1-table" id="${tableId}"><thead><tr>${headers}</tr></thead><tbody>${rows.length ? rows.join("") : '<tr><td colspan="7" class="empty">No P1 findings in the applied Jenkins report.</td></tr>'}</tbody></table></div></div></details></div>`;
+      const tableId = 'jenkins-p1-action-table';
+      const records = new Map(loadedFullSearchRecords.map(record => [String(record.livelabsId), record]));
+      const items = Object.entries(dashboardQaReportMerge?.overlay || {}).filter(([id]) => publicLivelabsIds.has(id))
+        .map(([id, overlay]) => ({id, overlay, record:records.get(id), findings:(overlay.findings || []).filter(issue => issue.priority === 'P1')})).filter(item => item.findings.length);
+      const needsFix = issue => !(issue.group === 'verification-required' || /verify/i.test(issue.priorityLabel || ''));
+      items.sort((a,b) => Number(b.findings.some(needsFix)) - Number(a.findings.some(needsFix)) || b.findings.length-a.findings.length || a.id.localeCompare(b.id));
+      const columns = ['Title', 'Type', 'Action', 'P1 findings', 'Occurrences', 'Author / owner', 'LiveLabs ID', 'Record'];
+      const headers = columns.map((label,index) => `<th data-column-label="${label}" data-sort-column-index="${index}" data-sort-type="${[3,4,6].includes(index) ? 'number':'text'}"><button class="sort-button" type="button" data-sort-table="${tableId}" data-column-index="${index}" data-default-direction="${[3,4].includes(index)?'desc':'asc'}">${label}</button></th>`).join('');
+      const filters = columns.map((label,index) => `<label class="filter-field"><span>${label}</span><input aria-label="Filter ${label}" type="search" data-table-filter="${tableId}" data-column-index="${index}"></label>`).join('');
+      const rows = items.map((item,index) => {
+        const {id,overlay,record,findings} = item;
+        const tags = reviewFocusForRecord(record); if (!tags.includes('QA issues')) tags.push('QA issues');
+        const actions = [...new Set(findings.map(issue => needsFix(issue) ? 'Author fix' : 'Verify report'))];
+        const occurrences = findings.reduce((sum,issue) => sum + Math.max(0,Number(issue.count || 0)),0);
+        const values = [record?.title || overlay.itemTitle || 'LiveLabs item',record?.type || 'Unknown',actions.join(' · '),findings.length,occurrences,record?.owner || 'Reviewer assignment needed',id,'Open record'];
+        const cells = values.map((value,i) => `<td data-column-label="${columns[i]}" data-filter-value="${escapeHtml(String(value).toLowerCase())}" data-sort-value="${escapeHtml(value)}">${i===7 ? `<a class="author-button author-button-primary" href="/search/?livelabs_id=${encodeURIComponent(id)}">Open record</a>` : escapeHtml(value)}</td>`).join('');
+        const details = findings.map(issue => `<li><strong>${escapeHtml(humanReadableJenkinsFinding(issue))}</strong> · ${needsFix(issue)?'Author fix':'Verify report'} · ${Math.max(0,Number(issue.count||0))} occurrences<p>${escapeHtml(issue.message || 'Open the record for source evidence.')}</p></li>`).join('');
+        return `<tr class="expandable-row" data-filter-row="true" data-livelabs-id="${id}" data-content-type="${escapeHtml(record?.type || '')}" data-review-focus="${escapeHtml(JSON.stringify(tags))}" data-original-index="${index}" data-detail-row-id="p1-${id}" data-expanded="false" tabindex="0" aria-expanded="false">${cells}</tr><tr class="detail-row" data-detail-for="p1-${id}" hidden><td colspan="8"><div class="detail-shell"><h4>P1 findings for ${escapeHtml(values[0])}</h4><ul>${details}</ul><a class="author-button author-button-primary" href="/search/?livelabs_id=${encodeURIComponent(id)}">Open full record and evidence</a></div></td></tr>`;
+      }).join('');
+      const findingCount = items.reduce((sum,item)=>sum+item.findings.length,0);
+      section.innerHTML = `<div class="section-head"><h2>P1 urgent action</h2><p>Review findings that may stop learners.</p></div>${jenkinsPriorityGuideMarkup()}<section class="panel ranked-table-panel"><div class="panel-head"><h3>P1 urgent action</h3><span>${items.length} rows · ${findingCount} findings</span></div><div class="toggle-body"><div class="table-tools"><span class="table-count" data-table-count-for="${tableId}">${items.length} rows</span><button class="filter-reset" data-clear-filters-for="${tableId}">Clear filters</button></div><details class="filter-disclosure"><summary>Apply filters</summary>${combinedTableControls(tableId)}<div class="filter-grid">${filters}</div></details><div class="table-wrap" data-filter-table="${tableId}"><table class="data-table" id="${tableId}"><thead><tr>${headers}</tr></thead><tbody>${rows || `<tr><td colspan="8">${dashboardQaReportMerge ? 'No P1 findings in the applied report.' : 'Add a Jenkins report in Admin to see P1 findings.'}</td></tr>`}</tbody></table></div></div></section>`;
       section.dataset.mergeId = mergeId;
-      applyDashboardPageView(document.body.dataset.dashboardPage || "overview");
-      initializeTablesIn(section, { force: true });
+      normalizeRankedTablePresentation(section);
+      applyRankedTableDisclosures(); decorateDashboardCopyTargets(section);
+      applyDashboardPageView(document.body.dataset.dashboardPage || 'performance');
+      initializeTablesIn(section, {force:true});
     }
     function applyJenkinsDashboardMerge() {
       applyJenkinsMergeToLoadedRecords();
@@ -1975,10 +1992,19 @@
       if (loadedFullSearchRecords.length) renderAllDataTable();
       if (dashboardQaReportMerge) refreshRenderedSearchDetail();
     }
+    async function fetchDashboardState() {
+      try {
+        const response = await fetch('/api/dashboard-admin-state', {cache:'no-store'});
+        if (response.ok) return await response.json();
+      } catch { /* A static release has no API. */ }
+      try {
+        const response = await fetch(new URL('./assets/data/dashboard-state.json', document.baseURI), {cache:'no-store'});
+        return response.ok ? await response.json() : null;
+      } catch { return null; }
+    }
     function ensureDashboardQaMergeLoaded() {
       if (dashboardQaReportMerge) return Promise.resolve(dashboardQaReportMerge);
-      return fetch("/api/dashboard-admin-state", { cache: "no-store" })
-        .then((response) => response.ok ? response.json() : null)
+      return fetchDashboardState()
         .then((payload) => {
           dashboardQaReportMerge = payload?.qaReportMerge || null;
           if (dashboardQaReportMerge) applyJenkinsMergeToLoadedRecords();
@@ -1994,8 +2020,7 @@
       if (record) renderSearchDetail(record, { updateUrl: false });
     }
     function reloadDashboardJenkinsMerge() {
-      fetch("/api/dashboard-admin-state", { cache: "no-store" })
-        .then((response) => response.ok ? response.json() : null)
+      fetchDashboardState()
         .then((payload) => {
           dashboardQaReportMerge = payload?.qaReportMerge || null;
           applyJenkinsDashboardMerge();
@@ -2353,12 +2378,7 @@
       titleCell.appendChild(document.createTextNode(" "));
       titleCell.appendChild(badge);
     }
-    const noAuthorRetirementTableIds = new Set([
-      "at-risk-top-100-workshops",
-      "at-risk-top-100-sprints",
-      "retire-now-top-100-workshops",
-      "retire-now-top-100-sprints"
-    ]);
+    const noAuthorRetirementTableIds = new Set(['at-risk-table', 'retirement-review-table']);
     const demandProtectedReviewTableIds = new Set(noAuthorRetirementTableIds);
     function cleanDisplayValue(value) {
       const text = String(value || "").trim();
@@ -2491,7 +2511,7 @@
         add("Summary", "", detailReportText(card.querySelector("dt")), detailReportText(card.querySelector("dd")));
       });
       view.querySelectorAll(".search-detail-panel, [data-report-section]").forEach((panel) => {
-        const belongsToSection = (element) => element.closest(".search-detail-panel, [data-report-section]") === panel;
+        const belongsToSection = (element) => element.closest(".search-detail-panel, [data-report-section]") === panel && !element.closest(".author-check");
         const section = detailReportText(panel.querySelector("h3"));
         Array.from(panel.querySelectorAll(".panel-head > span, .note")).filter(belongsToSection).forEach((element) => {
           add(section, "", element.matches(".note") ? "Note" : "Count", detailReportText(element));
@@ -2504,7 +2524,9 @@
           table.querySelectorAll("tbody tr").forEach((row, index) => {
             const cells = Array.from(row.querySelectorAll("td"));
             const label = row.querySelector("th");
-            if (label) {
+            if (label && cells.length > 1) {
+              cells.forEach((cell, column) => add(section, String(index + 1), `${detailReportText(label)} / ${headers[column + 1] || `Column ${column + 1}`}`, detailReportText(cell)));
+            } else if (label) {
               add(section, "", detailReportText(label), detailReportText(cells[0]));
             } else if (cells.length === 1 && cells[0].colSpan > 1) {
               add(section, "", "Note", detailReportText(cells[0]));
@@ -2513,6 +2535,12 @@
             }
           });
         });
+      });
+      view.querySelectorAll('.author-check').forEach((check, index) => {
+        const section = detailReportText(check.closest('.author-finding-group')?.querySelector('summary'));
+        check.querySelectorAll('dt').forEach(dt => add(section, String(index + 1), detailReportText(dt), detailReportText(dt.nextElementSibling)));
+        check.querySelectorAll('.author-target').forEach((target, targetIndex) => add(section, `${index + 1}.${targetIndex + 1}`, 'Affected content', detailReportText(target)));
+        check.querySelectorAll('a[href]').forEach(link => add(section, String(index + 1), detailReportText(link), link.href));
       });
       return rows;
     }
@@ -3202,38 +3230,8 @@
         </section>`;
     }
     function familyHtml(record) {
-      const family = record.family;
-      const wmsId = String(family?.wmsId || record.wmsId || "").trim();
-      if (!family || !wmsId || Number(family.total || 0) <= 1) return "";
-      const siblings = Array.isArray(family.siblings) ? family.siblings : [];
-      const rows = siblings.map((item) => {
-        const related = searchRecordByKey.get(item.key);
-        const title = item.title || related?.title || "Untitled";
-        const livelabsId = item.livelabsId || related?.livelabsId || "";
-        const status = [item.publishStatus, item.publishType].filter(Boolean).join(" / ") || related?.status || "";
-        const category = item.category || related?.category || "";
-        const titleHtml = related
-          ? `<button class="nav-link" type="button" data-family-search-key="${escapeHtml(item.key)}">${escapeHtml(title)}</button>`
-          : escapeHtml(title);
-        const meta = [
-          livelabsId ? `<span>LiveLabs ${escapeHtml(livelabsId)}</span>` : "",
-          status ? `<span>${escapeHtml(status)}</span>` : "",
-          category ? `<span>${escapeHtml(category)}</span>` : ""
-        ].filter(Boolean).join("");
-        return `<article class="family-record">
-          <div class="family-record-title">${titleHtml}</div>
-          <div class="family-record-meta">${meta || `<span>Record details unavailable</span>`}</div>
-        </article>`;
-      }).join("");
-      return `
-        <section class="search-detail-panel search-detail-panel-wide search-family-panel" data-report-section>
-          <div class="panel-head">
-            <h3>Other items with the same WMS ID</h3>
-            <span>${siblings.length} other items · ${escapeHtml(family.total)} total</span>
-          </div>
-          <p class="note">These public, published records share WMS ID ${escapeHtml(wmsId)}. We group by exact WMS ID, not by title. Select a title to open another record.</p>
-          <div class="search-family-records">${rows || `<p>No related records available.</p>`}</div>
-        </section>`;
+      const count = record.family?.siblings?.length || 0;
+      return count ? `<details class="search-detail-panel search-detail-panel-wide search-family-panel" data-family-disclosure><summary><h3>Related records</h3><span>${count} with WMS ${escapeHtml(record.wmsId)}</span></summary><div class="search-family-records"></div></details>` : '';
     }
     function adminTagsPanelHtml(record) {
       const tags = adminTagsForRecord(record);
@@ -3253,7 +3251,7 @@
         contentKey: params.get("content_key") || ""
       };
     }
-    function writeSearchUrl({ query = "", record = null, identity = null, replace = true, route = "current", clearHash = null } = {}) {
+    function writeSearchUrl({ query = "", record = null, identity = null, replace = true, route = "current", clearHash = null, scoreMode = null } = {}) {
       const url = new URL(location.href);
       const selectedIdentity = record ? canonicalRecordIdentity(record) : normalizeSearchIdentity(identity || {});
       const onInventory = /\/inventory(?:\/index\.html)?\/?$/i.test(url.pathname) || url.searchParams.get('view') === 'inventory';
@@ -3267,6 +3265,8 @@
         url.pathname = new URL(location.protocol === 'file:' ? 'index.html' : destination + '/', document.baseURI).pathname;
         url.searchParams.delete("view");
       }
+      if (selectedIdentity.livelabsId) url.searchParams.set('score_context', scoreMode || scoreContext());
+      else url.searchParams.delete('score_context');
       if (query) url.searchParams.set("q", query);
       else url.searchParams.delete("q");
       ["livelabs_id", "wms_id", "content_key"].forEach((parameter) => url.searchParams.delete(parameter));
@@ -3313,118 +3313,28 @@
       </section>`;
     }
     function qaReportOverlayHtml(record) {
-      const overlay = dashboardQaReportMerge?.overlay?.[String(record.livelabsId || "")];
-      if (!overlay) return "";
-      const counts = overlay.testCounts || {};
-      const priorities = overlay.priorityCounts || {};
-      const tests = Array.isArray(overlay.tests) ? overlay.tests : [];
-      const findings = Array.isArray(overlay.findings) ? overlay.findings : [];
-      const reportWarnings = Array.isArray(dashboardQaReportMerge.summary?.report?.warnings) ? dashboardQaReportMerge.summary.report.warnings : [];
-      const p1Findings = findings.filter((issue) => issue.priority === "P1");
-      const otherFindings = findings.filter((issue) => issue.priority !== "P1");
-      const totalTests = Number(counts.passed || 0) + Number(counts.failed || 0) + Number(counts.skipped || 0) + Number(counts.other || 0);
-      const score = overlay.jenkinsErrorScore == null ? "N/A" : Number(overlay.jenkinsErrorScore).toFixed(2);
-      const p1Blockers = Number(priorities.p1 || 0);
-      const p1Verify = Number(priorities.p1Verification || 0);
-      const p1Total = Math.max(p1Blockers + p1Verify, p1Findings.length);
-      const p2Issues = Number(priorities.p2 || 0);
-      const p3Issues = Number(priorities.p3 || 0);
-      const runStatus = overlay.runStatus || "N/A";
-      const itemStatus = overlay.itemStatus || "N/A";
-      const hasCountsWithoutDetails = !findings.length && (p1Total > 0 || p2Issues > 0 || p3Issues > 0 || Number(overlay.findingRows || 0) > 0);
-      const countPhrase = (count, singular, plural = `${singular}s`) => `${count} ${count === 1 ? singular : plural}`;
-      const detailCount = [findings.length ? countPhrase(findings.length, "finding") : "", tests.length ? countPhrase(tests.length, "test") : "", Number(overlay.findingRows || 0) ? countPhrase(Number(overlay.findingRows || 0), "issue row") : ""].filter(Boolean).join(" · ") || "Run summary";
-      const recordKey = String(record.livelabsId || "item").replace(/[^a-zA-Z0-9_-]/g, "-");
-      let helpSequence = 0;
-      const help = (label, description) => {
-        const id = `qa-help-${recordKey}-${++helpSequence}`;
-        return `<span class="qa-help-wrap"><abbr class="qa-help-trigger" tabindex="0" aria-label="About ${escapeHtml(label)}" aria-describedby="${escapeHtml(id)}">i</abbr><span class="qa-help-tooltip" id="${escapeHtml(id)}" role="tooltip">${escapeHtml(description)}</span></span>`;
-      };
-      const tooltipLabel = (label, description) => {
-        const id = `qa-help-${recordKey}-${++helpSequence}`;
-        return `<span class="qa-help-wrap qa-help-text-wrap"><abbr class="qa-help-term" tabindex="0" aria-label="About ${escapeHtml(label)}" aria-describedby="${escapeHtml(id)}">${escapeHtml(label)}</abbr><span class="qa-help-tooltip" id="${escapeHtml(id)}" role="tooltip">${escapeHtml(description)}</span></span>`;
-      };
-      const labeled = tooltipLabel;
-      const detailField = (label, value, description, wide = false) => `<div${wide ? " class=\"qa-detail-wide\"" : ""}><dt>${labeled(label, description)}</dt><dd>${escapeHtml(value == null || value === "" ? "N/A" : String(value))}</dd></div>`;
-      const timestampField = (label, value, description) => {
-        const timestamp = value == null || value === "" ? "" : String(value);
-        const parts = timestamp.match(/^(\d{4}-\d{2}-\d{2})T(.+)$/);
-        if (!parts) return detailField(label, timestamp || "N/A", description);
-        return `<div><dt>${labeled(label, description)}</dt><dd><time class="qa-timestamp" datetime="${escapeHtml(timestamp)}"><span>${escapeHtml(parts[1])}</span><span>${escapeHtml(parts[2])}</span></time></dd></div>`;
-      };
-      const priorityHelp = {
-        P1: "Urgent: this may stop a learner, such as a broken required link or a step they cannot complete. Review the evidence, then fix it or ask a reviewer. P1 is handled separately from the score.",
-        P2: "Fix next. Examples include a typo, grammar issue, or Markdown problem. Each P2 occurrence counts twice as much as a P3 occurrence in the error score.",
-        P3: "Minor cleanup with little effect on the learner, such as wording polish that does not change a step or result. Each P3 occurrence counts half as much as a P2 occurrence in the error score."
-      };
-      const findingCards = (items) => `<div class="qa-evidence-list">${items.map((issue) => {
-        const priority = issue.priority || "N/A";
-        const priorityLabel = issue.priorityLabel || "Unmapped · review";
-        const issueType = issue.label || issue.code || "Unclassified";
-        const source = issue.file ? `${issue.file}${issue.line ? `:${issue.line}` : ""}` : (issue.section || "N/A");
-        const priorityDescription = priorityHelp[priority] || "Priority was not mapped from the report. Review the finding details with a reviewer.";
-        return `<article class="qa-evidence-card"><div class="qa-evidence-card-heading"><h5>${escapeHtml(issueType)}</h5><span class="qa-priority-chip">${tooltipLabel(priorityLabel, priorityDescription)}</span></div><dl class="qa-evidence-grid">
-          ${detailField("QA severity", issue.severity || "N/A", "Severity assigned by the QA check. The P1, P2, and P3 priority describes how urgently an author should act.")}
-          ${detailField("Occurrences", Number(issue.count || 0), "How many times this finding was reported. One issue row can represent multiple occurrences.")}
-          ${detailField("Reported finding", issue.message || "N/A", "The finding text supplied by the report. Use it to locate the affected instruction or content.", true)}
-          ${detailField("Test source", source, "The file and line, or report section, where the check found this issue.")}
-          ${detailField("Evidence status", issue.evidenceStatus || "Needs review", "Whether the report includes enough detail to confirm and act on this finding.")}
-        </dl></article>`;
-      }).join("")}</div>`;
-      const testCards = `<div class="qa-evidence-list">${tests.map((test) => `<article class="qa-evidence-card qa-test-card"><h5>${escapeHtml(test.title || "Untitled test")}</h5><dl class="qa-evidence-grid">
-        ${detailField("Result", test.status || "N/A", "What the automated check reported for this run.")}
-        ${detailField("Expected", test.expectedStatus || "N/A", "The result the check expected.")}
-        ${detailField("Classification", test.classification || "N/A", "The report's category for this check.")}
-        ${detailField("Issues", test.issueCodes || "N/A", "Issue codes linked to this test, when the report provides them.")}
-      </dl></article>`).join("")}</div>`;
-      const runLabel = (label, description) => `<span class="qa-run-label">${tooltipLabel(label, description)}:</span>`;
-      const scoreHelp = "Weights each P2 occurrence twice as much as a P3 occurrence, then scales the total issue burden. P1 is handled separately. This is not the percentage of failed tests; higher means more P2/P3 issues. N/A means the report's priorities could not be mapped.";
-      const p2Occurrences = Number(priorities.p2Occurrences || 0);
-      const p3Occurrences = Number(priorities.p3Occurrences || 0);
-      const p1Detail = !p1Total ? "None reported" : (p1Blockers + p1Verify > 0 ? `${countPhrase(p1Blockers, "learner blocker")} · ${countPhrase(p1Verify, "finding to verify", "findings to verify")}` : countPhrase(p1Total, "P1 finding"));
-      return `<section class="search-detail-panel search-detail-panel-wide qa-report-overlay" data-qa-report-overlay>
-        <div class="qa-report-heading"><div><h3>Jenkins test results ${help("Jenkins test results", "Jenkins runs automated checks on workshops and sprints and reports test results and content findings.")}</h3></div><span class="qa-score-badge"><span>${labeled("Jenkins error score", scoreHelp)}</span><strong>${escapeHtml(score)}</strong></span></div>
-        <p class="note">Automated checks flag issues in workshops and sprints. Review P1 first; P2 and P3 affect the score.</p>
-        <dl class="qa-signal-grid" aria-label="Jenkins issue priorities">
-          <div data-priority="P1"><dt>${labeled("P1 · urgent", priorityHelp.P1)}</dt><dd>${p1Total}</dd><span class="qa-signal-detail">${p1Detail}</span></div>
-          <div data-priority="P2"><dt>${labeled("P2 · fix next", priorityHelp.P2)}</dt><dd>${countPhrase(p2Issues, "finding")} · ${countPhrase(p2Occurrences, "occurrence")}</dd></div>
-          <div data-priority="P3"><dt>${labeled("P3 · minor", priorityHelp.P3)}</dt><dd>${countPhrase(p3Issues, "finding")} · ${countPhrase(p3Occurrences, "occurrence")}</dd></div>
-        </dl>
-        <p class="qa-run-summary"><span>${runLabel("Run", "The overall result of the Jenkins job that ran the checks.")} <strong>${escapeHtml(runStatus)}</strong></span><span>${runLabel("Item", "The result Jenkins reported for this workshop or sprint in the report.")} <strong>${escapeHtml(itemStatus)}</strong></span><span>${runLabel("Tests", "Counts checks reported as passed, failed, or skipped. These counts do not directly set the error score.")} <strong>${Number(counts.passed || 0)} passed · ${Number(counts.failed || 0)} failed · ${Number(counts.skipped || 0)} skipped</strong></span></p>
-        ${hasCountsWithoutDetails ? `<p class="qa-status-note">The report has summary counts but no item-level findings to review.</p>` : ""}
-        <details class="search-disclosure qa-report-detail"><summary><span class="qa-detail-summary-title">Full report details ${help("Full report details", "Run times, finding counts, and item-level evidence copied from the Jenkins report.")}</span><span class="search-disclosure-count">${escapeHtml(detailCount)}</span></summary><div class="search-disclosure-body">
-          <dl class="qa-run-details">
-            ${timestampField("Started", overlay.startedAt, "When Jenkins started this run.")}
-            ${timestampField("Report applied", dashboardQaReportMerge.appliedAt, "When this report was added to the Analytics view.")}
-            ${detailField("Issue rows", Number(overlay.findingRows || 0), "Finding entries in the imported report. A row may include more than one occurrence.")}
-            ${detailField("Reported occurrences", Number(overlay.findingOccurrences || 0), "Total number of times findings were reported across the issue rows.")}
-            ${detailField("Tests reported", totalTests, "Total checks counted as passed, failed, skipped, or another reported status.")}
-            ${detailField("Internal QA only", Number(priorities.internalQa || 0), "Findings reserved for the QA team, rather than author action items.")}
-          </dl>
-          ${p1Findings.length ? `<div class="qa-report-detail-group"><h4>${tooltipLabel("P1 findings", "Urgent findings that may stop learners. Review these first and confirm the evidence.")}</h4>${findingCards(p1Findings)}</div>` : ""}
-          ${otherFindings.length ? `<div class="qa-report-detail-group"><h4>${tooltipLabel("Other findings", "P2 findings need a fix next. P3 findings are lower-impact cleanup. Both contribute to the error score.")}</h4>${findingCards(otherFindings)}</div>` : ""}
-          ${tests.length ? `<details class="search-disclosure qa-test-details"><summary><span class="qa-detail-summary-title">Test case details ${help("Test case details", "Per-test results and any issue codes linked to each check.")}</span><span class="search-disclosure-count">${tests.length} tests</span></summary><div class="search-disclosure-body">${testCards}</div></details>` : ""}
-          ${reportWarnings.length ? `<div class="qa-report-warnings"><strong>${labeled("Report notes", "Notes supplied with the imported report that may affect how its evidence should be read.")}</strong><p class="note">${reportWarnings.map(escapeHtml).join(" ")}</p></div>` : ""}
-        </div></details>
-      </section>`;
+      return window.LiveLabsAuthor.evidenceHtml(jenkinsOverlayForId(record.livelabsId));
     }
-    function renderSearchDetail(record, { updateUrl = true } = {}) {
+    function renderSearchDetail(record, { updateUrl = true, scoreMode = null } = {}) {
       if (updateUrl) {
-        writeSearchUrl({ query: "", record, replace: false, route: "search" });
+        writeSearchUrl({ query: "", record, replace: false, route: "search", scoreMode });
         clearGlobalSearchUi();
         document.body.classList.remove("dashboard-inventory-active", "dashboard-tops-active");
       }
       const view = ensureSearchView();
-      const summaryItems = summaryItemsFor(record);
+      const score = recordScore(record);
+      const summaryItems = [['Score', score == null ? 'N/A' : score.toFixed(2)], ['LiveLabs ID', record.livelabsId || 'N/A'], ['WMS ID', record.wmsId || 'N/A'], ['Last update', record.update || 'Unknown']];
+      const scoreNote = scoreContext() === 'risk' ? 'Higher score means higher review priority.' : 'Higher score means stronger performance.';
       const governanceItems = governanceItemsFor(record);
       const updateLabels = new Set(["Update Evidence", "Latest GitHub Update", "Suggested Action", "Recommended Action", "Lifecycle State", "Workshop Path"]);
       const profileItems = governanceItems.filter(([label]) => !["WMS ID", "LiveLabs ID"].includes(label) && !updateLabels.has(label));
       const qaReportHtml = qaReportOverlayHtml(record);
+      const scoreEvidenceHtml = window.LiveLabsAuthor.scoreHtml(authorScoreBaselines[String(record.livelabsId)], jenkinsOverlayForId(record.livelabsId), scoreContext());
       const metaListHtml = (items) => items.length ? `<dl class="search-meta-list">${items.map(([label, value]) => {
         const wide = ["Latest GitHub Update", "Workshop Path"].includes(label) || String(value).length > 48;
         return `<div${wide ? ` class="wide"` : ""}><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`;
       }).join("")}</dl>` : `<p class="note">No details were reported in this group.</p>`;
-      const subtitle = [record.source || "Dashboard", record.status || "", record.ownership?.status === "disputed" ? "Ownership needs review" : record.owner ? `WMS reported owner: ${record.owner}` : ""].filter(Boolean).join(" | ");
+      const subtitle = [record.status || "", record.ownership?.status === "disputed" ? "Ownership needs review" : record.owner ? `WMS reported owner: ${record.owner}` : ""].filter(Boolean).join(" | ");
       view.innerHTML = `
         <div class="search-view-header">
           <div>
@@ -3432,21 +3342,20 @@
             <h2>${escapeHtml(record.title)}</h2>
             ${subtitle ? `<p class="search-view-subtitle">${escapeHtml(subtitle)}</p>` : ""}
           </div>
-          <span class="search-view-actions"><button class="nav-link" type="button" data-copy-search-link>Copy link</button><details class="report-export-dropdown"><summary class="nav-link">Export report <span aria-hidden="true">▾</span></summary><div class="report-export-options"><button type="button" data-export-search-xlsx>Excel (.xlsx)</button><button type="button" data-export-search-csv>CSV (.csv)</button></div></details><button class="nav-link" type="button" data-back-dashboard>Back to Dashboard</button></span>
+          <span class="search-view-actions">${window.LiveLabsAuthor.liveButton(record, jenkinsOverlayForId(record.livelabsId))}<button class="nav-link" type="button" data-copy-search-link>Copy link</button><details class="report-export-dropdown"><summary class="nav-link">Export report <span aria-hidden="true">▾</span></summary><div class="report-export-options"><button type="button" data-export-search-xlsx>Excel (.xlsx)</button><button type="button" data-export-search-csv>CSV (.csv)</button></div></details><button class="nav-link" type="button" data-back-dashboard>Back to Dashboard</button></span>
         </div>
-        <section class="search-summary-section" aria-label="Record summary"><h3 class="search-section-title">At a glance</h3><dl class="search-result-summary">
+        <details open class="search-detail-panel search-detail-panel-wide search-ownership-panel"><summary><h3>Ownership &amp; publishing</h3></summary>${metaListHtml(profileItems)}</details>
+        <section class="search-summary-section" aria-label="Record summary"><p class="author-score-note">${scoreNote}${score == null ? " Required score inputs are unavailable." : ""} P1 remains a separate priority.</p><dl class="search-result-summary">
           ${summaryItems.map(([label, value]) => `<div class="search-result-card"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}
         </dl></section>
-        <section class="search-detail-panel search-detail-panel-wide search-ownership-panel"><h3>Ownership &amp; publishing</h3>${metaListHtml(profileItems)}</section>
-        ${qaEvidenceHtml(record)}
+
         <div class="search-detail-grid${qaReportHtml ? " search-qa-source-grid" : ""}">
           ${qaReportHtml}
-          <section class="search-detail-panel search-detail-panel-wide search-source-panel" data-report-section>
-            <div class="panel-head"><h3>Source details</h3><span>Full record fields</span></div>
-            <p class="note">Open a group when you need the source values used in this view.</p>
+          ${scoreEvidenceHtml}
+          <details class="search-detail-panel search-detail-panel-wide search-source-panel" data-report-section><summary><h3>Source details</h3></summary>
             <details class="search-disclosure"><summary><span>Dashboard row</span><span class="search-disclosure-count">${record.values.size} fields</span></summary><div class="search-disclosure-body"><table class="search-detail-table"><tbody>${sourceRowsHtml(record)}</tbody></table></div></details>
             <details class="search-disclosure"><summary><span>Additional source fields</span><span class="search-disclosure-count">${record.details.size} fields</span></summary><div class="search-disclosure-body"><table class="search-detail-table"><tbody>${fieldRowsHtml(record)}</tbody></table></div></details>
-          </section>
+          </details>
         </div>
         <div class="search-detail-grid">
           ${fileUpdatesHtml(record)}
@@ -3484,6 +3393,12 @@
         closeExportDropdown();
         const identity = record.livelabsId ? `livelabs-${record.livelabsId}` : `wms-${record.wmsId || "result"}`;
         window.LiveLabsExport.xlsx(searchDetailReportRows(view), `${String(record.type || "content").toLowerCase()}-${identity}-report.xlsx`);
+      });
+      view.querySelector('[data-family-disclosure]')?.addEventListener('toggle', event => {
+        const disclosure = event.currentTarget;
+        if (!disclosure.open || disclosure.dataset.loaded) return;
+        disclosure.dataset.loaded = 'true';
+        disclosure.querySelector('.search-family-records').innerHTML = (record.family.siblings || []).map(item => `<a class="family-record" href="${recordLink(item, scoreContext())}"><strong>${escapeHtml(item.title || 'Related record')}</strong><span>LiveLabs ${escapeHtml(item.livelabsId)}</span></a>`).join('');
       });
       view.querySelectorAll("[data-family-search-key]").forEach((button) => {
         button.addEventListener("click", () => {
@@ -3557,20 +3472,14 @@
           : `${allMatches.length} matches`
         : "No matches";
       matches.forEach((record) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "search-result-button";
-        const familyNote = record.family?.total > 1 ? `Family ${record.family.total}` : "";
-        const tagNote = recordAdminTagText(record);
+        const result = document.createElement('article');
+        result.className = 'author-search-result';
         const overlay = jenkinsOverlayForId(record.livelabsId);
-        const findings = Array.isArray(overlay?.findings) ? overlay.findings : [];
-        const p1 = findings.filter((finding) => finding.priority === "P1").length;
-        const p2p3 = findings.filter((finding) => ["P2", "P3"].includes(finding.priority)).reduce((sum, finding) => sum + Math.max(1, Number(finding.count || 0)), 0);
-        const score = overlay?.jenkinsErrorScore != null && Number.isFinite(Number(overlay.jenkinsErrorScore)) ? `Jenkins Error Score ${Number(overlay.jenkinsErrorScore).toFixed(2)}` : "Jenkins Error Score N/A";
-        const jenkinsNote = overlay ? `${p1} P1 · ${p2p3} P2/P3 occurrences · ${score}` : "No Jenkins report attached";
-        button.innerHTML = `<strong>${escapeHtml(record.title)}</strong><span class="search-result-meta">${escapeHtml([record.category, record.wmsId ? `WMS ${record.wmsId}` : "", record.livelabsId ? `LiveLabs ${record.livelabsId}` : "", record.owner || "", tagNote ? `Tags: ${tagNote}` : "", familyNote].filter(Boolean).join(" | "))}</span><span class="search-result-jenkins">${escapeHtml(jenkinsNote)}</span>`;
-        button.addEventListener("click", () => renderSearchDetail(record));
-        resultsNode.appendChild(button);
+        const findings = overlay?.findings || [];
+        const score = recordScore(record, 'performance');
+        const priorities = ['P1','P2','P3'].map(priority => { const count = findings.filter(item => item.priority === priority).length; return count ? `${count} ${priority}` : ''; }).filter(Boolean).join(' · ');
+        result.innerHTML = `<div class="author-search-copy"><strong>${escapeHtml(record.title)}</strong><span>${escapeHtml(record.type)} · LiveLabs ${escapeHtml(record.livelabsId)}</span><span class="author-email" title="${escapeHtml(record.owner)}">${escapeHtml(record.owner)}</span><span>${escapeHtml(priorities || (overlay ? (findings.length ? 'Unclassified findings · review with QA' : 'No findings reported') : 'No QA report'))}</span></div><div class="author-search-score"><span>Score</span><strong>${score == null ? 'N/A' : score.toFixed(2)}</strong></div><div class="author-search-actions"><a class="author-button author-button-primary" href="${recordLink(record)}">Open record</a>${window.LiveLabsAuthor.liveButton(record, overlay)}</div>`;
+        resultsNode.append(result);
       });
     }
     function applyRankedTableDisclosures() {
@@ -3580,6 +3489,7 @@
         const disclosure = document.createElement("details");
         disclosure.className = "panel toggle-panel ranked-table-panel ranked-table-disclosure";
         disclosure.dataset.generatedDisclosure = "true";
+        disclosure.open = false;
         const summary = document.createElement("summary");
         summary.className = "panel-head";
         while (panelHead.firstChild) summary.appendChild(panelHead.firstChild);
@@ -4238,7 +4148,7 @@
       const records = publicRawRecords;
       const overlay = dashboardQaReportMerge?.overlay || {};
       const matched = Object.entries(overlay).filter(([id]) => publicLivelabsIds.has(String(id).trim()));
-      const scored = matched.filter(([, item]) => item?.jenkinsErrorScore != null && Number.isFinite(Number(item.jenkinsErrorScore)));
+      const scored = matched.filter(([, item]) => item?.findings?.some(finding => ["P2", "P3"].includes(finding.priority)));
       const p1Count = matched.reduce((total, [, item]) => total + (Array.isArray(item?.findings) ? item.findings.filter((finding) => finding.priority === "P1").length : 0), 0);
       const countByType = (type) => records.filter((record) => record.type === type).length;
       const values = {
@@ -4246,12 +4156,12 @@
         "jenkins-p1-count": p1Count,
         "workshop-count": countByType("Workshop"),
         "sprint-count": countByType("Sprint"),
-        "jenkins-scored-count": scored.length,
+        "error-items-count": scored.length,
         "p1-count": p1Count
       };
       Object.entries(values).forEach(([key, value]) => {
         document.querySelectorAll(`[data-overview-metric="${key}"], [data-public-stat="${key}"]`).forEach((node) => {
-          node.textContent = Number(value).toLocaleString();
+          node.textContent = ((key === "public-count" && !records.length) || (["jenkins-p1-count", "error-items-count"].includes(key) && !dashboardQaReportMerge)) ? "—" : Number(value).toLocaleString();
         });
       });
       const cohortNote = section.querySelector('[data-overview-note="public-breakdown"]');
@@ -4675,9 +4585,8 @@
       });
       loadFullSearchRecords().then(() => {
         applyPortfolioStatsSummary();
-        return fetch("/api/dashboard-admin-state", { cache: "no-store" });
+        return fetchDashboardState();
       })
-        .then((response) => response.ok ? response.json() : null)
         .then((payload) => {
           dashboardQaReportMerge = payload?.qaReportMerge || null;
           applyJenkinsDashboardMerge();

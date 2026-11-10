@@ -1,0 +1,28 @@
+@font-face {font-family:"Oracle Sans";src:url('/assets/fonts/OracleSans_Rg.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face {font-family:"Oracle Sans";src:url('/assets/fonts/OracleSans_SBd.ttf') format('truetype');font-weight:600;font-display:swap}
+@font-face {font-family:"Oracle Sans";src:url('/assets/fonts/OracleSans_Bd.ttf') format('truetype');font-weight:700;font-display:swap}
+:root {--bg:#faf8f6;--panel:#fff;--panel-soft:#f4f1ed;--text:#161513;--muted:#6b6560;--line:#dedad6;--link:#00688c;--fail:#b33124;--fail-bg:#fff0ed;--warn:#8a5900;--warn-bg:#fff4dc;--pass:#436b1d;--pass-bg:#eff5e9;--info:#315965;--info-bg:#edf3f4;}
+html,body,body.retest-page {font-family:"Oracle Sans",Arial,sans-serif;color:var(--text);background:var(--bg);line-height:1.5}
+button,input,select,textarea,.button,.review-nav a,.nav-actions a,.retest-page .button {font-family:inherit}
+body>header,.retest-page header {background:#312d2a;color:#fff;border-bottom:4px solid #c74634;padding:26px 28px}
+header .meta,header .muted,header .run-meta {color:#e8e2dc}
+header code {color:#161513;background:#f4f1ed}
+.analytics-archive-notice {padding:9px 28px;background:#f1ede8;border-bottom:1px solid var(--line);font-size:12px;color:#625d58}
+.analytics-archive-notice:empty {display:none}
+body>header {--text:#fff;--muted:#e6e0d9;}
+main,.retest-page main {max-width:1440px;padding:24px 28px 40px}
+.page-title {max-width:1384px}
+.review-nav a,.nav-actions a,.link-button,.button,.review-button {border-radius:4px;border-color:#c5bfb8;color:#312d2a;background:#fff}
+.review-nav a:hover,.nav-actions a:hover,.link-button:hover,.review-button:hover {background:#f3efeb;border-color:#6b6560}
+.button.primary {background:#c74634;border-color:#c74634;color:#fff}
+.button:disabled,button:disabled {opacity:.55;cursor:not-allowed}
+.result-row[open]>.result-summary,.result-row[open]>.result-summary:hover {background:#f1ede8;color:#312d2a}
+.result-row[open] {box-shadow:inset 4px 0 0 #c74634}
+.result-details {background:#fff}
+.result-summary:hover {background:#faf8f6}
+.section,.card,.stat,.metric {border-radius:8px;box-shadow:none}
+.operator-issue {border-radius:6px}
+input,select {background:#fff;color:#161513;border-color:#8c8783}
+:focus-visible {outline:2px solid #00688c;outline-offset:3px}
+.retest-page .item-reason,.retest-page .retest-queue-note {background:#f4f1ed;color:#625d58}
+@media(max-width:720px) {main,.retest-page main {padding:16px 12px}body>header,.retest-page header {padding:20px 16px}.analytics-archive-notice{padding:9px 16px}}

@@ -11,76 +11,61 @@
   <link rel="stylesheet" href="./assets/css/page-loading.css?v=20261009-loading">
   <link rel="icon" href="./assets/images/oracle-logo-white.svg" type="image/svg+xml">
 
-  <link rel="stylesheet" href="./assets/css/dashboard.css?v=20261102-search-detail-v9">
+  <link rel="stylesheet" href="./assets/css/dashboard.css?v=20261108-evidence-v3">
 
 </head>
 <body>
   <a class="skip-link" href="#dashboard-top">Skip to dashboard content</a>
   <div class="sr-only" id="copy-status" role="status" aria-live="polite" aria-atomic="true"></div>
   <div class="layout">
-    <aside class="rail"><div class="brand">
-<a class="brand-mark" href="#overview" data-dashboard-home aria-label="Back to LiveLabs Analytics dashboard"><img src="./assets/images/oracle-logo-white.svg" alt="Oracle"></a><span>LiveLabs Analytics</span>
+    <aside class="rail" id="analytics-menu" aria-label="Main menu" aria-hidden="true" inert><div class="brand">
+<a class="brand-mark" href="/dashboard/?view=performance" data-dashboard-home aria-label="Back to LiveLabs Analytics dashboard"><img src="./assets/images/oracle-logo-white.svg" alt="Oracle"></a><span>LiveLabs Analytics</span>
 </div>
 <section class="sidebar-search" aria-label="Search"><label for="global-workshop-search">Search</label><span class="search-box"><input id="global-workshop-search" type="search" autocomplete="off" placeholder="Title, ID, author, keyword"><button class="search-clear-button" type="button" data-search-clear aria-label="Clear search" hidden><svg viewbox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"></path></svg></button></span><div class="search-status" data-search-status role="status" aria-live="polite" aria-atomic="true" hidden></div>
-<div class="search-results" data-search-results></div></section><button class="sidebar-back-button" type="button" data-back-dashboard hidden>Back to Dashboard</button><nav class="nav-list" aria-label="Analytics pages"><a href="/dashboard/" aria-current="true" data-dashboard-view="overview"><svg class="nav-icon" viewbox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7"></rect><rect x="13" y="4" width="7" height="7"></rect><rect x="4" y="13" width="7" height="7"></rect><rect x="13" y="13" width="7" height="7"></rect></svg><span>Overview</span></a><a href="/dashboard/?view=performance" data-dashboard-view="performance"><svg class="nav-icon" viewbox="0 0 24 24" aria-hidden="true"><path d="M4 19h16"></path><path d="M6 16l4-5 4 3 4-7"></path><path d="M16 7h2v2"></path></svg><span>Top Performers</span></a><a href="/dashboard/?view=errors" data-dashboard-view="errors"><svg class="nav-icon" viewbox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.8-3 8.1-7 10-4-1.9-7-5.2-7-10V6l7-3z"></path><path d="M9 12l2 2 4-5"></path></svg><span>Errors &amp; fixes</span></a><a href="/dashboard/?view=retirement" data-dashboard-view="retirement"><svg class="nav-icon" viewbox="0 0 24 24" aria-hidden="true"><path d="M5 7h14"></path><path d="M8 7V5h8v2"></path><path d="M7 10v8c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2v-8"></path><path d="M10 12v5"></path><path d="M14 12v5"></path></svg><span>Retirement</span></a><a href="/dashboard/?view=stats" data-dashboard-view="stats"><svg class="nav-icon" viewbox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"></path><path d="M14 3v5h5"></path><path d="M9 13h6"></path><path d="M9 17h6"></path></svg><span>Portfolio Stats</span></a></nav><a class="admin-entry-button" href="./admin/" data-admin-link hidden><svg class="admin-entry-icon" viewbox="0 0 24 24" aria-hidden="true"><path d="M12 3v3"></path><path d="M12 18v3"></path><path d="M4.9 4.9l2.1 2.1"></path><path d="M17 17l2.1 2.1"></path><path d="M3 12h3"></path><path d="M18 12h3"></path><circle cx="12" cy="12" r="4"></circle></svg><span>Admin Panel</span></a></aside>
+<div class="search-results" data-search-results></div></section><button class="sidebar-back-button" type="button" data-back-dashboard hidden>Back to Dashboard</button><nav class="nav-list" aria-label="Analytics pages"><a href="/dashboard/?view=performance" aria-current="true" data-dashboard-view="performance"><svg class="nav-icon" viewbox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7"></rect><rect x="13" y="4" width="7" height="7"></rect><rect x="4" y="13" width="7" height="7"></rect><rect x="13" y="13" width="7" height="7"></rect></svg><span>Dashboard</span></a></nav><a class="admin-entry-button" href="./admin/" data-admin-link hidden><svg class="admin-entry-icon" viewbox="0 0 24 24" aria-hidden="true"><path d="M12 3v3"></path><path d="M12 18v3"></path><path d="M4.9 4.9l2.1 2.1"></path><path d="M17 17l2.1 2.1"></path><path d="M3 12h3"></path><path d="M18 12h3"></path><circle cx="12" cy="12" r="4"></circle></svg><span>Admin Panel</span></a></aside>
     <main id="dashboard-top" tabindex="-1">
       <header class="page-header" id="overview" data-dashboard-page="all">
         <div>
           <div class="hero-logo" aria-label="LiveLabs"><img src="./assets/images/livelabs-logo-white.svg" alt="LiveLabs"></div>
           <h1>LiveLabs Analytics</h1>
           <p class="intro">Find public workshops and sprints. Check their recent activity and review status.</p>
-          <p class="intro snapshot-date" title="Analytics source snapshot: 28 September 2026. Jenkins evidence reflects the report applied in Admin.">Data snapshot: 28 September 2026.</p>
         </div>
       </header>
-      <div class="hero-stripe" aria-hidden="true" data-dashboard-page="overview"></div>
-      <section class="metric-band" aria-label="Public portfolio signals" data-dashboard-page="overview"><div class="metric-card">
-<span>Public and published</span><strong data-overview-metric="public-count">—</strong><small>Current author-facing cohort</small>
-</div>
-<div class="metric-card">
-<span>Jenkins matched items</span><strong data-overview-metric="jenkins-match-count">—</strong><small>Matched report evidence in this cohort</small>
-</div>
-<div class="metric-card">
-<span>P1 findings</span><strong data-overview-metric="jenkins-p1-count">—</strong><small>Urgent items in the applied report</small>
-</div></section><div class="cards overview-performer-cards" data-dashboard-page="overview">
-<div class="card compact-card performer-summary-card">
-<span>Top Performer Workshop</span><strong data-top-performer="workshop">Loading public ranking…</strong><p data-top-performer-meta="workshop">Ranked from public and published data.</p>
-</div>
-<div class="card compact-card performer-summary-card">
-<span>Top Performer Sprint</span><strong data-top-performer="sprint">Loading public ranking…</strong><p data-top-performer-meta="sprint">Ranked from public and published data.</p>
-</div>
-<div class="card compact-card p1-summary-card">
-<span>P1 reviewer actions</span><strong data-public-p1-count="true">Loading…</strong><p>Open the P1 urgent action tab to review findings.</p>
-</div>
-</div>
-
- <section class="section lazy-section" id="top-performers" data-dashboard-page="performance" data-lazy-section="top-performers" data-lazy-src="./assets/fragments/top-performers.html" aria-busy="true"><div class="section-head">
+      <div class="hero-stripe" aria-hidden="true" data-dashboard-page="all"></div>
+      <section class="overview-portfolio-stats" id="portfolio-stats" data-dashboard-page="all" aria-label="Portfolio statistics">
+  <div class="metric-band" aria-label="Public portfolio signals" data-public-stats="true">
+    <article class="metric-card"><span>Public and published</span><strong data-overview-metric="public-count">—</strong><small data-overview-note="public-breakdown">Workshop and sprint counts</small></article>
+    <article class="metric-card"><span>P1 findings to review</span><strong data-overview-metric="jenkins-p1-count">—</strong><small>Check learner blockers first</small></article>
+    <article class="metric-card"><span>Items with errors</span><strong data-overview-metric="error-items-count">—</strong><small>Items with P2 or P3 findings</small></article>
+  </div>
+</section>
+<nav class="dashboard-tabs" role="tablist" aria-label="Dashboard sections" data-dashboard-page="all">
+  <button id="dashboard-tab-performance" type="button" role="tab" aria-selected="true" aria-controls="top-performers" data-dashboard-tab="performance">Top Performers</button>
+  <button id="dashboard-tab-urgent" type="button" role="tab" aria-selected="false" aria-controls="jenkins-p1-slot" data-dashboard-tab="urgent" tabindex="-1">P1 urgent action</button>
+  <button id="dashboard-tab-at-risk" type="button" role="tab" aria-selected="false" aria-controls="at-risk-content" data-dashboard-tab="at-risk" tabindex="-1">At-risk</button>
+  <button id="dashboard-tab-retirement" type="button" role="tab" aria-selected="false" aria-controls="retire-now-content" data-dashboard-tab="retirement" tabindex="-1">Retirement review</button>
+</nav>
+<section class="section lazy-section dashboard-tab-panel" id="top-performers" role="tabpanel" aria-labelledby="dashboard-tab-performance" tabindex="0" data-dashboard-page="performance" data-lazy-section="top-performers" data-lazy-src="./assets/fragments/top-performers.html?v=20261106-author-report-v2" aria-busy="true"><div class="section-head">
 <div class="section-head-top"><h2>Top Performers</h2></div>
-<p>Compare public workshops and sprints by views and update freshness.</p>
+<p>Explore content ranked by demand, freshness and QA results.</p>
 </div>
-<div class="lazy-section-panel"><p class="lazy-section-status" role="status">Loading review queue in the background...</p></div></section><div id="jenkins-p1-slot" data-dashboard-page="errors"></div>
-
- <section class="section lazy-section" id="at-risk-content" data-dashboard-page="errors" data-lazy-section="at-risk-content" data-lazy-src="./assets/fragments/at-risk-content.html" aria-busy="true"><div class="section-head">
-<div class="section-head-top"><h2>At-Risk Content</h2></div>
-<p>Review public content with lower demand, older updates, or missing author details. Scores help prioritize review; they do not make changes automatically.</p>
+<div class="lazy-section-panel"><p class="lazy-section-status" role="status">Loading performance tables…</p></div></section>
+<section id="jenkins-p1-slot" class="section dashboard-tab-panel" role="tabpanel" aria-labelledby="dashboard-tab-urgent" tabindex="0" data-dashboard-page="urgent" hidden></section>
+<section class="section lazy-section dashboard-tab-panel" id="at-risk-content" role="tabpanel" aria-labelledby="dashboard-tab-at-risk" tabindex="0" data-dashboard-page="at-risk" data-lazy-section="at-risk-content" data-lazy-src="./assets/fragments/at-risk-content.html?v=20261106-author-report-v2" aria-busy="true" hidden><div class="section-head">
+<div class="section-head-top"><h2>At-risk</h2></div>
+<p>Review content by demand, age and QA findings.</p>
 </div>
-<div class="lazy-section-panel"><p class="lazy-section-status" role="status">Loading review queue in the background...</p></div></section>
- <section class="section lazy-section" id="retire-now-content" data-dashboard-page="retirement" data-lazy-section="retire-now-content" data-lazy-src="./assets/fragments/retire-now-content.html" aria-busy="true"><div class="section-head">
-<div class="section-head-top"><h2>Retire-Now Content</h2></div>
-<p>Review public workshops and sprints with low demand and no recent meaningful update. Confirm any retirement decision with the content owner.</p>
+<div class="lazy-section-panel"><p class="lazy-section-status" role="status">Loading at-risk tables…</p></div></section>
+<section class="section lazy-section dashboard-tab-panel" id="retire-now-content" role="tabpanel" aria-labelledby="dashboard-tab-retirement" tabindex="0" data-dashboard-page="retirement" data-lazy-section="retire-now-content" data-lazy-src="./assets/fragments/retire-now-content.html?v=20261106-author-report-v2" aria-busy="true" hidden><div class="section-head">
+<div class="section-head-top"><h2>Retirement review</h2></div>
+<p>Review removal requests and low-demand content before deciding what to retire.</p>
 </div>
-<div class="lazy-section-panel"><p class="lazy-section-status" role="status">Loading review queue in the background...</p></div></section>
- <section class="section portfolio-statistics-section" data-dashboard-page="overview stats" id="portfolio-stats"><div class="section-head">
-<div class="section-head-top"><h2>Portfolio Stats</h2></div>
-<p>A concise view of the public and published cohort and its available Jenkins evidence.</p>
-</div>
-<div class="portfolio-stats-grid" data-public-stats="true">
-<article class="portfolio-stat-card"><span>Published workshops</span><strong data-public-stat="workshop-count">—</strong></article><article class="portfolio-stat-card"><span>Published sprints</span><strong data-public-stat="sprint-count">—</strong></article><article class="portfolio-stat-card"><span>Items with Jenkins evidence</span><strong data-public-stat="jenkins-covered-count">—</strong></article><article class="portfolio-stat-card"><span>Items with Jenkins Error Score</span><strong data-public-stat="jenkins-scored-count">—</strong></article><article class="portfolio-stat-card"><span>P1 findings to review</span><strong data-public-stat="p1-count">—</strong></article><article class="portfolio-stat-card"><span>No Jenkins report</span><strong data-public-stat="no-report-count">—</strong></article>
-</div>
-<p class="note public-scope-note">Scope: publish type Public and publish status Published. Disabled, private, event, and unpublished records are available only in Admin Inventory.</p></section><footer class="site-footer">Powered by Oracle LiveLabs Team © 2026</footer>
+<div class="lazy-section-panel"><p class="lazy-section-status" role="status">Loading retirement tables…</p></div></section><footer class="site-footer">Powered by Oracle LiveLabs Team © 2026</footer>
     </main>
   </div>
 
   <script src="./assets/js/report-export.js?v=20261009-admin-review"></script>
-  <script src="./assets/js/dashboard.js?v=20261102-search-detail-v9"></script>
+  <script src="./assets/js/author-report.js?v=20261108-evidence-validity-v3"></script>
+  <script src="./assets/js/dashboard.js?v=20261108-evidence-validity-v3"></script>
   </body>
 </html>

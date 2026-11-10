@@ -7,13 +7,16 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
-const fileFallbackBuilder = path.join(root, "dev", "scripts", "build-file-inventory-fallback.mjs");
 const args = process.argv.slice(2);
 const outputFlag = args.indexOf("--output");
 const replaceExisting = args.includes("--replace");
+const stateFlag = args.indexOf('--dashboard-state');
+if (stateFlag >= 0 && !args[stateFlag + 1]) throw new Error('--dashboard-state requires a reviewed public export.');
+const stateInput = stateFlag >= 0 ? path.resolve(root, args[stateFlag + 1]) : null;
+const includeFileFallback = args.includes("--include-file-fallback");
 
 if (args.includes("--help") || args.includes("-h")) {
-  console.log("Usage: node scripts/build-static-release.mjs --output <directory> [--replace]");
+  console.log("Usage: node dev/scripts/build-static-release.mjs --output <directory> [--replace] [--include-file-fallback] [--dashboard-state <public-export.json>]");
   console.log("Builds in a sibling staging directory, verifies the manifest, then atomically promotes the result.");
   console.log("Existing output is preserved unless --replace is explicit; replacement keeps a dated previous directory.");
   process.exit(0);
@@ -26,19 +29,18 @@ if (fs.existsSync(output) && !replaceExisting) {
   throw new Error(`Release output already exists: ${output}. Use a new immutable path or pass --replace for a recoverable local replacement.`);
 }
 
-childProcess.execFileSync(process.execPath, [path.join(root, "dev", "scripts", "build-public-inventory.mjs")], { cwd: root, stdio: "inherit" });
+// Packaging must never regenerate reviewed source pages, data or fragments.
+childProcess.execFileSync("python", [path.join(root, "dev/scripts/build-author-reports.py"), "--check"], {cwd: root, stdio: "inherit"});
+childProcess.execFileSync("python", [path.join(root, "dev/scripts/build-page-entrypoints.py"), "--check"], { cwd: root, stdio: "inherit" });
+childProcess.execFileSync(process.execPath, [path.join(root, "dev/scripts/build-public-inventory.mjs"), "--check"], { cwd: root, stdio: "inherit" });
 const publicInventory = path.join(root, "inventory", "data", "public_portfolio_inventory.json");
-childProcess.execFileSync("python", [
-  path.join(root, "dev", "scripts", "refresh-top-performers.py"),
-  "--inventory", publicInventory,
-  "--snapshot-date", "2026-09-28",
-], { cwd: root, stdio: "inherit" });
-childProcess.execFileSync("python", [path.join(root, "dev", "scripts", "build-public-review-fragments.py")], { cwd: root, stdio: "inherit" });
-childProcess.execFileSync(process.execPath, [fileFallbackBuilder], { cwd: root, stdio: "inherit" });
-// Keep the directory entry identical to the dashboard, with assets based at its parent.
-for (const entry of ['dashboard', 'search']) {
-  fs.mkdirSync(path.join(root, entry), { recursive: true });
-  fs.writeFileSync(path.join(root, entry, 'index.html'), fs.readFileSync(path.join(root, 'index.html'), 'utf8').replace('<head>', '<head>\n  <base href="../">'));
+const sourcePayload = JSON.parse(fs.readFileSync(path.join(root, "inventory/data/portfolio_inventory.json"), "utf8"));
+const publicPayload = JSON.parse(fs.readFileSync(publicInventory, "utf8"));
+const eligibility = JSON.parse(childProcess.execFileSync('python', [path.join(root, 'dev/scripts/dashboard_policy.py')], {encoding:'utf8'}));
+const expectedKeys = eligibility.keys.sort();
+const observedKeys = publicPayload.records.map(r => r.key).sort();
+if (JSON.stringify(expectedKeys) !== JSON.stringify(observedKeys) || sourcePayload.metadata.snapshot_date !== publicPayload.metadata.snapshot_date) {
+  throw new Error("Public projection does not match the source cohort and date; refresh and review data before packaging.");
 }
 
 const releaseInputs = [
@@ -49,7 +51,7 @@ const releaseInputs = [
   { source: "dev/config/release-manifest.json", target: "release-manifest.json" },
   { source: "assets", target: "assets" },
   { source: "inventory/data/public_portfolio_inventory.json", target: "inventory/data/public_portfolio_inventory.json" },
-  { source: "inventory/data/portfolio_inventory.file.js", target: "inventory/data/portfolio_inventory.file.js" },
+  ...(includeFileFallback ? [{ source: "inventory/data/portfolio_inventory.file.js", target: "inventory/data/portfolio_inventory.file.js" }] : []),
 ];
 const staging = `${output}.staging-${process.pid}-${Date.now()}`;
 
@@ -98,13 +100,30 @@ function verifyManifest(directory) {
 
 let previousOutput = null;
 try {
+  fs.mkdirSync(path.dirname(output), {recursive: true});
   fs.mkdirSync(staging, { recursive: false });
   for (const { source: sourceRelativePath, target: targetRelativePath } of releaseInputs) {
     const source = path.join(root, sourceRelativePath);
     const target = path.join(staging, targetRelativePath);
     if (!fs.existsSync(source)) throw new Error(`Missing release input: ${sourceRelativePath}`);
     fs.mkdirSync(path.dirname(target), { recursive: true });
-    fs.cpSync(source, target, { recursive: true });
+    fs.cpSync(source, target, { recursive: true, filter: file => path.resolve(file) !== path.join(root, 'assets/data/dashboard-state.json') });
+  }
+
+  let stateEvidence = null;
+  if (stateInput) {
+    const state = JSON.parse(fs.readFileSync(stateInput, 'utf8'));
+    const evidence = state.releaseEvidence;
+    const overlay = state.qaReportMerge?.overlay;
+    const publicIds = new Set(publicPayload.records.map(r => String(r.livelabsId)));
+    if (!evidence || evidence.inventorySha256 !== sha256(publicInventory) || evidence.snapshotDate !== publicPayload.metadata.snapshot_date
+      || evidence.scoreValidityVersion !== 2 || !overlay || !Object.keys(overlay).length
+      || Object.entries(overlay).some(([id, item]) => !publicIds.has(id) || item.scoreValidityVersion !== 2
+        || (item.scoreState !== 'scored' && item.jenkinsErrorScore !== null))) {
+      throw new Error('Jenkins export is stale, outside the public cohort, or lacks current score validity. Re-export from the reviewed local service.');
+    }
+    fs.copyFileSync(stateInput, path.join(staging, 'assets/data/dashboard-state.json'));
+    stateEvidence = evidence;
   }
 
   const manifestPath = path.join(staging, "release-manifest.json");
@@ -128,7 +147,17 @@ try {
     wms_metadata_fallback_records: records.filter(record => !record.sourceFlags?.github_update_evidence_available).length,
   };
   manifest.admin_service = { runtime: "separate authenticated service", entry_point: "/admin", dashboard_management_page: "/admin/dashboard-management", inventory_page: "/admin/inventory", full_inventory_in_static_bundle: false, included_in_static_bundle: false };
+  manifest.file_url_fallback_included = includeFileFallback;
+  manifest.jenkins_delivery = stateEvidence ? {mode: 'reviewed static projection', static_overlay_included: true, evidence: stateEvidence} : { mode: "live API required", static_overlay_included: false, note: "The saved Jenkins overlay is not part of this static package. Export a reviewed cohort-scoped snapshot or route the API through an authenticated service before promotion." };
+  manifest.canonical_page = "dashboard/index.html";
+  manifest.packaging_mutates_source = false;
   manifest.release_files = releaseFileEntries(staging);
+  for (const file of manifest.release_files.filter(file => /\.(html|js|json|css)$/i.test(file.path))) {
+    const text = fs.readFileSync(path.join(staging, file.path), "utf8");
+    if (/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|https?:\/\/[^\s"<>]*objectstorage[^\s"<>]*\/p\/[A-Za-z0-9_-]{12,}\/|\bghp_[A-Za-z0-9]{30,}/i.test(text)) {
+      throw new Error(`Access-bearing material found in ${file.path}; release was not promoted.`);
+    }
+  }
   const contentIdentity = crypto.createHash("sha256").update(JSON.stringify(manifest.release_files)).digest("hex").slice(0, 16);
   const version = String(manifest.bundle_version || "unversioned").replace(/[^a-z0-9._-]+/gi, "-");
   manifest.release_id = `${version}-${contentIdentity}`;

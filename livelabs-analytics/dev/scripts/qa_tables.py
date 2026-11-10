@@ -72,7 +72,7 @@ def qa_detail(qa,baseline,adjusted,kind,target_qa=None):
 def top_fragments(payload, root):
     spec=spec_from_file_location('top_policy',root/'dev/scripts/refresh-top-performers.py')
     mod=module_from_spec(spec);spec.loader.exec_module(mod)
-    # Existing generator truncates to 100; score the entire eligible pool first.
+    # The historical pilot applies QA to the entire eligible pool before its cutoff.
     fragments=[]; baseline={}
     for typ in ('Workshop','Sprint'):
         records=[x for x in payload['records'] if x.get('type')==typ and x.get('publishStatus')=='Published'
@@ -84,7 +84,7 @@ def top_fragments(payload, root):
             c={'recent_views_12m_content_percentile':mod.percentile(views['recent_views_12m'],v12),
                'recent_views_90d_content_percentile':mod.percentile(views['recent_views_90d'],v90),
                'top_performer_freshness_score':mod.freshness_score(record,date.fromisoformat(payload['metadata']['snapshot_date']))}
-            score=round(.45*c['recent_views_12m_content_percentile']+.35*c['recent_views_90d_content_percentile']+.2*c['top_performer_freshness_score'],2)
+            score=mod.baseline_score(c['recent_views_12m_content_percentile'],c['recent_views_90d_content_percentile'],c['top_performer_freshness_score'])
             scored.append((record,score,c))
         scored.sort(key=lambda x:(-x[1],x[0]['title'].lower(),str(x[0].get('livelabsId'))))
         table_id='top-performer-top-100-'+typ.lower()+'s'

@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 from collections import Counter
 import json
+from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
 from lxml import html
@@ -35,12 +36,10 @@ def audit_top(path: Path) -> tuple[int, int, list[str]]:
         for row in table.xpath(".//tbody/tr[@data-filter-row='true']"):
             values = detail_map(row)
             try:
-                expected = round(
-                    0.45 * number(values["recent_views_12m_content_percentile"])
-                    + 0.35 * number(values["recent_views_90d_content_percentile"])
-                    + 0.20 * number(values["top_performer_freshness_score"]),
-                    2,
-                )
+                demand = Decimal('.45') * Decimal(values['recent_views_12m_content_percentile']) + Decimal('.35') * Decimal(values['recent_views_90d_content_percentile'])
+                freshness = values['top_performer_freshness_score']
+                unrounded = demand / Decimal('.8') if freshness == 'Unknown; weight omitted' else demand + Decimal('.20') * Decimal(freshness)
+                expected = float(unrounded.quantize(Decimal('.01'), rounding=ROUND_HALF_UP))
                 actual = number(row.xpath("./td[10]")[0].text_content())
                 checked += 1
                 if expected != actual:

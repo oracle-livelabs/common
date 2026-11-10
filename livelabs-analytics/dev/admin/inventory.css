@@ -1,4 +1,4 @@
-.admin-inventory-page .inventory-summary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:0 30px 18px; }
+.admin-inventory-page .inventory-summary { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:0 30px 18px; }
 .admin-inventory-page .inventory-stat { display:grid; gap:4px; padding:15px 18px; border:1px solid var(--line); border-top:3px solid var(--oracle-red); border-radius:8px; background:var(--paper); }
 .admin-inventory-page .inventory-stat span { color:var(--muted); font-size:12px; font-weight:700; }
 .admin-inventory-page .inventory-stat strong { color:var(--oracle-bark); font-size:24px; }
@@ -19,5 +19,14 @@
 .admin-inventory-page .inventory-table-wrap td:nth-last-child(-n+2) { min-width:150px; white-space:normal; }
 .admin-inventory-page .inventory-pagination { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:14px; color:var(--muted); font-size:13px; }
 .admin-inventory-page .inventory-pagination .controls { margin:0; }
+.admin-inventory-page #dashboard-audit,.admin-inventory-page #policy-editor { margin:0 30px 18px; padding:22px; border:1px solid var(--line); border-radius:8px; background:var(--paper); }
+.admin-inventory-page #dashboard-audit summary { cursor:pointer; font-weight:700; }
+.admin-inventory-page #policy-editor[hidden] { display:none; }
+.admin-inventory-page #policy-form label { display:grid; gap:6px; margin-bottom:14px; font-weight:600; }
+.admin-inventory-page #policy-form select,.admin-inventory-page #policy-form textarea { max-width:100%; padding:10px; border:1px solid var(--line); border-radius:6px; font:inherit; }
 @media(max-width:900px) { .admin-inventory-page .inventory-controls { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:700px) { .admin-inventory-page .inventory-summary { grid-template-columns:1fr; margin-inline:14px; } .admin-inventory-page .inventory-results { margin-inline:14px; padding:14px; } .admin-inventory-page .inventory-controls { grid-template-columns:1fr; } .admin-inventory-page .inventory-pagination { align-items:stretch; flex-direction:column; } }
+.admin-inventory-page #review-form label { display:grid; gap:6px; margin-bottom:14px; font-weight:600; }
+.admin-inventory-page #review-form select,.admin-inventory-page #review-form textarea { width:100%; max-width:100%; padding:10px; border:1px solid var(--line); border-radius:6px; font:inherit; }
+.admin-inventory-page #review-form .inventory-controls { grid-template-columns:repeat(3,minmax(150px,1fr)); }
+@media(max-width:700px) { .admin-inventory-page #review-form .inventory-controls { grid-template-columns:1fr; } }
