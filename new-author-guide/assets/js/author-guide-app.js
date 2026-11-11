@@ -2943,7 +2943,7 @@
   }
 
   function syncAuthorNavToggle() {
-    var canToggle = state.mode !== "hub";
+    var canToggle = true;
     var expanded;
 
     if (!authorGlobalNavToggle) {
@@ -2990,6 +2990,7 @@
     imageLightboxCaption.hidden = !captionText;
     imageLightbox.removeAttribute("hidden");
     imageLightbox.setAttribute("aria-hidden", "false");
+    window.LiveLabsImageViewer.open(imageLightbox);
     document.body.classList.add("image-lightbox-open");
     imageLightboxClose.focus();
     setLiveMessage("Expanded image opened.");
@@ -3005,6 +3006,7 @@
       return;
     }
 
+    window.LiveLabsImageViewer.close(imageLightbox);
     imageLightbox.setAttribute("hidden", "");
     imageLightbox.setAttribute("aria-hidden", "true");
     imageLightboxImage.removeAttribute("src");
@@ -3615,7 +3617,7 @@
       searchEmptyState.classList.add("d-none");
     } else {
       searchSummary.textContent = "The guide did not find a strong match for that query yet.";
-      searchEmptyState.innerHTML = 'No strong matches for <strong>"' + escapeHtml(query) + '</strong>. Try shorter keywords such as <strong>publish</strong>, <strong>validator</strong>, <strong>Quarterly Quality Assurance</strong>, <strong>GitHub Pages</strong>, or <strong>manifest</strong>.';
+      searchEmptyState.innerHTML = 'No strong matches for <strong>"' + escapeHtml(query) + '"</strong>. Try shorter keywords such as <strong>publish</strong>, <strong>validator</strong>, <strong>Quarterly Quality Assurance</strong>, <strong>GitHub Pages</strong>, or <strong>manifest</strong>.';
       searchEmptyState.classList.remove("d-none");
       if (nodocIndexState === "loading" || catalogIndexState === "loading") {
         searchEmptyState.textContent = "Results will appear as the guide finishes loading.";
@@ -5589,7 +5591,7 @@
         button: authorGlobalNavToggle,
         bodyClass: "author-nav-closed",
         canToggle: function () {
-          return state.mode !== "hub";
+          return true;
         },
         hiddenWhenDisabled: true,
         onToggle: scheduleLayoutSync

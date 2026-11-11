@@ -53,6 +53,7 @@
     lightboxCaption.hidden = !captionText;
     lightbox.removeAttribute("hidden");
     lightbox.setAttribute("aria-hidden", "false");
+    window.LiveLabsImageViewer.open(lightbox);
     document.body.classList.add("image-lightbox-open");
     lightboxClose.focus();
   }
@@ -62,6 +63,7 @@
       return;
     }
 
+    window.LiveLabsImageViewer.close(lightbox);
     lightbox.setAttribute("hidden", "");
     lightbox.setAttribute("aria-hidden", "true");
     lightboxImage.removeAttribute("src");
