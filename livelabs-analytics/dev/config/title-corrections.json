@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "corrections": [
+    {
+      "recordKey": "livelabs:3861",
+      "wmsId": "11518",
+      "reportedTitle": "Oracle Autonomous¿¿¿¿·¿¿¿¿¿¿¿¿¿·¿¿¿·¿¿¿¿¿¿¿¿¿¿¿¿¿¿",
+      "displayTitle": "Oracle Autonomousクラウド・サービスのリモート・データ・ソースを使用したアプリの構築",
+      "evidence": "Mapped workshop manifest: apex/ja-jp-remote-data-source/manifest.json",
+      "evidenceSha256": "9649ba7587baad26468437ca8818d405769940e62278df13264925f5adc90716"
+    },
+    {
+      "recordKey": "livelabs:3862",
+      "wmsId": "11516",
+      "reportedTitle": "Oracle Autonomous¿¿¿¿·¿¿¿¿¿REST¿¿¿·¿¿¿¿¿¿¿¿¿¿¿¿¿¿",
+      "displayTitle": "Oracle Autonomousクラウド・サービスのRESTデータ・ソースを使用したアプリの構築",
+      "evidence": "Mapped workshop manifest: apex/ja-jp-rest-data-source/manifest.json",
+      "evidenceSha256": "c49f860ae861ee175e40aac1d37d34607f26bc1cfedcce6e0347cc785670586b"
+    },
+    {
+      "recordKey": "livelabs:3864",
+      "wmsId": "11513",
+      "reportedTitle": "Oracle Autonomous Cloud Services¿PoC¿¿¿¿¿",
+      "displayTitle": "Oracle Autonomous Cloud ServicesでPoCを構築する",
+      "evidence": "Mapped workshop manifest: apex/ja-jp-proof-of-concept/manifest.json",
+      "evidenceSha256": "fca503d4aa0fa58963f1d62320712a85be36ab90c7174dd25567c4cc6d730698"
+    },
+    {
+      "recordKey": "livelabs:3681",
+      "wmsId": "11366",
+      "reportedTitle": "[Japanese] Oracle Autonomous¿¿¿¿·¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿",
+      "displayTitle": "[Japanese] Oracle Autonomousクラウド・サービスの既存のテーブルに基づくアプリの作成",
+      "evidence": "Mapped workshop manifest: apex/ja-jp-existing-tables/manifest.json",
+      "evidenceSha256": "909b2bbdd6e2601d3dda0fb19b4ea7b14494cf854e19feda4f27f3f8f259a3c8"
+    },
+    {
+      "recordKey": "livelabs:3211",
+      "wmsId": "11045",
+      "reportedTitle": "[Japanese] Launch GraalVM to accelerate java workload ¿¿¿Java¿¿¿¿¿¿GraalVM¿¿¿¿¿",
+      "displayTitle": "[Japanese] Launch GraalVM to accelerate java workload 次世代Java高速実行基盤GraalVMハンズオン",
+      "evidence": "Mapped workshop manifest: developer/graalvm-development/workshops/livelabs/manifest.json",
+      "evidenceSha256": "97d47575a21b4a0458a7fe0a05f9fa8252c947643e317e27c778ec63d715e08b"
+    },
+    {
+      "recordKey": "wms:11364:oracle autonomous cloud service",
+      "wmsId": "11364",
+      "reportedTitle": "Oracle Autonomous Cloud Service¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿",
+      "displayTitle": "[Japanese] Oracle Autonomousクラウド・サービスの既存のテーブルに基づくアプリの作成",
+      "evidence": "Mapped workshop manifest: apex/ja-jp-existing-tables/manifest.json",
+      "evidenceSha256": "909b2bbdd6e2601d3dda0fb19b4ea7b14494cf854e19feda4f27f3f8f259a3c8"
+    },
+    {
+      "recordKey": "livelabs:4301",
+      "wmsId": "12000",
+      "reportedTitle": "Uncover insights from relationships within large datasets¿ using Oracle AI Graph Database",
+      "displayTitle": "Uncover insights from relationships within large datasets using Oracle AI Graph Database",
+      "evidence": "Remove isolated corrupt punctuation from the supplied English title; preserve all words."
+    },
+    {
+      "recordKey": "livelabs:4348",
+      "wmsId": "12000",
+      "reportedTitle": "Uncover insights from relationships within large datasets¿ using Oracle AI Graph Database",
+      "displayTitle": "Uncover insights from relationships within large datasets using Oracle AI Graph Database",
+      "evidence": "Remove isolated corrupt punctuation from the supplied English title; preserve all words."
+    },
+    {
+      "recordKey": "livelabs:4521",
+      "wmsId": "12110",
+      "reportedTitle": "Build an enterprise data chat agent with NVIDIA AI-Q Blueprint on OCI¿",
+      "displayTitle": "Build an enterprise data chat agent with NVIDIA AI-Q Blueprint on OCI",
+      "evidence": "Remove isolated corrupt punctuation from the supplied English title; preserve all words."
+    }
+  ]
+}

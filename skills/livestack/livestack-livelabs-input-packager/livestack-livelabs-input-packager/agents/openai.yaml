@@ -1,0 +1,4 @@
+interface:
+  display_name: "LiveStack LiveLabs Input Packager"
+  short_description: "Package industry LiveStacks into LiveLabs Author INPUT_ZIP files."
+  default_prompt: "Use $livestack-livelabs-input-packager to package this industry LiveStack into a portable INPUT_ZIP for LiveLabs Workshop Author 26.5.2. Ask for STACK_PATH and OUTPUT_PATH if missing."

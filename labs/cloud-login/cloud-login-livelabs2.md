@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Welcome to LiveLabs.
+Welcome to LiveLabs!
 You have successfully created a LiveLabs Sandbox environment!
 
 In this lab, we will show you where you can find the login information and how to log in to your LiveLabs Sandbox.
@@ -20,7 +20,7 @@ Estimated Time: 5 minutes
 
     a. **View Login Info:** Clink this link to find your assigned credentials, resources, and other information to access your LiveLabs Sandbox.
 
-    b. **Time Remaining:** This shows the remaining time before your access to the LiveLabs Sandbox expires. 
+    b. **Time Remaining:** This shows the remaining time before your access to the LiveLabs Sandbox expires.
 
     >**Note:** You may be able to extend the reservation time by clicking the **Extend Workshop Reservation** link.
 

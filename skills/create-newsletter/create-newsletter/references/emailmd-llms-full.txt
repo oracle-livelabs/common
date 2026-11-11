@@ -1,0 +1,1100 @@
+# API Reference (/docs/api-reference)
+
+
+
+render(markdown, options?) [#rendermarkdown-options]
+
+Renders markdown to email-safe HTML.
+
+**Returns** `{ html, text, meta }`
+
+* `html` — complete HTML email document
+* `text` — plain text version for the `text/plain` MIME part
+* `meta` — extracted frontmatter metadata
+
+```typescript
+import { render } from "emailmd";
+
+const { html, text, meta } = render("# Hello");
+```
+
+RenderOptions [#renderoptions]
+
+```typescript
+{
+  theme?: Partial<Theme>;
+  wrapper?: 'default' | WrapperFn;
+}
+```
+
+| Option    | Type                     | Description                   |
+| --------- | ------------------------ | ----------------------------- |
+| `theme`   | `Partial<Theme>`         | Override default theme values |
+| `wrapper` | `'default' \| WrapperFn` | Custom email wrapper function |
+
+RenderResult [#renderresult]
+
+```typescript
+{
+  html: string;
+  text: string;
+  meta: { preheader?: string; [key: string]: unknown };
+}
+```
+
+| Property | Type     | Description                       |
+| -------- | -------- | --------------------------------- |
+| `html`   | `string` | Complete email-safe HTML document |
+| `text`   | `string` | Plain text version                |
+| `meta`   | `object` | Extracted frontmatter metadata    |
+
+Theme [#theme]
+
+The full theme interface with all customizable properties:
+
+```typescript
+interface Theme {
+  brandColor: string;       // Links, highlights, accents
+  headingColor: string;     // Heading text
+  bodyColor: string;        // Body text
+  backgroundColor: string;  // Outer background
+  contentColor: string;     // Content area background
+  cardColor: string;        // Callout / code block background
+  buttonColor: string;      // Primary button background
+  buttonTextColor: string;  // Button text
+  secondaryColor: string;   // Secondary button border
+  secondaryTextColor: string; // Secondary button text
+  successColor: string;     // Success button background
+  successTextColor: string; // Success button text
+  dangerColor: string;      // Danger button background
+  dangerTextColor: string;  // Danger button text
+  warningColor: string;     // Warning button background
+  warningTextColor: string; // Warning button text
+  fontFamily: string;       // Font stack
+  fontSize: string;         // Base font size (e.g. "16px")
+  lineHeight: string;       // Base line height (e.g. "1.6")
+  contentWidth: string;     // Email width (e.g. "600px")
+}
+```
+
+Pass a `Partial<Theme>` to `render()` to override any subset of values. See [Theme](/docs/theme) for defaults.
+
+darkTheme [#darktheme]
+
+A pre-built dark theme object. Import and pass directly or spread with overrides:
+
+```typescript
+import { render, darkTheme } from "emailmd";
+
+// Use as-is
+render(md, { theme: darkTheme });
+
+// Override specific values
+render(md, { theme: { ...darkTheme, brandColor: "#e11d48" } });
+```
+
+buildHead(theme, preheader?) [#buildheadtheme-preheader]
+
+```typescript
+function buildHead(theme: Theme, preheader?: string): string;
+```
+
+Generates the MJML `<mj-head>` element containing global styles, font imports, and the hidden preheader text. Used when building [custom wrappers](/docs/wrappers).
+
+segmentsToMjml(segments, theme) [#segmentstomjmlsegments-theme]
+
+```typescript
+function segmentsToMjml(segments: Segment[], theme: Theme): string;
+```
+
+Converts parsed content segments into MJML body elements (sections, columns, text, buttons, images, tables, etc.). Used when building [custom wrappers](/docs/wrappers).
+
+Segment [#segment]
+
+```typescript
+interface Segment {
+  type: 'text' | 'callout' | 'centered' | 'highlight' | 'header' | 'footer'
+      | 'button' | 'button-group' | 'image' | 'hr' | 'table' | 'hero';
+  content: string;
+  attrs?: Record<string, string>;
+  buttons?: Array<Record<string, string>>;
+}
+```
+
+Represents a parsed block of content from the markdown. The `segments` array is what gets passed to `segmentsToMjml` and to custom wrapper functions.
+
+WrapperFn [#wrapperfn]
+
+```typescript
+type WrapperFn = (
+  segments: Segment[],
+  theme: Theme,
+  meta?: Record<string, unknown>,
+) => string;
+```
+
+A function that receives parsed segments, the resolved theme, and frontmatter metadata, and returns a complete MJML string. See [Wrappers](/docs/wrappers) for usage examples.
+
+
+# Buttons (/docs/buttons)
+
+
+
+Add call-to-action buttons using the `{button}` attribute:
+
+```markdown
+[Get Started](https://example.com){button}
+
+[Learn More](https://example.com){button.secondary}
+
+[Shop Sale](https://example.com){button color="#dc2626"}
+```
+
+Semantic Colors [#semantic-colors]
+
+Use preset color names for common actions:
+
+```markdown
+[Confirm Account](https://example.com/confirm){button.success}
+
+[Delete Account](https://example.com/delete){button.danger}
+
+[Review Changes](https://example.com/review){button.warning}
+```
+
+These default to standard semantic colors (green, red, amber). You can customize them with `success_color`, `danger_color`, and `warning_color` in [frontmatter](/docs/frontmatter) or via the [theme API](/docs/theme). The secondary button color can be changed with `secondary_color`.
+
+Side-by-Side Buttons [#side-by-side-buttons]
+
+Place multiple buttons on the same line to render them side-by-side:
+
+```markdown
+[Get Started](https://example.com){button} [Learn More](https://example.com/more){button.secondary}
+```
+
+Buttons on separate lines (separated by a blank line) stack vertically as usual. MJML handles responsive stacking automatically — side-by-side on desktop, stacked on mobile.
+
+Full-Width Buttons [#full-width-buttons]
+
+Make a button span the full width of the email content area with `width="full"`:
+
+```markdown
+[Get Started](https://example.com){button width="full"}
+```
+
+This works with any variant or custom color:
+
+```markdown
+[Learn More](https://example.com){button.secondary width="full"}
+
+[Shop Sale](https://example.com){button color="#dc2626" width="full"}
+```
+
+Button Fallback [#button-fallback]
+
+Add a fallback URL below a button for accessibility. Some email clients block or strip buttons, so providing the raw URL ensures recipients can still take action:
+
+```markdown
+[Reset Password](https://example.com/reset){button fallback}
+```
+
+This renders a small muted text below the button: *"If you're having trouble clicking the button, copy and paste this URL into your browser."*
+
+Works with button groups too — only buttons with `fallback` show their URL:
+
+```markdown
+[Accept](https://example.com/accept){button fallback} [Decline](https://example.com/decline){button.secondary}
+```
+
+Custom Fallback Text [#custom-fallback-text]
+
+Override the default fallback message with `fallback="custom text"` to support different languages or custom wording:
+
+```markdown
+[Réinitialiser](https://example.com/reset){button fallback="Si vous avez des difficultés, copiez cette URL :"}
+```
+
+The custom text is rendered before the URL link. When no value is provided (`fallback` without `="..."`), the default English message is used.
+
+
+# Emoji (/docs/emoji)
+
+
+
+Insert emoji by shortcode name using the `:shortcode:` syntax:
+
+```markdown
+Gone camping! :tent: Be back soon.
+
+That is so funny! :joy:
+```
+
+The full set of \~1900 emoji shortcodes from [markdown-it-emoji](https://github.com/markdown-it/markdown-it-emoji) is supported. Emoji are rendered as native Unicode characters, so they display natively in all modern email clients without image fallbacks.
+
+Common Examples [#common-examples]
+
+| Shortcode            | Emoji | Shortcode    | Emoji |
+| -------------------- | ----- | ------------ | ----- |
+| `:smile:`            | 😄    | `:heart:`    | ❤️    |
+| `:wave:`             | 👋    | `:fire:`     | 🔥    |
+| `:rocket:`           | 🚀    | `:star:`     | ⭐     |
+| `:thumbsup:`         | 👍    | `:tada:`     | 🎉    |
+| `:white_check_mark:` | ✅     | `:warning:`  | ⚠️    |
+| `:email:`            | 📧    | `:calendar:` | 📅    |
+
+Usage in Emails [#usage-in-emails]
+
+```markdown
+:wave: **Welcome aboard!**
+
+Your order has been confirmed :white_check_mark:
+
+:calendar: Delivery expected: Friday
+```
+
+Full Shortcode Reference [#full-shortcode-reference]
+
+Use the [emoji picker in the builder](/builder) to search all available shortcodes, or see the [full emoji list](https://gist.github.com/rxaviers/7360908).
+
+
+# Frontmatter (/docs/frontmatter)
+
+
+
+Add a YAML frontmatter block at the top of your markdown to override theme values and set metadata per-email:
+
+```markdown
+---
+preheader: "Don't miss our biggest sale"
+brand_color: "#e11d48"
+button_color: "#059669"
+---
+
+# Sale Starts Now
+
+Everything is 50% off this weekend.
+
+::: footer
+**Acme Corp** · [Unsubscribe](https://example.com/unsub)
+:::
+```
+
+Frontmatter uses `snake_case` keys. They map directly to the same [theme options](/docs/theme) available in the JS API (which uses `camelCase`).
+
+Preheader [#preheader]
+
+The `preheader` field sets the preview text that email clients show in the inbox list next to the subject line. It's hidden in the email body itself:
+
+```markdown
+---
+preheader: "Your order has shipped — track it now"
+---
+```
+
+Selecting a Theme [#selecting-a-theme]
+
+Use `theme` to switch the base theme for a single email. Individual overrides still layer on top:
+
+```markdown
+---
+theme: dark
+brand_color: "#e11d48"
+---
+
+# Dark email with a custom brand color
+```
+
+Valid values: `light` (default), `dark`.
+
+All Frontmatter Keys [#all-frontmatter-keys]
+
+| Key                    | Description                               |
+| ---------------------- | ----------------------------------------- |
+| `preheader`            | Inbox preview text (hidden in email body) |
+| `theme`                | Base theme — `light` or `dark`            |
+| `brand_color`          | Links, highlights, accents                |
+| `heading_color`        | Heading text color                        |
+| `body_color`           | Body text color                           |
+| `background_color`     | Outer background color                    |
+| `content_color`        | Content area background                   |
+| `card_color`           | Callout / code block background           |
+| `button_color`         | Primary button background                 |
+| `button_text_color`    | Button text color                         |
+| `secondary_color`      | Secondary button border                   |
+| `secondary_text_color` | Secondary button text                     |
+| `success_color`        | Success button background                 |
+| `success_text_color`   | Success button text                       |
+| `danger_color`         | Danger button background                  |
+| `danger_text_color`    | Danger button text                        |
+| `warning_color`        | Warning button background                 |
+| `warning_text_color`   | Warning button text                       |
+| `font_family`          | Font stack                                |
+| `font_size`            | Base font size                            |
+| `line_height`          | Base line height                          |
+| `content_width`        | Email content width                       |
+
+Custom Metadata [#custom-metadata]
+
+Any keys beyond the ones above are passed through in the `meta` object returned by `render()`. This is useful for storing email metadata alongside the template:
+
+```markdown
+---
+preheader: "Welcome aboard"
+subject: "Welcome to Acme"
+campaign_id: "onboarding-v2"
+---
+
+# Welcome!
+```
+
+```typescript
+const { html, text, meta } = render(markdown);
+
+console.log(meta.subject);     // "Welcome to Acme"
+console.log(meta.campaign_id); // "onboarding-v2"
+console.log(meta.preheader);   // "Welcome aboard"
+```
+
+
+# Getting Started (/docs/getting-started)
+
+
+
+Installation [#installation]
+
+```bash
+npm install emailmd
+```
+
+Basic Usage [#basic-usage]
+
+Import the `render` function and pass it a markdown string:
+
+```typescript
+import { render } from "emailmd";
+
+const { html, text } = render(`
+# Welcome!
+
+Thanks for signing up.
+
+[Get Started](https://example.com){button}
+`);
+```
+
+The `render` function returns:
+
+* `html` — a complete HTML document (DOCTYPE, html, head, body) ready to use as the `text/html` MIME part. Not a fragment — you can send it as-is.
+* `text` — plain text version for the `text/plain` MIME part. Buttons become `Label: https://url`, images become `[Image: alt]`, and all formatting is stripped.
+* `meta` — frontmatter metadata extracted from the markdown. Includes `preheader` (inbox preview text) and any custom keys you define. See [Frontmatter](/docs/frontmatter).
+
+Next Steps [#next-steps]
+
+* [Theme](/docs/theme) — Customize colors and fonts
+* [Frontmatter](/docs/frontmatter) — Set metadata per-email
+* [Buttons](/docs/buttons) — Add call-to-action buttons
+* [Directives](/docs/directives) — Use header, hero, callout, and more
+* [API Reference](/docs/api-reference) — Full API documentation
+
+
+# Images (/docs/images)
+
+
+
+Block images (standalone paragraph) are automatically rendered as responsive, centered email images:
+
+```markdown
+![Hero banner](https://example.com/hero.jpg)
+```
+
+Width [#width]
+
+Control image width with the attrs syntax:
+
+```markdown
+![Product](https://example.com/product.jpg){width="400"}
+```
+
+Alignment [#alignment]
+
+Images are centered by default. Override with:
+
+```markdown
+![Photo](https://example.com/photo.jpg){align="left"}
+```
+
+Rounded Corners [#rounded-corners]
+
+```markdown
+![Avatar](https://example.com/avatar.jpg){width="80" border-radius="50%"}
+```
+
+Linked Images [#linked-images]
+
+Wrap an image in a link to make it clickable:
+
+```markdown
+[![Shop banner](https://example.com/banner.jpg)](https://example.com/shop)
+```
+
+Inline Images [#inline-images]
+
+Images mixed with text in a paragraph are rendered inline:
+
+```markdown
+Feature one with icon ![check](https://example.com/check.png) included.
+```
+
+Vertical Alignment [#vertical-alignment]
+
+Inline images default to `vertical-align: middle`, centering them with adjacent text. Override per image with `valign`:
+
+```markdown
+Top-aligned ![icon](https://example.com/icon.png){valign="top"} icon.
+```
+
+Supported values: `top`, `middle`, `bottom`, `baseline`, `text-top`, `text-bottom`.
+
+Float [#float]
+
+Use `float` to wrap text around an image instead of flowing beneath it:
+
+```markdown
+![Plant](https://example.com/plant.jpg){width="80" float="left"} **Monstera Deliciosa, 6" pot** Easy care · Bright indirect light · $42.00
+```
+
+Supported values: `left`, `right`. Appropriate margin is added automatically.
+
+> **Note:** Outlook desktop ignores `float` and falls back to default inline behavior.
+
+Inline Image Size [#inline-image-size]
+
+Control inline image dimensions with `width` and `height`:
+
+```markdown
+A small ![icon](https://example.com/icon.png){width="20" height="20"} icon.
+```
+
+
+# Introduction (/docs)
+
+
+
+Why Email.md? [#why-emailmd]
+
+Writing good email HTML is really hard. Unlike web pages, email clients don't share a modern rendering engine - Outlook still uses Microsoft Word's rendering engine, Gmail strips out `<style>` tags and most CSS, and Yahoo Mail has its own quirks. What looks perfect in Apple Mail can be completely broken in Outlook. This means email developers end up writing deeply nested tables, inline styles, and client-specific hacks just to get a simple layout to work everywhere.
+
+Most teams either settle for plain-text-looking emails, hire a specialist, or wrestle with complex templating systems that require deep knowledge of each client's limitations.
+
+Email.md takes a different approach. Instead of fighting with HTML tables and inline CSS, you write **Markdown** - the same simple syntax you already use in README files, docs, and chat. Email.md handles the hard part: converting that markdown into bulletproof, email-safe HTML (via MJML) that renders correctly across Gmail, Outlook, Apple Mail, Yahoo Mail, and every other major client.
+
+It won't cover every edge case a hand-crafted HTML email can - but it handles **80%+ of email design needs** in a fraction of the time and complexity.
+
+And because it's just markdown, **AI is a natural fit**. Large language models are great at writing markdown, which means you can use AI to draft, iterate, and generate Email.md templates quickly. Describe the email you want and get a working, production-ready template in seconds.
+
+To give your AI tool full knowledge of Email.md's syntax and features, feed it the complete docs:
+
+```
+https://www.emailmd.dev/llms-full.txt
+```
+
+Quick Start [#quick-start]
+
+```bash
+npm install emailmd
+```
+
+```typescript
+import { render } from "emailmd";
+
+const { html, text } = render(`
+# Welcome!
+
+Thanks for signing up.
+
+[Get Started](https://example.com){button}
+`);
+
+// html → complete email-safe HTML (works in Gmail, Outlook, Apple Mail, everything)
+// text → plain text version for text/plain MIME part
+```
+
+Features [#features]
+
+* **Email-Safe HTML** - Powered by MJML for bulletproof rendering across all email clients
+* **Rich Markdown** - Tables, task lists, buttons, callouts, heroes, and more
+* **Theming** - Light/dark themes, brand colors, full customization
+* **Frontmatter** - Override theme values and set metadata per-email
+* **Directives** - Header, hero, callout, highlight, centered, and footer blocks
+* **Plain Text** - Automatic plain text generation for the `text/plain` MIME part
+
+Built on MJML [#built-on-mjml]
+
+Email.md uses [MJML](https://mjml.io) under the hood for bulletproof email HTML. Tested across Gmail, Outlook, Apple Mail, Yahoo Mail, and more.
+
+
+# Markdown (/docs/markdown)
+
+
+
+Email.md supports standard markdown plus several extensions. This page covers the features that aren't covered by their own dedicated docs pages ([buttons](/docs/buttons), [images](/docs/images), [tables](/docs/tables), [emoji](/docs/emoji), and [directives](/docs/directives)).
+
+Text Formatting [#text-formatting]
+
+Standard inline formatting works as expected:
+
+```markdown
+**Bold text** and *italic text* and ***bold italic***.
+
+~~Strikethrough~~ for deleted content.
+
+`inline code` renders with a subtle background.
+```
+
+Headings [#headings]
+
+```markdown
+# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+```
+
+Headings are styled with the theme's `headingColor`.
+
+Links [#links]
+
+```markdown
+[Visit our site](https://example.com)
+
+Autolinks work too: https://example.com
+```
+
+Links are styled with the theme's `brandColor`.
+
+Lists [#lists]
+
+Ordered and unordered lists:
+
+```markdown
+- First item
+- Second item
+- Third item
+
+1. Step one
+2. Step two
+3. Step three
+```
+
+Task Lists [#task-lists]
+
+```markdown
+- [x] Design approved
+- [x] Content written
+- [ ] Ready to send
+```
+
+Task lists render with checkboxes — checked items show a filled checkbox, unchecked items show an empty one.
+
+Blockquotes [#blockquotes]
+
+```markdown
+> "The best way to predict the future is to create it."
+>
+> — Peter Drucker
+```
+
+Blockquotes are styled with a left border in your theme's `brandColor`.
+
+Code Blocks [#code-blocks]
+
+Fenced code blocks render with a theme-aware background:
+
+````markdown
+```
+const greeting = "Hello, world!";
+console.log(greeting);
+```
+````
+
+The background uses the theme's `cardColor` with rounded corners and comfortable padding.
+
+Definition Lists [#definition-lists]
+
+```markdown
+Email.md
+: A markdown-to-email library.
+
+MJML
+: The framework that powers Email.md's HTML output.
+```
+
+Highlighted Text [#highlighted-text]
+
+Use `==double equals==` to highlight text with a colored background:
+
+```markdown
+Don't miss our ==biggest sale of the year==!
+```
+
+The highlight uses your theme's `brandColor` at reduced opacity.
+
+Subscript & Superscript [#subscript--superscript]
+
+```markdown
+H~2~O is water.
+
+E = mc^2^ is famous.
+```
+
+`~text~` renders as subscript, `^text^` renders as superscript.
+
+Horizontal Rules [#horizontal-rules]
+
+A horizontal rule creates a visual separator between sections:
+
+```markdown
+Thanks for reading!
+
+---
+
+*The Acme Team*
+```
+
+
+# Tables (/docs/tables)
+
+
+
+Standard GFM (GitHub Flavored Markdown) tables are supported and rendered as styled, email-safe HTML tables:
+
+```markdown
+| Name  | Role       | Status |
+| ----- | ---------- | ------ |
+| Alice | Engineer   | Active |
+| Bob   | Designer   | Active |
+| Carol | Manager    | Away   |
+```
+
+Column Alignment [#column-alignment]
+
+Control column alignment using colons in the separator row — left-align with `:---`, center with `:---:`, right-align with `---:`:
+
+```markdown
+| Item                     |   Qty |    Price |
+| :----------------------- | ----: | -------: |
+| Monstera Deliciosa, 6"   |     1 |   $42.00 |
+| Ceramic Pot, White       |     1 |   $18.00 |
+| **Total**                |       | **$60.00** |
+```
+
+Automatic Styling [#automatic-styling]
+
+Tables are automatically styled with your theme colors:
+
+* **Header row** — bold text with a 2px bottom border
+* **Body rows** — subtle 1px bottom borders between rows
+* **Cell padding** — consistent 8px vertical, 12px horizontal
+
+All colors and borders inherit from your theme, so tables match the rest of your email without any extra configuration.
+
+Tips [#tips]
+
+Keep tables simple and narrow for the best results on mobile. Very wide tables may require horizontal scrolling on small screens — stick to 2–4 columns when possible.
+
+
+# Theme (/docs/theme)
+
+
+
+Customize colors and fonts to match your brand:
+
+```typescript
+const { html } = render(markdown, {
+  theme: {
+    brandColor: '#e11d48',
+    buttonColor: '#e11d48',
+    fontFamily: 'Georgia, serif',
+  }
+});
+```
+
+Dark Mode [#dark-mode]
+
+A built-in dark theme is available. Pass it directly to flip all colors at once:
+
+```typescript
+import { render, darkTheme } from 'emailmd';
+
+const { html } = render(markdown, { theme: darkTheme });
+```
+
+Or use it as a base and override individual values:
+
+```typescript
+const { html } = render(markdown, {
+  theme: { ...darkTheme, brandColor: '#e11d48' },
+});
+```
+
+You can also activate it per-email via frontmatter — see [Frontmatter](/docs/frontmatter).
+
+All Theme Options [#all-theme-options]
+
+| Key                  | Light Default                                                                                                      | Dark Default | Description                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------ | ------------------------------- |
+| `brandColor`         | `#18181b`                                                                                                          | `#fafafa`    | Links, highlights, accents      |
+| `headingColor`       | `#09090b`                                                                                                          | `#fafafa`    | Heading text                    |
+| `bodyColor`          | `#71717a`                                                                                                          | `#a1a1aa`    | Body text                       |
+| `backgroundColor`    | `#fafafa`                                                                                                          | `#09090b`    | Outer background                |
+| `contentColor`       | `#ffffff`                                                                                                          | `#18181b`    | Content area background         |
+| `cardColor`          | `#f4f4f5`                                                                                                          | `#27272a`    | Callout / code block background |
+| `buttonColor`        | `#18181b`                                                                                                          | `#fafafa`    | Primary button background       |
+| `buttonTextColor`    | `#fafafa`                                                                                                          | `#18181b`    | Button text                     |
+| `secondaryColor`     | `#18181b`                                                                                                          | `#fafafa`    | Secondary button border         |
+| `secondaryTextColor` | `#18181b`                                                                                                          | `#fafafa`    | Secondary button text           |
+| `successColor`       | `#16a34a`                                                                                                          | *(same)*     | Success button background       |
+| `successTextColor`   | `#ffffff`                                                                                                          | *(same)*     | Success button text             |
+| `dangerColor`        | `#dc2626`                                                                                                          | *(same)*     | Danger button background        |
+| `dangerTextColor`    | `#ffffff`                                                                                                          | *(same)*     | Danger button text              |
+| `warningColor`       | `#d97706`                                                                                                          | *(same)*     | Warning button background       |
+| `warningTextColor`   | `#ffffff`                                                                                                          | *(same)*     | Warning button text             |
+| `fontFamily`         | `Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` | *(same)*     | Font stack                      |
+| `fontSize`           | `16px`                                                                                                             | *(same)*     | Base font size                  |
+| `lineHeight`         | `1.6`                                                                                                              | *(same)*     | Base line height                |
+| `contentWidth`       | `600px`                                                                                                            | *(same)*     | Email width                     |
+
+The dark theme inverts the color palette — light text on dark backgrounds — while keeping the same typography settings. You can import `darkTheme` directly or activate it per-email via [frontmatter](/docs/frontmatter).
+
+
+# Wrappers (/docs/wrappers)
+
+
+
+Most emails work great with the default wrapper — a gray outer background with a centered white content area. Custom wrappers are for when you need full control over the outer MJML structure, such as an edge-to-edge background color, custom `<mj-body>` attributes, or a multi-section layout.
+
+Custom Wrapper [#custom-wrapper]
+
+Supply a `WrapperFn` to replace the default outer structure:
+
+```typescript
+import { render, buildHead, segmentsToMjml } from 'emailmd';
+import type { WrapperFn } from 'emailmd';
+
+const myWrapper: WrapperFn = (segments, theme, meta) => {
+  const head = buildHead(theme, meta?.preheader);
+  const body = segmentsToMjml(segments, theme);
+  return `<mjml>${head}<mj-body>${body}</mj-body></mjml>`;
+};
+
+render(md, { wrapper: myWrapper });
+```
+
+The wrapper function receives three arguments:
+
+* **`segments`** — the parsed content blocks from the markdown (text, buttons, images, directives, tables, etc.). Each segment has a `type`, `content`, and optional `attrs`.
+* **`theme`** — the fully resolved theme object after merging defaults with any overrides from the render options and frontmatter.
+* **`meta`** — extracted frontmatter metadata (includes `preheader` and any custom keys).
+
+Helper Functions [#helper-functions]
+
+Email.md exports two helpers for use inside custom wrappers:
+
+* **`buildHead(theme, preheader?)`** — generates the `<mj-head>` element containing global styles, font imports, and the hidden preheader text.
+* **`segmentsToMjml(segments, theme)`** — converts the parsed segments into MJML body elements (sections, columns, text, buttons, images, tables, etc.).
+
+You can call these helpers to reuse Email.md's rendering logic while customizing the outer shell, or you can skip them entirely and write raw MJML from scratch.
+
+
+# Callout (/docs/directives/callout)
+
+
+
+A callout renders a highlighted block, useful for tips, notes, or important information:
+
+```markdown
+::: callout
+**Pro tip:** You can customize your dashboard in Settings.
+:::
+```
+
+Callouts are styled with a subtle background color (using the theme's `cardColor`) to visually distinguish them from regular content.
+
+Parameters [#parameters]
+
+Add space-separated parameters after the directive name to customize appearance.
+
+Alignment [#alignment]
+
+```markdown
+::: callout center
+**ABC-123**
+Your confirmation code.
+:::
+```
+
+Supported values: `left` (default), `center`, `right`.
+
+Padding [#padding]
+
+```markdown
+::: callout compact
+Short note.
+:::
+```
+
+Supported values: `compact` (tighter), `spacious` (more breathing room). Default padding is used when no keyword is provided.
+
+Color & Background [#color--background]
+
+Override the text color or background color with `color=` and `bg=`:
+
+```markdown
+::: callout color=#1e40af bg=#eff6ff
+**Note:** Your account is pending review.
+:::
+```
+
+Combined [#combined]
+
+Parameters can be freely combined:
+
+```markdown
+::: callout center compact bg=#eff6ff
+**ABC-123**
+:::
+```
+
+
+# Centered (/docs/directives/centered)
+
+
+
+A centered directive renders center-aligned text:
+
+```markdown
+::: centered
+Thanks for reading.
+The Acme Team
+:::
+```
+
+Useful for sign-offs, short messages, or any content that looks better centered.
+
+Color [#color]
+
+Override the text color with a hex value:
+
+```markdown
+::: centered color=#00F7A4
+Thanks for reading.
+The Acme Team
+:::
+```
+
+Other directives like [callout](/docs/directives/callout) and [highlight](/docs/directives/highlight) also support a `center` parameter for centering text within a styled block:
+
+```markdown
+::: callout center
+**ABC-123**
+:::
+```
+
+
+# Footer (/docs/directives/footer)
+
+
+
+A footer renders at the bottom of the email with smaller, muted text:
+
+```markdown
+::: footer
+**Acme Corp** · [Unsubscribe](https://example.com/unsub) · [Preferences](https://example.com/prefs)
+:::
+```
+
+The footer is styled with reduced font size and muted colors, appropriate for legal text, unsubscribe links, and company information.
+
+Parameters [#parameters]
+
+Alignment [#alignment]
+
+The footer is centered by default. Override with `left` or `right`:
+
+```markdown
+::: footer left
+© 2026 Acme Corp · All rights reserved.
+:::
+```
+
+Color [#color]
+
+Override the text color with `color=`:
+
+```markdown
+::: footer color=#9ca3af
+Legal text here.
+:::
+```
+
+
+# Header (/docs/directives/header)
+
+
+
+Content rendered above the main body area — typically used for a logo or brand image:
+
+```markdown
+::: header
+![Logo](https://example.com/logo.png){width="150"}
+:::
+```
+
+The header appears at the very top of the email, before the main content area. It's commonly used for brand logos, navigation links, or a top banner.
+
+Parameters [#parameters]
+
+Alignment [#alignment]
+
+The header is centered by default. Override with `left` or `right`:
+
+```markdown
+::: header left
+![Logo](https://example.com/logo.png){width="150"}
+:::
+```
+
+Color [#color]
+
+Override the text color with `color=`:
+
+```markdown
+::: header color=#1e40af
+**Acme Corp**
+:::
+```
+
+
+# Hero (/docs/directives/hero)
+
+
+
+A full-width section with a background image and overlaid text — typically used for a hero banner at the top of an email:
+
+```markdown
+::: hero https://example.com/hero.jpg
+# Welcome aboard
+Get started with your new account today.
+:::
+```
+
+The URL after `hero` is required and specifies the background image. All content inside the directive is overlaid on top of it.
+
+Text is centered and rendered in white for contrast against the background image. You can include any markdown content inside the hero — headings, paragraphs, buttons, and more:
+
+```markdown
+::: hero https://example.com/sale-bg.jpg
+# Summer Sale
+Up to 50% off everything this weekend.
+
+[Shop Now](https://example.com/sale){button color="#e11d48"}
+:::
+```
+
+MJML handles Outlook VML fallbacks automatically, so the background image works across all major email clients.
+
+
+# Highlight (/docs/directives/highlight)
+
+
+
+A highlight renders an emphasized content block with a brand color accent:
+
+```markdown
+::: highlight
+Limited time: first 100 signups get 50% off.
+:::
+```
+
+The highlight directive uses the theme's `brandColor` to draw attention to important content like promotions, announcements, or key messages.
+
+Parameters [#parameters]
+
+Add space-separated parameters after the directive name to customize appearance.
+
+Alignment [#alignment]
+
+```markdown
+::: highlight center
+**50% OFF** — This weekend only!
+:::
+```
+
+Supported values: `left` (default), `center`, `right`.
+
+Padding [#padding]
+
+```markdown
+::: highlight compact
+Flash sale!
+:::
+```
+
+Supported values: `compact` (tighter), `spacious` (more breathing room).
+
+Color & Background [#color--background]
+
+Override the text color or background color with `color=` and `bg=`:
+
+```markdown
+::: highlight color=#ffffff bg=#dc2626
+**URGENT:** Action required.
+:::
+```
+
+
+# Directives (/docs/directives)
+
+
+
+Directives are special block-level sections that control the email layout. They use the `:::` fenced container syntax:
+
+```markdown
+::: directive
+Content goes here
+:::
+```
+
+Available Directives [#available-directives]
+
+| Directive                               | Description                                       |
+| --------------------------------------- | ------------------------------------------------- |
+| [header](/docs/directives/header)       | Content above the main body (logos, brand images) |
+| [hero](/docs/directives/hero)           | Full-width section with background image          |
+| [callout](/docs/directives/callout)     | Highlighted tip or note                           |
+| [highlight](/docs/directives/highlight) | Emphasized content block                          |
+| [centered](/docs/directives/centered)   | Center-aligned text                               |
+| [footer](/docs/directives/footer)       | Footer with links and legal text                  |
+
+Parameters [#parameters]
+
+Some directives accept space-separated parameters after the directive name to customize alignment, padding, and colors:
+
+```markdown
+::: callout center
+Centered callout content
+:::
+
+::: highlight center compact bg=#dc2626
+Compact, centered highlight with custom background
+:::
+```
+
+| Parameter   | Syntax        | Values                    | Applies To                                   |
+| ----------- | ------------- | ------------------------- | -------------------------------------------- |
+| **align**   | Bare keyword  | `center`, `left`, `right` | callout, highlight, header, footer           |
+| **padding** | Bare keyword  | `compact`, `spacious`     | callout, highlight                           |
+| **color**   | `color=<hex>` | Any hex color             | callout, highlight, centered, header, footer |
+| **bg**      | `bg=<hex>`    | Any hex color             | callout, highlight                           |
+
+See each directive's page for detailed examples.

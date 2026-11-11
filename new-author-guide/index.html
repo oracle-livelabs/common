@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Oracle LiveLabs Author Guide refresh with a guided path, reference toolkit, Step by Step Guide, unified search, and a real workshop example.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23C74634'/%3E%3C/svg%3E">
+  <title>Home · Oracle LiveLabs Author Guide</title>
+  <script src="assets/js/author-guide-config.js?v=20261109-object-storage"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/author-guide.css">
+    <link rel="stylesheet" href="assets/css/author-guide-improvements.css?v=20261109-object-storage">
+</head>
+<body data-author-guide-page="hub">
+  <div id="app" data-redwood-creator-pass="2026-05-25">
+    <div class="app-shell">
+      <!-- Sticky Navigation -->
+      <div data-shared-side-nav></div>
+
+      <section class="hub-screen" id="hub" aria-labelledby="hubHeading">
+        <div class="container">
+          <div class="hub-hero">
+            <div class="row g-4 align-items-center">
+              <div class="col-xl-12">
+                <div class="hero-lockup">
+                  <span>
+                    <span class="hero-lockup-label">Oracle LiveLabs</span>
+                    <span class="hero-lockup-note">Author guide</span>
+                  </span>
+                </div>
+                <h1 class="hero-title" id="hubHeading">One guide, many doors into LiveLabs authoring</h1>
+              </div>
+            </div>
+          </div>
+          <div class="home-action-panel">
+            <p class="panel-copy">Choose the path that matches the job: a fast route, a focused answer, the complete guide, or a workshop example.</p>
+            <form class="home-search-form" id="homeSearchForm" role="search" aria-label="Search from the author guide home">
+              <label class="visually-hidden" for="homeSearchInput">Search the author guide</label>
+              <input
+                id="homeSearchInput"
+                class="home-search-input"
+                type="search"
+                placeholder="WMS, Quality Assurance, GitHub, validator"
+                aria-label="Search across the full author guide, including Quickstart, Cheatsheet, Markdown, and NoDoc"
+              >
+              <button class="home-search-button" type="submit" aria-label="Search the author guide">
+                <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                  <path d="M10.8 18.1a7.3 7.3 0 1 1 5.2-2.1l4 4" />
+                </svg>
+              </button>
+            </form>
+            <div class="home-mini-flow mt-2">
+              <a class="home-mini-step" data-mode-target="beginner" href="./quickstart/index.html">
+                <span>
+                  <strong>Create a new workshop</strong>
+                  <small>Open Quickstart for the WMS to publish sequence.</small>
+                </span>
+              </a>
+              <a class="home-mini-step" data-mode-target="explorer" href="./cheatsheet/index.html">
+                <span>
+                  <strong>Fix a blocker</strong>
+                  <small>Open Cheatsheet for validation, WMS, media, or GitHub answers.</small>
+                </span>
+              </a>
+              <a class="home-mini-step" href="https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/" data-full-guide-link target="_blank" rel="noreferrer">
+                <span>
+                  <strong>Need full depth</strong>
+                  <small>Open the original guide when you need every source section.</small>
+                </span>
+              </a>
+              <a class="home-mini-step" href="https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/" data-workshop-example-link target="_blank" rel="noreferrer">
+                <span>
+                  <strong>Need an example</strong>
+                  <small>Open a real LiveLabs workshop as a working reference.</small>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="mode-screen d-none" id="searchMode" aria-labelledby="searchHeading">
+        <div class="container py-5">
+          <div class="search-mode-hero">
+            <p class="eyebrow">Author guide search</p>
+            <h2 id="searchHeading">Find the right authoring guidance</h2>
+            <p>Search across Quickstart, Cheatsheet, Markdown, the NoDoc workshop, and a real workshop example when relevant.</p>
+            <form class="search-page-form" id="searchPageForm" role="search">
+              <label class="visually-hidden" for="searchPageInput">Search the author guide</label>
+              <div class="search-page-input-wrap">
+                <input class="search-page-input" id="searchPageInput" type="text" inputmode="search" role="searchbox" placeholder="WMS, Quality Assurance, GitHub, validator" autocomplete="off">
+                <button class="search-page-input-clear" id="searchPageClear" type="button" aria-label="Clear search" title="Clear search" hidden>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+                </button>
+              </div>
+              <button class="search-page-button" type="submit" aria-label="Search">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg>
+              </button>
+            </form>
+            <div class="d-flex flex-wrap gap-2 mt-3">
+              <span class="badge text-bg-light" id="searchQueryChip">No query yet</span>
+              <span class="badge text-bg-light" id="searchCountChip">0 results</span>
+            </div>
+            <p class="mt-3 mb-0" id="searchSummary"></p>
+          </div>
+          <section class="search-results-shell">
+            <div class="search-results-grid" id="searchResults"></div>
+            <div class="search-empty-state" id="searchEmptyState"></div>
+          </section>
+        </div>
+      </section>
+      <button type="button" class="back-to-top" id="backToTopButton" aria-label="Back to top" title="Back to top">
+        <span class="back-to-top-icon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+            <path d="M8 3.25 3.75 7.5l.9.9L7.5 5.56V13h1V5.56l2.85 2.84.9-.9L8 3.25Z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="back-to-top-label">Back to top</span>
+      </button>
+      <!-- Cheatsheet Detail Modal -->
+      <div class="modal fade" id="bubbleModal" tabindex="-1" aria-labelledby="bubbleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div>
+                <div class="modal-kicker" id="bubbleModalKicker">Cheatsheet Detail</div>
+                <h2 class="modal-title h3 mb-0" id="bubbleModalLabel">Cheatsheet detail</h2>
+              </div>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close detail view"></button>
+            </div>
+
+            <div class="modal-body">
+              <p class="lead mb-3" id="bubbleModalDescription"></p>
+              <div class="detail-tags mb-4" id="bubbleModalTags"></div>
+              <div class="modal-support-mount d-none" id="bubbleModalVideoMount"></div>
+
+              <div class="card modal-media-card mb-4 d-none" id="bubbleModalMediaCard">
+                <div class="card-body">
+                  <figure class="modal-media-figure mb-0">
+                    <figcaption id="bubbleModalImageCaption"></figcaption>
+                    <img id="bubbleModalImage" alt="">
+                  </figure>
+                </div>
+              </div>
+
+              <div class="modal-support-mount d-none" id="bubbleModalMilestonesMount"></div>
+              <div class="modal-support-mount d-none" id="bubbleModalExampleMount"></div>
+
+              <div class="modal-grid">
+                <div class="modal-panel">
+                  <h3>Do this</h3>
+                  <ol id="bubbleModalSteps"></ol>
+                </div>
+
+                <div class="modal-panel">
+                  <h3>What to check</h3>
+                  <ul id="bubbleModalCheckpoints"></ul>
+                </div>
+
+                <div class="modal-panel">
+                  <h3>Watch for</h3>
+                  <ul id="bubbleModalWatchFor"></ul>
+                </div>
+              </div>
+
+              <div class="modal-support-mount d-none" id="bubbleModalResourcesMount"></div>
+
+              <div class="card snippet-card mt-4" id="bubbleModalSnippetCard">
+                <div class="card-body">
+                  <div class="snippet-header">
+                    <div>
+                      <div class="snippet-meta" id="bubbleModalSnippetMeta">Reference snippet</div>
+                      <h3 class="mb-0" id="bubbleModalSnippetTitle">Snippet</h3>
+                    </div>
+                    <button class="copy-snippet" type="button" data-copy-target="bubbleModalSnippet">Copy</button>
+                  </div>
+                  <pre><code id="bubbleModalSnippet"></code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <a class="btn btn-outline-secondary rounded-pill px-4 d-none" id="bubbleModalSourceLink" href="#" target="_blank" rel="noreferrer">Open Step by Step Guide</a>
+              <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="image-lightbox" id="imageLightbox" hidden aria-hidden="true">
+        <div class="image-lightbox-backdrop" data-lightbox-close="true"></div>
+        <div class="image-lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="imageLightboxTitle">
+          <div class="image-lightbox-header">
+            <p class="image-lightbox-kicker" id="imageLightboxTitle">Expanded Image</p>
+            <button type="button" class="image-lightbox-close" id="imageLightboxClose" aria-label="Close expanded image">Close</button>
+          </div>
+          <div class="image-lightbox-body">
+            <img id="imageLightboxImage" alt="">
+          </div>
+          <p class="image-lightbox-caption" id="imageLightboxCaption"></p>
+        </div>
+      </div>
+      <div class="visually-hidden-live" aria-live="polite" id="liveRegion"></div>
+      <footer class="app-footer" aria-label="Site footer" data-shared-footer data-footer-variant="app">
+        <div class="container">Powered by Oracle LiveLabs Team &copy; 2026</div>
+      </footer>
+
+    </div>
+  </div>
+
+  <script async src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/guide-content.js?v=20261109-object-storage"></script>
+  <script src="assets/js/nodoc-cheatsheet-data.js?v=20261007-nodoc-cheatsheet"></script>
+  <script src="assets/js/workshop-generator.js?v=20260708-skill-generator-livestack"></script>
+  <script src="assets/js/shared-side-nav.js?v=20261109-object-storage"></script>
+  <script src="assets/js/nodoc-search.js?v=20261007-search"></script>
+  <script src="assets/js/guide-loader.js?v=20261109-object-storage"></script>
+  <script src="assets/js/nodoc-workshop.js?v=20261109-object-storage"></script>
+  <script src="assets/js/markdown-reference-data.js?v=20261109-object-storage"></script>
+  <script src="assets/js/author-guide-app.js?v=20261109-object-storage"></script>
+  <script src="assets/js/shared-footer.js?v=20260516-followup"></script>
+</body>
+</html>

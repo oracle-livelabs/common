@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Connect Codex to NoDoc and learn authoring, review, history, preview, and QA.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23C74634'/%3E%3C/svg%3E">
+  <title>NoDoc · Oracle LiveLabs Author Guide</title>
+  <script src="../assets/js/author-guide-config.js?v=20261109-object-storage"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/author-guide.css">
+  <link rel="stylesheet" href="../assets/css/author-guide-improvements.css?v=20261109-object-storage">
+</head>
+<body data-author-guide-page="nodoc">
+  <div id="app" data-redwood-creator-pass="2026-05-25">
+    <div class="app-shell">
+      <!-- Sticky Navigation -->
+      <div data-shared-side-nav></div>
+
+      <section class="mode-screen d-none" id="nodocMode" aria-labelledby="nodocHeading">
+        <div class="container">
+          <div class="card mode-hero nodoc-page-hero">
+            <div class="card-body">
+              <div class="mode-overline">Recommended authoring path</div>
+              <h2 class="mode-title" id="nodocHeading"><span class="nodoc-hero-title-copy">Create workshops with</span><a class="nodoc-title-link" href="https://nodoc.oraclecorp.com/" target="_blank" rel="noopener noreferrer" aria-label="Open No Doc platform in a new tab"><img class="nodoc-title-logo" src="../assets/images/no-doc-formal.png" data-guide-asset="assets/images/no-doc-formal.png" alt="No Doc"></a></h2>
+            </div>
+            <div class="nodoc-decoration-strip" aria-hidden="true"></div>
+          </div>
+
+          <section class="card content-card nodoc-full-workshop-card" aria-label="Workshop content">
+            <div class="card-body">
+              <form class="nodoc-search-form" id="nodocSearchForm" role="search" aria-label="Search NoDoc workshop documentation">
+                <label class="visually-hidden" for="nodocSearchInput">Search NoDoc documentation, labs, and tasks</label>
+                <div class="search-group input-group">
+                  <input class="form-control" id="nodocSearchInput" disabled type="search" autocomplete="off" placeholder="Search MCP setup, manual drafts, Codex drafts, QA…" aria-describedby="nodocSearchHelp">
+                  <button class="btn btn-primary" type="submit" disabled>Search</button>
+                </div>
+              </form>
+              <p id="nodocSearchHelp" class="small text-muted mt-2 mb-2">Search current lab and task titles, workflow names, or MCP tools such as <code>discard_page_draft</code>.</p>
+              <div class="nodoc-search-status" id="nodocSearchStatus" aria-live="polite"></div>
+              <div class="nodoc-search-results" id="nodocSearchResults" hidden></div>
+              <div class="guide-layout nodoc-guide-layout">
+                <aside class="guide-sidebar nodoc-sidebar" aria-label="NoDoc workshop navigation">
+                  <div class="guide-sidebar-card">
+                    <nav inert class="nodoc-side-nav" aria-label="NoDoc labs and tasks">
+                      <button class="nodoc-nav-title is-active" type="button" data-nodoc-nav="0" aria-current="page">Introduction</button>
+                      <div class="nodoc-nav-group" data-nodoc-group="1"><button class="nodoc-nav-title" type="button" data-nodoc-nav="1" aria-expanded="false" aria-controls="nodoc-nav-tasks-1">Lab 1 · Access, navigation, and Codex MCP</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-1" hidden><button type="button" data-nodoc-nav="1" data-nodoc-task="1">Open NoDoc and confirm access</button><button type="button" data-nodoc-nav="1" data-nodoc-task="2">Understand the workspace hierarchy</button><button type="button" data-nodoc-nav="1" data-nodoc-task="3">Connect Codex to NoDoc through MCP</button></div></div>
+                      <div class="nodoc-nav-group" data-nodoc-group="2"><button class="nodoc-nav-title" type="button" data-nodoc-nav="2" aria-expanded="false" aria-controls="nodoc-nav-tasks-2">Lab 2 · Create, manage, and recover article structure</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-2" hidden><button type="button" data-nodoc-nav="2" data-nodoc-task="1">Create an article</button><button type="button" data-nodoc-nav="2" data-nodoc-task="2">Add pages</button><button type="button" data-nodoc-nav="2" data-nodoc-task="3">Delete an article or page</button><button type="button" data-nodoc-nav="2" data-nodoc-task="4">Review and recover article and page history</button></div></div>
+                       <div class="nodoc-nav-group" data-nodoc-group="3"><button class="nodoc-nav-title" type="button" data-nodoc-nav="3" aria-expanded="false" aria-controls="nodoc-nav-tasks-3">Lab 3 · Edit and organize page content</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-3" hidden><button type="button" data-nodoc-nav="3" data-nodoc-task="1">Control Autosave</button><button type="button" data-nodoc-nav="3" data-nodoc-task="2">Create and manage page drafts</button><button type="button" data-nodoc-nav="3" data-nodoc-task="3">Apply metadata tags</button><button type="button" data-nodoc-nav="3" data-nodoc-task="4">Write structured content</button></div></div>
+                      <div class="nodoc-nav-group" data-nodoc-group="4"><button class="nodoc-nav-title" type="button" data-nodoc-nav="4" aria-expanded="false" aria-controls="nodoc-nav-tasks-4">Lab 4 · Manage versions and collaboration</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-4" hidden><button type="button" data-nodoc-nav="4" data-nodoc-task="1">Manage versions</button><button type="button" data-nodoc-nav="4" data-nodoc-task="2">Manage co-authors</button><button type="button" data-nodoc-nav="4" data-nodoc-task="3">Add and manage a comment</button></div></div>
+                      <div class="nodoc-nav-group" data-nodoc-group="5"><button class="nodoc-nav-title" type="button" data-nodoc-nav="5" aria-expanded="false" aria-controls="nodoc-nav-tasks-5">Lab 5 · Repository exchange</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-5" hidden><button type="button" data-nodoc-nav="5" data-nodoc-task="1">Load a selected page from OraHub</button><button type="button" data-nodoc-nav="5" data-nodoc-task="2">Export reviewed content to OraHub</button></div></div>
+                      <div class="nodoc-nav-group" data-nodoc-group="6"><button class="nodoc-nav-title" type="button" data-nodoc-nav="6" aria-expanded="false" aria-controls="nodoc-nav-tasks-6">Lab 6 · Vibe Doc-ing content validation and corrections</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-6" hidden><button type="button" data-nodoc-nav="6" data-nodoc-task="1">Use Vibe Doc-ing to validate and correct content</button><button type="button" data-nodoc-nav="6" data-nodoc-task="2">Generate the Information Map</button></div></div>
+                      <div class="nodoc-nav-group" data-nodoc-group="7"><button class="nodoc-nav-title" type="button" data-nodoc-nav="7" aria-expanded="false" aria-controls="nodoc-nav-tasks-7">Lab 7 · Ingest and use Ask NoDoc</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-7" hidden><button type="button" data-nodoc-nav="7" data-nodoc-task="1">Ingest approved content</button><button type="button" data-nodoc-nav="7" data-nodoc-task="2">Use selected-workshop Ask NoDoc</button><button type="button" data-nodoc-nav="7" data-nodoc-task="3">Use the Focus Area chat and manage context</button></div></div>
+                      <div class="nodoc-nav-group" data-nodoc-group="8"><button class="nodoc-nav-title" type="button" data-nodoc-nav="8" aria-expanded="false" aria-controls="nodoc-nav-tasks-8">Lab 8 · Use NoDoc MCP for authoring and Pre Publish</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-8" hidden><button type="button" data-nodoc-nav="8" data-nodoc-task="1">Browse NoDoc and fetch the exact content</button><button type="button" data-nodoc-nav="8" data-nodoc-task="2">Create content and reuse approved content</button><button type="button" data-nodoc-nav="8" data-nodoc-task="3">Edit, organize, and collaborate on content</button><button type="button" data-nodoc-nav="8" data-nodoc-task="4">Delete content safely</button><button type="button" data-nodoc-nav="8" data-nodoc-task="5">Find changes and compare page history</button><button type="button" data-nodoc-nav="8" data-nodoc-task="6">Start, review, and push a pre-publish request</button><button type="button" data-nodoc-nav="8" data-nodoc-task="7">Apply authorization and troubleshooting boundaries</button></div></div>
+                      <div class="nodoc-nav-group" data-nodoc-group="9"><button class="nodoc-nav-title" type="button" data-nodoc-nav="9" aria-expanded="false" aria-controls="nodoc-nav-tasks-9">Lab 9 · Pre Publish and validation results</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-9" hidden><button type="button" data-nodoc-nav="9" data-nodoc-task="1">Configure the LiveLabs Pre Publish target</button><button type="button" data-nodoc-nav="9" data-nodoc-task="2">Run mandatory validations and resolve findings</button><button type="button" data-nodoc-nav="9" data-nodoc-task="3">Choose the post-validation output</button></div></div>
+                      <div class="nodoc-nav-group" data-nodoc-group="10"><button class="nodoc-nav-title" type="button" data-nodoc-nav="10" aria-expanded="false" aria-controls="nodoc-nav-tasks-10">Lab 10 · Complete QA and submit the WMS publishing request</button><div class="nodoc-nav-tasks" id="nodoc-nav-tasks-10" hidden><button type="button" data-nodoc-nav="10" data-nodoc-task="1">Review the Lab 9 output and complete Self Quality Assurance</button><button type="button" data-nodoc-nav="10" data-nodoc-task="2">Resolve review findings and confirm release approval</button><button type="button" data-nodoc-nav="10" data-nodoc-task="3">Create and configure the WMS publishing request</button></div></div>
+                    </nav>
+                  </div>
+                </aside>
+                <main class="guide-stage nodoc-guide-stage" id="nodocWorkshopReader">
+                  <!-- Source: content/nodoc/nodoc-workshop.html, loaded by nodoc-workshop.js. -->
+                  <div class="nodoc-full-tree" aria-label="NoDoc workshop content" aria-busy="true">
+                    <div class="guide-load-state" role="status" aria-live="polite"><p>Loading the NoDoc guide… Please wait.</p></div>
+                  </div>
+                </main>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </section>
+      <button type="button" class="back-to-top" id="backToTopButton" aria-label="Back to top" title="Back to top">
+        <span class="back-to-top-icon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+            <path d="M8 3.25 3.75 7.5l.9.9L7.5 5.56V13h1V5.56l2.85 2.84.9-.9L8 3.25Z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="back-to-top-label">Back to top</span>
+      </button>
+      <!-- Cheatsheet Detail Modal -->
+      <div class="modal fade" id="bubbleModal" tabindex="-1" aria-labelledby="bubbleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div>
+                <div class="modal-kicker" id="bubbleModalKicker">Cheatsheet Detail</div>
+                <h2 class="modal-title h3 mb-0" id="bubbleModalLabel">Cheatsheet detail</h2>
+              </div>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close detail view"></button>
+            </div>
+
+            <div class="modal-body">
+              <p class="lead mb-3" id="bubbleModalDescription"></p>
+              <div class="detail-tags mb-4" id="bubbleModalTags"></div>
+              <div class="modal-support-mount d-none" id="bubbleModalVideoMount"></div>
+
+              <div class="card modal-media-card mb-4 d-none" id="bubbleModalMediaCard">
+                <div class="card-body">
+                  <figure class="modal-media-figure mb-0">
+                    <figcaption id="bubbleModalImageCaption"></figcaption>
+                    <img id="bubbleModalImage" alt="">
+                  </figure>
+                </div>
+              </div>
+
+              <div class="modal-support-mount d-none" id="bubbleModalMilestonesMount"></div>
+              <div class="modal-support-mount d-none" id="bubbleModalExampleMount"></div>
+
+              <div class="modal-grid">
+                <div class="modal-panel">
+                  <h3>Do this</h3>
+                  <ol id="bubbleModalSteps"></ol>
+                </div>
+
+                <div class="modal-panel">
+                  <h3>What to check</h3>
+                  <ul id="bubbleModalCheckpoints"></ul>
+                </div>
+
+                <div class="modal-panel">
+                  <h3>Watch for</h3>
+                  <ul id="bubbleModalWatchFor"></ul>
+                </div>
+              </div>
+
+              <div class="modal-support-mount d-none" id="bubbleModalResourcesMount"></div>
+
+              <div class="card snippet-card mt-4" id="bubbleModalSnippetCard">
+                <div class="card-body">
+                  <div class="snippet-header">
+                    <div>
+                      <div class="snippet-meta" id="bubbleModalSnippetMeta">Reference snippet</div>
+                      <h3 class="mb-0" id="bubbleModalSnippetTitle">Snippet</h3>
+                    </div>
+                    <button class="copy-snippet" type="button" data-copy-target="bubbleModalSnippet">Copy</button>
+                  </div>
+                  <pre><code id="bubbleModalSnippet"></code></pre>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <a class="btn btn-outline-secondary rounded-pill px-4 d-none" id="bubbleModalSourceLink" href="#" target="_blank" rel="noreferrer">Open Step by Step Guide</a>
+              <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="image-lightbox" id="imageLightbox" hidden aria-hidden="true">
+        <div class="image-lightbox-backdrop" data-lightbox-close="true"></div>
+        <div class="image-lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="imageLightboxTitle">
+          <div class="image-lightbox-header">
+            <p class="image-lightbox-kicker" id="imageLightboxTitle">Expanded Image</p>
+            <button type="button" class="image-lightbox-close" id="imageLightboxClose" aria-label="Close expanded image">Close</button>
+          </div>
+          <div class="image-lightbox-body">
+            <img id="imageLightboxImage" alt="">
+          </div>
+          <p class="image-lightbox-caption" id="imageLightboxCaption"></p>
+        </div>
+      </div>
+      <div class="visually-hidden-live" aria-live="polite" id="liveRegion"></div>
+      <footer class="app-footer" aria-label="Site footer" data-shared-footer data-footer-variant="app">
+        <div class="container">Powered by Oracle LiveLabs Team &copy; 2026</div>
+      </footer>
+
+    </div>
+  </div>
+
+  <script async src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/guide-content.js?v=20261109-object-storage"></script>
+  <script src="../assets/js/nodoc-cheatsheet-data.js?v=20261007-nodoc-cheatsheet"></script>
+  <script src="../assets/js/workshop-generator.js?v=20260708-skill-generator-livestack"></script>
+  <script src="../assets/js/shared-side-nav.js?v=20261109-object-storage"></script>
+  <script src="../assets/js/nodoc-search.js?v=20261007-search"></script>
+  <script src="../assets/js/guide-loader.js?v=20261109-object-storage"></script>
+  <script src="../assets/js/nodoc-workshop.js?v=20261109-object-storage"></script>
+  <script src="../assets/js/markdown-reference-data.js?v=20261109-object-storage"></script>
+  <script src="../assets/js/author-guide-app.js?v=20261109-object-storage"></script>
+  <script src="../assets/js/shared-footer.js?v=20260516-followup"></script>
+</body>
+</html>

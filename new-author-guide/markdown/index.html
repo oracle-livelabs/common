@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="LiveLabs Markdown authoring reference with lab structure, readable patterns, copyable snippets, and workshop QA guidance.">
+  <meta name="theme-color" content="#fbf9f8">
+  <title>Markdown · Oracle LiveLabs Author Guide</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='4' fill='%23C74634'/%3E%3C/svg%3E">
+  <script src="../assets/js/author-guide-config.js?v=20261109-object-storage"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/author-guide.css">
+  <link rel="stylesheet" href="../assets/css/author-guide-improvements.css?v=20261109-object-storage">
+  <link rel="stylesheet" href="../assets/css/markdown-reference.css?v=20260924-header-r2">
+  <script src="../assets/js/shared-side-nav.js?v=20261109-object-storage" defer></script>
+  <noscript><style>.filter-panel,.section-sidebar{display:none!important}.reference-layout{display:block}</style></noscript>
+  <script src="../assets/js/markdown-reference-data.js?v=20261109-object-storage" defer></script>
+  <script src="../assets/js/markdown-reference.js?v=20260923-shared-redwood-r2" defer></script>
+</head>
+<body data-author-guide-page="markdown">
+  <a class="skip-link" href="#markdownMode">Skip to content</a>
+  <div id="app" data-redwood-creator-pass="2026-05-25">
+    <div class="app-shell">
+      <!-- Sticky Navigation -->
+      <div data-shared-side-nav></div>
+
+  <main id="markdownMode" class="mode-screen" tabindex="-1">
+    <div class="container">
+    <section class="card mode-hero reference-hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="mode-overline">LiveLabs Markdown authoring</p>
+        <h1 class="mode-title" id="page-title">Author a Markdown lab</h1>
+        <p class="hero-description">Build labs with steps, code, images, and supporting content.</p>
+      </div>
+      <div class="cheatsheet-decoration-strip" aria-hidden="true"></div>
+    </section>
+
+    <div class="reference-layout">
+      <aside class="section-sidebar" aria-label="Reference navigation">
+        <nav class="guide-sidebar-card section-navigation" aria-labelledby="section-nav-title">
+          <p class="panel-kicker" id="section-nav-title">IN THIS REFERENCE</p>
+          <ol id="section-links"></ol>
+          <a class="publish-link" href="#before-publish">Before you publish <span aria-hidden="true">↓</span></a>
+        </nav>
+      </aside>
+
+      <div class="reference-main">
+        <form class="filter-panel" id="reference-filter" role="search" aria-label="Find a Markdown pattern">
+          <div class="filter-input-group">
+            <label for="pattern-search">Find a pattern</label>
+            <div class="search-input-wrap"><span aria-hidden="true">⌕</span><input class="form-control" type="search" id="pattern-search" name="q" placeholder="Try images, lists, or copy" autocomplete="off" aria-describedby="search-help"></div>
+          </div>
+          <div class="filter-scope-group"><label for="pattern-scope">Show</label><select class="form-select" id="pattern-scope" name="scope"><option value="all">All patterns</option><option value="core">Core Markdown</option><option value="livelabs">LiveLabs features</option><option value="caution">Use with care</option></select></div>
+          <button class="btn btn-outline-secondary" type="button" id="clear-filters">Clear</button>
+          <p class="filter-help" id="search-help">Search titles, explanations, and examples. Press <kbd>/</kbd> to find a pattern.</p>
+          <p class="filter-status" id="filter-status" role="status" aria-live="polite" aria-atomic="true">Loading patterns…</p>
+        </form>
+        <noscript><p class="empty-state">Enable JavaScript to browse and copy the Markdown examples. You can also follow the <a href="https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/?lab=4-labs-markdown-develop-content">official LiveLabs Markdown guide</a>.</p></noscript>
+        <div class="empty-state" id="empty-state" hidden><h2>No matching patterns</h2><p>Try a shorter phrase or choose a different category.</p><button type="button" class="btn btn-outline-secondary" id="empty-clear">Show all patterns</button></div>
+        <div id="reference-sections"></div>
+
+        <section class="publish-checklist" id="before-publish" aria-labelledby="publish-title" tabindex="-1">
+          <p class="panel-kicker">ONE FINAL PASS</p>
+          <h2 id="publish-title">Before you publish</h2>
+          <ul>
+            <li>Follow the lab from start to finish as a learner. Confirm each step has a clear action and expected outcome.</li>
+            <li>Replace every placeholder. Check file names, letter case, relative paths, and image descriptions.</li>
+            <li>Preview in the LiveLabs workshop, including on a narrow screen. Check code blocks, indentation, tables, and optional sections.</li>
+            <li>Open every link and download. Test copy buttons and run commands in the intended environment.</li>
+          </ul>
+          <a class="text-link" href="../quickstart/index.html">Continue with the author Quickstart <span aria-hidden="true">→</span></a>
+        </section>
+      </div>
+    </div>
+  </div>
+  </main>
+  <footer class="app-footer" aria-label="Site footer" data-shared-footer data-footer-variant="app">
+    <div class="container">Powered by Oracle LiveLabs Team &copy; 2026</div>
+  </footer>
+    </div>
+  </div>
+  <script src="../assets/js/shared-footer.js?v=20260516-followup"></script>
+  <div class="sr-only" id="copy-status" role="status" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

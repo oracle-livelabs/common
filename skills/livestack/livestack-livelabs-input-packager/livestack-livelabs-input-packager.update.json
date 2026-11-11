@@ -1,0 +1,34 @@
+{
+  "name": "livestack-livelabs-input-packager",
+  "owner": "Patt",
+  "authors": [
+    {
+      "name": "Patt",
+      "role": "author"
+    }
+  ],
+  "version": "1.0",
+  "published_at": "2026-05-21T00:00:00Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/livestack/livestack-livelabs-input-packager/ready-to-deploy-archive/livestack-livelabs-input-packager.zip",
+  "archive_sha256": "26d76f04a2eac8525e560cc275a6d1391a56956fbb48f4b00c824eb598a3bc46",
+  "content_hash": "d3ab08fe0bce4ed5f3de4f6348a9b002b926421396619cca2143c096a1727432",
+  "min_updater_version": "2",
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version_history": [
+    {
+      "version": "1.0",
+      "published_at": "2026-05-21T00:00:00Z",
+      "authors": [
+        "Patt"
+      ],
+      "changes": [
+        "Current repository package recorded from the published skill artifact."
+      ],
+      "archive_sha256": "26d76f04a2eac8525e560cc275a6d1391a56956fbb48f4b00c824eb598a3bc46",
+      "content_hash": "d3ab08fe0bce4ed5f3de4f6348a9b002b926421396619cca2143c096a1727432",
+      "portal_status": "pending"
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script src="/assets/js/page-loading.js?v=20261009-loading"></script>
+  <link rel="stylesheet" href="/assets/css/page-loading.css?v=20261009-loading">
+  <title>LiveLabs Analytics — Data governance</title>
+  <link rel="stylesheet" href="/assets/css/dashboard.css">
+  <link rel="stylesheet" href="/admin-assets/admin.css?v=20261020-sidebar-back">
+  <script defer src="/assets/js/report-export.js"></script>
+  <script defer src="/admin-assets/panel.js?v=20261020-sidebar-back"></script>
+</head>
+<body class="admin-page admin-governance-page">
+  <a class="skip-link" href="/admin/governance#governance-tabs">Skip to governance content</a>
+  <div class="layout analytics-shell-layout">
+    <!-- ADMIN_NAV -->
+    <main>
+      <header class="page-header admin-hero">
+        <div>
+          <p class="eyebrow">Portfolio governance</p>
+          <h1>Data governance</h1>
+          <p id="identity"></p>
+        </div>
+      </header>
+      <div class="hero-stripe"></div>
+
+      <p id="status" role="status" aria-live="polite"></p>
+      <nav id="governance-tabs" class="admin-tabs" role="tablist" aria-label="Data governance views">
+        <button id="tab-snapshots" type="button" role="tab" aria-selected="true" aria-controls="snapshots" data-tab="snapshots" tabindex="0">Snapshots</button>
+        <button id="tab-quality" type="button" role="tab" aria-selected="false" aria-controls="quality" data-tab="quality" tabindex="-1">Data quality</button>
+        <button id="tab-reviews" type="button" role="tab" aria-selected="false" aria-controls="reviews" data-tab="reviews" tabindex="-1">Review decisions</button>
+      </nav>
+
+      <section class="governance-overview" aria-label="Governance overview">
+        <div class="governance-stat"><span>Saved snapshots</span><strong id="overview-snapshots">—</strong><small id="overview-latest">Loading snapshot history…</small></div>
+        <div class="governance-stat"><span>Quality issues</span><strong id="overview-issues">—</strong><small id="overview-affected">Loading selected snapshot…</small></div>
+        <div class="governance-stat"><span>Review decisions</span><strong id="overview-reviews">—</strong><small>Recorded by signed-in admins</small></div>
+        <div class="governance-stat"><span>Selected snapshot</span><strong id="overview-quality-date">—</strong><small id="overview-freshness">Source freshness loading…</small></div>
+      </section>
+
+      <section id="snapshots" role="tabpanel" tabindex="0" aria-labelledby="tab-snapshots snapshots-title">
+        <h2 id="snapshots-title">Snapshots and changes</h2>
+        <p>Capture the current inventory and calculated demand rankings before refreshing. Imported snapshots are retained for comparison; they do not replace dashboard data.</p>
+        <div class="admin-split-grid">
+          <div class="admin-inset">
+            <h3>Snapshot history</h3>
+            <div class="controls">
+              <button id="capture" type="button">Capture current inventory</button>
+              <button id="download-snapshot" type="button">Download selected snapshot</button>
+            </div>
+            <label>Import snapshot JSON<input id="import-snapshot" type="file" accept=".json,application/json"></label>
+          </div>
+          <div class="admin-inset">
+            <h3>Compare versions</h3>
+            <div class="controls">
+              <label>Earlier snapshot<select id="before"></select></label>
+              <label>Later snapshot<select id="after"></select></label>
+              <button id="compare" type="button">Compare snapshots</button>
+            </div>
+          </div>
+        </div>
+        <div id="snapshot-info" class="admin-source-note" aria-live="polite"></div>
+        <p id="rank-notice"></p>
+        <div id="comparison-summary" class="summary"></div>
+        <div class="controls">
+          <label>Search changes<input id="change-search" type="search" placeholder="Title, ID, field, explanation"></label>
+          <button id="changes-csv" type="button">Export changes CSV</button>
+          <button id="changes-xlsx" type="button">Export formatted Excel</button>
+        </div>
+        <div id="changes" class="table-wrap"></div>
+      </section>
+
+      <section id="quality" role="tabpanel" tabindex="0" aria-labelledby="tab-quality quality-title" hidden>
+        <h2 id="quality-title">Data quality queue</h2>
+        <p>Use this queue to investigate unresolved publishing classifications, shared traffic, missing repository evidence, and reporting-period anomalies. Each issue links directly to a review decision for the same snapshot and content.</p>
+        <div class="controls">
+          <label>Issue snapshot<select id="quality-snapshot"></select></label>
+          <label>Issue type<select id="quality-category"><option value="">All issues</option></select></label>
+          <label>Search issues<input id="quality-search" type="search" placeholder="Title, ID, or reason"></label>
+          <button id="quality-csv" type="button">Export filtered queue CSV</button>
+          <button id="quality-xlsx" type="button">Export formatted Excel</button>
+        </div>
+        <div id="quality-info" class="admin-source-note"></div>
+        <div id="quality-summary" class="quality-summary" aria-label="Selected snapshot quality summary"></div>
+        <div id="quality-results" class="table-wrap"></div>
+      </section>
+
+      <section id="reviews" role="tabpanel" tabindex="0" aria-labelledby="tab-reviews reviews-title" hidden>
+        <h2 id="reviews-title">Review decisions</h2>
+        <p>Record a human decision against a specific snapshot. These append-only decisions preserve the reviewer, time, and rationale; they do not change content status or calculated suggestions.</p>
+        <div class="admin-inset review-compose">
+          <h3>Record a decision</h3>
+          <p id="review-selection-note" class="admin-muted">Choose a record from the quality queue, or search this snapshot to start a review.</p>
+          <form method="post" id="review-form">
+            <div class="controls">
+              <label>Source snapshot<select name="snapshotId" id="review-snapshot" required></select></label>
+              <label>Find content<input id="review-record-search" type="search" placeholder="Search by title, LiveLabs ID, or record key" autocomplete="off"></label>
+              <label>Content<select name="recordKey" id="review-record" required><option value="">Search for a content record</option></select></label>
+              <label>Replacement candidate (optional)<input id="review-candidate-search" type="search" placeholder="Search candidate title or ID" autocomplete="off"></label>
+              <label>Candidate<select name="candidateKey" id="review-candidate"><option value="">No candidate</option></select></label>
+              <label>Decision<select name="decision" id="review-decision" required>
+                <option>Investigate data</option>
+                <option>Keep active</option>
+                <option>Refresh content</option>
+                <option>Replacement approved</option>
+                <option>Replacement rejected</option>
+                <option>Retirement proposed</option>
+              </select></label>
+            </div>
+            <p id="review-record-count" class="admin-muted" aria-live="polite">Search to find a record in the selected snapshot.</p>
+            <p id="review-candidate-count" class="admin-muted" aria-live="polite">A candidate is optional for this decision.</p>
+            <p id="review-candidate-required-note" class="admin-muted"></p>
+            <label>Reason<textarea name="reason" rows="3" required maxlength="4000" placeholder="Describe the evidence reviewed and why this decision was made."></textarea></label>
+            <button type="submit">Record decision</button>
+          </form>
+        </div>
+        <details class="score-details">
+          <summary>Selected record score explanation</summary>
+          <div id="score-explanation"></div>
+        </details>
+        <h3>Decision history</h3>
+        <div class="controls">
+          <label>Search decision history<input id="review-search" type="search" placeholder="Record, reviewer, decision, reason"></label>
+          <button id="reviews-csv" type="button">Export history CSV</button>
+          <button id="reviews-xlsx" type="button">Export formatted Excel</button>
+        </div>
+        <div id="review-history" class="table-wrap"></div>
+      </section>
+
+      <footer class="site-footer">Powered by Oracle LiveLabs Team &copy; 2026</footer>
+    </main>
+  </div>
+</body>
+</html>

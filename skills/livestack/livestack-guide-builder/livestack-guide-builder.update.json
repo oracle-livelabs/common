@@ -1,0 +1,47 @@
+{
+  "name": "livestack-guide-builder",
+  "owner": "Matt",
+  "authors": [
+    {
+      "name": "Matt",
+      "role": "author"
+    }
+  ],
+  "version": "1.2",
+  "published_at": "2026-05-26T08:43:03Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/livestack/livestack-guide-builder/ready-to-deploy-archive/livestack-guide-builder.zip",
+  "archive_sha256": "43df6c549057b78e57f4bf3f8e2ccbd286f9624b10cb2c6506271afe9cdb2271",
+  "content_hash": "1b6dc7e23e2ecd12e71fa4062cb72d74a7bc4a6b44c74ecc59b4e23c05b2de6c",
+  "min_updater_version": "2",
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version_history": [
+    {
+      "version": "1.2",
+      "published_at": "2026-05-26T08:43:03Z",
+      "authors": [
+        "Matt"
+      ],
+      "changes": [
+        "Updated reference guidance to use public GitHub healthcare, finance, and retail guide URLs, with local checkouts treated only as optional mirrors."
+      ],
+      "archive_sha256": "43df6c549057b78e57f4bf3f8e2ccbd286f9624b10cb2c6506271afe9cdb2271",
+      "content_hash": "1b6dc7e23e2ecd12e71fa4062cb72d74a7bc4a6b44c74ecc59b4e23c05b2de6c",
+      "portal_status": "pending"
+    },
+    {
+      "version": "1.0",
+      "published_at": "2026-05-21T00:00:00Z",
+      "authors": [
+        "Matt"
+      ],
+      "changes": [
+        "Current repository package recorded from the published skill artifact."
+      ],
+      "archive_sha256": "f76e145b1c207bb5982a0a1a9310dd99d65a8927a2a65da92e1377f667373b44",
+      "content_hash": "18596c1814c4e1c330999da552dee7fce8ce4feccd2982ca2a4724bc2f818dc0",
+      "portal_status": "pending"
+    }
+  ]
+}

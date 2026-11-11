@@ -1,0 +1,49 @@
+{
+  "name": "task-planner",
+  "owner": "Lucian",
+  "authors": [
+    {
+      "name": "Lucian",
+      "role": "author"
+    }
+  ],
+  "version": "1.2",
+  "published_at": "2026-05-22T00:00:00Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/task-planner/ready-to-deploy-archive/task-planner.zip",
+  "archive_sha256": "4a42723641f3a7af323226e8e9ecfc19733e94625290847d3159a9369c5233b8",
+  "content_hash": "818cee04834058387790f42918bfa71a9ccf6683af8f7d505227b5543b6f4535",
+  "min_updater_version": "2",
+  "validation": [
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version_history": [
+    {
+      "version": "1.2",
+      "published_at": "2026-05-22T00:00:00Z",
+      "authors": [
+        "Lucian"
+      ],
+      "changes": [
+        "Added PlanOps mode with durable project folders, status/resume files, versioned plan outputs, execution briefs, validation matrices, decisions, progress logs, and targeted review questions.",
+        "Kept legacy Artifact Mode compatible with existing PLAN.md and PLAN_QA.md workflows.",
+        "Updated the portal-facing skill description to focus on PlanOps capabilities and execution-readiness artifacts."
+      ],
+      "archive_sha256": "4a42723641f3a7af323226e8e9ecfc19733e94625290847d3159a9369c5233b8",
+      "content_hash": "818cee04834058387790f42918bfa71a9ccf6683af8f7d505227b5543b6f4535",
+      "portal_status": "pending"
+    },
+    {
+      "version": "1.1",
+      "published_at": "2026-05-21T00:00:00Z",
+      "authors": [
+        "Lucian"
+      ],
+      "changes": [
+        "Current repository package recorded from the published skill artifact."
+      ],
+      "archive_sha256": "e5ffcc7aa4d38c0470ca9441a13117c51a8f4903eb733c874eea0deb73a9467e",
+      "content_hash": "c237c002029565cdfc805fefb4f1489e04d9760d0872a73e8006b33f396f644b",
+      "portal_status": "pending"
+    }
+  ]
+}

@@ -1,0 +1,398 @@
+{
+  "schemaVersion": "qa-hub.source-capability-inventory.v1",
+  "reviewDate": "2026-10-05",
+  "sourceRepository": "oracle-livelabs/common",
+  "localCommit": "c1c5ce1ac0c840f25f1b9db5c1e1ccecacda33f0",
+  "scope": "qa-automation/tests/platform",
+  "method": "Static source-file inventory and declared tag literals; no test collection or execution",
+  "limitations": [
+    "Generated tests depend on catalog data and browser projects.",
+    "These are spec-file counts, not test-case counts.",
+    "This file does not authorize execution or establish deployed capabilities."
+  ],
+  "specFileCount": 28,
+  "laneSpecCounts": {
+    "auth": 3,
+    "generated": 6,
+    "par": 2,
+    "regression": 9,
+    "smoke": 8
+  },
+  "tagSpecCounts": {
+    "@accessibility": 1,
+    "@assets": 2,
+    "@auth": 3,
+    "@catalog": 8,
+    "@catalog-index": 1,
+    "@content": 9,
+    "@direct": 1,
+    "@event-code": 1,
+    "@filters": 1,
+    "@generated": 6,
+    "@home": 4,
+    "@instructions": 5,
+    "@launch": 1,
+    "@livestack": 5,
+    "@navigation": 3,
+    "@overview": 4,
+    "@par": 2,
+    "@platform": 26,
+    "@private-page": 1,
+    "@regression": 9,
+    "@reservations": 1,
+    "@resources": 2,
+    "@responsive": 1,
+    "@scheduled": 1,
+    "@search": 6,
+    "@smoke": 11,
+    "@tenancy": 1,
+    "@ui": 22,
+    "@unit": 1,
+    "@workshop": 8
+  },
+  "specs": [
+    {
+      "id": "tests/platform/auth/authenticatedHome.spec.ts",
+      "lane": "auth",
+      "tags": [
+        "@auth",
+        "@home",
+        "@platform",
+        "@smoke"
+      ],
+      "sha256": "c5dd803e2855dd5adc314c3be8239d4df0ce7df5e6b426de45058a8adaabc1b4"
+    },
+    {
+      "id": "tests/platform/auth/privatePageAccess.spec.ts",
+      "lane": "auth",
+      "tags": [
+        "@auth",
+        "@platform",
+        "@private-page",
+        "@smoke"
+      ],
+      "sha256": "83075084c9c71accb0e80c3478998073ba970734fba14eb24a74263990a80d5e"
+    },
+    {
+      "id": "tests/platform/auth/reservations.spec.ts",
+      "lane": "auth",
+      "tags": [
+        "@auth",
+        "@platform",
+        "@reservations",
+        "@smoke"
+      ],
+      "sha256": "4875409adad756ef5400bf3147ee58b8fef5151e6daf7a222e32124de24ca856"
+    },
+    {
+      "id": "tests/platform/generated/catalogIndex.generated.spec.ts",
+      "lane": "generated",
+      "tags": [
+        "@catalog-index",
+        "@generated",
+        "@platform"
+      ],
+      "sha256": "2376cfa74585ccf68cd6309c3c2489b0b0dbd737cbf805cad9f113483618a530"
+    },
+    {
+      "id": "tests/platform/generated/livestackOverview.generated.spec.ts",
+      "lane": "generated",
+      "tags": [
+        "@content",
+        "@generated",
+        "@livestack",
+        "@overview",
+        "@platform",
+        "@ui"
+      ],
+      "sha256": "f378e938a79e31d1acf762e033e7d1426eac2cb403ebbd2c9ed16539e892f83e"
+    },
+    {
+      "id": "tests/platform/generated/livestackResources.generated.spec.ts",
+      "lane": "generated",
+      "tags": [
+        "@assets",
+        "@content",
+        "@generated",
+        "@instructions",
+        "@livestack",
+        "@platform",
+        "@resources",
+        "@ui"
+      ],
+      "sha256": "935e0e75f581ca509a5faf0feadd671d727895c3daae593515e221b568f81b3f"
+    },
+    {
+      "id": "tests/platform/generated/previewInstructions.generated.spec.ts",
+      "lane": "generated",
+      "tags": [
+        "@content",
+        "@generated",
+        "@instructions",
+        "@platform",
+        "@ui",
+        "@workshop"
+      ],
+      "sha256": "b081a9b190232a2e28bcaaa3c1de6583a59f1fdf668577fe3bbbbc5e9ae5d7b2"
+    },
+    {
+      "id": "tests/platform/generated/tenancyInstructions.generated.spec.ts",
+      "lane": "generated",
+      "tags": [
+        "@content",
+        "@generated",
+        "@instructions",
+        "@platform",
+        "@tenancy",
+        "@ui",
+        "@workshop"
+      ],
+      "sha256": "412a309f35f473e21447b6800580fda8d7f6671ee4ad73e4239e0ec1de42dee1"
+    },
+    {
+      "id": "tests/platform/generated/workshopOverview.generated.spec.ts",
+      "lane": "generated",
+      "tags": [
+        "@content",
+        "@generated",
+        "@overview",
+        "@platform",
+        "@ui",
+        "@workshop"
+      ],
+      "sha256": "b6cd0bcc7203fdb30f89fd495612dff9984c572bab6cd73970af932b56478fd6"
+    },
+    {
+      "id": "tests/platform/par/catalogParLinks.spec.ts",
+      "lane": "par",
+      "tags": [
+        "@catalog",
+        "@livestack",
+        "@par",
+        "@scheduled",
+        "@workshop"
+      ],
+      "sha256": "bed7dc0495d1eee3061f1b0f54b43c74ba96b8e00cb0b1032f1d49511dc02da3"
+    },
+    {
+      "id": "tests/platform/par/parAuditCore.spec.ts",
+      "lane": "par",
+      "tags": [
+        "@par",
+        "@unit"
+      ],
+      "sha256": "48df6dc59217d59b55f0753401ce606c29c476aaa87d3814f2d5ac6d6fcfe2ce"
+    },
+    {
+      "id": "tests/platform/regression/public/catalog/filters/catalogFilters.spec.ts",
+      "lane": "regression",
+      "tags": [
+        "@catalog",
+        "@filters",
+        "@platform",
+        "@regression",
+        "@ui"
+      ],
+      "sha256": "5a2e2922dad0def7fe80a266ec8d3c75e6be857618abff1591a9fa569be6b5d9"
+    },
+    {
+      "id": "tests/platform/regression/public/catalog/search/catalogDeepLinks.spec.ts",
+      "lane": "regression",
+      "tags": [
+        "@catalog",
+        "@navigation",
+        "@platform",
+        "@regression",
+        "@search",
+        "@ui"
+      ],
+      "sha256": "9d20e93b104e7605a4c29ef1784809bd506196761c7b02c5c6cfff9a8151b088"
+    },
+    {
+      "id": "tests/platform/regression/public/catalog/search/catalogSearchControls.spec.ts",
+      "lane": "regression",
+      "tags": [
+        "@catalog",
+        "@platform",
+        "@regression",
+        "@search",
+        "@ui"
+      ],
+      "sha256": "a43bbca36bd0d3068f00ec21c9ecf8685990ae9fc303b742ff5cbc4fd7dd11ed"
+    },
+    {
+      "id": "tests/platform/regression/public/instructions/previewInstructions.spec.ts",
+      "lane": "regression",
+      "tags": [
+        "@content",
+        "@instructions",
+        "@platform",
+        "@regression",
+        "@ui",
+        "@workshop"
+      ],
+      "sha256": "d244f3a5dd54641e3d5d35768a64ffc79a9bcd8f197c97d5f74e89a2d7b84cae"
+    },
+    {
+      "id": "tests/platform/regression/public/livestack-resources/livestackResources.spec.ts",
+      "lane": "regression",
+      "tags": [
+        "@assets",
+        "@instructions",
+        "@livestack",
+        "@platform",
+        "@regression",
+        "@resources",
+        "@ui"
+      ],
+      "sha256": "e927fa32cb4109df1b2b866fd5b8816f7f0496c65d88d08cd9a35c54d7492f03"
+    },
+    {
+      "id": "tests/platform/regression/public/overview/livestackOverview.spec.ts",
+      "lane": "regression",
+      "tags": [
+        "@content",
+        "@livestack",
+        "@overview",
+        "@platform",
+        "@regression",
+        "@ui"
+      ],
+      "sha256": "880fa3b6f905aeb89a3ef8264e72877ba67764a16d75c8faec8ffab27853ad0f"
+    },
+    {
+      "id": "tests/platform/regression/public/overview/workshopOverview.spec.ts",
+      "lane": "regression",
+      "tags": [
+        "@content",
+        "@overview",
+        "@platform",
+        "@regression",
+        "@ui",
+        "@workshop"
+      ],
+      "sha256": "e5702718a2da922f6ebd0c19a796ee4fdadc26e7769e63f2d86a409eb7ae0789"
+    },
+    {
+      "id": "tests/platform/regression/public/search/searchEdgeCases.spec.ts",
+      "lane": "regression",
+      "tags": [
+        "@catalog",
+        "@platform",
+        "@regression",
+        "@search",
+        "@ui"
+      ],
+      "sha256": "d811fe080750ec2af64c222823cf3560c218513ac37a60592e1e258e9728a528"
+    },
+    {
+      "id": "tests/platform/regression/public/workshop/launch-options/workshopLaunchOptions.spec.ts",
+      "lane": "regression",
+      "tags": [
+        "@launch",
+        "@platform",
+        "@regression",
+        "@ui",
+        "@workshop"
+      ],
+      "sha256": "678d4ac02c8435f92b06e8da0fe33fe560d34be27b3cd7f861e9e759e23b9abe"
+    },
+    {
+      "id": "tests/platform/smoke/public/catalog/catalogDirect.spec.ts",
+      "lane": "smoke",
+      "tags": [
+        "@catalog",
+        "@direct",
+        "@platform",
+        "@search",
+        "@smoke",
+        "@ui"
+      ],
+      "sha256": "0592c4798e773bdc49ce8c6ee4a81eadc22d2565bf2d90404aa85a51279f07f1"
+    },
+    {
+      "id": "tests/platform/smoke/public/catalog/workshopContentShell.spec.ts",
+      "lane": "smoke",
+      "tags": [
+        "@content",
+        "@platform",
+        "@smoke",
+        "@ui",
+        "@workshop"
+      ],
+      "sha256": "fd4e8173656204329938c1d2fbaec40732370719fb040fa026867b8d05151df6"
+    },
+    {
+      "id": "tests/platform/smoke/public/event-code/eventCodeEntry.spec.ts",
+      "lane": "smoke",
+      "tags": [
+        "@event-code",
+        "@navigation",
+        "@platform",
+        "@smoke",
+        "@ui"
+      ],
+      "sha256": "8cf6a186f667f53f521872dd2eb4d97c9f90ac6cb0f8e14ed3513bf03553111e"
+    },
+    {
+      "id": "tests/platform/smoke/public/homepage/homeAccessibility.spec.ts",
+      "lane": "smoke",
+      "tags": [
+        "@accessibility",
+        "@home",
+        "@platform",
+        "@smoke",
+        "@ui"
+      ],
+      "sha256": "d954c24f7e94b93fb30d0b5bf308991abf93ea52b36ae351e680a24f95cbb1bc"
+    },
+    {
+      "id": "tests/platform/smoke/public/homepage/homePage.spec.ts",
+      "lane": "smoke",
+      "tags": [
+        "@home",
+        "@navigation",
+        "@platform",
+        "@smoke",
+        "@ui"
+      ],
+      "sha256": "715b5645ee7922b67d91a4c08179eb79030043982721d8d982ee2424df22399c"
+    },
+    {
+      "id": "tests/platform/smoke/public/homepage/homeResponsive.spec.ts",
+      "lane": "smoke",
+      "tags": [
+        "@home",
+        "@platform",
+        "@responsive",
+        "@smoke",
+        "@ui"
+      ],
+      "sha256": "a06845c339627b0b42053a19ab40672b006066da04bbc719735e05a1b2d2ebcf"
+    },
+    {
+      "id": "tests/platform/smoke/public/search/homeSearch.spec.ts",
+      "lane": "smoke",
+      "tags": [
+        "@catalog",
+        "@platform",
+        "@search",
+        "@smoke",
+        "@ui"
+      ],
+      "sha256": "4d3d54fb5a8146d5957a518022f44d4427691e631a6bde9f603feaace7814446"
+    },
+    {
+      "id": "tests/platform/smoke/public/search/homeSearchOpenWorkshopLanding.spec.ts",
+      "lane": "smoke",
+      "tags": [
+        "@catalog",
+        "@platform",
+        "@search",
+        "@smoke",
+        "@ui"
+      ],
+      "sha256": "6464146ae955d813a1baa0e8a0a0c9570c6c4c062ea8a72753c59460e80ae2a1"
+    }
+  ]
+}

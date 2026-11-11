@@ -1,0 +1,76 @@
+{
+  "name": "confluence-page-builder",
+  "owner": "Lucian",
+  "authors": [
+    {
+      "name": "Lucian",
+      "role": "author"
+    }
+  ],
+  "version": "1.3",
+  "published_at": "2026-05-21T21:59:10Z",
+  "archive_url": "https://raw.githubusercontent.com/oracle-livelabs/common/main/skills/confluence-page-builder/ready-to-deploy-archive/confluence-page-builder.zip",
+  "archive_sha256": "6f4b2e921aaba63718be4b4c311c1acc33e8f9ff1a508b7ccf4c9f9adc472722",
+  "content_hash": "2a80875a64d05b9fe78ed45ac08b3653a428a04a926d9722df09cdb20ab87f6c",
+  "min_updater_version": "2",
+  "validation": [
+    "python3 scripts/confluence_storage_audit.py <storage_file>",
+    "python3 scripts/confluence_page_qa_gate.py <storage_file>",
+    "python3 -m py_compile scripts/*.py",
+    "python3 scripts/check_skill_package.py <skill_root>"
+  ],
+  "version_history": [
+    {
+      "version": "1.3",
+      "published_at": "2026-05-21T21:59:10Z",
+      "authors": [
+        "Lucian"
+      ],
+      "changes": [
+        "Removed duplicated FAQ/FAQ Questions template wording, added a Confluence page QA gate for duplicate labels and storage hygiene, updated workflow guidance, and ran skill-cleaner publish-readiness cleanup."
+      ],
+      "archive_sha256": "6f4b2e921aaba63718be4b4c311c1acc33e8f9ff1a508b7ccf4c9f9adc472722",
+      "content_hash": "2a80875a64d05b9fe78ed45ac08b3653a428a04a926d9722df09cdb20ab87f6c",
+      "portal_status": "pending"
+    },
+    {
+      "version": "1.2",
+      "published_at": "2026-05-21T21:42:39Z",
+      "authors": [
+        "Lucian"
+      ],
+      "changes": [
+        "Updated the summary-first template with tabbed Legend sections, grouped FAQ tabs, short-answer expandable FAQ entries, and restrained Redwood-inspired color guidance."
+      ],
+      "archive_sha256": "332e5bd16c473aebb7fb045d6abfec4f42fa90f9890c5f63ce8f5656a4668455",
+      "content_hash": "f0c191dd973b8a39e6ceb19bdb02ca2cbdf25ceb37075881389d25acb3a2d7a9",
+      "portal_status": "pending"
+    },
+    {
+      "version": "1.1",
+      "published_at": "2026-05-21T00:00:00Z",
+      "authors": [
+        "Lucian"
+      ],
+      "changes": [
+        "Added versioned Desktop workspace workflow, summary-first template rules, iteration reports, usage guide generation, PM-mode guidance, and standard expand/tab outline support."
+      ],
+      "archive_sha256": "f3d97bcb610aaed57b2aec01c074a08dc262e53533301bc5b1ab50195eb6a4ad",
+      "content_hash": "084e39dbf71f7d6395289924c5d740a6838eb4aaa717071353a95866c86b0eea",
+      "portal_status": "pending"
+    },
+    {
+      "version": "1.0",
+      "published_at": "2026-05-21T00:00:00Z",
+      "authors": [
+        "Lucian"
+      ],
+      "changes": [
+        "Current repository package recorded from the published skill artifact."
+      ],
+      "archive_sha256": "78d6f0e823a0b555172c61452f32413d7103826209a05ac1ffb8e9d71c947a1e",
+      "content_hash": "4aaa1fd34a0cf4b9b76a0a966e306bb9063c58fc29d3c2a9b612397228e47863",
+      "portal_status": "pending"
+    }
+  ]
+}

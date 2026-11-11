@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="360" viewBox="0 0 1400 360" role="img" aria-labelledby="title desc">
+  <title id="title">NoDoc workspace hierarchy</title>
+  <desc id="desc">A left-to-right diagram showing Focus Area, LiveLabs repo, Article, optional Article version, and Page as nested navigation levels.</desc>
+  <defs>
+    <linearGradient id="canvas" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#eef3f7"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-20%" width="120%" height="150%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#142b3a" flood-opacity="0.14"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6b7785"/>
+    </marker>
+    <style>
+      .heading { font: 700 26px Arial, sans-serif; fill: #1f2933; }
+      .subheading { font: 400 16px Arial, sans-serif; fill: #52606d; }
+      .node-title { font: 700 20px Arial, sans-serif; fill: #ffffff; }
+      .node-copy { font: 400 14px Arial, sans-serif; fill: #ffffff; }
+      .node-note { font: 700 13px Arial, sans-serif; fill: #475569; }
+      .connector { stroke: #6b7785; stroke-width: 3; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1400" height="360" rx="20" fill="url(#canvas)"/>
+  <text x="48" y="48" class="heading">Read the NoDoc workspace from broadest scope to selected page</text>
+  <text x="48" y="76" class="subheading">Use the left Table of Contents. Expand each parent before selecting its child.</text>
+
+  <line x1="250" y1="190" x2="300" y2="190" class="connector"/>
+  <line x1="520" y1="190" x2="570" y2="190" class="connector"/>
+  <line x1="790" y1="190" x2="840" y2="190" class="connector"/>
+  <line x1="1060" y1="190" x2="1110" y2="190" class="connector"/>
+
+  <g filter="url(#shadow)">
+    <rect x="40" y="120" width="210" height="140" rx="16" fill="#c74634"/>
+    <text x="145" y="166" text-anchor="middle" class="node-title">Focus Area</text>
+    <text x="145" y="196" text-anchor="middle" class="node-copy">Select the content scope</text>
+    <text x="145" y="220" text-anchor="middle" class="node-copy">from the NoDoc selector</text>
+
+    <rect x="310" y="120" width="210" height="140" rx="16" fill="#9d2b25"/>
+    <text x="415" y="166" text-anchor="middle" class="node-title">LiveLabs repo</text>
+    <text x="415" y="196" text-anchor="middle" class="node-copy">Open the selected</text>
+    <text x="415" y="220" text-anchor="middle" class="node-copy">workspace TOC</text>
+
+    <rect x="580" y="120" width="210" height="140" rx="16" fill="#00688b"/>
+    <text x="685" y="166" text-anchor="middle" class="node-title">Article</text>
+    <text x="685" y="196" text-anchor="middle" class="node-copy">Choose the top-level</text>
+    <text x="685" y="220" text-anchor="middle" class="node-copy">documentation item</text>
+
+    <rect x="850" y="120" width="210" height="140" rx="16" fill="#087f8c"/>
+    <text x="955" y="157" text-anchor="middle" class="node-title">Article version</text>
+    <text x="955" y="184" text-anchor="middle" class="node-copy">Use when the article</text>
+    <text x="955" y="208" text-anchor="middle" class="node-copy">shows a version</text>
+    <text x="955" y="237" text-anchor="middle" class="node-note">optional level</text>
+
+    <rect x="1120" y="120" width="210" height="140" rx="16" fill="#14532d"/>
+    <text x="1225" y="166" text-anchor="middle" class="node-title">Page</text>
+    <text x="1225" y="196" text-anchor="middle" class="node-copy">Select the page to</text>
+    <text x="1225" y="220" text-anchor="middle" class="node-copy">read, edit, or review</text>
+  </g>
+
+  <text x="48" y="316" class="subheading">Scope rule: keep the full parent chain in view when you choose a target for authoring, history, MCP, or Pre Publish.</text>
+</svg>

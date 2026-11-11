@@ -1,0 +1,4 @@
+interface:
+  display_name: "Polly Disable"
+  short_description: "Disable Polly for the current clone"
+  default_prompt: "Use $polly-disable to disable Polly for this repository."

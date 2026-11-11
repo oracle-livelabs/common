@@ -3,6 +3,8 @@
 ## Introduction
 DB User Assistance Team ONLY - You need to add a link from your Oracle Help Center (OHC) page to a lab hosted on an Oracle GitHub repository. This lab details how to use Oracle Learning Library (OLL) administration tools to manage links and how to add a link to an OHC page.
 
+Estimated Time: x
+
 ### Objectives
 * Create an OLL content entry for your lab.
 * Create the Target URL for a Lab.
@@ -37,7 +39,7 @@ You must have OLL administrator privileges to view and edit content entries in O
 5. To find your the content entry for the lab, click on a header label in the table, click in the **Filter** field, begin typing what you're looking for, and then select the appropriate item.
 6. Click **link** under **Copy This** to copy the content entry link.
 
-  The content ID URL opens in your browser.
+    The content ID URL opens in your browser.
 
 7. Save the URL, which you will use to create a link from an OHC page.
 

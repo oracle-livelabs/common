@@ -1,0 +1,33 @@
+{
+  "title": "Oracle LiveLabs Author Guide",
+  "tutorials": [
+    { "id": "introduction", "title": "Introduction", "description": "This lab provides an overview of submitting and creating workshops and labs for Oracle LiveLabs and other platforms.", "taskCount": 0, "panelCount": 3 },
+    { "id": "sla", "title": "LiveLabs SLAs", "description": "This document outlines the Service Level Agreements (SLAs) for the Oracle LiveLabs platform, including response times for PRs, approvals, publishing, and support.", "taskCount": 0, "panelCount": 1 },
+    { "id": "github-introduction", "title": "Need more information on GitHub?", "description": "Describes what GitHub is and general information on projects and repositories", "taskCount": 0, "panelCount": 3 },
+    { "id": "wms-workflows", "title": "Need to understand the status workflow in WMS?", "description": "Details the status in WMS and what comes next, who is responsible.", "taskCount": 0, "panelCount": 3 },
+    { "id": "1-labs-wms", "title": "Lab 1: Submit new workshop in WMS", "description": "This lab walks you through working with Oracle Workshop Management System (WMS) and shows you the workflow for developing a workshop.", "taskCount": 4, "panelCount": 6 },
+    { "id": "2-labs-github", "title": "Lab 2: Set up GitHub and install tools", "description": "This lab helps you configure your environment for developing labs and workshops using Markdown and GitHub.", "taskCount": 5, "panelCount": 8 },
+    { "id": "3-labs-sync-github", "title": "Lab 3: Stay in sync with GitHub environment", "description": "This lab shows you the Oracle LiveLabs GitHub folder structure how to fork and clone the repositories. Also use the common labs and images with the workshop templates.", "taskCount": 10, "panelCount": 13 },
+    { "id": "13-labs-capture-screens-best-practices", "title": "Lab 4a: Capture effective screens - Best practices", "description": "This lab will describe the best practices when capturing screens.", "taskCount": 4, "panelCount": 6 },
+    { "id": "optishot", "title": "Lab 4b: How to use OptiShot to optimize screenshots", "taskCount": 5, "panelCount": 9 },
+    { "id": "4-labs-markdown-develop-content", "title": "Lab 5a: Develop Markdown and content", "description": "This lab gives you tips and tricks for editing and developing your lab (markdown) content using LiveLabs standards and accessibility for your workshops.", "taskCount": 21, "panelCount": 23 },
+    { "id": "freesqlembed", "title": "Lab 5b: Embed SQL Developer using freesql.com", "description": "This lab shows you how to embed SQL Developer in a LiveLabs workshop using FreeSQL.", "taskCount": 3, "panelCount": 6 },
+    { "id": "quiz", "title": "Lab 5c: Add LiveLabs Quizzes to your workshops", "taskCount": 7, "panelCount": 10 },
+    { "id": "fixomat", "title": "Lab 5d: Fixomat 2000", "description": "This lab shows you how to use Fixomat for LiveLabs markdown repair and cleanup.", "taskCount": 4, "panelCount": 7 },
+    { "id": "5-labs-qa-checks", "title": "Lab 6a: Quality Assurance checks and steps", "description": "This lab prepares you for Quality Assurance of your workshop, details to look for and adjust before publishing your workshop.", "taskCount": 4, "panelCount": 6 },
+    { "id": "prcheck", "title": "Lab 6b: Pull Request Automated Checks", "taskCount": 4, "panelCount": 7 },
+    { "id": "6-labs-publish", "title": "Lab 7: Publish your workshop", "description": "This lab walks you through the WMS steps to publish your workshop.", "taskCount": 4, "panelCount": 7 },
+    { "id": "11-create-freesql", "title": "Lab 8a: Publish to Live SQL", "description": "This lab shows you how to create a tutorial in Live SQL", "taskCount": 4, "panelCount": 7 },
+    { "id": "12-freesql-integration", "title": "Lab 8b: Live SQL Integration", "description": "This lab shows you how to integrate Live SQL in your workshop", "taskCount": 3, "panelCount": 5 },
+    { "id": "10-create-sprints-workflow", "title": "Lab 9: Develop LiveLabs Sprints", "description": "This lab shows you how to create a Sprint for LiveLabs", "taskCount": 5, "panelCount": 7 },
+    { "id": "6-labs-setup-graphical-remote-desktop", "title": "Lab 10a: Setup Graphical Remote Desktop", "description": "This lab will describe how to create and use a graphical remote desktop for your workshop.", "taskCount": 6, "panelCount": 12 },
+    { "id": "7-labs-create-custom-image-for-marketplace", "title": "Lab 10b: Create Custom Image for Marketplace", "description": "This lab will describe how to create and use a marketplace image for your workshop.", "taskCount": 3, "panelCount": 6 },
+    { "id": "8-labs-publish-custom-image-to-marketplace", "title": "Lab 10c: Publish Your Image to Oracle Marketplace", "description": "This lab will show you how to publish your image to Oracle Marketplace.", "taskCount": 6, "panelCount": 9 },
+    { "id": "12-add-custom-image-to-workshop", "title": "Lab 10d: Update the Image on Your Sandbox Environment", "description": "This lab will show you how to get your new Marketplace image added to your LiveLab.", "taskCount": 3, "panelCount": 5 },
+    { "id": "secure-desktop", "title": "Lab 11a: Secure Desktop Environments in LiveLabs", "description": "This lab will show you how to get your new Marketplace image added to your LiveLab.", "taskCount": 2, "panelCount": 4 },
+    { "id": "secure-desktop-how-to-request", "title": "Lab 11b: How to Request and Access Secure Desktop Environments", "description": "This lab will show you how to get your new Marketplace image added to your LiveLab.", "taskCount": 2, "panelCount": 5 },
+    { "id": "15-labs-livelabs-ai-developer-hub", "title": "Lab 12: Get Started with the LiveLabs AI Developer Hub", "description": "This lab points authors to the LiveLabs AI Developer Hub for deeper workflow guides instead of repeating that content here.", "taskCount": 3, "panelCount": 6 },
+    { "id": "create-a-livestack", "title": "Lab 13: Create a LiveStack", "description": "This lab shows you how to create a LiveStack in WMS.", "taskCount": 4, "panelCount": 6 },
+    { "id": "17-assets", "title": "Lab 14: Create and Manage Assets", "description": "This lab shows you how to create and manage assets using the WMS Self-Service Portal.", "taskCount": 5, "panelCount": 7 }
+  ]
+}

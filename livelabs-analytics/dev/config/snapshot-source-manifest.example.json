@@ -1,0 +1,15 @@
+{
+  "snapshot_date": "2026-09-28",
+  "files": {
+    "wms": "All Workshops Report (4).csv",
+    "sprints": "All Workshops Report (2).csv",
+    "views": "livelabs_dashboard_top_views.xlsx",
+    "tags_product": "Workshop by Tags (Role, Product, Focus).csv",
+    "tags_role": "Workshop by Tags (Role, Product, Focus) (1).csv",
+    "tags_focus": "Workshop by Tags (Role, Product, Focus) (2).csv",
+    "tags_sales_play": "Workshop by Tags (Role, Product, Focus) (3).csv"
+  },
+  "period_definitions": {
+    "status": "Unconfirmed — obtain explicit start/end dates and cumulative/disjoint definitions from the source provider"
+  }
+}
