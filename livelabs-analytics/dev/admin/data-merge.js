@@ -363,8 +363,8 @@
   function renderMergePreview(data) {
     const counts = data.counts;
     const summaryItems = [
-      ['Matched QA rows', counts.matchedRows], ['Matched dashboard items', counts.matchedAnalyticsRecords],
-      ['Analytics only', counts.unmatchedAnalyticsRecords], ['QA only', counts.unmatchedQaRows], ['Ambiguous QA rows', counts.ambiguousQaRows],
+      ['Matched QA rows', counts.matchedRows], ['Matched inventory items', counts.matchedAnalyticsRecords],
+      ['Analytics-only items', counts.unmatchedAnalyticsRecords], ['QA-only rows', counts.unmatchedQaRows], ['Ambiguous QA rows', counts.ambiguousQaRows],
       ['P1 findings', counts.p1Findings], ['Average Jenkins Error Score', counts.averageJenkinsErrorScore == null ? 'N/A' : Number(counts.averageJenkinsErrorScore).toFixed(2)]
     ];
     $('merge-status-title').textContent = data.applyable ? 'Mapped preview is ready' : 'No unique dashboard matches yet';
@@ -389,10 +389,11 @@
     selectOptions($('snapshot-select'), snapshots, (item) => `${item.date} · ${item.label} · ${item.id.slice(0, 8)}`, (item) => item.id, 'No Analytics snapshots saved');
     selectOptions($('jenkins-select'), qaSnapshots, (item) => `${item.runId} · ${item.label} · ${item.id.slice(0, 8)}`, (item) => item.id, 'No QA report snapshots saved');
     selectOptions($('archive-run-select'), archiveRuns, (item) => `${item.startedAt || item.runId} · ${item.status} · ${item.total} tests`, (item) => item.runId, 'No local archive runs found');
-    if (prefer.analyticsId && snapshots.some((item) => item.id === prefer.analyticsId)) $('snapshot-select').value = prefer.analyticsId;
-    if (prefer.qaId && qaSnapshots.some((item) => item.id === prefer.qaId)) $('jenkins-select').value = prefer.qaId;
     if (snapshots.some((item) => item.id === analyticsSelection)) $('snapshot-select').value = analyticsSelection;
     if (qaSnapshots.some((item) => item.id === qaSelection)) $('jenkins-select').value = qaSelection;
+    // A newly imported/edited version takes precedence over the previous selection.
+    if (prefer.analyticsId && snapshots.some((item) => item.id === prefer.analyticsId)) $('snapshot-select').value = prefer.analyticsId;
+    if (prefer.qaId && qaSnapshots.some((item) => item.id === prefer.qaId)) $('jenkins-select').value = prefer.qaId;
     renderSelections();
     renderMergeHistory();
     await refreshPreviews();
@@ -833,7 +834,7 @@
         const imported = normalizeAnalyticsImport(await readImportedFile(file), file.name);
         const saved = await post('snapshots', { action: 'upload', label: file.name, snapshot: imported });
         await loadSources({ analyticsId: saved.snapshotId });
-        setStatus(`Analytics source saved: ${imported.records.length.toLocaleString()} records.`);
+        setStatus(`Analytics source saved: ${imported.records.length.toLocaleString()} records for matching. Refresh canonical inventory separately to update dashboard content.`);
       }
       catch (error) { setStatus(error.message); }
       finally { event.target.value = ''; }
@@ -918,7 +919,7 @@
           analyticsField: $('analytics-match-field').value, qaField: $('qa-match-field').value
         });
         window.localStorage.setItem('livelabsQaReportMergeRefresh', `${result.id}:${Date.now()}`);
-        setStatus(`Integrated Jenkins findings for ${result.summary.matchedDashboardItems.toLocaleString()} dashboard items. Dashboard, inventory, and search will show the updated scores and records.`);
+        setStatus(`Integrated Jenkins findings for ${result.summary.matchedDashboardItems.toLocaleString()} matched inventory items. The public dashboard shows eligible published items. Canonical inventory is unchanged.`);
         await loadSources();
       } catch (error) { setStatus(error.message); }
     });

@@ -4,9 +4,34 @@
   function hydrateNoDocAssets(root, contentUrl) {
     root.querySelectorAll("[data-nodoc-asset]").forEach(function (image) {
       var attribute = image.tagName === "SOURCE" ? "srcset" : "src";
-      image.setAttribute(attribute, new URL(image.getAttribute("data-nodoc-asset"), contentUrl).toString());
+      var url = new URL(image.getAttribute("data-nodoc-asset"), contentUrl).toString();
+      if (image.tagName === "IMG") {
+        image.setAttribute("data-guide-src", url);
+        image.loading = "lazy";
+        image.decoding = "async";
+      } else {
+        image.setAttribute(attribute, url);
+      }
     });
   }
+
+  function loadVisibleNoDocImages(root) {
+    if (!root) return;
+    root.querySelectorAll("img[data-guide-src]").forEach(function (image) {
+      if (image.closest('[hidden], details:not([open]), .tab-pane:not(.active)')) return;
+      image.src = image.getAttribute("data-guide-src");
+      image.removeAttribute("data-guide-src");
+    });
+  }
+
+  document.addEventListener("toggle", function (event) {
+    if (event.target.open) loadVisibleNoDocImages(event.target);
+  }, true);
+  document.addEventListener("shown.bs.tab", function () {
+    var source = document.getElementById("nodocWorkshopSource");
+    // The reader mounts the source fragment under this stable root.
+    loadVisibleNoDocImages(source || document.getElementById("nodocWorkshopReader"));
+  });
 
   function cleanLabel(value) {
     return String(value || "").replace(/\u00c2/g, "").replace(/\s+/g, " ").trim();
@@ -1244,6 +1269,7 @@
         taskSection.open = selectedTask > 0 && taskSection.id === "nodoc-panel-" + selectedIndex + "-task-" + selectedTask;
       });
       syncTaskToggle(selectedPanel);
+      loadVisibleNoDocImages(selectedPanel);
       target = selectedTask ? selectedPanel.querySelector("#nodoc-panel-" + selectedIndex + "-task-" + selectedTask) : selectedPanel;
       focusTarget = selectedTask ? target.querySelector(":scope > summary") : selectedPanel.querySelector(".nodoc-lab-heading");
       if (config.scroll !== false) {

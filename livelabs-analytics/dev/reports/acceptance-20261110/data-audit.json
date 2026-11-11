@@ -1,0 +1,371 @@
+{
+  "sourceRecords": 2293,
+  "publicRecords": 889,
+  "sourceUniqueKeys": 2293,
+  "publicUniqueIds": 889,
+  "publicTypes": {
+    "Workshop": 610,
+    "Sprint": 279
+  },
+  "qaMatched": 861,
+  "unmatchedIds": [
+    "3396",
+    "3411",
+    "3607",
+    "3683",
+    "3938",
+    "3971",
+    "4074",
+    "4081",
+    "4207",
+    "4210",
+    "4238",
+    "4414",
+    "4449",
+    "4451",
+    "4454",
+    "4455",
+    "4457",
+    "4467",
+    "4470",
+    "4473",
+    "4478",
+    "4482",
+    "4486",
+    "4488",
+    "4499",
+    "625",
+    "686",
+    "696"
+  ],
+  "qaOutsidePublic": [],
+  "qaStates": {
+    "scored": 833,
+    "inspection-unavailable": 24,
+    "no-completed-checks": 4
+  },
+  "qaRunIds": [
+    "2026-10-15T12-11-24-208Z"
+  ],
+  "qaDates": [
+    "2026-10-15T12:11:24.208Z"
+  ],
+  "p1Items": 77,
+  "p1Findings": 91,
+  "p2p3Items": 449,
+  "occurrencesByPriority": {
+    "P1": 238,
+    "P2": 1383,
+    "": 184
+  },
+  "sourceDiagnostics": {
+    "schemaVersion": 1,
+    "snapshotDate": "2026-09-28",
+    "evaluatedOn": "2026-11-10",
+    "snapshotAgeDays": 43,
+    "sourceDates": {
+      "wms_snapshot_date": "2026-09-28",
+      "dashboard_views_snapshot_date": "2026-09-28",
+      "tag_snapshot_date": "2026-09-28",
+      "github_repository_snapshot_date": "2026-08-15",
+      "workshop_update_evidence_snapshot_date": "2026-08-14",
+      "governance_evidence_refresh_required": true
+    },
+    "policyStatus": "provisional; calibration requires reviewed outcomes",
+    "types": [
+      {
+        "type": "Workshop",
+        "records": 1893,
+        "annualDemandKnown": 1035,
+        "annualDemandUnknown": 858,
+        "configuredThresholds": {
+          "strictViews": 250,
+          "broadViews": 500,
+          "riskViews": 1000,
+          "oldMonths": 12,
+          "watchMonths": 6
+        },
+        "reviewedDecisions": 0,
+        "sensitivity": [
+          {
+            "annualViewsAtMost": 100,
+            "count": 297,
+            "percentOfKnownDemand": 28.7
+          },
+          {
+            "annualViewsAtMost": 250,
+            "count": 361,
+            "percentOfKnownDemand": 34.88
+          },
+          {
+            "annualViewsAtMost": 500,
+            "count": 450,
+            "percentOfKnownDemand": 43.48
+          },
+          {
+            "annualViewsAtMost": 1000,
+            "count": 549,
+            "percentOfKnownDemand": 53.04
+          }
+        ]
+      },
+      {
+        "type": "Sprint",
+        "records": 400,
+        "annualDemandKnown": 373,
+        "annualDemandUnknown": 27,
+        "configuredThresholds": {
+          "strictViews": 250,
+          "broadViews": 500,
+          "riskViews": 1000,
+          "oldMonths": 12,
+          "watchMonths": 6
+        },
+        "reviewedDecisions": 0,
+        "sensitivity": [
+          {
+            "annualViewsAtMost": 100,
+            "count": 53,
+            "percentOfKnownDemand": 14.21
+          },
+          {
+            "annualViewsAtMost": 250,
+            "count": 136,
+            "percentOfKnownDemand": 36.46
+          },
+          {
+            "annualViewsAtMost": 500,
+            "count": 298,
+            "percentOfKnownDemand": 79.89
+          },
+          {
+            "annualViewsAtMost": 1000,
+            "count": 320,
+            "percentOfKnownDemand": 85.79
+          }
+        ]
+      }
+    ],
+    "windowChecks": [
+      {
+        "shorter": "Views - Last 7 Days",
+        "longer": "Views - Last 14 Days",
+        "comparableRecords": 1185,
+        "nonNestedRecords": 1069
+      },
+      {
+        "shorter": "Views - Last 14 Days",
+        "longer": "Views - Last 30 Days",
+        "comparableRecords": 1185,
+        "nonNestedRecords": 0
+      },
+      {
+        "shorter": "Views - Last 30 Days",
+        "longer": "Views - Last 90 Days",
+        "comparableRecords": 1199,
+        "nonNestedRecords": 0
+      },
+      {
+        "shorter": "Views - Last 90 Days",
+        "longer": "Views - Last 12 Months",
+        "comparableRecords": 1216,
+        "nonNestedRecords": 0
+      }
+    ],
+    "trendsEnabled": false,
+    "windowInterpretation": "Non-nested periods need source definitions before trend calculations; this alone does not prove corrupt counts.",
+    "metricAttribution": {
+      "exact_unique_title": 1224,
+      "shared_title_across_wms_records": 275,
+      "unavailable": 745,
+      "unavailable_ambiguous_title": 49
+    },
+    "readiness": {
+      "provisional": 2293
+    },
+    "queues": {
+      "evidence": 1465,
+      "at-risk": 622,
+      "lifecycle": 206
+    }
+  },
+  "publicDiagnostics": {
+    "schemaVersion": 1,
+    "snapshotDate": "2026-09-28",
+    "evaluatedOn": "2026-11-10",
+    "snapshotAgeDays": 43,
+    "sourceDates": {
+      "wms_snapshot_date": "2026-09-28",
+      "dashboard_views_snapshot_date": "2026-09-28",
+      "tag_snapshot_date": "2026-09-28",
+      "github_repository_snapshot_date": "2026-08-15",
+      "workshop_update_evidence_snapshot_date": "2026-08-14"
+    },
+    "policyStatus": "provisional; calibration requires reviewed outcomes",
+    "types": [
+      {
+        "type": "Workshop",
+        "records": 610,
+        "annualDemandKnown": 555,
+        "annualDemandUnknown": 55,
+        "configuredThresholds": {
+          "strictViews": 250,
+          "broadViews": 500,
+          "riskViews": 1000,
+          "oldMonths": 12,
+          "watchMonths": 6
+        },
+        "reviewedDecisions": 0,
+        "sensitivity": [
+          {
+            "annualViewsAtMost": 100,
+            "count": 12,
+            "percentOfKnownDemand": 2.16
+          },
+          {
+            "annualViewsAtMost": 250,
+            "count": 34,
+            "percentOfKnownDemand": 6.13
+          },
+          {
+            "annualViewsAtMost": 500,
+            "count": 92,
+            "percentOfKnownDemand": 16.58
+          },
+          {
+            "annualViewsAtMost": 1000,
+            "count": 159,
+            "percentOfKnownDemand": 28.65
+          }
+        ]
+      },
+      {
+        "type": "Sprint",
+        "records": 279,
+        "annualDemandKnown": 274,
+        "annualDemandUnknown": 5,
+        "configuredThresholds": {
+          "strictViews": 250,
+          "broadViews": 500,
+          "riskViews": 1000,
+          "oldMonths": 12,
+          "watchMonths": 6
+        },
+        "reviewedDecisions": 0,
+        "sensitivity": [
+          {
+            "annualViewsAtMost": 100,
+            "count": 11,
+            "percentOfKnownDemand": 4.01
+          },
+          {
+            "annualViewsAtMost": 250,
+            "count": 76,
+            "percentOfKnownDemand": 27.74
+          },
+          {
+            "annualViewsAtMost": 500,
+            "count": 222,
+            "percentOfKnownDemand": 81.02
+          },
+          {
+            "annualViewsAtMost": 1000,
+            "count": 238,
+            "percentOfKnownDemand": 86.86
+          }
+        ]
+      }
+    ],
+    "windowChecks": [
+      {
+        "shorter": "Views - Last 7 Days",
+        "longer": "Views - Last 14 Days",
+        "comparableRecords": 852,
+        "nonNestedRecords": 803
+      },
+      {
+        "shorter": "Views - Last 14 Days",
+        "longer": "Views - Last 30 Days",
+        "comparableRecords": 852,
+        "nonNestedRecords": 0
+      },
+      {
+        "shorter": "Views - Last 30 Days",
+        "longer": "Views - Last 90 Days",
+        "comparableRecords": 849,
+        "nonNestedRecords": 0
+      },
+      {
+        "shorter": "Views - Last 90 Days",
+        "longer": "Views - Last 12 Months",
+        "comparableRecords": 828,
+        "nonNestedRecords": 0
+      }
+    ],
+    "trendsEnabled": false,
+    "windowInterpretation": "Non-nested periods need source definitions before trend calculations; this alone does not prove corrupt counts.",
+    "metricAttribution": {
+      "exact_unique_title": 768,
+      "shared_title_across_wms_records": 93,
+      "unavailable_ambiguous_title": 23,
+      "unavailable": 5
+    },
+    "readiness": {
+      "provisional": 889
+    },
+    "queues": {
+      "at-risk": 512,
+      "evidence": 372,
+      "lifecycle": 5
+    }
+  },
+  "files": [
+    {
+      "path": "inventory/data/portfolio_inventory.json",
+      "bytes": 29909546,
+      "gzipBytes": 2244659,
+      "sha256": "50092e101f4b428bf3f6ad752cf352940cc7d6ddef20bfadd51ba99002034dd2"
+    },
+    {
+      "path": "inventory/data/public_portfolio_inventory.json",
+      "bytes": 15932049,
+      "gzipBytes": 1257137,
+      "sha256": "5e3fd45ddcc00e95b8c2391aff475759805a0a3522fef2800c4e62bd1d3807d3"
+    },
+    {
+      "path": "assets/data/score-baselines.json",
+      "bytes": 804819,
+      "gzipBytes": 32249,
+      "sha256": "baeb02bf4e4e4c8d8a87dd583a02b086e58060c8ccdb8a4a2992cd3153d3596b"
+    },
+    {
+      "path": "dev/reports/dashboard-state-acceptance-20261110.json",
+      "bytes": 5999654,
+      "gzipBytes": 444602,
+      "sha256": "7511b65ccd51f183814619f7c3f332ec50fb2178bf6e22374c7c580bac562538"
+    }
+  ],
+  "publicFieldBytes": {
+    "key": 13156,
+    "title": 57161,
+    "wmsId": 6045,
+    "livelabsId": 5155,
+    "category": 12458,
+    "owner": 22504,
+    "ownerMissing": 4444,
+    "type": 8332,
+    "publishStatus": 9779,
+    "publishType": 7112,
+    "status": 14826,
+    "update": 10668,
+    "contactCoverage": 87043,
+    "source": 113792,
+    "sourceFlags": 740623,
+    "review": 816511,
+    "values": 626427,
+    "details": 3067662,
+    "fileUpdates": 1778,
+    "family": 1935283,
+    "searchable": 4025749
+  }
+}
