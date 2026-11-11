@@ -1,7 +1,3 @@
-# Snapshot refresh and release
-
-Status on 8 November 2026: local fixes and release preparation are implemented. Lucian will supply the new source files later. The current candidate uses the 28 September WMS/views snapshot and the 15 October Jenkins run. It must not be promoted as fresh data.
-
 ## Inputs to retain together
 
 - WMS inventory export, Sprint classification export, views workbook, and the four product/role/focus/sales-play tag exports identified by `dev/config/snapshot-source-manifest.example.json`.
