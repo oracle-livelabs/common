@@ -1,0 +1,23 @@
+{
+  "status": "failed",
+  "passedTests": 11,
+  "failedTests": 1,
+  "releaseId": "2026-09-28-snapshot-refresh-08ea501fb18a6725",
+  "manifestSha256": "e33cead9d0dcf33a2b3aa94981366327a20ab225250d767a9fbe3ae10fafb838",
+  "checkedAt": "2026-11-10T14:24:24.693Z",
+  "checks": [
+    "Manifest hashes",
+    "QA export inventory binding",
+    " public count",
+    " QA counts",
+    " excludes inventory/data/portfolio_inventory.json",
+    " excludes dev/admin/panel.html",
+    " excludes .private/admin/admin.sqlite3",
+    " excludes api/admin/inventory",
+    " performance unique rows",
+    " performance every final score",
+    " performance detail paths"
+  ],
+  "externalLinksVerified": false,
+  "error": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.search-result-button').filter({ hasText: 'Modern Data Warehouse Workshop' }).first() to be visible\u001b[22m\n\n    at C:\\Users\\Lucian Brinzei\\Desktop\\Desktop\\Projects\\livelabs-repos\\common\\livelabs-analytics\\dev\\scripts\\verify-release-acceptance.cjs:59:22"
+}

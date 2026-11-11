@@ -9,7 +9,7 @@
   <script src="assets/js/author-guide-config.js?v=20261109-object-storage"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/author-guide.css">
-    <link rel="stylesheet" href="assets/css/author-guide-improvements.css?v=20261109-object-storage">
+    <link rel="stylesheet" href="assets/css/author-guide-improvements.css?v=20261110-release-fixes">
 </head>
 <body data-author-guide-page="hub">
   <div id="app" data-redwood-creator-pass="2026-05-25">
@@ -185,9 +185,9 @@
           </div>
         </div>
       </div>
-      <div class="image-lightbox" id="imageLightbox" hidden aria-hidden="true">
+      <dialog class="image-lightbox" id="imageLightbox" hidden aria-hidden="true" aria-labelledby="imageLightboxTitle">
         <div class="image-lightbox-backdrop" data-lightbox-close="true"></div>
-        <div class="image-lightbox-dialog" role="dialog" aria-modal="true" aria-labelledby="imageLightboxTitle">
+        <div class="image-lightbox-dialog">
           <div class="image-lightbox-header">
             <p class="image-lightbox-kicker" id="imageLightboxTitle">Expanded Image</p>
             <button type="button" class="image-lightbox-close" id="imageLightboxClose" aria-label="Close expanded image">Close</button>
@@ -197,7 +197,7 @@
           </div>
           <p class="image-lightbox-caption" id="imageLightboxCaption"></p>
         </div>
-      </div>
+      </dialog>
       <div class="visually-hidden-live" aria-live="polite" id="liveRegion"></div>
       <footer class="app-footer" aria-label="Site footer" data-shared-footer data-footer-variant="app">
         <div class="container">Powered by Oracle LiveLabs Team &copy; 2026</div>
@@ -207,15 +207,16 @@
   </div>
 
   <script async src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/guide-content.js?v=20261109-object-storage"></script>
+  <script src="assets/js/guide-content.js?v=20261110-release-fixes"></script>
   <script src="assets/js/nodoc-cheatsheet-data.js?v=20261007-nodoc-cheatsheet"></script>
-  <script src="assets/js/workshop-generator.js?v=20260708-skill-generator-livestack"></script>
-  <script src="assets/js/shared-side-nav.js?v=20261109-object-storage"></script>
+  <script src="assets/js/workshop-generator.js?v=20261110-release-fixes"></script>
+  <script src="assets/js/shared-side-nav.js?v=20261110-release-fixes"></script>
   <script src="assets/js/nodoc-search.js?v=20261007-search"></script>
   <script src="assets/js/guide-loader.js?v=20261109-object-storage"></script>
-  <script src="assets/js/nodoc-workshop.js?v=20261109-object-storage"></script>
+  <script src="assets/js/nodoc-workshop.js?v=20261110-release-fixes"></script>
   <script src="assets/js/markdown-reference-data.js?v=20261109-object-storage"></script>
-  <script src="assets/js/author-guide-app.js?v=20261109-object-storage"></script>
+  <script src="assets/js/shared-image-viewer.js?v=20261110-release-fixes"></script>
+  <script src="assets/js/author-guide-app.js?v=20261110-release-fixes"></script>
   <script src="assets/js/shared-footer.js?v=20260516-followup"></script>
 </body>
 </html>

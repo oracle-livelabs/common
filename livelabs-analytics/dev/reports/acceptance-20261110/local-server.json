@@ -1,0 +1,10 @@
+{
+  "url": "http://127.0.0.1:4175/dashboard/?view=urgent",
+  "status": 200,
+  "heading": "LiveLabs Analytics",
+  "metrics": [
+    "889",
+    "91",
+    "449"
+  ]
+}

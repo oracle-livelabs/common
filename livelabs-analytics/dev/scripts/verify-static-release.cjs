@@ -45,7 +45,7 @@ const server = http.createServer((request,response)=>{
     if(candidate) {
       await page.goto(url+'/search/?livelabs_id='+candidate[0],{waitUntil:'networkidle'});
       await page.getByText('Score and evidence',{exact:true}).click();
-      check('Invalid QA retains baseline in packaged details',(await page.locator('#search-workshop-view').innerText()).includes('QA does not change this baseline'));
+      check('Invalid QA retains baseline in packaged details',(await page.locator('.score-summary').innerText()).includes('QA excluded'));
     }
     await page.setViewportSize({width:390,height:844});
     check('Mobile has no page overflow',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));

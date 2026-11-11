@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "snapshotDate": "2026-09-28",
+  "evaluatedOn": "2026-11-10",
+  "snapshotAgeDays": 43,
+  "sourceDates": {
+    "wms_snapshot_date": "2026-09-28",
+    "dashboard_views_snapshot_date": "2026-09-28",
+    "tag_snapshot_date": "2026-09-28",
+    "github_repository_snapshot_date": "2026-08-15",
+    "workshop_update_evidence_snapshot_date": "2026-08-14",
+    "governance_evidence_refresh_required": true
+  },
+  "policyStatus": "provisional; calibration requires reviewed outcomes",
+  "types": [
+    {
+      "type": "Workshop",
+      "records": 1893,
+      "annualDemandKnown": 1035,
+      "annualDemandUnknown": 858,
+      "configuredThresholds": {
+        "strictViews": 250,
+        "broadViews": 500,
+        "riskViews": 1000,
+        "oldMonths": 12,
+        "watchMonths": 6
+      },
+      "reviewedDecisions": 0,
+      "sensitivity": [
+        {
+          "annualViewsAtMost": 100,
+          "count": 297,
+          "percentOfKnownDemand": 28.7
+        },
+        {
+          "annualViewsAtMost": 250,
+          "count": 361,
+          "percentOfKnownDemand": 34.88
+        },
+        {
+          "annualViewsAtMost": 500,
+          "count": 450,
+          "percentOfKnownDemand": 43.48
+        },
+        {
+          "annualViewsAtMost": 1000,
+          "count": 549,
+          "percentOfKnownDemand": 53.04
+        }
+      ]
+    },
+    {
+      "type": "Sprint",
+      "records": 400,
+      "annualDemandKnown": 373,
+      "annualDemandUnknown": 27,
+      "configuredThresholds": {
+        "strictViews": 250,
+        "broadViews": 500,
+        "riskViews": 1000,
+        "oldMonths": 12,
+        "watchMonths": 6
+      },
+      "reviewedDecisions": 0,
+      "sensitivity": [
+        {
+          "annualViewsAtMost": 100,
+          "count": 53,
+          "percentOfKnownDemand": 14.21
+        },
+        {
+          "annualViewsAtMost": 250,
+          "count": 136,
+          "percentOfKnownDemand": 36.46
+        },
+        {
+          "annualViewsAtMost": 500,
+          "count": 298,
+          "percentOfKnownDemand": 79.89
+        },
+        {
+          "annualViewsAtMost": 1000,
+          "count": 320,
+          "percentOfKnownDemand": 85.79
+        }
+      ]
+    }
+  ],
+  "windowChecks": [
+    {
+      "shorter": "Views - Last 7 Days",
+      "longer": "Views - Last 14 Days",
+      "comparableRecords": 1185,
+      "nonNestedRecords": 1069
+    },
+    {
+      "shorter": "Views - Last 14 Days",
+      "longer": "Views - Last 30 Days",
+      "comparableRecords": 1185,
+      "nonNestedRecords": 0
+    },
+    {
+      "shorter": "Views - Last 30 Days",
+      "longer": "Views - Last 90 Days",
+      "comparableRecords": 1199,
+      "nonNestedRecords": 0
+    },
+    {
+      "shorter": "Views - Last 90 Days",
+      "longer": "Views - Last 12 Months",
+      "comparableRecords": 1216,
+      "nonNestedRecords": 0
+    }
+  ],
+  "trendsEnabled": false,
+  "windowInterpretation": "Non-nested periods need source definitions before trend calculations; this alone does not prove corrupt counts.",
+  "metricAttribution": {
+    "exact_unique_title": 1224,
+    "shared_title_across_wms_records": 275,
+    "unavailable": 745,
+    "unavailable_ambiguous_title": 49
+  },
+  "readiness": {
+    "not-evaluated": 2293
+  },
+  "queues": {
+    "not-evaluated": 2293
+  }
+}

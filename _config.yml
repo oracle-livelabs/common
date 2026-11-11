@@ -11,3 +11,7 @@ exclude:
   - vendor/ruby/
   - skills/
   - new-author-guide/troubleshooting/
+  # Analytics Admin sources, full inventory and local evidence are not Pages content.
+  - livelabs-analytics/dev/
+  - livelabs-analytics/output/
+  - livelabs-analytics/inventory/data/portfolio_inventory.json

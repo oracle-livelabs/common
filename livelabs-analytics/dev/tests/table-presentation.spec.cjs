@@ -62,6 +62,7 @@ test('dashboard tabs stay readable and support navigation on desktop and mobile'
   for(const width of [1440,390]){
     await page.setViewportSize({width,height:900});
     await page.goto('/dashboard/',{waitUntil:'networkidle'});
+    await expect(page.locator('html')).not.toHaveClass(/page-loading/);
     const nav=page.getByRole('tablist',{name:'Dashboard sections'});
     const tabs=nav.getByRole('tab');
     await expect(tabs).toHaveCount(4);
@@ -77,6 +78,8 @@ test('dashboard tabs stay readable and support navigation on desktop and mobile'
     await page.keyboard.press('End');
     await expect(tabs.last()).toHaveAttribute('aria-selected','true');
     await expect(page.locator('#retire-now-content')).toBeVisible();
+    await expect(page.locator('html')).not.toHaveClass(/page-loading/);
+    await expect(tabs.last()).toBeFocused();
     await page.keyboard.press('Home');
     await expect(tabs.first()).toHaveAttribute('aria-selected','true');
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);

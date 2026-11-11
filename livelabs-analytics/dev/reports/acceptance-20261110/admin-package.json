@@ -1,0 +1,17 @@
+{
+  "archive": "dev\\releases\\acceptance-20261110-admin-final.zip",
+  "archiveSha256": "2e4a7bde741e9854f3a6dd6725e216be03b844c533df8b9e8b8aa83458f599f4",
+  "status": "passed",
+  "passed": 9,
+  "checks": [
+    "Archive paths and private-state exclusions",
+    "Every packaged file matches its manifest hash",
+    "Packaged service imports and initializes a temporary database",
+    "/dashboard/ returns 200",
+    "/admin returns 200",
+    "/api/admin/inventory returns 401",
+    "/inventory/data/portfolio_inventory.json returns 404",
+    "/.private/admin/admin.sqlite3 returns 404",
+    "Fresh service has no fabricated QA merge"
+  ]
+}
