@@ -47,7 +47,7 @@ This downloads and installs OptiShot to `/Applications`. After installation, fin
 
     ```
     <copy>
-    curl -fsSL -o /tmp/OptiShot.zip "https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-MacOS-arm.zip" && unzip -o /tmp/OptiShot.zip -d /tmp && cp -R /tmp/OptiShot.app /Applications/ && rm -rf /tmp/OptiShot.zip /tmp/OptiShot.app /tmp/__MACOSX && echo "OptiShot installed to /Applications"
+    curl -fsSL -o /tmp/OptiShot.zip "https://objectstorage.us-ashburn-1.oraclecloud.com/p/4Au3jJ-t8Wtw3LWyYsDMqQk2FdlXDvXCb1MYRS0J6P4QS-GCrv2YNOolWdtFMLZq/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-MacOS-arm.zip" && unzip -o /tmp/OptiShot.zip -d /tmp && cp -R /tmp/OptiShot.app /Applications/ && rm -rf /tmp/OptiShot.zip /tmp/OptiShot.app /tmp/__MACOSX && echo "OptiShot installed to /Applications"
     </copy>
     ```
 
@@ -63,7 +63,7 @@ This downloads and installs OptiShot to `/Applications`. After installation, fin
 
     ```
     <copy>
-    $tmp="$env:TEMP\OptiShot"; $dest="$env:LOCALAPPDATA\Programs\OptiShot"; $lnk="$env:APPDATA\Microsoft\Windows\Start Menu\Programs\OptiShot.lnk"; New-Item -ItemType Directory -Force -Path $tmp | Out-Null; Invoke-WebRequest -Uri "https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-Windows.zip" -OutFile "$tmp\OptiShot.zip"; Expand-Archive -Path "$tmp\OptiShot.zip" -DestinationPath "$tmp" -Force; New-Item -ItemType Directory -Force -Path $dest | Out-Null; Copy-Item -Path "$tmp\OptiShot\*" -Destination $dest -Recurse -Force; $ws=(New-Object -ComObject WScript.Shell).CreateShortcut($lnk); $ws.TargetPath="$dest\OptiShot.exe"; $ws.Save(); Remove-Item -Path $tmp -Recurse -Force; Write-Host "OptiShot installed. Search 'OptiShot' in Start Menu."
+    $tmp="$env:TEMP\OptiShot"; $dest="$env:LOCALAPPDATA\Programs\OptiShot"; $lnk="$env:APPDATA\Microsoft\Windows\Start Menu\Programs\OptiShot.lnk"; New-Item -ItemType Directory -Force -Path $tmp | Out-Null; Invoke-WebRequest -Uri "https://objectstorage.us-ashburn-1.oraclecloud.com/p/4Au3jJ-t8Wtw3LWyYsDMqQk2FdlXDvXCb1MYRS0J6P4QS-GCrv2YNOolWdtFMLZq/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-Windows.zip" -OutFile "$tmp\OptiShot.zip"; Expand-Archive -Path "$tmp\OptiShot.zip" -DestinationPath "$tmp" -Force; New-Item -ItemType Directory -Force -Path $dest | Out-Null; Copy-Item -Path "$tmp\OptiShot\*" -Destination $dest -Recurse -Force; $ws=(New-Object -ComObject WScript.Shell).CreateShortcut($lnk); $ws.TargetPath="$dest\OptiShot.exe"; $ws.Save(); Remove-Item -Path $tmp -Recurse -Force; Write-Host "OptiShot installed. Search 'OptiShot' in Start Menu."
     </copy>
     ```
 
