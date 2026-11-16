@@ -14,6 +14,10 @@ Python's standard library; publishing Admin visibility changes also requires
 Node.js 18 or newer for the public projection builder. Keep the reviewed
 `dev/config/dashboard-policy.json` with the service and source build inputs.
 
+Excel imports also require the `openpyxl` Python package on the service host.
+Verify that dependency before enabling `.xlsx`/`.xlsm` imports; JSON and CSV do
+not use it.
+
 Configure credentials interactively on the host:
 
 ```sh

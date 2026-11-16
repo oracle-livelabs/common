@@ -6742,3 +6742,20 @@ body.home-no-scroll #app .hub-hero {
     font-size: 0.68rem;
   }
 }
+
+/* Native modal isolation retains the existing full-screen image layout. */
+#app dialog.image-lightbox { margin: 0; border: 0; width: 100vw; height: 100vh; max-width: none; max-height: none; color: inherit; }
+#app dialog.image-lightbox::backdrop { background: transparent; }
+@media (max-width: 700px) {
+  #app[data-redwood-creator-pass="2026-05-25"] .generated-example-table { min-width: 0; table-layout: fixed; }
+  #app[data-redwood-creator-pass="2026-05-25"] .generated-example-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  #app[data-redwood-creator-pass="2026-05-25"] .generated-example-table tbody,
+  #app[data-redwood-creator-pass="2026-05-25"] .generated-example-table tr,
+  #app[data-redwood-creator-pass="2026-05-25"] .generated-example-table th,
+  #app[data-redwood-creator-pass="2026-05-25"] .generated-example-table td { display: block; width: auto; min-width: 0; }
+  #app[data-redwood-creator-pass="2026-05-25"] .generated-example-row { padding-bottom: .75rem; border-bottom: 1px solid #d4cfca; }
+  #app[data-redwood-creator-pass="2026-05-25"] .generated-example-row th,
+  #app[data-redwood-creator-pass="2026-05-25"] .generated-example-row td { border: 0; padding-bottom: .25rem; }
+  #app[data-redwood-creator-pass="2026-05-25"] .generated-example-action { text-align: left !important; }
+  #app[data-redwood-creator-pass="2026-05-25"] .generated-example-table .generated-example-pre { max-height: none; }
+}

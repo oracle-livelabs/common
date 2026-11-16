@@ -13,15 +13,18 @@ const replaceExisting = args.includes("--replace");
 const stateFlag = args.indexOf('--dashboard-state');
 if (stateFlag >= 0 && !args[stateFlag + 1]) throw new Error('--dashboard-state requires a reviewed public export.');
 const stateInput = stateFlag >= 0 ? path.resolve(root, args[stateFlag + 1]) : null;
+const allowMissingQa = args.includes('--allow-missing-qa');
 const includeFileFallback = args.includes("--include-file-fallback");
 
 if (args.includes("--help") || args.includes("-h")) {
-  console.log("Usage: node dev/scripts/build-static-release.mjs --output <directory> [--replace] [--include-file-fallback] [--dashboard-state <public-export.json>]");
+  console.log("Usage: node dev/scripts/build-static-release.mjs --output <directory> --dashboard-state <public-export.json> [--replace] [--include-file-fallback]");
+  console.log("Use --allow-missing-qa only for an explicitly incomplete Analytics-only preview; it cannot pass promotion preflight.");
   console.log("Builds in a sibling staging directory, verifies the manifest, then atomically promotes the result.");
   console.log("Existing output is preserved unless --replace is explicit; replacement keeps a dated previous directory.");
   process.exit(0);
 }
 if (outputFlag >= 0 && !args[outputFlag + 1]) throw new Error("--output requires a directory.");
+if (!stateInput && !allowMissingQa) throw new Error('A complete release requires --dashboard-state. Export the reviewed QA state first, or use --allow-missing-qa for an incomplete preview.');
 
 const output = path.resolve(root, outputFlag >= 0 ? args[outputFlag + 1] : "dev/releases/local");
 if (output === root) throw new Error("Release output must be a separate directory.");

@@ -20,7 +20,7 @@ window.authorGuideContent = (function () {
     sampleSprints: "https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-sprints",
     aiHubGuide: "https://lfoinding.github.io/livelabs-ai-playground/skills/how-to/workshops/sandbox/index.html",
     aiHubRepo: "https://github.com/lfoinding/livelabs-ai-playground",
-    aiHubSkills: "https://skills.oraclecorp.com/ords/r/skills/lib/skill-detail?p5_skill=4E66D8B27E76D7DFE0631C16000A11D6&clear=5&session=5940804516414"
+    aiHubSkills: "https://skills.oraclecorp.com/"
   };
 
   var eventCodeGuideHref = "markdown/event-code/index.html";

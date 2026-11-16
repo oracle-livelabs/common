@@ -232,7 +232,7 @@ test("WMS-reported ownership is preserved separately from support contacts", asy
   expect(rows).toContainEqual(["Source details", "N/A", "Support Contact Email", "marco.antonio.luchian@oracle.com"]);
 });
 
-test("CSV preserves file detail, Unicode, quotes, newlines, and safe spreadsheet text", async ({ page }) => {
+test("CSV preserves file detail, Unicode, quotes, newlines, and safe spreadsheet text", async ({ page }, testInfo) => {
   await page.goto("/search/?livelabs_id=598", { waitUntil: "networkidle" });
   await expect(page.locator("#search-workshop-view")).toBeVisible();
   await page.evaluate(() => {

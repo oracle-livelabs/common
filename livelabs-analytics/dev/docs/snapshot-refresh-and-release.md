@@ -1,7 +1,3 @@
-# Snapshot refresh and release
-
-Status on 8 November 2026: local fixes and release preparation are implemented. Lucian will supply the new source files later. The current candidate uses the 28 September WMS/views snapshot and the 15 October Jenkins run. It must not be promoted as fresh data.
-
 ## Inputs to retain together
 
 - WMS inventory export, Sprint classification export, views workbook, and the four product/role/focus/sales-play tag exports identified by `dev/config/snapshot-source-manifest.example.json`.
@@ -37,11 +33,21 @@ node dev/scripts/validate-dashboard.mjs
 node dev/node_modules/@playwright/test/cli.js test --config dev/config/playwright.config.cjs --workers 2
 python -X utf8 dev/scripts/export-dashboard-state.py --output "dev/reports/<reviewed-state>.json"
 node dev/scripts/build-static-release.mjs --output "dev/releases/<candidate>" --dashboard-state "dev/reports/<reviewed-state>.json"
-node dev/scripts/verify-static-release.cjs --release "dev/releases/<candidate>" --output "output/screenshots/<candidate>"
+node dev/scripts/verify-release-acceptance.cjs --release "dev/releases/<candidate>" --output "output/screenshots/<candidate>"
 node dev/scripts/preflight-object-storage.mjs --release "dev/releases/<candidate>" --access-model internal-authenticated --browser-evidence "output/screenshots/<candidate>/browser-evidence.json" --strict --report "dev/reports/<candidate>-preflight.json"
 ```
 
 The QA export is cohort-scoped and bound to the public inventory hash. Packaging rejects stale exports and excludes implicit QA files from bulk asset copying. Browser evidence is bound to the exact release manifest. Historical recovery of 99 deleted files is no longer a recurring release prerequisite; optional recovery evidence is still checked if supplied.
+
+A complete build now requires `--dashboard-state`. The explicit `--allow-missing-qa`
+option is for incomplete CI/local previews; strict promotion rejects those previews.
+Publishing the repository folder through GitHub Pages does not invoke this release
+workflow or copy the private runtime merge. Publish the reviewed release artifact
+through the approved authenticated delivery path.
+
+Admin Data merge imports matching snapshots and applies Jenkins findings. It does
+not replace the canonical inventory files. Complete the staged WMS/LiveLabs refresh
+and regenerate the public projection before applying QA to the new cohort.
 
 Clear `fresh_data_pending` and the governance/retirement verification flags only after the new source and resulting queues have been reviewed. Rebuild and revalidate the final candidate after changing those declarations. Keep contact-bearing output behind the already specified authenticated delivery boundary.
 

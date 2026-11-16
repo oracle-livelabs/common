@@ -1306,7 +1306,7 @@
     }
     function scoreContext() { return new URLSearchParams(location.search).get('score_context') === 'risk' ? 'risk' : 'performance'; }
     function recordLink(record, context = 'performance') {
-      return `/search/?livelabs_id=${encodeURIComponent(record.livelabsId)}&score_context=${context}`;
+      return new URL(`search/?livelabs_id=${encodeURIComponent(record.livelabsId)}&score_context=${context}`, document.baseURI).href;
     }
     function loadFullSearchRecords() {
       if (fullSearchRecordsPromise) return fullSearchRecordsPromise;
@@ -1953,6 +1953,12 @@
       }
       const mergeId = String(dashboardQaReportMerge?.id || dashboardQaReportMerge?.appliedAt || 'no-report');
       if (section.dataset.mergeId === mergeId) return;
+      if (!dashboardQaReportMerge) {
+        section.innerHTML = `<div class="section-head"><h2>P1 urgent action</h2><p>Review findings that may stop learners.</p></div>${jenkinsPriorityGuideMarkup()}<section class="panel"><h3>QA report unavailable</h3><p role="status">This dashboard has no QA report loaded. Finding counts are unknown. Analytics rankings remain available.</p></section>`;
+        section.dataset.mergeId = mergeId;
+        applyDashboardPageView(document.body.dataset.dashboardPage || 'performance');
+        return;
+      }
       const tableId = 'jenkins-p1-action-table';
       const records = new Map(loadedFullSearchRecords.map(record => [String(record.livelabsId), record]));
       const items = Object.entries(dashboardQaReportMerge?.overlay || {}).filter(([id]) => publicLivelabsIds.has(id))
@@ -1968,9 +1974,9 @@
         const actions = [...new Set(findings.map(issue => needsFix(issue) ? 'Author fix' : 'Verify report'))];
         const occurrences = findings.reduce((sum,issue) => sum + Math.max(0,Number(issue.count || 0)),0);
         const values = [record?.title || overlay.itemTitle || 'LiveLabs item',record?.type || 'Unknown',actions.join(' · '),findings.length,occurrences,record?.owner || 'Reviewer assignment needed',id,'Open record'];
-        const cells = values.map((value,i) => `<td data-column-label="${columns[i]}" data-filter-value="${escapeHtml(String(value).toLowerCase())}" data-sort-value="${escapeHtml(value)}">${i===7 ? `<a class="author-button author-button-primary" href="/search/?livelabs_id=${encodeURIComponent(id)}">Open record</a>` : escapeHtml(value)}</td>`).join('');
+        const cells = values.map((value,i) => `<td data-column-label="${columns[i]}" data-filter-value="${escapeHtml(String(value).toLowerCase())}" data-sort-value="${escapeHtml(value)}">${i===7 ? `<a class="author-button author-button-primary" href="${escapeHtml(recordLink({livelabsId:id}))}">Open record</a>` : escapeHtml(value)}</td>`).join('');
         const details = findings.map(issue => `<li><strong>${escapeHtml(humanReadableJenkinsFinding(issue))}</strong> · ${needsFix(issue)?'Author fix':'Verify report'} · ${Math.max(0,Number(issue.count||0))} occurrences<p>${escapeHtml(issue.message || 'Open the record for source evidence.')}</p></li>`).join('');
-        return `<tr class="expandable-row" data-filter-row="true" data-livelabs-id="${id}" data-content-type="${escapeHtml(record?.type || '')}" data-review-focus="${escapeHtml(JSON.stringify(tags))}" data-original-index="${index}" data-detail-row-id="p1-${id}" data-expanded="false" tabindex="0" aria-expanded="false">${cells}</tr><tr class="detail-row" data-detail-for="p1-${id}" hidden><td colspan="8"><div class="detail-shell"><h4>P1 findings for ${escapeHtml(values[0])}</h4><ul>${details}</ul><a class="author-button author-button-primary" href="/search/?livelabs_id=${encodeURIComponent(id)}">Open full record and evidence</a></div></td></tr>`;
+        return `<tr class="expandable-row" data-filter-row="true" data-livelabs-id="${id}" data-content-type="${escapeHtml(record?.type || '')}" data-review-focus="${escapeHtml(JSON.stringify(tags))}" data-original-index="${index}" data-detail-row-id="p1-${id}" data-expanded="false" tabindex="0" aria-expanded="false">${cells}</tr><tr class="detail-row" data-detail-for="p1-${id}" hidden><td colspan="8"><div class="detail-shell"><h4>P1 findings for ${escapeHtml(values[0])}</h4><ul>${details}</ul><a class="author-button author-button-primary" href="${escapeHtml(recordLink({livelabsId:id}))}">Open full record and evidence</a></div></td></tr>`;
       }).join('');
       const findingCount = items.reduce((sum,item)=>sum+item.findings.length,0);
       section.innerHTML = `<div class="section-head"><h2>P1 urgent action</h2><p>Review findings that may stop learners.</p></div>${jenkinsPriorityGuideMarkup()}<section class="panel ranked-table-panel"><div class="panel-head"><h3>P1 urgent action</h3><span>${items.length} rows · ${findingCount} findings</span></div><div class="toggle-body"><div class="table-tools"><span class="table-count" data-table-count-for="${tableId}">${items.length} rows</span><button class="filter-reset" data-clear-filters-for="${tableId}">Clear filters</button></div><details class="filter-disclosure"><summary>Apply filters</summary>${combinedTableControls(tableId)}<div class="filter-grid">${filters}</div></details><div class="table-wrap" data-filter-table="${tableId}"><table class="data-table" id="${tableId}"><thead><tr>${headers}</tr></thead><tbody>${rows || `<tr><td colspan="8">${dashboardQaReportMerge ? 'No P1 findings in the applied report.' : 'Add a Jenkins report in Admin to see P1 findings.'}</td></tr>`}</tbody></table></div></div></section>`;
@@ -4161,7 +4167,8 @@
       };
       Object.entries(values).forEach(([key, value]) => {
         document.querySelectorAll(`[data-overview-metric="${key}"], [data-public-stat="${key}"]`).forEach((node) => {
-          node.textContent = ((key === "public-count" && !records.length) || (["jenkins-p1-count", "error-items-count"].includes(key) && !dashboardQaReportMerge)) ? "—" : Number(value).toLocaleString();
+          const qaUnavailable = ["jenkins-p1-count", "error-items-count"].includes(key) && !dashboardQaReportMerge;
+          node.textContent = qaUnavailable ? "Unavailable" : (key === "public-count" && !records.length) ? "—" : Number(value).toLocaleString();
         });
       });
       const cohortNote = section.querySelector('[data-overview-note="public-breakdown"]');

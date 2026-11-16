@@ -373,9 +373,9 @@ function checkAccessibilityAndSecurityContracts() {
 }
 
 function checkBundleSize() {
-  const limits = [["index.html", 8 * 1024 * 1024], ["inventory/data/portfolio_inventory.json", 20 * 1024 * 1024]];
+  const limits = [["index.html", 8 * 1024 * 1024], ["inventory/data/public_portfolio_inventory.json", 20 * 1024 * 1024]];
   const oversized = limits.filter(([file, limit]) => fs.statSync(path.join(root, file)).size > limit).map(([file]) => file);
-  oversized.length ? fail("bundle size budget", `oversized: ${oversized.join(", ")}`) : pass("bundle size budget", "dashboard and retained data are within static release limits");
+  oversized.length ? fail("bundle size budget", `oversized: ${oversized.join(", ")}`) : pass("bundle size budget", "dashboard and public projection are within static release limits; full inventory is Admin-only");
 }
 
 function checkHtmlReferences() {

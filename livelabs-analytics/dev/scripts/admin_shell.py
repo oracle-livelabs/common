@@ -5,8 +5,7 @@ Archived source files stay immutable; only the served HTML receives the shell.
 import re
 
 PAGES = (
-    ('/admin/dashboard-management', 'Dashboard management'),
-    ('/admin/governance', 'Data governance'),
+    ('/admin/dashboard-management', 'Dashboard tags'),
     ('/admin/data-merge', 'Data merge'),
     ('/admin/jenkins', 'Jenkins reports'),
     ('/admin/inventory', 'Portfolio inventory'),

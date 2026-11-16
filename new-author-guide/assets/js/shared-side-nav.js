@@ -162,6 +162,8 @@
       }
 
       expanded = !document.body.classList.contains(bodyClass);
+      var navigation = document.getElementById("modeNav");
+      if (navigation) navigation.inert = !expanded;
       if (config.hiddenWhenDisabled) {
         button.hidden = !enabled;
       }
@@ -210,6 +212,17 @@
   }
 
   renderSharedSideNav();
+
+  // The shared component owns the initial state and binding on every page.
+  if (window.matchMedia("(max-width: 940px)").matches) {
+    document.body.classList.add("author-nav-closed");
+  }
+  bindSideNavToggle({
+    button: "authorGlobalNavToggle",
+    bodyClass: "author-nav-closed",
+    hiddenWhenDisabled: true,
+    onToggle: function () { window.dispatchEvent(new Event("resize")); }
+  });
 
   window.LiveLabsSideNav = Object.assign({}, window.LiveLabsSideNav, {
     bindSideNavToggle: bindSideNavToggle

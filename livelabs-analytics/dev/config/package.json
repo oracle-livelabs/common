@@ -10,7 +10,7 @@
     "sync:public-data": "node ../scripts/build-public-inventory.mjs && python ../scripts/refresh-top-performers.py --inventory ../../inventory/data/public_portfolio_inventory.json --output ../../assets/fragments/top-performers.html && python ../scripts/build-public-review-fragments.py && python ../scripts/build-author-reports.py && node ../scripts/build-file-inventory-fallback.mjs",
     "sync:file-data": "node ../scripts/build-file-inventory-fallback.mjs",
     "test:browser": "node ../node_modules/@playwright/test/cli.js test --config playwright.config.cjs",
-    "build:release:ci": "node ../scripts/build-static-release.mjs --output dev/.ci-release",
+    "build:release:ci": "node ../scripts/build-static-release.mjs --output dev/.ci-release --allow-missing-qa",
     "preflight:ci": "node ../scripts/preflight-object-storage.mjs --release dev/.ci-release --report dev/.ci-preflight.json"
   },
   "devDependencies": {

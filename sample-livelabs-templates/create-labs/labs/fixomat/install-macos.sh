@@ -7,7 +7,7 @@ set -e
 APP_NAME="LiveLabs Fixomat 2000"
 APP_BUNDLE="${APP_NAME}.app"
 INSTALL_DIR="/Applications"
-DOWNLOAD_URL="${FIXOMAT_DOWNLOAD_URL:-https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/fixomat/LiveLabs-Fixomat-2000-macOS-arm.zip}"
+DOWNLOAD_URL="${FIXOMAT_DOWNLOAD_URL:-https://objectstorage.us-ashburn-1.oraclecloud.com/p/4Au3jJ-t8Wtw3LWyYsDMqQk2FdlXDvXCb1MYRS0J6P4QS-GCrv2YNOolWdtFMLZq/n/c4u04/b/livelabsfiles/o/fixomat/LiveLabs-Fixomat-2000-macOS-arm.zip}"
 
 TEMP_DIR=$(mktemp -d)
 ZIP_PATH="$TEMP_DIR/fixomat.zip"

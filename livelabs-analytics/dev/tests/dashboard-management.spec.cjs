@@ -76,7 +76,7 @@ test('every Admin page shares compact navigation, responsive layout and working 
   const capture = await page.request.post(`${baseURL}/api/admin/snapshots`, {data:{captureCurrent:true},headers:{Origin:baseURL,'X-CSRF-Token':session.csrf}});
   expect(capture.ok()).toBe(true);
   const pages = [
-    ['dashboard-management','Dashboard management'],['governance','Data governance'],
+    ['dashboard-management','Dashboard tags'],['governance','Data governance'],
     ['data-merge','Data merge'],['jenkins','Jenkins reports'],['inventory','Portfolio inventory']
   ];
   for (const width of [1440,390]) {
@@ -85,8 +85,9 @@ test('every Admin page shares compact navigation, responsive layout and working 
       await page.goto(`${baseURL}/admin/${route}`);
       await expect(page.locator('html')).not.toHaveClass(/page-loading/);
       await expect(page.locator('h1')).toHaveText(title);
-      await expect(page.locator('.analytics-nav a')).toHaveText(pages.map(p=>p[1]));
-      await expect(page.locator('.analytics-nav a[aria-current="page"]')).toHaveText(title);
+      await expect(page.locator('.analytics-nav a')).toHaveText(pages.filter(p=>p[0]!=='governance').map(p=>p[1]));
+      if (route === 'governance') await expect(page.locator('.analytics-nav a[aria-current="page"]')).toHaveCount(0);
+      else await expect(page.locator('.analytics-nav a[aria-current="page"]')).toHaveText(title);
       await expect(page.locator('.analytics-shell-layout a').filter({hasText:/^Back to dashboard$/})).toHaveCount(1);
       await expect(page.locator('main a[href^="/dashboard/"]')).toHaveCount(0);
       if (width < 950) {
@@ -152,6 +153,90 @@ test('every Admin page shares compact navigation, responsive layout and working 
   await expect(page).toHaveURL(`${baseURL}/admin`);
   expect((await page.request.get(`${baseURL}/api/admin/session`)).status()).toBe(401);
   expect(errors).toEqual([]);
+});
+
+test('Admin imports, maps, exports and applies QA without joining WMS siblings', async ({page}, testInfo) => {
+  test.setTimeout(180000);
+  const login=await page.request.post(`${baseURL}/api/admin/login`, {data:{username:'regression-reviewer',password},headers:{Origin:baseURL}});
+  expect(login.ok()).toBe(true);
+  const {csrf}=await (await page.request.get(`${baseURL}/api/admin/session`)).json();
+  const headers={Origin:baseURL,'X-CSRF-Token':csrf};
+  expect((await page.request.post(`${baseURL}/api/admin/snapshots`,{headers,data:{captureCurrent:true}})).ok()).toBe(true);
+  expect((await page.request.post(`${baseURL}/api/admin/qa-snapshots`,{headers,data:{action:'upload',label:'Older QA fixture',summary:{runId:'older-fixture',catalogItems:[{catalogItem:{livelabsId:'3570',type:'workshop'},counts:{passed:1},tests:[{title:'Content',status:'passed'}]}]}}})).ok()).toBe(true);
+  await page.goto(`${baseURL}/admin/data-merge`);
+  await expect(page.locator('html')).not.toHaveClass(/page-loading/);
+  const records=['3570','598','931'].map((id,i)=>({key:'livelabs:'+id,livelabsId:id,wmsId:'family-fixture',title:`Merge fixture ${i}`,type:'Workshop',publishType:'Public',publishStatus:'Published'}));
+  const snapshot={metadata:{snapshot_date:'2026-11-10'},records};
+  await page.locator('#import-snapshot').setInputFiles({name:'acceptance-inventory.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(snapshot))});
+  await expect(page.locator('#status')).toContainText('Analytics source saved: 3 records');
+  await expect(page.locator('#snapshot-select option:checked')).toContainText('acceptance-inventory.json');
+  const catalogItems=['3570','598','999999'].map((id,i)=>({key:'workshop:'+id,catalogItem:{id,livelabsId:id,wmsId:'family-fixture',title:`QA fixture ${i}`,type:'workshop'},status:'failed',counts:{total:2,passed:1,failed:1},tests:[{title:'Content',status:'failed'},{title:'Links',status:'passed'}],issues:[{code:i===1?'BROKEN_VISIBLE_LINK':'POSSIBLE_TYPO',count:i===1?1:2}]}));
+  const summary={runId:'acceptance-merge-fixture',runType:'regression',startedAt:'2026-11-10T08:00:00Z',status:'failed',catalogItems,sourceReport:{}};
+  await page.locator('#import-jenkins-pair').setInputFiles({name:'acceptance-qa.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(summary))});
+  await expect(page.locator('#status')).toContainText('Jenkins report saved: 3 items');
+  await expect(page.locator('#jenkins-select option:checked')).toContainText('acceptance-merge-fixture');
+  await expect(page.locator('#snapshot-select option:checked')).toContainText('acceptance-inventory.json');
+  const snapshotId=await page.locator('#snapshot-select').inputValue();
+  const qaId=await page.locator('#jenkins-select').inputValue();
+  await page.locator('#analytics-match-field').selectOption('wmsId');
+  await page.locator('#qa-match-field').selectOption('wmsId');
+  await page.locator('#map-reports').click();
+  await expect(page.locator('#merge-status-title')).toHaveText('No unique dashboard matches yet');
+  await expect(page.locator('#apply-merge')).toBeDisabled();
+  await page.locator('#analytics-match-field').selectOption('livelabsId');
+  await page.locator('#qa-match-field').selectOption('livelabsId');
+  await page.locator('#map-reports').click();
+  await expect(page.locator('#merge-status-title')).toHaveText('Mapped preview is ready');
+  // A QA item contributes its two checks and one finding to the merge rows.
+  for(const [label,count] of [['Matched inventory items','2'],['Analytics-only items','1'],['QA-only rows','3'],['Ambiguous QA rows','0']]){
+    await expect(page.locator('#merge-counts li').filter({hasText:label}).locator('span')).toHaveText(count);
+  }
+  const downloaded=page.waitForEvent('download');await page.locator('#merge-csv').click();
+  const csv=await downloaded;await csv.saveAs(testInfo.outputPath('mapped.csv'));
+  expect(fs.readFileSync(testInfo.outputPath('mapped.csv'),'utf8')).toContain('999999');
+  page.once('dialog',dialog=>dialog.accept());await page.locator('#apply-merge').click();
+  await expect(page.locator('#status')).toContainText('Integrated Jenkins findings for 2 matched inventory items');
+  await expect(page.locator('#status')).toContainText('Canonical inventory is unchanged');
+  await page.reload();await expect(page.locator('html')).not.toHaveClass(/page-loading/);
+  const state=await (await page.request.get(`${baseURL}/api/dashboard-admin-state`)).json();
+  expect(Object.keys(state.qaReportMerge.overlay).sort()).toEqual(['3570','598']);
+  expect(state.qaReportMerge.overlay['3570'].jenkinsErrorScore).toBe(16.67);
+  expect(state.qaReportMerge.overlay['598'].jenkinsErrorScore).toBe(0);
+  expect(state.qaReportMerge.overlay['598'].findings.some(f=>f.priority==='P1')).toBe(true);
+  const saved=await (await page.request.get(`${baseURL}/api/admin/snapshot?snapshot=${snapshotId}`)).json();
+  expect(saved.records.map(r=>r.livelabsId)).toEqual(['3570','598','931']);
+  const qa=await (await page.request.get(`${baseURL}/api/admin/qa-snapshot?snapshot=${qaId}`)).json();
+  expect(qa.catalogItems).toHaveLength(3);
+});
+
+test('Admin inventory searches, filters types, pages and opens the correct record controls', async ({page})=>{
+  const login=await page.request.post(`${baseURL}/api/admin/login`,{data:{username:'regression-reviewer',password},headers:{Origin:baseURL}});
+  expect(login.ok()).toBe(true);
+  const payload=await (await page.request.get(`${baseURL}/api/admin/inventory`)).json();
+  await page.goto(`${baseURL}/admin/inventory`);await expect(page.locator('html')).not.toHaveClass(/page-loading/);
+  await expect(page.locator('#count-all')).toHaveText(payload.records.length.toLocaleString());
+  for(const kind of ['Workshop','Sprint']){
+    await page.locator('#inventory-type').selectOption(kind);
+    const expected=payload.records.filter(r=>r.type===kind);
+    await expect(page.locator('#inventory-count')).toHaveText(expected.length.toLocaleString()+' records');
+    expect(await page.locator('#inventory-rows tr').evaluateAll((rows,kind)=>rows.every(row=>row.cells[4].textContent===kind),kind)).toBe(true);
+    await page.locator('#inventory-next').click();
+    await expect(page.locator('#inventory-page-status')).toContainText('Showing 51');
+    await page.locator('#inventory-previous').click();
+    await expect(page.locator('#inventory-page-status')).toContainText('Showing 1');
+  }
+  await page.locator('#inventory-type').selectOption('');
+  const target=payload.records.find(r=>r.livelabsId==='3570');
+  for(const query of [target.title,target.owner]){
+    await page.locator('#inventory-search').fill(query);
+    await expect(page.locator('#inventory-rows tr').filter({hasText:target.title}).first()).toBeVisible();
+  }
+  await page.locator('#inventory-search').fill(target.title);
+  await page.locator('#inventory-rows tr').filter({hasText:target.title}).getByRole('button',{name:'Manage',exact:true}).click();
+  await expect(page.locator('#policy-record')).toContainText(target.title);
+  await page.locator('#policy-cancel').click();await expect(page.locator('#policy-editor')).toBeHidden();
+  await page.locator('#inventory-search').fill('zz-no-such-item');
+  await expect(page.locator('#inventory-rows')).toContainText('No records match these filters');
 });
 
 test.afterAll(async () => {
@@ -231,8 +316,10 @@ test('assignment table filters, sorts, pages and edits the exact rule from an ex
   expect(state.state.rowOverrides.find(r=>r.id==='family-rule').tags).toEqual(['retired','refresh']);
   expect(state.state.rowOverrides.find(r=>r.id==='rule-0').tags).toEqual(['retired']);
   await page.reload();
+  await expect(page.locator('html')).not.toHaveClass(/page-loading/);
   await expect(panel.locator('[data-assignment-row]')).toHaveCount(10);
   await page.locator('#assignment-search').fill('8000');
+  await expect(page.locator('#assignment-search')).toHaveValue('8000');
   await expect(panel.locator('[data-assignment-row]')).toHaveCount(2);
   await page.screenshot({path:testInfo.outputPath('assignments-desktop.png'),fullPage:true});
 });
