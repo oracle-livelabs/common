@@ -1,4 +1,4 @@
-// Quick answers distilled from content/nodoc/nodoc-workshop.html.
+// Quick answers distilled from nodoc/content/workshop.html.
 // Keep source lab/task references and workflow boundaries aligned with that guide.
 (function (root) {
   "use strict";

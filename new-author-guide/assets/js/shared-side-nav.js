@@ -213,10 +213,7 @@
 
   renderSharedSideNav();
 
-  // The shared component owns the initial state and binding on every page.
-  if (window.matchMedia("(max-width: 940px)").matches) {
-    document.body.classList.add("author-nav-closed");
-  }
+  // The shared component starts expanded on every page and viewport.
   bindSideNavToggle({
     button: "authorGlobalNavToggle",
     bodyClass: "author-nav-closed",

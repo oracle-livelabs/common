@@ -136,7 +136,7 @@ window.authorGuideContent = (function () {
           milestone("Quarterly Quality Assurance", "Published workshops cycle back into Quality Assurance later, and missed Quality Assurance can disable the entry.")
         ],
         image: {
-          src: "../assets/media/guide/author-guide/1-labs-wms/images/submit_workshop.png",
+          src: "../assets/images/step-by-step/1-labs-wms--submit_workshop.png",
           alt: "Submit new workshop request page in WMS",
           caption: "The reviewer-facing request page is where the workshop scope and ownership are established."
         },
@@ -197,7 +197,7 @@ window.authorGuideContent = (function () {
           "- Path Intellisense"
         ].join("\n"),
         image: {
-          src: "../assets/media/guide/author-guide/2-labs-github/images/git-hub-desktop-login-screen.png",
+          src: "../assets/images/step-by-step/2-labs-github--git-hub-desktop-login-screen.png",
           alt: "GitHub Desktop sign-in screen",
           caption: "GitHub Desktop is the main fork, clone, commit, and pull request surface used throughout the guide."
         },
@@ -251,7 +251,7 @@ window.authorGuideContent = (function () {
           "https://<user>.github.io/<repository>/<path>/workshops/<variant>/index.html"
         ].join("\n"),
         image: {
-          src: "../assets/media/guide/author-guide/3-labs-sync-github/images/sample-workshop-structure.png",
+          src: "../assets/images/step-by-step/3-labs-sync-github--sample-workshop-structure.png",
           alt: "Sample workshop structure in Visual Studio Code",
           caption: "The sample structure is the cleanest baseline for new authoring work."
         },
@@ -334,7 +334,7 @@ window.authorGuideContent = (function () {
           resourceLink("Check paths, access, and safe examples", "../markdown/index.html#final-checks", "Test links and assets and remove sensitive data before review.")
         ],
         image: {
-          src: "../assets/media/guide/author-guide/4-labs-markdown-develop-content/images/lintchecker.png",
+          src: "../assets/images/step-by-step/4-labs-markdown-develop-content--lintchecker.png",
           alt: "LintChecker enabled in preview with qa=true",
           caption: "Add ?qa=true while previewing so structural issues surface before pull request review."
         },
@@ -393,7 +393,7 @@ window.authorGuideContent = (function () {
           resourceLink("Check paths, access, and safe examples", "../markdown/index.html#final-checks", "Test every destination from the learner environment.")
         ],
         image: {
-          src: "../assets/media/guide/author-guide/4-labs-markdown-develop-content/images/case-sensitive.png",
+          src: "../assets/images/step-by-step/4-labs-markdown-develop-content--case-sensitive.png",
           alt: "Case-sensitive image and path reminder",
           caption: "GitHub Pages is case-sensitive even when a local machine is not."
         },
@@ -449,7 +449,7 @@ window.authorGuideContent = (function () {
           resourceLink("Paragraphs, images, and code inside a step", "../markdown/index.html#step-content", "Indent supporting content by four spaces inside a numbered step.")
         ],
         image: {
-          src: "../assets/media/guide/author-guide/4-labs-markdown-develop-content/images/image-desc.png",
+          src: "../assets/images/step-by-step/4-labs-markdown-develop-content--image-desc.png",
           alt: "Markdown image reference with descriptive alt text",
           caption: "Use the image description to tell the learner what the screenshot proves, not merely that an image is present."
         },
@@ -512,7 +512,7 @@ window.authorGuideContent = (function () {
           resourceLink("Reveal an optional answer", "../markdown/index.html#reveal-code", "Keep optional solutions in details/summary outside required instructions.")
         ],
         image: {
-          src: "../assets/media/guide/author-guide/4-labs-markdown-develop-content/images/code-copy.png",
+          src: "../assets/images/step-by-step/4-labs-markdown-develop-content--code-copy.png",
           alt: "LiveLabs copy tag inside a code block",
           caption: "Put the copy tag around only the command or SQL a learner needs for the current task."
         },
@@ -560,7 +560,7 @@ window.authorGuideContent = (function () {
           "</if>"
         ].join("\n"),
         image: {
-          src: "../assets/media/guide/author-guide/4-labs-markdown-develop-content/images/conditional-vsc1.png",
+          src: "../assets/images/step-by-step/4-labs-markdown-develop-content--conditional-vsc1.png",
           alt: "Conditional formatting example in Visual Studio Code",
           caption: "Conditional content should stay obvious enough that another author can follow it."
         },
@@ -783,14 +783,14 @@ window.authorGuideContent = (function () {
         ].join("\n"),
         interfaceImages: [
           {
-            src: "../assets/media/guide/author-guide/quiz/images/quizid.png",
+            src: "../assets/images/step-by-step/quiz--quizid.png",
             alt: "Quiz question syntax in a Markdown file",
             caption: "Start with the quiz syntax: Q: for the question, * for correct answers, - for incorrect answers, and > for the explanation."
           }
         ],
         outcomeImages: [
           {
-            src: "../assets/media/guide/author-guide/quiz/images/quizscore.png",
+            src: "../assets/images/step-by-step/quiz--quizscore.png",
             alt: "Rendered scored LiveLabs quiz",
             caption: "After preview, verify that the quiz renders and shows the expected answer state; add scoring only when it supports the learning goal."
           }
@@ -832,7 +832,7 @@ window.authorGuideContent = (function () {
           "- Keep only referenced files in the images folder"
         ].join("\n"),
         image: {
-          src: "../assets/media/guide/author-guide/13-labs-capture-screens-best-practices/images/screen-captures-general-guidelines.png",
+          src: "../assets/images/step-by-step/13-labs-capture-screens-best-practices--screen-captures-general-guidelines.png",
           alt: "General screenshot guidelines reference",
           caption: "The screenshot standards page is the authoritative checklist for capture quality and privacy."
         },
@@ -865,7 +865,7 @@ window.authorGuideContent = (function () {
         ],
         interfaceImages: [
           {
-            src: "../assets/media/guide/author-guide/optishot/images/root.png",
+            src: "../assets/images/step-by-step/optishot--root.png",
             alt: "OptiShot folder picker for selecting an image root",
             caption: "2. Launch OptiShot, then select the folder that contains the images to process. It scans subfolders and excludes .git."
           }
@@ -898,7 +898,7 @@ window.authorGuideContent = (function () {
         ].join("\n"),
         outcomeImages: [
           {
-            src: "../assets/media/guide/author-guide/optishot/images/summary.png",
+            src: "../assets/images/step-by-step/optishot--summary.png",
             alt: "OptiShot processing summary output",
             caption: "3. Confirm the result: resized and optimized files changed; skipped files already met the limit; failed files need investigation."
           }
@@ -932,7 +932,7 @@ window.authorGuideContent = (function () {
         ],
         interfaceImages: [
           {
-            src: "../assets/media/guide/author-guide/fixomat/images/fixomat.png",
+            src: "../assets/images/step-by-step/fixomat--fixomat.png",
             alt: "LiveLabs Fixomat 2000 application showing its mode options, Select folder, Run, Save Log, and output console",
             caption: "2. This is the captured Fixomat interface from the Step by Step Guide. Select the workshop root, choose the repair mode, then run the pass."
           }
@@ -1014,12 +1014,12 @@ window.authorGuideContent = (function () {
           milestone("Quarterly Quality Assurance", "Published workshops cycle back into Quality Assurance later to stay current.")
         ],
         interfaceImages: [{
-          src: "../assets/media/guide/author-guide/5-labs-qa-checks/images/self-qa-checklist-1.png",
+          src: "../assets/images/step-by-step/5-labs-qa-checks--self-qa-checklist-1.png",
           alt: "Self Quality Assurance checklist in WMS",
           caption: "Open the checklist before changing status and save all evidence before certification."
         }],
         outcomeImages: [{
-          src: "../assets/media/guide/author-guide/5-labs-qa-checks/images/completed-checklist-1.png",
+          src: "../assets/images/step-by-step/5-labs-qa-checks--completed-checklist-1.png",
           alt: "Completed Self Quality Assurance checklist in WMS",
           caption: "The result to verify: the completed checklist is saved before you certify Self Quality Assurance Complete."
         }],
@@ -1071,7 +1071,7 @@ window.authorGuideContent = (function () {
           ".\\validate-livelabs-markdown.ps1 C:\\path\\to\\your\\workshop"
         ].join("\n"),
         image: {
-          src: "../assets/media/guide/author-guide/prcheck/images/prerror.png",
+          src: "../assets/images/step-by-step/prcheck--prerror.png",
           alt: "Failed pull request checks on GitHub",
           caption: "Start with the failing workflow name so you fix the real blocker."
         },
@@ -1131,7 +1131,7 @@ window.authorGuideContent = (function () {
           "https://oracle-livelabs.github.io/sprints/<category-folder>/<sprint-folder>/"
         ].join("\n"),
         image: {
-          src: "../assets/media/guide/author-guide/6-labs-publish/images/publishing-tab.png",
+          src: "../assets/images/step-by-step/6-labs-publish--publishing-tab.png",
           alt: "Publishing tab in WMS",
           caption: "The Publishing tab is where the final production metadata is created and approved."
         },
@@ -1217,7 +1217,7 @@ window.authorGuideContent = (function () {
           "- Production URL"
         ].join("\n"),
         image: {
-          src: "../assets/media/guide/author-guide/10-labs-create-sprints-workflow/images/sprints-workflow.png",
+          src: "../assets/images/step-by-step/10-labs-create-sprints-workflow--sprints-workflow.png",
           alt: "LiveLabs sprint workflow diagram",
           caption: "Sprints use a separate repository and publish request path from full workshops."
         },
@@ -1259,12 +1259,12 @@ window.authorGuideContent = (function () {
           "- Browser settings are optimized before image capture"
         ].join("\n"),
         interfaceImages: [{
-          src: "../assets/media/guide/author-guide/6-labs-setup-graphical-remote-desktop/images/novnc-urls.png",
+          src: "../assets/images/step-by-step/6-labs-setup-graphical-remote-desktop--novnc-urls.png",
           alt: "noVNC URL settings for a graphical remote desktop",
           caption: "Run the noVNC setup and verify the generated desktop URLs before you preload browser content or capture an image."
         }],
         outcomeImages: [{
-          src: "../assets/media/guide/author-guide/6-labs-setup-graphical-remote-desktop/images/novnc-custom-chrome-7a.png",
+          src: "../assets/images/step-by-step/6-labs-setup-graphical-remote-desktop--novnc-custom-chrome-7a.png",
           alt: "Configured graphical desktop with Chrome opened through noVNC",
           caption: "Confirm the provisioned desktop reaches the intended browser state before custom image capture."
         }],
@@ -1314,12 +1314,12 @@ window.authorGuideContent = (function () {
           "Validated remote desktop URL"
         ].join("\n"),
         interfaceImages: [{
-          src: "../assets/media/guide/author-guide/7-labs-create-custom-image-for-marketplace/images/create-image-1.png",
+          src: "../assets/images/step-by-step/7-labs-create-custom-image-for-marketplace--create-image-1.png",
           alt: "OCI Console More Actions menu for creating a custom image",
           caption: "After cleanup, start capture from the source instance through More Actions > Create custom image."
         }],
         outcomeImages: [{
-          src: "../assets/media/guide/author-guide/7-labs-create-custom-image-for-marketplace/images/remote-desktop-landing.png",
+          src: "../assets/images/step-by-step/7-labs-create-custom-image-for-marketplace--remote-desktop-landing.png",
           alt: "Remote desktop landing page for a test instance created from the custom image",
           caption: "The outcome to verify is a fresh instance that opens the remote desktop as expected, not only a successful image-creation request."
         }],
@@ -1363,12 +1363,12 @@ window.authorGuideContent = (function () {
           "Support contacts"
         ].join("\n"),
         interfaceImages: [{
-          src: "../assets/media/guide/author-guide/8-labs-publish-custom-image-to-marketplace/images/create-listing-1.png",
+          src: "../assets/images/step-by-step/8-labs-publish-custom-image-to-marketplace--create-listing-1.png",
           alt: "OCI Marketplace action for creating a listing",
           caption: "Create or update the Marketplace listing only after the custom image has passed its fresh-instance test."
         }],
         outcomeImages: [{
-          src: "../assets/media/guide/author-guide/8-labs-publish-custom-image-to-marketplace/images/publish-listing-revision-options.png",
+          src: "../assets/images/step-by-step/8-labs-publish-custom-image-to-marketplace--publish-listing-revision-options.png",
           alt: "OCI Marketplace listing revision publish options",
           caption: "Publish the approved listing revision, then retain its listing, app catalog, image, and version identifiers for WMS registration."
         }],
@@ -1413,12 +1413,12 @@ window.authorGuideContent = (function () {
           "7. Save and retest the LiveLab"
         ].join("\n"),
         interfaceImages: [{
-          src: "../assets/media/guide/author-guide/12-add-custom-image-to-workshop/images/register-listing-1.png",
+          src: "../assets/images/step-by-step/12-add-custom-image-to-workshop--register-listing-1.png",
           alt: "WMS custom image registration form for a Marketplace listing",
           caption: "Register the tested Marketplace listing with its listing and app catalog identifiers before adding an image version."
         }],
         outcomeImages: [{
-          src: "../assets/media/guide/author-guide/12-add-custom-image-to-workshop/images/update-image-5.png",
+          src: "../assets/images/step-by-step/12-add-custom-image-to-workshop--update-image-5.png",
           alt: "WMS sandbox environment image selection for an updated custom image",
           caption: "Select the new image in the existing sandbox environment, save, and retest the LiveLab."
         }],
@@ -1454,34 +1454,34 @@ window.authorGuideContent = (function () {
         ],
         interfaceImages: [
           {
-            src: "../assets/media/guide/author-guide/15-livestack/images/create-a-ls-1.png",
+            src: "../assets/images/step-by-step/15-livestack--create-a-ls-1.png",
             alt: "WMS navigation option to create a LiveStack",
             caption: "1. Access: open WMS and choose Create a LiveStack in the left navigation."
           },
           {
-            src: "../assets/media/guide/author-guide/15-livestack/images/fill-initialization-form.png",
+            src: "../assets/images/step-by-step/15-livestack--fill-initialization-form.png",
             alt: "LiveStack initialization form in WMS",
             caption: "2. Create: complete the initialization form and create the new LiveStack record."
           },
           {
-            src: "../assets/media/guide/author-guide/15-livestack/images/ls-details.png",
+            src: "../assets/images/step-by-step/15-livestack--ls-details.png",
             alt: "LiveStack Details page in WMS",
             caption: "3. Use: LiveStack Details is the working surface for entries, assets, ordering, visibility, and status."
           }
         ],
         outcomeImages: [
           {
-            src: "../assets/media/guide/author-guide/15-livestack/images/fill-entry-form.png",
+            src: "../assets/images/step-by-step/15-livestack--fill-entry-form.png",
             alt: "LiveStack form for configuring a LiveLab entry",
             caption: "Add a LiveLab, then set its launch overrides, title, and position only when required."
           },
           {
-            src: "../assets/media/guide/author-guide/15-livestack/images/add-asset-4.png",
+            src: "../assets/images/step-by-step/15-livestack--add-asset-4.png",
             alt: "LiveStack asset visibility control for Internal or External access",
             caption: "Add a shared or owned asset, then set its visibility deliberately before publishing."
           },
           {
-            src: "../assets/media/guide/author-guide/15-livestack/images/request-publishing.png",
+            src: "../assets/images/step-by-step/15-livestack--request-publishing.png",
             alt: "LiveStack status selection for Publish Requested",
           caption: "Final step: set Publish Requested and save after the package has been reviewed."
           }
@@ -1517,34 +1517,34 @@ window.authorGuideContent = (function () {
         ],
         interfaceImages: [
           {
-            src: "../assets/media/guide/author-guide/17-assets/images/1-assets-page.png",
+            src: "../assets/images/step-by-step/17-assets--1-assets-page.png",
             alt: "WMS Assets page under Self Services",
             caption: "1. Access: in WMS, expand Self Services and open Assets."
           },
           {
-            src: "../assets/media/guide/author-guide/17-assets/images/2-new-asset-dialog.png",
+            src: "../assets/images/step-by-step/17-assets--2-new-asset-dialog.png",
             alt: "WMS New Asset dialog with file and link options",
             caption: "2. Create: select New Asset, then choose whether you need a file or a link."
           }
         ],
         outcomeImages: [
           {
-            src: "../assets/media/guide/author-guide/17-assets/images/3-upload-file-form.png",
+            src: "../assets/images/step-by-step/17-assets--3-upload-file-form.png",
             alt: "WMS form for uploading a file asset",
             caption: "File path: upload the file, name it clearly, choose the type, and add editors when required."
           },
           {
-            src: "../assets/media/guide/author-guide/17-assets/images/4-upload-link-form.png",
+            src: "../assets/images/step-by-step/17-assets--4-upload-link-form.png",
             alt: "WMS form for adding a link asset",
             caption: "Link path: store a reusable URL with a clear name, type, description, and editors."
           },
           {
-            src: "../assets/media/guide/author-guide/17-assets/images/5-access-par-link.png",
+            src: "../assets/images/step-by-step/17-assets--5-access-par-link.png",
             alt: "WMS asset row with the generated PAR link icon",
             caption: "Use the link icon to open or copy the generated PAR link for a file asset."
           },
           {
-            src: "../assets/media/guide/author-guide/17-assets/images/7-update-asset-dialog.png",
+            src: "../assets/images/step-by-step/17-assets--7-update-asset-dialog.png",
             alt: "WMS dialog for updating an existing file asset",
             caption: "Update an existing file asset to keep its PAR link; create a new asset only when a new link is needed."
           }
@@ -1731,7 +1731,7 @@ window.authorGuideContent = (function () {
           resourceLink("Open the Oracle Skills Library", officialLinks.aiHubSkills, "Download the approved LiveLabs AI Developer skills from the Oracle Skills Library.")
         ],
         image: {
-          src: "../assets/media/guide/author-guide/15-labs-livelabs-ai-developer-hub/images/download-livelabs-skill.png",
+          src: "../assets/images/step-by-step/15-labs-livelabs-ai-developer-hub--download-livelabs-skill.png",
           alt: "AI Developer Hub interface for downloading LiveLabs skills",
           caption: "Use the Hub's skill download path only after you have opened its how-to guide and selected a focused authoring task."
         },
