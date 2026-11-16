@@ -131,6 +131,22 @@
         .split(/[;|]+/)
         .some((part) => normalizeFilterText(part) === normalizedQuery);
     }
+    function recordContactSearchText(record) {
+      const values = [record?.owner || ""];
+      [record?.values, record?.details].forEach((fields) => {
+        if (!(fields instanceof Map)) return;
+        fields.forEach((value, label) => {
+          if (/author|owner|support|technical|tech contact|manager|workshop team|contact/i.test(String(label))) values.push(String(value || ""));
+        });
+      });
+      return normalizeFilterText(values.filter(Boolean).join(" "));
+    }
+    function rowMatchesContactFilter(row, query) {
+      if (!publicRecordByLiveLabsId.size) return false;
+      const id = String(row?.dataset?.livelabsId || "").trim();
+      const record = publicRecordByLiveLabsId.get(id);
+      return Boolean(record && recordContactSearchText(record).includes(query));
+    }
     function rowMatchesFilters(row, filters) {
       if (row.dataset.qaAnalyticsExcluded === "true") return false;
       const selectedFocus = filters.filter(control => control.dataset.filterMode === 'review-focus' && control.checked).map(control => control.value);
@@ -149,6 +165,13 @@
         }
         const query = normalizeFilterText(control.value);
         if (!query) return true;
+        if (control.dataset.filterMode === "record-contact") {
+          return rowMatchesContactFilter(row, query);
+        }
+        if (control.dataset.filterMode === "table-search") {
+          const visibleText = Array.from(cells, (cell) => cell.dataset.filterValue || cell.textContent || "").join(" ");
+          return normalizeFilterText(visibleText).includes(query) || rowMatchesContactFilter(row, query);
+        }
         const columnIndex = Number(control.dataset.columnIndex);
         const cell = cells[columnIndex];
         if (!cell) return false;
@@ -1310,6 +1333,7 @@
     }
     function loadFullSearchRecords() {
       if (fullSearchRecordsPromise) return fullSearchRecordsPromise;
+      fullSearchRecordsLoadState = "loading";
       fullSearchRecordsPromise = Promise.all([loadCanonicalPortfolioPayload(), fetch('./assets/data/score-baselines.json', {cache:'no-cache'}).then(response => response.ok ? response.json() : {}).catch(() => ({}))])
         .then(([payload, scores]) => {
           authorScoreBaselines = scores.records || {};
@@ -1317,9 +1341,15 @@
           publicRawRecords = Array.isArray(payload.records) ? payload.records : [];
           publicLivelabsIds = new Set(publicRawRecords.map((record) => String(record.livelabsId || "").trim()).filter(Boolean));
           loadedFullSearchRecords = publicRawRecords.map(fullIndexRecordToSearchRecord);
+          publicRecordByLiveLabsId = new Map(loadedFullSearchRecords.filter(record => String(record.livelabsId || '').trim())
+            .map(record => [String(record.livelabsId).trim(), record]));
+          fullSearchRecordsLoadState = "loaded";
           return loadedFullSearchRecords;
         })
-        .catch(() => []);
+        .catch(() => {
+          fullSearchRecordsLoadState = "unavailable";
+          return [];
+        });
       return fullSearchRecordsPromise;
     }
     function portfolioInventoryRecordToSearchRecord(raw) {
@@ -1362,6 +1392,8 @@
     const criteriaRuleAutomationPaused = true;
     const authorFacingGovernanceTagsHidden = true;
     let fullSearchRecordsPromise = null;
+    let publicRecordByLiveLabsId = new Map();
+    let fullSearchRecordsLoadState = "idle";
     let portfolioPayloadPromise = null;
     let portfolioInventoryRecordsPromise = null;
     let loadedFullSearchRecords = [];
@@ -4570,6 +4602,33 @@
         if (!control) return;
         const usesChange = control.tagName.toLowerCase() === "select" || control.type === "checkbox";
         if ((event.type === "change") !== usesChange) return;
+        if (control.dataset.filterMode === 'record-contact' || control.dataset.filterMode === 'table-search') {
+          const status = control.closest('label')?.querySelector('[data-contact-filter-status]');
+          const query = normalizeFilterText(control.value);
+          if (!query) {
+            if (status) { status.hidden = true; status.textContent = ''; }
+          } else if (!publicRecordByLiveLabsId.size && fullSearchRecordsLoadState !== 'unavailable' && control.dataset.contactLoadPending !== 'true') {
+            control.dataset.contactLoadPending = 'true';
+            control.dataset.contactLoadState = 'loading';
+            control.setAttribute('aria-busy', 'true');
+            if (status) { status.hidden = false; status.textContent = 'Searching public owner and contact fields…'; }
+            loadFullSearchRecords().then((records) => {
+              control.dataset.contactLoadPending = 'false';
+              control.dataset.contactLoadState = records.length ? 'ready' : 'unavailable';
+              control.removeAttribute('aria-busy');
+              if (status) {
+                status.textContent = records.length
+                  ? ''
+                  : 'Owner/contact search is unavailable; visible table fields remain searchable.';
+                status.hidden = Boolean(records.length);
+              }
+              preserveViewportDuringTableUpdate(control.dataset.tableFilter, () => applyTableState(control.dataset.tableFilter, { resetPage: true }));
+            });
+          } else if (!publicRecordByLiveLabsId.size && fullSearchRecordsLoadState === 'unavailable' && status) {
+            status.hidden = false;
+            status.textContent = 'Owner/contact email search is unavailable; visible table fields remain searchable.';
+          }
+        }
         preserveViewportDuringTableUpdate(control.dataset.tableFilter, () => {
           applyTableState(control.dataset.tableFilter, { resetPage: true });
         });
