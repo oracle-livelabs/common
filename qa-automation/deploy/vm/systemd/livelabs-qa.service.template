@@ -1,0 +1,19 @@
+[Unit]
+Description=LiveLabs QA container stack
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=@QA_USER@
+Environment=HOME=@QA_HOME@
+Environment=XDG_RUNTIME_DIR=/run/user/@QA_UID@
+WorkingDirectory=@QA_DEPLOY_DIR@
+ExecStart=/usr/bin/env bash @QA_DEPLOY_DIR@/scripts/compose.sh up -d
+ExecStop=/usr/bin/env bash @QA_DEPLOY_DIR@/scripts/compose.sh stop
+TimeoutStartSec=900
+TimeoutStopSec=180
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,9 @@
+{
+  "name": "@oracle-livelabs/webpage-screenshot-pipeline-tool",
+  "private": true,
+  "version": "1.1.0",
+  "description": "Package-local Playwright runtime for the webpage-screenshot-pipeline skill",
+  "dependencies": {
+    "playwright": "1.55.0"
+  }
+}

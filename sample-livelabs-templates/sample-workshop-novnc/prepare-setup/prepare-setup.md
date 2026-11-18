@@ -18,16 +18,16 @@ This lab assumes you have:
 
     <!-- *Note 1:* If providing a single Stack download for the workshop, use this simple expression. -->
 
-    - [sample-mkplc-freetier.zip](https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-tenancy.zip)
+    - [sample-mkplc-freetier.zip](https://objectstorage.us-ashburn-1.oraclecloud.com/p/JsqfrhyU1XL4XO9bVtcIwGUSyFvXdh-C3bAQlm8tBCjCubXXjibfvAWeJkHFOmbj/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-tenancy.zip)
 
     <!-- *Note 2:* If providing multiple Stacks download for the same workshop, use a conditional expression similar to the below. Keep in mind that the condition or *type* must be paired with a valid entry in the *manifest.json* file. Refer to *freetier-advanced* and *freetier-basics* -->
 
 <!-- 
 <if type="advanced">
-    - [sample-mkplc-advanced.zip](https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-tenancy-advanced.zip)
+    - [sample-mkplc-advanced.zip](https://objectstorage.us-ashburn-1.oraclecloud.com/p/JsqfrhyU1XL4XO9bVtcIwGUSyFvXdh-C3bAQlm8tBCjCubXXjibfvAWeJkHFOmbj/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-tenancy-advanced.zip)
 </if>
 <if type="basics">
-    - [sample-mkplc-basics.zip](https://c4u02.objectstorage.us-ashburn-1.oci.customer-oci.com/p/tfC_fKB7HB5Wo1pvpYu1fHifVw-E7MZruSx9l5J6ebjhGZOwsFawUiJlJhzgR7Hy/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-tenancy-basics.zip)
+    - [sample-mkplc-basics.zip](https://objectstorage.us-ashburn-1.oraclecloud.com/p/JsqfrhyU1XL4XO9bVtcIwGUSyFvXdh-C3bAQlm8tBCjCubXXjibfvAWeJkHFOmbj/n/c4u02/b/hosted_workshops/o/stacks/ll-orm-mkplc-tenancy-basics.zip)
 </if>
  -->
  

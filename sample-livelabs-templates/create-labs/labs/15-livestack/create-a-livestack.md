@@ -2,20 +2,30 @@
 
 ## Introduction
 
-LiveLabs LiveStacks help teams move from initial solution exploration to hands-on learning and deployment planning. A LiveStack brings together demos, LiveLabs workshops, deployment assets, and supporting materials around a common industry challenge or business outcome.
+**LiveStacks** are industry-focused solution packages published through LiveLabs. Each LiveStack brings together the materials needed to understand a solution, experience it, and prepare for deployment around a specific business challenge or outcome.
 
-LiveStacks are available across Finance, Retail, Healthcare, Media & Entertainment, and Energy & Utilities, with additional industry solutions being published in the coming weeks. You can access LiveStacks directly from LiveLabs to explore content, subscribe for updates, and share solutions with customers and colleagues.
+A LiveStack can include a **LiveStack Demo** for solution storytelling, one or more **LiveLabs workshops** for hands-on learning, deployment-ready assets for implementation, and supporting materials that help teams move from exploration to adoption.
 
-A LiveStack supports the following journey:
+**Keep in mind:**
 
-1. **Envision** - Showcase potential business outcomes through a LiveStack Demo built around real industry challenges.
-2. **Try** - Explore the solution and gain hands-on experience through a LiveLabs Workshop.
-3. **Embed** - Deploy and validate the solution in your environment using deployment-ready assets.
-4. **Scale** - Extend and adapt the solution from pilot to broader adoption.
+- A **LiveStack** is the *full solution package*.
 
-LiveStacks also support Oracle-internal content, including briefing materials, supporting assets, and engagement guidance. These internal assets help teams prepare for customer conversations while remaining hidden from external audiences.
+- A **LiveStack Demo** is *one component within that package*.
 
-Estimated Time: 20 minutes
+The demo is designed to help audiences quickly understand the business value and solution narrative, while the workshop and deployment assets support hands-on validation and implementation planning.  LiveStacks help teams move through a practical journey: envision the solution, try it through guided hands-on work, embed it with deployment assets, and scale it across broader use cases or environments.
+
+LiveStacks currently cover industries such as Finance, Retail, Healthcare, Media & Entertainment, and Energy & Utilities, with additional solutions planned. You can access them directly from LiveLabs to explore available content, subscribe for updates, and share relevant solutions with customers and colleagues.
+
+A LiveStack supports the following journey from solution discovery to implementation and scale:
+
+1. **Envision** - Use a LiveStack Demo to showcase potential business outcomes through a focused story built around a real industry challenge.
+2. **Try** - Explore the solution and gain hands-on experience through a LiveLabs workshop included in the LiveStack.
+3. **Embed** - Deploy and validate the solution in your environment by using the deployment-ready assets included in the LiveStack.
+4. **Scale** - Extend and adapt the solution from pilot use to broader adoption across teams, environments, or customer scenarios.
+
+LiveStacks can also include Oracle-internal content such as briefing materials, supporting assets, and engagement guidance. These internal materials help teams prepare for customer conversations while remaining hidden from external audiences.
+
+Estimated Time: **20 minutes**
 
 
 ### Objectives
@@ -28,31 +38,35 @@ Estimated Time: 20 minutes
 
 ## Task 1: Create a LiveStack
 
-1. Go to the [Workshop Management System](https://livelabs.oracle.com/wms).
+Perform the following set of steps to create a LiveStack entry:
 
-2. In the left window pane, click 'Create a LiveStack'.
+1. Go to the [Workshop Management System](https://livelabs.oracle.com/wms). (WMS)
+
+2. In the left navigation pane, click **Create a LiveStack**.
 
     ![Create a LiveStack navigation](images/create-a-ls-1.png " ")
 
-3. Learn more about what a LiveStack is on the landing page. When ready, click 'Create a LiveStack'.
+3. Review the landing-page overview of LiveStacks, then click **Create a LiveStack** when you are ready to continue.
 
     ![Create a LiveStack landing page](images/create-a-ls-2.png " ")
 
-4. Fill out the LiveStack initialization form and click 'Create'.
+4. Complete the LiveStack initialization form, then click **Create**.
 
     ![Fill out the LiveStack initialization form](images/fill-initialization-form.png " ")
 
-5. You should now land on the LiveStack Details page.
+5. You should now be on the **LiveStack Details** page.
 
     ![LiveStack details page](images/ls-details.png " ")
 
-6. You can add both assets and LiveLabs as LiveStack content. You'll see how in the following labs.
+6. A LiveStack can include both assets and LiveLabs. The next labs show how to add each type of content.
 
-> NOTE: You can view all of your LiveStacks under My LiveStacks.
+> **Note:** You can view all of your LiveStacks under **My LiveStacks**.
 
-## Task 2: Add LiveLab Entries to Your LiveStack
+## Task 2: Add LiveLab Entries
 
-1. On the LiveStack details page, click 'Add Entry'.
+Perform the following set of steps to add LiveLab Entries to your LiveStack:
+
+1. On the LiveStack details page, click **Add Entry**.
 
     ![Add a LiveStack entry](images/add-entry-1.png " ")
 
@@ -60,60 +74,60 @@ Estimated Time: 20 minutes
 
     ![Add a LiveStack entry](images/add-entry-2.png " ")
 
-3. Once a LiveLab is selected, you'll see all of its available override fields. 
-    * **Run on Sandbox** - This field appears when a LiveLabs has a Sandbox Environment available. If you don't want this LiveLab's option available when accessed via your LiveStack, you can turn it off.
-    * **Run on Your Tenancy** - This field appears when a LiveLabs has a Run on Your Tenancy option available. If you don't want this LiveLab's option available when accessed via your LiveStack, you can turn it off.
-    * **Title** - Initially filled with the original title, but you can modify this field to rename the LiveLab as desired in your LiveStack.
-    * **Position** - This field is used to set the display order of the entries. You can also physically reorder them in the report view by clicking and dragging.
+3. After you select a LiveLab, the available override fields appear.
+    * **Run on Sandbox** - This field appears when the selected LiveLab includes a Sandbox environment. Turn it off if you do not want that option available through your LiveStack.
+    * **Run on Your Tenancy** - This field appears when the selected LiveLab includes a Run on Your Tenancy option. Turn it off if you do not want that option available through your LiveStack.
+    * **Title** - This field is prefilled with the original title, but you can update it to rename the LiveLab within your LiveStack.
+    * **Position** - Use this field to set the display order of the entries. You can also reorder them in the report view by clicking and dragging.
 
     ![Fill out the LiveStack entry form](images/fill-entry-form.png " ")
 
-4. Click 'Create' to add the LiveLab to your LiveStack.
+4. Click **Create** to add the LiveLab to your LiveStack.
 
-> NOTE: All changes made to published LiveStacks reflect immediately in LiveLabs.
+> **Note:** Changes made to published LiveStacks appear immediately in **LiveLabs**.
 
 ## Task 3: Add Assets to Your LiveStack
 
-A LiveStack supports the inclusion of assets related to your LiveStack content, as seen in the example below. This lab explains how to do this.
+A LiveStack can also include related assets that support its content, as shown in the example below. This lab explains how to add them.
 
-> NOTE: Assets are created and managed in WMS > Self Services > Assets.
+> **Note:** Assets are created and managed in **WMS** > **Self Services** > **Assets**.
 
 ![LiveStack landing page example](images/ls-landing-page-example.png " ")
 
-1. On the LiveStack details page, click 'Add Asset'.
+1. On the LiveStack details page, click **Add Asset**.
 
     ![Add a LiveStack asset](images/add-asset-1.png " ")
 
-2. Search by asset name or ID to find the asset of your choice.
+2. Search by asset name or ID to find the asset you want to add.
 
     ![Search for a LiveStack asset](images/add-asset-2.png " ")
 
-    > NOTE: Only assets created by or shared with you will be listed.
+    > **Note:** Only assets created by you or shared with you appear in the list.
 
-3. To manually order the assets, you can update the position value here or physically reorder them in the report view by clicking and dragging.
+3. To order the assets manually, update the position value here or reorder them in the report view by clicking and dragging.
 
     ![Configure a LiveStack asset](images/add-asset-3.png " ")
 
-4. The asset can be set to external or internal using the visibility switch. **Internal** assets will only be visible to Oracle employees, whereas **external** assets will be visible to anyone.
+4. Use the visibility switch to mark the asset as **Internal** or **External**. Internal assets are visible only to Oracle employees, while external assets are visible to all audiences.
 
     ![Configure a LiveStack asset](images/add-asset-4.png " ")
 
-5. Click 'Create' to add the asset to your LiveStack.
+5. Click **Create** to add the asset to your LiveStack.
 
-> NOTE: All changes made to published LiveStacks reflect immediately in LiveLabs.
+> **Note:** All changes made to published LiveStacks reflect immediately in LiveLabs.
 
 
 ## Task 4: Publish Your LiveStack
 
-1. Once you've finalized your LiveStack, you can request publishing by changing it's status to 'Publish Requested' and clicking Save.
+1. Once you've finalized your LiveStack, you can request publishing by changing it's status to **Publish Requested** and clicking Save.
 
     ![Request publishing.](images/request-publishing.png " ")
 
-2. The LiveStack council will provide a status update on your request in 2-3 business days. You will receive an email notification.
+2. The LiveStack council will provide a status update within **2 to 3 business days**, and you will receive an email notification.
 
     **Pending review, you have a LiveStack! 🎉**
 
 ## Acknowledgements
 
 * **Author** - Brianna Ambler, Database Product Manager
-* **Last Updated By/Date** - Brianna Ambler, Database Product Manager, June 2026
+* **Last Updated By/Date** - Teodor Constantin Nechita, Senior Technical Writer, July 2026

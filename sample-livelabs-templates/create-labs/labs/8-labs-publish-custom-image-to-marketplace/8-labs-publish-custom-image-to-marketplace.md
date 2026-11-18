@@ -22,19 +22,15 @@ In this lab, you will:
 
 2. Confirm that you have an OCI tenancy that Marketplace Publisher can use. Marketplace Publisher now runs in the OCI Console, so you must be able to sign in to that tenancy and work in the target compartment.
 
-3. Ask a tenancy administrator to add the required Marketplace Publisher IAM policies. At minimum, your publisher group needs access to manage Marketplace Publisher resources, and the Marketplace service must be able to read the image resources used by the listing.
+3. Ask a tenancy administrator to add the required Marketplace Publisher IAM policies. At minimum, your publisher group needs access to manage Marketplace Publisher resources, and the Marketplace service must be able to read the image resources used by the listing. See the current [Marketplace Publisher IAM policy documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/publisher-iam-policy.htm).
 
-    See the current [Marketplace Publisher IAM policy documentation](https://docs.oracle.com/en-us/iaas/Content/Marketplace/publisher-iam-policy.htm).
-
-4. After approval, sign in to the OCI Console and open **Marketplace**. Under **Publisher**, confirm that you can access **Terms**, **Artifacts**, **Listings**, and **Listing revisions**.
+4. After receiving email approval, sign in to the OCI Console and open **Marketplace**. Under **Publisher**, confirm that you can access **Terms**, **Artifacts**, **Listings**, and **Listing revisions**.
 
     ![Marketplace Publisher approval email](images/omp-approval-email.png)
 
-After you have publisher access and the required policies, continue to Task 2.
-
 ## Task 2: Add Terms of Use
 
-> **Note:** Create the terms of use once per tenancy and compartment. Reuse the active terms when you create or update listing packages.
+> **Note:** You only need one Terms of Use per tenancy. Reuse the active terms when you create or update listing packages.
 
 1. Sign in to the OCI Console using a tenancy with Marketplace Publisher access. Open the navigation menu and select **Marketplace**. Under **Publisher**, select **Terms**.
 
@@ -44,7 +40,7 @@ After you have publisher access and the required policies, continue to Task 2.
 
 3. Select the compartment, enter a descriptive terms name, and create the terms resource.
 
-4. Open the terms resource and add a terms version. Upload the current [Oracle Standard Terms and Restrictions PDF](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/n9OHqZrPlUZh6UtSMnnI3yq7IJecJweZ5pDjiBFqiPbOLtIjuebugDo28-KJ6geD/n/c4u04/b/livelabsfiles/o/Oracle%20Standard%20Terms%20and%20Restrictions.pdf), or use the legal-approved replacement supplied by the LiveLabs team.
+4. Open the terms resource and add a terms version. Upload the current [Oracle Standard Terms and Restrictions PDF](https://objectstorage.us-ashburn-1.oraclecloud.com/p/4Au3jJ-t8Wtw3LWyYsDMqQk2FdlXDvXCb1MYRS0J6P4QS-GCrv2YNOolWdtFMLZq/n/c4u04/b/livelabsfiles/o/Oracle%20Standard%20Terms%20and%20Restrictions.pdf).
 
     ![Create a terms version](images/create-terms-2.png)
 
@@ -90,13 +86,14 @@ For more information, see the [Marketplace Publisher artifact documentation](htt
 
 2. Select **Create Listing**.
 
-    ![Create Listing action](images/create-listing-1.png)
+2. Click **Create Listing**.
+    ![Image](./images/create-listing-1.png)
 
-3. Select **OCI Application Listing** as the listing type.
+3. Select **OCI Application Listing**.
+    ![Image](./images/create-listing-2.png)
 
-    ![OCI Application Listing type selection](images/create-listing-2.png)
-
-4. Complete **Header details**.
+4. Fill out the header details. 
+    > **NOTE:** Be sure to set the package type to **Compute Image** and use the same compartment as your artifact.
 
     Use these values for a LiveLabs compute image listing:
 
@@ -185,16 +182,17 @@ For more information, see the [listing revision editing documentation](https://d
 
 1. On the **Listing revisions** page, locate the revision that Oracle approved for publication. A revision that is ready to publish can show **Approved** or **Unpublished**, depending on its publication history.
 
-2. Open the row actions menu and choose the publishing option that matches the intended audience:
-
-    * Select **Publish** for a public Marketplace listing.
-    * Select **Publish as Private** for a private listing, and enter the allowed tenancy OCID or comma-separated tenancy OCIDs that should be able to access the listing.
-
-    > **Important:** Do not leave the allowed tenancies field blank when publishing a private listing. Current Marketplace Publisher documentation requires tenancy OCIDs for private publishing.
+2. Open the row actions menu and select **Publish as Private**.
 
     ![Publish an approved or unpublished listing revision](images/publish-listing-revision-options.png)
 
-3. Select the final publish action and monitor the listing revision until its status changes to **Published** or **Published as Private**.
+3. The **Publish as a private listing revision** confirmation dialog opens.
+
+4. Leave the **Allowed tenancies** field blank, then select **Publish as Private**.
+
+    ![Leave allowed tenancies blank before publishing a private listing](images/publish-private-listing-revision.png)
+
+5. Monitor the listing revision until its status changes to **Published as Private**.
 
 Publishing can take 1 to 3 business days. If publishing takes longer or you have Oracle Marketplace questions, post in the [Marketplace Slack channel](https://oracle.enterprise.slack.com/archives/CEKCPA98B).
 

@@ -24,6 +24,10 @@ const DEFAULT_NAVIGATION_TIMEOUT_MS = 45_000;
 const DEFAULT_WAIT_TIMEOUT_MS = 20_000;
 const DEFAULT_RETRIES = 2;
 const DEFAULT_RETRY_DELAY_MS = 3_000;
+const CATALOG_RESULT_CAP = 100;
+const CATALOG_LEVEL_GROUP = "Level";
+const CATALOG_PRIMARY_COVERAGE_GROUP = "Type";
+const CATALOG_FALLBACK_COVERAGE_GROUP = "Product";
 
 const HELP = `Generate a LiveLabs catalog index for data-driven QA tests.
 
@@ -152,10 +156,6 @@ function catalogUrl(options) {
   return url.toString();
 }
 
-function normalizeAbsoluteUrl(baseUrl, href) {
-  return new URL(href, `${baseUrl}/`).toString();
-}
-
 function normalizeHref(baseUrl, href) {
   const url = new URL(href, `${baseUrl}/`);
   const sessionParamNames = ["session", "cs", "p_instance", "x01"];
@@ -186,7 +186,7 @@ function shortHash(value) {
 
 function explicitIdFromUrl(urlValue) {
   const url = new URL(urlValue);
-  const preferredParams = ["workshop", "workshop_id", "wid", "id", "p_id", "app_id", "lsid"];
+  const preferredParams = ["workshop", "workshop_id", "wid", "p400_id", "id", "p_id", "app_id", "lsid"];
 
   for (const paramName of preferredParams) {
     const value = url.searchParams.get(paramName);
@@ -200,7 +200,7 @@ function explicitIdFromUrl(urlValue) {
 
 function buildCatalogItem(baseUrl, rawItem) {
   const normalizedHref = normalizeHref(baseUrl, rawItem.href);
-  const absoluteUrl = normalizeAbsoluteUrl(baseUrl, rawItem.href);
+  const normalizedUrl = new URL(normalizedHref);
   const type = itemTypeFromHref(normalizedHref);
   const slug = slugify(rawItem.title);
   const explicitId = explicitIdFromUrl(normalizedHref);
@@ -211,9 +211,9 @@ function buildCatalogItem(baseUrl, rawItem) {
     slug,
     type,
     title: rawItem.title,
-    href: rawItem.href,
+    href: normalizedUrl.pathname + normalizedUrl.search,
     normalized_href: normalizedHref,
-    absolute_url: absoluteUrl,
+    absolute_url: normalizedHref,
     catalog_page: rawItem.catalogPage,
     catalog_position: rawItem.catalogPosition,
     card_text: rawItem.cardText,
@@ -231,6 +231,14 @@ async function dismissCookieBanner(page) {
       continue;
     }
   }
+}
+
+async function removeCrawlerOverlays(page) {
+  await page.evaluate(() => {
+    for (const element of document.querySelectorAll(".truste_overlay")) {
+      element.remove();
+    }
+  });
 }
 
 async function waitForCards(page) {
@@ -403,30 +411,27 @@ async function cardSignature(page) {
 }
 
 async function clickNextPage(page) {
-  return page.evaluate(() => {
-    const candidates = Array.from(document.querySelectorAll("button, a, [role='button']"));
-    const next = candidates.find((element) => {
-      const text = (element.textContent ?? "").replace(/\s+/g, " ").trim();
-      const label = element.getAttribute("aria-label") ?? "";
-      const title = element.getAttribute("title") ?? "";
-      const name = `${text} ${label} ${title}`;
-      const box = element.getBoundingClientRect();
-      const style = window.getComputedStyle(element);
-      const disabled =
+  const candidates = page.getByRole("button", { name: "Next", exact: true });
+
+  for (let index = (await candidates.count()) - 1; index >= 0; index -= 1) {
+    const candidate = candidates.nth(index);
+    const disabled = await candidate.evaluate((element) => {
+      const classNames = `${element.className || ""} ${element.parentElement?.className || ""}`.toLowerCase();
+      return (
         element.hasAttribute("disabled") ||
         element.getAttribute("aria-disabled") === "true" ||
-        element.className.toString().toLowerCase().includes("disabled");
-
-      return /(^|\s)next(\s|$)/i.test(name) && box.width > 0 && box.height > 0 && style.visibility !== "hidden" && !disabled;
+        classNames.includes("disabled")
+      );
     });
 
-    if (!next) {
-      return false;
+    if (!disabled && (await candidate.isVisible()) && (await candidate.isEnabled())) {
+      await removeCrawlerOverlays(page);
+      await candidate.click({ timeout: DEFAULT_WAIT_TIMEOUT_MS });
+      return true;
     }
+  }
 
-    next.click();
-    return true;
-  });
+  return false;
 }
 
 async function crawlCatalog(options) {
@@ -443,60 +448,79 @@ async function crawlCatalog(options) {
   const page = await context.newPage();
   const seen = new Map();
   const warnings = [];
+  const pageBudget = { used: 0 };
+  let strategy = "visible-results";
 
   try {
     await gotoWithRetries(page, catalogUrl(options), options, warnings);
     await dismissCookieBanner(page);
+    await removeCrawlerOverlays(page);
 
-    for (let pageNumber = 1; pageNumber <= options.maxPages; pageNumber += 1) {
-      await waitForCardsWithRetries(page, options, warnings, `Catalog page ${pageNumber}`);
-      const rawItems = await collectVisibleCards(page, pageNumber);
+    const shouldEnumerateFullCatalog = !options.search?.trim() && !options.catalogUrl?.trim() && options.maxItems === 0;
+    const coverage = shouldEnumerateFullCatalog ? await discoverFullCatalogCoverage(page) : null;
 
-      for (const rawItem of rawItems) {
-        const item = buildCatalogItem(options.baseUrl, rawItem);
-        const key = `${item.type}|${item.normalized_href}`;
-
-        if (!seen.has(key)) {
-          seen.set(key, item);
+    if (coverage?.plans.length) {
+      strategy = "partitioned-facets";
+      for (const plan of coverage.plans) {
+        if (plan.phase === "fallback" && coverage.targetCount > 0 && seen.size >= coverage.targetCount) {
+          break;
         }
 
-        if (options.maxItems && seen.size >= options.maxItems) {
-          return {
-            items: [...seen.values()].sort((left, right) => left.title.localeCompare(right.title)),
-            warnings,
-          };
+        const appliedFacets = [];
+        for (const facet of plan.facets) {
+          const applied = await setCatalogFacet(page, facet, true, options, warnings);
+          if (!applied) break;
+          appliedFacets.push(facet);
         }
-      }
 
-      const before = await cardSignature(page);
-      const hasNext = await clickNextPage(page);
-      if (!hasNext) {
-        break;
-      }
+        if (appliedFacets.length !== plan.facets.length) {
+          for (const facet of [...appliedFacets].reverse()) {
+            await setCatalogFacet(page, facet, false, options, warnings);
+          }
+          continue;
+        }
 
-      try {
-        await page.waitForFunction(
-          (previousSignature) =>
-            Array.from(
-              document.querySelectorAll(
-                'a.a-CardView-fullLink[href*="view-workshop"], a.a-CardView-fullLink[href*="livestack-landing-page"]',
-              ),
-            )
-              .slice(0, 5)
-              .map((anchor) => `${(anchor.textContent ?? "").replace(/\s+/g, " ").trim()}|${anchor.getAttribute("href") ?? ""}`)
-              .join("\n") !== previousSignature,
-          before,
-          { timeout: DEFAULT_WAIT_TIMEOUT_MS },
+        const planLabel = plan.facets.map((facet) => facet.label).join(" + ");
+        const result = await collectCatalogResultPages(
+          page,
+          options,
+          warnings,
+          seen,
+          pageBudget,
+          `Catalog facet "${planLabel}"`,
         );
-      } catch {
-        warnings.push(`Catalog page ${pageNumber}: Next clicked but card signature did not change before timeout.`);
-        break;
+
+        for (const facet of [...plan.facets].reverse()) {
+          await setCatalogFacet(page, facet, false, options, warnings);
+        }
+
+        if (
+          result.reachedItemCap ||
+          result.reachedPageCap
+        ) {
+          break;
+        }
       }
+
+      if (coverage.targetCount > 0 && seen.size < coverage.targetCount) {
+        warnings.push(
+          `Catalog coverage found ${seen.size} of at least ${coverage.targetCount} advertised workshops and LiveStacks.`,
+        );
+      }
+    } else {
+      if (shouldEnumerateFullCatalog) {
+        warnings.push(
+          "Catalog coverage facets were not available. The index contains only the visible catalog result set.",
+        );
+      }
+      await collectCatalogResultPages(page, options, warnings, seen, pageBudget, "Catalog");
     }
 
     return {
       items: [...seen.values()].sort((left, right) => left.title.localeCompare(right.title)),
       warnings,
+      strategy,
+      coverageFacets: coverage?.labels || [],
     };
   } finally {
     await browser.close();
@@ -509,7 +533,148 @@ async function crawlCatalog(options) {
   }
 }
 
-function buildIndex(options, items, warnings) {
+async function discoverFullCatalogCoverage(page) {
+  const facets = await page.evaluate(() =>
+    Array.from(document.querySelectorAll("input[type='checkbox'][id]"))
+      .map((input) => {
+        const label = document.querySelector(`label[for="${CSS.escape(input.id)}"]`);
+        const listbox = input.closest("[role='listbox']");
+        const badge = label?.querySelector("[data-count]");
+        return {
+          id: input.id,
+          group: listbox?.getAttribute("aria-label")?.trim() || "",
+          label: label?.querySelector(".label")?.textContent?.replace(/\s+/g, " ").trim() || "",
+          count: Number(String(badge?.getAttribute("data-count") || "0").replace(/,/g, "")) || 0,
+        };
+      })
+      .filter((facet) => facet.group && facet.label),
+  );
+  const levels = facets.filter((facet) => facet.group === CATALOG_LEVEL_GROUP);
+  const primary = facets.filter((facet) => facet.group === CATALOG_PRIMARY_COVERAGE_GROUP);
+  const fallback = facets.filter((facet) => facet.group === CATALOG_FALLBACK_COVERAGE_GROUP);
+  const expectedCount = levels.reduce((count, facet) => count + facet.count, 0);
+  const liveStackCount = primary.find((facet) => facet.label === "LiveStack")?.count || 0;
+  const targetCount = expectedCount + liveStackCount;
+  const primaryPlans = partitionFacetGroup(primary, levels).map((facets) => ({ facets, phase: "primary" }));
+  const fallbackPlans = partitionFacetGroup(fallback, levels).map((facets) => ({ facets, phase: "fallback" }));
+
+  return {
+    expectedCount,
+    targetCount,
+    plans: [...primaryPlans, ...fallbackPlans],
+    labels: [
+      `${CATALOG_PRIMARY_COVERAGE_GROUP} (${primary.length} values)`,
+      `${CATALOG_FALLBACK_COVERAGE_GROUP} (${fallback.length} values)`,
+      `${CATALOG_LEVEL_GROUP} (${levels.length} values)`,
+    ],
+  };
+}
+
+function partitionFacetGroup(facets, levels) {
+  return facets.flatMap((facet) =>
+    facet.count > CATALOG_RESULT_CAP && levels.length
+      ? levels.map((level) => [facet, level])
+      : [[facet]],
+  );
+}
+
+async function setCatalogFacet(page, facet, selected, options, warnings) {
+  const input = page.locator(`#${facet.id}`);
+  const currentState = await input.isChecked().catch(() => false);
+  if (currentState === selected) return true;
+
+  await removeCrawlerOverlays(page);
+  const option = input.locator("..");
+  const unavailable =
+    (await option.getAttribute("aria-disabled")) === "true" ||
+    /\bis-disabled\b/i.test((await option.getAttribute("class")) || "");
+  if (selected && unavailable) return false;
+
+  await prepareFacetRefreshWait(page, facet);
+  await option.dispatchEvent("click");
+  await page.waitForFunction(
+    ({ id, expected }) => document.getElementById(id)?.checked === expected,
+    { id: facet.id, expected: selected },
+    { timeout: DEFAULT_WAIT_TIMEOUT_MS },
+  );
+  await page.waitForFunction(
+    (marker) => window.__qaCatalogFacetRefresh === marker,
+    facet.refreshMarker,
+    { timeout: DEFAULT_WAIT_TIMEOUT_MS },
+  );
+  await page.waitForTimeout(500);
+  await waitForCardsWithRetries(page, options, warnings, `Catalog facet "${facet.label}"`);
+  return true;
+}
+
+async function prepareFacetRefreshWait(page, facet) {
+  facet.refreshMarker = `${Date.now()}-${Math.random()}`;
+  await page.evaluate(
+    ({ marker, regionId }) => {
+      window.__qaCatalogFacetRefresh = "";
+      const region = document.getElementById(regionId);
+      window.apex?.jQuery(region).one("apexafterrefresh.qaCatalog", () => {
+        window.__qaCatalogFacetRefresh = marker;
+      });
+    },
+    {
+      marker: facet.refreshMarker,
+      regionId: facet.id.split("_fr_")[0],
+    },
+  );
+}
+
+async function collectCatalogResultPages(page, options, warnings, seen, pageBudget, contextName) {
+  while (pageBudget.used < options.maxPages) {
+    pageBudget.used += 1;
+    const catalogPage = pageBudget.used;
+    await waitForCardsWithRetries(page, options, warnings, `${contextName}, result page ${catalogPage}`);
+    const rawItems = await collectVisibleCards(page, catalogPage);
+
+    for (const rawItem of rawItems) {
+      const item = buildCatalogItem(options.baseUrl, rawItem);
+      const key = `${item.type}|${item.normalized_href}`;
+
+      if (!seen.has(key)) {
+        seen.set(key, item);
+      }
+
+      if (options.maxItems && seen.size >= options.maxItems) {
+        return { reachedItemCap: true, reachedPageCap: false };
+      }
+    }
+
+    const before = await cardSignature(page);
+    const hasNext = await clickNextPage(page);
+    if (!hasNext) {
+      return { reachedItemCap: false, reachedPageCap: false };
+    }
+
+    try {
+      await page.waitForFunction(
+        (previousSignature) =>
+          Array.from(
+            document.querySelectorAll(
+              'a.a-CardView-fullLink[href*="view-workshop"], a.a-CardView-fullLink[href*="livestack-landing-page"]',
+            ),
+          )
+            .slice(0, 5)
+            .map((anchor) => `${(anchor.textContent ?? "").replace(/\s+/g, " ").trim()}|${anchor.getAttribute("href") ?? ""}`)
+            .join("\n") !== previousSignature,
+        before,
+        { timeout: DEFAULT_WAIT_TIMEOUT_MS },
+      );
+    } catch {
+      warnings.push(`${contextName}: Next clicked but the card set did not change before timeout.`);
+      return { reachedItemCap: false, reachedPageCap: false };
+    }
+  }
+
+  warnings.push(`Catalog crawl stopped after reaching the ${options.maxPages}-page limit.`);
+  return { reachedItemCap: false, reachedPageCap: true };
+}
+
+function buildIndex(options, items, warnings, crawlMetadata = {}) {
   const counts = items.reduce(
     (accumulator, item) => {
       accumulator[item.type] += 1;
@@ -527,6 +692,8 @@ function buildIndex(options, items, warnings) {
     item_count: items.length,
     counts,
     crawl: {
+      strategy: crawlMetadata.strategy || "visible-results",
+      coverage_facets: crawlMetadata.coverageFacets || [],
       max_pages: options.maxPages,
       max_items: options.maxItems,
       retries: options.retries,
@@ -630,11 +797,15 @@ async function main() {
   console.log(`Auth    : ${options.storageStateFile ? "storage state" : "anonymous"}`);
 
   const crawlResult = await crawlCatalog(options);
-  const index = buildIndex(options, crawlResult.items, crawlResult.warnings);
+  const index = buildIndex(options, crawlResult.items, crawlResult.warnings, {
+    strategy: crawlResult.strategy,
+    coverageFacets: crawlResult.coverageFacets,
+  });
   writeIndex(options.outputFile, index);
   writeSummary(options.summaryOutputFile, buildSummary(index, options.outputFile));
 
   console.log(`Indexed : ${index.item_count} cards (${index.counts.workshop} workshops, ${index.counts.livestack} LiveStacks)`);
+  console.log(`Strategy: ${index.crawl.strategy}`);
   console.log(`Warnings: ${index.crawl.warnings.length}`);
 }
 

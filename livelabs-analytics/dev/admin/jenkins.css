@@ -1,0 +1,13 @@
+.admin-jenkins-page main { min-width:0; }
+.admin-jenkins-page .admin-hero { display:flex; flex-direction:row; align-items:center; justify-content:space-between; text-align:left; min-height:0; height:auto; padding:24px 28px; gap:24px; }
+.admin-jenkins-page .admin-hero > div { margin:0; max-width:none; }
+.admin-jenkins-page .admin-hero h1 { font-size:28px; margin:4px 0; }
+.admin-jenkins-page .admin-hero p { margin:0; }
+.admin-jenkins-page .admin-hero .nav-link { margin:0; flex-shrink:0; }
+.admin-jenkins-page .jenkins-controls { margin:20px 28px; padding:18px 22px; border:1px solid #dedad6; border-radius:8px; background:#fff; display:flex; flex-wrap:wrap; align-items:end; gap:12px 20px; }
+.jenkins-controls label { display:grid; gap:6px; font-weight:600; min-width:280px; }
+.jenkins-controls select { padding:9px 12px; max-width:100%; border:1px solid #8c8783; border-radius:4px; font:inherit; }
+.jenkins-controls p { flex-basis:100%; margin:0; color:#625d58; font-size:13px; overflow-wrap:anywhere; }
+.jenkins-controls details { flex-basis:100%; font-size:13px; }
+.jenkins-controls details p { margin:10px 0 0; }
+@media(max-width:700px) { .admin-jenkins-page .jenkins-controls { margin:12px; padding:16px; } .jenkins-controls label { min-width:0; width:100%; } }

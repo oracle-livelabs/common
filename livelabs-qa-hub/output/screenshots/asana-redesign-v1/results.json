@@ -1,0 +1,169 @@
+{
+  "url": "http://127.0.0.1:4192/prototype.html",
+  "checks": [
+    "Initial board has all 16 sample tasks and four status columns",
+    "No document-level horizontal overflow at desktop",
+    "Local note appears in the detail panel",
+    "Subtask progress is editable",
+    "Escape closes task panel",
+    "Edited task moved to the review column",
+    "Task edits survive reload",
+    "Notes and subtasks survive reload",
+    "Search narrows tasks",
+    "No-results state is useful",
+    "Priority filter shows only matching tasks",
+    "Board can group by QA area",
+    "Drag-and-drop changes task status",
+    "Sorting places high priority first in a mixed column",
+    "List shares the same tasks",
+    "List fields can be customized",
+    "Field settings are independent by view",
+    "Roadmap groups sample tasks into November, December, and January",
+    "Moving roadmap cards changes the due month",
+    "Overview counts derive from the shared task state",
+    "QA area navigation narrows the workspace",
+    "Task creation opens the new task",
+    "User text is escaped rather than interpreted as HTML",
+    "Export offers a JSON board download",
+    "Explicit reset restores only the sample workspace",
+    "Task detail is keyboard accessible",
+    "Focus returns to the task after closing detail",
+    "Search keyboard shortcut works",
+    "Mobile keeps horizontal scrolling inside the board canvas",
+    "Mobile navigation opens",
+    "Mobile area navigation closes and filters the board",
+    "Mobile detail fits viewport",
+    "No browser runtime or asset errors"
+  ],
+  "errors": [],
+  "screenshots": [
+    {
+      "name": "01-desktop-board__r01-c01.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "url": "http://127.0.0.1:4192/prototype.html",
+      "captureMode": "full page",
+      "files": [
+        "01-desktop-board__r01-c01.png",
+        "01-desktop-board__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
+    },
+    {
+      "name": "02-desktop-task-detail__r01-c01.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "url": "http://127.0.0.1:4192/prototype.html",
+      "captureMode": "full page",
+      "files": [
+        "02-desktop-task-detail__r01-c01.png",
+        "02-desktop-task-detail__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
+    },
+    {
+      "name": "03-desktop-list__r01-c01.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "url": "http://127.0.0.1:4192/prototype.html#view=list",
+      "captureMode": "full page",
+      "files": [
+        "03-desktop-list__r01-c01.png",
+        "03-desktop-list__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
+    },
+    {
+      "name": "04-desktop-roadmap__r01-c01.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "url": "http://127.0.0.1:4192/prototype.html#view=roadmap",
+      "captureMode": "full page",
+      "files": [
+        "04-desktop-roadmap__r01-c01.png",
+        "04-desktop-roadmap__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
+    },
+    {
+      "name": "05-desktop-overview__r01-c01.png",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "url": "http://127.0.0.1:4192/prototype.html#view=overview",
+      "captureMode": "full page",
+      "files": [
+        "05-desktop-overview__r01-c01.png",
+        "05-desktop-overview__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
+    },
+    {
+      "name": "06-mobile-board.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "url": "http://127.0.0.1:4192/prototype.html#view=board",
+      "captureMode": "full page"
+    },
+    {
+      "name": "07-mobile-task-detail.png",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "url": "http://127.0.0.1:4192/prototype.html#view=board&area=par-links",
+      "captureMode": "full page"
+    }
+  ]
+}

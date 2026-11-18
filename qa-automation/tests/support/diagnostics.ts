@@ -2,6 +2,7 @@ import type { ConsoleMessage, Page, Request, Response, TestInfo } from "@playwri
 import { writeFile } from "node:fs/promises";
 
 import type { EnvironmentConfig } from "../../config/projectConfig.js";
+import { sanitizeSourceUrl } from "./parAudit.js";
 
 export interface QADiagnosticsOptions {
   environmentName: string;
@@ -32,6 +33,12 @@ function timestamp(): string {
   return new Date().toISOString();
 }
 
+function redactSensitiveText(value: string): string {
+  return value
+    .replace(/https?:\/\/[^\s"'<>]+/gi, (candidate) => sanitizeSourceUrl(candidate) || candidate)
+    .replace(/\/p\/[^/\s"'<>]+/gi, "/p/***");
+}
+
 function sanitizeAttachmentName(value: string): string {
   return value
     .trim()
@@ -46,24 +53,24 @@ function formatLocation(message: ConsoleMessage): string {
     return "";
   }
 
-  return ` (${location.url}:${location.lineNumber}:${location.columnNumber})`;
+  return ` (${sanitizeSourceUrl(location.url) || location.url}:${location.lineNumber}:${location.columnNumber})`;
 }
 
 function formatConsoleMessage(message: ConsoleMessage): string {
-  return `[${timestamp()}] [${message.type()}] ${message.text()}${formatLocation(message)}`;
+  return redactSensitiveText(`[${timestamp()}] [${message.type()}] ${message.text()}${formatLocation(message)}`);
 }
 
 function formatRequestFailure(request: Request): string {
   const failure = request.failure();
   const method = request.method();
-  const url = request.url();
+  const url = sanitizeSourceUrl(request.url()) || request.url();
   const errorText = failure?.errorText ?? "request failed";
   return `[${timestamp()}] [requestfailed] ${method} ${url} -> ${errorText}`;
 }
 
 function formatResponseFailure(response: Response): string {
   const request = response.request();
-  return `[${timestamp()}] [http-${response.status()}] ${request.method()} ${response.url()} -> ${response.statusText()}`;
+  return `[${timestamp()}] [http-${response.status()}] ${request.method()} ${sanitizeSourceUrl(response.url()) || response.url()} -> ${response.statusText()}`;
 }
 
 async function writeAttachment(testInfo: TestInfo, name: string, content: string, contentType: string): Promise<void> {
@@ -78,7 +85,7 @@ async function writeAttachment(testInfo: TestInfo, name: string, content: string
 }
 
 async function capturePageState(page: Page, testInfo: TestInfo, name: string): Promise<void> {
-  const pageUrl = page.isClosed() ? "page-closed" : page.url();
+  const pageUrl = page.isClosed() ? "page-closed" : sanitizeSourceUrl(page.url()) || page.url();
   const pageTitle = page.isClosed()
     ? "page-closed"
     : await page
@@ -138,7 +145,7 @@ function buildRunContext(
     observedStatus: testInfo.status,
     startedAt: sessionStartedAt,
     finishedAt: timestamp(),
-    finalPageUrl: page.isClosed() ? "page-closed" : page.url(),
+    finalPageUrl: page.isClosed() ? "page-closed" : sanitizeSourceUrl(page.url()) || page.url(),
     finalPageTitle: pageTitle,
     artifactPolicy: {
       console: options.captureConsole,
@@ -181,7 +188,7 @@ export function createDiagnosticsSession(
       return;
     }
 
-    buffers.pageErrors.push(`[${timestamp()}] ${error.stack || error.message}`);
+    buffers.pageErrors.push(redactSensitiveText(`[${timestamp()}] ${error.stack || error.message}`));
   };
 
   const onRequestFailed = (request: Request): void => {
@@ -257,7 +264,7 @@ export function createDiagnosticsSession(
       }
     }
 
-    const noteContent = artifactErrors.join("\n\n");
+    const noteContent = redactSensitiveText(artifactErrors.join("\n\n"));
     if (!noteContent.trim()) {
       return;
     }

@@ -127,6 +127,42 @@ To create a Pull Request:
 
 5. When your workshop is in **Completed** status, and we have approved your publishing request, your workshop will be published automatically within 1 business day.
 
+## Task 2A: Create a LiveLab Publishing of Type LiveStack Demo
+
+Use this task when the LiveLab publishing entry is for a LiveStack Demo instead of a workshop. The workshop must be in **Completed** status before the publishing request can be approved.
+
+1. Open the workshop in WMS and click the **Publishing** tab and click **+ Publish to LiveLabs**.
+
+    ![Publishing tab for a completed workshop](images/livestack-demo-publishing-tab.png " ")
+
+
+2. Set the **LiveLab Type** to **LiveStack Demo**. WMS then displays the **LiveStack Demo Setup** section.
+
+    ![LiveStack Demo type selected](images/livestack-demo-type-selected.png " ")
+
+3. Complete the publishing settings:
+    * In **Publish Type**, select **Public**, **Event**, **Private**, or **Disabled**.
+    * In **Estimated Completion Time (mins)**, enter the approximate time required to complete the demo.
+    * Optionally, add a **Video URL**.
+    * If the demo can run in a customer tenancy, enable **Run on your Tenancy Enabled?** and enter the **Run on your Tenancy URL**.
+    * Enable **Override CDN URLs with Github Pages URLs?** only when the demo must use GitHub Pages content instead of the LiveLabs CDN.
+
+    ![Publishing settings for a LiveStack Demo](images/livestack-demo-create.png " ")
+
+4. In **LiveStack Demo Setup**, select the source for the demo:
+
+    * To use an externally hosted demo, click **Use a URL**, enter the **LiveStack Demo URL**, and optionally enter the **LiveStack Instructions URL**.
+
+        ![Use a URL for a LiveStack Demo](images/livestack-demo-use-url.png " ")
+
+    * To host the demo in LiveLabs, click **Upload a zip file**, click **Choose File**, select the demo zip file, and optionally enter the **LiveStack Instructions URL**.
+
+        ![Upload a zip file for a LiveStack Demo](images/livestack-demo-upload-zip.png " ")
+
+5. Review your publishing settings and click **Create**.
+
+The new publishing entry is created with a status of **Publish Requested**. The LiveLabs publishing team will review the request before it is published.
+
 ## Task 3: Request the Green Button / Sandbox Environment
 
 This task walks you through requesting a LiveLabs Sandbox environment, also known as the green button. After the sandbox is enabled, users can run the workshop in a pre-provisioned LiveLabs environment instead of using their own **OCI Free Tier** tenancy.

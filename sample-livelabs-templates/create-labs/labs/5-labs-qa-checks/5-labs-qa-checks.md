@@ -33,7 +33,7 @@ To share and view your workshop:
 
 Now that your workshop is in the repositories inside the Oracle LiveLabs GitHub project, set your workshop status in WMS to **In Development** or **Self QA**.
 
-1. Go to the WMS (Oracle employees only - [bit.ly/oraclelivelabs](https://bit.ly/oraclelivelabs)) and click **Edit My Workshops**.
+1. Go to the WMS (Oracle employees only - [open WMS](https://livelabs.oracle.com/wms)) and click **Edit My Workshops**.
 
     ![Edit Workshop](images/edit-my-workshop.png " ")
 

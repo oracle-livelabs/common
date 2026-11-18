@@ -3,7 +3,7 @@
 
 $ErrorActionPreference = "Stop"
 
-$DownloadUrl = "https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-Windows.zip"
+$DownloadUrl = "https://objectstorage.us-ashburn-1.oraclecloud.com/p/4Au3jJ-t8Wtw3LWyYsDMqQk2FdlXDvXCb1MYRS0J6P4QS-GCrv2YNOolWdtFMLZq/n/c4u04/b/livelabsfiles/o/optishot/OptiShot-Windows.zip"
 $InstallDir = "$env:LOCALAPPDATA\Programs\OptiShot"
 $TempDir = "$env:TEMP\OptiShot_Install"
 $StartMenuDir = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"

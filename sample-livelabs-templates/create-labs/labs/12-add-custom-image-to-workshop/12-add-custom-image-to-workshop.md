@@ -18,7 +18,7 @@ Estimated Time: 15 minutes
 ## Task 1: Register Your Listing with LiveLabs
  > WARNING: Your listing must be of status 'Published as Private' in OMP before you can register it in LiveLabs. 
 
-1. In your browser, go to the [Workshop Management System ](https://apex.oraclecorp.com/pls/apex/f?p=LIVELABS)(WMS).
+1. In your browser, go to the [Workshop Management System ](https://livelabs.oracle.com/wms)(WMS).
 
 2. Navigate to Custom Images in the Self Service portal.
     ![Image](./images/register-listing-1.png)

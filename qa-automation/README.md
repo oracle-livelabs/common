@@ -32,7 +32,7 @@ If browser installation is blocked on your network, install dependencies with `n
 Use the wrapper directly:
 
 ```powershell
-node ./scripts/qa.mjs tests/platform/smoke
+node ./scripts/qa.mjs tests/smoke/platform
 ```
 
 On Windows, you can also use:
@@ -47,15 +47,17 @@ Common commands:
 npm run doctor
 npm run typecheck
 npm run test:collect
+npm run test:unit
 npm run catalog:index
 npm run auth:storage -- --target-url "https://livelabs.oracle.com/..."
 npm run test:generated
-node ./scripts/qa.mjs tests/platform/smoke
-node ./scripts/qa.mjs tests/platform/regression
-node ./scripts/qa.mjs tests/platform --tag smoke
-node ./scripts/qa.mjs tests/platform --tag search
-node ./QA_GUI/scripts/published-workshop-qa.mjs --url "https://oracle-livelabs.github.io/<repo>/<path>/workshops/tenancy/index.html"
-node ./scripts/qa.mjs tests/platform/smoke/public/homePage.spec.ts --headed
+node ./scripts/qa.mjs tests/smoke/platform
+node ./scripts/qa.mjs tests/regression/platform
+node ./scripts/qa.mjs tests/smoke/workshops
+node ./scripts/qa.mjs tests/regression/workshops
+node ./scripts/qa.mjs tests/regression/livestacks
+node ./scripts/qa.mjs tests/smoke/platform --tag search
+node ./scripts/qa.mjs tests/smoke/platform/public/homepage/homePage.spec.ts --headed
 ```
 
 Useful options:
@@ -75,17 +77,48 @@ Useful options:
 
 ## Test Lanes
 
+See [`TEST-ARCHITECTURE.md`](TEST-ARCHITECTURE.md) for the current suite
+inventory, architecture grade, coverage gaps, and evidence rules.
+
+Tests are grouped first by product area and then by test purpose:
+
+```text
+tests/
+  platform/       # shared homepage, catalog, search, auth, and PAR checks
+  workshops/      # smoke, regression, generated catalog, and unit-test plans
+  livestacks/     # smoke, regression, generated catalog, and source-unit plans
+  unit/           # framework-owned Node tests grouped by catalog, runner, reporting, and livestacks
+  support/        # shared fixtures, helpers, and data access
+  data/           # checked-in test inputs and generated catalog artifacts
+```
+
+`smoke` covers short, high-value journeys; `regression` covers deeper behavior
+and edge cases; `generated` fans checks out across catalog-indexed targets;
+`unit` covers browser-free logic. A domain folder with only a README documents
+a coverage gap rather than claiming tests already exist.
+
 Public smoke:
 
 ```powershell
-node ./scripts/qa.mjs tests/platform/smoke
+node ./scripts/qa.mjs tests/smoke/platform
 ```
 
 Public regression:
 
 ```powershell
-node ./scripts/qa.mjs tests/platform/regression
+node ./scripts/qa.mjs tests/regression/platform
 ```
+
+LiveStack unit tests:
+
+```powershell
+$env:QA_LIVESTACK_ROOT = "C:\path\to\livestack"
+npm run test:unit:livestacks
+```
+
+This lane runs the existing package-owned Node.js unit suites without launching
+Playwright browsers. See [`tests/unit/livestacks/UNIT-TEST-PLAN.md`](tests/unit/livestacks/UNIT-TEST-PLAN.md)
+for the source inventory and expansion plan.
 
 Generated catalog rollout:
 
@@ -116,77 +149,37 @@ The generated suite intentionally still does not execute Sandbox or tenancy
 provisioning flows. It only validates instruction pages that are opened from
 those options.
 
-## Published Workshop QA Checker
+## PAR Link Audit
 
-Use this lane when you already have a published workshop URL and want the same
-browser-side checker that appears after adding `qa=true` manually.
+PAR checks run inside every generated catalog regression. The unified report groups routing, content, asset, and PAR findings under the same workshop or LiveStack row. It needs no manually maintained link file, masks every PAR token, and discovers author email addresses only from workshop acknowledgement or author sections.
 
-The visual app and its runner live in `QA_GUI`.
+Run locally after generating the catalog:
 
-Visual app:
+    npm run test:par
 
-```powershell
-npm run workshop:qa:app
-```
-
-Open `http://127.0.0.1:8787`, paste a workshop URL, and run the check from the
-page. The History tab keeps the last 5 completed runs and the app restores the
-active run after browser back/reload.
-
-For a local Windows install, double-click `QA_GUI/Install Workshop QA.cmd`. It
-creates a Desktop shortcut that starts the local server and opens the app.
-
-To produce a shareable Windows installer, run:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\QA_GUI\package-windows-installer.ps1
-```
-
-The installer artifact is written to `artifacts/dist/Workshop-QA-Setup.exe`.
-
-Command line:
-
-```powershell
-npm run workshop:qa -- "https://oracle-livelabs.github.io/oic/oic-gen3/cookbooks/erp-cloud/bulk-extract/workshops/tenancy/index.html"
-```
-
-The runner fetches the workshop `manifest.json`, opens each lab as
-`?qa=true&lab=<lab-id>`, waits for the top-right QA report to settle, then writes:
-
-- `QA_GUI/artifacts/runs/<run>/report.md` from the visual app
-- `QA_GUI/artifacts/runs/<run>/report.json` from the visual app
-- `QA_GUI/artifacts/published-workshop-qa/<run>/report.md` from the CLI
-- `QA_GUI/artifacts/published-workshop-qa/<run>/report.json` from the CLI
-
-Useful options:
-
-```powershell
-npm run workshop:qa -- "<workshop-url>" --lab cloud-login
-npm run workshop:qa -- "<workshop-url>" --max-labs 3
-npm run workshop:qa -- "<workshop-url>" --headed
-npm run workshop:qa -- "<workshop-url>" --browser-channel msedge
-npm run workshop:qa -- "<workshop-url>" --allow-issues
-```
-
-Quote URLs that contain `&` in PowerShell. By default, the command exits non-zero
-when the checker finds issues or when a lab cannot load. Use `--allow-issues`
-when you only want the report file and do not want findings to fail the command.
-
+Operational guidance is maintained in the internal LiveLabs QA Strategy Confluence page, under Automation-specific documentation: PAR link audit.
 Jenkins generated catalog runs:
 
 ```text
 Script Path: qa-automation/Jenkinsfile
-Runbook: docs/runbooks/jenkins-generated-catalog.md
+Runbook: internal LiveLabs QA Strategy > Automation-specific documentation > Jenkins generated catalog QA
 ```
 
 Use Jenkins for the scheduled overnight catalog sweep. The Jenkins pipeline runs
-`tests/platform/generated`, not the homepage smoke lane, and supports a fast
-`pr-slice` profile plus a sharded `nightly-full` profile.
+the generated regression and PAR checks together in one report. It supports a
+fast `pr-slice` profile and a single-report `nightly-full` profile.
+
+A generic private-VM package is available under [`deploy/vm`](deploy/vm/README.md).
+It requires corporate OIDC, named group-based roles, OCI Vault-backed secrets,
+internal TLS, an active CrowdStrike sensor, and approved private infrastructure.
+No environment-specific address, assigned port, identity-provider value,
+credential, private key, or secret OCID is committed to this public repository.
+The internal provisioning record supplies those values at deployment time.
 
 To see the generated test names without opening a browser:
 
 ```powershell
-node ./scripts/qa.mjs tests/platform/generated --collect-only
+node ./scripts/qa.mjs tests/generated/platform tests/generated/workshops tests/generated/livestacks --collect-only
 ```
 
 For a quick local slice:
@@ -217,22 +210,14 @@ so a failure report shows the exact title, type, card URL, and resource/action
 list that produced it.
 
 The crawler retries transient navigation and card-rendering failures by default.
+
 For a deeper crawl or a slower network:
 
 ```powershell
 npm run catalog:index -- --max-pages 250 --retries 4 --retry-delay-ms 5000
 ```
 
-For authenticated/private catalog entries, keep credentials only in `.env` or CI
-secrets:
-
-```powershell
-# .env
-QA_LIVELABS_USERNAME=
-QA_LIVELABS_PASSWORD=
-QA_AUTH_TARGET_URL=https://livelabs.oracle.com/...
-QA_STORAGE_STATE=.auth/livelabs-storage-state.json
-```
+For authenticated/private catalog entries, local developer runs may use the ignored `.env` and browser-state paths with an approved test identity. The permanent QA service retrieves its approved test identity from OCI Vault through the VM instance principal. Never place credential values in documentation, source control, Jenkins parameters, or command history.
 
 Create a reusable authenticated browser state, then run the generated suite:
 
@@ -250,7 +235,7 @@ Authenticated checks:
 ```powershell
 $env:QA_STORAGE_STATE="path\to\storage-state.json"
 $env:QA_RESERVATIONS_URL="https://example-reservations-url"
-node ./scripts/qa.mjs tests/platform/auth --tag auth
+node ./scripts/qa.mjs tests/smoke/platform/auth --tag auth
 ```
 
 Private authenticated page mockup:
@@ -259,16 +244,16 @@ Private authenticated page mockup:
 $env:QA_STORAGE_STATE="playwright\.auth\livelabs-auth.json"
 $env:QA_AUTH_TARGET_URL="https://livelabs.oracle.com/ords/r/dbpm/<app-alias>/home"
 $env:QA_AUTH_READY_TEXT="<text visible only after auth>"
-node ./scripts/qa.mjs tests/platform/auth/privatePageAccess.spec.ts --tag auth
+node ./scripts/qa.mjs tests/smoke/platform/auth/privatePageAccess.spec.ts --tag auth
 ```
 
-If the application team provides a test-only session bootstrap endpoint, set `QA_AUTH_BOOTSTRAP_URL` and keep the short-lived `QA_AUTH_BOOTSTRAP_TOKEN` in a local or CI secret. See `docs/runbooks/authenticated-page-access.md` for the access request checklist and the full variable contract.
+Private-content authentication must use an access method approved by the application and security owners. Keep its contract and secret-handling procedure in the internal runbook, not this public repository.
 
 Do not commit storage-state files, credentials, screenshots with private data, or environment-specific secrets.
 
 ## Creating Tests
 
-1. Add the spec under the matching lane: `tests/platform/smoke` for fast confidence checks or `tests/platform/regression` for focused edge cases.
+1. Add the spec under its test category and area: `tests/smoke/workshops` or `tests/smoke/livestacks` for fast journeys, the matching `regression` folder for deeper behavior, or `tests/unit` for browser-free framework checks.
 2. Put selectors and navigation behavior in page objects under `pages/platform`.
 3. Put shared data in `tests/data` and shared helpers in `tests/support` only when more than one spec needs them.
 4. Import the canonical fixture from `tests/support/test.ts`.
@@ -304,12 +289,14 @@ Before committing a new test:
 ```powershell
 npm run typecheck
 npm run test:collect
-node ./scripts/qa.mjs tests/platform/smoke/public/newSpec.spec.ts
+node ./scripts/qa.mjs tests/smoke/platform/public/newSpec.spec.ts
 ```
 
 ## Reports And Debugging
 
-Artifacts are written under `artifacts` and are ignored by Git.
+Artifacts are written under `artifacts` and are ignored by Git. Every root report
+also writes a token-safe `results.csv`; one failed catalog item produces one row
+per distinct issue, while a passing item produces one row with blank issue fields.
 
 Open the latest HTML report:
 
@@ -347,5 +334,5 @@ $env:QA_CATALOG_INDEX_LIMIT="25"
 $env:QA_CATALOG_INDEX_SHARD="1/4"
 $env:QA_AUTH_TARGET_URL="https://example-private-page-url"
 $env:QA_TRACE="on"
-node ./scripts/qa.mjs tests/platform/smoke
+node ./scripts/qa.mjs tests/smoke/platform
 ```

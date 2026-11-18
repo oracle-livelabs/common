@@ -118,21 +118,24 @@ export const test = base.extend<QATestFixtures, QAWorkerFixtures>({
     async ({ page, browserName, targetEnvironment, environmentConfig, livelabsSearchTerm }, use, testInfo) => {
       // The diagnostics fixture is automatic so every spec gets the same log,
       // screenshot, and page-state attachments without opting in test by test.
+      const sensitiveParAudit = testInfo.tags.includes("@par");
       const diagnostics = createDiagnosticsSession(page, testInfo, {
         environmentName: targetEnvironment,
         environmentConfig,
         livelabsSearchTerm,
         browserName,
-        captureConsole: parseBooleanFlag(process.env.QA_CAPTURE_CONSOLE, defaults.capture_console),
-        capturePageErrors: parseBooleanFlag(process.env.QA_CAPTURE_PAGE_ERRORS, defaults.capture_page_errors),
-        captureRequestFailures: parseBooleanFlag(process.env.QA_CAPTURE_REQUEST_FAILURES, defaults.capture_request_failures),
-        captureResponseErrors: parseBooleanFlag(process.env.QA_CAPTURE_RESPONSE_ERRORS, defaults.capture_response_errors),
+        captureConsole: sensitiveParAudit ? false : parseBooleanFlag(process.env.QA_CAPTURE_CONSOLE, defaults.capture_console),
+        capturePageErrors: sensitiveParAudit ? false : parseBooleanFlag(process.env.QA_CAPTURE_PAGE_ERRORS, defaults.capture_page_errors),
+        captureRequestFailures: sensitiveParAudit ? false : parseBooleanFlag(process.env.QA_CAPTURE_REQUEST_FAILURES, defaults.capture_request_failures),
+        captureResponseErrors: sensitiveParAudit ? false : parseBooleanFlag(process.env.QA_CAPTURE_RESPONSE_ERRORS, defaults.capture_response_errors),
         responseErrorStatus: parseIntegerFlag(process.env.QA_RESPONSE_ERROR_STATUS, defaults.response_error_status),
-        attachDomSnapshotOnFailure: parseBooleanFlag(
-          process.env.QA_ATTACH_DOM_SNAPSHOT_ON_FAILURE,
-          defaults.attach_dom_snapshot_on_failure,
-        ),
-        fullPageScreenshots: parseBooleanFlag(process.env.QA_FULL_PAGE_SCREENSHOT, defaults.full_page_screenshot),
+        attachDomSnapshotOnFailure: sensitiveParAudit
+          ? false
+          : parseBooleanFlag(
+              process.env.QA_ATTACH_DOM_SNAPSHOT_ON_FAILURE,
+              defaults.attach_dom_snapshot_on_failure,
+            ),
+        fullPageScreenshots: sensitiveParAudit ? false : parseBooleanFlag(process.env.QA_FULL_PAGE_SCREENSHOT, defaults.full_page_screenshot),
       });
 
       await use(undefined);
