@@ -26,13 +26,13 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
 1. Click the **Navigation Menu** in the upper left, navigate to **Compute**, and select **Instances**.
 
-   ![Compute Instances](../../images/console/compute-instances.png " ")
+    ![Compute Instances](../../images/console/compute-instances.png " ")
 
 2. Select the compartment you are assigned to (check which compartment you are assigned to on the LiveLabs *Login Info* page). Expand the **root** compartment and then the **Livelabs** compartment. Select the compartment assigned to you.
 
     ![View Login Info](https://oracle-livelabs.github.io/common/labs/need-help/images/view-login-info.png " ")
 
-   ![Select Compartment](../../images/console/compute-instance-compartment.png " ")
+    ![Select Compartment](./images/compute-instance-compartment.png " ")
 
 3. Go to your Cloud console and click **Cloud Shell** at the top right of the page.
 
@@ -42,7 +42,7 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     ![Open cloud shell.](https://oracle-livelabs.github.io/common/images/console/cloud-shell-open.png " ")
 
-4.  Once the cloud shell has started, enter the following command. Choose the key name you can remember. This will be the key name you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
+4. Once the cloud shell has started, enter the following command. Choose the key name you can remember. This will be the key name you will use to connect to any compute instances you create. Press Enter twice for no passphrase.
 
     ````text
     <copy>mkdir .ssh</copy>
@@ -62,7 +62,7 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     ![SSH key output](./images/cloudshell-ssh-keygen-2.png " ")
 
-5.  Examine the two files that you just created.
+5. Examine the two files that you just created.
 
     ````
     <copy>ls</copy>
@@ -78,7 +78,7 @@ The Cloud Shell machine is a small virtual machine running a Bash shell which yo
 
     ![Cat in cloud shell](./images/cat-in-cloudshell.png " ")
 
-7.  When pasting the key into the compute instance in future labs, make sure that you remove any hard returns that may have been added when copying. *The .pub key should be one line.*
+7. When pasting the key into the compute instance in future labs, make sure that you remove any hard returns that may have been added when copying. *The .pub key should be one line.*
 
     ![Copy public key](./images/copy-publickey-cloudshell.png " ")
 

@@ -2,11 +2,11 @@
   "name": "webpage-screenshot-pipeline",
   "owner": "Linda Foinding",
   "authors": ["Linda Foinding", "Lucian Brinzei"],
-  "version": "1.1.0",
-  "published_at": "2026-08-05T00:00:00Z",
+  "version": "1.2.0",
+  "published_at": "2026-09-04T00:00:00Z",
   "archive_url": "pending-review",
-  "archive_sha256": "5503bbf8b449bd86ffc6c43d41bb96eb4eecdf72ab1d4258a0482ac89b5192ba",
-  "content_hash": "ed8a25dc39b58410466330214d7a0cc81d40218cb8573305022283902e6c879e",
+  "archive_sha256": "e320df231dbe95cd9943629e788f3358ed102f6c3c0ba9d4a7aac59ec009f397",
+  "content_hash": "98e194b724cd8fe787c3f318460e6b5aef07219f32a017f51c112c2f915cde1b",
   "min_updater_version": "2",
   "validation": [
     "node --check tools/webpage-screenshot-pipeline/capture.mjs",
@@ -15,12 +15,21 @@
   ],
   "version_history": [
     {
+      "version": "1.2.0",
+      "published_at": "2026-09-04T00:00:00Z",
+      "authors": ["Lucian Brinzei"],
+      "changes": [
+        "Added Oracle Sans regular and bold font assets and documented the package-local annotation font contract."
+      ],
+      "archive_sha256": "e320df231dbe95cd9943629e788f3358ed102f6c3c0ba9d4a7aac59ec009f397",
+      "content_hash": "98e194b724cd8fe787c3f318460e6b5aef07219f32a017f51c112c2f915cde1b",
+      "portal_status": "pending"
+    },
+    {
       "version": "1.1.0",
       "published_at": "2026-08-05T00:00:00Z",
-      "authors": ["Linda Foinding", "Lucian Brinzei"],
-      "changes": [
-        "Added package-local Playwright dependency metadata, setup scripts, capture wrappers, and actionable missing-runtime diagnostics for Nodoc."
-      ],
+      "authors": ["Lucian Brinzei"],
+      "changes": ["Added package-local Playwright dependency metadata, setup scripts, capture wrappers, and actionable missing-runtime diagnostics for Nodoc."],
       "archive_sha256": "5503bbf8b449bd86ffc6c43d41bb96eb4eecdf72ab1d4258a0482ac89b5192ba",
       "content_hash": "ed8a25dc39b58410466330214d7a0cc81d40218cb8573305022283902e6c879e",
       "portal_status": "pending"

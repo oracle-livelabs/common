@@ -31,7 +31,7 @@ dialog. It does not provision resources or run anything inside a tenancy.
 To see the generated tests without running browsers:
 
 ```powershell
-node ./scripts/qa.mjs tests/platform/generated --collect-only
+node ./scripts/qa.mjs tests/generated/platform tests/generated/workshops tests/generated/livestacks --collect-only
 ```
 
 For a small local slice:

@@ -1,6 +1,8 @@
 # Content Validation Workflow
 
-This rule set reviews changed Markdown content in pull requests for recurring AI-associated wording and writing patterns. It is an editorial aid, not an authorship detector. A finding requires human review; it is not proof that a person or tool produced the text.
+The machine-readable rules use `schema_version` 1 and expose a `rule_version` in every report. The workflow scans workshop content for governed AI-associated wording and style signals. Findings remain review signals and do not block or rewrite source content unless the policy is explicitly changed to do so.
+
+This rule set reviews Markdown content for recurring AI-associated wording and writing patterns. It is an editorial aid, not an authorship detector. A finding requires human review; it is not proof that a person or tool produced the text.
 
 ## What changed from the source list
 
@@ -13,8 +15,6 @@ The source list was useful as a vocabulary bank but too broad for automatic revi
 The workflow intentionally removes ordinary transitions such as `for example`, `for instance`, `furthermore`, `moreover`, `additionally`, and `in addition`. It also removes ordinary technical terms such as `support`, `enable`, `optimize`, `integrate`, `requirement`, `outcome`, `framework`, and `implementation` from high-signal scoring. Those words can be useful and do not provide a reliable editorial signal by themselves.
 
 Punctuation and formatting remain review-only style signals. A single em dash, colon, parenthetical, bold span, or semicolon is normal. Repetition is what creates a finding.
-
-The automated list also omits title-case headings, sentence-fragment headings, repeated numbered lists, repeated heading-plus-explanation blocks, parallel bullets, balanced three-part lists, and slash pairs beyond the small allowlisted examples. Those patterns are common in LiveLabs structure or too dependent on context to be useful as automatic flags; existing Markdown validation and human review cover them better.
 
 ## Annotated compact list
 
@@ -36,4 +36,4 @@ The machine-readable source of truth is [`rules.json`](rules.json). It keeps rat
 
 ## Review policy
 
-The workflow reviews the first Markdown H1 as the title and then the full prose body. It ignores fenced code blocks and inline code so commands and identifiers do not inflate the score. It reports all matches with file and line numbers. The check fails only for a cluster: at least three high-signal terms, at least two phrase matches, or at least six total signals in one file. A clean file and a file with one isolated match pass.
+The workflow reviews Markdown workshop content after excluding H1 title lines, fenced code blocks, and inline code so titles, commands, and identifiers do not inflate the score. It reports the repository, file, field, rule ID, severity, matching value, line, and corrective guidance. A clean file and a file with one isolated match pass. Review signals do not fail the workflow; only an explicitly configured blocking policy does.

@@ -9,7 +9,7 @@ const appRoot = resolve(here, '..')
 const resourcesDir = resolve(appRoot, '..', 'resources')
 const appPort = Number(process.env.APP_PORT || 4193)
 const debugPort = Number(process.env.CHROME_DEBUG_PORT || 9334)
-const appUrl = `http://127.0.0.1:${appPort}`
+const appUrl = `http://127.0.0.1:${appPort}/legacy.html`
 
 function findChrome() {
   const candidates = [

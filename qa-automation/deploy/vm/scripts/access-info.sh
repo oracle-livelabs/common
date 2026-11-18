@@ -33,14 +33,12 @@ LiveLabs QA Hub access
 ======================
 Portal:             ${base_url}/
 Jenkins:            ${base_url}/jenkins/
-PAR audit reports:  ${base_url}/par/
-Regression reports: ${base_url}/regression/
+Unified QA reports: ${base_url}/regression/
 
 Authentication:     Generated local credentials
 Credential files:   ${deploy_dir}/secrets/bootstrap-credentials
 
 Operator jobs:
-  - LiveLabs PAR audit
   - LiveLabs overall regression
 
 Read the credential file only from an authorized VM shell. Never copy it into

@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/Marco-03/common",
+  "commit": "84f5ffd2e3acb2f715782b80c94ed670680d151c",
+  "renderer": "regression-table-v23",
+  "files": {
+    "reporters/root-summary-reporter.mjs": "fa12634d26dd7d797c4810a71f347751a9cb3999a929569e6c8598f588d2ea3d",
+    "reporters/par-link-report.mjs": "ed4bffa803df3d2b4462bc9500e54230d6753c116d28a12bb2f7bfaeb7228c52",
+    "hub-ui.css": "eb9ebe536c648f09a8d5fed584d75040f1a00a987573467df70acaeb7658eb07",
+    "hub-client.js": "dd8577331e2701dd73d36b7938f866a0bb7f3db0b5cf7162323bfdc4caf0c7f8"
+  }
+}

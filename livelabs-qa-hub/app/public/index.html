@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LiveLabs QA Hub</title>
     <link rel="icon" href="data:," />
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./prototype.css" />
+    <link rel="stylesheet" href="./workspace.css" />
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="./app.js"></script>
+    <a class="skip-link" href="#workspace">Skip to workspace</a>
+    <div id="hub"></div>
+    <dialog id="task-dialog" aria-labelledby="detail-title"></dialog>
+    <dialog id="utility-dialog" aria-labelledby="utility-title"></dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./workspace.mjs"></script>
   </body>
 </html>

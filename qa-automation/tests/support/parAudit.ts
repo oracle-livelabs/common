@@ -67,6 +67,8 @@ export interface ParAuditAttachment {
 export interface ParAuditScanError {
   page_type: string;
   page_url: string;
+  source_file_url?: string;
+  lab_number?: number;
   label: string;
   error: string;
 }
@@ -383,6 +385,7 @@ export function buildParAuditAttachment(
     scan_errors: (options.scanErrors || []).map((error) => ({
       ...error,
       page_url: sanitizeSourceUrl(error.page_url),
+      source_file_url: error.source_file_url ? sanitizeSourceUrl(error.source_file_url) : undefined,
       error: sanitizeDiagnosticMessage(error.error),
     })),
     counts,

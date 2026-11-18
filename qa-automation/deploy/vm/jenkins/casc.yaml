@@ -1,5 +1,5 @@
 jenkins:
-  systemMessage: "LiveLabs QA service. Use the PAR audit or overall regression jobs."
+  systemMessage: "LiveLabs QA service. Use the overall regression job for all catalog and PAR checks."
   numExecutors: 2
   mode: NORMAL
   scmCheckoutRetryCount: 2

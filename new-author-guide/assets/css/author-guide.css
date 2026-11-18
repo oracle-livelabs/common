@@ -4336,26 +4336,26 @@
     }
 
     #app .manifest-field-grid,
-    #app .handoff-field-grid {
+    #app .review-link-field-grid {
       grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
       gap: 0.7rem;
     }
 
     #app .manifest-field-grid .detail-field-card,
-    #app .handoff-field-grid .detail-field-card {
+    #app .review-link-field-grid .detail-field-card {
       border-radius: 16px;
       padding: 0.78rem 0.82rem;
     }
 
     #app .manifest-field-grid .detail-field-label,
-    #app .handoff-field-grid .detail-field-label {
+    #app .review-link-field-grid .detail-field-label {
       margin-bottom: 0.34rem;
       font-size: 0.7rem;
       letter-spacing: 0.08em;
     }
 
     #app .manifest-field-grid .detail-field-value,
-    #app .handoff-field-grid .detail-field-value {
+    #app .review-link-field-grid .detail-field-value {
       font-size: 0.88rem;
       line-height: 1.48;
       font-weight: 700;

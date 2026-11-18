@@ -40,7 +40,12 @@ class ContentValidationTests(unittest.TestCase):
         )
         result = module.analyze(path, self.rules)
         self.assertTrue(result["review_required"])
-        self.assertTrue(result["title_matches"])
+
+    def test_h1_title_is_not_scored(self):
+        path = self.write_fixture("# A Transformative Journey\n")
+        result = module.analyze(path, self.rules)
+        self.assertFalse(result["review_required"])
+        self.assertEqual(result["distinct_high"], 0)
 
     def test_code_is_not_scored(self):
         path = self.write_fixture(
@@ -64,6 +69,48 @@ class ContentValidationTests(unittest.TestCase):
         result = module.analyze(path, self.rules)
         self.assertFalse(result["review_required"])
         self.assertTrue(any(item.rule_id == "colon-explanation" for item in result["styles"]))
+
+    def test_explicit_blocking_rule_can_fail_validation(self):
+        rules = json.loads(json.dumps(self.rules))
+        rules["high_signal_terms"][0]["severity"] = "blocking"
+        path = self.write_fixture("# Direct content\n\nDelve into the documented task.\n")
+        result = module.analyze(path, rules)
+        self.assertTrue(result["blocking"])
+
+    def test_report_contains_actionable_content_finding_fields(self):
+        path = self.write_fixture("# Direct content\n\nDelve into a holistic journey that empowers teams.\n")
+        result = module.analyze(path, self.rules)
+        report = module.render_report([result], [path], "example/repository")
+        self.assertIn("Repository: `example/repository`", report)
+        self.assertIn("field: `workshop content`", report)
+        self.assertIn("rule: `delve`", report)
+        self.assertIn("severity: `warning`", report)
+        self.assertIn("guidance:", report)
+
+    def test_invalid_rule_configuration_returns_actionable_error(self):
+        bad_rules = json.loads(json.dumps(self.rules))
+        bad_rules["phrases"] = "not a list"
+        handle = tempfile.NamedTemporaryFile("w", suffix=".json", encoding="utf-8", delete=False)
+        json.dump(bad_rules, handle)
+        handle.close()
+        self.addCleanup(lambda: Path(handle.name).unlink(missing_ok=True))
+        path = self.write_fixture("# Direct content\n\nUse the documented task.\n")
+        self.assertEqual(module.main(["--files", path, "--rules", handle.name]), 2)
+
+    def test_correction_is_revalidated_and_analysis_is_read_only(self):
+        path = self.write_fixture(
+            "# Direct content\n\n"
+            "Delve into a holistic framework that empowers teams.\n"
+        )
+        before = Path(path).read_text(encoding="utf-8")
+        first = module.analyze(path, self.rules)
+        second = module.analyze(path, self.rules)
+        self.assertEqual(first, second)
+        self.assertTrue(first["review_required"])
+        self.assertEqual(Path(path).read_text(encoding="utf-8"), before)
+        Path(path).write_text("# Direct content\n\nUse the documented task.\n", encoding="utf-8")
+        corrected = module.analyze(path, self.rules)
+        self.assertFalse(corrected["review_required"])
 
 
 if __name__ == "__main__":

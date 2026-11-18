@@ -7,6 +7,11 @@
   ],
   "tutorials": [
     {
+      "title": "Paths",
+      "description": "Choose between the New Author Guide and the Step-by-Step Guide, with links to authoring tools, references, and publishing guidance.",
+      "filename": "./../../paths/paths.md"
+    },
+    {
       "title": "Introduction",
       "description": "This lab provides an overview of submitting and creating workshops and labs for Oracle LiveLabs and other platforms.",
       "filename": "./../../introduction/introduction.md"

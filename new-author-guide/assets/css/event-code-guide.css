@@ -1,0 +1,302 @@
+#app #markdownMode .event-code-callout {
+  margin: 0 0 24px;
+  padding: 20px 24px;
+  border: 1px solid var(--redwood-border);
+  border-left: 5px solid #c74634;
+  border-radius: 6px;
+  background: var(--redwood-surface);
+}
+
+#app #markdownMode .event-code-callout p:last-child,
+#app #markdownMode .event-code-section p:last-child,
+#app #markdownMode .event-code-section ul:last-child {
+  margin-bottom: 0;
+}
+
+#app #markdownMode .event-code-flow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 24px 0;
+}
+
+#app #markdownMode .event-code-flow article {
+  min-height: 122px;
+  padding: 18px;
+  border: 1px solid var(--redwood-border);
+  border-top: 4px solid var(--finance-teal);
+  border-radius: 6px;
+  background: var(--redwood-surface);
+}
+
+#app #markdownMode .event-code-flow span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--redwood-text-soft);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+#app #markdownMode .event-code-flow strong {
+  display: block;
+  font-size: 17px;
+}
+
+#app #markdownMode .event-code-section {
+  margin: 0 0 24px;
+  padding: 26px;
+  border: 1px solid var(--redwood-border);
+  border-radius: 6px;
+  background: var(--redwood-surface);
+  scroll-margin-top: 24px;
+}
+
+#app #markdownMode .event-code-section h2 {
+  margin: 0 0 12px;
+  font-size: 24px;
+}
+
+#app #markdownMode .event-code-section h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+#app #markdownMode .event-code-section > .panel-kicker {
+  margin: 0 0 8px;
+}
+
+#app #markdownMode .event-code-section p,
+#app #markdownMode .event-code-section li {
+  color: var(--redwood-text);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+#app #markdownMode .event-code-section ul {
+  padding-left: 20px;
+  margin: 14px 0 0;
+}
+
+#app #markdownMode .event-code-section li + li {
+  margin-top: 8px;
+}
+
+#app #markdownMode .event-code-steps {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  margin: 20px 0 0;
+  list-style: none;
+  counter-reset: event-step;
+}
+
+#app #markdownMode .event-code-steps > li {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding: 18px;
+  border: 1px solid var(--redwood-border);
+  border-radius: 6px;
+  background: #fff;
+  counter-increment: event-step;
+}
+
+#app #markdownMode .event-code-steps > li::before {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 50%;
+  background: #c74634;
+  color: #fff;
+  content: counter(event-step);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+#app #markdownMode .event-code-steps p {
+  margin: 0;
+}
+
+#app #markdownMode .event-code-steps p + p {
+  margin-top: 8px;
+}
+
+#app #markdownMode .event-code-after-steps h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+#app #markdownMode .event-code-image-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+#app #markdownMode .event-code-image-grid > .event-code-figure {
+  min-width: 0;
+  margin: 0;
+}
+
+#app #markdownMode .event-code-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 0;
+}
+
+#app #markdownMode .event-code-fields > div {
+  padding: 16px;
+  border: 1px solid var(--redwood-border);
+  border-radius: 6px;
+  background: #fff;
+}
+
+#app #markdownMode .event-code-fields dt {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+#app #markdownMode .event-code-fields dd {
+  margin: 0;
+  color: var(--redwood-text-soft);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+#app #markdownMode .event-code-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+#app #markdownMode .event-code-objective {
+  display: inline-block;
+  margin: 0 0 20px;
+  padding: 9px 13px;
+  border-left: 4px solid #c74634;
+  background: #fbf5f3;
+}
+
+#app #markdownMode .event-code-figure {
+  position: relative;
+  overflow: hidden;
+  margin: 18px 0 0;
+  border: 1px solid var(--redwood-border);
+  border-radius: 6px;
+  background: #fff;
+}
+
+#app #markdownMode .event-code-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+#app #markdownMode .event-code-email-figure {
+  max-width: 720px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#app #markdownMode .event-code-email-figure img {
+  width: auto;
+  max-width: 100%;
+  max-height: 320px;
+  margin-right: auto;
+  margin-left: auto;
+  object-fit: contain;
+}
+
+#app #markdownMode .event-code-figure figcaption {
+  padding: 10px 14px;
+  border-top: 1px solid var(--redwood-border);
+  background: #fbf9f8;
+  color: var(--redwood-text-soft);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+#app #markdownMode .event-code-overview {
+  margin-top: 22px;
+}
+
+#app #markdownMode .event-code-reference {
+  margin: 20px 0 0;
+  padding: 16px 18px;
+  border: 1px solid var(--redwood-border);
+  border-radius: 6px;
+  background: #fbf9f8;
+}
+
+#app #markdownMode .event-code-reference summary {
+  color: var(--redwood-text);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+#app #markdownMode .event-code-reference > p {
+  margin: 12px 0 0;
+}
+
+#app #markdownMode .event-code-reference-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+#app #markdownMode .event-code-video {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid var(--redwood-border);
+  border-top: 4px solid var(--finance-teal);
+  border-radius: 6px;
+  background: var(--redwood-surface);
+}
+
+#app #markdownMode .event-code-video h3 {
+  margin: 0;
+  font-size: 19px;
+}
+
+#app #markdownMode .event-code-video-player {
+  display: block !important;
+  width: 100%;
+  max-height: 70vh;
+  aspect-ratio: 16 / 9;
+  border-radius: 4px;
+  background: #171717;
+}
+
+@media (max-width: 720px) {
+  #app #markdownMode .event-code-flow,
+  #app #markdownMode .event-code-fields,
+  #app #markdownMode .event-code-reference-grid,
+  #app #markdownMode .event-code-image-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #app #markdownMode .event-code-section {
+    padding: 20px 16px;
+  }
+
+  #app #markdownMode .event-code-steps > li {
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 10px;
+    padding: 14px;
+  }
+
+  #app #markdownMode .event-code-video {
+    padding: 16px;
+  }
+
+}

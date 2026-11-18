@@ -67,14 +67,14 @@ The installer rejects public bind addresses, common service ports, missing SSO s
 
 ## Operation
 
-The portal presents two operator workflows:
+The portal presents one **LiveLabs overall regression** workflow. Every full or targeted run includes catalog, content, routing, asset, and PAR checks in one report and CSV. Jenkins configuration, report history, and local secret files persist across service restarts. Back up the Jenkins and report volumes according to the approved VM policy.
 
-- PAR audit;
-- overall regression.
+Confirmed retired workshops are stored in the persistent QA configuration
+volume. The authenticated report portal is the only exposed path that can add
+or remove entries. Jenkins mounts the same registry read-only and filters those
+WMS IDs before each unified catalog scan.
 
-Reports and CSV files remain separated by workflow. Jenkins configuration, report history, and local secret files persist across service restarts. Back up the Jenkins and report volumes according to the approved VM policy.
-
-Report history is shared server-side, not stored in a viewer's browser. At startup, the service rebuilds the `latest/` page and saved-run selector from every existing `runs/*/summary.json`, so a newly authorized viewer immediately sees the same reports as the rest of the team. When the persistent report volume is empty and private Object Storage publishing is configured, startup restores the saved PAR and regression report files before rebuilding those indexes. Viewers never need to run a job just to populate the portal.
+Report history is shared server-side, not stored in a viewer's browser. At startup, the service rebuilds the `latest/` page and saved-run selector from every existing `runs/*/summary.json`, so a newly authorized viewer immediately sees the same reports as the rest of the team. When the persistent report volume is empty and private Object Storage publishing is configured, startup restores the saved unified regression reports before rebuilding the index. Viewers never need to run a job just to populate the portal.
 
 To print non-secret access URLs from an authorized VM session:
 

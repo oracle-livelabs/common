@@ -1,0 +1,11 @@
+{
+  "version": "qa-governance-v1.1",
+  "severity_weights": {"blocker": 10, "critical": 10, "major": 3, "minor": 1, "info": 0},
+  "burden_half_score": 20,
+  "retirement_influence": 0.25,
+  "max_run_age_days": 14,
+  "max_snapshot_lag_days": 2,
+  "evidence_gap_codes": ["AUTHENTICATION_REQUIRED", "PAR_SCAN_INCOMPLETE", "PAR_LINK_UNVERIFIED", "LINK_CHECK_INCOMPLETE", "SOURCE_SCAN_INCOMPLETE", "SKIPPED", "BLOCKED", "TIMEOUT"],
+  "content_codes": ["WORKSHOP_NOT_AVAILABLE", "ROUTING_INVALID_WORKSHOP_ID", "ROUTING_FAILED", "BROKEN_VISIBLE_IMAGE", "WRITING_GRAMMAR", "POSSIBLE_TYPO", "STALE_PAR_LINK", "MARKDOWN_FORMATTING", "BROKEN_VISIBLE_LINK", "BROKEN_EMBEDDED_CONTENT", "INSTRUCTIONS_FLOW", "CONTENT_TEXT_DEFECT", "CONTENT_RELEVANCE", "ASSET_ACTION_FAILED"],
+  "root_cause_codes": ["WORKSHOP_NOT_AVAILABLE", "ROUTING_INVALID_WORKSHOP_ID", "AUTHENTICATION_REQUIRED"]
+}

@@ -15,13 +15,22 @@ window.authorGuideContent = (function () {
     secureDesktopDocs: "https://oracle-livelabs.github.io/common/support/securedesktops/index.html",
     secureDesktopStart: "https://oracle-livelabs.github.io/common/support/securedesktops/index.html?lab=securedesktops",
     liveLabsAuthorsSlack: "https://oracle.enterprise.slack.com/archives/CTUPZQ5HA",
-    freesql: "https://freesql.com/",
+    wms: "https://livelabs.oracle.com/wms",
     sprintsRepo: "https://github.com/oracle-livelabs/sprints",
     sampleSprints: "https://github.com/oracle-livelabs/common/tree/main/sample-livelabs-templates/sample-sprints",
     aiHubGuide: "https://lfoinding.github.io/livelabs-ai-playground/skills/how-to/workshops/sandbox/index.html",
     aiHubRepo: "https://github.com/lfoinding/livelabs-ai-playground",
-    aiHubSkills: "https://github.com/lfoinding/livelabs-ai-playground/tree/main/LiveLabs-AI-Developer"
+    aiHubSkills: "https://skills.oraclecorp.com/"
   };
+
+  var eventCodeGuideHref = "markdown/event-code/index.html";
+  if (window.AuthorGuidePaths && typeof window.AuthorGuidePaths.root === "function") {
+    try {
+      eventCodeGuideHref = new URL("markdown/event-code/index.html", window.AuthorGuidePaths.root()).toString();
+    } catch (error) {
+      // Keep the relative guide route when the page is running outside its normal site shell.
+    }
+  }
 
   function labLink(labId) {
     return canonicalRoot + labId;
@@ -122,12 +131,12 @@ window.authorGuideContent = (function () {
           milestone("More Info Needed", "Answer council questions in WMS and improve the request until the use case is clear."),
           milestone("Approved", "Begin heavier GitHub work only after the initial review gate clears."),
           milestone("In Development", "Move here when real GitHub authoring starts and the preview path exists."),
-          milestone("Self Quality Assurance to Self Quality Assurance Complete", "Run the checklist, save it, and certify the handoff only after the workshop is stable."),
+          milestone("Self Quality Assurance to Self Quality Assurance Complete", "Run the checklist, save it, and certify completion only after the workshop is stable."),
           milestone("Completed", "Stakeholders have verified the workshop and it is ready for publish handling."),
           milestone("Quarterly Quality Assurance", "Published workshops cycle back into Quality Assurance later, and missed Quality Assurance can disable the entry.")
         ],
         image: {
-          src: "../content/author-guide/1-labs-wms/images/submit_workshop.png",
+          src: "../assets/images/step-by-step/1-labs-wms--submit_workshop.png",
           alt: "Submit new workshop request page in WMS",
           caption: "The reviewer-facing request page is where the workshop scope and ownership are established."
         },
@@ -188,7 +197,7 @@ window.authorGuideContent = (function () {
           "- Path Intellisense"
         ].join("\n"),
         image: {
-          src: "../content/author-guide/2-labs-github/images/git-hub-desktop-login-screen.png",
+          src: "../assets/images/step-by-step/2-labs-github--git-hub-desktop-login-screen.png",
           alt: "GitHub Desktop sign-in screen",
           caption: "GitHub Desktop is the main fork, clone, commit, and pull request surface used throughout the guide."
         },
@@ -242,7 +251,7 @@ window.authorGuideContent = (function () {
           "https://<user>.github.io/<repository>/<path>/workshops/<variant>/index.html"
         ].join("\n"),
         image: {
-          src: "../content/author-guide/3-labs-sync-github/images/sample-workshop-structure.png",
+          src: "../assets/images/step-by-step/3-labs-sync-github--sample-workshop-structure.png",
           alt: "Sample workshop structure in Visual Studio Code",
           caption: "The sample structure is the cleanest baseline for new authoring work."
         },
@@ -259,7 +268,10 @@ window.authorGuideContent = (function () {
         description: "Use this card to create a workshop structure that renders and validates cleanly.",
         steps: [
           "Create the workshop folder and copy the sample labs and workshops folder.",
-          "Rename each lab folder and markdown file together. Remove unused files folders and keep images in each lab's images folder.",
+          "Give each lab one # title, a short introduction, objectives, prerequisites, and one or more ## Task N: Action headings.",
+          "Use Estimated Time: in individual labs, keep Acknowledgements at the end, and add Learn More only when it helps the learner.",
+          "Rename each lab folder and markdown file together. Remove unused files/ folders and keep images in each lab's images/ folder.",
+          "Keep supporting files in each lab's files folder and use relative paths from the Markdown file for local images and files.",
           "Copy the introduction folder when needed. Add a README only when the variant requires one.",
           "Update each manifest with the correct title, help address, tutorial order, and variant settings.",
           "Remove unused include or variables entries. Link shared labs and images with absolute URLs.",
@@ -267,11 +279,12 @@ window.authorGuideContent = (function () {
         ],
         checkpoints: [
           "Sample folders are renamed and manifest.json has no stale entries.",
-          "Each lab has an images folder; unused files folders are removed.",
+          "Each lab has an images folder, any needed files folder, one H1, ordered task headings, and Acknowledgements.",
           "?qa=true preview shows the correct order, structure, and help address."
         ],
         watchFor: [
           "Using an old workshop instead of the canonical template.",
+          "Adding a second H1 or using bold paragraphs instead of task headings.",
           "Leaving unused include or variables entries.",
           "Using relative common links or mixed-case filenames."
         ],
@@ -288,17 +301,40 @@ window.authorGuideContent = (function () {
           "      index.html",
           "      manifest.json",
           "",
-          "manifest.json essentials",
-          "\"workshoptitle\": \"My Workshop Title\",",
-          "\"help\": \"my-team@oracle.com\",",
-          "\"tutorials\": [ ... ]",
-          "\"variables\": [\"../../variables/variables.json\"]  // only if needed",
+          "my-lab.md essentials",
+          "# Explore your environment",
+          "## Introduction",
+          "Estimated Time: 5 minutes",
+          "### Objectives",
+          "### Prerequisites",
+          "## Task 1: Check the environment",
+          "## Acknowledgements",
+          "",
+          "manifest.json essentials (add variables only when needed)",
+          "{",
+          "  \"workshoptitle\": \"My Workshop Title\",",
+          "  \"help\": \"my-team@oracle.com\",",
+          "  \"tutorials\": [",
+          "    {",
+          "      \"title\": \"Lab 1: Explore your environment\",",
+          "      \"filename\": \"../../my-lab/my-lab.md\"",
+          "    }",
+          "  ]",
+          "}",
           "",
           "Preview",
           "index.html?qa=true"
         ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Use these patterns for the lab contract, manifest paths, preview checks, and final validation.",
+        resourceLinks: [
+          resourceLink("Copy a starter lab", "../markdown/index.html#lab-skeleton", "Use one title, objectives, prerequisites, a task, and acknowledgements."),
+          resourceLink("Put the lab in the workshop", "../markdown/index.html#files-and-manifest", "Check manifest order and paths relative to the manifest."),
+          resourceLink("Preview the workshop and run QA", "../markdown/index.html#preview-qa", "Serve the loader and use qa=true; it is not a pass certificate."),
+          resourceLink("Check paths, access, and safe examples", "../markdown/index.html#final-checks", "Test links and assets and remove sensitive data before review.")
+        ],
         image: {
-          src: "../content/author-guide/4-labs-markdown-develop-content/images/lintchecker.png",
+          src: "../assets/images/step-by-step/4-labs-markdown-develop-content--lintchecker.png",
           alt: "LintChecker enabled in preview with qa=true",
           caption: "Add ?qa=true while previewing so structural issues surface before pull request review."
         },
@@ -315,31 +351,49 @@ window.authorGuideContent = (function () {
         description: "Use this card when links work locally but fail in preview or production.",
         steps: [
           "Use lowercase file and folder names, and match their exact case in links.",
-          "Use Markdown links unless the guide requires special markup.",
+          "Use descriptive Markdown links and keep reference definitions on their own line when you reuse a destination.",
+          "Use LiveLabs navigation tokens for the workshop sequence, such as ?lab=lab-1, instead of linking directly to a .md file.",
+          "Keep supporting files in the lab's files folder. Use a normal link for browser-renderable files and add ?download=1 only when the learner must save the file.",
           "Link shared labs and assets with approved absolute common URLs.",
-          "Check links in Live Server and your github.io preview."
+          "Check links in local preview and hosted preview."
         ],
         checkpoints: [
           "Links work locally and on GitHub Pages.",
           "Shared content uses canonical common URLs.",
-          "Standard links use Markdown."
+          "Standard links use Markdown and lab navigation uses the actual workshop token.",
+          "Downloads, renderable files, and new-tab behavior are tested from the learner page."
         ],
         watchFor: [
           "Case-only renames that fail on GitHub Pages.",
           "Local paths for shared common content.",
+          "Linking directly to a lab .md file instead of using the workshop's ?lab= token.",
+          "Adding ?download=1 to every file or assuming target=\"_blank\" is supported.",
           "Assuming local preview proves the production path."
         ],
         snippetMeta: "Path-safe examples",
         snippetTitle: "Use Markdown links and case-correct paths",
         snippet: [
-          "[Open the next lab](./../../my-lab/my-lab.md)",
-          "[Open GitHub Desktop](https://desktop.github.com/)",
+          "[Open Lab 1](?lab=lab-1)",
+          "[Open the sample JSON](files/sample.json)",
+          "[Download the sample data](files/data.csv?download=1)",
+          "",
+          "[Oracle documentation][docs]",
+          "",
+          "[docs]: https://docs.oracle.com/ \"Oracle documentation\"",
           "",
           "Rule:",
           "The path and filename case must match what is on disk exactly."
         ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Use the reference examples for descriptive links, lab navigation, downloads, and final path checks.",
+        resourceLinks: [
+          resourceLink("Descriptive links and references", "../markdown/index.html#links", "Use meaningful labels and keep reference definitions separate."),
+          resourceLink("Navigate between labs", "../markdown/index.html#lab-navigation", "Use the actual ?lab= token from the workshop URL."),
+          resourceLink("Open or download a supporting file", "../markdown/index.html#downloads", "Use ?download=1 only when saving is required."),
+          resourceLink("Check paths, access, and safe examples", "../markdown/index.html#final-checks", "Test every destination from the learner environment.")
+        ],
         image: {
-          src: "../content/author-guide/4-labs-markdown-develop-content/images/case-sensitive.png",
+          src: "../assets/images/step-by-step/4-labs-markdown-develop-content--case-sensitive.png",
           alt: "Case-sensitive image and path reminder",
           caption: "GitHub Pages is case-sensitive even when a local machine is not."
         },
@@ -356,28 +410,49 @@ window.authorGuideContent = (function () {
         description: "Use this card to reference images correctly in Markdown.",
         steps: [
           "Store workshop images in the current lab's images folder unless they are shared from common.",
+          "Use relative paths from the Markdown file for local images and keep supporting downloads in the lab's files folder.",
           "Write alt text that explains what the image shows or proves.",
+          "Use the LiveLabs image-size extension only when default sizing does not fit; preserve automatic height with an asterisk.",
           "Use approved absolute URLs for shared common images.",
-          "Confirm images load in your GitHub Pages preview."
-        ],
+          "Confirm images load in local and hosted preview, including on a narrow screen."
+n        ],
         checkpoints: [
           "Every image has descriptive alt text.",
-          "The same images load locally and on github.io.",
-          "Shared images use canonical common URLs."
+          "Local images use lowercase, case-correct paths relative to the lab Markdown file.",
+          "The same images load locally and on hosted preview.",
+          "Shared images use canonical common URLs and sizing does not distort the screenshot."
         ],
         watchFor: [
           "Storing screenshots outside the images folder.",
           "Vague alt text, such as image1 or screenshot.",
-          "Mixed-case or incomplete image paths."
+          "Mixed-case or incomplete image paths.",
+          "Blank alt text, sensitive data in screenshots, or an image carrying the only required instruction.",
+          "Fixed dimensions that make the image unreadable or distorted."
         ],
         snippetMeta: "Image example",
         snippetTitle: "Shared image plus alt text pattern",
         snippet: [
+          "![The resource list shows the new instance](images/instance-ready.png)",
+          "",
           "![Console home page](https://oracle-livelabs.github.io/common/images/console/home-page.png \" \")",
+          "",
+          "![Architecture overview](images/architecture.png =50%x*)",
           "",
           "Rule:",
           "Use alt text that tells the learner what the image proves or what UI they should recognize."
         ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Use the reference examples for local image paths, sizing, indentation, and accessible descriptions.",
+        resourceLinks: [
+          resourceLink("Add a useful screenshot", "../markdown/index.html#images", "Keep essential instructions in text and describe what the image proves."),
+          resourceLink("Size an image without distortion", "../markdown/index.html#image-sizing", "Prefer default sizing or automatic height with an asterisk."),
+          resourceLink("Paragraphs, images, and code inside a step", "../markdown/index.html#step-content", "Indent supporting content by four spaces inside a numbered step.")
+        ],
+        image: {
+          src: "../assets/images/step-by-step/4-labs-markdown-develop-content--image-desc.png",
+          alt: "Markdown image reference with descriptive alt text",
+          caption: "Use the image description to tell the learner what the screenshot proves, not merely that an image is present."
+        },
         sourceHref: labLink("4-labs-markdown-develop-content"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
@@ -390,31 +465,57 @@ window.authorGuideContent = (function () {
         tags: ["markdown"],
         description: "Use this card when learners must copy commands or SQL from the guide.",
         steps: [
-          "Wrap copyable commands in <copy> tags.",
-          "Use sql or plsql fenced blocks inside <copy> tags for multiline SQL.",
-          "Place each copy block beside its step.",
-          "Preview and test the copy button."
-        ],
+          "Put balanced <copy> tags inside a fenced bash, sql, or plsql block, and include only the command or SQL the learner should paste.",
+          "Use a separate text or output block for expected results; never put a shell prompt, secrets, or expected output inside <copy> tags.",
+          "Indent the code, expected output, and screenshots by four spaces when they belong inside a numbered step.",
+          "Place each copy block beside its step, preserve SQL order and line breaks, and preview the resulting copy button."
+n        ],
         checkpoints: [
           "Copy buttons appear where needed.",
-          "SQL preserves line breaks and execution order.",
-          "Each copy block supports its nearby step."
+          "Copied text excludes the <copy> tags and preserves SQL line breaks and execution order.",
+          "Expected output is visibly separate and each copy block supports its nearby step.",
+          "The intended client accepts the copied SQL or command."
         ],
         watchFor: [
           "Plain blocks where learners must paste content.",
           "Unrelated commands in one copy block.",
-          "Untested copy behavior."
+          "Shell prompts, secrets, expected output, or missing language labels in the fenced block.",
+          "Missing indentation that detaches a code block from its numbered step.",
+          "Untested copy behavior or a client-specific trailing newline."
         ],
         snippetMeta: "Copy-ready SQL",
         snippetTitle: "Wrap SQL inside copy tags",
         snippet: [
-          "```sql",
-          "<copy>",
-          "SELECT * FROM employees;",
-          "SELECT * FROM departments;",
-          "</copy>",
-          "```"
+          "1. Check the client version.",
+          "",
+          "    Run this command:",
+          "",
+          "    ```sql",
+          "    <copy>",
+          "    SELECT * FROM employees;",
+          "    SELECT * FROM departments;",
+          "    </copy>",
+          "    ```",
+          "",
+          "    Expected output:",
+          "",
+          "    ```text",
+          "    Two result sets appear.",
+          "    ```"
         ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Use the reference examples for fenced languages, copy tags, expected output, and nested step content.",
+        resourceLinks: [
+          resourceLink("Inline code and fenced blocks", "../markdown/index.html#inline-code", "Label commands and expected output so learners know what to run."),
+          resourceLink("Add a LiveLabs copy button", "../markdown/index.html#copy-code", "Keep balanced tags around only the learner's command."),
+          resourceLink("Paragraphs, images, and code inside a step", "../markdown/index.html#step-content", "Indent supporting blocks by four spaces inside a numbered step."),
+          resourceLink("Reveal an optional answer", "../markdown/index.html#reveal-code", "Keep optional solutions in details/summary outside required instructions.")
+        ],
+        image: {
+          src: "../assets/images/step-by-step/4-labs-markdown-develop-content--code-copy.png",
+          alt: "LiveLabs copy tag inside a code block",
+          caption: "Put the copy tag around only the command or SQL a learner needs for the current task."
+        },
         sourceHref: labLink("4-labs-markdown-develop-content"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "core-workflow"
@@ -427,41 +528,219 @@ window.authorGuideContent = (function () {
         tags: ["markdown"],
         description: "Use this card for shared content or variant-specific sections.",
         steps: [
-          "Reference stable common labs with absolute manifest URLs.",
-          "Add manifest variables only for values reused across variants.",
-          "Use conditional blocks for multiple delivery types.",
-          "Preview every conditional branch."
+          "Insert a shared-content shortname such as [](include:shared-prerequisites), then map it to a file in the manifest's top-level include property.",
+          "Reference stable common labs with approved absolute URLs and resolve include paths from the manifest location.",
+          "Add manifest variables only for values reused across variants; keep the variables JSON path relative to the manifest and never store secrets there.",
+          "Put the matching type on the tutorial entry, keep shared steps outside <if> blocks, and preview every conditional branch.",
+          "Use maintained building blocks before duplicating common provisioning or setup content."
         ],
         checkpoints: [
           "Variables serve a real reuse case.",
-          "Conditional branches are easy to follow.",
-          "Tutorial order works when a branch is hidden."
+          "Include mappings, variable files, and tutorial type values match the manifest paths and names.",
+          "Conditional branches are easy to follow and every supported type has been tested.",
+          "Tutorial order works when a branch is hidden and reused content still fits the assembled lab."
         ],
         watchFor: [
           "Copying canonical shared content.",
           "Overly complex conditional logic.",
+          "Putting include mappings or type at the wrong manifest level.",
+          "Putting passwords or tokens in variables files.",
           "Testing only one delivery type."
         ],
         snippetMeta: "Variant pattern",
         snippetTitle: "Manifest variables plus conditional content",
         snippet: [
-          "\"variables\": [",
-          "  \"../../variables/variables.json\",",
-          "  \"../../variables/variables-in-another-file.json\"",
-          "]",
+          "\"include\": {",
+          "  \"shared-prerequisites\": \"../../shared/prerequisites.md\"",
+          "},",
+          "\"variables\": [\"../../variables/variables.json\"],",
           "",
-          "<if type=\"livelabs\">",
-          "Use the LiveLabs environment instructions here.",
+          "<if type=\"python\">",
+          "Use the Python environment instructions here.",
           "</if>"
         ].join("\n"),
         image: {
-          src: "../content/author-guide/4-labs-markdown-develop-content/images/conditional-vsc1.png",
+          src: "../assets/images/step-by-step/4-labs-markdown-develop-content--conditional-vsc1.png",
           alt: "Conditional formatting example in Visual Studio Code",
           caption: "Conditional content should stay obvious enough that another author can follow it."
         },
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Use the reference examples for include mappings, conditional types, reusable values, and maintained building blocks.",
+        resourceLinks: [
+          resourceLink("Include a shared Markdown file", "../markdown/index.html#include-content", "Use a shortname so common content stays maintainable."),
+          resourceLink("Map the include in the manifest", "../markdown/index.html#include-mapping", "Keep the mapped file path relative to the manifest."),
+          resourceLink("Write conditional instructions", "../markdown/index.html#conditional-content", "Keep variants readable and testable."),
+          resourceLink("Select the variant in the manifest", "../markdown/index.html#conditional-manifest", "Put the matching type on the tutorial entry."),
+          resourceLink("Define a value and use it in Markdown", "../markdown/index.html#variable-values", "Keep variable files valid, relative, and free of secrets."),
+          resourceLink("Use maintained building blocks", "../markdown/index.html#building-blocks", "Prefer reusable building blocks over copied setup instructions.")
+        ],
         sourceHref: labLink("4-labs-markdown-develop-content"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
+      },
+      {
+        id: "markdown-writing",
+        title: "Markdown Writing Patterns",
+        short: "Use headings, paragraphs, lists, notes, and literal syntax that stay readable in LiveLabs.",
+        accent: "ocean",
+        tags: ["markdown"],
+        description: "Use this card when a lab needs a clear Markdown outline and learner-friendly prose.",
+        steps: [
+          "Use one # title, ## sections, ### subsections, and ## Task N: Action headings in sequence; do not replace headings with bold paragraphs.",
+          "Separate paragraphs with a blank line. Use two trailing spaces only when an intentional line break is required.",
+          "Use bold for interface labels, italic text sparingly, and blockquotes for context rather than required actions.",
+          "Use numbered lists for ordered actions, bullets for choices or prerequisites, and four-space indentation for nested lists or content inside a step.",
+          "Escape punctuation or use inline code when the lab needs to show Markdown syntax literally."
+        ],
+        checkpoints: [
+          "The page has one clear H1 and a predictable heading hierarchy.",
+          "Each procedure has one main action per numbered step and an observable result.",
+          "Notes support the procedure without hiding a required action.",
+          "Nested lists and supporting content stay attached to the correct step."
+        ],
+        watchFor: [
+          "A second H1 or skipped heading levels that make the outline hard to scan.",
+          "Single newlines used where a new paragraph was intended.",
+          "Bullets used for actions whose order matters.",
+          "Markdown markers that render instead of appearing as literal syntax."
+        ],
+        snippetMeta: "Readable Markdown",
+        snippetTitle: "Headings, steps, notes, and nested choices",
+        snippet: [
+          "# Explore your environment",
+          "",
+          "## Task 1: Check the environment",
+          "",
+          "1. Open the console.",
+          "",
+          "    > **Note:** Keep this tab open.",
+          "",
+          "    Select **Create**.",
+          "",
+          "    - Region",
+          "    - Compartment",
+          "        - Confirm the resource appears.",
+          "",
+          "Use `oci --version` to check the client."
+        ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Open the existing examples for headings, paragraphs, lists, notes, escaping, and content inside steps.",
+        resourceLinks: [
+          resourceLink("Headings and hierarchy", "../markdown/index.html#headings", "Keep one H1 and use task headings for lab actions."),
+          resourceLink("Paragraphs and line breaks", "../markdown/index.html#paragraphs", "Use blank lines and intentional breaks deliberately."),
+          resourceLink("Numbered steps", "../markdown/index.html#ordered-lists", "Write one ordered action per step."),
+          resourceLink("Bullets and nested lists", "../markdown/index.html#unordered-lists", "Use bullets for choices and prerequisites."),
+          resourceLink("Notes, blockquotes, and dividers", "../markdown/index.html#quotes-and-rules", "Keep context separate from required actions."),
+          resourceLink("Show punctuation literally", "../markdown/index.html#escape-characters", "Escape syntax when the learner must see it as text."),
+          resourceLink("Paragraphs, images, and code inside a step", "../markdown/index.html#step-content", "Indent supporting content by four spaces.")
+        ],
+        sourceHref: labLink("4-labs-markdown-develop-content"),
+        sourceLabel: "Open Step by Step Guide",
+        guideTarget: "core-workflow"
+      },
+      {
+        id: "markdown-media-tables",
+        title: "Markdown Media & Tables",
+        short: "Add videos and compact comparison tables without hiding the learner's procedure.",
+        accent: "sienna",
+        tags: ["markdown"],
+        description: "Use this card when a lab needs a video explanation or a small comparison table.",
+        steps: [
+          "Use the documented provider prefix and video ID for YouTube or Video Hub embeds; replace every VIDEO_ID placeholder before publishing.",
+          "Use an approved direct video URL only when the audience can access it, and provide captions and a written alternative.",
+          "Use a table for compact comparison, keep the same number of columns in every row, and use descriptive link text or inline code in cells.",
+          "Add a table title immediately after the final row with {: title=\"...\"}; LiveLabs supplies the table number.",
+          "Preview media and tables on a narrow screen, then keep long procedures in numbered steps instead of dense tables."
+        ],
+        checkpoints: [
+          "Video embeds use a supported provider form and real accessible IDs.",
+          "The written lab remains complete if the video cannot be played.",
+          "Tables have a header, separator row, consistent columns, and a useful caption when needed.",
+          "Links, alignment, captions, and media render correctly in the assembled workshop."
+        ],
+        watchFor: [
+          "Ordinary watch URLs or image links used as LiveLabs embeds.",
+          "Videos without captions, access checks, or a text alternative.",
+          "Wide tables that hide the action on a phone.",
+          "A table caption separated from its table or placeholder video IDs left in production."
+        ],
+        snippetMeta: "Media and comparison",
+        snippetTitle: "Captioned table plus LiveLabs video embeds",
+        snippet: [
+          "| Resource | Status | Count |",
+          "| :--- | :---: | ---: |",
+          "| [Documentation](https://docs.oracle.com/) | **Ready** | `2` |",
+          "| `sample.json` | Review | `1` |",
+          "{: title=\"Resource status\"}",
+          "",
+          "[](youtube:VIDEO_ID:small)",
+          "[](videohub:VIDEO_ID:medium)",
+          "[](video:https://example.com/workshop-overview.mp4)"
+        ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Open the existing examples for supported video syntax, direct video files, tables, and captions.",
+        resourceLinks: [
+          resourceLink("Embed a video", "../markdown/index.html#video-embeds", "Use the provider prefix and replace the video ID."),
+          resourceLink("Use a direct video file when needed", "../markdown/index.html#direct-video", "Verify format, permissions, captions, and lifetime."),
+          resourceLink("Columns, alignment, and links", "../markdown/index.html#table-alignment", "Keep comparison tables compact and consistent."),
+          resourceLink("Give a table a caption", "../markdown/index.html#table-caption", "Place the title immediately after the table."),
+          resourceLink("Compare information in a table", "../markdown/index.html#tables", "Use numbered steps for procedures."),
+          resourceLink("Check paths, access, and safe examples", "../markdown/index.html#final-checks", "Test every media and table destination.")
+        ],
+        sourceHref: labLink("4-labs-markdown-develop-content"),
+        sourceLabel: "Open Step by Step Guide",
+        guideTarget: "core-workflow"
+      },
+      {
+        id: "markdown-preview-qa",
+        title: "Markdown Preview & QA",
+        short: "Preview the assembled workshop, run checks, and avoid Markdown extensions the renderer does not support.",
+        accent: "pine",
+        tags: ["markdown"],
+        description: "Use this card before review or publication to check the learner's real rendering.",
+        steps: [
+          "Serve the workshop over HTTP and open workshops/tenancy/index.html, not the Markdown file directly.",
+          "Use ?qa=true on the workshop URL, or &qa=true when a lab query already exists, to enable the available checks.",
+          "Run the documented Markdown validator, fix findings, and repeat the full learner procedure from the assembled workshop.",
+          "Check task order, copy buttons, includes, conditions, downloads, images, videos, links, tables, and narrow-screen readability.",
+          "Replace every placeholder, remove private data, and avoid unsupported extensions unless the actual LiveLabs renderer proves them safe."
+        ],
+        checkpoints: [
+          "The loader opens the intended lab and the workshop menu order is correct.",
+          "QA and validator findings are resolved rather than treated as a pass certificate.",
+          "Every link, download, asset, copy block, include, condition, and media item works from the learner environment.",
+          "The final page is readable on a narrow screen and contains no secrets or stale placeholders."
+        ],
+        watchFor: [
+          "Opening a .md file directly and assuming it matches the workshop loader.",
+          "Using qa=true as proof that all content is correct.",
+          "Features such as task checkboxes, footnotes, or definition lists that render literally.",
+          "Windows-only path casing, author-only permissions, or examples containing private information."
+        ],
+        snippetMeta: "Preview and final pass",
+        snippetTitle: "Run the workshop loader and final learner check",
+        snippet: [
+          "http://127.0.0.1:5500/workshops/tenancy/index.html?qa=true",
+          "http://127.0.0.1:5500/workshops/tenancy/index.html?lab=lab-1&qa=true",
+          "",
+          "Final pass:",
+          "- Follow the lab from start to finish as a learner.",
+          "- Open every link and download.",
+          "- Check code, images, tables, and narrow-screen layout.",
+          "- Replace placeholders and remove private information."
+        ].join("\n"),
+        resourcesTitle: "Go further in the Markdown reference",
+        resourcesIntro: "Open the existing QA and compatibility guidance before you hand the workshop to review or publication.",
+        resourceLinks: [
+          resourceLink("Preview the workshop and run QA", "../markdown/index.html#preview-qa", "Open the loader with the appropriate qa=true query."),
+          resourceLink("Check paths, access, and safe examples", "../markdown/index.html#final-checks", "Test from the intended learner environment."),
+          resourceLink("Do not assume every Markdown extension works", "../markdown/index.html#unsupported-extensions", "Use only syntax the renderer supports."),
+          resourceLink("Before you publish", "../markdown/index.html#before-publish", "Complete the final learner-focused pass."),
+          resourceLink("Navigate between labs", "../markdown/index.html#lab-navigation", "Test the actual workshop sequence token.")
+        ],
+        sourceHref: labLink("4-labs-markdown-develop-content"),
+        sourceLabel: "Open Step by Step Guide",
+        guideTarget: "core-workflow"
       },
       {
         id: "quiz-blocks",
@@ -502,11 +781,20 @@ window.authorGuideContent = (function () {
           "badge: images/badge.png",
           "```"
         ].join("\n"),
-        image: {
-          src: "../content/author-guide/quiz/images/quizconfig.png",
-          alt: "Quiz configuration example",
-          caption: "Use quiz-config only when scoring or badges are really part of the learning flow."
-        },
+        interfaceImages: [
+          {
+            src: "../assets/images/step-by-step/quiz--quizid.png",
+            alt: "Quiz question syntax in a Markdown file",
+            caption: "Start with the quiz syntax: Q: for the question, * for correct answers, - for incorrect answers, and > for the explanation."
+          }
+        ],
+        outcomeImages: [
+          {
+            src: "../assets/images/step-by-step/quiz--quizscore.png",
+            alt: "Rendered scored LiveLabs quiz",
+            caption: "After preview, verify that the quiz renders and shows the expected answer state; add scoring only when it supports the learning goal."
+          }
+        ],
         sourceHref: labLink("quiz"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
@@ -638,7 +926,6 @@ window.authorGuideContent = (function () {
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
       },
-      {
         id: "screenshots",
         title: "Screenshot Standards",
         short: "Crop to the action, redact safely, keep images at 1280px or less, and remove unused files.",
@@ -671,7 +958,7 @@ window.authorGuideContent = (function () {
           "- Keep only referenced files in the images folder"
         ].join("\n"),
         image: {
-          src: "../content/author-guide/13-labs-capture-screens-best-practices/images/screen-captures-general-guidelines.png",
+          src: "../assets/images/step-by-step/13-labs-capture-screens-best-practices--screen-captures-general-guidelines.png",
           alt: "General screenshot guidelines reference",
           caption: "The screenshot standards page is the authoritative checklist for capture quality and privacy."
         },
@@ -682,15 +969,39 @@ window.authorGuideContent = (function () {
       {
         id: "optishot",
         title: "OptiShot",
-        short: "Select the right folder, keep the 1280px limit, and review the summary before rerunning checks.",
+        short: "Install the desktop app, select the image root, keep the 1280px limit, and review its output before rerunning checks.",
         accent: "ocean",
         tags: ["media", "tools"],
-        description: "Use this card to resize images or clean up a screenshot-heavy workshop.",
+        description: "Use OptiShot after capturing screenshots when a workshop has JPEG or PNG files that may exceed the LiveLabs 1280px limit.",
+        installTitle: "1. Install OptiShot",
+        installIntro: "Run the installer that matches the author machine. It creates the application and a normal launch location; do not use an unverified package from another source.",
+        installCommands: [
+          {
+            platform: "macOS (Arm)",
+            title: "Install to Applications",
+            note: "Open Terminal. The installer places OptiShot.app in /Applications.",
+            command: "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/oracle-livelabs/common/main/sample-livelabs-templates/create-labs/labs/optishot/install-macos.sh)\""
+          },
+          {
+            platform: "Windows (x64)",
+            title: "Install from PowerShell",
+            note: "Open PowerShell. The installer creates the Start Menu shortcut and installs under LocalAppData.",
+            command: "Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/oracle-livelabs/common/main/sample-livelabs-templates/create-labs/labs/optishot/install-windows.ps1'))"
+          }
+        ],
+        interfaceImages: [
+          {
+            src: "../assets/images/step-by-step/optishot--root.png",
+            alt: "OptiShot folder picker for selecting an image root",
+            caption: "2. Launch OptiShot, then select the folder that contains the images to process. It scans subfolders and excludes .git."
+          }
+        ],
         steps: [
-          "Install and launch OptiShot.",
-          "Select the workshop or images folder; OptiShot scans subfolders and skips .git.",
-          "Use the 1280px default. Run dry-run first to inspect changes.",
-          "Review resized, skipped, and optimized files before rerunning checks."
+          "Launch OptiShot from the Start Menu on Windows or Applications on macOS; the folder picker opens automatically.",
+          "Choose the workshop images folder or the workshop root when its images are in subfolders. Do not select a parent folder that contains unrelated workshops.",
+          "Keep the default maximum dimension of 1280 pixels. For a non-destructive check, run the command-line dry-run shown below before processing.",
+          "Let the status window finish, then read the resized, optimized, skipped, failed, before, after, and saved values.",
+          "Re-run the local preview or pull request checks after processing so size compliance is verified with the workshop."
         ],
         checkpoints: [
           "The selected folder contains the images under review.",
@@ -711,11 +1022,13 @@ window.authorGuideContent = (function () {
           "Useful flag:",
           "-m 1280"
         ].join("\n"),
-        image: {
-          src: "../content/author-guide/optishot/images/summary.png",
-          alt: "OptiShot summary output",
-          caption: "The summary tells you which images were resized, skipped, or optimized."
-        },
+        outcomeImages: [
+          {
+            src: "../assets/images/step-by-step/optishot--summary.png",
+            alt: "OptiShot processing summary output",
+            caption: "3. Confirm the result: resized and optimized files changed; skipped files already met the limit; failed files need investigation."
+          }
+        ],
         sourceHref: labLink("optishot"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "tools-productivity"
@@ -723,15 +1036,39 @@ window.authorGuideContent = (function () {
       {
         id: "fixomat",
         title: "Fixomat",
-        short: "Select the workshop root, choose a mode, and review FIXED and MANUAL results.",
+        short: "Install Fixomat, choose the workshop root and repair mode, then act on its automatic and manual results.",
         accent: "pine",
         tags: ["tools", "validation"],
-        description: "Use this card to clean up Markdown or images before review.",
+        description: "Use Fixomat when a stable workshop needs a focused Markdown repair pass, an image optimization pass, or both before validation and review.",
+        installTitle: "1. Install Fixomat",
+        installIntro: "Run the matching official installer, then launch LiveLabs Fixomat 2000 from the location it creates.",
+        installCommands: [
+          {
+            platform: "macOS (Arm)",
+            title: "Install to Applications",
+            note: "Open Terminal. The installer places LiveLabs Fixomat 2000.app in /Applications.",
+            command: "/bin/bash -c \"$(curl -fsSL https://raw.githubusercontent.com/oracle-livelabs/common/main/sample-livelabs-templates/create-labs/labs/fixomat/install-macos.sh)\""
+          },
+          {
+            platform: "Windows (x64)",
+            title: "Install from PowerShell",
+            note: "Open PowerShell. The installer creates a Start Menu shortcut and installs under LocalAppData.",
+            command: "Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/oracle-livelabs/common/main/sample-livelabs-templates/create-labs/labs/fixomat/install-windows.ps1'))"
+          }
+        ],
+        interfaceImages: [
+          {
+            src: "../assets/images/step-by-step/fixomat--fixomat.png",
+            alt: "LiveLabs Fixomat 2000 application showing its mode options, Select folder, Run, Save Log, and output console",
+            caption: "2. This is the captured Fixomat interface from the Step by Step Guide. Select the workshop root, choose the repair mode, then run the pass."
+          }
+        ],
         steps: [
-          "Launch Fixomat and select the workshop root, not a nested lab.",
-          "Choose Markdown, images, or combined mode for the reported issue.",
-          "Run the scan and read the summary and console output.",
-          "Resolve MANUAL findings, then rerun Fixomat or preview before updating the pull request."
+          "Launch LiveLabs Fixomat 2000 from the Start Menu on Windows or Applications on macOS.",
+          "Click Select folder and choose the workshop root, not a nested lab or a folder containing several unrelated workshops.",
+          "Choose Fix Markdown only, Optimize images only, or Fix Markdown + Optimize images based on the problem you intend to solve.",
+          "Click Run and wait for the console and summary to finish. Use Save Log when the review needs the complete run record in fixomat.log.",
+          "Review every MANUAL item, make the required human edits, then rerun Fixomat or the relevant local validation before updating the pull request."
         ],
         checkpoints: [
           "The selected mode matches the problem.",
@@ -795,18 +1132,23 @@ window.authorGuideContent = (function () {
           exampleField("Evidence", "Checklist boxes checked, images uploaded, and certification ready", "Save the checklist before you try to move to Self Quality Assurance Complete or Quarterly Quality Assurance Complete.")
         ],
         milestonesTitle: "Quality Assurance status flow",
-        milestonesIntro: "Publishing starts only after the workshop moves through the Quality Assurance and stakeholder handoff states cleanly.",
+        milestonesIntro: "Publishing starts only after Quality Assurance is complete, review feedback is resolved, and WMS moves the workshop to Completed.",
         milestones: [
           milestone("Self Quality Assurance", "The workshop is stable enough to test end to end."),
           milestone("Self Quality Assurance Complete", "The checklist is saved and certified, and stakeholders are notified."),
           milestone("Completed", "Stakeholders have verified the workshop and it is ready for publishing action."),
           milestone("Quarterly Quality Assurance", "Published workshops cycle back into Quality Assurance later to stay current.")
         ],
-        image: {
-          src: "../content/author-guide/5-labs-qa-checks/images/self-qa-checklist-1.png",
+        interfaceImages: [{
+          src: "../assets/images/step-by-step/5-labs-qa-checks--self-qa-checklist-1.png",
           alt: "Self Quality Assurance checklist in WMS",
-          caption: "The checklist must be fully saved before Self Quality Assurance Complete can succeed."
-        },
+          caption: "Open the checklist before changing status and save all evidence before certification."
+        }],
+        outcomeImages: [{
+          src: "../assets/images/step-by-step/5-labs-qa-checks--completed-checklist-1.png",
+          alt: "Completed Self Quality Assurance checklist in WMS",
+          caption: "The result to verify: the completed checklist is saved before you certify Self Quality Assurance Complete."
+        }],
         sourceHref: labLink("5-labs-qa-checks"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "validation-publish"
@@ -855,7 +1197,7 @@ window.authorGuideContent = (function () {
           ".\\validate-livelabs-markdown.ps1 C:\\path\\to\\your\\workshop"
         ].join("\n"),
         image: {
-          src: "../content/author-guide/prcheck/images/prerror.png",
+          src: "../assets/images/step-by-step/prcheck--prerror.png",
           alt: "Failed pull request checks on GitHub",
           caption: "Start with the failing workflow name so you fix the real blocker."
         },
@@ -869,7 +1211,7 @@ window.authorGuideContent = (function () {
         short: "Create the pull request with its WMS ID, complete Publishing, and provide final URLs.",
         accent: "red",
         tags: ["publishing", "wms"],
-        description: "Use this card for the final pull request and WMS publishing handoff.",
+        description: "Use this card for the final pull request and WMS publishing request.",
         steps: [
           "Create the pull request after Quality Assurance fixes are pushed. Include the WMS ID in its title.",
           "Complete the pull request requirements and Self Quality Assurance checklist.",
@@ -889,14 +1231,14 @@ window.authorGuideContent = (function () {
           "Skipping the Publishing tab because the pull request was already created."
         ],
         milestonesTitle: "Final release flow",
-        milestonesIntro: "Keep the production handoff aligned with the real workshop state instead of mixing preview, review, and production URLs.",
+        milestonesIntro: "Keep the publishing request aligned with the real workshop state instead of mixing preview, review, and production URLs.",
         milestones: [
           milestone("pull request opened", "The title includes the WMS ID and the branch is current."),
           milestone("Publish Requested", "The Publishing tab is filled with production metadata and URL patterns."),
-          milestone("Publish Approved", "LiveLabs publishers have approved the production handoff."),
+          milestone("Publish Approved", "LiveLabs publishers have approved the publishing request."),
           milestone("Production verified", "The oracle-livelabs workshop matches the preview you already reviewed.")
         ],
-        snippetMeta: "Review handoff",
+        snippetMeta: "Review and publishing links",
         snippetTitle: "pull request and publishing URL patterns",
         snippet: [
           "pull request title",
@@ -915,7 +1257,7 @@ window.authorGuideContent = (function () {
           "https://oracle-livelabs.github.io/sprints/<category-folder>/<sprint-folder>/"
         ].join("\n"),
         image: {
-          src: "../content/author-guide/6-labs-publish/images/publishing-tab.png",
+          src: "../assets/images/step-by-step/6-labs-publish--publishing-tab.png",
           alt: "Publishing tab in WMS",
           caption: "The Publishing tab is where the final production metadata is created and approved."
         },
@@ -994,14 +1336,14 @@ window.authorGuideContent = (function () {
         snippet: [
           "https://oracle-livelabs.github.io/sprints/<domain-folder>/<sprint-folder>/",
           "",
-          "Required handoff",
+          "Required request details",
           "- WMS ID",
           "- LiveLabs ID",
           "- Pull request link",
           "- Production URL"
         ].join("\n"),
         image: {
-          src: "../content/author-guide/10-labs-create-sprints-workflow/images/sprints-workflow.png",
+          src: "../assets/images/step-by-step/10-labs-create-sprints-workflow--sprints-workflow.png",
           alt: "LiveLabs sprint workflow diagram",
           caption: "Sprints use a separate repository and publish request path from full workshops."
         },
@@ -1042,6 +1384,16 @@ window.authorGuideContent = (function () {
           "- Required apps or services start automatically",
           "- Browser settings are optimized before image capture"
         ].join("\n"),
+        interfaceImages: [{
+          src: "../assets/images/step-by-step/6-labs-setup-graphical-remote-desktop--novnc-urls.png",
+          alt: "noVNC URL settings for a graphical remote desktop",
+          caption: "Run the noVNC setup and verify the generated desktop URLs before you preload browser content or capture an image."
+        }],
+        outcomeImages: [{
+          src: "../assets/images/step-by-step/6-labs-setup-graphical-remote-desktop--novnc-custom-chrome-7a.png",
+          alt: "Configured graphical desktop with Chrome opened through noVNC",
+          caption: "Confirm the provisioned desktop reaches the intended browser state before custom image capture."
+        }],
         sourceHref: labLink("6-labs-setup-graphical-remote-desktop"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
@@ -1074,7 +1426,7 @@ window.authorGuideContent = (function () {
           "Testing only the source instance and never testing an instance created from the captured image.",
           "Forgetting to update desktop guide and app URL variables before packaging the ORM stack."
         ],
-        snippetMeta: "Image handoff fields",
+        snippetMeta: "Image details",
         snippetTitle: "Record these before moving on",
         snippet: [
           "Image OCID",
@@ -1087,6 +1439,16 @@ window.authorGuideContent = (function () {
           "Test stack result",
           "Validated remote desktop URL"
         ].join("\n"),
+        interfaceImages: [{
+          src: "../assets/images/step-by-step/7-labs-create-custom-image-for-marketplace--create-image-1.png",
+          alt: "OCI Console More Actions menu for creating a custom image",
+          caption: "After cleanup, start capture from the source instance through More Actions > Create custom image."
+        }],
+        outcomeImages: [{
+          src: "../assets/images/step-by-step/7-labs-create-custom-image-for-marketplace--remote-desktop-landing.png",
+          alt: "Remote desktop landing page for a test instance created from the custom image",
+          caption: "The outcome to verify is a fresh instance that opens the remote desktop as expected, not only a successful image-creation request."
+        }],
         sourceHref: labLink("7-labs-create-custom-image-for-marketplace"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
@@ -1126,6 +1488,16 @@ window.authorGuideContent = (function () {
           "Version",
           "Support contacts"
         ].join("\n"),
+        interfaceImages: [{
+          src: "../assets/images/step-by-step/8-labs-publish-custom-image-to-marketplace--create-listing-1.png",
+          alt: "OCI Marketplace action for creating a listing",
+          caption: "Create or update the Marketplace listing only after the custom image has passed its fresh-instance test."
+        }],
+        outcomeImages: [{
+          src: "../assets/images/step-by-step/8-labs-publish-custom-image-to-marketplace--publish-listing-revision-options.png",
+          alt: "OCI Marketplace listing revision publish options",
+          caption: "Publish the approved listing revision, then retain its listing, app catalog, image, and version identifiers for WMS registration."
+        }],
         sourceHref: labLink("8-labs-publish-custom-image-to-marketplace"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
@@ -1166,6 +1538,16 @@ window.authorGuideContent = (function () {
           "6. Select the new image",
           "7. Save and retest the LiveLab"
         ].join("\n"),
+        interfaceImages: [{
+          src: "../assets/images/step-by-step/12-add-custom-image-to-workshop--register-listing-1.png",
+          alt: "WMS custom image registration form for a Marketplace listing",
+          caption: "Register the tested Marketplace listing with its listing and app catalog identifiers before adding an image version."
+        }],
+        outcomeImages: [{
+          src: "../assets/images/step-by-step/12-add-custom-image-to-workshop--update-image-5.png",
+          alt: "WMS sandbox environment image selection for an updated custom image",
+          caption: "Select the new image in the existing sandbox environment, save, and retest the LiveLab."
+        }],
         sourceHref: labLink("12-add-custom-image-to-workshop"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
@@ -1173,51 +1555,63 @@ window.authorGuideContent = (function () {
       {
         id: "livestack-create",
         title: "LiveStack Creation",
-        short: "Create an industry-focused LiveStack package, add LiveLabs and assets, then request publishing.",
+        short: "Open WMS, create an industry-focused LiveStack package, add LiveLabs and assets, then request publishing.",
         accent: "ocean",
         tags: ["livestack", "assets"],
         updatedAt: "2026-07-01",
-        description: "Use this card to package a LiveStack Demo, LiveLabs workshops, assets, and supporting material around one outcome.",
+        description: "Use this card to create and maintain the full LiveStack package. A LiveStack Demo is one component inside that package, not the package itself.",
         steps: [
-          "Open WMS, choose Create a LiveStack, review the landing-page overview, and create the initial LiveStack record.",
-          "Use the LiveStack Details page as the working surface for LiveLab entries, assets, ordering, visibility, and publishing status.",
-          "Add LiveLab entries by name or ID, then configure Run on Sandbox, Run on Your Tenancy, title, and position when those override fields appear.",
-          "Add assets from WMS > Self Services > Assets. Only assets created by you or shared with you appear in the asset picker.",
-          "Set asset position and internal or external visibility. Internal assets are visible only to Oracle employees; external assets are visible to all audiences.",
-          "When the LiveStack is ready, change status to Publish Requested and save. The LiveStack council provides an update within 2 to 3 business days by email."
+          "In WMS, choose Create a LiveStack, review the landing page, complete the initialization form, and click Create.",
+          "On LiveStack Details, use Add Entry to search for a LiveLab by name or ID. Set only the needed overrides: Run on Sandbox, Run on Your Tenancy, title, and position; then click Create.",
+          "Use Add Asset to search for an asset that you created or that was shared with you. Set its position and mark it Internal or External before you create it.",
+          "Review the LiveLab and asset order in the Details page. Published LiveStack changes appear in LiveLabs immediately, so verify the audience visibility before editing a published package.",
+          "When the package is ready, set status to Publish Requested and save. The LiveStack council sends a status update within 2 to 3 business days."
         ],
         checkpoints: [
-          "The author understands that a LiveStack is the full solution package and a LiveStack Demo is one component inside it.",
-          "The LiveStack maps clearly to the Envision, Try, Embed, and Scale journey instead of acting as a loose list of links.",
-          "Every LiveLab entry has the intended title, launch options, and order.",
-          "Every asset is owned by or shared with the author and has the right internal or external visibility before publication.",
-          "The author knows that published LiveStack changes appear in LiveLabs immediately."
+          "The LiveStack tells one solution story; it does not act as an unstructured list of links.",
+          "Each LiveLab has the right title, launch options, and position.",
+          "Each asset is owned by or shared with the author and has the intended audience visibility.",
+          "The package is checked before Publish Requested because published edits are immediate."
         ],
         watchFor: [
           "Confusing a LiveStack Demo with the full LiveStack package.",
-          "Trying to add assets before they exist in WMS Self Services > Assets or before they have been shared with you.",
-          "Leaving internal briefing material visible to external audiences.",
-          "Reordering or editing a published LiveStack without realizing the change is immediate."
+          "Trying to add an asset that is not in WMS Self Services > Assets or has not been shared with you.",
+          "Leaving internal briefing material visible to external audiences."
         ],
-        snippetMeta: "LiveStack build path",
-        snippetTitle: "Create, fill, and publish the LiveStack",
-        snippet: [
-          "LiveStack = full solution package",
-          "LiveStack Demo = storytelling component inside the package",
-          "",
-          "1. WMS > Create a LiveStack",
-          "2. Review the overview and complete the initialization form",
-          "3. Add LiveLab entries by name or ID",
-          "4. Configure launch options, title, and position",
-          "5. Add owned or shared assets from Self Services > Assets",
-          "6. Set asset order and internal or external visibility",
-          "7. Change status to Publish Requested and wait for council email"
-        ].join("\n"),
-        image: {
-          src: "../content/author-guide/15-livestack/images/ls-details.png",
-          alt: "LiveStack details page in WMS",
-          caption: "The details page is where authors add LiveLabs, assets, order, visibility, and publish status."
-        },
+        interfaceImages: [
+          {
+            src: "../assets/images/step-by-step/15-livestack--create-a-ls-1.png",
+            alt: "WMS navigation option to create a LiveStack",
+            caption: "1. Access: open WMS and choose Create a LiveStack in the left navigation."
+          },
+          {
+            src: "../assets/images/step-by-step/15-livestack--fill-initialization-form.png",
+            alt: "LiveStack initialization form in WMS",
+            caption: "2. Create: complete the initialization form and create the new LiveStack record."
+          },
+          {
+            src: "../assets/images/step-by-step/15-livestack--ls-details.png",
+            alt: "LiveStack Details page in WMS",
+            caption: "3. Use: LiveStack Details is the working surface for entries, assets, ordering, visibility, and status."
+          }
+        ],
+        outcomeImages: [
+          {
+            src: "../assets/images/step-by-step/15-livestack--fill-entry-form.png",
+            alt: "LiveStack form for configuring a LiveLab entry",
+            caption: "Add a LiveLab, then set its launch overrides, title, and position only when required."
+          },
+          {
+            src: "../assets/images/step-by-step/15-livestack--add-asset-4.png",
+            alt: "LiveStack asset visibility control for Internal or External access",
+            caption: "Add a shared or owned asset, then set its visibility deliberately before publishing."
+          },
+          {
+            src: "../assets/images/step-by-step/15-livestack--request-publishing.png",
+            alt: "LiveStack status selection for Publish Requested",
+          caption: "Final step: set Publish Requested and save after the package has been reviewed."
+          }
+        ],
         sourceHref: labLink("create-a-livestack"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
@@ -1225,52 +1619,62 @@ window.authorGuideContent = (function () {
       {
         id: "wms-assets",
         title: "WMS Asset Manager",
-        short: "Upload reusable files or links, share editor access, copy PAR links, and maintain assets.",
+        short: "Open Assets, create reusable file or link assets, use the PAR link, and update them safely.",
         accent: "pine",
         tags: ["assets", "wms"],
         updatedAt: "2026-06-01",
-        description: "Use this card to manage reusable workshop, sandbox, tenancy, or LiveStack assets in WMS.",
+        description: "Use WMS Assets to store and share reusable files or links for workshops, sandboxes, tenancies, and LiveStacks without a support request.",
         steps: [
-          "Open WMS, expand Self Services, choose Assets, and click New Asset.",
-          "For files, choose Upload a File, pick the file, name it clearly, choose an asset type, and add a description when the name is not enough.",
-          "For links, choose Upload a Link, paste the URL, name the asset, choose its type, and describe what the link opens.",
-          "Add additional editors as comma-separated email addresses when teammates or stakeholders need the asset in their own asset list.",
-          "Use the link icon to open or copy the PAR link that WMS creates for uploaded files.",
-          "Overwrite a file asset when the same PAR link should keep working. Create a new asset when you need a new PAR link."
+          "In WMS, expand Self Services, open Assets, and select New Asset.",
+          "For a file, choose Upload a File, select the file, enter a clear name, choose Demo, Link, or Terraform Stack, then add a description or additional editors when needed and click Create.",
+          "For a reusable URL, choose Upload a Link, enter the URL, name, type, description, and any additional editors, then click Create.",
+          "For a file asset, use the link icon in the asset list to open or copy the generated PAR link.",
+          "To replace a file while keeping its PAR link, open the existing asset, choose the replacement file, update the details, and click Update. Create a new asset only when you need a new PAR link."
         ],
         checkpoints: [
-          "The asset name, type, description, and editor list tell future maintainers what the asset is and who owns it.",
-          "Uploaded files have a working PAR link before you use them in a workshop, sandbox, tenancy flow, or LiveStack.",
-          "The team knows whether it is overwriting an existing asset or creating a new asset with a new link."
+          "The asset name, type, description, and editors make its purpose and ownership clear.",
+          "A file asset's PAR link works before it is used in a workshop, sandbox, tenancy flow, or LiveStack.",
+          "The team knows whether the update must preserve the current PAR link or create a new one."
         ],
         watchFor: [
-          "Uploading assets with vague names that become unsearchable later.",
+          "Vague names that make assets hard to find later.",
           "Creating a new asset when an overwriteable PAR link should stay stable.",
-          "Forgetting to add additional editors before handoff."
+          "Forgetting additional editors before review."
         ],
-        snippetMeta: "Asset manager decisions",
-        snippetTitle: "Choose the right asset path",
-        snippet: [
-          "File asset",
-          "- Store in Object Storage",
-          "- Use the generated PAR link",
-          "- Overwrite to keep the same PAR link",
-          "",
-          "Link asset",
-          "- Store a reusable URL in WMS",
-          "- Use a clear name and type",
-          "- Add additional editors for handoff",
-          "",
-          "Common asset types",
-          "- Demo",
-          "- Link",
-          "- Terraform Stack"
-        ].join("\n"),
-        image: {
-          src: "../content/author-guide/17-assets/images/2-new-asset-dialog.png",
-          alt: "WMS Asset Details dialog for file or link assets",
-          caption: "WMS assets turn reusable files and links into shared, maintainable authoring objects."
-        },
+        interfaceImages: [
+          {
+            src: "../assets/images/step-by-step/17-assets--1-assets-page.png",
+            alt: "WMS Assets page under Self Services",
+            caption: "1. Access: in WMS, expand Self Services and open Assets."
+          },
+          {
+            src: "../assets/images/step-by-step/17-assets--2-new-asset-dialog.png",
+            alt: "WMS New Asset dialog with file and link options",
+            caption: "2. Create: select New Asset, then choose whether you need a file or a link."
+          }
+        ],
+        outcomeImages: [
+          {
+            src: "../assets/images/step-by-step/17-assets--3-upload-file-form.png",
+            alt: "WMS form for uploading a file asset",
+            caption: "File path: upload the file, name it clearly, choose the type, and add editors when required."
+          },
+          {
+            src: "../assets/images/step-by-step/17-assets--4-upload-link-form.png",
+            alt: "WMS form for adding a link asset",
+            caption: "Link path: store a reusable URL with a clear name, type, description, and editors."
+          },
+          {
+            src: "../assets/images/step-by-step/17-assets--5-access-par-link.png",
+            alt: "WMS asset row with the generated PAR link icon",
+            caption: "Use the link icon to open or copy the generated PAR link for a file asset."
+          },
+          {
+            src: "../assets/images/step-by-step/17-assets--7-update-asset-dialog.png",
+            alt: "WMS dialog for updating an existing file asset",
+            caption: "Update an existing file asset to keep its PAR link; create a new asset only when a new link is needed."
+          }
+        ],
         sourceHref: labLink("17-assets"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "specialized-workflows"
@@ -1424,10 +1828,11 @@ window.authorGuideContent = (function () {
         tags: ["ai", "tools"],
         description: "Use AI to draft, restructure, or automate authoring tasks. Validate all output against the guide and validator rules.",
         steps: [
-          "Start with the AI Developer Hub how-to guide.",
-          "Review the repository and skill bundle before creating a new prompt flow.",
-          "Use it for focused tasks: draft steps, tighten prose, extract prerequisites, or create a first pass.",
-          "Check AI output against the guide, preview the workshop, and run the validator."
+          "Open the AI Developer Hub guide and choose the workflow that matches one authoring outcome, such as building from source material, capturing screenshots, adding knowledge checks, or adapting content for an industry.",
+          "Open the Oracle Skills Library link above and download the skill package that fits that outcome. Read its README or SKILL instructions before you use it.",
+          "Install or load the downloaded skill using its package instructions, then give it one focused task with the workshop files, source material, and desired result in scope.",
+          "Review the generated text, commands, or media against the Step by Step Guide. Keep only output that is accurate, specific, and usable in the workshop.",
+          "Preview the changed workshop and run the relevant validator or checks before committing the result."
         ],
         checkpoints: [
           "Start with the published guide and skill bundle.",
@@ -1446,20 +1851,90 @@ window.authorGuideContent = (function () {
           resourceLink("AI Developer Hub repository", officialLinks.aiHubRepo, "Access the source materials."),
           resourceLink("LiveLabs AI Developer skills", officialLinks.aiHubSkills, "Review available skills first.")
         ],
-        snippetMeta: "Quick start",
-        snippetTitle: "Hub resources",
-        snippet: [
-          "git clone https://github.com/lfoinding/livelabs-ai-playground.git",
-          "",
-          "Guide",
-          "https://lfoinding.github.io/livelabs-ai-playground/skills/how-to/workshops/sandbox/index.html",
-          "",
-          "Skill bundle",
-          "https://github.com/lfoinding/livelabs-ai-playground/tree/main/LiveLabs-AI-Developer"
-        ].join("\n"),
+        preImageResourcesTitle: "LiveLabs AI Developer skills",
+        preImageResourcesIntro: "Review available skills first.",
+        preImageResourceLinks: [
+          resourceLink("Open the Oracle Skills Library", officialLinks.aiHubSkills, "Download the approved LiveLabs AI Developer skills from the Oracle Skills Library.")
+        ],
+        image: {
+          src: "../assets/images/step-by-step/15-labs-livelabs-ai-developer-hub--download-livelabs-skill.png",
+          alt: "AI Developer Hub interface for downloading LiveLabs skills",
+          caption: "Use the Hub's skill download path only after you have opened its how-to guide and selected a focused authoring task."
+        },
         sourceHref: labLink("15-labs-livelabs-ai-developer-hub"),
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "help-faq"
+      },
+      {
+        id: "request-event-code",
+        title: "Request a LiveLabs Event Code",
+        short: "Request an eligible Event Code, follow review and publication, then help participants enter it.",
+        accent: "red",
+        tags: ["wms", "events", "event code"],
+        description: "Request an Event Code in WMS, track its approval and publication, then guide participants through entering the code on LiveLabs.",
+        steps: [
+          "In WMS, open Events and select Request an Event Code.",
+          "Choose the workshop by title, WMS ID, or LiveLabs ID. Its publish type must be public or event.",
+          "Enter the requestor, dates, timezone, and workshop completion estimate. Add optional contacts or event title; set Green Button capacity and attendee time only when needed.",
+          "Complete the workshop details, check the links, and submit. The first WMS email confirms receipt and that the request is under review; it is not approval or a usable code.",
+          "Wait while WMS reviews the request, and respond to any requested changes. The approval email means the request passed review; it says publication may take up to 24 hours.",
+          "After approval, wait for the scheduled publishing job and the separate Event Published email after deployment succeeds. Copy the code from that email or the published WMS record; then enter it under Event Code on LiveLabs, select Submit Event Code, and select Start on the event page."
+        ],
+        checkpoints: [
+          "The selected workshop is the right one and uses the public or event publish type.",
+          "The dates, timezone, links, and applicable Green Button limits are correct.",
+          "Share the Event Code only after WMS confirms Event Published; submission or approval alone does not mean the code is ready."
+        ],
+        watchFor: [
+          "A tenancy without the workshop's required resources can prevent it from working.",
+          "For a green-button event, complete the capacity and attendee-time fields; explain a time over 8 hours in Remarks."
+        ],
+        resourcesTitle: "Continue the event-code workflow",
+        resourcesIntro: "Use the full guide for annotated steps, open WMS to submit a request, or go to LiveLabs to enter an approved code.",
+        resourceLinks: [
+          resourceLink("Read the full Event Code guide", eventCodeGuideHref, "Open the dedicated step-by-step page in this author guide."),
+          resourceLink("Open Workshop Management System", officialLinks.wms, "Request the Event Code from Events in WMS."),
+          resourceLink("Open LiveLabs", "https://livelabs.oracle.com/ords/r/dbpm/livelabs/home", "Enter an approved Event Code from the LiveLabs navigation.")
+        ],
+        interfaceImages: [
+          {
+            src: "assets/images/event-code/how_to_ll_event.png",
+            alt: "Diagram showing the WMS Event Code request from opening the form through approval",
+            caption: "Event Code request overview"
+          },
+          {
+            src: "assets/images/event-code/request_event_code.png",
+            alt: "WMS Events menu with Request an Event Code highlighted",
+            caption: "Open the Event Code request in WMS"
+          },
+          {
+            src: "assets/images/event-code/event-submitted-email.png",
+            alt: "WMS email confirming that the Event Code request was received and is under review",
+            caption: "The first email confirms submission and starts the review period"
+          },
+          {
+            src: "assets/images/event-code/event-approved-email.png",
+            alt: "WMS approval email explaining that the Event Code will be pushed to LiveLabs",
+            caption: "Approval follows review; the code still needs to be published"
+          },
+          {
+            src: "assets/images/event-code/event-published-email.png",
+            alt: "WMS Event Published email showing the Event Code ready to share",
+            caption: "Copy the code from the Event Published notice"
+          },
+          {
+            src: "assets/images/event-code/livelabs-submit-event-code.png",
+            alt: "LiveLabs Event Code dialog with an entered code and Submit Event Code highlighted",
+            caption: "Enter and submit the published code on LiveLabs"
+          }
+        ],
+        video: {
+          src: "assets/videos/event-code-request-walkthrough.mp4",
+          poster: "assets/images/event-code/how_to_ll_event.png",
+          title: "Event Code request walkthrough",
+          summary: "Watch the WMS request process, from choosing a workshop through submitting the request for approval."
+        },
+        guideTarget: "specialized-workflows"
       }
     ]
   };

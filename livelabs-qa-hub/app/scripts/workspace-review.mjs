@@ -1,0 +1,213 @@
+import assert from 'node:assert/strict'
+import { mkdir, writeFile } from 'node:fs/promises'
+import { fileURLToPath } from 'node:url'
+import { resolve } from 'node:path'
+import { chromium } from '../../../qa-automation/node_modules/playwright/index.mjs'
+
+const url = process.env.QA_HUB_URL || 'http://127.0.0.1:4192/'
+const out = resolve(fileURLToPath(new URL('../..', import.meta.url)), 'output/screenshots/unified-hub-v2')
+const maxImageDimension = 1280
+const tileOverlap = 64
+await mkdir(out, { recursive: true })
+const browser = await chromium.launch({ channel: 'chrome', headless: true })
+const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' })
+const page = await context.newPage(), checks = [], errors = [], screenshots = []
+page.on('pageerror', error => errors.push(error.message))
+const check = (label, value) => { assert.ok(value, label); checks.push(label) }
+const splitAxis = length => {
+  const count = Math.max(1, Math.ceil((length - tileOverlap) / (maxImageDimension - tileOverlap)))
+  const size = Math.ceil((length + (count - 1) * tileOverlap) / count)
+  const step = size - tileOverlap
+  return Array.from({ length: count }, (_, index) => {
+    const start = Math.min(index * step, length - size)
+    return { start, size: Math.min(size, length - start) }
+  })
+}
+const nav = async section => page.locator(`.sidebar [data-nav="${section}"]`).click()
+const capture = async file => {
+  await page.locator('#toast.toast-visible').waitFor({ state: 'hidden' })
+  const viewport = page.viewportSize()
+  const documentSize = await page.evaluate(() => ({
+    width: Math.max(document.documentElement.scrollWidth, document.body.scrollWidth),
+    height: Math.max(document.documentElement.scrollHeight, document.body.scrollHeight)
+  }))
+  const width = Math.max(viewport.width, documentSize.width)
+  const height = Math.max(viewport.height, documentSize.height)
+  const columns = splitAxis(width), rows = splitAxis(height)
+  const tiled = columns.length > 1 || rows.length > 1
+  const files = []
+  for (const [rowIndex, row] of rows.entries()) {
+    for (const [columnIndex, column] of columns.entries()) {
+      const tile = tiled
+        ? file.replace(/\.png$/i, `__r${String(rowIndex + 1).padStart(2, '0')}-c${String(columnIndex + 1).padStart(2, '0')}.png`)
+        : file
+      const path = resolve(out, tile)
+      if (tiled) {
+        await page.screenshot({ path, clip: { x: column.start, y: row.start, width: column.size, height: row.size }, animations: 'disabled' })
+      } else {
+        await page.screenshot({ path, fullPage: true, animations: 'disabled' })
+      }
+      files.push(tile)
+    }
+  }
+  screenshots.push({ file: files[0], files, originalDimensions: { width, height }, tileGrid: { rows: rows.length, columns: columns.length }, tileOverlapPixels: tiled ? tileOverlap : 0, url: page.url(), viewport, mode: 'full page' })
+}
+const closeDetail = async () => { await page.locator('#task-dialog [data-close="detail"]').first().click() }
+try {
+  const response = await context.request.get(url + 'api/local/tms'), data = await response.json()
+  check('Framework adapter returns current collection and saved report evidence', response.ok() && data.schema === 'qa-tms.automation-workspace.v1' && data.source.collection === 'available')
+  const current = data.tests.filter(t => t.inSource), guards = current.filter(t => t.setupRequired)
+  check('Current source, catalog guards, and historical-only tests are separate', current.length > 0 && guards.length > 0 && data.tests.some(t => !t.inSource))
+  check('Reader is GET-only', (await context.request.post(url + 'api/local/tms')).status() === 405)
+  check('Unlisted TMS files are not mounted', (await context.request.get(url + 'tms/state.mjs')).status() === 404)
+  await page.goto(url)
+  await page.waitForFunction(() => document.querySelector('.footer-right')?.textContent.includes('current tests'))
+  await page.evaluate(() => document.fonts.ready)
+  check('Dashboard is the main Hub entry point', await page.locator('h1').textContent() === 'QA dashboard')
+  check('Dashboard metrics derive from current framework collection', await page.locator('.stat-value').first().textContent() === String(current.length))
+  check('Old reports are explicitly marked as historical evidence', await page.locator('.source-banner').textContent().then(s => s.includes('Historical evidence')))
+  check('All integration menu routes exist', await page.locator('.sidebar [data-nav]').count() === 11)
+  await capture('01-dashboard.png')
+  await nav('tests')
+  check('Test board has five workflow columns', await page.locator('.board-column').count() === 5)
+  check('Catalog setup guards are visible and not placed in Ready by default', await page.locator('[data-drop="backlog"] .area-tag').allTextContents().then(s => s.includes('Setup required')) && await page.locator('[data-drop="ready"]').textContent().then(s => !s.includes('Setup required')))
+  await capture('02-tests.png')
+
+  await nav('bugs')
+  check('Findings are imported for triage', await page.locator('.task-card').count() === data.bugs.length)
+  const bug = data.bugs[0]
+  await page.locator(`[data-card="${bug.id}"]`).dragTo(page.locator('[data-drop="progress"] .column-title'))
+  check('Bug drag updates its local workflow', await page.locator(`[data-drop="progress"] [data-card="${bug.id}"]`).count() === 1)
+  await page.locator(`[data-record="${bug.id}"]`).click()
+  await page.locator('#record-status').selectOption('retest')
+  await page.locator('#record-priority').selectOption('High')
+  await page.locator('#record-owner').fill('QA reviewer')
+  await page.locator('#record-due').fill('2026-11-18')
+  await page.locator('#record-due').press('Tab')
+  await page.locator('#record-note-form textarea').fill('Retest after source verification. <script>not executable</script>')
+  await page.locator('#record-note-form button').click()
+  check('Notes are escaped and saved locally', await page.locator('.comment').count() === 1 && await page.locator('#task-dialog script').count() === 0)
+  await page.reload()
+  await page.locator('#task-dialog').waitFor({ state: 'visible' })
+  check('Deep link restores selected finding and local edits', await page.locator('#record-status').inputValue() === 'retest' && await page.locator('#record-owner').inputValue() === 'QA reviewer')
+  check('Recorded failure remains visible after workflow changes', await page.locator('.evidence-box').textContent().then(s => s.includes('Failed')))
+  await capture('03-finding-detail.png')
+  await page.locator(`#task-dialog [data-record="${bug.testId}"]`).click()
+  check('Finding links to its test', await page.locator('#task-dialog').textContent().then(s => s.includes('Linked bugs & findings')))
+  await page.locator('[data-action="bug-for-test"]').click()
+  check('Logging a linked bug reuses an existing open finding', await page.locator('#detail-title').textContent() === bug.title)
+  await closeDetail()
+  await capture('04-bug-board.png')
+
+  await nav('tests')
+  await page.locator('[data-tab="list"]').click()
+  check('List and board share every imported test', await page.locator('.list-task-button').count() === data.tests.length)
+  await page.locator('[data-action="filter"]').click()
+  await page.locator('[data-filter="origin"]').selectOption('current')
+  check('Current-source filter excludes historical-only records', await page.locator('.list-task-button').count() === current.length)
+  await page.locator('[data-action="clear"]').click()
+  await page.locator('#workspace-search').fill('no such unique test matching string')
+  check('Search shows useful empty state', await page.locator('.empty-state h2').textContent() === 'No matching records')
+  await page.locator('[data-action="clear"]').first().click()
+  await page.locator('[data-action="create"]').click()
+  await page.locator('#create-record [name="title"]').fill('Review prototype manual journey')
+  await page.locator('#create-record [name="domain"]').selectOption('workshops')
+  await page.locator('#create-record button.primary').click()
+  const manualHash = new URLSearchParams(new URL(page.url()).hash.slice(1)), manualId = manualHash.get('record')
+  check('Manual tests have their own local origin', await page.locator('.detail-toolbar').textContent().then(s => s.includes('Local manual test')))
+  await page.locator('[data-action="manual-result"]').click()
+  await page.locator('#manual-result-form [name="status"]').selectOption('failed')
+  await page.locator('#manual-result-form [name="evidence"]').fill('The expected confirmation was absent during the manual review.')
+  await page.locator('#manual-result-form button').click()
+  check('Manual outcomes require and retain evidence', await page.locator('.evidence-box').textContent().then(s => s.includes('Failed') && s.includes('confirmation was absent')))
+  await page.locator('[data-action="bug-for-test"]').click()
+  check('Manual test can create a linked local bug', await page.locator('.detail-toolbar').textContent().then(s => s.includes('Local bug')))
+  await closeDetail()
+  await page.locator('#workspace-search').fill('Review prototype manual journey')
+  await page.locator('[data-action="plan-from-view"]').click()
+  await page.locator('#plan-form [name="title"]').fill('Workshop review plan')
+  check('Plan from filtered view selects only matching tests', await page.locator('#plan-form [name="tests"]:checked').count() === 1)
+  await page.locator('#plan-form button.primary').click()
+  check('Plan membership and counts are visible', await page.locator('.plan-card').textContent().then(s => s.includes('Workshop review plan') && s.includes('1 tests')))
+  await page.locator('.plan-title').click()
+  check('Plan members link to real test records', await page.locator(`#utility-dialog [data-record="${manualId}"]`).count() === 1)
+  await page.locator('[data-edit-plan]').click()
+  await page.locator('#plan-form [name="title"]').fill('Workshop release review')
+  await page.locator('#plan-form button.primary').click()
+  await capture('05-test-plans.png')
+
+  await nav('requirements')
+  await page.locator('[data-action="new-requirement"]').first().click()
+  await page.locator('#requirement-form [name="title"]').fill('Confirmation appears after the learner action')
+  await page.locator(`#requirement-form input[value="${manualId}"]`).check()
+  await page.locator('#requirement-form button.primary').click()
+  check('Requirements link to selected test cases', await page.locator('.coverage-count').textContent() === '1 linked tests')
+  await page.locator(`#hub [data-record="${manualId}"]`).click()
+  check('Requirement links are bidirectional', await page.locator('#task-dialog [data-link-requirement]:checked').count() === 1)
+  check('Test-plan links are visible in test details', await page.locator('#task-dialog [data-plan]').count() === 1)
+  await closeDetail()
+
+  await nav('work')
+  await page.locator('[data-action="create"]').first().click()
+  await page.locator('#create-record [name="title"]').fill('Prepare November QA handoff')
+  await page.locator('#create-record [name="status"]').selectOption('progress')
+  await page.locator('#create-record button.primary').click()
+  await page.locator('#record-due').fill('2026-11-25'); await page.locator('#record-due').press('Tab')
+  await closeDetail()
+  await page.locator('[data-tab="roadmap"]').click()
+  check('QA work supports the monthly roadmap', await page.locator('[data-drop-month="2026-11"]').textContent().then(s => s.includes('November 2026') && s.includes('Prepare November QA handoff')))
+  await page.locator('.task-card').dragTo(page.locator('[data-drop-month="2026-12"] .column-title'))
+  check('Roadmap drag reschedules work without changing its workflow', await page.locator('[data-drop-month="2026-12"] .task-card').count() === 1)
+
+  await nav('runs')
+  check('Run history retains recorded totals', await page.locator('[data-run]').count() === data.runs.length)
+  await page.locator('[data-run]').first().click()
+  check('Run results link back to tests', await page.locator('#utility-dialog [data-record]').count() === data.runs[0].results.length)
+  await page.locator('#utility-dialog [data-close]').click()
+  await nav('par-links')
+  check('PAR unavailable state is not presented as healthy', await page.locator('.empty-state').textContent().then(s => s.includes('not measured')))
+  await nav('on-call')
+  await page.locator('[data-on-call-load="synthetic"]').click()
+  await page.locator('[data-on-call-case]').first().waitFor()
+  check('Existing on-call synthetic review is integrated', await page.locator('.source-label').textContent().then(s => s.includes('Synthetic preview')))
+  await page.locator('[data-on-call-load="live"]').click()
+  check('Unavailable live on-call does not fall back to synthetic data', await page.locator('[data-on-call-case]').count() === 0)
+  await nav('settings')
+  const downloadPromise = page.waitForEvent('download')
+  await page.locator('[data-action="backup"]').click()
+  check('Local workspace can be backed up', (await downloadPromise).suggestedFilename() === 'qa-workspace-local-backup.json')
+  await page.locator('[data-action="refresh"]').last().click()
+  await page.waitForFunction(() => !document.querySelector('.footer-right')?.textContent.includes('Reading'))
+  await nav('bugs'); await page.locator(`[data-record="${bug.id}"]`).click()
+  check('Refreshing source evidence preserves local triage and notes', await page.locator('#record-status').inputValue() === 'retest' && await page.locator('.comment').count() === 1)
+  await closeDetail()
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('livelabs-qa-unified-workspace-v1')))
+  check('Browser storage retains local changes, not imported evidence or support cases', !('snapshot' in saved) && !('runs' in saved) && saved.tests.every(t => t.source === 'Local manual test') && !('onCall' in saved))
+  const second = await context.newPage()
+  await second.goto('http://127.0.0.1:4193/')
+  await second.waitForURL('http://127.0.0.1:4192/#section=tests')
+  check('TMS entry opens the canonical shared Hub origin', second.url().startsWith(url))
+  await second.close()
+
+  await page.setViewportSize({ width: 390, height: 844 })
+  check('Mobile has no page-level horizontal overflow', await page.evaluate(() => document.documentElement.scrollWidth === innerWidth))
+  await capture('06-mobile-bugs.png')
+  await page.locator('.mobile-toggle').click(); await nav('dashboard')
+  check('Mobile navigation switches the shared workspace', await page.locator('h1').textContent() === 'QA dashboard' && !await page.locator('.sidebar').isVisible())
+  await capture('07-mobile-dashboard.png')
+  await page.locator('[data-record]').first().click()
+  check('Mobile detail remains within the viewport', await page.locator('#task-dialog').evaluate(el => el.getBoundingClientRect().width <= innerWidth))
+  await capture('08-mobile-detail.png')
+  await page.keyboard.press('Escape')
+  check('Escape dismisses the detail panel', !await page.locator('#task-dialog').isVisible())
+  check('No runtime errors in integrated flows', errors.length === 0)
+  const offline = await context.newPage()
+  await offline.route('**/api/local/tms*', route => route.fulfill({ status: 503, contentType: 'application/json', body: '{}' }))
+  await offline.goto(url)
+  await offline.locator('.source-banner.warning').waitFor()
+  check('Unavailable reader is explicit and does not fall back to demo evidence', await offline.locator('.source-banner').textContent().then(s => s.includes('unavailable')) && await offline.locator('.stat-value').first().textContent() === '—')
+  await offline.close()
+  await writeFile(resolve(out, 'results.json'), JSON.stringify({ checks, errors, source: { current: current.length, guards: guards.length, historical: data.tests.length - current.length, findings: data.bugs.length, runs: data.runs.length }, screenshots }, null, 2))
+  await writeFile(resolve(out, 'manifest.md'), `# Unified QA Hub review\n\nCaptured ${new Date().toISOString()} against ${url}. Installed Chrome, isolated context. Real local framework inventory and saved report projections; created records exist only in the disposable test browser.\n\n## Objectives\n\nMap each original review capture to its linked lossless PNG tiles.\n\n## Estimated Time\n\nEstimated Time: About 5 minutes to review this evidence set.\n\n## Screenshots\n\n${screenshots.map(s => `- ${s.files.map(file => `[${file}](${file})`).join(', ')} — source ${s.originalDimensions.width} × ${s.originalDimensions.height}${s.files.length > 1 ? `; ${s.tileGrid.rows} × ${s.tileGrid.columns} lossless tiles with ${s.tileOverlapPixels}px overlap` : ''}; ${s.mode}; ${s.url}`).join('\n')}\n\n## Interaction checks\n\n${checks.map(c => `- PASS: ${c}`).join('\n')}\n\nRuntime errors: ${errors.length}\n\n## Acknowledgements\n\nCapture context and test conditions are recorded above and in the project review notes.\n`)
+  console.log(JSON.stringify({ passed: checks.length, errors, source: { current: current.length, setupGuards: guards.length, historical: data.tests.length - current.length }, output: out }, null, 2))
+} finally { await browser.close() }

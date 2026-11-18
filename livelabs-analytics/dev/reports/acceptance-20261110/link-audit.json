@@ -1,0 +1,97 @@
+{
+  "records": 889,
+  "validFieldValues": {
+    "Production URL": 889,
+    "Production GitHub URL": 519
+  },
+  "uniqueUrls": 1383,
+  "invalidUrls": [],
+  "missingFields": {
+    "Production GitHub URL": 369
+  },
+  "sampledRequests": [
+    {
+      "id": "598",
+      "type": "Workshop",
+      "field": "Production URL",
+      "host": "livelabs.oracle.com",
+      "status": 200,
+      "finalHost": "livelabs.oracle.com",
+      "redirected": false,
+      "contentType": "text/html;charset=utf-8"
+    },
+    {
+      "id": "633",
+      "type": "Workshop",
+      "field": "Production URL",
+      "host": "livelabs.oracle.com",
+      "status": 200,
+      "finalHost": "livelabs.oracle.com",
+      "redirected": false,
+      "contentType": "text/html;charset=utf-8"
+    },
+    {
+      "id": "664",
+      "type": "Workshop",
+      "field": "Production URL",
+      "host": "livelabs.oracle.com",
+      "status": 200,
+      "finalHost": "livelabs.oracle.com",
+      "redirected": false,
+      "contentType": "text/html;charset=utf-8"
+    },
+    {
+      "id": "633",
+      "type": "Workshop",
+      "field": "Production GitHub URL",
+      "host": "oracle.github.io",
+      "status": 404
+    },
+    {
+      "id": "668",
+      "type": "Workshop",
+      "field": "Production GitHub URL",
+      "host": "github.com",
+      "status": 200,
+      "finalHost": "github.com",
+      "redirected": false,
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "id": "685",
+      "type": "Workshop",
+      "field": "Production GitHub URL",
+      "host": "oracle.github.io",
+      "status": 404
+    },
+    {
+      "id": "3265",
+      "type": "Sprint",
+      "field": "Production URL",
+      "host": "livelabs.oracle.com",
+      "status": 302
+    },
+    {
+      "id": "3384",
+      "type": "Sprint",
+      "field": "Production URL",
+      "host": "livelabs.oracle.com",
+      "status": 302
+    },
+    {
+      "id": "3264",
+      "type": "Sprint",
+      "field": "Production URL",
+      "host": "livelabs.oracle.com",
+      "status": 302
+    }
+  ],
+  "scope": "All production destination formats checked; 9 unauthenticated HTTP samples. HTTP 200 does not prove workshop content correctness. HTTP 302 errors need browser redirect inspection. QA Hub and token-bearing URLs excluded.",
+  "withheldAccessBearingLinks": [
+    {
+      "id": "3305",
+      "field": "Production GitHub URL",
+      "reason": "Not an absolute HTTP(S) URL"
+    }
+  ]
+}

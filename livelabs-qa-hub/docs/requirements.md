@@ -1,168 +1,59 @@
-# LiveLabs QA Hub Requirements
+# LiveLabs QA Hub requirements
 
-Date: 2026-05-26
-Status: V3 draft for review
+Updated 4 November 2026. This iteration integrates QA TMS into the main Hub rather than linking to a separate default interface.
 
-## Objective
+## Purpose
 
-Create a LiveLabs QA Hub that gives PM, QA, content, platform, and LiveStack stakeholders one operational view of quality health, issues, logs, usage signals, ownership, and follow-up work across the LiveLabs ecosystem.
+Connect QA planning, test readiness, bug triage, and requirements to source-backed framework evidence. Distinguish what the team plans or marks complete from what an execution actually observed.
 
-## Background
+## Pages and hierarchy
 
-The seed Jira epic `LDA-1492` scoped a LiveLabs QA health monitoring solution. The scope is now expanded into a broader hub. Health monitoring remains a core page, but the hub also needs watchdog-style issue flagging, user roles, account management, CRUD-capable work queues, GitHub intake, reviewed knowledge sources, usage and sprint metrics, reports, a linked TMS, and future integrations with Jira, CI/CD, LiveLabs data, WMS/TMS, and LiveStack QA sources.
+1. QA dashboard: current test collection, setup guards, open findings, plans, and dated run evidence.
+2. QA work: local task Board, List, and Roadmap.
+3. Tests: current automation inventory, historical-only tests, manual tests, and workflow.
+4. Bugs & findings: triage, confirmation, progress, retest, and closure.
+5. Test plans: editable test membership, plan status, and independent workflow/result counts.
+6. Requirements: expected behavior and explicit test coverage links.
+7. Automation runs: saved run history; Live Jenkins Reports remain unavailable.
+8. PAR Links: measured, broken, unverified, and unavailable coverage states.
+9. On-Call: existing synthetic/private review flow; support data remains in memory.
+10. Repositories: local checkout inventory, not a live PR queue.
+11. Sources & workspace: availability, backup, and legacy entry points.
 
-## Personas
+## UI and behavior
 
-| Persona | Needs |
-| --- | --- |
-| QA admin | Configure monitors, manage users, triage alerts, update issue ownership, publish reports. |
-| QA user | View health, inspect logs, follow assigned issues, export evidence, read reports. |
-| PM/content owner | Understand workshop, sprint, usage, and content quality risks. |
-| Platform owner | See service health, regression failures, release blockers, and incident patterns. |
-| LiveStack owner | Track LiveStack guide, bundle, runtime, and validation issues. |
-| Test lead | Design tests, track executions, review coverage, and connect defects to QA evidence. |
+Use the reviewed Asana patterns with Oracle Sans, Bark navigation, warm surfaces, compact status labels, view tabs, and a side detail panel. Boards support drag-and-drop and keyboard/touch status editing. Provide search, filters, sorting, counts, empty states, and responsive layouts without page-level horizontal overflow.
+
+Link tests, bugs, plans, requirements, and runs by stable identity. Local manual outcomes require evidence. A test's workflow completion must never change its recorded automated outcome, and a later pass must not silently close a bug.
+
+## Source contract
+
+Collect Playwright test names using list-only mode. Read saved run summaries through a minimized projection. Keep collection/setup guards, historical unmatched identities, and manual records distinct. Catalog guard cases do not establish expanded catalog coverage.
+
+Normalize only the known old domain/purpose path order when matching historical evidence. Do not fuzzy-match titles across unrelated sources. Select the final retry per test/browser/run; retain browser distinctions. Deduplicate findings by test identity, browser, and classification, with multiple run occurrences.
+
+Show source timestamps and stale labels; do not infer current health from the September saved runs. Missing sources yield unavailable states, never obsolete seed data. PAR not-measured is not healthy. Contacts, access URLs, raw errors, and attachments do not enter the planning projection or static assets.
 
 ## Roles And Permissions
 
-| Capability | User | Admin |
-| --- | --- | --- |
-| Log in and view dashboard | Yes | Yes |
-| View QA Watchdog alerts and logs | Yes | Yes |
-| Create or edit watchdog records | No | Yes |
-| Acknowledge or resolve alerts | No | Yes |
-| View health monitor status | Yes | Yes |
-| Configure health checks | No | Yes |
-| View usage, sprint, and reports pages | Yes | Yes |
-| Export reports | Yes | Yes |
-| View GitHub intake and QA knowledge | Yes | Yes |
-| Add GitHub intake or knowledge notes | No | Yes |
-| Manage users, roles, and account status | No | Yes |
+This iteration is a loopback-only local development workspace. The earlier demo login was a presentation mechanism, not production authentication; it remains in the legacy Hub. Production identity, authorization, shared state, and authenticated private reviewer access are not implemented in this local redesign.
 
-## Functional Requirements
+The server accepts read-only local requests and exposes no test-execution or external-write endpoint. Local owners and statuses are not production authorization controls.
 
-### Authentication
+## Persistence and delivery
 
-- The hub must show a login page before the application shell.
-- The first draft must include seeded `user` and `admin` accounts.
-- The production version must support a real identity provider or an approved Oracle internal auth path.
-- The UI must show the active role and enforce role-based actions.
+Browser-local workflow edits use a separate shared key on port 4192. Preserve previous Hub, visual-prototype, and TMS storage. The TMS default entry resolves to the Hub origin; the old TMS stays at port 4193 `/legacy.html` for existing records. Do not silently treat old demo records as current framework evidence.
 
-### User And Account Management
+Build both projects. Validate data reconciliation, immutability, linked-object workflows, reload/refresh persistence, unavailable sources, keyboard behavior, mobile layout, and retained legacy entry points. No publication or deployment is part of this request.
 
-- Admins can create, update, disable, and remove users.
-- Users can view their own account profile and permissions.
-- Disabled users cannot authenticate.
-- Account changes must be auditable in the production version.
+## Objectives
 
-### Hub Navigation
+Define the QA Hub pages, roles, source contract, persistence behavior, and validation scope.
 
-- The first design draft uses a left-side navigation menu.
-- V3 top-level navigation must include: Command Center, QA Operations, GitHub Intake, Knowledge Base, Test Management, Reports, and Admin Console.
-- QA Operations must provide launchers for QA Watchdog, Health Monitor, Automation Runs, LiveStack QA, Platform And Content QA, Usage Metrics, and Sprint Ops.
-- Each section must be deep-linkable in the production version.
+## Estimated Time
 
-### QA Watchdog
+Estimated Time: About 15 minutes to review the product requirements.
 
-- Provide a Datadog-like operational page for quality alerts, logs, monitors, severity, ownership, status, and recent events.
-- Admins can create alert records, assign owners, and change status.
-- Users can inspect alerts but cannot mutate records.
-- Alerts must preserve enough evidence to support follow-up Jira or sprint work.
+## Acknowledgements
 
-### Health Monitor
-
-- Show current health for LiveLabs platform, content publishing, LiveStack, analytics, CI/CD automation, and sprint process signals.
-- Show status, latency/freshness, owner, evidence source, and next check.
-- Production checks should support poll-based and event-based inputs.
-
-### Automation Runs
-
-- Show latest regression, smoke, accessibility, link, content validation, and browser checks.
-- Capture run status, source branch, environment, failure class, artifact links, and retry state.
-- Connect failures to watchdog alerts when thresholds are crossed.
-
-### LiveStack QA
-
-- Track LiveStack bundle readiness, guide variants, local runtime status, Podman/container checks, ORDS/API checks, and documentation evidence.
-- Connect LiveStack failures to content and platform risk views.
-
-### Platform And Content QA
-
-- Track LiveLabs platform release health, workshop content validation, broken links, stale metadata, disabled workshop rules, sprint/content governance, and WMS/TMS process health.
-- Distinguish published content issues from source data issues.
-
-### Usage Metrics
-
-- Show workshop starts, sprint usage, declining/at-risk workshops, adoption by category, and usage anomalies.
-- Support future joins against existing LiveLabs analytics outputs.
-
-### Sprint Ops
-
-- Track QA tasks, sprint procedure compliance, owner response, stale blockers, Jira alignment, and readiness gates.
-- Provide a queue for high-risk or aging work.
-
-### Reports
-
-- Provide executive summaries, QA exception lists, release-readiness reports, automation failure summaries, and trend exports.
-- Reports must separate confirmed facts from inferred or stale data.
-
-### GitHub Intake
-
-- Track repository-driven QA work across PRs, issues, validation logs, and review history.
-- Admins can add local intake records in the prototype.
-- Production must start read-only unless writeback is approved.
-- Repeated GitHub failures should connect to Watchdog alerts and TMS execution evidence.
-
-### QA Knowledge Base
-
-- Provide a NotebookLM-style intake lane for files, links, research notes, and reviewed decision records.
-- Sources must be reviewed before being promoted into QA rules, TMS requirements, or reports.
-- Prototype source notes are local only.
-- Production must support source provenance, duplicate detection, review status, and promotion history.
-
-### Test Management
-
-- The QA Hub links to a separate LiveLabs TMS project.
-- The TMS owns requirements, test repository, plans, builds, executions, coverage, defects, and TMS reports.
-- QA Hub records should link to TMS records where relevant: Watchdog alert to test case, PR to plan/execution, Knowledge Base note to requirement.
-
-## Non-Functional Requirements
-
-- Redwood-aligned UI with Oracle Sans, Oracle Red, Oracle Bark, neutral surfaces, and documented functional link colors.
-- Responsive layout for desktop and review on narrow screens.
-- Clear permission feedback without exposing unavailable controls as working actions.
-- Accessible labels, keyboard navigation, visible focus states, and adequate contrast.
-- Production design must avoid storing secrets in browser storage.
-- Data integrations must support provenance, freshness, owner, and confidence.
-
-## Initial Data Domains
-
-| Domain | Example Signals |
-| --- | --- |
-| Jira | QA epics, incidents, sprint tasks, owners, status, comments. |
-| CI/CD | Playwright runs, smoke tests, lint/typecheck, build failures, artifacts. |
-| LiveLabs Analytics | Workshop and sprint usage, disabled content, QA exceptions, replacement candidates. |
-| LiveStack | Bundle checks, app runtime, guide validation, container status. |
-| Platform | Login, catalog, search, workshop launch, CDN/static content, APEX flows. |
-| WMS/TMS | Workshop metadata, publishing status, testing process gates. |
-| GitHub | Pull requests, issues, review logs, CI links, repository history. |
-| Knowledge Sources | Reviewed files, links, source notes, decisions, and promotion status. |
-
-## Acceptance Criteria For First Draft
-
-- Project folder exists under `Projects\LiveLabs QA Hub`.
-- Requirements, implementation plan, Jira source notes, task list, and validation report exist.
-- Section folders exist for the major QA hub capabilities.
-- Prototype shows login first.
-- Demo `user` and `admin` accounts work.
-- Admin role can perform local account and watchdog CRUD actions.
-- User role can view hub content but cannot perform admin-only mutations.
-- Prototype uses Redwood-aligned colors and Oracle Sans assets copied from the active Redwood Creator skill.
-- Local validation and tests pass.
-
-## Open Questions
-
-1. Should the production implementation be Oracle JET, APEX, ORDS-backed full stack, React/Vite prototype hardened later, or another approved stack?
-2. Which internal identity provider should back real authentication?
-3. Which LiveLabs analytics datasets should be considered authoritative for usage and content risk?
-4. Should Jira remain the system of record for QA items, or should the hub own its own incident model and sync with Jira?
-5. What notification channel is expected first: email, Slack/Teams, Jira comments, Confluence report, or all of these later?
+The requirements preserve the existing TMS entry points and distinguish imported evidence from browser-local workflow state.

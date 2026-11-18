@@ -1,0 +1,197 @@
+{
+  "checks": [
+    "Framework adapter returns current collection and saved report evidence",
+    "Current source, catalog guards, and historical-only tests are separate",
+    "Reader is GET-only",
+    "Unlisted TMS files are not mounted",
+    "Dashboard is the main Hub entry point",
+    "Dashboard metrics derive from current framework collection",
+    "Old reports are explicitly marked as historical evidence",
+    "All integration menu routes exist",
+    "Test board has five workflow columns",
+    "Catalog setup guards are visible and not placed in Ready by default",
+    "Findings are imported for triage",
+    "Bug drag updates its local workflow",
+    "Notes are escaped and saved locally",
+    "Deep link restores selected finding and local edits",
+    "Recorded failure remains visible after workflow changes",
+    "Finding links to its test",
+    "Logging a linked bug reuses an existing open finding",
+    "List and board share every imported test",
+    "Current-source filter excludes historical-only records",
+    "Search shows useful empty state",
+    "Manual tests have their own local origin",
+    "Manual outcomes require and retain evidence",
+    "Manual test can create a linked local bug",
+    "Plan from filtered view selects only matching tests",
+    "Plan membership and counts are visible",
+    "Plan members link to real test records",
+    "Requirements link to selected test cases",
+    "Requirement links are bidirectional",
+    "Test-plan links are visible in test details",
+    "QA work supports the monthly roadmap",
+    "Roadmap drag reschedules work without changing its workflow",
+    "Run history retains recorded totals",
+    "Run results link back to tests",
+    "PAR unavailable state is not presented as healthy",
+    "Existing on-call synthetic review is integrated",
+    "Unavailable live on-call does not fall back to synthetic data",
+    "Local workspace can be backed up",
+    "Refreshing source evidence preserves local triage and notes",
+    "Browser storage retains local changes, not imported evidence or support cases",
+    "TMS entry opens the canonical shared Hub origin",
+    "Mobile has no page-level horizontal overflow",
+    "Mobile navigation switches the shared workspace",
+    "Mobile detail remains within the viewport",
+    "Escape dismisses the detail panel",
+    "No runtime errors in integrated flows",
+    "Unavailable reader is explicit and does not fall back to demo evidence"
+  ],
+  "errors": [],
+  "source": {
+    "current": 89,
+    "guards": 46,
+    "historical": 28,
+    "findings": 12,
+    "runs": 2
+  },
+  "screenshots": [
+    {
+      "file": "01-dashboard__r01-c01.png",
+      "url": "http://127.0.0.1:4192/",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "mode": "full page",
+      "files": [
+        "01-dashboard__r01-c01.png",
+        "01-dashboard__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
+    },
+    {
+      "file": "02-tests__r01-c01.png",
+      "url": "http://127.0.0.1:4192/#section=tests&view=board",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "mode": "full page",
+      "files": [
+        "02-tests__r01-c01.png",
+        "02-tests__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
+    },
+    {
+      "file": "03-finding-detail__r01-c01.png",
+      "url": "http://127.0.0.1:4192/#section=bugs&view=board&record=AF-d67c0d439105bbea3fd7&kind=bugs",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "mode": "full page",
+      "files": [
+        "03-finding-detail__r01-c01.png",
+        "03-finding-detail__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
+    },
+    {
+      "file": "04-bug-board__r01-c01.png",
+      "url": "http://127.0.0.1:4192/#section=bugs&view=board",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "mode": "full page",
+      "files": [
+        "04-bug-board__r01-c01.png",
+        "04-bug-board__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
+    },
+    {
+      "file": "05-test-plans__r01-c01.png",
+      "url": "http://127.0.0.1:4192/#section=plans&view=board",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "mode": "full page",
+      "files": [
+        "05-test-plans__r01-c01.png",
+        "05-test-plans__r01-c02.png"
+      ],
+      "originalDimensions": {
+        "width": 1440,
+        "height": 1000
+      },
+      "tileGrid": {
+        "rows": 1,
+        "columns": 2
+      },
+      "tileOverlapPixels": 64
+    },
+    {
+      "file": "06-mobile-bugs.png",
+      "url": "http://127.0.0.1:4192/#section=bugs&view=board",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "mode": "full page"
+    },
+    {
+      "file": "07-mobile-dashboard.png",
+      "url": "http://127.0.0.1:4192/#section=dashboard&view=board",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "mode": "full page"
+    },
+    {
+      "file": "08-mobile-detail.png",
+      "url": "http://127.0.0.1:4192/#section=dashboard&view=board&record=AF-d67c0d439105bbea3fd7&kind=bugs",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "mode": "full page"
+    }
+  ]
+}

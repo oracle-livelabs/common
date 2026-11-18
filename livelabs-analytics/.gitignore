@@ -14,6 +14,10 @@ public/
 .cache/
 coverage/
 .tmp/
+/archive/
+/output/screenshots/
+/dev/admin/archive/
+/assets/data/views-wms-contact-index.js
 
 # System files
 .DS_Store
@@ -35,6 +39,7 @@ Wallet_*/
 *.sso
 *.jks
 backend.env
+/.private/
 
 # This project is a static hosted-file bundle. Backend, database, VM, and admin
 # material belongs in the migration archive, not in the deployable subtree.
@@ -68,10 +73,18 @@ venv/
 __codex_*
 MISSING_MARKDOWN_DETAILS_LOG_*.md
 LiveLabs_Analytics_Dashboard_*/
+/dev/reports/dashboard-state-*.json
 test-results/
 playwright-report/
 /.ci-release/
 /.ci-preflight.json
+/dev/.ci-release/
+/dev/.ci-release.previous-*/
+/dev/.ci-preflight.json
+/dev/releases/
+/dev/migration-audit/
+/dev/snapshots/
+/dev/logs/
 
 # Local QA planning and source datasets
 QA_TEST_PLAN.md

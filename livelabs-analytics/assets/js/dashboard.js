@@ -70,19 +70,9 @@
     const defaultPageSize = 20;
     const rankedDefaultPageSize = 10;
     const pageSizeSteps = [10, 20, 40, 60, 80, 100, 120, 140];
-    const rankedTop100TableIds = new Set([
-      "top-performer-top-100-workshops",
-      "top-performer-top-100-sprints",
-      "at-risk-top-100-workshops",
-      "at-risk-top-100-sprints",
-      "retire-now-top-100-workshops",
-      "retire-now-top-100-sprints"
-    ]);
+    const rankedTop100TableIds = new Set(['top-performers-table', 'at-risk-table', 'retirement-review-table', 'jenkins-p1-action-table']);
     const tenRowDefaultTableIds = new Set([
-      ...rankedTop100TableIds,
-      "replacement-recommendations",
-      "disabled-workshops",
-      "disabled-sprints"
+      ...rankedTop100TableIds
     ]);
     function defaultPageSizeForWrapper(wrapper) {
       return tenRowDefaultTableIds.has(wrapper?.dataset?.filterTable) ? rankedDefaultPageSize : defaultPageSize;
@@ -101,6 +91,10 @@
         const originalIndexB = Number(rowB.dataset.originalIndex || 0);
         if (!activeColumnIndex || activeDirection === "none") return originalIndexA - originalIndexB;
         const headerCell = wrapper.querySelector(`th[data-sort-column-index="${activeColumnIndex}"]`);
+        if (wrapper.dataset.reviewPriority === "true" && dashboardTableHeaderLabel(headerCell) === "score") {
+          const bandDifference = Number(rowA.dataset.reviewOrder || 0) - Number(rowB.dataset.reviewOrder || 0);
+          if (bandDifference) return bandDifference;
+        }
         const sortType = headerCell?.dataset.sortType || "text";
         const cellA = rowA.querySelectorAll("td[data-sort-value]")[Number(activeColumnIndex)];
         const cellB = rowB.querySelectorAll("td[data-sort-value]")[Number(activeColumnIndex)];
@@ -125,6 +119,7 @@
       return rows;
     }
     function isActiveFilter(control) {
+      if (control.type === "checkbox") return control.checked;
       if (control.dataset.filterMode === "no-author") return control.checked === true;
       if (control.dataset.filterMode === "demand-protected") return control.checked === true;
       return normalizeFilterText(control.value) !== "";
@@ -136,10 +131,32 @@
         .split(/[;|]+/)
         .some((part) => normalizeFilterText(part) === normalizedQuery);
     }
+    function recordContactSearchText(record) {
+      const values = [record?.owner || ""];
+      [record?.values, record?.details].forEach((fields) => {
+        if (!(fields instanceof Map)) return;
+        fields.forEach((value, label) => {
+          if (/author|owner|support|technical|tech contact|manager|workshop team|contact/i.test(String(label))) values.push(String(value || ""));
+        });
+      });
+      return normalizeFilterText(values.filter(Boolean).join(" "));
+    }
+    function rowMatchesContactFilter(row, query) {
+      if (!publicRecordByLiveLabsId.size) return false;
+      const id = String(row?.dataset?.livelabsId || "").trim();
+      const record = publicRecordByLiveLabsId.get(id);
+      return Boolean(record && recordContactSearchText(record).includes(query));
+    }
     function rowMatchesFilters(row, filters) {
       if (row.dataset.qaAnalyticsExcluded === "true") return false;
+      const selectedFocus = filters.filter(control => control.dataset.filterMode === 'review-focus' && control.checked).map(control => control.value);
+      const rowFocus = JSON.parse(row.dataset.reviewFocus || '[]');
+      if (selectedFocus.length && !selectedFocus.some(focus => rowFocus.includes(focus))) return false;
       const cells = row.querySelectorAll("td[data-filter-value]");
       return filters.every((control) => {
+        if (control.dataset.filterMode === 'review-focus') return true;
+        if (control.dataset.filterMode === 'content-type') return !control.value || control.value === row.dataset.contentType;
+        if (control.dataset.filterMode === "review-tier") return !control.value || row.dataset.reviewTier === control.value;
         if (control.dataset.filterMode === "no-author") {
           return control.checked !== true || row.dataset.noAuthor === "true";
         }
@@ -148,6 +165,13 @@
         }
         const query = normalizeFilterText(control.value);
         if (!query) return true;
+        if (control.dataset.filterMode === "record-contact") {
+          return rowMatchesContactFilter(row, query);
+        }
+        if (control.dataset.filterMode === "table-search") {
+          const visibleText = Array.from(cells, (cell) => cell.dataset.filterValue || cell.textContent || "").join(" ");
+          return normalizeFilterText(visibleText).includes(query) || rowMatchesContactFilter(row, query);
+        }
         const columnIndex = Number(control.dataset.columnIndex);
         const cell = cells[columnIndex];
         if (!cell) return false;
@@ -161,10 +185,10 @@
     function filterLabelFor(control) {
       return control.closest(".filter-field")?.querySelector("span")?.textContent || "";
     }
-    function enhanceCategoryFilters() {
-      document.querySelectorAll('[data-table-filter]').forEach((control) => {
+    function enhanceCategoryFilters(root = document) {
+      root.querySelectorAll?.('[data-table-filter]').forEach((control) => {
         if (control.tagName.toLowerCase() === "select") return;
-        if (normalizeFilterText(filterLabelFor(control)) !== "category") return;
+        if (!["category", "council"].includes(normalizeFilterText(filterLabelFor(control)))) return;
         const tableId = control.dataset.tableFilter;
         const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
         if (!wrapper) return;
@@ -189,7 +213,7 @@
         });
         const allOption = document.createElement("option");
         allOption.value = "";
-        allOption.textContent = "All categories";
+        allOption.textContent = normalizeFilterText(filterLabelFor(control)) === "council" ? "All councils" : "All categories";
         select.appendChild(allOption);
         Array.from(categories.entries())
           .sort((entryA, entryB) => textSortCollator.compare(entryA[1], entryB[1]))
@@ -271,10 +295,13 @@
     function tableSortOptionsFor(tableId) {
       const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
       if (!wrapper) return [];
-      return Array.from(wrapper.querySelectorAll("th[data-sort-column-index]")).map((headerCell) => ({
+      return Array.from(wrapper.querySelectorAll("th[data-sort-column-index]"))
+        .filter((headerCell) => !headerCell.hidden && headerCell.getAttribute("aria-hidden") !== "true")
+        .map((headerCell) => ({
         label: (headerCell.querySelector("button")?.textContent || headerCell.textContent || `Column ${Number(headerCell.dataset.sortColumnIndex || 0) + 1}`).trim(),
         value: headerCell.dataset.sortColumnIndex || ""
-      })).filter((option) => option.label && option.value !== "" && option.label !== "#");
+        }))
+        .filter((option) => option.label && option.value !== "" && option.label !== "#");
     }
     function syncTableSortSelect(select, tableId, selectedValue) {
       const options = tableSortOptionsFor(tableId);
@@ -636,7 +663,8 @@
       });
     }
     function scheduleInitialTableSetup() {
-      const setup = () => initializeTablesIn(document);
+      const endLoading = window.LiveLabsLoading.begin('Preparing dashboard tables…');
+      const setup = () => { try { initializeTablesIn(document); } finally { endLoading(); } };
       if (typeof window.requestIdleCallback === "function") {
         window.requestIdleCallback(setup, { timeout: 900 });
       } else {
@@ -740,13 +768,13 @@
     }
     function sourceRowsHtml(record) {
       const rows = Array.from(record.values.entries())
-        .filter(([label, value]) => label && value && normalizeFilterText(label) !== "source")
+        .filter(([label, value]) => label && value && normalizeFilterText(label) !== "source" && !label.startsWith("QA ") && !/jenkins error score|analytics qa error score/i.test(label))
         .map(([label, value]) => `<tr><th>${escapeHtml(label)}</th><td>${escapeHtml(displayDetailValue(label, value))}</td></tr>`);
       return rows.length ? rows.join("") : `<tr><td colspan="2">No dashboard row fields available.</td></tr>`;
     }
     function summaryItemsFor(record) {
       const ids = [record.wmsId ? `WMS ${record.wmsId}` : "", record.livelabsId ? `LiveLabs ${record.livelabsId}` : ""].filter(Boolean).join(" | ");
-      const score = labeledValue(record, ["Score", "Retire Score", "Replacement Score", "Similarity Score"]);
+      const score = labeledValue(record, ["Score", "Retire Score"]);
       const views12m = labeledValue(record, ["Views 12m", "Recent Views 12m", "Page Views 12m"]);
       const views90d = labeledValue(record, ["Views 90d", "Recent Views 90d", "Page Views 90d"]);
       return [
@@ -766,6 +794,7 @@
         ["WMS ID", record.wmsId || "N/A"],
         ["LiveLabs ID", record.livelabsId || "N/A"],
         ["Owner", record.owner || "N/A"],
+        record.details.get("Ownership Status") ? ["Ownership Status", record.details.get("Ownership Status")] : null,
         ["Publish Status", record.details.get("Publish Status") || "N/A"],
         ["Publish Type", record.details.get("Publish Type") || "N/A"],
         ["Update Evidence", record.details.get("Update Evidence") || "N/A"],
@@ -867,13 +896,16 @@
         Array.from(details.values()).join(" "),
         siblingSearchText
       ].filter(Boolean).join(" "));
-      return {
+      const record = {
         category: raw?.category || "",
         details,
         family: raw?.family || null,
         fileUpdates,
         livelabsId: String(raw?.livelabsId || ""),
         owner: cleanContactEnumeration(raw?.owner || ""),
+        ownership: raw?.ownership || null,
+        qa: raw?.qa || null,
+        review: raw?.review || null,
         recordKey: raw?.key || "",
         row: null,
         searchable,
@@ -885,6 +917,7 @@
         values,
         wmsId: String(raw?.wmsId || "")
       };
+      return applyJenkinsMergeToRecord(record);
     }
     function mergeSearchRecords(...recordSets) {
       const merged = new Map();
@@ -905,8 +938,9 @@
           category: existing.category || record.category,
           details,
           family: existing.family || record.family,
+          qa: record.qa || existing.qa || null,
           fileUpdates: existing.fileUpdates?.length ? existing.fileUpdates : record.fileUpdates,
-          owner: existing.owner || record.owner,
+          owner: existing.ownership?.status === "disputed" ? "" : existing.owner || record.owner,
           recordKey: key,
           row: existing.row || record.row,
           searchable: normalizeFilterText([record.searchable, existing.searchable].join(" ")),
@@ -920,28 +954,402 @@
       searchRecordByKey = merged;
       return Array.from(merged.values());
     }
+    function loadFilePortfolioPayload() {
+      const existing = globalThis.__livelabsPortfolioInventoryPayload;
+      if (existing) return Promise.resolve(existing);
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = new URL("./inventory/data/portfolio_inventory.file.js", document.baseURI).href;
+        script.onload = () => globalThis.__livelabsPortfolioInventoryPayload
+          ? resolve(globalThis.__livelabsPortfolioInventoryPayload)
+          : reject(new Error("The file-safe Inventory payload did not register."));
+        script.onerror = () => reject(new Error("The file-safe Inventory payload could not be loaded."));
+        document.head.append(script);
+      });
+    }
+    const dashboardPageConfig = {
+      performance: { sections: ["top-performers"] },
+      urgent: { sections: [] },
+      "at-risk": { sections: ["at-risk-content"] },
+      retirement: { sections: ["retire-now-content"] }
+    };
+    const dashboardSectionPage = {
+      "top-performers": "performance",
+      "jenkins-p1-slot": "urgent",
+      "at-risk-content": "at-risk",
+      "retire-now-content": "retirement",
+      "portfolio-stats": "performance"
+    };
+    const dashboardSectionMembership = {
+      "top-performers": "performance",
+      "at-risk-content": "at-risk",
+      "retire-now-content": "retirement"
+    };
+    function normalizeDashboardPage(value) {
+      const normalized = String(value || "overview").trim().toLowerCase();
+      if (normalized === "inventory") return "inventory";
+      const aliases = {
+        overview: "performance", dashboard: "performance", stats: "performance", tops: "performance",
+        errors: "at-risk", "at-risk-content": "at-risk", p1: "urgent", "p1-urgent-action": "urgent",
+        "immediate-retirement": "retirement"
+      };
+      const page = aliases[normalized] || normalized;
+      return dashboardPageConfig[page] ? page : "performance";
+    }
+    function applyDashboardPageView(value) {
+      const page = normalizeDashboardPage(value);
+      document.body.dataset.dashboardPage = page;
+      const sectionSettings = { "top-performers": "topPerformers", "at-risk-content": "atRiskContent", "retire-now-content": "retireNowContent", "portfolio-stats": "portfolioStats" };
+      document.querySelectorAll("[data-dashboard-page]").forEach((element) => {
+        const pages = String(element.dataset.dashboardPage || "").split(/\s+/);
+        const settingKey = sectionSettings[element.id];
+        const adminVisible = !settingKey || dashboardAdminState.sectionVisibility?.[settingKey] !== false;
+        element.hidden = (!pages.includes("all") && !pages.includes(page)) || !adminVisible;
+      });
+      document.querySelectorAll("[data-dashboard-tab]").forEach((tab) => {
+        const selected = tab.dataset.dashboardTab === page;
+        tab.setAttribute("aria-selected", selected ? "true" : "false");
+        tab.tabIndex = selected ? 0 : -1;
+      });
+      return page;
+    }
+    const lazySectionLoads = new Map();
+    function lazySectionPlaceholder(sectionId) {
+      return document.querySelector(`[data-lazy-section="${sectionId}"]`);
+    }
+    function lazySectionError(section, message) {
+      section.dataset.lazyError = "true";
+      section.setAttribute("aria-busy", "false");
+      const panel = section.querySelector(".lazy-section-panel");
+      if (panel) panel.innerHTML = `<p class="lazy-section-status" role="alert">${escapeHtml(message)}</p>`;
+    }
+    async function loadLazySection(sectionId) {
+      const placeholder = lazySectionPlaceholder(sectionId);
+      if (!placeholder) return document.getElementById(sectionId);
+      if (location.protocol === "file:") {
+        lazySectionError(placeholder, "This review queue needs an HTTP(S) server or the OCI tenancy URL. Inventory remains available from this local file.");
+        return placeholder;
+      }
+      if (lazySectionLoads.has(sectionId)) return lazySectionLoads.get(sectionId);
+      placeholder.setAttribute("aria-busy", "true");
+      const panel = placeholder.querySelector(".lazy-section-panel");
+      if (panel) panel.innerHTML = "<p>Loading review queue…</p>";
+      const request = fetch(placeholder.dataset.lazySrc, { credentials: "same-origin" })
+        .then((response) => {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return response.text();
+        })
+        .then((markup) => {
+          const template = document.createElement("template");
+          template.innerHTML = markup.trim();
+          const section = template.content.firstElementChild;
+          if (!(section instanceof HTMLElement) || section.tagName !== "SECTION" || section.id !== sectionId) {
+            throw new Error("fragment has an invalid section root");
+          }
+          section.dataset.dashboardPage = dashboardSectionMembership[sectionId] || dashboardSectionPage[sectionId] || "overview";
+          const tabLabels = {
+            "top-performers": "dashboard-tab-performance",
+            "at-risk-content": "dashboard-tab-at-risk",
+            "retire-now-content": "dashboard-tab-retirement"
+          };
+          if (tabLabels[sectionId]) {
+            section.classList.add("dashboard-tab-panel");
+            section.setAttribute("role", "tabpanel");
+            section.setAttribute("aria-labelledby", tabLabels[sectionId]);
+            section.tabIndex = 0;
+          }
+          placeholder.replaceWith(section);
+          normalizeRankedTablePresentation(section);
+          updateJenkinsScoreExplanations(section);
+          applyDashboardPageView(document.body.dataset.dashboardPage || "overview");
+          normalizeSectionLinks(section);
+          applyRankedTableDisclosures();
+          applyQaExceptionPrototype();
+          applyAdminRowOverrides();
+          applyNoAuthorGovernanceFlags();
+          applyDemandProtectedGovernanceFlags();
+          decorateDashboardCopyTargets(section);
+          applySectionVisibilitySettings();
+          enhanceCategoryFilters(section);
+          initializeTablesIn(section);
+          applyJenkinsMergeToRankedTables();
+          tableSearchRecordsCache = null;
+          refreshDashboardSearch();
+          return section;
+        })
+        .catch((error) => {
+          lazySectionLoads.delete(sectionId);
+          const current = lazySectionPlaceholder(sectionId);
+          if (current) lazySectionError(current, `Could not load this review queue (${error.message}).`);
+          window.LiveLabsLoading.fail('A review queue could not be loaded. Please try again.');
+          return current;
+        });
+      lazySectionLoads.set(sectionId, request);
+      return window.LiveLabsLoading.track(request, 'Loading review queues…');
+    }
+    function normalizeSectionLinks(container = document) {
+      container.querySelectorAll('a[href^="#"]').forEach(link => {
+        const hash = link.getAttribute('href');
+        link.dataset.sectionHash = hash;
+        const target = link.classList.contains('skip-link') ? new URL(location.href)
+          : new URL(location.protocol === 'file:' ? 'index.html' : 'dashboard/', document.baseURI);
+        target.hash = hash;
+        link.href = target.href;
+      });
+    }
+    function configureLazySections() {
+      document.addEventListener("click", (event) => {
+        const anchor = event.target.closest('a[data-section-hash], a[href^="#"]');
+        const sectionId = anchor?.hash?.slice(1);
+        if (!sectionId || event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        const targetPage = dashboardSectionPage[sectionId];
+        if (targetPage && targetPage !== normalizeDashboardPage(document.body.dataset.dashboardPage)) {
+          event.preventDefault();
+          window.setDashboardPage?.(targetPage, { targetHash: anchor.hash, updateUrl: true });
+          return;
+        }
+        event.preventDefault();
+        if (anchor.classList.contains('skip-link')) {
+          document.getElementById(sectionId)?.scrollIntoView({ block: 'start' });
+          return;
+        }
+        if (!lazySectionPlaceholder(sectionId)) {
+          history.pushState(null, '', anchor.href);
+          document.getElementById(sectionId)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+          return;
+        }
+        loadLazySection(sectionId).then((section) => {
+          history.pushState(null, "", anchor.href);
+          section?.scrollIntoView({ block: "start", behavior: "smooth" });
+        });
+      });
+      const route = readSearchUrlState();
+      const isInventory = document.body.classList.contains('dashboard-inventory-active');
+      const needsDashboard = !isInventory && !hasSearchIdentity(route) && !route.query;
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          observer.unobserve(entry.target);
+          void loadLazySection(entry.target.dataset.lazySection);
+        });
+      });
+      document.querySelectorAll('[data-lazy-section]').forEach(section => observer.observe(section));
+      if (needsDashboard) {
+        const page = normalizeDashboardPage(document.body.dataset.dashboardPage);
+        (dashboardPageConfig[page]?.sections || []).forEach((sectionId) => void loadLazySection(sectionId));
+      }
+      const initialSectionId = location.hash.slice(1);
+      if (initialSectionId && lazySectionPlaceholder(initialSectionId)) {
+        const targetPage = dashboardSectionPage[initialSectionId];
+        if (targetPage && targetPage !== normalizeDashboardPage(document.body.dataset.dashboardPage)) {
+          window.setDashboardPage?.(targetPage, { targetHash: location.hash, updateUrl: false });
+        } else {
+          loadLazySection(initialSectionId).then((section) => section?.scrollIntoView({ block: "start" }));
+        }
+      }
+    }
+    function dashboardRecordValue(record, label) {
+      const pair = (record?.values || []).find((item) => Array.isArray(item) && item[0] === label);
+      const value = Number(String(pair?.[1] ?? "").replace(/,/g, ""));
+      return Number.isFinite(value) ? value : null;
+    }
+    function dashboardRecordDate(record) {
+      const details = new Map((record?.details || []).filter((item) => Array.isArray(item) && item.length >= 2));
+      const candidates = [
+        details.get("Last Meaningful Workshop Update"),
+        details.get("Latest Workshop Commit Date"),
+        details.get("Latest GitHub Update"),
+        details.get("Latest Repository Update Proxy"),
+        details.get("WMS Last Update"),
+        record?.update
+      ];
+      for (const candidate of candidates) {
+        const text = String(candidate || "").trim();
+        const parsed = new Date(/^\d{4}-\d{2}-\d{2}$/.test(text) ? `${text}T00:00:00Z` : text);
+        if (!Number.isNaN(parsed.getTime())) return parsed;
+      }
+      return null;
+    }
+    const portfolioMetricTooltips = {
+      "public-count": "Counts workshops and sprints that are both Published and Public. These items are available in author search and dashboard rankings.",
+      "error-items-count": "Public items with at least one P2 or P3 finding. Each item counts once; P1-only items are covered by the separate P1 findings card. Unclassified findings remain in record details.",
+      "jenkins-p1-count": "P1 means an issue may stop a learner—for example, a required link or image is broken, or a step cannot be completed. From the Dashboard, open P1 urgent action, check the evidence, and fix confirmed issues. If you cannot reproduce one, ask a reviewer to verify it.",
+      "jenkins-match-count": "Counts public, published items matched to a row in the applied Jenkins report. A match means evidence is available; it does not mean errors were found."
+    };
+    function addPortfolioMetricTooltips(root = document) {
+      root.querySelectorAll?.(".metric-card [data-overview-metric]").forEach((metric) => {
+        const copy = portfolioMetricTooltips[metric.dataset.overviewMetric];
+        const card = metric.closest(".metric-card");
+        const title = card?.querySelector(":scope > span");
+        if (!copy || !card || !title || card.dataset.metricTooltip === "true") return;
+        const titleText = title.textContent.trim();
+        const tooltipId = `metric-tooltip-${metric.dataset.overviewMetric}`;
+        const heading = document.createElement("div");
+        heading.className = "metric-card-heading";
+        const helpWrap = document.createElement("span");
+        helpWrap.className = "metric-help-wrap";
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "metric-help-button";
+        button.setAttribute("aria-label", `About ${titleText}`);
+        button.setAttribute("aria-describedby", tooltipId);
+        button.textContent = "i";
+        const tooltip = document.createElement("span");
+        tooltip.id = tooltipId;
+        tooltip.className = "metric-tooltip";
+        tooltip.setAttribute("role", "tooltip");
+        tooltip.textContent = copy;
+        card.insertBefore(heading, title);
+        heading.append(title, helpWrap);
+        helpWrap.append(button, tooltip);
+        card.dataset.metricTooltip = "true";
+      });
+    }
+    function updatePortfolioStatsFromPayload(payload) {
+      const records = Array.isArray(payload?.records) ? payload.records : [];
+      if (!records.length) return;
+      const active = records.filter((record) => record.publishType === "Public" && record.publishStatus === "Published");
+      const byType = (type) => active.filter((record) => record.type === type);
+      const disabled = [];
+      const events = [];
+      const notPublished = [];
+      const infoRows = Array.from(document.querySelectorAll("#portfolio-stats .info-table tr"));
+      const setInfo = (label, value) => {
+        const row = infoRows.find((item) => item.querySelector("th")?.textContent.trim() === label);
+        const cell = row?.querySelector("td");
+        if (cell) cell.textContent = String(value);
+      };
+      setInfo("Active workshops", byType("Workshop").length);
+      setInfo("Active sprints", byType("Sprint").length);
+      setInfo("Disabled workshops", disabled.filter((record) => record.type === "Workshop").length);
+      setInfo("Disabled sprints", disabled.filter((record) => record.type === "Sprint").length);
+      setInfo("Events excluded", events.length);
+      setInfo("Not published", notPublished.length);
+      const matchedTwelveMonth = active.filter((record) => dashboardRecordValue(record, "Views - Last 12 Months") !== null).length;
+      setInfo("Dashboard rows matched to WMS (12m)", active.length ? `${((matchedTwelveMonth / active.length) * 100).toFixed(2)}%` : "N/A");
+      const snapshotDate = new Date(`${payload.metadata?.snapshot_date || "2026-09-28"}T00:00:00Z`);
+      const ageDays = (record) => {
+        const updated = dashboardRecordDate(record);
+        return updated ? Math.max(0, Math.floor((snapshotDate - updated) / 86400000)) : null;
+      };
+      const updatedInYear = active.filter((record) => ageDays(record) !== null && ageDays(record) <= 365);
+      const aged18to24 = active.filter((record) => ageDays(record) !== null && ageDays(record) > 548 && ageDays(record) <= 730);
+      const thousandPlus = active.filter((record) => (dashboardRecordValue(record, "Views - Last 12 Months") || 0) >= 1000);
+      const glance = document.querySelector('[data-portfolio-glance="true"]');
+      if (glance) {
+        const strongValues = glance.querySelectorAll(".portfolio-glance-card strong");
+        const smallValues = glance.querySelectorAll(".portfolio-glance-card small");
+        const workshopCount = byType("Workshop").length;
+        const sprintCount = byType("Sprint").length;
+        if (strongValues[0]) strongValues[0].textContent = String(active.length);
+        if (strongValues[1]) strongValues[1].textContent = String(updatedInYear.length);
+        if (strongValues[2]) strongValues[2].textContent = String(aged18to24.length);
+        if (strongValues[3]) strongValues[3].textContent = String(thousandPlus.length);
+        if (smallValues[0]) smallValues[0].textContent = `${workshopCount} workshops · ${sprintCount} sprints`;
+        if (smallValues[1]) smallValues[1].textContent = `${updatedInYear.filter((record) => record.type === "Workshop").length} workshops · ${updatedInYear.filter((record) => record.type === "Sprint").length} sprints`;
+        if (smallValues[2]) smallValues[2].textContent = `${aged18to24.filter((record) => record.type === "Workshop").length} workshops · ${aged18to24.filter((record) => record.type === "Sprint").length} sprints`;
+        if (smallValues[3]) smallValues[3].textContent = `${thousandPlus.filter((record) => record.type === "Workshop").length} workshops · ${thousandPlus.filter((record) => record.type === "Sprint").length} sprints`;
+        const glanceNote = glance.querySelector(".note");
+        if (glanceNote) glanceNote.textContent = `A quick read across four portfolio metrics. The active portfolio contains ${active.length} items: ${workshopCount} workshops and ${sprintCount} sprints.`;
+      }
+      const demandBands = [
+        ["5,000+ views", (value) => value >= 5000],
+        ["1,000-4,999 views", (value) => value >= 1000 && value < 5000],
+        ["250-999 views", (value) => value >= 250 && value < 1000],
+        ["50-249 views", (value) => value >= 50 && value < 250],
+        ["Under 50 views", (value) => value < 50]
+      ];
+      const stalenessBands = [
+        ["Updated in last 12 months", (days) => days <= 365],
+        ["Stale: 12-18 months", (days) => days > 365 && days <= 548],
+        ["Stale: 18-24 months", (days) => days > 548 && days <= 730],
+        ["Stale: 24+ months", (days) => days > 730]
+      ];
+      const updateChart = (heading, type, classifier, values, note) => {
+        const panel = Array.from(document.querySelectorAll("#portfolio-stats .chart-card")).find((item) => item.querySelector("h3")?.textContent.trim() === heading);
+        if (!panel) return;
+        const rows = Array.from(panel.querySelectorAll(".chart-row"));
+        const counts = new Map(classifier.map(([label]) => [label, 0]));
+        values.forEach((value) => {
+          const bucket = classifier.find(([, predicate]) => predicate(value));
+          if (bucket) counts.set(bucket[0], counts.get(bucket[0]) + 1);
+        });
+        const maximum = Math.max(...counts.values(), 1);
+        rows.forEach((row) => {
+          const label = row.querySelector("strong")?.textContent.trim();
+          if (!counts.has(label)) return;
+          const count = counts.get(label);
+          const countNode = row.querySelector(".chart-head span");
+          const noteNode = row.querySelector(".chart-note");
+          const fill = row.querySelector(".bar-fill");
+          if (countNode) countNode.textContent = `${count} ${type}`;
+          if (noteNode) noteNode.textContent = `${count} ${type} are in this band.`;
+          if (fill) fill.style.setProperty("--bar-width", `${((count / maximum) * 100).toFixed(1)}%`);
+        });
+        const noteNode = panel.querySelector(".note");
+        if (noteNode) noteNode.textContent = note;
+      };
+      for (const type of ["Workshop", "Sprint"]) {
+        const current = byType(type);
+        const demandValues = current.map((record) => dashboardRecordValue(record, "Views - Last 12 Months")).filter((value) => value !== null);
+        updateChart(`${type} Demand Bands`, `${type.toLowerCase()}s`, demandBands, demandValues, `Count of active ${type.toLowerCase()}s by 12-month demand band. Rows without a matched 12-month view are excluded from these five bands.`);
+        const ageValues = current.map((record) => dashboardRecordDate(record)).filter(Boolean).map((value) => Math.max(0, Math.floor((snapshotDate - value) / 86400000)));
+        updateChart(`${type} Staleness Bands`, `${type.toLowerCase()}s`, stalenessBands, ageValues, `Count of ${type.toLowerCase()}s by update age using available WMS/GitHub evidence; GitHub evidence is dated 14-15 August 2026.`);
+      }
+    }
+    function normalizePortfolioPayload(payload) {
+      portfolioInventoryMetadata = payload?.metadata || null;
+      const normalized = {
+        metadata: portfolioInventoryMetadata,
+        records: Array.isArray(payload?.records) ? payload.records : []
+      };
+      updatePortfolioStatsFromPayload(normalized);
+      return normalized;
+    }
     function loadCanonicalPortfolioPayload() {
       if (portfolioPayloadPromise) return portfolioPayloadPromise;
       if (typeof fetch !== "function") {
         portfolioPayloadPromise = Promise.resolve({ metadata: null, records: [] });
         return portfolioPayloadPromise;
       }
-      portfolioPayloadPromise = fetch("./data/portfolio_inventory.json", { cache: "no-cache" })
+      if (location.protocol === "file:") {
+        portfolioPayloadPromise = loadFilePortfolioPayload().then(normalizePortfolioPayload);
+        return portfolioPayloadPromise;
+      }
+      portfolioPayloadPromise = fetch("./inventory/data/public_portfolio_inventory.json", { cache: "no-cache" })
         .then((response) => response.ok ? response.json() : Promise.reject(new Error(`HTTP ${response.status}`)))
-        .then((payload) => {
-          portfolioInventoryMetadata = payload?.metadata || null;
-          return {
-            metadata: portfolioInventoryMetadata,
-            records: Array.isArray(payload?.records) ? payload.records : []
-          };
-        });
+        .then(normalizePortfolioPayload);
       return portfolioPayloadPromise;
+    }
+    let authorScoreBaselines = {};
+    function recordScore(record, context = scoreContext()) {
+      const baseline = authorScoreBaselines[String(record.livelabsId)]?.[context];
+      return baseline == null ? null : mergeScoreForTable({mode: context}, baseline, jenkinsOverlayForId(record.livelabsId));
+    }
+    function scoreContext() { return new URLSearchParams(location.search).get('score_context') === 'risk' ? 'risk' : 'performance'; }
+    function recordLink(record, context = 'performance') {
+      return new URL(`search/?livelabs_id=${encodeURIComponent(record.livelabsId)}&score_context=${context}`, document.baseURI).href;
     }
     function loadFullSearchRecords() {
       if (fullSearchRecordsPromise) return fullSearchRecordsPromise;
-      fullSearchRecordsPromise = loadCanonicalPortfolioPayload()
-        .then((payload) => payload.records.map(fullIndexRecordToSearchRecord))
-        .catch(() => []);
+      fullSearchRecordsLoadState = "loading";
+      fullSearchRecordsPromise = Promise.all([loadCanonicalPortfolioPayload(), fetch('./assets/data/score-baselines.json', {cache:'no-cache'}).then(response => response.ok ? response.json() : {}).catch(() => ({}))])
+        .then(([payload, scores]) => {
+          authorScoreBaselines = scores.records || {};
+          portfolioInventoryMetadata = payload.metadata || null;
+          publicRawRecords = Array.isArray(payload.records) ? payload.records : [];
+          publicLivelabsIds = new Set(publicRawRecords.map((record) => String(record.livelabsId || "").trim()).filter(Boolean));
+          loadedFullSearchRecords = publicRawRecords.map(fullIndexRecordToSearchRecord);
+          publicRecordByLiveLabsId = new Map(loadedFullSearchRecords.filter(record => String(record.livelabsId || '').trim())
+            .map(record => [String(record.livelabsId).trim(), record]));
+          fullSearchRecordsLoadState = "loaded";
+          return loadedFullSearchRecords;
+        })
+        .catch(() => {
+          fullSearchRecordsLoadState = "unavailable";
+          return [];
+        });
       return fullSearchRecordsPromise;
     }
     function portfolioInventoryRecordToSearchRecord(raw) {
@@ -971,20 +1379,26 @@
         .catch((error) => {
           portfolioInventoryMetadata = null;
           window.__portfolioInventoryError = `Portfolio inventory load failed. ${error?.stack || error?.message || error || ""}`;
+          window.LiveLabsLoading.fail('Portfolio data could not be loaded. Please try again.');
           return [];
         });
       return portfolioInventoryRecordsPromise;
     }
     const adminStorageKey = "livelabsAnalyticsAdminState";
+    const qaMergeRefreshKey = "livelabsQaReportMergeRefresh";
     const sessionKey = "livelabsAnalyticsSession";
     const adminSessionDurationMs = 12 * 60 * 60 * 1000;
     const adminStateSchemaVersion = 3;
     const criteriaRuleAutomationPaused = true;
     const authorFacingGovernanceTagsHidden = true;
     let fullSearchRecordsPromise = null;
+    let publicRecordByLiveLabsId = new Map();
+    let fullSearchRecordsLoadState = "idle";
     let portfolioPayloadPromise = null;
     let portfolioInventoryRecordsPromise = null;
     let loadedFullSearchRecords = [];
+    let publicRawRecords = [];
+    let publicLivelabsIds = new Set();
     let portfolioInventoryMetadata = null;
     let portfolioInventoryLoadComplete = false;
     let tableSearchRecordsCache = null;
@@ -995,6 +1409,8 @@
     const allDataPageSizeSteps = [25, 50, 100, 250, 500, 1000, 1500, 2500, 5000, 10000];
     const allDataState = {
       coverage: "",
+      jenkinsData: "",
+      jenkinsPriority: "",
       page: 1,
       pageRange: "",
       pageSize: 100,
@@ -1015,7 +1431,11 @@
       { key: "wmsId", label: "WMS ID", type: "number" },
       { key: "livelabsId", label: "LiveLabs ID", type: "number" },
       { key: "category", label: "Category", type: "text" },
-      { key: "contact", label: "Contact", type: "text" }
+      { key: "contact", label: "Contact", type: "text" },
+      { key: "qaError", label: "Analytics QA Error Score", type: "number" },
+      { key: "jenkinsError", label: "Jenkins Error Score", type: "number" },
+      { key: "jenkinsPriority", label: "Jenkins Priority", type: "text" },
+      { key: "qaState", label: "QA Evidence", type: "text" }
     ];
     const allDataReviewGroupOptions = [
       { key: "no-author", label: "No author/contact gap" },
@@ -1027,14 +1447,14 @@
       { key: "missing", label: "Missing governance data" }
     ];
     const defaultTagDefinitions = [
-      { key: "no-author", label: "No Author", className: "governance-group-no-author" },
-      { key: "stale-high-demand", label: "Stale, High Demand", className: "governance-group-stale-high-demand" },
-      { key: "retirement-review", label: "Retirement Review", className: "governance-group-retire-review" },
-      { key: "refresh", label: "Refresh", className: "governance-group-stale-high-demand" },
-      { key: "keep", label: "Keep", className: "" },
-      { key: "inactive", label: "Inactive/Event", className: "governance-group-inactive" },
-      { key: "missing", label: "Missing Data", className: "governance-group-missing" },
-      { key: "manager-review", label: "Manager Review", className: "" }
+      { key: "no-author", label: "No Author", description: "Use this tag when an item does not identify an author or contact.", className: "governance-group-no-author" },
+      { key: "stale-high-demand", label: "Stale, High Demand", description: "Use this tag when content may be outdated but demand remains high.", className: "governance-group-stale-high-demand" },
+      { key: "retirement-review", label: "Retirement Review", description: "Use this tag when an item needs review for possible retirement.", className: "governance-group-retire-review" },
+      { key: "refresh", label: "Refresh", description: "Use this tag when an item should be refreshed or updated.", className: "governance-group-stale-high-demand" },
+      { key: "keep", label: "Keep", description: "Use this tag when an item should remain available.", className: "" },
+      { key: "inactive", label: "Inactive/Event", description: "Use this tag when an item is inactive or tied to a time-bound event.", className: "governance-group-inactive" },
+      { key: "missing", label: "Missing Data", description: "Use this tag when key item information is missing.", className: "governance-group-missing" },
+      { key: "manager-review", label: "Manager Review", description: "Use this tag when a manager needs to review an item or decision.", className: "" }
     ];
     const defaultTagClassByKey = new Map(defaultTagDefinitions.map((tag) => [tag.key, tag.className || ""]));
     const tagKeyBlocklist = new Set(["qa-excluded"]);
@@ -1064,8 +1484,6 @@
       topPerformers: true,
       atRiskContent: true,
       retireNowContent: true,
-      replacementSuggestions: true,
-      disabledContent: true,
       portfolioStats: true
     };
     const defaultAdminState = {
@@ -1087,14 +1505,575 @@
       manager: { details: ["Manager Email", "Owner Group", "Owner Email", "Author Email"], headers: ["Author Email", "Owner Group", "Manager Email", "Owner"] },
       monthsSinceUpdate: { details: ["Months Since Update", "Months Since Last Update"], headers: ["Stale Months", "Months Since Update"] },
       publishDate: { details: ["Publish Date Used", "First Workshop File Commit Date", "Publish Date"], headers: ["Publish Date"] },
-      score: { details: ["Score", "Best Performer Score", "Retire Score", "Replacement Similarity Score"], headers: ["Score", "Risk Score", "Retire Score", "Replacement Score"] },
+      score: { details: ["Score", "Best Performer Score", "Retire Score"], headers: ["Score", "Risk Score", "Retire Score"] },
       title: { details: ["Title"], headers: ["Title", "Current Item", "Candidate Title"] },
       views12m: { details: ["Views 12m", "Recent Views 12m", "Page Views 12m"], headers: ["Views 12m", "Recent Views 12m", "Page Views 12m"] },
       views90d: { details: ["Views 90d", "Recent Views 90d", "Page Views 90d"], headers: ["Views 90d", "Recent Views 90d", "Page Views 90d"] },
       wmsId: { details: ["WMS ID", "Current WMS ID", "Candidate WMS ID"], headers: ["WMS ID", "Current WMS ID", "Candidate WMS ID"] }
     };
     let dashboardAdminState = readDashboardAdminState();
+    let dashboardQaReportMerge = null;
     let refreshDashboardSearch = () => {};
+    function jenkinsOverlayForId(livelabsId) {
+      const overlay = dashboardQaReportMerge?.overlay?.[String(livelabsId || "")];
+      if (!overlay) return null;
+      const findings = Array.isArray(overlay.findings) ? overlay.findings : [];
+      const originalCounts = overlay.priorityCounts || {};
+      const occurrenceCount = (priority) => findings.filter((issue) => issue.priority === priority)
+        .reduce((sum, issue) => sum + Math.max(0, Number(issue.count || 0)), 0);
+      const priorityCounts = {
+        ...originalCounts,
+        unmapped: Number(originalCounts.unmapped ?? findings.filter((issue) => !["P1", "P2", "P3"].includes(issue.priority) && issue.group !== "internal-qa").length),
+        p3: Number(originalCounts.p3 || findings.filter((issue) => issue.priority === "P3").length),
+        p2Occurrences: Number(originalCounts.p2Occurrences ?? occurrenceCount("P2")),
+        p3Occurrences: Number(originalCounts.p3Occurrences ?? occurrenceCount("P3"))
+      };
+      const policy = overlay.scorePolicy || dashboardQaReportMerge.summary?.scorePolicy || {};
+      const weights = policy.weights || { P2: 2, P3: 1 };
+      const referenceBurden = Number(policy.referenceBurden || 20);
+      const validity = window.LiveLabsAuthor.qaValidity(overlay);
+      const score = validity !== 'scored' ? null : overlay.jenkinsErrorScore !== undefined
+        ? overlay.jenkinsErrorScore
+        : Number(priorityCounts.unmapped || 0) > 0
+          ? null
+          : (() => {
+            const burden = Number(weights.P2 || 2) * priorityCounts.p2Occurrences + Number(weights.P3 || 1) * priorityCounts.p3Occurrences;
+            return Math.round((10000 * burden / (burden + referenceBurden)) || 0) / 100;
+          })();
+      return { ...overlay, priorityCounts, jenkinsErrorScore: score, scoreState: validity === 'scored' && score === null ? 'unmapped-priority' : validity };
+    }
+    function jenkinsPrioritySummary(overlay) {
+      if (!overlay) return "No Jenkins report";
+      const counts = overlay.priorityCounts || {};
+      const parts = [];
+      ["p1", "p2", "p3"].forEach((key) => {
+        if (Number(counts[key] || 0)) parts.push(`${key.toUpperCase()} ${Number(counts[key]).toLocaleString()}`);
+      });
+      if (Number(counts.unmapped || 0)) parts.push(`Unmapped ${Number(counts.unmapped).toLocaleString()}`);
+      if (overlay.scoreState !== "scored") parts.push("QA incomplete");
+      return parts.join(" · ") || "No prioritized findings";
+    }
+    function applyJenkinsMergeToRecord(record) {
+      if (!record) return record;
+      const overlay = jenkinsOverlayForId(record.livelabsId);
+      record.jenkins = overlay;
+      record.jenkinsErrorScore = overlay?.jenkinsErrorScore ?? null;
+      record.jenkinsPrioritySummary = jenkinsPrioritySummary(overlay);
+      const findings = Array.isArray(overlay?.findings) ? overlay.findings : [];
+      record.jenkinsIssueCodes = Array.from(new Set(findings.map((issue) => String(issue.code || "").trim()).filter(Boolean))).join(" ");
+      record.jenkinsIssueSearch = findings.map((issue) => [issue.priority, issue.code, issue.label, issue.message, issue.file, issue.section].filter(Boolean).join(" ")).join(" ");
+      if (record.searchableBase === undefined) record.searchableBase = record.searchable || "";
+      record.searchable = normalizeFilterText([record.searchableBase, record.jenkinsPrioritySummary, record.jenkinsIssueCodes, record.jenkinsIssueSearch, overlay?.runId].filter(Boolean).join(" "));
+      ["Jenkins Error Score", "Jenkins Priority", "Jenkins Issue Codes", "Jenkins Issue Summary", "Jenkins Run ID"].forEach((key) => {
+        record.details?.delete?.(key);
+        record.values?.delete?.(key);
+      });
+      if (overlay) {
+        const details = record.details instanceof Map ? record.details : (record.details = new Map());
+        const values = record.values instanceof Map ? record.values : (record.values = new Map());
+        const fields = [
+          ["Jenkins Error Score", overlay.jenkinsErrorScore ?? "N/A"],
+          ["Jenkins Priority", record.jenkinsPrioritySummary],
+          ["Jenkins Issue Codes", record.jenkinsIssueCodes || "None reported"],
+          ["Jenkins Issue Summary", record.jenkinsIssueSearch || "No issue details reported"],
+          ["Jenkins Run ID", overlay.runId || "Not reported"]
+        ];
+        fields.forEach(([key, value]) => { details.set(key, String(value)); values.set(key, String(value)); });
+      }
+      return record;
+    }
+    function applyJenkinsMergeToLoadedRecords() {
+      const seen = new Set();
+      loadedFullSearchRecords.forEach((record) => {
+        if (!record || seen.has(record)) return;
+        seen.add(record);
+        applyJenkinsMergeToRecord(record);
+      });
+      searchRecordByKey.forEach(applyJenkinsMergeToRecord);
+      inventoryRecordByKey.forEach(applyJenkinsMergeToRecord);
+    }
+    const jenkinsRankedTableConfigs = [
+      { id: 'top-performers-table', mode: 'performance', scoreHeader: 'Score', idHeader: 'LiveLabs ID' },
+      { id: 'at-risk-table', mode: 'risk', scoreHeader: 'Score', idHeader: 'LiveLabs ID' },
+      { id: 'retirement-review-table', mode: 'risk', scoreHeader: 'Score', idHeader: 'LiveLabs ID' }
+    ];    function updateJenkinsScoreExplanations(root = document) {
+      const policy = dashboardQaReportMerge?.summary?.scorePolicy || {};
+      const configuredShare = Number(policy.tableShare ?? 0.25);
+      const jenkinsShare = Math.min(0.45, Math.max(0.05, Number.isFinite(configuredShare) ? configuredShare : 0.25));
+      const shares = { analytics: `${Math.round((1 - jenkinsShare) * 100)}%`, jenkins: `${Math.round(jenkinsShare * 100)}%` };
+      root.querySelectorAll("[data-score-share]").forEach((node) => {
+        const label = shares[node.dataset.scoreShare];
+        if (label) node.textContent = label;
+      });
+    }
+    function dashboardTableHeaderLabel(cell) {
+      return normalizeFilterText(cell?.querySelector("button")?.textContent || cell?.textContent || "");
+    }
+    function dashboardTableColumnIndex(wrapper, label) {
+      const wanted = normalizeFilterText(label);
+      return Array.from(wrapper?.querySelectorAll("thead tr:first-child th") || []).findIndex((cell) => {
+        const header = dashboardTableHeaderLabel(cell);
+        return header === wanted || (!header.startsWith("jenkins ") && header.endsWith(` ${wanted}`));
+      });
+    }
+    function dashboardTableCellForHeader(row, label) {
+      const index = dashboardTableColumnIndex(row?.closest("[data-filter-table]"), label);
+      return index < 0 ? null : row.querySelectorAll("td[data-filter-value]")[index] || null;
+    }
+    // Follow WMS identity/content/contact order, then retain Analytics-only fields.
+    // Missing WMS fields are skipped; presentation never adds or removes columns.
+    const rankedTableColumnOrder = ['LiveLabs ID', 'WMS ID', 'Title', 'Council', 'Production URL', 'Completion Date', 'Last Update', 'Author', 'Author Email', 'Author / owner', 'Support Contact Email', '#', 'Type', 'Review status', 'Views 12m', 'Views 90d', 'Score', 'Errors Found'];
+    function rankedTableDisplayLabel(label) {
+      const normalized = normalizeFilterText(label);
+      if (["category", "council area"].includes(normalized)) return "Council";
+      if (normalized === "last meaningful update") return "Last Update";
+      if (["score", "review score", "retire score"].includes(normalized)) return "Score";
+      if (normalized === "jenkins priority") return "Errors Found";
+      return label;
+    }
+    function normalizeRankedTablePresentation(root = document) {
+      if (!root?.querySelector) return;
+      [...jenkinsRankedTableConfigs, {id:'jenkins-p1-action-table', mode:'urgent'}].forEach((config) => {
+        const selector = `[data-filter-table="${config.id}"]`;
+        const wrapper = root.matches?.(selector) ? root : root.querySelector(selector);
+        const table = wrapper?.querySelector("table");
+        const headerRow = table?.querySelector("thead tr:first-child");
+        if (!wrapper || !table || !headerRow) return;
+        const entries = Array.from(headerRow.children).map((cell, currentIndex) => {
+          if (cell.dataset.rankedSourceColumnIndex === undefined) cell.dataset.rankedSourceColumnIndex = String(currentIndex);
+          const originalLabel = (cell.querySelector(".sort-button")?.textContent || cell.textContent || "").trim();
+          const label = rankedTableDisplayLabel(originalLabel);
+          const button = cell.querySelector(".sort-button");
+          if (button && label !== originalLabel) {
+            button.textContent = label;
+            button.title = `Sort by ${label}`;
+          }
+          const orderIndex = rankedTableColumnOrder.findIndex((candidate) => normalizeFilterText(candidate) === normalizeFilterText(label));
+          return { cell, currentIndex, label, sourceIndex: Number(cell.dataset.rankedSourceColumnIndex), orderIndex: orderIndex < 0 ? rankedTableColumnOrder.length : orderIndex };
+        }).sort((left, right) => left.orderIndex - right.orderIndex || left.currentIndex - right.currentIndex);
+        const newIndexByCurrentIndex = new Map();
+        entries.forEach((entry, newIndex) => {
+          newIndexByCurrentIndex.set(entry.currentIndex, newIndex);
+          entry.cell.dataset.sortColumnIndex = String(newIndex);
+          entry.cell.dataset.columnLabel = entry.label;
+          const button = entry.cell.querySelector(".sort-button");
+          if (button) button.dataset.columnIndex = String(newIndex);
+          headerRow.appendChild(entry.cell);
+        });
+        const targetColumnOrder = entries.map((entry) => entry.sourceIndex);
+        table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach((row) => {
+          const rowCells = Array.from(row.children).filter((cell) => cell.tagName === "TD");
+          if (rowCells.length !== entries.length) return;
+          let currentColumnOrder = row.dataset.rankedColumnOrder
+            ? row.dataset.rankedColumnOrder.split(",").map(Number)
+            : Array.from({ length: rowCells.length }, (_, index) => index);
+          const currentSet = new Set(currentColumnOrder);
+          entries.forEach((entry) => {
+            if (!currentSet.has(entry.sourceIndex)) currentColumnOrder.push(entry.sourceIndex);
+          });
+          if (currentColumnOrder.length !== rowCells.length) return;
+          const orderedCells = targetColumnOrder.map((sourceIndex) => rowCells[currentColumnOrder.indexOf(sourceIndex)]);
+          if (orderedCells.some((cell) => !cell)) return;
+          orderedCells.forEach((cell, index) => { cell.dataset.columnLabel = entries[index].label; row.appendChild(cell); });
+          row.dataset.rankedColumnOrder = targetColumnOrder.join(",");
+        });
+        wrapper.closest(".toggle-body")?.querySelectorAll(`[data-table-filter="${config.id}"]`).forEach((control) => {
+          if (control.dataset.columnIndex === undefined) return;
+          const oldIndex = Number(control.dataset.columnIndex);
+          const newIndex = newIndexByCurrentIndex.get(oldIndex);
+          if (newIndex === undefined) return;
+          control.dataset.columnIndex = String(newIndex);
+          const label = entries[newIndex]?.label;
+          const fieldLabel = control.closest(".filter-field")?.querySelector("span");
+          if (label && fieldLabel) {
+            fieldLabel.textContent = label;
+            if (control.tagName.toLowerCase() !== "select") control.placeholder = `Filter ${label}`;
+            else if (normalizeFilterText(label) === "council" && control.options[0]) control.options[0].textContent = "All councils";
+          }
+        });
+        const body = wrapper.closest('.toggle-body');
+        const grid = body?.querySelector('.filter-grid');
+        if (grid) {
+          [...grid.children].sort((a,b) => Number(a.querySelector('[data-column-index]')?.dataset.columnIndex ?? 999) - Number(b.querySelector('[data-column-index]')?.dataset.columnIndex ?? 999)).forEach(field => grid.append(field));
+        }
+        const typeSelect = body?.querySelector(`[data-table-filter="${config.id}"][data-filter-mode="content-type"]`);
+        if (typeSelect) {
+          typeSelect.setAttribute('aria-label', 'Content type');
+          const labels = {'':'All items', Workshop:'Workshops only', Sprint:'Sprints only'};
+          [...typeSelect.options].forEach(option => {
+            const value = option.value;
+            option.value = value;
+            option.textContent = labels[value] || option.textContent;
+          });
+          const label = typeSelect.closest('label');
+          label.classList.add('table-type-filter');
+          let typeBar = body.querySelector('.table-content-type-controls');
+          if (!typeBar) {
+            typeBar = document.createElement('div');
+            typeBar.className = 'table-content-type-controls';
+            body.insertBefore(typeBar, body.querySelector('.filter-disclosure') || wrapper);
+          }
+          typeBar.append(label);
+        }
+        table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach(row => {
+          if (config.mode === 'urgent') return;
+          const detail = detailRowFor(row);
+          if (!detail) return;
+          let link = detail.querySelector('a[href*="/search/"]');
+          if (!link && row.dataset.livelabsId) { link = document.createElement('a'); detail.querySelector('.detail-shell')?.append(link); }
+          if (link && row.dataset.livelabsId) {
+            link.href = recordLink({livelabsId:row.dataset.livelabsId}, config.mode);
+            link.className = 'author-button author-button-primary'; link.textContent = 'Open record';
+          }
+        });
+        const existingSortIndex = Number(wrapper.dataset.sortColumnIndex);
+        if (newIndexByCurrentIndex.has(existingSortIndex)) wrapper.dataset.sortColumnIndex = String(newIndexByCurrentIndex.get(existingSortIndex));
+      });
+    }
+    function ensureJenkinsTableColumns(wrapper) {
+      const table = wrapper?.querySelector('table');
+      const header = table?.querySelector('thead tr');
+      if (!header) return null;
+      if (wrapper.dataset.analyticsColumnCount === undefined) {
+        wrapper.dataset.analyticsColumnCount = String(header.children.length);
+        wrapper.dataset.analyticsSortColumnIndex = wrapper.dataset.sortColumnIndex || '';
+        wrapper.dataset.analyticsSortDirection = wrapper.dataset.sortDirection || 'none';
+      }
+      if (!header.querySelector('[data-jenkins-column="priority"]')) {
+        const index = header.children.length;
+        const cell = document.createElement('th');
+        cell.dataset.jenkinsColumn = 'priority';
+        cell.dataset.rankedSourceColumnIndex = String(index);
+        cell.dataset.sortType = 'text';
+        cell.innerHTML = `<button class="sort-button" type="button" data-sort-table="${wrapper.dataset.filterTable}" data-column-index="${index}" data-default-direction="asc">Errors Found</button>`;
+        header.append(cell);
+        const grid = wrapper.closest('.toggle-body')?.querySelector('.filter-grid');
+        if (grid) grid.insertAdjacentHTML('beforeend', `<label class="filter-field" data-jenkins-filter="priority"><span>Errors Found</span><input type="search" placeholder="Filter P1, P2, or P3" data-table-filter="${wrapper.dataset.filterTable}" data-column-index="${index}"></label>`);
+      }
+      table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach(row => {
+        if (row.dataset.analyticsOriginalIndex === undefined) row.dataset.analyticsOriginalIndex = row.dataset.originalIndex || '0';
+        if (!row.querySelector('[data-jenkins-column="priority"]')) {
+          const cell = document.createElement('td');
+          cell.dataset.jenkinsColumn = 'priority'; cell.dataset.filterValue = ''; cell.dataset.sortValue = ''; row.append(cell);
+        }
+      });
+      normalizeRankedTablePresentation(wrapper);
+      table.querySelectorAll('tbody tr.detail-row td[colspan]').forEach(cell => { cell.colSpan = header.children.length; });
+      return {table, scoreIndex: dashboardTableColumnIndex(wrapper, 'Score'), priorityIndex: dashboardTableColumnIndex(wrapper, 'Errors Found')};
+    }
+    function tableRecordId(row, columnIndex) {
+      return String(row?.querySelectorAll('td[data-filter-value]')?.[columnIndex]?.dataset?.filterValue || "").trim();
+    }
+    function mergeScoreForTable(config, baseline, sourceOverlay) {
+      if (!Number.isFinite(baseline)) return null;
+      const configuredShare = Number(dashboardQaReportMerge?.summary?.scorePolicy?.tableShare ?? 0.25);
+      const jenkinsShare = Math.min(0.45, Math.max(0.05, Number.isFinite(configuredShare) ? configuredShare : 0.25));
+      if (config.mode === "performance") {
+        const error = sourceOverlay?.jenkinsErrorScore == null ? null : Number(sourceOverlay.jenkinsErrorScore);
+        return error != null && Number.isFinite(error) ? baseline * (1 - jenkinsShare) + (100 - error) * jenkinsShare : baseline;
+      }
+      if (config.mode === "risk") {
+        const error = sourceOverlay?.jenkinsErrorScore == null ? null : Number(sourceOverlay.jenkinsErrorScore);
+        return error != null && Number.isFinite(error) ? baseline * (1 - jenkinsShare) + error * jenkinsShare : baseline;
+      }
+      return null;
+    }
+    const reviewFocusLabels = ['Lifecycle', 'Low demand', 'Older updates', 'Needs evidence', 'QA issues', 'Missing contact', 'Keep active', 'New content'];
+    function focusBadges(tags) {
+      return `<span class="review-focus-tags">${tags.map(tag => `<span class="review-focus-tag">${escapeHtml(tag)}</span>`).join('') || '<span class="muted">—</span>'}</span>`;
+    }
+    function reviewFocusForRecord(record) {
+      const tags = [...(record?.review?.focusTags || [])];
+      const qa = dashboardQaReportMerge?.overlay?.[String(record?.livelabsId || '')];
+      if (qa?.findings?.length) tags.push('QA issues');
+      return [...new Set(tags)];
+    }
+    function updateRowReviewFocus(row, overlay) {
+      if (!row.dataset.baseReviewFocus) row.dataset.baseReviewFocus = row.dataset.reviewFocus || '[]';
+      const tags = JSON.parse(row.dataset.baseReviewFocus);
+      if (overlay?.findings?.length) tags.push('QA issues');
+      row.dataset.reviewFocus = JSON.stringify([...new Set(tags)]);
+      const cell = row.querySelector('[data-review-focus-cell]');
+      if (cell) {
+        cell.innerHTML = focusBadges([...new Set(tags)]);
+        cell.dataset.filterValue = cell.dataset.sortValue = tags.join(' | ').toLowerCase();
+      }
+    }
+    function combinedTableControls(tableId) {
+      return `<div class="review-table-controls"><label>Type <select aria-label="Type" data-table-filter="${tableId}" data-filter-mode="content-type"><option value="">All types</option><option>Workshop</option><option>Sprint</option></select></label><fieldset class="review-focus-filter"><legend>Review focus <small>choose any</small></legend>${reviewFocusLabels.map(tag => `<label class="focus-choice"><input type="checkbox" value="${tag}" data-table-filter="${tableId}" data-filter-mode="review-focus">${tag}</label>`).join('')}</fieldset></div>`;
+    }
+    function humanReadableJenkinsFinding(issue) {
+      const label = String(issue?.label || issue?.code || "").trim();
+      if (!label || issue?.label) return label;
+      return label.replace(/[_-]+/g, " ").toLowerCase().replace(/\b[a-z]/g, (letter) => letter.toUpperCase());
+    }
+    function jenkinsColumnValue(overlay, withScore = false) {
+      if (!overlay) return withScore ? "" : "No Jenkins report";
+      const score = overlay.jenkinsErrorScore;
+      if (withScore) return score == null ? "N/A" : Number(score).toFixed(2);
+      const counts = overlay.priorityCounts || {};
+      const findings = Array.isArray(overlay.findings) ? overlay.findings : [];
+      const priorityLabels = [
+        ["p1", "P1", "urgent"],
+        ["p2", "P2", "review needed"],
+        ["p3", "P3", "minor"]
+      ];
+      const parts = priorityLabels.flatMap(([key, priority, meaning]) => {
+        const findingCount = findings.filter((issue) => issue.priority === priority).length;
+        const count = Math.max(Number(counts[key] || 0), findingCount);
+        return count ? [`${priority}: ${count} ${meaning}`] : [];
+      });
+      const unmapped = Number(counts.unmapped || 0);
+      if (unmapped) parts.push(`Unclassified: ${unmapped} · review with QA`);
+      const issues = Array.from(new Set(findings.map(humanReadableJenkinsFinding).filter(Boolean))).slice(0, 2);
+      const summary = parts.join(" · ") || "No P1/P2/P3 findings reported";
+      return issues.length ? `${summary} — ${issues.join(", ")}` : summary;
+    }
+    function rankedTableSourceScoreCell(row, config) {
+      if (!config.scoreHeader) return null;
+      const index = dashboardTableColumnIndex(row.closest("[data-filter-table]"), config.scoreHeader);
+      const cell = index < 0 ? null : row.querySelectorAll('td[data-filter-value]')[index];
+      if (!cell) return null;
+      if (cell.dataset.analyticsBaseline === undefined) cell.dataset.analyticsBaseline = cell.dataset.sortValue || cell.textContent.trim();
+      return cell;
+    }
+    function applyJenkinsMergeToRankedTables() {
+      if (!dashboardQaReportMerge) return;
+      const mergeId = String(dashboardQaReportMerge.id || dashboardQaReportMerge.appliedAt || "active");
+      let anyUpdated = false;
+      jenkinsRankedTableConfigs.forEach((config) => {
+        const wrapper = document.querySelector(`[data-filter-table="${config.id}"]`);
+        if (!wrapper || wrapper.dataset.jenkinsMergeId === mergeId) return;
+        const columns = ensureJenkinsTableColumns(wrapper);
+        if (!columns) return;
+        anyUpdated = true;
+        const idIndex = dashboardTableColumnIndex(wrapper, config.idHeader);
+        const originalIndex = config.scoreHeader ? dashboardTableColumnIndex(wrapper, config.scoreHeader) : -1;
+        const rows = Array.from(columns.table.querySelectorAll('tbody tr[data-filter-row="true"]'));
+        rows.forEach((row) => {
+          const sourceId = tableRecordId(row, idIndex);
+          const sourceOverlay = jenkinsOverlayForId(sourceId);
+          updateRowReviewFocus(row, sourceOverlay);
+          const priorityLabel = jenkinsColumnValue(sourceOverlay);
+          const priorityCell = row.querySelector('[data-jenkins-column="priority"]');
+          if (!priorityCell) return;
+          priorityCell.dataset.filterValue = normalizeFilterText(priorityLabel);
+          priorityCell.dataset.sortValue = normalizeFilterText(priorityLabel);
+          priorityCell.textContent = priorityLabel;
+          if (config.scoreHeader) {
+            const baseCell = row.querySelectorAll('td[data-filter-value]')[originalIndex];
+            if (baseCell.dataset.analyticsBaseline === undefined) {
+              baseCell.dataset.analyticsBaseline = baseCell.dataset.sortValue || baseCell.textContent.trim();
+              baseCell.dataset.analyticsFilterValue = baseCell.dataset.filterValue || "";
+              baseCell.dataset.analyticsSortValue = baseCell.dataset.sortValue || "";
+            }
+            const baseline = Number.parseFloat(baseCell.dataset.analyticsBaseline);
+          const blended = mergeScoreForTable(config, baseline, sourceOverlay);
+            if (blended != null) {
+              baseCell.textContent = blended.toFixed(2);
+              baseCell.dataset.filterValue = normalizeFilterText(blended.toFixed(2));
+              baseCell.dataset.sortValue = blended.toFixed(4);
+            }
+          }
+        });
+        const scoreSortIndex = config.scoreHeader ? dashboardTableColumnIndex(wrapper, config.scoreHeader) : columns.scoreIndex;
+        wrapper.dataset.sortColumnIndex = String(scoreSortIndex >= 0 ? scoreSortIndex : columns.scoreIndex);
+        wrapper.dataset.sortDirection = "desc";
+        const sortedRows = rows.slice().sort((left, right) => {
+          if (wrapper.dataset.reviewPriority === "true") {
+            const bandDifference = Number(left.dataset.reviewOrder || 0) - Number(right.dataset.reviewOrder || 0);
+            if (bandDifference) return bandDifference;
+          }
+          const a = Number.parseFloat(left.querySelectorAll('td[data-sort-value]')[scoreSortIndex >= 0 ? scoreSortIndex : columns.scoreIndex]?.dataset.sortValue || "");
+          const b = Number.parseFloat(right.querySelectorAll('td[data-sort-value]')[scoreSortIndex >= 0 ? scoreSortIndex : columns.scoreIndex]?.dataset.sortValue || "");
+          if (!Number.isFinite(a) && !Number.isFinite(b)) return Number(left.dataset.originalIndex || 0) - Number(right.dataset.originalIndex || 0);
+          if (!Number.isFinite(a)) return 1;
+          if (!Number.isFinite(b)) return -1;
+          return b - a;
+        });
+        sortedRows.forEach((row, index) => {
+          row.dataset.originalIndex = String(index);
+          const rankCell = row.querySelector('td[data-column-label="#"]');
+          if (rankCell) {
+            rankCell.textContent = String(index + 1);
+            rankCell.dataset.filterValue = String(index + 1);
+            rankCell.dataset.sortValue = String(index + 1);
+          }
+          columns.table.querySelector("tbody")?.appendChild(row);
+          const detailRow = detailRowFor(row);
+          if (detailRow) columns.table.querySelector("tbody")?.appendChild(detailRow);
+        });
+        wrapper.dataset.jenkinsMergeId = mergeId;
+      });
+      if (!anyUpdated) return;
+      refreshInitializedTableStates({ resetPage: true });
+    }
+    function clearJenkinsRankedTableMerge() {
+      let cleared = false;
+      jenkinsRankedTableConfigs.forEach((config) => {
+        const wrapper = document.querySelector(`[data-filter-table="${config.id}"][data-jenkins-merge-id]`);
+        const table = wrapper?.querySelector("table");
+        const headerRow = table?.querySelector("thead tr:first-child");
+        if (!wrapper || !table || !headerRow) return;
+        cleared = true;
+        const scoreIndex = config.scoreHeader ? dashboardTableColumnIndex(wrapper, config.scoreHeader) : -1;
+        table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach((row) => {
+          if (config.scoreHeader && scoreIndex >= 0) {
+            const scoreCell = row.querySelectorAll('td[data-filter-value]')[scoreIndex];
+            if (scoreCell?.dataset.analyticsBaseline !== undefined) {
+              scoreCell.textContent = scoreCell.dataset.analyticsBaseline;
+              scoreCell.dataset.filterValue = scoreCell.dataset.analyticsFilterValue || "";
+              scoreCell.dataset.sortValue = scoreCell.dataset.analyticsSortValue || "";
+              delete scoreCell.dataset.analyticsBaseline;
+              delete scoreCell.dataset.analyticsFilterValue;
+              delete scoreCell.dataset.analyticsSortValue;
+            }
+          }
+          const rankCell = row.querySelector('td[data-column-label="#"]');
+          if (rankCell?.dataset.analyticsRank !== undefined) {
+            rankCell.textContent = rankCell.dataset.analyticsRank;
+            rankCell.dataset.filterValue = rankCell.dataset.analyticsRankFilter || rankCell.dataset.analyticsRank;
+            rankCell.dataset.sortValue = rankCell.dataset.analyticsRankSort || rankCell.dataset.analyticsRank;
+            delete rankCell.dataset.analyticsRank;
+            delete rankCell.dataset.analyticsRankFilter;
+            delete rankCell.dataset.analyticsRankSort;
+          }
+          row.dataset.originalIndex = row.dataset.analyticsOriginalIndex || "0";
+          delete row.dataset.analyticsOriginalIndex;
+          updateRowReviewFocus(row, null);
+          row.querySelectorAll('[data-jenkins-column]').forEach((cell) => cell.remove());
+        });
+        headerRow.querySelectorAll('[data-jenkins-column]').forEach((cell) => cell.remove());
+        const staticColumnOrder = Array.from(headerRow.children, (cell) => cell.dataset.rankedSourceColumnIndex).join(",");
+        table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach((row) => { row.dataset.rankedColumnOrder = staticColumnOrder; });
+        wrapper.closest(".toggle-body")?.querySelectorAll("[data-jenkins-filter]").forEach((field) => field.remove());
+        table.querySelectorAll("tbody tr.detail-row").forEach((row) => {
+          const colspan = row.querySelector("td[colspan]");
+          if (colspan) colspan.colSpan = Number(wrapper.dataset.analyticsColumnCount || headerRow.children.length);
+        });
+        if (wrapper.dataset.analyticsSortColumnIndex) wrapper.dataset.sortColumnIndex = wrapper.dataset.analyticsSortColumnIndex;
+        else delete wrapper.dataset.sortColumnIndex;
+        wrapper.dataset.sortDirection = wrapper.dataset.analyticsSortDirection || "none";
+        ["analyticsColumnCount", "analyticsSortColumnIndex", "analyticsSortDirection", "jenkinsMergeId"].forEach((key) => { delete wrapper.dataset[key]; });
+      });
+      if (cleared) refreshInitializedTableStates({ resetPage: true });
+    }
+    function ownersForJenkinsQueue() {
+      const owners = new Map();
+      [inventoryRecordByKey, searchRecordByKey].forEach((records) => records.forEach((record) => {
+        const id = String(record?.livelabsId || "").trim();
+        if (id && record?.owner && !owners.has(id)) owners.set(id, record.owner);
+      }));
+      document.querySelectorAll('tr[data-filter-row="true"]').forEach((row) => {
+        const values = rowValuesByHeader(row);
+        const id = String(values.get("LiveLabs ID") || "").trim();
+        const owner = values.get("Author Email") || values.get("Owner Email") || values.get("Owner");
+        if (id && owner && !owners.has(id)) owners.set(id, owner);
+      });
+      return owners;
+    }
+    function jenkinsPriorityGuideMarkup() {
+      return `<details class="panel toggle-panel jenkins-priority-guide"><summary class="panel-head"><h3>What P1 priority means</h3></summary><div class="toggle-body"><p>P1 findings may stop learners. <strong>Author fix</strong> means check the evidence and fix the issue. <strong>Verify report</strong> means confirm the finding first.</p><p>One row represents one item. Open it for individual findings. P1 does not change the score or approve retirement.</p></div></details>`;
+    }
+    function renderJenkinsP1ActionQueue() {
+      const anchor = document.getElementById('jenkins-p1-slot');
+      if (!anchor) return;
+      let section = document.getElementById('jenkins-p1-action-queue');
+      if (!section) {
+        section = document.createElement('section'); section.id = 'jenkins-p1-action-queue';
+        section.className = 'section jenkins-p1-section'; section.dataset.dashboardPage = 'urgent'; anchor.append(section);
+      }
+      const mergeId = String(dashboardQaReportMerge?.id || dashboardQaReportMerge?.appliedAt || 'no-report');
+      if (section.dataset.mergeId === mergeId) return;
+      if (!dashboardQaReportMerge) {
+        section.innerHTML = `<div class="section-head"><h2>P1 urgent action</h2><p>Review findings that may stop learners.</p></div>${jenkinsPriorityGuideMarkup()}<section class="panel"><h3>QA report unavailable</h3><p role="status">This dashboard has no QA report loaded. Finding counts are unknown. Analytics rankings remain available.</p></section>`;
+        section.dataset.mergeId = mergeId;
+        applyDashboardPageView(document.body.dataset.dashboardPage || 'performance');
+        return;
+      }
+      const tableId = 'jenkins-p1-action-table';
+      const records = new Map(loadedFullSearchRecords.map(record => [String(record.livelabsId), record]));
+      const items = Object.entries(dashboardQaReportMerge?.overlay || {}).filter(([id]) => publicLivelabsIds.has(id))
+        .map(([id, overlay]) => ({id, overlay, record:records.get(id), findings:(overlay.findings || []).filter(issue => issue.priority === 'P1')})).filter(item => item.findings.length);
+      const needsFix = issue => !(issue.group === 'verification-required' || /verify/i.test(issue.priorityLabel || ''));
+      items.sort((a,b) => Number(b.findings.some(needsFix)) - Number(a.findings.some(needsFix)) || b.findings.length-a.findings.length || a.id.localeCompare(b.id));
+      const columns = ['Title', 'Type', 'Action', 'P1 findings', 'Occurrences', 'Author / owner', 'LiveLabs ID', 'Record'];
+      const headers = columns.map((label,index) => `<th data-column-label="${label}" data-sort-column-index="${index}" data-sort-type="${[3,4,6].includes(index) ? 'number':'text'}"><button class="sort-button" type="button" data-sort-table="${tableId}" data-column-index="${index}" data-default-direction="${[3,4].includes(index)?'desc':'asc'}">${label}</button></th>`).join('');
+      const filters = columns.map((label,index) => `<label class="filter-field"><span>${label}</span><input aria-label="Filter ${label}" type="search" data-table-filter="${tableId}" data-column-index="${index}"></label>`).join('');
+      const rows = items.map((item,index) => {
+        const {id,overlay,record,findings} = item;
+        const tags = reviewFocusForRecord(record); if (!tags.includes('QA issues')) tags.push('QA issues');
+        const actions = [...new Set(findings.map(issue => needsFix(issue) ? 'Author fix' : 'Verify report'))];
+        const occurrences = findings.reduce((sum,issue) => sum + Math.max(0,Number(issue.count || 0)),0);
+        const values = [record?.title || overlay.itemTitle || 'LiveLabs item',record?.type || 'Unknown',actions.join(' · '),findings.length,occurrences,record?.owner || 'Reviewer assignment needed',id,'Open record'];
+        const cells = values.map((value,i) => `<td data-column-label="${columns[i]}" data-filter-value="${escapeHtml(String(value).toLowerCase())}" data-sort-value="${escapeHtml(value)}">${i===7 ? `<a class="author-button author-button-primary" href="${escapeHtml(recordLink({livelabsId:id}))}">Open record</a>` : escapeHtml(value)}</td>`).join('');
+        const details = findings.map(issue => `<li><strong>${escapeHtml(humanReadableJenkinsFinding(issue))}</strong> · ${needsFix(issue)?'Author fix':'Verify report'} · ${Math.max(0,Number(issue.count||0))} occurrences<p>${escapeHtml(issue.message || 'Open the record for source evidence.')}</p></li>`).join('');
+        return `<tr class="expandable-row" data-filter-row="true" data-livelabs-id="${id}" data-content-type="${escapeHtml(record?.type || '')}" data-review-focus="${escapeHtml(JSON.stringify(tags))}" data-original-index="${index}" data-detail-row-id="p1-${id}" data-expanded="false" tabindex="0" aria-expanded="false">${cells}</tr><tr class="detail-row" data-detail-for="p1-${id}" hidden><td colspan="8"><div class="detail-shell"><h4>P1 findings for ${escapeHtml(values[0])}</h4><ul>${details}</ul><a class="author-button author-button-primary" href="${escapeHtml(recordLink({livelabsId:id}))}">Open full record and evidence</a></div></td></tr>`;
+      }).join('');
+      const findingCount = items.reduce((sum,item)=>sum+item.findings.length,0);
+      section.innerHTML = `<div class="section-head"><h2>P1 urgent action</h2><p>Review findings that may stop learners.</p></div>${jenkinsPriorityGuideMarkup()}<section class="panel ranked-table-panel"><div class="panel-head"><h3>P1 urgent action</h3><span>${items.length} rows · ${findingCount} findings</span></div><div class="toggle-body"><div class="table-tools"><span class="table-count" data-table-count-for="${tableId}">${items.length} rows</span><button class="filter-reset" data-clear-filters-for="${tableId}">Clear filters</button></div><details class="filter-disclosure"><summary>Apply filters</summary>${combinedTableControls(tableId)}<div class="filter-grid">${filters}</div></details><div class="table-wrap" data-filter-table="${tableId}"><table class="data-table" id="${tableId}"><thead><tr>${headers}</tr></thead><tbody>${rows || `<tr><td colspan="8">${dashboardQaReportMerge ? 'No P1 findings in the applied report.' : 'Add a Jenkins report in Admin to see P1 findings.'}</td></tr>`}</tbody></table></div></div></section>`;
+      section.dataset.mergeId = mergeId;
+      normalizeRankedTablePresentation(section);
+      applyRankedTableDisclosures(); decorateDashboardCopyTargets(section);
+      applyDashboardPageView(document.body.dataset.dashboardPage || 'performance');
+      initializeTablesIn(section, {force:true});
+    }
+    function applyJenkinsDashboardMerge() {
+      applyJenkinsMergeToLoadedRecords();
+      updateJenkinsScoreExplanations();
+      if (!dashboardQaReportMerge) clearJenkinsRankedTableMerge();
+      renderJenkinsP1ActionQueue();
+      applyJenkinsMergeToRankedTables();
+      applyPortfolioStatsSummary();
+      tableSearchRecordsCache = null;
+      refreshDashboardSearch();
+      if (loadedFullSearchRecords.length) renderAllDataTable();
+      if (dashboardQaReportMerge) refreshRenderedSearchDetail();
+    }
+    async function fetchDashboardState() {
+      try {
+        const response = await fetch('/api/dashboard-admin-state', {cache:'no-store'});
+        if (response.ok) return await response.json();
+      } catch { /* A static release has no API. */ }
+      try {
+        const response = await fetch(new URL('./assets/data/dashboard-state.json', document.baseURI), {cache:'no-store'});
+        return response.ok ? await response.json() : null;
+      } catch { return null; }
+    }
+    function ensureDashboardQaMergeLoaded() {
+      if (dashboardQaReportMerge) return Promise.resolve(dashboardQaReportMerge);
+      return fetchDashboardState()
+        .then((payload) => {
+          dashboardQaReportMerge = payload?.qaReportMerge || null;
+          if (dashboardQaReportMerge) applyJenkinsMergeToLoadedRecords();
+          return dashboardQaReportMerge;
+        })
+        .catch(() => dashboardQaReportMerge);
+    }
+    function refreshRenderedSearchDetail() {
+      const view = document.querySelector(".search-workshop-view");
+      const identity = readSearchUrlState();
+      if (!view || !view.querySelector(".search-view-header") || !hasSearchIdentity(identity)) return;
+      const record = resolveSearchRecordIdentity(Array.from(searchRecordByKey.values()), identity).record;
+      if (record) renderSearchDetail(record, { updateUrl: false });
+    }
+    function reloadDashboardJenkinsMerge() {
+      fetchDashboardState()
+        .then((payload) => {
+          dashboardQaReportMerge = payload?.qaReportMerge || null;
+          applyJenkinsDashboardMerge();
+        })
+        .catch(() => {});
+    }
+    function observeJenkinsDashboardTables() {
+      if (window.__jenkinsDashboardMergeObserver || !document.body) return;
+      window.__jenkinsDashboardMergeObserver = new MutationObserver(() => {
+        if (!dashboardQaReportMerge) return;
+        renderJenkinsP1ActionQueue();
+        applyJenkinsMergeToRankedTables();
+      });
+      window.__jenkinsDashboardMergeObserver.observe(document.body, { childList: true, subtree: true });
+    }
     function adminNumberOrNull(value) {
       if (value === null || value === undefined || value === "") return null;
       const match = String(value).replace(/,/g, "").match(/-?\d+(?:\.\d+)?/);
@@ -1162,6 +2141,7 @@
     }
     function sanitizeTagDefinitions(tags = defaultTagDefinitions) {
       const seen = new Set();
+      const allowedColors = new Set(["teal", "blue", "purple", "green", "amber", "red", "slate"]);
       return (Array.isArray(tags) ? tags : [])
         .map((tag) => {
           const label = String(tag?.label || formatOverrideStatus(tag?.key || "")).trim();
@@ -1169,11 +2149,13 @@
           if (!label || !requestedKey || tagKeyBlocklist.has(requestedKey)) return null;
           const key = uniqueTagKey(requestedKey, seen);
           seen.add(key);
+          const requestedColor = String(tag?.color || "teal").toLowerCase();
           return {
             key,
             label,
-            note: String(tag?.note || ""),
-            className: String(tag?.className || defaultTagClassByKey.get(key) || "")
+            description: String(tag?.description || tag?.note || ""),
+            className: String(tag?.className || defaultTagClassByKey.get(key) || ""),
+            color: allowedColors.has(requestedColor) ? requestedColor : "teal"
           };
         })
         .filter(Boolean);
@@ -1189,14 +2171,14 @@
         .filter((tag) => allowed.has(tag))));
     }
     function tagDefinitionFor(key) {
-      return tagDefinitionsForState(dashboardAdminState).find((tag) => tag.key === key) || { key, label: formatOverrideStatus(key), className: "" };
+      return tagDefinitionsForState(dashboardAdminState).find((tag) => tag.key === key) || { key, label: formatOverrideStatus(key), description: "", className: "", color: "teal" };
     }
     function tagPillsHtml(tags = []) {
       const cleaned = sanitizeAssignedTags(tags, tagDefinitionsForState(dashboardAdminState));
       if (!cleaned.length) return "";
       return `<span class="governance-group-list">${cleaned.map((tagKey) => {
         const tag = tagDefinitionFor(tagKey);
-        return `<span class="governance-group-pill ${escapeHtml(tag.className || "")}" data-admin-tag="${escapeHtml(tag.key)}">${escapeHtml(tag.label)}</span>`;
+        return `<span class="governance-group-pill ${escapeHtml(tag.className || "")} tag-tone-${escapeHtml(tag.color || "teal")}" data-admin-tag="${escapeHtml(tag.key)}"${tag.description ? ` title="${escapeHtml(tag.description)}"` : ""}>${escapeHtml(tag.label)}</span>`;
       }).join("")}</span>`;
     }
     function adminTagsForRecord(record) {
@@ -1213,6 +2195,7 @@
         note: String(override?.note || ""),
         qaExcluded: false,
         status,
+        tagsOnly: override?.tagsOnly === true,
         tags: sanitizeAssignedTags(override?.tags, tagDefinitions),
         target: ["title", "wms_id", "livelabs_id"].includes(override?.target) ? override.target : "wms_id",
         value: String(override?.value || "").trim()
@@ -1273,7 +2256,7 @@
       const link = document.querySelector("[data-admin-link]");
       if (!link) return;
       const session = refreshCachedAdminSession(readDashboardSession());
-      link.href = "./admin/";
+      link.href = "/admin";
       link.title = session
         ? `Open admin panel as ${session.email || session.name || "admin"}`
         : "Sign in to open the admin panel";
@@ -1282,7 +2265,7 @@
         const cachedSession = refreshCachedAdminSession(readDashboardSession());
         if (!cachedSession) return;
         event.preventDefault();
-        window.location.href = "./admin/";
+        window.location.href = "/admin";
       }, { once: true });
     }
     function activeQaExceptionRules() {
@@ -1425,7 +2408,7 @@
     }
     function addQaExceptionBadge(row, label = "QA Review", extraClass = "") {
       if (authorFacingGovernanceTagsHidden) return;
-      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      const titleCell = dashboardTableCellForHeader(row, "Title");
       if (!titleCell || titleCell.querySelector(".qa-exception-badge")) return;
       const badge = document.createElement("span");
       badge.className = `qa-exception-badge ${extraClass}`.trim();
@@ -1433,12 +2416,7 @@
       titleCell.appendChild(document.createTextNode(" "));
       titleCell.appendChild(badge);
     }
-    const noAuthorRetirementTableIds = new Set([
-      "at-risk-top-100-workshops",
-      "at-risk-top-100-sprints",
-      "retire-now-top-100-workshops",
-      "retire-now-top-100-sprints"
-    ]);
+    const noAuthorRetirementTableIds = new Set(['at-risk-table', 'retirement-review-table']);
     const demandProtectedReviewTableIds = new Set(noAuthorRetirementTableIds);
     function cleanDisplayValue(value) {
       const text = String(value || "").trim();
@@ -1468,17 +2446,6 @@
       ["current wms id", "WMS ID"],
       ["livelabs id", "LiveLabs ID"],
       ["current livelabs id", "LiveLabs ID"]
-    ]);
-    const copyableDetailFields = new Set([
-      "owner",
-      "owner email",
-      "author email",
-      "wms id",
-      "livelabs id",
-      "category",
-      "status",
-      "workshop status",
-      "manager email"
     ]);
     function copyableValueHtml(value, label, fallback = "N/A") {
       const text = String(value ?? "").trim() || fallback;
@@ -1535,14 +2502,109 @@
       const row = element.closest("tr");
       const tableLabel = row?.querySelector("th")?.textContent || "";
       if (tableLabel) return tableLabel.trim();
+      if (row) {
+        const headers = element.closest("table")?.querySelectorAll("thead th");
+        return headers?.[element.cellIndex]?.textContent?.trim() || "value";
+      }
       const definition = element.closest("div");
       return definition?.querySelector("dt")?.textContent?.trim() || "";
     }
+    function detailReportText(element) {
+      if (!element) return "";
+      const clone = element.cloneNode(true);
+      clone.querySelectorAll("[data-copy-value]").forEach((button) => button.remove());
+      clone.querySelectorAll("br").forEach((node) => node.replaceWith("\n"));
+      clone.querySelectorAll(".subtle").forEach((node) => node.prepend("\n"));
+      return (clone.textContent || "").trim();
+    }
     function decorateDetailCopyTargets(root = document) {
-      root.querySelectorAll?.("#search-workshop-view .search-result-card dd, #search-workshop-view .search-meta-list dd, #search-workshop-view .search-detail-table td").forEach((element) => {
-        const label = detailFieldLabelForElement(element);
-        if (copyableDetailFields.has(normalizeFilterText(label))) copyValueFromElement(element, label);
+      root.querySelectorAll?.(".search-result-card dd, .search-meta-list dd, .search-detail-panel td").forEach((element) => {
+        if (element.querySelector("[data-copy-value]")) return;
+        const text = detailReportText(element);
+        if (!text) return;
+        const label = element.matches("h2") ? "Workshop/Sprint Title"
+          : element.matches(".search-kicker") ? "Content Type"
+          : element.matches(".search-view-subtitle") ? "Page context"
+          : detailFieldLabelForElement(element) || "Section information";
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "copy-value-button";
+        button.dataset.copyValue = text;
+        button.setAttribute("aria-label", `Copy ${label}`);
+        button.title = `Copy ${label}`;
+        button.textContent = "Copy";
+        element.classList.add("search-copy-target");
+        element.append(button);
       });
+    }
+    // A rectangular report preserves the page's section order and table row groups.
+    function searchDetailReportRows(view) {
+      const rows = [["Section", "Row", "Field", "Value"]];
+      const add = (section, row, field, value) => rows.push([section, row, field, value]);
+      add("Page Overview", "", "Content Type", detailReportText(view.querySelector(".search-kicker")));
+      add("Page Overview", "", "Title", detailReportText(view.querySelector("h2")));
+      const context = detailReportText(view.querySelector(".search-view-subtitle"));
+      if (context) add("Page Overview", "", "Context", context);
+      view.querySelectorAll(".search-result-card").forEach((card) => {
+        add("Summary", "", detailReportText(card.querySelector("dt")), detailReportText(card.querySelector("dd")));
+      });
+      view.querySelectorAll(".search-detail-panel, [data-report-section]").forEach((panel) => {
+        const belongsToSection = (element) => element.closest(".search-detail-panel, [data-report-section]") === panel && !element.closest(".author-check");
+        const section = detailReportText(panel.querySelector("h3"));
+        Array.from(panel.querySelectorAll(".panel-head > span, .note")).filter(belongsToSection).forEach((element) => {
+          add(section, "", element.matches(".note") ? "Note" : "Count", detailReportText(element));
+        });
+        Array.from(panel.querySelectorAll("dl > div")).filter(belongsToSection).forEach((item) => {
+          add(section, "", detailReportText(item.querySelector("dt")), detailReportText(item.querySelector("dd")));
+        });
+        Array.from(panel.querySelectorAll("table")).filter(belongsToSection).forEach((table) => {
+          const headers = Array.from(table.querySelectorAll("thead th"), detailReportText);
+          table.querySelectorAll("tbody tr").forEach((row, index) => {
+            const cells = Array.from(row.querySelectorAll("td"));
+            const label = row.querySelector("th");
+            if (label && cells.length > 1) {
+              cells.forEach((cell, column) => add(section, String(index + 1), `${detailReportText(label)} / ${headers[column + 1] || `Column ${column + 1}`}`, detailReportText(cell)));
+            } else if (label) {
+              add(section, "", detailReportText(label), detailReportText(cells[0]));
+            } else if (cells.length === 1 && cells[0].colSpan > 1) {
+              add(section, "", "Note", detailReportText(cells[0]));
+            } else {
+              cells.forEach((cell, column) => add(section, String(index + 1), headers[column] || `Column ${column + 1}`, detailReportText(cell)));
+            }
+          });
+        });
+      });
+      view.querySelectorAll('.author-check').forEach((check, index) => {
+        const section = detailReportText(check.closest('.author-finding-group')?.querySelector('summary'));
+        check.querySelectorAll('dt').forEach(dt => add(section, String(index + 1), detailReportText(dt), detailReportText(dt.nextElementSibling)));
+        check.querySelectorAll('.author-target').forEach((target, targetIndex) => add(section, `${index + 1}.${targetIndex + 1}`, 'Affected content', detailReportText(target)));
+        check.querySelectorAll('a[href]').forEach(link => add(section, String(index + 1), detailReportText(link), link.href));
+      });
+      return rows;
+    }
+    function reportCsvCell(value) {
+      let text = value == null || String(value).trim() === "" ? "N/A" : String(value);
+      // Keep spreadsheet applications from interpreting source text as a formula.
+      if (/^\s*[=+\-@]/.test(text)) text = `'${text}`;
+      return `"${text.replace(/"/g, '""')}"`;
+    }
+    function exportSearchDetailCsv(record, view) {
+      const csv = "\uFEFF" + searchDetailReportRows(view)
+        .map((row) => row.map(reportCsvCell).join(","))
+        .join("\r\n") + "\r\n";
+      const slug = (value) => String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      const identity = record.livelabsId ? `livelabs-${record.livelabsId}` : record.wmsId ? `wms-${record.wmsId}` : record.title;
+      const filename = `${slug(record.type) || "content"}-${slug(identity).slice(0, 100) || "result"}-report.csv`;
+      const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8;" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      const statusNode = document.getElementById("copy-status");
+      if (statusNode) statusNode.textContent = `CSV report downloaded for ${record.title}`;
     }
     async function copyValueFromButton(button) {
       const text = button?.dataset.copyValue || "";
@@ -1696,7 +2758,7 @@
     }
     function addNoAuthorBadge(row) {
       if (authorFacingGovernanceTagsHidden) return;
-      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      const titleCell = dashboardTableCellForHeader(row, "Title");
       if (!titleCell || titleCell.querySelector(".no-author-badge")) return;
       const badge = document.createElement("span");
       badge.className = "no-author-badge";
@@ -1721,7 +2783,7 @@
     function clearNoAuthorMarkers(row) {
       row.classList.remove("no-author-row");
       delete row.dataset.noAuthor;
-      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      const titleCell = dashboardTableCellForHeader(row, "Title");
       if (titleCell?.dataset.noAuthorBaseFilterValue !== undefined) {
         titleCell.dataset.filterValue = titleCell.dataset.noAuthorBaseFilterValue;
       }
@@ -1775,13 +2837,13 @@
     }
     function rowDemandProtectionDetailText(row) {
       const status = rowDemandProtectionStatus(row);
-      const months = status.staleMonths === null ? "unknown age" : `${status.staleMonths} months since update`;
+      const months = status.staleMonths === null ? "N/A (update date unavailable)" : `${status.staleMonths} months since update`;
       const reasonText = status.reasons.length ? status.reasons.join("; ") : "no demand-protection threshold met";
       return `Stale threshold match: ${months}. Demand protection: ${reasonText}. Review for refresh or keep-active handling before treating this as a clean retirement candidate.`;
     }
     function addDemandProtectedBadge(row) {
       if (authorFacingGovernanceTagsHidden) return;
-      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      const titleCell = dashboardTableCellForHeader(row, "Title");
       if (!titleCell || titleCell.querySelector(".demand-protected-badge")) return;
       const badge = document.createElement("span");
       badge.className = "demand-protected-badge";
@@ -1862,7 +2924,9 @@
       const needle = normalizeFilterText(override?.value || "");
       if (!needle || !record) return false;
       if (override.target === "livelabs_id") return normalizeFilterText(record.livelabsId || "") === needle;
-      if (override.target === "title") return normalizeFilterText(record.title || "").includes(needle);
+      if (override.target === "title") return override.tagsOnly
+        ? normalizeFilterText(record.title || "") === needle
+        : normalizeFilterText(record.title || "").includes(needle);
       return normalizeFilterText(record.wmsId || "") === needle;
     }
     function adminOverrideForRecord(record) {
@@ -1920,7 +2984,7 @@
       }
     }
     function removeAdminTagBadges(row) {
-      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      const titleCell = dashboardTableCellForHeader(row, "Title");
       if (titleCell?.dataset.adminTagBaseFilterValue !== undefined) {
         titleCell.dataset.filterValue = titleCell.dataset.adminTagBaseFilterValue;
         delete titleCell.dataset.adminTagBaseFilterValue;
@@ -1934,7 +2998,7 @@
     function addAdminTagBadges(row, tags = []) {
       const cleaned = sanitizeAssignedTags(tags, tagDefinitionsForState(dashboardAdminState));
       if (!cleaned.length) return;
-      const titleCell = row.querySelectorAll("td[data-filter-value]")[1];
+      const titleCell = dashboardTableCellForHeader(row, "Title");
       if (!titleCell || titleCell.querySelector(".admin-tag-badges")) return;
       const labels = cleaned.map((tagKey) => tagDefinitionFor(tagKey).label);
       const baseFilterValue = titleCell.dataset.filterValue || "";
@@ -1959,21 +3023,25 @@
         });
         detailRowFor(row)?.querySelectorAll("[data-admin-override-detail]").forEach((detail) => detail.remove());
         detailRowFor(row)?.querySelectorAll("[data-admin-tags-detail]").forEach((detail) => detail.remove());
-        const override = activeRowOverrides().find((item) => adminTargetMatches(row, item.target || "wms_id", item.value));
+        const override = activeRowOverrides().find((item) => item.tagsOnly && item.target === "title"
+          ? normalizeFilterText(adminMatchContextFor(row).title) === normalizeFilterText(item.value)
+          : adminTargetMatches(row, item.target || "wms_id", item.value));
         if (!override) return;
         applyAdminFieldEdits(row, override);
         row.dataset.adminOverride = "true";
-        row.dataset.adminStatus = override.status || "pending";
+        if (!override.tagsOnly) row.dataset.adminStatus = override.status || "pending";
         const tags = sanitizeAssignedTags(override.tags, tagDefinitionsForState(dashboardAdminState));
         addAdminTagBadges(row, tags);
         const detailBody = detailRowFor(row)?.querySelector(".detail-table tbody");
         if (!detailBody) return;
-        const detail = document.createElement("tr");
-        detail.dataset.adminOverrideDetail = "true";
-        const status = override.status || "pending";
-        const note = override.note || "No note provided.";
-        detail.innerHTML = `<th>Admin Override</th><td>${escapeHtml(`${formatOverrideStatus(status)}. ${note}`)}</td>`;
-        detailBody.prepend(detail);
+        if (!override.tagsOnly) {
+          const detail = document.createElement("tr");
+          detail.dataset.adminOverrideDetail = "true";
+          const status = override.status || "pending";
+          const note = override.note || "No note provided.";
+          detail.innerHTML = `<th>Admin Override</th><td>${escapeHtml(`${formatOverrideStatus(status)}. ${note}`)}</td>`;
+          detailBody.prepend(detail);
+        }
         if (tags.length) {
           const tagDetail = document.createElement("tr");
           tagDetail.dataset.adminTagsDetail = "true";
@@ -1993,15 +3061,17 @@
         ["top-performers", "topPerformers"],
         ["at-risk-content", "atRiskContent"],
         ["retire-now-content", "retireNowContent"],
-        ["replacement-suggestions", "replacementSuggestions"],
-        ["disabled-content", "disabledContent"],
         ["portfolio-stats", "portfolioStats"]
       ];
       mappings.forEach(([sectionId, settingKey]) => {
         const visible = dashboardAdminState.sectionVisibility?.[settingKey] !== false;
         const section = document.getElementById(sectionId);
-        if (section) section.hidden = !visible;
-        document.querySelectorAll(`a[href="#${sectionId}"]`).forEach((link) => {
+        if (section) {
+          const pages = String(section.dataset.dashboardPage || "all").split(/\s+/);
+          const pageVisible = pages.includes("all") || pages.includes(normalizeDashboardPage(document.body.dataset.dashboardPage));
+          section.hidden = !visible || !pageVisible;
+        }
+        document.querySelectorAll(`a[href="#${sectionId}"], a[data-section-hash="#${sectionId}"]`).forEach((link) => {
           link.hidden = !visible;
           link.setAttribute("aria-hidden", visible ? "false" : "true");
         });
@@ -2143,8 +3213,6 @@
         "Publish Date Used",
         "Lifecycle State",
         "Suggested Action",
-        "Replacement Title",
-        "Replacement Score",
         "Why This Rule Matched",
         "Why It Is Included Or Excluded",
         "Sprint Signal Reason",
@@ -2153,6 +3221,11 @@
         "Manifest Path",
         "Owner Group",
         "Manager Email",
+        "Support Contact Email",
+        "Tech Contact Email",
+        "Ownership Status",
+        "WMS Reported Owner Email (disputed)",
+        "Ownership Review Evidence",
         "Author Coverage"
       ];
       const rows = preferredFields
@@ -2173,13 +3246,13 @@
         </tr>`;
       }).join("");
       return `
-        <section class="search-detail-panel search-detail-panel-wide">
+        <section class="search-detail-panel search-detail-panel-wide search-file-update-panel">
           <div class="panel-head">
-            <h3>Files Updated On GitHub</h3>
+            <h3>GitHub file updates</h3>
             <span>${record.fileUpdates.length} files</span>
           </div>
-          <p class="note">Pulled from the existing markdown file date check for this dashboard row.</p>
-          <div class="search-files-table-wrap">
+          <p class="note">Review Git update dates, acknowledgement dates, and the date check for each file.</p>
+          <details class="search-disclosure"><summary><span>View file update details</span><span class="search-disclosure-count">${record.fileUpdates.length} files</span></summary><div class="search-disclosure-body"><div class="search-files-table-wrap">
             <table class="search-files-table">
               <thead>
                 <tr>
@@ -2191,39 +3264,12 @@
               </thead>
               <tbody>${rows}</tbody>
             </table>
-          </div>
+          </div></div></details>
         </section>`;
     }
     function familyHtml(record) {
-      const family = record.family;
-      if (!family || Number(family.total || 0) <= 1) return "";
-      const siblings = Array.isArray(family.siblings) ? family.siblings : [];
-      const rows = siblings.map((item) => {
-        const related = searchRecordByKey.get(item.key);
-        const title = item.title || related?.title || "Untitled";
-        const livelabsId = item.livelabsId || related?.livelabsId || "";
-        const wmsId = item.wmsId || related?.wmsId || family.wmsId || "";
-        const status = [item.publishStatus, item.publishType].filter(Boolean).join(" / ") || related?.status || "";
-        const category = item.category || related?.category || "";
-        const titleHtml = related
-          ? `<button class="nav-link" type="button" data-family-search-key="${escapeHtml(item.key)}">${escapeHtml(title)}</button>`
-          : escapeHtml(title);
-        return `<tr><td>${titleHtml}</td><td>${escapeHtml(livelabsId)}</td><td>${escapeHtml(wmsId)}</td><td>${escapeHtml(status)}</td><td>${escapeHtml(category)}</td></tr>`;
-      }).join("");
-      return `
-        <section class="search-detail-panel search-detail-panel-wide">
-          <div class="panel-head">
-            <h3>Same WMS Family</h3>
-            <span>${escapeHtml(family.total)} rows</span>
-          </div>
-          <p class="note">These rows share WMS ID ${escapeHtml(family.wmsId || record.wmsId || "")}. Each LiveLabs ID remains a separate searchable result and detail page.</p>
-          <div class="search-files-table-wrap">
-            <table class="search-files-table">
-              <thead><tr><th>Related Content</th><th>LiveLabs ID</th><th>WMS ID</th><th>Status</th><th>Category</th></tr></thead>
-              <tbody>${rows || `<tr><td colspan="5">No sibling rows available.</td></tr>`}</tbody>
-            </table>
-          </div>
-        </section>`;
+      const count = record.family?.siblings?.length || 0;
+      return count ? `<details class="search-detail-panel search-detail-panel-wide search-family-panel" data-family-disclosure><summary><h3>Related records</h3><span>${count} with WMS ${escapeHtml(record.wmsId)}</span></summary><div class="search-family-records"></div></details>` : '';
     }
     function adminTagsPanelHtml(record) {
       const tags = adminTagsForRecord(record);
@@ -2243,15 +3289,22 @@
         contentKey: params.get("content_key") || ""
       };
     }
-    function writeSearchUrl({ query = "", record = null, identity = null, replace = true, route = "current", clearHash = null } = {}) {
+    function writeSearchUrl({ query = "", record = null, identity = null, replace = true, route = "current", clearHash = null, scoreMode = null } = {}) {
       const url = new URL(location.href);
       const selectedIdentity = record ? canonicalRecordIdentity(record) : normalizeSearchIdentity(identity || {});
-      if (route === "dashboard") {
-        const normalizedPath = url.pathname.replace(/\/+$/, "").toLowerCase();
-        if (normalizedPath.endsWith("/inventory") || normalizedPath.endsWith("/inventory/index.html")) {
-          url.pathname = new URL("../", url).pathname;
-        }
+      const onInventory = /\/inventory(?:\/index\.html)?\/?$/i.test(url.pathname) || url.searchParams.get('view') === 'inventory';
+      const inventoryFamilyFilter = onInventory && selectedIdentity.wmsId && !selectedIdentity.livelabsId && !selectedIdentity.contentKey;
+      let destination = route;
+      if (route === 'current') {
+        if (hasSearchIdentity(selectedIdentity) && !inventoryFamilyFilter) destination = 'search';
+        else if (!hasSearchIdentity(selectedIdentity) && /\/search(?:\/index\.html)?\/?$/i.test(url.pathname)) destination = 'dashboard';
       }
+      if (destination === 'dashboard' || destination === 'search') {
+        url.pathname = new URL(location.protocol === 'file:' ? 'index.html' : destination + '/', document.baseURI).pathname;
+        url.searchParams.delete("view");
+      }
+      if (selectedIdentity.livelabsId) url.searchParams.set('score_context', scoreMode || scoreContext());
+      else url.searchParams.delete('score_context');
       if (query) url.searchParams.set("q", query);
       else url.searchParams.delete("q");
       ["livelabs_id", "wms_id", "content_key"].forEach((parameter) => url.searchParams.delete(parameter));
@@ -2260,6 +3313,10 @@
       if (selectedIdentity.contentKey) url.searchParams.set("content_key", selectedIdentity.contentKey);
       const shouldClearHash = clearHash ?? Boolean(query || hasSearchIdentity(selectedIdentity));
       if (shouldClearHash) url.hash = "";
+      else if (!query && !hasSearchIdentity(selectedIdentity) && url.pathname === new URL('dashboard/', document.baseURI).pathname) {
+        if (!url.searchParams.has("view")) url.searchParams.set("view", "performance");
+        if (url.hash === "#overview") url.hash = "";
+      }
       const method = replace ? "replaceState" : "pushState";
       history[method](null, "", `${url.pathname}${url.search}${url.hash}`);
     }
@@ -2278,16 +3335,44 @@
       }
       window.setTimeout(() => { button.textContent = "Copy link"; }, 1800);
     }
-    function renderSearchDetail(record, { updateUrl = true } = {}) {
+    function qaEvidenceState(record) {
+      const qa = record.qa;
+      return qa ? (qa.match_status === "matched" ? qa.state : qa.match_status) : "not_observed";
+    }
+    function qaEvidenceHtml(record) {
+      if (!record.qa) return "";
+      const qa = record.qa;
+      const rows = Array.from(record.details.entries()).filter(([label]) => label.startsWith("QA "));
+      const warnings = qa.freshness_warnings?.length ? ` Source checks: ${qa.freshness_warnings.join("; ")}.` : "";
+      return `<section class="search-detail-panel search-detail-panel-wide qa-evidence" data-qa-evidence>
+        <div class="panel-head"><h3>QA source evidence</h3></div>
+        <p class="note">${qa.mode === "pilot" ? "Local pilot. " : ""}The Jenkins Error Score reflects reported issue severity and counts, not the percentage of failed tests. Evidence without a confirmed QA status needs review.${escapeHtml(warnings)}</p>
+        ${rows.length ? `<details class="search-disclosure"><summary><span>View QA evidence fields</span><span class="search-disclosure-count">${rows.length} fields</span></summary><div class="search-disclosure-body"><table class="search-detail-table"><tbody>${rows.map(([label, value]) => `<tr><th>${escapeHtml(label)}</th><td>${escapeHtml(value)}</td></tr>`).join("")}</tbody></table></div></details>` : ""}
+      </section>`;
+    }
+    function qaReportOverlayHtml(record) {
+      return window.LiveLabsAuthor.evidenceHtml(jenkinsOverlayForId(record.livelabsId));
+    }
+    function renderSearchDetail(record, { updateUrl = true, scoreMode = null } = {}) {
       if (updateUrl) {
-        writeSearchUrl({ query: "", record, replace: false, route: "dashboard" });
+        writeSearchUrl({ query: "", record, replace: false, route: "search", scoreMode });
         clearGlobalSearchUi();
         document.body.classList.remove("dashboard-inventory-active", "dashboard-tops-active");
       }
       const view = ensureSearchView();
-      const summaryItems = summaryItemsFor(record);
+      const score = recordScore(record);
+      const summaryItems = [['Score', score == null ? 'N/A' : score.toFixed(2)], ['LiveLabs ID', record.livelabsId || 'N/A'], ['WMS ID', record.wmsId || 'N/A'], ['Last update', record.update || 'Unknown']];
+      const scoreNote = scoreContext() === 'risk' ? 'Higher score means higher review priority.' : 'Higher score means stronger performance.';
       const governanceItems = governanceItemsFor(record);
-      const subtitle = [record.source || "Dashboard", record.status || "", record.owner ? `Owner: ${record.owner}` : ""].filter(Boolean).join(" | ");
+      const updateLabels = new Set(["Update Evidence", "Latest GitHub Update", "Suggested Action", "Recommended Action", "Lifecycle State", "Workshop Path"]);
+      const profileItems = governanceItems.filter(([label]) => !["WMS ID", "LiveLabs ID"].includes(label) && !updateLabels.has(label));
+      const qaReportHtml = qaReportOverlayHtml(record);
+      const scoreEvidenceHtml = window.LiveLabsAuthor.scoreHtml(authorScoreBaselines[String(record.livelabsId)], jenkinsOverlayForId(record.livelabsId), scoreContext());
+      const metaListHtml = (items) => items.length ? `<dl class="search-meta-list">${items.map(([label, value]) => {
+        const wide = ["Latest GitHub Update", "Workshop Path"].includes(label) || String(value).length > 48;
+        return `<div${wide ? ` class="wide"` : ""}><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`;
+      }).join("")}</dl>` : `<p class="note">No details were reported in this group.</p>`;
+      const subtitle = [record.status || "", record.ownership?.status === "disputed" ? "Ownership needs review" : record.owner ? `WMS reported owner: ${record.owner}` : ""].filter(Boolean).join(" | ");
       view.innerHTML = `
         <div class="search-view-header">
           <div>
@@ -2295,37 +3380,63 @@
             <h2>${escapeHtml(record.title)}</h2>
             ${subtitle ? `<p class="search-view-subtitle">${escapeHtml(subtitle)}</p>` : ""}
           </div>
-          <span class="search-view-actions"><button class="nav-link" type="button" data-copy-search-link>Copy link</button><button class="nav-link" type="button" data-back-dashboard>Back to Dashboard</button></span>
+          <span class="search-view-actions">${window.LiveLabsAuthor.liveButton(record, jenkinsOverlayForId(record.livelabsId))}<button class="nav-link" type="button" data-copy-search-link>Copy link</button><details class="report-export-dropdown"><summary class="nav-link">Export report <span aria-hidden="true">▾</span></summary><div class="report-export-options"><button type="button" data-export-search-xlsx>Excel (.xlsx)</button><button type="button" data-export-search-csv>CSV (.csv)</button></div></details><button class="nav-link" type="button" data-back-dashboard>Back to Dashboard</button></span>
         </div>
-        <dl class="search-result-summary">
+        <details open class="search-detail-panel search-detail-panel-wide search-ownership-panel"><summary><h3>Ownership &amp; publishing</h3></summary>${metaListHtml(profileItems)}</details>
+        <section class="search-summary-section" aria-label="Record summary"><p class="author-score-note">${scoreNote}${score == null ? " Required score inputs are unavailable." : ""} P1 remains a separate priority.</p><dl class="search-result-summary">
           ${summaryItems.map(([label, value]) => `<div class="search-result-card"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}
-        </dl>
+        </dl></section>
+
+        <div class="search-detail-grid${qaReportHtml ? " search-qa-source-grid" : ""}">
+          ${qaReportHtml}
+          ${scoreEvidenceHtml}
+          <details class="search-detail-panel search-detail-panel-wide search-source-panel" data-report-section><summary><h3>Source details</h3></summary>
+            <details class="search-disclosure"><summary><span>Dashboard row</span><span class="search-disclosure-count">${record.values.size} fields</span></summary><div class="search-disclosure-body"><table class="search-detail-table"><tbody>${sourceRowsHtml(record)}</tbody></table></div></details>
+            <details class="search-disclosure"><summary><span>Additional source fields</span><span class="search-disclosure-count">${record.details.size} fields</span></summary><div class="search-disclosure-body"><table class="search-detail-table"><tbody>${fieldRowsHtml(record)}</tbody></table></div></details>
+          </details>
+        </div>
         <div class="search-detail-grid">
-          <section class="search-detail-panel">
-            <h3>Governance Summary</h3>
-            <dl class="search-meta-list">
-              ${governanceItems.map(([label, value]) => {
-                const wide = ["Latest GitHub Update", "Workshop Path"].includes(label) || String(value).length > 48;
-                return `<div${wide ? ` class="wide"` : ""}><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`;
-              }).join("")}
-            </dl>
-          </section>
-          <section class="search-detail-panel">
-            <h3>Dashboard Row</h3>
-            <table class="search-detail-table"><tbody>${sourceRowsHtml(record)}</tbody></table>
-          </section>
-          ${familyHtml(record)}
           ${fileUpdatesHtml(record)}
-          <section class="search-detail-panel search-detail-panel-wide">
-            <h3>Additional Details</h3>
-            <table class="search-detail-table"><tbody>${fieldRowsHtml(record)}</tbody></table>
-          </section>
+          ${familyHtml(record)}
         </div>`;
       view.querySelectorAll("[data-back-dashboard]").forEach((button) => {
         button.addEventListener("click", () => showDashboardView({ clearUrl: true }));
       });
       view.querySelectorAll("[data-copy-search-link]").forEach((button) => {
         button.addEventListener("click", () => copySearchLink(button));
+      });
+      const exportDropdown = view.querySelector(".report-export-dropdown");
+      const closeExportDropdown = () => {
+        exportDropdown.open = false;
+        exportDropdown.querySelector("summary").focus();
+      };
+      view.exportMenuController?.abort();
+      view.exportMenuController = new AbortController();
+      document.addEventListener("click", (event) => {
+        if (!exportDropdown.contains(event.target)) exportDropdown.open = false;
+      }, { signal: view.exportMenuController.signal });
+      exportDropdown.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") { event.preventDefault(); closeExportDropdown(); }
+      });
+      exportDropdown.addEventListener("focusout", () => {
+        window.setTimeout(() => {
+          if (!exportDropdown.contains(document.activeElement)) exportDropdown.open = false;
+        }, 0);
+      });
+      view.querySelector("[data-export-search-csv]").addEventListener("click", () => {
+        closeExportDropdown();
+        exportSearchDetailCsv(record, view);
+      });
+      view.querySelector("[data-export-search-xlsx]").addEventListener("click", () => {
+        closeExportDropdown();
+        const identity = record.livelabsId ? `livelabs-${record.livelabsId}` : `wms-${record.wmsId || "result"}`;
+        window.LiveLabsExport.xlsx(searchDetailReportRows(view), `${String(record.type || "content").toLowerCase()}-${identity}-report.xlsx`);
+      });
+      view.querySelector('[data-family-disclosure]')?.addEventListener('toggle', event => {
+        const disclosure = event.currentTarget;
+        if (!disclosure.open || disclosure.dataset.loaded) return;
+        disclosure.dataset.loaded = 'true';
+        disclosure.querySelector('.search-family-records').innerHTML = (record.family.siblings || []).map(item => `<a class="family-record" href="${recordLink(item, scoreContext())}"><strong>${escapeHtml(item.title || 'Related record')}</strong><span>LiveLabs ${escapeHtml(item.livelabsId)}</span></a>`).join('');
       });
       view.querySelectorAll("[data-family-search-key]").forEach((button) => {
         button.addEventListener("click", () => {
@@ -2365,6 +3476,18 @@
       });
       if (clearUrl) writeSearchUrl();
     }
+    function mountPrimarySearch() {
+      const existing = document.querySelector(".primary-search-panel");
+      const search = document.querySelector(".rail .sidebar-search");
+      const header = document.querySelector("#overview");
+      if (existing || !search || !header) return;
+      const panel = document.createElement("section");
+      panel.className = "primary-search-panel";
+      panel.setAttribute("aria-label", "Search public workshops and sprints");
+      panel.innerHTML = '<div class="primary-search-copy"><div class="primary-search-heading"><h2>Find a workshop or sprint</h2></div></div><div class="primary-search-control"></div>';
+      panel.querySelector(".primary-search-control").append(search);
+      header.append(panel);
+    }
     function renderSearchResults(records, query) {
       const resultsNode = document.querySelector("[data-search-results]");
       const statusNode = document.querySelector("[data-search-status]");
@@ -2387,14 +3510,14 @@
           : `${allMatches.length} matches`
         : "No matches";
       matches.forEach((record) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "search-result-button";
-        const familyNote = record.family?.total > 1 ? `Family ${record.family.total}` : "";
-        const tagNote = recordAdminTagText(record);
-        button.innerHTML = `<strong>${escapeHtml(record.title)}</strong><span>${escapeHtml([record.category, record.wmsId ? `WMS ${record.wmsId}` : "", record.livelabsId ? `LiveLabs ${record.livelabsId}` : "", record.owner || "", tagNote ? `Tags: ${tagNote}` : "", familyNote].filter(Boolean).join(" | "))}</span>`;
-        button.addEventListener("click", () => renderSearchDetail(record));
-        resultsNode.appendChild(button);
+        const result = document.createElement('article');
+        result.className = 'author-search-result';
+        const overlay = jenkinsOverlayForId(record.livelabsId);
+        const findings = overlay?.findings || [];
+        const score = recordScore(record, 'performance');
+        const priorities = ['P1','P2','P3'].map(priority => { const count = findings.filter(item => item.priority === priority).length; return count ? `${count} ${priority}` : ''; }).filter(Boolean).join(' · ');
+        result.innerHTML = `<div class="author-search-copy"><strong>${escapeHtml(record.title)}</strong><span>${escapeHtml(record.type)} · LiveLabs ${escapeHtml(record.livelabsId)}</span><span class="author-email" title="${escapeHtml(record.owner)}">${escapeHtml(record.owner)}</span><span>${escapeHtml(priorities || (overlay ? (findings.length ? 'Unclassified findings · review with QA' : 'No findings reported') : 'No QA report'))}</span></div><div class="author-search-score"><span>Score</span><strong>${score == null ? 'N/A' : score.toFixed(2)}</strong></div><div class="author-search-actions"><a class="author-button author-button-primary" href="${recordLink(record)}">Open record</a>${window.LiveLabsAuthor.liveButton(record, overlay)}</div>`;
+        resultsNode.append(result);
       });
     }
     function applyRankedTableDisclosures() {
@@ -2404,6 +3527,7 @@
         const disclosure = document.createElement("details");
         disclosure.className = "panel toggle-panel ranked-table-panel ranked-table-disclosure";
         disclosure.dataset.generatedDisclosure = "true";
+        disclosure.open = false;
         const summary = document.createElement("summary");
         summary.className = "panel-head";
         while (panelHead.firstChild) summary.appendChild(panelHead.firstChild);
@@ -2414,10 +3538,13 @@
       });
     }
     function ensureAllDataDashboardUi() {
+      document.querySelectorAll("[data-inventory-link], [data-dashboard-view='inventory']").forEach((item) => item.remove());
+      document.getElementById("all-data-browser")?.remove();
+      return;
       const navListForInventory = document.querySelector(".nav-list");
       if (navListForInventory && !navListForInventory.querySelector("[data-inventory-link]")) {
         const inventoryItem = document.createElement("a");
-        inventoryItem.href = "./inventory/";
+        inventoryItem.href = new URL(location.protocol === 'file:' ? 'inventory/index.html' : 'inventory', document.baseURI).href;
         inventoryItem.dataset.inventoryLink = "true";
         inventoryItem.innerHTML = `<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"></path><path d="M5 9h14"></path><path d="M5 14h14"></path><path d="M10 4v16"></path></svg><span>Portfolio Inventory</span>`;
         const topPerformers = navListForInventory.querySelector('a[href="#top-performers"]');
@@ -2426,15 +3553,15 @@
       const navList = document.querySelector(".nav-list");
       if (navList) {
         navList.querySelectorAll('[data-dashboard-view="tops"]').forEach((item) => item.remove());
-        const overviewLink = navList.querySelector('a[href="#overview"]');
-        if (overviewLink) {
-          overviewLink.dataset.dashboardView = "overview";
-          const label = overviewLink.querySelector("span");
-          if (label) label.textContent = "Dashboard Overview";
+        const dashboardLink = navList.querySelector('[data-dashboard-view="performance"]') || navList.querySelector('[data-dashboard-view="overview"]') || navList.querySelector('a[href="#overview"]');
+        if (dashboardLink) {
+          dashboardLink.dataset.dashboardView = "performance";
+          const label = dashboardLink.querySelector("span");
+          if (label) label.textContent = "Dashboard";
         }
         if (!navList.querySelector('[data-inventory-link]')) {
           const inventoryItem = document.createElement("a");
-          inventoryItem.href = "./inventory/";
+          inventoryItem.href = new URL(location.protocol === 'file:' ? 'inventory/index.html' : 'inventory', document.baseURI).href;
           inventoryItem.dataset.inventoryLink = "true";
           inventoryItem.innerHTML = `<svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5z"></path><path d="M5 9h14"></path><path d="M5 14h14"></path><path d="M10 4v16"></path></svg><span>Portfolio Inventory</span>`;
           const topPerformers = navList.querySelector('a[href="#top-performers"]');
@@ -2449,6 +3576,7 @@
         const section = document.createElement("section");
         section.className = "section all-data-section";
         section.id = "all-data-browser";
+        section.dataset.dashboardPage = "inventory";
         section.innerHTML = `
           <header class="page-header inventory-page-header">
             <div>
@@ -2489,12 +3617,14 @@
                   <label class="filter-field" for="all-data-publish-type"><span>Publish Type</span><select id="all-data-publish-type" data-all-data-select="publishType"><option value="">All publish types</option></select></label>
                   <label class="filter-field" for="all-data-review-state"><span>Review state</span><select id="all-data-review-state"><option value="">All review states</option><option value="Content to review/remove">Content to review/remove</option><option value="Ready">Ready</option></select></label>
                   <label class="filter-field" for="all-data-coverage"><span>Contact Coverage</span><select id="all-data-coverage"><option value="">All coverage</option><option value="author">Author</option><option value="fallback">Fallback contact</option><option value="author-missing">Author missing</option><option value="contact-gap">No author/fallback contact</option><option value="owner">Owner/stakeholder only</option><option value="missing">No contact evidence</option></select></label>
+                  <label class="filter-field" for="all-data-jenkins-data"><span>Jenkins data</span><select id="all-data-jenkins-data"><option value="">All records</option><option value="reported">Report applied</option><option value="issues">Has findings</option><option value="no-report">No report</option></select></label>
+                  <label class="filter-field" for="all-data-jenkins-priority"><span>Jenkins priority</span><select id="all-data-jenkins-priority"><option value="">All priorities</option><option value="P1">P1 · urgent</option><option value="P2">P2 · review</option><option value="P3">P3 · minor</option><option value="unmapped">Unmapped</option></select></label>
                 </div>
                 ${allDataControlsHtml("top")}
                 <div class="table-wrap">
                   <table id="all-content-data-table" class="all-data-table">
-                    <thead><tr><th class="all-data-row-number">#</th><th>Title</th><th>Type</th><th>Publish Status</th><th>Publish Type</th><th>WMS ID</th><th>LiveLabs ID</th><th>Category</th><th>Contact</th></tr></thead>
-                    <tbody data-all-data-rows><tr><td colspan="9" class="empty">Open Portfolio Inventory to load records</td></tr></tbody>
+                    <thead><tr><th class="all-data-row-number">#</th><th>Title</th><th>Type</th><th>Publish Status</th><th>Publish Type</th><th>WMS ID</th><th>LiveLabs ID</th><th>Category</th><th>Contact</th><th>Analytics QA Error Score</th><th>Jenkins Error Score</th><th>Jenkins Priority</th><th>QA Evidence</th></tr></thead>
+                    <tbody data-all-data-rows><tr><td colspan="13" class="empty">Open Portfolio Inventory to load records</td></tr></tbody>
                   </table>
                 </div>
                 ${allDataControlsHtml("bottom")}
@@ -2513,7 +3643,7 @@
         allDataState.pageRange = "";
         scheduleAllDataRender();
       });
-      [["all-data-type", "type"], ["all-data-publish-status", "publishStatus"], ["all-data-publish-type", "publishType"], ["all-data-review-state", "reviewState"], ["all-data-coverage", "coverage"]].forEach(([id, key]) => {
+      [["all-data-type", "type"], ["all-data-publish-status", "publishStatus"], ["all-data-publish-type", "publishType"], ["all-data-review-state", "reviewState"], ["all-data-coverage", "coverage"], ["all-data-jenkins-data", "jenkinsData"], ["all-data-jenkins-priority", "jenkinsPriority"]].forEach(([id, key]) => {
         const control = document.getElementById(id);
         if (!control) return;
         control.addEventListener("change", () => {
@@ -2630,7 +3760,7 @@
         return { authorMissing: false, detail: authorContact || "N/A", label: "Author", rank: "author" };
       }
       if (inventoryCoverage?.rank === "fallback") {
-        const fallbackContact = cleanContactEnumeration(record.owner || allDataExactValue(record, ["Workshop Team", "Manager Email", "Acknowledgement Updater", "Owner Group"]));
+        const fallbackContact = cleanContactEnumeration(record.owner || allDataExactValue(record, ["Tech Contact Email", "Support Contact Email", "Workshop Team", "Manager Email", "Acknowledgement Updater", "Owner Group"]));
         return { authorMissing: true, detail: fallbackContact || "Fallback contact present", label: "Fallback contact", rank: "fallback" };
       }
       if (inventoryCoverage?.rank === "covered") {
@@ -2783,15 +3913,19 @@
       const values = {
         category: record.category,
         contact: coverage.detail || record.owner,
+        jenkinsError: record.jenkinsErrorScore == null ? "" : String(record.jenkinsErrorScore),
+        jenkinsPriority: record.jenkinsPrioritySummary || "",
         livelabsId: record.livelabsId,
         publishStatus: allDataPublishStatus(record),
         publishType: allDataPublishType(record),
         source: record.source,
         title: record.title,
         type: allDataType(record),
+        qaError: record.qa?.observed_error_score == null ? "" : String(record.qa.observed_error_score),
+        qaState: qaEvidenceState(record),
         wmsId: record.wmsId
       };
-      return values[key] || "";
+      return values[key] ?? "";
     }
     function sortAllDataRecords(records) {
       const sortField = allDataSortFields.find((field) => field.key === allDataState.sortKey);
@@ -2800,6 +3934,12 @@
       }
       const direction = allDataState.sortDirection === "desc" ? "desc" : "asc";
       return records.slice().sort((left, right) => {
+        if (sortField.key === "qaError" || sortField.key === "jenkinsError") {
+          const scoreFor = (record) => sortField.key === "jenkinsError" ? record.jenkinsErrorScore : record.qa?.observed_error_score;
+          const missingLeft = scoreFor(left) == null;
+          const missingRight = scoreFor(right) == null;
+          if (missingLeft !== missingRight) return missingLeft ? 1 : -1;
+        }
         const comparison = compareSortValues(allDataSortValue(left, sortField.key), allDataSortValue(right, sortField.key), sortField.type);
         if (comparison === 0) return (left.inventoryIndex ?? 0) - (right.inventoryIndex ?? 0);
         return direction === "desc" ? -comparison : comparison;
@@ -2862,6 +4002,8 @@
     }
     function resetAllDataFilters() {
       allDataState.coverage = "";
+      allDataState.jenkinsData = "";
+      allDataState.jenkinsPriority = "";
       allDataState.page = 1;
       allDataState.pageRange = "";
       allDataState.publishStatus = "";
@@ -2871,7 +4013,7 @@
       allDataState.sortDirection = "asc";
       allDataState.sortKey = "";
       allDataState.type = "";
-      ["all-data-search", "all-data-type", "all-data-publish-status", "all-data-publish-type", "all-data-review-state", "all-data-coverage"].forEach((id) => {
+      ["all-data-search", "all-data-type", "all-data-publish-status", "all-data-publish-type", "all-data-review-state", "all-data-coverage", "all-data-jenkins-data", "all-data-jenkins-priority"].forEach((id) => {
         const control = document.getElementById(id);
         if (control) control.value = "";
       });
@@ -2879,21 +4021,27 @@
     function setInventoryLoadingState(message = "Loading inventory") {
       document.querySelectorAll("[data-all-data-count]").forEach((node) => { node.textContent = message; });
       const rowsNode = document.querySelector("[data-all-data-rows]");
-      if (rowsNode) rowsNode.innerHTML = `<tr><td colspan="9" class="empty">${escapeHtml(message)}</td></tr>`;
+      if (rowsNode) rowsNode.innerHTML = `<tr><td colspan="13" class="empty">${escapeHtml(message)}</td></tr>`;
       const totalNode = document.querySelector("[data-all-data-total]");
       if (totalNode) totalNode.textContent = message;
     }
     function ensurePortfolioInventoryLoaded({ render = true } = {}) {
       if (loadedFullSearchRecords.length) {
-        if (render) renderAllDataTable();
+        if (render) {
+          if (window.__portfolioInventoryError) setInventoryLoadingState(window.__portfolioInventoryError);
+          else renderAllDataTable();
+        }
         return Promise.resolve(loadedFullSearchRecords);
       }
       if (portfolioInventoryLoadComplete) {
-        if (render) renderAllDataTable();
+        if (render) {
+          if (window.__portfolioInventoryError) setInventoryLoadingState(window.__portfolioInventoryError);
+          else renderAllDataTable();
+        }
         return Promise.resolve(loadedFullSearchRecords);
       }
       setInventoryLoadingState("Loading inventory");
-      return loadPortfolioInventoryRecords().then((fullRecords) => {
+      const inventoryRequest = loadPortfolioInventoryRecords().then((fullRecords) => {
         loadedFullSearchRecords = fullRecords.map((record, index) => {
           if (record.inventoryIndex === undefined) record.inventoryIndex = index;
           return record;
@@ -2923,9 +4071,13 @@
         applyNoAuthorGovernanceFlags();
         applyDemandProtectedGovernanceFlags();
         refreshInitializedTableStates();
-        if (render) renderAllDataTable();
+        if (render) {
+          if (window.__portfolioInventoryError) setInventoryLoadingState(window.__portfolioInventoryError);
+          else renderAllDataTable();
+        }
         return loadedFullSearchRecords;
       });
+      return window.LiveLabsLoading.track(inventoryRequest, 'Loading portfolio records…');
     }
     function focusAllDataFilters() {
       const filters = document.querySelector("#all-data-panel .all-data-filter-grid");
@@ -2948,6 +4100,14 @@
         Array.from(record.values?.values?.() || []).join(" "),
         Array.from(record.details?.values?.() || []).join(" ")
       ].filter(Boolean).join(" "));
+    }
+    function jenkinsPriorityMatches(record, priority) {
+      if (!priority) return true;
+      const overlay = record.jenkins || jenkinsOverlayForId(record.livelabsId);
+      if (!overlay) return false;
+      return priority === "unmapped"
+        ? Number(overlay.priorityCounts?.unmapped || 0) > 0
+        : Number(overlay.priorityCounts?.[priority.toLowerCase()] || 0) > 0;
     }
     function syncAllDataSelect(select, values, allLabel) {
       if (!select) return;
@@ -2977,6 +4137,11 @@
         if (allDataState.publishStatus && allDataPublishStatus(record) !== allDataState.publishStatus) return false;
         if (allDataState.publishType && allDataPublishType(record) !== allDataState.publishType) return false;
         if (allDataState.reviewState && allDataReviewState(record) !== allDataState.reviewState) return false;
+        const jenkins = record.jenkins || jenkinsOverlayForId(record.livelabsId);
+        if (allDataState.jenkinsData === "reported" && !jenkins) return false;
+        if (allDataState.jenkinsData === "issues" && !(Number(jenkins?.findingRows || 0) > 0)) return false;
+        if (allDataState.jenkinsData === "no-report" && jenkins) return false;
+        if (!jenkinsPriorityMatches(record, allDataState.jenkinsPriority)) return false;
         const coverage = allDataContactCoverage(record);
         if (!allDataRecordMatchesCoverage(coverage, allDataState.coverage)) return false;
         if (normalizedQuery && !allDataSearchText(record).includes(normalizedQuery)) return false;
@@ -2996,6 +4161,10 @@
         <td>${copyableValueHtml(record.livelabsId, "LiveLabs ID")}</td>
         <td>${escapeHtml(record.category || "N/A")}</td>
         <td>${copyableValueHtml(contact, "Author Email")}</td>
+        <td>${escapeHtml(record.qa?.observed_error_score ?? "N/A")}</td>
+        <td>${escapeHtml(record.jenkinsErrorScore ?? "N/A")}</td>
+        <td>${escapeHtml(record.jenkinsPrioritySummary || "No Jenkins report")}</td>
+        <td>${escapeHtml(qaEvidenceState(record).replaceAll("_", " "))}</td>
       </tr>`;
     }
     function openAllDataRecordDetail(row) {
@@ -3013,40 +4182,29 @@
     }
     function applyPortfolioStatsSummary() {
       const section = document.querySelector("#portfolio-stats");
-      if (!section || section.dataset.summaryApplied === "true") return;
-      section.dataset.summaryApplied = "true";
-      const fallbackDetails = Array.from(section.querySelectorAll("details.toggle-panel")).find((details) =>
-        normalizeFilterText(details.querySelector("summary h3")?.textContent || "") === "fallback implementation details"
-      );
-      if (fallbackDetails) fallbackDetails.hidden = false;
-      const sectionNote = section.querySelector(".section-head p");
-      if (sectionNote) sectionNote.textContent = "Start with four signals, then open the detailed demand and staleness breakdown only when you need it.";
-      const details = section.querySelector("details.toggle-panel:not([hidden])");
-      if (!details) return;
-      const summaryTitle = details.querySelector("summary h3");
-      const summaryMeta = details.querySelector("summary span");
-      if (summaryTitle) summaryTitle.textContent = "Explore the detailed breakdown";
-      if (summaryMeta) summaryMeta.textContent = "Demand + staleness bands";
-      const coveragePanel = Array.from(details.querySelectorAll(":scope > .toggle-body > .panel-grid > .panel")).find((panel) =>
-        normalizeFilterText(panel.querySelector(".panel-head h3")?.textContent || "") === "portfolio coverage"
-      );
-      if (coveragePanel) coveragePanel.remove();
-      const glance = document.createElement("details");
-      glance.className = "panel toggle-panel portfolio-glance";
-      glance.dataset.portfolioGlance = "true";
-      glance.setAttribute("aria-label", "Portfolio at a glance");
-      glance.innerHTML = `
-        <summary class="panel-head"><h3>Portfolio at a glance</h3></summary>
-        <div class="toggle-body portfolio-glance-body">
-          <p class="note">A quick read of the current active portfolio.</p>
-          <div class="portfolio-glance-grid">
-        <article class="portfolio-glance-card"><span>Active portfolio</span><strong>885</strong><small>585 workshops · 300 sprints</small></article>
-        <article class="portfolio-glance-card"><span>Updated in last 12 months</span><strong>285</strong><small>215 workshops · 70 sprints</small></article>
-        <article class="portfolio-glance-card"><span>Aged 18–24 months</span><strong>473</strong><small>250 workshops · 223 sprints</small></article>
-        <article class="portfolio-glance-card"><span>1,000+ views in 12 months</span><strong>433</strong><small>393 workshops · 40 sprints</small></article>
-          </div>
-        </div>`;
-      details.before(glance);
+      if (!section) return;
+      const records = publicRawRecords;
+      const overlay = dashboardQaReportMerge?.overlay || {};
+      const matched = Object.entries(overlay).filter(([id]) => publicLivelabsIds.has(String(id).trim()));
+      const scored = matched.filter(([, item]) => item?.findings?.some(finding => ["P2", "P3"].includes(finding.priority)));
+      const p1Count = matched.reduce((total, [, item]) => total + (Array.isArray(item?.findings) ? item.findings.filter((finding) => finding.priority === "P1").length : 0), 0);
+      const countByType = (type) => records.filter((record) => record.type === type).length;
+      const values = {
+        "public-count": records.length,
+        "jenkins-p1-count": p1Count,
+        "workshop-count": countByType("Workshop"),
+        "sprint-count": countByType("Sprint"),
+        "error-items-count": scored.length,
+        "p1-count": p1Count
+      };
+      Object.entries(values).forEach(([key, value]) => {
+        document.querySelectorAll(`[data-overview-metric="${key}"], [data-public-stat="${key}"]`).forEach((node) => {
+          const qaUnavailable = ["jenkins-p1-count", "error-items-count"].includes(key) && !dashboardQaReportMerge;
+          node.textContent = qaUnavailable ? "Unavailable" : (key === "public-count" && !records.length) ? "—" : Number(value).toLocaleString();
+        });
+      });
+      const cohortNote = section.querySelector('[data-overview-note="public-breakdown"]');
+      if (cohortNote) cohortNote.textContent = `${countByType("Workshop").toLocaleString()} workshops · ${countByType("Sprint").toLocaleString()} sprints`;
     }
     function renderInventorySummary(totalRecords) {
       const summaryNode = document.querySelector("[data-inventory-summary]");
@@ -3073,8 +4231,9 @@
           .join("");
       }
       if (warningNode) {
-        warningNode.hidden = true;
-        warningNode.textContent = "";
+        const qa = portfolioInventoryMetadata?.qa_governance;
+        warningNode.hidden = !qa;
+        warningNode.textContent = qa ? `QA ${qa.mode}: Jenkins ${qa.started_at}; Analytics ${qa.snapshot_date}. Error score 0–100; lower is better. Missing QA evidence does not count as a pass. ${qa.promotion_gaps.join("; ")}.` : "";
       }
     }
     function renderAllDataTable() {
@@ -3085,7 +4244,7 @@
       const totalRecords = loadedFullSearchRecords.length;
       if (totalNode) totalNode.textContent = totalRecords ? `${totalRecords.toLocaleString()} inventory records` : "Loading inventory";
       if (!totalRecords) {
-        rowsNode.innerHTML = `<tr><td colspan="9" class="empty">Open Portfolio Inventory to load records</td></tr>`;
+        rowsNode.innerHTML = `<tr><td colspan="13" class="empty">Open Portfolio Inventory to load records</td></tr>`;
         syncAllDataControls(0, 1, 0, 0, null);
         return;
       }
@@ -3107,30 +4266,23 @@
       const last = records.length ? (selectedRange ? Math.min(selectedRange.end, records.length) : start + pageRecords.length) : 0;
       rowsNode.innerHTML = pageRecords.length
         ? pageRecords.map((record, index) => allDataRowHtml(record, first + index)).join("")
-        : `<tr><td colspan="9" class="empty">No matching rows</td></tr>`;
+        : `<tr><td colspan="13" class="empty">No matching rows</td></tr>`;
       if (panel) panel.dataset.totalPages = String(totalPages);
       syncAllDataControls(records.length, totalPages, first, last, selectedRange);
     }
     document.addEventListener("DOMContentLoaded", () => {
+      mountPrimarySearch();
       ensureAllDataDashboardUi();
       applyRankedTableDisclosures();
+      observeJenkinsDashboardTables();
+      addPortfolioMetricTooltips(document);
       const navLinks = Array.from(document.querySelectorAll(".nav-list a"));
-      const setNavCurrent = (mode, targetHash = "") => {
+      const setNavCurrent = (mode) => {
         navLinks.forEach((item) => item.removeAttribute("aria-current"));
-        const defaultHash = mode === "tops" ? "#top-performers" : mode === "inventory" ? "" : "#overview";
-        const normalizedHash = targetHash || defaultHash;
-        const hashLink = normalizedHash
-          ? navLinks.find((item) => item.getAttribute("href") === normalizedHash && !item.dataset.dashboardView)
-            || navLinks.find((item) => item.getAttribute("href") === normalizedHash)
-          : null;
-        const modeLink = navLinks.find((item) => item.dataset.dashboardView === mode);
-        const current = mode === "inventory"
-          ? (document.querySelector("[data-inventory-link]") || hashLink)
-          : mode === "overview"
-          ? (hashLink || modeLink)
-          : (modeLink || hashLink)
-          || document.querySelector('.nav-list a[data-dashboard-view="overview"]')
-          || document.querySelector('.nav-list a[href="#overview"]');
+        const normalizedMode = normalizeDashboardPage(mode);
+        const current = normalizedMode === "inventory"
+          ? navLinks.find((item) => item.hasAttribute("data-inventory-link"))
+          : navLinks.find((item) => item.dataset.dashboardView === normalizedMode);
         current?.setAttribute("aria-current", "true");
       };
       const scrollDashboardTarget = (targetHash) => {
@@ -3144,83 +4296,90 @@
           || normalizedPath.endsWith("/inventory")
           || normalizedPath.endsWith("/inventory/index.html");
       };
-      const replaceDashboardUrl = (targetHash) => {
-        if (!targetHash) return;
-        const normalizedPath = location.pathname.replace(/\/+$/, "").toLowerCase();
-        if (normalizedPath.endsWith("/inventory") || normalizedPath.endsWith("/inventory/index.html")) {
-          const target = new URL("../", location.href);
-          target.search = "";
-          target.hash = targetHash;
-          history.replaceState(null, "", `${target.pathname}${target.search}${target.hash}`);
-          return;
-        }
-        history.replaceState(null, "", targetHash);
+      const dashboardEntryUrl = () => {
+        return new URL(location.protocol === 'file:' ? 'index.html' : 'dashboard/', document.baseURI);
       };
-      const setDashboardMode = (mode = "overview", targetHash = "") => {
+      const setDashboardMode = (mode = "overview", options = {}) => {
+        if (typeof options === "string") options = { targetHash: options };
+        const targetHash = options.targetHash || "";
         showDashboardView({ clearUrl: false });
-        const normalizedMode = ["overview", "tops", "inventory"].includes(mode) ? mode : "overview";
-        if (normalizedMode !== "inventory") writeSearchUrl();
+        const normalizedMode = normalizeDashboardPage(mode);
         document.body.classList.toggle("dashboard-inventory-active", normalizedMode === "inventory");
-        document.body.classList.toggle("dashboard-tops-active", normalizedMode === "tops");
-        setNavCurrent(normalizedMode, targetHash);
-        replaceDashboardUrl(targetHash);
+        document.body.classList.remove("dashboard-tops-active");
+        applyDashboardPageView(normalizedMode);
+        setNavCurrent(normalizedMode);
+        if (options.updateUrl) {
+          const target = normalizedMode === "inventory"
+            ? new URL(location.protocol === "file:" ? "inventory/index.html" : "inventory/", document.baseURI)
+            : dashboardEntryUrl();
+          target.search = "";
+          if (normalizedMode !== "inventory") target.searchParams.set("view", normalizedMode);
+          target.hash = targetHash;
+          history.pushState(null, "", `${target.pathname}${target.search}${target.hash}`);
+        }
         if (normalizedMode === "inventory") {
           ensurePortfolioInventoryLoaded({ render: true }).finally(() => scrollDashboardTarget(targetHash || "#all-data-browser"));
           return;
         }
-        scrollDashboardTarget(targetHash || (normalizedMode === "tops" ? "#top-performers" : "#overview"));
+        const sections = dashboardPageConfig[normalizedMode]?.sections || [];
+        const sectionLoads = sections.map((sectionId) => loadLazySection(sectionId));
+        if (targetHash) Promise.all(sectionLoads).then(() => scrollDashboardTarget(targetHash));
+        else if (options.updateUrl && !options.preserveScroll) scrollDashboardTarget("#dashboard-top");
       };
+      window.setDashboardPage = setDashboardMode;
+      const dashboardTabs = Array.from(document.querySelectorAll("[data-dashboard-tab]"));
+      dashboardTabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => setDashboardMode(tab.dataset.dashboardTab, { updateUrl: true, preserveScroll: true }));
+        tab.addEventListener("keydown", (event) => {
+          const nextIndex = event.key === "ArrowRight" ? (index + 1) % dashboardTabs.length
+            : event.key === "ArrowLeft" ? (index - 1 + dashboardTabs.length) % dashboardTabs.length
+              : event.key === "Home" ? 0 : event.key === "End" ? dashboardTabs.length - 1 : -1;
+          if (nextIndex < 0) return;
+          event.preventDefault();
+          dashboardTabs[nextIndex].focus();
+          dashboardTabs[nextIndex].click();
+        });
+      });
       document.querySelectorAll("[data-dashboard-view]").forEach((link) => {
         link.addEventListener("click", (event) => {
           event.preventDefault();
-          setDashboardMode(link.dataset.dashboardView || "overview", link.getAttribute("href") || "");
+          setDashboardMode(link.dataset.dashboardView || "overview", { targetHash: link.hash || "", updateUrl: true });
         });
       });
       navLinks.filter((link) => !link.dataset.dashboardView && !link.dataset.inventoryLink).forEach((link) => {
         link.addEventListener("click", (event) => {
-          if (inventoryRouteRequested()) {
-            event.preventDefault();
-            const target = new URL("../", location.href);
-            target.search = "";
-            target.hash = link.getAttribute("href") || "#overview";
-            window.location.assign(`${target.pathname}${target.search}${target.hash}`);
-            return;
-          }
-          showDashboardView();
-          document.body.classList.remove("dashboard-inventory-active", "dashboard-tops-active");
-          setNavCurrent("overview", link.getAttribute("href") || "");
+          event.preventDefault();
+          const targetPage = dashboardSectionPage[link.hash.slice(1)] || "overview";
+          setDashboardMode(targetPage, { targetHash: link.hash || "", updateUrl: true });
         });
       });
       window.addEventListener("hashchange", () => {
         if (inventoryRouteRequested()) {
-          setDashboardMode("inventory", "");
+          setDashboardMode("inventory", { updateUrl: false });
           return;
         }
-        const targetHash = location.hash || "#overview";
-        document.body.classList.remove("dashboard-inventory-active", "dashboard-tops-active");
-        showDashboardView({ clearUrl: false });
-        setNavCurrent("overview", targetHash);
+        const targetHash = location.hash === "#overview" ? "" : location.hash;
+        const requestedPage = new URLSearchParams(location.search).get("view") || dashboardSectionPage[targetHash.slice(1)] || "performance";
+        setDashboardMode(requestedPage, { targetHash, updateUrl: false });
+        if (location.hash === "#overview") {
+          const canonical = new URL(location.href);
+          canonical.searchParams.set("view", normalizeDashboardPage(requestedPage));
+          canonical.hash = "";
+          history.replaceState(null, "", `${canonical.pathname}${canonical.search}`);
+        }
       });
       document.querySelectorAll("[data-dashboard-home]").forEach((link) => {
         link.addEventListener("click", (event) => {
           event.preventDefault();
-          if (inventoryRouteRequested()) {
-            const target = new URL("../", location.href);
-            target.search = "";
-            target.hash = "#overview";
-            window.location.assign(`${target.pathname}${target.search}${target.hash}`);
-            return;
-          }
-          setDashboardMode("overview", "#overview");
+          setDashboardMode("performance", { updateUrl: true });
         });
       });
       const normalizedPath = location.pathname.replace(/\/+$/, "").toLowerCase();
       const onInventoryPage = normalizedPath.endsWith("/inventory") || normalizedPath.endsWith("/inventory/index.html");
       const initialParams = new URLSearchParams(location.search);
-      const legacyInventoryRequested = !onInventoryPage && (location.hash === "#all-data-browser" || initialParams.get("view") === "inventory");
+      const legacyInventoryRequested = !onInventoryPage && location.hash === "#all-data-browser";
       if (legacyInventoryRequested) {
-        const target = new URL("./inventory/", location.href);
-        initialParams.delete("view");
+        const target = new URL(location.protocol === 'file:' ? 'inventory/index.html' : 'inventory', document.baseURI);
         target.search = initialParams.toString();
         target.hash = "";
         window.location.replace(`${target.pathname}${target.search}`);
@@ -3230,9 +4389,20 @@
         history.replaceState(null, "", `${location.pathname}${location.search}`);
       }
       if (inventoryRouteRequested()) {
-        setDashboardMode("inventory", "");
+        setDashboardMode("inventory", { updateUrl: false });
       } else {
-        setNavCurrent("overview", location.hash || "#overview");
+        const normalizedPathForRoute = location.pathname.replace(/\/+$/, "").toLowerCase();
+        const isDashboardRoute = normalizedPathForRoute.endsWith("/dashboard") || normalizedPathForRoute.endsWith("/dashboard/index.html") || normalizedPathForRoute === "";
+        const requestedPage = initialParams.get("view") || dashboardSectionPage[location.hash.slice(1)] || "performance";
+        const normalizedRequestedPage = normalizeDashboardPage(requestedPage);
+        const targetHash = location.hash === "#overview" ? "" : location.hash;
+        setDashboardMode(requestedPage, { targetHash, updateUrl: false });
+        if (isDashboardRoute && normalizedRequestedPage !== "inventory") {
+          const canonical = new URL(location.href);
+          canonical.searchParams.set("view", normalizedRequestedPage);
+          if (location.hash === "#overview") canonical.hash = "";
+          history.replaceState(null, "", `${canonical.pathname}${canonical.search}${canonical.hash}`);
+        }
       }
       syncAdminEntryLink();
       applyQaExceptionPrototype();
@@ -3273,13 +4443,14 @@
           return;
         }
         if (!detailViewActive) writeSearchUrl({ query: searchInput.value });
-        if (!loadedFullSearchRecords.length && !portfolioInventoryLoadComplete) {
+        if (!loadedFullSearchRecords.length) {
           const requestId = ++searchLoadRequest;
-          setSearchStatus("Loading full portfolio search");
+          setSearchStatus("Loading public portfolio search");
           syncSearchClear();
-          ensurePortfolioInventoryLoaded({ render: document.body.classList.contains("dashboard-inventory-active") }).then(() => {
+          loadFullSearchRecords().then((records) => {
             if (requestId !== searchLoadRequest) return;
             searchRecords = buildActiveSearchIndex();
+            if (!records.length) setSearchStatus("Public portfolio search is unavailable");
             renderSearchResults(searchRecords, searchInput.value);
             syncSearchClear();
           });
@@ -3307,22 +4478,21 @@
           writeSearchUrl({
             query: state.query,
             identity: state,
-            route: identityRequested && !inventoryWmsFilterOnly ? "dashboard" : "current"
+            route: identityRequested && !inventoryWmsFilterOnly ? "search" : "current"
           });
         }
-        if (inventoryWmsFilterOnly) {
-          setDashboardMode("inventory", "");
-          applyInventoryUrlState();
-          return;
-        }
+        if (inventoryRouteRequested()) return;
+        document.body.classList.remove('dashboard-inventory-active', 'dashboard-tops-active');
         if (identityRequested) {
           document.body.classList.remove("dashboard-inventory-active", "dashboard-tops-active");
           setSearchStatus(`Loading record for ${searchIdentityLabel(state)}`);
-          ensurePortfolioInventoryLoaded({ render: false }).then((records) => {
+          loadFullSearchRecords().then(async (records) => {
             searchRecords = buildSearchIndex(records, { includeTableRecords: false });
             const resolution = resolveSearchRecordIdentity(searchRecords, state);
             if (resolution.record) {
-              writeSearchUrl({ query: state.query, record: resolution.record, replace: true, route: "dashboard" });
+              await ensureDashboardQaMergeLoaded();
+              if (dashboardQaReportMerge) applyJenkinsMergeToRecord(resolution.record);
+              writeSearchUrl({ query: state.query, record: resolution.record, replace: true, route: "search" });
               renderSearchDetail(resolution.record, { updateUrl: false });
               setSearchStatus("");
             } else {
@@ -3335,7 +4505,10 @@
           return;
         }
         if (state.query) updateSearch();
-        else showDashboardView({ clearUrl: false });
+        else {
+          const requestedPage = new URLSearchParams(location.search).get("view") || dashboardSectionPage[location.hash.slice(1)] || "overview";
+          setDashboardMode(requestedPage, { targetHash: location.hash, updateUrl: false });
+        }
       };
       window.addEventListener("popstate", restoreSearchFromUrl);
       const scheduleSearchUpdate = (delay = 120) => {
@@ -3369,10 +4542,35 @@
           showDashboardView({ clearUrl: true });
           if (document.body.classList.contains("dashboard-inventory-active")) setNavCurrent("inventory", "");
           else if (document.body.classList.contains("dashboard-tops-active")) setNavCurrent("tops", "#top-performers");
-          else setNavCurrent("overview", location.hash || "#overview");
+          else setNavCurrent("performance");
         });
       });
       document.addEventListener("click", (event) => {
+        const sortButton = event.target.closest("[data-sort-table]");
+        if (sortButton) {
+          const tableId = sortButton.dataset.sortTable;
+          const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
+          if (!wrapper) return;
+          const columnIndex = sortButton.dataset.columnIndex;
+          const defaultDirection = sortButton.dataset.defaultDirection || "asc";
+          const currentDirection = wrapper.dataset.sortColumnIndex === columnIndex ? (wrapper.dataset.sortDirection || "none") : "none";
+          wrapper.dataset.sortColumnIndex = columnIndex;
+          wrapper.dataset.sortDirection = currentDirection === "asc" ? "desc" : defaultDirection;
+          preserveViewportDuringTableUpdate(tableId, () => applyTableState(tableId, { resetPage: true }));
+          return;
+        }
+        const clearButton = event.target.closest("[data-clear-filters-for]");
+        if (clearButton) {
+          const tableId = clearButton.dataset.clearFiltersFor;
+          preserveViewportDuringTableUpdate(tableId, () => {
+            document.querySelectorAll(`[data-table-filter="${tableId}"]`).forEach((control) => {
+              if (control.type === "checkbox") control.checked = false;
+              else control.value = "";
+            });
+            applyTableState(tableId, { resetPage: true });
+          });
+          return;
+        }
         const copyButton = event.target.closest("button[data-copy-value]");
         if (copyButton) {
           event.preventDefault();
@@ -3399,52 +4597,78 @@
         toggleRowExpanded(row);
       });
       enhanceCategoryFilters();
-      document.querySelectorAll("[data-table-filter]").forEach((control) => {
-        const eventName = control.tagName.toLowerCase() === "select" || control.type === "checkbox" ? "change" : "input";
-        control.addEventListener(eventName, () => {
-          preserveViewportDuringTableUpdate(control.dataset.tableFilter, () => {
-            applyTableState(control.dataset.tableFilter, { resetPage: true });
-          });
-        });
-      });
-      document.querySelectorAll("[data-sort-table]").forEach((button) => {
-        button.addEventListener("click", () => {
-          const tableId = button.dataset.sortTable;
-          const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
-          if (!wrapper) return;
-          const columnIndex = button.dataset.columnIndex;
-          const defaultDirection = button.dataset.defaultDirection || "asc";
-          const currentDirection = wrapper.dataset.sortColumnIndex === columnIndex ? (wrapper.dataset.sortDirection || "none") : "none";
-          let nextDirection = defaultDirection;
-          if (currentDirection === "asc") nextDirection = "desc";
-          else if (currentDirection === "desc") nextDirection = "asc";
-          wrapper.dataset.sortColumnIndex = columnIndex;
-          wrapper.dataset.sortDirection = nextDirection;
-          preserveViewportDuringTableUpdate(tableId, () => {
-            applyTableState(tableId, { resetPage: true });
-          });
-        });
-      });
-      document.querySelectorAll("[data-clear-filters-for]").forEach((button) => {
-        button.addEventListener("click", () => {
-          const tableId = button.dataset.clearFiltersFor;
-          preserveViewportDuringTableUpdate(tableId, () => {
-            document.querySelectorAll(`[data-table-filter="${tableId}"]`).forEach((control) => {
-              if (control.type === "checkbox") control.checked = false;
-              else control.value = "";
+      const updateTableForFilter = (event) => {
+        const control = event.target.closest?.("[data-table-filter]");
+        if (!control) return;
+        const usesChange = control.tagName.toLowerCase() === "select" || control.type === "checkbox";
+        if ((event.type === "change") !== usesChange) return;
+        if (control.dataset.filterMode === 'record-contact' || control.dataset.filterMode === 'table-search') {
+          const status = control.closest('label')?.querySelector('[data-contact-filter-status]');
+          const query = normalizeFilterText(control.value);
+          if (!query) {
+            if (status) { status.hidden = true; status.textContent = ''; }
+          } else if (!publicRecordByLiveLabsId.size && fullSearchRecordsLoadState !== 'unavailable' && control.dataset.contactLoadPending !== 'true') {
+            control.dataset.contactLoadPending = 'true';
+            control.dataset.contactLoadState = 'loading';
+            control.setAttribute('aria-busy', 'true');
+            if (status) { status.hidden = false; status.textContent = 'Searching public owner and contact fields…'; }
+            loadFullSearchRecords().then((records) => {
+              control.dataset.contactLoadPending = 'false';
+              control.dataset.contactLoadState = records.length ? 'ready' : 'unavailable';
+              control.removeAttribute('aria-busy');
+              if (status) {
+                status.textContent = records.length
+                  ? ''
+                  : 'Owner/contact search is unavailable; visible table fields remain searchable.';
+                status.hidden = Boolean(records.length);
+              }
+              preserveViewportDuringTableUpdate(control.dataset.tableFilter, () => applyTableState(control.dataset.tableFilter, { resetPage: true }));
             });
-            applyTableState(tableId, { resetPage: true });
-          });
+          } else if (!publicRecordByLiveLabsId.size && fullSearchRecordsLoadState === 'unavailable' && status) {
+            status.hidden = false;
+            status.textContent = 'Owner/contact email search is unavailable; visible table fields remain searchable.';
+          }
+        }
+        preserveViewportDuringTableUpdate(control.dataset.tableFilter, () => {
+          applyTableState(control.dataset.tableFilter, { resetPage: true });
         });
-      });
+      };
+      document.addEventListener("input", updateTableForFilter);
+      document.addEventListener("change", updateTableForFilter);
       document.addEventListener("toggle", (event) => {
         const disclosure = event.target;
         if (disclosure instanceof HTMLDetailsElement && disclosure.open) {
           initializeTablesIn(disclosure, { force: true });
         }
       }, true);
+      normalizeSectionLinks();
+      configureLazySections();
       scheduleInitialTableSetup();
+      window.LiveLabsLoading.ready();
       window.addEventListener("storage", (event) => {
         if (event.key === adminStorageKey) reloadDashboardAdminState();
+        if (event.key === qaMergeRefreshKey) reloadDashboardJenkinsMerge();
       });
+      loadFullSearchRecords().then(() => {
+        applyPortfolioStatsSummary();
+        return fetchDashboardState();
+      })
+        .then((payload) => {
+          dashboardQaReportMerge = payload?.qaReportMerge || null;
+          applyJenkinsDashboardMerge();
+          if (!payload?.configured || !payload.state) return;
+          const tagDefinitions = Array.isArray(payload.state.tagDefinitions) ? payload.state.tagDefinitions : [];
+          const remoteAssignments = Array.isArray(payload.state.rowOverrides) ? payload.state.rowOverrides : [];
+          const rowOverrides = dashboardAdminState.rowOverrides.map((override) => ({ ...override, tags: [], tagsOnly: false }));
+          remoteAssignments.forEach((remote) => {
+            const existing = rowOverrides.find((item) => item.target === remote.target
+              && normalizeFilterText(item.value) === normalizeFilterText(remote.value));
+            if (existing) existing.tags = remote.tags || [];
+            else rowOverrides.push({ ...remote, fieldEdits: {}, note: "", tagsOnly: true });
+          });
+          dashboardAdminState = sanitizeDashboardAdminState({ ...dashboardAdminState, tagDefinitions, rowOverrides });
+          window.localStorage.setItem(adminStorageKey, JSON.stringify(dashboardAdminState));
+          reloadDashboardAdminState();
+        })
+        .catch(() => {});
     });
