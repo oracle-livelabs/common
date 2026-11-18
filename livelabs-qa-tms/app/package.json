@@ -8,7 +8,8 @@
     "start": "node scripts/serve.mjs --port 4193",
     "build": "node scripts/build.mjs",
     "validate": "node scripts/validate-project.mjs",
-    "smoke": "node scripts/browser-smoke.mjs",
+    "smoke": "node ../../livelabs-qa-hub/app/scripts/workspace-review.mjs",
+    "smoke:legacy": "node ../../livelabs-qa-hub/app/scripts/legacy-review.mjs",
     "test": "node --test tests/*.test.mjs"
   },
   "engines": {

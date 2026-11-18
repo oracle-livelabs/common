@@ -8,6 +8,7 @@ import argparse
 import base64
 import csv
 import getpass
+import gzip
 import hashlib
 import hmac
 import io
@@ -21,17 +22,25 @@ import sqlite3
 import threading
 import time
 from datetime import datetime, timezone
+from contextlib import contextmanager
 from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit, parse_qs
 from admin_data import compare_snapshots, identity, provenance, quality_queue, validate_snapshot
+from dashboard_policy import read_policy, eligible as dashboard_eligible, admin_inventory, save_decision, save_review_decision
+from dashboard_audit import table_audit
 from importlib.util import module_from_spec, spec_from_file_location
+from author_reports import normalize_evidence, enrich_merge, load_evidence
+from qa_validity import qa_validity
+from jenkins_reports import normalize_report, reports as saved_jenkins_reports, report_file, report_csp, apply_list_operations
+from admin_shell import admin_page, report_page
 
 ROOT = Path(__file__).resolve().parents[2]
 PRIVATE = ROOT / 'dev/admin'
 STATE = ROOT / '.private/admin'
 DATABASE = STATE / 'admin.sqlite3'
+JENKINS_ARCHIVE = STATE / 'jenkins-reports'
 QA_REPORTS_ROOT = Path(os.environ.get('LIVELABS_ADMIN_QA_REPORTS_DIR', ROOT.parent / 'qa-automation' / 'reports')).resolve()
 ITERATIONS = 600000
 MAX_USERNAME_LENGTH = 200
@@ -59,21 +68,27 @@ ISSUE_TAXONOMY = {
     'AUTHENTICATION_REQUIRED': ('', 'Internal QA only', 'internal-qa', True),
 }
 JENKINS_SCORE_POLICY = {
-    'version': 'jenkins-priority-v1',
+    'version': 'jenkins-hygiene-validity-v2',
     'weights': {'P2': 2, 'P3': 1},
     'referenceBurden': 20,
     'tableShare': 0.25,
 }
+@contextmanager
 def db():
     connection = sqlite3.connect(DATABASE)
     connection.row_factory = sqlite3.Row
-    return connection
+    try:
+        with connection:
+            yield connection
+    finally:
+        connection.close()
 
 
 def initialize():
     STATE.mkdir(parents=True, exist_ok=True)
     with db() as conn:
         conn.executescript('''
+            CREATE TABLE IF NOT EXISTS qa_retest_list (id INTEGER PRIMARY KEY CHECK(id=1), payload TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS account (id INTEGER PRIMARY KEY CHECK(id=1), username TEXT NOT NULL, salt TEXT NOT NULL, digest TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS sessions (token TEXT PRIMARY KEY, csrf TEXT NOT NULL, expires REAL NOT NULL, remembered INTEGER NOT NULL DEFAULT 0, last_seen REAL NOT NULL DEFAULT 0);
             CREATE TABLE IF NOT EXISTS snapshots (id TEXT PRIMARY KEY, label TEXT NOT NULL, date TEXT NOT NULL, created TEXT NOT NULL, payload TEXT NOT NULL);
@@ -186,6 +201,7 @@ def classify_qa_issue(issue):
         'sourceItemPriority': str(issue.get('sourceItemPriority', issue.get('itemPriority', '')))[:20],
         'catalogUrl': str(issue.get('catalogUrl', ''))[:2000],
         'finalUrl': str(issue.get('finalUrl', ''))[:2000],
+        'authorEvidence': normalize_evidence(issue),
     }
 
 
@@ -266,6 +282,12 @@ def validate_qa_summary(summary):
         for item in catalog_items:
             if not isinstance(item, dict):
                 raise ValueError('Each catalog item in the QA summary must be an object.')
+            catalog = item.get('catalogItem') or {}
+            if not isinstance(catalog, dict):
+                raise ValueError('Each catalog item needs an identity object.')
+            grouped_ids = {str(value) for field in ('ids', 'duplicate_ids') for value in catalog.get(field, [])}
+            if len(grouped_ids) > 1:
+                raise ValueError('Grouped LiveLabs IDs cannot be merged. Import a per-ID summary or a reconciled JSON/CSV pair.')
             if item.get('tests') is not None and (not isinstance(item.get('tests'), list) or len(item['tests']) > 20000 or any(not isinstance(test, dict) for test in item['tests'])):
                 raise ValueError('Catalog item tests must be objects in a list of no more than 20,000 rows.')
             if item.get('counts') is not None and not isinstance(item.get('counts'), dict):
@@ -289,6 +311,7 @@ def qa_snapshot_id(summary):
 
 
 def store_qa_snapshot(summary, label, parent_id=None, source='upload'):
+    summary = normalize_report(summary, for_merge=True)
     validate_qa_summary(summary)
     run_id = str(summary['runId'])
     snapshot_id = qa_snapshot_id(summary)
@@ -338,10 +361,16 @@ def qa_merge_rows(summary):
             rows.append({**common, 'recordType': 'catalog-item', 'testTitle': '', 'section': '',
                          'testStatus': '', 'expectedStatus': '', 'classification': issue_summary['prioritySummary']})
             continue
+        unassigned = [issue for issue in issues if isinstance(issue, dict) and sum(isinstance(t, dict) and t.get('title') == issue.get('testTitle') for t in tests) != 1]
+        if unassigned:
+            unmatched = summarize_qa_issues(unassigned)
+            rows.append({**common, 'recordType':'item-findings', 'testTitle':'', 'section':'', 'testStatus':'', 'expectedStatus':'', 'classification':'',
+                'issueDetails':unmatched['details'], 'issueCodes':unmatched['codes'], 'issueCount':unmatched['rows'],
+                'issueOccurrences':unmatched['occurrences'], 'prioritySummary':unmatched['prioritySummary'], 'issueSummary':unmatched['preview']})
         for test in tests:
             if not isinstance(test, dict):
                 continue
-            related = [issue for issue in issues if isinstance(issue, dict) and issue.get('testTitle') == test.get('title')]
+            related = [issue for issue in issues if isinstance(issue, dict) and issue not in unassigned and issue.get('testTitle') == test.get('title')]
             related_summary = summarize_qa_issues(related)
             rows.append({**common, 'recordType': 'test', 'testTitle': test.get('title', ''),
                          'section': test.get('section', ''), 'testStatus': test.get('status', ''),
@@ -480,9 +509,21 @@ def merge_sources(analytics_id, qa_id, analytics_field='livelabsId', qa_field='l
             elif group != 'internal-qa':
                 rollup['unmapped'] += 1
     score_by_record = {}
-    for record_key, rollup in score_rollups.items():
-        burden = JENKINS_SCORE_POLICY['weights']['P2'] * rollup['p2Occurrences'] + JENKINS_SCORE_POLICY['weights']['P3'] * rollup['p3Occurrences']
-        score_by_record[record_key] = round(100 * burden / (burden + JENKINS_SCORE_POLICY['referenceBurden']), 2) if not rollup['unmapped'] else None
+    validity_by_record = {}
+    for record_key in score_rollups:
+        rows = [r for r in output if r.get('analyticsRecordKey') == record_key and r['matchStatus'] == 'matched']
+        aggregate = next((r['qaTestCounts'] for r in rows if r.get('qaTestCounts')), None)
+        counts = dict(aggregate) if aggregate else {'passed': 0, 'failed': 0, 'skipped': 0, 'other': 0}
+        if aggregate is None:
+            for r in rows:
+                status = str(r.get('qaTestStatus', '')).lower()
+                if not status and not r.get('qaTestTitle'): continue
+                key = 'passed' if status in ('passed','pass') else 'failed' if status in ('failed','fail','unexpected') else 'skipped' if status == 'skipped' else 'other'
+                counts[key] += 1
+        scored = enrich_dashboard_qa_overlay({'testCounts': counts, 'itemStatus': rows[0].get('qaItemStatus'),
+            'findings': [issue for r in rows for issue in r.get('qaIssueDetails', [])]})
+        score_by_record[record_key] = scored['jenkinsErrorScore']
+        validity_by_record[record_key] = scored['scoreState']
     for row in output:
         rollup = score_rollups.get(row.get('analyticsRecordKey'))
         if row['matchStatus'] == 'matched' and rollup:
@@ -491,7 +532,7 @@ def merge_sources(analytics_id, qa_id, analytics_field='livelabsId', qa_field='l
             row['qaPriorityP2Occurrences'] = rollup['p2Occurrences']
             row['qaPriorityP3Occurrences'] = rollup['p3Occurrences']
             row['qaJenkinsErrorScore'] = score_by_record.get(row['analyticsRecordKey'])
-            row['qaJenkinsScoreState'] = 'scored' if row['qaJenkinsErrorScore'] is not None else 'unmapped-priority'
+            row['qaJenkinsScoreState'] = validity_by_record[row['analyticsRecordKey']]
         else:
             row['qaPriorityCounts'] = {'p1': 0, 'p1Verification': 0, 'p2': 0, 'p3': 0, 'p2Occurrences': 0, 'p3Occurrences': 0, 'unmapped': 0}
             row['qaPriorityP1'] = 0
@@ -543,9 +584,8 @@ def canonical_inventory_payload():
 
 def public_inventory_scope():
     payload = canonical_inventory_payload()
-    records = [record for record in payload['records']
-               if str(record.get('publishType', '')).strip().casefold() == 'public'
-               and str(record.get('publishStatus', '')).strip().casefold() == 'published']
+    policy = read_policy()
+    records = [record for record in payload['records'] if dashboard_eligible(record, policy)]
     ids = {str(record.get('livelabsId', '')).strip() for record in records if str(record.get('livelabsId', '')).strip()}
     wms_ids = {str(record.get('wmsId', '')).strip() for record in records if str(record.get('wmsId', '')).strip()}
     titles = {' '.join(str(record.get('title', '')).split()).casefold() for record in records if str(record.get('title', '')).strip()}
@@ -557,8 +597,8 @@ def enrich_dashboard_qa_overlay(item, policy=None):
     findings = item.get('findings') if isinstance(item.get('findings'), list) else []
     counts = {'p1': 0, 'p1Verification': 0, 'p2': 0, 'p3': 0,
               'p2Occurrences': 0, 'p3Occurrences': 0, 'internalQa': 0, 'unmapped': 0}
-    for finding in findings:
-        normalized = classify_qa_issue(finding)
+    normalized_findings = [classify_qa_issue(finding) for finding in findings]
+    for normalized in normalized_findings:
         priority = normalized.get('priority')
         group = normalized.get('group')
         occurrence_count = max(0, int(normalized.get('count', 0) or 0))
@@ -582,13 +622,18 @@ def enrich_dashboard_qa_overlay(item, policy=None):
     reference_burden = max(0.0, float(score_policy.get('referenceBurden', JENKINS_SCORE_POLICY['referenceBurden'])))
     burden = (float(weights.get('P2', 2)) * counts['p2Occurrences']
               + float(weights.get('P3', 1)) * counts['p3Occurrences'])
-    score = round(100 * burden / (burden + reference_burden), 2) if counts['unmapped'] == 0 else None
+    validity = qa_validity({**item, 'findings': normalized_findings})
+    if counts['unmapped'] and validity == 'scored':
+        validity = 'unmapped-priority'
+    score = round(100 * burden / (burden + reference_burden), 2) if validity == 'scored' and burden + reference_burden > 0 else None
     item['priorityCounts'] = counts
     item['p2Occurrences'] = counts['p2Occurrences']
     item['p3Occurrences'] = counts['p3Occurrences']
     item['jenkinsErrorScore'] = score
     item['scorePolicy'] = score_policy
-    item['scoreState'] = 'scored' if score is not None else 'unmapped-priority'
+    item['scoreState'] = validity
+    item['scoreValidityVersion'] = 2
+    item['scoreScope'] = 'Reported P2/P3 content hygiene; coverage and content length can affect comparisons.'
     return item
 
 
@@ -707,12 +752,15 @@ class Handler(BaseHTTPRequestHandler):
         # Login requests and tokens are never logged.
         pass
 
-    def send(self, status, body=b'', content_type='application/json', cookie=None, csp=None, disposition=None):
+    def send(self, status, body=b'', content_type='application/json', cookie=None, csp=None, disposition=None, content_encoding=None):
         if not isinstance(body, bytes):
             body = json.dumps(body, ensure_ascii=False).encode()
         self.send_response(status)
         self.send_header('Content-Type', content_type)
         self.send_header('Content-Length', str(len(body)))
+        if content_encoding:
+            self.send_header('Content-Encoding', content_encoding)
+            self.send_header('Vary', 'Accept-Encoding')
         self.send_header('Cache-Control', 'no-store')
         self.send_header('X-Content-Type-Options', 'nosniff')
         self.send_header('Referrer-Policy', 'same-origin')
@@ -861,6 +909,7 @@ class Handler(BaseHTTPRequestHandler):
                     },
                     'overlay': public_overlay,
                 }
+                public_merge = enrich_merge(public_merge, load_evidence(STATE / 'author-evidence.json'), public_ids)
             return self.send(200, {'configured': True, 'state': {'tagDefinitions': definitions, 'rowOverrides': assignments},
                                    'qaReportMerge': public_merge})
         if path == '/admin':
@@ -879,18 +928,58 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header('Content-Length', '0')
             self.end_headers()
             return
+        if path.startswith('/admin/jenkins/report/'):
+            if not self.session():
+                return self.send(401, {'error': 'Sign in required.'})
+            parts = path.split('/')
+            if len(parts) != 6:
+                return self.send(404, {'error': 'Report file not found.'})
+            try:
+                target = report_file(JENKINS_ARCHIVE, parts[4], parts[5])
+                mime = mimetypes.guess_type(str(target))[0] or 'application/octet-stream'
+                if target.suffix == '.html':
+                    html = report_page(target.read_text(encoding='utf-8'))
+                    body = html.encode('utf-8')
+                    if 'gzip' in self.headers.get('Accept-Encoding', ''):
+                        return self.send(200, gzip.compress(body), mime + ';charset=utf-8', csp=report_csp(html), content_encoding='gzip')
+                    return self.send(200, body, mime + ';charset=utf-8', csp=report_csp(html))
+                csp = None
+                compressed = target.with_name(target.name + '.gz')
+                if 'gzip' in self.headers.get('Accept-Encoding', '') and compressed.is_file() and compressed.resolve().parent == target.parent:
+                    return self.send(200, compressed.read_bytes(), mime, csp=csp, content_encoding='gzip')
+                return self.send(200, target.read_bytes(), mime + (';charset=utf-8' if mime.startswith('text/') else ''), csp=csp)
+            except (OSError, ValueError):
+                return self.send(404, {'error': 'Report file not found.'})
+        if path.rstrip('/') == '/admin/jenkins' and self.session():
+            available = saved_jenkins_reports(JENKINS_ARCHIVE)
+            if available:
+                self.send_response(302)
+                self.send_header('Location', f"/admin/jenkins/report/{available[0]['id']}/summary.html")
+                self.send_header('Cache-Control', 'no-store')
+                self.send_header('Content-Length', '0')
+                self.end_headers()
+                return
         admin_pages = {
             '/admin/dashboard-management': 'dashboard-management.html',
             '/admin/data-merge': 'data-merge.html',
+            '/admin/jenkins': 'jenkins.html',
+            '/admin/jenkins/history': 'jenkins.html',
             '/admin/governance': 'panel.html',
-            '/admin/inventory': 'inventory.html',
-            '/admin/user-settings': 'user-settings.html'
+            '/admin/inventory': 'inventory.html'
         }
         page_path = path.rstrip('/') if path.startswith('/admin/') else path
+        if page_path == '/admin/user-settings':
+            self.send_response(302)
+            self.send_header('Location', '/admin/dashboard-management' if self.session() else '/admin')
+            self.send_header('Cache-Control', 'no-store')
+            self.send_header('Content-Length', '0')
+            self.end_headers()
+            return
         if page_path in admin_pages:
             if not self.session():
                 return self.file(PRIVATE / 'login.html')
-            return self.file(PRIVATE / admin_pages[page_path])
+            html = admin_page((PRIVATE / admin_pages[page_path]).read_text(encoding='utf-8'), page_path)
+            return self.send(200, html.encode('utf-8'), 'text/html;charset=utf-8')
         if path in ('/admin-panel-login', '/admin-panel-login/', '/admin-panel', '/login.html', '/admin.html'):
             return self.redirect()
         if path.startswith('/api/admin/'):
@@ -905,10 +994,27 @@ class Handler(BaseHTTPRequestHandler):
                                            'expires': session['expires'], 'idleExpires': session['idle_expires'],
                                            'remembered': session['remembered']})
                 if path == '/api/admin/inventory':
-                    return self.send(200, canonical_inventory_payload())
+                    return self.send(200, admin_inventory(canonical_inventory_payload()))
+                if path == '/api/admin/qa-overlay':
+                    applied = dashboard_qa_merge() or {}
+                    policy = applied.get('summary', {}).get('scorePolicy') or JENKINS_SCORE_POLICY
+                    applied = enrich_merge(applied, load_evidence(STATE / 'author-evidence.json'), set(applied.get('overlay', {})))
+                    return self.send(200, {'scorePolicy':policy, 'overlay': {key: enrich_dashboard_qa_overlay(dict(item), policy)
+                        for key, item in applied.get('overlay', {}).items() if isinstance(item, dict)}})
+                if path == '/api/admin/dashboard-audit':
+                    query = parse_qs(url.query)
+                    maximum = float(query['max_views'][0]) if query.get('max_views') else None
+                    months = int(query['months'][0]) if query.get('months') else None
+                    return self.send(200, table_audit(canonical_inventory_payload(), maximum, months))
                 if path == '/api/admin/dashboard-state':
                     saved = dashboard_admin_state()
                     return self.send(200, saved or {'state': None, 'updated': None})
+                if path == '/api/admin/jenkins/reports':
+                    return self.send(200, {'reports': saved_jenkins_reports(JENKINS_ARCHIVE), 'liveJenkinsConfigured': False})
+                if path == '/api/admin/jenkins/list':
+                    with db() as conn:
+                        saved = conn.execute('SELECT payload FROM qa_retest_list WHERE id=1').fetchone()
+                    return self.send(200, {'retest': json.loads(saved['payload']) if saved else {}})
                 if path == '/api/admin/jenkins/runs':
                     return self.send(200, {'source': 'local-archive', 'runs': qa_report_runs()})
                 if path == '/api/admin/jenkins/run':
@@ -992,7 +1098,7 @@ class Handler(BaseHTTPRequestHandler):
             if not self.session():
                 return self.send(401, {'error': 'Sign in required.'})
             name = path.removeprefix('/admin-assets/')
-            if name not in ('panel.js', 'admin.css', 'dashboard-management.js', 'data-merge.js', 'inventory.js', 'inventory.css', 'user-settings.js'):
+            if name not in ('jenkins.js', 'jenkins.css', 'jenkins-report-theme.css', 'jenkins-report-bridge.js', 'panel.js', 'admin.css', 'admin-shell.css', 'admin-shell.js', 'dashboard-management.js', 'data-merge.js', 'inventory.js', 'inventory.css'):
                 return self.send(404, {'error': 'Not found.'})
             return self.file(PRIVATE / name)
         if path in ('/assets/admin-login.js', '/assets/admin-login.css'):
@@ -1014,7 +1120,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(403, {'error': 'Same-origin request required.'})
         try:
             length = int(self.headers.get('Content-Length', '0'))
-            limit = 4096 if path == '/api/admin/login' else MAX_BODY
+            limit = 4096 if path == '/api/admin/login' else 96 * 1024 * 1024 if path == '/api/admin/qa-snapshots' else MAX_BODY
             if not 0 < length <= limit:
                 return self.send(413, {'error': 'Request size exceeds limit.'})
             payload = json.loads(self.rfile.read(length))
@@ -1064,6 +1170,22 @@ class Handler(BaseHTTPRequestHandler):
         if not hmac.compare_digest(self.headers.get('X-CSRF-Token', ''), session['csrf']):
             return self.send(403, {'error': 'Session request token required.'})
         try:
+            if path == '/api/admin/jenkins/list':
+                with LOCK, db() as conn:
+                    saved = conn.execute('SELECT payload FROM qa_retest_list WHERE id=1').fetchone()
+                    updated = apply_list_operations(json.loads(saved['payload']) if saved else {}, payload.get('operations'))
+                    conn.execute('INSERT OR REPLACE INTO qa_retest_list(id,payload) VALUES(1,?)', (json.dumps(updated),))
+                return self.send(200, {'retest': updated})
+            if path in ('/api/admin/jenkins/retest', '/api/admin/jenkins/par-link/resolve'):
+                return self.send(503, {'error': 'Live Jenkins services are not connected. Use the saved evidence and exported retest payload.'})
+            if path == '/api/admin/content-visibility':
+                with db() as conn:
+                    actor = conn.execute('SELECT username FROM account WHERE id=1').fetchone()['username']
+                return self.send(200, save_decision(payload, canonical_inventory_payload(), actor))
+            if path == '/api/admin/retirement-review':
+                with db() as conn:
+                    actor = conn.execute('SELECT username FROM account WHERE id=1').fetchone()['username']
+                return self.send(200, save_review_decision(payload, canonical_inventory_payload(), actor))
             if path == '/api/admin/parse-xlsx':
                 return self.send(200, parse_uploaded_xlsx(payload.get('filename'), payload.get('contentBase64')))
             if path == '/api/admin/logout':
@@ -1163,14 +1285,8 @@ class Handler(BaseHTTPRequestHandler):
                     })
                     source_test_counts = row.get('qaTestCounts')
                     if isinstance(source_test_counts, dict) and source_test_counts:
-                        passed = int(source_test_counts.get('passed', 0) or 0)
-                        failed = int(source_test_counts.get('failed', 0) or 0)
-                        skipped = int(source_test_counts.get('skipped', 0) or 0)
-                        total = int(source_test_counts.get('total', passed + failed + skipped) or 0)
-                        item['testCounts'] = {
-                            'passed': max(0, passed), 'failed': max(0, failed), 'skipped': max(0, skipped),
-                            'other': max(0, total - passed - failed - skipped),
-                        }
+                        # Keep declared totals and unknown/invalid counts; validity must match preview.
+                        item['testCounts'] = dict(source_test_counts)
                     issue_details = row.get('qaIssueDetails') if isinstance(row.get('qaIssueDetails'), list) else []
                     for issue in issue_details:
                         normalized = classify_qa_issue(issue)
@@ -1194,10 +1310,10 @@ class Handler(BaseHTTPRequestHandler):
                         if len(item['findings']) < 5000:
                             item['findings'].append(normalized)
                     status = str(row['qaTestStatus'] or '').casefold()
-                    if row['qaTestTitle'] or status:
+                    if (row['qaTestTitle'] or status) and not source_test_counts:
                         if status in ('passed', 'pass'):
                             item['testCounts']['passed'] += 1
-                        elif status in ('failed', 'fail', 'timedout', 'timed out', 'interrupted', 'unexpected'):
+                        elif status in ('failed', 'fail', 'unexpected'):
                             item['testCounts']['failed'] += 1
                         elif status == 'skipped':
                             item['testCounts']['skipped'] += 1
@@ -1210,15 +1326,7 @@ class Handler(BaseHTTPRequestHandler):
                 if not overlay:
                     raise ValueError('The selected reports contain no matched LiveLabs IDs to apply to the dashboard.')
                 for item in overlay.values():
-                    counts = item['priorityCounts']
-                    burden = (JENKINS_SCORE_POLICY['weights']['P2'] * counts['p2Occurrences']
-                              + JENKINS_SCORE_POLICY['weights']['P3'] * counts['p3Occurrences'])
-                    item['scorePolicy'] = JENKINS_SCORE_POLICY
-                    item['jenkinsErrorScore'] = (
-                        round(100 * burden / (burden + JENKINS_SCORE_POLICY['referenceBurden']), 2)
-                        if counts['unmapped'] == 0 else None
-                    )
-                    item['scoreState'] = 'scored' if counts['unmapped'] == 0 else 'unmapped-priority'
+                    enrich_dashboard_qa_overlay(item)
                 merge_id = secrets.token_hex(16)
                 mapping = merged['mapping']
                 summary = {**merged['counts'], 'matchedDashboardItems': len(overlay), 'scorePolicy': JENKINS_SCORE_POLICY}
@@ -1343,7 +1451,7 @@ def main():
         password = secrets.token_urlsafe(24)
         configure('admin', password)
         credentials = STATE / 'initial-credentials.txt'
-        credentials.write_text('Local LiveLabs Analytics admin\nUsername: admin\nPassword: ' + password + '\n\nChange this password in Account after signing in.\n', encoding='utf-8')
+        credentials.write_text('Local LiveLabs Analytics admin\nUsername: admin\nPassword: ' + password + '\n\nChange this password with: python dev/scripts/admin-server.py --configure\n', encoding='utf-8')
         print('Local account created. Initial credentials file: ' + str(credentials))
         return
     if args.configure:

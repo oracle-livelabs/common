@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "distinctScenarios": 24,
+  "singleCleanFullRun": false,
+  "suites": {
+    "dashboard-management.spec.cjs": 6,
+    "qa-governance.spec.cjs": 2,
+    "search-detail-reports.spec.cjs": 6,
+    "static-dashboard.spec.cjs": 5,
+    "static-delivery.spec.cjs": 2,
+    "table-presentation.spec.cjs": 2,
+    "search-navigation.spec.cjs": 1
+  },
+  "evidence": [
+    "browser-suite.log: 21 passed, 1 source-selection regression failed before fix",
+    "admin-final.log: all 6 Admin scenarios passed after fix",
+    "search-flows.log: additional public search scenario passed; Admin evaluation-context test issue corrected and passed in admin-search.log and admin-final.log"
+  ],
+  "remainingProductFailuresInExecutedScenarios": 0
+}

@@ -115,6 +115,27 @@
     options($('quality-snapshot'), latest);
     options($('review-snapshot'), latest);
     renderSnapshotOverview();
+    const empty = snapshots.length === 0;
+    for (const id of ['before','after','quality-snapshot','review-snapshot','download-snapshot','compare','changes-csv','changes-xlsx','quality-csv','quality-xlsx']) {
+      $(id).disabled = empty;
+    }
+    $('review-form').querySelectorAll('input,select,textarea,button').forEach(control => { control.disabled = empty; });
+    if (empty) {
+      issues = []; reviewRecords = []; reviewPayload = null;
+      $('overview-issues').textContent = '—';
+      $('overview-affected').textContent = 'Awaiting a snapshot';
+      $('overview-quality-date').textContent = '—';
+      $('overview-freshness').textContent = 'No source selected';
+      const message = 'Capture the current inventory or import a snapshot to start reviewing.';
+      $('snapshot-info').textContent = message;
+      $('quality-info').textContent = message;
+      $('quality-summary').replaceChildren();
+      $('quality-results').replaceChildren();
+      $('review-selection-note').textContent = message;
+      renderRecordChoices(''); renderCandidateChoices(''); renderScore();
+      return;
+    }
+    $('review-selection-note').textContent = 'Choose a record from the quality queue, or search this snapshot to start a review.';
     await Promise.all([loadQuality(), loadRecords()]);
   }
 

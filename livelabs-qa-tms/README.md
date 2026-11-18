@@ -1,51 +1,49 @@
-# LiveLabs Test Management Solution
+# LiveLabs Test Management
 
-LiveLabs TMS is a separate local prototype linked from the LiveLabs QA Hub. It explores a TestLink-style and Xray-style test management workflow for LiveLabs QA without changing Jira, GitHub, WMS, or production LiveLabs systems.
+Test Management is integrated into the main LiveLabs QA Hub dashboard and menu. The shared UI uses Asana-style Board and List views, with linked test, bug, plan, requirement, and run-evidence detail panels.
 
-## Prototype
+## Open locally
 
-Current status: demo-only static prototype with seeded/browser-local data. It is ready for manager review from GitHub Pages after this folder is pushed with `app/dist`.
-
-Run locally:
+From `app/`:
 
 ```powershell
-cd "C:\Users\Lucian Brinzei\Desktop\Desktop\Projects\livelabs-repos\common\livelabs-qa-tms\app"
-npm test
-npm run validate
-npm run build
-npm run smoke
 npm start
 ```
 
-Local review URL:
+The [TMS entry](http://127.0.0.1:4193/) opens [Tests in QA Hub](http://127.0.0.1:4192/#section=tests). The launcher starts the Hub reader if it is not already available. Both entry points converge on port 4192, keeping the unified browser-local state on one origin.
 
-```text
-http://127.0.0.1:4193
+The [previous TMS](http://127.0.0.1:4193/legacy.html) and its original `livelabs-tms-state-v2` browser storage remain available. Historical demo records are not mixed with real framework evidence.
+
+## What this project owns
+
+- `app/public/workspace-model.mjs`: shared test, bug, work-item, requirement-link, plan, and manual-result behavior.
+- `app/scripts/automation-adapter.mjs`: reads the sibling QA Automation collection and saved reports, normalizes identities, and returns a minimized evidence projection.
+- `app/tests/workspace.test.mjs`: source matching, retry handling, deduplication, evidence immutability, manual execution, setup guards, and plan integrity.
+- The retained legacy model/UI and tests for earlier project, suite, requirement-document, execution, and lifecycle workflows.
+
+The Hub project owns the integrated renderer and navigation. Its static build packages this project's shared model. No separate duplicated TMS interface or browser-local store is used for the new workflow.
+
+## Workflow and evidence
+
+- **Tests:** Backlog → Ready → In progress → In review → Done.
+- **Bugs & findings:** Needs triage → Confirmed → In progress → Ready to retest → Closed.
+- Dragging or editing a status changes local workflow only. Imported pass/fail/skipped results retain their original run, browser, and timestamp.
+- Current collection, catalog setup guards, historical-only test identities, and manual tests remain visibly distinct.
+- Automation findings require triage; they are not automatically confirmed product bugs.
+- Tests link to bugs, plans, requirements, and saved run evidence. Manual test results require a user-supplied evidence note.
+- Plans can be created from a filtered test view and updated later. Requirements support explicit test links in both directions.
+
+The development backend is read-only. Refresh collects test names without running browsers. There are no Jenkins execution, Jira writeback, deployment, or notification endpoints. Local workflow changes are saved in the Hub origin's `livelabs-qa-unified-workspace-v1` browser store; imported evidence is not copied into that store.
+
+## Checks
+
+```powershell
+npm test
+npm run build
+npm run validate
+npm run smoke
 ```
 
-GitHub Pages path after push:
+`npm run smoke` runs the shared Hub integration checks and needs both local servers plus installed Chrome and the sibling Playwright dependency. `npm run smoke:legacy` checks the retained TMS interface.
 
-```text
-https://oracle-livelabs.github.io/common/livelabs-qa-tms/
-```
-
-## Scope
-
-The prototype includes:
-
-- Test repository tree
-- Projects/features
-- Requirement documents
-- Requirements and traceability matrix
-- Test suites linked to test plans
-- Test plans, builds, and tests inside each plan
-- Test execution board and execution creation
-- Execution reports and local export preview
-- Defects and Jira/Xray-style mappings
-- Link back to LiveLabs QA Hub
-- Root `index.html` for GitHub Pages review from `/common/livelabs-qa-tms/`
-- Local project, requirement-document, requirement, suite, plan, test, and execution creation
-- Local execution status updates
-- Local audit events
-
-All data is local seeded and browser-persisted demo data.
+See [the integration report](../livelabs-qa-hub/docs/integrated-tms-v2.md). Earlier feature maps and version reports describe the retained legacy prototype, not the new default navigation.

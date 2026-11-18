@@ -1,0 +1,124 @@
+{
+  "format": "livelabs-analytics-object-storage-preflight-v1",
+  "generated_at": "2026-11-08T16:31:49.890Z",
+  "release_root": "C:\\Users\\Lucian Brinzei\\Desktop\\Desktop\\Projects\\livelabs-repos\\common\\livelabs-analytics\\dev\\releases\\stability-20261108-final",
+  "release_id": "2026-09-28-snapshot-refresh-7f372a8ea72ba9bf",
+  "strict": true,
+  "access_model": "internal-authenticated",
+  "status": "failed",
+  "summary": {
+    "passed": 16,
+    "warnings": 0,
+    "failures": 3
+  },
+  "required_object_metadata": {
+    "html": {
+      "content_type": "text/html; charset=utf-8",
+      "cache_control": "no-cache, must-revalidate"
+    },
+    "json": {
+      "content_type": "application/json; charset=utf-8",
+      "cache_control": "no-cache, must-revalidate"
+    },
+    "versioned_assets": {
+      "cache_control": "public, max-age=31536000, immutable"
+    }
+  },
+  "results": [
+    {
+      "status": "PASS",
+      "name": "release manifest integrity",
+      "detail": "23 declared files match exactly"
+    },
+    {
+      "status": "PASS",
+      "name": "static-only boundary",
+      "detail": "backend, admin, database, documentation, and local-runtime paths are absent"
+    },
+    {
+      "status": "PASS",
+      "name": "public cohort boundary",
+      "detail": "889 public/published rows; full inventory absent"
+    },
+    {
+      "status": "PASS",
+      "name": "record identity",
+      "detail": "889 unique nonempty LiveLabs IDs"
+    },
+    {
+      "status": "PASS",
+      "name": "canonical page parity",
+      "detail": "root and search match the reviewed dashboard"
+    },
+    {
+      "status": "PASS",
+      "name": "canonical portfolio snapshot consistency",
+      "detail": "2026-09-28T00:00:00Z"
+    },
+    {
+      "status": "PASS",
+      "name": "source snapshot-date consistency",
+      "detail": "2026-09-28"
+    },
+    {
+      "status": "PASS",
+      "name": "stylesheet asset resolution",
+      "detail": "5 font and image reference(s) resolve"
+    },
+    {
+      "status": "PASS",
+      "name": "approved UI and accessibility contract",
+      "detail": "required component and accessibility markers present"
+    },
+    {
+      "status": "FAIL",
+      "name": "fresh source snapshot",
+      "detail": "The recorded source snapshot is awaiting refresh; build time does not establish freshness"
+    },
+    {
+      "status": "PASS",
+      "name": "static Jenkins projection",
+      "detail": "861 matched items; inventory hash and score validity verified"
+    },
+    {
+      "status": "PASS",
+      "name": "access-bearing material scan",
+      "detail": "No matched private-key, GitHub-token or OCI PAR patterns; not a full security audit"
+    },
+    {
+      "status": "PASS",
+      "name": "governance table population",
+      "detail": "3 required table families contain rows"
+    },
+    {
+      "status": "PASS",
+      "name": "single paginated-table architecture",
+      "detail": "no separate Top 10, Top 50, or Top 100 panels found"
+    },
+    {
+      "status": "PASS",
+      "name": "contact-data access model",
+      "detail": "internal-authenticated"
+    },
+    {
+      "status": "FAIL",
+      "name": "promotion gate: governance_snapshot_verified",
+      "detail": "not verified in release manifest"
+    },
+    {
+      "status": "FAIL",
+      "name": "promotion gate: retirement_outputs_verified",
+      "detail": "not verified in release manifest"
+    },
+    {
+      "status": "PASS",
+      "name": "optional historical recovery evidence",
+      "detail": "Not supplied; this release is verified through its content manifest. Historical recovery is not a recurring deployment prerequisite."
+    },
+    {
+      "status": "PASS",
+      "name": "browser regression evidence",
+      "detail": "6 tests passed"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "integrity": "ok",
+  "rowCountsMatch": true,
+  "tables": {
+    "account": 1,
+    "sessions": 0,
+    "snapshots": 3,
+    "reviews": 0,
+    "dashboard_admin_state": 1,
+    "qa_snapshots": 1,
+    "applied_merges": 1,
+    "qa_retest_list": 0
+  },
+  "backup": ".private\\admin\\acceptance-20261110\\admin-backup.sqlite3",
+  "bytes": 66007040,
+  "sha256": "fdbb55224bb971e21ded13d978ece4f3c50382c96d03e4cc8594837c50da5d89"
+}

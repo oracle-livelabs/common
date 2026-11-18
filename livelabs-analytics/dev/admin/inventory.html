@@ -8,32 +8,20 @@
   <title>Portfolio inventory — LiveLabs Analytics Admin</title>
   <link rel="stylesheet" href="/assets/css/dashboard.css?v=20261030-public-scope">
   <link rel="stylesheet" href="/admin-assets/admin.css?v=20261030-redwood">
-  <link rel="stylesheet" href="/admin-assets/inventory.css?v=20261030-public-scope">
-  <script defer src="/admin-assets/inventory.js?v=20261030-public-scope"></script>
+  <link rel="stylesheet" href="/admin-assets/inventory.css?v=20261105-unified-v3">
+  <script defer src="/admin-assets/inventory.js?v=20261108-cleanup-readiness-v2"></script>
 </head>
 <body class="admin-page admin-inventory-page">
   <a class="skip-link" href="#inventory-results">Skip to inventory</a>
-  <div class="layout">
-    <aside class="rail">
-      <div class="brand"><a class="brand-mark" href="/dashboard/#overview" aria-label="Back to LiveLabs Analytics"><img src="/assets/images/oracle-logo-white.svg" alt="Oracle"></a><span>LiveLabs Analytics</span></div>
-      <p class="admin-rail-label">Administration</p>
-      <nav class="nav-list" aria-label="Admin pages">
-        <a href="/admin/dashboard-management">Dashboard management</a>
-        <a href="/admin/data-merge">Data merge</a>
-        <a href="/admin/governance">Data governance</a>
-        <a href="/admin/inventory" aria-current="page">Portfolio inventory</a>
-        <a href="/admin/user-settings">Account</a>
-      </nav>
-      <a class="sidebar-back-button nav-dashboard-link" href="/dashboard/#overview">Back to dashboard</a>
-    </aside>
+  <div class="layout analytics-shell-layout">
+    <!-- ADMIN_NAV -->
     <main>
       <header class="page-header admin-hero">
         <div>
           <p class="eyebrow">Admin · full portfolio</p>
           <h1>Portfolio inventory</h1>
-          <p class="intro">Search all Analytics records, including private, disabled, event, and unpublished items. Jenkins findings appear only for public and published records.</p>
+          <p class="intro">Review the full portfolio, team content and internal tests. Classify individual records to control dashboard visibility without deleting source data.</p>
         </div>
-        <div class="admin-hero-actions"><a class="nav-link" href="/dashboard/#overview">Author dashboard</a></div>
       </header>
       <div class="hero-stripe" aria-hidden="true"></div>
       <p id="inventory-status" class="admin-source-note" role="status" aria-live="polite">Loading the full inventory…</p>
@@ -41,6 +29,31 @@
         <div class="inventory-stat"><span>All records</span><strong id="count-all">—</strong></div>
         <div class="inventory-stat"><span>Public and published</span><strong id="count-public">—</strong></div>
         <div class="inventory-stat"><span>Disabled or removal requested</span><strong id="count-disabled">—</strong></div>
+        <div class="inventory-stat"><span>Admin-only content</span><strong id="count-hidden">—</strong></div>
+      </section>
+      <details class="admin-inset" id="dashboard-audit"><summary>Table eligibility and calculations</summary>
+        <div id="audit-methodology"></div>
+        <div class="inventory-controls"><label>Preview maximum annual views<input id="audit-views" type="number" min="0" max="1000000" value="250"></label><label>Preview update age (months)<input id="audit-months" type="number" min="1" max="120" value="12"></label><button id="audit-preview" type="button">Preview criteria</button></div>
+        <p id="audit-status" role="status"></p><div class="table-wrap"><table class="data-table"><thead><tr><th>Type</th><th>Published</th><th>Dashboard</th><th>Top Performers</th><th>At-risk</th><th>Low views</th><th>Older update</th><th>Retirement candidates</th><th>Lifecycle queue</th><th>Strict gate</th><th>Gate preview</th><th>Missing annual views</th><th>Proxy updates</th></tr></thead><tbody id="audit-counts"></tbody></table></div>
+        <h3>Exclusive review bands</h3><div id="audit-bands"></div><p id="audit-diff"></p><div id="audit-calibration"></div><p id="audit-relative"></p>
+      </details>
+      <section id="policy-editor" class="admin-inset" hidden aria-labelledby="policy-title">
+        <h2 id="policy-title">Manage content and retirement review</h2><p id="policy-record"></p><p id="review-current"></p>
+        <form id="policy-form"><label>Content classification<select id="policy-classification"><option value="learner_content">Learner content — eligible when public and published</option><option value="test_content">Internal test — Admin only</option><option value="internal_training">Internal training — Admin only</option><option value="needs_review">Needs review — keep existing published eligibility</option></select></label>
+          <label>Reason<textarea id="policy-reason" required minlength="5" maxlength="1000" rows="3"></textarea></label>
+          <p>Saving rebuilds the public data and tables. Source records remain available here. Classification applies to this record only, not its WMS family or author.</p>
+          <button id="policy-save" type="submit">Save visibility</button> <button id="policy-cancel" type="button">Cancel</button><p id="policy-status" role="status" aria-live="polite"></p>
+        </form>
+        <hr><h3>Retirement decision and verified evidence</h3>
+        <form id="review-form">
+          <label>Review state<select id="review-state"><option value="unreviewed">Automatic rules — no manual decision</option><option value="owner_requested">Owner retirement request recorded</option><option value="confirmed_obsolete">Confirmed obsolete or replaced</option><option value="approved_retirement">Approved for retirement</option><option value="keep_active">Keep active until review date</option><option value="needs_evidence">Needs evidence</option></select></label>
+          <label>Decision reason<textarea id="review-reason" required minlength="5" maxlength="1000" rows="2"></textarea></label>
+          <label>Supporting evidence or reference<textarea id="review-evidence" maxlength="2000" rows="2"></textarea></label>
+          <div class="inventory-controls"><label>Verified first-publication date<input id="review-firstPublishedDate" type="date"></label><label>Verified substantive-content update<input id="review-contentUpdatedDate" type="date"></label><label>Keep-active expiry<input id="review-keepUntil" type="date"></label></div>
+          <p>Verified dates must be on or before the source snapshot and need supporting evidence. Completion dates and repository activity alone are insufficient. Keep-active decisions require a future expiry. Source Delete Requested remains in lifecycle review. Saving a decision rebuilds the dashboard; it does not unpublish or delete content.</p>
+          <p>Reasons, references and reviewer identity stay in Admin. The dashboard shows the decision state and generated reasons. Static exports evaluate expiries when rebuilt; inspect their evaluation date before delivery.</p>
+          <button id="review-save" type="submit">Save retirement review</button><p id="review-status" role="status" aria-live="polite"></p>
+        </form>
       </section>
       <section id="inventory-results" class="admin-inset inventory-results">
         <div class="inventory-heading"><div><h2>Find a record</h2><p class="admin-muted">Filter by title, ID, owner, publish state, workflow status, or Jenkins priority.</p></div><span id="inventory-count" class="panel-count">—</span></div>
@@ -50,6 +63,9 @@
           <button type="button" data-inventory-scope="disabled">Disabled and removal requests</button>
           <button type="button" data-inventory-scope="private">Private</button>
           <button type="button" data-inventory-scope="not-public">Not public and published</button>
+          <button type="button" data-inventory-scope="hidden">Admin-only tests and training</button>
+          <button type="button" data-inventory-scope="team">Internal team content</button>
+          <button type="button" data-inventory-scope="review">Needs classification review</button>
         </div>
         <div class="inventory-controls">
           <label>Search inventory<input id="inventory-search" type="search" placeholder="Title, LiveLabs ID, WMS ID, author, keyword"></label>
@@ -58,10 +74,15 @@
           <label>Publish status<select id="inventory-publish-status"><option value="">All publish statuses</option></select></label>
           <label>Workflow status<select id="inventory-workflow"><option value="">All workflow statuses</option></select></label>
           <label>Jenkins priority<select id="inventory-jenkins-priority"><option value="">All Jenkins states</option><option>P1</option><option>P2</option><option>P3</option><option>Unmapped</option><option>No report</option><option>Not scanned</option></select></label>
+          <label>Team member or contact<select id="inventory-team"><option value="">All team members</option></select></label>
+          <label>Review focus<select id="inventory-review-focus"><option value="">All review focus</option></select></label>
+          <label>Cleanup queue<select id="inventory-cleanup-queue"><option value="">All cleanup queues</option></select></label>
+          <label>Review band<select id="inventory-review-band"><option value="">All review bands</option></select></label>
         </div>
+        <p id="team-evidence" class="admin-muted"></p>
         <div class="table-wrap inventory-table-wrap">
           <table class="data-table" id="inventory-table">
-            <thead><tr><th>Title</th><th>Type</th><th>Publish type</th><th>Publish status</th><th>Workflow status</th><th>LiveLabs ID</th><th>WMS ID</th><th>Author / owner</th><th>Jenkins Error Score</th><th>Jenkins findings</th></tr></thead>
+            <thead><tr><th>LiveLabs ID</th><th>WMS ID</th><th>Title</th><th>Author / owner</th><th>Type</th><th>Review focus</th><th>Publish type</th><th>Publish status</th><th>Workflow status</th><th>Jenkins Error Score</th><th>Jenkins findings</th><th>Dashboard visibility</th><th>Review</th></tr></thead>
             <tbody id="inventory-rows"><tr><td colspan="10" class="empty">Loading inventory…</td></tr></tbody>
           </table>
         </div>

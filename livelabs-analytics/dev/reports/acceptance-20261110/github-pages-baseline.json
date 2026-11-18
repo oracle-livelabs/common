@@ -1,0 +1,51 @@
+{
+  "url": "https://oracle-livelabs.github.io/common/livelabs-analytics/dashboard/?view=urgent",
+  "checkedAt": "2026-11-10T14:15:33.379Z",
+  "metrics": [
+    "889",
+    "—",
+    "—"
+  ],
+  "p1Summary": [
+    "What P1 priority means",
+    "P1 urgent action0 rows · 0 findings"
+  ],
+  "resources": [
+    {
+      "path": "assets/data/dashboard-state.json",
+      "status": 404,
+      "bytes": 9379
+    },
+    {
+      "path": "assets/data/score-baselines.json",
+      "status": 200,
+      "bytes": 804819
+    },
+    {
+      "path": "inventory/data/public_portfolio_inventory.json",
+      "status": 200,
+      "bytes": 15932049
+    },
+    {
+      "path": "inventory/data/portfolio_inventory.json",
+      "status": 200,
+      "bytes": 29054917
+    },
+    {
+      "path": "dev/config/release-manifest.json",
+      "status": 200,
+      "bytes": 2096
+    }
+  ],
+  "failedResponses": [
+    {
+      "url": "https://oracle-livelabs.github.io/api/dashboard-admin-state",
+      "status": 404
+    },
+    {
+      "url": "https://oracle-livelabs.github.io/common/livelabs-analytics/assets/data/dashboard-state.json",
+      "status": 503
+    }
+  ],
+  "errors": []
+}

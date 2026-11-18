@@ -1,0 +1,138 @@
+/* Shared Admin shell. Namespaced so saved QA renderer styles stay independent. */
+body .analytics-shell-layout { display:grid; grid-template-columns:232px minmax(0,1fr); min-height:100vh; }
+body .analytics-rail { box-sizing:border-box; position:sticky; top:0; display:flex; flex-direction:column; gap:0; height:100vh; overflow:auto; padding:24px 16px 16px; background:#312d2a; color:#fff; font:14px/1.5 "Oracle Sans",Arial,sans-serif; }
+body .analytics-brand { display:grid; gap:14px; padding:0 0 20px; border-bottom:1px solid #5b5652; }
+body .analytics-brand img { display:block; width:116px; max-width:100%; height:auto; }
+body .analytics-brand span { font-size:20px; line-height:1.3; }
+body .analytics-navigation { display:flex; flex:1; flex-direction:column; margin:0; padding:0; border:0; border-radius:0; background:transparent; color:#fff; }
+body .analytics-navigation > summary { display:none; }
+body .analytics-nav-content { display:flex; flex:1; flex-direction:column; min-height:calc(100vh - 142px); }
+body .analytics-nav-label { margin:20px 12px 12px; color:#d8d2cc; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; }
+body .analytics-nav { display:grid; gap:4px; padding:0; margin:0; }
+body .analytics-nav a { display:block; margin:0; padding:10px 12px; border:0; border-left:3px solid transparent; border-radius:6px; background:transparent; color:#fff; font-size:14px; line-height:1.5; text-decoration:none; }
+body .analytics-nav a:hover,body .analytics-nav a[aria-current="page"] { background:#4b4744; color:#fff; }
+body .analytics-nav a[aria-current="page"] { border-left-color:#e76b56; font-weight:600; }
+body .analytics-nav-footer { display:grid; gap:8px; margin-top:auto; padding-top:24px; }
+body .analytics-back,body .analytics-signout { box-sizing:border-box; display:block; width:100%; min-height:40px; margin:0; padding:9px 12px; border:1px solid #817a74; border-radius:6px; background:#4b4744; color:#fff; font:600 13px/1.5 "Oracle Sans",Arial,sans-serif; text-align:center; text-decoration:none; cursor:pointer; }
+body .analytics-signout { border-color:transparent; background:transparent; font-weight:400; }
+body .analytics-back:hover,body .analytics-signout:hover { background:#5b5652; color:#fff; }
+body .analytics-nav-status { margin:0; font-size:12px; color:#fff; }
+body .analytics-nav-status:empty { display:none; }
+body .analytics-rail :focus-visible { outline:2px solid #fff; outline-offset:3px; }
+
+/* Shared page rhythm: compact left-aligned headers and useful content space. */
+.admin-page .analytics-shell-layout > main { min-width:0; max-width:none; padding:0 24px 24px; display:block; }
+.admin-page .analytics-shell-layout .admin-hero { display:block; height:auto; min-height:0; margin:0 -24px; padding:24px; text-align:left; background:#312d2a; }
+.admin-page .analytics-shell-layout .admin-hero > div { width:auto; max-width:100%; margin:0; }
+.admin-page .analytics-shell-layout .admin-hero h1 { margin:0; font-size:30px; line-height:1.2; }
+.admin-page .analytics-shell-layout .admin-hero .eyebrow { margin:0 0 8px; font-size:12px; }
+.admin-page .analytics-shell-layout .admin-hero p:not(.eyebrow) { max-width:960px; margin:10px 0 0; font-size:14px; line-height:1.5; color:#eee9e5; }
+.admin-page .analytics-shell-layout .hero-stripe { height:4px; margin:0 -24px 20px; }
+.admin-page .analytics-shell-layout main > section { margin:0 0 20px; padding:20px; }
+.admin-page .analytics-shell-layout main > #status { min-height:0; margin:0 0 16px; font-size:13px; color:#625d58; }
+.admin-page .analytics-shell-layout main > #status:empty { display:none; }
+.admin-page .analytics-shell-layout :is(h2,h3,h4) { color:#161513; }
+.admin-page .analytics-shell-layout h2 { font-size:22px; }
+.admin-page .analytics-shell-layout .tag-section-heading { display:block; margin:0 0 16px; padding:0 0 16px; }
+.admin-page .analytics-shell-layout .tag-section-heading > p { max-width:980px; margin:8px 0 0; }
+.admin-page .analytics-shell-layout .tag-section-heading h2 { font-size:22px; }
+.admin-page .analytics-shell-layout .admin-split-grid { gap:16px; margin:16px 0; }
+.admin-page .analytics-shell-layout :is(.admin-inset,.current-assignment-panel) { padding:16px; border-radius:8px; border-color:#d4cfca; background:#fff; box-shadow:none; }
+.admin-page .analytics-shell-layout :is(.eyebrow,.panel-count,.preview-count,.source-badge,.governance-stat > span,.quality-stat > span) { font-size:12px; }
+.admin-page .analytics-shell-layout .site-footer { margin-top:20px; padding-top:16px; font-size:12px; }
+.admin-page .analytics-shell-layout .admin-empty { margin:0; padding:16px; font-size:14px; }
+.admin-page .analytics-shell-layout :is(.table-wrap,.inventory-table-wrap) { max-width:100%; }
+.admin-page .analytics-shell-layout :is(input,select,textarea) { box-sizing:border-box; max-width:100%; }
+.admin-page .analytics-shell-layout :is(section,form,fieldset,.controls) { min-width:0; }
+
+/* Tag forms should fit their card before the whole page stacks. */
+.admin-management-page .analytics-shell-layout #tag-form { grid-template-columns:repeat(2,minmax(0,1fr)); margin:16px 0; }
+.admin-management-page .analytics-shell-layout #tag-form .tag-description-field { grid-column:1/-1; }
+.admin-management-page .analytics-shell-layout #tag-form > button { grid-column:1/-1; grid-row:auto; justify-self:start; min-height:40px; }
+.admin-management-page .analytics-shell-layout .tag-color-control-row { flex-wrap:wrap; }
+.admin-management-page .analytics-shell-layout .tag-color-control-row select { min-width:100px; }
+.admin-management-page .analytics-shell-layout .admin-tag-definition { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.admin-management-page .analytics-shell-layout .admin-tag-definition label:nth-of-type(3),.admin-management-page .analytics-shell-layout .admin-tag-actions { grid-column:1/-1; }
+.admin-management-page .analytics-shell-layout .admin-tag-actions { display:flex; flex-wrap:wrap; }
+.admin-management-page .analytics-shell-layout .admin-tag-actions button { width:auto; }
+.admin-management-page .analytics-shell-layout #tag-definitions { max-height:340px; padding:0 12px; background:#faf8f6; }
+.admin-management-page .analytics-shell-layout .tag-assignment-panel .admin-item-results { max-height:260px; }
+.admin-management-page .analytics-shell-layout .current-assignment-panel { margin-top:16px; }
+@media(min-width:1201px) {
+  .admin-management-page .analytics-shell-layout #tags { display:grid; grid-template-columns:1fr 1fr; align-items:start; gap:16px; }
+  .admin-management-page .analytics-shell-layout #tags > .tag-section-heading { grid-column:1/-1; margin:0; }
+  .admin-management-page .analytics-shell-layout #tags > .admin-split-grid { display:contents; }
+  .admin-management-page .analytics-shell-layout .tag-definition-panel { grid-column:1; grid-row:2; }
+  .admin-management-page .analytics-shell-layout .tag-assignment-panel { grid-column:2; }
+  .admin-management-page .analytics-shell-layout .current-assignment-panel { grid-column:1/-1; margin:0; }
+}
+
+/* Merge steps use the same white panels and compact empty states. */
+.admin-merge-page .analytics-shell-layout :is(.merge-source-section,.merge-output-section,.merge-workflow,.merge-history-section) { border-color:#d4cfca; background:#fff; box-shadow:none; }
+.admin-merge-page .analytics-shell-layout .merge-workflow { display:block; }
+.admin-merge-page .analytics-shell-layout .merge-workflow-heading { display:none; }
+.admin-merge-page .analytics-shell-layout .merge-workflow-steps { margin:0; }
+.admin-merge-page .analytics-shell-layout :is(.preview-table-shell,.merge-result-preview .preview-table-shell,.preview-empty,.preview-error,.preview-meta) { min-height:0; }
+.admin-merge-page .analytics-shell-layout :is(.preview-empty,.preview-error) { padding:16px; }
+.admin-merge-page .analytics-shell-layout :is(.merge-readiness-status small,.merge-count-grid li,.mapping-rule-note,.merge-workflow-steps small,.import-snapshot-label small,.preview-meta) { font-size:12px; }
+.admin-merge-page .analytics-shell-layout .merge-history-section { padding:0; }
+
+.admin-governance-page .analytics-shell-layout .admin-tabs { margin:0 0 16px; padding:6px; }
+.admin-governance-page .analytics-shell-layout main > .governance-overview { padding:0; border:0; background:transparent; }
+.admin-governance-page .analytics-shell-layout #review-form > .controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); }
+.admin-inventory-page .analytics-shell-layout :is(#dashboard-audit,#policy-editor,.inventory-results) { margin:0 0 20px; padding:20px; }
+.admin-inventory-page .analytics-shell-layout main > .inventory-summary { margin:0 0 20px; padding:0; border:0; background:transparent; }
+.admin-inventory-page .analytics-shell-layout .inventory-controls { grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); }
+.admin-inventory-page .analytics-shell-layout .inventory-table-wrap table { min-width:1800px; }
+.admin-inventory-page .analytics-shell-layout .inventory-table-wrap :is(th,td):nth-child(3) { min-width:240px; }
+.admin-page .analytics-shell-layout :is(#snapshot-info,#rank-notice,#comparison-summary,#changes):empty { display:none; }
+.analytics-report-content .review-message:empty { display:none; }
+.admin-jenkins-page .analytics-shell-layout .jenkins-controls { margin:0 0 20px; }
+
+/* Original report renderer stays intact inside the same navigation shell. */
+body:has(.analytics-report-layout) { margin:0; }
+.analytics-report-content { min-width:0; }
+.analytics-report-content > header { padding:24px; background:#312d2a; color:#fff; border-bottom:4px solid #c74634; }
+.analytics-report-content > header .page-title { display:block; width:auto; max-width:none; margin:0; padding:0; }
+.analytics-report-content > header h1 { margin:0; color:#fff; font-size:30px; line-height:1.2; }
+.analytics-report-content .analytics-report-eyebrow { margin:0 0 8px; color:#d8d2cc; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; }
+.analytics-report-content > header .meta { margin-top:10px; font-size:13px; }
+.analytics-report-content > header :is(.review-nav,.nav-actions) { margin-top:14px; }
+.analytics-report-content > main { box-sizing:border-box; width:100%; max-width:none; margin:0; padding:20px 24px 24px; }
+.analytics-report-content > .analytics-archive-notice { margin:0; padding:10px 24px; }
+.analytics-report-content :is(.results-panel,.section) { min-width:0; }
+.analytics-report-content :is(.result-tools,.totals) { flex-wrap:wrap; }
+
+@media(max-width:1200px) {
+  .admin-page .analytics-shell-layout .admin-split-grid { grid-template-columns:1fr; }
+  .admin-page .analytics-shell-layout main > .governance-overview,.admin-page .analytics-shell-layout .inventory-summary { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:950px) {
+  body .analytics-shell-layout { display:block; }
+  body .analytics-rail { position:static; height:auto; padding:16px; }
+  body .analytics-brand { display:flex; align-items:center; gap:20px; padding:0; border:0; }
+  body .analytics-brand img { width:100px; }
+  body .analytics-brand span { font-size:18px; }
+  body .analytics-navigation { display:block; margin-top:14px; }
+  body .analytics-navigation > summary { display:list-item; padding:8px 0; color:#fff; cursor:pointer; font-weight:600; }
+  body .analytics-nav-content { min-height:0; }
+  body .analytics-nav-label { display:none; }
+  body .analytics-nav-footer { padding-top:16px; }
+  .analytics-report-content > main { overflow-x:auto; }
+}
+@media(max-width:600px) {
+  .admin-page .analytics-shell-layout > main { padding:0 16px 20px; }
+  .admin-page .analytics-shell-layout .admin-hero { margin:0 -16px; padding:20px 16px; }
+  .admin-page .analytics-shell-layout .admin-hero h1,.analytics-report-content > header h1 { font-size:26px; }
+  .admin-page .analytics-shell-layout .hero-stripe { margin:0 -16px 16px; }
+  .admin-page .analytics-shell-layout main > section { padding:16px; margin-bottom:16px; }
+  .admin-page .analytics-shell-layout :is(.admin-inset,.current-assignment-panel) { padding:14px; }
+  .admin-management-page .analytics-shell-layout #tag-form { grid-template-columns:1fr; }
+  .admin-governance-page .analytics-shell-layout #review-form > .controls { grid-template-columns:1fr; }
+  .admin-page .analytics-shell-layout main > .governance-overview,.admin-page .analytics-shell-layout .inventory-summary { grid-template-columns:1fr 1fr; }
+  .admin-page .analytics-shell-layout .governance-stat { padding:12px; }
+  .admin-page .analytics-shell-layout .governance-stat strong { font-size:20px; }
+  .admin-inventory-page .analytics-shell-layout .inventory-controls { grid-template-columns:1fr; }
+  .analytics-report-content > header { padding:20px 16px; }
+  .analytics-report-content > main { padding:16px; }
+}

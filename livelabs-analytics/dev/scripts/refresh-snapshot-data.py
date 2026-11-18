@@ -23,6 +23,7 @@ from pathlib import Path
 
 from openpyxl import load_workbook
 from ownership_corrections import apply_ownership_corrections
+from title_corrections import apply_title_corrections
 
 SOURCE_DESCRIPTION = "28 September 2026 WMS, dashboard views, and WMS tag reports; GitHub repository/update evidence retained from 14-15 August 2026"
 REPORT_DATE_LABEL = "28 September 2026"
@@ -309,8 +310,9 @@ def make_record(
             "dashboard_metric_shared_record_count": shared_count,
         }
     )
-    if not publish_type:
-        source_flags["publish_type_resolution_status"] = "not_assigned_in_current_wms_workflow"
+    source_flags["publish_type_resolution_status"] = (
+        "current_wms_export" if clean(row.get("Publish Type")) else
+        "retained_prior_inventory" if publish_type else "not_assigned_in_current_wms_workflow")
     if not source_flags.get("repository_mapping_status"):
         source_flags["repository_mapping_status"] = "pending_snapshot_repository_mapping"
 
@@ -543,7 +545,9 @@ def main() -> int:
         "records": records,
     }
     apply_ownership_corrections(payload)
-    args.inventory.write_text(json.dumps(payload, separators=(",", ":"), ensure_ascii=False) + "\n", encoding="utf-8")
+    # Correct presentation only after raw source titles have matched demand data.
+    apply_title_corrections(payload)
+    args.inventory.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps({
         "inventory": str(args.inventory),
         "records": len(records),

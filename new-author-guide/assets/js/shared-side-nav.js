@@ -65,12 +65,7 @@
       '                <a class="nav-menu-link" data-shared-nav-route="markdown/" href="#" aria-label="Open Markdown reference"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 4l-4 16"/></svg></span><span>Markdown</span></a>',
       '              </div>',
       '            </details>',
-      '            <details class="nav-menu-group" id="nodocMenu">',
-      '              <summary class="nav-menu-summary" aria-controls="nodocMenuItems"><a class="btn nav-control nav-menu-parent" data-mode-target="nodoc" data-shared-nav-route="nodoc/" href="#" aria-label="Open NoDoc guide"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 3.5h9l3 3V20H6V3.5Z"/><path d="M15 3.5V7h3M9 11h6M9 14h6M9 17h4"/></svg></span><span class="nav-control-text">NoDoc</span></a></summary>',
-      '              <div class="nav-menu-items" id="nodocMenuItems" aria-label="Related NoDoc pages">',
-      '                <a class="nav-menu-link" data-shared-nav-route="troubleshooting/" href="#" aria-label="Open NoDoc troubleshooting"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17Z"/><path d="M12 7.5v5m0 3.5h.01"/></svg></span><span>Troubleshooting</span></a>',
-      '              </div>',
-      '            </details>',
+      '            <a class="btn nav-control" data-mode-target="nodoc" data-shared-nav-route="nodoc/" href="#" aria-label="Open NoDoc guide"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 3.5h9l3 3V20H6V3.5Z"/><path d="M15 3.5V7h3M9 11h6M9 14h6M9 17h4"/></svg></span><span class="nav-control-text">NoDoc</span></a>',
       '            <a class="btn nav-control" data-full-guide-link href="#" target="_blank" rel="noreferrer" aria-label="Open Step by Step Guide"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6.5 4.5h9.2a1.8 1.8 0 0 1 1.8 1.8v13.2H8.3a1.8 1.8 0 0 1-1.8-1.8V4.5Z"/><path d="M9.2 4.5v15M10.8 8h4M10.8 11h4M10.8 14h3"/><path d="M4.5 6.5h2M4.5 9h2M4.5 11.5h2M4.5 14h2M4.5 16.5h2"/></svg></span><span class="nav-control-text">Step by Step Guide</span></a>',
       '            <a class="btn nav-control" data-workshop-example-link href="#" target="_blank" rel="noreferrer" aria-label="Open a real LiveLabs workshop example"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M9 3h6M10 3v5l-5.6 9.8A2.1 2.1 0 0 0 6.2 21h11.6a2.1 2.1 0 0 0 1.8-3.2L14 8V3M8 15h8"/></svg></span><span class="nav-control-text">Workshop Example</span></a>',
       '          </div>',
@@ -86,7 +81,7 @@
 
     document.querySelectorAll("[data-shared-nav-route]").forEach(function (link) {
       var route = link.getAttribute("data-shared-nav-route");
-      link.href = new URL(route, rootUrl).toString();
+      link.href = new URL((route || "") + "index.html", rootUrl).toString();
     });
 
     document.querySelectorAll("[data-full-guide-link]").forEach(function (link) {
@@ -98,14 +93,13 @@
 
     page = document.body.getAttribute("data-author-guide-page");
     currentPath = window.location.pathname.replace(/index\.html$/i, "").replace(/\/+$/, "");
-    currentSubRoute = /\/markdown\/event-code$/i.test(currentPath) ? "markdown/event-code/" : (/\/markdown$/i.test(currentPath) ? "markdown/" : (/\/troubleshooting$/i.test(currentPath) ? "troubleshooting/" : ""));
+    currentSubRoute = /\/markdown\/event-code$/i.test(currentPath) ? "markdown/event-code/" : (/\/markdown$/i.test(currentPath) ? "markdown/" : "");
     activeTarget = {
       hub: "hub",
       beginner: "beginner",
       explorer: "explorer",
       markdown: "explorer",
-      nodoc: "nodoc",
-      troubleshooting: "nodoc"
+      nodoc: "nodoc"
     }[page];
     if (currentSubRoute === "markdown/event-code/") {
       activeTarget = null;
@@ -124,7 +118,7 @@
 
     if (currentSubRoute) {
       var currentLink = document.querySelector('[data-shared-nav-route="' + currentSubRoute + '"]');
-      var menu = document.getElementById(currentSubRoute === "troubleshooting/" ? "nodocMenu" : "cheatsheetMenu");
+      var menu = document.getElementById("cheatsheetMenu");
       if (currentLink) {
         currentLink.classList.add("is-active");
         currentLink.setAttribute("aria-current", "page");
@@ -168,6 +162,8 @@
       }
 
       expanded = !document.body.classList.contains(bodyClass);
+      var navigation = document.getElementById("modeNav");
+      if (navigation) navigation.inert = !expanded;
       if (config.hiddenWhenDisabled) {
         button.hidden = !enabled;
       }
@@ -216,6 +212,17 @@
   }
 
   renderSharedSideNav();
+
+  // The shared component owns the initial state and binding on every page.
+  if (window.matchMedia("(max-width: 940px)").matches) {
+    document.body.classList.add("author-nav-closed");
+  }
+  bindSideNavToggle({
+    button: "authorGlobalNavToggle",
+    bodyClass: "author-nav-closed",
+    hiddenWhenDisabled: true,
+    onToggle: function () { window.dispatchEvent(new Event("resize")); }
+  });
 
   window.LiveLabsSideNav = Object.assign({}, window.LiveLabsSideNav, {
     bindSideNavToggle: bindSideNavToggle

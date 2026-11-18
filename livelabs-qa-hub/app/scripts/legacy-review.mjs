@@ -1,0 +1,50 @@
+import assert from 'node:assert/strict'
+import { chromium } from '../../../qa-automation/node_modules/playwright/index.mjs'
+
+const browser = await chromium.launch({ channel: 'chrome', headless: true })
+const context = await browser.newContext(), page = await context.newPage(), errors = []
+page.on('pageerror', error => errors.push(error.message))
+let checks = 0
+const check = (label, value) => { assert.ok(value, label); checks++ }
+try {
+  await page.goto('http://127.0.0.1:4192/legacy.html')
+  await page.locator('#login-form').evaluate(form => form.requestSubmit())
+  await page.locator('.app-shell').waitFor()
+  check('Legacy Hub navigation is retained', await page.locator('nav[aria-label="Primary"] [data-view]').count() === 6)
+  await page.locator('[data-view="jenkins"]').first().click()
+  await page.locator('[data-table="run-history"]').waitFor()
+  await page.reload()
+  check('Legacy Hub report route persists', await page.locator('[data-table="run-history"]').count() === 1)
+  await page.locator('[data-view="automation"]').first().click()
+  check('Legacy test execution remains disabled', await page.locator('#run-request-form .primary-button').isDisabled())
+  await page.locator('[data-view="on-call"]').first().click()
+  check('Legacy on-call stays available', await page.locator('[data-on-call-load="synthetic"]').count() === 1)
+  await page.locator('#logout-button').click()
+  check('Legacy demo sign-out works', await page.locator('#login-form').isVisible())
+
+  await page.goto('http://127.0.0.1:4193/legacy.html')
+  await page.locator('[data-view="projects"]').first().click()
+  await page.locator('#project-form [name="name"]').fill('Legacy preservation check')
+  await page.locator('#project-form').evaluate(form => form.requestSubmit())
+  check('Existing TMS project CRUD still works', await page.locator('body').textContent().then(s => s.includes('Legacy preservation check')))
+  await page.locator('[data-view="repository"]').first().click()
+  await page.locator('[data-object-id="TC-001"]').first().click()
+  check('Legacy test detail links remain available', await page.locator('#testcase-detail-form').isVisible())
+  await page.locator('#testcase-detail-form [name="title"]').fill('Legacy edited test title')
+  await page.locator('#testcase-detail-form').evaluate(form => form.requestSubmit())
+  await page.locator('[data-object-id="REQ-001"]').first().click()
+  check('Legacy test links to requirement', await page.locator('#requirement-detail-form').isVisible())
+  await page.locator('[data-object-id="TP-2026-05"]').first().click()
+  check('Legacy requirement links to plan', await page.locator('#plan-detail-form').isVisible())
+  await page.locator('[data-object-id="EX-001"]').first().click()
+  check('Legacy plan links to execution', await page.locator('#execution-detail-form').isVisible())
+  await page.locator('#execution-defect-form [name="title"]').fill('Legacy linked defect')
+  await page.locator('#execution-defect-form').evaluate(form => form.requestSubmit())
+  await page.reload()
+  check('Legacy object route and linked defect persist', await page.locator('#execution-detail-form').isVisible() && await page.locator('body').textContent().then(s => s.includes('Legacy linked defect')))
+  await page.goto('http://127.0.0.1:4193/#' + encodeURIComponent('object:test-case:TC-001:repository'))
+  await page.waitForURL(/legacy\.html/)
+  check('Old TMS object links resolve to retained records', await page.locator('#testcase-detail-form [name="title"]').inputValue() === 'Legacy edited test title')
+  check('Legacy interfaces have no runtime errors', errors.length === 0)
+  console.log(JSON.stringify({ legacyChecks: checks, errors }, null, 2))
+} finally { await browser.close() }

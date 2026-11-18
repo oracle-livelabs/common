@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "checks": [
+    "Missing QA export rejected",
+    "Stale inventory binding rejected",
+    "Old QA validity policy rejected",
+    "Existing candidate cannot be overwritten implicitly",
+    "Rejected builds preserve existing candidate and leave no promoted partial release"
+  ],
+  "passed": 5
+}
