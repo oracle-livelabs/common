@@ -11,7 +11,7 @@ import sys
 from urllib.parse import unquote, urlsplit
 
 
-ALLOWED_NAMESPACES = frozenset({"c4u04", "c4uo2"})
+ALLOWED_NAMESPACES = frozenset({"c4u04", "c4u02"})
 URL_PATTERN = re.compile(r"https?://\S+", re.IGNORECASE)
 HUNK_PATTERN = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,\d+)? @@")
 TEMPLATE_PATTERN = re.compile(r"<[^>]+>|%3c[^%]*%3e", re.IGNORECASE)

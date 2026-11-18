@@ -29,7 +29,7 @@
     loadNoDoc: function () {
       if (!noDocPromise) {
         noDocPromise = boundedRequest(function (signal) {
-          var manifestUrl = options.resolve("workshops/nodoc/manifest.json");
+          var manifestUrl = options.resolve("nodoc/manifest.json");
           return read(manifestUrl, "json", signal).then(function (manifest) {
             if (!manifest || !manifest.content) throw new Error("NoDoc content is not configured");
             var contentUrl = new URL(manifest.content, manifestUrl).toString();
