@@ -42,12 +42,15 @@
     <div data-video-card data-video-title="Lab 1 walkthrough"
       data-video-summary="Preview learning aid. Sign in with Oracle SSO, navigate the NoDoc platform, and connect Codex to NoDoc through MCP."
       data-video-features="Oracle SSO|NoDoc navigation|Codex MCP"></div>
-    <p>Sign in to NoDoc with Oracle SSO, open the LiveLabs Focus Area, and connect Codex through NoDoc MCP when you
-      want Codex to browse or update authorized content. LiveLabs does not require a contributor role.</p>
+    <p>Use Oracle SSO to open NoDoc, then locate the LiveLabs Focus Area and follow its hierarchy
+      to the article and page you need. If you plan to use Codex, complete Task 3 to connect through
+      NoDoc MCP; Codex can work only with content your NoDoc account is allowed to access. LiveLabs
+      authoring does not require a contributor role.</p>
     <h4>Objectives</h4>
     <ul>
       <li>Sign in through Oracle SSO.</li>
-      <li>Read the Focus Area, LiveLabs repo, article, version, and page hierarchy before selecting content.</li>
+      <li>Navigate the NoDoc hierarchy and identify the exact article, version if present, and page.</li>
+      <li>If you plan to use Codex, connect it through NoDoc MCP and verify the read-only connection.</li>
     </ul>
     <details class="nodoc-task">
       <summary>Task 1 · Open NoDoc and confirm access</summary>
@@ -66,8 +69,7 @@
             <figcaption>Select NoDoc after the Oracle SSO sign-in completes.</figcaption>
           </figure>
         </li>
-        <li>Confirm that the NoDoc platform opens. For LiveLabs, continue with the NoDoc access already assigned to your
-          account; do not treat a contributor role as an authoring prerequisite.
+        <li>Confirm that the NoDoc platform opens before continuing.
           <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
             aria-label="Expand image: Reached NoDoc platform">
             <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
@@ -79,12 +81,11 @@
     </details>
     <details class="nodoc-task">
       <summary>Task 2 · Navigate the NoDoc platform</summary>
-      <p>After access is confirmed, navigate the NoDoc Repo table of contents before creating or editing content. Follow
-        the hierarchy first, then use the navigation steps to select the content you need.</p>
+      <p>Navigate the NoDoc table of contents from the selected Focus Area to the page you need. The steps below show
+        each level and how to confirm the full target.</p>
       <ol>
-        <li><strong>Start with the workspace hierarchy.</strong> The technical guide describes the Focus Area as the
-          top-level scope, with articles and pages shown in the selected workspace. Use the hierarchy below as your
-          navigation map.
+        <li><strong>Start with the workspace hierarchy.</strong> Follow this path: Focus Area → LiveLabs repo → Article
+          → optional Article version → Page. Use the diagram to keep each selection in context.
           <figure class="nodoc-route-evidence nodoc-hierarchy-diagram" data-expandable="true" tabindex="0" role="button"
             aria-label="Expand diagram: NoDoc workspace hierarchy">
             <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
@@ -155,7 +156,7 @@
           similarly named articles and pages from being mixed up.</li>
       </ol>
     </details>
-<details class="nodoc-task" data-search-summary="Set up the Windows or macOS token variable and config.toml, verify the connection, and install or update the nodoc-mcp usage skill." data-search-keywords="mcp installation setup connect configuration personal token environment variable Windows macOS ASK_NODOC_MCP_TOKEN config.toml usage skill update get_nodoc_mcp_usage_skill"><summary>Task 3 · Connect Codex to NoDoc through MCP</summary>
+<details class="nodoc-task" data-search-summary="Set up the Windows or macOS token variable and config.toml, verify the connection, and install or update the nodoc-mcp usage skill." data-search-keywords="mcp installation setup connect configuration personal token environment variable Windows macOS ASK_NODOC_MCP_TOKEN config.toml usage skill update get_nodoc_mcp_usage_skill"><summary>Task 3 · Optional: connect Codex to NoDoc through MCP</summary>
       <p>Connect Codex once, then use it to browse and work on the NoDoc content your account can access. This setup supports Windows and macOS; your existing NoDoc permissions still apply.</p>
       <p class="nodoc-callout"><strong>Before you start:</strong> open NoDoc successfully, have Codex installed, and choose content you can view. You need permission to add a user environment variable. Do not enter your token into a chat or this guide.</p>
       <div class="nodoc-mcp-steps" aria-label="Five setup steps"><span>1. Token</span><span>2. User variable</span><span>3. Config</span><span>4. Verify</span><span>5. Usage skill</span></div>
@@ -164,6 +165,7 @@
 <figure class="nodoc-route-evidence nodoc-mcp-figure"><img loading="lazy" decoding="async" data-nodoc-asset="../images/mcp/01-token-form.png" alt="NoDoc MCP access-token form with token label, expiry date, and Generate access token button." width="1264" height="801"><figcaption>Step 1a · Open the token page. Actual product screenshot, 7 October 2026; no token was generated.</figcaption></figure><figure class="nodoc-route-evidence nodoc-mcp-figure"><img loading="lazy" decoding="async" data-nodoc-asset="../images/mcp/02-token-label.png" alt="Token label filled with Windows laptop; expiry date and Generate access token button remain visible." width="1264" height="801"><figcaption>Step 1b · The example label identifies the computer; check the expiry before generating a token.</figcaption></figure>
       <p>If you lose the token, revoke it on this page and create another. Do not send it in email, save it in source control, or include it in screenshots.</p>
       <h4>2. Save it in a user environment variable</h4>
+      <p>Choose the instructions for your operating system and complete one path.</p>
       <h5>Windows</h5>
       <ol><li>In Windows Search, open <strong>Edit the system environment variables</strong>.</li><li>In <strong>System Properties</strong>, select <strong>Environment Variables</strong>.</li><li>Under <strong>User variables for your account</strong>, select <strong>New</strong>.</li><li>Set <strong>Variable name</strong> to <code>ASK_NODOC_MCP_TOKEN</code>. Paste the complete token into <strong>Variable value</strong>.</li><li>Select <strong>OK</strong> in each dialog to save. Use the user-variable section so the value belongs to your Windows account.</li></ol>
 <figure class="nodoc-route-evidence nodoc-mcp-figure"><img data-nodoc-asset="../images/mcp/windows-variable.svg" alt="Windows setup path: System Properties, Environment Variables, User variables, then New. Set ASK_NODOC_MCP_TOKEN to the personal token." width="1120" height="610" loading="lazy"><figcaption>Step 2 · Explanatory illustration of the Windows dialog sequence. The value is deliberately omitted.</figcaption></figure><p class="nodoc-checkpoint"><strong>Check your result:</strong> The variable name appears under User variables. Do not display or print its value. Applications already running need a restart to see it.</p>
@@ -200,9 +202,9 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
     <div data-video-card data-video-title="Lab 2 walkthrough"
       data-video-summary="Preview learning aid. Create an article, build its page hierarchy, choose an approved page creation route, and review or recover authorized content."
       data-video-features="Article creation|Page structure|Creation routes|Page history|Page lifecycle"></div>
-    <p>Build the article foundation before editing content or handing work to collaborators. Create the article, add
-      pages under the intended parents, choose the appropriate creation route for each page, and remove or recover only
-      content you are authorized to manage. Follow one primary creation path end to end; the tabs document alternatives.</p>
+    <p>Create an article, add pages beneath the intended parent, and choose a creation route that matches the approved
+      source. Follow one route through the article and page tabs; use the other tabs as references. The final tasks cover
+      deletion and recovery, so use content you are authorized to manage and verify each target before acting.</p>
     <h4>Objectives</h4>
     <ul>
       <li>Create an article with a clear name and content version.</li>
@@ -250,7 +252,8 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
             <figcaption>Select the route that matches the approved source and desired authoring outcome.</figcaption>
           </figure>
           <div class="nodoc-creation-tabs">
-            <p class="nodoc-creation-tabs-intro">Select the option that matches your starting point.</p>
+            <p class="nodoc-creation-tabs-intro">Choose one route based on the approved starting point. Use Create From Scratch when you have no source to import
+              or reuse; choose another route only when its source and workflow apply.</p>
             <div class="nav nav-tabs nodoc-creation-tablist" id="nodoc-creation-options" role="tablist"
               aria-label="Article creation options">
               <button class="nav-link active nodoc-creation-tab" id="nodoc-creation-scratch-tab" data-bs-toggle="tab"
@@ -288,9 +291,9 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
               </section>
               <section class="tab-pane fade nodoc-creation-panel" id="nodoc-creation-codex-panel" role="tabpanel"
                 aria-labelledby="nodoc-creation-codex-tab" tabindex="0">
-                <p>Use this option when a tailored first-draft prompt will help you begin the article. The prompt
-                  builder below runs locally in this guide; it prepares text for the in-product NoDoc Codex route and
-                  does not send your idea to a service.</p>
+                <p><strong>Optional LiveLabs-specific route:</strong> Use Codex when a tailored first draft will help you
+                  begin a LiveLabs workshop. The prompt builder below runs locally in this guide; it prepares text for
+                  NoDoc Codex and does not send your idea to a service.</p>
                 <ol>
                   <li>Select <strong>Codex</strong>.</li>
                   <li>Plan the skills first. <code>livelabs-workshop-author</code> is required to build the workshop;
@@ -647,8 +650,8 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
           <figcaption>The Add Page dialog lists the available creation methods.</figcaption>
         </figure>
         <div class="nodoc-creation-tabs nodoc-page-creation-tabs">
-          <p class="nodoc-creation-tabs-intro">Select the option that matches the approved source and desired page
-            outcome.</p>
+          <p class="nodoc-creation-tabs-intro">Choose one method. Use Empty File for a new blank page; choose another method only when its source is approved
+            and the method fits your task.</p>
           <div class="nav nav-tabs nodoc-creation-tablist" id="nodoc-page-creation-options" role="tablist"
             aria-label="Page creation options">
             <button class="nav-link active nodoc-creation-tab" id="nodoc-page-creation-empty-tab" data-bs-toggle="tab"
@@ -747,8 +750,8 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
             <section class="tab-pane fade nodoc-creation-panel" id="nodoc-page-creation-diagram-panel" role="tabpanel"
               aria-labelledby="nodoc-page-creation-diagram-tab" tabindex="0">
               <h5>Architecture Diagram</h5>
-              <p>Use this to create a diagram page from the architecture or technical flow documented in the target
-                workshop or lab. Keep the prompt specific to the approved content you want the diagram to explain.</p>
+              <p><strong>Optional route:</strong> Use Architecture Diagram when approved workshop or lab content needs a
+                diagram. Keep the prompt specific to the documented architecture or technical flow.</p>
               <section class="nodoc-architecture-prompt-builder" data-nodoc-architecture-prompt-builder
                 aria-labelledby="nodoc-architecture-prompt-builder-title">
                 <h6 id="nodoc-architecture-prompt-builder-title">Build the Architecture Diagram description</h6>
@@ -866,9 +869,9 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
             <section class="tab-pane fade nodoc-creation-panel" id="nodoc-page-creation-codex-panel" role="tabpanel"
               aria-labelledby="nodoc-page-creation-codex-tab" tabindex="0">
               <h5>Codex Skills</h5>
-              <p>Use this for a first draft created with approved skills. The helper below mirrors the article-level
-                Codex flow for a single page, including resource checks, and builds the prompt locally; it does not
-                create content in NoDoc.</p>
+              <p><strong>Optional LiveLabs-specific route:</strong> Use Codex Skills to prepare a first draft for a
+                LiveLabs page. The helper builds the prompt locally and checks for required resources; it does not
+                create content in NoDoc. The LiveLabs Workshop Author skill is required for this route.</p>
               <section class="nodoc-page-codex-prompt-builder" data-nodoc-page-codex-prompt-builder
                 aria-labelledby="nodoc-page-codex-prompt-builder-title">
                 <h6 id="nodoc-page-codex-prompt-builder-title">Build a page-specific Codex prompt</h6>
@@ -915,11 +918,11 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
                       <label class="nodoc-codex-skill-option">
                         <input type="checkbox" data-nodoc-page-codex-skill="oracle-db-skill"
                           data-nodoc-codex-skill="oracle-db-skill"
-                          data-nodoc-page-codex-skill-name="oracle-db-skills"
-                          data-nodoc-codex-skill-name="oracle-db-skills"
+                          data-nodoc-page-codex-skill-name="oracle-db-skill"
+                          data-nodoc-codex-skill-name="oracle-db-skill"
                           data-nodoc-codex-skill-description="Validate Oracle Database-specific SQL, PL/SQL, JSON, Vector Search, ORDS, security, and version-sensitive implementation details."
                           data-nodoc-codex-skill-resource-requirement="the target database release, Oracle capabilities to verify, and approved technical sources">
-                        <span class="nodoc-codex-skill-copy"><strong>oracle-db-skills</strong><small>Use only for approved, version-sensitive Oracle Database content.</small></span>
+                        <span class="nodoc-codex-skill-copy"><strong>oracle-db-skill</strong><small>Use only for approved, version-sensitive Oracle Database content.</small></span>
                       </label>
                       <label class="nodoc-codex-skill-option">
                         <input type="checkbox" data-nodoc-page-codex-skill="freesql"
@@ -997,8 +1000,8 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
     <details class="nodoc-task">
       <summary>Task 3 · Delete an article or page</summary>
       <ol>
-        <li>Confirm that you own the article or page and that deletion is authorized. Do not delete content that belongs
-          to another author.</li>
+        <li>Use only an authorized practice article or page. Confirm that you own it and that deletion is approved; do
+          not delete another author’s content.</li>
         <li>Select the article or page in the table of contents, then click the trash bin icon at the top of the page.
           <div class="nodoc-evidence-grid">
             <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
@@ -1025,9 +1028,13 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
     </details>
     <details class="nodoc-task" data-search-summary="Use NoDoc history controls to compare revisions, restore a page, or recover deleted pages." data-search-keywords="manual ui browser history restore recover deleted page compare revisions">
       <summary>Task 4 · Review and recover article and page history</summary>
-      <p>History has two separate scopes. Select the whole article when you need article-level history or recovery of a
-        deleted child page. Select an individual page when you need to compare, preview, or restore that page's retained
-        history versions. Do not mix the article-level deleted-page flow with the page-level retained-version flow.</p>
+      <p>Choose the History scope based on what you need:</p>
+      <ul>
+        <li><strong>Restore a deleted page:</strong> select its article and open article-level History.</li>
+        <li><strong>Compare or restore earlier content:</strong> select that page and open page-level History.</li>
+      </ul>
+      <p>These are separate workflows. Article-level History lists deleted child pages; page-level History applies to
+        retained versions of one page in its article version.</p>
       <section class="nodoc-history-scope" aria-labelledby="nodoc-article-history-scope">
         <h5 id="nodoc-article-history-scope">Article-level History: review the whole article and restore deleted pages</h5>
         <p>Select the article in the table of contents before opening <strong>History</strong>. The dialog is then scoped
@@ -1159,14 +1166,10 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
     <div data-video-card data-video-title="Lab 3 walkthrough"
       data-video-summary="Preview learning aid. Configure saving behavior, create and review page drafts, and author structured content in the current NoDoc UI."
       data-video-features="Autosave|Page drafts|Draft history and Difference|Metadata and structured content"></div>
-    <p>After the article and page structure exist, prepare each page for authoring. Set the saving behavior, apply
-      approved metadata, write structured LiveLabs content, and use drafts when proposing changes to pages owned by
-      another author.</p>
-    <p class="nodoc-callout"><strong>Before editing, recognize page metadata.</strong> NoDoc uses special markers at
-      the top of a page for catalog labels. For example, <code>@@@@ReleaseVersion="Latest"</code> records the approved
-      release value; it is page metadata, not learner-facing prose. Keep existing approved markers at the top when you
-      edit. Do not invent or change values. The metadata task below explains the labels and how they differ from
-      in-page filter markers.</p>
+    <p>This Lab covers page saving, drafts, metadata, and the rich-text editor. Use a draft when you propose changes to
+      another author’s page; an authorized reviewer can compare it with the original before approval. When editing an
+      existing page, preserve its approved metadata at the top. Task 3 explains how those markers differ from filter
+      tags.</p>
     <h4>Objectives</h4>
     <ul>
       <li>Choose the appropriate Autosave behavior and confirm the saved state.</li>
@@ -1199,8 +1202,9 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
             </figure>
           </div>
         </li>
-        <li>Before leaving the page, confirm the saved state. Owners use <strong>Save</strong> to update the original;
-          non-owners use <strong>Save Draft</strong> for owner review.</li>
+        <li>Before leaving, use the save action for the current page state: owners use <strong>Save</strong> to update the
+          original page; non-owners use <strong>Save Draft</strong> for owner review. In Task 4, the editing walkthrough
+          uses <strong>Save &amp; Check In</strong>.</li>
       </ol>
     </details>
     <details class="nodoc-task" data-search-summary="Manual NoDoc UI: save a draft, open Drafts and View Diff, accept or reject individual changes, and approve the review." data-search-keywords="manual browser ui draft drafts review approve reject changes difference viewer save draft">
@@ -1208,6 +1212,8 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
       <p><strong>Manual workflow:</strong> Create and save a draft in the NoDoc browser interface, then use
         <strong>Drafts</strong> and <strong>View Diff</strong> to review it. Draft edits leave the original page unchanged
         until an authorized reviewer approves the changes.</p>
+      <p><strong>Before you start:</strong> Use an approved practice page created by another author. The reviewer must
+        be authorized to approve the draft.</p>
       <p>To review, approve, or discard an existing draft directly in Codex, use
         <a href="#nodoc:8:8">Lab 8, Task 8 · Draft review through Codex MCP</a>.</p>
       <h5>Create and save a draft</h5>
@@ -1288,7 +1294,8 @@ required = false</code></pre></div><figure class="nodoc-route-evidence nodoc-mcp
       <section class="nodoc-metadata-guide" aria-labelledby="nodoc-metadata-title">
         <h5 id="nodoc-metadata-title">Metadata tags: what they are and how to use them</h5>
         <p>Metadata tags are controlled labels at the top of a page. They help organize, filter, ingest, and find pages.
-          The highlighted marker in the example is a page label; preserve approved values when editing.
+          For example, <code>@@@@ReleaseVersion="Latest"</code> records an approved release value; it is page metadata,
+          not learner-facing prose. Preserve the approved value and its location when editing.
         </p>
         <ol class="nodoc-compact-list">
           <li>Place metadata at the top of the page, then recheck it after a rename or move.
@@ -1391,17 +1398,16 @@ Linux-specific instructions.
         <li>Use the toolbar to build or revise the page. Start with a concise introduction, objectives, prerequisites
           when needed, then headings and numbered learner tasks.
           <ul class="nodoc-compact-list">
-            <li><strong>Heading</strong> sets the page structure.</li>
-            <li><strong>Bold, Italic, and Strikethrough</strong> apply emphasis or mark text for removal.</li>
+            <li>Use <strong>Heading</strong> to structure the page. <strong>Bold, Italic, and Strikethrough</strong>
+              apply emphasis or mark text for removal.</li>
             <li><strong>Quote</strong> and <strong>Note</strong> separate quoted material, warnings, decisions, or
               context.</li>
-            <li><strong>Code block</strong> adds copyable code; <strong>Tabs</strong> separate different content;
-              <strong>Quiz</strong> adds a knowledge check; <strong>Inline code</strong> formats commands or tokens.
-            </li>
+            <li><strong>Code block</strong> adds copyable code, and <strong>Inline code</strong> formats commands or
+              tokens. <strong>Tabs</strong> separate content; <strong>Quiz</strong> adds a knowledge check.</li>
             <li><strong>Image</strong> and <strong>Link</strong> add approved media with alt text and tested relative
-              links; <strong>Indent/Outdent</strong> changes block nesting.</li>
-            <li><strong>Video, Table, and Lists</strong> add media, structured data, and learner steps; <strong>MD
-                Source</strong> lets you inspect or edit the Markdown source.</li>
+              links. <strong>Video, Table, and Lists</strong> add media, structured data, and learner steps.
+              <strong>Indent/Outdent</strong> changes block nesting.</li>
+            <li>Use <strong>MD Source</strong> to inspect or edit the Markdown source.</li>
           </ul>
         </li>
         <li>Click <strong>Save &amp; Check In</strong> to save progress manually, then review the rendered content,
@@ -1417,9 +1423,9 @@ Linux-specific instructions.
     <div data-video-card data-video-title="Lab 4 walkthrough"
       data-video-summary="Preview learning aid. Create and restore article versions, manage co-author access, and handle anchored comments safely."
       data-video-features="Versions|Co-authors|Comments|Review feedback"></div>
-    <p>Once the page content is structured, manage the article as a shared, reviewable asset. Create recoverable
-      versions, grant access only to approved co-authors, and use anchored comments to keep feedback attached to the
-      exact content under discussion.</p>
+    <p>With the page structure in place, use this Lab to manage article versions, co-author access, and comments. You’ll
+      create or restore a version, review who can collaborate, and attach feedback to the passage it concerns. These
+      actions depend on ownership or role permissions.</p>
     <h4>Objectives</h4>
     <ul>
       <li>Create and restore article versions only after verifying the target.</li>
@@ -1476,6 +1482,7 @@ Linux-specific instructions.
         <li>Review the current co-author list before changing access.</li>
         <li>Choose <strong>Add Coauthor</strong> to grant approved collaboration access.</li>
         <li>Select a co-author and choose <strong>Remove Coauthor</strong> only when their access should end.</li>
+        <li>Confirm that the co-author list reflects the change.</li>
       </ol>
     </details>
     <details class="nodoc-task">
@@ -1529,8 +1536,9 @@ Linux-specific instructions.
     <div data-video-card data-video-title="Lab 5 walkthrough"
       data-video-summary="Preview learning aid. Verify current OraHub labels, branches, and permissions before importing or exporting content."
       data-video-features="From OraHub|To OraHub|Review before overwrite"></div>
-    <p>Use these controls only when the approved workflow needs an OraHub repository copy. They are separate from the
-      standard NoDoc-to-WMS publishing route.</p>
+    <p>Use this Lab when an approved workflow needs Markdown copied between NoDoc and an OraHub branch. <strong>From
+      OraHub</strong> loads source content into a selected NoDoc page; <strong>To OraHub</strong> exports reviewed content.
+      These repository actions are separate from NoDoc Pre Publish and the WMS publishing request.</p>
     <h4>Objectives</h4>
     <ul>
       <li>Load approved OraHub Markdown into a selected NoDoc page.</li>
@@ -1539,12 +1547,13 @@ Linux-specific instructions.
     <details class="nodoc-task">
       <summary>Task 1 · Load a selected page from OraHub</summary>
       <ol>
-        <li>For a new page, use the <strong>Import From OraHub</strong> creation option in Lab 2.
-          For an empty or existing selected page, use the upper action-row <strong>From OraHub</strong> control.
-        </li>
+        <li>Choose the path for the target page: for a new page, use the <strong>Import From OraHub</strong> creation
+          option in Lab 2; for an empty or existing page, select it and use the upper action-row <strong>From OraHub</strong>
+          control.</li>
         <li>Select the approved branch, Focus Area, folder, and file.</li>
         <li>Review the loaded Markdown, then select <strong>Overwrite Changes</strong> only when replacing the target
-          page is approved. Before overwriting, confirm the target page and keep a recoverable copy or version.
+          page is approved. Before overwriting, confirm the target page and keep a recoverable copy or version. After
+          the overwrite completes, reopen the page and confirm that the intended Markdown appears.
           <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
             aria-label="Expand image: Load a selected page from OraHub">
             <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
@@ -1559,12 +1568,18 @@ Linux-specific instructions.
     <details class="nodoc-task">
       <summary>Task 2 · Export reviewed content to OraHub</summary>
       <ol>
-        <li>Use <strong>To OraHub</strong> only after the selected content has been reviewed and validated.</li>
+        <li>Use <strong>To OraHub</strong> only after the selected content has been reviewed and validated. If you are
+          following Labs 1–10 in order, complete the content validation in <a href="#nodoc:6:1">Lab 6 · Vibe Doc-ing</a>
+          first, then return to this optional task.</li>
         <li>Select the intended scope: <strong>Merged Content</strong> for a first article page, <strong>Page
             Only</strong>
           for one page, or <strong>Whole Article</strong> for the full article.</li>
-        <li>Download the Markdown or select the approved branch and choose <strong>Upload to OraHub</strong>. Verify the
-          scope and destination before confirming the export.
+        <li>Choose an output:
+          <ul>
+            <li>To keep a local copy, download the Markdown.</li>
+            <li>To upload it to OraHub, select the approved branch and choose <strong>Upload to OraHub</strong>.</li>
+          </ul>
+          Before confirming an upload, verify the scope and destination.
           <figure class="nodoc-route-evidence" data-expandable="true" tabindex="0" role="button"
             aria-label="Expand image: Export reviewed content to OraHub">
             <span class="figure-expand-pill" aria-hidden="true">Click to expand</span>
