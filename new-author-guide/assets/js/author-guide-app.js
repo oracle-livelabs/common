@@ -59,8 +59,8 @@
   var guideSections = [];
   var guideSectionMap = {};
   var guideCatalogHref = "";
-  var fullGuideHref = "https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/";
-  var workshopExampleHref = window.authorGuideWorkshopExampleHref || "https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/";
+  var fullGuideHref = "https://livelabs.oracle.com/cdn/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/index.html";
+  var workshopExampleHref = window.authorGuideWorkshopExampleHref || "https://livelabs.oracle.com/cdn/developer/dev-ai-app-dev-finance/workshops/sandbox/index.html";
   var nodocSearchEntries = [];
   var nodocSearchLoadPromise = null;
   var nodocIndexState = "loading";
@@ -872,20 +872,43 @@
     return !!findCheatsheetTagByHash(hash);
   }
 
-  function quickstartSectionTarget(hash) {
-    var id = String(hash || "").replace(/^#/, "");
-    var target;
+  function quickstartSectionHash(stepNumber, sectionId) {
+    return window.LiveLabsSectionUrl.build(["step-" + stepNumber, sectionId]);
+  }
 
-    try {
-      id = decodeURIComponent(id);
-    } catch (error) {
-      // Keep the literal hash when it contains an invalid escape sequence.
+  function quickstartSectionAtScroll(stepIndex) {
+    var step = stepSections[stepIndex];
+    var anchors = step ? Array.prototype.slice.call(step.querySelectorAll("[data-quickstart-anchor]")) : [];
+    var threshold = step ? stickyOffset(step) + 24 : 0;
+    var current = null;
+
+    anchors.forEach(function (target) {
+      if (target.closest("[hidden]")) {
+        return;
+      }
+      if (target.getBoundingClientRect().top <= threshold) {
+        current = target;
+      }
+    });
+
+    return current;
+  }
+
+  function quickstartSectionTarget(hash) {
+    var parts = window.LiveLabsSectionUrl.parse(hash);
+    var requestedStep = parts.length > 1 ? /^step-(\d+)$/i.exec(parts[0]) : null;
+    var id = requestedStep ? parts[1] : (parts.length === 1 ? parts[0] : "");
+    var target = id ? document.getElementById(id) : null;
+    var step = target && target.closest(".rabbit-step");
+
+    if (parts.length > 2 || (parts.length > 1 && !requestedStep)) {
+      return null;
+    }
+    if (requestedStep && step && Number(requestedStep[1]) - 1 !== Number(step.getAttribute("data-step-index"))) {
+      return null;
     }
 
-    target = document.getElementById(id);
-    return target && target.closest(".rabbit-step") && target.closest("[data-quickstart-anchor]")
-      ? target
-      : null;
+    return target && step && target.closest("[data-quickstart-anchor]") ? target : null;
   }
 
   function routeUrl(hash) {
@@ -940,7 +963,7 @@
     if (cleaned === "nodoc" || cleaned === "no-doc") {
       return pageUrl("nodoc");
     }
-    if (cleaned.indexOf("nodoc:") === 0) {
+    if (cleaned.indexOf("nodoc:") === 0 || cleaned.indexOf("nodoc#") === 0) {
       return pageUrl("nodoc", hash);
     }
     if (cleaned === "troubleshooting" || cleaned === "error-help") {
@@ -1033,13 +1056,20 @@
     if (state.mode === "beginner") {
       var sectionTarget = quickstartSectionTarget(currentHash);
       var targetStep = sectionTarget && sectionTarget.closest(".rabbit-step");
+      var activeSection;
 
       if (targetStep && Number(targetStep.getAttribute("data-step-index")) === state.currentStep) {
         setHash(currentHash, options);
         return;
       }
 
-      setHash("#step-" + (state.currentStep + 1), options);
+      activeSection = quickstartSectionAtScroll(state.currentStep);
+      setHash(
+        activeSection
+          ? quickstartSectionHash(state.currentStep + 1, activeSection.id)
+          : "#step-" + (state.currentStep + 1),
+        options
+      );
       return;
     }
 
@@ -1054,7 +1084,12 @@
     }
 
     if (state.mode === "nodoc") {
-      setHash(currentHash.indexOf("#nodoc:") === 0 ? currentHash : "#nodoc", options);
+      setHash(
+        currentHash.indexOf("#nodoc:") === 0 || currentHash.indexOf("#nodoc#") === 0
+          ? currentHash
+          : "#nodoc",
+        options
+      );
       return;
     }
 
@@ -1289,6 +1324,8 @@
   function syncBeginnerStepFromScroll() {
     var anchor;
     var currentIndex = 0;
+    var currentSection;
+    var nextHash;
 
     if (state.mode !== "beginner" || suppressObserver || !stepSections.length) {
       return;
@@ -1304,7 +1341,14 @@
     if (currentIndex !== state.currentStep) {
       state.currentStep = currentIndex;
       updateBeginnerUI();
-      updateHashFromState({ replace: true });
+    }
+
+    currentSection = quickstartSectionAtScroll(currentIndex);
+    nextHash = currentSection
+      ? quickstartSectionHash(currentIndex + 1, currentSection.id)
+      : "#step-" + (currentIndex + 1);
+    if (window.location.hash !== nextHash) {
+      setHash(nextHash, { replace: true });
     }
   }
 
@@ -4557,7 +4601,7 @@
           path: "Markdown / " + section.title,
           body: [pattern.source || "", pattern.result, (pattern.notes || []).join(" ")].join(" "),
           keywords: (pattern.keywords || "").split(/\s+/),
-          resultHref: resolveGuideRuntimePath("markdown/index.html#" + pattern.id),
+          resultHref: resolveGuideRuntimePath("markdown/index.html" + window.LiveLabsSectionUrl.build(["markdown", pattern.id])),
           resultLabel: "Open Markdown example"
         });
         searchIndex.push(entry);
@@ -4595,7 +4639,10 @@
         path: "NoDoc / " + entry.path,
         body: entry.text,
         keywords: entry.keywords.split(/\s+/),
-        resultHref: routeUrl("#nodoc:" + entry.panel + (entry.task ? ":" + entry.task : "")),
+        resultHref: routeUrl(window.LiveLabsSectionUrl.build([
+          "nodoc",
+          entry.panel === 0 ? "introduction" : "lab-" + entry.panel
+        ].concat(entry.task ? ["task-" + entry.task] : []))),
         open: { kind: "nodoc", panel: entry.panel, task: entry.task }
       });
     });
@@ -5050,7 +5097,7 @@
       return;
     }
 
-    if (cleaned.indexOf("nodoc:") === 0) {
+    if (cleaned.indexOf("nodoc:") === 0 || cleaned.indexOf("nodoc#") === 0) {
       switchMode("nodoc", { scroll: true, forceTop: true, hash: false, announce: false });
       return;
     }

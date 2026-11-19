@@ -8,14 +8,14 @@ async function data(request) {
   };
 }
 
-test('dashboard has no menu and counts P1 separately from P2/P3 items', async ({page, request}) => {
+test('dashboard has two-page navigation and counts P1 separately from P2/P3 items', async ({page, request}) => {
   const {inventory,state} = await data(request);
   const errors=[]; page.on('pageerror', e=>errors.push(e.message));
   await page.goto('/dashboard/', {waitUntil:'networkidle'});
   await expect(page.getByRole('heading',{level:1,name:'LiveLabs Analytics'})).toBeVisible();
   await expect(page.locator('#global-workshop-search')).toBeVisible();
   await expect(page.getByRole('button',{name:/^(Menu|Close menu)/})).toHaveCount(0);
-  await expect(page.locator('.rail')).toBeHidden();
+  await expect(page.locator('.rail .nav-list a')).toHaveText(['Dashboard','Views']);
   await expect(page.locator('[data-overview-metric="public-count"]')).toHaveText(inventory.records.length.toLocaleString());
   const matched = inventory.records.map(r=>state.qaReportMerge.overlay[r.livelabsId]).filter(Boolean);
   const p1 = matched.reduce((sum,item)=>sum+Number(item.priorityCounts.p1||0)+Number(item.priorityCounts.p1Verification||0),0);
@@ -24,6 +24,58 @@ test('dashboard has no menu and counts P1 separately from P2/P3 items', async ({
   await expect(page.locator('[data-overview-metric="error-items-count"]')).toHaveText(errorsCount.toLocaleString());
   await expect(page.locator('[data-dashboard-tab]')).toHaveText(['Top Performers','P1 urgent action','At-risk','Retirement review']);
   expect(errors).toEqual([]);
+});
+
+test('overview QA metrics show a loading state until the Jenkins data arrives', async ({page, request}) => {
+  const {inventory, state} = await data(request);
+  const matched = inventory.records.map(record => state.qaReportMerge.overlay[record.livelabsId]).filter(Boolean);
+  const expectedP1 = matched.reduce((sum, item) => sum + Number(item.priorityCounts.p1 || 0) + Number(item.priorityCounts.p1Verification || 0), 0);
+  const expectedErrors = matched.filter(item => (item.findings || []).some(finding => ['P2', 'P3'].includes(finding.priority))).length;
+  let releaseState;
+  let requestStarted;
+  const requestStartedPromise = new Promise(resolve => { requestStarted = resolve; });
+  const stateGate = new Promise(resolve => { releaseState = resolve; });
+
+  await page.route('**/api/dashboard-admin-state', async route => {
+    requestStarted();
+    await stateGate;
+    await route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify(state)});
+  });
+  await page.goto('/dashboard/', {waitUntil: 'domcontentloaded'});
+  await requestStartedPromise;
+
+  const p1Metric = page.locator('[data-overview-metric="jenkins-p1-count"]');
+  const errorMetric = page.locator('[data-overview-metric="error-items-count"]');
+  const loadingStatus = page.locator('[data-qa-metrics-status]');
+  await expect(page.locator('.page-loading-overlay')).toBeVisible();
+  await expect(page.locator('.layout')).toHaveAttribute('inert', '');
+  await expect(p1Metric).not.toContainText('Loading');
+  await expect(errorMetric).not.toContainText('Loading');
+  await expect(p1Metric).toHaveAttribute('aria-busy', 'true');
+  await expect(loadingStatus).toBeHidden();
+
+  releaseState();
+  await expect(p1Metric).toHaveText(expectedP1.toLocaleString());
+  await expect(errorMetric).toHaveText(expectedErrors.toLocaleString());
+  await expect(p1Metric).not.toHaveAttribute('aria-busy', 'true');
+  await expect(page.locator('.page-loading-overlay')).toBeHidden();
+  await expect(loadingStatus).toBeHidden();
+});
+
+test('overview QA metrics switch from loading to unavailable when no Jenkins report is saved', async ({page, request}) => {
+  const {state} = await data(request);
+  const emptyState = {...state, qaReportMerge: null};
+  await page.route('**/api/dashboard-admin-state', route => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify(emptyState),
+  }));
+
+  await page.goto('/dashboard/', {waitUntil: 'networkidle'});
+
+  await expect(page.locator('[data-overview-metric="jenkins-p1-count"]')).toHaveText('Unavailable');
+  await expect(page.locator('[data-overview-metric="error-items-count"]')).toHaveText('Unavailable');
+  await expect(page.locator('[data-qa-metrics-status]')).toHaveText('Jenkins findings are unavailable.');
 });
 
 test('every ranked row uses its available baseline and valid QA within its review band', async ({page, request}) => {
@@ -55,7 +107,7 @@ test('every ranked row uses its available baseline and valid QA within its revie
   }
 });
 
-test('P1 remains in urgent action and retirement explains provisional evidence', async ({page}) => {
+test('P1 remains in urgent action and retirement explains its key safeguards', async ({page}) => {
   await page.goto('/dashboard/?view=urgent',{waitUntil:'networkidle'});
   await expect(page.locator('#jenkins-p1-action-queue')).toBeVisible();
   await page.locator('#jenkins-p1-action-queue details.ranked-table-disclosure > summary').click();
@@ -64,8 +116,9 @@ test('P1 remains in urgent action and retirement explains provisional evidence',
   const help=page.locator('#retire-now-content .review-methodology');
   await expect(help).toBeHidden();
   await page.locator('#retire-now-content details.toggle-panel > summary').filter({hasText:'What drives the score'}).click();
-  await expect(help).toContainText('verified update and publication dates');
-  await expect(help).toContainText('Admin approval does not confirm removal in WMS');
+  await expect(help).toContainText('P1 stays in urgent action');
+  await expect(help).toContainText('Admin must confirm retirement');
+  await expect(help).not.toContainText('verified update and publication dates');
 });
 
 for(const width of [1440,390]) test(`search details explain effective weights at ${width}px`,async({page},testInfo)=>{

@@ -6,6 +6,15 @@
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   })[char]);
   const pages = {};
+  const pageSizes = {};
+  const tableSorts = {};
+  const tableExportButtons = {
+    changes: [$('changes-csv'), $('changes-xlsx')],
+    'quality-results': [$('quality-csv'), $('quality-xlsx')],
+    'review-history': [$('reviews-csv'), $('reviews-xlsx')]
+  };
+  const tableViews = new Map();
+  const tableCollator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
   const tabs = [...document.querySelectorAll('[role="tab"][data-tab]')];
   let csrf = '';
   let snapshots = [];
@@ -78,21 +87,97 @@
     };
   }
 
-  function table(id, headers, rows) {
-    const page = pages[id] = Math.min(pages[id] || 0, Math.max(0, Math.ceil(rows.length / 100) - 1));
-    $(id).innerHTML = rows.length
-      ? `<p>${rows.length} matching rows · ${page * 100 + 1}–${Math.min(rows.length, (page + 1) * 100)} shown. Exports include all matches.</p><div class="controls"><button data-previous ${page === 0 ? 'disabled' : ''}>Previous</button><button data-next ${(page + 1) * 100 >= rows.length ? 'disabled' : ''}>Next</button></div><table><thead><tr>${headers.map(header => `<th>${escape(header)}</th>`).join('')}</tr></thead><tbody>${rows.slice(page * 100, (page + 1) * 100).map(row => `<tr>${row.map(cell => `<td>${escape(LiveLabsExport.clean(cell))}</td>`).join('')}</tr>`).join('')}</tbody></table>`
-      : '<p>No matching rows.</p>';
-
-    for (const [attribute, delta] of [['previous', -1], ['next', 1]]) {
-      const button = $(id).querySelector('[data-' + attribute + ']');
-      if (button) button.onclick = () => {
-        pages[id] += delta;
-        table(id, headers, rows);
-        $(id).scrollTop = 0;
-      };
+  function table(id, headers, rows, options = {}) {
+    const pageSize = [10, 25, 50, 100].includes(Number(pageSizes[id])) ? Number(pageSizes[id]) : 10;
+    pageSizes[id] = pageSize;
+    const state = tableSorts[id] || (tableSorts[id] = { index: -1, direction: 'asc' });
+    const valuesFor = options.valuesFor || (row => row);
+    const ordered = rows.slice();
+    if (state.index >= 0 && state.index < headers.length) {
+      ordered.sort((left, right) => {
+        const leftText = String(valuesFor(left)[state.index] ?? '').trim();
+        const rightText = String(valuesFor(right)[state.index] ?? '').trim();
+        const leftMissing = !leftText || leftText === '—';
+        const rightMissing = !rightText || rightText === '—';
+        if (leftMissing !== rightMissing) return leftMissing ? 1 : -1;
+        const leftNumber = Number(leftText.replace(/[,%]/g, ''));
+        const rightNumber = Number(rightText.replace(/[,%]/g, ''));
+        const numeric = leftText && rightText && Number.isFinite(leftNumber) && Number.isFinite(rightNumber)
+          ? leftNumber - rightNumber
+          : tableCollator.compare(leftText, rightText);
+        return state.direction === 'desc' ? -numeric : numeric;
+      });
     }
+    const totalPages = Math.max(1, Math.ceil(ordered.length / pageSize));
+    const page = pages[id] = Math.min(Math.max(0, pages[id] || 0), totalPages - 1);
+    const start = ordered.length ? page * pageSize + 1 : 0;
+    const visible = ordered.slice(page * pageSize, (page + 1) * pageSize);
+    const visibleValues = visible.map(valuesFor);
+    tableViews.set(id, { headers, rows: visibleValues, records: visible });
+    const pagination = () => `<div class="pagination-controls admin-table-pagination table-controls-toolbar" aria-label="Table controls">
+      <span class="pagination-range">${options.summary ? `${escape(options.summary)} · ` : ''}${ordered.length ? `Showing ${start}–${Math.min(start + visible.length - 1, ordered.length)} of ${ordered.length.toLocaleString()} rows` : 'No matching rows'}</span>
+      <div class="pagination-actions"><span class="admin-table-export-slot" data-admin-export-slot="${escape(id)}"></span>
+      <button class="pagination-button" type="button" data-admin-clear-table="${escape(id)}">Clear filters</button>
+      <label>Rows per page<select data-admin-page-size="${escape(id)}" aria-label="Rows per page">${[10, 25, 50, 100].map(size => `<option value="${size}"${size === pageSize ? ' selected' : ''}>${size}</option>`).join('')}</select></label>
+      <button class="pagination-button" type="button" data-admin-page-action="previous" data-admin-page-table="${escape(id)}" ${page === 0 ? 'disabled' : ''}>Previous</button>
+      <span data-admin-page-label>Page ${page + 1} of ${totalPages}</span>
+      <button class="pagination-button" type="button" data-admin-page-action="next" data-admin-page-table="${escape(id)}" ${page + 1 >= totalPages ? 'disabled' : ''}>Next</button></div></div>`;
+    const sortStateLabel = index => state.index === index ? (state.direction === 'asc' ? ' ↑' : ' ↓') : '';
+    const sortableColumns = options.sortableColumns || headers.map((_, index) => index);
+    const head = headers.map((header, index) => `<th aria-sort="${state.index === index ? (state.direction === 'asc' ? 'ascending' : 'descending') : 'none'}">${sortableColumns.includes(index)
+      ? `<button class="admin-table-sort" type="button" data-admin-sort-table="${escape(id)}" data-admin-sort-column="${index}" aria-label="Sort by ${escape(header)}">${escape(header)}${sortStateLabel(index)}</button>`
+      : escape(header)}</th>`).join('');
+    const body = visible.map((row, index) => options.renderRow
+      ? options.renderRow(row, index)
+      : `<tr>${valuesFor(row).map(cell => `<td>${escape(LiveLabsExport.clean(cell))}</td>`).join('')}</tr>`).join('');
+    $(id).innerHTML = ordered.length
+      ? `${pagination()}<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`
+      : '<p class="admin-muted">No matching rows.</p>';
+    const exportSlot = $(id).querySelector(`[data-admin-export-slot="${id}"]`);
+    tableExportButtons[id]?.forEach(button => { if (exportSlot) exportSlot.append(button); });
   }
+
+  function rerenderTable(id) {
+    if (id === 'quality-results') renderQuality();
+    else if (id === 'changes') renderChanges();
+    else if (id === 'review-history') renderReviews();
+  }
+
+  document.addEventListener('change', event => {
+    const select = event.target.closest?.('[data-admin-page-size]');
+    if (!select) return;
+    const id = select.dataset.adminPageSize;
+    pageSizes[id] = Number(select.value) || 10;
+    pages[id] = 0;
+    rerenderTable(id);
+  });
+  document.addEventListener('click', event => {
+    const clearButton = event.target.closest?.('[data-admin-clear-table]');
+    if (clearButton) {
+      const id = clearButton.dataset.adminClearTable;
+      const searchId = id === 'changes' ? 'change-search' : id === 'quality-results' ? 'quality-search' : 'review-search';
+      if ($(searchId)) $(searchId).value = '';
+      if (id === 'quality-results') $('quality-category').value = '';
+      pages[id] = 0;
+      rerenderTable(id);
+      return;
+    }
+    const pageButton = event.target.closest?.('[data-admin-page-action]');
+    if (pageButton) {
+      const id = pageButton.dataset.adminPageTable;
+      pages[id] = Math.max(0, (pages[id] || 0) + (pageButton.dataset.adminPageAction === 'next' ? 1 : -1));
+      rerenderTable(id);
+      return;
+    }
+    const sortButton = event.target.closest?.('[data-admin-sort-table]');
+    if (!sortButton) return;
+    const id = sortButton.dataset.adminSortTable;
+    const index = Number(sortButton.dataset.adminSortColumn);
+    const previous = tableSorts[id] || { index: -1, direction: 'asc' };
+    tableSorts[id] = { index, direction: previous.index === index && previous.direction === 'asc' ? 'desc' : 'asc' };
+    pages[id] = 0;
+    rerenderTable(id);
+  });
 
   function options(select, selected) {
     select.innerHTML = snapshots.map(snapshot => `<option value="${escape(snapshot.id)}">${escape(snapshot.date + ' · ' + snapshot.id.slice(0, 8) + ' — ' + snapshot.label)}</option>`).join('');
@@ -184,28 +269,18 @@
 
   function renderQuality() {
     const matching = qualityMatches();
-    const page = pages['quality-results'] = Math.min(pages['quality-results'] || 0, Math.max(0, Math.ceil(matching.length / 100) - 1));
     const affected = new Set(matching.map(issue => issue.key)).size;
-    if (!matching.length) {
-      $('quality-results').innerHTML = '<p>No issues match these filters.</p>';
-      return;
-    }
-    const visible = matching.slice(page * 100, (page + 1) * 100);
     const headers = [...qualityHeaders, 'Action'];
-    const rows = visible.map((issue, index) => {
+    table('quality-results', headers, matching, {
+      summary: `${matching.length.toLocaleString()} issues · ${affected.toLocaleString()} content items`,
+      valuesFor: issue => [issue.snapshotDate, issue.key, issue.title, issue.livelabsId, issue.wmsId, issue.category, issue.reason, 'Review'],
+      sortableColumns: qualityHeaders.map((_, index) => index),
+      renderRow: (issue, index) => {
       const cells = [issue.snapshotDate, issue.key, issue.title, issue.livelabsId, issue.wmsId, issue.category, issue.reason]
         .map(value => `<td>${escape(LiveLabsExport.clean(value))}</td>`).join('');
-      return `<tr>${cells}<td><button type="button" class="admin-review-issue" data-quality-review="${page * 100 + index}">Review</button></td></tr>`;
-    }).join('');
-    $('quality-results').innerHTML = `<p>${matching.length.toLocaleString()} matching issues across ${affected.toLocaleString()} content items · ${page * 100 + 1}–${Math.min(matching.length, (page + 1) * 100)} shown. Exports include all matches.</p><div class="controls"><button data-previous ${page === 0 ? 'disabled' : ''}>Previous</button><button data-next ${(page + 1) * 100 >= matching.length ? 'disabled' : ''}>Next</button></div><table><thead><tr>${headers.map(header => `<th>${escape(header)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>`;
-    for (const [attribute, delta] of [['previous', -1], ['next', 1]]) {
-      const button = $('quality-results').querySelector('[data-' + attribute + ']');
-      if (button) button.onclick = () => {
-        pages['quality-results'] += delta;
-        renderQuality();
-        $('quality-results').scrollTop = 0;
-      };
-    }
+        return `<tr>${cells}<td><button type="button" class="admin-review-issue" data-quality-review="${index}">Review</button></td></tr>`;
+      }
+    });
   }
 
   const changeRows = () => changes.filter(change => matches(change, $('change-search').value)).map(change => [
@@ -400,7 +475,7 @@
   $('quality-results').addEventListener('click', event => {
     const button = event.target.closest('[data-quality-review]');
     if (!button) return;
-    const issue = qualityMatches()[Number(button.dataset.qualityReview)];
+    const issue = tableViews.get('quality-results')?.records[Number(button.dataset.qualityReview)];
     if (issue) task(() => openReviewForIssue(issue))(event);
   });
 
@@ -409,13 +484,16 @@
   $('change-search').oninput = () => { pages.changes = 0; renderChanges(); };
   $('review-search').oninput = () => { pages['review-history'] = 0; renderReviews(); };
 
-  for (const [prefix, headers, rows] of [
-    ['quality', qualityHeaders, qualityRows], ['changes', changeHeaders, changeRows], ['reviews', reviewHeaders, reviewRows]
+  for (const [prefix, tableId, rows] of [
+    ['quality', 'quality-results', qualityRows], ['changes', 'changes', changeRows], ['reviews', 'review-history', reviewRows]
   ]) {
     for (const extension of ['csv', 'xlsx']) {
-      $(prefix + '-' + extension).onclick = () => LiveLabsExport[extension](
-        [headers, ...rows()], `livelabs-${prefix}-${new Date().toISOString().slice(0, 10)}.${extension}`
-      );
+      $(prefix + '-' + extension).onclick = () => {
+        const view = tableViews.get(tableId);
+        if (!view?.rows.length) return;
+        const page = (pages[tableId] || 0) + 1;
+        LiveLabsExport[extension]([view.headers, ...view.rows], `livelabs-${prefix}-page-${page}-${new Date().toISOString().slice(0, 10)}.${extension}`);
+      };
     }
   }
 

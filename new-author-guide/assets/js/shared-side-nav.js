@@ -85,10 +85,10 @@
     });
 
     document.querySelectorAll("[data-full-guide-link]").forEach(function (link) {
-      link.href = window.authorGuideFullGuideHref || "https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/";
+      link.href = window.authorGuideFullGuideHref || "https://livelabs.oracle.com/cdn/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/index.html";
     });
     document.querySelectorAll("[data-workshop-example-link]").forEach(function (link) {
-      link.href = window.authorGuideWorkshopExampleHref || "https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/";
+      link.href = window.authorGuideWorkshopExampleHref || "https://livelabs.oracle.com/cdn/developer/dev-ai-app-dev-finance/workshops/sandbox/index.html";
     });
 
     page = document.body.getAttribute("data-author-guide-page");

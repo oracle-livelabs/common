@@ -1,14 +1,8 @@
 (() => {
   "use strict";
 
-  const WINDOWS = [
-    { label: "Last 7 Days", key: "Views - Last 7 Days" },
-    { label: "Last 14 Days", key: "Views - Last 14 Days" },
-    { label: "Last 30 Days", key: "Views - Last 30 Days" },
-    { label: "Last 90 Days", key: "Views - Last 90 Days" },
-    { label: "Last 180 Days", key: "Views - Last 180 Days" },
-    { label: "Last 12 Months", key: "Views - Last 12 Months" },
-  ];
+  const viewPeriods = globalThis.LiveLabsViews;
+  const WINDOWS = viewPeriods.periods;
   const byId = (id) => document.getElementById(id);
   const pairsToMap = (pairs) => new Map(Array.isArray(pairs)
     ? pairs.filter((pair) => Array.isArray(pair) && pair.length > 1).map(([key, value]) => [String(key), value])
@@ -19,7 +13,7 @@
     const number = Number(normalized);
     return Number.isSafeInteger(number) ? number : null;
   };
-  const formatNumber = (value) => value === null ? "—" : value.toLocaleString();
+  const formatNumber = viewPeriods.format;
   const emailValue = (record, labels, directKeys = []) => {
     const sources = [record.details, record.values];
     for (const label of labels) {
@@ -64,45 +58,65 @@
     return cell;
   }
 
-  function prepareRecords(records) {
-    const prepared = records.filter(publicRecord).map((record) => ({
-      title: String(record.title || "Untitled record"),
-      id: String(record.livelabsId || "").trim(),
-      wmsId: String(record.wmsId || "").trim(),
-      type: String(record.type || ""),
-      values: pairsToMap(record.values),
-      details: pairsToMap(record.details),
-    }));
+  function prepareRecords(records, contactPayload) {
+    const contactById = new Map(Object.entries(contactPayload?.items || {}));
+    const prepared = records.filter(publicRecord).map((record) => {
+      const values = pairsToMap(record.values);
+      const details = pairsToMap(record.details);
+      const council = String(record.category || details.get("Council Area") || values.get("Council Area")
+        || details.get("Category") || values.get("Category") || "").trim() || "Not reported";
+      return {
+        title: String(record.title || "Untitled record"),
+        id: String(record.livelabsId || "").trim(),
+        wmsId: String(record.wmsId || "").trim(),
+        type: String(record.type || ""),
+        council,
+        values,
+        details,
+        authorEmail: "",
+        additionalContactEmail: "",
+        additionalContactType: "",
+      };
+    });
     return prepared.map((record) => ({
       ...record,
       authorEmail: emailValue(record, ["Author Email", "Workshop Owner Email", "Owner Email"], ["authorEmail", "workshopOwnerEmail", "ownerEmail", "owner"]),
+      additionalContactEmail: String(contactById.get(record.id)?.email || "").trim(),
+      additionalContactType: String(contactById.get(record.id)?.type || "").trim(),
     }));
   }
 
   function render(records, snapshotDate) {
     const search = byId("views-search");
     const authorEmailFilter = byId("views-author-email");
+    const additionalContactFilter = byId("views-additional-contact-email");
     const typeFilter = byId("views-type");
+    const councilFilter = byId("views-council");
     const periodFilter = byId("views-period");
-    const sortFilter = byId("views-sort");
-    const sortDirection = byId("views-sort-direction");
+    const body = byId("views-table-body");
+    const table = body.closest("table");
     const pageSizeFilters = Array.from(document.querySelectorAll("[data-views-page-size]"));
     const clearFiltersButton = byId("views-clear-filters");
     const previousButtons = Array.from(document.querySelectorAll("[data-views-previous]"));
     const nextButtons = Array.from(document.querySelectorAll("[data-views-next]"));
-    const body = byId("views-table-body");
     const count = byId("views-table-count");
     const exportStatus = byId("views-export-status");
     const pageLabels = Array.from(document.querySelectorAll("[data-views-page-label]"));
     const countHeading = byId("views-count-heading");
-    const snapshotNote = byId("views-snapshot-note");
 
     const statusOf = (record) => String(record.details.get("Dashboard Metric Status") || "");
     const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
+    Array.from(new Set(records.map((record) => record.council))).sort(collator.compare).forEach((council) => {
+      const option = document.createElement("option");
+      option.value = council;
+      option.textContent = council;
+      councilFilter.append(option);
+    });
     let currentPage = 1;
+    let sortKey = "views";
+    let sortDirection = "desc";
     let exportRecords = [];
     let exportMetadata = {};
-    snapshotNote.textContent = `Snapshot: ${snapshotDate || "date unavailable"} · shared-title counts omitted; source periods unconfirmed.`;
 
     const activeWindow = () => WINDOWS.find((window) => window.key === periodFilter.value) || WINDOWS[WINDOWS.length - 1];
     const detailHref = (record) => {
@@ -128,28 +142,32 @@
     const update = () => {
       exportStatus.textContent = "";
       const window = activeWindow();
-      countHeading.textContent = `Views · ${window.label}`;
+      countHeading.querySelector("[data-views-sort='views']").textContent = `Views · ${window.label}`;
       const query = search.value.trim().toLocaleLowerCase();
       const authorQuery = authorEmailFilter.value.trim().toLocaleLowerCase();
+      const additionalContactQuery = additionalContactFilter.value.trim().toLocaleLowerCase();
       const selectedType = typeFilter.value;
+      const selectedCouncil = councilFilter.value;
       const filtered = records.filter((record) => (!selectedType || record.type === selectedType)
-        && (!query || `${record.title} ${record.id} ${record.wmsId} ${record.authorEmail}`.toLocaleLowerCase().includes(query))
-        && (!authorQuery || record.authorEmail.toLocaleLowerCase().includes(authorQuery)));
+        && (!selectedCouncil || record.council === selectedCouncil)
+        && (!query || `${record.title} ${record.id} ${record.wmsId} ${record.authorEmail} ${record.additionalContactEmail}`.toLocaleLowerCase().includes(query))
+        && (!authorQuery || record.authorEmail.toLocaleLowerCase().includes(authorQuery))
+        && (!additionalContactQuery || record.additionalContactEmail.toLocaleLowerCase().includes(additionalContactQuery)));
       const rows = filtered.map((record) => {
         const status = statusOf(record);
         const uniqueTitle = status === "available_unique_title_scope";
-        const metric = uniqueTitle ? countValue(record.values.get(window.key) ?? record.details.get(window.key)) : null;
+        const metric = viewPeriods.metric(record, window.key);
         const rank = uniqueTitle ? countValue(record.details.get(`${window.key} Rank`)) : null;
         return { record, metric, rank };
       });
-      const key = sortFilter.value;
-      const direction = sortDirection.dataset.direction === "asc" ? "asc" : "desc";
-      const numericSort = key === "views" || key === "rank";
+      const key = sortKey;
+      const direction = sortDirection;
+      const numericSort = key === "views" || key === "rank" || key === "livelabsId";
       rows.sort((left, right) => {
         let comparison = 0;
         if (numericSort) {
-          const leftValue = key === "views" ? left.metric : left.rank;
-          const rightValue = key === "views" ? right.metric : right.rank;
+          const leftValue = key === "views" ? left.metric : key === "rank" ? left.rank : left.record.id ? Number(left.record.id) : null;
+          const rightValue = key === "views" ? right.metric : key === "rank" ? right.rank : right.record.id ? Number(right.record.id) : null;
           if (leftValue === null && rightValue !== null) return 1;
           if (leftValue !== null && rightValue === null) return -1;
           if (leftValue !== null && rightValue !== null) comparison = leftValue - rightValue;
@@ -157,7 +175,8 @@
           const valueFor = (item) => key === "title" ? item.record.title
             : key === "livelabsId" ? item.record.id
               : key === "author" ? item.record.authorEmail
-                : item.record.type;
+            : key === "contact" ? item.record.additionalContactEmail
+              : key === "council" ? item.record.council : item.record.type;
           comparison = collator.compare(valueFor(left), valueFor(right));
         }
         if (comparison !== 0) return direction === "asc" ? comparison : -comparison;
@@ -170,14 +189,16 @@
       const start = (currentPage - 1) * pageSize;
       const pageRows = rows.slice(start, start + pageSize);
       const end = start + pageRows.length;
-      const columns = ["#", "Title", "LiveLabs ID", "Type", "Author / owner email", `Views · ${window.label}`];
+      const columns = ["#", "Title", "LiveLabs ID", "Type", "Council", "Author / owner email", "Additional contact email", `Views · ${window.label}`];
       exportRecords = pageRows.map(({ record, metric, rank }) => ({
         [columns[0]]: rank,
         [columns[1]]: record.title,
         [columns[2]]: record.id || "Not assigned",
         [columns[3]]: record.type,
-        [columns[4]]: record.authorEmail || null,
-        [columns[5]]: metric,
+        [columns[4]]: record.council,
+        [columns[5]]: record.authorEmail || null,
+        [columns[6]]: record.additionalContactEmail ? `${record.additionalContactType}: ${record.additionalContactEmail}` : null,
+        [columns[7]]: metric,
       }));
       exportMetadata = {
         source: "LiveLabs Analytics views table",
@@ -185,10 +206,12 @@
         appliedFilters: {
           search: search.value.trim() || null,
           authorEmail: authorEmailFilter.value.trim() || null,
+          additionalContactEmail: additionalContactFilter.value.trim() || null,
           contentType: selectedType || "All types",
+          council: selectedCouncil || "All councils",
           viewPeriod: window.label,
         },
-        sort: { by: sortFilter.options[sortFilter.selectedIndex]?.textContent || "Views", direction },
+        sort: { by: table?.querySelector(`th[data-views-sort-key="${key}"] button`)?.textContent?.trim() || "Views", direction },
         pagination: { page: currentPage, totalPages, pageSize, filteredRows: rows.length, exportedRows: pageRows.length },
         exportedAt: new Date().toISOString(),
         columns,
@@ -201,14 +224,17 @@
       previousButtons.forEach((button) => { button.disabled = currentPage <= 1; });
       nextButtons.forEach((button) => { button.disabled = currentPage >= totalPages; });
       pageSizeFilters.forEach((select) => { select.value = String(pageSize); });
-      sortDirection.textContent = direction === "desc" ? "Desc" : "Asc";
-      sortDirection.setAttribute("aria-label", direction === "desc" ? "Sort descending" : "Sort ascending");
+      table?.querySelectorAll("[data-views-sort]").forEach((button) => {
+        const header = button.closest("th");
+        const isActive = button.dataset.viewsSort === sortKey;
+        header?.setAttribute("aria-sort", isActive ? (sortDirection === "asc" ? "ascending" : "descending") : "none");
+      });
 
       body.replaceChildren();
       if (!pageRows.length) {
         const row = document.createElement("tr");
         const cell = makeCell("No public workshops or sprints match these filters.", "views-empty");
-        cell.colSpan = 6;
+        cell.colSpan = 8;
         row.append(cell);
         body.append(row);
         return;
@@ -226,7 +252,9 @@
           linkedCell(item.record.title, item.record, "Open item details"),
           idCell,
           makeCell(item.record.type),
+          makeCell(item.record.council),
           makeCell(item.record.authorEmail || "—"),
+          makeContactCell(item.record.additionalContactEmail, item.record.additionalContactType),
           makeCell(formatNumber(item.metric), "views-number"),
         );
         body.append(row);
@@ -236,25 +264,31 @@
     const resetPageAndUpdate = () => { currentPage = 1; update(); };
     search.addEventListener("input", resetPageAndUpdate);
     authorEmailFilter.addEventListener("input", resetPageAndUpdate);
+    additionalContactFilter.addEventListener("input", resetPageAndUpdate);
     typeFilter.addEventListener("change", resetPageAndUpdate);
+    councilFilter.addEventListener("change", resetPageAndUpdate);
     periodFilter.addEventListener("change", resetPageAndUpdate);
-    sortFilter.addEventListener("change", resetPageAndUpdate);
     pageSizeFilters.forEach((select) => select.addEventListener("change", () => {
       pageSizeFilters.forEach((peer) => { peer.value = select.value; });
       resetPageAndUpdate();
     }));
-    sortDirection.dataset.direction = "desc";
-    sortDirection.addEventListener("click", () => {
-      sortDirection.dataset.direction = sortDirection.dataset.direction === "desc" ? "asc" : "desc";
+    table?.querySelector("thead")?.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-views-sort]");
+      if (!button) return;
+      const nextKey = button.dataset.viewsSort;
+      sortDirection = sortKey === nextKey ? (sortDirection === "desc" ? "asc" : "desc") : "asc";
+      sortKey = nextKey;
       resetPageAndUpdate();
     });
     clearFiltersButton.addEventListener("click", () => {
       search.value = "";
       authorEmailFilter.value = "";
+      additionalContactFilter.value = "";
       typeFilter.value = "";
+      councilFilter.value = "";
       periodFilter.value = WINDOWS[WINDOWS.length - 1].key;
-      sortFilter.value = "views";
-      sortDirection.dataset.direction = "desc";
+      sortKey = "views";
+      sortDirection = "desc";
       pageSizeFilters.forEach((select) => { select.value = "10"; });
       resetPageAndUpdate();
       search.focus();
@@ -295,20 +329,44 @@
     update();
   }
 
+  function makeContactCell(email, type) {
+    const cell = document.createElement("td");
+    if (!email) {
+      cell.textContent = "—";
+      return cell;
+    }
+    const content = document.createElement("span");
+    content.className = "views-contact-cell";
+    const badge = document.createElement("span");
+    badge.className = "views-contact-type";
+    badge.textContent = type || "Contact";
+    const address = document.createElement("span");
+    address.className = "views-contact-email";
+    address.textContent = email;
+    content.append(badge, address);
+    cell.append(content);
+    return cell;
+  }
+
+  function loadContactPayload() {
+    return fetch(new URL('./api/dashboard-contacts', document.baseURI), {cache:'no-store'})
+      .then(response => response.ok ? response.json() : {items:{}})
+      .catch(() => ({items:{}}));
+  }
+
   async function initialize() {
     try {
-      const payload = await loadPayload();
-      const records = prepareRecords(payload.records || []);
+      const [payload, contactPayload] = await Promise.all([loadPayload(), loadContactPayload()]);
+      const records = prepareRecords(payload.records || [], contactPayload);
       const snapshotDate = payload.metadata?.data_freshness?.dashboard_views_snapshot_date
         || payload.metadata?.snapshot_date || "";
       render(records, snapshotDate);
     } catch (error) {
-      byId("views-snapshot-note").textContent = "The public views snapshot could not be loaded. Refresh the page or check the local data file.";
       byId("views-table-count").textContent = "Views are unavailable.";
       const body = byId("views-table-body");
       const row = document.createElement("tr");
       const cell = makeCell("Views are unavailable until the public snapshot loads.", "views-empty");
-      cell.colSpan = 6;
+      cell.colSpan = 8;
       row.append(cell);
       body.replaceChildren(row);
     } finally {

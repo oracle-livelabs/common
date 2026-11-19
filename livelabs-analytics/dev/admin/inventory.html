@@ -6,10 +6,11 @@
   <script src="/assets/js/page-loading.js?v=20261030-public-scope"></script>
   <link rel="stylesheet" href="/assets/css/page-loading.css?v=20261030-public-scope">
   <title>Portfolio inventory — LiveLabs Analytics Admin</title>
-  <link rel="stylesheet" href="/assets/css/dashboard.css?v=20261030-public-scope">
-  <link rel="stylesheet" href="/admin-assets/admin.css?v=20261030-redwood">
-  <link rel="stylesheet" href="/admin-assets/inventory.css?v=20261105-unified-v3">
-  <script defer src="/admin-assets/inventory.js?v=20261108-cleanup-readiness-v2"></script>
+  <link rel="stylesheet" href="/assets/css/dashboard.css?v=20261113-shared-table-navigation-v2">
+  <link rel="stylesheet" href="/admin-assets/admin.css?v=20261116-admin-theme">
+  <link rel="stylesheet" href="/admin-assets/inventory.css?v=20261116-admin-inventory-table">
+  <script defer src="/assets/js/report-export.js?v=20261113-page-export"></script>
+  <script defer src="/admin-assets/inventory.js?v=20261116-admin-inventory-table"></script>
 </head>
 <body class="admin-page admin-inventory-page">
   <a class="skip-link" href="#inventory-results">Skip to inventory</a>
@@ -20,23 +21,9 @@
         <div>
           <p class="eyebrow">Admin · full portfolio</p>
           <h1>Portfolio inventory</h1>
-          <p class="intro">Review the full portfolio, team content and internal tests. Classify individual records to control dashboard visibility without deleting source data.</p>
         </div>
       </header>
       <div class="hero-stripe" aria-hidden="true"></div>
-      <p id="inventory-status" class="admin-source-note" role="status" aria-live="polite">Loading the full inventory…</p>
-      <section class="inventory-summary" aria-label="Inventory counts">
-        <div class="inventory-stat"><span>All records</span><strong id="count-all">—</strong></div>
-        <div class="inventory-stat"><span>Public and published</span><strong id="count-public">—</strong></div>
-        <div class="inventory-stat"><span>Disabled or removal requested</span><strong id="count-disabled">—</strong></div>
-        <div class="inventory-stat"><span>Admin-only content</span><strong id="count-hidden">—</strong></div>
-      </section>
-      <details class="admin-inset" id="dashboard-audit"><summary>Table eligibility and calculations</summary>
-        <div id="audit-methodology"></div>
-        <div class="inventory-controls"><label>Preview maximum annual views<input id="audit-views" type="number" min="0" max="1000000" value="250"></label><label>Preview update age (months)<input id="audit-months" type="number" min="1" max="120" value="12"></label><button id="audit-preview" type="button">Preview criteria</button></div>
-        <p id="audit-status" role="status"></p><div class="table-wrap"><table class="data-table"><thead><tr><th>Type</th><th>Published</th><th>Dashboard</th><th>Top Performers</th><th>At-risk</th><th>Low views</th><th>Older update</th><th>Retirement candidates</th><th>Lifecycle queue</th><th>Strict gate</th><th>Gate preview</th><th>Missing annual views</th><th>Proxy updates</th></tr></thead><tbody id="audit-counts"></tbody></table></div>
-        <h3>Exclusive review bands</h3><div id="audit-bands"></div><p id="audit-diff"></p><div id="audit-calibration"></div><p id="audit-relative"></p>
-      </details>
       <section id="policy-editor" class="admin-inset" hidden aria-labelledby="policy-title">
         <h2 id="policy-title">Manage content and retirement review</h2><p id="policy-record"></p><p id="review-current"></p>
         <form id="policy-form"><label>Content classification<select id="policy-classification"><option value="learner_content">Learner content — eligible when public and published</option><option value="test_content">Internal test — Admin only</option><option value="internal_training">Internal training — Admin only</option><option value="needs_review">Needs review — keep existing published eligibility</option></select></label>
@@ -56,37 +43,50 @@
         </form>
       </section>
       <section id="inventory-results" class="admin-inset inventory-results">
-        <div class="inventory-heading"><div><h2>Find a record</h2><p class="admin-muted">Filter by title, ID, owner, publish state, workflow status, or Jenkins priority.</p></div><span id="inventory-count" class="panel-count">—</span></div>
-        <div class="inventory-shortcuts" role="group" aria-label="Common inventory views">
-          <button type="button" data-inventory-scope="all" aria-pressed="true">All records</button>
-          <button type="button" data-inventory-scope="public">Public and published</button>
-          <button type="button" data-inventory-scope="disabled">Disabled and removal requests</button>
-          <button type="button" data-inventory-scope="private">Private</button>
-          <button type="button" data-inventory-scope="not-public">Not public and published</button>
-          <button type="button" data-inventory-scope="hidden">Admin-only tests and training</button>
-          <button type="button" data-inventory-scope="team">Internal team content</button>
-          <button type="button" data-inventory-scope="review">Needs classification review</button>
-        </div>
-        <div class="inventory-controls">
-          <label>Search inventory<input id="inventory-search" type="search" placeholder="Title, LiveLabs ID, WMS ID, author, keyword"></label>
-          <label>Content type<select id="inventory-type"><option value="">All types</option></select></label>
-          <label>Publish type<select id="inventory-publish-type"><option value="">All publish types</option></select></label>
-          <label>Publish status<select id="inventory-publish-status"><option value="">All publish statuses</option></select></label>
-          <label>Workflow status<select id="inventory-workflow"><option value="">All workflow statuses</option></select></label>
+        <div class="inventory-heading"><div><h2>Inventory records</h2><p>Review the full source inventory without changing published data.</p></div></div>
+        <div class="inventory-controls inventory-primary-controls">
+          <label>Search records<input id="inventory-search" type="search" placeholder="Title, IDs, Workshop Owner, Support Contact, or keyword"></label>
+          <label>Type<select id="inventory-type"><option value="">All types</option></select></label>
           <label>Jenkins priority<select id="inventory-jenkins-priority"><option value="">All Jenkins states</option><option>P1</option><option>P2</option><option>P3</option><option>Unmapped</option><option>No report</option><option>Not scanned</option></select></label>
-          <label>Team member or contact<select id="inventory-team"><option value="">All team members</option></select></label>
-          <label>Review focus<select id="inventory-review-focus"><option value="">All review focus</option></select></label>
-          <label>Cleanup queue<select id="inventory-cleanup-queue"><option value="">All cleanup queues</option></select></label>
-          <label>Review band<select id="inventory-review-band"><option value="">All review bands</option></select></label>
         </div>
-        <p id="team-evidence" class="admin-muted"></p>
+        <details class="inventory-filter-disclosure">
+          <summary>More filters</summary>
+          <div class="inventory-controls inventory-secondary-controls">
+            <label>View<select id="inventory-scope"><option value="all">All records</option><option value="public">Public and published</option><option value="disabled">Disabled and removal requests</option><option value="private">Private</option><option value="not-public">Not public and published</option><option value="hidden">Admin-only tests and training</option><option value="team">Internal team content</option><option value="review">Needs classification review</option></select></label>
+            <label>Publish type<select id="inventory-publish-type"><option value="">All publish types</option></select></label>
+            <label>Publish status<select id="inventory-publish-status"><option value="">All publish statuses</option></select></label>
+            <label>Workflow status<select id="inventory-workflow"><option value="">All workflow statuses</option></select></label>
+            <label>Team member or contact<select id="inventory-team"><option value="">All team members</option></select></label>
+            <label>Review focus<select id="inventory-review-focus"><option value="">All review focus</option></select></label>
+            <label>Cleanup queue<select id="inventory-cleanup-queue"><option value="">All cleanup queues</option></select></label>
+            <label>Review band<select id="inventory-review-band"><option value="">All review bands</option></select></label>
+          </div>
+        </details>
+        <div class="inventory-table-tools table-controls-toolbar">
+          <span id="inventory-count" class="pagination-range" aria-live="polite">—</span>
+          <div class="table-toolbar-actions">
+          <details class="table-export-dropdown">
+            <summary>Export visible rows</summary>
+            <div class="table-export-options">
+              <button type="button" data-inventory-export-format="csv">CSV (.csv)</button>
+              <button type="button" data-inventory-export-format="xlsx">Excel (.xlsx)</button>
+              <button type="button" data-inventory-export-format="json">JSON (.json)</button>
+            </div>
+          </details>
+          <button id="inventory-clear" class="filter-reset" type="button">Clear filters</button>
+            <label>Rows per page<select data-inventory-page-size aria-label="Rows per page"><option>10</option><option>25</option><option>50</option><option>100</option></select></label>
+            <button class="pagination-button" type="button" data-inventory-page-action="previous" disabled>Previous</button>
+            <span data-inventory-page-label aria-live="polite">Page 1 of 1</span>
+            <button class="pagination-button" type="button" data-inventory-page-action="next" disabled>Next</button>
+          <span id="inventory-export-status" role="status" aria-live="polite"></span>
+          </div>
+        </div>
         <div class="table-wrap inventory-table-wrap">
           <table class="data-table" id="inventory-table">
-            <thead><tr><th>LiveLabs ID</th><th>WMS ID</th><th>Title</th><th>Author / owner</th><th>Type</th><th>Review focus</th><th>Publish type</th><th>Publish status</th><th>Workflow status</th><th>Jenkins Error Score</th><th>Jenkins findings</th><th>Dashboard visibility</th><th>Review</th></tr></thead>
-            <tbody id="inventory-rows"><tr><td colspan="10" class="empty">Loading inventory…</td></tr></tbody>
+            <thead><tr><th scope="col">#</th><th scope="col" data-inventory-sort-key="livelabsId" aria-sort="none"><button class="table-sort-button" type="button" data-inventory-sort="livelabsId">LiveLabs ID</button></th><th scope="col" data-inventory-sort-key="wmsId" aria-sort="none"><button class="table-sort-button" type="button" data-inventory-sort="wmsId">WMS ID</button></th><th scope="col" data-inventory-sort-key="title" aria-sort="none"><button class="table-sort-button" type="button" data-inventory-sort="title">Title</button></th><th scope="col" data-inventory-sort-key="owner" aria-sort="none"><button class="table-sort-button" type="button" data-inventory-sort="owner">Author / owner</button></th><th scope="col" data-inventory-sort-key="type" aria-sort="none"><button class="table-sort-button" type="button" data-inventory-sort="type">Type</button></th><th scope="col" data-inventory-sort-key="reviewFocus" aria-sort="none"><button class="table-sort-button" type="button" data-inventory-sort="reviewFocus">Review focus</button></th><th scope="col" data-inventory-sort-key="publishType" aria-sort="none"><button class="table-sort-button" type="button" data-inventory-sort="publishType">Publish type</button></th><th scope="col" data-inventory-sort-key="publishStatus" aria-sort="none"><button class="table-sort-button" type="button" data-inventory-sort="publishStatus">Publish status</button></th><th scope="col" data-inventory-sort-key="workflow" aria-sort="none"><button class="table-sort-button" type="button" data-inventory-sort="workflow">Workflow status</button></th><th scope="col" data-inventory-sort-key="jenkinsScore" aria-sort="none"><button class="table-sort-button" type="button" data-inventory-sort="jenkinsScore">Jenkins Error Score</button></th><th scope="col" data-inventory-sort-key="jenkinsFindings" aria-sort="none"><button class="table-sort-button" type="button" data-inventory-sort="jenkinsFindings">Jenkins findings</button></th><th scope="col" data-inventory-sort-key="visibility" aria-sort="none"><button class="table-sort-button" type="button" data-inventory-sort="visibility">Dashboard visibility</button></th><th scope="col" data-inventory-sort-key="review" aria-sort="none"><button class="table-sort-button" type="button" data-inventory-sort="review">Review</button></th></tr></thead>
+            <tbody id="inventory-rows"><tr><td colspan="14" class="empty">Loading inventory…</td></tr></tbody>
           </table>
         </div>
-        <div class="inventory-pagination"><span id="inventory-page-status">—</span><div class="controls"><button id="inventory-previous" type="button" disabled>Previous</button><button id="inventory-next" type="button" disabled>Next</button></div></div>
       </section>
       <footer class="site-footer">Powered by Oracle LiveLabs Team &copy; 2026</footer>
     </main>

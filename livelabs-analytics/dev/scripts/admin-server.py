@@ -21,7 +21,7 @@ import secrets
 import sqlite3
 import threading
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from contextlib import contextmanager
 from http.cookies import SimpleCookie
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -53,6 +53,27 @@ LOCK = threading.Lock()
 ATTEMPTS = {}
 SAFE_RUN_ID = re.compile(r'^[A-Za-z0-9._:-]{1,180}$')
 TAG_COLORS = frozenset(('teal', 'blue', 'purple', 'green', 'amber', 'red', 'slate'))
+WEEKLY_UPDATE_STEPS = (
+    {'key':'setup', 'group':'Setup', 'title':'Verify access and resume the current week', 'description':'Check the authenticated browser tabs, confirm this project checkout, and resume an unfinished run for this Bucharest week.'},
+    {'key':'wms_published', 'group':'Collect source data', 'title':'WMS · All Published LiveLabs Workshops', 'description':'Export the complete report. Record its displayed total, retrieval date, filename and SHA-256.'},
+    {'key':'wms_primary', 'group':'Collect source data', 'title':'WMS · Primary Report', 'description':'Export the complete all-status report. Preserve every source row and field.'},
+    {'key':'wms_kitchen_sink', 'group':'Collect source data', 'title':'WMS · Kitchen Sink', 'description':'Export the complete all-status report. Keep it separate from Primary Report.'},
+    {'key':'livelabs_views', 'group':'Collect source data', 'title':'LiveLabs dashboard · six view periods', 'description':'Copy each filter sequentially and unchanged. Record every period label, source date, row count and hash.'},
+    {'key':'github_history', 'group':'Collect source data', 'title':'GitHub · repository and item-path history', 'description':'Capture repository heads, mapped item paths, changed files, authors and dates. Keep unresolved mappings explicit.'},
+    {'key':'jenkins_evidence', 'group':'Collect source data', 'title':'Jenkins · select authorized report evidence', 'description':'Use a report from one run and revision. Keep historical dates visible; if live QA is unavailable or deferred, record that state.'},
+    {'key':'assemble', 'group':'Preserve and process', 'title':'Assemble the source set and verify hashes', 'description':'Copy source files byte-for-byte. Record source dates, filenames, row counts, sizes and hashes in the run manifest.'},
+    {'key':'processing_gates', 'group':'Preserve and process', 'title':'Resolve schema and evidence gates', 'description':'Validate WMS workbook support, header-based views parsing, classifications, required tags and Jenkins companion files. Never edit raw inputs.'},
+    {'key':'candidate', 'group':'Prepare and review', 'title':'Build and review an isolated candidate', 'description':'Create derived working inputs and a candidate. Compare coverage, eligibility, scores, evidence dates and unresolved rows before promotion.'},
+    {'key':'inventory_promotion', 'group':'Integrate locally', 'title':'Back up and promote the approved inventory', 'description':'Back up canonical inventory and Admin state. Promote only the specifically reviewed candidate, then rebuild public outputs.'},
+    {'key':'jenkins_merge', 'group':'Integrate locally', 'title':'Archive, map and review Jenkins evidence', 'description':'Save the report, map by LiveLabs ID, inspect exact findings and locations, and obtain review before applying a merge.'},
+    {'key':'qa_application', 'group':'Integrate locally', 'title':'Apply the approved merge and read it back', 'description':'Confirm the selected Analytics and QA versions, apply the reviewed merge, then verify history and dashboard signals.'},
+    {'key':'user_validation', 'group':'Validate and package', 'title':'Validate user-facing data and flows', 'description':'Check representative records, Workshop/Sprint counts, contacts, filters, tables, search detail, links, exports and navigation.'},
+    {'key':'release_security', 'group':'Validate and package', 'title':'Run security checks and build the release', 'description':'Inspect the public diff and bundle for secrets/private data. Run project validation, release acceptance and storage preflight.'},
+    {'key':'pull_request', 'group':'Review and hand off', 'title':'Prepare and review the GitHub pull request', 'description':'Push only the approved public files, inspect the exact diff, and rebuild the release from the merged commit.'},
+    {'key':'tenancy_handoff', 'group':'Review and hand off', 'title':'Hand off the release for tenancy upload', 'description':'Give the user the exact artifact, hash, evidence and rollback reference. Upload and destination verification remain user actions.'},
+)
+WEEKLY_UPDATE_STEP_KEYS = frozenset(step['key'] for step in WEEKLY_UPDATE_STEPS)
+WEEKLY_UPDATE_STATUSES = frozenset(('NOT_STARTED', 'IN_PROGRESS', 'COMPLETE', 'BLOCKED', 'DEFERRED'))
 ISSUE_TAXONOMY = {
     'STALE_PAR_LINK': ('P1', 'P1 · learner blocker', 'author-facing', False),
     'BROKEN_VISIBLE_LINK': ('P1', 'P1 · learner blocker', 'author-facing', False),
@@ -96,6 +117,7 @@ def initialize():
             CREATE TABLE IF NOT EXISTS applied_merges (id TEXT PRIMARY KEY, analytics_id TEXT NOT NULL, qa_id TEXT NOT NULL, mapping TEXT NOT NULL, summary TEXT NOT NULL, overlay TEXT NOT NULL, created TEXT NOT NULL, active INTEGER NOT NULL DEFAULT 0);
             CREATE TABLE IF NOT EXISTS reviews (id TEXT PRIMARY KEY, record_key TEXT NOT NULL, snapshot_id TEXT NOT NULL, candidate_key TEXT, decision TEXT NOT NULL, reason TEXT NOT NULL, reviewer TEXT NOT NULL, created TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS dashboard_admin_state (id INTEGER PRIMARY KEY CHECK(id=1), payload TEXT NOT NULL, updated TEXT NOT NULL);
+            CREATE TABLE IF NOT EXISTS weekly_update_runs (id TEXT PRIMARY KEY, week_start TEXT NOT NULL, created TEXT NOT NULL, updated TEXT NOT NULL, status TEXT NOT NULL, payload TEXT NOT NULL);
         ''')
         columns = {row['name'] for row in conn.execute('PRAGMA table_info(sessions)')}
         if 'remembered' not in columns:
@@ -124,6 +146,20 @@ def configure(username=None, password=None):
 
 def now():
     return datetime.now(timezone.utc).isoformat()
+
+
+def bucharest_now():
+    """Return Europe/Bucharest time without relying on optional Windows tzdata."""
+    utc_now = datetime.now(timezone.utc)
+    year = utc_now.year
+    def last_sunday(month):
+        next_month = datetime(year + (month == 12), 1 if month == 12 else month + 1, 1, tzinfo=timezone.utc)
+        last_day = next_month - timedelta(days=1)
+        return last_day - timedelta(days=(last_day.weekday() + 1) % 7)
+    daylight_start = last_sunday(3).replace(hour=1)
+    daylight_end = last_sunday(10).replace(hour=1)
+    offset = timedelta(hours=3 if daylight_start <= utc_now < daylight_end else 2)
+    return utc_now.astimezone(timezone(offset))
 
 
 def valid_timestamp(value):
@@ -821,9 +857,18 @@ class Handler(BaseHTTPRequestHandler):
         url = urlsplit(self.path)
         path = url.path
         entry_paths = ('/', '/index.html', '/dashboard', '/dashboard/', '/dashboard/index.html',
-                       '/search', '/search/', '/search/index.html', '/inventory', '/inventory/', '/inventory/index.html')
+                       '/search', '/search/', '/search/index.html', '/views', '/views/', '/views/index.html',
+                       '/inventory', '/inventory/', '/inventory/index.html')
         if path in entry_paths:
             query = parse_qs(url.query)
+            if path in ('/views', '/views/', '/views/index.html'):
+                if path != '/views/':
+                    self.send_response(302)
+                    self.send_header('Location', '/views/' + ('?' + url.query if url.query else ''))
+                    self.send_header('Content-Length', '0')
+                    self.end_headers()
+                    return
+                return self.file(ROOT / 'views/index.html')
             has_value = lambda key: bool(query.get(key, [''])[0].strip())
             inventory_list = path in ('/inventory', '/inventory/', '/inventory/index.html') or query.get('view') == ['inventory']
             if inventory_list:
@@ -843,6 +888,27 @@ class Handler(BaseHTTPRequestHandler):
                 return
             entry = destination.strip('/') + '/index.html'
             return self.file(ROOT / entry)
+        if path == '/api/dashboard-contacts':
+            # Supplemental WMS contacts stay in private runtime storage. A remote
+            # deployment must authenticate; only a loopback-bound preview is open.
+            local_preview = (not self.server.public_origin
+                             and self.server.server_address[0] in ('127.0.0.1', '::1')
+                             and self.client_address[0] in ('127.0.0.1', '::1'))
+            if not local_preview and not self.session():
+                return self.send(401, {'error': 'Sign in required.'})
+            source = STATE / 'views-contacts.json'
+            if not source.is_file():
+                return self.send(200, {'configured': False, 'items': {}})
+            try:
+                contacts = json.loads(source.read_text(encoding='utf-8'))
+                _, _, public_ids, _, _ = public_inventory_scope()
+                items = {str(key): {'email': value['email'], 'type': value.get('type', 'Other')}
+                         for key, value in contacts.get('items', {}).items()
+                         if str(key) in public_ids and isinstance(value, dict)
+                         and isinstance(value.get('email'), str) and '@' in value['email']}
+                return self.send(200, {'configured': True, 'items': items})
+            except (ValueError, TypeError, AttributeError):
+                return self.send(503, {'error': 'Contact data could not be loaded.'})
         if path == '/api/dashboard-admin-state':
             saved = dashboard_admin_state()
             applied = dashboard_qa_merge()
@@ -965,7 +1031,9 @@ class Handler(BaseHTTPRequestHandler):
             '/admin/jenkins': 'jenkins.html',
             '/admin/jenkins/history': 'jenkins.html',
             '/admin/governance': 'panel.html',
-            '/admin/inventory': 'inventory.html'
+            '/admin/inventory': 'inventory.html',
+            '/admin/inventory/author-contributor-gaps': 'author-contributor-gaps.html',
+            '/admin/weekly-update': 'weekly-update.html'
         }
         page_path = path.rstrip('/') if path.startswith('/admin/') else path
         if page_path == '/admin/user-settings':
@@ -995,6 +1063,10 @@ class Handler(BaseHTTPRequestHandler):
                                            'remembered': session['remembered']})
                 if path == '/api/admin/inventory':
                     return self.send(200, admin_inventory(canonical_inventory_payload()))
+                if path == '/api/admin/weekly-runs':
+                    with db() as conn:
+                        rows = conn.execute('SELECT payload FROM weekly_update_runs ORDER BY created DESC LIMIT 30').fetchall()
+                    return self.send(200, {'steps':list(WEEKLY_UPDATE_STEPS), 'runs':[json.loads(row['payload']) for row in rows]})
                 if path == '/api/admin/qa-overlay':
                     applied = dashboard_qa_merge() or {}
                     policy = applied.get('summary', {}).get('scorePolicy') or JENKINS_SCORE_POLICY
@@ -1098,7 +1170,7 @@ class Handler(BaseHTTPRequestHandler):
             if not self.session():
                 return self.send(401, {'error': 'Sign in required.'})
             name = path.removeprefix('/admin-assets/')
-            if name not in ('jenkins.js', 'jenkins.css', 'jenkins-report-theme.css', 'jenkins-report-bridge.js', 'panel.js', 'admin.css', 'admin-shell.css', 'admin-shell.js', 'dashboard-management.js', 'data-merge.js', 'inventory.js', 'inventory.css'):
+            if name not in ('jenkins.js', 'jenkins.css', 'jenkins-report-theme.css', 'jenkins-report-bridge.js', 'panel.js', 'admin.css', 'admin-shell.css', 'admin-shell.js', 'dashboard-management.js', 'data-merge.js', 'inventory.js', 'inventory.css', 'author-contributor-gaps.js', 'author-contributor-gaps.css', 'weekly-update.js', 'weekly-update.css'):
                 return self.send(404, {'error': 'Not found.'})
             return self.file(PRIVATE / name)
         if path in ('/assets/admin-login.js', '/assets/admin-login.css'):
@@ -1106,7 +1178,7 @@ class Handler(BaseHTTPRequestHandler):
         # Explicit public roots: never serve dev, git, runtime state or secrets.
         relative = 'index.html' if path == '/' else path.lstrip('/')
         target = (ROOT / relative).resolve()
-        allowed = relative == 'index.html' or relative.startswith('assets/') or relative in ('inventory/data/public_portfolio_inventory.json', 'inventory/data/portfolio_inventory.file.js')
+        allowed = relative in ('index.html', 'views/index.html') or relative.startswith('assets/') or relative in ('inventory/data/public_portfolio_inventory.json', 'inventory/data/portfolio_inventory.file.js')
         if not allowed or not target.is_relative_to(ROOT) or any(part.startswith('.') for part in Path(relative).parts):
             return self.send(404, {'error': 'Not found.'})
         return self.file(target)
@@ -1176,6 +1248,66 @@ class Handler(BaseHTTPRequestHandler):
                     updated = apply_list_operations(json.loads(saved['payload']) if saved else {}, payload.get('operations'))
                     conn.execute('INSERT OR REPLACE INTO qa_retest_list(id,payload) VALUES(1,?)', (json.dumps(updated),))
                 return self.send(200, {'retest': updated})
+            if path == '/api/admin/weekly-runs':
+                action = payload.get('action')
+                if action == 'start':
+                    local_now = bucharest_now()
+                    week_start = (local_now.date() - timedelta(days=local_now.weekday())).isoformat()
+                    with db() as conn:
+                        existing = conn.execute("SELECT payload FROM weekly_update_runs WHERE week_start=? AND status!='READY_FOR_REVIEW' ORDER BY created DESC LIMIT 1", (week_start,)).fetchone()
+                        if existing:
+                            return self.send(200, {'run':json.loads(existing['payload']), 'resumed':True})
+                        created = local_now.isoformat(timespec='seconds')
+                        run_id = f"update-{local_now.strftime('%Y%m%d')}-{secrets.token_hex(4)}"
+                        run = {'runId':run_id, 'weekStart':week_start, 'startedAt':created, 'updatedAt':created,
+                               'status':'IN_PROGRESS', 'steps':[{'key':step['key'], 'status':'NOT_STARTED', 'evidence':''} for step in WEEKLY_UPDATE_STEPS]}
+                        conn.execute('INSERT INTO weekly_update_runs(id,week_start,created,updated,status,payload) VALUES(?,?,?,?,?,?)',
+                                     (run_id, week_start, created, created, run['status'], json.dumps(run, ensure_ascii=False)))
+                    return self.send(201, {'run':run, 'resumed':False})
+                if action == 'save':
+                    run_id = str(payload.get('runId', '')).strip()
+                    if not re.fullmatch(r'update-\d{8}-[a-f0-9]{8}', run_id):
+                        raise ValueError('Choose a valid weekly update run.')
+                    steps = payload.get('steps')
+                    if not isinstance(steps, list) or len(steps) != len(WEEKLY_UPDATE_STEPS):
+                        raise ValueError('Include every workflow step exactly once.')
+                    clean_steps = []
+                    seen = set()
+                    for item in steps:
+                        if not isinstance(item, dict):
+                            raise ValueError('Each workflow step must be an object.')
+                        key = str(item.get('key', '')).strip()
+                        if key not in WEEKLY_UPDATE_STEP_KEYS:
+                            raise ValueError(f'Unknown workflow step: {key or "(empty)"}.')
+                        if key in seen:
+                            raise ValueError('Each workflow step can appear only once.')
+                        seen.add(key)
+                        status = str(item.get('status', '')).strip().upper()
+                        if status not in WEEKLY_UPDATE_STATUSES:
+                            raise ValueError(f'Invalid status for workflow step {key}.')
+                        evidence = item.get('evidence', '')
+                        if not isinstance(evidence, str) or len(evidence) > 2000:
+                            raise ValueError(f'Evidence for workflow step {key} must be 2,000 characters or fewer.')
+                        clean_steps.append({'key':key, 'status':status, 'evidence':evidence.strip()})
+                    if seen != WEEKLY_UPDATE_STEP_KEYS:
+                        raise ValueError('Include every workflow step exactly once.')
+                    local_now = bucharest_now().isoformat(timespec='seconds')
+                    if any(step['status'] == 'BLOCKED' for step in clean_steps):
+                        status = 'BLOCKED'
+                    elif all(step['status'] == 'COMPLETE' for step in clean_steps):
+                        status = 'READY_FOR_REVIEW'
+                    else:
+                        status = 'IN_PROGRESS'
+                    with db() as conn:
+                        row = conn.execute('SELECT payload FROM weekly_update_runs WHERE id=?', (run_id,)).fetchone()
+                        if not row:
+                            raise ValueError('Weekly update run not found.')
+                        run = json.loads(row['payload'])
+                        run.update({'steps':clean_steps, 'updatedAt':local_now, 'status':status})
+                        conn.execute('UPDATE weekly_update_runs SET updated=?,status=?,payload=? WHERE id=?',
+                                     (local_now, status, json.dumps(run, ensure_ascii=False), run_id))
+                    return self.send(200, {'run':run})
+                raise ValueError('Choose start or save for a weekly update run.')
             if path in ('/api/admin/jenkins/retest', '/api/admin/jenkins/par-link/resolve'):
                 return self.send(503, {'error': 'Live Jenkins services are not connected. Use the saved evidence and exported retest payload.'})
             if path == '/api/admin/content-visibility':

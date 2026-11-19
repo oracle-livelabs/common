@@ -8,11 +8,12 @@
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <title>Workshop and Sprint Views · LiveLabs Analytics</title>
-  <script src="./assets/js/page-loading.js?v=20261113-direct-record-route-v2"></script>
-  <link rel="stylesheet" href="./assets/css/page-loading.css?v=20261009-loading">
+  <script src="./assets/js/page-loading.js?v=20261116-recovery-v1"></script>
+  <link rel="stylesheet" href="./assets/css/page-loading.css?v=20261116-recovery-v1">
   <link rel="icon" href="./assets/images/oracle-logo-white.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./assets/css/dashboard.css?v=20261113-dashboard-controls-v2">
-  <link rel="stylesheet" href="./assets/css/views.css?v=20261113-table-panel-v2">
+  <link rel="stylesheet" href="./assets/css/dashboard.css?v=20261116-search-without-score">
+  <link rel="stylesheet" href="./assets/css/views.css?v=20261117-council-filter-v1">
+  <link rel="stylesheet" href="./assets/css/tables.css?v=20261117-council-filter-v1">
 </head>
 <body class="analytics-primary-nav analytics-views-page">
   <a class="skip-link" href="#views-top">Skip to views table</a>
@@ -48,7 +49,6 @@
         <div class="views-section-heading">
           <div>
             <h2 id="views-heading">All public workshops and sprints</h2>
-            <p id="views-snapshot-note" class="views-snapshot-note" role="status" aria-live="polite">Loading the public views snapshot…</p>
           </div>
         </div>
         <div class="views-table-panel">
@@ -61,12 +61,22 @@
             <span>Author / owner email</span>
             <input id="views-author-email" type="search" autocomplete="off" placeholder="Filter by email">
           </label>
+          <label class="views-control" for="views-additional-contact-email">
+            <span>Additional contact email</span>
+            <input id="views-additional-contact-email" type="search" autocomplete="off" placeholder="Filter by email">
+          </label>
           <label class="views-control" for="views-type">
             <span>Content type</span>
             <select id="views-type">
               <option value="">All types</option>
               <option value="Workshop">Workshops</option>
               <option value="Sprint">Sprints</option>
+            </select>
+          </label>
+          <label class="views-control" for="views-council">
+            <span>Council</span>
+            <select id="views-council">
+              <option value="">All councils</option>
             </select>
           </label>
           <label class="views-control" for="views-period">
@@ -80,42 +90,25 @@
               <option value="Views - Last 12 Months" selected>Last 12 Months</option>
             </select>
           </label>
-          <label class="views-control" for="views-sort">
-            <span>Sort by</span>
-            <select id="views-sort">
-              <option value="views" selected>Views</option>
-              <option value="rank">Rank</option>
-              <option value="title">Title</option>
-              <option value="livelabsId">LiveLabs ID</option>
-              <option value="author">Author / owner email</option>
-              <option value="type">Type</option>
-            </select>
-          </label>
-          <button id="views-sort-direction" class="views-button" type="button" aria-label="Sort descending">Desc</button>
         </div>
-        <div class="views-table-meta">
+        <div class="views-table-controls table-controls-toolbar">
           <p id="views-table-count" role="status" aria-live="polite">Loading view records…</p>
-          <div class="views-export-tools">
-            <details class="table-export-dropdown">
-              <summary>Export visible rows</summary>
-              <div class="table-export-options">
-                <button type="button" data-views-export-format="csv">CSV (.csv)</button>
-                <button type="button" data-views-export-format="xlsx">Excel (.xlsx)</button>
-                <button type="button" data-views-export-format="json">JSON (.json)</button>
-              </div>
-            </details>
-            <span id="views-export-status" class="table-export-status" role="status" aria-live="polite"></span>
-          </div>
-          <button id="views-clear-filters" class="views-button" type="button">Clear filters</button>
-        </div>
-        <div class="views-pagination pagination-controls pagination-controls-top" data-views-pagination="top" aria-label="Table pagination, above results">
-          <div class="pagination-actions">
+          <div class="views-table-meta-actions">
+            <div class="views-export-tools">
+              <details class="table-export-dropdown">
+                <summary>Export visible rows</summary>
+                <div class="table-export-options">
+                  <button type="button" data-views-export-format="csv">CSV (.csv)</button>
+                  <button type="button" data-views-export-format="xlsx">Excel (.xlsx)</button>
+                  <button type="button" data-views-export-format="json">JSON (.json)</button>
+                </div>
+              </details>
+              <span id="views-export-status" class="table-export-status" role="status" aria-live="polite"></span>
+            </div>
+            <button id="views-clear-filters" class="views-button" type="button">Clear filters</button>
             <label class="views-page-size" for="views-page-size">Rows
               <select id="views-page-size" data-views-page-size aria-label="Rows per page">
-                <option value="10" selected>10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
+                <option value="10" selected>10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option>
               </select>
             </label>
             <button id="views-previous" class="views-button pagination-button" data-views-previous type="button" disabled>Previous</button>
@@ -127,38 +120,26 @@
           <table class="views-table">
             <thead>
               <tr>
-                <th id="views-rank-heading" scope="col">#</th>
-                <th scope="col">Title</th>
-                <th scope="col">LiveLabs ID</th>
-                <th scope="col">Type</th>
-                <th scope="col">Author / owner email</th>
-                <th id="views-count-heading" scope="col">Views · Last 12 Months</th>
+                <th id="views-rank-heading" scope="col" data-views-sort-key="rank" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="rank">#</button></th>
+                <th scope="col" data-views-sort-key="title" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="title">Title</button></th>
+                <th scope="col" data-views-sort-key="livelabsId" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="livelabsId">LiveLabs ID</button></th>
+                <th scope="col" data-views-sort-key="type" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="type">Type</button></th>
+                <th scope="col" data-views-sort-key="council" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="council">Council</button></th>
+                <th scope="col" data-views-sort-key="author" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="author">Author / owner email</button></th>
+                <th scope="col" data-views-sort-key="contact" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="contact">Additional contact email</button></th>
+                <th id="views-count-heading" scope="col" data-views-sort-key="views" aria-sort="descending"><button class="table-sort-button" type="button" data-views-sort="views">Views · Last 12 Months</button></th>
               </tr>
             </thead>
-            <tbody id="views-table-body"><tr><td colspan="7" class="views-empty">Loading view records…</td></tr></tbody>
+            <tbody id="views-table-body"><tr><td colspan="8" class="views-empty">Loading view records…</td></tr></tbody>
           </table>
-        </div>
-        <div class="views-pagination pagination-controls pagination-controls-bottom" data-views-pagination="bottom" aria-label="Table pagination, below results">
-          <div class="pagination-actions">
-          <label class="views-page-size" for="views-page-size-bottom">Rows
-            <select id="views-page-size-bottom" data-views-page-size aria-label="Rows per page">
-              <option value="10" selected>10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
-          </label>
-          <button id="views-previous-bottom" class="views-button pagination-button" data-views-previous type="button" disabled>Previous</button>
-          <span data-views-page-label aria-live="polite">Page 1 of 1</span>
-          <button id="views-next-bottom" class="views-button pagination-button" data-views-next type="button" disabled>Next</button>
-          </div>
         </div>
         </div>
       </section>
       <footer class="site-footer">Powered by Oracle LiveLabs Team © 2026</footer>
     </main>
   </div>
-  <script src="./assets/js/report-export.js?v=20261113-page-export"></script>
-  <script src="./assets/js/views.js?v=20261113-shared-table-navigation-v1"></script>
+  <script src="./assets/js/report-export.js?v=20261116-recovery-v1"></script>
+  <script src="./assets/js/view-periods.js?v=20261116-views"></script>
+  <script src="./assets/js/views.js?v=20261117-council-filter-v1"></script>
 </body>
 </html>

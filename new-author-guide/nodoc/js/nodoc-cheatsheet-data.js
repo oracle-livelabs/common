@@ -456,7 +456,7 @@
       description: card.short,
       tags: ["nodoc", "nodoc-" + card.topic].concat((card.also || []).map(function (tag) { return "nodoc-" + tag; })),
       keywords: ["nodoc", "no doc", "no-doc"].concat(card.keywords || []),
-      sourceRoute: "#nodoc:" + card.source.join(":"),
+      sourceRoute: "#nodoc#" + (card.source[0] ? "lab-" + card.source[0] : "introduction") + (card.source[1] ? "#task-" + card.source[1] : ""),
       sourceLabel: card.source[0] ? "Open NoDoc guide · Lab " + card.source[0] + ", Task " + card.source[1] : "Open NoDoc guide · Introduction",
       updatedAt: "2026-10-07"
     });

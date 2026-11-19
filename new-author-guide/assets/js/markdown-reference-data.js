@@ -484,7 +484,7 @@ window.LiveLabsMarkdownSections = [
         "links": [
           {
             "label": "Open the LiveLabs Markdown authoring guide",
-            "href": "https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/?lab=4-labs-markdown-develop-content"
+            "href": "https://livelabs.oracle.com/cdn/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/index.html?lab=4-labs-markdown-develop-content"
           }
         ],
         "keywords": "qa=true lintchecker live server preview validation publish vscode"

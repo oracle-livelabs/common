@@ -1,10 +1,10 @@
 const {test,expect}=require('@playwright/test');
 
 const tables = [
-  ['performance','top-performers-table',['LiveLabs ID','WMS ID','Title','Council','Last Update','Author Email','#','Type','Views 12m','Views 90d','Score','Errors Found']],
-  ['urgent','jenkins-p1-action-table',['LiveLabs ID','Title','Author / owner','Type','Action','P1 findings','Occurrences','Record']],
-  ['at-risk','at-risk-table',['LiveLabs ID','WMS ID','Title','Council','Last Update','Author','#','Type','Review status','Views 12m','Score','Errors Found']],
-  ['retirement','retirement-review-table',['LiveLabs ID','WMS ID','Title','Council','Last Update','Author','#','Type','Review status','Views 12m','Score','Errors Found']],
+  ['performance','top-performers-table',['#','LiveLabs ID','WMS ID','Title','Council','WMS Last Update','Author Email','Additional contact email','Type','Views','Score','Errors Found']],
+  ['urgent','jenkins-p1-action-table',['#','LiveLabs ID','Title','Author / owner','Additional contact email','Type','Views','Issues']],
+  ['at-risk','at-risk-table',['#','LiveLabs ID','WMS ID','Title','Council','WMS Last Update','Author','Additional contact email','Type','Review status','Views','Score','Errors Found']],
+  ['retirement','retirement-review-table',['#','LiveLabs ID','WMS ID','Title','Council','WMS Last Update','Author','Additional contact email','Type','Review status','Views','Score','Errors Found']],
 ];
 
 test('existing content tables keep their fields and WMS order through filtering, sorting and reset',async({page},testInfo)=>{
@@ -18,6 +18,7 @@ test('existing content tables keep their fields and WMS order through filtering,
     const body=table.locator('xpath=ancestor::div[contains(@class,"toggle-body")]').first();
     const type=body.getByRole('combobox',{name:'Content type',exact:true});
     await expect(type).toBeVisible();
+    await expect(body.getByRole('searchbox',{name:'Search this table',exact:true})).toBeVisible();
     await expect(type.locator('option')).toHaveText(['All items','Workshops only','Sprints only']);
     const original=await table.locator('tbody tr[data-filter-row="true"]').evaluateAll(rows=>rows.map(r=>({id:r.dataset.livelabsId,type:r.dataset.contentType})));
     for(const kind of ['Workshop','Sprint']){
@@ -29,19 +30,19 @@ test('existing content tables keep their fields and WMS order through filtering,
       expect(actual.every(r=>expected.some(e=>e.id===r.id))).toBe(true);
     }
     await type.selectOption('');
-    const filters=body.locator('.filter-disclosure');
-    if(!(await filters.getAttribute('open')))await filters.locator(':scope > summary').click();
-    const idFilter=filters.locator('.filter-field').filter({has:page.locator('span',{hasText:/^LiveLabs ID$/})}).locator('input');
+    await expect(body.locator('.filter-disclosure, [data-filter-mode="review-focus"], .filter-grid')).toHaveCount(0);
+    const idFilter=body.getByRole('searchbox',{name:'Search this table',exact:true});
     await idFilter.fill(original[0].id);
-    await expect(table.locator('tbody tr[data-filter-row="true"]:visible').first().locator('td').first()).toHaveAttribute('data-filter-value',original[0].id);
+    await expect(table.locator('tbody tr[data-filter-row="true"]:visible').first().locator('td[data-column-label="LiveLabs ID"]')).toHaveAttribute('data-filter-value',original[0].id);
     await idFilter.fill('');
-    await table.getByRole('button',{name:'LiveLabs ID',exact:true}).click();
-    await expect(table.locator('thead th').first()).toHaveAttribute('aria-sort',/ascending|descending/);
-    const direction=await table.locator('thead th').first().getAttribute('aria-sort');
-    const ids=await table.locator('tbody tr[data-filter-row="true"]:visible').evaluateAll(rows=>rows.map(r=>Number(r.cells[0].dataset.sortValue)));
+    const idButton=table.getByRole('button',{name:'LiveLabs ID',exact:true});
+    const idIndex=Number(await idButton.getAttribute('data-column-index'));
+    await idButton.click();
+    const idHeader=table.locator(`thead th[data-sort-column-index="${idIndex}"]`);
+    await expect(idHeader).toHaveAttribute('aria-sort',/ascending|descending/);
+    const direction=await idHeader.getAttribute('aria-sort');
+    const ids=await table.locator('tbody tr[data-filter-row="true"]:visible').evaluateAll((rows,index)=>rows.map(r=>Number(r.querySelectorAll('td[data-filter-value]')[index].dataset.sortValue)),idIndex);
     expect(ids).toEqual([...ids].sort((a,b)=>direction==='ascending'?a-b:b-a));
-    const fields=await filters.locator('.filter-grid [data-column-index]').evaluateAll(nodes=>nodes.map(n=>Number(n.dataset.columnIndex)));
-    expect(fields).toEqual([...fields].sort((a,b)=>a-b));
     await table.scrollIntoViewIfNeeded();
     await page.screenshot({path:testInfo.outputPath(id+'.png'),animations:'disabled'});
     // Reinitialization must preserve the same existing fields and row identities.
@@ -49,6 +50,53 @@ test('existing content tables keep their fields and WMS order through filtering,
     expect(await table.locator('tbody tr[data-filter-row="true"]').count()).toBe(original.length);
   }
   expect(errors).toEqual([]);
+});
+
+test('ranked table exports the filtered, sorted visible page using the selected page size',async({page,request})=>{
+  const payload=await (await request.get('/inventory/data/public_portfolio_inventory.json')).json();
+  await page.goto('/dashboard/?view=performance',{waitUntil:'networkidle'});
+  const table=page.locator('#top-performers-table');
+  const disclosure=table.locator('xpath=ancestor::details[contains(@class,"ranked-table-disclosure")]').first();
+  if(!(await disclosure.getAttribute('open')))await disclosure.locator(':scope > summary').click();
+  const body=table.locator('xpath=ancestor::div[contains(@class,"toggle-body")]').first();
+  const type=body.getByRole('combobox',{name:'Content type',exact:true});
+  const contact=body.getByRole('searchbox',{name:'Search this table',exact:true});
+  const target=await table.locator('tbody tr[data-filter-row="true"]').first().evaluate(row=>({id:row.dataset.livelabsId,type:row.dataset.contentType}));
+  const record=payload.records.find(item=>String(item.livelabsId||'')===String(target.id));
+  expect(record).toBeTruthy();
+  const contactValue=[record.owner,...(record.details||[]).filter(pair=>Array.isArray(pair)&&/owner|author|support|technical|manager|contact/i.test(String(pair[0]))).map(pair=>pair[1])].find(value=>/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(String(value||'')));
+  expect(contactValue).toBeTruthy();
+  await contact.fill(contactValue);
+  await expect.poll(()=>table.locator('tbody tr[data-filter-row="true"]:visible').evaluateAll(rows=>rows.map(row=>row.dataset.livelabsId))).toContain(String(target.id));
+  await contact.fill('');
+  await type.selectOption('Workshop');
+  const range=body.locator(`[data-pagination-range-for="${await table.evaluate(el=>el.closest('[data-filter-table]').dataset.filterTable)}"]`);
+  const rangeText=await range.first().textContent();
+  const matchedCount=Number(rangeText.match(/of\s+(\d+)\s+filtered rows/i)?.[1] || rangeText.match(/of\s+(\d+)\s+rows/i)?.[1] || 0);
+  expect(matchedCount).toBeGreaterThan(10);
+  const visiblePageCount=Math.min(100,matchedCount);
+  await body.locator(`[data-page-size-for="${await table.evaluate(el=>el.closest('[data-filter-table]').dataset.filterTable)}"]`).first().selectOption('100');
+  const visibleIds=await table.locator('tbody tr[data-filter-row="true"]:visible').evaluateAll(rows=>rows.map(row=>row.dataset.livelabsId));
+  expect(visibleIds).toHaveLength(visiblePageCount);
+  const menu=table.locator('xpath=ancestor::div[contains(@class,"toggle-body")]').locator('.table-export-dropdown');
+  const exports={};
+  for(const format of ['csv','xlsx','json']) {
+    await menu.locator(':scope > summary').click();
+    const pending=page.waitForEvent('download');
+    await menu.getByRole('button',{name:format==='xlsx'?'Excel (.xlsx)':`${format.toUpperCase()} (.${format})`}).click();
+    const download=await pending;
+    expect(download.suggestedFilename()).toMatch(new RegExp(`\\.${format}$`));
+    exports[format]=await require('node:fs/promises').readFile(await download.path());
+  }
+  expect(exports.csv.toString('utf8').startsWith('\uFEFF')).toBe(true);
+  expect(exports.xlsx.subarray(0,2).toString()).toBe('PK');
+  const exported=JSON.parse(exports.json.toString('utf8'));
+  expect(exported.rowCount).toBe(visibleIds.length);
+  expect(exported.rows).toHaveLength(visibleIds.length);
+  expect(exported.rows.map(row=>String(row['LiveLabs ID']))).toEqual(visibleIds);
+  expect(exported.rows.every(row=>row.Type==='Workshop')).toBe(true);
+  expect(exported.appliedFilters).toEqual(expect.arrayContaining([expect.objectContaining({value:'Workshop'})]));
+  await expect(body.locator(`[data-table-export-status="top-performers-table"]`)).toHaveText(`${visiblePageCount} visible page rows exported.`);
 });
 
 test('dashboard tabs stay readable and support navigation on desktop and mobile',async({page},testInfo)=>{

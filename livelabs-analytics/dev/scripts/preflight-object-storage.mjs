@@ -111,7 +111,8 @@ retainedForbidden.length
   ? fail("static-only boundary", `forbidden paths: ${retainedForbidden.join(", ")}`)
   : pass("static-only boundary", "backend, admin, database, documentation, and local-runtime paths are absent");
 
-const inventoryPayload = readJson(path.join(releaseRoot, "inventory/data/public_portfolio_inventory.json"));
+const inventoryPayloadPath = manifest.data_snapshot?.canonical_portfolio_payload || 'inventory/data/public_portfolio_inventory.json';
+const inventoryPayload = readJson(path.join(releaseRoot, inventoryPayloadPath));
 const rows = inventoryPayload.records || [];
 const publicOnly = rows.length > 0 && rows.every(row => String(row.publishType).toLowerCase() === 'public' && String(row.publishStatus).toLowerCase() === 'published');
 publicOnly && !fs.existsSync(path.join(releaseRoot, 'inventory/data/portfolio_inventory.json'))
@@ -180,7 +181,7 @@ manifest.data_snapshot?.fresh_data_pending === true
 if (manifest.jenkins_delivery?.static_overlay_included === true) {
   try {
     const state = readJson(path.join(releaseRoot, 'assets/data/dashboard-state.json'));
-    const inventoryHash = sha256(path.join(releaseRoot, 'inventory/data/public_portfolio_inventory.json'));
+    const inventoryHash = sha256(path.join(releaseRoot, inventoryPayloadPath));
     const eligibleIds = new Set(ids);
     const overlay = state.qaReportMerge?.overlay;
     if (state.releaseEvidence?.inventorySha256 !== inventoryHash || !overlay || !Object.keys(overlay).length
