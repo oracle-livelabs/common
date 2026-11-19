@@ -105,26 +105,35 @@ function checkDashboardScripts() {
 function checkAuthorContributorCoverageContract() {
   const html = fs.readFileSync(path.join(root, "dev/admin/author-contributor-gaps.html"), "utf8");
   const script = fs.readFileSync(path.join(root, "dev/admin/author-contributor-gaps.js"), "utf8");
-  const inventory = fs.readFileSync(path.join(root, "dev/admin/inventory.html"), "utf8");
   const server = fs.readFileSync(path.join(root, "dev/scripts/admin-server.py"), "utf8");
+  const adminShell = fs.readFileSync(path.join(root, "dev/scripts/admin_shell.py"), "utf8");
   const builder = fs.readFileSync(path.join(root, "dev/scripts/build-admin-service.py"), "utf8");
   const required = [
-    [html, 'id="author-contributor-results"'], [html, 'id="author-status"'], [html, 'id="contributor-status"'],
-    [html, 'id="author-contributor-rows"'], [inventory, 'href="/admin/inventory/author-contributor-gaps"'],
-    [script, "/api/admin/inventory"], [script, "Acknowledgement Contributors"], [script, "Owner Email"],
-    [script, 'authorStatus === \'any\' && contributorStatus === \'any\''], [server, "'/admin/inventory/author-contributor-gaps': 'author-contributor-gaps.html'"],
+    [html, 'id="author-contributor-results"'], [html, 'id="author-status"'], [html, 'id="additional-contact-status"'],
+    [html, 'id="author-contributor-rows"'], [html, '<option value="missing" selected>Missing email</option>'],
+    [script, "/api/admin/inventory"], [script, "author:['Owner Email','Workshop Owner Email','Author Email']"],
+    [script, "supportContact:['Support Contact Email','Support Email']"], [script, "techContact:['Tech Contact Email','Technical Contact Email']"],
+    [script, "hasAdditionalContact:Boolean(supportContact || techContact)"],
+    [script, "contactStatus === 'missing' && data.hasAdditionalContact"],
+    [script, "contactStatus === 'present' && !data.hasAdditionalContact"],
+    [server, "'/admin/inventory/author-contributor-gaps': 'author-contributor-gaps.html'"],
     [server, "'author-contributor-gaps.js', 'author-contributor-gaps.css'"],
     [builder, "'author-contributor-gaps.html', 'author-contributor-gaps.js', 'author-contributor-gaps.css'"]
   ];
   const missing = required.filter(([source, marker]) => !source.includes(marker)).map(([, marker]) => marker);
+  const navigationOrder = /\('\/admin\/inventory', 'Portfolio inventory'\),\s*\('\/admin\/inventory\/author-contributor-gaps', 'Missing contact'\)/.test(adminShell);
+  if (!navigationOrder) missing.push("Missing contact navigation below Portfolio inventory");
   const privateRoute = server.includes("'/admin/inventory/author-contributor-gaps': 'author-contributor-gaps.html'")
     && /if page_path in admin_pages:[\s\S]*?if not self\.session\(\):[\s\S]*?return self\.file\(PRIVATE \/ 'login\.html'\)/.test(server);
   const safeAuthorRule = script.includes("author:field(record,aliases.author)") && script.includes("author:['Owner Email','Workshop Owner Email','Author Email']")
     && !/author\s*:\s*(?:clean\()?record\.owner/.test(script);
-  if (missing.length || !privateRoute || !safeAuthorRule) {
-    fail("Admin author/contributor coverage contract", `missing=${missing.join(", ") || "none"}; protected route=${privateRoute}; exact author field=${safeAuthorRule}`);
+  const currentCoverageRule = script.includes("authorStatus === 'missing' && data.author")
+    && script.includes("authorStatus === 'present' && !data.author")
+    && !script.includes("Acknowledgement Contributors");
+  if (missing.length || !privateRoute || !safeAuthorRule || !currentCoverageRule) {
+    fail("Admin missing-contact coverage contract", `missing=${missing.join(", ") || "none"}; protected route=${privateRoute}; exact author field=${safeAuthorRule}; current coverage rule=${currentCoverageRule}`);
   } else {
-    pass("Admin author/contributor coverage contract", "private inventory route is packaged, linked from inventory, and reports exact source-field gaps");
+    pass("Admin missing-contact coverage contract", "private page defaults to missing main-author email and measures additional coverage from support or technical contacts");
   }
 }
 
