@@ -22,6 +22,19 @@
   const cards = [];
   const sectionEntries = [];
   const kindNames = { core: "Core Markdown", livelabs: "LiveLabs feature", caution: "Use with care" };
+  const publishSection = document.getElementById("before-publish");
+  const publishLink = document.querySelector(".publish-link");
+  let sectionRevealPending = Boolean(window.location.hash);
+
+  function markdownSectionHash(sectionId) {
+    return window.LiveLabsSectionUrl.build(["markdown", sectionId]);
+  }
+
+  function markdownSectionIdFromHash(hash) {
+    const parts = window.LiveLabsSectionUrl.parse(hash);
+    if (parts.length === 2 && parts[0] === "markdown") return parts[1];
+    return parts.length === 1 ? parts[0] : "";
+  }
 
   function element(tag, className, content) {
     const node = document.createElement(tag);
@@ -165,12 +178,13 @@
     const number = String(index + 1).padStart(2, "0");
     const item = element("li");
     const anchor = element("a");
-    anchor.href = `#${section.id}`;
+    anchor.href = markdownSectionHash(section.id);
     anchor.append(element("span", "section-number", number), element("span", "", section.title));
     item.append(anchor);
     navigation.append(item);
     const node = element("section", "reference-section");
     node.id = section.id;
+    node.setAttribute("data-section-url-anchor", "");
     node.tabIndex = -1;
     node.setAttribute("aria-labelledby", `${section.id}-heading`);
     const headingRow = element("div", "section-heading");
@@ -188,6 +202,12 @@
   });
   container.append(fragment);
 
+  if (publishSection && publishLink) {
+    publishSection.setAttribute("data-section-url-anchor", "");
+    publishLink.href = markdownSectionHash(publishSection.id);
+    sectionEntries.push({ id: publishSection.id, node: publishSection, anchor: publishLink, filterable: false });
+  }
+
   function updateCurrentSection() {
     const visible = sectionEntries.filter(entry => !entry.node.hidden);
     let current = visible[0];
@@ -198,6 +218,17 @@
       if (entry === current) entry.anchor.setAttribute("aria-current", "location");
       else entry.anchor.removeAttribute("aria-current");
     });
+    return current || null;
+  }
+
+  function syncCurrentSectionHash() {
+    if (sectionRevealPending) return;
+    const current = updateCurrentSection();
+    if (!current) return;
+    const nextHash = markdownSectionHash(current.id);
+    if (window.location.hash !== nextHash) {
+      window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search + nextHash);
+    }
   }
 
   function applyFilters() {
@@ -208,7 +239,7 @@
       card.node.hidden = !matches;
       if (matches) count += 1;
     });
-    sectionEntries.forEach(entry => {
+    sectionEntries.filter(entry => entry.filterable !== false).forEach(entry => {
       entry.node.hidden = !cards.some(card => card.section.id === entry.id && !card.node.hidden);
       entry.anchor.setAttribute("data-filtered-out", String(entry.node.hidden));
     });
@@ -225,16 +256,27 @@
   }
 
   function revealHash(focus = false) {
-    let id;
-    try { id = decodeURIComponent(window.location.hash.slice(1)); } catch (_error) { return; }
-    if (!id) return;
+    const id = markdownSectionIdFromHash(window.location.hash);
+    if (!id) {
+      sectionRevealPending = false;
+      return;
+    }
     const target = document.getElementById(id);
-    if (!target) return;
+    if (!target) {
+      sectionRevealPending = false;
+      return;
+    }
     if (target.hidden || target.closest("[hidden]")) clearFilters();
+    sectionRevealPending = true;
     window.requestAnimationFrame(() => {
       target.scrollIntoView({ block: "start" });
       if (focus && target.matches("article, section")) target.focus({ preventScroll: true });
       updateCurrentSection();
+      const canonicalHash = markdownSectionHash(target.id);
+      if (window.location.hash !== canonicalHash) {
+        window.history.replaceState(window.history.state, "", window.location.pathname + window.location.search + canonicalHash);
+      }
+      sectionRevealPending = false;
     });
   }
 
@@ -252,24 +294,25 @@
   document.addEventListener("click", event => {
     const link = event.target.closest('a[href^="#"]');
     if (!link || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
-    let id;
-    try { id = decodeURIComponent(link.hash.slice(1)); } catch (_error) { return; }
+    const id = markdownSectionIdFromHash(link.hash);
     const target = document.getElementById(id);
     if (!target) return;
+    event.preventDefault();
     if (target.hidden || target.closest("[hidden]")) clearFilters();
-    if (window.location.hash === link.hash) {
-      event.preventDefault();
-      revealHash(true);
+    const nextHash = markdownSectionHash(target.id);
+    if (window.location.hash !== nextHash) {
+      window.history.pushState(window.history.state, "", window.location.pathname + window.location.search + nextHash);
     }
+    revealHash(true);
   });
   window.addEventListener("hashchange", () => revealHash(true));
   let scrollPending = false;
   window.addEventListener("scroll", () => {
     if (scrollPending) return;
     scrollPending = true;
-    window.requestAnimationFrame(() => { updateCurrentSection(); scrollPending = false; });
+    window.requestAnimationFrame(() => { syncCurrentSectionHash(); scrollPending = false; });
   }, { passive: true });
-  window.addEventListener("resize", updateCurrentSection);
+  window.addEventListener("resize", syncCurrentSectionHash);
   applyFilters();
   if (window.location.hash) revealHash();
 })();

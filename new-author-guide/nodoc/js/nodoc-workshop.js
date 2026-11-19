@@ -1204,21 +1204,56 @@
     function workshopHash(panelIndex, taskIndex) {
       var panel = Number(panelIndex || 0);
       var task = Number(taskIndex || 0);
+      var parts;
 
-      if (panel === 0 && task === 0) {
-        return "#nodoc";
+      parts = ["nodoc", panel === 0 ? "introduction" : "lab-" + panel];
+      if (task > 0) {
+        parts.push("task-" + task);
       }
-
-      return "#nodoc:" + panel + (task > 0 ? ":" + task : "");
+      return window.LiveLabsSectionUrl.build(parts);
     }
 
     function readWorkshopHash() {
-      var deepLinkMatch = window.location.hash.match(/^#nodoc:(\d+)(?::(\d+))?$/i);
+      var legacyMatch = window.location.hash.match(/^#nodoc:(\d+)(?::(\d+))?$/i);
+      var parts = window.LiveLabsSectionUrl.parse(window.location.hash);
+      var panel = 0;
+      var task = 0;
+      var matched = false;
+      var labMatch;
+      var taskMatch;
+
+      if (legacyMatch) {
+        panel = Number(legacyMatch[1]);
+        task = legacyMatch[2] ? Number(legacyMatch[2]) : 0;
+        matched = true;
+      } else if (parts.length === 1 && parts[0] === "nodoc") {
+        matched = true;
+      } else if (parts[0] === "nodoc" && parts.length >= 2 && parts.length <= 3) {
+        if (parts[1] === "introduction") {
+          panel = 0;
+          matched = true;
+        } else {
+          labMatch = /^lab-(\d+)$/i.exec(parts[1]);
+          if (labMatch && Number(labMatch[1]) > 0) {
+            panel = Number(labMatch[1]);
+            matched = true;
+          }
+        }
+
+        if (matched && parts[2]) {
+          taskMatch = /^task-(\d+)$/i.exec(parts[2]);
+          if (taskMatch && Number(taskMatch[1]) > 0) {
+            task = Number(taskMatch[1]);
+          } else {
+            matched = false;
+          }
+        }
+      }
 
       return {
-        panel: deepLinkMatch ? Number(deepLinkMatch[1]) : 0,
-        task: deepLinkMatch && deepLinkMatch[2] ? Number(deepLinkMatch[2]) : 0,
-        matched: !!deepLinkMatch
+        panel: panel,
+        task: task,
+        matched: matched
       };
     }
 

@@ -23,15 +23,6 @@ VIEW_LABELS = {
     "recent_views_90d": "Views - Last 90 Days",
 }
 FORMULA = "Weighted mean: 45% annual demand percentile, 35% 90-day demand percentile, 20% trusted freshness; omit unknown freshness and reweight available inputs."
-FILTER_COLUMNS = [
-    ("Rank", "#"), ("Title", "Title"), ("Author Email", "Author Email"),
-    ("WMS ID", "WMS ID"), ("LiveLabs ID", "LiveLabs ID"), ("Category", "Category"),
-    ("Views 12m", "Views 12m"), ("Views 90d", "Views 90d"),
-    ("Last Meaningful Update", "Last Meaningful Update"), ("Score", "Score"),
-    ("Type", "Type"),
-]
-
-
 def clean(value: object) -> str:
     return "" if value in (None, "") else str(value).strip()
 
@@ -85,6 +76,14 @@ def latest_update(record: dict) -> date | None:
     return parse_date(record.get("update"))
 
 
+def wms_last_update(record: dict) -> date | None:
+    """Return the WMS record timestamp for display, separate from score freshness."""
+    updated = parse_date(record.get("update"))
+    if updated:
+        return updated
+    return parse_date(pairs(record).get("WMS Last Update"))
+
+
 def percentile(value: float, values: list[float]) -> float:
     ordered = sorted(values)
     lower = sum(1 for item in ordered if item < value)
@@ -118,18 +117,6 @@ def sort_value(value: object, kind: str) -> str:
 def td(value: object, sort_kind: str = "text") -> str:
     text = clean(value)
     return f'<td data-filter-value="{escape(text.lower())}" data-sort-value="{escape(sort_value(text, sort_kind))}">{escape(text)}</td>'
-
-
-def filter_grid(table_id: str) -> str:
-    fields = []
-    for index, (label, placeholder) in enumerate(FILTER_COLUMNS):
-        field_id = f"{table_id}-filter-rank" if index == 0 else f"{table_id}-filter-{index}"
-        fields.append(
-            f'<label class="filter-field" for="{field_id}"><span>{escape(label)}</span>'
-            f'<input id="{field_id}" type="search" placeholder="Filter {escape(placeholder)}" '
-            f'data-table-filter="{table_id}" data-column-index="{index}"></label>'
-        )
-    return "".join(fields)
 
 
 def detail_table(record: dict, components: dict[str, float]) -> str:
@@ -178,31 +165,31 @@ def table(records: list[dict], content_type: str, snapshot_date: date) -> str:
         for index, (title, kind, direction) in enumerate([
             ("#", "number", "asc"), ("Title", "text", "asc"), ("Author Email", "text", "asc"),
             ("WMS ID", "number", "desc"), ("LiveLabs ID", "number", "desc"), ("Category", "text", "asc"),
-            ("Views 12m", "number", "desc"), ("Views 90d", "number", "desc"), ("Last Meaningful Update", "date", "desc"), ("Score", "number", "desc"), ("Type", "text", "asc"),
+            ("Views 12m", "number", "desc"), ("Views 90d", "number", "desc"), ("WMS Last Update", "date", "desc"), ("Score", "number", "desc"), ("Type", "text", "asc"),
         ])
     )
     body: list[str] = []
     for index, (record, score, components) in enumerate(scored):
         detail = pairs(record)
         author = detail.get("Owner Email") or record.get("owner")
-        updated = latest_update(record).isoformat() if latest_update(record) else "N/A"
+        wms_updated = wms_last_update(record)
+        updated = wms_updated.isoformat() if wms_updated else "Not reported"
         views = view_map(record)
         detail_id = f"{table_id}-detail-{index}"
         body.append(
-            f'<tr class="expandable-row" data-filter-row="true" {row_attributes(record)} data-original-index="{index}" data-detail-row-id="{detail_id}" data-expanded="false" tabindex="0" aria-expanded="false">'
+            f'<tr class="record-navigation-row" data-filter-row="true" {row_attributes(record)} data-original-index="{index}" data-detail-row-id="{detail_id}" tabindex="0">'
             + td(index + 1, "number") + td(record.get("title")) + td(author) + td(record.get("wmsId"), "number") + td(record.get("livelabsId"), "number")
             + td(record.get("category")) + td(int(views["recent_views_12m"]), "number") + td(int(views["recent_views_90d"]), "number") + td(updated, "date") + td(f"{score:.2f}", "number")
             + td(record.get('type')) + "</tr>"
         )
-        body.append(f'<tr class="detail-row" data-detail-for="{detail_id}" hidden><td colspan="11"><div class="detail-shell"><p class="detail-title">Details for {escape(clean(record.get("title")))}.</p>{detail_table(record, components)}</div></td></tr>')
+        body.append(f'<template data-detail-for="{detail_id}"><div class="detail-shell"><p class="detail-title">Details for {escape(clean(record.get("title")))}.</p>{detail_table(record, components)}</div></template>')
     plural = "Workshops" if content_type == "Workshop" else "Sprints"
     return (
         f'<section class="panel ranked-table-panel"><div class="panel-head"><h3>Top Performers</h3><span>{len(scored)} rows</span></div>'
         f'<div class="toggle-body">'
         f'<div class="table-tools"><span class="table-count" data-table-count-for="{table_id}">{len(scored)} rows</span>'
-        f'<span class="table-hint">Click a row for more details.</span><button class="filter-reset" type="button" data-clear-filters-for="{table_id}">Clear filters</button></div>'
-        f'<details class="filter-disclosure"><summary><svg class="filter-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M8 12h8"></path><path d="M11 17h2"></path></svg><span>Apply filters</span><span class="filter-chevron" aria-hidden="true"></span></summary>'
-        f'{controls(table_id)}<div class="filter-grid">{filter_grid(table_id)}</div></details><div class="table-wrap" data-filter-table="{table_id}">'
+        f'<span class="table-hint">Select a row to open its full details.</span><button class="filter-reset" type="button" data-clear-filters-for="{table_id}">Clear filters</button></div>'
+        f'{controls(table_id)}<div class="table-wrap" data-filter-table="{table_id}">'
         f'<table class="data-table" id="{table_id}"><thead><tr>{header}</tr></thead><tbody>{"".join(body)}</tbody></table></div></div></section>'
     )
 

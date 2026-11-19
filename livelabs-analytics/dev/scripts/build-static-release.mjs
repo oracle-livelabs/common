@@ -15,11 +15,17 @@ if (stateFlag >= 0 && !args[stateFlag + 1]) throw new Error('--dashboard-state r
 const stateInput = stateFlag >= 0 ? path.resolve(root, args[stateFlag + 1]) : null;
 const allowMissingQa = args.includes('--allow-missing-qa');
 const includeFileFallback = args.includes("--include-file-fallback");
+const compactLayout = args.includes('--compact');
+const inventoryTarget = compactLayout ? 'assets/data/portfolio.json' : 'inventory/data/public_portfolio_inventory.json';
+if (fs.existsSync(path.join(root, 'assets/data/views-wms-contact-index.js'))) {
+  throw new Error('Supplemental WMS contacts belong in private service storage, not public assets.');
+}
 
 if (args.includes("--help") || args.includes("-h")) {
   console.log("Usage: node dev/scripts/build-static-release.mjs --output <directory> --dashboard-state <public-export.json> [--replace] [--include-file-fallback]");
   console.log("Use --allow-missing-qa only for an explicitly incomplete Analytics-only preview; it cannot pass promotion preflight.");
   console.log("Builds in a sibling staging directory, verifies the manifest, then atomically promotes the result.");
+  console.log('--compact groups all runtime JSON and optional offline payloads under assets/data.');
   console.log("Existing output is preserved unless --replace is explicit; replacement keeps a dated previous directory.");
   process.exit(0);
 }
@@ -49,12 +55,13 @@ if (JSON.stringify(expectedKeys) !== JSON.stringify(observedKeys) || sourcePaylo
 const releaseInputs = [
   { source: "index.html", target: "index.html" },
   { source: "dashboard/index.html", target: "dashboard/index.html" },
+  { source: "views/index.html", target: "views/index.html" },
   { source: "search/index.html", target: "search/index.html" },
   { source: "dev/config/.nojekyll", target: ".nojekyll" },
   { source: "dev/config/release-manifest.json", target: "release-manifest.json" },
   { source: "assets", target: "assets" },
-  { source: "inventory/data/public_portfolio_inventory.json", target: "inventory/data/public_portfolio_inventory.json" },
-  ...(includeFileFallback ? [{ source: "inventory/data/portfolio_inventory.file.js", target: "inventory/data/portfolio_inventory.file.js" }] : []),
+  { source: "inventory/data/public_portfolio_inventory.json", target: inventoryTarget },
+  ...(includeFileFallback ? [{ source: "inventory/data/portfolio_inventory.file.js", target: compactLayout ? 'assets/data/portfolio.file.js' : "inventory/data/portfolio_inventory.file.js" }] : []),
 ];
 const staging = `${output}.staging-${process.pid}-${Date.now()}`;
 
@@ -113,6 +120,16 @@ try {
     fs.cpSync(source, target, { recursive: true, filter: file => path.resolve(file) !== path.join(root, 'assets/data/dashboard-state.json') });
   }
 
+  if (compactLayout) {
+    for (const name of walkFiles(staging).filter(name => /\.(?:html|js)$/.test(name))) {
+      const file = path.join(staging, name);
+      const original = fs.readFileSync(file, 'utf8');
+      const rewritten = original.replaceAll('inventory/data/public_portfolio_inventory.json', inventoryTarget)
+        .replaceAll('inventory/data/portfolio_inventory.file.js', 'assets/data/portfolio.file.js');
+      if (rewritten !== original) fs.writeFileSync(file, rewritten, 'utf8');
+    }
+  }
+
   let stateEvidence = null;
   if (stateInput) {
     const state = JSON.parse(fs.readFileSync(stateInput, 'utf8'));
@@ -131,11 +148,11 @@ try {
 
   const manifestPath = path.join(staging, "release-manifest.json");
   const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
-  const inventoryData = JSON.parse(fs.readFileSync(path.join(staging, "inventory/data/public_portfolio_inventory.json"), "utf8"));
+  const inventoryData = JSON.parse(fs.readFileSync(path.join(staging, inventoryTarget), "utf8"));
   manifest.data_snapshot = {
     ...(manifest.data_snapshot || {}),
     portfolio_inventory_generated_at: inventoryData.metadata?.generated_at || null,
-    canonical_portfolio_payload: "inventory/data/public_portfolio_inventory.json",
+    canonical_portfolio_payload: inventoryTarget,
     source_snapshot_date: inventoryData.metadata?.snapshot_date || null,
     ...Object.fromEntries(Object.entries(inventoryData.metadata?.data_freshness || {}).filter(([key]) => key.endsWith("snapshot_date"))),
   };
@@ -153,6 +170,9 @@ try {
   manifest.file_url_fallback_included = includeFileFallback;
   manifest.jenkins_delivery = stateEvidence ? {mode: 'reviewed static projection', static_overlay_included: true, evidence: stateEvidence} : { mode: "live API required", static_overlay_included: false, note: "The saved Jenkins overlay is not part of this static package. Export a reviewed cohort-scoped snapshot or route the API through an authenticated service before promotion." };
   manifest.canonical_page = "dashboard/index.html";
+  manifest.entry_points = ['/', '/dashboard/', '/views/', '/search/'];
+  manifest.runtime_layout = compactLayout ? 'compact-assets' : 'legacy-compatible';
+  manifest.gateway_routes = {'/':'index.html','/dashboard/':'dashboard/index.html','/views/':'views/index.html','/search/':'search/index.html'};
   manifest.packaging_mutates_source = false;
   manifest.release_files = releaseFileEntries(staging);
   for (const file of manifest.release_files.filter(file => /\.(html|js|json|css)$/i.test(file.path))) {
@@ -161,7 +181,9 @@ try {
       throw new Error(`Access-bearing material found in ${file.path}; release was not promoted.`);
     }
   }
-  const contentIdentity = crypto.createHash("sha256").update(JSON.stringify(manifest.release_files)).digest("hex").slice(0, 16);
+  const identityManifest = {...manifest};
+  for (const key of ['release_id', 'release_built_at', 'release_layout']) delete identityManifest[key];
+  const contentIdentity = crypto.createHash("sha256").update(JSON.stringify(identityManifest)).digest("hex").slice(0, 16);
   const version = String(manifest.bundle_version || "unversioned").replace(/[^a-z0-9._-]+/gi, "-");
   manifest.release_id = `${version}-${contentIdentity}`;
   manifest.release_built_at = new Date().toISOString();

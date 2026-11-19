@@ -12,8 +12,8 @@ test('search supports IDs, titles, owners, Unicode, empty results and browser hi
   const matches=page.locator('.author-search-result');
   for(const query of [target.livelabsId,target.title,target.owner,'modern data warehouse']){
     await input.fill(query);
+    await expect.poll(()=>new URL(page.url()).searchParams.get('q')).toBe(query);
     await expect(matches.filter({hasText:target.title}).first()).toBeVisible();
-    await expect(page).toHaveURL(new RegExp('q='));
   }
   await matches.filter({hasText:target.title}).first().getByRole('link',{name:'Open record',exact:true}).click();
   await expect(page.locator('.search-view-header h2')).toHaveText(target.title);
@@ -22,7 +22,8 @@ test('search supports IDs, titles, owners, Unicode, empty results and browser hi
   await page.goForward();await expect(page.locator('.search-view-header h2')).toHaveText(target.title);
   await page.locator('.rail .nav-list').getByRole('link',{name:'Dashboard',exact:true}).click();
   await expect(page).toHaveURL(/\/dashboard\//);
-  await expect(page.locator('html')).not.toHaveClass(/page-loading/);
+  await expect(page.locator('.page-loading-overlay')).toBeHidden();
+  await expect(page.locator('[data-overview-metric="public-count"]')).toHaveText(String(records.length));
   const unicode=records.find(r=>/[^\x00-\x7F]/.test(r.title));
   if(unicode){await input.fill(unicode.title);await expect(matches.filter({hasText:unicode.title}).first()).toBeVisible();}
   await input.fill('zz-no-such-item-<script>');
@@ -32,29 +33,43 @@ test('search supports IDs, titles, owners, Unicode, empty results and browser hi
   const families=new Map();for(const r of records){const key=String(r.wmsId);families.set(key,[...(families.get(key)||[]),r]);}
   const [wms]=[...families].find(([id,items])=>id&&id!=='undefined'&&items.length>1);
   await page.goto('/search/?wms_id='+encodeURIComponent(wms),{waitUntil:'networkidle'});
-  await expect(page.locator('html')).not.toHaveClass(/page-loading/);
-  await expect(page.locator('.search-detail-panel h2')).toHaveText('Record unavailable');
-  await expect(page.locator('.search-route-identity')).toHaveText(`WMS ID ${wms}`);
+  await expect(page.locator('#search-workshop-view')).toContainText('Multiple records match');
+  await expect(page.locator('#search-workshop-view a[href*="livelabs_id="]').first()).toBeVisible();
   await expect(page.locator('.search-view-header h2')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
+
+test('same-document browser history restores query results after record details', async ({ page }) => {
+  const target = records.find(record => record.livelabsId === '3570');
+  await page.goto('/dashboard/?q=modern+data+warehouse', { waitUntil: 'networkidle' });
+  await expect(page.locator('html')).not.toHaveClass(/page-loading/);
+  const result = page.locator('.author-search-result').filter({ hasText: target.title }).first();
+  await expect(result).toBeVisible();
+  const detailUrl = await result.getByRole('link', { name: 'Open record', exact: true }).getAttribute('href');
+  // Build same-document entries so Back exercises the application's popstate
+  // restoration instead of a fresh document's startup rendering.
+  await page.evaluate(url => {
+    const queryUrl = location.href;
+    history.pushState(null, '', url);
+    history.pushState(null, '', queryUrl);
+  }, detailUrl);
+  await page.goBack();
+  await expect(page.locator('.search-view-header h2')).toHaveText(target.title);
+  await page.goBack();
+  await expect(page.locator('#global-workshop-search')).toHaveValue('modern data warehouse');
+  await expect(result).toBeVisible();
+  await expect(page.locator('#search-workshop-view')).toBeHidden();
+  await page.goForward();
+  await expect(page.locator('.search-view-header h2')).toBeVisible();
+  await expect(page.locator('.search-view-header h2')).toHaveText(target.title);
+});
+
 test('serves the public Views page from its local route', async ({ page, request }) => {
   const response = await request.get('/views/');
   expect(response.status()).toBe(200);
   await page.goto('/views/');
   await expect(page).toHaveTitle('Workshop and Sprint Views · LiveLabs Analytics');
   await expect(page.getByRole('heading', { name: 'Workshop and sprint views' })).toBeVisible();
-});
-
-test('public Views page does not load the unapproved WMS contact index', async ({ page }) => {
-  const contactIndexRequests = [];
-  page.on('request', (request) => {
-    if (request.url().includes('views-wms-contact-index.js')) contactIndexRequests.push(request.url());
-  });
-  await page.goto('/views/', { waitUntil: 'networkidle' });
-  await expect(page.locator('#views-additional-contact-email')).toHaveCount(0);
-  await expect(page.getByRole('columnheader', { name: 'Additional contact email' })).toHaveCount(0);
-  expect(contactIndexRequests).toEqual([]);
 });
 
 test('Views export status stays aligned with the current page size', async ({ page }) => {
@@ -118,16 +133,12 @@ test('clicking a Dashboard table row opens the full record detail page', async (
   const liveLabsId = await row.getAttribute('data-livelabs-id');
   expect(liveLabsId).toBeTruthy();
   await row.locator('td[data-column-label="Title"]').click();
-  await expect(page).toHaveURL((url) => url.pathname.endsWith('/search/') && url.searchParams.get('livelabs_id') === liveLabsId);
+  await expect(page).toHaveURL(new RegExp(`/search/\\?livelabs_id=${liveLabsId}`));
   await expect(page.locator('.search-view-header h2')).toBeVisible();
 });
 
 test('P1 queue rows open details directly without an Open record column or expansion rows', async ({ page }) => {
   await page.goto('/dashboard/?view=urgent', { waitUntil: 'networkidle' });
-  const reportUnavailable = page.getByRole('heading', { name: 'QA report unavailable' });
-  if (await reportUnavailable.count()) {
-    test.skip(true, 'The P1 queue needs a Jenkins QA report, which is not present in this fixture.');
-  }
   const table = page.locator('#jenkins-p1-action-table');
   await page.locator('details.ranked-table-disclosure').filter({ has: table }).locator('summary').first().click();
   await expect(table).toBeVisible();

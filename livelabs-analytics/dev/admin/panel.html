@@ -6,10 +6,10 @@
   <script src="/assets/js/page-loading.js?v=20261009-loading"></script>
   <link rel="stylesheet" href="/assets/css/page-loading.css?v=20261009-loading">
   <title>LiveLabs Analytics — Data governance</title>
-  <link rel="stylesheet" href="/assets/css/dashboard.css">
-  <link rel="stylesheet" href="/admin-assets/admin.css?v=20261020-sidebar-back">
+  <link rel="stylesheet" href="/assets/css/dashboard.css?v=20261113-shared-table-navigation-v2">
+  <link rel="stylesheet" href="/admin-assets/admin.css?v=20261116-admin-theme">
   <script defer src="/assets/js/report-export.js"></script>
-  <script defer src="/admin-assets/panel.js?v=20261020-sidebar-back"></script>
+  <script defer src="/admin-assets/panel.js?v=20261116-admin-theme"></script>
 </head>
 <body class="admin-page admin-governance-page">
   <a class="skip-link" href="/admin/governance#governance-tabs">Skip to governance content</a>
@@ -65,10 +65,10 @@
         <div id="comparison-summary" class="summary"></div>
         <div class="controls">
           <label>Search changes<input id="change-search" type="search" placeholder="Title, ID, field, explanation"></label>
-          <button id="changes-csv" type="button">Export changes CSV</button>
-          <button id="changes-xlsx" type="button">Export formatted Excel</button>
+          <button id="changes-csv" type="button">Export visible page CSV</button>
+          <button id="changes-xlsx" type="button">Export visible page Excel</button>
         </div>
-        <div id="changes" class="table-wrap"></div>
+        <div id="changes" class="admin-paged-table"></div>
       </section>
 
       <section id="quality" role="tabpanel" tabindex="0" aria-labelledby="tab-quality quality-title" hidden>
@@ -78,12 +78,12 @@
           <label>Issue snapshot<select id="quality-snapshot"></select></label>
           <label>Issue type<select id="quality-category"><option value="">All issues</option></select></label>
           <label>Search issues<input id="quality-search" type="search" placeholder="Title, ID, or reason"></label>
-          <button id="quality-csv" type="button">Export filtered queue CSV</button>
-          <button id="quality-xlsx" type="button">Export formatted Excel</button>
+          <button id="quality-csv" type="button">Export visible page CSV</button>
+          <button id="quality-xlsx" type="button">Export visible page Excel</button>
         </div>
         <div id="quality-info" class="admin-source-note"></div>
         <div id="quality-summary" class="quality-summary" aria-label="Selected snapshot quality summary"></div>
-        <div id="quality-results" class="table-wrap"></div>
+        <div id="quality-results" class="admin-paged-table"></div>
       </section>
 
       <section id="reviews" role="tabpanel" tabindex="0" aria-labelledby="tab-reviews reviews-title" hidden>
@@ -122,10 +122,10 @@
         <h3>Decision history</h3>
         <div class="controls">
           <label>Search decision history<input id="review-search" type="search" placeholder="Record, reviewer, decision, reason"></label>
-          <button id="reviews-csv" type="button">Export history CSV</button>
-          <button id="reviews-xlsx" type="button">Export formatted Excel</button>
+          <button id="reviews-csv" type="button">Export visible page CSV</button>
+          <button id="reviews-xlsx" type="button">Export visible page Excel</button>
         </div>
-        <div id="review-history" class="table-wrap"></div>
+        <div id="review-history" class="admin-paged-table"></div>
       </section>
 
       <footer class="site-footer">Powered by Oracle LiveLabs Team &copy; 2026</footer>

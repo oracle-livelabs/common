@@ -127,12 +127,12 @@ test('record details prioritize ownership and keep errors and score tables compa
     await page.setViewportSize({width,height:1000});
     await page.goto('/search/?livelabs_id=3570',{waitUntil:'networkidle'});
     const view=page.locator('#search-workshop-view');
-    const ownership=view.locator('.search-ownership-panel');
-    await expect(ownership).toHaveAttribute('open','');
-    await expect(view.locator('.search-detail-panel h3').first()).toHaveText('Ownership & publishing');
-    await expect(ownership.locator('dd').filter({hasText:/^Published/})).toBeVisible();
+    const overview=view.locator('.search-overview-panel');
+    await expect(overview.getByRole('heading',{name:'Ownership, publishing & performance'})).toBeVisible();
+    await expect(overview.locator('[data-summary-key="owner"] dd')).toContainText('javier.x.de.la.torre@oracle.com');
+    await expect(overview.locator('[data-summary-key="publishing"] dd')).toContainText('Published · Public');
     const report=view.locator('[data-qa-report-overlay]');
-    await expect(report.locator('.author-report-date')).toContainText('15 Oct 2026');
+    await expect(report).toContainText('15 Oct 2026');
     const loading=report.locator('.author-finding-group').filter({has:page.locator(':scope > summary strong',{hasText:'Full instructions not loading'})});
     await expect(loading.locator(':scope > summary')).toContainText('2 checks · 6 occurrences');
     await loading.locator(':scope > summary').click();
@@ -176,10 +176,11 @@ test("public workshop and sprint details copy and export their displayed content
     const view = page.locator("#search-workshop-view");
     await expect(view).toBeVisible();
     const actions = view.locator(".search-view-actions > button");
-    await expect(actions).toHaveText(["Copy link", "Back to Dashboard"]);
+    await expect(actions).toHaveText(["Copy link"]);
+    await expect(view.locator('.search-view-actions [data-back-dashboard]')).toHaveCount(0);
     await expect(view.locator(".search-view-header [data-copy-value]")).toHaveCount(0);
-    const latest = view.locator(".search-result-card").filter({ has: page.locator("dt", { hasText: "Last update" }) });
-    const latestButton = latest.getByRole("button", { name: "Copy Last update", exact: true });
+    const latest = view.locator('.search-result-card[data-summary-key="update"]');
+    const latestButton = latest.getByRole("button", { name: "Copy WMS last update", exact: true });
     await expect(latestButton).toHaveCSS("opacity", "0");
     await latest.locator('dd').hover();
     await expect(latestButton).toHaveCSS("opacity", "1");
@@ -187,8 +188,7 @@ test("public workshop and sprint details copy and export their displayed content
     await latestButton.click();
     await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe(expectedLatest);
 
-    const governance = view.locator(".search-detail-panel").filter({ has: page.getByRole("heading", { name: "Ownership & publishing", exact: true }) });
-    if (!(await governance.evaluate(element=>element.open))) await governance.locator(':scope > summary').click();
+    const governance = view.locator('.search-overview-panel');
     for (const field of await governance.locator("dd").all()) {
       const button = field.getByRole("button");
       await field.hover();
@@ -200,7 +200,7 @@ test("public workshop and sprint details copy and export their displayed content
     const { rows, filename } = await downloadReport(page);
     expect(filename).toMatch(/-report\.csv$/);
     expect(rows).toContainEqual(["Page Overview", "N/A", "Title", record.title]);
-    expect(rows).toContainEqual(["Summary", "N/A", "Last update", expectedLatest]);
+    expect(rows).toContainEqual(["Summary", "N/A", "WMS last update", expectedLatest]);
     expect(rows.some(row => row[0] === 'Source details')).toBe(true);
     expect(rows.some(row => row[0] === 'Score and evidence' && row[2].includes('Baseline weight'))).toBe(true);
     const displayed = await view.locator('[data-copy-value]').evaluateAll(buttons=>buttons.map(button=>button.dataset.copyValue));
@@ -217,17 +217,16 @@ test("WMS-reported ownership is preserved separately from support contacts", asy
   await page.goto("/search/?livelabs_id=4074&wms_id=11763", { waitUntil: "networkidle" });
   const view = page.locator("#search-workshop-view");
   await expect(view).toBeVisible();
-  await expect(view.locator(".search-view-subtitle")).toContainText("WMS reported owner: vasile-lucian.brinzei@oracle.com");
+  const overview = view.locator('.search-overview-panel');
+  await expect(overview.locator('[data-summary-key="owner"] dd')).toContainText("vasile-lucian.brinzei@oracle.com");
   await expect(view.locator(".search-view-subtitle")).not.toContainText("Ownership needs review");
-  const governance = view.locator(".search-detail-panel").filter({ has: page.getByRole("heading", { name: "Ownership & publishing", exact: true }) });
-  if (!(await governance.evaluate(element=>element.open))) await governance.locator(':scope > summary').click();
-  const copy = governance.getByRole("button", { name: "Copy Owner", exact: true });
+  const copy = overview.locator('[data-summary-key="owner"] button[data-copy-value]');
   await expect(copy).toHaveAttribute("data-copy-value", "vasile-lucian.brinzei@oracle.com");
   await expect(copy).toHaveCSS("opacity", "0");
   await copy.focus();
   await expect(copy).toHaveCSS("opacity", "1");
   const { rows } = await downloadReport(page);
-  expect(rows).toContainEqual(["Ownership & publishing", "N/A", "Owner", "vasile-lucian.brinzei@oracle.com"]);
+  expect(rows).toContainEqual(["Summary", "N/A", "Owner / author", "vasile-lucian.brinzei@oracle.com"]);
   expect(rows.some((row) => row[2] === "WMS Reported Owner Email (disputed)")).toBe(false);
   expect(rows).toContainEqual(["Source details", "N/A", "Support Contact Email", "marco.antonio.luchian@oracle.com"]);
 });
@@ -267,4 +266,27 @@ test("CSV preserves file detail, Unicode, quotes, newlines, and safe spreadsheet
   await expect(page.locator("[data-export-search-csv]")).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: testInfo.outputPath("search-detail-mobile.png"), fullPage: true });
+});
+
+test('search result page exports a full JSON record with its item identity and detail sections', async ({ page }) => {
+  await page.goto('/search/?livelabs_id=598', { waitUntil: 'networkidle' });
+  const view=page.locator('#search-workshop-view');
+  await expect(view).toBeVisible();
+  const menu=view.locator('.report-export-dropdown');
+  await menu.locator(':scope > summary').click();
+  const pending=page.waitForEvent('download');
+  await menu.getByRole('button',{name:'JSON (.json)'}).click();
+  const download=await pending;
+  const report=JSON.parse(await fs.readFile(await download.path(),'utf8'));
+  expect(report.source).toBe('LiveLabs Analytics search detail');
+  expect(report.item).toMatchObject({livelabsId:'598',type:'Workshop'});
+  expect(report.rowCount).toBe(report.rows.length);
+  expect(report.rows).toEqual(expect.arrayContaining([
+    expect.objectContaining({Section:'Page Overview',Field:'Title',Value:'Get Started with Oracle Data Safe Fundamentals'}),
+    expect.objectContaining({Section:'Summary',Field:'Owner / author',Value:'jody.glover@oracle.com'}),
+    expect.objectContaining({Section:'Summary',Field:'Publishing',Value:'Published · Public'}),
+    expect.objectContaining({Section:'Source details',Field:'Publish Status',Value:'Published'})
+  ]));
+  expect(report.rows.some(row=>row.Section==='Summary'&&row.Field==='Performance score')).toBe(true);
+  expect(report.rows.some(row=>/Ranks this item|P1 findings remain/.test(row.Field))).toBe(false);
 });

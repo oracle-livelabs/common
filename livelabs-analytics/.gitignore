@@ -16,6 +16,8 @@ coverage/
 .tmp/
 /archive/
 /output/screenshots/
+/upload/
+/upload.staging-*/
 /dev/admin/archive/
 /assets/data/views-wms-contact-index.js
 

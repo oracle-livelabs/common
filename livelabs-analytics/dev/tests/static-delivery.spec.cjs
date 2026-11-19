@@ -23,10 +23,9 @@ test('record links stay under the deployed project prefix', async ({page}) => {
   await page.goto('/common/livelabs-analytics/dashboard/?view=urgent', {waitUntil:'networkidle'});
   const panel=page.locator('#jenkins-p1-action-queue details.ranked-table-disclosure');
   await panel.locator(':scope > summary').click();
-  const links=page.locator('#jenkins-p1-action-table a');
-  expect(await links.count()).toBeGreaterThan(0);
-  expect(await links.evaluateAll(nodes=>nodes.every(link=>new URL(link.href).pathname.startsWith('/common/livelabs-analytics/search/')))).toBe(true);
-  await links.filter({hasText:'Open record'}).first().click();
+  const row=page.locator('#jenkins-p1-action-table tbody tr[data-filter-row="true"]').first();
+  await expect(row).toBeVisible();
+  await row.locator('td[data-column-label="Title"]').click();
   await expect(page).toHaveURL(/\/common\/livelabs-analytics\/search\//);
   await expect(page.locator('.search-view-header h2')).toBeVisible();
 });

@@ -21,8 +21,8 @@
       var url = new URL(window.location.href);
       var experience = url.searchParams.get("experience");
       var lab = url.searchParams.get("lab");
-      var fullGuideHref = "https://" + "oracle-livelabs" + ".github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/";
-      var workshopExampleHref = "https://oracle-livelabs.github.io/developer/dev-ai-app-dev-finance/workshops/sandbox/";
+      var fullGuideHref = "https://livelabs.oracle.com/cdn/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/index.html";
+      var workshopExampleHref = "https://livelabs.oracle.com/cdn/developer/dev-ai-app-dev-finance/workshops/sandbox/index.html";
       var wmsHref = "https://livelabs.oracle.com/wms";
       var guideRoutes = {
         hub: "home",

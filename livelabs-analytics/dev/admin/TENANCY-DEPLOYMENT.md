@@ -39,7 +39,7 @@ python dev/scripts/admin-server.py --host 127.0.0.1 --port 4175 --public-origin 
 
 Replace the placeholder with the exact origin users open, with no trailing slash
 or path. The gateway must preserve that Host header. It must route
-`/admin`, `/admin/*` (including saved Jenkins report files), `/api/admin/*`, `/api/dashboard-admin-state`,
+`/admin`, `/admin/*` (including saved Jenkins report files), `/api/admin/*`, `/api/dashboard-admin-state`, `/api/dashboard-contacts`,
 `/admin-assets/*`, `/assets/admin-login.js`, and `/assets/admin-login.css`
 to the service. Shared `/assets/*` and dashboard
 paths can be served by the service as well, or by the existing static origin
@@ -58,6 +58,28 @@ report archive on the service host and set `LIVELABS_ADMIN_QA_REPORTS_DIR` to it
 `reports` directory. The service reads local run summaries; it does not connect
 to a Jenkins server.
 
+## Additional WMS contacts
+
+The supplemental WMS contact index is private runtime state, separate from the
+public inventory and the service ZIP. Generate it from the reviewed WMS exports
+with `dev/scripts/build-views-wms-contact-index.py`, using the active public
+inventory as `--inventory` and `.private/admin/views-contacts.json` as `--output`.
+The `.json` extension produces the service payload; a `.js` extension is retained
+only for older private candidate workflows. All output must stay under `.private`.
+
+Only unambiguous LiveLabs ID matches are used. Support, Technical, Manager and
+Other contact roles are checked in that order; the owner email is not repeated
+as an additional contact. Missing contacts remain missing.
+
+Back up and provision this file through the same private channel as Admin state.
+The `/api/dashboard-contacts` response is not cached. It permits a local preview
+only when both the bound listener and client are loopback addresses and no public
+origin is configured. Remote use requires an Admin session. The static Object
+Storage bundle cannot supply this private API; private supplemental contacts
+must not be copied into its assets to compensate. If ordinary authenticated
+dashboard users need these contacts, configure an approved service authentication
+policy before tenancy rollout.
+
 ## Dashboard, search and inventory routes
 
 The canonical source is `dashboard/index.html`. The dashboard uses
@@ -72,7 +94,7 @@ redirects legacy `/inventory` routes there. `/api/admin/inventory` requires an
 admin session. Do not map the full inventory JSON into a static origin.
 
 For Object Storage behind a gateway, map `/dashboard/` to
-`dashboard/index.html` and `/search/` to `search/index.html`. Preserve queries
+`dashboard/index.html`, `/views/` to `views/index.html`, and `/search/` to `search/index.html`. Preserve queries
 and apply equivalent mappings under any application prefix. Object Storage
 alone requires exact object keys; clean directory routes need gateway rules.
 Serve `/assets/*` and the public inventory JSON as files, never as an HTML
@@ -92,10 +114,11 @@ The current frontend eagerly requests the large public inventory during startup;
 tab fragments are lazy but include their full generated table contents. Payload
 splitting and paginated queries remain planned performance work.
 
-A plain static package does not include the saved Jenkins overlay. Before
-promotion, either export and wire a reviewed public-cohort QA snapshot into the
-frontend, or provide the same-origin API. Local service results do not prove
-that an Object Storage deployment will show the same QA scores.
+A complete static package includes a reviewed, inventory-bound public-cohort QA
+projection. Use `python deploy/build-upload.py` for the compact handoff and its
+exact-artifact browser checks. Supplemental contacts remain private service
+state; they are not copied into website assets. Local checks do not establish
+the deployed authentication or gateway configuration.
 
 ## Static administration limitations
 

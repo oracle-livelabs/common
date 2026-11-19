@@ -61,4 +61,122 @@
   }).catch(error => {notice.textContent = error.message;});
   // The renderer's PAR resolver requires the live QA service; preserve source links and explain this limitation.
   document.querySelectorAll('[data-unified-par-copy],[data-unified-par-toggle]').forEach(button => {button.disabled = true;button.title = 'Protected-resource resolution requires the live QA service.';});
+
+  function enhanceResultTable() {
+    const panel = document.querySelector('#tested-items');
+    const table = panel?.querySelector('.result-table');
+    const header = table?.querySelector('.result-table-head');
+    const rowsHost = header?.nextElementSibling;
+    const rows = Array.from(rowsHost?.querySelectorAll(':scope > [data-item-row]') || []);
+    const search = panel?.querySelector('[data-item-search]');
+    const filter = panel?.querySelector('[data-item-filter]');
+    const pageSize = panel?.querySelector('[data-item-page-size]');
+    const status = panel?.querySelector('[data-filter-status]');
+    const previous = panel?.querySelector('[data-item-previous]');
+    const next = panel?.querySelector('[data-item-next]');
+    const noResults = panel?.querySelector('[data-item-no-results]');
+    const toolbar = panel?.querySelector('.pagination');
+    if (!header || !rowsHost || !toolbar || toolbar.dataset.compactReady) return;
+    toolbar.dataset.compactReady = 'true';
+
+    const downloadMenu = panel.querySelector('.results-heading .download-menu');
+    const pageSizeLabel = pageSize?.closest('label');
+    const clear = document.createElement('button');
+    clear.type = 'button';
+    clear.className = 'button result-clear-filters';
+    clear.textContent = 'Clear filters';
+    clear.setAttribute('aria-label', 'Clear report search and filters');
+
+    const navigation = previous?.parentElement;
+    const pageLabel = document.createElement('span');
+    pageLabel.className = 'result-page-label';
+    pageLabel.setAttribute('aria-live', 'polite');
+    if (navigation && next) navigation.insertBefore(pageLabel, next);
+    if (navigation) navigation.classList.add('result-pagination-actions');
+
+    toolbar.classList.add('result-table-toolbar');
+    toolbar.replaceChildren(...[status, downloadMenu, clear, pageSizeLabel, navigation].filter(Boolean));
+    table.before(toolbar);
+
+    let sortColumn = -1;
+    let sortDirection = 'asc';
+    let currentPage = 1;
+    const collator = new Intl.Collator(undefined, {numeric:true, sensitivity:'base'});
+    const headings = Array.from(header.children);
+    headings.forEach((cell, index) => {
+      const label = cell.textContent.trim();
+      cell.setAttribute('role', 'columnheader');
+      cell.setAttribute('aria-sort', 'none');
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'result-sort-button';
+      button.dataset.resultSortColumn = String(index);
+      button.textContent = label;
+      button.setAttribute('aria-label', `Sort by ${label}`);
+      cell.replaceChildren(button);
+    });
+
+    const filterMatches = (row) => {
+      const selected = filter?.value || 'all';
+      if (selected === 'all') return true;
+      const issueCodes = (row.getAttribute('data-issues') || '').split(/\s+/).filter(Boolean);
+      if (selected.startsWith('priority:')) return (row.getAttribute('data-priority') || '').split(/\s+/).includes(selected.slice('priority:'.length));
+      if (selected.startsWith('audience:')) return (row.getAttribute('data-audience') || '').split(/\s+/).includes(selected.slice('audience:'.length));
+      return row.getAttribute('data-status') === selected || row.getAttribute('data-type') === selected || issueCodes.includes(selected);
+    };
+    const update = () => {
+      const query = (search?.value || '').trim().toLocaleLowerCase();
+      const ordered = [...rows];
+      if (sortColumn >= 0) ordered.sort((left, right) => {
+        const leftValue = left.querySelector('.result-summary')?.children[sortColumn]?.textContent.trim() || '';
+        const rightValue = right.querySelector('.result-summary')?.children[sortColumn]?.textContent.trim() || '';
+        return (sortDirection === 'desc' ? -1 : 1) * collator.compare(leftValue, rightValue);
+      });
+      ordered.forEach(row => rowsHost.append(row));
+      const matched = ordered.filter(row => filterMatches(row) && (!query || (row.getAttribute('data-search') || '').toLocaleLowerCase().includes(query)));
+      const size = Math.max(1, Number(pageSize?.value || 25));
+      const pageCount = Math.max(1, Math.ceil(matched.length / size));
+      currentPage = Math.min(Math.max(1, currentPage), pageCount);
+      const start = (currentPage - 1) * size;
+      const visible = new Set(matched.slice(start, start + size));
+      rows.forEach(row => {
+        row.hidden = !visible.has(row);
+        if (row.hidden) row.open = false;
+      });
+      if (status) status.textContent = matched.length ? `Showing ${start + 1}–${Math.min(start + size, matched.length)} of ${matched.length}` : 'Showing 0 results';
+      if (pageLabel) pageLabel.textContent = `Page ${currentPage} of ${pageCount}`;
+      if (noResults) noResults.hidden = matched.length !== 0;
+      if (previous) previous.disabled = currentPage <= 1 || matched.length === 0;
+      if (next) next.disabled = currentPage >= pageCount || matched.length === 0;
+      headings.forEach((cell, index) => cell.setAttribute('aria-sort', index === sortColumn ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'));
+    };
+
+    header.addEventListener('click', event => {
+      const button = event.target.closest('[data-result-sort-column]');
+      if (!button) return;
+      const column = Number(button.dataset.resultSortColumn);
+      sortDirection = sortColumn === column ? (sortDirection === 'asc' ? 'desc' : 'asc') : 'asc';
+      sortColumn = column;
+      currentPage = 1;
+      update();
+    });
+    search?.addEventListener('input', () => { currentPage = 1; update(); });
+    filter?.addEventListener('change', () => { currentPage = 1; update(); });
+    pageSize?.addEventListener('change', () => { currentPage = 1; update(); });
+    previous?.addEventListener('click', () => { currentPage = Math.max(1, currentPage - 1); update(); });
+    next?.addEventListener('click', () => { currentPage += 1; update(); });
+    clear.addEventListener('click', () => {
+      if (search) search.value = '';
+      if (filter) {
+        filter.value = 'all';
+        filter.dispatchEvent(new Event('change', {bubbles:true}));
+      }
+      if (search) search.dispatchEvent(new Event('input', {bubbles:true}));
+      currentPage = 1;
+      update();
+    });
+    update();
+  }
+
+  enhanceResultTable();
 })();

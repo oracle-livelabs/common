@@ -95,7 +95,7 @@
       return host === 'livelabs.oracle.com' || host.endsWith('.livelabs.oracle.com');
     }) || '';
   }
-  const liveButton = (record, overlay) => button(destination(record, overlay), record.type === 'Sprint' ? 'Open sprint' : 'Open workshop');
+  const liveButton = (record, overlay, primary = true) => button(destination(record, overlay), record.type === 'Sprint' ? 'Open sprint' : 'Open workshop', primary);
   function qaValidity(overlay) {
     const counts = overlay.testCounts || {};
     const findings = overlay.findings || [];
@@ -161,7 +161,14 @@
         return `<section class="author-check">${targets||fallback}${guidance?`<details class="author-check-guidance"><summary>Guidance</summary><dl class="author-instructions">${guidance}</dl></details>`:''}<details class="author-check-metadata"><summary>QA check details</summary><dl>${field('QA check source', `${issue.file || 'Not supplied'}${issue.line ? ':' + issue.line : ''}`)}${field('Reported occurrences', issue.count)}${field('Evidence status', issue.evidenceStatus)}</dl></details></section>`;
       }).join('')}</div></details>`;
     }).join('');
-    return `<section class="search-detail-panel search-detail-panel-wide qa-report-overlay" data-qa-report-overlay><div class="author-report-heading"><h3>Errors to review</h3><p class="author-report-date">Report: ${reportDate(overlay.startedAt)}${overlay.itemStatus?` · ${text(overlay.itemStatus)}`:''}</p></div><dl class="author-signals">${signals}</dl>${cards || `<p class="note">${Number(overlay.findingRows || 0) > 0 || Object.values(overlay.priorityCounts || {}).some(value => Number(value) > 0) ? 'The report has finding counts but no detailed entries.' : 'No findings were reported for this item.'}</p>`}<details class="search-disclosure author-run"><summary>Report details</summary><dl><div><dt>Report date</dt><dd>${reportDate(overlay.startedAt)}</dd></div>${field('Run', overlay.runId)}${field('Checks reported', checkSummary)}${field('Finding entries', findings.length)}${field('Reported occurrences', overlay.findingOccurrences)}</dl></details></section>`;
+    const reportFacts = [
+      ['Report date', reportDate(overlay.startedAt)],
+      ['Run', overlay.runId ? text(overlay.runId) : 'Not supplied'],
+      ['Checks', text(checkSummary)],
+      ['Finding entries', text(findings.length)],
+      ['Reported occurrences', overlay.findingOccurrences == null ? 'Not supplied' : text(overlay.findingOccurrences)],
+    ];
+    return `<section class="search-detail-panel search-detail-panel-wide qa-report-overlay" data-qa-report-overlay><div class="author-report-heading"><h3>Errors to review</h3><p class="author-report-date">${overlay.itemStatus ? text(overlay.itemStatus) : 'Jenkins report attached'}</p></div><dl class="author-run-overview">${reportFacts.map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join('')}</dl><dl class="author-signals">${signals}</dl>${cards || `<p class="note">${Number(overlay.findingRows || 0) > 0 || Object.values(overlay.priorityCounts || {}).some(value => Number(value) > 0) ? 'The report has finding counts but no detailed entries.' : 'No findings were reported for this item.'}</p>`}</section>`;
   }
   window.LiveLabsAuthor = {safeUrl, text, liveButton, evidenceHtml, qaValidity, scoreHtml};
 })();
