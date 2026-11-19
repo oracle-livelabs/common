@@ -58,7 +58,7 @@
       '          <div class="nav-group nav-group-all" role="group" aria-label="Primary navigation">',
       '            <a class="btn nav-control" data-mode-target="hub" data-shared-nav-route="" href="#" aria-label="Open the author guide home"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M3 10.8 12 3l9 7.8v9.7a.5.5 0 0 1-.5.5h-5.2v-6.1H8.7V21H3.5a.5.5 0 0 1-.5-.5v-9.7Z"/></svg></span><span class="nav-control-text">Home</span></a>',
       '            <a class="btn nav-control" data-mode-target="beginner" data-shared-nav-route="quickstart/" href="#" aria-label="Open quickstart"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg></span><span class="nav-control-text">Quickstart</span></a>',
-      '            <a class="btn nav-control" data-shared-nav-route="markdown/event-code/" href="#" aria-label="Open Event Code guide"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 4.5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-11a2 2 0 0 1 2-2Zm2 4h8m-8 4h8m-8 4h5"/></svg></span><span class="nav-control-text">Event Code</span></a>',
+      '            <a class="btn nav-control" data-shared-nav-route="event-code/" href="#" aria-label="Open Event Code guide"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 4.5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-11a2 2 0 0 1 2-2Zm2 4h8m-8 4h8m-8 4h5"/></svg></span><span class="nav-control-text">Event Code</span></a>',
       '            <details class="nav-menu-group" id="cheatsheetMenu">',
       '              <summary class="nav-menu-summary" aria-controls="cheatsheetMenuItems"><a class="btn nav-control nav-menu-parent" data-mode-target="explorer" data-shared-nav-route="cheatsheet/" href="#" aria-label="Open Cheatsheet"><span class="nav-control-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M8 4h8l1.5 2H20v14H4V6h2.5L8 4Zm0 7h8M8 15h6"/></svg></span><span class="nav-control-text">Cheatsheet</span></a></summary>',
       '              <div class="nav-menu-items" id="cheatsheetMenuItems" aria-label="Related Cheatsheet pages">',
@@ -93,7 +93,7 @@
 
     page = document.body.getAttribute("data-author-guide-page");
     currentPath = window.location.pathname.replace(/index\.html$/i, "").replace(/\/+$/, "");
-    currentSubRoute = /\/markdown\/event-code$/i.test(currentPath) ? "markdown/event-code/" : (/\/markdown$/i.test(currentPath) ? "markdown/" : "");
+    currentSubRoute = /\/event-code$/i.test(currentPath) ? "event-code/" : (/\/markdown$/i.test(currentPath) ? "markdown/" : "");
     activeTarget = {
       hub: "hub",
       beginner: "beginner",
@@ -101,7 +101,7 @@
       markdown: "explorer",
       nodoc: "nodoc"
     }[page];
-    if (currentSubRoute === "markdown/event-code/") {
+    if (currentSubRoute === "event-code/") {
       activeTarget = null;
     }
     if (activeTarget) {
@@ -123,7 +123,7 @@
         currentLink.classList.add("is-active");
         currentLink.setAttribute("aria-current", "page");
       }
-      if (menu && currentSubRoute !== "markdown/event-code/") menu.open = true;
+      if (menu && currentSubRoute !== "event-code/") menu.open = true;
     }
   }
 
