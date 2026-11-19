@@ -22,9 +22,16 @@ def object_storage_url(path: str) -> str:
 
 class ValidateParUrlsTests(unittest.TestCase):
     def test_allows_approved_namespaces(self):
-        for namespace in ("c4u04", "c4uo2"):
+        for namespace in ("c4u04", "c4u02"):
             line = object_storage_url(f"p/example/n/{namespace}/b/demo/o/file")
             self.assertEqual([], MODULE.findings_for_line("lab.md", 3, line))
+
+    def test_rejects_misspelled_c4u02_namespace(self):
+        line = object_storage_url("p/example/n/c4uo2/b/demo/o/file")
+        self.assertEqual(
+            [MODULE.Finding("lab.md", 3, "c4uo2")],
+            MODULE.findings_for_line("lab.md", 3, line),
+        )
 
     def test_rejects_unapproved_namespace_without_exposing_token(self):
         token = "secret-example-token"

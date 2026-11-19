@@ -415,7 +415,7 @@ window.authorGuideContent = (function () {
           "Use the LiveLabs image-size extension only when default sizing does not fit; preserve automatic height with an asterisk.",
           "Use approved absolute URLs for shared common images.",
           "Confirm images load in local and hosted preview, including on a narrow screen."
-        ],
+n        ],
         checkpoints: [
           "Every image has descriptive alt text.",
           "Local images use lowercase, case-correct paths relative to the lab Markdown file.",
@@ -469,7 +469,7 @@ window.authorGuideContent = (function () {
           "Use a separate text or output block for expected results; never put a shell prompt, secrets, or expected output inside <copy> tags.",
           "Indent the code, expected output, and screenshots by four spaces when they belong inside a numbered step.",
           "Place each copy block beside its step, preserve SQL order and line breaks, and preview the resulting copy button."
-        ],
+n        ],
         checkpoints: [
           "Copy buttons appear where needed.",
           "Copied text excludes the <copy> tags and preserves SQL line breaks and execution order.",
@@ -800,6 +800,132 @@ window.authorGuideContent = (function () {
         guideTarget: "reuse-enhancements"
       },
       {
+        id: "freesql-embed",
+        title: "FreeSQL Embed",
+        short: "Generate a FreeSQL embed, place it beside the task, and validate it in preview.",
+        accent: "pine",
+        tags: ["freesql", "interactive"],
+        description: "Use this card when inline SQL improves the learner's task flow.",
+        steps: [
+          "Prepare the SQL or PL/SQL and generate the FreeSQL embed.",
+          "Place the embed in the task that needs it, beside its instructions.",
+          "Preview the lab and check that the editor loads, fits, and supports the task.",
+          "Use a copy block instead if it is clearer."
+        ],
+        checkpoints: [
+          "The embed serves one task or concept.",
+          "Preview shows the editor where learners expect it.",
+          "Instructions remain clear."
+        ],
+        watchFor: [
+          "Using an embed when a code block is clearer.",
+          "Separating the embed from its instructions.",
+          "Changing iframe behavior without validating it."
+        ],
+        snippetMeta: "Placement rule",
+        snippetTitle: "Keep the embed close to the task",
+        snippet: [
+          "1. Generate the embed snippet in FreeSQL",
+          "2. Paste it into the task that needs SQL execution",
+          "3. Keep the instructions directly above or below it",
+          "4. Preview the rendered lab before review"
+        ].join("\n"),
+        sourceHref: labLink("freesqlembed"),
+        sourceLabel: "Open Step by Step Guide",
+        guideTarget: "reuse-enhancements"
+      },
+      {
+        id: "freesql-tutorial-publishing",
+        title: "FreeSQL Tutorial Publishing",
+        short: "Create a FreeSQL tutorial, map modules to tasks, then publish its Run on FreeSQL link in WMS.",
+        accent: "pine",
+        tags: ["freesql", "publishing"],
+        updatedAt: "2026-01-01",
+        description: "Use this card when learners should run SQL or PL/SQL in FreeSQL.",
+        steps: [
+          "Sign in to FreeSQL and create a tutorial or script from My Content.",
+          "Match the tutorial title, description, and tags to WMS.",
+          "Add an introduction module and one module per task.",
+          "Review, edit, and reorder modules to match the workshop flow.",
+          "Share the tutorial, add its link to WMS Publishing > Run on FreeSQL URL, and enable Run on FreeSQL.",
+          "Orange-button content lives in FreeSQL; brown and green buttons use GitHub Markdown."
+        ],
+        checkpoints: [
+          "Tutorial content matches the WMS outcome.",
+          "Modules match task order.",
+          "WMS has the FreeSQL URL and Run on FreeSQL enabled."
+        ],
+        watchFor: [
+          "Expecting GitHub Markdown to update the orange-button tutorial.",
+          "Using a script when learners need modules.",
+          "Publishing before the shared tutorial works."
+        ],
+        resourcesTitle: "FreeSQL entry point",
+        resourcesIntro: "Use the FreeSQL site for the tutorial and WMS for the public LiveLabs button.",
+        resourceLinks: [
+          resourceLink("Oracle FreeSQL", officialLinks.freesql, "Create and edit the tutorial or script."),
+          resourceLink("Oracle LiveLabs GitHub repositories", officialLinks.oracleRepos, "Use GitHub for brown and green button instructions.")
+        ],
+        snippetMeta: "Orange button handoff",
+        snippetTitle: "FreeSQL publishing checklist",
+        snippet: [
+          "1. Create tutorial or script in FreeSQL",
+          "2. Add modules for introduction and tasks",
+          "3. Test in the FreeSQL worksheet",
+          "4. Share and copy the tutorial link",
+          "5. Paste into WMS Run on FreeSQL URL",
+          "6. Enable Run on FreeSQL",
+          "7. Save and verify the orange button"
+        ].join("\n"),
+        image: {
+          src: "../content/author-guide/11-labs-create-freesql/images/add-livesql-url.png",
+          alt: "Run on FreeSQL URL field in WMS",
+          caption: "WMS turns the FreeSQL share link into the orange Run on FreeSQL entry."
+        },
+        sourceHref: labLink("11-create-freesql"),
+        sourceLabel: "Open Step by Step Guide",
+        guideTarget: "reuse-enhancements"
+      },
+      {
+        id: "freesql-button-integration",
+        title: "FreeSQL Button Integration",
+        short: "Add a FreeSQL button, wrap runnable SQL, test locally, and use a tutorial for long code.",
+        accent: "pine",
+        tags: ["freesql", "markdown"],
+        updatedAt: "2026-01-01",
+        description: "Use this card to launch a FreeSQL worksheet or tutorial from Markdown.",
+        steps: [
+          "Place <freesql-button> immediately after the lab title.",
+          "Wrap runnable SQL in <freesql> tags.",
+          "Tell learners to sign in before running database-changing code.",
+          "For URLs over 2048 characters, create a tutorial and use <freesql-button src=\"{tutorial-url}\">.",
+          "Preview locally, click Try It Now with FreeSQL, and test end to end."
+        ],
+        checkpoints: [
+          "The button follows the lab title.",
+          "Runnable worksheet SQL is inside FreeSQL tags.",
+          "The worksheet or tutorial opens with the expected code."
+        ],
+        watchFor: [
+          "Putting long scripts in a worksheet URL.",
+          "Failing to test the button locally.",
+          "Database-changing code without a sign-in note."
+        ],
+        snippetMeta: "Markdown pattern",
+        snippetTitle: "Worksheet and tutorial button options",
+        snippet: [
+          "<freesql-button>",
+          "",
+          "<freesql>",
+          "select * from departments;",
+          "</freesql>",
+          "",
+          "<freesql-button src=\"{tutorial-url}\">"
+        ].join("\n"),
+        sourceHref: labLink("12-freesql-integration"),
+        sourceLabel: "Open Step by Step Guide",
+        guideTarget: "reuse-enhancements"
+      },
         id: "screenshots",
         title: "Screenshot Standards",
         short: "Crop to the action, redact safely, keep images at 1280px or less, and remove unused files.",
@@ -1429,7 +1555,7 @@ window.authorGuideContent = (function () {
       {
         id: "livestack-create",
         title: "LiveStack Creation",
-        short: "Open WMS, create the LiveStack, add LiveLabs and assets, then request publishing.",
+        short: "Open WMS, create an industry-focused LiveStack package, add LiveLabs and assets, then request publishing.",
         accent: "ocean",
         tags: ["livestack", "assets"],
         updatedAt: "2026-07-01",
