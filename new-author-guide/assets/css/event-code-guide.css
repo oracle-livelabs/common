@@ -15,15 +15,16 @@
 
 #app #markdownMode .event-code-hero .mode-title {
   max-width: none;
-  margin: 0 0 10px;
-  font-size: clamp(32px, 3.2vw, 46px);
+  margin: 0 0 14px;
+  font-size: clamp(30px, 3vw, 42px);
   line-height: 1.06;
-  white-space: normal;
+  white-space: nowrap;
 }
 
 #app #markdownMode .event-code-hero .hero-description {
   max-width: 86ch;
   margin: 0;
+  line-height: 1.55;
 }
 
 #app #markdownMode .event-code-callout {
@@ -340,5 +341,10 @@
 @media (max-width: 590px) {
   #app #markdownMode .event-code-hero {
     padding: 28px 20px 22px;
+  }
+
+  #app #markdownMode .event-code-hero .mode-title {
+    font-size: clamp(26px, 6vw, 32px);
+    white-space: normal;
   }
 }
