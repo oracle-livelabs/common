@@ -415,7 +415,7 @@ window.authorGuideContent = (function () {
           "Use the LiveLabs image-size extension only when default sizing does not fit; preserve automatic height with an asterisk.",
           "Use approved absolute URLs for shared common images.",
           "Confirm images load in local and hosted preview, including on a narrow screen."
-n        ],
+        ],
         checkpoints: [
           "Every image has descriptive alt text.",
           "Local images use lowercase, case-correct paths relative to the lab Markdown file.",
@@ -469,7 +469,7 @@ n        ],
           "Use a separate text or output block for expected results; never put a shell prompt, secrets, or expected output inside <copy> tags.",
           "Indent the code, expected output, and screenshots by four spaces when they belong inside a numbered step.",
           "Place each copy block beside its step, preserve SQL order and line breaks, and preview the resulting copy button."
-n        ],
+        ],
         checkpoints: [
           "Copy buttons appear where needed.",
           "Copied text excludes the <copy> tags and preserves SQL line breaks and execution order.",
@@ -926,6 +926,7 @@ n        ],
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
       },
+      {
         id: "screenshots",
         title: "Screenshot Standards",
         short: "Crop to the action, redact safely, keep images at 1280px or less, and remove unused files.",
