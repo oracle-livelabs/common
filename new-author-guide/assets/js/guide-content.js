@@ -23,10 +23,10 @@ window.authorGuideContent = (function () {
     aiHubSkills: "https://skills.oraclecorp.com/"
   };
 
-  var eventCodeGuideHref = "markdown/event-code/index.html";
+  var eventCodeGuideHref = "event-code/index.html";
   if (window.AuthorGuidePaths && typeof window.AuthorGuidePaths.root === "function") {
     try {
-      eventCodeGuideHref = new URL("markdown/event-code/index.html", window.AuthorGuidePaths.root()).toString();
+      eventCodeGuideHref = new URL("event-code/index.html", window.AuthorGuidePaths.root()).toString();
     } catch (error) {
       // Keep the relative guide route when the page is running outside its normal site shell.
     }
