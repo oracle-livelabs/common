@@ -118,6 +118,23 @@ class ProtectedReportHTTPTests(unittest.TestCase):
         for path in ['/api/admin/jenkins/reports','/api/admin/jenkins/list', f'/admin/jenkins/report/{self.report_id}/summary.html','/admin-assets/jenkins-report-bridge.js']:
             self.assertEqual(self.request('GET', path)[0], 401, path)
 
+    def test_supplemental_contacts_are_public_item_scoped_and_remote_authenticated(self):
+        source = self.app.STATE / 'views-contacts.json'
+        source.write_text(json.dumps({'items': {'4336': {'email':'contact@example.test','type':'Technical'},
+                                               'not-public': {'email':'private@example.test','type':'Manager'}}}))
+        try:
+            status, headers, body = self.request('GET', '/api/dashboard-contacts')
+            self.assertEqual(status, 200)
+            self.assertEqual(headers['Cache-Control'], 'no-store')
+            self.assertEqual(list(json.loads(body)['items']), ['4336'])
+            self.server.public_origin = 'https://analytics.example.test'
+            self.assertEqual(self.request('GET', '/api/dashboard-contacts')[0], 401)
+            self.assertEqual(self.request('GET', '/api/dashboard-contacts', cookie=self.cookie)[0], 200)
+            self.assertEqual(self.request('GET', '/.private/admin/views-contacts.json')[0], 404)
+        finally:
+            self.server.public_origin = None
+            source.unlink()
+
     def test_authenticated_gzip_and_script_hash_policy(self):
         status, headers, body = self.request('GET', f'/admin/jenkins/report/{self.report_id}/summary.html', cookie=self.cookie, extra={'Accept-Encoding':'gzip'})
         self.assertEqual(status, 200);self.assertIn(b'Saved report', gzip.decompress(body))
@@ -132,7 +149,7 @@ class ProtectedReportHTTPTests(unittest.TestCase):
         self.assertEqual(gzip.decompress((self.app.JENKINS_ARCHIVE / self.report_id / 'summary.html.gz').read_bytes()), original)
 
     def test_all_admin_pages_share_navigation_and_settings_is_retired(self):
-        for route in ('dashboard-management', 'governance', 'data-merge', 'jenkins/history', 'inventory'):
+        for route in ('dashboard-management', 'governance', 'data-merge', 'jenkins/history', 'inventory', 'weekly-update'):
             status, _, body = self.request('GET', '/admin/' + route, cookie=self.cookie)
             self.assertEqual(status, 200)
             self.assertEqual(body.count(b'Back to dashboard'), 1, route)
@@ -142,6 +159,38 @@ class ProtectedReportHTTPTests(unittest.TestCase):
         self.assertEqual(status, 302)
         self.assertEqual(headers['Location'], '/admin/dashboard-management')
         self.assertEqual(self.request('GET', '/admin-assets/user-settings.js', cookie=self.cookie)[0], 404)
+
+    def test_weekly_update_runs_are_authenticated_csrf_protected_and_persisted(self):
+        self.assertEqual(self.request('GET', '/api/admin/weekly-runs')[0], 401)
+        self.assertEqual(self.request('POST', '/api/admin/weekly-runs', {'action':'start'}, cookie=self.cookie)[0], 403)
+        status, _, body = self.request('POST', '/api/admin/weekly-runs', {'action':'start'}, cookie=self.cookie, csrf=self.csrf)
+        self.assertIn(status, (200, 201))  # Reuse an unfinished run for the current week.
+        run = json.loads(body)['run']
+        self.assertRegex(run['runId'], r'^update-\d{8}-[a-f0-9]{8}$')
+        self.assertEqual(run['status'], 'IN_PROGRESS')
+        self.assertTrue(run['steps'])
+        step = run['steps'][0]
+        step['status'] = 'COMPLETE'
+        step['evidence'] = 'verified local source bundle'
+        status, _, saved_body = self.request('POST', '/api/admin/weekly-runs',
+            {'action':'save', 'runId':run['runId'], 'steps':run['steps']}, cookie=self.cookie, csrf=self.csrf)
+        self.assertEqual(status, 200)
+        saved = json.loads(saved_body)['run']
+        self.assertEqual(saved['steps'][0]['status'], 'COMPLETE')
+        self.assertEqual(saved['steps'][0]['evidence'], 'verified local source bundle')
+        listed = json.loads(self.request('GET', '/api/admin/weekly-runs', cookie=self.cookie)[2])
+        self.assertEqual(listed['runs'][0]['runId'], run['runId'])
+        self.assertEqual(listed['runs'][0]['steps'][0]['status'], 'COMPLETE')
+
+    def test_weekly_update_rejects_unknown_steps_and_invalid_status(self):
+        status, _, body = self.request('POST', '/api/admin/weekly-runs', {'action':'start'}, cookie=self.cookie, csrf=self.csrf)
+        run = json.loads(body)['run']
+        invalid = [dict(step) for step in run['steps']]
+        invalid[0]['key'] = 'not-a-step'
+        status, _, body = self.request('POST', '/api/admin/weekly-runs',
+            {'action':'save', 'runId':run['runId'], 'steps':invalid}, cookie=self.cookie, csrf=self.csrf)
+        self.assertEqual(status, 400)
+        self.assertIn(b'Unknown workflow step', body)
 
     def test_admin_entry_opens_full_report_and_history_remains_available(self):
         status, headers, _ = self.request('GET', '/admin/jenkins', cookie=self.cookie)

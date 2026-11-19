@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/assets/js/page-loading.js?v=20261030-public-scope"></script>
+  <link rel="stylesheet" href="/assets/css/page-loading.css?v=20261030-public-scope">
+  <link rel="stylesheet" href="/assets/css/dashboard.css?v=20261113-shared-table-navigation-v2">
+  <link rel="stylesheet" href="/admin-assets/admin.css?v=20261116-admin-theme">
+  <link rel="stylesheet" href="/admin-assets/inventory.css?v=20261116-admin-inventory-table">
+  <link rel="stylesheet" href="/admin-assets/author-contributor-gaps.css?v=20261118-author-contact-coverage-v4">
+  <script defer src="/assets/js/report-export.js?v=20261113-page-export"></script>
+  <script defer src="/admin-assets/author-contributor-gaps.js?v=20261118-author-contact-coverage-v4"></script>
+  <title>Missing contact — LiveLabs Analytics Admin</title>
+</head>
+<body class="admin-page admin-inventory-page admin-author-contributor-page">
+  <a class="skip-link" href="#author-contributor-results">Skip to missing contact results</a>
+  <div class="layout analytics-shell-layout">
+    <!-- ADMIN_NAV -->
+    <main>
+      <header class="page-header admin-hero">
+        <div>
+          <p class="eyebrow">Admin · portfolio inventory</p>
+          <h1>Missing contact</h1>
+          <p>Review records with a missing main-author email. Use the additional-contact filter for support or technical email coverage.</p>
+        </div>
+      </header>
+      <div class="hero-stripe" aria-hidden="true"></div>
+      <section id="author-contributor-results" class="admin-inset coverage-results" aria-labelledby="coverage-title">
+        <div class="inventory-heading">
+          <h2 id="coverage-title">Missing contact review</h2>
+          <div class="inventory-heading-actions"><a class="admin-secondary-action" href="/admin/inventory">Portfolio inventory</a><span id="author-contributor-count" class="panel-count" aria-live="polite">—</span></div>
+        </div>
+        <div class="coverage-controls coverage-primary-controls">
+          <label class="coverage-search">Search records<input id="gap-search" type="search" placeholder="Title, IDs, author, contact, or source detail"></label>
+          <fieldset class="coverage-contact-group">
+            <legend>Contact emails</legend>
+            <label>Main author email<select id="author-status"><option value="any">All records</option><option value="missing" selected>Missing email</option><option value="present">Email present</option></select></label>
+            <label>Additional contact email<select id="additional-contact-status"><option value="any">All records</option><option value="missing">No additional email</option><option value="present">Email available</option></select></label>
+          </fieldset>
+          <label class="coverage-type">Content type<select id="gap-type"><option value="">All types</option></select></label>
+        </div>
+        <details class="coverage-filter-disclosure" id="coverage-filter-disclosure">
+          <summary><span>Additional filters</span><span class="coverage-filter-hint">Category, publishing, workflow, owner and repository</span></summary>
+          <div class="coverage-filter-groups">
+            <fieldset class="coverage-filter-group" data-filter-group="catalog">
+              <legend>Catalog</legend>
+              <label>Category / council<select id="gap-category"><option value="">All categories</option></select></label>
+            </fieldset>
+            <fieldset class="coverage-filter-group" data-filter-group="publishing">
+              <legend>Publishing</legend>
+              <label>Publish type<select id="gap-publish-type"><option value="">All publish types</option></select></label>
+              <label>Publish status<select id="gap-publish-status"><option value="">All publish statuses</option></select></label>
+              <label>Workflow status<select id="gap-workflow"><option value="">All workflow statuses</option></select></label>
+            </fieldset>
+            <fieldset class="coverage-filter-group" data-filter-group="ownership">
+              <legend>Ownership &amp; source</legend>
+              <label>Owner group<select id="gap-owner-group"><option value="">All owner groups</option></select></label>
+              <label>Repository mapping<select id="gap-repository"><option value="">All repository states</option></select></label>
+            </fieldset>
+          </div>
+        </details>
+        <div class="coverage-results-toolbar table-controls-toolbar">
+          <span id="author-contributor-page-status" class="pagination-range" aria-live="polite">Loading…</span>
+          <div class="coverage-table-tools table-toolbar-actions">
+            <details class="table-export-dropdown">
+              <summary>Export visible rows</summary>
+              <div class="table-export-options">
+                <button type="button" data-author-contributor-export="csv">CSV (.csv)</button>
+                <button type="button" data-author-contributor-export="xlsx">Excel (.xlsx)</button>
+                <button type="button" data-author-contributor-export="json">JSON (.json)</button>
+              </div>
+            </details>
+            <button type="button" id="author-contributor-clear">Clear filters</button>
+            <label class="coverage-page-size">Rows per page<select id="author-contributor-page-size" aria-label="Rows per page"><option>10</option><option>25</option><option>50</option><option>100</option></select></label>
+            <button class="pagination-button" type="button" data-author-contributor-page="previous" disabled>Previous</button>
+            <span id="author-contributor-page-label" aria-live="polite">Page 1 of 1</span>
+            <button class="pagination-button" type="button" data-author-contributor-page="next" disabled>Next</button>
+            <span id="author-contributor-export-status" role="status" aria-live="polite"></span>
+          </div>
+        </div>
+        <div class="table-wrap coverage-table-wrap">
+          <table class="data-table" id="author-contributor-table">
+            <thead><tr><th scope="col">#</th><th scope="col" data-coverage-sort-key="livelabsId" aria-sort="none"><button class="table-sort-button" type="button" data-coverage-sort="livelabsId">LiveLabs ID</button></th><th scope="col" data-coverage-sort-key="wmsId" aria-sort="none"><button class="table-sort-button" type="button" data-coverage-sort="wmsId">WMS ID</button></th><th scope="col" data-coverage-sort-key="title" aria-sort="ascending"><button class="table-sort-button" type="button" data-coverage-sort="title">Title</button></th><th scope="col" data-coverage-sort-key="coverage" aria-sort="none"><button class="table-sort-button" type="button" data-coverage-sort="coverage">Coverage</button></th><th scope="col" data-coverage-sort-key="author" aria-sort="none"><button class="table-sort-button" type="button" data-coverage-sort="author">Main author email</button></th><th scope="col" data-coverage-sort-key="additionalContact" aria-sort="none"><button class="table-sort-button" type="button" data-coverage-sort="additionalContact">Additional contact emails</button></th><th scope="col" data-coverage-sort-key="type" aria-sort="none"><button class="table-sort-button" type="button" data-coverage-sort="type">Type</button></th><th scope="col" data-coverage-sort-key="category" aria-sort="none"><button class="table-sort-button" type="button" data-coverage-sort="category">Category / council</button></th><th scope="col" data-coverage-sort-key="wmsUpdate" aria-sort="none"><button class="table-sort-button" type="button" data-coverage-sort="wmsUpdate">WMS update</button></th></tr></thead>
+            <tbody id="author-contributor-rows"><tr><td colspan="10" class="empty">Loading source inventory…</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+      <footer class="site-footer">Powered by Oracle LiveLabs Team &copy; 2026</footer>
+    </main>
+  </div>
+</body>
+</html>

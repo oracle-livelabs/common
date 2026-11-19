@@ -1,4 +1,6 @@
+@import url("/assets/css/tables.css?v=20261116-shared-tables");
 /* Shared Admin shell. Namespaced so saved QA renderer styles stay independent. */
+body.admin-page,.analytics-report-layout { --paper:#f8f6f3; --page:#f1efeb; --line-soft:rgba(49,45,42,.14); color:#312d2a; background:#f1efeb; }
 body .analytics-shell-layout { display:grid; grid-template-columns:232px minmax(0,1fr); min-height:100vh; }
 body .analytics-rail { box-sizing:border-box; position:sticky; top:0; display:flex; flex-direction:column; gap:0; height:100vh; overflow:auto; padding:24px 16px 16px; background:#312d2a; color:#fff; font:14px/1.5 "Oracle Sans",Arial,sans-serif; }
 body .analytics-brand { display:grid; gap:14px; padding:0 0 20px; border-bottom:1px solid #5b5652; }
@@ -10,8 +12,8 @@ body .analytics-nav-content { display:flex; flex:1; flex-direction:column; min-h
 body .analytics-nav-label { margin:20px 12px 12px; color:#d8d2cc; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; }
 body .analytics-nav { display:grid; gap:4px; padding:0; margin:0; }
 body .analytics-nav a { display:block; margin:0; padding:10px 12px; border:0; border-left:3px solid transparent; border-radius:6px; background:transparent; color:#fff; font-size:14px; line-height:1.5; text-decoration:none; }
-body .analytics-nav a:hover,body .analytics-nav a[aria-current="page"] { background:#4b4744; color:#fff; }
-body .analytics-nav a[aria-current="page"] { border-left-color:#e76b56; font-weight:600; }
+body .analytics-nav a:hover,body .analytics-nav a[aria-current="page"] { background:#4b514e; color:#fff; }
+body .analytics-nav a[aria-current="page"] { border-left-color:#72a7a0; font-weight:600; }
 body .analytics-nav-footer { display:grid; gap:8px; margin-top:auto; padding-top:24px; }
 body .analytics-back,body .analytics-signout { box-sizing:border-box; display:block; width:100%; min-height:40px; margin:0; padding:9px 12px; border:1px solid #817a74; border-radius:6px; background:#4b4744; color:#fff; font:600 13px/1.5 "Oracle Sans",Arial,sans-serif; text-align:center; text-decoration:none; cursor:pointer; }
 body .analytics-signout { border-color:transparent; background:transparent; font-weight:400; }
@@ -22,22 +24,29 @@ body .analytics-rail :focus-visible { outline:2px solid #fff; outline-offset:3px
 
 /* Shared page rhythm: compact left-aligned headers and useful content space. */
 .admin-page .analytics-shell-layout > main { min-width:0; max-width:none; padding:0 24px 24px; display:block; }
-.admin-page .analytics-shell-layout .admin-hero { display:block; height:auto; min-height:0; margin:0 -24px; padding:24px; text-align:left; background:#312d2a; }
+.admin-page .analytics-shell-layout .admin-hero { display:block; height:auto; min-height:0; margin:0 -24px; padding:24px; text-align:left; background:#23454d; }
 .admin-page .analytics-shell-layout .admin-hero > div { width:auto; max-width:100%; margin:0; }
 .admin-page .analytics-shell-layout .admin-hero h1 { margin:0; font-size:30px; line-height:1.2; }
 .admin-page .analytics-shell-layout .admin-hero .eyebrow { margin:0 0 8px; font-size:12px; }
 .admin-page .analytics-shell-layout .admin-hero p:not(.eyebrow) { max-width:960px; margin:10px 0 0; font-size:14px; line-height:1.5; color:#eee9e5; }
-.admin-page .analytics-shell-layout .hero-stripe { height:4px; margin:0 -24px 20px; }
+.admin-page .analytics-shell-layout .hero-stripe { height:4px; margin:0 -24px 20px; background:#4f7d7b; }
 .admin-page .analytics-shell-layout main > section { margin:0 0 20px; padding:20px; }
 .admin-page .analytics-shell-layout main > #status { min-height:0; margin:0 0 16px; font-size:13px; color:#625d58; }
 .admin-page .analytics-shell-layout main > #status:empty { display:none; }
 .admin-page .analytics-shell-layout :is(h2,h3,h4) { color:#161513; }
+.admin-page .analytics-shell-layout main > section { background:#f8f6f3; }
+.admin-page .analytics-shell-layout :is(.admin-assignment-card,.admin-item-result,.admin-checkbox-list,.assignment-detail-grid > section,.jenkins-controls,.merge-source-card,.selection-summary-card,.merge-readiness-panel,.mapping-controls,.merge-result-preview,.preview-table-shell,.preview-empty,.preview-error,.import-snapshot-label,.source-history-list,.archive-copy-panel) { background:#f8f6f3; }
+.admin-page .analytics-shell-layout :is(button[type="submit"],.admin-primary-action) { border-color:#4f7d7b; background:#4f7d7b; color:#fff; }
+.admin-page .analytics-shell-layout :is(button[type="submit"],.admin-primary-action):hover:not(:disabled) { border-color:#335f61; background:#335f61; color:#fff; }
+.admin-page .analytics-shell-layout :is(input,select,textarea):focus-visible { outline-color:#4f7d7b; border-color:#4f7d7b; }
+.admin-page .analytics-shell-layout :is(button,a,input,select,textarea,summary):focus-visible { outline-color:#4f7d7b; }
+.admin-page .analytics-shell-layout button:hover:not(:disabled) { border-color:#4f7d7b; background:#e8efed; color:#335f61; }
 .admin-page .analytics-shell-layout h2 { font-size:22px; }
 .admin-page .analytics-shell-layout .tag-section-heading { display:block; margin:0 0 16px; padding:0 0 16px; }
 .admin-page .analytics-shell-layout .tag-section-heading > p { max-width:980px; margin:8px 0 0; }
 .admin-page .analytics-shell-layout .tag-section-heading h2 { font-size:22px; }
 .admin-page .analytics-shell-layout .admin-split-grid { gap:16px; margin:16px 0; }
-.admin-page .analytics-shell-layout :is(.admin-inset,.current-assignment-panel) { padding:16px; border-radius:8px; border-color:#d4cfca; background:#fff; box-shadow:none; }
+.admin-page .analytics-shell-layout :is(.admin-inset,.current-assignment-panel) { padding:16px; border-radius:8px; border-color:#d4cfca; background:#f8f6f3; box-shadow:none; }
 .admin-page .analytics-shell-layout :is(.eyebrow,.panel-count,.preview-count,.source-badge,.governance-stat > span,.quality-stat > span) { font-size:12px; }
 .admin-page .analytics-shell-layout .site-footer { margin-top:20px; padding-top:16px; font-size:12px; }
 .admin-page .analytics-shell-layout .admin-empty { margin:0; padding:16px; font-size:14px; }
@@ -84,7 +93,8 @@ body .analytics-rail :focus-visible { outline:2px solid #fff; outline-offset:3px
 .admin-inventory-page .analytics-shell-layout main > .inventory-summary { margin:0 0 20px; padding:0; border:0; background:transparent; }
 .admin-inventory-page .analytics-shell-layout .inventory-controls { grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); }
 .admin-inventory-page .analytics-shell-layout .inventory-table-wrap table { min-width:1800px; }
-.admin-inventory-page .analytics-shell-layout .inventory-table-wrap :is(th,td):nth-child(3) { min-width:240px; }
+.admin-inventory-page .analytics-shell-layout .inventory-table-wrap :is(th,td):first-child { width:52px; min-width:52px; }
+.admin-inventory-page .analytics-shell-layout .inventory-table-wrap :is(th,td):nth-child(4) { min-width:240px; }
 .admin-page .analytics-shell-layout :is(#snapshot-info,#rank-notice,#comparison-summary,#changes):empty { display:none; }
 .analytics-report-content .review-message:empty { display:none; }
 .admin-jenkins-page .analytics-shell-layout .jenkins-controls { margin:0 0 20px; }
@@ -92,7 +102,7 @@ body .analytics-rail :focus-visible { outline:2px solid #fff; outline-offset:3px
 /* Original report renderer stays intact inside the same navigation shell. */
 body:has(.analytics-report-layout) { margin:0; }
 .analytics-report-content { min-width:0; }
-.analytics-report-content > header { padding:24px; background:#312d2a; color:#fff; border-bottom:4px solid #c74634; }
+.analytics-report-content > header { padding:24px; background:#23454d; color:#fff; border-bottom:4px solid #4f7d7b; }
 .analytics-report-content > header .page-title { display:block; width:auto; max-width:none; margin:0; padding:0; }
 .analytics-report-content > header h1 { margin:0; color:#fff; font-size:30px; line-height:1.2; }
 .analytics-report-content .analytics-report-eyebrow { margin:0 0 8px; color:#d8d2cc; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; }

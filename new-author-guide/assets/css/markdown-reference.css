@@ -1,6 +1,6 @@
 /* The guide shell, menu, fonts, buttons, and palette come from the shared
    author-guide styles. Keep reference-specific rules inside this page. */
-body[data-author-guide-page="markdown"] .sr-only {
+body:is([data-author-guide-page="markdown"], [data-author-guide-page="event-code"]) .sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -11,7 +11,7 @@ body[data-author-guide-page="markdown"] .sr-only {
   white-space: nowrap;
   border: 0;
 }
-body[data-author-guide-page="markdown"] .skip-link {
+body:is([data-author-guide-page="markdown"], [data-author-guide-page="event-code"]) .skip-link {
   position: fixed;
   top: 12px;
   left: 12px;
@@ -21,7 +21,7 @@ body[data-author-guide-page="markdown"] .skip-link {
   color: #00688c;
   transform: translateY(-160%);
 }
-body[data-author-guide-page="markdown"] .skip-link:focus { transform: translateY(0); }
+body:is([data-author-guide-page="markdown"], [data-author-guide-page="event-code"]) .skip-link:focus { transform: translateY(0); }
 #app #markdownMode { display: flow-root; }
 #app #markdownMode [hidden] { display: none !important; }
 #app #markdownMode :is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
@@ -186,10 +186,10 @@ body[data-author-guide-page="markdown"] .skip-link:focus { transform: translateY
 }
 @media print {
   @page { margin: 14mm; }
-  body[data-author-guide-page="markdown"] #app .mode-nav,
-  body[data-author-guide-page="markdown"] #app .author-global-nav-toggle,
-  body[data-author-guide-page="markdown"] #app .app-footer,
-  body[data-author-guide-page="markdown"] .skip-link,
+  body:is([data-author-guide-page="markdown"], [data-author-guide-page="event-code"]) #app .mode-nav,
+  body:is([data-author-guide-page="markdown"], [data-author-guide-page="event-code"]) #app .author-global-nav-toggle,
+  body:is([data-author-guide-page="markdown"], [data-author-guide-page="event-code"]) #app .app-footer,
+  body:is([data-author-guide-page="markdown"], [data-author-guide-page="event-code"]) .skip-link,
   #app #markdownMode .section-sidebar,
   #app #markdownMode .filter-panel,
   #app #markdownMode .copy-button,
@@ -197,8 +197,8 @@ body[data-author-guide-page="markdown"] .skip-link:focus { transform: translateY
   #app #markdownMode .copy-feedback,
   #app #markdownMode .empty-state,
   #app #markdownMode .cheatsheet-decoration-strip { display: none !important; }
-  body[data-author-guide-page="markdown"] #app .app-shell { padding: 0 !important; }
-  body[data-author-guide-page="markdown"] #app, #app #markdownMode { background: #fff !important; padding: 0; overflow: visible; }
+  body:is([data-author-guide-page="markdown"], [data-author-guide-page="event-code"]) #app .app-shell { padding: 0 !important; }
+  body:is([data-author-guide-page="markdown"], [data-author-guide-page="event-code"]) #app, #app #markdownMode { background: #fff !important; padding: 0; overflow: visible; }
   #app #markdownMode .reference-hero { display: block; margin: 0 0 20px; padding: 20px; }
   #app #markdownMode .mode-title { font-size: 26pt; }
   #app #markdownMode .reference-layout { display: block; }

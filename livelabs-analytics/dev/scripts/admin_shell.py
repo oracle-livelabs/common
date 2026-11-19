@@ -6,16 +6,17 @@ import re
 
 PAGES = (
     ('/admin/dashboard-management', 'Dashboard tags'),
-    ('/admin/data-merge', 'Data merge'),
-    ('/admin/jenkins', 'Jenkins reports'),
     ('/admin/inventory', 'Portfolio inventory'),
+    ('/admin/inventory/author-contributor-gaps', 'Missing contact'),
+    ('/admin/jenkins', 'Jenkins reports'),
 )
-ASSETS = ('<link rel="stylesheet" href="/admin-assets/admin-shell.css?v=20261108">'
+ASSETS = ('<link rel="stylesheet" href="/admin-assets/admin-shell.css?v=20261116-admin-theme">'
           '<script defer src="/admin-assets/admin-shell.js?v=20261108"></script>')
 
 
 def navigation(route):
-    links = ''.join(f'<a href="{url}"' + (' aria-current="page"' if route == url or route.startswith(url + '/') else '')
+    current_page = max((url for url, _label in PAGES if route == url or route.startswith(url + '/')), key=len, default=None)
+    links = ''.join(f'<a href="{url}"' + (' aria-current="page"' if current_page == url else '')
                     + f'>{label}</a>' for url, label in PAGES)
     return (f'<aside class="rail analytics-rail"><div class="analytics-brand">'
             '<img src="/assets/images/oracle-logo-white.svg" alt="Oracle"><span>LiveLabs Analytics</span></div>'

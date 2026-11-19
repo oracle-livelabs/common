@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weekly update — LiveLabs Analytics Admin</title>
+  <link rel="stylesheet" href="/assets/css/dashboard.css?v=20261112-weekly-update">
+  <link rel="stylesheet" href="/admin-assets/admin.css?v=20261116-admin-theme">
+  <link rel="stylesheet" href="/admin-assets/weekly-update.css?v=20261112-1">
+  <script defer src="/admin-assets/weekly-update.js?v=20261112-1"></script>
+</head>
+<body class="admin-page weekly-update-page">
+  <a class="skip-link" href="#weekly-workflow">Skip to weekly update checklist</a>
+  <div class="layout analytics-shell-layout">
+    <!-- ADMIN_NAV -->
+    <main>
+      <header class="page-header admin-hero">
+        <div>
+          <p class="eyebrow">Admin · weekly process</p>
+          <h1>Weekly analytics update</h1>
+          <p class="intro">Follow the collection, review, integration and release steps. Keep each source unchanged and record evidence as you go.</p>
+        </div>
+      </header>
+      <div class="hero-stripe" aria-hidden="true"></div>
+      <section id="weekly-workflow" class="weekly-workflow-card" aria-labelledby="weekly-workflow-title">
+        <div class="weekly-workflow-heading">
+          <div><h2 id="weekly-workflow-title">Update checklist</h2><p>One dated record per work session. Resume unfinished work for this week.</p></div>
+          <label class="weekly-run-picker">Saved runs<select id="weekly-run-select" aria-label="Saved update runs" disabled><option>Loading runs…</option></select></label>
+        </div>
+        <div class="weekly-run-actions">
+          <button id="weekly-start-run" type="button">Start this week’s update</button>
+          <span id="weekly-run-status" role="status" aria-live="polite">Loading saved runs…</span>
+        </div>
+        <div id="weekly-progress-summary" class="weekly-progress-summary" hidden>
+          <div><strong id="weekly-run-state">In progress</strong><span id="weekly-run-date"></span></div>
+          <progress id="weekly-progress" max="100" value="0" aria-label="Weekly update completion"></progress>
+          <span id="weekly-progress-label">0 of 17 steps complete</span>
+        </div>
+        <p class="weekly-evidence-note">A checked step records operator progress; it does not verify the work by itself. Add a source path, date, hash, report ID, test result or release reference in the evidence field.</p>
+        <aside class="weekly-data-limit"><strong>Source data limit:</strong> the current snapshots do not include monthly view history for the last 24 months or video watching minutes. Record those as unavailable until WMS provides the fields; do not infer or fabricate them.</aside>
+        <div id="weekly-steps" class="weekly-steps" aria-live="polite"><p>Loading the checklist…</p></div>
+        <div class="weekly-save-row"><button id="weekly-save" type="button" disabled>Save progress</button><span id="weekly-save-status" role="status" aria-live="polite"></span></div>
+      </section>
+      <nav class="weekly-related-pages" aria-label="Related Admin pages">
+        <a href="/admin/dashboard-management">Dashboard tags</a>
+        <a href="/admin/inventory">Portfolio inventory</a>
+        <a href="/admin/jenkins">Jenkins reports</a>
+      </nav>
+      <footer class="site-footer">Powered by Oracle LiveLabs Team &copy; 2026</footer>
+    </main>
+  </div>
+</body>
+</html>

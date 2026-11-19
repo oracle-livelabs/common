@@ -1,3 +1,4 @@
+    const directRecordRoute = document.documentElement.classList.contains("analytics-record-requested");
     function normalizeFilterText(value) {
       return (value || "")
         .toString()
@@ -67,12 +68,13 @@
       const expanded = dataRow.dataset.expanded === "true";
       setRowExpanded(dataRow, !expanded);
     }
-    const defaultPageSize = 20;
+    const defaultPageSize = 10;
     const rankedDefaultPageSize = 10;
-    const pageSizeSteps = [10, 20, 40, 60, 80, 100, 120, 140];
-    const rankedTop100TableIds = new Set(['top-performers-table', 'at-risk-table', 'retirement-review-table', 'jenkins-p1-action-table']);
+    const pageSizeSteps = [10, 25, 50, 100];
+    const rankedTop100TableIds = new Set(['top-performers-table', 'at-risk-table', 'retirement-review-table']);
     const tenRowDefaultTableIds = new Set([
-      ...rankedTop100TableIds
+      ...rankedTop100TableIds,
+      'jenkins-p1-action-table'
     ]);
     function defaultPageSizeForWrapper(wrapper) {
       return tenRowDefaultTableIds.has(wrapper?.dataset?.filterTable) ? rankedDefaultPageSize : defaultPageSize;
@@ -132,7 +134,7 @@
         .some((part) => normalizeFilterText(part) === normalizedQuery);
     }
     function recordContactSearchText(record) {
-      const values = [record?.owner || ""];
+      const values = [record?.owner || "", record?.additionalContact?.email || ""];
       [record?.values, record?.details].forEach((fields) => {
         if (!(fields instanceof Map)) return;
         fields.forEach((value, label) => {
@@ -156,6 +158,16 @@
       return filters.every((control) => {
         if (control.dataset.filterMode === 'review-focus') return true;
         if (control.dataset.filterMode === 'content-type') return !control.value || control.value === row.dataset.contentType;
+        if (control.dataset.filterMode === 'table-search') {
+          const query = normalizeFilterText(control.value);
+          if (!query) return true;
+          const visibleFieldMatch = Array.from(cells).some((cell) => normalizeFilterText(cell.dataset.filterValue || cell.textContent || '').includes(query));
+          return visibleFieldMatch || rowMatchesContactFilter(row, query);
+        }
+        if (control.dataset.filterMode === 'record-contact') {
+          const query = normalizeFilterText(control.value);
+          return !query || rowMatchesContactFilter(row, query);
+        }
         if (control.dataset.filterMode === "review-tier") return !control.value || row.dataset.reviewTier === control.value;
         if (control.dataset.filterMode === "no-author") {
           return control.checked !== true || row.dataset.noAuthor === "true";
@@ -165,13 +177,6 @@
         }
         const query = normalizeFilterText(control.value);
         if (!query) return true;
-        if (control.dataset.filterMode === "record-contact") {
-          return rowMatchesContactFilter(row, query);
-        }
-        if (control.dataset.filterMode === "table-search") {
-          const visibleText = Array.from(cells, (cell) => cell.dataset.filterValue || cell.textContent || "").join(" ");
-          return normalizeFilterText(visibleText).includes(query) || rowMatchesContactFilter(row, query);
-        }
         const columnIndex = Number(control.dataset.columnIndex);
         const cell = cells[columnIndex];
         if (!cell) return false;
@@ -227,8 +232,7 @@
       });
     }
     function pageSizeOptionsFor(totalRows) {
-      const numericOptions = pageSizeSteps.filter((pageSize) => pageSize <= totalRows);
-      return [...numericOptions, "all"];
+      return pageSizeSteps;
     }
     function normalizePageSizeValue(wrapper, totalRows) {
       const validValues = pageSizeOptionsFor(totalRows).map((pageSize) => String(pageSize));
@@ -292,49 +296,123 @@
       setSelectOptions(select, options, pageRangeValue, { label: "Page", value: "" });
       select.disabled = options.length === 0;
     }
-    function tableSortOptionsFor(tableId) {
-      const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
-      if (!wrapper) return [];
-      return Array.from(wrapper.querySelectorAll("th[data-sort-column-index]"))
-        .filter((headerCell) => !headerCell.hidden && headerCell.getAttribute("aria-hidden") !== "true")
-        .map((headerCell) => ({
-        label: (headerCell.querySelector("button")?.textContent || headerCell.textContent || `Column ${Number(headerCell.dataset.sortColumnIndex || 0) + 1}`).trim(),
-        value: headerCell.dataset.sortColumnIndex || ""
-        }))
-        .filter((option) => option.label && option.value !== "" && option.label !== "#");
-    }
-    function syncTableSortSelect(select, tableId, selectedValue) {
-      const options = tableSortOptionsFor(tableId);
-      setSelectOptions(select, options, selectedValue || "", { label: "As listed", value: "" });
-      select.disabled = options.length === 0;
-    }
     function defaultSortDirectionFor(tableId, columnIndex) {
       const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
       return wrapper?.querySelector(`[data-sort-table="${tableId}"][data-column-index="${columnIndex}"]`)?.dataset.defaultDirection || "asc";
     }
-    function syncSortDirectionButton(button, direction, hasActiveSort) {
-      button.disabled = !hasActiveSort;
-      button.textContent = direction === "desc" ? "Desc" : "Asc";
-      button.setAttribute("aria-label", direction === "desc" ? "Sort descending" : "Sort ascending");
-      button.setAttribute("aria-pressed", hasActiveSort ? "true" : "false");
+    function tableExportColumns(table) {
+      const headerRow = table?.querySelector('thead tr:last-child');
+      if (!headerRow) return [];
+      return Array.from(headerRow.children).map((cell, index) => ({
+        index,
+        label: (cell.dataset.exportLabel || cell.querySelector('.sort-button')?.textContent || cell.textContent || '').trim(),
+        visible: !cell.hidden && cell.getAttribute('aria-hidden') !== 'true'
+      })).filter(column => column.visible && column.label);
     }
-    function focusTableFilters(tableId) {
-      const firstFilter = document.querySelector(`[data-table-filter="${tableId}"]`);
-      const disclosure = firstFilter?.closest("details.filter-disclosure");
-      if (disclosure) disclosure.open = true;
-      const target = disclosure || firstFilter || document.querySelector(`[data-filter-table="${tableId}"]`);
-      target?.scrollIntoView({ block: "center", behavior: "smooth" });
-      window.setTimeout(() => firstFilter?.focus?.({ preventScroll: true }), 160);
+    function tableExportFilters(tableId) {
+      return Array.from(document.querySelectorAll(`[data-table-filter="${tableId}"]`)).filter(isActiveFilter).map(control => ({
+        field: control.closest('.filter-field, label')?.querySelector('span')?.textContent?.trim()
+          || control.closest('fieldset')?.querySelector('legend')?.textContent?.trim() || filterLabelFor(control) || control.dataset.filterMode || 'Filter',
+        value: control.type === 'checkbox' ? control.value : String(control.value || '').trim()
+      }));
+    }
+    function tableExportPayload(tableId) {
+      const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
+      const table = wrapper?.querySelector('table');
+      const columns = tableExportColumns(table);
+      if (!wrapper || !table || !columns.length) throw new Error('This table is not ready to export.');
+      const filters = Array.from(document.querySelectorAll(`[data-table-filter="${tableId}"]`));
+      const matchingRows = sortTableRows(tableId).filter(row => rowMatchesFilters(row, filters));
+      const visibleRows = matchingRows.filter(row => !row.hidden);
+      const rows = visibleRows.map(row => columns.map(column => detailReportText(row.children[column.index])));
+      const panelTitle = wrapper.closest('.ranked-table-panel, .panel')?.querySelector('.panel-head h3')?.textContent?.trim()
+        || wrapper.closest('section.section')?.querySelector('.section-head h2')?.textContent?.trim() || tableId;
+      const sortColumnIndex = wrapper.dataset.sortColumnIndex || "";
+      const sortHeader = sortColumnIndex ? wrapper.querySelector(`th[data-sort-column-index="${sortColumnIndex}"]`) : null;
+      const firstVisibleIndex = visibleRows.length ? matchingRows.indexOf(visibleRows[0]) : -1;
+      const pageRange = wrapper.dataset.pageRange || "";
+      const pageLabel = String(pageRange || `page-${wrapper.dataset.currentPage || 1}`).replace(/[^a-z0-9-]+/gi, "-");
+      return {
+        title: panelTitle,
+        tableId,
+        viewPeriod: wrapper.dataset.viewPeriod || null,
+        exportedAt: new Date().toISOString(),
+        filterDescription: tableExportFilters(tableId),
+        sort: {
+          column: sortHeader ? (sortHeader.querySelector('.sort-button')?.textContent || sortHeader.textContent || '').trim() : "As listed",
+          direction: sortHeader ? (wrapper.dataset.sortDirection || "asc") : "none",
+        },
+        pagination: {
+          page: pageRange ? null : (Number(wrapper.dataset.currentPage || 1) || 1),
+          pageRange: pageRange || null,
+          pageSize: normalizePageSizeValue(wrapper, matchingRows.length),
+          filteredRows: matchingRows.length,
+          firstRow: firstVisibleIndex >= 0 ? firstVisibleIndex + 1 : 0,
+          exportedRows: rows.length,
+        },
+        columns: columns.map(column => column.label),
+        rowCount: rows.length,
+        rows: rows.map(values => Object.fromEntries(columns.map((column, index) => [column.label, values[index]]))),
+        matrix: [columns.map(column => column.label), ...rows]
+      };
+    }
+    function downloadTableExport(tableId, format) {
+      if (!window.LiveLabsExport) throw new Error('Export tools have not loaded yet.');
+      const contactFilter = document.querySelector(`[data-table-filter="${tableId}"][data-filter-mode="record-contact"]`);
+      if (contactFilter && isActiveFilter(contactFilter) && ['loading', 'unavailable'].includes(contactFilter.dataset.contactLoadState)) {
+        throw new Error(contactFilter.dataset.contactLoadState === 'loading' ? 'Wait for contact fields to finish loading before exporting.' : 'Contact fields could not be loaded; clear the contact filter before exporting.');
+      }
+      const report = tableExportPayload(tableId);
+      const slug = value => String(value || 'table').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'table';
+      const pageLabel = report.pagination.pageRange || `page-${report.pagination.page || 1}`;
+      const filename = `livelabs-${slug(tableId)}-${slug(pageLabel)}-${report.rowCount}-rows`;
+      if (format === 'csv') window.LiveLabsExport.csv(report.matrix, `${filename}.csv`);
+      else if (format === 'xlsx') window.LiveLabsExport.xlsx(report.matrix, `${filename}.xlsx`);
+      else if (format === 'json') window.LiveLabsExport.json({
+        source: 'LiveLabs Analytics dashboard table', title: report.title, tableId: report.tableId,
+        exportedAt: report.exportedAt, viewPeriod: report.viewPeriod, appliedFilters: report.filterDescription,
+        appliedSort: report.sort, pagination: report.pagination,
+        columns: report.columns, rowCount: report.rowCount, rows: report.rows
+      }, `${filename}.json`);
+      else throw new Error('Choose CSV, Excel or JSON.');
+      const status = document.querySelector(`[data-table-export-status="${tableId}"]`);
+      if (status) status.textContent = `${report.rowCount.toLocaleString()} visible page rows exported.`;
+    }
+    function ensureTableExportControls(tableId) {
+      const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
+      if (!wrapper) return;
+      const host = wrapper.closest('.toggle-body') || wrapper.parentElement;
+      if (!host) return;
+      let tools = host.querySelector('.table-tools');
+      if (!tools) {
+        tools = document.createElement('div');
+        tools.className = 'table-tools';
+        wrapper.insertAdjacentElement('beforebegin', tools);
+      }
+      if (!tools.querySelector(`[data-table-export-menu="${tableId}"]`)) {
+        const menu = document.createElement('details');
+        menu.className = 'table-export-dropdown';
+        menu.dataset.tableExportMenu = tableId;
+        menu.innerHTML = `<summary>Export visible rows</summary><div class="table-export-options"><button type="button" data-export-table="${tableId}" data-export-format="csv">CSV (.csv)</button><button type="button" data-export-table="${tableId}" data-export-format="xlsx">Excel (.xlsx)</button><button type="button" data-export-table="${tableId}" data-export-format="json">JSON (.json)</button></div>`;
+        tools.append(menu);
+        const status = document.createElement('span');
+        status.className = 'table-export-status';
+        status.dataset.tableExportStatus = tableId;
+        status.setAttribute('role', 'status');
+        status.setAttribute('aria-live', 'polite');
+        tools.append(status);
+      }
     }
     function buildPaginationControls(tableId, position = "bottom") {
       const controls = document.createElement("div");
-      controls.className = `pagination-controls pagination-controls-${position}`;
+      controls.className = `pagination-controls pagination-controls-${position} table-pagination-controls`;
       controls.dataset.paginationFor = tableId;
       controls.dataset.paginationPosition = position;
 
       const range = document.createElement("span");
-      range.className = "pagination-range";
+      range.className = "pagination-range table-count";
       range.dataset.paginationRangeFor = tableId;
+      range.dataset.tableCountFor = tableId;
       range.setAttribute("aria-live", "polite");
       controls.appendChild(range);
 
@@ -348,36 +426,6 @@
       sizeSelect.dataset.pageSizeFor = tableId;
       sizeLabel.appendChild(sizeSelect);
       actions.appendChild(sizeLabel);
-
-      const rangeLabel = document.createElement("label");
-      rangeLabel.textContent = "Range";
-      const rangeSelect = document.createElement("select");
-      rangeSelect.className = "page-size-select";
-      rangeSelect.dataset.pageRangeFor = tableId;
-      rangeLabel.appendChild(rangeSelect);
-      actions.appendChild(rangeLabel);
-
-      const sortLabel = document.createElement("label");
-      sortLabel.textContent = "Sort";
-      const sortSelect = document.createElement("select");
-      sortSelect.className = "page-size-select";
-      sortSelect.dataset.paginationSortFor = tableId;
-      sortLabel.appendChild(sortSelect);
-      actions.appendChild(sortLabel);
-
-      const sortDirectionButton = document.createElement("button");
-      sortDirectionButton.className = "pagination-button pagination-sort-direction";
-      sortDirectionButton.type = "button";
-      sortDirectionButton.dataset.paginationSortDirectionFor = tableId;
-      sortDirectionButton.textContent = "Asc";
-      actions.appendChild(sortDirectionButton);
-
-      const filterButton = document.createElement("button");
-      filterButton.className = "pagination-button pagination-filter-button";
-      filterButton.type = "button";
-      filterButton.dataset.paginationFilterFor = tableId;
-      filterButton.textContent = "Filters";
-      actions.appendChild(filterButton);
 
       const previousButton = document.createElement("button");
       previousButton.className = "pagination-button";
@@ -405,50 +453,9 @@
           wrapper.dataset.pageSize = sizeSelect.value;
           wrapper.dataset.currentPage = "1";
           delete wrapper.dataset.pageRange;
-          rangeSelect.value = "";
           applyTableState(tableId);
         });
       });
-      rangeSelect.addEventListener("change", () => {
-        preserveViewportDuringTableUpdate(tableId, () => {
-          const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
-          if (!wrapper) return;
-          if (rangeSelect.value) {
-            wrapper.dataset.pageRange = rangeSelect.value;
-          } else {
-            delete wrapper.dataset.pageRange;
-          }
-          wrapper.dataset.currentPage = "1";
-          applyTableState(tableId);
-        });
-      });
-      sortSelect.addEventListener("change", () => {
-        preserveViewportDuringTableUpdate(tableId, () => {
-          const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
-          if (!wrapper) return;
-          if (sortSelect.value) {
-            wrapper.dataset.sortColumnIndex = sortSelect.value;
-            wrapper.dataset.sortDirection = defaultSortDirectionFor(tableId, sortSelect.value);
-          } else {
-            delete wrapper.dataset.sortColumnIndex;
-            wrapper.dataset.sortDirection = "none";
-          }
-          wrapper.dataset.currentPage = "1";
-          delete wrapper.dataset.pageRange;
-          applyTableState(tableId);
-        });
-      });
-      sortDirectionButton.addEventListener("click", () => {
-        preserveViewportDuringTableUpdate(tableId, () => {
-          const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
-          if (!wrapper || !wrapper.dataset.sortColumnIndex) return;
-          wrapper.dataset.sortDirection = wrapper.dataset.sortDirection === "desc" ? "asc" : "desc";
-          wrapper.dataset.currentPage = "1";
-          delete wrapper.dataset.pageRange;
-          applyTableState(tableId);
-        });
-      });
-      filterButton.addEventListener("click", () => focusTableFilters(tableId));
       controls.querySelectorAll("[data-pagination-action]").forEach((button) => {
         button.addEventListener("click", () => {
           preserveViewportDuringTableUpdate(tableId, () => {
@@ -457,7 +464,6 @@
             const currentPage = Number(wrapper.dataset.currentPage || 1);
             wrapper.dataset.currentPage = String(button.dataset.paginationAction === "next" ? currentPage + 1 : currentPage - 1);
             delete wrapper.dataset.pageRange;
-            rangeSelect.value = "";
             applyTableState(tableId);
           });
         });
@@ -467,35 +473,34 @@
     function ensurePaginationControls(tableId, state) {
       const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
       if (!wrapper) return [];
+      ensureTableExportControls(tableId);
       const totalRows = state.totalRows;
-      const controlsByPosition = new Map(Array.from(document.querySelectorAll(`[data-pagination-for="${tableId}"]`)).map((controls) => [controls.dataset.paginationPosition || "bottom", controls]));
+      const existing = Array.from(document.querySelectorAll(`[data-pagination-for="${tableId}"]`));
+      existing.filter((controls) => (controls.dataset.paginationPosition || "bottom") !== "top").forEach((controls) => controls.remove());
+      const controlsByPosition = new Map(existing.filter((controls) => controls.isConnected).map((controls) => [controls.dataset.paginationPosition || "bottom", controls]));
       let topControls = controlsByPosition.get("top");
-      let bottomControls = controlsByPosition.get("bottom");
       if (!topControls) {
         topControls = buildPaginationControls(tableId, "top");
-        wrapper.insertAdjacentElement("beforebegin", topControls);
       }
-      if (!bottomControls) {
-        bottomControls = buildPaginationControls(tableId, "bottom");
-        wrapper.insertAdjacentElement("afterend", bottomControls);
+      const tools = (wrapper.closest('.toggle-body') || wrapper.parentElement)?.querySelector('.table-tools');
+      if (tools) {
+        tools.append(topControls);
+        const activeCount = topControls.querySelector(`[data-table-count-for="${tableId}"]`);
+        tools.querySelectorAll(`[data-table-count-for="${tableId}"]`).forEach((count) => { if (count !== activeCount) count.remove(); });
       }
-      const controlsList = [topControls, bottomControls].filter(Boolean);
+      else wrapper.insertAdjacentElement("beforebegin", topControls);
+      const controlsList = [topControls].filter(Boolean);
       controlsList.forEach((controls) => { controls.hidden = totalRows === 0; });
       const pageSizeValue = state.pageSizeValue || normalizePageSizeValue(wrapper, totalRows);
       controlsList.forEach((controls) => {
         const pageSizeSelect = controls.querySelector(`[data-page-size-for="${tableId}"]`);
         if (pageSizeSelect) syncPageSizeSelect(pageSizeSelect, totalRows, pageSizeValue);
-        const pageRangeSelect = controls.querySelector(`[data-page-range-for="${tableId}"]`);
-        if (pageRangeSelect) syncPageRangeSelect(pageRangeSelect, state.matchingRows, pageSizeValue, state.pageRangeValue || "");
-        const sortSelect = controls.querySelector(`[data-pagination-sort-for="${tableId}"]`);
-        if (sortSelect) syncTableSortSelect(sortSelect, tableId, state.sortColumnIndex || "");
-        const sortDirectionButton = controls.querySelector(`[data-pagination-sort-direction-for="${tableId}"]`);
-        if (sortDirectionButton) syncSortDirectionButton(sortDirectionButton, state.sortDirection || "asc", Boolean(state.sortColumnIndex && state.sortDirection !== "none"));
       });
       return controlsList;
     }
     function updatePaginationControls(tableId, state) {
       const controlsList = ensurePaginationControls(tableId, state);
+      const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
       controlsList.forEach((controls) => {
         if (!controls || controls.hidden) return;
         const range = controls.querySelector(`[data-pagination-range-for="${tableId}"]`);
@@ -524,6 +529,37 @@
         return null;
       }
       return option;
+    }
+    function updateDashboardTableLimitSummary(wrapper, totalRows) {
+      const tableId = wrapper?.dataset?.filterTable;
+      if (!rankedTop100TableIds.has(tableId)) return;
+      const displayedRows = Math.min(totalRows, 100);
+      const panel = wrapper.closest('.ranked-table-panel');
+      const panelCount = panel?.querySelector('.panel-head > span');
+      const countNode = panel?.querySelector(`[data-table-count-for="${tableId}"]`);
+      const hint = wrapper.closest('.toggle-body')?.querySelector('.table-hint');
+      panelCount?.remove();
+      if (countNode) countNode.textContent = `${displayedRows.toLocaleString()} rows`;
+      if (hint) hint.textContent = 'Select a row to open its full details.';
+    }
+    function refreshRankedTableTop100(wrapper) {
+      const tableId = wrapper?.dataset?.filterTable;
+      if (!rankedTop100TableIds.has(tableId)) return;
+      const rows = Array.from(wrapper.querySelectorAll('tbody tr[data-filter-row="true"]'));
+      const eligibleRows = rows
+        .filter((row) => row.dataset.qaAnalyticsExcluded !== 'true')
+        .sort((left, right) => Number(left.dataset.originalIndex || 0) - Number(right.dataset.originalIndex || 0));
+      const topRows = new Set(eligibleRows.slice(0, 100));
+      rows.forEach((row) => { row.dataset.dashboardTop100 = topRows.has(row) ? 'true' : 'false'; });
+    }
+    function refreshDashboardTableLimitSummaries(container = document) {
+      container.querySelectorAll?.('[data-filter-table]').forEach((wrapper) => {
+        if (!rankedTop100TableIds.has(wrapper.dataset.filterTable)) return;
+        refreshRankedTableTop100(wrapper);
+        const eligibleRows = Array.from(wrapper.querySelectorAll('tbody tr[data-filter-row="true"]'))
+          .filter((row) => row.dataset.qaAnalyticsExcluded !== 'true');
+        updateDashboardTableLimitSummary(wrapper, eligibleRows.length);
+      });
     }
     function preserveViewportDuringTableUpdate(tableId, updateCallback) {
       const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
@@ -573,16 +609,20 @@
       }
       const filters = Array.from(document.querySelectorAll(`[data-table-filter="${tableId}"]`));
       const rows = sortTableRows(tableId);
-      const activeRows = rows.filter((row) => row.dataset.qaAnalyticsExcluded !== "true");
-      const totalRows = activeRows.length;
+      const eligibleRows = rows.filter((row) => row.dataset.qaAnalyticsExcluded !== "true");
+      const totalRows = eligibleRows.length;
+      const activeRows = rankedTop100TableIds.has(tableId)
+        ? eligibleRows.filter((row) => row.dataset.dashboardTop100 === 'true')
+        : eligibleRows;
+      updateDashboardTableLimitSummary(wrapper, totalRows);
       const emptyState = wrapper.querySelector('[data-empty-state="true"]');
       const matchingRows = activeRows.filter((row) => rowMatchesFilters(row, filters));
       const defaultSize = defaultPageSizeForWrapper(wrapper);
-      const pageSizeValue = normalizePageSizeValue(wrapper, totalRows);
+      const pageSizeValue = normalizePageSizeValue(wrapper, activeRows.length);
       const selectedRange = pageRangeFor(wrapper, matchingRows.length, pageSizeValue);
       const rangedRows = selectedRange ? matchingRows.slice(selectedRange.start - 1, selectedRange.end) : matchingRows;
-      const paginationEnabled = totalRows > defaultSize && !selectedRange;
-      const pageSize = paginationEnabled ? pageSizeForValue(pageSizeValue, totalRows) : Math.max(totalRows, 1);
+      const paginationEnabled = activeRows.length > defaultSize && !selectedRange;
+      const pageSize = paginationEnabled ? pageSizeForValue(pageSizeValue, activeRows.length) : Math.max(activeRows.length, 1);
       const totalPages = paginationEnabled ? Math.max(1, Math.ceil(rangedRows.length / pageSize)) : 1;
       let currentPage = Number(wrapper.dataset.currentPage || 1);
       if (!Number.isFinite(currentPage) || currentPage < 1) currentPage = 1;
@@ -609,9 +649,17 @@
         } else if (paginationEnabled && matchingRows.length > 0) {
           const startRow = startIndex + 1;
           const endRow = Math.min(endIndex, matchingRows.length);
-          countNode.textContent = hasFilters
-            ? `${startRow}-${endRow} of ${matchingRows.length} filtered rows (${totalRows} total)`
-            : `${startRow}-${endRow} of ${totalRows} rows`;
+          if (rankedTop100TableIds.has(tableId) && !hasFilters && totalRows > matchingRows.length) {
+            countNode.textContent = `${startRow}-${endRow} of ${matchingRows.length} top-ranked rows`;
+          } else if (rankedTop100TableIds.has(tableId) && hasFilters && totalRows > matchingRows.length) {
+            countNode.textContent = `${startRow}-${endRow} of ${matchingRows.length} filtered top-ranked rows`;
+          } else {
+            countNode.textContent = hasFilters
+              ? rankedTop100TableIds.has(tableId)
+                ? `${startRow}-${endRow} of ${matchingRows.length} filtered top-ranked rows`
+                : `${startRow}-${endRow} of ${matchingRows.length} filtered rows (${totalRows} total)`
+              : `${startRow}-${endRow} of ${totalRows} rows`;
+          }
         } else if (hasFilters) {
           countNode.textContent = `${matchingRows.length} of ${totalRows} rows`;
         } else {
@@ -637,7 +685,7 @@
         sortDirection: wrapper.dataset.sortDirection || "none",
         startRow: displayStartRow,
         totalPages,
-        totalRows
+        totalRows: activeRows.length
       });
       decorateDashboardCopyTargets(wrapper);
     }
@@ -735,8 +783,8 @@
       return "";
     }
     function markdownUpdatesFor(row) {
-      const detailRow = detailRowFor(row);
-      const table = detailRow?.querySelector(".nested-details .nested-table");
+      const detail = detailContentFor(row);
+      const table = detail?.querySelector(".nested-details .nested-table");
       if (!table) return [];
       return Array.from(table.querySelectorAll("tbody tr")).map((updateRow) => {
         const cells = Array.from(updateRow.querySelectorAll("td"));
@@ -757,14 +805,20 @@
       }).filter((item) => item.fileName || item.filePath || item.gitUpdate || item.acknowledgement || item.checkLabel);
     }
     function detailValuesFor(row) {
-      const detailRow = detailRowFor(row);
+      const detail = detailContentFor(row);
       const values = new Map();
-      detailRow?.querySelectorAll(".detail-table tr").forEach((detailLine) => {
+      detail?.querySelectorAll(".detail-table tr").forEach((detailLine) => {
         const key = (detailLine.querySelector("th")?.textContent || "").trim();
         const value = (detailLine.querySelector("td")?.textContent || "").trim();
         if (key && value && !values.has(key)) values.set(key, value);
       });
       return values;
+    }
+    function detailContentFor(row) {
+      const detailRow = detailRowFor(row);
+      if (detailRow) return detailRow;
+      const detailId = row?.dataset?.detailRowId;
+      return detailId ? row.parentElement?.querySelector(`template[data-detail-for="${detailId}"]`)?.content || null : null;
     }
     function sourceRowsHtml(record) {
       const rows = Array.from(record.values.entries())
@@ -786,21 +840,6 @@
         views90d ? [views90d.label, views90d.value] : null,
         score ? [score.label, score.value] : null,
         ["Status", record.status || "N/A"]
-      ].filter(Boolean);
-    }
-    function governanceItemsFor(record) {
-      const action = labeledValue(record, ["Suggested Action", "Recommended Action", "Lifecycle State"]);
-      return [
-        ["WMS ID", record.wmsId || "N/A"],
-        ["LiveLabs ID", record.livelabsId || "N/A"],
-        ["Owner", record.owner || "N/A"],
-        record.details.get("Ownership Status") ? ["Ownership Status", record.details.get("Ownership Status")] : null,
-        ["Publish Status", record.details.get("Publish Status") || "N/A"],
-        ["Publish Type", record.details.get("Publish Type") || "N/A"],
-        ["Update Evidence", record.details.get("Update Evidence") || "N/A"],
-        ["Latest GitHub Update", record.details.get("Latest GitHub Update") || record.details.get("Latest Live Repo Commit Date") || record.details.get("Latest Workshop Commit Date") || record.details.get("Latest Markdown Commit Date") || "N/A"],
-        action ? [action.label, action.value] : null,
-        record.details.get("Workshop Path") ? ["Workshop Path", record.details.get("Workshop Path")] : null
       ].filter(Boolean);
     }
     function sectionLabelFor(row) {
@@ -1069,6 +1108,7 @@
           applyAdminRowOverrides();
           applyNoAuthorGovernanceFlags();
           applyDemandProtectedGovernanceFlags();
+          refreshDashboardTableLimitSummaries(section);
           decorateDashboardCopyTargets(section);
           applySectionVisibilitySettings();
           enhanceCategoryFilters(section);
@@ -1157,12 +1197,11 @@
     function dashboardRecordDate(record) {
       const details = new Map((record?.details || []).filter((item) => Array.isArray(item) && item.length >= 2));
       const candidates = [
+        record?.review?.scoringUpdate,
         details.get("Last Meaningful Workshop Update"),
         details.get("Latest Workshop Commit Date"),
         details.get("Latest GitHub Update"),
-        details.get("Latest Repository Update Proxy"),
-        details.get("WMS Last Update"),
-        record?.update
+        details.get("Latest Repository Update Proxy")
       ];
       for (const candidate of candidates) {
         const text = String(candidate || "").trim();
@@ -1295,7 +1334,7 @@
         const demandValues = current.map((record) => dashboardRecordValue(record, "Views - Last 12 Months")).filter((value) => value !== null);
         updateChart(`${type} Demand Bands`, `${type.toLowerCase()}s`, demandBands, demandValues, `Count of active ${type.toLowerCase()}s by 12-month demand band. Rows without a matched 12-month view are excluded from these five bands.`);
         const ageValues = current.map((record) => dashboardRecordDate(record)).filter(Boolean).map((value) => Math.max(0, Math.floor((snapshotDate - value) / 86400000)));
-        updateChart(`${type} Staleness Bands`, `${type.toLowerCase()}s`, stalenessBands, ageValues, `Count of ${type.toLowerCase()}s by update age using available WMS/GitHub evidence; GitHub evidence is dated 14-15 August 2026.`);
+        updateChart(`${type} Staleness Bands`, `${type.toLowerCase()}s`, stalenessBands, ageValues, `Count of ${type.toLowerCase()}s by reported content-update age; WMS record timestamps are not treated as content changes.`);
       }
     }
     function normalizePortfolioPayload(payload) {
@@ -1329,18 +1368,35 @@
     }
     function scoreContext() { return new URLSearchParams(location.search).get('score_context') === 'risk' ? 'risk' : 'performance'; }
     function recordLink(record, context = 'performance') {
-      return new URL(`search/?livelabs_id=${encodeURIComponent(record.livelabsId)}&score_context=${context}`, document.baseURI).href;
+      const url = new URL('search/', document.baseURI);
+      if (record.livelabsId) url.searchParams.set('livelabs_id', String(record.livelabsId));
+      if (!record.livelabsId && record.wmsId) url.searchParams.set('wms_id', String(record.wmsId));
+      url.searchParams.set('score_context', context);
+      if (record.wmsId) url.searchParams.set('wms_id', String(record.wmsId));
+      return url.href;
+    }
+    function recordLinkForTableRow(row) {
+      const values = rowValuesByHeader(row);
+      const livelabsId = String(row?.dataset?.livelabsId || values.get('LiveLabs ID') || '').trim();
+      const wmsId = String(row?.dataset?.wmsId || values.get('WMS ID') || '').trim();
+      if (!livelabsId && !wmsId) return '';
+      const tableId = row.closest('[data-filter-table]')?.dataset.filterTable || '';
+      const context = /at-risk|retirement/i.test(tableId) ? 'risk' : 'performance';
+      return recordLink({ livelabsId, wmsId }, context);
     }
     function loadFullSearchRecords() {
       if (fullSearchRecordsPromise) return fullSearchRecordsPromise;
-      fullSearchRecordsLoadState = "loading";
-      fullSearchRecordsPromise = Promise.all([loadCanonicalPortfolioPayload(), fetch('./assets/data/score-baselines.json', {cache:'no-cache'}).then(response => response.ok ? response.json() : {}).catch(() => ({}))])
-        .then(([payload, scores]) => {
+      fullSearchRecordsPromise = Promise.all([loadCanonicalPortfolioPayload(), fetch('./assets/data/score-baselines.json', {cache:'no-cache'}).then(response => response.ok ? response.json() : {}).catch(() => ({})), loadWmsContactPayload()])
+        .then(([payload, scores, contactPayload]) => {
           authorScoreBaselines = scores.records || {};
           portfolioInventoryMetadata = payload.metadata || null;
           publicRawRecords = Array.isArray(payload.records) ? payload.records : [];
           publicLivelabsIds = new Set(publicRawRecords.map((record) => String(record.livelabsId || "").trim()).filter(Boolean));
           loadedFullSearchRecords = publicRawRecords.map(fullIndexRecordToSearchRecord);
+          loadedFullSearchRecords.forEach((record) => {
+            const contact = contactPayload?.items?.[String(record.livelabsId || '').trim()];
+            if (contact?.email) record.additionalContact = contact;
+          });
           publicRecordByLiveLabsId = new Map(loadedFullSearchRecords.filter(record => String(record.livelabsId || '').trim())
             .map(record => [String(record.livelabsId).trim(), record]));
           fullSearchRecordsLoadState = "loaded";
@@ -1351,6 +1407,22 @@
           return [];
         });
       return fullSearchRecordsPromise;
+    }
+    let wmsContactPayloadPromise = null;
+    let wmsContactIndexLoadState = 'unloaded';
+    function loadWmsContactPayload() {
+      if (wmsContactPayloadPromise) return wmsContactPayloadPromise;
+      wmsContactIndexLoadState = 'loading';
+      wmsContactPayloadPromise = fetch(new URL('./api/dashboard-contacts', document.baseURI), {cache:'no-store'})
+        .then(response => response.ok ? response.json() : {items:{}, configured:false})
+        .then(payload => {
+          wmsContactIndexLoadState = payload.configured ? 'loaded' : 'unavailable';
+          return payload;
+        }).catch(() => {
+          wmsContactIndexLoadState = 'unavailable';
+          return {items:{}};
+        });
+      return wmsContactPayloadPromise;
     }
     function portfolioInventoryRecordToSearchRecord(raw) {
       const record = fullIndexRecordToSearchRecord(raw);
@@ -1392,8 +1464,7 @@
     const criteriaRuleAutomationPaused = true;
     const authorFacingGovernanceTagsHidden = true;
     let fullSearchRecordsPromise = null;
-    let publicRecordByLiveLabsId = new Map();
-    let fullSearchRecordsLoadState = "idle";
+    let fullSearchRecordsLoadState = "loading";
     let portfolioPayloadPromise = null;
     let portfolioInventoryRecordsPromise = null;
     let loadedFullSearchRecords = [];
@@ -1404,7 +1475,9 @@
     let tableSearchRecordsCache = null;
     let allDataRenderTimer = null;
     let allDataFilterOptionsRecordCount = 0;
+    let visibleAllDataPageRecords = [];
     let searchRecordByKey = new Map();
+    let publicRecordByLiveLabsId = new Map();
     let inventoryRecordByKey = new Map();
     const allDataPageSizeSteps = [25, 50, 100, 250, 500, 1000, 1500, 2500, 5000, 10000];
     const allDataState = {
@@ -1513,6 +1586,8 @@
     };
     let dashboardAdminState = readDashboardAdminState();
     let dashboardQaReportMerge = null;
+    let dashboardQaMergeLoadState = "loading";
+    let dashboardStatePromise = null;
     let refreshDashboardSearch = () => {};
     function jenkinsOverlayForId(livelabsId) {
       const overlay = dashboardQaReportMerge?.overlay?.[String(livelabsId || "")];
@@ -1620,13 +1695,128 @@
       const index = dashboardTableColumnIndex(row?.closest("[data-filter-table]"), label);
       return index < 0 ? null : row.querySelectorAll("td[data-filter-value]")[index] || null;
     }
-    // Follow WMS identity/content/contact order, then retain Analytics-only fields.
-    // Missing WMS fields are skipped; presentation never adds or removes columns.
-    const rankedTableColumnOrder = ['LiveLabs ID', 'WMS ID', 'Title', 'Council', 'Production URL', 'Completion Date', 'Last Update', 'Author', 'Author Email', 'Author / owner', 'Support Contact Email', '#', 'Type', 'Review status', 'Views 12m', 'Views 90d', 'Score', 'Errors Found'];
+    // Keep identity/contact order and display one selected demand period.
+    const rankedTableColumnOrder = ['#', 'LiveLabs ID', 'WMS ID', 'Title', 'Council', 'Production URL', 'Completion Date', 'WMS Last Update', 'Last Update', 'Author', 'Author Email', 'Author / owner', 'Additional contact email', 'Support Contact Email', 'Type', 'Review status', 'Views', 'Score', 'Errors Found'];
+    function nextRankedSourceColumnIndex(header) {
+      return Math.max(-1, ...Array.from(header.children, (cell, index) => Number(cell.dataset.rankedSourceColumnIndex ?? index))) + 1;
+    }
+    function updateRankedViewsColumn(wrapper) {
+      const periods = window.LiveLabsViews;
+      const period = periods.selected(wrapper.dataset.viewPeriod);
+      wrapper.dataset.viewPeriod = period.key;
+      const header = wrapper.querySelector('th[data-views-period-column]');
+      if (!header) return;
+      header.dataset.exportLabel = `Views · ${period.label}`;
+      const button = header.querySelector('.sort-button');
+      button.title = `Sort views · ${period.label}`;
+      button.setAttribute('aria-label', 'Views');
+      wrapper.querySelectorAll('tbody tr[data-filter-row="true"]').forEach(row => {
+        const cell = row.querySelector('td[data-views-period-column]');
+        if (!cell) return;
+        const record = publicRecordByLiveLabsId.get(String(row.dataset.livelabsId || '').trim());
+        const value = periods.metric(record, period.key);
+        cell.textContent = periods.format(value);
+        cell.dataset.filterValue = value === null ? '' : String(value);
+        cell.dataset.sortValue = value === null ? '' : String(value);
+      });
+    }
+    function ensureRankedViewsColumn(wrapper, table, tableId) {
+      const header = table.querySelector('thead tr');
+      const original = Array.from(header.children);
+      original.forEach((cell,index) => { if (cell.dataset.rankedSourceColumnIndex === undefined) cell.dataset.rankedSourceColumnIndex = String(index); });
+      let activeSort = wrapper.dataset.sortColumnIndex ? original[Number(wrapper.dataset.sortColumnIndex)] : null;
+      const candidates = original.filter(cell => cell.hasAttribute('data-views-period-column') || /^views (?:12m|90d)$/.test(dashboardTableHeaderLabel(cell)));
+      let primary = candidates[0];
+      for (const cell of candidates.slice(1).reverse()) {
+        const index = Array.from(header.children).indexOf(cell);
+        table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach(row => row.cells[index]?.remove());
+        if (activeSort === cell) activeSort = primary;
+        cell.remove();
+      }
+      if (!primary) {
+        primary = document.createElement('th');
+        primary.dataset.rankedSourceColumnIndex = String(nextRankedSourceColumnIndex(header));
+        header.append(primary);
+        table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach(row => row.append(document.createElement('td')));
+      }
+      primary.dataset.viewsPeriodColumn = 'true';
+      primary.dataset.sortType = 'number';
+      if (!primary.querySelector('button')) primary.innerHTML = `<button class="sort-button" type="button" data-sort-table="${tableId}" data-default-direction="desc">Views</button>`;
+      primary.querySelector('button').textContent = 'Views';
+      primary.querySelector('button').dataset.defaultDirection = 'desc';
+      const viewIndex = Array.from(header.children).indexOf(primary);
+      const order = Array.from(header.children, cell => cell.dataset.rankedSourceColumnIndex).join(',');
+      table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach(row => {
+        row.cells[viewIndex].dataset.viewsPeriodColumn = 'true';
+        row.dataset.rankedColumnOrder = order;
+      });
+      table.querySelectorAll('tbody td[colspan]').forEach(cell => { cell.colSpan = header.children.length; });
+      if (activeSort) wrapper.dataset.sortColumnIndex = String(Array.from(header.children).indexOf(activeSort));
+      updateRankedViewsColumn(wrapper);
+    }
+    function ensureRankedContactColumn(table, tableId) {
+      const header = table.querySelector('thead tr');
+      if (!header.querySelector('[data-additional-contact-column]')) {
+        const cell = document.createElement('th');
+        cell.dataset.additionalContactColumn = 'true';
+        cell.dataset.rankedSourceColumnIndex = String(nextRankedSourceColumnIndex(header));
+        cell.dataset.sortType = 'text';
+        cell.innerHTML = `<button class="sort-button" type="button" data-sort-table="${tableId}" data-default-direction="asc">Additional contact email</button>`;
+        header.append(cell);
+      }
+      table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach(row => {
+        let cell = row.querySelector('td[data-additional-contact-column]');
+        if (!cell) {
+          cell = document.createElement('td');
+          cell.dataset.additionalContactColumn = 'true';
+          row.append(cell);
+        }
+        const contact = publicRecordByLiveLabsId.get(String(row.dataset.livelabsId || '').trim())?.additionalContact;
+        const email = String(contact?.email || '').trim();
+        const type = email ? String(contact?.type || 'Contact') : '';
+        if (cell.dataset.contactEmail !== email || cell.dataset.contactType !== type) {
+          cell.dataset.contactEmail = email;
+          cell.dataset.contactType = type;
+          cell.replaceChildren();
+          if (email) {
+            const badge = document.createElement('span');
+            badge.className = 'dashboard-contact-type';
+            badge.textContent = type;
+            const address = document.createElement('span');
+            address.className = 'dashboard-contact-email';
+            address.textContent = email;
+            cell.append(badge, ' ', address);
+          } else cell.textContent = 'N/A';
+        }
+        cell.dataset.filterValue = normalizeFilterText([email, type].filter(Boolean).join(' '));
+        cell.dataset.sortValue = email.toLowerCase();
+      });
+      table.querySelectorAll('tbody td[colspan]').forEach(cell => { cell.colSpan = header.children.length; });
+    }
+    function sizeRankedTableColumns(table, entries) {
+      const weights = {'#':4.5, 'LiveLabs ID':8.5, 'WMS ID':7.5, Title:22, Council:10,
+        'WMS Last Update':8, 'Last Update':8, Author:15, 'Author Email':15, 'Author / owner':15,
+        'Additional contact email':15, Type:9, 'Review status':10, Views:8,
+        Score:6, 'Errors Found':8, Issues:26};
+      const total = entries.reduce((sum, entry) => sum + (weights[entry.label] || 10), 0);
+      let group = table.querySelector(':scope > colgroup[data-ranked-widths]');
+      if (!group) {
+        group = document.createElement('colgroup');
+        group.dataset.rankedWidths = 'true';
+        table.prepend(group);
+      }
+      group.replaceChildren(...entries.map(entry => {
+        const col = document.createElement('col');
+        col.style.width = `${(weights[entry.label] || 10) / total * 100}%`;
+        return col;
+      }));
+      table.classList.add('dashboard-ranked-table');
+      table.classList.toggle('dashboard-ranked-table-compact', entries.length < 10);
+    }
     function rankedTableDisplayLabel(label) {
       const normalized = normalizeFilterText(label);
       if (["category", "council area"].includes(normalized)) return "Council";
-      if (normalized === "last meaningful update") return "Last Update";
+      if (normalized === "last meaningful update") return "WMS Last Update";
       if (["score", "review score", "retire score"].includes(normalized)) return "Score";
       if (normalized === "jenkins priority") return "Errors Found";
       return label;
@@ -1639,6 +1829,8 @@
         const table = wrapper?.querySelector("table");
         const headerRow = table?.querySelector("thead tr:first-child");
         if (!wrapper || !table || !headerRow) return;
+        ensureRankedContactColumn(table, config.id);
+        ensureRankedViewsColumn(wrapper, table, config.id);
         const entries = Array.from(headerRow.children).map((cell, currentIndex) => {
           if (cell.dataset.rankedSourceColumnIndex === undefined) cell.dataset.rankedSourceColumnIndex = String(currentIndex);
           const originalLabel = (cell.querySelector(".sort-button")?.textContent || cell.textContent || "").trim();
@@ -1660,6 +1852,7 @@
           if (button) button.dataset.columnIndex = String(newIndex);
           headerRow.appendChild(entry.cell);
         });
+        sizeRankedTableColumns(table, entries);
         const targetColumnOrder = entries.map((entry) => entry.sourceIndex);
         table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach((row) => {
           const rowCells = Array.from(row.children).filter((cell) => cell.tagName === "TD");
@@ -1692,11 +1885,32 @@
           }
         });
         const body = wrapper.closest('.toggle-body');
+        const legacyDisclosure = body?.querySelector('.filter-disclosure');
+        if (legacyDisclosure) {
+          const reviewControls = legacyDisclosure.querySelector('.review-table-controls');
+          if (reviewControls) legacyDisclosure.replaceWith(reviewControls);
+          else legacyDisclosure.remove();
+        }
         const grid = body?.querySelector('.filter-grid');
         if (grid) {
-          [...grid.children].sort((a,b) => Number(a.querySelector('[data-column-index]')?.dataset.columnIndex ?? 999) - Number(b.querySelector('[data-column-index]')?.dataset.columnIndex ?? 999)).forEach(field => grid.append(field));
+          grid.querySelectorAll('[data-table-filter][data-column-index]').forEach((control) => control.closest('.filter-field')?.remove());
+          grid.remove();
         }
-        const typeSelect = body?.querySelector(`[data-table-filter="${config.id}"][data-filter-mode="content-type"]`);
+        body?.querySelectorAll('.review-focus-filter, .review-focus-groups, .review-filter-hint').forEach(control => control.remove());
+        let quickFilters = body?.querySelector('.table-quick-filters');
+        if (body && !quickFilters) {
+          quickFilters = document.createElement('div');
+          quickFilters.className = 'table-quick-filters';
+          quickFilters.setAttribute('aria-label', 'Search, filter, and sort this table');
+          body.insertBefore(quickFilters, body.querySelector('.review-table-controls') || wrapper);
+        }
+        let typeSelect = body?.querySelector(`[data-table-filter="${config.id}"][data-filter-mode="content-type"]`);
+        if (!typeSelect && body) {
+          const typeField = document.createElement('label');
+          typeField.innerHTML = `<span>Content type</span><select aria-label="Content type" data-table-filter="${config.id}" data-filter-mode="content-type"><option value="">All items</option><option value="Workshop">Workshops only</option><option value="Sprint">Sprints only</option></select>`;
+          quickFilters.append(typeField);
+          typeSelect = typeField.querySelector('select');
+        }
         if (typeSelect) {
           typeSelect.setAttribute('aria-label', 'Content type');
           const labels = {'':'All items', Workshop:'Workshops only', Sprint:'Sprints only'};
@@ -1706,15 +1920,63 @@
             option.textContent = labels[value] || option.textContent;
           });
           const label = typeSelect.closest('label');
-          label.classList.add('table-type-filter');
-          let typeBar = body.querySelector('.table-content-type-controls');
-          if (!typeBar) {
-            typeBar = document.createElement('div');
-            typeBar.className = 'table-content-type-controls';
-            body.insertBefore(typeBar, body.querySelector('.filter-disclosure') || wrapper);
-          }
-          typeBar.append(label);
+          label.classList.add('table-quick-filter-field', 'table-type-filter');
+          quickFilters.append(label);
         }
+        let searchControl = body?.querySelector(`[data-table-filter="${config.id}"][data-filter-mode="table-search"], [data-table-filter="${config.id}"][data-filter-mode="record-contact"]`);
+        let searchField = searchControl?.closest('label');
+        if (!searchControl && quickFilters) {
+          const field = document.createElement('label');
+          field.innerHTML = `<span>Search this table</span><input type="search" aria-label="Search this table" placeholder="Title, IDs, author/owner, or contact email" data-table-filter="${config.id}" data-filter-mode="table-search"><small data-contact-filter-status="${config.id}" role="status" aria-live="polite" hidden></small>`;
+          searchField = field;
+          searchControl = field.querySelector('input');
+        } else if (searchControl && !searchField) {
+          searchField = document.createElement('label');
+          searchField.append(searchControl);
+        }
+        if (searchControl && searchField && quickFilters) {
+          searchControl.dataset.filterMode = 'table-search';
+          searchControl.type = 'search';
+          searchControl.setAttribute('aria-label', 'Search this table');
+          searchControl.placeholder = 'Title, IDs, author/owner, or contact email';
+          searchField.classList.add('table-quick-filter-field', 'table-search-filter');
+          searchField.classList.remove('table-contact-filter');
+          let searchLabel = searchField.querySelector('span');
+          if (!searchLabel) {
+            searchLabel = document.createElement('span');
+            searchField.prepend(searchLabel);
+          }
+          searchLabel.textContent = 'Search this table';
+          let searchStatus = searchField.querySelector('[data-contact-filter-status]');
+          if (!searchStatus) {
+            searchStatus = document.createElement('small');
+            searchStatus.dataset.contactFilterStatus = config.id;
+            searchStatus.setAttribute('role', 'status');
+            searchStatus.setAttribute('aria-live', 'polite');
+            searchStatus.hidden = true;
+            searchField.append(searchStatus);
+          }
+          searchField.classList.remove('filter-field');
+          quickFilters.append(searchField);
+        }
+        let periodField = quickFilters?.querySelector('.table-view-period-filter');
+        if (!periodField && quickFilters) {
+          periodField = document.createElement('label');
+          periodField.className = 'table-quick-filter-field table-view-period-filter';
+          periodField.innerHTML = `<span>View period</span><select aria-label="View period" data-table-view-period="${config.id}">${window.LiveLabsViews.periods.map(period => `<option value="${period.key}">${period.label}</option>`).join('')}</select>`;
+          const periodSelect = periodField.querySelector('select');
+          periodSelect.value = wrapper.dataset.viewPeriod;
+          periodSelect.addEventListener('change', () => preserveViewportDuringTableUpdate(config.id, () => {
+            wrapper.dataset.viewPeriod = periodSelect.value;
+            updateRankedViewsColumn(wrapper);
+            applyTableState(config.id, {resetPage:true});
+          }));
+          quickFilters.append(periodField);
+        }
+        if (quickFilters && searchField && typeSelect) {
+          quickFilters.append(searchField, typeSelect.closest('label'), periodField);
+        }
+        body?.querySelectorAll('.review-table-controls').forEach(control => control.remove());
         table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach(row => {
           if (config.mode === 'urgent') return;
           const detail = detailRowFor(row);
@@ -1743,12 +2005,10 @@
         const index = header.children.length;
         const cell = document.createElement('th');
         cell.dataset.jenkinsColumn = 'priority';
-        cell.dataset.rankedSourceColumnIndex = String(index);
+        cell.dataset.rankedSourceColumnIndex = String(nextRankedSourceColumnIndex(header));
         cell.dataset.sortType = 'text';
         cell.innerHTML = `<button class="sort-button" type="button" data-sort-table="${wrapper.dataset.filterTable}" data-column-index="${index}" data-default-direction="asc">Errors Found</button>`;
         header.append(cell);
-        const grid = wrapper.closest('.toggle-body')?.querySelector('.filter-grid');
-        if (grid) grid.insertAdjacentHTML('beforeend', `<label class="filter-field" data-jenkins-filter="priority"><span>Errors Found</span><input type="search" placeholder="Filter P1, P2, or P3" data-table-filter="${wrapper.dataset.filterTable}" data-column-index="${index}"></label>`);
       }
       table.querySelectorAll('tbody tr[data-filter-row="true"]').forEach(row => {
         if (row.dataset.analyticsOriginalIndex === undefined) row.dataset.analyticsOriginalIndex = row.dataset.originalIndex || '0';
@@ -1778,7 +2038,6 @@
       }
       return null;
     }
-    const reviewFocusLabels = ['Lifecycle', 'Low demand', 'Older updates', 'Needs evidence', 'QA issues', 'Missing contact', 'Keep active', 'New content'];
     function focusBadges(tags) {
       return `<span class="review-focus-tags">${tags.map(tag => `<span class="review-focus-tag">${escapeHtml(tag)}</span>`).join('') || '<span class="muted">—</span>'}</span>`;
     }
@@ -1799,35 +2058,20 @@
         cell.dataset.filterValue = cell.dataset.sortValue = tags.join(' | ').toLowerCase();
       }
     }
-    function combinedTableControls(tableId) {
-      return `<div class="review-table-controls"><label>Type <select aria-label="Type" data-table-filter="${tableId}" data-filter-mode="content-type"><option value="">All types</option><option>Workshop</option><option>Sprint</option></select></label><fieldset class="review-focus-filter"><legend>Review focus <small>choose any</small></legend>${reviewFocusLabels.map(tag => `<label class="focus-choice"><input type="checkbox" value="${tag}" data-table-filter="${tableId}" data-filter-mode="review-focus">${tag}</label>`).join('')}</fieldset></div>`;
-    }
     function humanReadableJenkinsFinding(issue) {
       const label = String(issue?.label || issue?.code || "").trim();
       if (!label || issue?.label) return label;
       return label.replace(/[_-]+/g, " ").toLowerCase().replace(/\b[a-z]/g, (letter) => letter.toUpperCase());
     }
     function jenkinsColumnValue(overlay, withScore = false) {
-      if (!overlay) return withScore ? "" : "No Jenkins report";
+      if (!overlay) return withScore ? "" : "N/A";
       const score = overlay.jenkinsErrorScore;
       if (withScore) return score == null ? "N/A" : Number(score).toFixed(2);
       const counts = overlay.priorityCounts || {};
       const findings = Array.isArray(overlay.findings) ? overlay.findings : [];
-      const priorityLabels = [
-        ["p1", "P1", "urgent"],
-        ["p2", "P2", "review needed"],
-        ["p3", "P3", "minor"]
-      ];
-      const parts = priorityLabels.flatMap(([key, priority, meaning]) => {
-        const findingCount = findings.filter((issue) => issue.priority === priority).length;
-        const count = Math.max(Number(counts[key] || 0), findingCount);
-        return count ? [`${priority}: ${count} ${meaning}`] : [];
-      });
-      const unmapped = Number(counts.unmapped || 0);
-      if (unmapped) parts.push(`Unclassified: ${unmapped} · review with QA`);
-      const issues = Array.from(new Set(findings.map(humanReadableJenkinsFinding).filter(Boolean))).slice(0, 2);
-      const summary = parts.join(" · ") || "No P1/P2/P3 findings reported";
-      return issues.length ? `${summary} — ${issues.join(", ")}` : summary;
+      const reportedCount = ['p1', 'p2', 'p3', 'unmapped'].reduce((sum, key) => sum + Math.max(0, Number(counts[key]) || 0), 0);
+      const findingCount = Math.max(findings.length, reportedCount);
+      return findingCount ? `${findingCount} ${findingCount === 1 ? 'error' : 'errors'}` : "N/A";
     }
     function rankedTableSourceScoreCell(row, config) {
       if (!config.scoreHeader) return null;
@@ -1838,7 +2082,19 @@
       return cell;
     }
     function applyJenkinsMergeToRankedTables() {
-      if (!dashboardQaReportMerge) return;
+      if (!dashboardQaReportMerge) {
+        jenkinsRankedTableConfigs.forEach(config => {
+          const wrapper = document.querySelector(`[data-filter-table="${config.id}"]`);
+          if (!wrapper) return;
+          ensureJenkinsTableColumns(wrapper);
+          wrapper.querySelectorAll('td[data-jenkins-column="priority"]').forEach(cell => {
+            cell.textContent = 'N/A';
+            cell.dataset.filterValue = 'n a';
+            cell.dataset.sortValue = '';
+          });
+        });
+        return;
+      }
       const mergeId = String(dashboardQaReportMerge.id || dashboardQaReportMerge.appliedAt || "active");
       let anyUpdated = false;
       jenkinsRankedTableConfigs.forEach((config) => {
@@ -1903,6 +2159,7 @@
           const detailRow = detailRowFor(row);
           if (detailRow) columns.table.querySelector("tbody")?.appendChild(detailRow);
         });
+        refreshRankedTableTop100(wrapper);
         wrapper.dataset.jenkinsMergeId = mergeId;
       });
       if (!anyUpdated) return;
@@ -1955,6 +2212,7 @@
         else delete wrapper.dataset.sortColumnIndex;
         wrapper.dataset.sortDirection = wrapper.dataset.analyticsSortDirection || "none";
         ["analyticsColumnCount", "analyticsSortColumnIndex", "analyticsSortDirection", "jenkinsMergeId"].forEach((key) => { delete wrapper.dataset[key]; });
+        refreshRankedTableTop100(wrapper);
       });
       if (cleared) refreshInitializedTableStates({ resetPage: true });
     }
@@ -1997,21 +2255,22 @@
         .map(([id, overlay]) => ({id, overlay, record:records.get(id), findings:(overlay.findings || []).filter(issue => issue.priority === 'P1')})).filter(item => item.findings.length);
       const needsFix = issue => !(issue.group === 'verification-required' || /verify/i.test(issue.priorityLabel || ''));
       items.sort((a,b) => Number(b.findings.some(needsFix)) - Number(a.findings.some(needsFix)) || b.findings.length-a.findings.length || a.id.localeCompare(b.id));
-      const columns = ['Title', 'Type', 'Action', 'P1 findings', 'Occurrences', 'Author / owner', 'LiveLabs ID', 'Record'];
-      const headers = columns.map((label,index) => `<th data-column-label="${label}" data-sort-column-index="${index}" data-sort-type="${[3,4,6].includes(index) ? 'number':'text'}"><button class="sort-button" type="button" data-sort-table="${tableId}" data-column-index="${index}" data-default-direction="${[3,4].includes(index)?'desc':'asc'}">${label}</button></th>`).join('');
-      const filters = columns.map((label,index) => `<label class="filter-field"><span>${label}</span><input aria-label="Filter ${label}" type="search" data-table-filter="${tableId}" data-column-index="${index}"></label>`).join('');
+      const columns = ['#', 'Title', 'Type', 'Issues', 'Author / owner', 'LiveLabs ID'];
+      const headers = columns.map((label,index) => `<th data-column-label="${label}" data-sort-column-index="${index}" data-sort-type="${[0,3,5].includes(index) ? 'number':'text'}"><button class="sort-button" type="button" data-sort-table="${tableId}" data-column-index="${index}" data-default-direction="${index === 3 ? 'desc':'asc'}">${label}</button></th>`).join('');
       const rows = items.map((item,index) => {
         const {id,overlay,record,findings} = item;
         const tags = reviewFocusForRecord(record); if (!tags.includes('QA issues')) tags.push('QA issues');
         const actions = [...new Set(findings.map(issue => needsFix(issue) ? 'Author fix' : 'Verify report'))];
         const occurrences = findings.reduce((sum,issue) => sum + Math.max(0,Number(issue.count || 0)),0);
-        const values = [record?.title || overlay.itemTitle || 'LiveLabs item',record?.type || 'Unknown',actions.join(' · '),findings.length,occurrences,record?.owner || 'Reviewer assignment needed',id,'Open record'];
-        const cells = values.map((value,i) => `<td data-column-label="${columns[i]}" data-filter-value="${escapeHtml(String(value).toLowerCase())}" data-sort-value="${escapeHtml(value)}">${i===7 ? `<a class="author-button author-button-primary" href="${escapeHtml(recordLink({livelabsId:id}))}">Open record</a>` : escapeHtml(value)}</td>`).join('');
-        const details = findings.map(issue => `<li><strong>${escapeHtml(humanReadableJenkinsFinding(issue))}</strong> · ${needsFix(issue)?'Author fix':'Verify report'} · ${Math.max(0,Number(issue.count||0))} occurrences<p>${escapeHtml(issue.message || 'Open the record for source evidence.')}</p></li>`).join('');
-        return `<tr class="expandable-row" data-filter-row="true" data-livelabs-id="${id}" data-content-type="${escapeHtml(record?.type || '')}" data-review-focus="${escapeHtml(JSON.stringify(tags))}" data-original-index="${index}" data-detail-row-id="p1-${id}" data-expanded="false" tabindex="0" aria-expanded="false">${cells}</tr><tr class="detail-row" data-detail-for="p1-${id}" hidden><td colspan="8"><div class="detail-shell"><h4>P1 findings for ${escapeHtml(values[0])}</h4><ul>${details}</ul><a class="author-button author-button-primary" href="${escapeHtml(recordLink({livelabsId:id}))}">Open full record and evidence</a></div></td></tr>`;
+        const issueLabels = [...new Set(findings.map(humanReadableJenkinsFinding).filter(Boolean))];
+        const summary = issueLabels.slice(0, 2).join('; ') + (issueLabels.length > 2 ? `; +${issueLabels.length - 2} more` : '');
+        const issueCounts = `${findings.length} ${findings.length === 1 ? 'finding' : 'findings'} · ${occurrences} ${occurrences === 1 ? 'occurrence' : 'occurrences'} · ${actions.join(' · ')}`;
+        const values = [index + 1,record?.title || overlay.itemTitle || 'LiveLabs item',record?.type || 'Unknown',`${summary} ${issueCounts}`,record?.owner || 'Reviewer assignment needed',id];
+        const cells = values.map((value,i) => `<td data-column-label="${columns[i]}" data-filter-value="${escapeHtml(String(value).toLowerCase())}" data-sort-value="${escapeHtml(i === 3 ? findings.length : value)}">${i === 3 ? `<span class="urgent-issue-summary">${escapeHtml(summary)}</span> <small class="urgent-issue-counts">${escapeHtml(issueCounts)}</small>` : escapeHtml(value)}</td>`).join('');
+        return `<tr class="record-navigation-row" data-filter-row="true" data-livelabs-id="${id}" data-wms-id="${escapeHtml(record?.wmsId || '')}" data-content-type="${escapeHtml(record?.type || '')}" data-review-focus="${escapeHtml(JSON.stringify(tags))}" data-original-index="${index}" tabindex="0">${cells}</tr>`;
       }).join('');
       const findingCount = items.reduce((sum,item)=>sum+item.findings.length,0);
-      section.innerHTML = `<div class="section-head"><h2>P1 urgent action</h2><p>Review findings that may stop learners.</p></div>${jenkinsPriorityGuideMarkup()}<section class="panel ranked-table-panel"><div class="panel-head"><h3>P1 urgent action</h3><span>${items.length} rows · ${findingCount} findings</span></div><div class="toggle-body"><div class="table-tools"><span class="table-count" data-table-count-for="${tableId}">${items.length} rows</span><button class="filter-reset" data-clear-filters-for="${tableId}">Clear filters</button></div><details class="filter-disclosure"><summary>Apply filters</summary>${combinedTableControls(tableId)}<div class="filter-grid">${filters}</div></details><div class="table-wrap" data-filter-table="${tableId}"><table class="data-table" id="${tableId}"><thead><tr>${headers}</tr></thead><tbody>${rows || `<tr><td colspan="8">${dashboardQaReportMerge ? 'No P1 findings in the applied report.' : 'Add a Jenkins report in Admin to see P1 findings.'}</td></tr>`}</tbody></table></div></div></section>`;
+      section.innerHTML = `<div class="section-head"><h2>P1 urgent action</h2><p>Review findings that may stop learners.</p></div>${jenkinsPriorityGuideMarkup()}<section class="panel ranked-table-panel"><div class="panel-head"><h3>P1 urgent action</h3><span>${items.length} rows · ${findingCount} findings</span></div><div class="toggle-body"><div class="table-tools"><span class="table-count" data-table-count-for="${tableId}">${items.length} rows</span><button class="filter-reset" data-clear-filters-for="${tableId}">Clear filters</button></div><div class="table-wrap" data-filter-table="${tableId}"><table class="data-table" id="${tableId}"><thead><tr>${headers}</tr></thead><tbody>${rows || `<tr><td colspan="${columns.length}">${dashboardQaReportMerge ? 'No P1 findings in the applied report.' : 'Add a Jenkins report in Admin to see P1 findings.'}</td></tr>`}</tbody></table></div></div></section>`;
       section.dataset.mergeId = mergeId;
       normalizeRankedTablePresentation(section);
       applyRankedTableDisclosures(); decorateDashboardCopyTargets(section);
@@ -2027,28 +2286,40 @@
       applyPortfolioStatsSummary();
       tableSearchRecordsCache = null;
       refreshDashboardSearch();
-      if (loadedFullSearchRecords.length) renderAllDataTable();
+      if (loadedFullSearchRecords.length && document.body.classList.contains("dashboard-inventory-active")) renderAllDataTable();
       if (dashboardQaReportMerge) refreshRenderedSearchDetail();
     }
-    async function fetchDashboardState() {
-      try {
-        const response = await fetch('/api/dashboard-admin-state', {cache:'no-store'});
-        if (response.ok) return await response.json();
-      } catch { /* A static release has no API. */ }
-      try {
-        const response = await fetch(new URL('./assets/data/dashboard-state.json', document.baseURI), {cache:'no-store'});
-        return response.ok ? await response.json() : null;
-      } catch { return null; }
+    function fetchDashboardState({ refresh = false } = {}) {
+      if (dashboardStatePromise && !refresh) return dashboardStatePromise;
+      dashboardStatePromise = (async () => {
+        try {
+          const response = await fetch('/api/dashboard-admin-state', {cache:'no-store'});
+          if (response.ok) return await response.json();
+        } catch { /* A static release has no API. */ }
+        try {
+          const response = await fetch(new URL('./assets/data/dashboard-state.json', document.baseURI), {cache:'no-store'});
+          return response.ok ? await response.json() : null;
+        } catch { return null; }
+      })();
+      return dashboardStatePromise;
     }
     function ensureDashboardQaMergeLoaded() {
       if (dashboardQaReportMerge) return Promise.resolve(dashboardQaReportMerge);
+      dashboardQaMergeLoadState = "loading";
+      applyPortfolioStatsSummary();
       return fetchDashboardState()
         .then((payload) => {
           dashboardQaReportMerge = payload?.qaReportMerge || null;
-          if (dashboardQaReportMerge) applyJenkinsMergeToLoadedRecords();
+          dashboardQaMergeLoadState = dashboardQaReportMerge ? "loaded" : "unavailable";
+          applyPortfolioStatsSummary();
+          if (dashboardQaReportMerge && !directRecordRoute) applyJenkinsMergeToLoadedRecords();
           return dashboardQaReportMerge;
         })
-        .catch(() => dashboardQaReportMerge);
+        .catch(() => {
+          dashboardQaMergeLoadState = dashboardQaReportMerge ? "loaded" : "unavailable";
+          applyPortfolioStatsSummary();
+          return dashboardQaReportMerge;
+        });
     }
     function refreshRenderedSearchDetail() {
       const view = document.querySelector(".search-workshop-view");
@@ -2058,12 +2329,20 @@
       if (record) renderSearchDetail(record, { updateUrl: false });
     }
     function reloadDashboardJenkinsMerge() {
-      fetchDashboardState()
+      if (!dashboardQaReportMerge) {
+        dashboardQaMergeLoadState = "loading";
+        applyPortfolioStatsSummary();
+      }
+      fetchDashboardState({ refresh: true })
         .then((payload) => {
           dashboardQaReportMerge = payload?.qaReportMerge || null;
+          dashboardQaMergeLoadState = dashboardQaReportMerge ? "loaded" : "unavailable";
           applyJenkinsDashboardMerge();
         })
-        .catch(() => {});
+        .catch(() => {
+          dashboardQaMergeLoadState = dashboardQaReportMerge ? "loaded" : "unavailable";
+          applyPortfolioStatsSummary();
+        });
     }
     function observeJenkinsDashboardTables() {
       if (window.__jenkinsDashboardMergeObserver || !document.body) return;
@@ -2500,19 +2779,19 @@
     }
     function detailFieldLabelForElement(element) {
       const row = element.closest("tr");
-      const tableLabel = row?.querySelector("th")?.textContent || "";
+      const tableLabel = detailReportText(row?.querySelector("th"));
       if (tableLabel) return tableLabel.trim();
       if (row) {
         const headers = element.closest("table")?.querySelectorAll("thead th");
-        return headers?.[element.cellIndex]?.textContent?.trim() || "value";
+        return detailReportText(headers?.[element.cellIndex]) || "value";
       }
       const definition = element.closest("div");
-      return definition?.querySelector("dt")?.textContent?.trim() || "";
+      return detailReportText(definition?.querySelector("dt"));
     }
     function detailReportText(element) {
       if (!element) return "";
       const clone = element.cloneNode(true);
-      clone.querySelectorAll("[data-copy-value]").forEach((button) => button.remove());
+      clone.querySelectorAll("[data-copy-value], .term-help, [role=\"tooltip\"]").forEach((node) => node.remove());
       clone.querySelectorAll("br").forEach((node) => node.replaceWith("\n"));
       clone.querySelectorAll(".subtle").forEach((node) => node.prepend("\n"));
       return (clone.textContent || "").trim();
@@ -2605,6 +2884,22 @@
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
       const statusNode = document.getElementById("copy-status");
       if (statusNode) statusNode.textContent = `CSV report downloaded for ${record.title}`;
+    }
+    function exportSearchDetailJson(record, view) {
+      const matrix = searchDetailReportRows(view);
+      const columns = matrix[0] || ['Section', 'Row', 'Field', 'Value'];
+      const identity = record.livelabsId ? `livelabs-${record.livelabsId}` : record.wmsId ? `wms-${record.wmsId}` : record.title;
+      const slug = value => String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      window.LiveLabsExport.json({
+        source: 'LiveLabs Analytics search detail',
+        exportedAt: new Date().toISOString(),
+        item: { title:record.title, type:record.type, livelabsId:record.livelabsId || '', wmsId:record.wmsId || '' },
+        columns,
+        rowCount: Math.max(matrix.length - 1, 0),
+        rows: matrix.slice(1).map(values => Object.fromEntries(columns.map((column, index) => [column, values[index]])))
+      }, `${slug(record.type) || 'content'}-${slug(identity).slice(0, 100) || 'result'}-report.json`);
+      const statusNode = document.getElementById('copy-status');
+      if (statusNode) statusNode.textContent = `JSON report downloaded for ${record.title}`;
     }
     async function copyValueFromButton(button) {
       const text = button?.dataset.copyValue || "";
@@ -2796,8 +3091,8 @@
     }
     function addNoAuthorFilter(tableId) {
       if (authorFacingGovernanceTagsHidden) return;
-      const firstFilter = document.querySelector(`[data-table-filter="${tableId}"]`);
-      const grid = firstFilter?.closest(".filter-grid");
+      const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
+      const grid = wrapper?.closest(".toggle-body")?.querySelector(".filter-grid");
       if (!grid || grid.querySelector(`[data-filter-mode="no-author"][data-table-filter="${tableId}"]`)) return;
       const field = document.createElement("label");
       field.className = "filter-field no-author-filter-field";
@@ -2873,8 +3168,8 @@
     }
     function addDemandProtectedFilter(tableId) {
       if (authorFacingGovernanceTagsHidden) return;
-      const firstFilter = document.querySelector(`[data-table-filter="${tableId}"]`);
-      const grid = firstFilter?.closest(".filter-grid");
+      const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
+      const grid = wrapper?.closest(".toggle-body")?.querySelector(".filter-grid");
       if (!grid || grid.querySelector(`[data-filter-mode="demand-protected"][data-table-filter="${tableId}"]`)) return;
       const field = document.createElement("label");
       field.className = "filter-field demand-protected-filter-field";
@@ -3089,7 +3384,7 @@
       decorateDashboardCopyTargets();
       applySectionVisibilitySettings();
       refreshInitializedTableStates({ resetPage: true });
-      if (loadedFullSearchRecords.length) renderAllDataTable();
+      if (loadedFullSearchRecords.length && document.body.classList.contains("dashboard-inventory-active")) renderAllDataTable();
       refreshDashboardSearch();
     }
     function buildTableSearchIndex() {
@@ -3353,6 +3648,71 @@
     function qaReportOverlayHtml(record) {
       return window.LiveLabsAuthor.evidenceHtml(jenkinsOverlayForId(record.livelabsId));
     }
+    function initializeDetailTooltips(view) {
+      view.termTooltipController?.abort();
+      const controller = new AbortController();
+      view.termTooltipController = controller;
+      const {signal} = controller;
+      let active = null;
+      let closeTimer;
+      const close = () => {
+        window.clearTimeout(closeTimer);
+        if (!active) return;
+        const {tooltip} = active;
+        if (tooltip.hasAttribute('popover') && tooltip.matches(':popover-open')) tooltip.hidePopover();
+        tooltip.hidden = true;
+        active = null;
+      };
+      const position = (event) => {
+        if (!active) return;
+        const {button, tooltip} = active;
+        const anchor = button.getBoundingClientRect();
+        // Focus can start a smooth scroll. Keep keyboard help open while the
+        // focused trigger moves into view, and reposition it on each scroll.
+        if (!button.isConnected || (event && document.activeElement !== button && (anchor.bottom < 0 || anchor.top > innerHeight))) { close(); return; }
+        const box = tooltip.getBoundingClientRect();
+        const padding = 12;
+        const preferredTop = anchor.top - box.height - 8;
+        tooltip.style.left = `${Math.max(padding, Math.min(anchor.left + anchor.width / 2 - box.width / 2, innerWidth - box.width - padding))}px`;
+        tooltip.style.top = `${Math.max(padding, Math.min(preferredTop >= padding ? preferredTop : anchor.bottom + 8, innerHeight - box.height - padding))}px`;
+      };
+      view.querySelectorAll('.term-help').forEach((button, index) => {
+        const tooltip = button.querySelector('.term-tooltip');
+        if (!tooltip) return;
+        tooltip.id = `detail-term-tooltip-${index}`;
+        tooltip.hidden = true;
+        button.setAttribute('aria-describedby', tooltip.id);
+        // The top layer escapes card overflow and stacking contexts. A body portal
+        // also keeps the fallback clear of the metric card in older browsers.
+        if (typeof tooltip.showPopover === 'function') tooltip.setAttribute('popover', 'manual');
+        document.body.append(tooltip);
+        const show = () => {
+          window.clearTimeout(closeTimer);
+          if (active?.tooltip !== tooltip) close();
+          active = {button, tooltip};
+          tooltip.hidden = false;
+          if (tooltip.hasAttribute('popover') && !tooltip.matches(':popover-open')) tooltip.showPopover();
+          position();
+        };
+        const scheduleClose = () => {
+          window.clearTimeout(closeTimer);
+          closeTimer = window.setTimeout(() => {
+            if (!button.matches(':hover, :focus') && !tooltip.matches(':hover')) close();
+          }, 100);
+        };
+        button.addEventListener('mouseenter', show, {signal});
+        button.addEventListener('focus', show, {signal});
+        button.addEventListener('mouseleave', scheduleClose, {signal});
+        button.addEventListener('blur', scheduleClose, {signal});
+        button.addEventListener('click', show, {signal});
+        tooltip.addEventListener('mouseenter', () => window.clearTimeout(closeTimer), {signal});
+        tooltip.addEventListener('mouseleave', scheduleClose, {signal});
+        signal.addEventListener('abort', () => { close(); tooltip.remove(); }, {once:true});
+      });
+      document.addEventListener('keydown', event => { if (event.key === 'Escape') close(); }, {signal});
+      window.addEventListener('resize', position, {signal});
+      document.addEventListener('scroll', position, {capture:true, signal});
+    }
     function renderSearchDetail(record, { updateUrl = true, scoreMode = null } = {}) {
       if (updateUrl) {
         writeSearchUrl({ query: "", record, replace: false, route: "search", scoreMode });
@@ -3361,35 +3721,78 @@
       }
       const view = ensureSearchView();
       const score = recordScore(record);
-      const summaryItems = [['Score', score == null ? 'N/A' : score.toFixed(2)], ['LiveLabs ID', record.livelabsId || 'N/A'], ['WMS ID', record.wmsId || 'N/A'], ['Last update', record.update || 'Unknown']];
-      const scoreNote = scoreContext() === 'risk' ? 'Higher score means higher review priority.' : 'Higher score means stronger performance.';
-      const governanceItems = governanceItemsFor(record);
-      const updateLabels = new Set(["Update Evidence", "Latest GitHub Update", "Suggested Action", "Recommended Action", "Lifecycle State", "Workshop Path"]);
-      const profileItems = governanceItems.filter(([label]) => !["WMS ID", "LiveLabs ID"].includes(label) && !updateLabels.has(label));
+      const activeScoreMode = scoreContext();
+      const scoreNote = activeScoreMode === 'risk'
+        ? 'Review score: higher means higher review priority.'
+        : 'Performance score: higher means stronger performance.';
+      const dataValue = (labels) => labeledValue(record, labels)?.value || '';
+      const publishParts = [dataValue(['Publish Status']), dataValue(['Publish Type'])].filter(Boolean);
+      const overviewItems = [
+        [activeScoreMode === 'risk' ? 'Review score' : 'Performance score', score == null ? 'N/A' : score.toFixed(2), 'score'],
+        ['Views · 12 months', dataValue(['Views - Last 12 Months', 'Views 12m', 'Recent Views 12m', 'Page Views 12m']) || 'Not reported', 'views'],
+        ['Views · 90 days', dataValue(['Views - Last 90 Days', 'Views 90d', 'Recent Views 90d', 'Page Views 90d']) || 'Not reported', 'views'],
+        ['Owner / author', record.owner || dataValue(['Author Email', 'Owner Email']) || 'Not reported', 'owner'],
+        ['Additional contact', record.additionalContact?.email ? `${record.additionalContact.type}: ${record.additionalContact.email}` : dataValue(['Support Contact Email', 'Support Contact', 'Tech Contact Email']) || 'Not reported', 'contact'],
+        ['Category', record.category || dataValue(['Council Area', 'Category']) || 'Not reported', 'category'],
+        ['WMS last update', record.update || dataValue(['WMS Last Update', 'Last Update']) || 'Not reported', 'update'],
+        ['Latest GitHub update', dataValue(['Latest GitHub Update', 'Last Meaningful Workshop Update', 'Latest Workshop Commit Date', 'Latest Markdown Commit Date']) || 'Not reported', 'github'],
+        ['Publishing', publishParts.join(' · ') || 'Not reported', 'publishing'],
+      ];
+      const metricHelp = {
+        score: 'Ranks this item within its content type. P1 findings remain a separate urgent action.',
+        contact: 'A second WMS contact, such as support, technical, or manager, when available.',
+        update: 'Most recent update date recorded in WMS.',
+        github: 'Most recent update found in the linked workshop or sprint repository.',
+        publishing: 'Shows whether the item is published and who can access it.',
+      };
+      const review = record.review;
+      const reviewContext = review ? [
+        ['Review band', review.tierLabel],
+        ['Confidence', review.confidence],
+        ['Why included', (review.reasons || []).join(' ')],
+        ['Demand mapping', review.metricScope],
+        ['Within-type demand percentile', review.demandPercentile == null ? '' : review.demandPercentile],
+        ['Review state', review.reviewState],
+        ['Recorded update', review.recordedUpdate],
+        ['Update used for scoring', review.scoringUpdate],
+        ['Update evidence', review.updateEvidence],
+        ['Recorded Markdown update', review.markdownUpdate],
+        ['First publication verified', review.firstPublishedDate],
+        ['Keep-active expiry', review.keepUntil],
+        ['Source snapshot', review.snapshotDate],
+      ].filter(([, value]) => value !== undefined && value !== null && value !== '') : [];
+      const reviewContextHtml = reviewContext.length ? `<details class="search-detail-panel search-detail-panel-wide search-review-context"><summary><h3>Review context</h3><span>${escapeHtml(review.tierLabel || 'Available')}</span></summary><div class="search-disclosure-body"><table class="search-detail-table"><tbody>${reviewContext.map(([label, value]) => `<tr><th>${escapeHtml(label)}</th><td>${escapeHtml(String(value))}</td></tr>`).join('')}</tbody></table></div></details>` : '';
       const qaReportHtml = qaReportOverlayHtml(record);
       const scoreEvidenceHtml = window.LiveLabsAuthor.scoreHtml(authorScoreBaselines[String(record.livelabsId)], jenkinsOverlayForId(record.livelabsId), scoreContext());
-      const metaListHtml = (items) => items.length ? `<dl class="search-meta-list">${items.map(([label, value]) => {
-        const wide = ["Latest GitHub Update", "Workshop Path"].includes(label) || String(value).length > 48;
-        return `<div${wide ? ` class="wide"` : ""}><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`;
-      }).join("")}</dl>` : `<p class="note">No details were reported in this group.</p>`;
-      const subtitle = [record.status || "", record.ownership?.status === "disputed" ? "Ownership needs review" : record.owner ? `WMS reported owner: ${record.owner}` : ""].filter(Boolean).join(" | ");
+      const subtitle = [record.status || '', record.ownership?.status === 'disputed' ? 'Ownership needs review' : ''].filter(Boolean).join(' · ');
+      const identifiers = [
+        record.livelabsId ? `LiveLabs ID ${record.livelabsId}` : '',
+        record.wmsId ? `WMS ID ${record.wmsId}` : '',
+      ].filter(Boolean);
       view.innerHTML = `
-        <div class="search-view-header">
-          <div>
+        <header class="search-view-header search-item-banner">
+          <div class="search-item-branding">
+            <div class="hero-logo" aria-label="LiveLabs"><img src="./assets/images/livelabs-logo-white.svg" alt="LiveLabs"></div>
             <span class="search-kicker">${escapeHtml(record.type || "Portfolio result")}</span>
             <h2>${escapeHtml(record.title)}</h2>
             ${subtitle ? `<p class="search-view-subtitle">${escapeHtml(subtitle)}</p>` : ""}
+            ${identifiers.length ? `<div class="search-item-identifiers">${identifiers.map((item) => `<span>${escapeHtml(item)}</span>`).join('')}</div>` : ''}
           </div>
-          <span class="search-view-actions">${window.LiveLabsAuthor.liveButton(record, jenkinsOverlayForId(record.livelabsId))}<button class="nav-link" type="button" data-copy-search-link>Copy link</button><details class="report-export-dropdown"><summary class="nav-link">Export report <span aria-hidden="true">▾</span></summary><div class="report-export-options"><button type="button" data-export-search-xlsx>Excel (.xlsx)</button><button type="button" data-export-search-csv>CSV (.csv)</button></div></details><button class="nav-link" type="button" data-back-dashboard>Back to Dashboard</button></span>
-        </div>
-        <details open class="search-detail-panel search-detail-panel-wide search-ownership-panel"><summary><h3>Ownership &amp; publishing</h3></summary>${metaListHtml(profileItems)}</details>
-        <section class="search-summary-section" aria-label="Record summary"><p class="author-score-note">${scoreNote}${score == null ? " Required score inputs are unavailable." : ""} P1 remains a separate priority.</p><dl class="search-result-summary">
-          ${summaryItems.map(([label, value]) => `<div class="search-result-card"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("")}
-        </dl></section>
+          <nav class="search-view-actions" aria-label="Item actions">
+            ${window.LiveLabsAuthor.liveButton(record, jenkinsOverlayForId(record.livelabsId))}
+            <button class="nav-link" type="button" data-copy-search-link>Copy link</button>
+            <details class="report-export-dropdown"><summary class="nav-link">Export report <span aria-hidden="true">▾</span></summary><div class="report-export-options"><button type="button" data-export-search-xlsx>Excel (.xlsx)</button><button type="button" data-export-search-csv>CSV (.csv)</button><button type="button" data-export-search-json>JSON (.json)</button></div></details>
+          </nav>
+        </header>
+        <section class="search-summary-section search-overview-panel" aria-labelledby="search-overview-heading">
+          <div class="search-overview-heading"><h3 id="search-overview-heading">Ownership, publishing &amp; performance</h3><p class="author-score-note">${escapeHtml(scoreNote)} P1 findings stay in the urgent action queue.${score == null ? ' Score unavailable for this item.' : ''}</p></div>
+          <dl class="search-result-summary">${overviewItems.map(([label, value, key]) => `<div class="search-result-card" data-summary-key="${escapeHtml(key)}"><dt>${escapeHtml(label)}${metricHelp[key] ? `<button class="term-help" type="button" aria-label="${escapeHtml(label)} help"><span aria-hidden="true">i</span><span class="term-tooltip" role="tooltip">${escapeHtml(metricHelp[key])}</span></button>` : ''}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl>
+        </section>
 
         <div class="search-detail-grid${qaReportHtml ? " search-qa-source-grid" : ""}">
           ${qaReportHtml}
           ${scoreEvidenceHtml}
+          ${reviewContextHtml}
           <details class="search-detail-panel search-detail-panel-wide search-source-panel" data-report-section><summary><h3>Source details</h3></summary>
             <details class="search-disclosure"><summary><span>Dashboard row</span><span class="search-disclosure-count">${record.values.size} fields</span></summary><div class="search-disclosure-body"><table class="search-detail-table"><tbody>${sourceRowsHtml(record)}</tbody></table></div></details>
             <details class="search-disclosure"><summary><span>Additional source fields</span><span class="search-disclosure-count">${record.details.size} fields</span></summary><div class="search-disclosure-body"><table class="search-detail-table"><tbody>${fieldRowsHtml(record)}</tbody></table></div></details>
@@ -3399,9 +3802,7 @@
           ${fileUpdatesHtml(record)}
           ${familyHtml(record)}
         </div>`;
-      view.querySelectorAll("[data-back-dashboard]").forEach((button) => {
-        button.addEventListener("click", () => showDashboardView({ clearUrl: true }));
-      });
+      initializeDetailTooltips(view);
       view.querySelectorAll("[data-copy-search-link]").forEach((button) => {
         button.addEventListener("click", () => copySearchLink(button));
       });
@@ -3432,6 +3833,10 @@
         const identity = record.livelabsId ? `livelabs-${record.livelabsId}` : `wms-${record.wmsId || "result"}`;
         window.LiveLabsExport.xlsx(searchDetailReportRows(view), `${String(record.type || "content").toLowerCase()}-${identity}-report.xlsx`);
       });
+      view.querySelector('[data-export-search-json]').addEventListener('click', () => {
+        closeExportDropdown();
+        exportSearchDetailJson(record, view);
+      });
       view.querySelector('[data-family-disclosure]')?.addEventListener('toggle', event => {
         const disclosure = event.currentTarget;
         if (!disclosure.open || disclosure.dataset.loaded) return;
@@ -3447,9 +3852,6 @@
       view.hidden = false;
       document.body.classList.add("dashboard-search-active");
       decorateDetailCopyTargets(view);
-      document.querySelectorAll("[data-back-dashboard]").forEach((button) => {
-        button.hidden = false;
-      });
       document.querySelectorAll(".nav-list a").forEach((item) => item.removeAttribute("aria-current"));
       view.scrollIntoView({ block: "start" });
     }
@@ -3470,10 +3872,8 @@
       const view = document.querySelector("#search-workshop-view");
       if (view) view.hidden = true;
       document.body.classList.remove("dashboard-search-active");
+      document.documentElement.classList.remove("analytics-record-requested");
       clearGlobalSearchUi();
-      document.querySelectorAll("[data-back-dashboard]").forEach((button) => {
-        button.hidden = true;
-      });
       if (clearUrl) writeSearchUrl();
     }
     function mountPrimarySearch() {
@@ -3514,9 +3914,8 @@
         result.className = 'author-search-result';
         const overlay = jenkinsOverlayForId(record.livelabsId);
         const findings = overlay?.findings || [];
-        const score = recordScore(record, 'performance');
         const priorities = ['P1','P2','P3'].map(priority => { const count = findings.filter(item => item.priority === priority).length; return count ? `${count} ${priority}` : ''; }).filter(Boolean).join(' · ');
-        result.innerHTML = `<div class="author-search-copy"><strong>${escapeHtml(record.title)}</strong><span>${escapeHtml(record.type)} · LiveLabs ${escapeHtml(record.livelabsId)}</span><span class="author-email" title="${escapeHtml(record.owner)}">${escapeHtml(record.owner)}</span><span>${escapeHtml(priorities || (overlay ? (findings.length ? 'Unclassified findings · review with QA' : 'No findings reported') : 'No QA report'))}</span></div><div class="author-search-score"><span>Score</span><strong>${score == null ? 'N/A' : score.toFixed(2)}</strong></div><div class="author-search-actions"><a class="author-button author-button-primary" href="${recordLink(record)}">Open record</a>${window.LiveLabsAuthor.liveButton(record, overlay)}</div>`;
+        result.innerHTML = `<div class="author-search-copy"><strong>${escapeHtml(record.title)}</strong><span>${escapeHtml(record.type)} · LiveLabs ${escapeHtml(record.livelabsId)}</span><span class="author-email" title="${escapeHtml(record.owner)}">${escapeHtml(record.owner)}</span><span>${escapeHtml(priorities || (overlay ? (findings.length ? 'Unclassified findings · review with QA' : 'No findings reported') : 'No QA report'))}</span></div><div class="author-search-actions"><a class="author-button author-button-primary" href="${recordLink(record)}">Open record</a>${window.LiveLabsAuthor.liveButton(record, overlay, false)}</div>`;
         resultsNode.append(result);
       });
     }
@@ -3622,12 +4021,11 @@
                 </div>
                 ${allDataControlsHtml("top")}
                 <div class="table-wrap">
-                  <table id="all-content-data-table" class="all-data-table">
-                    <thead><tr><th class="all-data-row-number">#</th><th>Title</th><th>Type</th><th>Publish Status</th><th>Publish Type</th><th>WMS ID</th><th>LiveLabs ID</th><th>Category</th><th>Contact</th><th>Analytics QA Error Score</th><th>Jenkins Error Score</th><th>Jenkins Priority</th><th>QA Evidence</th></tr></thead>
+                <table id="all-content-data-table" class="all-data-table">
+                    <thead><tr>${allDataTableHeadersHtml()}</tr></thead>
                     <tbody data-all-data-rows><tr><td colspan="13" class="empty">Open Portfolio Inventory to load records</td></tr></tbody>
                   </table>
                 </div>
-                ${allDataControlsHtml("bottom")}
               </div>
             </section>
           </div>`;
@@ -3668,24 +4066,22 @@
           renderAllDataTable();
         });
       });
-      document.querySelectorAll("[data-all-data-sort]").forEach((sort) => {
-        sort.addEventListener("change", () => {
-          allDataState.sortKey = sort.value;
-          allDataState.sortDirection = sort.value ? allDataState.sortDirection || "asc" : "asc";
-          allDataState.page = 1;
-          allDataState.pageRange = "";
-          renderAllDataTable();
-        });
-      });
-      document.querySelectorAll("[data-all-data-sort-direction]").forEach((button) => {
+      document.querySelectorAll("[data-all-data-sort-key]").forEach((button) => {
         button.addEventListener("click", () => {
-          if (!allDataState.sortKey) return;
-          allDataState.sortDirection = allDataState.sortDirection === "desc" ? "asc" : "desc";
+          const key = button.dataset.allDataSortKey;
+          allDataState.sortDirection = allDataState.sortKey === key
+            ? (allDataState.sortDirection === "asc" ? "desc" : "asc") : "asc";
+          allDataState.sortKey = key;
           allDataState.page = 1;
           allDataState.pageRange = "";
           renderAllDataTable();
         });
       });
+      document.querySelectorAll("[data-all-data-export-format]").forEach((button) => button.addEventListener("click", () => {
+        try { exportAllDataVisibleRows(button.dataset.allDataExportFormat); }
+        catch (error) { const status = document.querySelector("[data-all-data-export-status]"); if (status) status.textContent = error?.message || "The visible rows could not be exported."; }
+        button.closest(".table-export-dropdown")?.removeAttribute("open");
+      }));
       document.querySelectorAll("[data-all-data-page]").forEach((button) => {
         button.addEventListener("click", () => {
           const totalPages = Number(button.closest(".all-data-panel")?.dataset.totalPages || "1") || 1;
@@ -3946,20 +4342,44 @@
       });
     }
     function allDataControlsHtml(position) {
-      return `<div class="all-data-actions all-data-actions-${escapeHtml(position)}" data-all-data-controls="${escapeHtml(position)}">
+      return `<div class="all-data-actions all-data-actions-${escapeHtml(position)} table-controls-toolbar" data-all-data-controls="${escapeHtml(position)}">
         <span data-all-data-count>Inventory not loaded</span>
         <button class="filter-reset" type="button" data-all-data-focus-filters>Filters</button>
         <button class="filter-reset" type="button" data-all-data-clear>Clear filters</button>
+        <details class="table-export-dropdown"><summary>Export visible rows</summary><div class="table-export-options"><button type="button" data-all-data-export-format="csv">CSV (.csv)</button><button type="button" data-all-data-export-format="xlsx">Excel (.xlsx)</button><button type="button" data-all-data-export-format="json">JSON (.json)</button></div></details>
         <div class="pagination-actions">
           <label>Rows <select class="page-size-select" data-all-data-page-size><option value="25">25</option><option value="50">50</option><option value="100" selected>100</option><option value="250">250</option><option value="all">All</option></select></label>
           <label>Range <select class="page-size-select" data-all-data-range><option value="">Page</option></select></label>
-          <label>Sort <select class="page-size-select" data-all-data-sort><option value="">As listed</option></select></label>
-          <button class="pagination-button pagination-sort-direction" type="button" data-all-data-sort-direction>Asc</button>
           <button class="pagination-button" type="button" data-all-data-page="prev">Prev</button>
           <span data-all-data-page-label>Page 1 of 1</span>
           <button class="pagination-button" type="button" data-all-data-page="next">Next</button>
+          <span data-all-data-export-status class="table-export-status" role="status" aria-live="polite"></span>
         </div>
       </div>`;
+    }
+    function allDataTableHeadersHtml() {
+      const columns = [{ label:"#", key:"" }, ...visibleAllDataSortFields()];
+      return columns.map((column, index) => {
+        const label = escapeHtml(column.label);
+        if (!column.key) return `<th class="all-data-row-number" scope="col">${label}</th>`;
+        return `<th scope="col" data-all-data-sort-column="${escapeHtml(column.key)}" aria-sort="none"><button class="table-sort-button" type="button" data-all-data-sort-key="${escapeHtml(column.key)}">${label}</button></th>`;
+      }).join("");
+    }
+    function exportAllDataVisibleRows(format) {
+      if (!visibleAllDataPageRecords.length) throw new Error("There are no visible rows to export.");
+      if (!window.LiveLabsExport) throw new Error("Export tools have not loaded yet.");
+      const fields = visibleAllDataSortFields();
+      const columns = ["#", ...fields.map(field => field.label)];
+      const rows = visibleAllDataPageRecords.map((record, index) => [
+        allDataState.pageRange ? (Number(allDataState.pageRange.split("-")[0]) || 1) + index : (allDataState.page - 1) * (Number(allDataState.pageSize) || visibleAllDataPageRecords.length) + index + 1,
+        ...fields.map(field => allDataSortValue(record, field.key) || "N/A")
+      ]);
+      const filename = `portfolio-inventory-page-${allDataState.page}`;
+      if (format === "csv") window.LiveLabsExport.csv([columns, ...rows], `${filename}.csv`);
+      else if (format === "xlsx") window.LiveLabsExport.xlsx([columns, ...rows], `${filename}.xlsx`);
+      else window.LiveLabsExport.json({ source:"LiveLabs Analytics portfolio inventory", exportedAt:new Date().toISOString(), page:allDataState.page, rowCount:rows.length, columns, rows }, `${filename}.json`);
+      const status = document.querySelector("[data-all-data-export-status]");
+      if (status) status.textContent = `${rows.length.toLocaleString()} visible rows exported.`;
     }
     function syncAllDataPageSizeSelect(select, recordsLength, pageSizeValue) {
       const options = allDataPageSizeOptionsFor(recordsLength).map((pageSize) => ({
@@ -3986,16 +4406,10 @@
       document.querySelectorAll("[data-all-data-range]").forEach((select) => {
         syncPageRangeSelect(select, recordsLength, pageSizeValue, allDataState.pageRange);
       });
-      document.querySelectorAll("[data-all-data-sort]").forEach((select) => {
-        const sortFields = visibleAllDataSortFields();
-        if (!sortFields.some((field) => field.key === allDataState.sortKey)) allDataState.sortKey = "";
-        setSelectOptions(select, sortFields.map((field) => ({ label: field.label, value: field.key })), allDataState.sortKey, { label: "As listed", value: "" });
-      });
-      document.querySelectorAll("[data-all-data-sort-direction]").forEach((button) => {
-        const hasSort = Boolean(allDataState.sortKey);
-        button.disabled = !hasSort;
-        button.textContent = allDataState.sortDirection === "desc" ? "Desc" : "Asc";
-        button.setAttribute("aria-label", allDataState.sortDirection === "desc" ? "Sort descending" : "Sort ascending");
+      document.querySelectorAll("[data-all-data-sort-key]").forEach((button) => {
+        const header = button.closest("th");
+        header?.setAttribute("aria-sort", button.dataset.allDataSortKey === allDataState.sortKey
+          ? (allDataState.sortDirection === "asc" ? "ascending" : "descending") : "none");
       });
       document.querySelectorAll("[data-all-data-page='prev']").forEach((button) => { button.disabled = Boolean(selectedRange) || allDataState.page <= 1; });
       document.querySelectorAll("[data-all-data-page='next']").forEach((button) => { button.disabled = Boolean(selectedRange) || allDataState.page >= totalPages; });
@@ -4181,6 +4595,7 @@
       return path.reduce((value, key) => value?.[key], portfolioInventoryMetadata) ?? fallback;
     }
     function applyPortfolioStatsSummary() {
+      if (directRecordRoute) return;
       const section = document.querySelector("#portfolio-stats");
       if (!section) return;
       const records = publicRawRecords;
@@ -4197,14 +4612,34 @@
         "error-items-count": scored.length,
         "p1-count": p1Count
       };
+      const portfolioLoading = fullSearchRecordsLoadState === "idle" || fullSearchRecordsLoadState === "loading";
+      const qaLoading = dashboardQaMergeLoadState === "loading";
       Object.entries(values).forEach(([key, value]) => {
         document.querySelectorAll(`[data-overview-metric="${key}"], [data-public-stat="${key}"]`).forEach((node) => {
-          const qaUnavailable = ["jenkins-p1-count", "error-items-count"].includes(key) && !dashboardQaReportMerge;
-          node.textContent = qaUnavailable ? "Unavailable" : (key === "public-count" && !records.length) ? "—" : Number(value).toLocaleString();
+          const isQaMetric = ["jenkins-p1-count", "error-items-count"].includes(key);
+          const qaUnavailable = isQaMetric && !dashboardQaReportMerge;
+          const isLoading = key === "public-count" ? portfolioLoading : isQaMetric && qaLoading;
+          if (isLoading) {
+            node.setAttribute("aria-busy", "true");
+            node.innerHTML = '<span class="metric-loading-placeholder" aria-hidden="true"></span>';
+            return;
+          }
+          node.removeAttribute("aria-busy");
+          node.textContent = key === "public-count" && fullSearchRecordsLoadState === "unavailable" ? "Unavailable"
+            : qaUnavailable ? "Unavailable"
+              : Number(value).toLocaleString();
         });
       });
+      const qaStatus = section.querySelector("[data-qa-metrics-status]");
+      if (qaStatus) {
+        const qaUnavailable = dashboardQaMergeLoadState === "unavailable" && !dashboardQaReportMerge;
+        qaStatus.hidden = !qaUnavailable;
+        qaStatus.textContent = qaUnavailable ? "Jenkins findings are unavailable." : "";
+      }
       const cohortNote = section.querySelector('[data-overview-note="public-breakdown"]');
-      if (cohortNote) cohortNote.textContent = `${countByType("Workshop").toLocaleString()} workshops · ${countByType("Sprint").toLocaleString()} sprints`;
+      if (cohortNote) cohortNote.textContent = fullSearchRecordsLoadState === "unavailable"
+        ? "Workshop and sprint counts are unavailable"
+        : `${countByType("Workshop").toLocaleString()} workshops · ${countByType("Sprint").toLocaleString()} sprints`;
     }
     function renderInventorySummary(totalRecords) {
       const summaryNode = document.querySelector("[data-inventory-summary]");
@@ -4262,6 +4697,7 @@
       allDataState.page = Math.min(Math.max(1, allDataState.page), totalPages);
       const start = selectedRange ? 0 : (allDataState.page - 1) * pageSize;
       const pageRecords = selectedRange ? rangedRecords : rangedRecords.slice(start, start + pageSize);
+      visibleAllDataPageRecords = pageRecords;
       const first = records.length ? (selectedRange ? selectedRange.start : start + 1) : 0;
       const last = records.length ? (selectedRange ? Math.min(selectedRange.end, records.length) : start + pageRecords.length) : 0;
       rowsNode.innerHTML = pageRecords.length
@@ -4271,11 +4707,19 @@
       syncAllDataControls(records.length, totalPages, first, last, selectedRange);
     }
     document.addEventListener("DOMContentLoaded", () => {
-      mountPrimarySearch();
-      ensureAllDataDashboardUi();
-      applyRankedTableDisclosures();
-      observeJenkinsDashboardTables();
-      addPortfolioMetricTooltips(document);
+      if (!directRecordRoute) {
+        mountPrimarySearch();
+        ensureAllDataDashboardUi();
+        applyRankedTableDisclosures();
+        observeJenkinsDashboardTables();
+        addPortfolioMetricTooltips(document);
+      } else {
+        document.body.classList.add("dashboard-search-active");
+        const routeView = ensureSearchView();
+        routeView.hidden = false;
+        routeView.innerHTML = '<div class="search-route-loading" role="status" aria-live="polite">Loading item details…</div>';
+        document.documentElement.classList.remove("analytics-record-requested");
+      }
       const navLinks = Array.from(document.querySelectorAll(".nav-list a"));
       const setNavCurrent = (mode) => {
         navLinks.forEach((item) => item.removeAttribute("aria-current"));
@@ -4342,11 +4786,14 @@
       });
       document.querySelectorAll("[data-dashboard-view]").forEach((link) => {
         link.addEventListener("click", (event) => {
+          // Direct record pages skip dashboard bootstrap. Follow the real link
+          // so returning to Dashboard initializes its search, totals and tables.
+          if (directRecordRoute) return;
           event.preventDefault();
           setDashboardMode(link.dataset.dashboardView || "overview", { targetHash: link.hash || "", updateUrl: true });
         });
       });
-      navLinks.filter((link) => !link.dataset.dashboardView && !link.dataset.inventoryLink).forEach((link) => {
+      navLinks.filter((link) => !link.dataset.dashboardView && !link.dataset.inventoryLink && !link.dataset.pageNavigation).forEach((link) => {
         link.addEventListener("click", (event) => {
           event.preventDefault();
           const targetPage = dashboardSectionPage[link.hash.slice(1)] || "overview";
@@ -4370,6 +4817,7 @@
       });
       document.querySelectorAll("[data-dashboard-home]").forEach((link) => {
         link.addEventListener("click", (event) => {
+          if (directRecordRoute) return;
           event.preventDefault();
           setDashboardMode("performance", { updateUrl: true });
         });
@@ -4388,7 +4836,9 @@
       if (onInventoryPage && location.hash) {
         history.replaceState(null, "", `${location.pathname}${location.search}`);
       }
-      if (inventoryRouteRequested()) {
+      if (directRecordRoute) {
+        // A record route renders only its requested item; it does not activate dashboard sections.
+      } else if (inventoryRouteRequested()) {
         setDashboardMode("inventory", { updateUrl: false });
       } else {
         const normalizedPathForRoute = location.pathname.replace(/\/+$/, "").toLowerCase();
@@ -4486,7 +4936,7 @@
         if (identityRequested) {
           document.body.classList.remove("dashboard-inventory-active", "dashboard-tops-active");
           setSearchStatus(`Loading record for ${searchIdentityLabel(state)}`);
-          loadFullSearchRecords().then(async (records) => {
+          const recordRequest = loadFullSearchRecords().then(async (records) => {
             searchRecords = buildSearchIndex(records, { includeTableRecords: false });
             const resolution = resolveSearchRecordIdentity(searchRecords, state);
             if (resolution.record) {
@@ -4496,18 +4946,30 @@
               renderSearchDetail(resolution.record, { updateUrl: false });
               setSearchStatus("");
             } else {
-              showDashboardView({ clearUrl: false });
-              if (state.query) renderSearchResults(searchRecords, state.query);
-              const prefix = resolution.kind === "ambiguous" ? "Multiple records match" : "No exact record found for";
-              setSearchStatus(`${prefix} ${searchIdentityLabel(state)}`);
+              if (directRecordRoute) {
+                const view = ensureSearchView();
+                view.hidden = false;
+                view.innerHTML = resolution.kind === 'ambiguous'
+                  ? `<section class="search-detail-panel search-detail-panel-wide"><h2>Multiple records match</h2><p>Choose a workshop or sprint from this WMS family.</p><ul>${resolution.matches.map(record => `<li><a href="${escapeHtml(recordLink(record))}">${escapeHtml(record.title)} · LiveLabs ${escapeHtml(record.livelabsId)}</a></li>`).join('')}</ul></section>`
+                  : `<section class="search-detail-panel search-detail-panel-wide"><h2>Record unavailable</h2><p>We couldn’t open the requested item. Its identifiers may have changed, or its data may be unavailable. Use the Dashboard or Views menu to continue.</p><p class="search-route-identity">${escapeHtml(searchIdentityLabel(state))}</p></section>`;
+                document.body.classList.add("dashboard-search-active");
+                setSearchStatus("");
+              } else {
+                showDashboardView({ clearUrl: false });
+                if (state.query) renderSearchResults(searchRecords, state.query);
+                const prefix = resolution.kind === "ambiguous" ? "Multiple records match" : "No exact record found for";
+                setSearchStatus(`${prefix} ${searchIdentityLabel(state)}`);
+              }
             }
           });
+          if (directRecordRoute) window.LiveLabsLoading.track(recordRequest, "Loading item details…");
           return;
         }
-        if (state.query) updateSearch();
-        else {
-          const requestedPage = new URLSearchParams(location.search).get("view") || dashboardSectionPage[location.hash.slice(1)] || "overview";
-          setDashboardMode(requestedPage, { targetHash: location.hash, updateUrl: false });
+        const requestedPage = new URLSearchParams(location.search).get("view") || dashboardSectionPage[location.hash.slice(1)] || "overview";
+        setDashboardMode(requestedPage, { targetHash: location.hash, updateUrl: false });
+        if (state.query) {
+          searchInput.value = state.query;
+          updateSearch();
         }
       };
       window.addEventListener("popstate", restoreSearchFromUrl);
@@ -4537,15 +4999,18 @@
         restoreSearchFromUrl();
       }
       applyInventoryUrlState();
-      document.querySelectorAll("[data-back-dashboard]").forEach((button) => {
-        button.addEventListener("click", () => {
-          showDashboardView({ clearUrl: true });
-          if (document.body.classList.contains("dashboard-inventory-active")) setNavCurrent("inventory", "");
-          else if (document.body.classList.contains("dashboard-tops-active")) setNavCurrent("tops", "#top-performers");
-          else setNavCurrent("performance");
-        });
-      });
       document.addEventListener("click", (event) => {
+        const exportButton = event.target.closest?.('[data-export-table][data-export-format]');
+        if (exportButton) {
+          event.preventDefault();
+          try { downloadTableExport(exportButton.dataset.exportTable, exportButton.dataset.exportFormat); }
+          catch (error) {
+            const status = document.querySelector(`[data-table-export-status="${exportButton.dataset.exportTable}"]`);
+            if (status) status.textContent = error?.message || 'The table could not be exported.';
+          }
+          exportButton.closest('.table-export-dropdown')?.removeAttribute('open');
+          return;
+        }
         const sortButton = event.target.closest("[data-sort-table]");
         if (sortButton) {
           const tableId = sortButton.dataset.sortTable;
@@ -4555,7 +5020,7 @@
           const defaultDirection = sortButton.dataset.defaultDirection || "asc";
           const currentDirection = wrapper.dataset.sortColumnIndex === columnIndex ? (wrapper.dataset.sortDirection || "none") : "none";
           wrapper.dataset.sortColumnIndex = columnIndex;
-          wrapper.dataset.sortDirection = currentDirection === "asc" ? "desc" : defaultDirection;
+          wrapper.dataset.sortDirection = currentDirection === "none" ? defaultDirection : currentDirection === "asc" ? "desc" : "asc";
           preserveViewportDuringTableUpdate(tableId, () => applyTableState(tableId, { resetPage: true }));
           return;
         }
@@ -4563,6 +5028,13 @@
         if (clearButton) {
           const tableId = clearButton.dataset.clearFiltersFor;
           preserveViewportDuringTableUpdate(tableId, () => {
+            const periodControl = document.querySelector(`[data-table-view-period="${tableId}"]`);
+            if (periodControl) {
+              periodControl.value = window.LiveLabsViews.defaultKey;
+              const wrapper = document.querySelector(`[data-filter-table="${tableId}"]`);
+              wrapper.dataset.viewPeriod = periodControl.value;
+              updateRankedViewsColumn(wrapper);
+            }
             document.querySelectorAll(`[data-table-filter="${tableId}"]`).forEach((control) => {
               if (control.type === "checkbox") control.checked = false;
               else control.value = "";
@@ -4578,12 +5050,13 @@
           copyValueFromButton(copyButton);
           return;
         }
-        const row = event.target.closest("tr[data-filter-row='true'][data-detail-row-id]");
+        const row = event.target.closest("tr[data-filter-row='true']");
         if (!row || event.target.closest("button, a, input, label, select, summary")) return;
-        toggleRowExpanded(row);
+        const href = recordLinkForTableRow(row);
+        if (href) window.location.assign(href);
       });
       document.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
+        if (event.key !== "Enter") return;
         const copyButton = event.target.closest("button[data-copy-value]");
         if (copyButton) {
           event.preventDefault();
@@ -4591,10 +5064,11 @@
           copyValueFromButton(copyButton);
           return;
         }
-        const row = event.target.closest("tr[data-filter-row='true'][data-detail-row-id]");
-        if (!row) return;
+        const row = event.target.closest("tr[data-filter-row='true']");
+        if (!row || event.target.closest("button, a, input, label, select, summary")) return;
         event.preventDefault();
-        toggleRowExpanded(row);
+        const href = recordLinkForTableRow(row);
+        if (href) window.location.assign(href);
       });
       enhanceCategoryFilters();
       const updateTableForFilter = (event) => {
@@ -4611,22 +5085,27 @@
             control.dataset.contactLoadPending = 'true';
             control.dataset.contactLoadState = 'loading';
             control.setAttribute('aria-busy', 'true');
-            if (status) { status.hidden = false; status.textContent = 'Searching public owner and contact fields…'; }
+            if (status) { status.hidden = false; status.textContent = 'Searching owner and contact emails…'; }
             loadFullSearchRecords().then((records) => {
               control.dataset.contactLoadPending = 'false';
               control.dataset.contactLoadState = records.length ? 'ready' : 'unavailable';
               control.removeAttribute('aria-busy');
               if (status) {
-                status.textContent = records.length
-                  ? ''
-                  : 'Owner/contact search is unavailable; visible table fields remain searchable.';
-                status.hidden = Boolean(records.length);
+                status.textContent = !records.length
+                  ? 'Owner/contact email search is unavailable; visible table fields remain searchable.'
+                  : wmsContactIndexLoadState === 'unavailable'
+                    ? 'Additional contact email search is unavailable; title, ID, and author/owner search still work.'
+                    : '';
+                status.hidden = Boolean(records.length) && wmsContactIndexLoadState !== 'unavailable';
               }
               preserveViewportDuringTableUpdate(control.dataset.tableFilter, () => applyTableState(control.dataset.tableFilter, { resetPage: true }));
             });
           } else if (!publicRecordByLiveLabsId.size && fullSearchRecordsLoadState === 'unavailable' && status) {
             status.hidden = false;
             status.textContent = 'Owner/contact email search is unavailable; visible table fields remain searchable.';
+          } else if (publicRecordByLiveLabsId.size && wmsContactIndexLoadState === 'unavailable' && status) {
+            status.hidden = false;
+            status.textContent = 'Additional contact email search is unavailable; title, ID, and author/owner search still work.';
           }
         }
         preserveViewportDuringTableUpdate(control.dataset.tableFilter, () => {
@@ -4642,23 +5121,23 @@
         }
       }, true);
       normalizeSectionLinks();
-      configureLazySections();
-      scheduleInitialTableSetup();
-      window.LiveLabsLoading.ready();
+      if (!directRecordRoute) {
+        configureLazySections();
+        scheduleInitialTableSetup();
+      }
       window.addEventListener("storage", (event) => {
         if (event.key === adminStorageKey) reloadDashboardAdminState();
         if (event.key === qaMergeRefreshKey) reloadDashboardJenkinsMerge();
       });
-      loadFullSearchRecords().then(() => {
-        applyPortfolioStatsSummary();
-        return fetchDashboardState();
-      })
-        .then((payload) => {
-          dashboardQaReportMerge = payload?.qaReportMerge || null;
+      if (!directRecordRoute) {
+        const dashboardStartup = Promise.all([loadFullSearchRecords(), fetchDashboardState()])
+        .then(([, state]) => {
+          dashboardQaReportMerge = state?.qaReportMerge || null;
+          dashboardQaMergeLoadState = dashboardQaReportMerge ? "loaded" : "unavailable";
           applyJenkinsDashboardMerge();
-          if (!payload?.configured || !payload.state) return;
-          const tagDefinitions = Array.isArray(payload.state.tagDefinitions) ? payload.state.tagDefinitions : [];
-          const remoteAssignments = Array.isArray(payload.state.rowOverrides) ? payload.state.rowOverrides : [];
+          if (!state?.configured || !state.state) return;
+          const tagDefinitions = Array.isArray(state.state.tagDefinitions) ? state.state.tagDefinitions : [];
+          const remoteAssignments = Array.isArray(state.state.rowOverrides) ? state.state.rowOverrides : [];
           const rowOverrides = dashboardAdminState.rowOverrides.map((override) => ({ ...override, tags: [], tagsOnly: false }));
           remoteAssignments.forEach((remote) => {
             const existing = rowOverrides.find((item) => item.target === remote.target
@@ -4670,5 +5149,11 @@
           window.localStorage.setItem(adminStorageKey, JSON.stringify(dashboardAdminState));
           reloadDashboardAdminState();
         })
-        .catch(() => {});
+        .catch(() => {
+          dashboardQaMergeLoadState = dashboardQaReportMerge ? "loaded" : "unavailable";
+          applyPortfolioStatsSummary();
+        });
+        window.LiveLabsLoading.track(dashboardStartup, "Loading dashboard data…");
+      }
+      window.LiveLabsLoading.ready();
     });

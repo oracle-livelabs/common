@@ -1,7 +1,7 @@
 // Structured source content for the redesigned guide.
 // Keep Guided Path and Toolkit content here; the Step by Step Guide now comes from the flat author-guide manifest.
 window.authorGuideContent = (function () {
-  var canonicalRoot = "https://oracle-livelabs.github.io/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/?lab=";
+  var canonicalRoot = "https://livelabs.oracle.com/cdn/common/sample-livelabs-templates/create-labs/labs/workshops/livelabs/index.html?lab=";
   var officialLinks = {
     github: "https://github.com/",
     githubDesktop: "https://desktop.github.com/",
@@ -23,10 +23,10 @@ window.authorGuideContent = (function () {
     aiHubSkills: "https://skills.oraclecorp.com/"
   };
 
-  var eventCodeGuideHref = "markdown/event-code/index.html";
+  var eventCodeGuideHref = "event-code/index.html";
   if (window.AuthorGuidePaths && typeof window.AuthorGuidePaths.root === "function") {
     try {
-      eventCodeGuideHref = new URL("markdown/event-code/index.html", window.AuthorGuidePaths.root()).toString();
+      eventCodeGuideHref = new URL("event-code/index.html", window.AuthorGuidePaths.root()).toString();
     } catch (error) {
       // Keep the relative guide route when the page is running outside its normal site shell.
     }
@@ -415,7 +415,7 @@ window.authorGuideContent = (function () {
           "Use the LiveLabs image-size extension only when default sizing does not fit; preserve automatic height with an asterisk.",
           "Use approved absolute URLs for shared common images.",
           "Confirm images load in local and hosted preview, including on a narrow screen."
-n        ],
+        ],
         checkpoints: [
           "Every image has descriptive alt text.",
           "Local images use lowercase, case-correct paths relative to the lab Markdown file.",
@@ -469,7 +469,7 @@ n        ],
           "Use a separate text or output block for expected results; never put a shell prompt, secrets, or expected output inside <copy> tags.",
           "Indent the code, expected output, and screenshots by four spaces when they belong inside a numbered step.",
           "Place each copy block beside its step, preserve SQL order and line breaks, and preview the resulting copy button."
-n        ],
+        ],
         checkpoints: [
           "Copy buttons appear where needed.",
           "Copied text excludes the <copy> tags and preserves SQL line breaks and execution order.",
@@ -684,7 +684,7 @@ n        ],
           resourceLink("Use a direct video file when needed", "../markdown/index.html#direct-video", "Verify format, permissions, captions, and lifetime."),
           resourceLink("Columns, alignment, and links", "../markdown/index.html#table-alignment", "Keep comparison tables compact and consistent."),
           resourceLink("Give a table a caption", "../markdown/index.html#table-caption", "Place the title immediately after the table."),
-          resourceLink("Compare information in a table", "../markdown/index.html#tables", "Use numbered steps for procedures."),
+          resourceLink("Compare information in a table", "../markdown/index.html#markdown#tables", "Use numbered steps for procedures."),
           resourceLink("Check paths, access, and safe examples", "../markdown/index.html#final-checks", "Test every media and table destination.")
         ],
         sourceHref: labLink("4-labs-markdown-develop-content"),
@@ -735,7 +735,7 @@ n        ],
           resourceLink("Preview the workshop and run QA", "../markdown/index.html#preview-qa", "Open the loader with the appropriate qa=true query."),
           resourceLink("Check paths, access, and safe examples", "../markdown/index.html#final-checks", "Test from the intended learner environment."),
           resourceLink("Do not assume every Markdown extension works", "../markdown/index.html#unsupported-extensions", "Use only syntax the renderer supports."),
-          resourceLink("Before you publish", "../markdown/index.html#before-publish", "Complete the final learner-focused pass."),
+          resourceLink("Before you publish", "../markdown/index.html#markdown#before-publish", "Complete the final learner-focused pass."),
           resourceLink("Navigate between labs", "../markdown/index.html#lab-navigation", "Test the actual workshop sequence token.")
         ],
         sourceHref: labLink("4-labs-markdown-develop-content"),
@@ -926,6 +926,7 @@ n        ],
         sourceLabel: "Open Step by Step Guide",
         guideTarget: "reuse-enhancements"
       },
+      {
         id: "screenshots",
         title: "Screenshot Standards",
         short: "Crop to the action, redact safely, keep images at 1280px or less, and remove unused files.",

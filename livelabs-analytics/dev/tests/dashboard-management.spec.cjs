@@ -64,6 +64,22 @@ server.serve_forever()
   });
 });
 
+test('Admin tables and saved Jenkins reports load the shared table theme', async ({page},testInfo) => {
+  const login=await page.request.post(`${baseURL}/api/admin/login`,{data:{username:'regression-reviewer',password},headers:{Origin:baseURL}});
+  expect(login.ok()).toBe(true);
+  for (const width of [1440,390]) {
+    await page.setViewportSize({width,height:1000});
+    for (const [route,selector] of [['inventory','#inventory-table thead th'],['dashboard-management','#assignment-table thead th'],[`jenkins/report/${reportId}/summary.html`,'.result-table-head']]) {
+      await page.goto(`${baseURL}/admin/${route}`,{waitUntil:'networkidle'});
+      const header=page.locator(selector).first();
+      const styles=await header.evaluate(el=>{const s=getComputedStyle(el);return {background:s.backgroundColor,color:s.color,font:s.fontSize,weight:s.fontWeight};});
+      expect(styles).toEqual({background:'rgb(237, 243, 242)',color:'rgb(49, 86, 93)',font:'12px',weight:'600'});
+      expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+      await page.screenshot({path:testInfo.outputPath(`shared-${route.split('/')[0]}-${width}.png`),animations:'disabled'});
+    }
+  }
+});
+
 test('every Admin page shares compact navigation, responsive layout and working report views', async ({page}, testInfo) => {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -76,8 +92,9 @@ test('every Admin page shares compact navigation, responsive layout and working 
   const capture = await page.request.post(`${baseURL}/api/admin/snapshots`, {data:{captureCurrent:true},headers:{Origin:baseURL,'X-CSRF-Token':session.csrf}});
   expect(capture.ok()).toBe(true);
   const pages = [
-    ['dashboard-management','Dashboard tags'],['governance','Data governance'],
-    ['data-merge','Data merge'],['jenkins','Jenkins reports'],['inventory','Portfolio inventory']
+    ['weekly-update','Weekly analytics update'],['data-merge','Data merge'],['jenkins','Jenkins reports'],
+    ['dashboard-management','Dashboard tags'],['inventory','Portfolio inventory'],
+    ['inventory/author-contributor-gaps','Missing contact'],['governance','Data governance']
   ];
   for (const width of [1440,390]) {
     await page.setViewportSize({width,height:1000});
@@ -85,8 +102,12 @@ test('every Admin page shares compact navigation, responsive layout and working 
       await page.goto(`${baseURL}/admin/${route}`);
       await expect(page.locator('html')).not.toHaveClass(/page-loading/);
       await expect(page.locator('h1')).toHaveText(title);
-      await expect(page.locator('.analytics-nav a')).toHaveText(pages.filter(p=>p[0]!=='governance').map(p=>p[1]));
-      if (route === 'governance') await expect(page.locator('.analytics-nav a[aria-current="page"]')).toHaveCount(0);
+      if (route === 'weekly-update') expect((await page.locator('#weekly-run-select').boundingBox()).height).toBeLessThan(55);
+      await expect(page.locator('.analytics-nav a')).toHaveText(['Dashboard tags','Portfolio inventory','Missing contact','Jenkins reports']);
+      expect(await page.locator('.analytics-nav a').evaluateAll(links=>links.map(link=>link.getAttribute('href')))).toEqual([
+        '/admin/dashboard-management','/admin/inventory','/admin/inventory/author-contributor-gaps','/admin/jenkins'
+      ]);
+      if (['weekly-update','data-merge','governance'].includes(route)) await expect(page.locator('.analytics-nav a[aria-current="page"]')).toHaveCount(0);
       else await expect(page.locator('.analytics-nav a[aria-current="page"]')).toHaveText(title);
       await expect(page.locator('.analytics-shell-layout a').filter({hasText:/^Back to dashboard$/})).toHaveCount(1);
       await expect(page.locator('main a[href^="/dashboard/"]')).toHaveCount(0);
@@ -214,18 +235,40 @@ test('Admin inventory searches, filters types, pages and opens the correct recor
   expect(login.ok()).toBe(true);
   const payload=await (await page.request.get(`${baseURL}/api/admin/inventory`)).json();
   await page.goto(`${baseURL}/admin/inventory`);await expect(page.locator('html')).not.toHaveClass(/page-loading/);
-  await expect(page.locator('#count-all')).toHaveText(payload.records.length.toLocaleString());
+  await expect(page.locator('#inventory-count')).toHaveText(`${payload.records.length.toLocaleString()} records`);
+  await expect(page.locator('#inventory-rows tr')).toHaveCount(10);
+  await expect(page.locator('#inventory-table th').first()).toHaveText('#');
+  await expect(page.locator('#inventory-sort, #inventory-sort-direction')).toHaveCount(0);
+  expect(await page.locator('.inventory-table-tools').evaluate(node => Boolean(node.compareDocumentPosition(document.querySelector('#inventory-table')) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
   for(const kind of ['Workshop','Sprint']){
     await page.locator('#inventory-type').selectOption(kind);
     const expected=payload.records.filter(r=>r.type===kind);
     await expect(page.locator('#inventory-count')).toHaveText(expected.length.toLocaleString()+' records');
-    expect(await page.locator('#inventory-rows tr').evaluateAll((rows,kind)=>rows.every(row=>row.cells[4].textContent===kind),kind)).toBe(true);
-    await page.locator('#inventory-next').click();
-    await expect(page.locator('#inventory-page-status')).toContainText('Showing 51');
-    await page.locator('#inventory-previous').click();
-    await expect(page.locator('#inventory-page-status')).toContainText('Showing 1');
+    expect(await page.locator('#inventory-rows tr').evaluateAll((rows,kind)=>rows.every(row=>row.cells[5].textContent===kind),kind)).toBe(true);
+    const topPagination=page.locator('.inventory-table-tools');
+    await topPagination.locator('[data-inventory-page-action="next"]').click();
+    await expect(topPagination.locator('[data-inventory-page-label]')).toContainText('Page 2 of');
+    await expect(page.locator('#inventory-rows tr').first().locator('td').first()).toHaveText('11');
+    await topPagination.locator('[data-inventory-page-action="previous"]').click();
+    await expect(topPagination.locator('[data-inventory-page-status]')).toContainText('Showing 1');
   }
   await page.locator('#inventory-type').selectOption('');
+  const titleSort = page.locator('#inventory-table th[data-inventory-sort-key="title"] button');
+  await titleSort.click();
+  await expect(titleSort.locator('xpath=..')).toHaveAttribute('aria-sort','ascending');
+  await page.locator('[data-inventory-page-size]').first().selectOption('25');
+  await page.locator('[data-inventory-page-action="next"]').first().click();
+  const visibleIds = await page.locator('#inventory-rows tr td:nth-child(2)').allTextContents();
+  await page.locator('.table-export-dropdown summary').click();
+  const downloaded = page.waitForEvent('download');
+  await page.getByRole('button', {name:'JSON (.json)', exact:true}).click();
+  const exported = JSON.parse(fs.readFileSync(await (await downloaded).path(), 'utf8'));
+  expect(exported.pagination).toMatchObject({page:2, pageSize:25, exportedRows:25});
+  expect(exported.rows.map(row => String(row['LiveLabs ID']))).toEqual(visibleIds);
+  expect(exported.rows.map(row => row['#'])).toEqual(Array.from({length:25}, (_, index) => index + 26));
+  await expect(page.locator('#inventory-export-status')).toContainText('25 visible page rows exported');
+  await page.locator('[data-inventory-page-size]').first().selectOption('10');
+  await expect(page.locator('#inventory-export-status')).toBeEmpty();
   const target=payload.records.find(r=>r.livelabsId==='3570');
   for(const query of [target.title,target.owner]){
     await page.locator('#inventory-search').fill(query);
@@ -277,31 +320,30 @@ test('assignment table filters, sorts, pages and edits the exact rule from an ex
   const panel=page.locator('.current-assignment-panel');
   await expect(panel.getByRole('table')).toBeVisible();
   await panel.screenshot({path:testInfo.outputPath('assignments-desktop-table.png')});
-  await expect(panel.locator('thead th')).toHaveText(['LiveLabs ID','WMS ID','Title','Council','Author / owner','Type','Tags','Match rule','Added']);
-  await expect(page.locator('#assignment-page-status')).toHaveText('1–10 of 29 rows');
+  await expect(panel.locator('thead th')).toHaveText(['Item','Author / owner','Tags','Assignment rule','Added']);
+  await expect(page.locator('#assignment-page-status')).toHaveText('1–10 of 29 assignments');
   await expect(panel.locator('[data-assignment-row]')).toHaveCount(10);
   await page.locator('#assignment-next').click();
-  await expect(page.locator('#assignment-page-status')).toHaveText('11–20 of 29 rows');
+  await expect(page.locator('#assignment-page-status')).toHaveText('11–20 of 29 assignments');
   await page.locator('#assignment-type').selectOption('Sprint');
-  await expect(page.locator('#assignment-page-status')).toHaveText('1–10 of 14 rows');
-  expect(await panel.locator('[data-assignment-row] td:nth-child(6)').allTextContents()).toEqual(Array(10).fill('Sprint'));
+  await expect(page.locator('#assignment-page-status')).toHaveText('1–10 of 14 assignments');
+  await expect(panel.locator('[data-assignment-row] .assignment-item-meta')).toHaveText(Array(10).fill(/· Sprint(?: ·|$)/));
   await page.locator('#assignment-type').selectOption('Workshop');
-  expect(await panel.locator('[data-assignment-row] td:nth-child(6)').allTextContents()).toEqual(Array(10).fill('Workshop'));
+  await expect(panel.locator('[data-assignment-row] .assignment-item-meta')).toHaveText(Array(10).fill(/· Workshop(?: ·|$)/));
   await page.locator('#assignment-type').selectOption('');
-  await panel.locator('summary').filter({hasText:'Apply filters'}).click();
-  await page.locator('#assignment-council').selectOption('Database');
-  await page.locator('#assignment-tag').selectOption('refresh');
+  await page.locator('#assignment-search').fill('refresh');
+  await page.locator('#assignment-type').selectOption('Sprint');
   await expect(panel.locator('[data-assignment-row]')).toHaveCount(1);
-  await expect(panel.locator('[data-assignment-row] td:first-child')).toHaveText('8001');
+  await expect(panel.locator('[data-assignment-row] .assignment-item-meta')).toContainText('LiveLabs ID 8001');
   await page.locator('#assignment-clear').click();
-  await page.locator('#assignment-livelabs-filter').fill('8000');
-  await page.locator('#assignment-wms-filter').fill('9000');
+  await page.locator('#assignment-search').fill('8000');
   await expect(panel.locator('[data-assignment-row]')).toHaveCount(2);
-  await page.locator('#assignment-clear').click();
-  await page.locator('#assignment-target-filter').selectOption('wms_id');
+  await page.locator('#assignment-search').fill('9000');
+  await expect(panel.locator('[data-assignment-row]')).toHaveCount(4);
+  await page.locator('#assignment-search').fill('WMS family ID');
   await expect(panel.locator('[data-assignment-row]')).toHaveCount(2);
-  await panel.getByRole('button',{name:'Sort by LiveLabs ID',exact:true}).click();
-  await expect(panel.locator('[data-assignment-row] td:first-child')).toHaveText(['8001','8000']);
+  await panel.getByRole('button',{name:'Sort by Title',exact:true}).click();
+  await expect(panel.locator('[data-assignment-row] .assignment-item-meta')).toHaveText([/LiveLabs ID 8001/,/LiveLabs ID 8000/]);
   await panel.locator('[data-assignment-row]').first().click();
   await expect(panel.locator('.assignment-rule-scope')).toContainText('2 items');
   await expect(panel.locator('.assignment-item-details')).toContainText('Assignment item 1');
@@ -357,7 +399,10 @@ test('assignment rows retain drafts on failed saves, support keyboard actions an
   await panel.getByRole('button',{name:'Remove assignment',exact:true}).click();
   await panel.getByRole('button',{name:'Confirm removal',exact:true}).click();
   await expect(panel.locator('[data-assignment-row]')).toHaveCount(0);
-  await expect(panel).toContainText('No assignments match these filters');
+  await expect(page.locator('#assignment-empty-state')).toBeVisible();
+  await expect(page.locator('#assignment-empty-state')).toContainText('No assignments match your search');
+  await expect(page.locator('#assignment-empty-state')).toContainText('Clear the search');
+  await expect(panel.getByRole('table')).toBeHidden();
   const state=await (await page.request.get(`${baseURL}/api/admin/dashboard-state`)).json();
   expect(state.state.rowOverrides.some(r=>r.id==='rule-2')).toBe(false);
   await page.locator('#assignment-clear').click();
@@ -377,7 +422,7 @@ test('sign-in loads Dashboard management and its protected inventory', async ({ 
   const scriptErrors = [];
   page.on('pageerror', error => scriptErrors.push(error.message));
   expect((await page.request.get(`${baseURL}/api/admin/inventory`)).status()).toBe(401);
-  await page.goto(`${baseURL}/admin`);
+  await page.goto(`${baseURL}/admin?next=${encodeURIComponent('/admin/weekly-update')}`);
   await expect(page.locator('html')).not.toHaveClass(/page-loading/);
   await expect(page.locator('.rail')).toHaveCount(0);
   await expect(page.getByRole('link', {name:'Back to dashboard',exact:true})).toHaveCount(1);
@@ -385,7 +430,9 @@ test('sign-in loads Dashboard management and its protected inventory', async ({ 
   await page.getByLabel('Username', { exact: true }).fill('regression-reviewer');
   await page.getByLabel('Password', { exact: true }).fill(password);
   await page.getByRole('button', { name: 'Sign in', exact: true }).click();
-  await expect(page).toHaveURL(`${baseURL}/admin/dashboard-management`);
+  await expect(page).toHaveURL(`${baseURL}/admin/weekly-update`);
+  await expect(page.locator('#weekly-run-status')).toContainText('No weekly update run is selected');
+  await page.goto(`${baseURL}/admin/dashboard-management`);
   await expect(page.locator('#status')).toContainText(/Loaded (saved dashboard|existing browser) tags/);
   await expect(page.getByText('Unable to load this page', { exact: true })).not.toBeVisible();
   const inventoryResponse = await page.request.get(`${baseURL}/api/admin/inventory`);
@@ -399,16 +446,34 @@ test('sign-in loads Dashboard management and its protected inventory', async ({ 
   expect(scriptErrors).toEqual([]);
   await page.screenshot({ path: testInfo.outputPath('dashboard-management.png'), fullPage: true });
   await page.goto(`${baseURL}/admin/inventory`);
-  await expect(page.locator('#count-all')).toHaveText(inventory.records.length.toLocaleString());
+  await expect(page.locator('#inventory-count')).toHaveText(`${inventory.records.length.toLocaleString()} records`);
+  await expect(page.locator('#inventory-rows tr')).toHaveCount(10);
   await expect(page.locator('#inventory-table thead th').filter({hasText:/^(LiveLabs ID|WMS ID|Title|Author \/ owner)$/})).toHaveText(['LiveLabs ID','WMS ID','Title','Author / owner']);
   for(const kind of ['Workshop','Sprint']) {
     await page.locator('#inventory-type').selectOption(kind);
     await expect(page.locator('#inventory-count')).toHaveText(`${inventory.records.filter(r=>r.type===kind).length.toLocaleString()} records`);
-    const kinds=await page.locator('#inventory-rows tr td:nth-child(5)').allTextContents();
+    const kinds=await page.locator('#inventory-rows tr td:nth-child(6)').allTextContents();
     expect(kinds.every(value=>value===kind)).toBe(true);
   }
   await page.locator('#inventory-type').selectOption('');
-  await expect(page.locator('#audit-calibration')).toContainText('Threshold sensitivity by content type');
+  await expect(page.locator('#inventory-search')).toBeVisible();
+  const contactRecord=inventory.records.find(record=>(record.details||[]).some(pair=>Array.isArray(pair)&&/support contact|workshop owner/i.test(String(pair[0]))&&String(pair[1]||'').trim()));
+  if(contactRecord) {
+    const contactValue=contactRecord.details.find(pair=>Array.isArray(pair)&&/support contact|workshop owner/i.test(String(pair[0]))&&String(pair[1]||'').trim())[1];
+    await page.locator('#inventory-search').click();
+    await page.locator('#inventory-search').pressSequentially(contactValue);
+    const expectedMatches=inventory.records.filter(record=>[record.title,record.livelabsId,record.wmsId,record.owner,record.searchable,...(record.details||[]).flatMap(pair=>Array.isArray(pair)?pair:[])].join(' ').toLocaleLowerCase().includes(String(contactValue).toLocaleLowerCase()));
+    await expect(page.locator('#inventory-search')).toHaveValue(contactValue);
+    await expect(page.locator('#inventory-count')).toHaveText(`${expectedMatches.length.toLocaleString()} records`);
+    expect(expectedMatches.length).toBeLessThan(inventory.records.length);
+    await page.locator('#inventory-search').fill('');
+  }
+  const filterDisclosure=page.locator('.inventory-filter-disclosure');
+  await filterDisclosure.locator(':scope > summary').click();
+  await page.locator('#inventory-scope').selectOption('public');
+  await expect(page.locator('#inventory-count')).toHaveText(`${inventory.records.filter(r=>String(r.publishType||'').toLowerCase()==='public'&&String(r.publishStatus||'').toLowerCase()==='published').length.toLocaleString()} records`);
+  await page.locator('#inventory-scope').selectOption('all');
+  await expect(page.locator('#inventory-count')).toHaveText(`${inventory.records.length.toLocaleString()} records`);
   await page.locator('#inventory-cleanup-queue').selectOption({label:'Removal requests'});
   const requests=inventory.records.filter(r=>r.cleanupQueues.includes('Removal requests'));
   await expect(page.locator('#inventory-count')).toHaveText(`${requests.length.toLocaleString()} records`);
@@ -416,4 +481,149 @@ test('sign-in loads Dashboard management and its protected inventory', async ({ 
   await expect(page.locator('#review-current')).toContainText('Source retirement confirmed: no');
   expect(scriptErrors).toEqual([]);
   await page.screenshot({path:testInfo.outputPath('cleanup-inventory.png'),fullPage:true});
+});
+
+test('weekly update checklist saves a dated run and resumes progress', async ({page}) => {
+  const errors=[]; page.on('pageerror',error=>errors.push(error.message));
+  expect((await page.request.get(`${baseURL}/api/admin/weekly-runs`)).status()).toBe(401);
+  const login=await page.request.post(`${baseURL}/api/admin/login`,{data:{username:'regression-reviewer',password},headers:{Origin:baseURL}});
+  expect(login.ok()).toBe(true);
+  await page.goto(`${baseURL}/admin/weekly-update`);
+  await expect(page.locator('#weekly-run-status')).toContainText('No weekly update run is selected');
+  for (const id of ['weekly-start-run', 'weekly-save']) {
+    const colors = await page.locator(`#${id}`).evaluate(node => {
+      const style = getComputedStyle(node);
+      return {text: style.color, background: style.backgroundColor};
+    });
+    expect(colors.background).not.toBe('rgba(0, 0, 0, 0)');
+    expect(colors.text).not.toBe(colors.background);
+  }
+  await page.getByRole('button',{name:'Start this week’s update'}).click();
+  await expect(page.locator('.weekly-step')).toHaveCount(17);
+  const first=page.locator('.weekly-step').first();
+  await first.locator('[data-step-complete]').check();
+  await first.locator('[data-step-evidence]').fill('fixture source folder · 2026-11-12 · SHA-256 verified');
+  await page.getByRole('button',{name:'Save progress'}).click();
+  await expect(page.locator('#weekly-save-status')).toHaveText('Saved');
+  const list=await (await page.request.get(`${baseURL}/api/admin/weekly-runs`)).json();
+  expect(list.runs).toHaveLength(1);
+  expect(list.runs[0].runId).toMatch(/^update-\d{8}-[a-f0-9]{8}$/);
+  expect(list.runs[0].steps[0]).toMatchObject({status:'COMPLETE',evidence:'fixture source folder · 2026-11-12 · SHA-256 verified'});
+  await page.reload();
+  await expect(page.locator('.weekly-step')).toHaveCount(17);
+  await expect(page.locator('.weekly-step').first().locator('[data-step-complete]')).toBeChecked();
+  await expect(page.locator('.weekly-step').first().locator('[data-step-evidence]')).toHaveValue('fixture source folder · 2026-11-12 · SHA-256 verified');
+  await expect(page.locator('#weekly-progress-label')).toHaveText('1 of 17 steps complete');
+  expect(errors).toEqual([]);
+});
+
+test('Admin missing-contact queue prioritizes the main author and groups secondary contacts', async ({page}, testInfo) => {
+  const unauthenticated = await page.request.get(`${baseURL}/admin/inventory/author-contributor-gaps`);
+  expect(unauthenticated.ok()).toBe(true);
+  expect(await unauthenticated.text()).toContain('Admin sign in');
+  expect((await page.request.get(`${baseURL}/api/admin/inventory`)).status()).toBe(401);
+
+  const login = await page.request.post(`${baseURL}/api/admin/login`, {
+    data: {username:'regression-reviewer',password}, headers: {Origin:baseURL}
+  });
+  expect(login.ok()).toBe(true);
+  const records = [
+    {livelabsId:'gap-1',wmsId:'family-1',title:'Main author and additional contact missing',type:'Workshop',category:'OCI',owner:'Platform Team',publishType:'Public',publishStatus:'Published',status:'Quarterly QA',details:[['Owner Group','Platform Team'],['WMS Last Update','2026-11-07T01:22:34Z']]},
+    {livelabsId:'gap-2',wmsId:'family-2',title:'Main author missing, support contact available',type:'Sprint',category:'Database',owner:'alex.author@example.com',publishType:'Public',publishStatus:'Published',status:'Quarterly QA',details:[['Support Contact Email','support@example.com'],['Acknowledgement Contributors','Taylor Contributor']]},
+    {livelabsId:'gap-3',wmsId:'family-3',title:'Author present, no additional contact',type:'Workshop',category:'OCI',owner:'casey.author@example.com',publishType:'Private',publishStatus:'Draft',status:'In progress',details:[['Owner Email','casey.author@example.com'],['Owner Group','DB Product Management']]},
+    {livelabsId:'gap-4',wmsId:'family-4',title:'Second author present, no additional contact',type:'Workshop',category:'Database',owner:'jordan.author@example.com',publishType:'Public',publishStatus:'Published',status:'Quarterly QA',details:[['Owner Email','jordan.author@example.com']]},
+    {livelabsId:'gap-5',wmsId:'family-5',title:'Technical contact available',type:'Workshop',category:'OCI',owner:'casey.author@example.com',publishType:'Public',publishStatus:'Published',status:'Quarterly QA',details:[['Owner Email','casey.author@example.com'],['Tech Contact Email','tech@example.com']]},
+    {livelabsId:'covered-6',wmsId:'family-6',title:'Both additional contacts available',type:'Workshop',category:'OCI',owner:'casey.author@example.com',publishType:'Public',publishStatus:'Published',status:'Quarterly QA',details:[['Owner Email','casey.author@example.com'],['Support Contact Email','support@example.com'],['Tech Contact Email','tech@example.com']]}
+  ];
+  for (let index=7;index<=15;index++) records.push({
+    livelabsId:`gap-${index}`,wmsId:`family-${index}`,title:`Unassigned author ${index}`,type:'Sprint',category:'Database',owner:'Platform Team',publishType:'Public',publishStatus:'Published',status:'Quarterly QA',details:[['Owner Group','Platform Team']]
+  });
+  await page.route('**/api/admin/inventory', route => route.fulfill({
+    status:200,contentType:'application/json',body:JSON.stringify({records,metadata:{snapshot_date:'2026-11-12'}})
+  }));
+  await page.goto(`${baseURL}/admin/inventory`);
+  await page.getByRole('link',{name:'Missing contact'}).click();
+  await expect(page).toHaveURL(/\/admin\/inventory\/author-contributor-gaps$/);
+  await expect(page.locator('#coverage-source-note')).toHaveCount(0);
+  await expect(page.locator('.coverage-summary')).toHaveCount(0);
+  await expect(page.locator('#author-status')).toHaveValue('missing');
+  await expect(page.locator('#additional-contact-status')).toHaveValue('any');
+  await expect(page.locator('#author-contributor-count')).toHaveText('11 records');
+  await expect(page.locator('#author-contributor-rows tr')).toHaveCount(10);
+  await expect(page.locator('#author-contributor-rows')).toContainText('Main author missing');
+  await expect(page.locator('#author-contributor-rows')).toContainText('N/A');
+  await expect(page.locator('#author-contributor-rows')).toContainText('support@example.com');
+  await expect(page.locator('#author-contributor-rows tr').first().locator('[data-column-label="WMS update"]')).toHaveText('2026-11-07');
+  await expect(page.locator('#author-contributor-table thead')).not.toContainText('GitHub contributors');
+  await expect(page.locator('#support-contact-status')).toHaveCount(0);
+  await expect(page.locator('#tech-contact-status')).toHaveCount(0);
+  await expect(page.locator('#contributor-status')).toHaveCount(0);
+  await expect(page.locator('#author-contributor-page-size')).toHaveValue('10');
+  await expect(page.locator('[data-coverage-page-size]')).toHaveCount(0);
+  await expect(page.getByLabel('Main author email').locator('option[value="any"]')).toHaveText('All records');
+  await expect(page.getByLabel('Main author email').locator('option[value="missing"]')).toHaveText('Missing email');
+  await expect(page.getByLabel('Main author email').locator('option[value="present"]')).toHaveText('Email present');
+  await expect(page.getByLabel('Additional contact email').locator('option[value="any"]')).toHaveText('All records');
+  await expect(page.getByLabel('Additional contact email').locator('option[value="missing"]')).toHaveText('No additional email');
+  await expect(page.getByLabel('Additional contact email').locator('option[value="present"]')).toHaveText('Email available');
+  await expect(page.locator('#coverage-filter-disclosure > summary')).toContainText('Additional filters');
+  await expect(page.locator('#coverage-filter-disclosure legend')).toHaveText(['Catalog','Publishing','Ownership & source']);
+  await expect(page.locator('.coverage-results-toolbar')).toBeVisible();
+  await expect(page.locator('#author-contributor-sort, #author-contributor-sort-direction')).toHaveCount(0);
+  const coverageTitle = page.locator('#author-contributor-table th[data-coverage-sort-key="title"] button');
+  await coverageTitle.click();
+  await expect(coverageTitle.locator('xpath=..')).toHaveAttribute('aria-sort','descending');
+  await coverageTitle.click();
+  await expect(coverageTitle.locator('xpath=..')).toHaveAttribute('aria-sort','ascending');
+
+  await page.locator('#additional-contact-status').selectOption('present');
+  await expect(page.locator('#author-contributor-count')).toHaveText('1 record');
+  await expect(page.locator('#author-contributor-rows')).toContainText('support@example.com');
+  await page.locator('#additional-contact-status').selectOption('missing');
+  await expect(page.locator('#author-contributor-count')).toHaveText('10 records');
+  await expect(page.locator('#author-contributor-rows')).toContainText('Additional contact missing');
+  await page.locator('#additional-contact-status').selectOption('any');
+  await page.locator('#author-status').selectOption('any');
+  await page.locator('#additional-contact-status').selectOption('missing');
+  await expect(page.locator('#author-contributor-count')).toHaveText('12 records');
+  await page.locator('#author-status').selectOption('present');
+  await expect(page.locator('#author-contributor-count')).toHaveText('2 records');
+  await expect(page.locator('#author-contributor-rows')).toContainText('Author present, no additional contact');
+  await expect(page.locator('#author-contributor-rows')).toContainText('Second author present, no additional contact');
+  await page.locator('#author-contributor-clear').click();
+  await expect(page.locator('#author-status')).toHaveValue('missing');
+  await expect(page.locator('#additional-contact-status')).toHaveValue('any');
+  await expect(page.locator('#author-contributor-count')).toHaveText('11 records');
+
+  await page.locator('#gap-search').fill('support@example.com');
+  await expect(page.locator('#author-contributor-count')).toHaveText('1 record');
+  await expect(page.locator('#author-contributor-rows')).toContainText('support@example.com');
+  await page.locator('#author-contributor-clear').click();
+  await expect(page.locator('#author-contributor-page-label')).toHaveText('Page 1 of 2');
+  await page.locator('[data-author-contributor-page="next"]').first().click();
+  await expect(page.locator('#author-contributor-page-label')).toHaveText('Page 2 of 2');
+  await expect(page.locator('#author-contributor-rows tr')).toHaveCount(1);
+  await page.locator('[data-author-contributor-page="previous"]').last().click();
+  await expect(page.locator('#author-contributor-page-label')).toHaveText('Page 1 of 2');
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByText('Export visible rows',{exact:true}).click();
+  await page.getByRole('button',{name:'CSV (.csv)'}).click();
+  const download = await downloadPromise;
+  await expect(page.locator('.coverage-table-tools .table-export-dropdown')).not.toHaveAttribute('open');
+  expect(download.suggestedFilename()).toMatch(/missing-contact-11-rows\.csv$/);
+  const outputPath = await download.path();
+  const csv = fs.readFileSync(outputPath,'utf8');
+  expect(csv).toContain('Main author missing');
+  expect(csv).toContain('Additional contact emails');
+  expect(csv).not.toContain('Acknowledgement contributors');
+  await page.locator('#author-contributor-clear').click();
+
+  for (const width of [1440,390]) {
+    await page.setViewportSize({width,height:1000});
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`page overflows at ${width}`).toBe(true);
+    expect(await page.locator('.coverage-results-toolbar').evaluate(element=>element.getBoundingClientRect().height),`table controls should stay compact at ${width}`).toBeLessThan(width < 700 ? 260 : 90);
+    if (width >= 1100) expect(await page.locator('.coverage-table-wrap').evaluate(element=>element.scrollWidth<=element.clientWidth+1),'table should fit the desktop content width').toBe(true);
+    await page.screenshot({path:testInfo.outputPath(`author-contributor-gaps-${width}.png`),fullPage:true,animations:'disabled'});
+  }
 });

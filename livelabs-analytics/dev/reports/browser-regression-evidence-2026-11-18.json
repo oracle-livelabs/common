@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "passedTests": 60,
+  "failedTests": 0,
+  "releaseId": "2026.11.16-05748f6f5eb8db25",
+  "manifestSha256": "cb3a18c6670314fc31d5e06fbcd3040f85cb91e37f783987d35ae9fb123efbf9",
+  "checkedAt": "2026-11-18T10:14:14.7205019Z",
+  "suite": "Playwright full suite, one worker",
+  "target": "current local project checkout at 127.0.0.1:4175",
+  "note": "Static bundle manifest and file hashes are checked separately by the object-storage preflight."
+}
