@@ -1,0 +1,29 @@
+{
+  "checked_at": "2026-11-16T19:30:35.172278+00:00",
+  "status": "passed",
+  "focused_browser_tests": 6,
+  "source_validator_checks": 86,
+  "upload_boundary_tests": 4,
+  "related_browser_tests_passed_in_prior_regression_run": 19,
+  "code_hashes": {
+    "assets/js/view-periods.js": "4cdc3437297a52ef3579205b08586fe16958843fb8c01838d1376506b830dbc5",
+    "assets/js/dashboard.js": "dce0d6b1d6019bf8cc6adf6a3e05216fa20b85ea68f32630c65f94488ca97f10",
+    "assets/js/views.js": "4157e207d91f03bf6f8af82fa3eccc1469280f28614f205e6b3723dc2acbaa8c",
+    "assets/js/author-report.js": "fd605bea8899008f58baa53295942a237b8184441bf355300f8f2674f9aa518d",
+    "assets/css/dashboard.css": "63d10a00fe3b591edb798cfa8f7f1926ca018e100a87c0af8ff63470b6827ad3",
+    "assets/css/tables.css": "66553304bc79108c6b0778b9466a04f015f6d56b760ff439adcea404500a095e",
+    "dashboard/index.html": "444ec6ece0161637b936f64ea2d4e7571ac736dc62b43e4bfd9b28c56bee5a23",
+    "views/index.html": "447fb76d2fdc6d104294148add83f8050dcccd829cbb060a653d876de1903adb"
+  },
+  "scope": [
+    "All six periods and one Views column on all four Dashboard tables and Views",
+    "Raw source values, row identities, scores, sorting and exports",
+    "Independent tab selections and empty urgent table",
+    "Desktop, intermediate widths and mobile layouts",
+    "Teal primary and outlined secondary search-result actions"
+  ],
+  "source_log": "dev/logs/views-selector-passed.log",
+  "related_log": "dev/logs/views-selector-regression.log",
+  "data_refresh_performed": false,
+  "deployment_performed": false
+}

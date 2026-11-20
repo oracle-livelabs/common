@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <base href="../">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Search public LiveLabs workshops and sprints by views across six source periods.">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <title>Workshop and Sprint Views · LiveLabs Analytics</title>
+  <script src="./assets/js/page-loading.js?v=20261116-recovery-v1"></script>
+  <link rel="stylesheet" href="./assets/css/page-loading.css?v=20261116-recovery-v1">
+  <link rel="icon" href="./assets/images/oracle-logo-white.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./assets/css/dashboard.css?v=20261116-search-without-score">
+  <link rel="stylesheet" href="./assets/css/views.css?v=20261117-council-filter-v1">
+  <link rel="stylesheet" href="./assets/css/tables.css?v=20261117-council-filter-v1">
+</head>
+<body class="analytics-primary-nav analytics-views-page">
+  <a class="skip-link" href="#views-top">Skip to views table</a>
+  <div class="layout">
+    <aside class="rail" id="analytics-menu" aria-label="Main menu">
+      <div class="brand">
+        <a class="brand-mark" href="./dashboard/?view=performance" aria-label="LiveLabs Analytics Dashboard">
+          <img src="./assets/images/oracle-logo-white.svg" alt="Oracle">
+        </a>
+        <span>LiveLabs Analytics</span>
+      </div>
+      <nav class="nav-list" aria-label="Analytics pages">
+        <a href="./dashboard/?view=performance" data-page-navigation="true">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7"></rect><rect x="13" y="4" width="7" height="7"></rect><rect x="4" y="13" width="7" height="7"></rect><rect x="13" y="13" width="7" height="7"></rect></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="./views/" aria-current="page" data-page-navigation="true">
+          <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"></path><path d="M4 19h16"></path><path d="m7 14 3-3 3 2 5-6"></path></svg>
+          <span>Views</span>
+        </a>
+      </nav>
+    </aside>
+    <main id="views-top" tabindex="-1">
+      <header class="page-header">
+        <div>
+          <div class="hero-logo" aria-label="LiveLabs"><img src="./assets/images/livelabs-logo-white.svg" alt="LiveLabs"></div>
+          <h1>Workshop and sprint views</h1>
+          <p class="intro">Browse view counts for public, published LiveLabs content. Search by title or LiveLabs ID.</p>
+        </div>
+      </header>
+      <div class="hero-stripe" aria-hidden="true"></div>
+      <section class="views-section section" aria-labelledby="views-heading">
+        <div class="views-section-heading">
+          <div>
+            <h2 id="views-heading">All public workshops and sprints</h2>
+          </div>
+        </div>
+        <div class="views-table-panel">
+        <div class="views-table-toolbar" aria-label="Search and filter views">
+          <label class="views-control views-search-control" for="views-search">
+            <span>Search</span>
+            <input id="views-search" type="search" autocomplete="off" placeholder="Title, LiveLabs ID, or email">
+          </label>
+          <label class="views-control" for="views-author-email">
+            <span>Author / owner email</span>
+            <input id="views-author-email" type="search" autocomplete="off" placeholder="Filter by email">
+          </label>
+          <label class="views-control" for="views-additional-contact-email">
+            <span>Additional contact email</span>
+            <input id="views-additional-contact-email" type="search" autocomplete="off" placeholder="Filter by email">
+          </label>
+          <label class="views-control" for="views-type">
+            <span>Content type</span>
+            <select id="views-type">
+              <option value="">All types</option>
+              <option value="Workshop">Workshops</option>
+              <option value="Sprint">Sprints</option>
+            </select>
+          </label>
+          <label class="views-control" for="views-council">
+            <span>Council</span>
+            <select id="views-council">
+              <option value="">All councils</option>
+            </select>
+          </label>
+          <label class="views-control" for="views-period">
+            <span>View period</span>
+            <select id="views-period">
+              <option value="Views - Last 7 Days">Last 7 Days</option>
+              <option value="Views - Last 14 Days">Last 14 Days</option>
+              <option value="Views - Last 30 Days">Last 30 Days</option>
+              <option value="Views - Last 90 Days">Last 90 Days</option>
+              <option value="Views - Last 180 Days">Last 180 Days</option>
+              <option value="Views - Last 12 Months" selected>Last 12 Months</option>
+            </select>
+          </label>
+        </div>
+        <div class="views-table-controls table-controls-toolbar">
+          <p id="views-table-count" role="status" aria-live="polite">Loading view records…</p>
+          <div class="views-table-meta-actions">
+            <div class="views-export-tools">
+              <details class="table-export-dropdown">
+                <summary>Export visible rows</summary>
+                <div class="table-export-options">
+                  <button type="button" data-views-export-format="csv">CSV (.csv)</button>
+                  <button type="button" data-views-export-format="xlsx">Excel (.xlsx)</button>
+                  <button type="button" data-views-export-format="json">JSON (.json)</button>
+                </div>
+              </details>
+              <span id="views-export-status" class="table-export-status" role="status" aria-live="polite"></span>
+            </div>
+            <button id="views-clear-filters" class="views-button" type="button">Clear filters</button>
+            <label class="views-page-size" for="views-page-size">Rows
+              <select id="views-page-size" data-views-page-size aria-label="Rows per page">
+                <option value="10" selected>10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option>
+              </select>
+            </label>
+            <button id="views-previous" class="views-button pagination-button" data-views-previous type="button" disabled>Previous</button>
+            <span id="views-page-label" data-views-page-label aria-live="polite">Page 1 of 1</span>
+            <button id="views-next" class="views-button pagination-button" data-views-next type="button" disabled>Next</button>
+          </div>
+        </div>
+        <div class="views-table-wrap" tabindex="0" aria-label="Scrollable workshop views results">
+          <table class="views-table">
+            <thead>
+              <tr>
+                <th id="views-rank-heading" scope="col" data-views-sort-key="rank" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="rank">#</button></th>
+                <th scope="col" data-views-sort-key="title" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="title">Title</button></th>
+                <th scope="col" data-views-sort-key="livelabsId" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="livelabsId">LiveLabs ID</button></th>
+                <th scope="col" data-views-sort-key="type" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="type">Type</button></th>
+                <th scope="col" data-views-sort-key="council" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="council">Council</button></th>
+                <th scope="col" data-views-sort-key="author" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="author">Author / owner email</button></th>
+                <th scope="col" data-views-sort-key="contact" aria-sort="none"><button class="table-sort-button" type="button" data-views-sort="contact">Additional contact email</button></th>
+                <th id="views-count-heading" scope="col" data-views-sort-key="views" aria-sort="descending"><button class="table-sort-button" type="button" data-views-sort="views">Views · Last 12 Months</button></th>
+              </tr>
+            </thead>
+            <tbody id="views-table-body"><tr><td colspan="8" class="views-empty">Loading view records…</td></tr></tbody>
+          </table>
+        </div>
+        </div>
+      </section>
+      <footer class="site-footer">Powered by Oracle LiveLabs Team © 2026</footer>
+    </main>
+  </div>
+  <script src="./assets/js/report-export.js?v=20261116-recovery-v1"></script>
+  <script src="./assets/js/view-periods.js?v=20261116-views"></script>
+  <script src="./assets/js/views.js?v=20261117-council-filter-v1"></script>
+</body>
+</html>

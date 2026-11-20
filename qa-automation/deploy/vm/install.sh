@@ -9,6 +9,7 @@ private_address=""
 public_host=""
 https_port=""
 jenkins_internal_port=""
+par_resolver_internal_port=""
 portal_internal_port=""
 vpn_cidr=""
 skip_packages=false
@@ -32,6 +33,7 @@ Usage:
 Required options:
   --https-port <port>          Approved private portal port.
   --jenkins-port <port>        Approved container-only Jenkins port.
+  --par-resolver-port <port>   Approved container-only PAR resolver port.
   --portal-port <port>         Approved container-only portal port.
 
 Optional options:
@@ -77,6 +79,11 @@ while [[ $# -gt 0 ]]; do
     --jenkins-port)
       [[ $# -ge 2 ]] || fail "--jenkins-port needs a value."
       jenkins_internal_port="$2"
+      shift 2
+      ;;
+    --par-resolver-port)
+      [[ $# -ge 2 ]] || fail "--par-resolver-port needs a value."
+      par_resolver_internal_port="$2"
       shift 2
       ;;
     --portal-port)
@@ -192,8 +199,9 @@ validate_private_port() {
 
 validate_private_port --https-port "$https_port"
 validate_private_port --jenkins-port "$jenkins_internal_port"
+validate_private_port --par-resolver-port "$par_resolver_internal_port"
 validate_private_port --portal-port "$portal_internal_port"
-[[ "$(printf '%s\n' "$https_port" "$jenkins_internal_port" "$portal_internal_port" | sort -u | wc -l)" == "3" ]] || fail "All QA service ports must be distinct."
+[[ "$(printf '%s\n' "$https_port" "$jenkins_internal_port" "$par_resolver_internal_port" "$portal_internal_port" | sort -u | wc -l)" == "4" ]] || fail "All QA service ports must be distinct."
 
 crowdstrike_args=()
 if [[ -n "$crowdstrike_rpm" ]]; then
@@ -266,6 +274,7 @@ set_env_value() {
 set_env_value QA_BIND_ADDRESS "$private_address"
 set_env_value QA_HTTPS_PORT "$https_port"
 set_env_value QA_JENKINS_INTERNAL_PORT "$jenkins_internal_port"
+set_env_value QA_PAR_RESOLVER_INTERNAL_PORT "$par_resolver_internal_port"
 set_env_value QA_PORTAL_INTERNAL_PORT "$portal_internal_port"
 set_env_value QA_PUBLIC_HOST "$public_host"
 set_env_value QA_PUBLIC_URL "https://${public_host}:${https_port}"

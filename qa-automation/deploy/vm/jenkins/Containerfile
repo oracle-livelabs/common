@@ -33,8 +33,12 @@ RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins.txt
 COPY deploy/vm/jenkins/casc.yaml /usr/share/jenkins/ref/casc.yaml
 COPY deploy/vm/jenkins/jobs.groovy /usr/share/jenkins/ref/jobs.groovy
 COPY deploy/vm/jenkins/entrypoint.sh /usr/local/bin/livelabs-qa-jenkins
+COPY deploy/vm/scripts/restore-reports.sh /usr/local/bin/livelabs-qa-restore-reports
+COPY scripts/reporters/par-link-report.mjs /opt/qa-report-tools/scripts/reporters/par-link-report.mjs
+COPY scripts/reporters/root-summary-reporter.mjs /opt/qa-report-tools/scripts/reporters/root-summary-reporter.mjs
+COPY scripts/reporters/rebuild-saved-reports.mjs /opt/qa-report-tools/scripts/reporters/rebuild-saved-reports.mjs
 
-RUN chmod 0755 /usr/local/bin/livelabs-qa-jenkins \
+RUN chmod 0755 /usr/local/bin/livelabs-qa-jenkins /usr/local/bin/livelabs-qa-restore-reports \
     && mkdir -p /var/qa-reports/par /var/qa-reports/regression /var/jenkins_home/.npm /var/jenkins_home/.cache \
     && chown -R jenkins:jenkins /var/qa-reports /var/jenkins_home/.npm /var/jenkins_home/.cache
 

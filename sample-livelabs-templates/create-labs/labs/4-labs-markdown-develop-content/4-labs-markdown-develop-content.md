@@ -2,9 +2,9 @@
 
 ## Introduction
 
-To optimize your workflow while developing workshop content, we recommend using VSCode as your editor. VSCode allows you to efficiently edit Markdown files using the optional tasks below. As demonstrated in the previous lab, Task 1 provides templates that give you a solid foundation to start editing. Tasks 2 to 15 (optional) streamline your content development and enhance productivity.
+To optimize your workflow while developing workshop content, we recommend using VSCode as your editor. VSCode allows you to efficiently edit Markdown files using the optional tasks below. As demonstrated in the previous lab, Task 1 provides templates that give you a solid foundation to start editing. Tasks 2 to 22 (optional) streamline your content development and enhance productivity.
 
-> **Note:** For a comprehensive workshop development experience, we recommend using the sample workshop folder provided in Task 1, while tasks 2 to 15 are optional.
+> **Note:** For a comprehensive workshop development experience, we recommend using the sample workshop folder provided in Task 1, while tasks 2 to 22 are optional.
 
 Estimated Time: x
 
@@ -75,7 +75,7 @@ To create your lab and workshop content:
 
 2. To use a common lab, you need to use an absolute link to the lab in your workshop's manifest.json file. For example, to use the "Generate SSH Key" common lab located in [https://github.com/oracle-livelabs/common/blob/main/**labs/generate-ssh-key-cloud-shell/generate-ssh-keys-cloud-shell.md**](https://github.com/oracle-livelabs/common/blob/main/labs/generate-ssh-key-cloud-shell/generate-ssh-keys-cloud-shell.md), use this link in the manifest.json file: [https://oracle-livelabs.github.io/common/**labs/generate-ssh-key-local/generate-ssh-keys-local.md**](https://oracle-livelabs.github.io/common/labs/generate-ssh-key-local/generate-ssh-keys-local.md).
 
-    Use the LiveLabs [Markdown Cheat Sheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf)
+    Use the LiveLabs [Markdown Cheat Sheet](https://objectstorage.us-ashburn-1.oraclecloud.com/p/4Au3jJ-t8Wtw3LWyYsDMqQk2FdlXDvXCb1MYRS0J6P4QS-GCrv2YNOolWdtFMLZq/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf)
 
 ## Task 3: Don'ts
 
@@ -233,7 +233,79 @@ Without using image scaling, all the screenshots you take for your workshop will
 
 5. As a final note, it's in your best interest to take as large of a picture as you can and then scale it down using the parameters above. LiveLabs allows the magnification of images, so if you have a larger base image, the audience will have more clarity.
 
-## Task 10: Add and Embed a Video
+
+### Show a Preview of a Tall Image (coming soon)
+
+For a tall screenshot, use `image-preview` to show a landscape-shaped crop until the reader selects **Expand to view full image**. The reader can then collapse it again or select the image to open the enlarged view.
+
+Place one Markdown image with descriptive alternate text between `:::image-preview` and `:::`. Put each marker at the start of its own line. Replace the example URL with the path to your image.
+
+```text
+:::image-preview
+![VS Code file explorer showing the Open with Live Server option](https://example.com/your-image.png)
+:::
+```
+
+Try it here:
+
+:::image-preview
+![VS Code file explorer showing the Open with Live Server option](./images/open-live-server.png)
+:::
+
+## Task 10: Place Instructions Beside an Image (coming soon)
+
+Use `image-right` when a screenshot helps readers follow a short set of instructions. On wider screens, the instructions appear to the left of the image. On narrow screens, the image appears below the instructions.
+
+1. Start the block with `:::image-right`. Write the instructions below it using normal Markdown, including numbered or bulleted lists.
+2. Add `:::image` on its own line, followed by **one** Markdown image with descriptive alternate text. Close the block with `:::` on its own line. Keep all three markers at the start of their lines.
+3. Copy this example into a lab's `.md` file. Put the image in that lab's `images` folder and update the path and alternate text to match your screenshot:
+
+    ```text
+    :::image-right
+    1. Open the LiveLabs home page.
+    2. Use the search field to find a workshop.
+    :::image
+    ![LiveLabs home page with the workshop search field at the top](./images/livelabs-homepage.png)
+    :::
+    ```
+
+Here is the example rendered in this lab:
+
+:::image-right
+1. Open the LiveLabs home page.
+2. Use the search field to find a workshop.
+:::image
+![LiveLabs home page with the workshop search field at the top](./images/livelabs-homepage.png)
+:::
+
+
+### Combine Instructions with an Image Preview
+
+You can also use `image-preview` inside the image column of an `image-right` block. Close the preview and the outer block with a separate `:::` line for each. Replace the example URL with the path to your image.
+
+```text
+:::image-right
+1. Find the workshop's index.html file in VS Code.
+2. Right-click the file and select Open with Live Server.
+:::image
+:::image-preview
+![VS Code file explorer showing the Open with Live Server option](https://example.com/your-image.png)
+:::
+:::
+```
+
+Try the combined layout here:
+
+:::image-right
+1. Find the workshop's `index.html` file in VS Code.
+2. Right-click the file and select **Open with Live Server**.
+:::image
+:::image-preview
+![VS Code file explorer showing the Open with Live Server option](./images/open-live-server.png)
+:::
+:::
+
+## Task 11: Add and Embed a Video
 
 Adding videos is very similar to adding images. We most commonly see videos added in the introductions for labs to familiarize the audience with the product before they dive into the workshop.
 LiveLabs supports embedding videos from [YouTube](https://www.youtube.com), [Oracle Video Hub](https://videohub.oracle.com), or direct video file URLs (such as videos hosted on OCI Object Storage).
@@ -293,7 +365,7 @@ You can also embed video files directly from a URL, such as videos hosted on OCI
 
     > **Note:** Ensure your video file is publicly accessible if you want users to view it without authentication.
 
-## Task 11: Scale a Video
+## Task 12: Scale a Video
 
 If you do not specify a size when embedding a video, the video displays in small size by default. For most workshops, this default size is the recommended option unless you want to give the video more visual emphasis on the page.
 
@@ -351,11 +423,11 @@ Use large when you want the video to take up more of the available lab page widt
 
 The screenshots below show how video sizing appears inside a workshop:
 
-![Small video](<./images/small-video.png>)
+![Small video](./images/small-video.png)
 
  This screenshot shows a video displayed at **small** size.
 
-![Medium video](<./images/medium-video.png>)
+![Medium video](./images/medium-video.png)
 
 This screenshot shows a video displayed at **medium** size.
 
@@ -371,7 +443,7 @@ Use the default embed format whenever possible:
 
 **Important:** Only specify medium or large when the video needs more prominence in the task or page layout.
 
-## Task 12: Tables
+## Task 13: Tables
 
 You can define a table in Markdown just like so:
 
@@ -422,9 +494,9 @@ As you can see, the numbering is added automatically.
 
 Isn't that cool?
 
-You can also refer to the [LiveLabs Markdown Cheatsheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/labfiles/LiveLabs_MD_Cheat_Sheet.pdf)
+You can also refer to the [LiveLabs Markdown Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.com/p/4Au3jJ-t8Wtw3LWyYsDMqQk2FdlXDvXCb1MYRS0J6P4QS-GCrv2YNOolWdtFMLZq/n/c4u04/b/livelabsfiles/o/labfiles/LiveLabs_MD_Cheat_Sheet.pdf)
 
-## Task 13: Variables
+## Task 14: Variables
 
 You can specify variables in another file and refer to them in your markdown.
 
@@ -483,7 +555,7 @@ You can specify variables in another file and refer to them in your markdown.
 
     - Here you can find more info: **[](var:doc_link)**
 
-## Task 14: Use the LintChecker
+## Task 15: Use the LintChecker
 
 The LintChecker is a useful JavaScript function for QA that you should use. It is especially handy in catching easily overlooked errors such as indentation, syntax errors, and formatting issues.
 
@@ -532,7 +604,7 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
     | HTML in Markdown | Replace `[text](url)` with `[text](url)`. |
     | Steps not numbered | Use `1.`, `2.`, etc. instead of `*` or `-` for steps. |
     {: title="Common fixes"}
-## Task 15: Case Sensitivity
+## Task 16: Case Sensitivity
 
 **THIS IS IMPORTANT.** Most of us use Windows and macOS, which are **Case Insensitive** systems. This means that Windows and macOS consider "OrAcLe.PnG" to be the same as "oracle.png" or "Oracle.PNG" for file structure. GitHub and GitHub pages are **Case Sensitive** and **do** make that distinction.
 
@@ -548,7 +620,7 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
 
 2. If you run into a Case Sensitivity error on Windows or macOS, you cannot fix it by renaming it directly with the correct case because the system will not recognize that you are trying to rename it. You have to either rename that item to something else entirely and then rename it back with the correct case, or you can use **"git mv"** as described [in this article](https://stackoverflow.com/questions/11183788/in-a-git-repository-how-to-properly-rename-a-directory) for more complicated fixes that involve entire directories.
 
-## Task 16: Code Snippets
+## Task 17: Code Snippets
 
 1. If you include code snippets in your workshop instruction, use the following syntax for code to distinguish it from other instructions.
 
@@ -638,9 +710,9 @@ The LintChecker is a useful JavaScript function for QA that you should use. It i
 
 - If a code snippet, command, or script is copied or adapted from another author, repository, blog, documentation page, or sample project, cite the source near the code block and confirm the license allows reuse.
 
-- Download this handy [Cheatsheet](https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
+- Download this handy [Cheatsheet](https://objectstorage.us-ashburn-1.oraclecloud.com/p/4Au3jJ-t8Wtw3LWyYsDMqQk2FdlXDvXCb1MYRS0J6P4QS-GCrv2YNOolWdtFMLZq/n/c4u04/b/livelabsfiles/o/LiveLabs_MD_Cheat_Sheet.pdf), which has more information about using Markdown syntax for LiveLabs development.
 
-## Task 17: Strikethrough
+## Task 18: Strikethrough
 
 With this feature, you can cross out text or words in a paragraph by adding two tildes before and after the word or text in a paragraph.
 
@@ -650,7 +722,7 @@ With this feature, you can cross out text or words in a paragraph by adding two 
 
     *`~~An example of Strikethrough.~~`* transforms to *~~An example of Strikethrough.~~*
 
-## Task 18: Clickable Links
+## Task 19: Clickable Links
 
 1. The old pattern of making a URL clickable required markdown formatting. For example, you needed to have this format in markdown to make the links clickable.
 
@@ -666,7 +738,7 @@ With this feature, you can cross out text or words in a paragraph by adding two 
 
 4. The URLs open in a new tab in the browser. The same applies to email addresses.
 
-## Task 19: Building Blocks
+## Task 20: Building Blocks
 
 Building Blocks enhance both workshop development and customer experience. This step focuses on how authors can use Building Blocks and Tasks to accelerate their workshop development in your repo.
 
@@ -676,7 +748,7 @@ Building Blocks enhance both workshop development and customer experience. This 
 
 3. To leverage pre-built building blocks for your repository, check out this [how to create building block guide](https://github.com/oracle-livelabs/common/blob/main/building-blocks/how-to-author-with-blocks/how-to-author-with-blocks.md) to begin building for your repo.
 
-## Task 20: Use LiveServer Extension
+## Task 21: Use LiveServer Extension
 
 If you have installed the LiveServer extension in your VSCode by following the steps in Lab 2 Task 4, you can use Live Server to open your workshop's HTML file and dynamically view and test your changes.
 
@@ -690,7 +762,7 @@ If you have installed the LiveServer extension in your VSCode by following the s
 
 3. With the workshop now open in your browser, you can modify your files as needed. Save the changes you make to the files. To see the changes reflected in real-time, reload the page in your browser. Live Server ensures that any modifications you make to the files are immediately visible.
 
-## Task 21: Auto-Estimated Time
+## Task 22: Auto-Estimated Time
 
 The framework can automatically calculate the estimated reading time for your lab based on its content. This saves you from manually estimating and keeps the time accurate as your content changes.
 

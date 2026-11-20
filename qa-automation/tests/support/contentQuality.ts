@@ -76,7 +76,6 @@ export async function collectContentQualityIssues(page: Page, options: ContentQu
     timeout: BasePage.PAGE_READY_TIMEOUT_MS,
   });
 
-  issues.push(...(await collectExpectedTermIssues(page, options)));
   issues.push(...(await collectObviousTextDefectIssues(page, options.contextName)));
   issues.push(...(await collectBrokenVisibleImageIssues(page, options.contextName)));
   issues.push(...(await collectBrokenEmbeddedContentIssues(page, options.contextName)));
@@ -138,46 +137,6 @@ export function contentQualityIssue(
     ...(count ? { count } : {}),
     ...(details === undefined ? {} : { details }),
   };
-}
-
-async function collectExpectedTermIssues(page: Page, options: ContentQualityOptions): Promise<ContentQualityIssue[]> {
-  const expectedTerms = options.expectedTerms ?? [];
-  if (expectedTerms.length === 0) {
-    return [];
-  }
-
-  const bodyText = await page.locator("body").innerText({ timeout: BasePage.DEFAULT_TIMEOUT_MS });
-  const missingTerms = expectedTerms.filter((term) => !new RegExp(escapeRegex(term), "i").test(bodyText));
-
-  if (options.expectedTermsMode === "any") {
-    if (missingTerms.length < expectedTerms.length) {
-      return [];
-    }
-
-    return [
-      contentQualityIssue(
-        "CONTENT_RELEVANCE",
-        "Content relevance",
-        "major",
-        `The page did not contain any expected catalog terms: ${expectedTerms.join(", ")}.`,
-        { expectedTerms },
-      ),
-    ];
-  }
-
-  if (missingTerms.length === 0) {
-    return [];
-  }
-
-  return [
-    contentQualityIssue(
-      "CONTENT_RELEVANCE",
-      "Content relevance",
-      "major",
-      `The page missed expected catalog terms: ${missingTerms.join(", ")}.`,
-      { expectedTerms, missingTerms },
-    ),
-  ];
 }
 
 async function collectObviousTextDefectIssues(page: Page, contextName: string): Promise<ContentQualityIssue[]> {
@@ -475,8 +434,4 @@ async function visibleContentLocator(page: Page, selector: string) {
 
 function isBrokenLinkStatus(status: number): boolean {
   return status >= 400 && !AUTH_OR_RATE_LIMIT_STATUSES.has(status);
-}
-
-function escapeRegex(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

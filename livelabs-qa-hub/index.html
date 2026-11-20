@@ -6,10 +6,10 @@
     <meta name="description" content="LiveLabs QA Hub static prototype for GitHub Pages review." />
     <title>LiveLabs QA Hub</title>
     <link rel="icon" href="data:," />
-    <link rel="stylesheet" href="./app/dist/styles.css" />
+    <meta http-equiv="refresh" content="0;url=./app/dist/index.html" />
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="./app/dist/app.js"></script>
+    <a href="./app/dist/index.html">Open LiveLabs QA Hub</a>
+    <script>location.replace('./app/dist/index.html' + location.search + location.hash)</script>
   </body>
 </html>

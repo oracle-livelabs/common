@@ -1,0 +1,31 @@
+{
+  "schema": "oncall-sealed-run.v1",
+  "mode": "synthetic",
+  "runId": "synthetic-e5900984270976e44089",
+  "realSourcesRead": false,
+  "sourceWrites": 0,
+  "nativeDraftsCreated": 0,
+  "slackMessagesSent": 0,
+  "artifacts": [
+    {
+      "name": "state.json",
+      "sha256": "cef73f09ce9c07ab6a0be5149f3dbcc1f77f7b074107354abd0714d5c6c2ce5a",
+      "bytes": 11256
+    },
+    {
+      "name": "checks.json",
+      "sha256": "1548e2662f3142c86d705d524a237eed41465b9aaa57d14675f672f50351755e",
+      "bytes": 3533
+    },
+    {
+      "name": "hub-operations.json",
+      "sha256": "cabcfa06c1e67c6936ddd704305f1c237012d48a4c45add0df06b2dbf08cc3a2",
+      "bytes": 14841
+    },
+    {
+      "name": "report.md",
+      "sha256": "6881ddcfdc70caa63fafb76f0aa03fb64959f95659b327258fa0f1696a49f093",
+      "bytes": 4057
+    }
+  ]
+}

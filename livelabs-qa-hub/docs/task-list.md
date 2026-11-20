@@ -1,6 +1,29 @@
+# Current delivery — 5 October 2026
+
+- [x] Replace the QA Operations launcher and repeated cards with seven direct destinations.
+- [x] Apply a minimal Redwood layout and shared searchable, sortable, paginated tables.
+- [x] Read saved local reports, framework inventory and local repositories through loopback-only readers.
+- [x] Rework on-call review into a case table and on-demand draft details.
+- [x] Prepare the source review and connected QA Hub plan.
+- [x] Review framework selection, Jenkins/report topology, Analytics snapshot refresh and author evidence; document proposed per-page actions.
+- [x] Record all 28 spec files and 30 declared tags in a source capability inventory.
+- [ ] Verify the private Jenkins/report URL, TLS and deployed authentication.
+- [ ] Resolve certificate trust and OCI `NotAuthenticated` results to complete the live VM/job review.
+- [ ] Consolidate Platform, Content, PAR Links and Run History under QA Automation; add Analytics and CI & Services destinations.
+- [ ] Connect live Jenkins/PAR, on-call and GitHub adapters.
+- [ ] Enable authorized, audited and idempotent run requests.
+- [ ] Extend Jenkins scope parameters, queueing, isolated agents and attempt-bound publication.
+- [ ] Add repeatable Analytics candidate refresh and private author verification workers.
+
+See [the current integration plan](connected-qa-hub-plan.md) and [architecture/action review](architecture-and-actions-review-2026-10-05.md). The lists below preserve historical delivery notes.
+
 # LiveLabs QA Hub Task List
 
 Status legend: `Done`, `Ready`, `Needs Review`, `Blocked`
+
+## Current Scope (2026-10-05)
+
+The active Hub excludes the Knowledge Base and linked Test Management surfaces. Historical delivery records below remain for context.
 
 ## Completed In This Draft
 
@@ -22,7 +45,7 @@ Status legend: `Done`, `Ready`, `Needs Review`, `Blocked`
 | Needs Review | Confirm whether V2 should prioritize Command Center, QA Watchdog, Health Monitor, and Admin Console first. |
 | Needs Review | Confirm role model beyond `user` and `admin` for future builds. |
 | Needs Review | Confirm production stack direction. |
-| Needs Review | Confirm source systems and owners for Jira, CI/CD, LiveLabs analytics, WMS/TMS, and LiveStack. |
+| Needs Review | Confirm source systems and owners for Jira, CI/CD, LiveLabs analytics, WMS, and LiveStack. |
 | Needs Review | Confirm which reports leadership needs first. |
 
 ## V2 Planning Tasks
@@ -50,7 +73,7 @@ Status legend: `Done`, `Ready`, `Needs Review`, `Blocked`
 | Needs Review | Confirm whether Admin Console should stay separate from user profile. |
 | Needs Review | Confirm whether V3 should stay static/demo or move to ORDS/Oracle Database, APEX, or Oracle JET app structure. |
 
-## V3 Rework Tasks
+## V3 Rework Tasks (Historical)
 
 | Status | Task |
 | --- | --- |
@@ -67,7 +90,7 @@ Status legend: `Done`, `Ready`, `Needs Review`, `Blocked`
 | Done | Create `docs\v3-rework-plan.md`. |
 | Done | Expand validation to cover V3 navigation and local intake workflows. |
 
-## Linked TMS Tasks
+## Linked TMS Tasks (Historical)
 
 | Status | Task |
 | --- | --- |
@@ -79,7 +102,7 @@ Status legend: `Done`, `Ready`, `Needs Review`, `Blocked`
 | Done | Add unit tests, validation, build script, and browser smoke script. |
 | Needs Review | Decide whether TMS should become independent, Xray-aligned, or hybrid. |
 
-## V4 Test Management Rework Tasks
+## V4 Test Management Rework Tasks (Historical)
 
 | Status | Task |
 | --- | --- |

@@ -1,29 +1,15 @@
 # LiveLabs Analytics
 
-LiveLabs Analytics is a static governance dashboard for reviewing the Oracle LiveLabs workshop portfolio. It helps portfolio owners identify high-performing content, workshops and sprints that need review, and content that may be ready for retirement after replacement validation.
+Use the generated **`upload/website/` contents** for Object Storage, after its readiness gates pass. The repository itself contains private source data and developer tools and is not an upload directory.
 
-This checked-in GitHub Pages bundle is static only. Keep OCI VM runtime files such as API code, wallet files, Nginx configuration, systemd units, and protected environment files in the VM deployment workspace instead of this published directory.
+| Directory | Purpose |
+|---|---|
+| `assets/`, `dashboard/`, `search/`, `views/` | Website source and shared UI assets |
+| `inventory/data/` | Source inventory and generated public projection; do not upload this directory wholesale |
+| `dev/` | Admin source, generation scripts, tests, configuration and historical review material |
+| `deploy/` | One upload builder, source-data review and deployment instructions |
+| `upload/` | Generated website, private service archive and verification evidence, separated for handoff |
+| `.private/` | Credentials, databases, private contacts and source candidates; never upload to Object Storage |
+| `archive/`, `output/` | Retained historical recovery and screenshot evidence; excluded from packaging |
 
-For the pre-Object Storage holding package, use `docs/reference/static-bundle-object-storage-handoff.md`.
-
-## How To Read The Dashboard
-
-Start at the summary cards at the top of the page. They highlight the leading top performer, highest-risk item, and retire-now candidate across workshops and sprints.
-
-Use the Contents section to move between the main views:
-
-- `Top Performers` shows workshops and sprints with the strongest demand and freshness signals.
-- `At-Risk Content` shows stale or low-demand content that should be reviewed before it moves closer to retirement.
-- `Retire-Now Content` shows items with stronger evidence for retirement, usually after replacement evidence is available.
-- `Replacement Suggestions` lists candidate successors and similarity evidence.
-- `Disabled Content` keeps already disabled workshops and sprints visible for audit context.
-- `Portfolio Stats` summarizes source coverage, scoring inputs, governance signals, and data-quality notes.
-
-
-## Search, Sorting, And Filtering
-
-Use the sidebar search to open a focused workshop or sprint detail view, then use `Back to Dashboard` to return to the main dashboard.
-
-Most tables support sorting, filtering, pagination, and expandable rows. Filters always apply to the full table before pagination. Category filters use exact category selections so broad labels such as `Database` do not also match `AI/ML Database`. Pagination includes row-range jumps for `15 - 20` through `120 - 140`.
-
-The active improvement requirements live in `docs/requirements/livelabs-analytics-improvements-2026-05-15.md`.
+Build and review with [the deployment instructions](deploy/README.md). Current readiness is recorded by the build, not inferred from a folder name or a successful local preview.

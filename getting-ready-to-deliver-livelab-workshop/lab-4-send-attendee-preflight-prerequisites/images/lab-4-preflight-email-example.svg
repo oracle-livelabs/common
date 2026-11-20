@@ -7,11 +7,12 @@
     <text x="165" y="108" font-size="24" font-weight="700">Subject: Action Required Before the LiveLab</text>
     <line x1="165" y1="132" x2="1035" y2="132" stroke="#d4d4d4" stroke-width="2"/>
     <text x="165" y="176" font-size="20" font-weight="700">Before the session:</text>
-    <text x="200" y="216" font-size="18">1. Create or confirm your Oracle account.</text>
-    <text x="200" y="250" font-size="18">2. Verify your email address.</text>
-    <text x="200" y="284" font-size="18">3. Open the LiveLab URL and enter the event code.</text>
-    <text x="200" y="318" font-size="18">4. Confirm the expected first screen.</text>
-    <text x="200" y="352" font-size="18">5. Contact the support alias before the session if access fails.</text>
+<text x="200" y="216" font-size="18">1. Create or confirm your Oracle account, verify email, and sign in.</text>
+<text x="200" y="250" font-size="18">2. Open the attendee URL and enter the event code.</text>
+<text x="200" y="284" font-size="18">3. Follow the selected access path and complete prerequisites.</text>
+<text x="200" y="318" font-size="18">4. Confirm the expected first screen and provisioning time.</text>
+<text x="200" y="352" font-size="18">5. Add venue or Secure Desktop checks when required.</text>
+<text x="200" y="386" font-size="18">6. Contact the support alias before the session if access fails.</text>
     <rect x="165" y="388" width="870" height="56" rx="8" fill="#eef3f7" stroke="#7b90a7" stroke-width="2"/>
     <text x="200" y="424" font-size="18" font-weight="700">Author reminder:</text>
     <text x="360" y="424" font-size="18">replace every bracketed value before sending.</text>

@@ -16,7 +16,24 @@ Estimated Time: 15 minutes
 
 ![Facilitation runbook flow](./images/lab-1-runbook-flow.svg " ")
 
-Use this lab to record the event-specific people, timing, backups, status, and delivery notes.
+Use this lab to record the event-specific people, timing, backups, status, venue logistics, and delivery notes.
+
+## Task 0: Confirm Venue and Customer Logistics
+
+1. Confirm with the venue team, before the event:
+
+    - The room has a working network connection;
+    - The network has access to the internet and permits the LiveLabs attendee path, including any required browser, noVNC, or Secure Desktop traffic;
+    - The network has enough capacity for the planned number of workshop students; and
+    - Building access, visitor registration, room access times, badges, parking, and other arrival details are arranged for the delivery team and attendees.
+
+    Record who confirmed each item, when it was confirmed, and what fallback applies if a check fails.
+
+2. Ask the customer what they need to know before the event. Capture answers in the event runbook, including any requested agenda, architecture, security, account, access, or support information.
+
+3. Ask the platform team to review the event, including smaller events, so they can check that another event is not consuming the required shared capacity. Record the review owner and outcome.
+
+4. Determine in advance whether attendees require Secure Desktops. If they do, confirm availability, access instructions, network requirements, and the tested fallback before sending the attendee message.
 
 ## Task 1: Confirm Roles
 

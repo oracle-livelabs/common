@@ -1,55 +1,35 @@
 # Capture Recipes
 
-## Playwright Recipe
+## Package-local Playwright
 
-Use this as default for reproducible capture runs.
+Run setup once:
 
-```bash
-export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
-export PWCLI="<path-to-playwright-cli>"
-export SHOT_ROOT="output/screenshots/<run-name>"
-mkdir -p "$SHOT_ROOT"
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\webpage-screenshot-pipeline\setup.ps1
 ```
 
-Desktop pass:
+Capture a desktop page:
 
-```bash
-"$PWCLI" open "https://example.com" --headed
-"$PWCLI" snapshot
-"$PWCLI" viewport 1440 900
-"$PWCLI" screenshot "$SHOT_ROOT/01-home-desktop-initial.png" --full-page
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\webpage-screenshot-pipeline\capture.ps1 `
+  -Url "https://example.com" `
+  -OutputPath "output/screenshots/example/01-home-desktop-initial.png" `
+  -ViewportWidth 1440 -ViewportHeight 900 -FullPage
 ```
 
-Mobile pass:
+Capture a mobile page:
 
-```bash
-"$PWCLI" viewport 390 844
-"$PWCLI" screenshot "$SHOT_ROOT/02-home-mobile-initial.png" --full-page
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\webpage-screenshot-pipeline\capture.ps1 `
+  -Url "https://example.com" `
+  -OutputPath "output/screenshots/example/02-home-mobile-initial.png" `
+  -ViewportWidth 390 -ViewportHeight 844 -FullPage
 ```
 
-If login/state changes are required, capture one screenshot per key state transition and keep numbering strict (`03-...`, `04-...`).
+## Chrome DevTools MCP
 
-## Chrome DevTools MCP Recipe
+Use `new_page` or `navigate_page`, inspect with `take_snapshot`, then use `take_screenshot`. Capture console and network diagnostics when a page is blank or assets fail.
 
-Use this when you need targeted element captures or runtime debugging tied to visual evidence.
+## OS fallback
 
-1. Open page with `new_page` / `navigate_page`.
-2. Find target with `take_snapshot` and capture `uid`.
-3. Capture with `take_screenshot`:
-   - Full-page when layout context matters.
-   - Element screenshot when pixel precision of a component matters.
-4. Capture supporting diagnostics when useful:
-   - `list_console_messages`
-   - `list_network_requests`
-5. Save screenshot files into the same run folder as Playwright artifacts.
-
-## OS-level Fallback Recipe
-
-Use only if browser tools cannot capture the required surface.
-
-```bash
-python3 "<path-to-os-screenshot-helper>" \
-  --path "output/screenshots/<run-name>/99-desktop-fallback.png"
-```
-
-Record fallback reason in `manifest.md`.
+Use only when browser-level capture is unavailable. Record the reason in the manifest and do not report the result as a Playwright capture.

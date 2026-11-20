@@ -1,0 +1,246 @@
+{
+  "schemaVersion": 1,
+  "revision": 2,
+  "retirement": {
+    "maxViews12m": 250,
+    "olderThanMonths": 12
+  },
+  "decisions": {
+    "livelabs:3552": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Node Red Analytics Test",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:3069": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: testing adding more than 50",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:3095": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Testing WMS-LL ORDS Sync - Please Ignore",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:3096": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Testing WMS-LL ORDS Sync - Please Ignore",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:3325": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Testing WMS Prod 3.0 - Please Ignore",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:3332": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Testing WMS Prod 3.0 - Please Ignore",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:3636": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Updated Quarterly QA - Prod Test",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4149": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Testing",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4199": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Private Testing for LL ID: 727",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4150": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: TEST",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4153": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Test Workshop",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4197": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: GB - Test",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4089": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: CDN Test - William",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4133": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: [GB TEST] Get Started with Oracle Access Governance",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4262": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Private Testing for LL ID: 3937",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4227": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Audit Vault and DB Firewall GB Testing",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4416": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Test - JSON",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4430": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Test - GG",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4472": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Test - Hope 2",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4458": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Test Workshop 4 Documentation",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4438": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Brianna's Test",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4471": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Hope - Test 1",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4498": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: [Grace Hopper] - Sandbox Test",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4505": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: NODOC TEST - Build A GenAI App On Oracle AI Database Psychiatry Edition",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4489": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Marco-Test-1",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "livelabs:4513": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: NODOC TEST - Build A GenAI App On Oracle AI Database Psychiatry Edition",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "wms:12054:marcie test workshop for quiz generation": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Marcie Test Workshop for Quiz Generation",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "wms:11970:wms test abby": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: WMS test- Abby",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "wms:4421:wms test workshop ignore": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: WMS Test Workshop - Ignore",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "wms:11971:test workshop for ramona m db team": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Test Workshop for Ramona M & DB team",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "wms:11795:workshop test": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Workshop Test",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "wms:11448:mircea test": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: mircea test",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "wms:12190:hope test dev": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Hope - Test Dev",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "wms:12111:test workshop teodor": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Test Workshop Teodor",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "wms:11547:test workshop ana": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: Test Workshop Ana",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    },
+    "wms:12113:test": {
+      "classification": "test_content",
+      "reason": "Reviewed explicit internal test/fixture title: test",
+      "updatedAt": "2026-11-05",
+      "updatedBy": "Requested content review"
+    }
+  },
+  "reviewCriteria": {
+    "graceMonths": 6,
+    "types": {
+      "Workshop": {
+        "strictViews": 250,
+        "broadViews": 500,
+        "riskViews": 1000,
+        "oldMonths": 12,
+        "watchMonths": 6
+      },
+      "Sprint": {
+        "strictViews": 250,
+        "broadViews": 500,
+        "riskViews": 1000,
+        "oldMonths": 12,
+        "watchMonths": 6
+      }
+    }
+  },
+  "reviewDecisions": {}
+}

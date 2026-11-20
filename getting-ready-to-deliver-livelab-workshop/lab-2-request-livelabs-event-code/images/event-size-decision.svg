@@ -22,6 +22,6 @@
     <text x="665" y="373" font-size="18">If capacity is not confirmed, stop and</text>
     <text x="665" y="401" font-size="18">resolve it before attendee instructions go out.</text>
     <rect x="60" y="505" width="1080" height="70" rx="8" fill="#f6eee8" stroke="#7f5f4a" stroke-width="3"/>
-    <text x="90" y="548" font-size="21" font-weight="700">Record: attendee count, provisioning path, owner, approval, expected ready time, and fallback.</text>
+<text x="90" y="548" font-size="21" font-weight="700">Record: attendee count, provisioning path, platform review, Secure Desktop decision, owner, and fallback.</text>
   </g>
 </svg>

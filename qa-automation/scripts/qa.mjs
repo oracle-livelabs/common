@@ -314,28 +314,13 @@ function resolveRequestedPaths(paths) {
 function detectRunLane(options) {
   const tags = new Set(normalizeTags(options.tag));
   const paths = normalizeRunPaths(options.paths);
+  const categories = ["smoke", "regression", "generated", "unit"];
+  const categoryPattern = new RegExp(`tests/(${categories.join("|")})/([^/]+)`);
+  const categorizedPath = paths.map((entry) => entry.match(categoryPattern)).find(Boolean);
+  const category = categorizedPath?.[1] ?? categories.find((candidate) => tags.has(candidate));
+  const area = categorizedPath?.[2] ?? "platform";
 
-  if (paths.some((entry) => entry.includes("tests/platform/regression")) || (tags.has("platform") && tags.has("regression"))) {
-    return ["platform", "regression"];
-  }
-
-  if (paths.some((entry) => entry.includes("tests/platform/smoke")) || (tags.has("platform") && tags.has("smoke"))) {
-    return ["platform", "smoke"];
-  }
-
-  if (tags.has("regression") || paths.some((entry) => entry.includes("/regression/") || entry.endsWith("/regression"))) {
-    return ["platform", "regression"];
-  }
-
-  if (tags.has("smoke") || paths.some((entry) => entry.includes("/smoke/") || entry.endsWith("/smoke"))) {
-    return ["platform", "smoke"];
-  }
-
-  if (paths.some((entry) => entry.includes("tests/platform"))) {
-    return ["platform", "adhoc"];
-  }
-
-  return ["platform", "adhoc"];
+  return [area, category ?? "adhoc"];
 }
 
 function resolveTestOutputDir(options) {

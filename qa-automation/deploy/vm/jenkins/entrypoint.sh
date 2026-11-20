@@ -23,16 +23,15 @@ export HOME=/var/jenkins_home
 export NPM_CONFIG_CACHE="${HOME}/.npm"
 
 mkdir -p /var/qa-reports/par /var/qa-reports/regression "${NPM_CONFIG_CACHE}" /var/jenkins_home/.cache/fontconfig
-for channel in par regression; do
-  if [[ ! -f "/var/qa-reports/${channel}/index.html" ]]; then
-    cat > "/var/qa-reports/${channel}/index.html" <<EOF
-<!doctype html><meta charset="utf-8"><title>LiveLabs QA</title><h1>No ${channel} report yet</h1><p>Run the matching Jenkins job to create the first report.</p>
-EOF
-  fi
-done
+
+if ! /usr/local/bin/livelabs-qa-restore-reports; then
+  echo "Saved report restore failed; continuing with reports already present on the VM." >&2
+fi
+node /opt/qa-report-tools/scripts/reporters/rebuild-saved-reports.mjs \
+  --reports-base "${QA_ROOT_REPORTS_BASE:-/var/qa-reports}"
 
 chown -R jenkins:jenkins "${NPM_CONFIG_CACHE}" /var/jenkins_home/.cache
-chown jenkins:jenkins /var/jenkins_home /var/qa-reports /var/qa-reports/par /var/qa-reports/regression
-chown jenkins:jenkins /var/qa-reports/par/index.html /var/qa-reports/regression/index.html
+chown -R jenkins:jenkins /var/qa-reports
+chown jenkins:jenkins /var/jenkins_home
 
 exec /usr/bin/tini -- runuser --user jenkins --preserve-environment -- /usr/local/bin/jenkins.sh "$@"

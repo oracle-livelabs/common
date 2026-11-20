@@ -2,12 +2,12 @@
 (function () {
   var fallbackTopic = "Oracle LiveLabs workshop";
   var productCatalog = [
-    { label: "Oracle Database", module: "Oracle Database", patterns: ["oracle database", "database", "adb", "autonomous database", "23ai", "select ai", "selectai"] },
+    { label: "Oracle Database", module: "Oracle Database", patterns: ["oracle database", "oracle databases", "database", "databases", "adb", "autonomous database", "23ai", "select ai", "selectai"] },
     { label: "Autonomous Database", module: "Oracle Database", patterns: ["autonomous database", "adb"] },
     { label: "Select AI", module: "Oracle Database", patterns: ["select ai", "selectai"] },
     { label: "OCI Generative AI", module: "OCI AI Services", patterns: ["oci genai", "oci generative ai", "generative ai", "genai"] },
     { label: "OCI AI Services", module: "OCI AI Services", patterns: ["ai speech", "ai services", "oci ai"] },
-    { label: "OCI Object Storage", module: "Oracle Cloud Infrastructure", patterns: ["object storage", "bucket"] },
+    { label: "OCI Object Storage", module: "Oracle Cloud Infrastructure", patterns: ["object storage", "bucket", "buckets"] },
     { label: "OCI Functions", module: "Oracle Cloud Infrastructure", patterns: ["functions", "serverless"] },
     { label: "OCI Events", module: "Oracle Cloud Infrastructure", patterns: ["events", "event-driven"] },
     { label: "OCI Notifications", module: "Oracle Cloud Infrastructure", patterns: ["notifications"] },
@@ -15,7 +15,7 @@
     { label: "APEX", module: "Application Development", patterns: ["apex", "application express"] },
     { label: "FreeSQL", module: "Oracle Database", patterns: ["freesql"] },
     { label: "Kubernetes", module: "Cloud Native", patterns: ["kubernetes", "oke"] },
-    { label: "Analytics", module: "Analytics", patterns: ["analytics", "dashboard", "visualization"] },
+    { label: "Analytics", module: "Analytics", patterns: ["analytics", "dashboard", "dashboards", "visualization", "visualizations"] },
     { label: "IAM", module: "Security", patterns: ["iam", "identity", "policy", "policies"] },
     { label: "Logging", module: "Observability", patterns: ["logging", "logs", "observability"] }
   ];
@@ -377,21 +377,12 @@
 
     productCatalog.forEach(function (product) {
       var found = product.patterns.some(function (pattern) {
-        return lower.indexOf(pattern) !== -1;
+        return new RegExp("\\b" + pattern + "\\b").test(lower);
       });
       if (found) {
         matches.push(product.label);
       }
     });
-
-    if (lower.indexOf("rag") !== -1 || lower.indexOf("agent") !== -1 || lower.indexOf("vector") !== -1 || lower.indexOf("memory") !== -1) {
-      matches.push("Oracle Database");
-      matches.push("OCI Generative AI");
-    }
-
-    if (lower.indexOf("ai") !== -1 && lower.indexOf("chat") !== -1) {
-      matches.push("OCI Generative AI");
-    }
 
     return uniqueValues(matches).slice(0, 6);
   }
@@ -433,7 +424,7 @@
     });
     var lower = prompt.toLowerCase();
 
-    if (lower.indexOf("agent") !== -1 || lower.indexOf("rag") !== -1 || lower.indexOf("genai") !== -1) {
+    if (/\b(?:agents?|rag|genai)\b/.test(lower)) {
       return primary === "Oracle Database" || products.indexOf("Oracle Database") !== -1
         ? "Oracle Database and AI"
         : "OCI AI Services";
@@ -485,8 +476,10 @@
       .replace(/\b(create|build|deploy|learn|show|teach|using|with|on|secure|analyze|analyse|migrate|implement|configure)\b/gi, " ")
       .replace(/\b(administrator|administrators|architect|architects|analyst|analysts|developer|developers|learner|learners|user|users)\b/gi, " ")
       .replace(/\b(oracle cloud infrastructure|oracle database|autonomous database|oci|adb|selectai|select ai)\b/gi, " ")
+      .replace(/\b(?:and\s+)?validate\b.*$/i, "")
       .replace(/\s+/g, " ")
-      .trim();
+      .replace(/^[\s,;:.\-]+|[\s,;:.!?\-]+$/g, "")
+      .replace(/^(?:a|an|the)\s+/i, "");
 
     if (!text) {
       text = compactPrompt(prompt);
@@ -560,7 +553,8 @@
   function exampleFields(prompt) {
     var data = profile(prompt);
     var topicTitle = titleCase(data.topicShort);
-    var title = compactText(titleCase(data.verb + " " + data.topicShort + (productAlreadyInTopic(data.topicShort, data.product) ? "" : " with " + data.product)), 96);
+    var suffix = productAlreadyInTopic(data.topicShort, data.product) ? "" : " with " + data.product;
+    var title = titleCase(data.verb + " " + compactText(data.topicShort, 96 - data.verb.length - 1 - suffix.length)) + suffix;
     var shortDescription = boundSentence(
       titleCase(data.verb) + " " + topicTitle + " with " + data.productsText + " through a guided LiveLabs workflow that covers setup, implementation, validation, and handoff.",
       400
@@ -609,15 +603,11 @@
       {
         label: "Workshop Outline",
         value: [
-          "Define the scenario and learner outcome: Understand the problem, the target audience, and where " + data.product + " fits.",
-          "",
-          "Prepare the environment: Confirm required accounts, access, sample data, repositories, and service configuration.",
-          "",
-          titleCase(data.verb) + " the core workflow: Complete the main " + topicTitle + " implementation with guided, copy-ready steps.",
-          "",
-          "Validate and troubleshoot: Run checks that prove the solution works and capture common fixes.",
-          "",
-          "Prepare for WMS review: Record prerequisites, tags, expected results, QA notes, and publishing handoff details."
+          "Lab 1: Scenario and learner outcome — Understand the problem, the target audience, and where " + data.product + " fits.",
+          "Lab 2: Prepare the environment — Confirm required accounts, access, sample data, repositories, and service configuration.",
+          "Lab 3: Build the core workflow — Complete the main " + topicTitle + " implementation with guided, copy-ready steps.",
+          "Lab 4: Validate and troubleshoot — Run checks that prove the solution works and capture common fixes.",
+          "Lab 5: WMS review and handoff — Record prerequisites, tags, expected results, QA notes, and publishing handoff details."
         ].join("\n")
       },
       {
@@ -660,16 +650,16 @@
       "",
       "## Proposed lab outline",
       "",
-      "1. **Introduction and setup**",
+      "1. **Lab 1: Introduction and setup**",
       "   - Explain the scenario, prerequisites, and expected result.",
       "   - Confirm account, repository, and tool access.",
-      "2. **Build the core workflow**",
+      "2. **Lab 2: Build the core workflow**",
       "   - Implement the main " + data.product + " task in small validated steps.",
       "   - Add copy-ready commands, screenshots, and checks close to the actions.",
-      "3. **Add workshop polish**",
+      "3. **Lab 3: Add workshop polish**",
       "   - Add tables, callouts, images, quizzes, or FreeSQL blocks only where they help learning.",
       "   - Verify accessibility, links, image paths, and code-copy behavior.",
-      "4. **Validate and hand off**",
+      "4. **Lab 4: Validate and hand off**",
       "   - Run preview with `?qa=true`.",
       "   - Update WMS fields and prepare Self Quality Assurance notes.",
       "",
