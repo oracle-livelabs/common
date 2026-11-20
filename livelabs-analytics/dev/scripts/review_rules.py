@@ -227,27 +227,23 @@ def methodology_html(criteria, snapshot=None, evaluation_date=None, section='adm
             if section == 'risk':
                 limits += f' Priority: ≤{c["riskViews"]} views and &gt;{c["oldMonths"]} months. Watchlist: ≤{c["riskViews"]} views and &gt;{c["watchMonths"]} months.'
             limits += '</p>'
-        limits += '<p>Demand thresholds are provisional and configured separately for Workshops and Sprints. Compare their impact in Admin before changing policy.</p>'
         base = '<p><strong>Base:</strong> low demand 50%, update age 35%, missing contact 15%.</p>'
-        final = '<p><strong>With usable QA:</strong> <span data-score-share="analytics">75%</span> base + <span data-score-share="jenkins">25%</span> P2/P3 content-hygiene error score. P1 stays in urgent action.</p>'
+        final = '<p><strong>With usable QA:</strong> final score = <span data-score-share="analytics">75%</span> base + <span data-score-share="jenkins">25%</span> P2/P3 error score. More errors increase review priority. P1 stays in urgent action.</p>'
         if section == 'performance':
-            body = ('<p>Public, published items with both view periods; reviewed tests stay in Admin.</p>'
-                '<p><strong>Base:</strong> annual views 45%, 90-day views 35%, freshness 20%. Views are compared within each content type.</p>'
-                '<p><strong>With usable QA:</strong> <span data-score-share="analytics">75%</span> base + <span data-score-share="jenkins">25%</span> content hygiene (100 minus the P2/P3 error score); P1 stays in urgent action.</p>')
+            body = ('<p><strong>Base score:</strong> annual views 45%, 90-day views 35%, and update recency 20%. View counts are compared within Workshops or Sprints.</p>'
+                '<p><strong>With usable QA:</strong> final score = <span data-score-share="analytics">75%</span> base + <span data-score-share="jenkins">25%</span> quality score (100 minus the P2/P3 error score). P1 stays in the urgent-action queue. Without usable QA, the base score stands.</p>')
         elif section == 'risk':
-            body = '<p>All eligible items remain available. Stronger review bands come first.</p>' + base + limits + final
+            body = '<p>All eligible items remain available. Higher review bands appear first.</p>' + base + limits + final
         else:
             body = ('<p>Includes removal requests, demand candidates and low-demand items needing evidence.</p>' + limits + base + final
-                + '<p>Demand candidates need verified update and publication dates and attributable demand. Otherwise they stay in evidence review. Grace and keep-active exceptions apply. Admin approval does not confirm removal in WMS.</p>')
-        body += '<p>Unknown inputs are omitted and weights rebalance. Without usable completed QA, the base score stands. QA measures reported content hygiene; it does not establish relevance, obsolescence or complete quality. Open a row for evidence.</p>'
+                + '<p>New-content grace and keep-active exceptions apply. Admin must confirm retirement.</p>')
         return ('<details class="panel toggle-panel"><summary class="panel-head"><h3>What drives the score</h3></summary>'
                 '<div class="toggle-body review-methodology">' + body + '</div></details>')
     shared = '<p>Only public, published content appears here. Reviewed tests and internal training stay in Admin. Workshops and Sprints share one table. Type filters the format; focus tags filter the reasons. Select several tags to match any of them.</p>'
     qa_risk = '<p><strong>Final score:</strong> <span data-score-share="analytics">75%</span> base score + <span data-score-share="jenkins">25%</span> P2/P3 content-hygiene error score when QA checks are usable. P2/P3 findings raise review priority; P1 findings stay in urgent action. Unavailable or incomplete QA leaves the base score unchanged.</p>'
     performance = (
-        '<p><strong>Base score:</strong> annual demand (45%), recent 90-day demand (35%) and freshness (20%). Demand is compared within each content type; higher scores mean stronger performance.</p>'
-        '<p>Both view periods are required. Unknown freshness is left out and the other weights increase proportionally.</p>'
-        '<p><strong>Final score:</strong> <span data-score-share="analytics">75%</span> base score + <span data-score-share="jenkins">25%</span> content hygiene when QA checks are usable. Content hygiene is 100 minus Jenkins Error Score. P2/P3 findings lower it; P1 stays in urgent action. Unavailable or incomplete QA leaves the base score unchanged.</p>'
+        '<p><strong>Base score:</strong> annual views 45%, 90-day views 35%, and update recency 20%. View counts are compared within Workshops or Sprints.</p>'
+        '<p><strong>With usable QA:</strong> final score = <span data-score-share="analytics">75%</span> base + <span data-score-share="jenkins">25%</span> quality score (100 minus the P2/P3 error score). P1 stays in the urgent-action queue. Without usable QA, the base score stands.</p>'
     )
     base_risk = '<p><strong>Base score:</strong> low annual demand (50%), update age up to 36 months (35%) and missing author/contact (15%). Demand is compared within each content type. Unknown inputs are left out and the other weights increase proportionally.</p>'
     groups = list(criteria['types'].items())

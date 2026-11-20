@@ -62,6 +62,11 @@ def last_update(record: dict) -> date | None:
         return None
 
 
+def wms_last_update(record: dict) -> date | None:
+    """Use the WMS row timestamp for display without treating it as freshness evidence."""
+    return parse_date(record.get("update")) or parse_date(detail_map(record).get("WMS Last Update"))
+
+
 def percentile(value: float, values: list[float]) -> float | None:
     if not values:
         return None
@@ -103,6 +108,7 @@ def review_metrics(records: list[dict], content_type: str) -> list[dict]:
             "record": record,
             "views12m": view_count,
             "updated": updated,
+            "wmsUpdated": wms_last_update(record),
             "ageMonths": age_months,
             "missingAuthor": missing_author,
             "score": score,
@@ -142,7 +148,7 @@ def table_html(rows: list[dict], content_type: str, table_id: str, retirement: b
     columns = [
         ("#", "number"), ("Title", "text"), ("Author", "text"), ("WMS ID", "number"),
         ("LiveLabs ID", "number"), ("Category", "text"), ("Views 12m", "number"),
-        ("Last Meaningful Update", "date"), ("Retire Score" if retirement else "Review Score", "number"),
+        ("WMS Last Update", "date"), ("Retire Score" if retirement else "Review Score", "number"),
         ("Type", "text"), ("Review status", "text"),
     ]
     header = "".join(
@@ -151,12 +157,6 @@ def table_html(rows: list[dict], content_type: str, table_id: str, retirement: b
         f'data-default-direction="{"asc" if index < 2 or kind == "text" else "desc"}" title="Sort by {escape(label)}">{escape(label)}</button></th>'
         for index, (label, kind) in enumerate(columns)
     )
-    filters = "".join(
-        f'<label class="filter-field" for="{table_id}-filter-{index}"><span>{escape(label)}</span>'
-        f'<input id="{table_id}-filter-{index}" type="search" placeholder="Filter {escape(label)}" '
-        f'data-table-filter="{table_id}" data-column-index="{index}"></label>'
-        for index, (label, _) in enumerate(columns)
-    )
     body = []
     for index, item in enumerate(rows):
         record = item["record"]
@@ -164,7 +164,7 @@ def table_html(rows: list[dict], content_type: str, table_id: str, retirement: b
         details = detail_map(record)
         title = clean(record.get("title")) or "Untitled item"
         owner = clean(record.get("owner")) or "No author listed"
-        updated = item["updated"].isoformat() if item["updated"] else "N/A"
+        updated = item["wmsUpdated"].isoformat() if item["wmsUpdated"] else "Not reported"
         score = f'{item["score"]:.2f}' if item["score"] is not None else "N/A"
         detail_id = f"{table_id}-detail-{index}"
         base = "".join([
@@ -173,7 +173,7 @@ def table_html(rows: list[dict], content_type: str, table_id: str, retirement: b
             td(f'{item["views12m"]:,.0f}' if item["views12m"] is not None else "N/A", "number"),
             td(updated, "date"), td(score, "number"), td(record.get('type')), td(review_status(review)),
         ])
-        body.append(f'<tr class="expandable-row" data-filter-row="true" {row_attributes(record)} data-review-tier="{review["tier"]}" data-review-order="{review["tierOrder"]}" data-original-index="{index}" data-detail-row-id="{detail_id}" data-expanded="false" tabindex="0" aria-expanded="false">{base}</tr>')
+        body.append(f'<tr class="record-navigation-row" data-filter-row="true" {row_attributes(record)} data-review-tier="{review["tier"]}" data-review-order="{review["tierOrder"]}" data-original-index="{index}" data-detail-row-id="{detail_id}" tabindex="0">{base}</tr>')
         detail_rows = [
             ("Review band", review["tierLabel"]), ("Confidence", review["confidence"]), ("Why included", " ".join(review["reasons"])), ("Content type", record.get("type")), ("Publish status", record.get("publishStatus")),
             ("Publish type", record.get("publishType")), ("Workflow status", record.get("status")),
@@ -186,7 +186,7 @@ def table_html(rows: list[dict], content_type: str, table_id: str, retirement: b
             ("Review score inputs", "Public demand, update age, and author/contact coverage"),
         ]
         detail_html = "".join(f'<tr><th>{escape(clean(label))}</th><td>{escape(clean(value) or "N/A")}</td></tr>' for label, value in detail_rows)
-        body.append(f'<tr class="detail-row" data-detail-for="{detail_id}" hidden><td colspan="{len(columns)}"><div class="detail-shell"><p class="detail-title">Review details for {escape(title)}.</p><table class="detail-table"><tbody>{detail_html}</tbody></table></div></td></tr>')
+        body.append(f'<template data-detail-for="{detail_id}"><div class="detail-shell"><p class="detail-title">Review details for {escape(title)}.</p><table class="detail-table"><tbody>{detail_html}</tbody></table></div></template>')
     label = 'Retirement review' if retirement else 'At-risk items'
     bands = {item['review']['tier'] for item in rows}
     band_options = ''.join(f'<option value="{key}">{escape(value)} ({sum(item["review"]["tier"] == key for item in rows)})</option>' for key,value in TIER_LABELS.items() if key in bands)
@@ -195,9 +195,8 @@ def table_html(rows: list[dict], content_type: str, table_id: str, retirement: b
         f'<div class="toggle-body">'
         f'<label class="review-band-filter" for="{table_id}-band">Review band <select id="{table_id}-band" data-table-filter="{table_id}" data-filter-mode="review-tier"><option value="">All review bands</option>{band_options}</select></label>'
         f'<div class="table-tools"><span class="table-count" data-table-count-for="{table_id}">{len(rows)} rows</span>'
-        f'<span class="table-hint">Open a row to review its source fields.</span><button class="filter-reset" type="button" data-clear-filters-for="{table_id}">Clear filters</button></div>'
-        f'<details class="filter-disclosure"><summary><span>Apply filters</span><span class="filter-chevron" aria-hidden="true"></span></summary>'
-        f'{controls(table_id)}<div class="filter-grid">{filters}</div></details><div class="table-wrap" data-filter-table="{table_id}" data-review-priority="true">'
+        f'<span class="table-hint">Select a row to open its full details.</span><button class="filter-reset" type="button" data-clear-filters-for="{table_id}">Clear filters</button></div>'
+        f'{controls(table_id)}<div class="table-wrap" data-filter-table="{table_id}" data-review-priority="true">'
         f'<table class="data-table" id="{table_id}"><thead><tr>{header}</tr></thead><tbody>{"".join(body)}</tbody></table></div></div></section>'
     )
 

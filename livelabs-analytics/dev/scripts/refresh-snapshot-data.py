@@ -68,6 +68,110 @@ def parse_csv(path: Path) -> list[dict[str, str]]:
     raise RuntimeError(f"Could not decode {path}: {last_error}")
 
 
+def parse_table(path: Path) -> list[dict[str, object]]:
+    """Read a CSV or Excel table by its original headers without rewriting it."""
+    if path.suffix.lower() not in {".xlsx", ".xlsm"}:
+        return parse_csv(path)
+
+    workbook = load_workbook(path, read_only=True, data_only=True)
+    try:
+        sheet = workbook.active
+        rows = sheet.iter_rows(values_only=True)
+        try:
+            header_row = next(rows)
+        except StopIteration:
+            raise ValueError(f"Workbook has no header row: {path}") from None
+        headers = [clean(value) for value in header_row]
+        if not any(headers):
+            raise ValueError(f"Workbook has no header row: {path}")
+        nonempty_headers = [header for header in headers if header]
+        if len(nonempty_headers) != len(set(nonempty_headers)):
+            raise ValueError(f"Workbook has duplicate column names: {path}")
+
+        records = []
+        for values in rows:
+            cells = list(values)
+            if not any(value is not None for value in cells):
+                continue
+            records.append({
+                header: cells[index] if index < len(cells) else None
+                for index, header in enumerate(headers)
+                if header
+            })
+        return records
+    finally:
+        workbook.close()
+
+
+def normalized_field(row: dict[str, object], field: str) -> object:
+    target = re.sub(r"[^a-z0-9]", "", field.casefold())
+    return next((value for key, value in row.items()
+                 if re.sub(r"[^a-z0-9]", "", key.casefold()) == target), None)
+
+
+def has_field(row: dict[str, object], field: str) -> bool:
+    target = re.sub(r"[^a-z0-9]", "", field.casefold())
+    return any(re.sub(r"[^a-z0-9]", "", key.casefold()) == target for key in row)
+
+
+def adapt_wms_rows(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    """Add internal canonical aliases for the observed WMS exports; source files remain untouched."""
+    adapted = []
+    for source in rows:
+        row = dict(source)
+        aliases = {
+            "Livelabsid": ("Livelabs ID",),
+            "Workshop Title": ("Title",),
+            "Publish Title": ("Workshop Title", "Title"),
+        }
+        for canonical, fallbacks in aliases.items():
+            if clean(row.get(canonical)):
+                continue
+            value = normalized_field(row, canonical)
+            if value is None or clean(value) == "":
+                value = next((normalized_field(row, field) for field in fallbacks
+                              if clean(normalized_field(row, field)) != ""), None)
+            if value is not None and clean(value) != "":
+                row[canonical] = value
+        adapted.append(row)
+    return adapted
+
+
+def build_sprint_index(wms_rows: list[dict[str, object]], sprint_rows: list[dict[str, object]]) -> dict[str, str]:
+    """Resolve explicit Y/N type evidence; never silently classify missing evidence as Workshop."""
+    if not sprint_rows:
+        raise ValueError("Sprint classification input is empty.")
+    if not any(has_field(row, "Sprint Flg") for row in sprint_rows):
+        raise ValueError("Sprint classification input is missing the required 'Sprint Flg' column.")
+    if not any(has_field(row, "Livelabs ID") for row in sprint_rows):
+        raise ValueError("Sprint classification input is missing the required LiveLabs ID column.")
+
+    index: dict[str, str] = {}
+    conflicts: set[str] = set()
+    for row in sprint_rows:
+        item_id = clean(normalized_field(row, "Livelabs ID"))
+        flag = clean(normalized_field(row, "Sprint Flg")).upper()
+        if not item_id:
+            continue
+        if flag not in {"Y", "N"}:
+            raise ValueError(f"Sprint classification for LiveLabs ID {item_id} must be Y or N; received {flag or 'blank'}.")
+        if item_id in index and index[item_id] != flag:
+            conflicts.add(item_id)
+        else:
+            index[item_id] = flag
+    if conflicts:
+        sample = ", ".join(sorted(conflicts)[:5])
+        raise ValueError(f"Conflicting sprint flags for {len(conflicts)} LiveLabs IDs: {sample}.")
+
+    missing = [clean(normalized_field(row, "Livelabs ID")) for row in wms_rows
+               if clean(normalized_field(row, "Livelabs ID")) and
+               clean(normalized_field(row, "Livelabs ID")) not in index]
+    if missing:
+        sample = ", ".join(missing[:5])
+        raise ValueError(f"Sprint classification is missing for {len(missing)} WMS records: {sample}.")
+    return index
+
+
 def normalize_title(value: object) -> str:
     text = unicodedata.normalize("NFKC", clean(value)).replace("\u00bf", " ")
     text = unicodedata.normalize("NFKD", text)
@@ -94,20 +198,29 @@ def parse_views(path: Path) -> tuple[dict[str, list[dict[str, int | str]]], dict
     views: dict[str, list[dict[str, int | str]]] = defaultdict(list)
     row_counts: Counter[str] = Counter()
     active_block = ""
+    columns: tuple[int, int, int] | None = None
     for row in rows:
-        cells = [clean(value) for value in row[:4]]
-        marker = cells[1].lower() if len(cells) > 1 else ""
-        if marker in VIEW_BY_BLOCK:
+        cells = [clean(value).casefold() for value in row]
+        marker = next((cell for cell in cells if cell in VIEW_BY_BLOCK), "")
+        if marker:
             active_block = marker
+            columns = None
             continue
-        if not active_block or cells[1].lower() == "name":
+
+        for index in range(max(0, len(cells) - 2)):
+            if cells[index:index + 3] == ["name", "views", "rank"]:
+                columns = (index, index + 1, index + 2)
+                break
+        if not active_block or not columns:
             continue
-        name = cells[1]
+
+        title_index, views_index, rank_index = columns
+        name = clean(row[title_index]) if title_index < len(row) else ""
         if not name:
             continue
         try:
-            value = int(float(row[2]))
-            rank = int(float(row[3]))
+            value = int(float(row[views_index]))
+            rank = int(float(row[rank_index]))
         except (TypeError, ValueError):
             continue
         views[active_block].append({"title": name, "normalized_title": normalize_title(name), "views": value, "rank": rank})
@@ -231,7 +344,7 @@ def make_record(
     publish_title = clean(row.get("Publish Title")) or clean(row.get("Workshop Title")) or "N/A"
     workshop_title = clean(row.get("Workshop Title"))
     sprint_flag = sprint_by_id.get(livelabs_id)
-    record_type = ("Sprint" if sprint_flag == "Y" else "Workshop") if sprint_flag in {"Y", "N"} else (old.get("type") or "Workshop")
+    record_type = ("Sprint" if sprint_flag == "Y" else "Workshop") if sprint_flag in {"Y", "N"} else (old.get("type") or "Unknown")
     owner_email = clean(row.get("Workshop Owner Email"))
     owner_group = clean(row.get("Workshop Owner Group"))
     owner = owner_email or owner_group
@@ -422,9 +535,9 @@ def main() -> int:
     old_by_fallback = {(clean(record.get("wmsId")), normalize_title(record.get("rawTitle") or record.get("title"))): record for record in old_records if not clean(record.get("livelabsId"))}
 
     wms_path = source_file("wms", "All Workshops Report (4).csv")
-    wms_rows = parse_csv(wms_path)
-    sprint_rows = parse_csv(source_file("sprints", "All Workshops Report (2).csv"))
-    sprint_by_id = {clean(row.get("Livelabs ID")): clean(row.get("Sprint Flg")).upper() for row in sprint_rows if clean(row.get("Livelabs ID"))}
+    wms_rows = adapt_wms_rows(parse_table(wms_path))
+    sprint_rows = parse_table(source_file("sprints", "All Workshops Report (2).csv"))
+    sprint_by_id = build_sprint_index(wms_rows, sprint_rows)
     views_path = source_file("views", "livelabs_dashboard_top_views.xlsx")
     views, view_counts = parse_views(views_path)
     view_index = build_view_index(views)

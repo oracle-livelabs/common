@@ -29,8 +29,9 @@
   let csrf = '', sessionTimer, definitions = [], assignments = [], records = [], selectedRecord = null, savingState = false;
   const editDrafts = new Map();
   const assignmentDrafts = new Map();
-  const assignmentView = {page:1, size:10, sort:'livelabsId', direction:1, expanded:'', removing:'', busy:false, message:''};
-  const assignmentFilterIds = ['assignment-search','assignment-type','assignment-livelabs-filter','assignment-wms-filter','assignment-council','assignment-tag','assignment-target-filter'];
+  const assignmentView = {page:1, size:10, sort:'title', direction:1, expanded:'', removing:'', busy:false, message:''};
+  let visibleAssignments = [];
+  const assignmentFilterIds = ['assignment-search','assignment-type'];
 
   function status(message) { $('status').textContent = message; }
   function scheduleExpiry(expires) { clearTimeout(sessionTimer); sessionTimer = setTimeout(() => location.replace('/admin'), Math.max(0, expires * 1000 - Date.now())); }
@@ -212,23 +213,8 @@
       const haystack=[record.title,record.livelabsId,record.wmsId,record.category,record.owner,row.type,
         assignment.value,targetLabel(assignment.target),...row.tags.map(tag=>`${tag.label} ${tag.description||tag.note||''}`)].join(' ');
       return (!query||normalize(haystack).includes(query))
-        && (!$('assignment-type').value||row.type===$('assignment-type').value)
-        && normalize(record.livelabsId).includes(normalize($('assignment-livelabs-filter').value))
-        && normalize(record.wmsId).includes(normalize($('assignment-wms-filter').value))
-        && (!$('assignment-council').value||record.category===$('assignment-council').value)
-        && (!$('assignment-tag').value||assignment.tags.includes($('assignment-tag').value))
-        && (!$('assignment-target-filter').value||assignment.target===$('assignment-target-filter').value);
+        && (!$('assignment-type').value||row.type===$('assignment-type').value);
     }).sort((a,b)=>assignmentView.direction*assignmentCell(a,assignmentView.sort).localeCompare(assignmentCell(b,assignmentView.sort),undefined,{numeric:true,sensitivity:'base'}));
-  }
-  function refreshAssignmentOptions() {
-    for(const [id,empty,options] of [
-      ['assignment-council','All councils',[...new Set(records.map(record=>record.category).filter(Boolean))].sort().map(value=>[value,value])],
-      ['assignment-tag','All tags',definitions.map(tag=>[tag.key,tag.label])]
-    ]) {
-      const selected=$(id).value;
-      $(id).innerHTML=`<option value="">${empty}</option>`+options.map(([value,label])=>`<option value="${esc(value)}">${esc(label)}</option>`).join('');
-      if(options.some(([value])=>value===selected))$(id).value=selected;
-    }
   }
   function fieldLabel(value) {
     return String(value).replace(/([a-z])([A-Z])/g,'$1 $2').replaceAll('_',' ').replace(/^./,char=>char.toUpperCase());
@@ -273,19 +259,26 @@
       </section></div></div>`;
   }
   function renderAssignments() {
-    refreshAssignmentOptions();
     const all=assignmentRows(), filtered=filteredAssignmentRows(all);
     const items=new Set(all.filter(row=>!row.record.missing).map(row=>row.record.key||row.record.livelabsId));
     const unmatched=new Set(all.filter(row=>row.record.missing).map(row=>row.assignment.id)).size;
-    $('assignment-count').textContent=`${items.size} ${items.size===1?'item':'items'} · ${assignments.length} ${assignments.length===1?'rule':'rules'}${unmatched?` · ${unmatched} unmatched`:''}`;
+    $('assignment-count').textContent=`${items.size} assigned ${items.size===1?'item':'items'}${unmatched?` · ${unmatched} unmatched ${unmatched===1?'rule':'rules'}`:''}`;
+    $('assignment-browse-controls').hidden=all.length===0;
     const pages=Math.max(1,Math.ceil(filtered.length/assignmentView.size));
     assignmentView.page=Math.max(1,Math.min(assignmentView.page,pages));
     const start=(assignmentView.page-1)*assignmentView.size, visible=filtered.slice(start,start+assignmentView.size);
-    $('assignment-page-status').textContent=filtered.length?`${start+1}–${start+visible.length} of ${filtered.length} rows`:'No records to show';
+    visibleAssignments = visible;
+    $('assignment-page-status').textContent=filtered.length?`${start+1}–${start+visible.length} of ${filtered.length} assignments`:'No matching assignments';
     $('assignment-page-number').textContent=`Page ${assignmentView.page} of ${pages}`;
     $('assignment-previous').disabled=assignmentView.page===1;
     $('assignment-next').disabled=assignmentView.page===pages;
+    $('assignment-page-size').value=String(assignmentView.size);
     $('assignment-export').disabled=!filtered.length;
+    $('assignment-table-scroll').hidden=filtered.length===0;
+    $('assignment-empty-state').hidden=filtered.length>0;
+    $('assignment-empty-state').textContent=all.length===0
+      ?'No tags have been assigned yet. Search for an item above, choose its tags, and save the assignment.'
+      :'No assignments match your search. Clear the search or choose All items to see the full list.';
     document.querySelectorAll('[data-assignment-sort]').forEach(button=>{
       if(button.dataset.assignmentSort===assignmentView.sort)button.parentElement.setAttribute('aria-sort',assignmentView.direction===1?'ascending':'descending');
       else button.parentElement.removeAttribute('aria-sort');
@@ -293,11 +286,10 @@
     $('assignments').innerHTML=visible.map((row,index)=>{
       const {record,assignment}=row, open=assignmentView.expanded===row.key, detailId=`assignment-detail-${index}`;
       return `<tr data-assignment-row="${esc(row.key)}" class="${open?'is-expanded':''}">
-        <td><button type="button" class="assignment-row-toggle" data-toggle-assignment aria-expanded="${open}" aria-controls="${detailId}" aria-label="${open?'Hide':'Show'} details for ${esc(record.title)}">${esc(record.livelabsId||'—')}</button></td>
-        <td>${esc(record.wmsId||'—')}</td><td>${esc(record.title||'Item unavailable')}</td><td>${esc(record.category||'—')}</td><td>${esc(record.owner||'—')}</td><td>${esc(row.type)}</td>
-        <td>${row.tags.map(tag=>tagChip(tag)).join('')}</td><td>${esc(assignmentCell(row,'rule'))}${assignment.enabled===false?'<span class="assignment-disabled">Disabled</span>':''}</td><td>${esc(displayDate(assignment.createdAt))}</td></tr>
-        <tr id="${detailId}" class="assignment-row-detail" ${open?'':'hidden'}><td colspan="9">${open?assignmentDetail(row):''}</td></tr>`;
-    }).join('')||`<tr><td colspan="9" class="admin-empty">${assignments.length?'No assignments match these filters.':'No assignments yet. Assign tags to an item above to get started.'}</td></tr>`;
+        <td><button type="button" class="assignment-row-toggle" data-toggle-assignment aria-expanded="${open}" aria-controls="${detailId}" aria-label="${open?'Hide':'Show'} details for ${esc(record.title||'item')}">${esc(record.title||'Item unavailable')}</button><span class="assignment-item-meta">LiveLabs ID ${esc(record.livelabsId||'—')} · WMS ID ${esc(record.wmsId||'—')} · ${esc(row.type)}${record.category?` · ${esc(record.category)}`:''}</span></td>
+        <td>${esc(record.owner||'—')}</td><td>${row.tags.map(tag=>tagChip(tag)).join('')}</td><td>${esc(assignmentCell(row,'rule'))}${assignment.enabled===false?'<span class="assignment-disabled">Disabled</span>':''}</td><td>${esc(displayDate(assignment.createdAt))}</td></tr>
+        <tr id="${detailId}" class="assignment-row-detail" ${open?'':'hidden'}><td colspan="5">${open?assignmentDetail(row):''}</td></tr>`;
+    }).join('')||'';
     $('assignments').querySelectorAll('[data-assignment-row]').forEach(element=>element.addEventListener('click',event=>{
       if(savingState||assignmentView.busy||event.target.closest('a,input,select,textarea')||(!event.target.closest('button')&&window.getSelection()?.toString()))return;
       assignmentView.expanded=assignmentView.expanded===element.dataset.assignmentRow?'':element.dataset.assignmentRow;
@@ -338,16 +330,16 @@
       assignments.splice(index,1);
       try{await save();assignmentDrafts.delete(assignment.id);assignmentView.removing='';assignmentView.expanded='';assignmentView.message='';}
       catch(error){assignments.splice(index,0,assignment);assignmentView.message=`Could not remove assignment: ${error.message}`;status(assignmentView.message);}
-      finally{assignmentView.busy=false;renderAssignments();if(assignmentView.expanded)$('assignments').querySelector('[data-confirm-assignment-delete]')?.focus();else $('assignment-page-status').scrollIntoView({block:'nearest'});}
+      finally{assignmentView.busy=false;renderAssignments();if(assignmentView.expanded)$('assignments').querySelector('[data-confirm-assignment-delete]')?.focus();else if(assignments.length)$('assignment-page-status').scrollIntoView({block:'nearest'});else $('item-search').focus({preventScroll:true});}
     });
   }
   function exportAssignments() {
     const fields=['livelabsId','wmsId','title','category','owner','type','tags','rule','createdAt'];
-    const headers=Array.from($('assignment-table').querySelectorAll('thead th')).map(th=>th.textContent.trim());
+    const headers=['LiveLabs ID','WMS ID','Title','Council','Author / owner','Type','Tags','Assignment rule','Added'];
     const cell=value=>{let text=String(value??'');if(/^[\s]*[=+@-]/.test(text)||/^[\t\r\n]/.test(text))text="'"+text;return '"'+text.replaceAll('"','""')+'"';};
-    const csv=[headers,...filteredAssignmentRows().map(row=>fields.map(field=>assignmentCell(row,field)))].map(row=>row.map(cell).join(',')).join('\r\n');
+    const csv=[headers,...visibleAssignments.map(row=>fields.map(field=>assignmentCell(row,field)))].map(row=>row.map(cell).join(',')).join('\r\n');
     const url=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));
-    const link=document.createElement('a');link.href=url;link.download='current-assignments.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    const link=document.createElement('a');link.href=url;link.download=`current-assignments-page-${assignmentView.page}.csv`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
 
   $('tag-color').innerHTML=colorOptions('teal');

@@ -11,7 +11,7 @@ const root = path.resolve(option('--release')), output = path.resolve(option('--
 const manifestPath = path.join(root, 'release-manifest.json');
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 const state = JSON.parse(fs.readFileSync(path.join(root, 'assets/data/dashboard-state.json'), 'utf8'));
-const inventory = JSON.parse(fs.readFileSync(path.join(root, 'inventory/data/public_portfolio_inventory.json'), 'utf8'));
+const inventory = JSON.parse(fs.readFileSync(path.join(root, manifest.data_snapshot?.canonical_portfolio_payload || 'inventory/data/public_portfolio_inventory.json'), 'utf8'));
 const scores = JSON.parse(fs.readFileSync(path.join(root, 'assets/data/score-baselines.json'), 'utf8'));
 const mime = {'.html':'text/html','.js':'text/javascript','.css':'text/css','.json':'application/json','.svg':'image/svg+xml','.png':'image/png','.ttf':'font/ttf'};
 const server = http.createServer((request,response)=>{

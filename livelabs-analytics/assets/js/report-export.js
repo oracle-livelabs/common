@@ -12,6 +12,9 @@
     const cell = value => { let text = clean(value); if (/^\s*[=+\-@]/.test(text)) text = "'" + text; return '"' + text.replace(/"/g, '""') + '"'; };
     download(new Blob(['\uFEFF' + rows.map(row => row.map(cell).join(',')).join('\r\n') + '\r\n'], {type:'text/csv;charset=utf-8'}), filename.replace(/\.(csv|xlsx)$/i, '') + '.csv');
   }
+  function json(data, filename) {
+    download(new Blob([JSON.stringify(data, null, 2) + '\n'], {type:'application/json;charset=utf-8'}), filename.replace(/\.(csv|xlsx|json)$/i, '') + '.json');
+  }
   const encoder = new TextEncoder();
   const crcTable = Array.from({length:256}, (_, n) => { for(let i=0;i<8;i++) n = n & 1 ? 0xedb88320 ^ (n >>> 1) : n >>> 1; return n >>> 0; });
   function crc(bytes) { let n=0xffffffff; for(const byte of bytes) n = crcTable[(n ^ byte)&255] ^ (n >>> 8); return (n ^ 0xffffffff) >>> 0; }
@@ -53,5 +56,5 @@
     });
   }
   function xlsx(rows, filename) { download(workbook(rows),filename.replace(/\.(csv|xlsx)$/i,'')+'.xlsx'); }
-  window.LiveLabsExport = {csv,xlsx,workbook,clean};
+  window.LiveLabsExport = {csv,json,xlsx,workbook,clean};
 })();

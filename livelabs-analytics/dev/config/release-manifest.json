@@ -1,11 +1,11 @@
 {
   "bundle_name": "LiveLabs Analytics static C4U02 bundle",
-  "bundle_version": "2026-09-28-snapshot-refresh",
+  "bundle_version": "2026.11.16",
   "runtime": "static",
-  "entry_points": ["/", "/dashboard/", "/search/"],
+  "entry_points": ["/", "/dashboard/", "/views/", "/search/"],
   "identity": {"record_key": "livelabs_id_or_wms_title_fallback", "family_key": "wms_id"},
   "data_snapshot": {
-    "portfolio_inventory_generated_at": "2026-09-28T00:00:00Z",
+    "portfolio_inventory_generated_at": "2026-11-16T15:57:33Z",
     "canonical_portfolio_payload": "inventory/data/public_portfolio_inventory.json",
     "source_snapshot_date": "2026-09-28",
     "github_repository_snapshot_date": "2026-08-15",
@@ -13,7 +13,7 @@
     "fresh_data_pending": true
   },
   "data_quality": {
-    "record_count": 894,
+    "record_count": 889,
     "source_record_count": 2293,
     "data_scope": "public_published",
     "update_evidence_classified_records": 2250,

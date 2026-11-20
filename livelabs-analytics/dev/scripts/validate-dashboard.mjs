@@ -96,6 +96,45 @@ function checkDashboardScripts() {
   }
   new vm.Script(fs.readFileSync(path.join(root, "dev/admin/inventory.js"), "utf8"), { filename: "dev/admin/inventory.js" });
   pass("Admin Inventory script parse", "protected inventory page script parses");
+  new vm.Script(fs.readFileSync(path.join(root, "dev/admin/author-contributor-gaps.js"), "utf8"), { filename: "dev/admin/author-contributor-gaps.js" });
+  pass("Admin author/contributor coverage script parse", "protected coverage page script parses");
+  new vm.Script(fs.readFileSync(path.join(root, "dev/admin/weekly-update.js"), "utf8"), { filename: "dev/admin/weekly-update.js" });
+  pass("Admin Weekly Update script parse", "protected weekly update page script parses");
+}
+
+function checkAuthorContributorCoverageContract() {
+  const html = fs.readFileSync(path.join(root, "dev/admin/author-contributor-gaps.html"), "utf8");
+  const script = fs.readFileSync(path.join(root, "dev/admin/author-contributor-gaps.js"), "utf8");
+  const server = fs.readFileSync(path.join(root, "dev/scripts/admin-server.py"), "utf8");
+  const adminShell = fs.readFileSync(path.join(root, "dev/scripts/admin_shell.py"), "utf8");
+  const builder = fs.readFileSync(path.join(root, "dev/scripts/build-admin-service.py"), "utf8");
+  const required = [
+    [html, 'id="author-contributor-results"'], [html, 'id="author-status"'], [html, 'id="additional-contact-status"'],
+    [html, 'id="author-contributor-rows"'], [html, '<option value="missing" selected>Missing email</option>'],
+    [script, "/api/admin/inventory"], [script, "author:['Owner Email','Workshop Owner Email','Author Email']"],
+    [script, "supportContact:['Support Contact Email','Support Email']"], [script, "techContact:['Tech Contact Email','Technical Contact Email']"],
+    [script, "hasAdditionalContact:Boolean(supportContact || techContact)"],
+    [script, "contactStatus === 'missing' && data.hasAdditionalContact"],
+    [script, "contactStatus === 'present' && !data.hasAdditionalContact"],
+    [server, "'/admin/inventory/author-contributor-gaps': 'author-contributor-gaps.html'"],
+    [server, "'author-contributor-gaps.js', 'author-contributor-gaps.css'"],
+    [builder, "'author-contributor-gaps.html', 'author-contributor-gaps.js', 'author-contributor-gaps.css'"]
+  ];
+  const missing = required.filter(([source, marker]) => !source.includes(marker)).map(([, marker]) => marker);
+  const navigationOrder = /\('\/admin\/inventory', 'Portfolio inventory'\),\s*\('\/admin\/inventory\/author-contributor-gaps', 'Missing contact'\)/.test(adminShell);
+  if (!navigationOrder) missing.push("Missing contact navigation below Portfolio inventory");
+  const privateRoute = server.includes("'/admin/inventory/author-contributor-gaps': 'author-contributor-gaps.html'")
+    && /if page_path in admin_pages:[\s\S]*?if not self\.session\(\):[\s\S]*?return self\.file\(PRIVATE \/ 'login\.html'\)/.test(server);
+  const safeAuthorRule = script.includes("author:field(record,aliases.author)") && script.includes("author:['Owner Email','Workshop Owner Email','Author Email']")
+    && !/author\s*:\s*(?:clean\()?record\.owner/.test(script);
+  const currentCoverageRule = script.includes("authorStatus === 'missing' && data.author")
+    && script.includes("authorStatus === 'present' && !data.author")
+    && !script.includes("Acknowledgement Contributors");
+  if (missing.length || !privateRoute || !safeAuthorRule || !currentCoverageRule) {
+    fail("Admin missing-contact coverage contract", `missing=${missing.join(", ") || "none"}; protected route=${privateRoute}; exact author field=${safeAuthorRule}; current coverage rule=${currentCoverageRule}`);
+  } else {
+    pass("Admin missing-contact coverage contract", "private page defaults to missing main-author email and measures additional coverage from support or technical contacts");
+  }
 }
 
 function checkInventoryPageContract() {
@@ -103,7 +142,7 @@ function checkInventoryPageContract() {
   const html = fs.readFileSync(filePath, "utf8");
   const script = fs.readFileSync(path.join(root, "dev/admin/inventory.js"), "utf8");
   const server = fs.readFileSync(path.join(root, "dev/scripts/admin-server.py"), "utf8");
-  const required = ["/admin-assets/inventory.js", 'id="inventory-jenkins-priority"', "Jenkins Error Score", 'id="count-public"', 'id="count-disabled"'];
+  const required = ["/admin-assets/inventory.js", 'id="inventory-jenkins-priority"', 'id="inventory-scope"', 'class="inventory-filter-disclosure"', "Workshop Owner, Support Contact", "Jenkins Error Score", 'id="inventory-table"'];
   const missing = required.filter((marker) => !html.includes(marker));
   const scriptMarkers = ["/api/admin/inventory", "/api/admin/qa-overlay", "jenkinsState(record)", "Outside Jenkins public scan scope"];
   const missingScript = scriptMarkers.filter((marker) => !script.includes(marker));
@@ -113,6 +152,40 @@ function checkInventoryPageContract() {
   } else {
     pass("Admin Inventory contract", "full inventory is behind the Admin session and includes Jenkins state and priority filtering");
   }
+}
+
+function checkWeeklyUpdateContract() {
+  const html = fs.readFileSync(path.join(root, "dev/admin/weekly-update.html"), "utf8");
+  const script = fs.readFileSync(path.join(root, "dev/admin/weekly-update.js"), "utf8");
+  const login = fs.readFileSync(path.join(root, "dev/admin/login.js"), "utf8");
+  const server = fs.readFileSync(path.join(root, "dev/scripts/admin-server.py"), "utf8");
+  const builder = fs.readFileSync(path.join(root, "dev/scripts/build-admin-service.py"), "utf8");
+  const required = [
+    [html, 'id="weekly-steps"'], [html, "monthly view history"], [html, "video watching minutes"],
+    [script, "/api/admin/weekly-runs"], [login, "'/admin/weekly-update'"], [server, "'/admin/weekly-update': 'weekly-update.html'"],
+    [server, "if path == '/api/admin/weekly-runs':"], [server, "X-CSRF-Token"],
+    [builder, "weekly-update.html"], [builder, "weeklyUpdatePage"]
+  ];
+  const missing = required.filter(([source, marker]) => !source.includes(marker)).map(([, marker]) => marker);
+  missing.length
+    ? fail("Weekly update workflow contract", `missing: ${missing.join(", ")}`)
+    : pass("Weekly update workflow contract", "dated checklist is protected, CSRF guarded, retained in Admin storage, and packaged for the service release");
+}
+
+function checkDashboardExportAndContactContract() {
+  const dashboard = fs.readFileSync(path.join(root, "assets/js/dashboard.js"), "utf8");
+  const exporter = fs.readFileSync(path.join(root, "assets/js/report-export.js"), "utf8");
+  const searchHtml = fs.readFileSync(path.join(root, "search/index.html"), "utf8");
+  const requirements = [
+    [dashboard, 'data-export-format="csv"'], [dashboard, 'data-export-format="xlsx"'], [dashboard, 'data-export-format="json"'],
+    [dashboard, "rowMatchesFilters(row, filters)"], [dashboard, "Search this table"],
+    [dashboard, "function exportSearchDetailJson"], [dashboard, "data-export-search-json"],
+    [exporter, "function json(data, filename)"], [exporter, "function xlsx(rows, filename)"], [searchHtml, "report-export.js"]
+  ];
+  const missing = requirements.filter(([source, marker]) => !source.includes(marker)).map(([, marker]) => marker);
+  missing.length
+    ? fail("Dashboard contact filter and export contract", `missing: ${missing.join(", ")}`)
+    : pass("Dashboard contact filter and export contract", "ranked tables and full search detail offer filtered CSV, Excel, and JSON exports with owner/contact matching");
 }
 
 function checkInternalContactData() {
@@ -445,7 +518,9 @@ function checkStaticBoundary() {
   const missing = requiredFiles.filter((file) => !fs.existsSync(path.join(root, file)));
   missing.length ? fail("static bundle required files", `missing: ${missing.join(", ")}`) : pass("static bundle required files", `${requiredFiles.length} required paths present`);
 
-  const forbiddenPaths = ["admin", "admin.html", "login.html", "app", "api", "database", "dataset", "server", "ops", "health", "health.html", "_local", "docs", "README.md"];
+  // Source documentation is allowed here; the packaged-site preflight still
+  // rejects README/docs and all private or developer content in website/.
+  const forbiddenPaths = ["admin", "admin.html", "login.html", "app", "api", "database", "dataset", "server", "ops", "health", "health.html", "_local", "docs"];
   const retainedForbidden = forbiddenPaths.filter((file) => fs.existsSync(path.join(root, file)));
   retainedForbidden.length ? fail("static-only boundary", `forbidden paths present: ${retainedForbidden.join(", ")}`) : pass("static-only boundary", "admin, backend, database, dataset, and local runtime paths absent");
 
@@ -553,11 +628,11 @@ async function checkHttpSmoke() {
     ["/dashboard/?view=performance", 200], ["/dashboard/?view=errors", 200],
     ["/dashboard/?view=retirement", 200], ["/dashboard/?view=stats", 200],
     ["/inventory/", 302], ["/inventory/index.html", 302],
-    ["/assets/css/dashboard.css", 200], ["/assets/js/dashboard.js", 200],
+    ["/assets/css/dashboard.css", 200], ["/assets/js/dashboard.js", 200], ["/assets/js/report-export.js", 200],
     ["/inventory/data/public_portfolio_inventory.json", 200], ["/inventory/data/portfolio_inventory.json", 404],
     ["/?q=autonomous%20database", 302], ["/?livelabs_id=4074", 302],
     ["/search/?livelabs_id=4074", 200], ["/inventory/?wms_id=11040", 302],
-    ["/admin", 200], ["/admin/inventory", 200], ["/api/admin/inventory", 401], ["/api/dashboard-admin-state", 200],
+    ["/admin", 200], ["/admin/inventory", 200], ["/admin/inventory/author-contributor-gaps", 200], ["/admin/weekly-update", 200], ["/api/admin/inventory", 401], ["/api/admin/weekly-runs", 401], ["/api/dashboard-admin-state", 200],
     ["/assets/images/oracle-logo-white.svg", 200], ["/assets/images/livelabs-logo-white.svg", 200],
     ["/assets/images/ill-abst-000109-16x9.png", 200], ["/assets/images/color-strip.png", 200],
     ["/assets/fonts/OracleSans_Rg.ttf", 200], ["/assets/fonts/OracleSans_SBd.ttf", 200], ["/assets/fonts/OracleSans_Bd.ttf", 200],
@@ -683,6 +758,9 @@ function printResults() {
 try {
   checkDashboardScripts();
   checkInventoryPageContract();
+  checkAuthorContributorCoverageContract();
+  checkWeeklyUpdateContract();
+  checkDashboardExportAndContactContract();
   checkHtmlReferences();
   checkStylesheetReferences();
   checkStaticBoundary();

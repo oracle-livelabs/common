@@ -1,0 +1,156 @@
+{
+  "reviewed_at": "2026-11-16T18:04:37.471002+00:00",
+  "live_sources_fetched": false,
+  "current": {
+    "records": 2293,
+    "populated_livelabs_ids": 1818,
+    "missing_livelabs_ids": 475,
+    "public_records": 889,
+    "public_types": {
+      "Workshop": 610,
+      "Sprint": 279
+    },
+    "source_snapshot_date": "2026-09-28",
+    "source_dates": {
+      "wms_snapshot_date": "2026-11-12",
+      "dashboard_views_snapshot_date": "2026-09-28",
+      "tag_snapshot_date": "2026-09-28",
+      "github_repository_snapshot_date": "2026-08-15",
+      "workshop_update_evidence_snapshot_date": "2026-08-14",
+      "governance_evidence_refresh_required": true
+    },
+    "full_inventory_sha256": "b3ebcf651b7b864961912080b7f1ebad89860dff173bc73637a5e4c9eed73a58",
+    "public_inventory_sha256": "76562fcdcc59c0fadd4d927074245b8eab74e965b968e4b496648011cc998fcb"
+  },
+  "integrity_checks": {
+    "full_record_keys_unique": true,
+    "populated_livelabs_ids_unique": true,
+    "public_livelabs_ids_unique_nonempty": true,
+    "public_only": true,
+    "baseline_bound_to_current_public_inventory": true,
+    "baseline_covers_current_public_inventory": true,
+    "supplied_source_inputs_match_recorded_hashes": true
+  },
+  "freshness_verified": false,
+  "promotion_blockers": [
+    "Resolve LiveLabs Last Week discrepancy and approve source window semantics.",
+    "Supply current type, publish type and tags or approve a documented retain-unknown policy.",
+    "Resolve GitHub item-path evidence gaps and review substantive changes.",
+    "Supply a same-run detailed Jenkins findings export and fresh checks before QA scoring.",
+    "Complete public privacy review before release generation.",
+    "candidate matches active inventory",
+    "content types resolved",
+    "publication types resolved",
+    "fresh tags available",
+    "view periods confirmed",
+    "fresh qa executed",
+    "candidate review gates resolved",
+    "views date matches supplied set",
+    "github evidence matches supplied set"
+  ],
+  "freshness_checks": {
+    "reviewed_candidate_available": true,
+    "candidate_matches_active_inventory": false,
+    "supplied_sources_unchanged": true,
+    "content_types_resolved": false,
+    "publication_types_resolved": false,
+    "fresh_tags_available": false,
+    "view_periods_confirmed": false,
+    "fresh_qa_executed": false,
+    "candidate_review_gates_resolved": false,
+    "wms_date_matches_supplied_set": true,
+    "views_date_matches_supplied_set": false,
+    "github_evidence_matches_supplied_set": false
+  },
+  "newer_candidate": {
+    "directory": "C:\\Users\\Lucian Brinzei\\Desktop\\Desktop\\Projects\\livelabs-repos\\common\\livelabs-analytics\\.private\\admin\\data-update-candidates\\2026-11-12-analytics-refresh-07",
+    "status": "PRIVATE_CANDIDATE_NOT_PROMOTED",
+    "records": 2334,
+    "new_livelabs_ids": 40,
+    "missing_content_types": 50,
+    "missing_publish_types": 572,
+    "fresh_tags_available": false,
+    "promotion_gates": [
+      "Resolve LiveLabs Last Week discrepancy and approve source window semantics.",
+      "Supply current type, publish type and tags or approve a documented retain-unknown policy.",
+      "Resolve GitHub item-path evidence gaps and review substantive changes.",
+      "Supply a same-run detailed Jenkins findings export and fresh checks before QA scoring.",
+      "Complete public privacy review before release generation."
+    ],
+    "source_integrity": [
+      {
+        "source": "wms_kitchen",
+        "file": "Kitchen_sink_All_Workshops_&_Sprints.xlsx",
+        "matches_recorded_hash": true,
+        "role": "supplied source input"
+      },
+      {
+        "source": "wms_primary",
+        "file": "Primary_report_All_Workshops_&_Sprints.xlsx",
+        "matches_recorded_hash": true,
+        "role": "supplied source input"
+      },
+      {
+        "source": "wms_published_route",
+        "file": "All Workshops Report.xlsx",
+        "matches_recorded_hash": true,
+        "role": "supplied source input"
+      },
+      {
+        "source": "livelabs_views",
+        "file": "collected_views.csv",
+        "matches_recorded_hash": true,
+        "role": "supplied source input"
+      },
+      {
+        "source": "github_item_history",
+        "file": "github-item-history.jsonl",
+        "matches_recorded_hash": true,
+        "role": "supplied source input"
+      },
+      {
+        "source": "github_item_summary",
+        "file": "github-item-summary.csv",
+        "matches_recorded_hash": true,
+        "role": "supplied source input"
+      },
+      {
+        "source": "github_repository_file_index",
+        "file": "github-repository-files.csv",
+        "matches_recorded_hash": true,
+        "role": "supplied source input"
+      },
+      {
+        "source": "github_commit_file_events",
+        "file": "github-commit-file-events.csv",
+        "matches_recorded_hash": true,
+        "role": "supplied source input"
+      },
+      {
+        "source": "github_search_candidates_not_used_as_mappings",
+        "file": "github-search-candidates.csv",
+        "matches_recorded_hash": true,
+        "role": "supplied source input"
+      },
+      {
+        "source": "jenkins_report",
+        "file": "latest_jenkins_report.json",
+        "matches_recorded_hash": true,
+        "role": "supplied source input"
+      },
+      {
+        "source": "baseline_inventory",
+        "file": "portfolio_inventory.json",
+        "matches_recorded_hash": false,
+        "role": "historical baseline; active inventory was subsequently refreshed"
+      },
+      {
+        "source": "github_collection_manifest",
+        "file": "collection-manifest.json",
+        "matches_recorded_hash": true,
+        "role": "supplied source input"
+      }
+    ]
+  },
+  "integrity_status": "passed"
+}

@@ -2,6 +2,7 @@
   'use strict';
   // Pin relative assets and links before client-side navigation changes the URL.
   const appRoot = new URL('../../', document.currentScript.src);
+  let recordDetailRequest = false;
   if (location.pathname !== '/admin') {
     let base = document.querySelector('base');
     if (!base) { base = document.createElement('base'); document.head.prepend(base); }
@@ -18,6 +19,10 @@
       const hasValue = key => Boolean(url.searchParams.get(key)?.trim());
       const inventoryList = inventoryPaths.includes(url.pathname) || url.searchParams.get('view') === 'inventory';
       const recordRequested = hasValue('livelabs_id') || hasValue('content_key') || (hasValue('wms_id') && !inventoryList);
+      if (recordRequested) {
+        recordDetailRequest = true;
+        document.documentElement.classList.add('analytics-record-requested');
+      }
       if (recordRequested || (hasValue('q') && !inventoryList)) {
         url.pathname = new URL('search/', appRoot).pathname;
         url.searchParams.delete('view');
@@ -43,6 +48,10 @@
       overlay = document.createElement('div');
       overlay.className = 'page-loading-overlay';
       overlay.innerHTML = '<div class="page-loading-card" role="status" aria-live="polite"><span class="page-loading-spinner" aria-hidden="true"></span><h2>Loading LiveLabs Analytics</h2><p data-loading-message>Preparing your page…</p><div class="page-loading-actions" hidden><button type="button">Try again</button><a>Back to dashboard</a></div></div>';
+      if (recordDetailRequest) {
+        overlay.querySelector('h2').textContent = 'Opening item details';
+        overlay.querySelector('[data-loading-message]').textContent = 'Loading the selected item…';
+      }
       overlay.querySelector('button').addEventListener('click', () => location.reload());
       overlay.querySelector('a').href = new URL(location.protocol === 'file:' ? 'index.html#overview' : 'dashboard/#overview', appRoot).href;
       document.body.append(overlay);
