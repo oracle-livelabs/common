@@ -34,7 +34,7 @@ You can use Oracle Cloud Shell to connect to your remote server using SSH.
 
     ```bash
     <copy>
-    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/75QkYvgn8zNo7vSaI8M4k5GGvs62bRQzeHPQFCxoQQZD1nwD5sl8oDyWjkBvAScE/n/c4u04/b/OCW2024/o/id_rsa_livelabs.zip 
+    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/4Au3jJ-t8Wtw3LWyYsDMqQk2FdlXDvXCb1MYRS0J6P4QS-GCrv2YNOolWdtFMLZq/n/c4u04/b/livelabsfiles/o/OCW2024/id_rsa_livelabs.zip
     </copy>
     ```
 3. Unzip the archive
@@ -83,7 +83,7 @@ The instructions below also apply if you are using Microsoft Windows Subsystem f
 
     ```bash
     <copy>
-    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/75QkYvgn8zNo7vSaI8M4k5GGvs62bRQzeHPQFCxoQQZD1nwD5sl8oDyWjkBvAScE/n/c4u04/b/OCW2024/o/id_rsa_livelabs.zip 
+    wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/4Au3jJ-t8Wtw3LWyYsDMqQk2FdlXDvXCb1MYRS0J6P4QS-GCrv2YNOolWdtFMLZq/n/c4u04/b/livelabsfiles/o/OCW2024/id_rsa_livelabs.zip
     </copy>
     ```
 3. Unzip the archive
@@ -122,11 +122,11 @@ The instructions below also apply if you are using Microsoft Windows Subsystem f
 You can also use Putty to connect to the remote server.
 You must have Putty installed. [Download Putty](https://www.putty.org/)
 
-1. Download the id_rsa_livelabs.zip using a browser of your choice from the following URL or click [here]([id_rsa_livelabs.zip](https://objectstorage.us-ashburn-1.oraclecloud.com/p/75QkYvgn8zNo7vSaI8M4k5GGvs62bRQzeHPQFCxoQQZD1nwD5sl8oDyWjkBvAScE/n/c4u04/b/OCW2024/o/id_rsa_livelabs.zip )):
+1. Download the id_rsa_livelabs.zip using a browser of your choice from the following URL or click [here]([id_rsa_livelabs.zip](https://objectstorage.us-ashburn-1.oraclecloud.com/p/4Au3jJ-t8Wtw3LWyYsDMqQk2FdlXDvXCb1MYRS0J6P4QS-GCrv2YNOolWdtFMLZq/n/c4u04/b/livelabsfiles/o/OCW2024/id_rsa_livelabs.zip)):
 
     ```bash
     <copy>
-    https://objectstorage.us-ashburn-1.oraclecloud.com/p/75QkYvgn8zNo7vSaI8M4k5GGvs62bRQzeHPQFCxoQQZD1nwD5sl8oDyWjkBvAScE/n/c4u04/b/OCW2024/o/id_rsa_livelabs.zip 
+    https://objectstorage.us-ashburn-1.oraclecloud.com/p/4Au3jJ-t8Wtw3LWyYsDMqQk2FdlXDvXCb1MYRS0J6P4QS-GCrv2YNOolWdtFMLZq/n/c4u04/b/livelabsfiles/o/OCW2024/id_rsa_livelabs.zip
     </copy>
     ```
 
