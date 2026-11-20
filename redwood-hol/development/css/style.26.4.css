@@ -1,7 +1,7 @@
 /*
 Author: Ashwin Agarwal
 Contributors:  Suresh Mohan, Jon Russell
-Last updated: Nov 18, 2026 by Codex
+Last updated: Nov 19, 2026 by Codex
 Version: 26.4
 
 Version     Date             Author          Summary
@@ -18,9 +18,9 @@ Version     Date             Author          Summary
 25.0        Jan-28-26       Kevin Lazarz    Version bump to match JS v25.0
 26.2        Feb-06-26       Kevin Lazarz    LDA-1024: urls not working when using medium sized video
 26.3        Mar-13-26       Kevin Lazarz    FreeSQL embedded iframe responsive/layout overrides
-26.4        Nov-18-26       Kevin Lazarz    Centered 960px reading panel with 870px content over fixed Redwood artwork; floated the sidebar 
+26.4        Nov-19-26       Kevin Lazarz    Centered 960px reading panel with 870px content over fixed Redwood artwork; floated the sidebar
                                             and labeled Back/Next navigation; fixed Oracle.com-inspired footer links with muted text; refreshed colors, 
-                                            accessibility, instructional typography, links, image frames, lighter task rows, image-right layout, 
+                                            accessibility, instructional typography, links, image frames, lighter task rows, image-right layout, expandable image previews,
                                             image enlargement controls, seamless sidebar toggle, and dark theme with CDN background URLs
 */
 
@@ -52,12 +52,7 @@ body::before {
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background: #A6C9B5 url("https://livelabs.oracle.com/cdn/common/redwood-hol/img/light-bg.png") center / cover no-repeat;
-}
-
-/* Resolve shared artwork locally when previewing the development stylesheet. */
-html[data-local-preview="true"] body::before {
-    background-image: url("../../img/light-bg.png");
+    background: #A6C9B5 url("https://livelabs.oracle.com/cdn/common/redwood-hol/img/light-bg.webp") center / cover no-repeat;
 }
 
 body {
@@ -855,6 +850,109 @@ html[data-theme="dark"] #openNav[aria-expanded="true"]::after {
     }
 }
 
+/* Optional landscape preview for long screenshots. */
+#module-content .ll-image-preview {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 1.5rem auto;
+    border: 1px solid #BCB6B1;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px -12px rgba(49, 45, 42, .18);
+}
+
+#module-content .ll-image-preview__crop {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    max-height: 28rem;
+    overflow: hidden;
+}
+
+#module-content .ll-image-preview.is-expanded .ll-image-preview__crop {
+    aspect-ratio: auto;
+    max-height: none;
+    overflow: visible;
+}
+
+#module-content .ll-image-preview img {
+    display: block !important;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#module-content .ll-image-preview:not(.is-expanded) .ll-image-preview__crop::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 7rem;
+    background: linear-gradient(transparent, #FFFFFF);
+    pointer-events: none;
+}
+
+#module-content .ll-image-preview__toggle {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    bottom: 0.75rem;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    width: max-content;
+    max-width: calc(100% - 1rem);
+    padding: 0.5rem 1rem;
+    border: 1px solid #BCB6B1;
+    border-radius: 999px;
+    background: #E8E8E5;
+    color: #161513;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    scroll-margin-bottom: calc(var(--footer-height, 3rem) + 1rem);
+}
+
+#module-content .ll-image-preview__toggle svg {
+    width: 1rem;
+    height: 1rem;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+#module-content .ll-image-preview__toggle:hover {
+    background: #D4CFCA;
+}
+
+#module-content .ll-image-preview__toggle:focus-visible {
+    outline: 3px solid #C74634;
+    outline-offset: 2px;
+}
+
+#module-content .ll-image-preview.is-expanded .ll-image-preview__toggle {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    margin: 1rem auto;
+}
+
+#module-content .ll-image-preview.is-expanded .ll-image-preview__toggle svg {
+    transform: rotate(180deg);
+}
+
 /* Selection tabs */
 
 .selection_tabs {
@@ -1179,6 +1277,15 @@ code {
     /* background-color: #ffffff; */
 }
 
+/* Subtle background for inline Markdown code only. */
+#module-content :not(pre) > code {
+    background-color: #E8E8E5;
+    border-radius: 0.25em;
+    padding: 0.08em 0.28em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+
 pre {
     line-height: 1.25;
     /* overflow-x: auto; */
@@ -1312,6 +1419,19 @@ textarea {
     width: 100%;
 }
 
+/* Local videos keep their natural aspect ratio and reserve their full height. */
+:is(.video-container-small, .video-container-medium, .video-container-large, .video-container-undefined):has(> video) {
+    height: auto;
+    padding-bottom: 0;
+    margin-bottom: 2rem;
+}
+
+:is(.video-container-small, .video-container-medium, .video-container-large, .video-container-undefined):has(> video) > video {
+    position: static;
+    height: auto;
+    transform: none;
+    margin-inline: auto;
+}
 
 figure {
     margin-left: 0;
@@ -2314,11 +2434,7 @@ html[data-theme="dark"] body {
 }
 
 html[data-theme="dark"] body::before {
-    background: #2B2927 url("https://livelabs.oracle.com/cdn/common/redwood-hol/img/dark-bg.png") center / cover no-repeat;
-}
-
-html[data-theme="dark"][data-local-preview="true"] body::before {
-    background-image: url("../../img/dark-bg.png");
+    background: #2B2927 url("https://livelabs.oracle.com/cdn/common/redwood-hol/img/dark-bg.webp") center / cover no-repeat;
 }
 
 html[data-theme="dark"] #module-content {
@@ -2448,6 +2564,10 @@ html[data-theme="dark"] #module-content pre code span.copy-code {
     color: var(--dark-text);
 }
 
+html[data-theme="dark"] #module-content :not(pre) > code {
+    background-color: #3A3A38;
+}
+
 html[data-theme="dark"] #module-content pre {
     background-color: #1E1F1E;
     border-color: var(--dark-border);
@@ -2467,6 +2587,25 @@ html[data-theme="dark"] #module-content figure > img {
     background-color: #383532;
     border-color: #827A73;
 }
+
+html[data-theme="dark"] #module-content .ll-image-preview {
+    border-color: #827A73;
+}
+
+html[data-theme="dark"] #module-content .ll-image-preview:not(.is-expanded) .ll-image-preview__crop::after {
+    background: linear-gradient(transparent, #262625);
+}
+
+html[data-theme="dark"] #module-content .ll-image-preview__toggle {
+    background: #3A3A38;
+    border-color: #827A73;
+    color: var(--dark-text);
+}
+
+html[data-theme="dark"] #module-content .ll-image-preview__toggle:hover {
+    background: #514C47;
+}
+
 
 html[data-theme="dark"] #module-content .ll-quiz,
 html[data-theme="dark"] #module-content .ll-quiz-badge-container {
