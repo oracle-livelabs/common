@@ -39,7 +39,7 @@
  * 25.0        Jan-28-26       Kevin Lazarz     SQL copy-to-clipboard: added trailing newline for ```sql blocks so last statement executes
  * 26.2        Feb-06-26       Kevin Lazarz     QA parity: removed gerund checks, synced script behavior
  * 26.3        Mar-13-26       Kevin Lazarz      FreeSQL iframe loader split into external module + loader wiring
- * 26.4        Nov-18-26       Kevin Lazarz     Added image-right Markdown blocks, aligned content widths, improved task controls, contained wide tables, 
+ * 26.4        Nov-19-26       Kevin Lazarz     Added image-right and image-preview Markdown blocks, aligned content widths, improved task controls, contained wide tables,
  *                                              made image enlargement keyboard accessible, set the footer copyright year dynamically, 
  *                                              anchored labeled Back/Next navigation to the content and footer, floated the sidebar, clarified its toggle label, 
  *                                              and added persistent dark mode with local background preview support
@@ -470,6 +470,8 @@ let main = function () {
             markdownContent = convertSingleLineCode(markdownContent);
             const imageRightBlocks = extractImageRightBlocks(markdownContent);
             markdownContent = imageRightBlocks.markdown;
+            const imagePreviewBlocks = extractImagePreviewBlocks(markdownContent);
+            markdownContent = imagePreviewBlocks.markdown;
             markdownContent = convertQuizBlocks(markdownContent); // converts ```quiz blocks to interactive quiz HTML
             markdownContent = convertCodeBlocks(markdownContent); // codeblock with multiple breaks don't render correctly, so I convert to codeblock here itself
 
@@ -481,7 +483,8 @@ let main = function () {
                 strikethrough: true //allow strikethrough formatting
             });
             $(articleElement).html(markdownConverter.makeHtml(markdownContent)); //converting markdownContent to HTML by using showdown plugin
-            renderImageRightBlocks(articleElement, imageRightBlocks.blocks, markdownConverter);
+            renderImageRightBlocks(articleElement, imageRightBlocks.blocks, markdownConverter, imagePreviewBlocks.blocks);
+            renderImagePreviewBlocks(articleElement, imagePreviewBlocks.blocks, markdownConverter);
 
             articleElement = updateOpenCloseButtonText(articleElement, manifestFileContent); // in the manifest file, you can specify task_type to specify different text
             articleElement = showRightAndLeftArrow(articleElement, manifestFileContent);
@@ -618,7 +621,7 @@ let main = function () {
         } while (matches);
     }
 
-    /* Author syntax: :::image-right, instruction Markdown, :::image, one Markdown image, :::
+    /* Author syntax: :::image-right, instructions, :::image, one Markdown image (optionally wrapped in :::image-preview), :::
        The image follows the instructions in source order, which is also the mobile reading order. */
     let extractImageRightBlocks = function (markdown) {
         const lines = markdown.split(/\r?\n/);
@@ -644,7 +647,14 @@ let main = function () {
                     if (!innerFence && divider < 0 && /^:::image[ \t]*$/.test(lines[j])) {
                         divider = j;
                     } else if (!innerFence && divider >= 0 && /^:::[ \t]*$/.test(lines[j])) {
-                        end = j;
+                        // A preview inside the image column has its own closing marker.
+                        const imageLines = lines.slice(divider + 1, j).join('\n').trim();
+                        if (/^:::image-preview[ \t]*\n/.test(imageLines)) {
+                            const outerEnd = j + 1;
+                            if (outerEnd < lines.length && /^:::[ \t]*$/.test(lines[outerEnd])) end = outerEnd;
+                        } else {
+                            end = j;
+                        }
                         break;
                     }
                     innerFence = updateFence(lines[j], innerFence);
@@ -652,9 +662,11 @@ let main = function () {
 
                 if (divider > i + 1 && end > divider + 1) {
                     const instructions = lines.slice(i + 1, divider).join('\n').trim();
-                    const image = lines.slice(divider + 1, end).join('\n').trim();
+                    const imageContent = lines.slice(divider + 1, end).join('\n').trim();
+                    const preview = imageContent.match(/^:::image-preview[ \t]*\n([\s\S]*?)\n:::[ \t]*$/);
+                    const image = preview ? preview[1].trim() : imageContent;
                     if (instructions && /^!\[[^\]\n]+\]\([^\n]+\)$/.test(image)) {
-                        const index = blocks.push({ instructions: instructions, image: image }) - 1;
+                        const index = blocks.push({ instructions: instructions, image: image, preview: !!preview }) - 1;
                         output.push('', '<div class="ll-image-right-placeholder" data-image-right-index="' + index + '"></div>', '');
                         i = end;
                         continue;
@@ -669,7 +681,7 @@ let main = function () {
         return { markdown: output.join('\n'), blocks: blocks };
     };
 
-    let renderImageRightBlocks = function (articleElement, blocks, converter) {
+    let renderImageRightBlocks = function (articleElement, blocks, converter, previews) {
         $(articleElement).find('.ll-image-right-placeholder').each(function () {
             const block = blocks[Number($(this).attr('data-image-right-index'))];
             if (!block) return;
@@ -677,10 +689,76 @@ let main = function () {
             $('<div class="ll-image-right__instructions"></div>')
                 .html(converter.makeHtml(convertCodeBlocks(convertQuizBlocks(block.instructions))))
                 .appendTo(layout);
-            $('<div class="ll-image-right__image"></div>')
-                .html(converter.makeHtml(block.image))
-                .appendTo(layout);
+            const imageColumn = $('<div class="ll-image-right__image"></div>').appendTo(layout);
+            if (block.preview) {
+                const index = previews.push(block.image) - 1;
+                $('<div class="ll-image-preview-placeholder"></div>')
+                    .attr('data-image-preview-index', index).appendTo(imageColumn);
+            } else {
+                imageColumn.html(converter.makeHtml(block.image));
+            }
             $(this).replaceWith(layout);
+        });
+    };
+
+    /* Author syntax: :::image-preview, one Markdown image, :::.
+       The explicit block keeps long instructional screenshots compact until requested. */
+    let extractImagePreviewBlocks = function (markdown) {
+        const lines = markdown.split(/\r?\n/);
+        const output = [];
+        const blocks = [];
+        let fence = null;
+        const updateFence = function (line, current) {
+            const match = line.match(/^[ \t]{0,3}(`{3,}|~{3,})(.*)$/);
+            if (!match) return current;
+            if (!current) return { marker: match[1][0], length: match[1].length };
+            if (match[1][0] === current.marker && match[1].length >= current.length && !match[2].trim()) return null;
+            return current;
+        };
+
+        for (let i = 0; i < lines.length; i++) {
+            if (!fence && /^:::image-preview[ \t]*$/.test(lines[i])) {
+                let end = i + 1;
+                while (end < lines.length && !/^:::[ \t]*$/.test(lines[end])) end++;
+                if (end < lines.length) {
+                    const image = lines.slice(i + 1, end).join('\n').trim();
+                    if (/^!\[[^\]\n]+\]\([^\n]+\)$/.test(image)) {
+                        const index = blocks.push(image) - 1;
+                        output.push('', '<div class="ll-image-preview-placeholder" data-image-preview-index="' + index + '"></div>', '');
+                        i = end;
+                        continue;
+                    }
+                }
+            }
+            fence = updateFence(lines[i], fence);
+            output.push(lines[i]);
+        }
+        return { markdown: output.join('\n'), blocks: blocks };
+    };
+
+    let renderImagePreviewBlocks = function (articleElement, blocks, converter) {
+        $(articleElement).find('.ll-image-preview-placeholder').each(function () {
+            const index = Number($(this).attr('data-image-preview-index'));
+            const holder = $('<div></div>').html(converter.makeHtml(blocks[index]));
+            const image = holder.find('img').first();
+            if (!image.length) return;
+
+            const figure = $('<figure class="ll-image-preview"></figure>');
+            const crop = $('<div class="ll-image-preview__crop"></div>')
+                .attr('id', 'll-image-preview-' + index)
+                .append(image);
+            const label = $('<span>Expand to view full image</span>');
+            const button = $('<button type="button" class="ll-image-preview__toggle" aria-expanded="false"></button>')
+                .attr('aria-controls', crop.attr('id'))
+                .append('<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6"/></svg>', label)
+                .on('click', function () {
+                    const expanded = figure.toggleClass('is-expanded').hasClass('is-expanded');
+                    $(this).attr('aria-expanded', String(expanded));
+                    label.text(expanded ? 'Collapse image' : 'Expand to view full image');
+                    if (!expanded) requestAnimationFrame(() => this.scrollIntoView({ block: 'nearest' }));
+                });
+            figure.append(crop, button);
+            $(this).replaceWith(figure);
         });
     };
 
@@ -1504,7 +1582,7 @@ let main = function () {
 
         $(articleElement).find("img").on('load', function () {
             if ($(this)[0].width > 100 || $(this)[0].height > 100 || $(this).attr("title") !== undefined) { // only images with title or width or height > 100 get wrapped (DBDOC-2397)
-                $(this).wrap("<figure></figure>"); //wrapping image tags with figure tags
+                if (!$(this).closest('figure').length) $(this).wrap("<figure></figure>"); //wrapping image tags with figure tags
 
             }
 
