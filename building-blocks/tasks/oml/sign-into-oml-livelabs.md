@@ -7,6 +7,7 @@
 
 You can access Oracle Machine Learning User Interface from Autonomous AI Database. Oracle Machine Learning User Interface provides you the following functionalities: 
 
+* Data Science Agent - An intelligent built-in conversational chatbot integrated with Oracle Machine Learning UI included in your Oracle Autonomous AI Database subscription. You must provide the LLM, whether from a third-party AI provider, OCI GenAI Service, or one you privately host. You can run many common data science workflows, including discovery, exploration, preparation, model training, evaluation, and supported scoring workflows, using natural language.
 * Notebooks - A web-based interface for data analysis, data discovery, data visualization, and collaboration
 * AutoML UI - An interface for no-code automated machine learning modeling and model deployment
 * Models - For model deployment

@@ -1,4 +1,4 @@
-# Create and Run Notebooks in Oracle Machine Learning User Interface
+# Introduction to Oracle Machine Learning Notebooks
 
 ## Introduction
 
