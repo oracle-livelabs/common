@@ -865,6 +865,7 @@ html[data-theme="dark"] #openNav[aria-expanded="true"]::after {
 
 #module-content .ll-image-preview__crop {
     position: relative;
+    width: 100%;
     aspect-ratio: 16 / 9;
     max-height: 28rem;
     overflow: hidden;
