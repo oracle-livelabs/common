@@ -67,6 +67,13 @@ try {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+    // External sites must open outside the workshop frame, without its referrer.
+    document.querySelectorAll('.footer-links a[href]').forEach(function (link) {
+        if (link.origin !== location.origin && ['https:', 'http:'].includes(link.protocol)) {
+            link.target = '_blank';
+            link.relList.add('noopener', 'noreferrer');
+        }
+    });
     document.querySelectorAll('.footer-links a[data-lbl="copyright"]').forEach(function (link) {
         link.textContent = "© " + new Date().getFullYear() + " Oracle";
     });
@@ -1697,7 +1704,7 @@ let main = function () {
         const support_text = "Go to forum";
         if (support !== undefined) {
             // the Need Help? URL is taken from the manifest file (key is support)
-            let need_help = $(document.createElement('li')).append($(document.createElement('a')).attr({ 'href': support, 'target': '_blank' }).text(support_text));
+            let need_help = $(document.createElement('li')).append($(document.createElement('a')).attr({ 'href': support, 'target': '_blank', 'rel': 'noopener noreferrer' }).text(support_text));
             $('.footer-links').append(need_help);
         }
     }
