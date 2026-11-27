@@ -967,6 +967,7 @@ html[data-theme="dark"] #openNav[aria-expanded="true"]::after {
 #module-content .selection_tabs {
     --tab-label: #767676;
     --tab-current: #323638;
+    --tab-accent: #00688c;
     --tab-divider: #ededed;
 }
 
