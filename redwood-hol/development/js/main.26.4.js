@@ -43,6 +43,7 @@
  *                                              made image enlargement keyboard accessible, set the footer copyright year dynamically, 
  *                                              anchored labeled Back/Next navigation to the content and footer, floated the sidebar, clarified its toggle label, 
  *                                              and added persistent dark mode with local background preview support
+ *             Nov-27-26                       Switch conditional content in place and show tabs in the sections that use it.
  */
 
 /*
@@ -462,50 +463,146 @@ let main = function () {
             markdownContent = include(markdownContent, manifestFileContent.include); // added for include feature: [DBDOC-2434] Include any file inside of Markdown before rendering
             markdownContent = substituteVariables(markdownContent, manifestFileContent.variable_values); // added for variable feature
             markdownContent = calculateEstimatedTime(markdownContent); // calculates and replaces "Estimated Time: X" placeholder
-            markdownContent = singlesource(markdownContent, selectedTutorial.type); // implement show/hide feature based on the if tag (DBDOC-2430)
-            markdownContent = convertFreeSQLButtonTags(markdownContent); // converts <freesql-button> tags to actual FreeSQL buttons
-            markdownContent = convertBracketInsideCopyCode(markdownContent); // converts <> tags inside copy tag to &lt; and &gt; (DBDOC-2404)
-            markdownContent = addPathToImageSrc(markdownContent, tut_fname); //adding the path for the image based on the filename in manifest
-            markdownContent = addPathToTypeHrefs(markdownContent); // if type is specified in the markdown, then add absolute path for it.
-            markdownContent = convertSingleLineCode(markdownContent);
-            const imageRightBlocks = extractImageRightBlocks(markdownContent);
-            markdownContent = imageRightBlocks.markdown;
-            const imagePreviewBlocks = extractImagePreviewBlocks(markdownContent);
-            markdownContent = imagePreviewBlocks.markdown;
-            markdownContent = convertQuizBlocks(markdownContent); // converts ```quiz blocks to interactive quiz HTML
-            markdownContent = convertCodeBlocks(markdownContent); // codeblock with multiple breaks don't render correctly, so I convert to codeblock here itself
+            const source = markdownContent;
+            const selectable = $.isPlainObject(selectedTutorial.type);
+            const defaultType = selectable && Object.keys(selectedTutorial.type)[0];
+            let renderedType = getParam('type') || defaultType;
 
-            const markdownConverter = new showdown.Converter({
-                tables: true, //allows tables to rendered
-                parseImgDimensions: true, //allows image dimension to be specified in the markdown
-                metadata: true, // allows metadata to be added between --- and --- tags at the top of the markdown
-                simplifiedAutoLink: true, //transform http addresses automatically in to clickable URLs in HTML
-                strikethrough: true //allow strikethrough formatting
-            });
-            $(articleElement).html(markdownConverter.makeHtml(markdownContent)); //converting markdownContent to HTML by using showdown plugin
-            renderImageRightBlocks(articleElement, imageRightBlocks.blocks, markdownConverter, imagePreviewBlocks.blocks);
-            renderImagePreviewBlocks(articleElement, imagePreviewBlocks.blocks, markdownConverter);
+            function switchType(anchor, nextType) {
+                if (nextType === renderedType) return;
+                const open = new Set($('#module-content h2.minus').map(function () { return this.id; }).get());
+                const heading = anchor && $(anchor).closest('section').children('h2')[0];
+                const oldTop = anchor && anchor.getBoundingClientRect().top;
+                const oldScroll = window.scrollY;
+                renderedType = nextType;
+                render();
+                $('#module-content h2.plus').each(function () {
+                    if (open.has(this.id)) expandSection(this, 'instant');
+                });
+                changeButtonState();
+                const scope = heading ? document.getElementById(heading.id)?.parentElement : articleElement;
+                const active = scope && scope.querySelector('.selection_tabs a.active');
+                if (anchor && active) {
+                    active.focus({ preventScroll: true });
+                    window.scrollBy(0, active.getBoundingClientRect().top - oldTop);
+                } else {
+                    window.scrollTo(0, oldScroll);
+                }
+            }
 
-            articleElement = updateOpenCloseButtonText(articleElement, manifestFileContent); // in the manifest file, you can specify task_type to specify different text
-            articleElement = showRightAndLeftArrow(articleElement, manifestFileContent);
-            articleElement = renderVideoHubVideos(articleElement); //adds iframe to Oracle Video Hub videos
-            articleElement = renderYouTubeVideos(articleElement); //adds iframe to YouTube videos
-            articleElement = renderDirectVideos(articleElement); //adds HTML5 video element for direct video URLs
-            articleElement = updateH1Title(articleElement); //adding the h1 title in the Tutorial before the container div and removing it from the articleElement
-            articleElement = wrapSectionTag(articleElement); //adding each section within section tag
-            articleElement = wrapTablesForHorizontalScroll(articleElement);
-            articleElement = wrapImgWithFigure(articleElement); //Wrapping images with figure, adding figcaption to all those images that have title in the MD
-            articleElement = applyReadingMeasure(articleElement);
-            articleElement = addPathToAllRelativeHref(articleElement, tut_fname); //adding the path for all HREFs based on the filename in manifest
-            articleElement = setH2Name(articleElement);
-            articleElement = makeAnchorLinksWork(articleElement); //if there are links to anchors (for example: #hash-name), this function will enable it work
-            articleElement = addTargetBlank(articleElement); //setting target for all ahrefs to _blank
-            articleElement = allowCodeCopy(articleElement); //adds functionality to copy code from codeblocks
-            articleElement = enableForceDownload(articleElement); // enables the force download feature (?download=1 must be mentioned at the end of the URL)
-            articleElement = injectUtmParams(articleElement);
-            articleElement = showTabs(articleElement, selectedTutorial.type); //show type options as tabs (DBDOC-2455)
-            articleElement = highlightCodeBlock(articleElement); // highlights the code in the codeblock (DBDOC-2494)
-            articleElement = addModalWindow(articleElement); // add modal window so that images open in full screen when clicked (DBDOC-2575)
+            function render() {
+                let markdownContent = singlesource(source, selectedTutorial.type, true); // implement show/hide feature based on the if tag (DBDOC-2430)
+                markdownContent = convertFreeSQLButtonTags(markdownContent); // converts <freesql-button> tags to actual FreeSQL buttons
+                markdownContent = convertBracketInsideCopyCode(markdownContent); // converts <> tags inside copy tag to &lt; and &gt; (DBDOC-2404)
+                markdownContent = addPathToImageSrc(markdownContent, tut_fname); //adding the path for the image based on the filename in manifest
+                markdownContent = addPathToTypeHrefs(markdownContent); // if type is specified in the markdown, then add absolute path for it.
+                markdownContent = convertSingleLineCode(markdownContent);
+                const imageRightBlocks = extractImageRightBlocks(markdownContent);
+                markdownContent = imageRightBlocks.markdown;
+                const imagePreviewBlocks = extractImagePreviewBlocks(markdownContent);
+                markdownContent = imagePreviewBlocks.markdown;
+                markdownContent = convertQuizBlocks(markdownContent); // converts ```quiz blocks to interactive quiz HTML
+                markdownContent = convertCodeBlocks(markdownContent); // codeblock with multiple breaks don't render correctly, so I convert to codeblock here itself
+
+                const markdownConverter = new showdown.Converter({
+                    tables: true, //allows tables to rendered
+                    parseImgDimensions: true, //allows image dimension to be specified in the markdown
+                    metadata: true, // allows metadata to be added between --- and --- tags at the top of the markdown
+                    simplifiedAutoLink: true, //transform http addresses automatically in to clickable URLs in HTML
+                    strikethrough: true //allow strikethrough formatting
+                });
+                $(articleElement).html(markdownConverter.makeHtml(markdownContent)); //converting markdownContent to HTML by using showdown plugin
+                renderImageRightBlocks(articleElement, imageRightBlocks.blocks, markdownConverter, imagePreviewBlocks.blocks);
+                renderImagePreviewBlocks(articleElement, imagePreviewBlocks.blocks, markdownConverter);
+
+                articleElement = updateOpenCloseButtonText(articleElement, manifestFileContent); // in the manifest file, you can specify task_type to specify different text
+                articleElement = showRightAndLeftArrow(articleElement, manifestFileContent);
+                articleElement = renderVideoHubVideos(articleElement); //adds iframe to Oracle Video Hub videos
+                articleElement = renderYouTubeVideos(articleElement); //adds iframe to YouTube videos
+                articleElement = renderDirectVideos(articleElement); //adds HTML5 video element for direct video URLs
+                articleElement = updateH1Title(articleElement); //adding the h1 title in the Tutorial before the container div and removing it from the articleElement
+                articleElement = wrapSectionTag(articleElement); //adding each section within section tag
+                articleElement = wrapTablesForHorizontalScroll(articleElement);
+                articleElement = wrapImgWithFigure(articleElement); //Wrapping images with figure, adding figcaption to all those images that have title in the MD
+                articleElement = applyReadingMeasure(articleElement);
+                articleElement = addPathToAllRelativeHref(articleElement, tut_fname); //adding the path for all HREFs based on the filename in manifest
+                articleElement = setH2Name(articleElement);
+                articleElement = makeAnchorLinksWork(articleElement); //if there are links to anchors (for example: #hash-name), this function will enable it work
+                articleElement = addTargetBlank(articleElement); //setting target for all ahrefs to _blank
+                articleElement = allowCodeCopy(articleElement); //adds functionality to copy code from codeblocks
+                articleElement = enableForceDownload(articleElement); // enables the force download feature (?download=1 must be mentioned at the end of the URL)
+                articleElement = injectUtmParams(articleElement);
+                articleElement = showTabs(articleElement, selectedTutorial.type, switchType); //show type options as tabs (DBDOC-2455)
+                articleElement = highlightCodeBlock(articleElement); // highlights the code in the codeblock (DBDOC-2494)
+                articleElement = addModalWindow(articleElement); // add modal window so that images open in full screen when clicked (DBDOC-2575)
+                if (getParam("qa") == "true")
+                    articleElement = performQA(articleElement, markdownContent, manifestFileContent);
+                if (!articleElement.isConnected) $("main").html(articleElement);
+                //FOllowing code will make sure that landmarks have a unique title (LLAPEX-401)
+                document.getElementsByTagName("header")[0].setAttribute("title", "livelabs header");
+                document.getElementsByTagName("main")[0].setAttribute("title", "livelabs main");
+                document.getElementsByTagName("footer")[0].setAttribute("title", "livelabs footer");
+                //END of fix for landmarks
+
+                // Following code makes tables accessible (see LLAPEX-403)
+                $(articleElement).find("table").attr("role", "presentation"); //add role to table
+
+                var i = 0;
+                var tables = articleElement.getElementsByTagName("table");
+                let title = document.querySelector('title').innerText;
+                let caption_start = '{: title="';
+
+                for (i; i < tables.length; i++) {
+                    var table = tables[i];
+                    var capt = table.createCaption();
+                    let given_title = null;
+                    let next_element = $($(tables)[i]).find('tr').last();
+                    if (next_element.text().trim().startsWith(caption_start)) {
+                        given_title = next_element.text().trim().replace(caption_start, "");
+                        given_title = given_title.replace('"}', "");
+                        $(next_element).remove();
+                    }
+                    var tit = capt.textContent = 'Table ' + (i + 1) + ': ' + (given_title || title);
+                    table.setAttribute("role", "presentation");
+                    let tableScrollRegion = table.closest('.table-scroll');
+                    if (tableScrollRegion) {
+                        tableScrollRegion.setAttribute('aria-label', tit);
+                    }
+                };
+                // END OF TABLE ACCESSIBILITY ENHANCEMENT
+
+                if (selectedTutorial.filename == 'preview') {
+                    let uploaded_images = JSON.parse(window.localStorage.getItem("imagesValue"));
+
+                    // added for showing images in preview
+                    if (uploaded_images !== null) {
+                        $('main').find('img').each(function (i, imageFile) {
+                            for (let i = 0; i < uploaded_images.length; i++) {
+                                if ($(imageFile).attr('src').indexOf(uploaded_images[i].filename) >= 0) {
+                                    $(imageFile).attr('src', uploaded_images[i].src);
+                                }
+                            }
+                        });
+                    }
+                }
+
+                if (getParam("qa") == "true") {
+                    dragElement(document.getElementById("qa-report"));
+                } else {
+                    collapseSection($("#module-content h2:not(:eq(0))"), "none"); //collapses all sections by default
+                }
+
+                setupContentNav(manifestFileContent, articleElement);
+            }
+
+            if (defaultType && !getParam('type'))
+                history.replaceState(history.state, '', setParam(location.href, 'type', defaultType));
+            render();
+            if (defaultType) {
+                window.addEventListener('popstate', function () {
+                    switchType(null, getParam('type') || defaultType);
+                });
+            }
             updateHeadContent(selectedTutorial, manifestFileContent.workshoptitle); //changing document head based on the manifest
 
             // adding link to the support forum URL in the footer if the manifest file contains it (DBDOC-2459 and DBDOC-2496)
@@ -513,11 +610,11 @@ let main = function () {
             // adding social media link to the header
             // addSocialMediaLink(manifestFileContent.help, manifestFileContent.workshoptitle);
             // adding link to the Neep Help URL in the header if the manifest file contains it (DBDOC-2496)
-            
-            // KP Translate 
+
+            // KP Translate
             $(document).ready(function () {
-                addTranslateIcon(manifestFileContent.help); 
-            
+                addTranslateIcon(manifestFileContent.help);
+
                 $(document).on('click', function (e) {
                     if (!$(e.target).closest('#translate_icon, #translate_popup').length) {
                         $('#translate_popup').hide();
@@ -525,71 +622,6 @@ let main = function () {
                 });
             });
             addNeedHelpLink(manifestFileContent.help);
-
-            if (getParam("qa") == "true") {
-                articleElement = performQA(articleElement, markdownContent, manifestFileContent);
-            }
-        }).done(function () {
-            $("main").html(articleElement); //placing the article element inside the main tag of the Tutorial template
-            setTimeout(function () {
-                setupContentNav(manifestFileContent, articleElement);
-            }, 0); //sets up the collapse/expand button and open/close section feature
-
-
-
-            //FOllowing code will make sure that landmarks have a unique title (LLAPEX-401)
-            document.getElementsByTagName("header")[0].setAttribute("title", "livelabs header");
-            document.getElementsByTagName("main")[0].setAttribute("title", "livelabs main");
-            document.getElementsByTagName("footer")[0].setAttribute("title", "livelabs footer");
-            //END of fix for landmarks
-
-            // Following code makes tables accessible (see LLAPEX-403)
-            $("table").attr("role", "presentation"); //add role to table
-
-            var i = 0;
-            var tables = document.getElementsByTagName("table");
-            let title = document.querySelector('title').innerText;
-            let caption_start = '{: title="';
-
-            for (i; i < tables.length; i++) {
-                var table = tables[i];
-                var capt = table.createCaption();
-                let given_title = null;
-                let next_element = $($(tables)[i]).find('tr').last();
-                if (next_element.text().trim().startsWith(caption_start)) {
-                    given_title = next_element.text().trim().replace(caption_start, "");
-                    given_title = given_title.replace('"}', "");
-                    $(next_element).remove();
-                }
-                var tit = capt.textContent = 'Table ' + (i + 1) + ': ' + (given_title || title);
-                table.setAttribute("role", "presentation");
-                let tableScrollRegion = table.closest('.table-scroll');
-                if (tableScrollRegion) {
-                    tableScrollRegion.setAttribute('aria-label', tit);
-                }
-            };
-            // END OF TABLE ACCESSIBILITY ENHANCEMENT
-
-            if (selectedTutorial.filename == 'preview') {
-                let uploaded_images = JSON.parse(window.localStorage.getItem("imagesValue"));
-
-                // added for showing images in preview
-                if (uploaded_images !== null) {
-                    $('main').find('img').each(function (i, imageFile) {
-                        for (let i = 0; i < uploaded_images.length; i++) {
-                            if ($(imageFile).attr('src').indexOf(uploaded_images[i].filename) >= 0) {
-                                $(imageFile).attr('src', uploaded_images[i].src);
-                            }
-                        }
-                    });
-                }
-            }
-
-            if (getParam("qa") == "true") {
-                dragElement(document.getElementById("qa-report"));
-            } else {
-                collapseSection($("#module-content h2:not(:eq(0))"), "none"); //collapses all sections by default
-            }
 
             if (callbackFunc)
                 callbackFunc();
@@ -1006,38 +1038,41 @@ let main = function () {
         return articleElement;
     }
 
-    // DBDOC-2455: Support for content selectable via tabs
-    let showTabs = function (articleElement, type) {
-        if ($.type(type) == "object") { // if true, it means select tab needs to be added
-            let div = $(document.createElement('div')).addClass('selection_tabs');
-            let tab = $(document.createElement('ul')).addClass('tab');
-
-            if (getParam("type") == false) {
-                window.history.pushState('', '', setParam(window.location.href, 'type', Object.keys(type)[0]));
-            }
-
-            $(Object.keys(type)).each(function (_, type_key) {
-                let li = $(document.createElement('li')).addClass('btn_if_' + type_key);
-                // $(li).html('<a href="' + setParam(window.location.href, 'type', type_key) + '">' + type[type_key] + '</a>');
-                $(li).html('<a href="#">' + type[type_key] + '</a>');
-                $(li).find('a').click(function () {
-                    $(this).attr('href', setParam(window.location.href, 'type', type_key));
-                });
-                $(tab).append(li);
-
-                if (type_key == getParam("type")) {
-                    $(li).find('a').addClass('active');
-                }
-            });
-
-            $(div).append(tab);
-            $(articleElement).find('h2:not(:eq(0))').after(div);
-            $(articleElement).find('h1').after(div);
-            $(articleElement).find('.selection_tabs:not(:eq(0))').addClass('stick');
+    function showTabs(article, types, switchType) {
+        if (!$.isPlainObject(types)) return article;
+        const owners = new Set();
+        for (const marker of article.querySelectorAll('[data-ll-conditional-tab]')) {
+            owners.add(marker.closest('section') || article);
+            const parent = marker.parentElement;
+            marker.remove();
+            if (parent.matches('p') && !parent.childElementCount && !parent.textContent.trim()) parent.remove();
         }
-
-        return articleElement;
+        for (const owner of owners) {
+            const list = $('<ul class="tab">');
+            for (const [key, label] of Object.entries(types)) {
+                const url = new URL(location.href);
+                url.searchParams.set('type', key);
+                const link = $('<a>').text(label).attr('href', url.href);
+                if (key === getParam('type')) link.addClass('active').attr('aria-current', 'true');
+                link.on('click', function (event) {
+                    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.which > 1) return;
+                    event.preventDefault();
+                    if (key === getParam('type')) return;
+                    const next = new URL(location.href);
+                    next.searchParams.set('type', key);
+                    history.pushState(history.state, '', next.href);
+                    switchType(this, key);
+                });
+                $('<li>').addClass('btn_if_' + key).append(link).appendTo(list);
+            }
+            const controls = $('<div class="selection_tabs">').append(list);
+            const heading = $(owner).children('h1,h2').first();
+            if (heading.length) heading.after(controls);
+            else $(owner).prepend(controls);
+        }
+        return article;
     }
+
     // DBDOC-2494: added for syntax highlight feature. The syntax highlight feature uses the highlight.js plugin.
     let highlightCodeBlock = function (articleElement) {
         $(articleElement).find('pre:not(.nohighlighting) code').each(function (_, block) {
@@ -1913,7 +1948,7 @@ let main = function () {
             $('#btn_toggle').hide();
         }
 
-        window.scrollTo(0, 0);
+
     }
 
     /**
@@ -1926,6 +1961,8 @@ let main = function () {
             $(anchorElement).nextUntil("#module-content h1, #module-content h2").show('fast', function () {
                 $(window).scroll();
             });
+        } else if (effect === 'instant') {
+            $(anchorElement).nextUntil("#module-content h1, #module-content h2").show();
         } else if (effect === "fade") {
             $(anchorElement).nextUntil("#module-content h1, #module-content h2").fadeIn('fast', function () {
                 $(window).scroll();
@@ -2162,46 +2199,21 @@ let main = function () {
     }
 
     /* remove all content that is not of type specified in the manifest file. Then remove all if tags.*/
-    let singlesource = function (markdownContent, type) {
-        let ifTagRegExp = new RegExp(/<\s*if type="([^>]*)">([\s\S|\n]*?)<\/\s*if>/gm);
-        let contentToReplace = []; // content that needs to be replaced
-
-        if (getParam("type") !== false) {
-            type = getParam("type");
-        } else if ($.type(type) == 'object') {
-            type = Object.keys(type)[0];
-        }
-
-        if ($.type(type) !== 'array')
-            type = Array(type);
-
-        let matches;
-        do {
-            matches = ifTagRegExp.exec(markdownContent);
-            if (matches === null) {
-                $(contentToReplace).each(function (index, value) {
-                    markdownContent = markdownContent.replace(value.replace, value.with);
-                });
-                return markdownContent;
-            }
-            // convert if type to array
-            let all_types = matches[1].split(' '),
-                matchFound = false;
-
-            for (let i = 0; i < all_types.length && !matchFound; i++) {
-                if ($.inArray(all_types[i], type) >= 0) { // check if type specified matches content
-                    matchFound = true;
-                }
-            }
-
-            // replace with blank if type doesn't match
-            // replace with text without if tag (if any if type matches)
-            (!matchFound) ?
-                contentToReplace.push({ "replace": matches[0], "with": '' }) :
-                contentToReplace.push({ "replace": matches[0], "with": matches[2] });
-
-        } while (matches);
+    function singlesource(markdown, type, markSections = false) {
+        const selectable = $.isPlainObject(type);
+        const selected = getParam('type') || (selectable ? Object.keys(type)[0] : type);
+        const keys = Array.isArray(selected) ? selected : [selected];
+        // A marker survives Markdown conversion even when this variant has no content here.
+        const marker = markSections && selectable ? '<span data-ll-conditional-tab></span>' : '';
+        const blocks = /^( {0,3})(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1\2[\t ]*\r?$|<\s*if type="([^"]*)">([\s\S]*?)<\/\s*if>/gm;
+        return markdown.replace(blocks, function (original, indent, fence, types, content) {
+            if (fence) return original;
+            const visible = types.split(/\s+/).some(key => keys.includes(key));
+            if (!marker) return visible ? content : '';
+            return marker + (visible ? content.replace(/^(\r?\n)/, '\n\n') : '');
+        });
     }
+
     /* converts < > symbols inside the copy tag to &lt; and &gt; */
     let convertBracketInsideCopyCode = function (markdownContent) {
         let copyRegExp = new RegExp(/<copy>([\s\S|\n]*?)<\/copy>/gm);

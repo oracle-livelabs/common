@@ -94,7 +94,7 @@ a:active {
 }
 
 /* Keep links in workshop instructions identifiable without hovering. */
-#module-content a[href]:not(.tryit-button):not(.ll-quiz-badge-download):not(:has(button)) {
+#module-content a[href]:not(:where(.selection_tabs a)):not(.tryit-button):not(.ll-quiz-badge-download):not(:has(button)) {
     text-decoration: underline dashed;
     text-underline-offset: 0.15em;
 }
@@ -964,38 +964,52 @@ html[data-theme="dark"] #openNav[aria-expanded="true"]::after {
     margin-top: -14px;
 }
 
-ul.tab {
-    list-style-type: none;
+#module-content .selection_tabs {
+    --tab-label: #767676;
+    --tab-current: #323638;
+    --tab-divider: #ededed;
+}
+
+#module-content .selection_tabs .tab {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    border-bottom: 1px solid #D4CFCA;
+    box-shadow: inset 0 -1px var(--tab-divider);
 }
 
-/* Float the list items side by side */
-ul.tab li {
-    float: left;
-    margin-bottom: 0px;
+#module-content .selection_tabs li {
+    margin: 0;
+    padding: 0;
 }
 
-/* Style the links inside the list items */
-ul.tab li a {
-    display: inline-block;
-    color: #161513;
-    text-align: center;
-    padding: 4px 20px;
+#module-content .selection_tabs .tab li a[href] {
+    display: block;
+    padding: 13px clamp(12px, 2vw, 26px);
+    color: var(--tab-label);
+    background: transparent;
+    font-size: 1.125rem;
+    line-height: 1.4;
+    font-weight: 700;
     text-decoration: none;
-    transition: 0.3s;
-    font-weight: 500;
+    border-radius: 2px;
 }
 
-/* Change background color of links on hover */
-ul.tab li a:hover {
-    background-color: #E4E1DD;
+#module-content .selection_tabs .tab li a:is(:hover, :focus-visible, .active) {
+    color: var(--tab-current);
 }
 
-/* Create an active/current tablink class */
-ul.tab li a:focus, .active {
+#module-content .selection_tabs .tab li a.active {
+    box-shadow: inset 0 -3px var(--tab-accent);
+}
+
+#module-content .selection_tabs a:focus-visible {
+    outline: 2px solid var(--tab-accent);
+    outline-offset: -3px;
+}
+
+#leftNav .active {
     background-color: #D4CFCA;
 }
 
@@ -2482,8 +2496,8 @@ html[data-theme="dark"] #leftNav li[id^="related-content-"] {
     background-color: #383532 !important;
 }
 
-html[data-theme="dark"] #module-content a[href]:not(.tryit-button):not(.ll-quiz-badge-download),
-html[data-theme="dark"] #module-content a:visited:not(.tryit-button):not(.ll-quiz-badge-download) {
+html[data-theme="dark"] #module-content a[href]:not(:where(.selection_tabs a)):not(.tryit-button):not(.ll-quiz-badge-download),
+html[data-theme="dark"] #module-content a:visited:not(:where(.selection_tabs a)):not(.tryit-button):not(.ll-quiz-badge-download) {
     color: var(--dark-link);
 }
 
@@ -2546,18 +2560,15 @@ html[data-theme="dark"] #module-content th {
     background-color: #403D3A;
 }
 
-html[data-theme="dark"] #module-content :is(th, td),
-html[data-theme="dark"] #module-content ul.tab {
+html[data-theme="dark"] #module-content :is(th, td) {
     border-color: var(--dark-border);
 }
 
-html[data-theme="dark"] #module-content ul.tab li a {
-    color: var(--dark-text);
-}
-
-html[data-theme="dark"] #module-content ul.tab li a:hover,
-html[data-theme="dark"] #module-content ul.tab li a.active {
-    background-color: #48433F;
+html[data-theme="dark"] #module-content .selection_tabs {
+    --tab-label: #c8c4c0;
+    --tab-current: var(--dark-text);
+    --tab-accent: #80cde8;
+    --tab-divider: var(--dark-border);
 }
 
 html[data-theme="dark"] #module-content :is(pre, code),
